@@ -281,15 +281,15 @@ $field = new ExtraField('user');
 $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
 
 $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
-$idExtraFieldChangeable = (int) (isset($authorLp['changeable']) ? $authorLp['changeable'] : 0);
-if ($idExtraField != 0 && $idExtraFieldChangeable == 1) {
+if ($idExtraField != 0) {
     $extraFieldValueUser = new ExtraFieldValue('user');
     $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
         $authorLp['variable'],
         1,
         true,
         false,
-        true);
+        true
+    );
 
     foreach ($arrayExtraFieldValueUser as $item) {
         $teacher = api_get_user_info($item['item_id']);
@@ -360,7 +360,7 @@ if ($form->validate()) {
             }
             $saveAuthor = array_unique($saveAuthor);
             $messages .= implode(' / ', $saveAuthor);
-            $currentUrl = api_request_uri();
+            $currentUrl = api_get_self();
             if (!empty($messages)) {
                 if ($removeExist) {
                     Session::write('messageError', get_lang('DeletedAuthors'));

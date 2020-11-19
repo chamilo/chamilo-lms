@@ -9,6 +9,7 @@ if (!isset($_GET['cidReq'])) {
 }
 
 require_once './main/inc/global.inc.php';
+apiBlockInactiveUser();
 
 if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
     api_protect_course_script(true);

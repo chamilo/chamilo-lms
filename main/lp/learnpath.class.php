@@ -1532,11 +1532,12 @@ class learnpath
         $maxScore = 100
     ) {
         $id = (int) $id;
-        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($id)) {
             return false;
         }
+
+        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {
             $minScore = 0;
@@ -1546,8 +1547,8 @@ class learnpath
             $maxScore = 100;
         }
 
-        $minScore = floatval($minScore);
-        $maxScore = floatval($maxScore);
+        $minScore = (float) $minScore;
+        $maxScore = (float) $maxScore;
 
         if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
@@ -1827,6 +1828,23 @@ class learnpath
         } catch (Exception $exception) {
             return 0;
         }
+    }
+
+    /**
+     * Get the learning path name by id
+     *
+     * @param int $lpId
+     *
+     * @return mixed
+     */
+    public static function getLpNameById($lpId)
+    {
+        $em = Database::getManager();
+
+        return $em->createQuery('SELECT clp.name FROM ChamiloCourseBundle:CLp clp
+            WHERE clp.iid = :iid')
+            ->setParameter('iid', $lpId)
+            ->getSingleScalarResult();
     }
 
     /**
@@ -4496,13 +4514,10 @@ class learnpath
                             $session_condition
                         ";
                 Database::query($sql);
-            } else {
-                // Parameter and database incompatible, do nothing, exit.
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -6741,9 +6756,9 @@ class learnpath
                 [
                     'title' => get_lang('ClearAllPrerequisites'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                            'action' => 'clear_prerequisites',
-                            'lp_id' => $lpId,
-                        ]),
+                        'action' => 'clear_prerequisites',
+                        'lp_id' => $lpId,
+                    ]),
                 ],
             ];
             $actionsRight = Display::groupButtonWithDropDown(
@@ -6753,7 +6768,7 @@ class learnpath
             );
         }
 
-        if (isset($extraField['authorlp']) && $extraField['changeable'] == 1) {
+        if (isset($extraField['authorlp'])) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'add-groups.png',
@@ -10067,7 +10082,8 @@ class learnpath
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
 
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                //if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                if (!isset($selectedMinScore[$item['id']]) && !empty($masteryScoreAsMinValue)) {
                     // Backwards compatibility with 1.9.x use mastery_score as min value
                     $selectedMinScoreValue = $masteryScoreAsMinValue;
                 }
@@ -12191,12 +12207,25 @@ EOD;
         }
     }
 
-    public static function getLpList($courseId)
+    public static function getLpList($courseId, $onlyActiveLp = true)
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_LP = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
 
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId";
+        $sql = "SELECT lp.id, lp.name
+                FROM $TABLE_LP lp
+                INNER JOIN $TABLE_ITEM_PROPERTY ip
+                ON lp.id = ip.ref
+                WHERE lp.c_id = $courseId ";
+
+        if ($onlyActiveLp) {
+            $sql .= "AND ip.tool = 'learnpath' ";
+            $sql .= "AND ip.visibility = 1 ";
+        }
+
+        $sql .= "GROUP BY lp.id";
+
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

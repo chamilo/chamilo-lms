@@ -240,8 +240,10 @@ if (isset($_REQUEST['comments']) &&
         $tot = $pluginEvaluation->getResultWithFormula($id, $formula);
     }
 
+    $totalScore = (float) $tot;
+
     $sql = "UPDATE $TBL_TRACK_EXERCISES
-            SET exe_result = '".floatval($tot)."'
+            SET exe_result = '".$totalScore."'
             WHERE exe_id = ".$id;
     Database::query($sql);
 
@@ -262,6 +264,39 @@ if (isset($_REQUEST['comments']) &&
                 Display::return_message(get_lang('MessageSent'))
             );
         }
+    }
+
+    $notifications = api_get_configuration_value('exercise_finished_notification_settings');
+    if ($notifications) {
+        ob_start();
+        $stats = ExerciseLib::displayQuestionListByAttempt(
+            $objExerciseTmp,
+            $track_exercise_info['exe_id'],
+            false,
+            false,
+            false,
+            api_get_configuration_value('quiz_results_answers_report'),
+            false
+        );
+        ob_end_clean();
+
+        $attemptCount = Event::getAttemptPosition(
+            $track_exercise_info['exe_id'],
+            $student_id,
+            $objExerciseTmp->id,
+            $lp_id,
+            $lpItemId,
+            $lp_item_view_id
+        );
+
+        ExerciseLib::sendNotification(
+            $student_id,
+            $objExerciseTmp,
+            $track_exercise_info,
+            api_get_course_info(),
+            $attemptCount,
+            $stats
+        );
     }
 
     // Updating LP score here
@@ -383,17 +418,8 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     $exe_id = (int) $_GET['did'];
     if (!empty($exe_id)) {
-        $sql = 'DELETE FROM '.$TBL_TRACK_EXERCISES.' WHERE exe_id = '.$exe_id;
-        Database::query($sql);
-        $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
-        Database::query($sql);
+        ExerciseLib::deleteExerciseAttempt($exe_id);
 
-        Event::addEvent(
-            LOG_EXERCISE_ATTEMPT_DELETE,
-            LOG_EXERCISE_ATTEMPT,
-            $exe_id,
-            api_get_utc_datetime()
-        );
         header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     }

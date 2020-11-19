@@ -196,9 +196,7 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 $extraField = [];
 $field = new ExtraField('user');
 $authorLpField = $field->get_handler_field_info_by_field_variable('authorlp');
-$idExtraField = (int) (isset($authorLpField['id']) ? $authorLpField['id'] : 0);
-$idExtraFieldChangeable = (int) (isset($authorLpField['changeable']) ? $authorLpField['changeable'] : 0);
-if ($idExtraField != 0 && $idExtraFieldChangeable == 1) {
+if ($authorLpField != null) {
     $extraField['authorlp'] = $authorLpField;
 }
 
@@ -207,7 +205,8 @@ echo $learnPath->build_action_menu(false,
     false,
     true,
     '',
-    $extraField);
+    $extraField
+);
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, true);

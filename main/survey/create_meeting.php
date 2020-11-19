@@ -82,14 +82,14 @@ for ($i = 1; $i <= $maxEvents; $i++) {
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = 3;    
+    var number = 3;
     $("#add_button").on("click", function() {
         number++;
         $("#time_" + number + "_date_time_wrapper").show();
     });
-    
+
     $("#remove_button").on("click", function() {
-        if (number > 1) {            
+        if (number > 1) {
             $("#time_" + number + "_date_time_wrapper").hide();
             number--;
         }

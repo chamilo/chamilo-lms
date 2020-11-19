@@ -57,15 +57,11 @@ if (!$is_allowedToEdit) {
 }
 
 $allowSignature = false;
-if ($student_id === $current_user_id && 'true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
-    $extraFieldValue = new ExtraFieldValue('exercise');
-    $result = $extraFieldValue->get_values_by_handler_and_field_variable($exercise_id, 'signature_activated');
-    if ($result && isset($result['value']) && 1 === (int) $result['value']) {
-        // Check if signature exists.
-        $signature = ExerciseSignaturePlugin::getSignature($current_user_id, $track_exercise_info);
-        if (false === $signature) {
-            $allowSignature = true;
-        }
+if ($student_id === $current_user_id && ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)) {
+    // Check if signature exists.
+    $signature = ExerciseSignaturePlugin::getSignature($current_user_id, $track_exercise_info);
+    if (false === $signature) {
+        $allowSignature = true;
     }
 }
 

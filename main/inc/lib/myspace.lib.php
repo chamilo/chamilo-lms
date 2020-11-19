@@ -63,6 +63,14 @@ class MySpace
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/ti_report.php',
                 'content' => get_lang('TIReport'),
             ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global.php',
+                'content' => get_lang('QuestionStats'),
+            ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php',
+                'content' => get_lang('QuestionStatsDetailedReport'),
+            ],
         ];
 
         $field = new ExtraField('user');
@@ -1178,21 +1186,23 @@ class MySpace
             $lp_id = (int) $row['lp_id'];
             $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lp_id);
             if (!empty($registeredUsers)) {
-                $lp_info = [];
+                $lpInfo = [];
                 $teacherList = [];
                 $teachersId = explode(',', trim($row['users_id'], ","));
                 $lp_table = Database::get_course_table(TABLE_LP_MAIN);
                 $query = "
-            SELECT *,
-                   (select title from $tblCourse where course.id = c_lp.c_id) as courseTitle
+            SELECT $lp_table.*,
+                   $tblCourse.title as courseTitle,
+                   $tblCourse.code as courseCode
             FROM
                 $lp_table
+            INNER JOIN $tblCourse ON $tblCourse.id = $lp_table.c_id
             WHERE
-                id = $lp_id
+                $lp_table.iid = $lp_id
                 ";
                 $res = Database::query($query);
                 if (Database::num_rows($res)) {
-                    $lp_info = Database::fetch_array($res);
+                    $lpInfo = Database::fetch_array($res);
                 }
                 $studentUsers = [];
                 for ($i = 0; $i < count($registeredUsers); $i++) {
@@ -1202,9 +1212,10 @@ class MySpace
                 for ($i = 0; $i < count($teachersId); $i++) {
                     $teacherId = $teachersId[$i];
                     $teacher = api_get_user_info($teacherId);
-                    $data[$teacher['complete_name']][$lp_info['name']] = [
+                    $data[$teacher['complete_name']][$lpInfo['name']] = [
                         'students' => count($studentUsers),
                         'studentList' => $studentUsers,
+                        'lpInfo' => $lpInfo,
                     ];
                     $teacherList[] = $teacher;
                 }
@@ -1234,6 +1245,7 @@ class MySpace
                     $hiddenField = 'student_show_'.$index;
                     $hiddenFieldLink = 'student_show_'.$index.'_';
                     $printTeacherName = ($teacherName == $teacherNameTemp) ? '' : $teacherName;
+                    $lpInfo = $row['lpInfo'];
                     $teacherNameTemp = $teacherName;
                     $table .=
                         "<tr>".
@@ -1247,7 +1259,14 @@ class MySpace
                         "</a>".
                         "<div id='$hiddenField' class='hidden'>";
                     foreach ($row['studentList'] as $student) {
-                        $table .= $student['complete_name']."<br>";
+                        $reportLink = Display::url(
+                            Display::return_icon('statistics.png', get_lang('Stats')),
+                            api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
+                            $student['id']
+                            .'&id_session='.$lpInfo['session_id']
+                            .'&course='.$lpInfo['courseCode']
+                        );
+                        $table .= "$reportLink ".$student['complete_name']."<br>";
                         $totalStudent++;
                     }
                     $index++;

@@ -219,11 +219,13 @@ if ($conferenceManager) {
 
                                         if (!empty($roomData)) {
                                             $roomId = $roomData['id'];
-                                            Database::update(
-                                                $roomTable,
-                                                ['out_at' => api_get_utc_datetime()],
-                                                ['id = ? ' => $roomId]
-                                            );
+                                            if (!empty($roomId)) {
+                                                Database::update(
+                                                    $roomTable,
+                                                    ['out_at' => api_get_utc_datetime()],
+                                                    ['id = ? ' => $roomId]
+                                                );
+                                            }
                                         }
                                         $i++;
                                     }
@@ -246,11 +248,13 @@ if ($conferenceManager) {
 
                 if (!empty($roomData)) {
                     $roomId = $roomData['id'];
-                    Database::update(
-                        $roomTable,
-                        ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
-                        ['id = ? ' => $roomId]
-                    );
+                    if (!empty($roomId)) {
+                        Database::update(
+                            $roomTable,
+                            ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                            ['id = ? ' => $roomId]
+                        );
+                    }
                 }
 
                 $message = Display::return_message(
@@ -300,17 +304,19 @@ if ($conferenceManager) {
 
             $i = 0;
             foreach ($roomData as $item) {
-                $roomId = $roomData['id'];
-                if ($i == 0) {
-                    Database::update(
-                        $roomTable,
-                        ['out_at' => api_get_utc_datetime()],
-                        ['id = ? ' => $roomId]
-                    );
-                } else {
-                    Database::update($roomTable, ['close' => BBBPlugin::ROOM_CLOSE], ['id = ? ' => $roomId]);
+                $roomId = $item['id'];
+                if (!empty($roomId)) {
+                    if ($i == 0) {
+                        Database::update(
+                            $roomTable,
+                            ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                            ['id = ? ' => $roomId]
+                        );
+                    } else {
+                        Database::update($roomTable, ['close' => BBBPlugin::ROOM_CLOSE], ['id = ? ' => $roomId]);
+                    }
+                    $i++;
                 }
-                $i++;
             }
 
             $message = Display::return_message(

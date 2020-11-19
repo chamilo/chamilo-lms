@@ -37,7 +37,7 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-if (isset($_POST['currentFile'])) {
+if (isset($_POST['currentFile']) && !empty($_POST['currentFile']) && empty($action)) {
     $action = 'replace';
 }
 $allowUseTool = false;

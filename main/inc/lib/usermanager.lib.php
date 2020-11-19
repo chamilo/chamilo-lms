@@ -781,7 +781,7 @@ class UserManager
      */
     public static function ensureCASUserExtraFieldExists()
     {
-        if (!UserManager::is_extra_field_available('cas_user')) {
+        if (!self::is_extra_field_available('cas_user')) {
             $extraField = new ExtraField('user');
             if (false === $extraField->save(
                     [
@@ -793,6 +793,21 @@ class UserManager
                     ]
                 )) {
                 throw new Exception(get_lang('FailedToCreateExtraFieldCasUser'));
+            }
+
+            $rules = api_get_configuration_value('cas_user_map');
+            if (!empty($rules) && isset($rules['extra'])) {
+                foreach ($rules['extra'] as $extra) {
+                    $extraField->save(
+                        [
+                            'variable' => $extra,
+                            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                            'display_text' => $extra,
+                            'visible_to_self' => false,
+                            'filter' => false,
+                        ]
+                    );
+                }
             }
         }
     }

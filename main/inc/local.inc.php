@@ -317,7 +317,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     if (!isset($attributes[$attributeName])) {
                                         continue;
                                     }
-                                    $value = $attributes[$field];
+                                    $value = $attributes[$attributeName];
                                     // Check replace.
                                     if (isset($rules['replace'][$attributeName])) {
                                         $value = $rules['replace'][$attributeName][$value];
@@ -334,7 +334,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $userEntity->setLastname($value);
                                             break;
                                         case 'active':
-                                            $userEntity->setActive(!('false' === $value));
+                                            $userEntity->setActive('false' === $value);
                                             break;
                                         case 'status':
                                             if (PLATFORM_ADMIN === (int) $value) {

@@ -1344,7 +1344,7 @@ class Template
 
             $extraParams = '';
 
-            if (api_get_configuration_value('ticket_add_quiz_and_lp')) {
+            if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
                 if (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) {
                     $extraParams = '&exerciseId=' . (int) $_GET['exerciseId'];
                 }

@@ -1016,7 +1016,9 @@ class ImportCsv
                                 );
                             }
                         }
-                        $this->logger->addInfo("Students - User updated: ".$row['username']);
+                        $this->logger->addInfo(
+                            'Students - User updated: '.$row['username'].' '.$row['firstname'].' '.$row['lastname'].' '.$email
+                        );
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }

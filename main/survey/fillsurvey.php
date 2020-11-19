@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+$lastQuestion =  0;
 
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
@@ -810,6 +811,12 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                     $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
                 }
                 $counter++;
+                // see GH#3582
+                if (isset($_GET['show']) && (int)$_GET['show'] >= 0) {
+                    $lastQuestion = (int)$_GET['show'] - 1;
+                } else {
+                    $lastQuestion = (int)$row['question_option_id'];
+                }
             }
         }
     } elseif ('1' === $survey_data['survey_type']) {
@@ -1372,6 +1379,18 @@ if ($survey_data['survey_type'] == '0') {
                     'success'
                 );
             } else {
+                // see GH#3582
+                if (
+                api_get_configuration_value('survey_backwards_enable')
+                ) {
+                    if ($lastQuestion >= 0) {
+                        $form->addHtml(
+                            "<a class=\" btn btn-warning \" href=\"$url&show=$lastQuestion\">".
+                            "<em class=\"fa fa-arrow-left\"></em> "
+                            .get_lang('Back')." </a>"
+                        );
+                    }
+                }
                 $form->addButton(
                     'next_survey_page',
                     get_lang('Next'),

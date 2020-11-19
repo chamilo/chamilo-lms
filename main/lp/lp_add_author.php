@@ -15,6 +15,7 @@ use ChamiloSession as Session;
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
+api_protect_admin_script(true);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;

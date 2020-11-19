@@ -1760,6 +1760,9 @@ $_configuration['auth_password_links'] = [
 // Add another layer of security by checking if the user is disabled at every page load (might generate considerable extra DB load)
 // $_configuration['security_block_inactive_users_immediately'] = false;
 
+// Allow all office suite documents to be uploaded in the "My files" section of the social network
+//$_configuration['social_myfiles_office_files_upload_allowed'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

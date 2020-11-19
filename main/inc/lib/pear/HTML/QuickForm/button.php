@@ -254,7 +254,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
             case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX_NO_LABEL:
             default:
-                $template = ' {element}  ';
+                $template = '<div class="form-group"> {element}  </div>';
                 break;
         }
 

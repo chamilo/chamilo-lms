@@ -5,6 +5,7 @@
  */
 
 
+
 var FC = $.fullCalendar = {
 	version: "3.1.0",
 	internalApiVersion: 7
@@ -119,7 +120,7 @@ function enableCursor() {
 
 // Given a total available height to fill, have `els` (essentially child rows) expand to accomodate.
 // By default, all elements that are shorter than the recommended height are expanded uniformly, not considering
-// any other els that are already too tall. if `shouldRedistribute` is on, it considers these tall rows and
+// any other els that are already too tall. if `shouldRedistribute` is on, it considers these tall rows and 
 // reduces the available height.
 function distributeHeight(els, availableHeight, shouldRedistribute) {
 
@@ -11030,7 +11031,7 @@ Calendar.mixin({
 	//   func // callback function to be called upon change
 	//   names // option names whose values should be given to func
 	// }
-	optionHandlers: null,
+	optionHandlers: null, 
 
 	// Calls handlerFunc immediately, and when the given option has changed.
 	// handlerFunc will be given the option value.
@@ -11107,13 +11108,13 @@ Calendar.defaults = {
 
 	weekNumberTitle: 'W',
 	weekNumberCalculation: 'local',
-
+	
 	//editable: false,
 
 	//nowIndicator: false,
 
 	scrollTime: '06:00:00',
-
+	
 	// event ajax
 	lazyFetching: true,
 	startParam: 'start',
@@ -11146,7 +11147,7 @@ Calendar.defaults = {
 	},
 
 	allDayText: 'all-day',
-
+	
 	// jquery-ui theming
 	theme: false,
 	themeButtonIcons: {
@@ -14186,3 +14187,4 @@ fcViews.listYear = {
 		listDayAltFormat: 'dddd' // day-of-week is nice-to-have
 	}
 };
+

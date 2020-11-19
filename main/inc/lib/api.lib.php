@@ -164,6 +164,7 @@ define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
+define('SECTION_CUSTOMPAGE', 'custompage');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -2403,7 +2404,7 @@ function api_format_course_array($course_data)
         $_course['course_image_source'] = $courseSys.'/course-pic85x85.png';
     } else {
         $url_image = Display::return_icon(
-            'course.png',
+            'blackboard.png',
             null,
             null,
             ICON_SIZE_LARGE,
@@ -2427,7 +2428,7 @@ function api_format_course_array($course_data)
             null,
             null,
             true,
-            false
+            true
         );
     }
 

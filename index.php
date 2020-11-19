@@ -201,11 +201,6 @@ if (isset($_GET['firstpage'])) {
 }
 
 $controller->setGradeBookDependencyBar(api_get_user_id());
-
-//See BT#17931
-$controller->tpl->assign('flash_messages_on_top', Display::getFlashToString());
-Display::cleanFlashMessages();
-
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

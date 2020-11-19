@@ -10,19 +10,21 @@
         <div class="col-md-9 col-md-push-3">
             <div class="page-content">
                 {% if plugin_content_top %}
-                <div class="page-content-top">
-                    {{ plugin_content_top }}
-                </div>
+                    <div class="page-content-top">
+                        {{ plugin_content_top }}
+                    </div>
                 {% endif %}
 
                 {{ sniff_notification }}
 
-                {{ flash_messages_on_top }}
+                {% block page_body %}
+                    {% include 'layout/page_body.tpl'|get_template %}
+                {% endblock %}
 
                 {% if home_welcome %}
-                <article id="home-welcome">
-                    {{ home_welcome }}
-                </article>
+                    <article id="home-welcome">
+                        {{ home_welcome }}
+                    </article>
                 {% endif %}
 
                 {% if home_include %}
@@ -31,9 +33,6 @@
                 </article>
                 {% endif %}
 
-                {% block page_body %}
-                    {% include 'layout/page_body.tpl'|get_template %}
-                {% endblock %}
 
                 {% if welcome_to_course_block %}
                     <article id="homepage-course">

@@ -1249,6 +1249,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 
         return false;
     }
+    apiBlockInactiveUser();
 
     return true;
 }
@@ -1276,7 +1277,67 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
         return false;
     }
 
+    apiBlockInactiveUser();
+
     return true;
+}
+
+/**
+ * Blocks inactive users with a currently active session from accessing more 
+ * pages "live".
+ *
+ * @return bool Returns true if the feature is disabled or the user account is still enabled. Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
+ */
+function apiBlockInactiveUser()
+{
+    $data = true;
+    if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
+        return $data;
+    }
+
+    $userId = api_get_user_id();
+    $homeUrl = api_get_path(WEB_PATH);
+    if (($userId) == 0) {
+        return $data;
+    }
+
+    $sql = "SELECT active FROM ".Database::get_main_table(TABLE_MAIN_USER)."
+            WHERE id = $userId";
+
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+
+        $data = (bool) $result_array['active'];
+    }
+    if ($data == false) {
+        $tpl = new Template(null, true, true, false, true, false, true, 0);
+        $tpl->assign('hide_login_link', 1);
+
+        //api_not_allowed(true, get_lang('AccountInactive'));
+        // we were not in a course, return to home page
+        $msg = Display::return_message(
+            get_lang('AccountInactive'),
+            'error',
+            false
+        );
+
+        $msg .= '<p class="text-center">
+                 <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
+
+        if (api_is_anonymous()) {
+            $form = api_get_not_allowed_login_form();
+            $msg .= '<div class="well">';
+            $msg .= $form->returnForm();
+            $msg .= '</div>';
+        }
+
+        $tpl->assign('content', $msg);
+        $tpl->display_one_col_template();
+        exit;
+    }
+
+    return $data;
 }
 
 /**
@@ -1315,6 +1376,7 @@ function api_block_anonymous_users($printHeaders = true)
 
         return false;
     }
+    apiBlockInactiveUser();
 
     return true;
 }
@@ -8235,8 +8297,8 @@ function api_set_settings_and_plugins()
 function api_set_more_memory_and_time_limits()
 {
     if (function_exists('ini_set')) {
-        api_set_memory_limit('256M');
-        ini_set('max_execution_time', 1800);
+        api_set_memory_limit('2048M');
+        ini_set('max_execution_time', 3600);
     }
 }
 

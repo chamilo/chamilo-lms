@@ -180,7 +180,7 @@ class CkEditor extends Editor
         return [[
             'title' => get_lang('EmptyTemplate'),
             'description' => null,
-            'image' => api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/empty.gif',
+            'image' => api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/empty.gif',
             'html' => '
                 <!DOCYTPE html>
                 <html>
@@ -218,21 +218,12 @@ class CkEditor extends Editor
         ];
 
         $templateList = [];
-
         foreach ($systemTemplates as $template) {
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
-            $image = api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image;
-
-            /*$image = $this->urlGenerator->generate(
-                'get_document_template_action',
-                array('file' => $image),
-                UrlGenerator::ABSOLUTE_URL
-            );*/
-
+            $image = api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/'.$image;
             $templateContent = $template->getContent();
             $content = str_replace($search, $replace, $templateContent);
-
             $templateList[] = [
                 'title' => get_lang($template->getTitle()),
                 'description' => get_lang($template->getComment()),
@@ -254,23 +245,20 @@ class CkEditor extends Editor
         $templatesRepo = $entityManager->getRepository('ChamiloCoreBundle:Templates');
         $user = api_get_user_entity($userId);
         $course = $entityManager->find('ChamiloCoreBundle:Course', api_get_course_int_id());
-
         if (!$user || !$course) {
             return [];
         }
 
         $courseTemplates = $templatesRepo->getCourseTemplates($course, $user);
         $templateList = [];
-
         foreach ($courseTemplates as $templateData) {
             $template = $templateData[0];
             $courseDirectory = $course->getDirectory();
-
             $templateItem = [];
             $templateItem['title'] = $template->getTitle();
             $templateItem['description'] = $template->getDescription();
-            $templateItem['image'] = api_get_path(WEB_APP_PATH)
-                .'home/default_platform_document/template_thumb/noimage.gif';
+            $templateItem['image'] = api_get_path(WEB_HOME_PATH).
+                'default_platform_document/template_thumb/noimage.gif';
             $templateItem['html'] = file_get_contents(api_get_path(SYS_COURSE_PATH)
                 .$courseDirectory.'/document'.$templateData['path']);
 

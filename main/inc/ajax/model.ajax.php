@@ -1398,10 +1398,10 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (api_get_configuration_value('allow_compilatio_tool') && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
-        if (isset($_GET['type']) && $_GET['type'] == 'simple') {
+        if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
                 'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
@@ -1680,6 +1680,7 @@ switch ($action) {
 
         $result = [];
         if (!empty($sessions)) {
+            $pdfIcon = Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL);
             foreach ($sessions as $session) {
                 if (api_drh_can_access_all_session_content()) {
                     $count_courses_in_session = SessionManager::get_course_list_by_session_id(
@@ -1691,7 +1692,7 @@ switch ($action) {
                 } else {
                     $count_courses_in_session = count(
                         Tracking::get_courses_followed_by_coach(
-                            $user_id,
+                            api_get_user_id(),
                             $session['id']
                         )
                     );
@@ -1711,6 +1712,19 @@ switch ($action) {
                 $dateToString = $dateData['access'];
 
                 $detailButtons = [];
+                $detailButtons[] = Display::url(
+                    $pdfIcon,
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'export_to_pdf',
+                            'type' => 'achievement',
+                            'session_to_export' => $session['id'],
+                            'all_students' => 1,
+                        ]
+                    ),
+                    ['target' => '_blank']
+                );
                 $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']

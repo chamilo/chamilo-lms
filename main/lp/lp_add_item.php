@@ -50,7 +50,7 @@ function load_cbo(id, previousId) {
     if (!id) {
         return false;
     }
-    
+
     previousId = previousId || 'previous';
 
     var cbo = document.getElementById(previousId);
@@ -193,8 +193,20 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 })
 </script>
 <?php
+$extraField = [];
+$field = new ExtraField('user');
+$authorLpField = $field->get_handler_field_info_by_field_variable('authorlp');
+if ($authorLpField != null) {
+    $extraField['authorlp'] = $authorLpField;
+}
 
-echo $learnPath->build_action_menu();
+echo $learnPath->build_action_menu(false,
+    true,
+    false,
+    true,
+    '',
+    $extraField
+);
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, true);

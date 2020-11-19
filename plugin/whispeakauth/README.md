@@ -5,7 +5,7 @@ Speech authentication with Whispeak
 
 This plugin requires the user to grant permission to use the microphone connected on the web browser. Currently,
 browsers are limiting this permission to be used only in a secure environment with HTTPS. 
-**If your portal does not work with HTTP, then Whispeak authentication may not work.**
+**If your portal does not work with HTTPS, then Whispeak authentication may not work.**
 
 Instructions:
 -------------
@@ -18,3 +18,5 @@ Instructions:
 3. Set the `login_bottom` region to the plugin. 
 4. Add `$_configuration['whispeak_auth_enabled'] = true;` to `configuration.php` file.
 5. Optionally, you can add the `menu_administrator` region to se the user logged activities from Whispeak.
+
+To have more information about whispeak or create an account to be able to use it on Chamilo you can go here <a href="https://whispeak.io/elearning/?source=chamilo">Whispeak</a>

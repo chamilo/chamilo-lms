@@ -1930,8 +1930,8 @@ class SurveyUtil
                 $line++;
                 $column = 0;
             }
-            if ($possible_answers_type[$row['question_id']] == 'open' ||
-                $possible_answers_type[$row['question_id']] == 'comment'
+            if ($possible_answers_type[$row['question_id']] === 'open' ||
+                $possible_answers_type[$row['question_id']] === 'comment'
             ) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
@@ -2974,6 +2974,7 @@ class SurveyUtil
         $table->set_column_filter(8, 'anonymous_filter');
         $actions = [
             'export_all' => get_lang('ExportResults'),
+            'export_by_class' => get_lang('ExportByClass'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
             'multiplicate' => get_lang('MultiplicateQuestions'),
             'delete' => get_lang('DeleteSurvey'),
@@ -3618,7 +3619,6 @@ class SurveyUtil
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
-        // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
@@ -3902,20 +3902,23 @@ class SurveyUtil
             $data = '';
             foreach ($chartData as $chartDataElement) {
                 $data .= '{"';
+                $option = str_replace(["\n", "\r"], '', $chartDataElement['option']);
+                $serieValue = isset($chartDataElement['serie']) ? $chartDataElement['serie'] : null;
+
                 if (!$hasSerie) {
-                    $data .= get_lang("Option").'":"'.$chartDataElement['option'].'", "';
-                    array_push($order, $chartDataElement['option']);
+                    $data .= get_lang("Option").'":"'.$option.'", "';
+                    array_push($order, $option);
                 } else {
-                    if (!is_array($chartDataElement['serie'])) {
+                    if (!is_array($serieValue)) {
                         $data .=
-                            get_lang("Option").'":"'.$chartDataElement['serie'].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
-                        array_push($serie, $chartDataElement['serie']);
+                            get_lang("Option").'":"'.$serieValue.'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
+                        array_push($serie, $serieValue);
                     } else {
                         $data .=
-                            get_lang("Serie").'":"'.$chartDataElement['serie'][0].'", "'.
-                            get_lang("Option").'":"'.$chartDataElement['serie'][1].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
+                            get_lang("Serie").'":"'.$serieValue[0].'", "'.
+                            get_lang("Option").'":"'.$serieValue[1].'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
                     }
                 }
                 $data .= get_lang("Votes").'":"'.$chartDataElement['votes'].'"},';

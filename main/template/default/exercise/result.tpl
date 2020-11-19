@@ -29,9 +29,10 @@
     </div>
 
     <script>
+        var imageFormat = 'image/png';
         var canvas = document.querySelector("canvas");
         var signaturePad = new SignaturePad(canvas);
-        var dataURL = signaturePad.toDataURL("image/jpeg");
+        var dataURL = signaturePad.toDataURL(imageFormat);
         var url = "{{ _p.web_ajax }}exercise.ajax.php?{{ _p.web_cid_query }}";
         var exeId = "{{ exe_id }}";
 
@@ -54,10 +55,8 @@
                     return false;
                 }
 
-                var dataURL = signaturePad.toDataURL("image/jpeg");
-
+                var dataURL = signaturePad.toDataURL(imageFormat);
                 $.ajax({
-                    contentType: "application/x-www-form-urlencoded",
                     beforeSend: function(result) {
                         $('#loading').show();
                     },

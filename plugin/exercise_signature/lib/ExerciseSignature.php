@@ -26,6 +26,23 @@ class ExerciseSignaturePlugin extends Plugin
         return $instance ? $instance : $instance = new self();
     }
 
+    public static function exerciseHasSignatureActivated(Exercise $exercise)
+    {
+        if (empty($exercise->iId)) {
+            return false;
+        }
+
+        if ('true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+            $extraFieldValue = new ExtraFieldValue('exercise');
+            $result = $extraFieldValue->get_values_by_handler_and_field_variable($exercise->iId, 'signature_activated');
+            if ($result && isset($result['value']) && 1 === (int) $result['value']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function saveSignature($userId, $trackInfo, $file)
     {
         if (false === self::validateSignatureAccess($userId, $trackInfo)) {

@@ -13,7 +13,11 @@
                         <img src="{{ data.avatar }}">
                     </div>
                     <div class="user-info">
-                        <strong>{{ data.name_url }}</strong><br>
+                        <strong>{{ data.name_url }}</strong>
+                        <br />
+                        {% if signature %}
+                            <img src="{{ signature }}" />
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -45,10 +49,20 @@
                         {% endif %}
 
                         {% if allow_signature %}
-                            <div class="list-data ip">
+                            <div class="list-data">
                                 <span class="item"></span>
                                 <a id="sign" class="btn btn-primary" href="javascript:void(0)">
                                     <em class="fa fa-pencil"></em> {{ 'Sign'| get_plugin_lang('ExerciseSignaturePlugin') }}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        {% if allow_export_pdf %}
+                            <br />
+                            <div class="list-data">
+                                <span class="item"></span>
+                                <a href="{{ export_url }}" class="btn btn-default">
+                                    <img src="{{ 'export_pdf.png'|icon(32) }}" /> {{ 'ExportResponseReport'| get_lang }}
                                 </a>
                             </div>
                         {% endif %}

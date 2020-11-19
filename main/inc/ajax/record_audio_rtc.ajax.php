@@ -1,11 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
 
-// Add security from Chamilo
 api_block_anonymous_users();
 
 $courseInfo = api_get_course_info();
@@ -31,9 +31,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
         exit;
     }
 
-    Display::addFlash(
-        Display::return_message(get_lang('UploadError'), 'error')
-    );
+    Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
     exit;
 }
 

@@ -811,15 +811,19 @@ class UserManager
         self::ensureCASUserExtraFieldExists();
 
         $loginName = 'cas_user_'.$casUser;
-        $defaultValue = get_lang("EditInProfile");
+        $defaultValue = get_lang('EditInProfile');
+        $defaultEmailValue = get_lang('EditInProfile');
         require_once __DIR__.'/../../auth/external_login/functions.inc.php';
+        if ('true' === api_get_setting('login_is_email')) {
+            $defaultEmailValue = $casUser;
+        }
         $userId = external_add_user(
             [
                 'username' => $loginName,
                 'auth_source' => CAS_AUTH_SOURCE,
                 'firstname' => $defaultValue,
                 'lastname' => $defaultValue,
-                'email' => $defaultValue,
+                'email' => $defaultEmailValue,
             ]
         );
         if (false === $userId) {

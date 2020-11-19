@@ -306,65 +306,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         // create the new user from its CAS user identifier
                         $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
                         $_user = api_get_user_info_from_username($login);
-                        $rules = api_get_configuration_value('cas_user_map');
-
-                        if (!empty($rules)) {
-                            $userEntity = api_get_user_entity($_user['id']);
-                            $attributes = phpCAS::getAttributes();
-                            if (isset($rules['fields'])) {
-                                $isAdmin = false;
-                                foreach ($rules['fields'] as $field => $attributeName) {
-                                    if (!isset($attributes[$attributeName])) {
-                                        continue;
-                                    }
-                                    $value = $attributes[$attributeName];
-                                    // Check replace.
-                                    if (isset($rules['replace'][$attributeName])) {
-                                        $value = $rules['replace'][$attributeName][$value];
-                                    }
-
-                                    switch ($field) {
-                                        case 'email':
-                                            $userEntity->setEmail($value);
-                                            break;
-                                        case 'firstname':
-                                            $userEntity->setFirstname($value);
-                                            break;
-                                        case 'lastname':
-                                            $userEntity->setLastname($value);
-                                            break;
-                                        case 'active':
-                                            $userEntity->setActive('false' === $value);
-                                            break;
-                                        case 'status':
-                                            if (PLATFORM_ADMIN === (int) $value) {
-                                                $value = COURSEMANAGER;
-                                                $isAdmin = true;
-                                            }
-                                            $userEntity->setStatus($value);
-                                            break;
-                                    }
-
-                                    Database::getManager()->persist($userEntity);
-                                    Database::getManager()->flush();
-
-                                    if ($isAdmin) {
-                                        UserManager::addUserAsAdmin($userEntity);
-                                    }
-                                }
-                            }
-                            if (isset($rules['extra'])) {
-                                foreach ($rules['extra'] as $variable) {
-                                    if (isset($attributes[$variable])) {
-                                        UserManager::update_extra_field_value(
-                                            $_user['id'],
-                                            $variable,
-                                            $attributes[$variable]
-                                        );
-                                    }
-                                }
-                            }
-                        }
+                        UserManager::updateCasUser($_user);
 
                         break;
 
@@ -380,6 +322,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             } else {
                 $_user = api_get_user_info_from_username($login);
+                switch (api_get_setting('cas_add_user_activate')) {
+                    case PLATFORM_AUTH_SOURCE:
+                        UserManager::updateCasUser($_user);
+
+                        break;
+                }
             }
 
             // $login is set and the user exists in the database

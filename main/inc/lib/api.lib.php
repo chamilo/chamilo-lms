@@ -1284,7 +1284,7 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 }
 
 /**
- * Blocks inactive users with a currently active session from accessing more 
+ * Blocks inactive users with a currently active session from accessing more
  * pages "live".
  *
  * @return bool Returns true if the feature is disabled or the user account is still enabled. Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
@@ -2404,7 +2404,7 @@ function api_format_course_array($course_data)
         $_course['course_image_source'] = $courseSys.'/course-pic85x85.png';
     } else {
         $url_image = Display::return_icon(
-            'blackboard.png',
+            'course.png',
             null,
             null,
             ICON_SIZE_LARGE,

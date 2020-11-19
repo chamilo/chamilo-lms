@@ -634,6 +634,10 @@ function menuArray()
  */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
+    // This configuration option allows you to completely hide the breadcrumb
+    if (api_get_configuration_value('breadcrumb_hide') == true) {
+        return '';
+    }
     $courseInfo = api_get_course_info();
     $user_id = api_get_user_id();
     $additionalBlocks = '';

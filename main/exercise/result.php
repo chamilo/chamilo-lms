@@ -13,6 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $id = isset($_REQUEST['id']) ? (int) $_GET['id'] : 0; // exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $origin = api_get_origin();
 
 if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
@@ -56,15 +57,11 @@ if (!$is_allowedToEdit) {
 }
 
 $allowSignature = false;
-if ($student_id === $current_user_id && 'true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
-    $extraFieldValue = new ExtraFieldValue('exercise');
-    $result = $extraFieldValue->get_values_by_handler_and_field_variable($exercise_id, 'signature_activated');
-    if ($result && isset($result['value']) && 1 === (int) $result['value']) {
-        // Check if signature exists.
-        $signature = ExerciseSignaturePlugin::getSignature($current_user_id, $track_exercise_info);
-        if (false === $signature) {
-            $allowSignature = true;
-        }
+if ($student_id === $current_user_id && ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)) {
+    // Check if signature exists.
+    $signature = ExerciseSignaturePlugin::getSignature($current_user_id, $track_exercise_info);
+    if (false === $signature) {
+        $allowSignature = true;
     }
 }
 
@@ -105,16 +102,59 @@ if ($show_headers) {
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 
+$allowExportPdf = api_get_configuration_value('quiz_results_answers_report');
+
 ob_start();
-ExerciseLib::displayQuestionListByAttempt(
+$stats = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,
     $message,
-    $allowSignature
+    $allowSignature,
+    $allowExportPdf,
+    'export' === $action
 );
 $pageContent = ob_get_contents();
 ob_end_clean();
+
+switch ($action) {
+    case 'export':
+        if ($allowExportPdf) {
+            $allAnswers = $stats['all_answers_html'];
+            @$pdf = new PDF();
+            $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
+            $title = get_lang('ResponseReport');
+            $exerciseTitle = $objExercise->get_formated_title();
+            $studentInfo = api_get_user_info($student_id);
+            $userHeader = $objExercise->showExerciseResultHeader(
+                $studentInfo,
+                $track_exercise_info,
+                false,
+                false,
+                false
+            );
+            $filename = get_lang('Exercise').'_'.$exerciseTitle;
+            $pdf->content_to_pdf("
+                    <html><body>
+                    <h2 style='text-align: center'>$title</h2>
+                    $userHeader
+                    $allAnswers
+                    </body></html>",
+                file_get_contents($cssFile),
+                $filename,
+                api_get_course_id(),
+                'D',
+                false,
+                null,
+                false,
+                true
+            );
+        } else {
+            api_not_allowed(true);
+        }
+        exit;
+        break;
+}
 
 $template = new Template('', $show_headers, $show_headers);
 $template->assign('page_content', $pageContent);

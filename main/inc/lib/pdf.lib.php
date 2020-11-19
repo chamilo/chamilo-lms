@@ -59,7 +59,7 @@ class PDF
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
-        $this->pdf = new mPDF(
+        @$this->pdf = new mPDF(
             'UTF-8',
             $pageFormat,
             '',
@@ -290,7 +290,7 @@ class PDF
                     if (file_exists($style)) {
                         $cssContent = file_get_contents($style);
                         try {
-                            $this->pdf->WriteHTML($cssContent, 1);
+                            @$this->pdf->WriteHTML($cssContent, 1);
                         } catch (MpdfException $e) {
                             error_log($e);
                         }
@@ -300,7 +300,7 @@ class PDF
 
             // it's not a chapter but the file exists, print its title
             if ($print_title) {
-                $this->pdf->WriteHTML(
+                @$this->pdf->WriteHTML(
                     '<html><body><h3>'.$html_title.'</h3></body></html>'
                 );
             }
@@ -349,12 +349,12 @@ class PDF
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }
                 if (!empty($document_html)) {
-                    $this->pdf->WriteHTML($document_html.$page_break);
+                    @$this->pdf->WriteHTML($document_html.$page_break);
                 }
             } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
                 // Images
                 $image = Display::img($file);
-                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
+                @$this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
             }
         }
         if (empty($pdf_name)) {
@@ -500,7 +500,7 @@ class PDF
 
         if (!empty($css)) {
             try {
-                $this->pdf->WriteHTML($css, 1);
+                @$this->pdf->WriteHTML($css, 1);
             } catch (MpdfException $e) {
                 error_log($e);
             }
@@ -514,15 +514,15 @@ class PDF
             }
             $cssContent = file_get_contents($css_file);
             try {
-                $this->pdf->WriteHTML($cssBootstrap, 1);
-                $this->pdf->WriteHTML($cssContent, 1);
+                @$this->pdf->WriteHTML($cssBootstrap, 1);
+                @$this->pdf->WriteHTML($cssContent, 1);
             } catch (MpdfException $e) {
                 error_log($e);
             }
         }
 
         try {
-            $this->pdf->WriteHTML($document_html);
+            @$this->pdf->WriteHTML($document_html);
         } catch (MpdfException $e) {
             error_log($e);
         }

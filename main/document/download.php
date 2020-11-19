@@ -1,19 +1,17 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This file is responsible for passing requested documents to the browser.
  * Many functions updated and moved to lib/document.lib.php.
- *
- * @package chamilo.document
  */
 session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global-min.inc.php';
 $this_section = SECTION_COURSES;
 
-// Protection
 api_protect_course_script();
-
 $_course = api_get_course_info();
 
 if (!isset($_course)) {
@@ -25,7 +23,6 @@ $doc_url = str_replace('///', '&', $_GET['doc_url']);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $docUrlNoPlus = $doc_url;
 $doc_url = str_replace(' ', '+', $doc_url);
-
 $docUrlParts = preg_split('/\/|\\\/', $doc_url);
 $doc_url = '';
 
@@ -36,24 +33,21 @@ foreach ($docUrlParts as $docUrlPart) {
 
     $doc_url .= '/'.$docUrlPart;
 }
-
 if (empty($doc_url)) {
-    api_not_allowed(
-        !empty($_GET['origin']) && $_GET['origin'] === 'learnpath'
-    );
+    api_not_allowed(!empty($_GET['origin']) && $_GET['origin'] === 'learnpath');
 }
 
 // Dealing with image included into survey: when users receive a link towards a
 // survey while not being authenticated on the platform.
 // The administrator should probably be able to disable this code through admin
 // interface.
-$refer_script = isset($_SERVER["HTTP_REFERER"]) ? strrchr($_SERVER["HTTP_REFERER"], '/') : null;
+$refer_script = isset($_SERVER['HTTP_REFERER']) ? strrchr($_SERVER['HTTP_REFERER'], '/') : null;
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-
-if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
-    parse_str($refer_script, $parts);
-    $course = isset($parts['course']) ? $parts['course'] : '';
-    $invitation = isset($parts['invitationcode']) ? $parts['invitationcode'] : '';
+if (substr($refer_script, 0, 15) === '/fillsurvey.php') {
+    $parts = parse_url($refer_script);
+    parse_str($parts['query'], $queryParts);
+    $course = isset($queryParts['course']) ? $queryParts['course'] : '';
+    $invitation = isset($queryParts['invitationcode']) ? $queryParts['invitationcode'] : '';
     include '../survey/survey.download.inc.php';
     $_course = check_download_survey($course, $invitation, $doc_url);
     $_course['path'] = $_course['directory'];
@@ -80,7 +74,7 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 $path_info = pathinfo($doc_url);
 
 $fix_file_name = false;
-if (isset($path_info['extension']) && $path_info['extension'] == 'swf') {
+if (isset($path_info['extension']) && $path_info['extension'] === 'swf') {
     $fixed_url = str_replace('-', '_', $doc_url);
     $doc_id = DocumentManager::get_document_id(api_get_course_info(), $doc_url);
     if (!$doc_id) {

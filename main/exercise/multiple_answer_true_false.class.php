@@ -327,6 +327,7 @@ class MultipleAnswerTrueFalse extends Question
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         }
+
         if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ||
             in_array(
                 $exercise->results_disabled,
@@ -336,7 +337,9 @@ class MultipleAnswerTrueFalse extends Question
                 ]
             )
         ) {
-            $header .= '<th>'.get_lang('Comment').'</th>';
+            if (false === $exercise->hideComment) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
         }
         $header .= '</tr>';
 

@@ -146,7 +146,6 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
 
 // Filter the type of questions we can add
 Question::displayTypeMenu($objExercise);
-
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
@@ -160,7 +159,7 @@ if (!$inATest) {
     if ($nbrQuestions) {
         // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
-
+        $originalQuestionSelectType = $objExercise->questionSelectionType;
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
@@ -195,6 +194,9 @@ if (!$inATest) {
             // Classic order
             $questionList = $objExercise->selectQuestionList(true, true);
         }
+
+        // Restore original value
+        $objExercise->questionSelectionType = $originalQuestionSelectType;
 
         echo '
             <div class="row hidden-xs">

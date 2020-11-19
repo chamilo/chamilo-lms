@@ -2,7 +2,18 @@
     <p>
         <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
         <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
-
+        <div id="timer" style="display: none">
+            <h2>
+                <div class="label label-danger">
+                    <span id="hour">00</span>
+                    <span class="divider">:</span>
+                    <span id="minute">00</span>
+                    <span class="divider">:</span>
+                    <span id="second">00</span>
+                </div>
+            </h2>
+            <br />
+        </div>
         <div class="form-group">
             <input type="text" name="audio_title" id="audio-title-rtc" class="form-control" placeholder="{{ 'InputNameHere'|get_lang }}" />
         </div>
@@ -20,11 +31,50 @@
 
 <script>
     $(function() {
+        function startTimer() {
+            $("#timer").show();
+            var timerData = {
+                hour: parseInt($("#hour").text()),
+                minute: parseInt($("#minute").text()),
+                second: parseInt($("#second").text())
+            };
+
+            clearInterval(window.timerInterval);
+            window.timerInterval = setInterval(function(){
+                // Seconds
+                timerData.second++;
+                if (timerData.second >= 60) {
+                    timerData.second = 0;
+                    timerData.minute++;
+                }
+
+                // Minutes
+                if (timerData.minute >= 60) {
+                    timerData.minute = 0;
+                    timerData.hour++;
+                }
+
+                $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+                $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+                $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+            }, 1000);
+        }
+
+        function stopTimer() {
+            $("#hour").text('00');
+            $("#minute").text('00');
+            $("#second").text('00');
+            $("#timer").hide();
+        }
+
+        function pauseTimer() {
+            clearInterval(window.timerInterval);
+        }
+
         function useRecordRTC(){
             $('#record-audio-recordrtc').show();
 
             var audioTitle = $('#audio-title-rtc');
-
             var mediaConstraints = {audio: true},
                     recordRTC = null,
                     btnStart = $('#btn-start-record'),
@@ -49,6 +99,8 @@
                 }
 
                 function successCallback(stream) {
+                    stopTimer();
+                    startTimer();
                     recordRTC = RecordRTC(stream, {
                         numberOfAudioChannels: 1,
                         type: 'audio'
@@ -60,6 +112,7 @@
                 }
 
                 function errorCallback(error) {
+                    stopTimer();
                     alert(error.message);
                 }
             });
@@ -69,6 +122,7 @@
                     return;
                 }
 
+                stopTimer();
                 recordRTC.stopRecording(function (audioURL) {
                     var recordedBlob = recordRTC.getBlob(),
                             fileName = Math.round(Math.random() * 99999999) + 99999999,
@@ -132,7 +186,6 @@
         }
 
         $('#record-audio-recordrtc, #record-audio-wami').hide();
-
         var webRTCIsEnabled = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia ||
                 navigator.mediaDevices.getUserMedia;
 

@@ -20,7 +20,7 @@ $courseIdList = isset($_REQUEST['courses']) ? $_REQUEST['courses'] : [];
 $exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
 
 $courseOptions = [];
-$exercisesList = [];
+$exerciseList = [];
 $selectedExercises = [];
 if (!empty($courseIdList)) {
     foreach ($courseIdList as $courseId) {
@@ -41,13 +41,18 @@ if (!empty($courseIdList)) {
                     $selectedExercises[$courseId][] = $exerciseId;
                 }
             }
-            $exercisesList += array_column($courseExerciseList, 'title', 'iid');
+            $exerciseList += array_column($courseExerciseList, 'title', 'iid');
         }
         $courseOptions[$courseId] = $courseInfo['name'];
     }
 }
 
-$exercisesList = array_unique($exercisesList);
+$exerciseList = array_unique($exerciseList);
+if (!empty($exerciseList)) {
+    array_walk($exerciseList, function (&$title) {
+        $title = Exercise::get_formated_title_variable($title);
+    });
+}
 
 $form = new FormValidator('search_form', 'GET', api_get_self());
 $form->addSelectAjax(
@@ -64,7 +69,7 @@ if (!empty($courseIdList)) {
     $form->addSelect(
         'exercises',
         get_lang('Exercise'),
-        $exercisesList,
+        $exerciseList,
         [
             'multiple' => true,
         ]
@@ -75,67 +80,109 @@ $form->setDefaults(['course_id_list' => array_keys($courseOptions)]);
 $form->addButtonSearch(get_lang('Search'));
 
 $tableContent = '';
+
+function getCourseSessionRow($courseId, $exerciseId, $sessionId, $title)
+{
+    $correctCount = ExerciseLib::getExerciseResultsCount('correct', $courseId, $exerciseId, $sessionId);
+    $wrongCount = ExerciseLib::getExerciseResultsCount('wrong', $courseId, $exerciseId, $sessionId);
+    $correctCountStudent = ExerciseLib::getExerciseResultsCount(
+        'correct_student',
+        $courseId,
+        $exerciseId,
+        $sessionId
+    );
+    $wrongCountStudent = ExerciseLib::getExerciseResultsCount(
+        'wrong_student',
+        $courseId,
+        $exerciseId,
+        $sessionId
+    );
+
+    //$questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, 10);
+    return [
+        'title' => $title,
+        'correct_count' => $correctCount,
+        'wrong_count' => $wrongCount,
+        'correct_count_student' => $correctCountStudent,
+        'wrong_count_student' => $wrongCountStudent,
+    ];
+}
+
 if ($form->validate()) {
     $headers = [
         get_lang('Session'),
         get_lang('CorrectAttempts'),
         get_lang('WrongAttempts'),
-        get_lang('StudentWithCorrectAnswers'),
-        get_lang('StudentWithWrongAnswers'),
+        get_lang('StudentsWithCorrectAnswers'),
+        get_lang('StudentsWithWrongAnswers'),
     ];
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');
 
     if ($exercises) {
-        foreach ($selectedExercises as $courseId => $exerciseList) {
+        foreach ($selectedExercises as $courseId => $courseExerciseList) {
             $sessions = SessionManager::get_session_by_course($courseId);
             $courseTitle = $courseOptions[$courseId];
 
-            foreach ($exerciseList as $exerciseId) {
-                $exerciseTitle = $exercisesList[$exerciseId];
+            foreach ($courseExerciseList as $exerciseId) {
+                $exerciseTitle = $exerciseList[$exerciseId];
                 $tableContent .= Display::page_subheader2($courseTitle.' - '.$exerciseTitle);
-
                 $orderedData = [];
+                $total = [];
+                $correctCount = 0;
+                $wrongCount = 0;
+                $correctCountStudent = 0;
+                $wrongCountStudent = 0;
+
                 foreach ($sessions as $session) {
                     $sessionId = $session['id'];
-                    $correctCount = ExerciseLib::getExerciseResultsCount('correct', $courseId, $exerciseId, $sessionId);
-                    $wrongCount = ExerciseLib::getExerciseResultsCount('wrong', $courseId, $exerciseId, $sessionId);
+                    $row = getCourseSessionRow($courseId, $exerciseId, $sessionId, $session['name']);
+                    $correctCount += $row['correct_count'];
+                    $wrongCount += $row['wrong_count'];
+                    $correctCountStudent += $row['correct_count_student'];
+                    $wrongCountStudent += $row['wrong_count_student'];
 
-                    $correctCountStudent = ExerciseLib::getExerciseResultsCount(
-                        'correct_student',
-                        $courseId,
-                        $exerciseId,
-                        $sessionId
-                    );
-                    $wrongCountStudent = ExerciseLib::getExerciseResultsCount(
-                        'wrong_student',
-                        $courseId,
-                        $exerciseId,
-                        $sessionId
-                    );
-
-                    $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, 10);
                     $orderedData[] = [
-                        $session['name'],
-                        $correctCount,
-                        $wrongCount,
-                        $correctCountStudent,
-                        $wrongCountStudent,
+                        $row['title'],
+                        $row['correct_count'],
+                        $row['wrong_count'],
+                        $row['correct_count_student'],
+                        $row['wrong_count_student'],
                     ];
                 }
 
-                $table = new SortableTableFromArray(
+                // Course base
+                $row = getCourseSessionRow($courseId, $exerciseId, 0, get_lang('BaseCourse'));
+                $orderedData[] = [
+                    $row['title'],
+                    $row['correct_count'],
+                    $row['wrong_count'],
+                    $row['correct_count_student'],
+                    $row['wrong_count_student'],
+                ];
+
+                $correctCount += $row['correct_count'];
+                $wrongCount += $row['wrong_count'];
+                $correctCountStudent += $row['correct_count_student'];
+                $wrongCountStudent += $row['wrong_count_student'];
+                $orderedData[] = [
+                    get_lang('Total'),
+                    $correctCount,
+                    $wrongCount,
+                    $correctCountStudent,
+                    $wrongCountStudent,
+                ];
+
+                /*$table = new SortableTableFromArray(
                     $orderedData,
-                    1,
-                    20,
+                    10,
+                    1000,
                     uniqid('question_tracking_')
-                );
-                $column = 0;
-                foreach ($headers as $header) {
-                    $table->set_header($column, $header, false);
-                    $column++;
-                }
-                $tableContent .= $table->return_table();
+                );*/
+                $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+                $table->setHeaders($headers);
+                $table->setData($orderedData);
+                $tableContent .= $table->toHtml();
             }
         }
     }

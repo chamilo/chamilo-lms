@@ -28,17 +28,15 @@ function check_download_survey($course, $invitation, $doc_url)
     $result = Database::query($sql);
     if (Database::num_rows($result) < 1) {
         echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
-        Display::display_footer();
         exit;
     }
     $survey_invitation = Database::fetch_assoc($result);
 
     // Now we check if the user already filled the survey
-    if ($survey_invitation['answered'] == 1) {
+    /*if ($survey_invitation['answered'] == 1) {
         echo Display::return_message(get_lang('YouAlreadyFilledThisSurvey'), 'error', false);
-        Display::display_footer();
         exit;
-    }
+    }*/
 
     // Very basic security check: check if a text field from
     // a survey/answer/option contains the name of the document requested
@@ -53,7 +51,11 @@ function check_download_survey($course, $invitation, $doc_url)
         if ($_POST['language']) {
             $survey_invitation['survey_id'] = $_POST['language'];
         } else {
-            echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.Security::remove_XSS($_GET['course']).'&invitationcode='.Security::remove_XSS($_GET['invitationcode']).'">';
+            echo '<form
+                id="language"
+                name="language"
+                method="POST"
+                action="'.api_get_self().'?course='.Security::remove_XSS($_GET['course']).'&invitationcode='.Security::remove_XSS($_GET['invitationcode']).'">';
             echo '  <select name="language">';
             while ($row = Database::fetch_assoc($result)) {
                 echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
@@ -68,6 +70,9 @@ function check_download_survey($course, $invitation, $doc_url)
         $row = Database::fetch_assoc($result);
         $survey_invitation['survey_id'] = $row['survey_id'];
     }
+
+    $doc_url = Database::escape_string($doc_url);
+    $survey_invitation['survey_id'] = Database::escape_string($survey_invitation['survey_id']);
 
     $sql = "SELECT count(*)
             FROM $table_survey
@@ -85,8 +90,8 @@ function check_download_survey($course, $invitation, $doc_url)
                 WHERE
                     c_id = $course_id AND
                     survey_id = ".$survey_invitation['survey_id']." AND (
-                        survey_question LIKE '%$doc_url%'
-                        or survey_question_comment LIKE '%$doc_url%'
+                        survey_question LIKE '%$doc_url%' OR
+                        survey_question_comment LIKE '%$doc_url%'
                     )
             UNION
                 SELECT count(*)
@@ -99,7 +104,6 @@ function check_download_survey($course, $invitation, $doc_url)
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
         echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
-        Display::display_footer();
         exit;
     }
 

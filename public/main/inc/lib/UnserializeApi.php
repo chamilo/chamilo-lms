@@ -105,9 +105,6 @@ class UnserializeApi
                         \Chamilo\CoreBundle\Entity\ResourceType::class,
                     ]
                 );
-
-                return unserialize($serialized);
-
                 break;
             case 'not_allowed_classes':
             default:
@@ -115,13 +112,13 @@ class UnserializeApi
         }
 
         if ($ignoreErrors) {
-            return @Unserialize::unserialize(
+            return unserialize(
                 $serialized,
                 ['allowed_classes' => $allowedClasses]
             );
         }
 
-        return Unserialize::unserialize(
+        return unserialize(
             $serialized,
             ['allowed_classes' => $allowedClasses]
         );

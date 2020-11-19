@@ -12,8 +12,8 @@ parameters:
                 - 'GeneratorBundle::fields.html.twig'
     course_info_is_not_editable: false
 
-#    router.request_context.base_url: '%env(APP_URL_APPEND)%'
-#    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
+    #    router.request_context.base_url: '%env(APP_URL_APPEND)%'
+    #    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
 
     # See https://glide.thephpleague.com/1.0/api/quick-reference/
     glide_media_filters:
@@ -41,7 +41,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: true       # Allows optimizing the container by removing unused services; this also means
-          # fetching services directly from the container via $container->get() won't work.
+        # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
 
     Chamilo\CoreBundle\Component\Utils\Glide:

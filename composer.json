@@ -11,13 +11,6 @@
         "docs": "https://github.com/chamilo/docs",
         "issues": "https://github.com/chamilo/chamilo-lms/issues"
     },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*"
-    },
     "autoload": {
         "psr-4": {
             "Chamilo\\": "src/"
@@ -44,10 +37,12 @@
         "php": "^7.2.9",
         "ext-bcmath": "*",
         "ext-curl": "*",
+        "ext-ctype": "*",
         "ext-dom": "*",
         "ext-exif": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
+        "ext-iconv": "*",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-libxml": "*",
@@ -145,6 +140,7 @@
         "vich/uploader-bundle": "^1.13"
     },
     "config": {
+        "optimize-autoloader": true,
         "component-dir": "public/assets",
         "sort-packages": true
     },
@@ -167,6 +163,13 @@
         "symplify/easy-coding-standard": "^8.0",
         "vimeo/psalm": "^3.14",
         "weirdan/doctrine-psalm-plugin": "^0.11.3"
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*"
     },
     "scripts": {
         "analyse": [

@@ -47,7 +47,8 @@ $allowedToTrackUser =
     api_is_session_admin() ||
     api_is_drh() ||
     api_is_student_boss() ||
-    api_is_course_admin()
+    api_is_course_admin() ||
+    api_is_teacher()
 ;
 
 if (false === $allowedToTrackUser && !empty($courseInfo)) {
@@ -159,7 +160,7 @@ switch ($action) {
         }
         break;
     case 'send_message':
-        if ($allowMessages === true) {
+        if (true === $allowMessages) {
             $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
             $message = isset($_POST['message']) ? $_POST['message'] : '';
 

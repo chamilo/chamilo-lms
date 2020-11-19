@@ -297,25 +297,89 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
             // make sure the user exists in the database
             $login = UserManager::casUserLoginName($casUser);
+            $_user = null;
             if (false === $login) {
                 // the CAS-authenticated user does not yet exist in internal database
-
                 // see whether we are supposed to create it
-                switch (api_get_setting("cas_add_user_activate")) {
+                switch (api_get_setting('cas_add_user_activate')) {
                     case PLATFORM_AUTH_SOURCE:
                         // create the new user from its CAS user identifier
                         $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
+                        $_user = api_get_user_info_from_username($login);
+                        $rules = api_get_configuration_value('cas_user_map');
+
+                        if (!empty($rules)) {
+                            $userEntity = api_get_user_entity($_user['id']);
+                            $attributes = phpCAS::getAttributes();
+                            if (isset($rules['fields'])) {
+                                $isAdmin = false;
+                                foreach ($rules['fields'] as $field => $attributeName) {
+                                    if (!isset($attributes[$attributeName])) {
+                                        continue;
+                                    }
+                                    $value = $attributes[$attributeName];
+                                    // Check replace.
+                                    if (isset($rules['replace'][$attributeName])) {
+                                        $value = $rules['replace'][$attributeName][$value];
+                                    }
+
+                                    switch ($field) {
+                                        case 'email':
+                                            $userEntity->setEmail($value);
+                                            break;
+                                        case 'firstname':
+                                            $userEntity->setFirstname($value);
+                                            break;
+                                        case 'lastname':
+                                            $userEntity->setLastname($value);
+                                            break;
+                                        case 'active':
+                                            $userEntity->setActive('false' === $value);
+                                            break;
+                                        case 'status':
+                                            if (PLATFORM_ADMIN === (int) $value) {
+                                                $value = COURSEMANAGER;
+                                                $isAdmin = true;
+                                            }
+                                            $userEntity->setStatus($value);
+                                            break;
+                                    }
+
+                                    Database::getManager()->persist($userEntity);
+                                    Database::getManager()->flush();
+
+                                    if ($isAdmin) {
+                                        UserManager::addUserAsAdmin($userEntity);
+                                    }
+                                }
+                            }
+                            if (isset($rules['extra'])) {
+                                foreach ($rules['extra'] as $variable) {
+                                    if (isset($attributes[$variable])) {
+                                        UserManager::update_extra_field_value(
+                                            $_user['id'],
+                                            $variable,
+                                            $attributes[$variable]
+                                        );
+                                    }
+                                }
+                            }
+                        }
+
                         break;
 
                     case LDAP_AUTH_SOURCE:
                         // find the new user's LDAP record from its CAS user identifier and copy information
                         $login = UserManager::createCASAuthenticatedUserFromLDAP($casUser);
+                        $_user = api_get_user_info_from_username($login);
                         break;
 
                     default:
                         // no automatic user creation is configured, just complain about it
                         throw new Exception(get_lang('NoUserMatched'));
                 }
+            } else {
+                $_user = api_get_user_info_from_username($login);
             }
 
             // $login is set and the user exists in the database
@@ -325,11 +389,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 UserManager::updateUserFromLDAP($login);
             }
 
-            $_user = api_get_user_info_from_username($login);
             Session::write('_user', $_user);
             $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
-        } else {
-            // not CAS authenticated
         }
     } elseif (isset($_POST['login']) && isset($_POST['password'])) {
         // $login && $password are given to log in

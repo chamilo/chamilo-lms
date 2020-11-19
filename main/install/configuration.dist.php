@@ -42,6 +42,38 @@ $_configuration['url_append'] = '{URL_APPEND_PATH}';
 //$extAuthSource["cas"]["login"] = $_configuration['root_sys']."main/auth/cas/login.php";
 //$extAuthSource["cas"]["newUser"] = $_configuration['root_sys']."main/auth/cas/newUser.php";
 
+// Map CAS attributes with user/user extrafields values BT#17620
+/*$_configuration['cas_user_map'] = [
+    'fields' => [
+        'email' => 'mail',
+        'firstname' => 'cn',
+        'lastname' => 'sn',
+        'active' => 'disabled',
+        'status' => 'role',
+    ],
+    'extra' => [
+        'isFromNewLogin',
+        'authenticationDate',
+        'successfulAuthenticationHandlers',
+        'created_by',
+        'credentialType',
+        'uid',
+        'authenticationMethod',
+        'longTermAuthenticationRequestTokenUsed',
+    ],
+    'replace' => [
+        'role' => [
+            'STUDENT' => 5,
+            'GUEST' => 5,
+            'HEI_COORD' => 1,
+            'SCHOOL_COORD' => 1,
+            'HEI_TUTOR' => 1,
+            'SCHOOL_TUTOR' => 1,
+            'ADMIN' => 11,
+        ],
+    ],
+];*/
+
 // NEW LDAP IMPLEMENTATION BASED ON external_login info
 // -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
 // $extAuthSource["extldap"]["login"] = $_configuration['root_sys']."main/auth/external_login/login.ldap.php";

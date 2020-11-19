@@ -427,18 +427,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public static function extractVerbInLanguage(\Xabbuh\XApi\Model\LanguageMap $languageMap, $language)
     {
-        if (isset($languageMap[$language])) {
-            return $languageMap[$language];
-        }
+        $iso = self::findLanguageIso($languageMap->languageTags(), $language);
 
-        $parts = explode('-', $language, 2);
-
-        if (count($parts) > 0) {
-            foreach ($languageMap->languageTags() as $languageTag) {
-                if (false !== strpos($languageTag, $parts[0])) {
-                    return $languageMap[$languageTag];
-                }
-            }
+        if (isset($languageMap[$iso])) {
+            return $languageMap[$iso];
         }
 
         if (isset($languageMap['und'])) {
@@ -446,5 +438,25 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         }
 
         return array_pop($languageMap);
+    }
+
+    /**
+     * @param string $needle
+     *
+     * @return string
+     */
+    public static function findLanguageIso(array $haystack, $needle)
+    {
+        if (in_array($needle, $haystack)) {
+            return $needle;
+        }
+
+        foreach ($haystack as $language) {
+            if (strpos($language, $needle) === 0) {
+                return $language;
+            }
+        }
+
+        return 'en';
     }
 }

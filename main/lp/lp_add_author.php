@@ -15,6 +15,7 @@ use ChamiloSession as Session;
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
+api_protect_admin_script(true);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
@@ -31,11 +32,6 @@ if (!$is_allowed_to_edit) {
 
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
-
-/*
-echo "<pre>".var_export($learnPath->authorsAvaible,true)."</pre>";
-exit();
-*/
 
 if (empty($learnPath)) {
     api_not_allowed();
@@ -247,6 +243,10 @@ foreach ($_SESSION['oLP']->items as $item) {
         $itemId,
         strtolower('AuthorLPItem')
     );
+    $priceItem = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $itemId,
+        strtolower('price')
+    );
     $authorName = [];
     if (!empty($extraFieldValues)) {
         if ($extraFieldValues != false) {
@@ -267,6 +267,9 @@ foreach ($_SESSION['oLP']->items as $item) {
         $authorName = " (".implode(', ', $authorName).")";
     } else {
         $authorName = '';
+    }
+    if (isset($priceItem['value']) && !empty($priceItem['value'])) {
+        $authorName .= "<br><small>".get_lang('Price')." (".$priceItem['value'].")</small>";
     }
     $form->addCheckBox("itemSelected[$itemId]", null, Display::return_icon('lp_document.png', $itemName).$itemName.$authorName);
     $default["itemSelected"][$itemId] = false;
@@ -310,6 +313,7 @@ foreach ($teachers as $key => $value) {
 $form->addSelect('authorItemSelect', get_lang('Authors'), $options, [
     'multiple' => 'multiple',
 ]);
+$form->addNumeric('price', get_lang('Price'));
 $form->addHtml('</div>');
 $form->addButtonCreate(get_lang('Send'));
 $form->setDefaults($default);
@@ -320,6 +324,7 @@ if ($form->validate()) {
     if (isset($_GET['sub_action']) && ($_GET['sub_action'] === 'author_view')) {
         $authors = $_POST['authorItemSelect'];
         $items = $_POST['itemSelected'];
+        $price = api_float_val($_POST['price']);
         unset($author);
         $saveExtraFieldItem = [];
         $saveAuthor = [];
@@ -338,6 +343,17 @@ if ($form->validate()) {
                     } else {
                         $saveExtraFieldItem[$itemId][$author] = $author;
                     }
+                }
+                if ($price > 0) {
+                    $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $itemId,
+                        'price'
+                    );
+                    $extraFieldValue->save([
+                        'variable' => 'price',
+                        'value' => $price,
+                        'item_id' => $itemId,
+                    ]);
                 }
             }
         }
@@ -360,17 +376,24 @@ if ($form->validate()) {
             }
             $saveAuthor = array_unique($saveAuthor);
             $messages .= implode(' / ', $saveAuthor);
-            $currentUrl = api_get_self();
-            if (!empty($messages)) {
-                if ($removeExist) {
-                    Session::write('messageError', get_lang('DeletedAuthors'));
-                    //header("Location: $currentUrl");
-                    echo "<script>window.location.replace(\"$currentUrl\");</script>";
-                    die();
-                }
+            $currentUrl = api_request_uri();
+            $redirect = false;
+            $sms = [];
+            if ($removeExist) {
+                Session::write('messageError', get_lang('DeletedAuthors'));
+                $redirect = true;
+            } elseif ($price > 0) {
+                $sms[] = get_lang('PriceUpdated');
+                $redirect = true;
+            } elseif (!empty($messages)) {
+                $sms[] = get_lang(get_lang('RegisteredAuthors')." ".$messages);
+                $redirect = true;
+            }
 
-                Session::write('message', get_lang('RegisteredAuthors')." ".$messages);
-                //header("Location: $currentUrl");
+            if ($redirect == true) {
+                if (count($sms) > 0) {
+                    Session::write('message', implode(' / ', $sms));
+                }
                 echo "<script>window.location.replace(\"$currentUrl\");</script>";
                 die();
             }

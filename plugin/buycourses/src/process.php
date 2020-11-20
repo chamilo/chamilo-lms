@@ -20,8 +20,9 @@ $includeSession = $plugin->get('include_sessions') === 'true';
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';
 $transferEnabled = $plugin->get('transfer_enable') === 'true';
 $culqiEnabled = $plugin->get('culqi_enable') === 'true';
+$tpvRedsysEnable = $plugin->get('tpv_redsys_enable') === 'true';
 
-if (!$paypalEnabled && !$transferEnabled && !$culqiEnabled) {
+if (!$paypalEnabled && !$transferEnabled && !$culqiEnabled && !$tpvRedsysEnable) {
     api_not_allowed(true);
 }
 
@@ -81,6 +82,10 @@ if (!$transferEnabled) {
 
 if (!$culqiEnabled) {
     unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
+}
+
+if (!$tpvRedsysEnable || !file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS]);
 }
 
 $count = count($paymentTypesOptions);

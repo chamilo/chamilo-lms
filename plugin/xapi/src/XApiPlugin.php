@@ -3,9 +3,17 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\XApi\Actor as ActorEntity;
+use Chamilo\PluginBundle\Entity\XApi\Attachment as AttachmentEntity;
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
+use Chamilo\PluginBundle\Entity\XApi\Context as ContextEntity;
+use Chamilo\PluginBundle\Entity\XApi\Extensions as ExtensionsEntity;
+use Chamilo\PluginBundle\Entity\XApi\Result as ResultEntity;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
+use Chamilo\PluginBundle\Entity\XApi\Statement as StatementEntity;
+use Chamilo\PluginBundle\Entity\XApi\StatementObject as StatementObjectEntity;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\PluginBundle\Entity\XApi\Verb as VerbEntity;
 use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;
@@ -104,6 +112,16 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             [
                 'xapi_shared_statement',
                 'xapi_tool_launch',
+                'xapi_cmi5_item',
+
+                'xapi_attachment',
+                'xapi_object',
+                'xapi_result',
+                'xapi_verb',
+                'xapi_extensions',
+                'xapi_context',
+                'xapi_actor',
+                'xapi_statement',
             ]
         );
 
@@ -130,6 +148,15 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(Cmi5Item::class),
+
+                $em->getClassMetadata(AttachmentEntity::class),
+                $em->getClassMetadata(StatementObjectEntity::class),
+                $em->getClassMetadata(ResultEntity::class),
+                $em->getClassMetadata(VerbEntity::class),
+                $em->getClassMetadata(ExtensionsEntity::class),
+                $em->getClassMetadata(ContextEntity::class),
+                $em->getClassMetadata(ActorEntity::class),
+                $em->getClassMetadata(StatementEntity::class),
             ]
         );
     }
@@ -199,6 +226,15 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(Cmi5Item::class),
+
+                $em->getClassMetadata(AttachmentEntity::class),
+                $em->getClassMetadata(StatementObjectEntity::class),
+                $em->getClassMetadata(ResultEntity::class),
+                $em->getClassMetadata(VerbEntity::class),
+                $em->getClassMetadata(ExtensionsEntity::class),
+                $em->getClassMetadata(ContextEntity::class),
+                $em->getClassMetadata(ActorEntity::class),
+                $em->getClassMetadata(StatementEntity::class),
             ]
         );
     }

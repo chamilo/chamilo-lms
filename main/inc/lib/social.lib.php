@@ -2468,9 +2468,16 @@ class SocialManager extends UserManager
         $user_info = api_get_user_info($userId);
         $portfolioName = ' '.$userId;
         $friend = true;
-        if ($userId != api_get_user_id()){
+        $editPorfolioLink = '';
+        if ($userId != api_get_user_id()) {
             $portfolioName = $user_info['complete_name'];
             $friend = self::get_relation_between_contacts(api_get_user_id(), $userId);
+        } else {
+            $editPorfolioLink .= "<div class=\"pull-right\" style='margin-top: -5px'>".
+                '<a href="/main/auth/profile.php?type=extended#openarea" class="btn btn-default btn-sm btn-social-edit">'.
+                "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>".
+                '</a>'.
+                "</div>";
         }
         if ($friend == 0) {
             /* if has not relation, get current user */
@@ -2558,7 +2565,7 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
-        return Display::panel($more_info, get_lang('Portfolio'));
+        return Display::panel($more_info, get_lang('Portfolio') . $editPorfolioLink);
     }
 
     /**

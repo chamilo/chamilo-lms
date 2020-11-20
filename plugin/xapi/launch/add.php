@@ -16,7 +16,6 @@ $plugin = XApiPlugin::create();
 $langAddActivity = $plugin->get_lang('AddActivity');
 
 $frmActivity = new FormValidator('frm_activity', 'post', api_get_self().'?'.api_get_cidreq());
-$frmActivity->addHeader($langAddActivity);
 $frmActivity->addFile('file', $plugin->get_lang('TinCanPackage'));
 $frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('AllowMultipleAttempts'));
 $frmActivity->addButtonAdvancedSettings('advanced_params');
@@ -118,12 +117,23 @@ if ($frmActivity->validate()) {
 
 $frmActivity->setDefaults(['allow_multiple_attempts' => true]);
 
-$pageTitle = $plugin->get_title();
+$actions = Display::url(
+    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    'list.php?'.api_get_cidreq()
+);
+
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => 'list.php', 'name' => $pageTitle];
+$interbreadcrumb[] = ['url' => 'list.php', 'name' => $plugin->get_title()];
 
 $view = new Template($langAddActivity);
-$view->assign('header', $pageTitle);
+$view->assign('header', $langAddActivity);
+$view->assign(
+    'actions',
+    Display::toolbarAction(
+        'xapi_actions',
+        [$actions]
+    )
+);
 $view->assign('content', $pageContent);
 $view->display_one_col_template();

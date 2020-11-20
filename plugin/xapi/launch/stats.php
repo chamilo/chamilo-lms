@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Knp\Component\Pager\Paginator;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -46,7 +47,7 @@ $countStudentList = CourseManager::get_student_list_from_course_code(
 
 $statsUrl = api_get_self().'?'.api_get_cidreq().'&id='.$toolLaunch->getId();
 
-$paginator = new \Knp\Component\Pager\Paginator();
+$paginator = new Paginator();
 $pagination = $paginator->paginate([]);
 $pagination->setTotalItemCount($countStudentList);
 $pagination->setItemNumberPerPage($length);

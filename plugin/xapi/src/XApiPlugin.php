@@ -386,13 +386,13 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     /**
      * @param int $courseId
      */
-    public function addCourseTool($courseId)
+    public function addCourseToolForTinCan($courseId)
     {
         $this->createLinkToCourseTool(
-            $this->get_title().':teacher',
+            $this->get_title(),
             $courseId,
             null,
-            'xapi/tincan/list.php'
+            'xapi/tincan/index.php'
         );
     }
 
@@ -403,7 +403,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             ->getResult();
 
         foreach ($courses as $course) {
-            $this->addCourseTool($course['id']);
+            $this->addCourseToolForTinCan($course['id']);
         }
     }
 
@@ -411,50 +411,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/list.php%']);
-
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/tool.php%']);
-    }
-
-    /**
-     * @param \Chamilo\PluginBundle\Entity\XApi\ToolLaunch $toolLaunch
-     *
-     * @return \Chamilo\CourseBundle\Entity\CTool|null
-     */
-    public function createLaunchCourseTool(ToolLaunch $toolLaunch)
-    {
-        $link ='xapi/tincan/tool.php?'.http_build_query(
-            [
-                'id' => $toolLaunch->getId(),
-            ]
-        );
-
-        return $this->createLinkToCourseTool(
-            $toolLaunch->getTitle(),
-            $toolLaunch->getCourse()->getId(),
-            null,
-            $link
-        );
-    }
-
-    /**
-     * @param \Chamilo\PluginBundle\Entity\XApi\ToolLaunch $toolLaunch
-     *
-     * @return \Chamilo\CourseBundle\Entity\CTool
-     */
-    public function getCourseToolFromLaunchTool(ToolLaunch $toolLaunch)
-    {
-        /** @var CTool $tool */
-        $tool = Database::getManager()
-            ->getRepository(CTool::class)
-            ->findOneBy([
-                'link' => 'xapi/tincan/tool.php?id='.$toolLaunch->getId(),
-                'cId' => $toolLaunch->getCourse()->getId(),
-            ]);
-
-        return $tool;
+            ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/index.php%']);
     }
 
     /**

@@ -106,8 +106,6 @@ if ($frmActivity->validate()) {
     $em->persist($toolLaunch);
     $em->flush();
 
-    $plugin->createLaunchCourseTool($toolLaunch);
-
     Display::addFlash(
         Display::return_message($plugin->get_lang('ActivityImported'), 'success')
     );
@@ -120,12 +118,12 @@ $frmActivity->setDefaults(['allow_multiple_attempts' => true]);
 
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    'list.php?'.api_get_cidreq()
+    'index.php?'.api_get_cidreq()
 );
 
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => 'list.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_title()];
 
 $view = new Template($langAddActivity);
 $view->assign('header', $langAddActivity);

@@ -27,10 +27,7 @@ if (null === $toolLaunch
 
 $plugin = XApiPlugin::create();
 
-$courseTool = $plugin->getCourseToolFromLaunchTool($toolLaunch);
-
 $em = Database::getManager();
-$em->remove($courseTool);
 $em->remove($toolLaunch);
 $em->flush();
 

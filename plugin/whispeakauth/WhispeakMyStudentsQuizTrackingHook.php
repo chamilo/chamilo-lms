@@ -30,6 +30,10 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
      */
     public function trackingHeader(HookMyStudentsQuizTrackingEventInterface $hook)
     {
+        if (false === WhispeakAuthPlugin::create()->isEnabled()) {
+            return [];
+        }
+
         return [
             'value' => WhispeakAuthPlugin::create()->get_lang('plugin_title'),
             'attrs' => [
@@ -53,6 +57,9 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
      */
     public function trackingContent(HookMyStudentsQuizTrackingEventInterface $hook)
     {
+        if (false === WhispeakAuthPlugin::create()->isEnabled()) {
+            return [];
+        }
         $data = $hook->getEventData();
 
         $totalCount = WhispeakAuthPlugin::countAllAttemptsInQuiz($data['quiz_id'], $data['student_id']);

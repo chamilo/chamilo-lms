@@ -142,7 +142,6 @@ if ($form->validate()) {
         $finder = new Finder();
         $finder->files()->in($destinationDir);
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        //var_dump($finalResult);
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $fileName = $file->getBasename();

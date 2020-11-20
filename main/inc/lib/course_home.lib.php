@@ -497,11 +497,8 @@ class CourseHome
      *
      * @return array
      */
-    public static function get_tools_category(
-        $course_tool_category,
-        $courseId = 0,
-        $sessionId = 0
-    ) {
+    public static function get_tools_category($course_tool_category, $courseId = 0, $sessionId = 0)
+    {
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $is_platform_admin = api_is_platform_admin();
         $all_tools_list = [];
@@ -610,6 +607,7 @@ class CourseHome
         // if the course homepage is loaded many times, so the list of hidden
         // tools might benefit from a shared memory storage later on
         $list = api_get_settings('Tools', 'list', api_get_current_access_url_id());
+
         $hide_list = [];
         $check = false;
         foreach ($list as $line) {
@@ -834,7 +832,6 @@ class CourseHome
         $courseId = api_get_course_int_id();
         $is_platform_admin = api_is_platform_admin();
         $courseInfo = api_get_course_info();
-
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
 
         if ($session_id == 0) {
@@ -847,12 +844,21 @@ class CourseHome
             }
         }
 
+        $disableUsers = 3 === (int) $courseInfo['visibility'] &&
+            api_get_configuration_value('disable_change_user_visibility_for_public_courses');
+
         $items = [];
         $app_plugin = new AppPlugin();
-
         if (isset($all_tools_list)) {
             $lnk = '';
             foreach ($all_tools_list as &$tool) {
+                $allowChangeVisibility = true;
+                $showIcon = true;
+                if ('user/user.php' === $tool['link'] && $disableUsers) {
+                    $allowChangeVisibility = false;
+                    $tool['visibility'] = 0;
+                    $showIcon = $is_allowed_to_edit;
+                }
                 $item = [];
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
@@ -878,6 +884,10 @@ class CourseHome
                     continue;
                 }
 
+                if (false === $showIcon) {
+                    continue;
+                }
+
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
                 unset($lnk);
@@ -885,7 +895,7 @@ class CourseHome
                 $item['extra'] = null;
                 $toolAdmin = isset($tool['admin']) ? $tool['admin'] : '';
 
-                if ($is_allowed_to_edit) {
+                if ($is_allowed_to_edit && $allowChangeVisibility) {
                     if (empty($session_id)) {
                         if (isset($tool['id'])) {
                             if ($tool['visibility'] == '1' && $toolAdmin != '1') {
@@ -937,7 +947,7 @@ class CourseHome
                                         ICON_SIZE_SMALL,
                                         false
                                     );
-                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye" title="'.get_lang('Deactivate').'"></em>';
+                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye-slash text-muted" title="'.get_lang('Deactivate').'"></em>';
                                     $link['cmd'] = 'restore=yes';
                                     $lnk[] = $link;
                                     break;
@@ -949,7 +959,7 @@ class CourseHome
                                         ICON_SIZE_SMALL,
                                         false
                                     );
-                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
+                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye" title="'.get_lang('Activate').'"></em>';
                                     $link['cmd'] = 'hide=yes';
                                     $lnk[] = $link;
                                     break;
@@ -962,7 +972,7 @@ class CourseHome
                                 ICON_SIZE_SMALL,
                                 false
                             );
-                            $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
+                            $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye" title="'.get_lang('Activate').'"></em>';
                             $link['cmd'] = 'hide=yes';
                             $lnk[] = $link;
                         }
@@ -1014,7 +1024,7 @@ class CourseHome
                 if ($tool['image'] === 'file_html.png' || $tool['image'] === 'file_html_na.png') {
                     $tool['link'] = $tool['link'];
                 } else {
-                    $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
+                    $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq(true, false).'&gidReq=0';
                 }
 
                 $toolIid = isset($tool['iid']) ? $tool['iid'] : null;

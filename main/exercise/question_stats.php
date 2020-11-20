@@ -52,7 +52,7 @@ foreach ($headers as $header) {
 }
 $row++;
 $scoreDisplay = new ScoreDisplay();
-$questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, 10);
+$questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, api_get_session_id());
 foreach ($questions as $data) {
     $questionId = (int) $data['question_id'];
     $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);

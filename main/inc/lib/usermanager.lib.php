@@ -781,7 +781,7 @@ class UserManager
      */
     public static function ensureCASUserExtraFieldExists()
     {
-        if (!UserManager::is_extra_field_available('cas_user')) {
+        if (!self::is_extra_field_available('cas_user')) {
             $extraField = new ExtraField('user');
             if (false === $extraField->save(
                     [
@@ -793,6 +793,21 @@ class UserManager
                     ]
                 )) {
                 throw new Exception(get_lang('FailedToCreateExtraFieldCasUser'));
+            }
+
+            $rules = api_get_configuration_value('cas_user_map');
+            if (!empty($rules) && isset($rules['extra'])) {
+                foreach ($rules['extra'] as $extra) {
+                    $extraField->save(
+                        [
+                            'variable' => $extra,
+                            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                            'display_text' => $extra,
+                            'visible_to_self' => false,
+                            'filter' => false,
+                        ]
+                    );
+                }
             }
         }
     }
@@ -811,15 +826,19 @@ class UserManager
         self::ensureCASUserExtraFieldExists();
 
         $loginName = 'cas_user_'.$casUser;
-        $defaultValue = get_lang("EditInProfile");
+        $defaultValue = get_lang('EditInProfile');
+        $defaultEmailValue = get_lang('EditInProfile');
         require_once __DIR__.'/../../auth/external_login/functions.inc.php';
+        if ('true' === api_get_setting('login_is_email')) {
+            $defaultEmailValue = $casUser;
+        }
         $userId = external_add_user(
             [
                 'username' => $loginName,
                 'auth_source' => CAS_AUTH_SOURCE,
                 'firstname' => $defaultValue,
                 'lastname' => $defaultValue,
-                'email' => $defaultValue,
+                'email' => $defaultEmailValue,
             ]
         );
         if (false === $userId) {
@@ -829,6 +848,74 @@ class UserManager
         self::update_extra_field_value($userId, 'cas_user', $casUser);
 
         return $loginName;
+    }
+
+    public static function updateCasUser($_user)
+    {
+        $rules = api_get_configuration_value('cas_user_map');
+
+        if (empty($_user)) {
+            return false;
+        }
+
+        if (!empty($rules)) {
+            $userEntity = api_get_user_entity($_user['id']);
+            $attributes = phpCAS::getAttributes();
+            if (isset($rules['fields'])) {
+                $isAdmin = false;
+                foreach ($rules['fields'] as $field => $attributeName) {
+                    if (!isset($attributes[$attributeName])) {
+                        continue;
+                    }
+                    $value = $attributes[$attributeName];
+                    // Check replace.
+                    if (isset($rules['replace'][$attributeName])) {
+                        $value = $rules['replace'][$attributeName][$value];
+                    }
+
+                    switch ($field) {
+                        case 'email':
+                            $userEntity->setEmail($value);
+                            break;
+                        case 'firstname':
+                            $userEntity->setFirstname($value);
+                            break;
+                        case 'lastname':
+                            $userEntity->setLastname($value);
+                            break;
+                        case 'active':
+                            $userEntity->setActive('false' === $value);
+                            break;
+                        case 'status':
+                            if (PLATFORM_ADMIN === (int) $value) {
+                                $value = COURSEMANAGER;
+                                $isAdmin = true;
+                            }
+                            $userEntity->setStatus($value);
+                            break;
+                    }
+
+                    Database::getManager()->persist($userEntity);
+                    Database::getManager()->flush();
+
+                    if ($isAdmin) {
+                        self::addUserAsAdmin($userEntity);
+                    }
+                }
+            }
+
+            if (isset($rules['extra'])) {
+                foreach ($rules['extra'] as $variable) {
+                    if (isset($attributes[$variable])) {
+                        self::update_extra_field_value(
+                            $_user['id'],
+                            $variable,
+                            $attributes[$variable]
+                        );
+                    }
+                }
+            }
+        }
     }
 
     /**

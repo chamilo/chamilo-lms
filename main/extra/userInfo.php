@@ -314,18 +314,23 @@ if ($displayMode == "viewDefEdit") {
         }
 
         if (api_get_setting('extended_profile') == 'true') {
-            if (!empty($mainUserInfo['competences'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
-            }
-            if (!empty($mainUserInfo['diplomas'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
-            }
-            if (!empty($mainUserInfo['teach'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
-            }
+            //    MY PERSONAL OPEN AREA
             if (!empty($mainUserInfo['openarea'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
             }
+            //    MY COMPETENCES
+            if (!empty($mainUserInfo['competences'])) {
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+            }
+            //    MY DIPLOMAS
+            if (!empty($mainUserInfo['diplomas'])) {
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+            }
+            // WHAT I AM ABLE TO TEACH
+            if (!empty($mainUserInfo['teach'])) {
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+            }
+            //    MY PRODUCTIONS
             if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
             }
@@ -397,18 +402,23 @@ if ($displayMode == "viewDefEdit") {
         }
 
         if (api_get_setting('extended_profile') == 'true') {
-            if (!empty($mainUserInfo['competences'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
-            }
-            if (!empty($mainUserInfo['diplomas'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
-            }
-            if (!empty($mainUserInfo['teach'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
-            }
+            //    MY PERSONAL OPEN AREA
             if (!empty($mainUserInfo['openarea'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
             }
+            //    MY COMPETENCES
+            if (!empty($mainUserInfo['competences'])) {
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+            }
+            //    MY DIPLOMAS
+            if (!empty($mainUserInfo['diplomas'])) {
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+            }
+            // WHAT I AM ABLE TO TEACH
+            if (!empty($mainUserInfo['teach'])) {
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+            }
+            //    MY PRODUCTIONS
             if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
             }

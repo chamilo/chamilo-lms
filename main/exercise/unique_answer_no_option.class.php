@@ -412,7 +412,10 @@ class UniqueAnswerNoOption extends Question
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         }
-        $header .= '<th>'.get_lang('Comment').'</th>';
+        if (false === $exercise->hideComment) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
+        }
+
         $header .= '</tr>';
 
         return $header;

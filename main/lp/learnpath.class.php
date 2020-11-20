@@ -1532,11 +1532,12 @@ class learnpath
         $maxScore = 100
     ) {
         $id = (int) $id;
-        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($id)) {
             return false;
         }
+
+        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {
             $minScore = 0;
@@ -1546,8 +1547,8 @@ class learnpath
             $maxScore = 100;
         }
 
-        $minScore = floatval($minScore);
-        $maxScore = floatval($maxScore);
+        $minScore = (float) $minScore;
+        $maxScore = (float) $maxScore;
 
         if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
@@ -1827,6 +1828,23 @@ class learnpath
         } catch (Exception $exception) {
             return 0;
         }
+    }
+
+    /**
+     * Get the learning path name by id
+     *
+     * @param int $lpId
+     *
+     * @return mixed
+     */
+    public static function getLpNameById($lpId)
+    {
+        $em = Database::getManager();
+
+        return $em->createQuery('SELECT clp.name FROM ChamiloCourseBundle:CLp clp
+            WHERE clp.iid = :iid')
+            ->setParameter('iid', $lpId)
+            ->getSingleScalarResult();
     }
 
     /**
@@ -4496,13 +4514,10 @@ class learnpath
                             $session_condition
                         ";
                 Database::query($sql);
-            } else {
-                // Parameter and database incompatible, do nothing, exit.
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -4929,7 +4944,8 @@ class learnpath
             // Save progress.
             list($progress) = $this->get_progress_bar_text('%');
             $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
-            if ($scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
                 return false;
             }
 
@@ -6580,6 +6596,7 @@ class learnpath
      * @param bool   $isConfigPage           Optional. If is the config page, show the edit button
      * @param bool   $allowExpand            Optional. Allow show the expand/contract button
      * @param string $action
+     * @param array  $extraField
      *
      * @return string
      */
@@ -6588,19 +6605,32 @@ class learnpath
         $showRequirementButtons = true,
         $isConfigPage = false,
         $allowExpand = true,
-        $action = ''
+        $action = '',
+        $extraField = []
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
-        $back = Display::url(
-            Display::return_icon(
-                'back.png',
-                get_lang('ReturnToLearningPaths'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            'lp_controller.php?'.api_get_cidreq()
-        );
+        if (!isset($extraField['backTo']) && empty($extraField['backTo'])) {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('ReturnToLearningPaths'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq()
+            );
+        } else {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('Back'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                $extraField['backTo']
+            );
+        }
 
         /*if ($backToBuild) {
             $back = Display::url(
@@ -6735,6 +6765,21 @@ class learnpath
                 get_lang('PrerequisitesOptions'),
                 $buttons,
                 true
+            );
+        }
+
+        if (isset($extraField['authorlp'])) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'add-groups.png',
+                    get_lang('Author'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'author_view',
+                    'lp_id' => $lpId,
+                ])
             );
         }
 
@@ -10037,7 +10082,8 @@ class learnpath
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
 
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                //if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                if (!isset($selectedMinScore[$item['id']]) && !empty($masteryScoreAsMinValue)) {
                     // Backwards compatibility with 1.9.x use mastery_score as min value
                     $selectedMinScoreValue = $masteryScoreAsMinValue;
                 }
@@ -12161,12 +12207,30 @@ EOD;
         }
     }
 
-    public static function getLpList($courseId)
+    public static function getLpList($courseId, $sessionId, $onlyActiveLp = true)
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_LP = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId";
+        $sql = "SELECT lp.id, lp.name
+                FROM $TABLE_LP lp
+                INNER JOIN $TABLE_ITEM_PROPERTY ip
+                ON lp.id = ip.ref
+                WHERE lp.c_id = $courseId ";
+
+        if (!empty($sessionId)) {
+            $sql .= "AND ip.session_id = $sessionId ";
+        }
+
+        if ($onlyActiveLp) {
+            $sql .= "AND ip.tool = 'learnpath' ";
+            $sql .= "AND ip.visibility = 1 ";
+        }
+
+        $sql .= "GROUP BY lp.id";
+
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

@@ -273,7 +273,7 @@ if (is_array($forumCategories)) {
         } else {
             $forumCategoryInfo['title'] = $forumCategory['cat_title'];
         }
-        $forumCategoryInfo['extra_fields'] = $forumCategory['extra_fields'];
+        $forumCategoryInfo['extra_fields'] = isset($forumCategory['extra_fields']) ? $forumCategory['extra_fields'] : [];
         $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory['session_id'], $_user['status']);
 
         // Validation when belongs to a session

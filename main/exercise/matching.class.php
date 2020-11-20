@@ -290,9 +290,6 @@ class Matching extends Question
         ])
         ) {
             $header .= '<th>'.get_lang('Choice').'</th>';
-            //if ($exercise->showExpectedChoiceColumn()) {
-                //$header .= '<th>'.get_lang('ExpectedChoice').'</th>';
-            //}
         }
 
         if ($exercise->showExpectedChoice()) {

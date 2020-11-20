@@ -22,6 +22,10 @@ class WhispeakMyStudentsLpTrackingHook extends HookObserver implements HookMyStu
      */
     public function trackingHeader(HookMyStudentsLpTrackingEventInterface $hook)
     {
+        if (false === WhispeakAuthPlugin::create()->isEnabled()) {
+            return [];
+        }
+
         return [
             'value' => WhispeakAuthPlugin::create()->get_lang('plugin_title'),
             'attrs' => ['class' => 'text-center'],
@@ -35,6 +39,10 @@ class WhispeakMyStudentsLpTrackingHook extends HookObserver implements HookMyStu
      */
     public function trackingContent(HookMyStudentsLpTrackingEventInterface $hook)
     {
+        if (false === WhispeakAuthPlugin::create()->isEnabled()) {
+            return [];
+        }
+
         $data = $hook->getEventData();
 
         $totalCount = WhispeakAuthPlugin::countAllAttemptsInLearningPath($data['lp_id'], $data['student_id']);

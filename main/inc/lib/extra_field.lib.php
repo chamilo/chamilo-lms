@@ -156,6 +156,9 @@ class ExtraField extends Model
             case 'forum_post':
                 $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
                 break;
+            case 'track_exercise':
+                $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -185,6 +188,7 @@ class ExtraField extends Model
             'forum_category',
             'forum_post',
             'exercise',
+            'track_exercise',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -1177,18 +1181,45 @@ class ExtraField extends Model
                         // When a variable is 'authors', this will be a
                         // select element of teachers (see BT#17648)
                         $variable = $field_details['variable'];
-                        if ($variable != 'authors') {
+                        $authors = ($variable == 'authors' || $variable == 'authorlpitem') ? true : false;
+                        if ($authors == false) {
                             foreach ($field_details['options'] as $optionDetails) {
                                 $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                             }
                         } else {
-                            $conditions = [
-                                'enabled' => 1,
-                                'status' => COURSEMANAGER,
-                            ];
-                            $teachers = UserManager::get_user_list($conditions);
-                            foreach ($teachers as $teacher) {
-                                $options[$teacher['id']] = $teacher['complete_name'];
+                            if ($variable == 'authors') {
+                                $conditions = [
+                                    'enabled' => 1,
+                                    'status' => COURSEMANAGER,
+                                ];
+                                $teachers = UserManager::get_user_list($conditions);
+                                foreach ($teachers as $teacher) {
+                                    $options[$teacher['id']] = $teacher['complete_name'];
+                                }
+                            } elseif ($variable == 'authorlpitem') {
+                                /* Authors*/
+                                $options = [];
+                                $field = new ExtraField('user');
+                                $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
+
+                                $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
+                                if ($idExtraField != 0) {
+                                    $extraFieldValueUser = new ExtraFieldValue('user');
+                                    $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
+                                        $authorLp['variable'],
+                                        1,
+                                        true,
+                                        false,
+                                        true
+                                    );
+
+                                    foreach ($arrayExtraFieldValueUser as $item) {
+                                        $teacher = api_get_user_info($item['item_id']);
+                                        // $teachers[] = $teacher;
+                                        $options[$teacher['id']] = $teacher['complete_name'];
+                                    }
+                                }
+                                /* Authors*/
                             }
                         }
                         $form->addElement(
@@ -1916,6 +1947,17 @@ class ExtraField extends Model
     }
 
     /**
+     * Gets the set of values of an extra_field searching for the variable name.
+     *
+     * Example:
+     * <code>
+     * <?php
+     * $extraField = new ExtraField('lp_item');
+     * $extraFieldArray =  $extraField->get_handler_field_info_by_field_variable('authorlpitem');
+     * echo "<pre>".var_export($extraFieldArray,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param string $variable
      *
      * @return array|bool
@@ -3122,30 +3164,6 @@ JAVASCRIPT;
         $result = Database::store_result($result);
 
         return $result;
-    }
-
-    /**
-     *  Gets the display name of an extra field.
-     *
-     * @param string $variableName
-     */
-    public static function getDisplayNameByVariable($variableName = null)
-    {
-        if ($variableName == null) {
-            return null;
-        }
-        $variableName = Database::escape_string($variableName);
-        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $query = "SELECT display_text
-            FROM $tblExtraField
-            WHERE variable = '$variableName'";
-        $companyField = Database::fetch_assoc(Database::query($query));
-
-        if ($companyField == false or !isset($companyField['display_text'])) {
-            return null;
-        }
-
-        return $companyField['display_text'];
     }
 
     /**

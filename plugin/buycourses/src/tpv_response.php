@@ -21,7 +21,7 @@ $version = $_POST['Ds_SignatureVersion'];
 $params = $_POST["Ds_MerchantParameters"];
 $signatureReceived = $_POST['Ds_Signature'];
 
-require_once '../resources/php/apiRedsys.php';
+require_once '../resources/apiRedsys.php';
 $tpv = new RedsysAPI();
 
 $decodec = $tpv->decodeMerchantParameters($params);

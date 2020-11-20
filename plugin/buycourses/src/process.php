@@ -84,7 +84,7 @@ if (!$culqiEnabled) {
     unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
 }
 
-if (!$tpvRedsysEnable) {
+if (!$tpvRedsysEnable || !file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')) {
     unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS]);
 }
 

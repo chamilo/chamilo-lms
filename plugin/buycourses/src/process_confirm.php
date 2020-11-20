@@ -315,7 +315,7 @@ switch ($sale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS:
         $tpvRedsysParams = $plugin->getTpvRedsysParams();
 
-        require_once '../resources/php/apiRedsys.php';
+        require_once '../resources/apiRedsys.php';
         $tpv = new RedsysAPI();
 
         $merchantcode = $tpvRedsysParams['merchantcode'];

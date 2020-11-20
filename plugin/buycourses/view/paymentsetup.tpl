@@ -49,9 +49,6 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <p>{{ 'InfoTpvRedsysApiCredentials'|get_plugin_lang('BuyCoursesPlugin') }}</p>
-                </div>
-                <div class="col-md-12">
                     {{ tpv_redsys_form }}
                 </div>
             </div>

@@ -4918,7 +4918,7 @@ EOT;
                 'score' => $total_score,
                 'total' => $total_weight,
             ];
-            echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+            echo TestCategory::get_stats_table_by_attempt($objExercise, $category_list);
         }
 
         if ($show_all_but_expected_answer) {
@@ -5000,7 +5000,7 @@ EOT;
         )) {
             echo Display::page_header(get_lang('Ranking'), null, 'h4');
             echo self::displayResultsInRanking(
-                $objExercise->iId,
+                $objExercise,
                 api_get_user_id(),
                 $courseId,
                 $sessionId
@@ -5045,15 +5045,16 @@ EOT;
     /**
      * Display the ranking of results in a exercise.
      *
-     * @param int $exerciseId
-     * @param int $currentUserId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param Exercise $exercise
+     * @param int      $currentUserId
+     * @param int      $courseId
+     * @param int      $sessionId
      *
      * @return string
      */
-    public static function displayResultsInRanking($exerciseId, $currentUserId, $courseId, $sessionId = 0)
+    public static function displayResultsInRanking($exercise, $currentUserId, $courseId, $sessionId = 0)
     {
+        $exerciseId = $exercise->iId;
         $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);

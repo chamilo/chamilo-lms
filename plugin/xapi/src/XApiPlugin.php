@@ -392,7 +392,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $this->get_title().':teacher',
             $courseId,
             null,
-            'xapi/launch/list.php'
+            'xapi/tincan/list.php'
         );
     }
 
@@ -411,11 +411,11 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/launch/list.php%']);
+            ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/list.php%']);
 
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/launch/tool.php%']);
+            ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/tool.php%']);
     }
 
     /**
@@ -425,7 +425,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function createLaunchCourseTool(ToolLaunch $toolLaunch)
     {
-        $link ='xapi/launch/tool.php?'.http_build_query(
+        $link ='xapi/tincan/tool.php?'.http_build_query(
             [
                 'id' => $toolLaunch->getId(),
             ]
@@ -450,7 +450,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $tool = Database::getManager()
             ->getRepository(CTool::class)
             ->findOneBy([
-                'link' => 'xapi/launch/tool.php?id='.$toolLaunch->getId(),
+                'link' => 'xapi/tincan/tool.php?id='.$toolLaunch->getId(),
                 'cId' => $toolLaunch->getCourse()->getId(),
             ]);
 

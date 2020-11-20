@@ -1644,6 +1644,9 @@ $_configuration['auth_password_links'] = [
 /*$_configuration['exercise_finished_notification_settings'] = [
     'notification_teacher' => [ // Notification label
         'for teacher' => [ // for teacher
+            'skip_notification_if_user_in_extra_field' => [
+                'company_variable' => ['Company A', 'Company B'],
+            ],
             'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
             'attempts' => [
                 [

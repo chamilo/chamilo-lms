@@ -31,7 +31,7 @@ class XApiCreateCourseHookObserver extends HookObserver implements HookCreateCou
         $plugin = XApiPlugin::create();
 
         if (HOOK_EVENT_TYPE_POST == $type) {
-            $plugin->addCourseTool($courseInfo['real_id']);
+            $plugin->addCourseToolForTinCan($courseInfo['real_id']);
         }
     }
 }

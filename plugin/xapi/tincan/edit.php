@@ -96,10 +96,6 @@ if ($frmActivity->validate()) {
             ->setLrsAuthPassword($values['lrs_auth_password']);
     }
 
-    $courseTool = $plugin->getCourseToolFromLaunchTool($toolLaunch);
-    $courseTool->setName($values['title']);
-
-    $em->persist($courseTool);
     $em->persist($toolLaunch);
     $em->flush();
 
@@ -127,12 +123,12 @@ $frmActivity->setDefaults(
 
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    'list.php?'.api_get_cidreq()
+    'index.php?'.api_get_cidreq()
 );
 
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => 'list.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_title()];
 
 $view = new Template($langEditActivity);
 $view->assign('header', $langEditActivity);

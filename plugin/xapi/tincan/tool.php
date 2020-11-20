@@ -140,6 +140,8 @@ if ($stateDocument) {
     $table->setColAttributes(2, ['class' => 'text-center']);
 }
 
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_title()];
+
 $pageTitle = $toolLaunch->getTitle();
 $pageContent = '';
 
@@ -161,8 +163,21 @@ if ($stateDocument) {
     $pageContent .= $table->toHtml();
 }
 
+
+$actions = Display::url(
+    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    'index.php?'.api_get_cidreq()
+);
+
 $view = new Template($pageTitle);
 $view->assign('header', $pageTitle);
+$view->assign(
+    'actions',
+    Display::toolbarAction(
+        'xapi_actions',
+        [$actions]
+    )
+);
 $view->assign('content', $pageContent);
 $view->display_one_col_template();
 

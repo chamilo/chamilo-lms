@@ -33,7 +33,6 @@ $plugin = XApiPlugin::create();
 $langEditActivity = $plugin->get_lang('EditActivity');
 
 $frmActivity = new FormValidator('frm_activity', 'post', api_get_self()."?$cidReq&edit={$toolLaunch->getId()}");
-$frmActivity->addHeader($langEditActivity);
 $frmActivity->addText('title', get_lang('Title'));
 $frmActivity->addTextarea('description', get_lang('Description'));
 $frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('AllowMultipleAttempts'));
@@ -130,13 +129,12 @@ $actions = Display::url(
     'list.php?'.api_get_cidreq()
 );
 
-$pageTitle = $plugin->get_title();
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => 'list.php', 'name' => $pageTitle];
+$interbreadcrumb[] = ['url' => 'list.php', 'name' => $plugin->get_title()];
 
 $view = new Template($langEditActivity);
-$view->assign('header', $pageTitle);
+$view->assign('header', $langEditActivity);
 $view->assign(
     'actions',
     Display::toolbarAction(

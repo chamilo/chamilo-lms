@@ -8662,10 +8662,13 @@ class Exercise
      *
      * @param int    $categoryId
      * @param string $keyword
-     * @param int    $userId     Optional.
-     * @param int    $courseId   Optional.
-     * @param int    $sessionId  Optional.
-     * @param bool   $returnData Optional.
+     * @param int    $userId
+     * @param int    $courseId
+     * @param int    $sessionId
+     * @param bool   $returnData
+     * @param int    $minCategories
+     * @param int    $filterByResultDisabled
+     * @param int    $filterByAttempt
      *
      * @return string
      */
@@ -8675,10 +8678,13 @@ class Exercise
         $userId = 0,
         $courseId = 0,
         $sessionId = 0,
-        $returnData = false
+        $returnData = false,
+        $minCategories = 0,
+        $filterByResultDisabled = 0,
+        $filterByAttempt = 0
     ) {
         $allowDelete = Exercise::allowAction('delete');
-        $allowClean = Exercise::allowAction('clean_results');
+        $allowClean = self::allowAction('clean_results');
 
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -8747,6 +8753,19 @@ class Exercise
             $keywordCondition = " AND title LIKE '%$keyword%' ";
         }
 
+        $filterByResultDisabledCondition = '';
+        /*$filterByResultDisabled = (int) $filterByResultDisabled;
+        if (!empty($filterByResultDisabled)) {
+            $filterByResultDisabledCondition = ' AND e.results_disabled = '.$filterByResultDisabled;
+        }*/
+        $filterByAttemptCondition = '';
+        /*$filterByAttempt = (int) $filterByAttempt;
+        if (!empty($filterByAttempt)) {
+            $filterByResultDisabledCondition = ' AND e.result_disabled = '.$filterByResultDisabled;
+        }*/
+        /*$minCategories = 0,
+        $filterByAttempt = 0*/
+
         // Only for administrators
         if ($is_allowedToEdit) {
             $total_sql = "SELECT count(iid) as count
@@ -8757,6 +8776,7 @@ class Exercise
                                 $condition_session
                                 $categoryCondition
                                 $keywordCondition
+                                $filterByResultDisabledCondition
                                 ";
             $sql = "SELECT * FROM $TBL_EXERCISES e
                     WHERE
@@ -8765,6 +8785,7 @@ class Exercise
                         $condition_session
                         $categoryCondition
                         $keywordCondition
+                        $filterByResultDisabledCondition
                     ORDER BY title
                     LIMIT $from , $limit";
         } else {
@@ -10870,6 +10891,15 @@ class Exercise
             get_lang('ExerciseAutoEvaluationAndRankingMode'),
             RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
             ['id' => 'result_disabled_8']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ExerciseCategoriesRadarMode'),
+            RESULT_DISABLE_RADAR,
+            ['id' => 'result_disabled_9']
         );
 
         return $form->addGroup(

@@ -34,15 +34,6 @@ $tool_name = get_lang('LostPassword');
 
 if ($reset && $userId) {
     $messageText = Login::reset_password($reset, $userId, true);
-
-    /*if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
-        CustomPages::display(
-            CustomPages::INDEX_UNLOGGED,
-            ['info' => $messageText]
-        );
-        exit;
-    }*/
-
     Display::addFlash(
         Display::return_message($messageText, 'info', false)
     );
@@ -50,7 +41,7 @@ if ($reset && $userId) {
     exit;
 }
 
-$form = new FormValidator('lost_password');
+$form = new FormValidator('lost_password', 'post', '', '', [], FormValidator::LAYOUT_GRID);
 $form->addHeader($tool_name);
 $form->addText(
     'user',
@@ -91,7 +82,7 @@ if ($allowCaptcha) {
     $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
 }
 
-$form->addButtonSend(get_lang('Send'));
+$form->addButtonSend(get_lang('Send'), 'submit', false, [], 'btn-block', null);
 
 if ($form->validate()) {
     $values = $form->exportValues();

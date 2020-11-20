@@ -4918,7 +4918,7 @@ EOT;
                 'score' => $total_score,
                 'total' => $total_weight,
             ];
-            echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+            echo TestCategory::get_stats_table_by_attempt($objExercise, $category_list);
         }
 
         if ($show_all_but_expected_answer) {
@@ -5000,7 +5000,7 @@ EOT;
         )) {
             echo Display::page_header(get_lang('Ranking'), null, 'h4');
             echo self::displayResultsInRanking(
-                $objExercise->iId,
+                $objExercise,
                 api_get_user_id(),
                 $courseId,
                 $sessionId
@@ -5045,15 +5045,16 @@ EOT;
     /**
      * Display the ranking of results in a exercise.
      *
-     * @param int $exerciseId
-     * @param int $currentUserId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param Exercise $exercise
+     * @param int      $currentUserId
+     * @param int      $courseId
+     * @param int      $sessionId
      *
      * @return string
      */
-    public static function displayResultsInRanking($exerciseId, $currentUserId, $courseId, $sessionId = 0)
+    public static function displayResultsInRanking($exercise, $currentUserId, $courseId, $sessionId = 0)
     {
+        $exerciseId = $exercise->iId;
         $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
@@ -5889,8 +5890,14 @@ EOT;
         return $content;
     }
 
-    public static function sendNotification($currentUserId, $objExercise, $exercise_stat_info, $courseInfo, $attemptCountToSend, $stats)
-    {
+    public static function sendNotification(
+        $currentUserId,
+        $objExercise,
+        $exercise_stat_info,
+        $courseInfo,
+        $attemptCountToSend,
+        $stats
+    ) {
         $notifications = api_get_configuration_value('exercise_finished_notification_settings');
         if (empty($notifications)) {
             return false;
@@ -5904,6 +5911,20 @@ EOT;
 
         // If there are no pending questions (Open questions).
         if (0 === $countPendingQuestions) {
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'signature_mandatory'
+            );
+
+            if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {
+                if (ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)) {
+                    $signature = ExerciseSignaturePlugin::getSignature($studentId, $exercise_stat_info);
+                    if (false !== $signature) {
+                        //return false;
+                    }
+                }
+            }
+
             $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
             if ($exercisePassed) {
                 $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
@@ -5930,7 +5951,7 @@ EOT;
                     }
                 }
 
-                // Send to student
+                // Send to student.
                 MessageManager::send_message($currentUserId, $subject, $content);
             }
 
@@ -5944,12 +5965,35 @@ EOT;
                 $exerciseNotification = $extraFieldData['value'];
             }
 
+            $extraFieldValueUser = new ExtraFieldValue('user');
+
             if (!empty($exerciseNotification) && !empty($notifications)) {
                 foreach ($notifications as $name => $notificationList) {
                     if ($exerciseNotification !== $name) {
                         continue;
                     }
                     foreach ($notificationList as $attemptData) {
+                        $skipNotification = false;
+                        $skipNotificationList = isset($attemptData['skip_notification_if_user_in_extra_field']) ? $attemptData['skip_notification_if_user_in_extra_field'] : [];
+                        if (!empty($skipNotificationList)) {
+                            foreach ($skipNotificationList as $skipVariable => $skipValues) {
+                                $userExtraFieldValue = $extraFieldValueUser->get_values_by_handler_and_field_variable(
+                                    $studentId,
+                                    $skipVariable
+                                );
+                                if (!empty($userExtraFieldValue) && isset($userExtraFieldValue['value'])) {
+                                    if (in_array($userExtraFieldValue['value'], $skipValues)) {
+                                        $skipNotification = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($skipNotification) {
+                            continue;
+                        }
+
                         $email = isset($attemptData['email']) ? $attemptData['email'] : '';
                         $emailList = explode(',', $email);
                         if (empty($emailList)) {

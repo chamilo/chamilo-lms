@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -2448,9 +2449,8 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
-        $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
-        return $html;
+        return Display::panel($form->returnForm(), get_lang('SocialWall'));
     }
 
     /**
@@ -2463,14 +2463,12 @@ class SocialManager extends UserManager
      */
     public static function getWallFormPortfolio($urlForm)
     {
-        $userId = isset($_GET['u']) ? (int) $_GET['u'] : '';
-        $userId = ($userId!=0) ? $userId : api_get_user_id();
+        $userId = isset($_GET['u']) ? (int) $_GET['u'] : 0;
+        $userId = $userId !== 0 ? $userId : api_get_user_id();
         $user_info = api_get_user_info($userId);
-        $portfolioName = ' '.$userId;
         $friend = true;
         $editPorfolioLink = '';
         if ($userId != api_get_user_id()) {
-            $portfolioName = $user_info['complete_name'];
             $friend = self::get_relation_between_contacts(api_get_user_id(), $userId);
         } else {
             $editPorfolioLink .= "<div class=\"pull-right\" style='margin-top: -5px'>".
@@ -2536,7 +2534,6 @@ class SocialManager extends UserManager
                 $more_info .= '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
                 $more_info .= '<br />';
             }
-            //$socialRightInformation .= SocialManager::social_wrapper_div($more_info, 4);
         }
 
         $form->addTextarea(
@@ -2565,6 +2562,7 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
+
         return Display::panel($more_info, get_lang('Portfolio') . $editPorfolioLink);
     }
 
@@ -2656,7 +2654,7 @@ class SocialManager extends UserManager
      */
     public static function getCountWallMessagesByUser($userId, $groupList = [], $friendList = [], $threadList = [])
     {
-        $count = self::getWallMessages(
+        return self::getWallMessages(
             $userId,
             0,
             $groupList,
@@ -2667,8 +2665,6 @@ class SocialManager extends UserManager
             true,
             $threadList
         );
-
-        return $count;
     }
 
     /**

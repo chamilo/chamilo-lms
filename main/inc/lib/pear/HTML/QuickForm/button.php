@@ -252,9 +252,10 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                 break;
             case FormValidator::LAYOUT_INLINE:
             case FormValidator::LAYOUT_GRID:
-            case FormValidator::LAYOUT_BOX_NO_LABEL:
             default:
-                $template = ' {element}  ';
+                $template = '<div class="form-group"> {element}  </div>';
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
                 break;
         }
 

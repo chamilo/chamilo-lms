@@ -748,23 +748,27 @@ class TestCategory
     /**
      * Returns a category summary report.
      *
-     * @param int   $exerciseId
-     * @param array $category_list
+     * @param Exercise $exercise
+     * @param array    $category_list
      *                             pre filled array with the category_id, score, and weight
      *                             example: array(1 => array('score' => '10', 'total' => 20));
      *
      * @return string
      */
-    public static function get_stats_table_by_attempt(
-        $exerciseId,
-        $category_list = []
-    ) {
+    public static function get_stats_table_by_attempt($exercise, $category_list = [])
+    {
+        $exerciseId = $exercise->iId;
         if (empty($category_list)) {
             return null;
         }
-        $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
+        $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
 
-        $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered', 'id' => 'category_results']);
+        $table = new HTML_Table(
+            [
+                'class' => 'table table-hover table-striped table-bordered',
+                'id' => 'category_results',
+            ]
+        );
         $table->setHeaderContents(0, 0, get_lang('Categories'));
         $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
         $table->setHeaderContents(0, 2, get_lang('RelativeScore'));
@@ -781,9 +785,13 @@ class TestCategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        if (count($category_list) > 1) {
+
+        $radar = '';
+        $countCategories = count($category_list);
+        if ($countCategories > 1) {
+            $resultsArray = [];
             foreach ($category_list as $category_id => $category_item) {
-                $table->setCellContents($row, 0, $category_name_list[$category_id]);
+                $table->setCellContents($row, 0, $categoryNameList[$category_id]);
                 $table->setCellContents(
                     $row,
                     1,
@@ -804,7 +812,70 @@ class TestCategory
                         true
                     )
                 );
+                $resultsArray[] = round($category_item['score']/$category_item['total']*10);
                 $row++;
+            }
+
+            // Radar requires more than 3 categories.
+            if ($countCategories > 2 && RESULT_DISABLE_RADAR === (int) $exercise->results_disabled) {
+                $categoryNameToJson = json_encode(array_column($categoryNameList, 'title'));
+                $resultsToJson = json_encode($resultsArray);
+                $radar = "
+                <canvas id='categoryRadar' width='400' height='200'></canvas>
+                <script>
+                    var data = {
+                        labels: $categoryNameToJson,
+                        datasets: [{
+                            fill:true,
+                            label: '".get_lang('Categories')."',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor:'#fff',
+                            pointHoverBorderColor: 'rgb(255, 99, 132)',
+                            pointRadius: 6,
+                            pointBorderWidth: 3,
+                            pointHoverRadius: 10,
+                            data: $resultsToJson
+                        }]
+                    }
+                    var options = {
+                        scale: {
+                            angleLines: {
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                  min: 0,
+                                  max: 10,
+                                  stepSize: 1
+                            },
+                            pointLabels: {
+                              fontSize: 14,
+                              //fontStyle: 'bold'
+                            },
+                        },
+                        elements: {
+                            line: {
+                                tension:0,
+                                borderWidth:3
+                            }
+                        },
+                        legend: {
+                            //position: 'bottom'
+                            display: false
+                        }
+                    };
+
+                    var ctx = document.getElementById('categoryRadar').getContext('2d');
+                    var myRadarChart = new Chart(ctx, {
+                        type: 'radar',
+                        data: data,
+                        options: options
+                    });
+                </script>
+                ";
             }
 
             if (!empty($none_category)) {
@@ -855,7 +926,7 @@ class TestCategory
                 );
             }
 
-            return $table->toHtml();
+            return $radar.$table->toHtml();
         }
 
         return '';

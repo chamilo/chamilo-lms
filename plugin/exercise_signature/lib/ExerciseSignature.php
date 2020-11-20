@@ -142,6 +142,24 @@ class ExerciseSignaturePlugin extends Plugin
             );
         }
 
+        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable('signature_mandatory');
+        $exists = $extraFieldHandler !== false;
+
+        if (!$exists) {
+            $extraField->save(
+                [
+                    'field_type' => 13, // checkbox yes/no
+                    'variable' => 'signature_mandatory',
+                    'display_text' => get_plugin_lang('SignatureMandatory', 'ExerciseSignaturePlugin'),
+                    'default_value' => null,
+                    'field_order' => null,
+                    'visible_to_self' => 1,
+                    'changeable' => 1,
+                    'filter' => null,
+                ]
+            );
+        }
+
         $extraField = new ExtraField('track_exercise');
         $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable('signature');
         $exists = $extraFieldHandler !== false;

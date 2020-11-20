@@ -17,7 +17,7 @@ switch ($action) {
     case 'delete-file':
         $path = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
         if (empty($path)) {
-            echo json_encode(["status" => "false", "message"=>$plugin->get_lang('ErrorEmptyPath')]);
+            echo json_encode(["status" => "false", "message" => $plugin->get_lang('ErrorEmptyPath')]);
             exit;
         }
 
@@ -25,13 +25,13 @@ switch ($action) {
             Display::addFlash($plugin->get_lang("DeletedSuccess"), 'success');
             echo json_encode(["status" => "true"]);
         } else {
-            echo json_encode(["status" => "false", "message"=>$plugin->get_lang('ErrorDeleteFile')]);
+            echo json_encode(["status" => "false", "message" => $plugin->get_lang('ErrorDeleteFile')]);
         }
         break;
     case 'delete-files-list':
         $list = isset($_REQUEST['list']) ? $_REQUEST['list'] : [];
         if (empty($list)) {
-            echo json_encode(["status" => "false", "message"=>$plugin->get_lang('ErrorEmptyPath')]);
+            echo json_encode(["status" => "false", "message" => $plugin->get_lang('ErrorEmptyPath')]);
             exit;
         }
 

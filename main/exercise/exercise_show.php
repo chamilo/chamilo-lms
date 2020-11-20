@@ -171,6 +171,10 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
+if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+}
+
 if ($action !== 'export') {
     $scoreJsCode = ExerciseLib::getJsCode();
     if ($origin !== 'learnpath') {
@@ -907,13 +911,15 @@ if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
     echo $chartMultiAnswer;
 }
 
-if (!empty($category_list) && ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)) {
-    // Adding total
+if (!empty($category_list) &&
+    ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)
+) {
+    // Adding total.
     $category_list['total'] = [
         'score' => $myTotalScoreTemp,
         'total' => $totalWeighting,
     ];
-    echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    echo TestCategory::get_stats_table_by_attempt($objExercise, $category_list);
 }
 
 if (in_array(
@@ -922,7 +928,7 @@ if (in_array(
 )) {
     echo Display::page_header(get_lang('Ranking'), null, 'h4');
     echo ExerciseLib::displayResultsInRanking(
-        $objExercise->iId,
+        $objExercise,
         $student_id,
         $courseInfo['real_id'],
         $sessionId

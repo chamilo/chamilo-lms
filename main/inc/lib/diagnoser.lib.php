@@ -628,6 +628,11 @@ class Diagnoser
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
+            'bcmath' => [
+                'link' => 'https://php.net/bcmath',
+                'expected' => 2,
+                'comment' => get_lang('ExtensionShouldBeLoaded'),
+            ],
         ];
 
         foreach ($extensions as $extension => $data) {

@@ -164,6 +164,7 @@ define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
+define('SECTION_CUSTOMPAGE', 'custompage');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -486,6 +487,7 @@ define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAY
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
+define('RESULT_DISABLE_RADAR', 9);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -1283,7 +1285,7 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 }
 
 /**
- * Blocks inactive users with a currently active session from accessing more 
+ * Blocks inactive users with a currently active session from accessing more
  * pages "live".
  *
  * @return bool Returns true if the feature is disabled or the user account is still enabled. Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
@@ -2427,7 +2429,7 @@ function api_format_course_array($course_data)
             null,
             null,
             true,
-            false
+            true
         );
     }
 

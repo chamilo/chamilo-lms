@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Doctrine\ORM\EntityRepository;
 use Fhaculty\Graph\Set\Vertices;
@@ -243,6 +244,7 @@ class SequenceResourceRepository extends EntityRepository
             foreach ($sequence['requirements'] as $resource) {
                 switch ($type) {
                     case SequenceResource::SESSION_TYPE:
+                        /** @var Session $resource */
                         $id = $resource->getId();
                         $resourceItem = [
                             'name' => $resource->getName(),

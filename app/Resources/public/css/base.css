@@ -187,9 +187,9 @@ select {
     margin: 15px 0 5px;
 }
 
-#login-block #formLogin .form-group {
+/*#login-block #formLogin .form-group {
     display: none;
-}
+}*/
 
 #login-block .btn-group, .btn-group-vertical {
     width: 100%;

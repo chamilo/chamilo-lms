@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -75,12 +76,15 @@ try {
         ];
     }
 
-    uasort($data, function ($attemptA, $attemptB) {
-        $timeA = strtotime($attemptA[XApiPlugin::STATE_LAST_LAUNCH]);
-        $timeB = strtotime($attemptB[XApiPlugin::STATE_LAST_LAUNCH]);
+    uasort(
+        $data,
+        function ($attemptA, $attemptB) {
+            $timeA = strtotime($attemptA[XApiPlugin::STATE_LAST_LAUNCH]);
+            $timeB = strtotime($attemptB[XApiPlugin::STATE_LAST_LAUNCH]);
 
-        return $timeB - $timeA;
-    });
+            return $timeB - $timeA;
+        }
+    );
 
     $documentData = new DocumentData($data);
 } catch (NotFoundException $notFoundException) {

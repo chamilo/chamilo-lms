@@ -1386,7 +1386,7 @@ function addEditTemplate()
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
 
     // Getting all the information of the template when editing a template.
-    if ($_GET['action'] == 'edit') {
+    if ($_GET['action'] === 'edit') {
         $defaults['template_id'] = $id;
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
@@ -1397,7 +1397,6 @@ function addEditTemplate()
         $form->addElement('hidden', 'template_id');
 
         // Adding an extra field: a preview of the image that is currently used.
-
         if (!empty($template->getImage())) {
             $form->addElement(
                 'static',

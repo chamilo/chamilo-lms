@@ -996,12 +996,12 @@ class ExtraField extends Model
                 }
                 // see  BT#17943
                 $authors = false;
-                if(
+                if (
                     $field_details['variable'] == 'authors'
                     || $field_details['variable'] == 'authorlp'
                     || $field_details['variable'] == 'authorlpitem'
                     || $field_details['variable'] == 'price'
-                ){
+                ) {
                     $authors = true;
 
                 }

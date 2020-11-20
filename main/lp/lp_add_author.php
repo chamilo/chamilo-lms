@@ -33,11 +33,6 @@ if (!$is_allowed_to_edit) {
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
 
-/*
-echo "<pre>".var_export($learnPath->authorsAvaible,true)."</pre>";
-exit();
-*/
-
 if (empty($learnPath)) {
     api_not_allowed();
 }
@@ -273,7 +268,7 @@ foreach ($_SESSION['oLP']->items as $item) {
     } else {
         $authorName = '';
     }
-    if(isset($priceItem['value']) && !empty($priceItem['value'])){
+    if (isset($priceItem['value']) && !empty($priceItem['value'])) {
         $authorName .= "<br><small>".get_lang('Price')." (".$priceItem['value'].")</small>";
     }
     $form->addCheckBox("itemSelected[$itemId]", null, Display::return_icon('lp_document.png', $itemName).$itemName.$authorName);
@@ -318,7 +313,7 @@ foreach ($teachers as $key => $value) {
 $form->addSelect('authorItemSelect', get_lang('Authors'), $options, [
     'multiple' => 'multiple',
 ]);
-$form->addNumeric('price',get_lang('Price'));
+$form->addNumeric('price', get_lang('Price'));
 $form->addHtml('</div>');
 $form->addButtonCreate(get_lang('Send'));
 $form->setDefaults($default);
@@ -388,16 +383,16 @@ if ($form->validate()) {
                 Session::write('messageError', get_lang('DeletedAuthors'));
                 $redirect = true;
             } elseif ($price > 0) {
-                $sms[]= get_lang('PriceUpdated');
+                $sms[] = get_lang('PriceUpdated');
                 $redirect = true;
             } elseif (!empty($messages)) {
-                $sms[]= get_lang(get_lang('RegisteredAuthors')." ".$messages);
+                $sms[] = get_lang(get_lang('RegisteredAuthors')." ".$messages);
                 $redirect = true;
             }
 
-            if($redirect == true){
-                if(count($sms)>0){
-                    Session::write('message',implode(' / ', $sms));
+            if ($redirect == true) {
+                if (count($sms) > 0) {
+                    Session::write('message', implode(' / ', $sms));
                 }
                 echo "<script>window.location.replace(\"$currentUrl\");</script>";
                 die();

@@ -546,13 +546,19 @@ EOT;
      * @param string $name          Element name (for form treatment purposes)
      * @param bool   $createElement Whether to use the create or add method
      * @param array  $attributes
-     * @param int    $size
+     * @param string $size
      * @param string $class
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = [], $size, $class)
-    {
+    public function addButtonSend(
+        $label,
+        $name = 'submit',
+        $createElement = false,
+        $attributes = [],
+        $size = 'default',
+        $class = ''
+    ) {
         return $this->addButton(
             $name,
             $label,

@@ -4933,7 +4933,6 @@ class learnpath
                         c_id = $course_id AND
                         lp_id = ".$this->get_id()." AND
                         user_id = ".$userId." ".$session_condition;
-
             if ($debug) {
                 error_log('Saving last item seen : '.$sql, 0);
             }
@@ -4946,10 +4945,19 @@ class learnpath
             $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                if ($debug) {
+                    error_log("Skip saving score with value: $score");
+                }
                 return false;
             }
 
+            /*if ($course_id == 220 && $scoreAsProgress && $scoreAsProgressSetting) {
+                error_log("HOT FIX JULIO new score has been replaced from $progress to $score");
+                $progress = $score;
+            }*/
+
             if ($progress >= 0 && $progress <= 100) {
+                // Check database.
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
                             progress = $progress
@@ -4959,6 +4967,9 @@ class learnpath
                             user_id = ".$userId." ".$session_condition;
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
+                if ($debug) {
+                    error_log($sql);
+                }
                 $this->progress_db = $progress;
             }
         }

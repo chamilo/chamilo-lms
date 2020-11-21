@@ -333,7 +333,7 @@ class TestCategory
      */
     public static function getListOfCategoriesIDForTest($exerciseId, $courseId = 0)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check test questions, obtaining unique categories in a table
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseId, false);
         $categoriesInExercise = $exercise->getQuestionWithCategories();
@@ -353,7 +353,7 @@ class TestCategory
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check the categories of a test, obtaining unique categories in table
         $categories_in_exercise = [];
         $question_list = $exercise->getQuestionOrderedListByName();
 
@@ -1072,10 +1072,15 @@ class TestCategory
     public function returnCategoryForm(Exercise $exercise)
     {
         $categories = $this->getListOfCategoriesForTest($exercise);
+        $sortedCategories = [];
+        foreach ($categories as $catId => $cat) {
+            $sortedCategories[$cat['title']] = $cat;
+        }
+        ksort($sortedCategories);
         $saved_categories = $exercise->getCategoriesInExercise();
         $return = null;
 
-        if (!empty($categories)) {
+        if (!empty($sortedCategories)) {
             $nbQuestionsTotal = $exercise->getNumberQuestionExerciseCategory();
             $exercise->setCategoriesGrouping(true);
             $real_question_count = count($exercise->getQuestionList());
@@ -1102,9 +1107,9 @@ class TestCategory
                 'title' => get_lang('NoCategory'),
             ];
 
-            $categories[] = $emptyCategory;
+            $sortedCategories[] = $emptyCategory;
 
-            foreach ($categories as $category) {
+            foreach ($sortedCategories as $category) {
                 $cat_id = $category['iid'];
                 $return .= '<tr>';
                 $return .= '<td>';
@@ -1245,7 +1250,7 @@ class TestCategory
                     c.c_id = $courseId AND
                     i.tool = '".TOOL_TEST_CATEGORY."'
                     $sessionCondition
-                ORDER BY title";
+                ORDER BY title ASC";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

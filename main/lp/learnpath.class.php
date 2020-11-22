@@ -6779,19 +6779,22 @@ class learnpath
             );
         }
 
-        if (isset($extraField['authorlp'])) {
-            $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'add-groups.png',
-                    get_lang('Author'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
-                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                    'action' => 'author_view',
-                    'lp_id' => $lpId,
-                ])
-            );
+        // see  BT#17943
+        if (api_is_platform_admin()) {
+            if (isset($extraField['authorlp'])) {
+                $actionsLeft .= Display::url(
+                    Display::return_icon(
+                        'add-groups.png',
+                        get_lang('Author'),
+                        '',
+                        ICON_SIZE_MEDIUM
+                    ),
+                    'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                        'action' => 'author_view',
+                        'lp_id' => $lpId,
+                    ])
+                );
+            }
         }
 
         $toolbar = Display::toolbarAction(

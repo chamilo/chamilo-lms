@@ -6,14 +6,14 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script(true);
 
-if (!api_is_allowed_to_edit()) {
-    // Students are redirected to the start_student.php
-    api_location(api_get_path(WEB_PLUGIN_PATH).'positioning/start_student.php?'.api_get_cidreq());
-}
-
 $plugin = Positioning::create();
 if (!$plugin->isEnabled()) {
     api_not_allowed(true);
+}
+
+if (!api_is_allowed_to_edit()) {
+    // Students are redirected to the start_student.php
+    api_location(api_get_path(WEB_PLUGIN_PATH).'positioning/start_student.php?'.api_get_cidreq());
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -22,6 +22,7 @@ $formToString = '';
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
+$courseInfo = api_get_course_info();
 
 switch ($action) {
     case 'set_initial':
@@ -109,6 +110,12 @@ if (!empty($users) && $initialData && $initialData['exercise_id']) {
 
 $table->set_form_actions([]);
 $exercises = $table->return_table();
+
+$template->assign(
+    'positioning_introduction',
+    //Display::return_message(sprintf($plugin->get_lang('PositioningIntroduction'), $courseInfo['title']))
+    Display::return_message($plugin->get_lang('PositioningIntroduction'))
+);
 $template->assign('grid', $exercises);
 $template->assign('radars', $radars);
 $template->assign('initial_exercise', $initialExerciseTitle);

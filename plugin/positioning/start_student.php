@@ -13,9 +13,6 @@ if (!$plugin->isEnabled()) {
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$formToString = '';
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
@@ -53,6 +50,7 @@ $studentAverage = (int) Tracking::getAverageStudentScore($currentUserId, $course
 $averageToUnlock = (int) $plugin->get('average_percentage_to_unlock_final_exercise');
 
 $finalExerciseTitle = '';
+$lpUrl = '';
 if ($finalData) {
     $exerciseId = $finalData['exercise_id'];
     $finalExercise = new Exercise();
@@ -66,6 +64,8 @@ if ($finalData) {
 
     $finalExerciseTitle = $finalExercise->get_formated_title();
     if (!empty($initialResults)) {
+        $lpUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+        $lpUrl = Display::url(get_lang('LearningPath'),$lpUrl);
         if ($studentAverage >= $averageToUnlock) {
             $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exerciseId;
             if (empty($finalResults)) {
@@ -83,12 +83,9 @@ $template = new Template($nameTools);
 
 $template->assign('initial_exercise', $initialExerciseTitle);
 $template->assign('final_exercise', $finalExerciseTitle);
-$template->assign(
-    'average_percentage_to_unlock_final_exercise',
-    $averageToUnlock
-);
-
+$template->assign('average_percentage_to_unlock_final_exercise', $averageToUnlock);
 $template->assign('average', $studentAverage);
+$template->assign('lp_url', $lpUrl);
 $template->assign('radars', $radars);
 $template->assign('content', $template->fetch('positioning/view/start_student.tpl'));
 $template->display_one_col_template();

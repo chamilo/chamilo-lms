@@ -1,4 +1,6 @@
 
+{{ positioning_introduction }}
+
 {{ grid }}
 
 {% if radars %}

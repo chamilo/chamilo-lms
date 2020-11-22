@@ -380,7 +380,7 @@ class ExerciseLib
                 $header1 = Display::tag('th', '&nbsp;');
                 $cpt1 = 0;
                 foreach ($objQuestionTmp->options as $item) {
-                    $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
+                    $colorBorder1 = $cpt1 == (count($objQuestionTmp->options) - 1)
                         ? '' : 'border-right: solid #FFFFFF 1px;';
                     if ($item === 'True' || $item === 'False') {
                         $header1 .= Display::tag(
@@ -4912,7 +4912,9 @@ EOT;
             echo $chartMultiAnswer;
         }
 
-        if (!empty($category_list) && ($show_results || $show_only_score)) {
+        if (!empty($category_list) &&
+            ($show_results || $show_only_score || RESULT_DISABLE_RADAR == $objExercise->results_disabled)
+        ) {
             // Adding total
             $category_list['total'] = [
                 'score' => $total_score,

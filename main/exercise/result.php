@@ -10,6 +10,7 @@ use ChamiloSession as Session;
  * @author Julio Montoya - Simple exercise result page
  */
 require_once __DIR__.'/../inc/global.inc.php';
+$current_course_tool = TOOL_QUIZ;
 
 $id = isset($_REQUEST['id']) ? (int) $_GET['id'] : 0; // exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;

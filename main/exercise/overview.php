@@ -8,11 +8,8 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
 $current_course_tool = TOOL_QUIZ;
-
 Exercise::cleanSessionVariables();
-
 $this_section = SECTION_COURSES;
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
@@ -29,6 +26,13 @@ $result = $objExercise->read($exercise_id, true);
 
 if (!$result) {
     api_not_allowed(true);
+}
+
+if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+    $plugin = Positioning::create();
+    if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, api_get_course_int_id(), $sessionId)) {
+        api_not_allowed(true);
+    }
 }
 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;

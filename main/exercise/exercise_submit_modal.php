@@ -8,6 +8,7 @@ use ChamiloSession as Session;
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
+$current_course_tool = TOOL_QUIZ;
 
 api_protect_course_script();
 

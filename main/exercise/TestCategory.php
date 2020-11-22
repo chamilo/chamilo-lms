@@ -762,7 +762,6 @@ class TestCategory
             return null;
         }
         $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
-
         $table = new HTML_Table(
             [
                 'class' => 'table table-hover table-striped table-bordered',
@@ -818,64 +817,7 @@ class TestCategory
 
             // Radar requires more than 3 categories.
             if ($countCategories > 2 && RESULT_DISABLE_RADAR === (int) $exercise->results_disabled) {
-                $categoryNameToJson = json_encode(array_column($categoryNameList, 'title'));
-                $resultsToJson = json_encode($resultsArray);
-                $radar = "
-                <canvas id='categoryRadar' width='400' height='200'></canvas>
-                <script>
-                    var data = {
-                        labels: $categoryNameToJson,
-                        datasets: [{
-                            fill:true,
-                            label: '".get_lang('Categories')."',
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgb(255, 99, 132)',
-                            pointBackgroundColor: 'rgb(255, 99, 132)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor:'#fff',
-                            pointHoverBorderColor: 'rgb(255, 99, 132)',
-                            pointRadius: 6,
-                            pointBorderWidth: 3,
-                            pointHoverRadius: 10,
-                            data: $resultsToJson
-                        }]
-                    }
-                    var options = {
-                        scale: {
-                            angleLines: {
-                                display: false
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                  min: 0,
-                                  max: 10,
-                                  stepSize: 1
-                            },
-                            pointLabels: {
-                              fontSize: 14,
-                              //fontStyle: 'bold'
-                            },
-                        },
-                        elements: {
-                            line: {
-                                tension:0,
-                                borderWidth:3
-                            }
-                        },
-                        legend: {
-                            //position: 'bottom'
-                            display: false
-                        }
-                    };
-
-                    var ctx = document.getElementById('categoryRadar').getContext('2d');
-                    var myRadarChart = new Chart(ctx, {
-                        type: 'radar',
-                        data: data,
-                        options: options
-                    });
-                </script>
-                ";
+                $radar = $exercise->getRadar(array_column($categoryNameList, 'title'), [$resultsArray]);
             }
 
             if (!empty($none_category)) {

@@ -15,7 +15,7 @@ use ChamiloSession as Session;
  * @todo small letters for table variables
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
+$current_course_tool = TOOL_QUIZ;
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = 'learnpath' === $origin;

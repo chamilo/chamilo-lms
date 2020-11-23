@@ -16,6 +16,9 @@ if (isset($_GET['export_csv']) && $exportCSV == false) {
 $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
 $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
+if (isset($_POST['display']) && $display == null) {
+    $display = Security::remove_XSS($_POST['display']);
+}
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script
@@ -109,11 +112,29 @@ switch ($display) {
         MySpace::displayResumeLpByItem($startDate, $endDate);
         break;
     case 'accessoverview':
-        $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
-        $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
-        $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
+        $courseId = isset($_GET['course_id']) ? (int)$_GET['course_id'] : 0;
+        if ($courseId == 0 && $_POST['course_id']) {
+            $courseId = (int)$_POST['course_id'];
+            $_GET['course_id'] = $courseId;
+        }
+        $sessionId = isset($_GET['session_id']) ? (int)$_GET['session_id'] : 0;
+        if ($sessionId == 0 && $_POST['session_id']) {
+            $sessionId = (int)$_POST['session_id'];
+            $_GET['session_id'] = $sessionId;
+        }
+        $studentId = isset($_GET['student_id']) ? (int)$_GET['student_id'] : 0;
+        if ($studentId == 0 && $_POST['student_id']) {
+            $studentId = (int)$_POST['student_id'];
+            $_GET['student_id'] = $studentId;
+        }
+        $perPage = isset($_GET['tracking_access_overview_per_page']) ? $_GET['tracking_access_overview_per_page'] : 20;
 
-        MySpace::displayTrackingAccessOverView($courseId, $sessionId, $studentId);
+        $dates = isset($_GET['date']) ? $_GET['date'] : null;
+        if ($dates == null && $_POST['date']) {
+            $dates = $_POST['date'];
+            $_GET['date'] = $dates;
+        }
+        MySpace::displayTrackingAccessOverView($courseId, $sessionId, $studentId, $perPage, $dates);
         break;
 }
 

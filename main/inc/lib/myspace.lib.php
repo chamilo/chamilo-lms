@@ -3338,7 +3338,13 @@ class MySpace
      * @param int $sessionId
      * @param int $studentId
      */
-    public static function displayTrackingAccessOverView($courseId, $sessionId, $studentId)
+    public static function displayTrackingAccessOverView(
+        $courseId,
+        $sessionId,
+        $studentId,
+        $perPage = 20,
+        $dates = null
+    )
     {
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
@@ -3456,12 +3462,24 @@ class MySpace
         $form->addButton('submit', get_lang('Generate'), 'gear', 'primary');
 
         $table = null;
-        if ($form->validate()) {
+        if (!empty($dates)) {
+        //if ($form->validate()) {
             $table = new SortableTable(
                 'tracking_access_overview',
                 ['MySpace', 'getNumberOfTrackAccessOverview'],
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
-                0
+                0,
+                $perPage
+            );
+            $table->set_additional_parameters(
+                [
+                    'course_id' => $courseId,
+                    'session_id' => $sessionId,
+                    'student_id' => $studentId,
+                    'date' => $dates,
+                    'tracking_access_overview_per_page' =>  $perPage,
+                    'display' => 'accessoverview',
+                ]
             );
             $table->set_header(0, get_lang('LoginDate'), true);
             $table->set_header(1, get_lang('Username'), true);

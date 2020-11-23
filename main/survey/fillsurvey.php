@@ -3,7 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
-$lastQuestion =  0;
+
+$lastQuestion = 0;
 
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
@@ -812,10 +813,10 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 }
                 $counter++;
                 // see GH#3582
-                if (isset($_GET['show']) && (int)$_GET['show'] >= 0) {
-                    $lastQuestion = (int)$_GET['show'] - 1;
+                if (isset($_GET['show']) && (int) $_GET['show'] >= 0) {
+                    $lastQuestion = (int) $_GET['show'] - 1;
                 } else {
-                    $lastQuestion = (int)$row['question_option_id'];
+                    $lastQuestion = (int) $row['question_option_id'];
                 }
             }
         }

@@ -268,20 +268,18 @@ if ($form->validate()) {
                 $extraFields[] = $fieldValue;
             }
 
-            //foreach ($filterCheckList as $fieldId => $field) {
-                $list = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $categoryId);
-                foreach ($list as $valueCertificate) {
-                    $item = [];
-                    $item[] = $sessionInfo['name'];
-                    $item[] = $courseInfo['title'];
-                    $item[] = $value['firstname'];
-                    $item[] = $value['lastname'];
-                    $item[] = $valueCertificate['score_certificate'];
-                    $item[] = api_get_local_time($valueCertificate['created_at']);
-                    $item = array_merge($item, $extraFields);
-                    $dataToExport[] = $item;
-                }
-            //}
+            $list = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $categoryId);
+            foreach ($list as $valueCertificate) {
+                $item = [];
+                $item[] = $sessionInfo['name'];
+                $item[] = $courseInfo['title'];
+                $item[] = $value['firstname'];
+                $item[] = $value['lastname'];
+                $item[] = $valueCertificate['score_certificate'];
+                $item[] = api_get_local_time($valueCertificate['created_at']);
+                $item = array_merge($item, $extraFields);
+                $dataToExport[] = $item;
+            }
         }
         Export::arrayToCsv($dataToExport, 'export');
     }

@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.ticket
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 'true') {
@@ -85,7 +83,7 @@ function updateLpList(courseId, sessionId) {
     }, function (lpList) {
         $("<option>", {
             value: 0,
-            text: "' . get_lang('Select') . '"
+            text: "'.get_lang('Select').'"
         }).appendTo($selectLp);
 
         if (lpList.length > 0) {
@@ -95,7 +93,6 @@ function updateLpList(courseId, sessionId) {
                     text: lp.text
                 }).appendTo($selectLp);
             });
-
             $selectLp.find("option[value=\'' . $lpId . '\']").attr("selected",true);
         }
 

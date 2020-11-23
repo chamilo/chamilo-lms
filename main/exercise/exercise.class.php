@@ -6679,6 +6679,35 @@ class Exercise
                         $exerciseAttempts
                     );
                     $isVisible = false;
+                } else {
+                    // Check blocking exercise.
+                    $extraFieldValue = new ExtraFieldValue('exercise');
+                    $blockExercise = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $this->iId,
+                        'blocking_percentage'
+                    );
+                    if ($blockExercise && isset($blockExercise['value']) && !empty($blockExercise['value'])) {
+                        $blockPercentage = (int) $blockExercise['value'];
+                        $userAttempts = Event::getExerciseResultsByUser(
+                            api_get_user_id(),
+                            $this->iId,
+                            $this->course_id,
+                            $this->sessionId,
+                            $lpId,
+                            $lpItemId
+                        );
+
+                        if (!empty($userAttempts)) {
+                            $currentAttempt = current($userAttempts);
+                            if ($currentAttempt['total_percentage'] <= $blockPercentage) {
+                                $message = sprintf(
+                                    get_lang('ExerciseBlockBecausePercentageX'),
+                                    $blockPercentage
+                                );
+                                $isVisible = false;
+                            }
+                        }
+                    }
                 }
             }
         }

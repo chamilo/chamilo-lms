@@ -1215,10 +1215,10 @@ class Event
         if (Database::num_rows($query) > 0) {
             $attempt = Database::fetch_array($query, 'ASSOC');
 
-            return $attempt['count'];
-        } else {
-            return 0;
+            return (int) $attempt['count'];
         }
+
+        return 0;
     }
 
     /**
@@ -1646,6 +1646,8 @@ class Event
             if (Database::num_rows($res_revised) > 0) {
                 $row['attempt_revised'] = 1;
             }
+            $row['total_percentage'] = ($row['exe_result'] / $row['exe_weighting']) * 100;
+
             $list[$row['exe_id']] = $row;
             $sql = "SELECT * FROM $table_track_attempt
                     WHERE exe_id = $exeId";

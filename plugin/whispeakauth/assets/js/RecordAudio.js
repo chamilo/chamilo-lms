@@ -85,6 +85,9 @@ window.RecordAudio = (function () {
                 btnStop.prop('disabled', false).parent().removeClass('hidden');
                 btnStart.prop('disabled', true).parent().addClass('hidden');
                 tagAudio.removeClass('show').parents('#audio-wrapper').addClass('hidden');
+
+                $('.fa-microphone').addClass('text-danger');
+                $('#txt-timer').epiclock({mode: $.epiclock.modes.countup, format: 'e:s'});
             }
 
             function errorCallback(error) {
@@ -110,6 +113,9 @@ window.RecordAudio = (function () {
             if (!recordRTC) {
                 return;
             }
+
+            $('.fa-microphone').removeClass('text-danger');
+            $('#txt-timer').text('');
 
             recordRTC.stopRecording(function (audioURL) {
                 tagAudio.prop('src', audioURL);

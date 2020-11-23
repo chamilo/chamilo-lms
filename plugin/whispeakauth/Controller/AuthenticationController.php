@@ -348,6 +348,7 @@ class AuthenticationController extends BaseController
 
         $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
         $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
+        $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 
         $pageTitle = $this->plugin->get_title();
 

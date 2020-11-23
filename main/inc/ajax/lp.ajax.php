@@ -22,9 +22,10 @@ if ($debug) {
 switch ($action) {
     case 'get_lp_list_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
+        $session_id = (isset($_GET['session_id']) && !empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
         $onlyActiveLp = !(api_is_platform_admin(true) || api_is_course_admin());
-        $results = learnpath::getLpList($course_id, $onlyActiveLp);
-        $data= [];
+        $results = learnpath::getLpList($course_id, $session_id, $onlyActiveLp);
+        $data = [];
 
         if (!empty($results)) {
             foreach ($results as $lp) {

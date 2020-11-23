@@ -333,7 +333,7 @@ class TestCategory
      */
     public static function getListOfCategoriesIDForTest($exerciseId, $courseId = 0)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check test questions, obtaining unique categories in a table
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseId, false);
         $categoriesInExercise = $exercise->getQuestionWithCategories();
@@ -353,7 +353,7 @@ class TestCategory
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check the categories of a test, obtaining unique categories in table
         $categories_in_exercise = [];
         $question_list = $exercise->getQuestionOrderedListByName();
 
@@ -748,23 +748,26 @@ class TestCategory
     /**
      * Returns a category summary report.
      *
-     * @param int   $exerciseId
-     * @param array $category_list
-     *                             pre filled array with the category_id, score, and weight
-     *                             example: array(1 => array('score' => '10', 'total' => 20));
+     * @param Exercise $exercise
+     * @param array    $category_list
+     *                                pre filled array with the category_id, score, and weight
+     *                                example: array(1 => array('score' => '10', 'total' => 20));
      *
      * @return string
      */
-    public static function get_stats_table_by_attempt(
-        $exerciseId,
-        $category_list = []
-    ) {
+    public static function get_stats_table_by_attempt($exercise, $category_list = [])
+    {
+        $exerciseId = $exercise->iId;
         if (empty($category_list)) {
             return null;
         }
-        $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
-
-        $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered', 'id' => 'category_results']);
+        $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
+        $table = new HTML_Table(
+            [
+                'class' => 'table table-hover table-striped table-bordered',
+                'id' => 'category_results',
+            ]
+        );
         $table->setHeaderContents(0, 0, get_lang('Categories'));
         $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
         $table->setHeaderContents(0, 2, get_lang('RelativeScore'));
@@ -781,9 +784,13 @@ class TestCategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        if (count($category_list) > 1) {
+
+        $radar = '';
+        $countCategories = count($category_list);
+        if ($countCategories > 1) {
+            $resultsArray = [];
             foreach ($category_list as $category_id => $category_item) {
-                $table->setCellContents($row, 0, $category_name_list[$category_id]);
+                $table->setCellContents($row, 0, $categoryNameList[$category_id]);
                 $table->setCellContents(
                     $row,
                     1,
@@ -804,7 +811,13 @@ class TestCategory
                         true
                     )
                 );
+                $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
                 $row++;
+            }
+
+            // Radar requires more than 3 categories.
+            if ($countCategories > 2 && RESULT_DISABLE_RADAR === (int) $exercise->results_disabled) {
+                $radar = $exercise->getRadar(array_column($categoryNameList, 'title'), [$resultsArray]);
             }
 
             if (!empty($none_category)) {
@@ -855,7 +868,7 @@ class TestCategory
                 );
             }
 
-            return $table->toHtml();
+            return $radar.$table->toHtml();
         }
 
         return '';
@@ -1001,10 +1014,15 @@ class TestCategory
     public function returnCategoryForm(Exercise $exercise)
     {
         $categories = $this->getListOfCategoriesForTest($exercise);
+        $sortedCategories = [];
+        foreach ($categories as $catId => $cat) {
+            $sortedCategories[$cat['title']] = $cat;
+        }
+        ksort($sortedCategories);
         $saved_categories = $exercise->getCategoriesInExercise();
         $return = null;
 
-        if (!empty($categories)) {
+        if (!empty($sortedCategories)) {
             $nbQuestionsTotal = $exercise->getNumberQuestionExerciseCategory();
             $exercise->setCategoriesGrouping(true);
             $real_question_count = count($exercise->getQuestionList());
@@ -1031,9 +1049,9 @@ class TestCategory
                 'title' => get_lang('NoCategory'),
             ];
 
-            $categories[] = $emptyCategory;
+            $sortedCategories[] = $emptyCategory;
 
-            foreach ($categories as $category) {
+            foreach ($sortedCategories as $category) {
                 $cat_id = $category['iid'];
                 $return .= '<tr>';
                 $return .= '<td>';
@@ -1174,7 +1192,7 @@ class TestCategory
                     c.c_id = $courseId AND
                     i.tool = '".TOOL_TEST_CATEGORY."'
                     $sessionCondition
-                ORDER BY title";
+                ORDER BY title ASC";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

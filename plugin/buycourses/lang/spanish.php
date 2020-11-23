@@ -214,3 +214,15 @@ $strings['CurrencyIsNotConfigured'] = "Por favor, configure una moneda antes de 
 $strings['ExportReport'] = "Exportar reporte de ventas";
 $strings['OrderTime'] = "Hora de pedido";
 $strings['SelectDateRange'] = "Seleccione una <strong>fecha de inicio</strong> y <strong>fecha de fin</strong> para el reporte";
+$strings['tpv_redsys_enable'] = "Habilitar TPV RedSys";
+$strings['tpv_redsys_enable_help'] = "Para poder utilizar la modalidad de pago del TPV de RedSys es necesario descargar los ficheros de \"INTEGRACIÓN REST - API PHP\" en el siguiente enlace <a href='https://pagosonline.redsys.es/descargas.html'>web de RedSys</a> y ubicar el fichero el fichero <strong>apiRedSys.php</strong> en el directorio <em>plugin/buycourses/resources</em>.";
+$strings['NotFindRedsysFile'] = "No se encuentra en el directorio <em>plugin/buycourses/resources</em> el fichero <strong>apiRedsys.php</strong>";
+$strings['TpvPayment'] = "Pago con tarjeta";
+$strings['TpvRedsysConfig'] = "Configuración TPV Redsys";
+$strings['DS_MERCHANT_MERCHANTCODE'] = "Número de comercio (FUC)";
+$strings['DS_MERCHANT_TERMINAL'] = "Número de terminal";
+$strings['DS_MERCHANT_CURRENCY'] = "Moneda del terminal";
+$strings['kc'] = "Clave secreta de encriptación";
+$strings['url_redsys'] = "URL conexión Redsys";
+$strings['url_redsys_sandbox'] = "URL conexión Redsys (Pruebas)";
+$strings['InfoTpvRedsysApiCredentials'] = "Deberá completar los siguientes campos del formulario con la información que les facilite el Soporte Técnico del TPV Redsys:";

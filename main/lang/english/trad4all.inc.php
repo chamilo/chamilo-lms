@@ -8702,4 +8702,5 @@ $Tariff = "Tariff";
 $ToInvoice = "To invoice";
 $LearningPathItemByAuthor = "LP item by author";
 $DeleteExerciseAttempts = "Delete also the exercise attempts. If not check then the exercise results will still be available in the exercise tool.";
+$ExerciseCategoriesRadarMode = "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback.";
 ?>

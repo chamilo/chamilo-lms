@@ -3607,7 +3607,8 @@ class CourseManager
         $getCount = false,
         $keyword = null,
         $sessionId = 0,
-        $showAllAssignedCourses = false
+        $showAllAssignedCourses = false,
+        $order = ''
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -3647,6 +3648,9 @@ class CourseManager
         }
 
         $orderBy = null;
+        if (!empty($order)) {
+            $orderBy = Database::escape_string($order);
+        }
         $extraInnerJoin = null;
 
         if (!empty($sessionId)) {

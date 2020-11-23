@@ -43,7 +43,11 @@ window.RecordAudio = (function () {
                     btnStop.prop('disabled', true).text(btnStop.data('loadingtext'));
                 }
             }).done(function (response) {
-                $('#messages-deck').html(response);
+                if (response.text) {
+                    $('#txt-sample-text').text(response.text);
+                }
+
+                $('#messages-deck').html(response.resultHtml);
 
                 if ($('#messages-deck > .alert.alert-success').length > 0) {
                     tagAudio.parents('#audio-wrapper').addClass('hidden').removeClass('show');

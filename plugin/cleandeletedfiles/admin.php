@@ -6,8 +6,6 @@
  * Plugin.
  *
  * @author Jose Angel Ruiz
- *
- * @package chamilo.plugin.CleanDeletedFiles
  */
 $cidReset = true;
 require_once __DIR__.'/config.php';
@@ -17,12 +15,11 @@ api_protect_admin_script();
 /** @var \CleanDeletedFilesPlugin $plugin */
 $plugin = CleanDeletedFilesPlugin::create();
 $plugin_info = $plugin->get_info();
-
 $isPlatformAdmin = api_is_platform_admin();
 
 if ($plugin->isEnabled() && $isPlatformAdmin) {
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {
+    $(function() {
         $(".delete-file").click(function(e) {
             e.preventDefault();
             var path = $(this).prop("href").substr(7);
@@ -84,7 +81,8 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
         "app/upload",
     ];
 
-    function findDeletedFiles($pathRelative) {
+    function findDeletedFiles($pathRelative)
+    {
         global $sizePath;
         $pathAbsolute = api_get_path(SYS_PATH).$pathRelative;
         $result = [];
@@ -92,9 +90,9 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
             $dir = dir($pathAbsolute);
             while ($file = $dir->read()) {
                 if (is_file($pathAbsolute.'/'.$file)) {
-                    $filesize = round(filesize($pathAbsolute.'/'.$file)/1024, 1);
+                    $filesize = round(filesize($pathAbsolute.'/'.$file) / 1024, 1);
                     $pos = strpos($file, "DELETED");
-                    if ($pos !== FALSE) {
+                    if ($pos !== false) {
                         $result[] = [
                             'path_complete' => $pathAbsolute.'/'.$file,
                             'path_relative' => $pathRelative.'/'.$file,
@@ -102,11 +100,14 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
                         ];
                         $sizePath += $filesize;
                     }
-                } else if ($file!='..' && $file!='.') {
-                    $result = array_merge($result, findDeletedFiles($pathRelative.'/'.$file));
+                } else {
+                    if ($file != '..' && $file != '.') {
+                        $result = array_merge($result, findDeletedFiles($pathRelative.'/'.$file));
+                    }
                 }
             }
         }
+
         return $result;
     }
 
@@ -122,7 +123,7 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
             echo "<li>".$plugin->get_lang('FilesDeletedMark').": <strong>".count($filesDeletedList)."</strong>";
             echo "<li>".$plugin->get_lang('FileDirSize').": ";
             if ($sizePath >= 1024) {
-                echo "<strong>".round($sizePath/1024,1)." Mb</strong>";
+                echo "<strong>".round($sizePath / 1024, 1)." Mb</strong>";
             } else {
                 echo "<strong>".$sizePath." Kb</strong>";
             }
@@ -133,7 +134,7 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
                     '<input type="checkbox" id="select_'.$i.'" class="select_all" />',
                     false,
                     null,
-                    ['style' => 'text-align:center']
+                    ['style' => 'text-align:center'],
                 ],
                 [$plugin->get_lang('path_dir'), true],
                 [$plugin->get_lang('size'), true, null, ['style' => 'min-width:85px']],
@@ -151,12 +152,12 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
                 );
 
                 $row = [
-                    '<input type="checkbox" 
+                    '<input type="checkbox"
                         class="checkbox-'.$i.' checkbox-item"
                         id="file://'.$value['path_complete'].'" />',
                     $value['path_relative'],
                     $value['size'].' '.($value['size'] >= 1024 ? 'Mb' : 'Kb'),
-                    $tools
+                    $tools,
                 ];
                 $data[] = $row;
             }
@@ -178,7 +179,7 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
     }
 
     if ($sizeTotal >= 1024) {
-        echo $plugin->get_lang('SizeTotalAllDir').": <strong>".round($sizeTotal/1024,1).' Mb</strong>';
+        echo $plugin->get_lang('SizeTotalAllDir').": <strong>".round($sizeTotal / 1024, 1).' Mb</strong>';
     } else {
         echo $plugin->get_lang('SizeTotalAllDir').": <strong>".$sizeTotal.' Kb</strong>';
     }

@@ -19,7 +19,7 @@ use ChamiloSession as Session;
  */
 $debug = false;
 require_once __DIR__.'/../inc/global.inc.php';
-
+$current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
 api_protect_course_script(true);
@@ -60,6 +60,9 @@ $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
+if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+}
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';

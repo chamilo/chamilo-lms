@@ -580,7 +580,7 @@ class Event
             error_log("position: $position");
         }
 
-        //Validation in case of fraud with active control time
+        // Validation in case of fraud with active control time.
         if (!ExerciseLib::exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
             if ($debug) {
                 error_log("exercise_time_control_is_valid is false");
@@ -593,11 +593,11 @@ class Event
             return false;
         }
 
-        if (is_null($answer)) {
+        if (null === $answer) {
             $answer = '';
         }
 
-        if (is_null($score)) {
+        if (null === $score) {
             $score = 0;
         }
 
@@ -1215,10 +1215,10 @@ class Event
         if (Database::num_rows($query) > 0) {
             $attempt = Database::fetch_array($query, 'ASSOC');
 
-            return $attempt['count'];
-        } else {
-            return 0;
+            return (int) $attempt['count'];
         }
+
+        return 0;
     }
 
     /**
@@ -1646,6 +1646,8 @@ class Event
             if (Database::num_rows($res_revised) > 0) {
                 $row['attempt_revised'] = 1;
             }
+            $row['total_percentage'] = ($row['exe_result'] / $row['exe_weighting']) * 100;
+
             $list[$row['exe_id']] = $row;
             $sql = "SELECT * FROM $table_track_attempt
                     WHERE exe_id = $exeId";

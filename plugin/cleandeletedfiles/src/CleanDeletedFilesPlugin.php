@@ -6,13 +6,11 @@
  * Clean deleted files plugin.
  *
  * @author Jose Angel Ruiz
- *
- * @package chamilo.plugin.CleanDeletedFiles
  */
 class CleanDeletedFilesPlugin extends Plugin
 {
     public $isAdminPlugin = true;
-    
+
     /**
      * Class constructor.
      */

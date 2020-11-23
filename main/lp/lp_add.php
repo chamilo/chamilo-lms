@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This is a learning path creation and player tool in Chamilo
+ * This is a learning path creation and player tool in Chamilo.
  *
  * @author Patrick Cool
  * @author Denes Nagy

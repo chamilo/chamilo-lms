@@ -1003,7 +1003,6 @@ class ExtraField extends Model
                     || $field_details['variable'] == 'price'
                 ) {
                     $authors = true;
-
                 }
                 if (!api_is_platform_admin() && $authors == true) {
                     continue;
@@ -1206,8 +1205,6 @@ class ExtraField extends Model
                                     'enabled' => 1,
                                     'status' => COURSEMANAGER,
                                 ];
-                                echo __FILE__."::".__LINE__."<pre>".var_export($conditions, true)."</pre><br>";
-
                                 $teachers = UserManager::get_user_list($conditions);
                                 foreach ($teachers as $teacher) {
                                     $options[$teacher['id']] = $teacher['complete_name'];

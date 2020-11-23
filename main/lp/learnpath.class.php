@@ -1831,7 +1831,7 @@ class learnpath
     }
 
     /**
-     * Get the learning path name by id
+     * Get the learning path name by id.
      *
      * @param int $lpId
      *
@@ -4933,7 +4933,6 @@ class learnpath
                         c_id = $course_id AND
                         lp_id = ".$this->get_id()." AND
                         user_id = ".$userId." ".$session_condition;
-
             if ($debug) {
                 error_log('Saving last item seen : '.$sql, 0);
             }
@@ -4946,10 +4945,20 @@ class learnpath
             $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                if ($debug) {
+                    error_log("Skip saving score with value: $score");
+                }
+
                 return false;
             }
 
+            /*if ($course_id == 220 && $scoreAsProgress && $scoreAsProgressSetting) {
+                error_log("HOT FIX JULIO new score has been replaced from $progress to $score");
+                $progress = $score;
+            }*/
+
             if ($progress >= 0 && $progress <= 100) {
+                // Check database.
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
                             progress = $progress
@@ -4959,6 +4968,9 @@ class learnpath
                             user_id = ".$userId." ".$session_condition;
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
+                if ($debug) {
+                    error_log($sql);
+                }
                 $this->progress_db = $progress;
             }
         }
@@ -12210,17 +12222,22 @@ EOD;
         }
     }
 
-    public static function getLpList($courseId, $onlyActiveLp = true)
+    public static function getLpList($courseId, $sessionId, $onlyActiveLp = true)
     {
         $TABLE_LP = Database::get_course_table(TABLE_LP_MAIN);
         $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $sql = "SELECT lp.id, lp.name
                 FROM $TABLE_LP lp
                 INNER JOIN $TABLE_ITEM_PROPERTY ip
                 ON lp.id = ip.ref
                 WHERE lp.c_id = $courseId ";
+
+        if (!empty($sessionId)) {
+            $sql .= "AND ip.session_id = $sessionId ";
+        }
 
         if ($onlyActiveLp) {
             $sql .= "AND ip.tool = 'learnpath' ";

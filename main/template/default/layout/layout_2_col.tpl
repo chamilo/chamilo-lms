@@ -17,6 +17,10 @@
 
                 {{ sniff_notification }}
 
+                {% block page_body %}
+                    {% include 'layout/page_body.tpl'|get_template %}
+                {% endblock %}
+
                 {% if home_welcome %}
                     <article id="home-welcome">
                         {{ home_welcome }}
@@ -29,9 +33,6 @@
                 </article>
                 {% endif %}
 
-                {% block page_body %}
-                    {% include 'layout/page_body.tpl'|get_template %}
-                {% endblock %}
 
                 {% if welcome_to_course_block %}
                     <article id="homepage-course">

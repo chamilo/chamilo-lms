@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -923,7 +924,7 @@ class SocialManager extends UserManager
         }
 
         $myExtendedProfileEdit = '';
-        if( $user_id == api_get_user_id()){
+        if ($user_id == api_get_user_id()) {
             $myExtendedProfileEdit .= '<a href="/main/auth/profile.php?type=extended#openarea" style="display:initial">'.
                 Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
         }
@@ -966,7 +967,7 @@ class SocialManager extends UserManager
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
         $messageSocialIcon = Display::return_icon('promoted_message.png', get_lang('PromotedMessages'));
-        $portfolio  = Display::return_icon('portfolio.png', get_lang('Portfolio '));
+        $portfolio = Display::return_icon('portfolio.png', get_lang('Portfolio '));
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
@@ -999,7 +1000,6 @@ class SocialManager extends UserManager
                     </a>
                 </li>';
             if ($settingExtendedProfileEnabled == true) {
-
                 $active = $show === 'portfolio' ? 'active' : null;
                 $links .= '
                 <li class="portfolio-icon '.$active.'">
@@ -1230,7 +1230,7 @@ class SocialManager extends UserManager
                         'data-title' => $sendMessageText,
                     ]
                 );
-                if($settingExtendedProfileEnabled == true) {
+                if ($settingExtendedProfileEnabled == true) {
                     $active = $show === 'portfolio' ? 'active' : null;
                     $links .= '
                 <li class="portfolio-icon '.$active.'">
@@ -1466,7 +1466,6 @@ class SocialManager extends UserManager
             }
             //    MY PRODUCTIONS
             self::display_productions($user_object->user_id);
-
         } else {
             $html .= '<div class="actions-title">';
             $html .= get_lang('UsersOnLineList');
@@ -2448,14 +2447,13 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
-        $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
-        return $html;
+        return Display::panel($form->returnForm(), get_lang('SocialWall'));
     }
 
     /**
      * Show middle section for Portfolio extended.
-     * Must be active on main/admin/settings.php?category=User into extended_profile
+     * Must be active on main/admin/settings.php?category=User into extended_profile.
      *
      * @param string $urlForm
      *
@@ -2463,14 +2461,19 @@ class SocialManager extends UserManager
      */
     public static function getWallFormPortfolio($urlForm)
     {
-        $userId = isset($_GET['u']) ? (int) $_GET['u'] : '';
-        $userId = ($userId!=0) ? $userId : api_get_user_id();
+        $userId = isset($_GET['u']) ? (int) $_GET['u'] : 0;
+        $userId = $userId !== 0 ? $userId : api_get_user_id();
         $user_info = api_get_user_info($userId);
-        $portfolioName = ' '.$userId;
         $friend = true;
-        if ($userId != api_get_user_id()){
-            $portfolioName = $user_info['complete_name'];
+        $editPorfolioLink = '';
+        if ($userId != api_get_user_id()) {
             $friend = self::get_relation_between_contacts(api_get_user_id(), $userId);
+        } else {
+            $editPorfolioLink .= "<div class=\"pull-right\" style='margin-top: -5px'>".
+                '<a href="/main/auth/profile.php?type=extended#openarea" class="btn btn-default btn-sm btn-social-edit">'.
+                "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>".
+                '</a>'.
+                "</div>";
         }
         if ($friend == 0) {
             /* if has not relation, get current user */
@@ -2529,7 +2532,6 @@ class SocialManager extends UserManager
                 $more_info .= '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
                 $more_info .= '<br />';
             }
-            //$socialRightInformation .= SocialManager::social_wrapper_div($more_info, 4);
         }
 
         $form->addTextarea(
@@ -2558,7 +2560,8 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
-        return Display::panel($more_info, get_lang('Portfolio'));
+
+        return Display::panel($more_info, get_lang('Portfolio').$editPorfolioLink);
     }
 
     /**
@@ -2649,7 +2652,7 @@ class SocialManager extends UserManager
      */
     public static function getCountWallMessagesByUser($userId, $groupList = [], $friendList = [], $threadList = [])
     {
-        $count = self::getWallMessages(
+        return self::getWallMessages(
             $userId,
             0,
             $groupList,
@@ -2660,8 +2663,6 @@ class SocialManager extends UserManager
             true,
             $threadList
         );
-
-        return $count;
     }
 
     /**

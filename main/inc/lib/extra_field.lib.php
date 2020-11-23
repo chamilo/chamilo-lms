@@ -994,6 +994,19 @@ class ExtraField extends Model
                         continue;
                     }
                 }
+                // see  BT#17943
+                $authors = false;
+                if (
+                    $field_details['variable'] == 'authors'
+                    || $field_details['variable'] == 'authorlp'
+                    || $field_details['variable'] == 'authorlpitem'
+                    || $field_details['variable'] == 'price'
+                ) {
+                    $authors = true;
+                }
+                if (!api_is_platform_admin() && $authors == true) {
+                    continue;
+                }
 
                 // Getting default value id if is set
                 $defaultValueId = null;
@@ -1192,8 +1205,6 @@ class ExtraField extends Model
                                     'enabled' => 1,
                                     'status' => COURSEMANAGER,
                                 ];
-                                echo __FILE__."::".__LINE__."<pre>".var_export($conditions, true)."</pre><br>";
-
                                 $teachers = UserManager::get_user_list($conditions);
                                 foreach ($teachers as $teacher) {
                                     $options[$teacher['id']] = $teacher['complete_name'];

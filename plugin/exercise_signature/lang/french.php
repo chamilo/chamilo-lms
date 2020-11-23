@@ -9,3 +9,4 @@ $strings['tool_enable'] = 'Activer le plugin';
 $strings['Sign'] = 'Signer';
 $strings['ProvideASignatureFirst'] = "Veuillez d'abord fournir une signature";
 $strings['SignatureActivated'] = 'Signature activée';
+$strings['SignatureMandatory'] = 'Signature obligatoire';

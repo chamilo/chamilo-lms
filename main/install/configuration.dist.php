@@ -42,6 +42,38 @@ $_configuration['url_append'] = '{URL_APPEND_PATH}';
 //$extAuthSource["cas"]["login"] = $_configuration['root_sys']."main/auth/cas/login.php";
 //$extAuthSource["cas"]["newUser"] = $_configuration['root_sys']."main/auth/cas/newUser.php";
 
+// Map CAS attributes with user/user extrafields values BT#17620
+/*$_configuration['cas_user_map'] = [
+    'fields' => [
+        'email' => 'mail',
+        'firstname' => 'cn',
+        'lastname' => 'sn',
+        'active' => 'disabled',
+        'status' => 'role',
+    ],
+    'extra' => [
+        'isFromNewLogin',
+        'authenticationDate',
+        'successfulAuthenticationHandlers',
+        'created_by',
+        'credentialType',
+        'uid',
+        'authenticationMethod',
+        'longTermAuthenticationRequestTokenUsed',
+    ],
+    'replace' => [
+        'role' => [
+            'STUDENT' => 5,
+            'GUEST' => 5,
+            'HEI_COORD' => 1,
+            'SCHOOL_COORD' => 1,
+            'HEI_TUTOR' => 1,
+            'SCHOOL_TUTOR' => 1,
+            'ADMIN' => 11,
+        ],
+    ],
+];*/
+
 // NEW LDAP IMPLEMENTATION BASED ON external_login info
 // -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
 // $extAuthSource["extldap"]["login"] = $_configuration['root_sys']."main/auth/external_login/login.ldap.php";
@@ -1612,9 +1644,13 @@ $_configuration['auth_password_links'] = [
 /*$_configuration['exercise_finished_notification_settings'] = [
     'notification_teacher' => [ // Notification label
         'for teacher' => [ // for teacher
+            'skip_notification_if_user_in_extra_field' => [
+                'company_variable' => ['Company A', 'Company B'],
+            ],
             'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
             'attempts' => [
                 [
+                    'is_block_by_percentage' => true,
                     'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
                     'content' => 'MailAttemptPassed', // exercise extra field
                     'content_default' => 'Hi, ((user_lastname)) ', // value if MailAttemptPassed is empty
@@ -1727,6 +1763,12 @@ $_configuration['auth_password_links'] = [
 
 // Add another layer of security by checking if the user is disabled at every page load (might generate considerable extra DB load)
 // $_configuration['security_block_inactive_users_immediately'] = false;
+
+// Allow all office suite documents to be uploaded in the "My files" section of the social network
+//$_configuration['social_myfiles_office_files_upload_allowed'] = false;
+
+// Enable a "Previous question" button in surveys
+// $_configuration['survey_backwards_enable'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

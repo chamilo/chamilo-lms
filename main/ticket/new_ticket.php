@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.ticket
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 'true') {
@@ -13,6 +11,7 @@ if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 
 
 api_block_anonymous_users();
 $courseId = api_get_course_int_id();
+$sessionId = api_get_session_id();
 $exerciseId = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? (int) $_GET['exerciseId'] : 0;
 $lpId = (isset($_GET['lpId']) && !empty($_GET['lpId'])) ? (int) $_GET['lpId'] : 0;
 
@@ -55,7 +54,7 @@ function updateExerciseList(courseId, sessionId) {
     }, function (exerciseList) {
         $("<option>", {
             value: 0,
-            text: "' . get_lang('Select') . '"
+            text: "'.get_lang('Select').'"
         }).appendTo($selectExercise);
 
         if (exerciseList.length > 0) {
@@ -66,24 +65,25 @@ function updateExerciseList(courseId, sessionId) {
                 }).appendTo($selectExercise);
             });
 
-            $selectExercise.find("option[value=\'' . $exerciseId . '\']").attr("selected",true);
+            $selectExercise.find("option[value=\''.$exerciseId.'\']").attr("selected",true);
         }
 
         $selectExercise.selectpicker("refresh");
     }, "json");
 }
 
-function updateLpList(courseId) {
+function updateLpList(courseId, sessionId) {
     var $selectLp = $("select#lp_id");
     $selectLp.empty();
 
     $.get("'.api_get_path(WEB_AJAX_PATH).'lp.ajax.php", {
         a: "get_lp_list_by_course",
-        course_id: courseId
+        course_id: courseId,
+        session_id: sessionId
     }, function (lpList) {
         $("<option>", {
             value: 0,
-            text: "' . get_lang('Select') . '"
+            text: "'.get_lang('Select').'"
         }).appendTo($selectLp);
 
         if (lpList.length > 0) {
@@ -93,8 +93,7 @@ function updateLpList(courseId) {
                     text: lp.text
                 }).appendTo($selectLp);
             });
-
-            $selectLp.find("option[value=\'' . $lpId . '\']").attr("selected",true);
+            $selectLp.find("option[value=\''.$lpId.'\']").attr("selected",true);
         }
 
         $selectLp.selectpicker("refresh");
@@ -121,12 +120,12 @@ $(document).ready(function() {
         updateLpList(courseId);
     });
 
-    var sessionId = $selectSession.val();
+    var sessionId = $selectSession.val() ? $selectSession.val() : '.$sessionId.';
     var courseId = $selectCourse.val() ? $selectCourse.val() : '.$courseId.';
 
     updateCourseList(sessionId);
     updateExerciseList(courseId, sessionId);
-    updateLpList(courseId);
+    updateLpList(courseId, sessionId);
 });
 
 var counter_image = 1;

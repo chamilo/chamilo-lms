@@ -46,7 +46,6 @@ body {
     margin-bottom: 60px;
 }
 .footer {
-    position: absolute;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
@@ -221,13 +220,10 @@ select {
 #login-block .btn-language.open .dropdown-menu {
     display: block;
 }
-
-#toolbar-admin.navbar {
+#toolbar-admin {
     margin-bottom: 0;
     border-radius: 0;
-    border: none;
 }
-
 .blackboard_show {
     float: left;
     position: absolute;
@@ -8358,10 +8354,6 @@ ul#toolnavbox-two li a.btn {
     border-top: none !important;
 }
 
-.page-blank {
-    padding: 20px 30px;
-}
-
 /* groups social */
 .group-tool {
     padding: 10px;
@@ -8952,12 +8944,14 @@ ul.dropdown-menu.inner > li > a {
     white-space: initial;
 }
 
+
 /* start document mp3 preview */
 .preview .mejs__container {
     background: #aaa;
     border-radius: 50%;
-    width: 22px;
-    height: 22px;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
 }
 
 .preview .mejs__controls {
@@ -8966,7 +8960,7 @@ ul.dropdown-menu.inner > li > a {
 }
 
 .preview .mejs__button > button {
-    margin: 16px 6px;
+    margin: 20px 2px;
 }
 
 /* end document mp3 preview */
@@ -9395,11 +9389,11 @@ ul.dropdown-menu.inner > li > a {
 .summary-course .list-donut .easy-donut{
     text-align: center;
 }
-.summary-course .state{
+.summary-course .state {
     margin-bottom: 10px;
     margin-top: 10px;
 }
-.summary-course .state .stat-heading{
+.summary-course .state .stat-heading {
     text-align: center;
     font-size: 12px;
 }
@@ -9407,14 +9401,14 @@ ul.dropdown-menu.inner > li > a {
     font-size: 22px;
     text-align: center;
 }
-.summary-course .state .stat-icon{
+.summary-course .state .stat-icon {
     font-size: 30px;
     text-align: center;
 }
 .summary-course .easypiechart-legend {
     font-size: 12px;
 }
-.summary-course .list-info{
+.summary-course .list-info {
     margin-bottom: 0;
 }
 .summary-course .list-info dt,
@@ -9423,35 +9417,35 @@ ul.dropdown-menu.inner > li > a {
     padding-top: 7px;
     padding-bottom: 7px;
 }
-.summary-course .list-info .text-color{
+.summary-course .list-info .text-color {
     color: #0A649F;
 }
-.question-result h3{
+.question-result h3 {
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
 }
 .question-result .user-avatar,
-.question-result .user-info{
+.question-result .user-info {
     text-align: center;
 }
-.question-result .user-avatar img{
+.question-result .user-avatar img {
     border-radius: 10px;
 }
-.group-data .list-data .item{
+.group-data .list-data .item {
     width: 150px;
     display: inline-block;
     font-weight: bold;
 }
-.badge-username{
+.badge-username {
     font-weight: bold;
 }
-.badge-item{
+.badge-item {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-.badge-item .msg{
+.badge-item .msg {
     border: 1px solid #cdcdcd;
     padding: 10px;
     border-radius: 5px;
@@ -9463,10 +9457,24 @@ ul.dropdown-menu.inner > li > a {
 }
 
 .compilation_block .progress {
-    margin:0px;
+    margin:0;
     width:120px
 }
-
+#registration .form_list {
+    display: grid;
+    grid-template-columns:  repeat(auto-fit, minmax(300px, 1fr));;
+}
+#registration .form_list .form-group {
+    margin: 10px;
+}
+#registration .form_list > *:nth-child(3n-2):nth-last-of-type(2) {
+    border-color: red;
+    grid-column: span 2;
+}
+#registration .form_list > *:nth-child(3n-1):nth-last-of-type(1) {
+    border-color: red;
+    grid-column: span 2;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

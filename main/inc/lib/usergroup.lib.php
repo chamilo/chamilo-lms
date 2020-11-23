@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -478,8 +479,8 @@ class UserGroup extends Model
      * </code>
      *
      * @param array $options
-     * @param int   $type    0 = classes / 1 = social groups
-     * @param bool  $withClasses Return with clases
+     * @param int   $type        0 = classes / 1 = social groups
+     * @param bool  $withClasses Return with classes.
      *
      * @return array
      */

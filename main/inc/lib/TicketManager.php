@@ -1226,7 +1226,7 @@ class TicketManager
                         $dataExercise = [
                             'cidReq' => $course['code'],
                             'id_session' => $sessionId,
-                            'exerciseId' => $row['exercise_id']
+                            'exerciseId' => $row['exercise_id'],
                         ];
                         $urlParamsExercise = http_build_query($dataExercise);
 
@@ -1241,7 +1241,7 @@ class TicketManager
                             'cidReq' => $course['code'],
                             'id_session' => $sessionId,
                             'lp_id' => $row['lp_id'],
-                            'action' => 'view'
+                            'action' => 'view',
                         ];
                         $urlParamsLp = http_build_query($dataLp);
 

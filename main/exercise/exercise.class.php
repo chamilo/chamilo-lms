@@ -6679,6 +6679,35 @@ class Exercise
                         $exerciseAttempts
                     );
                     $isVisible = false;
+                } else {
+                    // Check blocking exercise.
+                    $extraFieldValue = new ExtraFieldValue('exercise');
+                    $blockExercise = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $this->iId,
+                        'blocking_percentage'
+                    );
+                    if ($blockExercise && isset($blockExercise['value']) && !empty($blockExercise['value'])) {
+                        $blockPercentage = (int) $blockExercise['value'];
+                        $userAttempts = Event::getExerciseResultsByUser(
+                            api_get_user_id(),
+                            $this->iId,
+                            $this->course_id,
+                            $this->sessionId,
+                            $lpId,
+                            $lpItemId
+                        );
+
+                        if (!empty($userAttempts)) {
+                            $currentAttempt = current($userAttempts);
+                            if ($currentAttempt['total_percentage'] <= $blockPercentage) {
+                                $message = sprintf(
+                                    get_lang('ExerciseBlockBecausePercentageX'),
+                                    $blockPercentage
+                                );
+                                $isVisible = false;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -8662,12 +8691,15 @@ class Exercise
      *
      * @param int    $categoryId
      * @param string $keyword
-     * @param int    $userId     Optional.
-     * @param int    $courseId   Optional.
-     * @param int    $sessionId  Optional.
-     * @param bool   $returnData Optional.
+     * @param int    $userId
+     * @param int    $courseId
+     * @param int    $sessionId
+     * @param bool   $returnData
+     * @param int    $minCategoriesInExercise
+     * @param int    $filterByResultDisabled
+     * @param int    $filterByAttempt
      *
-     * @return string
+     * @return string|SortableTableFromArrayConfig
      */
     public static function exerciseGrid(
         $categoryId,
@@ -8675,10 +8707,15 @@ class Exercise
         $userId = 0,
         $courseId = 0,
         $sessionId = 0,
-        $returnData = false
+        $returnData = false,
+        $minCategoriesInExercise = 0,
+        $filterByResultDisabled = 0,
+        $filterByAttempt = 0,
+        $myActions = null,
+        $returnTable = false
     ) {
-        $allowDelete = Exercise::allowAction('delete');
-        $allowClean = Exercise::allowAction('clean_results');
+        //$allowDelete = Exercise::allowAction('delete');
+        $allowClean = self::allowAction('clean_results');
 
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -8747,6 +8784,17 @@ class Exercise
             $keywordCondition = " AND title LIKE '%$keyword%' ";
         }
 
+        $filterByResultDisabledCondition = '';
+        $filterByResultDisabled = (int) $filterByResultDisabled;
+        if (!empty($filterByResultDisabled)) {
+            $filterByResultDisabledCondition = ' AND e.results_disabled = '.$filterByResultDisabled;
+        }
+        $filterByAttemptCondition = '';
+        $filterByAttempt = (int) $filterByAttempt;
+        if (!empty($filterByAttempt)) {
+            $filterByAttemptCondition = ' AND e.max_attempt = '.$filterByAttempt;
+        }
+
         // Only for administrators
         if ($is_allowedToEdit) {
             $total_sql = "SELECT count(iid) as count
@@ -8757,6 +8805,8 @@ class Exercise
                                 $condition_session
                                 $categoryCondition
                                 $keywordCondition
+                                $filterByResultDisabledCondition
+                                $filterByAttemptCondition
                                 ";
             $sql = "SELECT * FROM $TBL_EXERCISES e
                     WHERE
@@ -8765,6 +8815,8 @@ class Exercise
                         $condition_session
                         $categoryCondition
                         $keywordCondition
+                        $filterByResultDisabledCondition
+                        $filterByAttemptCondition
                     ORDER BY title
                     LIMIT $from , $limit";
         } else {
@@ -9057,10 +9109,17 @@ class Exercise
                             $results_text = $count_exercise_not_validated == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
                             $title .= '<span class="exercise_tooltip" style="display: none;">'.$count_exercise_not_validated.' '.$results_text.' </span>';
                         }*/
-
-                        $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
+                        $overviewUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php';
+                        $url = $move.
+                            '<a
+                                '.$alt_title.'
+                                class="'.$class_tip.'"
+                                id="tooltip_'.$row['id'].'"
+                                href="'.$overviewUrl.'?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"
+                            >
                              '.Display::return_icon('quiz.png', $row['title']).'
-                             '.$title.' </a>'.PHP_EOL;
+                             '.$title.'
+                             </a>'.PHP_EOL;
 
                         if (ExerciseLib::isQuizEmbeddable($row)) {
                             $embeddableIcon = Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'));
@@ -9177,6 +9236,7 @@ class Exercise
                             }
 
                             $actions .= $clean;
+
                             // Visible / invisible
                             // Check if this exercise was added in a LP
                             if ($exercise->exercise_was_added_in_lp == true) {
@@ -9319,6 +9379,13 @@ class Exercise
 
                         if ($limitTeacherAccess && !api_is_platform_admin()) {
                             $delete = '';
+                        }
+
+                        if (!empty($minCategoriesInExercise)) {
+                            $cats = TestCategory::getListOfCategoriesForTest($exercise);
+                            if (!(count($cats) >= $minCategoriesInExercise)) {
+                                continue;
+                            }
                         }
 
                         $actions .= $delete;
@@ -9506,6 +9573,11 @@ class Exercise
 
                         if (!empty($additionalActions)) {
                             $actions .= $additionalActions.PHP_EOL;
+                        }
+
+                        // Replace with custom actions.
+                        if (!empty($myActions) && is_callable($myActions)) {
+                            $actions = $myActions($row);
                         }
 
                         $currentRow = [
@@ -9755,6 +9827,10 @@ class Exercise
                 if ($isDrhOfCourse) {
                     $table->set_header($i++, get_lang('Actions'), false);
                 }
+            }
+
+            if ($returnTable) {
+                return $table;
             }
 
             $content .= $table->return_table();
@@ -10365,6 +10441,138 @@ class Exercise
         return $content;
     }
 
+    public function getRadarsFromUsers($userList, $exercises, $courseId, $sessionId)
+    {
+        $dataSet = [];
+        $labels = [];
+        /** @var Exercise $exercise */
+        foreach ($exercises as $exercise) {
+            if (empty($labels)) {
+                $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
+                $labels = array_column($categoryNameList, 'title');
+            }
+
+            foreach ($userList as $userId) {
+                $results = Event::getExerciseResultsByUser(
+                    $userId,
+                    $exercise->iId,
+                    $courseId,
+                    $sessionId
+                );
+
+                if ($results) {
+                    $firstAttempt = current($results);
+                    $exeId = $firstAttempt['exe_id'];
+
+                    ob_start();
+                    $stats = ExerciseLib::displayQuestionListByAttempt(
+                        $exercise,
+                        $exeId,
+                        false
+                    );
+                    ob_end_clean();
+
+                    $categoryList = $stats['category_list'];
+                    $resultsArray = [];
+                    foreach ($categoryList as $category_id => $category_item) {
+                        $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
+                    }
+                    $dataSet[] = $resultsArray;
+                }
+            }
+        }
+
+        return $this->getRadar($labels, $dataSet);
+    }
+
+    public function getRadar($labels, $dataSet)
+    {
+        if (empty($labels) || empty($dataSet)) {
+            return '';
+        }
+
+        $labels = json_encode($labels);
+
+        // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
+        $colorList = [
+            'rgb(255, 99, 132, 1.0)',
+            'rgb(0,0,200,1.0)', // red
+            'rgb(255, 159, 64, 1.0)', // orange
+            'rgb(255, 205, 86, 1.0)', //yellow
+            'rgb(75, 192, 192, 1.0)', // green
+            'rgb(54, 162, 235, 1.0)', // blue
+            'rgb(153, 102, 255, 1.0)', // purple
+            //'rgb(201, 203, 207)' grey
+        ];
+
+        $dataSetToJson = [];
+        $counter = 0;
+        foreach ($dataSet as $resultsArray) {
+            $color = isset($colorList[$counter]) ? $colorList[$counter] : 'rgb('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1.0)';
+
+            $background = str_replace('1.0', '0.2', $color);
+            $dataSetToJson[] = [
+                'fill' => true,
+                //'label' =>  '".get_lang('Categories')."',
+                'backgroundColor' => $background,
+                'borderColor' => $color,
+                'pointBackgroundColor' => $color,
+                'pointBorderColor' => '#fff',
+                'pointHoverBackgroundColor' => '#fff',
+                'pointHoverBorderColor' => $color,
+                'pointRadius' => 6,
+                'pointBorderWidth' => 3,
+                'pointHoverRadius' => 10,
+                'data' => $resultsArray,
+            ];
+            $counter++;
+        }
+        $resultsToJson = json_encode($dataSetToJson);
+
+        return "
+                <canvas id='categoryRadar' width='400' height='200'></canvas>
+                <script>
+                    var data = {
+                        labels: $labels,
+                        datasets: $resultsToJson
+                    }
+                    var options = {
+                        scale: {
+                            angleLines: {
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                  min: 0,
+                                  max: 10,
+                                  stepSize: 1
+                            },
+                            pointLabels: {
+                              fontSize: 14,
+                              //fontStyle: 'bold'
+                            },
+                        },
+                        elements: {
+                            line: {
+                                tension: 0,
+                                borderWidth: 3
+                            }
+                        },
+                        legend: {
+                            //position: 'bottom'
+                            display: false
+                        }
+                    };
+                    var ctx = document.getElementById('categoryRadar').getContext('2d');
+                    var myRadarChart = new Chart(ctx, {
+                        type: 'radar',
+                        data: data,
+                        options: options
+                    });
+                </script>
+                ";
+    }
+
     /**
      * Get number of questions in exercise by user attempt.
      *
@@ -10870,6 +11078,15 @@ class Exercise
             get_lang('ExerciseAutoEvaluationAndRankingMode'),
             RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
             ['id' => 'result_disabled_8']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ExerciseCategoriesRadarMode'),
+            RESULT_DISABLE_RADAR,
+            ['id' => 'result_disabled_9']
         );
 
         return $form->addGroup(

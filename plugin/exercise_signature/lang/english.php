@@ -9,3 +9,4 @@ $strings['tool_enable'] = 'Tool enabled';
 $strings['ProvideASignatureFirst'] = 'Please provide a signature first';
 $strings['Sign'] = 'Sign';
 $strings['SignatureActivated'] = 'Signature activated';
+$strings['SignatureMandatory'] = 'Signature mandatory';

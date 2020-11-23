@@ -943,11 +943,13 @@ class ImportCsv
 
                             // 2. Condition
                             if (!in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $this->logger->addInfo("Students - User email is not updated from ".$userInfo['email']." to ".$row['email']." because the avoid conditions (email).");
                                 $email = $userInfo['email'];
                             }
 
                             // 3. Condition
                             if (in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $this->logger->addInfo('Email to be updated from:'.$userInfo['email'].' to '.$row['email']);
                                 $email = $row['email'];
                             }
 
@@ -1016,7 +1018,9 @@ class ImportCsv
                                 );
                             }
                         }
-                        $this->logger->addInfo("Students - User updated: ".$row['username']);
+                        $this->logger->addInfo(
+                            'Students - User updated: username:'.$row['username'].' firstname:'.$row['firstname'].' lastname:'.$row['lastname'].' email:'.$email
+                        );
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }

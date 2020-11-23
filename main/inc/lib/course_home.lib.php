@@ -536,6 +536,26 @@ class CourseHome
                     )';
                 }
 
+                if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+                    $plugin = Positioning::create();
+                    $block = $plugin->get('block_course_if_initial_exercise_not_attempted');
+                    if ('true' === $block) {
+                        $initialData = $plugin->getInitialExercise($course_id, $sessionId);
+                        if ($initialData && isset($initialData['exercise_id'])) {
+                            $results = Event::getExerciseResultsByUser(
+                                $userId,
+                                $initialData['exercise_id'],
+                                $course_id,
+                                $sessionId
+                            );
+
+                            if (empty($results)) {
+                                $conditions .= ' AND t.name = "positioning"';
+                            }
+                        }
+                    }
+                }
+
                 // Add order if there are LPs
                 $sql = "SELECT t.* FROM $course_tool_table t
                         LEFT JOIN $lpTable l
@@ -544,12 +564,14 @@ class CourseHome
                         ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
                         $conditions AND
                         t.c_id = $course_id $condition_session
+
                         ORDER BY
                             CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
                             CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,
                             lc.position,
                             l.display_order,
                             t.id";
+
                 $orderBy = '';
                 break;
             case TOOL_AUTHORING:

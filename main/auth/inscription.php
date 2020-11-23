@@ -73,7 +73,13 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
     }
 }
 
-$form = new FormValidator('registration');
+if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
+    $layoutForm = FormValidator::LAYOUT_GRID;
+} else {
+    $layoutForm = FormValidator::LAYOUT_HORIZONTAL;
+}
+
+$form = new FormValidator('registration', 'post', '', '', [], $layoutForm);
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
@@ -307,7 +313,6 @@ if ($user_already_registered_show_terms === false &&
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
-
 
     if (api_get_setting('extended_profile') === 'true') {
         //    MY PERSONAL OPEN AREA
@@ -630,7 +635,7 @@ if ($allowDoubleValidation && $showTerms == false) {
         $user_already_registered_show_terms ||
         $showTerms
     ) {
-        $form->addButtonNext(get_lang('RegisterUser'));
+        $form->addButton('register', get_lang('RegisterUser'), null, 'primary', 'btn-block');
         $formContainsSendButton = true;
     }
 }

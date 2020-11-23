@@ -11,6 +11,7 @@ use ChamiloSession as Session;
  * @author Julio Montoya switchable fill in blank option added
  */
 require_once __DIR__.'/../inc/global.inc.php';
+$current_course_tool = TOOL_QUIZ;
 
 $this_section = SECTION_COURSES;
 

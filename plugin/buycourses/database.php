@@ -48,6 +48,23 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TRANSFER)) {
     $transferTable->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_REDSYS)) {
+    $tpvRedsysTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TPV_REDSYS);
+    $tpvRedsysTable->addColumn(
+        'id',
+        \Doctrine\DBAL\Types\Type::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $tpvRedsysTable->addColumn('merchantcode', \Doctrine\DBAL\Types\Type::STRING);
+    $tpvRedsysTable->addColumn('terminal', \Doctrine\DBAL\Types\Type::STRING);
+    $tpvRedsysTable->addColumn('currency', \Doctrine\DBAL\Types\Type::STRING);
+    $tpvRedsysTable->addColumn('kc', \Doctrine\DBAL\Types\Type::STRING);
+    $tpvRedsysTable->addColumn('url_redsys', \Doctrine\DBAL\Types\Type::STRING);
+    $tpvRedsysTable->addColumn('url_redsys_sandbox', \Doctrine\DBAL\Types\Type::STRING);
+    $tpvRedsysTable->addColumn('sandbox', \Doctrine\DBAL\Types\Type::BOOLEAN);
+    $tpvRedsysTable->setPrimaryKey(['id']);
+}
+
 if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CURRENCY)) {
     $currencyTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_CURRENCY);
     $currencyTable->addColumn(
@@ -404,6 +421,7 @@ $commissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION);
 $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
 $culqiTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI);
 $globalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
+$tpvRedsysTable = Database::get_main_table(BuyCoursesPlugin::TABLE_TPV_REDSYS);
 
 $paypalExtraField = Database::select(
     "*",
@@ -439,6 +457,14 @@ Database::insert(
         'password' => '',
         'signature' => '',
         'sandbox' => true,
+    ]
+);
+
+Database::insert(
+    $tpvRedsysTable,
+    [
+        'url_redsys' => 'https://sis.redsys.es/sis/realizarPago',
+        'url_redsys_sandbox' => 'https://sis-t.redsys.es:25443/sis/realizarPago',
     ]
 );
 

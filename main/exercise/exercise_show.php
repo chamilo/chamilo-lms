@@ -15,7 +15,7 @@ use ChamiloSession as Session;
  * @todo small letters for table variables
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
+$current_course_tool = TOOL_QUIZ;
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = 'learnpath' === $origin;
@@ -169,6 +169,10 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
+}
+
+if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 }
 
 if ($action !== 'export') {
@@ -907,13 +911,15 @@ if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
     echo $chartMultiAnswer;
 }
 
-if (!empty($category_list) && ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)) {
-    // Adding total
+if (!empty($category_list) &&
+    ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)
+) {
+    // Adding total.
     $category_list['total'] = [
         'score' => $myTotalScoreTemp,
         'total' => $totalWeighting,
     ];
-    echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    echo TestCategory::get_stats_table_by_attempt($objExercise, $category_list);
 }
 
 if (in_array(
@@ -922,7 +928,7 @@ if (in_array(
 )) {
     echo Display::page_header(get_lang('Ranking'), null, 'h4');
     echo ExerciseLib::displayResultsInRanking(
-        $objExercise->iId,
+        $objExercise,
         $student_id,
         $courseInfo['real_id'],
         $sessionId

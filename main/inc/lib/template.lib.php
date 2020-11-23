@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -660,6 +661,14 @@ class Template
             $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'scorm.css');
             if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'learnpath.css')) {
                 $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'learnpath.css';
+            }
+        }
+        if (CustomPages::enabled()) {
+            $cssCustomPage = api_get_path(SYS_CSS_PATH).$this->themeDir."custompage.css";
+            if (is_file($cssCustomPage)) {
+                $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'custompage.css';
+            } else {
+                $css[] = api_get_path(WEB_CSS_PATH).'custompage.css';
             }
         }
 
@@ -1379,18 +1388,16 @@ class Template
             }
 
             $extraParams = '';
-
-            if (api_get_configuration_value('ticket_add_quiz_and_lp')) {
+            if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
                 if (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) {
-                    $extraParams = '&exerciseId=' . (int) $_GET['exerciseId'];
+                    $extraParams = '&exerciseId='.(int) $_GET['exerciseId'];
                 }
 
                 if (isset($_GET['lp_id']) && !empty($_GET['lp_id'])) {
-                    $extraParams .= '&lpId=' . (int) $_GET['lp_id'];
+                    $extraParams .= '&lpId='.(int) $_GET['lp_id'];
                 }
             }
             $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams.$extraParams;
-
             $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
 
             if ($allow) {
@@ -1845,14 +1852,14 @@ class Template
     private function assignFavIcon()
     {
         // Default root chamilo favicon
-        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+        $favico = '<link rel="icon" href="'.api_get_path(WEB_PATH).'favicon.png" type="image/png" />';
 
         //Added to verify if in the current Chamilo Theme exist a favicon
         $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
 
         //If exist pick the current chamilo theme favicon
-        if (is_file($favicoThemeUrl.'favicon.ico')) {
-            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
+        if (is_file($favicoThemeUrl.'favicon.png')) {
+            $favico = '<link rel="icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.png" type="image/png" />';
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -1869,7 +1876,7 @@ class Template
                 $icon_real_homep = api_get_path(SYS_HOME_PATH).$clean_url;
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {
-                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
+                    $favico = '<link rel="icon" href="'.$homep.'favicon.png" type="image/png" />';
                 }
             }
         }

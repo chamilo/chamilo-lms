@@ -1,4 +1,5 @@
 <?php
+
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Editor\Connector;
@@ -15,8 +16,6 @@ use Symfony\Component\Filesystem\Filesystem;
  *  This is the export library for Chamilo.
  *	Include/require it in your code to use its functionality.
  *	Several functions below are adaptations from functions distributed by www.nexen.net.
- *
- *  @package chamilo.library
  */
 class Export
 {

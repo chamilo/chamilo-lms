@@ -3344,8 +3344,7 @@ class MySpace
         $studentId,
         $perPage = 20,
         $dates = null
-    )
-    {
+    ) {
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $studentId = (int) $studentId;
@@ -3463,7 +3462,7 @@ class MySpace
 
         $table = null;
         if (!empty($dates)) {
-        //if ($form->validate()) {
+            //if ($form->validate()) {
             $table = new SortableTable(
                 'tracking_access_overview',
                 ['MySpace', 'getNumberOfTrackAccessOverview'],
@@ -3477,7 +3476,7 @@ class MySpace
                     'session_id' => $sessionId,
                     'student_id' => $studentId,
                     'date' => $dates,
-                    'tracking_access_overview_per_page' =>  $perPage,
+                    'tracking_access_overview_per_page' => $perPage,
                     'display' => 'accessoverview',
                 ]
             );

@@ -1831,7 +1831,7 @@ class learnpath
     }
 
     /**
-     * Get the learning path name by id
+     * Get the learning path name by id.
      *
      * @param int $lpId
      *
@@ -4948,6 +4948,7 @@ class learnpath
                 if ($debug) {
                     error_log("Skip saving score with value: $score");
                 }
+
                 return false;
             }
 

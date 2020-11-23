@@ -7,7 +7,6 @@
  *
  * @author Jose Angel Ruiz
  */
-
 $cidReset = true;
 require_once __DIR__.'/config.php';
 

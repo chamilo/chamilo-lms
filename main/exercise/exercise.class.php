@@ -10412,6 +10412,138 @@ class Exercise
         return $content;
     }
 
+    public function getRadarsFromUsers($userList, $exercises, $courseId, $sessionId)
+    {
+        $dataSet = [];
+        $labels = [];
+        /** @var Exercise $exercise */
+        foreach ($exercises as $exercise) {
+            if (empty($labels)) {
+                $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
+                $labels = array_column($categoryNameList, 'title');
+            }
+
+            foreach ($userList as $userId) {
+                $results = Event::getExerciseResultsByUser(
+                    $userId,
+                    $exercise->iId,
+                    $courseId,
+                    $sessionId
+                );
+
+                if ($results) {
+                    $firstAttempt = current($results);
+                    $exeId = $firstAttempt['exe_id'];
+
+                    ob_start();
+                    $stats = ExerciseLib::displayQuestionListByAttempt(
+                        $exercise,
+                        $exeId,
+                        false
+                    );
+                    ob_end_clean();
+
+                    $categoryList = $stats['category_list'];
+                    $resultsArray = [];
+                    foreach ($categoryList as $category_id => $category_item) {
+                        $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
+                    }
+                    $dataSet[] = $resultsArray;
+                }
+            }
+        }
+
+        return $this->getRadar($labels, $dataSet);
+    }
+
+    public function getRadar($labels, $dataSet)
+    {
+        if (empty($labels) || empty($dataSet)) {
+            return '';
+        }
+
+        $labels = json_encode($labels);
+
+        // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
+        $colorList = [
+            'rgb(255, 99, 132, 1.0)',
+            'rgb(0,0,200,1.0)', // red
+            'rgb(255, 159, 64, 1.0)', // orange
+            'rgb(255, 205, 86, 1.0)', //yellow
+            'rgb(75, 192, 192, 1.0)', // green
+            'rgb(54, 162, 235, 1.0)', // blue
+            'rgb(153, 102, 255, 1.0)', // purple
+            //'rgb(201, 203, 207)' grey
+        ];
+
+        $dataSetToJson = [];
+        $counter = 0;
+        foreach ($dataSet as $resultsArray) {
+            $color = isset($colorList[$counter]) ? $colorList[$counter] : 'rgb('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1.0)';
+
+            $background = str_replace('1.0', '0.2', $color);
+            $dataSetToJson[] = [
+                'fill' => true,
+                //'label' =>  '".get_lang('Categories')."',
+                'backgroundColor' => $background,
+                'borderColor' => $color,
+                'pointBackgroundColor' => $color,
+                'pointBorderColor' => '#fff',
+                'pointHoverBackgroundColor' => '#fff',
+                'pointHoverBorderColor' => $color,
+                'pointRadius' => 6,
+                'pointBorderWidth' => 3,
+                'pointHoverRadius' => 10,
+                'data' => $resultsArray,
+            ];
+            $counter++;
+        }
+        $resultsToJson = json_encode($dataSetToJson);
+
+        return "
+                <canvas id='categoryRadar' width='400' height='200'></canvas>
+                <script>
+                    var data = {
+                        labels: $labels,
+                        datasets: $resultsToJson
+                    }
+                    var options = {
+                        scale: {
+                            angleLines: {
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                  min: 0,
+                                  max: 10,
+                                  stepSize: 1
+                            },
+                            pointLabels: {
+                              fontSize: 14,
+                              //fontStyle: 'bold'
+                            },
+                        },
+                        elements: {
+                            line: {
+                                tension: 0,
+                                borderWidth: 3
+                            }
+                        },
+                        legend: {
+                            //position: 'bottom'
+                            display: false
+                        }
+                    };
+                    var ctx = document.getElementById('categoryRadar').getContext('2d');
+                    var myRadarChart = new Chart(ctx, {
+                        type: 'radar',
+                        data: data,
+                        options: options
+                    });
+                </script>
+                ";
+    }
+
     /**
      * Get number of questions in exercise by user attempt.
      *
@@ -10933,137 +11065,5 @@ class Exercise
             null,
             get_lang('ShowResultsToStudents')
         );
-    }
-
-    public function getRadarsFromUsers($userList, $exercises, $courseId, $sessionId)
-    {
-        $dataSet = [];
-        $labels = [];
-        /** @var Exercise $exercise */
-        foreach ($exercises as $exercise) {
-            if (empty($labels)) {
-                $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
-                $labels = array_column($categoryNameList, 'title');
-            }
-
-            foreach ($userList as $userId) {
-                $results = Event::getExerciseResultsByUser(
-                    $userId,
-                    $exercise->iId,
-                    $courseId,
-                    $sessionId
-                );
-
-                if ($results) {
-                    $firstAttempt = current($results);
-                    $exeId = $firstAttempt['exe_id'];
-
-                    ob_start();
-                    $stats = ExerciseLib::displayQuestionListByAttempt(
-                        $exercise,
-                        $exeId,
-                        false
-                    );
-                    ob_end_clean();
-
-                    $categoryList = $stats['category_list'];
-                    $resultsArray = [];
-                    foreach ($categoryList as $category_id => $category_item) {
-                        $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
-                    }
-                    $dataSet[] = $resultsArray;
-                }
-            }
-        }
-
-        return $this->getRadar($labels, $dataSet);
-    }
-
-    public function getRadar($labels, $dataSet)
-    {
-        if (empty($labels) || empty($dataSet)) {
-            return '';
-        }
-
-        $labels = json_encode($labels);
-
-        // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
-        $colorList = [
-            'rgb(255, 99, 132, 1.0)',
-            'rgb(0,0,200,1.0)', // red
-            'rgb(255, 159, 64, 1.0)', // orange
-            'rgb(255, 205, 86, 1.0)', //yellow
-            'rgb(75, 192, 192, 1.0)', // green
-            'rgb(54, 162, 235, 1.0)', // blue
-            'rgb(153, 102, 255, 1.0)', // purple
-            //'rgb(201, 203, 207)' grey
-        ];
-
-        $dataSetToJson = [];
-        $counter = 0;
-        foreach ($dataSet as $resultsArray) {
-            $color = isset($colorList[$counter]) ? $colorList[$counter] : 'rgb('.rand(0,255).', '.rand(0,255).', '.rand(0,255).', 1.0)';
-
-            $background = str_replace('1.0', '0.2', $color);
-            $dataSetToJson[] = [
-                'fill' => true,
-                //'label' =>  '".get_lang('Categories')."',
-                'backgroundColor' => $background,
-                'borderColor' => $color,
-                'pointBackgroundColor' => $color,
-                'pointBorderColor' => '#fff',
-                'pointHoverBackgroundColor' => '#fff',
-                'pointHoverBorderColor' => $color,
-                'pointRadius' => 6,
-                'pointBorderWidth' => 3,
-                'pointHoverRadius' => 10,
-                'data' => $resultsArray,
-            ];
-            $counter++;
-        }
-        $resultsToJson = json_encode($dataSetToJson);
-
-        return "
-                <canvas id='categoryRadar' width='400' height='200'></canvas>
-                <script>
-                    var data = {
-                        labels: $labels,
-                        datasets: $resultsToJson
-                    }
-                    var options = {
-                        scale: {
-                            angleLines: {
-                                display: false
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                  min: 0,
-                                  max: 10,
-                                  stepSize: 1
-                            },
-                            pointLabels: {
-                              fontSize: 14,
-                              //fontStyle: 'bold'
-                            },
-                        },
-                        elements: {
-                            line: {
-                                tension: 0,
-                                borderWidth: 3
-                            }
-                        },
-                        legend: {
-                            //position: 'bottom'
-                            display: false
-                        }
-                    };
-                    var ctx = document.getElementById('categoryRadar').getContext('2d');
-                    var myRadarChart = new Chart(ctx, {
-                        type: 'radar',
-                        data: data,
-                        options: options
-                    });
-                </script>
-                ";
     }
 }

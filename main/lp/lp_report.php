@@ -381,7 +381,7 @@ $parameters = [
     'group_filter' => $groupFilter,
     'cidReq' => $courseCode,
     'id_session' => $sessionId,
-    'lp_id' => $lpId
+    'lp_id' => $lpId,
 ];
 
 $table = new SortableTableFromArrayConfig($userList, 1, 20, 'lp');

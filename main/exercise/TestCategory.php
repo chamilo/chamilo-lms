@@ -750,8 +750,8 @@ class TestCategory
      *
      * @param Exercise $exercise
      * @param array    $category_list
-     *                             pre filled array with the category_id, score, and weight
-     *                             example: array(1 => array('score' => '10', 'total' => 20));
+     *                                pre filled array with the category_id, score, and weight
+     *                                example: array(1 => array('score' => '10', 'total' => 20));
      *
      * @return string
      */
@@ -811,7 +811,7 @@ class TestCategory
                         true
                     )
                 );
-                $resultsArray[] = round($category_item['score']/$category_item['total']*10);
+                $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
                 $row++;
             }
 

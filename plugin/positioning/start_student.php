@@ -71,7 +71,7 @@ if ($finalData) {
     $finalExerciseTitle = $finalExercise->get_formated_title();
     if (!empty($initialResults)) {
         $lpUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
-        $lpUrl = Display::url(get_lang('LearningPath'),$lpUrl);
+        $lpUrl = Display::url(get_lang('LearningPath'), $lpUrl);
         if ($studentAverage >= $averageToUnlock) {
             $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exerciseId;
             if (empty($finalResults)) {

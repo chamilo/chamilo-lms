@@ -81,7 +81,6 @@ class Positioning extends Plugin
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
-
             return Database::fetch_array($result, 'ASSOC');
         }
 
@@ -99,42 +98,6 @@ class Positioning extends Plugin
     public function setInitialExercise($exerciseId, $courseId, $sessionId)
     {
         $this->setOption('is_initial', $exerciseId, $courseId, $sessionId);
-    }
-
-    private function setOption($field, $exerciseId, $courseId, $sessionId)
-    {
-        if (!in_array($field, ['is_initial', 'is_final'], true)) {
-            return false;
-        }
-
-        $data = $this->getPositionData($exerciseId, $courseId, $sessionId);
-        $disableField = $field === 'is_initial' ? 'is_final' : 'is_initial';
-        if ($data && isset($data['id'])) {
-            $id = $data['id'];
-            $sql = "UPDATE $this->table SET
-                    $field = 1,
-                    $disableField = 0
-                    WHERE id = $id";
-            Database::query($sql);
-
-            $sql = "DELETE FROM $this->table
-                    WHERE $field = 1 AND c_id = $courseId AND session_id = $sessionId AND id <> $id";
-            Database::query($sql);
-
-        } else {
-            $params = [
-                'exercise_id' => $exerciseId,
-                'c_id' => $courseId,
-                'session_id' => $sessionId,
-                $field => 1,
-                $disableField => 0,
-            ];
-            $id = Database::insert($this->table, $params);
-
-            $sql = "DELETE FROM $this->table
-                    WHERE $field = 1 AND c_id = $courseId AND session_id = $sessionId AND id <> $id";
-            Database::query($sql);
-        }
     }
 
     public function setFinalExercise($exerciseId, $courseId, $sessionId)
@@ -192,6 +155,46 @@ class Positioning extends Plugin
         return $this->getCourseExercise($courseId, $sessionId, true, false);
     }
 
+    public function getFinalExercise($courseId, $sessionId)
+    {
+        return $this->getCourseExercise($courseId, $sessionId, false, true);
+    }
+
+    private function setOption($field, $exerciseId, $courseId, $sessionId)
+    {
+        if (!in_array($field, ['is_initial', 'is_final'], true)) {
+            return false;
+        }
+
+        $data = $this->getPositionData($exerciseId, $courseId, $sessionId);
+        $disableField = $field === 'is_initial' ? 'is_final' : 'is_initial';
+        if ($data && isset($data['id'])) {
+            $id = $data['id'];
+            $sql = "UPDATE $this->table SET
+                    $field = 1,
+                    $disableField = 0
+                    WHERE id = $id";
+            Database::query($sql);
+
+            $sql = "DELETE FROM $this->table
+                    WHERE $field = 1 AND c_id = $courseId AND session_id = $sessionId AND id <> $id";
+            Database::query($sql);
+        } else {
+            $params = [
+                'exercise_id' => $exerciseId,
+                'c_id' => $courseId,
+                'session_id' => $sessionId,
+                $field => 1,
+                $disableField => 0,
+            ];
+            $id = Database::insert($this->table, $params);
+
+            $sql = "DELETE FROM $this->table
+                    WHERE $field = 1 AND c_id = $courseId AND session_id = $sessionId AND id <> $id";
+            Database::query($sql);
+        }
+    }
+
     private function getCourseExercise($courseId, $sessionId, $isInitial, $isFinal)
     {
         $table = $this->table;
@@ -223,10 +226,5 @@ class Positioning extends Plugin
         }
 
         return false;
-    }
-
-    public function getFinalExercise($courseId, $sessionId)
-    {
-        return $this->getCourseExercise($courseId, $sessionId, false, true);
     }
 }

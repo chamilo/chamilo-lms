@@ -15,7 +15,7 @@ use ChamiloSession as Session;
  * @todo small letters for table variables
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
+$current_course_tool = TOOL_QUIZ;
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = 'learnpath' === $origin;
@@ -810,11 +810,7 @@ foreach ($questionList as $questionId) {
 
     $score = [];
     if ($show_results) {
-        $scorePassed = $my_total_score >= $my_total_weight;
-        if (function_exists('bccomp')) {
-            $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-            $scorePassed = $compareResult === 1 || $compareResult === 0;
-        }
+        $scorePassed = ExerciseLib::scorePassed($my_total_score, $my_total_weight);
         $score['result'] = ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,

@@ -1650,6 +1650,7 @@ $_configuration['auth_password_links'] = [
             'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
             'attempts' => [
                 [
+                    'is_block_by_percentage' => true,
                     'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
                     'content' => 'MailAttemptPassed', // exercise extra field
                     'content_default' => 'Hi, ((user_lastname)) ', // value if MailAttemptPassed is empty
@@ -1765,6 +1766,9 @@ $_configuration['auth_password_links'] = [
 
 // Allow all office suite documents to be uploaded in the "My files" section of the social network
 //$_configuration['social_myfiles_office_files_upload_allowed'] = false;
+
+// Enable a "Previous question" button in surveys
+// $_configuration['survey_backwards_enable'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

@@ -1003,7 +1003,6 @@ class ExtraField extends Model
                     || $field_details['variable'] == 'price'
                 ) {
                     $authors = true;
-
                 }
                 if (!api_is_platform_admin() && $authors == true) {
                     continue;

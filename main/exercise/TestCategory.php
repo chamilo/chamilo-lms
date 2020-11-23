@@ -333,7 +333,7 @@ class TestCategory
      */
     public static function getListOfCategoriesIDForTest($exerciseId, $courseId = 0)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check test questions, obtaining unique categories in a table
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseId, false);
         $categoriesInExercise = $exercise->getQuestionWithCategories();
@@ -353,7 +353,7 @@ class TestCategory
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check the categories of a test, obtaining unique categories in table
         $categories_in_exercise = [];
         $question_list = $exercise->getQuestionOrderedListByName();
 
@@ -750,8 +750,8 @@ class TestCategory
      *
      * @param Exercise $exercise
      * @param array    $category_list
-     *                             pre filled array with the category_id, score, and weight
-     *                             example: array(1 => array('score' => '10', 'total' => 20));
+     *                                pre filled array with the category_id, score, and weight
+     *                                example: array(1 => array('score' => '10', 'total' => 20));
      *
      * @return string
      */
@@ -762,7 +762,6 @@ class TestCategory
             return null;
         }
         $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
-
         $table = new HTML_Table(
             [
                 'class' => 'table table-hover table-striped table-bordered',
@@ -812,70 +811,13 @@ class TestCategory
                         true
                     )
                 );
-                $resultsArray[] = round($category_item['score']/$category_item['total']*10);
+                $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
                 $row++;
             }
 
             // Radar requires more than 3 categories.
             if ($countCategories > 2 && RESULT_DISABLE_RADAR === (int) $exercise->results_disabled) {
-                $categoryNameToJson = json_encode(array_column($categoryNameList, 'title'));
-                $resultsToJson = json_encode($resultsArray);
-                $radar = "
-                <canvas id='categoryRadar' width='400' height='200'></canvas>
-                <script>
-                    var data = {
-                        labels: $categoryNameToJson,
-                        datasets: [{
-                            fill:true,
-                            label: '".get_lang('Categories')."',
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgb(255, 99, 132)',
-                            pointBackgroundColor: 'rgb(255, 99, 132)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor:'#fff',
-                            pointHoverBorderColor: 'rgb(255, 99, 132)',
-                            pointRadius: 6,
-                            pointBorderWidth: 3,
-                            pointHoverRadius: 10,
-                            data: $resultsToJson
-                        }]
-                    }
-                    var options = {
-                        scale: {
-                            angleLines: {
-                                display: false
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                  min: 0,
-                                  max: 10,
-                                  stepSize: 1
-                            },
-                            pointLabels: {
-                              fontSize: 14,
-                              //fontStyle: 'bold'
-                            },
-                        },
-                        elements: {
-                            line: {
-                                tension:0,
-                                borderWidth:3
-                            }
-                        },
-                        legend: {
-                            //position: 'bottom'
-                            display: false
-                        }
-                    };
-
-                    var ctx = document.getElementById('categoryRadar').getContext('2d');
-                    var myRadarChart = new Chart(ctx, {
-                        type: 'radar',
-                        data: data,
-                        options: options
-                    });
-                </script>
-                ";
+                $radar = $exercise->getRadar(array_column($categoryNameList, 'title'), [$resultsArray]);
             }
 
             if (!empty($none_category)) {
@@ -1072,10 +1014,15 @@ class TestCategory
     public function returnCategoryForm(Exercise $exercise)
     {
         $categories = $this->getListOfCategoriesForTest($exercise);
+        $sortedCategories = [];
+        foreach ($categories as $catId => $cat) {
+            $sortedCategories[$cat['title']] = $cat;
+        }
+        ksort($sortedCategories);
         $saved_categories = $exercise->getCategoriesInExercise();
         $return = null;
 
-        if (!empty($categories)) {
+        if (!empty($sortedCategories)) {
             $nbQuestionsTotal = $exercise->getNumberQuestionExerciseCategory();
             $exercise->setCategoriesGrouping(true);
             $real_question_count = count($exercise->getQuestionList());
@@ -1102,9 +1049,9 @@ class TestCategory
                 'title' => get_lang('NoCategory'),
             ];
 
-            $categories[] = $emptyCategory;
+            $sortedCategories[] = $emptyCategory;
 
-            foreach ($categories as $category) {
+            foreach ($sortedCategories as $category) {
                 $cat_id = $category['iid'];
                 $return .= '<tr>';
                 $return .= '<td>';
@@ -1245,7 +1192,7 @@ class TestCategory
                     c.c_id = $courseId AND
                     i.tool = '".TOOL_TEST_CATEGORY."'
                     $sessionCondition
-                ORDER BY title";
+                ORDER BY title ASC";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

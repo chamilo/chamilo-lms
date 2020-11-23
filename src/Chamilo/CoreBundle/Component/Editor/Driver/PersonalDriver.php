@@ -53,8 +53,6 @@ class PersonalDriver extends Driver implements DriverInterface
                     'image/svg',
                 ];
 
-
-
                 $driver = [
                     'driver' => 'PersonalDriver',
                     'alias' => get_lang('MyFiles'),
@@ -107,7 +105,6 @@ class PersonalDriver extends Driver implements DriverInterface
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
                     ];
                 }
-
 
                 return $driver;
             }

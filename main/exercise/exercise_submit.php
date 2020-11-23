@@ -35,6 +35,7 @@ $debug = false;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
+
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
@@ -188,8 +189,15 @@ $exerciseInSession = Session::read('objExercise');
 
 // 3. $objExercise is not set, then return to the exercise list.
 if (!is_object($objExercise)) {
-    header('Location: exercise.php');
+    header('Location: exercise.php?'.api_get_cidreq());
     exit;
+}
+
+if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+    $plugin = Positioning::create();
+    if ($plugin->blockFinalExercise(api_get_user_id(), $objExercise->iId, api_get_course_int_id(), $sessionId)) {
+        api_not_allowed(true);
+    }
 }
 
 // if the user has submitted the form.

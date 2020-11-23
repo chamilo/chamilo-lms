@@ -380,7 +380,7 @@ class ExerciseLib
                 $header1 = Display::tag('th', '&nbsp;');
                 $cpt1 = 0;
                 foreach ($objQuestionTmp->options as $item) {
-                    $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
+                    $colorBorder1 = $cpt1 == (count($objQuestionTmp->options) - 1)
                         ? '' : 'border-right: solid #FFFFFF 1px;';
                     if ($item === 'True' || $item === 'False') {
                         $header1 .= Display::tag(
@@ -4693,12 +4693,7 @@ EOT;
 
                 $my_total_score = $result['score'];
                 $my_total_weight = $result['weight'];
-
-                $scorePassed = $my_total_score >= $my_total_weight;
-                if (function_exists('bccomp')) {
-                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-                    $scorePassed = $compareResult === 1 || $compareResult === 0;
-                }
+                $scorePassed = self::scorePassed($my_total_score, $my_total_weight);
 
                 // Category report
                 $category_was_added_for_this_test = false;
@@ -4819,7 +4814,7 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-                    if (false == $showQuestionScore) {
+                    if (false === $showQuestionScore) {
                         $score = [];
                     }
 
@@ -4912,7 +4907,9 @@ EOT;
             echo $chartMultiAnswer;
         }
 
-        if (!empty($category_list) && ($show_results || $show_only_score)) {
+        if (!empty($category_list) &&
+            ($show_results || $show_only_score || RESULT_DISABLE_RADAR == $objExercise->results_disabled)
+        ) {
             // Adding total
             $category_list['total'] = [
                 'score' => $total_score,
@@ -5028,6 +5025,11 @@ EOT;
             $total_weight
         );
 
+        $percentage = 0;
+        if (!empty($total_weight)) {
+            $percentage = ($total_score / $total_weight) * 100;
+        }
+
         return [
             'category_list' => $category_list,
             'attempts_result_list' => $attemptResult, // array of results
@@ -5038,6 +5040,7 @@ EOT;
             'all_answers_html' => $all,
             'total_score' => $total_score,
             'total_weight' => $total_weight,
+            'total_percentage' => $percentage,
             'count_pending_questions' => $countPendingQuestions,
         ];
     }
@@ -5234,7 +5237,7 @@ EOT;
         $countPendingQuestions = 0
     ) {
         $hide = (int) $objExercise->getPageConfigurationAttribute('hide_total_score');
-        if ($hide === 1) {
+        if (1 === $hide) {
             return '';
         }
 
@@ -5955,14 +5958,24 @@ EOT;
                 MessageManager::send_message($currentUserId, $subject, $content);
             }
 
+            // Notifications.
             $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
                 $objExercise->iId,
                 'notifications'
             );
-
             $exerciseNotification = '';
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $exerciseNotification = $extraFieldData['value'];
+            }
+
+            // Blocking exercise.
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'blocking_percentage'
+            );
+            $blockPercentage = false;
+            if ($extraFieldData && isset($extraFieldData['value']) && $extraFieldData['value']) {
+                $blockPercentage = $extraFieldData['value'];
             }
 
             $extraFieldValueUser = new ExtraFieldValue('user');
@@ -6008,6 +6021,19 @@ EOT;
 
                             if (!isset($attempt['status'])) {
                                 continue;
+                            }
+
+                            if ($blockPercentage && isset($attempt['is_block_by_percentage'])) {
+                                $passBlock = $stats['total_percentage'] > $blockPercentage;
+                                if ($attempt['is_block_by_percentage']) {
+                                    if ($passBlock) {
+                                        continue;
+                                    }
+                                } else {
+                                    if (false === $passBlock) {
+                                        continue;
+                                    }
+                                }
                             }
 
                             switch ($attempt['status']) {
@@ -6153,5 +6179,19 @@ EOT;
             $exeId.'-'.$trackExerciseInfo['exe_user_id'],
             api_get_utc_datetime()
         );
+    }
+
+    public static function scorePassed($score, $total)
+    {
+        $compareResult = bccomp($score, $total, 3);
+        $scorePassed = 1 === $compareResult || 0 === $compareResult;
+        if (false === $scorePassed) {
+            $epsilon = 0.00001;
+            if (abs($score - $total) < $epsilon) {
+                $scorePassed = true;
+            }
+        }
+
+        return $scorePassed;
     }
 }

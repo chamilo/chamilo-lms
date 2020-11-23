@@ -3,9 +3,11 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
+use Chamilo\CoreBundle\Entity\TrackEExercises;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
+$current_course_tool = TOOL_QUIZ;
 $debug = false;
 // Check if the user has access to the contextual course/session
 api_protect_course_script(true);
@@ -39,7 +41,6 @@ switch ($action) {
         echo json_encode($data);
         break;
     case 'update_duration':
-
         if (Session::read('login_as')) {
             if ($debug) {
                 error_log("User is 'login as' don't update duration time.");
@@ -68,7 +69,7 @@ switch ($action) {
         $onlyUpdateValue = 10;
 
         $em = Database::getManager();
-        /** @var \Chamilo\CoreBundle\Entity\TrackEExercises $attempt */
+        /** @var TrackEExercises $attempt */
         $attempt = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
 
         if (empty($attempt)) {
@@ -553,10 +554,6 @@ switch ($action) {
                     continue;
                 }
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
-                if ($debug) {
-                    error_log("Saving question_id = $my_question_id ");
-                    error_log("my_choice = ".print_r($my_choice, 1)."");
-                }
                 $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
                 $myChoiceDegreeCertainty = null;
                 if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {

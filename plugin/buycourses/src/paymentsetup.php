@@ -220,17 +220,17 @@ if (file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.ph
 
     if ($tpvRedsysForm->validate()) {
         $tpvRedsysFormValues = $tpvRedsysForm->getSubmitValues();
-    
+
         $plugin->saveTpvRedsysParams($tpvRedsysFormValues);
-    
+
         Display::addFlash(
             Display::return_message(get_lang('Saved'), 'success')
         );
-    
+
         header('Location:'.api_get_self());
         exit;
     }
-    
+
     $tpvRedsysForm->addText(
         'merchantcode',
         [$plugin->get_lang('DS_MERCHANT_MERCHANTCODE'), 'DS_MERCHANT_MERCHANTCODE'],

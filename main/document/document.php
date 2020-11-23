@@ -1165,7 +1165,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                     DocumentManager::updateDbInfo(
                         'update',
                         $document_to_move['path'],
-                        $moveTo.'/'.basename($document_to_move['path'])
+                        $moveTo.'/' // .basename($document_to_move['path'])
                     );
 
                     // Update database item property

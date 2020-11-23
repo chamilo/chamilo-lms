@@ -5030,6 +5030,11 @@ EOT;
             $total_weight
         );
 
+        $percentage = 0;
+        if (!empty($total_weight)) {
+            $percentage = ($total_score / $total_weight) * 100;
+        }
+
         return [
             'category_list' => $category_list,
             'attempts_result_list' => $attemptResult, // array of results
@@ -5040,6 +5045,7 @@ EOT;
             'all_answers_html' => $all,
             'total_score' => $total_score,
             'total_weight' => $total_weight,
+            'total_percentage' => $percentage,
             'count_pending_questions' => $countPendingQuestions,
         ];
     }
@@ -5957,14 +5963,24 @@ EOT;
                 MessageManager::send_message($currentUserId, $subject, $content);
             }
 
+            // Notifications.
             $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
                 $objExercise->iId,
                 'notifications'
             );
-
             $exerciseNotification = '';
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $exerciseNotification = $extraFieldData['value'];
+            }
+
+            // Blocking exercise.
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'blocking_percentage'
+            );
+            $blockPercentage = false;
+            if ($extraFieldData && isset($extraFieldData['value']) && $extraFieldData['value']) {
+                $blockPercentage = $extraFieldData['value'];
             }
 
             $extraFieldValueUser = new ExtraFieldValue('user');
@@ -6010,6 +6026,19 @@ EOT;
 
                             if (!isset($attempt['status'])) {
                                 continue;
+                            }
+
+                            if ($blockPercentage && isset($attempt['is_block_by_percentage'])) {
+                                $passBlock = $stats['total_percentage'] > $blockPercentage;
+                                if ($attempt['is_block_by_percentage']) {
+                                    if ($passBlock) {
+                                        continue;
+                                    }
+                                } else {
+                                   if (false === $passBlock) {
+                                       continue;
+                                   }
+                                }
                             }
 
                             switch ($attempt['status']) {

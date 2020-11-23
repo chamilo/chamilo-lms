@@ -1650,6 +1650,7 @@ $_configuration['auth_password_links'] = [
             'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
             'attempts' => [
                 [
+                    'is_block_by_percentage' => true,
                     'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
                     'content' => 'MailAttemptPassed', // exercise extra field
                     'content_default' => 'Hi, ((user_lastname)) ', // value if MailAttemptPassed is empty

@@ -81,17 +81,27 @@ $table = Exercise::exerciseGrid(
     true
 );
 
-$table->headers = [];
-$table->set_header(0, get_lang('ExerciseName'), false);
-$table->set_header(1, get_lang('QuantityQuestions'), false);
-$table->set_header(2, get_lang('Actions'), false);
-$exerciseList = [];
-foreach ($table->table_data as &$data) {
-    $data = [
-        $data[1],
-        $data[2],
-        $data[3],
-    ];
+$exercisesToString = '';
+if (!empty($table)) {
+    if ($table instanceof SortableTableFromArrayConfig) {
+        $table->headers = [];
+        $table->set_header(0, get_lang('ExerciseName'), false);
+        $table->set_header(1, get_lang('QuantityQuestions'), false);
+        $table->set_header(2, get_lang('Actions'), false);
+        $exerciseList = [];
+        foreach ($table->table_data as &$data) {
+            $data = [
+                $data[1],
+                $data[2],
+                $data[3],
+            ];
+        }
+
+        $table->set_form_actions([]);
+        $exercisesToString = $table->return_table();
+    } else {
+        $exercisesToString = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+    }
 }
 
 $initialData = $plugin->getInitialExercise($courseId, $sessionId);
@@ -108,15 +118,11 @@ if (!empty($users) && $initialData && $initialData['exercise_id']) {
     $initialExerciseTitle = $initialExercise->get_formated_title();
 }
 
-$table->set_form_actions([]);
-$exercises = $table->return_table();
-
 $template->assign(
     'positioning_introduction',
-    //Display::return_message(sprintf($plugin->get_lang('PositioningIntroduction'), $courseInfo['title']))
     Display::return_message($plugin->get_lang('PositioningIntroduction'))
 );
-$template->assign('grid', $exercises);
+$template->assign('table', $exercisesToString);
 $template->assign('radars', $radars);
 $template->assign('initial_exercise', $initialExerciseTitle);
 $template->assign('content', $template->fetch('positioning/view/start.tpl'));

@@ -46,7 +46,13 @@ if ($initialData) {
     }
 }
 
-$studentAverage = (int) Tracking::getAverageStudentScore($currentUserId, $courseCode, [], $sessionId);
+$studentAverage = Tracking::get_avg_student_progress(
+    $currentUserId,
+    $courseCode,
+    [],
+    $sessionId
+);
+
 $averageToUnlock = (int) $plugin->get('average_percentage_to_unlock_final_exercise');
 
 $finalExerciseTitle = '';

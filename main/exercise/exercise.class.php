@@ -8670,7 +8670,7 @@ class Exercise
      * @param int    $filterByResultDisabled
      * @param int    $filterByAttempt
      *
-     * @return string
+     * @return string|SortableTableFromArrayConfig
      */
     public static function exerciseGrid(
         $categoryId,

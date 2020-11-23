@@ -6035,9 +6035,9 @@ EOT;
                                         continue;
                                     }
                                 } else {
-                                   if (false === $passBlock) {
-                                       continue;
-                                   }
+                                    if (false === $passBlock) {
+                                        continue;
+                                    }
                                 }
                             }
 

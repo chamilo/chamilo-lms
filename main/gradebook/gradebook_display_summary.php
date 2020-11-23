@@ -1,11 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -177,7 +175,8 @@ $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 if (count($userList) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
-    echo '<br /><br /><div class="table-responsive"><table class="table table-hover table-striped table-bordered data_table">';
+    echo '<br /><br /><div class="table-responsive">
+            <table class="table table-hover table-striped table-bordered data_table">';
     echo '<tr><th>';
     echo get_lang('Student');
     echo '</th>';
@@ -185,13 +184,14 @@ if (count($userList) == 0) {
     echo get_lang('Action');
     echo '</th></tr>';
     foreach ($userList as $index => $value) {
+        $userData = api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
         echo '<tr>
-                <td width="70%">'
-                .api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].') </td>';
+                <td width="70%">'.$userData.'</td>';
         echo '<td>';
         $link = '';
         if ($allowSkillRelItem) {
-            $url = api_get_path(WEB_CODE_PATH).'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
+            $url = api_get_path(WEB_CODE_PATH).
+                'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
             $link = Display::url(
                 get_lang('Skills'),
                 $url,

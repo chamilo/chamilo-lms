@@ -14,7 +14,7 @@
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-
+$current_course_tool = TOOL_ANNOUNCEMENT;
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 

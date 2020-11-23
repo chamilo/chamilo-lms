@@ -1,51 +1,82 @@
-{{ groups }}
-<div class="table-responsive">
-    <table class="table table-hover table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>{{ 'FirstName'|get_lang }}</th>
-                <th>{{ 'LastName'|get_lang }}</th>
-                {% if show_email %}
-                    <th>{{ 'Email'|get_lang }}</th>
-                {% endif %}
-                <th class="text-center">{{ 'Group'|get_lang }}</th>
-                <th class="text-center">{{ 'ScormTime'|get_lang }}</th>
-                <th class="text-right">{{ 'Progress'|get_lang }}</th>
-                <th class="text-right">{{ 'ScormScore'|get_lang }}</th>
-                <th class="text-center">{{ 'LastConnection'|get_lang }}</th>
-                {% if not export %}
-                <th>{{ 'Actions'|get_lang }}</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in user_list %}
-                <tr id="row-{{ user.id }}">
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    {% if show_email %}
-                        <td>{{ user.email }}</td>
-                    {% endif %}
-                    <td>{{ user.groups }}</td>
-                    <td class="text-center">{{ user.lp_time }}</td>
-                    <td class="text-right">{{ user.lp_progress }}</td>
-                    <td class="text-right">{{ user.lp_score }}</td>
-                    <td class="text-center">{{ user.lp_last_connection }}</td>
-                    {% if not export %}
-                    <td>
-                        <button class="btn btn-primary btn-sm" data-id="{{ user.id }}">{{ 'Details'|get_lang }}</button>
-                    </td>
-                    {% endif %}
-                </tr>
-                <tr class="hide"></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+{{ group_form }}
+
+{{ table }}
+
+<div id="dialog-form" style="display:none;">
+    <div class="dialog-form-content">
+        {{ 'AreYouSureToDeleteResults' | get_lang | e('html') }} <span id="user_title"></span>
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input id="delete_exercise_attempts" type="checkbox"> {{ 'DeleteExerciseAttempts' | get_lang }}
+                </label>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
 $(function() {
-    $('tr td button').on('click', function (e) {
+    $("#dialog-form").dialog({
+        autoOpen : false,
+        modal : false,
+        width : 300,
+        height : 250,
+        zIndex : 20000
+    });
+
+    $('.delete_attempt').on('click', function() {
+        var userId = $(this).data('id');
+        var username = $(this).data('username');
+        $('#user_title').html(username);
+        $("#dialog-form").dialog({
+            buttons: {
+                '{{ "Delete" | get_lang }}' : function() {
+                    var deleteExercises = $('#delete_exercise_attempts').prop('checked');
+                    var urlDelete = '&delete_exercise_attempts=0';
+                    if (deleteExercises) {
+                        urlDelete = '&delete_exercise_attempts=1'
+                    }
+                    window.location.href = "{{ url }}"+urlDelete+"&reset=student&student_id=" + userId;
+                }
+            },
+            close: function() {
+                $('#user_title').html('');
+                $('#delete_exercise_attempt').prop('checked', false);
+            }
+        });
+        $("#dialog-form").dialog("open");
+    });
+
+    $('.delete_all').on('click', function() {
+        var users = $(this).data('users');
+        $('#user_title').html(users);
+        $("#dialog-form").dialog({
+            buttons: {
+                '{{ "Delete" | get_lang }}' : function() {
+                    var deleteExercises = $('#delete_exercise_attempts').prop('checked');
+                    var urlDelete = '&delete_exercise_attempts=0';
+                    if (deleteExercises) {
+                        urlDelete = '&delete_exercise_attempts=1'
+                    }
+                    window.location.href = "{{ url }}"+urlDelete+"&reset=all&student_id=0";
+                }
+            },
+            close: function() {
+                $('#user_title').html('');
+                $('#delete_exercise_attempt').prop('checked', false);
+            }
+        });
+        $("#dialog-form").dialog("open");
+    });
+
+
+    $('#group_filter').on('change', function() {
+        var groupId  = $(this).val();
+        window.location.href = "{{ url_base }}&group_filter=" + groupId;
+    });
+
+    $('tr td .details').on('click', function (e) {
         e.preventDefault();
         var self = $(this);
         var userId = self.data('id') || 0;
@@ -60,7 +91,7 @@ $(function() {
                 colspan: 7
             });
             newTD.load('{{ _p.web_main ~ 'mySpace/lp_tracking.php?action=stats&extend_all=0&id_session=' ~ session_id ~ '&course=' ~ course_code ~ '&lp_id=' ~ lp_id ~ '&student_id=\' + userId + \'&origin=tracking_course&allow_extend=0' }} .table-responsive', function () {
-                newTD.appendTo(trDetail);
+                newTD.insertAfter(trHead);
             });
             trDetail.removeClass('hide');
         }

@@ -880,6 +880,7 @@ switch ($action) {
         $course_id = api_get_course_int_id();
         $options = [];
         $options['course_id'] = $course_id;
+        $options['session_id'] = $_SESSION['id_session'];
 
         switch ($type) {
             case 'not_registered':
@@ -887,13 +888,18 @@ switch ($action) {
                 if (!empty($keyword)) {
                     $options['where']['AND name like %?% '] = $keyword;
                 }
-                $count = $obj->getUserGroupNotInCourse($options, $groupFilter, true);
+                $count = $obj->getUserGroupNotInCourse(
+                    $options,
+                    $groupFilter,
+                    true
+                );
                 break;
             case 'registered':
                 $options['where'] = [' usergroup.course_id = ? ' => $course_id];
                 $count = $obj->getUserGroupInCourse(
                     $options,
                     $groupFilter,
+                    true,
                     true
                 );
                 break;
@@ -1398,10 +1404,10 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (api_get_configuration_value('allow_compilatio_tool') && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
-        if (isset($_GET['type']) && $_GET['type'] == 'simple') {
+        if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
                 'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
@@ -1680,6 +1686,7 @@ switch ($action) {
 
         $result = [];
         if (!empty($sessions)) {
+            $pdfIcon = Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL);
             foreach ($sessions as $session) {
                 if (api_drh_can_access_all_session_content()) {
                     $count_courses_in_session = SessionManager::get_course_list_by_session_id(
@@ -1691,7 +1698,7 @@ switch ($action) {
                 } else {
                     $count_courses_in_session = count(
                         Tracking::get_courses_followed_by_coach(
-                            $user_id,
+                            api_get_user_id(),
                             $session['id']
                         )
                     );
@@ -1711,6 +1718,19 @@ switch ($action) {
                 $dateToString = $dateData['access'];
 
                 $detailButtons = [];
+                $detailButtons[] = Display::url(
+                    $pdfIcon,
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'export_to_pdf',
+                            'type' => 'achievement',
+                            'session_to_export' => $session['id'],
+                            'all_students' => 1,
+                        ]
+                    ),
+                    ['target' => '_blank']
+                );
                 $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
@@ -2339,12 +2359,19 @@ switch ($action) {
         $columns = ['name', 'users', 'status', 'group_type', 'actions'];
         $options['order'] = "name $sord";
         $options['limit'] = "$start , $limit";
+        $options['session_id'] = $_SESSION['id_session'];
         switch ($type) {
             case 'not_registered':
-                $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
+
+            $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
                 break;
             case 'registered':
-                $result = $obj->getUserGroupInCourse($options, $groupFilter);
+                $result = $obj->getUserGroupInCourse(
+                    $options,
+                    $groupFilter,
+                    false,
+                    true
+                );
                 break;
         }
 
@@ -2364,8 +2391,12 @@ switch ($action) {
                     );
                 }
 
-                if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
-                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq();
+                if ($obj->usergroup_was_added_in_course(
+                    $group['id'],
+                    $course_id,
+                    $_SESSION['id_session']
+                )) {
+                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.$_SESSION['id_session'];
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
                 } else {
                     $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered';

@@ -13,8 +13,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
-$is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
+    api_not_allowed(true);
+}
 
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
@@ -25,17 +29,10 @@ if (empty($lpId)) {
     api_not_allowed(true);
 }
 
-$subscriptionSettings = learnpath::getSubscriptionSettings();
-if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
-    api_not_allowed(true);
-}
-
 $allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
-
 $currentUser = api_get_user_entity(api_get_user_id());
 
 $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
-
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
@@ -109,7 +106,7 @@ if (!empty($subscribedUsersInLp)) {
     }
 }
 
-// Add/Edit users
+// User form.
 $formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 
@@ -122,21 +119,20 @@ $userMultiSelect = $formUsers->addElement(
 $formUsers->addButtonSave(get_lang('Save'));
 
 $defaults = [];
-
 if (!empty($selectedChoices)) {
     $defaults['users'] = $selectedChoices;
 }
 
 $formUsers->setDefaults($defaults);
 
-// Add/Edit groups
+// Group form.
 $form = new FormValidator('lp_edit', 'post', $url);
 $form->addElement('hidden', 'group_form', 1);
 
 // Group list
 $groupList = \CourseManager::get_group_list_of_course(
-    api_get_course_id(),
-    api_get_session_id(),
+    $courseCode,
+    $sessionId,
     1
 );
 $groupChoices = array_column($groupList, 'name', 'id');
@@ -173,7 +169,7 @@ $form->addButtonSave(get_lang('Save'));
 
 // UserGroup
 if ($allowUserGroups) {
-    $formUserGroup = new FormValidator('lp_edit', 'post', $url);
+    $formUserGroup = new FormValidator('usergroup_form', 'post', $url);
     $formUserGroup->addHidden('usergroup_form', 1);
 
     $userGroup = new UserGroup();
@@ -201,7 +197,7 @@ if ($allowUserGroups) {
 
     $formUserGroup->setDefaults(['usergroups' => $selectedUserGroupChoices]);
     $formUserGroup->addButtonSave(get_lang('Save'));
-
+    $sessionCondition = api_get_session_condition($sessionId, true);
     if ($formUserGroup->validate()) {
         $values = $formUserGroup->getSubmitValues();
         $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
@@ -213,9 +209,10 @@ if ($allowUserGroups) {
                     $sql = "DELETE FROM $table
                             WHERE
                                 c_id = $courseId AND
-                                session_id = $sessionId AND
                                 lp_id = $lpId AND
-                                usergroup_id = $userGroupId";
+                                usergroup_id = $userGroupId
+                                $sessionCondition
+                            ";
                     Database::query($sql);
 
                     $userList = $userGroup->get_users_by_usergroup($userGroupId);
@@ -234,19 +231,22 @@ if ($allowUserGroups) {
                 $sql = "SELECT id FROM $table
                         WHERE
                             c_id = $courseId AND
-                            session_id = $sessionId AND
                             lp_id = $lpId AND
-                            usergroup_id = $userGroupId";
+                            usergroup_id = $userGroupId
+                            $sessionCondition
+                            ";
                 $result = Database::query($sql);
 
                 if (0 == Database::num_rows($result)) {
                     $params = [
                         'lp_id' => $lpId,
                         'c_id' => $courseId,
-                        'session_id' => $sessionId,
                         'usergroup_id' => $userGroupId,
                         'created_at' => api_get_utc_datetime(),
                     ];
+                    if (!empty($sessionId)) {
+                        $params['session_id'] = $sessionId;
+                    }
                     Database::insert($table, $params);
                 }
             }
@@ -283,8 +283,9 @@ if ($allowUserGroups) {
             $sql = "DELETE FROM $table
                     WHERE
                         c_id = $courseId AND
-                        session_id = $sessionId AND
-                        lp_id = $lpId ";
+                        lp_id = $lpId
+                        $sessionCondition
+                    ";
             Database::query($sql);
         }
         header("Location: $url");
@@ -305,6 +306,7 @@ if (!empty($selectedGroupChoices)) {
 }
 $form->setDefaults($defaults);
 
+// Group.
 if ($form->validate()) {
     $values = $form->getSubmitValues();
 

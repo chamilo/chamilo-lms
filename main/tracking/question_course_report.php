@@ -62,7 +62,7 @@ foreach ($session_list as $sesion_item) {
     $my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
 
-$form = new FormValidator('search_simple', 'POST', '', '', null, false);
+$form = new FormValidator('search_simple', 'POST', '', '', null);
 $form->addElement(
     'select',
     'session_id',
@@ -116,7 +116,7 @@ if (!empty($course_info)) {
             );
 
             foreach ($question_list as $question_id) {
-                $question_data = Question::read($question_id);
+                $question_data = Question::read($question_id, $course_info);
                 $main_question_list[$question_id] = $question_data;
                 $quantity_exercises = 0;
                 $question_result = 0;

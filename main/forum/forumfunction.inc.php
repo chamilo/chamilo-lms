@@ -357,7 +357,6 @@ function show_add_forum_form($inputvalues = [], $lp_id)
 
     $group = [];
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Flat'), 'flat');
-    $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Threaded'), 'threaded');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
     $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'));
 

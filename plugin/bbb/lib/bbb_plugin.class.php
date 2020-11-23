@@ -214,7 +214,7 @@ class BBBPlugin extends Plugin
         );
         $fieldLabel = 'plugin_bbb_course_users_limit';
         $fieldType = ExtraField::FIELD_TYPE_INTEGER;
-        $fieldTitle = 'MaxUsersInConferenceRoom';
+        $fieldTitle = $this->get_lang('MaxUsersInConferenceRoom');
         $fieldDefault = '0';
         $extraField = new ExtraField('course');
         $fieldId = CourseManager::create_course_extra_field(

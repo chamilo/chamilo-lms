@@ -164,6 +164,7 @@ define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
+define('SECTION_CUSTOMPAGE', 'custompage');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -486,6 +487,7 @@ define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAY
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
+define('RESULT_DISABLE_RADAR', 9);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -1186,19 +1188,19 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
             default:
             case COURSE_VISIBILITY_CLOSED:
                 // Completely closed: the course is only accessible to the teachers. - 0
-                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
+                if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_REGISTERED:
                 // Private - access authorized to course members only - 1
-                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
+                if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM:
                 // Open - access allowed for users registered on the platform - 2
-                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
+                if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
@@ -1214,10 +1216,9 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
                 break;
         }
 
-        //If password is set and user is not registered to the course then the course is not visible
-        if ($isAllowedInCourse == false &&
-            isset($course_info['registration_code']) &&
-            !empty($course_info['registration_code'])
+        // If password is set and user is not registered to the course then the course is not visible.
+        if (false == $isAllowedInCourse &&
+            isset($course_info['registration_code']) && !empty($course_info['registration_code'])
         ) {
             $is_visible = false;
         }
@@ -1250,6 +1251,44 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
+    if ($is_visible && 'true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+        $plugin = Positioning::create();
+        $block = $plugin->get('block_course_if_initial_exercise_not_attempted');
+        if ('true' === $block) {
+            $currentPath = $_SERVER['PHP_SELF'];
+            // Allowed only this course paths.
+            $paths = [
+                '/plugin/positioning/start.php',
+                '/plugin/positioning/start_student.php',
+                '/main/course_home/course_home.php',
+                '/main/exercise/overview.php',
+            ];
+
+            if (!in_array($currentPath, $paths, true)) {
+                // Check if entering an exercise.
+                global $current_course_tool;
+                if ('quiz' !== $current_course_tool) {
+                    $initialData = $plugin->getInitialExercise($course_info['real_id'], $session_id);
+                    if ($initialData && isset($initialData['exercise_id'])) {
+                        $results = Event::getExerciseResultsByUser(
+                            api_get_user_id(),
+                            $initialData['exercise_id'],
+                            $course_info['real_id'],
+                            $session_id
+                        );
+                        if (empty($results)) {
+                            api_not_allowed($print_headers);
+
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    apiBlockInactiveUser();
+
     return true;
 }
 
@@ -1276,7 +1315,67 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
         return false;
     }
 
+    apiBlockInactiveUser();
+
     return true;
+}
+
+/**
+ * Blocks inactive users with a currently active session from accessing more
+ * pages "live".
+ *
+ * @return bool Returns true if the feature is disabled or the user account is still enabled. Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
+ */
+function apiBlockInactiveUser()
+{
+    $data = true;
+    if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
+        return $data;
+    }
+
+    $userId = api_get_user_id();
+    $homeUrl = api_get_path(WEB_PATH);
+    if (($userId) == 0) {
+        return $data;
+    }
+
+    $sql = "SELECT active FROM ".Database::get_main_table(TABLE_MAIN_USER)."
+            WHERE id = $userId";
+
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+
+        $data = (bool) $result_array['active'];
+    }
+    if ($data == false) {
+        $tpl = new Template(null, true, true, false, true, false, true, 0);
+        $tpl->assign('hide_login_link', 1);
+
+        //api_not_allowed(true, get_lang('AccountInactive'));
+        // we were not in a course, return to home page
+        $msg = Display::return_message(
+            get_lang('AccountInactive'),
+            'error',
+            false
+        );
+
+        $msg .= '<p class="text-center">
+                 <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
+
+        if (api_is_anonymous()) {
+            $form = api_get_not_allowed_login_form();
+            $msg .= '<div class="well">';
+            $msg .= $form->returnForm();
+            $msg .= '</div>';
+        }
+
+        $tpl->assign('content', $msg);
+        $tpl->display_one_col_template();
+        exit;
+    }
+
+    return $data;
 }
 
 /**
@@ -1315,6 +1414,7 @@ function api_block_anonymous_users($printHeaders = true)
 
         return false;
     }
+    apiBlockInactiveUser();
 
     return true;
 }
@@ -2365,7 +2465,7 @@ function api_format_course_array($course_data)
             null,
             null,
             true,
-            false
+            true
         );
     }
 
@@ -8235,8 +8335,8 @@ function api_set_settings_and_plugins()
 function api_set_more_memory_and_time_limits()
 {
     if (function_exists('ini_set')) {
-        api_set_memory_limit('256M');
-        ini_set('max_execution_time', 1800);
+        api_set_memory_limit('2048M');
+        ini_set('max_execution_time', 3600);
     }
 }
 
@@ -9689,7 +9789,6 @@ function api_get_relative_path($from, $to)
  *
  * @param string $type
  * @param string $serialized
- * @param bool   $ignoreErrors. Optional.
  *
  * @return mixed
  */

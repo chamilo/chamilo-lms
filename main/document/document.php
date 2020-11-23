@@ -37,7 +37,7 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-if (isset($_POST['currentFile'])) {
+if (isset($_POST['currentFile']) && !empty($_POST['currentFile']) && empty($action)) {
     $action = 'replace';
 }
 $allowUseTool = false;
@@ -275,12 +275,12 @@ switch ($action) {
                         if ($updateDocument) {
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('DownloadEnd').': '.$documentInfo['title'],
+                                    get_lang('OverwritenFile').': '.$documentInfo['title'],
                                     'success'
                                 )
                             );
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
+                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
                         }
                     }
                 } else {
@@ -2284,7 +2284,7 @@ echo '<script>
                });
                data = $(this).data("id");
                $(".upload_element_"+data).removeClass("hidden");
-               $.each($(".currentFile"),function(a,b){
+               $.each($("[name=\'currentFile\']"),function(a,b){
                    $(b).val(data);
                });
             });

@@ -24,10 +24,9 @@ use ChamiloSession as Session;
  * @copyright Patrick Cool
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
+$current_course_tool = TOOL_FORUM;
 api_protect_course_script(true);
 
-$current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
 $(function() {
     $(\'.hide-me\').slideUp();
@@ -273,7 +272,7 @@ if (is_array($forumCategories)) {
         } else {
             $forumCategoryInfo['title'] = $forumCategory['cat_title'];
         }
-        $forumCategoryInfo['extra_fields'] = $forumCategory['extra_fields'];
+        $forumCategoryInfo['extra_fields'] = isset($forumCategory['extra_fields']) ? $forumCategory['extra_fields'] : [];
         $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory['session_id'], $_user['status']);
 
         // Validation when belongs to a session

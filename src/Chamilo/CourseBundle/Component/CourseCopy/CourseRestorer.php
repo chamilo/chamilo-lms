@@ -2278,6 +2278,11 @@ class CourseRestorer
      */
     public function restore_test_category($session_id, $respect_base_content, $destination_course_code)
     {
+        // Cannot restore a test category to a session.
+        if (!empty($session_id)) {
+            return false;
+        }
+
         $destinationCourseId = $this->destination_course_info['real_id'];
         // Let's restore the categories
         $categoryOldVsNewList = []; // used to build the quiz_question_rel_category table
@@ -2916,11 +2921,11 @@ class CourseRestorer
                             $path = $this->get_new_id($item['item_type'], $item['path']);
                         }
 
-                        $item['item_type'] = $item['item_type'] == 'dokeos_chapter' ? 'dir' : $item['item_type'];
+                        $item['item_type'] = $item['item_type'] === 'dokeos_chapter' ? 'dir' : $item['item_type'];
 
                         $masteryScore = $item['mastery_score'];
-                        // If item is a chamilo quiz, then use the max score as mastery_score
-                        if ($item['item_type'] == 'quiz') {
+                        // If item is a chamilo quiz, then use the max score as mastery_score.
+                        if ($item['item_type'] === 'quiz') {
                             if (empty($masteryScore)) {
                                 $masteryScore = $item['max_score'];
                             }

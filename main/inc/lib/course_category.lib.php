@@ -587,7 +587,7 @@ class CourseCategory
 
     /**
      * @param string $category_code
-     * @param string $searchTerm
+     * @param string $keyword
      * @paran bool  $avoidCourses
      * @paran array $conditions
      *

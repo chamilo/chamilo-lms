@@ -316,10 +316,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .get_lang('YourDegreeOfCertainty')
             .'</th>'
         ;
-        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $header .= '<th>'.get_lang('Comment').'</th>';
-        } else {
-            $header .= '<th>&nbsp;</th>';
+
+        if (false === $exercise->hideComment) {
+            if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
         }
         $header .= '</tr>';
 

@@ -13,7 +13,11 @@
                         <img src="{{ data.avatar }}">
                     </div>
                     <div class="user-info">
-                        <strong>{{ data.name_url }}</strong><br>
+                        <strong>{{ data.name_url }}</strong>
+                        <br />
+                        {% if signature %}
+                            <img src="{{ signature }}" />
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -43,10 +47,27 @@
                                 <i class="fa fa-fw fa-laptop" aria-hidden="true"></i> {{ data.ip }}
                             </div>
                         {% endif %}
+
+                        {% if allow_signature %}
+                            <div class="list-data">
+                                <span class="item"></span>
+                                <a id="sign" class="btn btn-primary" href="javascript:void(0)">
+                                    <em class="fa fa-pencil"></em> {{ 'Sign'| get_plugin_lang('ExerciseSignaturePlugin') }}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        {% if allow_export_pdf %}
+                            <br />
+                            <div class="list-data">
+                                <span class="item"></span>
+                                <a href="{{ export_url }}" class="btn btn-default">
+                                    <img src="{{ 'export_pdf.png'|icon(32) }}" /> {{ 'ExportResponseReport'| get_lang }}
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
-
-                    <hr>
-
+                    <hr />
                     <div id="quiz_saved_answers_container">
                     {% if data.number_of_answers_saved != data.number_of_answers %}
                         <span class="label label-warning">
@@ -65,7 +86,11 @@
                                     <div class="col-sm-12">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="quiz_confirm_saved_answers_check" {% if not enable_form %}disabled{% endif %} {% if data.track_confirmation.confirmed %}checked{% endif %}>
+                                                <input
+                                                    type="checkbox"
+                                                    name="quiz_confirm_saved_answers_check"
+                                                    {% if not enable_form %}disabled{% endif %} {% if data.track_confirmation.confirmed %}checked{% endif %}
+                                                >
                                                 {{ 'QuizConfirmSavedAnswers'|get_lang }}
                                             </label>
                                         </div>
@@ -95,7 +120,6 @@
 
 {% if 'quiz_confirm_saved_answers'|api_get_configuration_value %}
     {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
-
     {% if enable_form %}
         <script>
             $(function () {

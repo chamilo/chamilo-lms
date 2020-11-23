@@ -380,7 +380,7 @@ class ExerciseLib
                 $header1 = Display::tag('th', '&nbsp;');
                 $cpt1 = 0;
                 foreach ($objQuestionTmp->options as $item) {
-                    $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
+                    $colorBorder1 = $cpt1 == (count($objQuestionTmp->options) - 1)
                         ? '' : 'border-right: solid #FFFFFF 1px;';
                     if ($item === 'True' || $item === 'False') {
                         $header1 .= Display::tag(
@@ -2847,6 +2847,7 @@ HOTSPOT;
      * @param string $decimalSeparator
      * @param string $thousandSeparator
      * @param bool   $roundValues           This option rounds the float values into a int using ceil()
+     * @param bool   $removeEmptyDecimals
      *
      * @return string an html with the score modified
      */
@@ -2859,11 +2860,15 @@ HOTSPOT;
         $hidePercentageSign = false,
         $decimalSeparator = '.',
         $thousandSeparator = ',',
-        $roundValues = false
+        $roundValues = false,
+        $removeEmptyDecimals = false
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
         }
+
+        $decimalSeparator = empty($decimalSeparator) ? '.' : $decimalSeparator;
+        $thousandSeparator = empty($thousandSeparator) ? ',' : $thousandSeparator;
 
         if ($use_platform_settings) {
             $result = self::convertScoreToPlatformSetting($score, $weight);
@@ -2872,6 +2877,7 @@ HOTSPOT;
         }
 
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
+
         // Formats values
         $percentage = float_format($percentage, 1);
         $score = float_format($score, 1);
@@ -2911,7 +2917,7 @@ HOTSPOT;
         }
 
         if ($show_percentage) {
-            $percentageSign = '%';
+            $percentageSign = ' %';
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
@@ -2920,6 +2926,11 @@ HOTSPOT;
                 $html = $percentage.$percentageSign;
             }
         } else {
+            if ($removeEmptyDecimals) {
+                if (ScoreDisplay::hasEmptyDecimals($weight)) {
+                    $weight = round($weight);
+                }
+            }
             $html = $score.' / '.$weight;
         }
 
@@ -4422,12 +4433,18 @@ EOT;
      * @param int      $exeId
      * @param bool     $save_user_result save users results (true) or just show the results (false)
      * @param string   $remainingMessage
+     * @param bool     $allowSignature
+     * @param bool     $allowExportPdf
+     * @param bool     $isExport
      */
     public static function displayQuestionListByAttempt(
         $objExercise,
         $exeId,
         $save_user_result = false,
-        $remainingMessage = ''
+        $remainingMessage = '',
+        $allowSignature = false,
+        $allowExportPdf = false,
+        $isExport = false
     ) {
         $origin = api_get_origin();
         $courseId = api_get_course_int_id();
@@ -4574,6 +4591,18 @@ EOT;
             }
         }
 
+        // When exporting to PDF hide feedback/comment/score show warning in hotspot.
+        if ($allowExportPdf && $isExport) {
+            $showTotalScore = false;
+            $showQuestionScore = false;
+            $objExercise->feedback_type = 2;
+            $objExercise->hideComment = true;
+            $objExercise->hideNoAnswer = true;
+            $objExercise->results_disabled = 0;
+            $objExercise->hideExpectedAnswer = true;
+            $show_results = true;
+        }
+
         if ('embeddable' !== $origin &&
             !empty($exercise_stat_info['exe_user_id']) &&
             !empty($studentInfo)
@@ -4582,7 +4611,9 @@ EOT;
             echo $objExercise->showExerciseResultHeader(
                 $studentInfo,
                 $exercise_stat_info,
-                $save_user_result
+                $save_user_result,
+                $allowSignature,
+                $allowExportPdf
             );
         }
 
@@ -4603,8 +4634,7 @@ EOT;
         $exerciseResult = null;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
-
-        if (in_array(
+        if (true === $save_user_result && in_array(
             $objExercise->getFeedbackType(),
             [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
         )) {
@@ -4664,6 +4694,12 @@ EOT;
                 $my_total_score = $result['score'];
                 $my_total_weight = $result['weight'];
 
+                $scorePassed = $my_total_score >= $my_total_weight;
+                if (function_exists('bccomp')) {
+                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+                    $scorePassed = $compareResult === 1 || $compareResult === 0;
+                }
+
                 // Category report
                 $category_was_added_for_this_test = false;
                 if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
@@ -4673,11 +4709,37 @@ EOT;
                     if (!isset($category_list[$objQuestionTmp->category]['total'])) {
                         $category_list[$objQuestionTmp->category]['total'] = 0;
                     }
+                    if (!isset($category_list[$objQuestionTmp->category]['total_questions'])) {
+                        $category_list[$objQuestionTmp->category]['total_questions'] = 0;
+                    }
+                    if (!isset($category_list[$objQuestionTmp->category]['passed'])) {
+                        $category_list[$objQuestionTmp->category]['passed'] = 0;
+                    }
+                    if (!isset($category_list[$objQuestionTmp->category]['wrong'])) {
+                        $category_list[$objQuestionTmp->category]['wrong'] = 0;
+                    }
+                    if (!isset($category_list[$objQuestionTmp->category]['no_answer'])) {
+                        $category_list[$objQuestionTmp->category]['no_answer'] = 0;
+                    }
+
                     $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
                     $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+                    if ($scorePassed) {
+                        // Only count passed if score is not empty
+                        if (!empty($my_total_score)) {
+                            $category_list[$objQuestionTmp->category]['passed']++;
+                        }
+                    } else {
+                        if ($result['user_answered']) {
+                            $category_list[$objQuestionTmp->category]['wrong']++;
+                        } else {
+                            $category_list[$objQuestionTmp->category]['no_answer']++;
+                        }
+                    }
+
+                    $category_list[$objQuestionTmp->category]['total_questions']++;
                     $category_was_added_for_this_test = true;
                 }
-
                 if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
                     foreach ($objQuestionTmp->category_list as $category_id) {
                         $category_list[$category_id]['score'] += $my_total_score;
@@ -4723,12 +4785,6 @@ EOT;
                     if ($teacherAudio) {
                         echo $teacherAudio;
                     }
-                }
-
-                $scorePassed = $my_total_score >= $my_total_weight;
-                if (function_exists('bccomp')) {
-                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-                    $scorePassed = $compareResult === 1 || $compareResult === 0;
                 }
 
                 $calculatedScore = [
@@ -4856,13 +4912,15 @@ EOT;
             echo $chartMultiAnswer;
         }
 
-        if (!empty($category_list) && ($show_results || $show_only_score)) {
+        if (!empty($category_list) &&
+            ($show_results || $show_only_score || RESULT_DISABLE_RADAR == $objExercise->results_disabled)
+        ) {
             // Adding total
             $category_list['total'] = [
                 'score' => $total_score,
                 'total' => $total_weight,
             ];
-            echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+            echo TestCategory::get_stats_table_by_attempt($objExercise, $category_list);
         }
 
         if ($show_all_but_expected_answer) {
@@ -4944,7 +5002,7 @@ EOT;
         )) {
             echo Display::page_header(get_lang('Ranking'), null, 'h4');
             echo self::displayResultsInRanking(
-                $objExercise->iId,
+                $objExercise,
                 api_get_user_id(),
                 $courseId,
                 $sessionId
@@ -4957,33 +5015,54 @@ EOT;
 
         $failedAnswersCount = 0;
         $wrongQuestionHtml = '';
+        $all = '';
         foreach ($attemptResult as $item) {
             if (false === $item['pass']) {
                 $failedAnswersCount++;
                 $wrongQuestionHtml .= $item['question_content'].'<br />';
             }
+            $all .= $item['question_content'].'<br />';
+        }
+
+        $passed = self::isPassPercentageAttemptPassed(
+            $objExercise,
+            $total_score,
+            $total_weight
+        );
+
+        $percentage = 0;
+        if (!empty($total_weight)) {
+            $percentage = ($total_score / $total_weight) * 100;
         }
 
         return [
-            'attempts_result' => $attemptResult,
-            'total_answers_count' => count($attemptResult),
-            'failed_answers_count' => $failedAnswersCount,
+            'category_list' => $category_list,
+            'attempts_result_list' => $attemptResult, // array of results
+            'exercise_passed' => $passed, // boolean
+            'total_answers_count' => count($attemptResult), // int
+            'failed_answers_count' => $failedAnswersCount, // int
             'failed_answers_html' => $wrongQuestionHtml,
+            'all_answers_html' => $all,
+            'total_score' => $total_score,
+            'total_weight' => $total_weight,
+            'total_percentage' => $percentage,
+            'count_pending_questions' => $countPendingQuestions,
         ];
     }
 
     /**
      * Display the ranking of results in a exercise.
      *
-     * @param int $exerciseId
-     * @param int $currentUserId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param Exercise $exercise
+     * @param int      $currentUserId
+     * @param int      $courseId
+     * @param int      $sessionId
      *
      * @return string
      */
-    public static function displayResultsInRanking($exerciseId, $currentUserId, $courseId, $sessionId = 0)
+    public static function displayResultsInRanking($exercise, $currentUserId, $courseId, $sessionId = 0)
     {
+        $exerciseId = $exercise->iId;
         $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
@@ -5104,12 +5183,11 @@ EOT;
         $ribbon = $displayChartDegree ? '<div class="ribbon">' : '';
 
         if ($checkPassPercentage) {
-            $isSuccess = self::isSuccessExerciseResult(
-                $score, $weight, $objExercise->selectPassPercentage()
-            );
+            $passPercentage = $objExercise->selectPassPercentage();
+            $isSuccess = self::isSuccessExerciseResult($score, $weight, $passPercentage);
             // Color the final test score if pass_percentage activated
             $ribbonTotalSuccessOrError = '';
-            if (self::isPassPercentageEnabled($objExercise->selectPassPercentage())) {
+            if (self::isPassPercentageEnabled($passPercentage)) {
                 if ($isSuccess) {
                     $ribbonTotalSuccessOrError = ' ribbon-total-success';
                 } else {
@@ -5139,6 +5217,13 @@ EOT;
         $ribbon .= $displayChartDegree ? '</div>' : '';
 
         return $ribbon;
+    }
+
+    public static function isPassPercentageAttemptPassed($objExercise, $score, $weight)
+    {
+        $passPercentage = $objExercise->selectPassPercentage();
+
+        return self::isSuccessExerciseResult($score, $weight, $passPercentage);
     }
 
     /**
@@ -5553,6 +5638,22 @@ EOT;
     }
 
     /**
+     * @param int $exerciseId
+     */
+    public static function getExerciseTitleById($exerciseId)
+    {
+        $em = Database::getManager();
+
+        return $em
+            ->createQuery('SELECT cq.title
+                FROM ChamiloCourseBundle:CQuiz cq
+                WHERE cq.iid = :iid'
+            )
+            ->setParameter('iid', $exerciseId)
+            ->getSingleScalarResult();
+    }
+
+    /**
      * @param int $exeId      ID from track_e_exercises
      * @param int $userId     User ID
      * @param int $exerciseId Exercise ID
@@ -5762,5 +5863,326 @@ EOT;
         }
 
         return $total;
+    }
+
+    public static function parseContent($content, $stats, $exercise, $trackInfo, $currentUserId = 0)
+    {
+        $wrongAnswersCount = $stats['failed_answers_count'];
+        $attemptDate = substr($trackInfo['exe_date'], 0, 10);
+
+        $content = str_replace(
+            [
+                '((exercise_error_count))',
+                '((all_answers_html))',
+                '((exercise_title))',
+                '((exercise_attempt_date))',
+            ],
+            [
+                $wrongAnswersCount,
+                $stats['all_answers_html'],
+                $exercise->get_formated_title(),
+                $attemptDate,
+            ],
+            $content
+        );
+
+        $currentUserId = empty($currentUserId) ? api_get_user_id() : (int) $currentUserId;
+
+        $content = AnnouncementManager::parseContent(
+            $currentUserId,
+            $content,
+            api_get_course_id(),
+            api_get_session_id()
+        );
+
+        return $content;
+    }
+
+    public static function sendNotification(
+        $currentUserId,
+        $objExercise,
+        $exercise_stat_info,
+        $courseInfo,
+        $attemptCountToSend,
+        $stats
+    ) {
+        $notifications = api_get_configuration_value('exercise_finished_notification_settings');
+        if (empty($notifications)) {
+            return false;
+        }
+
+        $studentId = $exercise_stat_info['exe_user_id'];
+        $exerciseExtraFieldValue = new ExtraFieldValue('exercise');
+        $wrongAnswersCount = $stats['failed_answers_count'];
+        $exercisePassed = $stats['exercise_passed'];
+        $countPendingQuestions = $stats['count_pending_questions'];
+
+        // If there are no pending questions (Open questions).
+        if (0 === $countPendingQuestions) {
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'signature_mandatory'
+            );
+
+            if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {
+                if (ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)) {
+                    $signature = ExerciseSignaturePlugin::getSignature($studentId, $exercise_stat_info);
+                    if (false !== $signature) {
+                        //return false;
+                    }
+                }
+            }
+
+            $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+            if ($exercisePassed) {
+                $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+            }
+
+            if ($exercisePassed) {
+                $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $objExercise->iId,
+                    'MailSuccess'
+                );
+            } else {
+                $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $objExercise->iId,
+                    'MailAttempt'.$attemptCountToSend
+                );
+            }
+
+            if ($extraFieldData && isset($extraFieldData['value'])) {
+                $content = $extraFieldData['value'];
+                $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
+                if (false === $exercisePassed) {
+                    if (0 !== $wrongAnswersCount) {
+                        $content .= $stats['failed_answers_html'];
+                    }
+                }
+
+                // Send to student.
+                MessageManager::send_message($currentUserId, $subject, $content);
+            }
+
+            // Notifications.
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'notifications'
+            );
+            $exerciseNotification = '';
+            if ($extraFieldData && isset($extraFieldData['value'])) {
+                $exerciseNotification = $extraFieldData['value'];
+            }
+
+            // Blocking exercise.
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'blocking_percentage'
+            );
+            $blockPercentage = false;
+            if ($extraFieldData && isset($extraFieldData['value']) && $extraFieldData['value']) {
+                $blockPercentage = $extraFieldData['value'];
+            }
+
+            $extraFieldValueUser = new ExtraFieldValue('user');
+
+            if (!empty($exerciseNotification) && !empty($notifications)) {
+                foreach ($notifications as $name => $notificationList) {
+                    if ($exerciseNotification !== $name) {
+                        continue;
+                    }
+                    foreach ($notificationList as $attemptData) {
+                        $skipNotification = false;
+                        $skipNotificationList = isset($attemptData['skip_notification_if_user_in_extra_field']) ? $attemptData['skip_notification_if_user_in_extra_field'] : [];
+                        if (!empty($skipNotificationList)) {
+                            foreach ($skipNotificationList as $skipVariable => $skipValues) {
+                                $userExtraFieldValue = $extraFieldValueUser->get_values_by_handler_and_field_variable(
+                                    $studentId,
+                                    $skipVariable
+                                );
+                                if (!empty($userExtraFieldValue) && isset($userExtraFieldValue['value'])) {
+                                    if (in_array($userExtraFieldValue['value'], $skipValues)) {
+                                        $skipNotification = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($skipNotification) {
+                            continue;
+                        }
+
+                        $email = isset($attemptData['email']) ? $attemptData['email'] : '';
+                        $emailList = explode(',', $email);
+                        if (empty($emailList)) {
+                            continue;
+                        }
+                        $attempts = $attemptData['attempts'];
+                        foreach ($attempts as $attempt) {
+                            $sendMessage = false;
+                            if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {
+                                continue;
+                            }
+
+                            if (!isset($attempt['status'])) {
+                                continue;
+                            }
+
+                            if ($blockPercentage && isset($attempt['is_block_by_percentage'])) {
+                                $passBlock = $stats['total_percentage'] > $blockPercentage;
+                                if ($attempt['is_block_by_percentage']) {
+                                    if ($passBlock) {
+                                        continue;
+                                    }
+                                } else {
+                                   if (false === $passBlock) {
+                                       continue;
+                                   }
+                                }
+                            }
+
+                            switch ($attempt['status']) {
+                                case 'passed':
+                                    if ($exercisePassed) {
+                                        $sendMessage = true;
+                                    }
+                                    break;
+                                case 'failed':
+                                    if (false === $exercisePassed) {
+                                        $sendMessage = true;
+                                    }
+                                    break;
+                                case 'all':
+                                    $sendMessage = true;
+                                    break;
+                            }
+
+                            if ($sendMessage) {
+                                $attachments = [];
+                                if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
+                                    // Get pdf content
+                                    $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                                        $objExercise->iId,
+                                        $attempt['add_pdf']
+                                    );
+
+                                    if ($pdfExtraData && isset($pdfExtraData['value'])) {
+                                        $pdfContent = self::parseContent(
+                                            $pdfExtraData['value'],
+                                            $stats,
+                                            $objExercise,
+                                            $exercise_stat_info,
+                                            $studentId
+                                        );
+
+                                        @$pdf = new PDF();
+                                        $filename = get_lang('Exercise');
+                                        $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
+                                        $pdfPath = @$pdf->content_to_pdf(
+                                            "<html><body>$pdfContent</body></html>",
+                                            file_get_contents($cssFile),
+                                            $filename,
+                                            api_get_course_id(),
+                                            'F',
+                                            false,
+                                            null,
+                                            false,
+                                            true
+                                        );
+                                        $attachments[] = ['filename' => $filename, 'path' => $pdfPath];
+                                    }
+                                }
+
+                                $content = isset($attempt['content_default']) ? $attempt['content_default'] : '';
+                                if (isset($attempt['content'])) {
+                                    $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                                        $objExercise->iId,
+                                        $attempt['content']
+                                    );
+                                    if ($extraFieldData && isset($extraFieldData['value']) && !empty($extraFieldData['value'])) {
+                                        $content = $extraFieldData['value'];
+                                    }
+                                }
+
+                                if (!empty($content)) {
+                                    $content = self::parseContent(
+                                        $content,
+                                        $stats,
+                                        $objExercise,
+                                        $exercise_stat_info,
+                                        $studentId
+                                    );
+                                    foreach ($emailList as $email) {
+                                        if (empty($email)) {
+                                            continue;
+                                        }
+                                        api_mail_html(
+                                            null,
+                                            $email,
+                                            $subject,
+                                            $content,
+                                            null,
+                                            null,
+                                            [],
+                                            $attachments
+                                        );
+                                    }
+                                }
+
+                                if (isset($attempt['post_actions'])) {
+                                    foreach ($attempt['post_actions'] as $action => $params) {
+                                        switch ($action) {
+                                            case 'subscribe_student_to_courses':
+                                                foreach ($params as $code) {
+                                                    CourseManager::subscribeUser($currentUserId, $code);
+                                                    break;
+                                                }
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Delete an exercise attempt.
+     *
+     * Log the exe_id deleted with the exe_user_id related.
+     *
+     * @param int $exeId
+     */
+    public static function deleteExerciseAttempt($exeId)
+    {
+        $exeId = (int) $exeId;
+
+        $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
+
+        if (empty($trackExerciseInfo)) {
+            return;
+        }
+
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
+        Database::query("DELETE FROM $tblTrackAttempt WHERE exe_id = $exeId");
+
+        Event::addEvent(
+            LOG_EXERCISE_ATTEMPT_DELETE,
+            LOG_EXERCISE_ATTEMPT,
+            $exeId,
+            api_get_utc_datetime()
+        );
+        Event::addEvent(
+            LOG_EXERCISE_ATTEMPT_DELETE,
+            LOG_EXERCISE_AND_USER_ID,
+            $exeId.'-'.$trackExerciseInfo['exe_user_id'],
+            api_get_utc_datetime()
+        );
     }
 }

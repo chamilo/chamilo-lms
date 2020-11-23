@@ -6183,10 +6183,9 @@ EOT;
 
     public static function scorePassed($score, $total)
     {
-        //$scorePassed = $score >= $total;
         $compareResult = bccomp($score, $total, 3);
         $scorePassed = 1 === $compareResult || 0 === $compareResult;
-        if (-1 === $scorePassed) {
+        if (false === $scorePassed) {
             $epsilon = 0.00001;
             if (abs($score - $total) < $epsilon) {
                 $scorePassed = true;

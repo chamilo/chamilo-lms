@@ -4693,12 +4693,7 @@ EOT;
 
                 $my_total_score = $result['score'];
                 $my_total_weight = $result['weight'];
-
-                $scorePassed = $my_total_score >= $my_total_weight;
-                if (function_exists('bccomp')) {
-                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-                    $scorePassed = $compareResult === 1 || $compareResult === 0;
-                }
+                $scorePassed = self::scorePassed($my_total_score, $my_total_weight);
 
                 // Category report
                 $category_was_added_for_this_test = false;
@@ -4819,7 +4814,7 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-                    if (false == $showQuestionScore) {
+                    if (false === $showQuestionScore) {
                         $score = [];
                     }
 
@@ -5242,7 +5237,7 @@ EOT;
         $countPendingQuestions = 0
     ) {
         $hide = (int) $objExercise->getPageConfigurationAttribute('hide_total_score');
-        if ($hide === 1) {
+        if (1 === $hide) {
             return '';
         }
 
@@ -6184,5 +6179,20 @@ EOT;
             $exeId.'-'.$trackExerciseInfo['exe_user_id'],
             api_get_utc_datetime()
         );
+    }
+
+    public static function scorePassed($score, $total)
+    {
+        //$scorePassed = $score >= $total;
+        $compareResult = bccomp($score, $total, 3);
+        $scorePassed = 1 === $compareResult || 0 === $compareResult;
+        if (-1 === $scorePassed) {
+            $epsilon = 0.00001;
+            if (abs($score - $total) < $epsilon) {
+                $scorePassed = true;
+            }
+        }
+
+        return $scorePassed;
     }
 }

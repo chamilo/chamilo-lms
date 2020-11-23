@@ -3766,6 +3766,7 @@ class Exercise
             if ($debug) {
                 error_log("c_quiz_answer.id_auto: $answerAutoId ");
                 error_log("Answer marked as correct in db (0/1)?: $answerCorrect ");
+                error_log("answerWeighting: $answerWeighting");
             }
 
             // Delineation
@@ -5831,6 +5832,7 @@ class Exercise
         if ($save_results) {
             if ($debug) {
                 error_log("Save question results $save_results");
+                error_log("Question score: $questionScore");
                 error_log('choice: ');
                 error_log(print_r($choice, 1));
             }
@@ -6073,7 +6075,7 @@ class Exercise
             Database::query($sql);
         }
 
-        $return = [
+        return [
             'score' => $questionScore,
             'weight' => $questionWeighting,
             'extra' => $extra_data,
@@ -6085,8 +6087,6 @@ class Exercise
             'correct_answer_id' => $correctAnswerId,
             'answer_destination' => $answerDestination,
         ];
-
-        return $return;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -7,8 +8,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 /**
  * @todo rework file in order to use addFlash
- *
- * @package chamilo.backup
  */
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...

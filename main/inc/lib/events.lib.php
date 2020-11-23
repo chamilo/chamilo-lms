@@ -580,7 +580,7 @@ class Event
             error_log("position: $position");
         }
 
-        //Validation in case of fraud with active control time
+        // Validation in case of fraud with active control time.
         if (!ExerciseLib::exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
             if ($debug) {
                 error_log("exercise_time_control_is_valid is false");
@@ -593,11 +593,11 @@ class Event
             return false;
         }
 
-        if (is_null($answer)) {
+        if (null === $answer) {
             $answer = '';
         }
 
-        if (is_null($score)) {
+        if (null === $score) {
             $score = 0;
         }
 

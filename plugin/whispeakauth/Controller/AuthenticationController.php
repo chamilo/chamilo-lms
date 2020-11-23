@@ -120,6 +120,8 @@ class AuthenticationController extends BaseController
         $userId = api_get_user_id();
         $user2fa = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
 
+        $result = [];
+
         if (!empty($user2fa) || !empty($userId)) {
             $isAllowed = !empty($_FILES['audio']);
         } else {
@@ -191,6 +193,18 @@ class AuthenticationController extends BaseController
 
             $message = $this->plugin->get_lang('AuthentifyFailed');
 
+            $authTokenRequest = new ApiRequest();
+            $authTokenResponse = $authTokenRequest->createAuthenticationSessionToken($user);
+
+            if (empty($authTokenResponse['text'])) {
+                $varNumber = mt_rand(1, 6);
+                $authTokenResponse['text'] = $this->plugin->get_lang("AuthentifySampleText$varNumber");
+            }
+
+            $result['text'] = $authTokenResponse['text'];
+
+            ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $authTokenResponse['token']);
+
             ChamiloSession::write(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, ++$failedLogins);
 
             if ($maxAttempts && $failedLogins >= $maxAttempts) {
@@ -220,7 +234,7 @@ class AuthenticationController extends BaseController
             }
         }
 
-        echo Display::return_message(
+        $result['resultHtml'] = Display::return_message(
             $message,
             $success ? 'success' : 'warning',
             false
@@ -230,11 +244,11 @@ class AuthenticationController extends BaseController
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
 
             if (!empty($lpItemInfo)) {
-                echo '<script>window.location.href = "'
+                $result['resultHtml'] .= '<script>window.location.href = "'
                     .api_get_path(WEB_PLUGIN_PATH)
                     .'whispeakauth/authentify_password.php";</script>';
 
-                exit;
+                return $result;
             }
 
             if (!empty($quizQuestionInfo)) {
@@ -242,14 +256,14 @@ class AuthenticationController extends BaseController
 
                 ChamiloSession::write(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, true);
 
-                echo "<script>window.location.href = '".$url."';</script>";
+                $result['resultHtml'] .= "<script>window.location.href = '".$url."';</script>";
 
-                exit;
+                return $result;
             }
 
-            echo '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
+            $result['resultHtml'] .= '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
 
-            exit;
+            return $result;
         }
 
         if ($success) {
@@ -267,9 +281,9 @@ class AuthenticationController extends BaseController
                     $lpItemInfo['lp']
                 );
 
-                echo '<script>window.location.href = "'.$lpItemInfo['src'].'";</script>';
+                $result['resultHtml'] .= '<script>window.location.href = "'.$lpItemInfo['src'].'";</script>';
 
-                exit;
+                return $result;
             }
 
             if (!empty($quizQuestionInfo)) {
@@ -285,9 +299,9 @@ class AuthenticationController extends BaseController
                     $quizQuestionInfo['quiz']
                 );
 
-                echo '<script>window.location.href = "'.$url.'";</script>';
+                $result['resultHtml'] .= '<script>window.location.href = "'.$url.'";</script>';
 
-                exit;
+                return $result;
             }
 
             if (empty($lpItemInfo) && empty($quizQuestionInfo)) {
@@ -308,8 +322,12 @@ class AuthenticationController extends BaseController
             ChamiloSession::write('_user', $loggedUser);
             Login::init_user($user->getId(), true);
 
-            echo '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
+            $result['resultHtml'] .= '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
+
+            return $result;
         }
+
+        return $result;
     }
 
     /**

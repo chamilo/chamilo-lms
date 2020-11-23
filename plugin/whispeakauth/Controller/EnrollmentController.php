@@ -48,6 +48,8 @@ class EnrollmentController extends BaseController
      */
     public function ajax()
     {
+        $result = ['resultHtml' => ''];
+
         if (!$this->plugin->toolIsEnabled() || empty($_FILES['audio'])) {
             throw new \Exception(get_lang('NotAllowed'));
         }
@@ -63,13 +65,28 @@ class EnrollmentController extends BaseController
         }
 
         $request = new ApiRequest();
-        $response = $request->createEnrollment($token, $audioFilePath, $user);
+
+        try {
+            $response = $request->createEnrollment($token, $audioFilePath, $user);
+        } catch (\Exception $exception) {
+            $enrollTokenRequest = new ApiRequest();
+            $enrollTokenResponse = $enrollTokenRequest->createEnrollmentSessionToken($user);
+
+            \ChamiloSession::write(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $enrollTokenResponse['token']);
+
+            return [
+                'resultHtml' => \Display::return_message($exception->getMessage(), 'error'),
+                'text' => $enrollTokenResponse['text'],
+            ];
+        }
 
         \ChamiloSession::erase(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         $this->plugin->saveEnrollment($user, $response['speaker']);
 
-        echo \Display::return_message($this->plugin->get_lang('EnrollmentSuccess'), 'success');
+        $result['resultHtml'] .= \Display::return_message($this->plugin->get_lang('EnrollmentSuccess'), 'success');
+
+        return $result;
     }
 
     /**

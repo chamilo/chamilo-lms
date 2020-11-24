@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\IRI;
@@ -66,7 +66,7 @@ class Verb
     /**
      * @param \Xabbuh\XApi\Model\Verb $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\Verb
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\Verb
      */
     public static function fromModel(VerbModel $model)
     {

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\Account;
@@ -117,7 +117,7 @@ class StatementObject
     /**
      * @var Extensions|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Extensions", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Extensions", cascade={"all"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $activityExtensions;
@@ -167,14 +167,14 @@ class StatementObject
     /**
      * @var StatementObject[]|null
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", mappedBy="group")
      */
     public $members;
 
     /**
      * @var StatementObject|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", inversedBy="members")
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $group;
@@ -189,7 +189,7 @@ class StatementObject
     /**
      * @var StatementObject|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $actor;
@@ -197,7 +197,7 @@ class StatementObject
     /**
      * @var Verb|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Verb", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Verb", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $verb;
@@ -205,7 +205,7 @@ class StatementObject
     /**
      * @var StatementObject|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $object;
@@ -223,7 +223,7 @@ class StatementObject
     /**
      * @var Statement|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Context", inversedBy="parentActivities")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Context", inversedBy="parentActivities")
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $parentContext;
@@ -231,7 +231,7 @@ class StatementObject
     /**
      * @var Statement|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Context", inversedBy="groupingActivities")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Context", inversedBy="groupingActivities")
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $groupingContext;
@@ -239,7 +239,7 @@ class StatementObject
     /**
      * @var Statement|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Context", inversedBy="categoryActivities")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Context", inversedBy="categoryActivities")
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $categoryContext;
@@ -247,7 +247,7 @@ class StatementObject
     /**
      * @var Statement|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Context", inversedBy="otherActivities")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Context", inversedBy="otherActivities")
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $otherContext;
@@ -255,7 +255,7 @@ class StatementObject
     /**
      * @param $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\StatementObject
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject
      */
     public static function fromModel($model)
     {
@@ -305,7 +305,7 @@ class StatementObject
     /**
      * @param \Xabbuh\XApi\Model\Activity $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\StatementObject
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject
      */
     private static function fromActivity(Activity $model)
     {
@@ -358,7 +358,7 @@ class StatementObject
     /**
      * @param \Xabbuh\XApi\Model\Actor $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\StatementObject
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject
      */
     private static function fromActor(ActorModel $model)
     {
@@ -394,7 +394,7 @@ class StatementObject
     /**
      * @param \Xabbuh\XApi\Model\SubStatement $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\StatementObject
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject
      */
     private static function fromSubStatement(SubStatement $model)
     {

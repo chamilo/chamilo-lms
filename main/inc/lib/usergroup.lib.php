@@ -712,7 +712,6 @@ class UserGroup extends Model
 
         $conditions = Database::parse_conditions($options);
 
-
         if ($withClasses == true) {
             $resultClasess = Database::query($sqlClasses);
         } else {

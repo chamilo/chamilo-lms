@@ -39,6 +39,7 @@ $actionsLeft = '';
 $actionsRight = '';
 $usergroup = new UserGroup();
 $actions = '';
+$idSession = api_get_session_id();
 
 if (api_is_allowed_to_edit()) {
     if ($type === 'registered') {
@@ -81,7 +82,6 @@ if (api_is_allowed_to_edit()) {
     switch ($action) {
         case 'add_class_to_course':
             $id = $_GET['id'];
-            $idSession = api_get_session_id();
             if (!empty($id) and $idSession == 0) {
                 /* To suscribe Groups*/
                 $usergroup->subscribe_courses_to_usergroup(
@@ -102,7 +102,6 @@ if (api_is_allowed_to_edit()) {
             break;
         case 'remove_class_from_course':
             $id = $_GET['id'];
-            $idSession = api_get_session_id();
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,

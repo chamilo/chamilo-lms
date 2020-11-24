@@ -566,10 +566,11 @@ class UserGroup extends Model
         }
 
         $conditions = Database::parse_conditions($options);
-        $sql .= $conditions;
+
         if ($withClasses == true) {
             $resultClasess = Database::query($sqlClasses);
         } else {
+            $sql .= $conditions;
             $result = Database::query($sql);
         }
 
@@ -711,11 +712,11 @@ class UserGroup extends Model
 
         $conditions = Database::parse_conditions($options);
 
-        $sql .= $conditions;
 
         if ($withClasses == true) {
             $resultClasess = Database::query($sqlClasses);
         } else {
+            $sql .= $conditions;
             $result = Database::query($sql);
         }
 

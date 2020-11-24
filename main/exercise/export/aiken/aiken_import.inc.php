@@ -361,7 +361,6 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
                 $question_index++;
                 continue;
             }
-
         } elseif (preg_match('/^TEXTO_CORRECTA:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer (Spanish e-ducativa format)
             $correct_answer_index = array_search($matches[1], $answers_array);

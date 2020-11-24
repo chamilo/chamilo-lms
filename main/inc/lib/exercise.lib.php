@@ -6155,7 +6155,7 @@ EOT;
     {
         $exeId = (int) $exeId;
 
-        $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
+        $trackExerciseInfo = self::get_exercise_track_exercise_info($exeId);
 
         if (empty($trackExerciseInfo)) {
             return;

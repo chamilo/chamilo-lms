@@ -38,3 +38,4 @@ $strings['LaunchNewAttempt'] = 'Launch new attempt';
 $strings['LrsConfiguration'] = 'LRS Configuration';
 $strings['Verb'] = 'Verb';
 $strings['Actor'] = 'Actor';
+$strings['ToolTinCan'] = 'Activities';

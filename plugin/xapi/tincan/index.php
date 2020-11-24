@@ -98,7 +98,7 @@ if ($isAllowedToEdit) {
     );
 }
 
-$pageTitle = $plugin->get_title();
+$pageTitle = $plugin->get_lang('ToolTinCan');
 $pageContent = Display::return_message($plugin->get_lang('NoActivities'), 'info');
 
 if ($table->get_total_number_of_items() > 0) {

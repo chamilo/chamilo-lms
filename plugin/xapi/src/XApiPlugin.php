@@ -384,7 +384,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public function addCourseToolForTinCan($courseId)
     {
         $this->createLinkToCourseTool(
-            $this->get_title(),
+            $this->get_lang('ToolTinCan'),
             $courseId,
             null,
             'xapi/tincan/index.php'

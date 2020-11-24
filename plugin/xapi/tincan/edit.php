@@ -128,7 +128,7 @@ $actions = Display::url(
 
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_lang('ToolTinCan')];
 
 $view = new Template($langEditActivity);
 $view->assign('header', $langEditActivity);

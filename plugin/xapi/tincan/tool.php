@@ -140,7 +140,7 @@ if ($stateDocument) {
     $table->setColAttributes(2, ['class' => 'text-center']);
 }
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_lang('ToolTinCan')];
 
 $pageTitle = $toolLaunch->getTitle();
 $pageContent = '';

@@ -891,6 +891,7 @@ switch ($action) {
                 $count = $obj->getUserGroupNotInCourse(
                     $options,
                     $groupFilter,
+                    true,
                     true
                 );
                 break;
@@ -2362,8 +2363,17 @@ switch ($action) {
         $options['session_id'] = api_get_session_id();
         switch ($type) {
             case 'not_registered':
-
-            $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
+                $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                if (!empty($keyword)) {
+                    $options['where']['AND name like %?% '] = $keyword;
+                }
+                $result = $obj->getUserGroupNotInCourse(
+                    $options,
+                    $groupFilter,
+                    false,
+                    true
+                );
+            // $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
                 break;
             case 'registered':
                 $result = $obj->getUserGroupInCourse(

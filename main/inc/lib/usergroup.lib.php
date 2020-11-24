@@ -649,8 +649,7 @@ class UserGroup extends Model
         ) {
             $sessionId = (int) $options['session_id'];
             unset($options['session_id']);
-            $courseId = (int) $options['course_id'];
-            $whereClasess = " WHERE ur.session_id = $sessionId AND sc.c_id = $courseId";
+            $whereClasess = " WHERE ur.session_id != $sessionId ";
         } else {
             $withClasses = false;
         }
@@ -671,8 +670,8 @@ class UserGroup extends Model
                     " {$this->usergroup_rel_session_table} ur".
                     " LEFT OUTER  JOIN {$this->usergroup_table} u ON u.id = ur.usergroup_id".
                     " INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.id) ".
-                    " INNER JOIN `{$this->session_table}` s ON s.id = ur.session_id".
-                    " INNER JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
+                    " LEFT JOIN `{$this->session_table}` s ON s.id = ur.session_id".
+                    " LEFT JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
                     " $whereClasess ";
             }
         } else {
@@ -688,8 +687,8 @@ class UserGroup extends Model
                     " FROM".
                     " {$this->usergroup_rel_session_table} ur".
                     " LEFT OUTER  JOIN {$this->usergroup_table} u ON u.id = ur.usergroup_id".
-                    " INNER JOIN `{$this->session_table}` s ON s.id = ur.session_id".
-                    " INNER JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
+                    " LEFT JOIN `{$this->session_table}` s ON s.id = ur.session_id".
+                    " LEFT JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
                     " $whereClasess ";
             }
         }

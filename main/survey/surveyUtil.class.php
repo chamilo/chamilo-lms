@@ -667,6 +667,7 @@ class SurveyUtil
             $chartData = [];
             $options = [];
             $questionId = (int) $question['question_id'];
+
             echo '<div class="title-question">';
             echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
             echo '</div>';
@@ -737,13 +738,13 @@ class SurveyUtil
                 echo '</div>';
 
                 // displaying the table: headers
-                echo '<table class="display-survey table" id=table_'.$chartContainerId.'>';
+                echo '<table class="display-survey table" id="table_'.$chartContainerId.'">';
                 echo '	<tr>';
                 echo '		<th>&nbsp;</th>';
                 echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
                 echo '		<th>'.get_lang('Percentage').'</th>';
                 echo '		<th>'.get_lang('VisualRepresentation').'</th>';
-                echo '	<tr>';
+                echo '	</tr>';
 
                 // Displaying the table: the content
                 if (is_array($options)) {
@@ -778,15 +779,18 @@ class SurveyUtil
                             echo '0';
                         }
 
-                        echo '      </td>';
-                        echo '		<td class="center">'.round($answers_number, 2).' %</td>';
-                        echo '		<td class="center">';
+                        echo '</td>';
+                        echo '<td class="center">'.round($answers_number, 2).' %</td>';
+                        echo '<td class="center">';
                         $size = $answers_number * 2;
                         if ($size > 0) {
-                            echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'
-                                .$size.'px">&nbsp;</div>';
+                            echo '<div
+                                    style="border:1px solid #264269; background-color:#aecaf4; height:10px;
+                                    width:'.$size.'px">
+                                    &nbsp;
+                                    </div>';
                         } else {
-                            echo '<div style="text-align: left;">'.get_lang("NoDataAvailable").'</div>';
+                            echo '<div style="text-align: left;">'.get_lang('NoDataAvailable').'</div>';
                         }
                         echo ' </td>';
                         echo ' </tr>';
@@ -803,13 +807,13 @@ class SurveyUtil
                 }
 
                 // displaying the table: footer (totals)
-                echo '	<tr>';
-                echo '		<td class="total"><b>'.get_lang('Total').'</b></td>';
-                echo '		<td class="total"><b>'.$optionResult.'</b></td>';
-                echo '		<td class="total">&nbsp;</td>';
-                echo '		<td class="total">&nbsp;</td>';
-                echo '	</tr>';
-                echo '</table>';
+                echo '	<tr>
+                            <td class="total"><b>'.get_lang('Total').'</b></td>
+                            <td class="total"><b>'.$optionResult.'</b></td>
+                            <td class="total">&nbsp;</td>
+                            <td class="total">&nbsp;</td>
+                        </tr>
+                        </table>';
             }
             echo '</div>';
         }

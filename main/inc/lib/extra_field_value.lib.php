@@ -162,12 +162,12 @@ class ExtraFieldValue extends Model
 
             // see  BT#17943
             $authors = false;
-            if(
+            if (
                 $extraFieldInfo['variable'] == 'authors'
                 || $extraFieldInfo['variable'] == 'authorlp'
                 || $extraFieldInfo['variable'] == 'authorlpitem'
                 || $extraFieldInfo['variable'] == 'price'
-            ){
+            ) {
                 $authors = true;
             }
             if (!api_is_platform_admin() && $authors == true) {

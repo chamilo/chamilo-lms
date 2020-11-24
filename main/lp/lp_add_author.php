@@ -322,8 +322,8 @@ echo '</div>';
 echo '</div>';
 if ($form->validate()) {
     if (isset($_GET['sub_action']) && ($_GET['sub_action'] === 'author_view')) {
-        $authors = isset($_POST['authorItemSelect'])?$_POST['authorItemSelect']: [];
-        $items = isset($_POST['itemSelected'])?$_POST['itemSelected']: [];
+        $authors = isset($_POST['authorItemSelect']) ? $_POST['authorItemSelect'] : [];
+        $items = isset($_POST['itemSelected']) ? $_POST['itemSelected'] : [];
         $price = api_float_val($_POST['price']);
         unset($author);
         $saveExtraFieldItem = [];
@@ -368,7 +368,7 @@ if ($form->validate()) {
                     'item_id' => $saveItemId,
                 ]);
                 $lastEdited = $values;
-                if(isset($options[$author])) {
+                if (isset($options[$author])) {
                     $saveAuthor[] = $options[$author];
                 }
             }

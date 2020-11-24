@@ -156,9 +156,6 @@ class AuthenticationController extends BaseController
 
         $token = \ChamiloSession::read(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
-        $request = new ApiRequest();
-        $success = $request->performAuthentication($token, $user, $audioFilePath);
-
         \ChamiloSession::erase(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         /** @var array $lpItemInfo */
@@ -166,7 +163,21 @@ class AuthenticationController extends BaseController
         /** @var array $quizQuestionInfo */
         $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
-        $message = $this->plugin->get_lang('AuthentifySuccess');
+        $success = true;
+
+        $request = new ApiRequest();
+
+        try {
+            $request->performAuthentication($token, $user, $audioFilePath);
+
+            $message = $this->plugin->get_lang('AuthentifySuccess');
+        } catch (\Exception $exception) {
+            $message = $this->plugin->get_lang('AuthentifyFailed')
+                .PHP_EOL
+                .$exception->getMessage();
+
+            $success = false;
+        }
 
         if (!$success) {
             if (!empty($lpItemInfo)) {
@@ -191,8 +202,6 @@ class AuthenticationController extends BaseController
                 $this->plugin->addAuthenticationAttempt(LogEvent::STATUS_FAILED, $user->getId());
             }
 
-            $message = $this->plugin->get_lang('AuthentifyFailed');
-
             $authTokenRequest = new ApiRequest();
             $authTokenResponse = $authTokenRequest->createAuthenticationSessionToken($user);
 
@@ -210,8 +219,8 @@ class AuthenticationController extends BaseController
             if ($maxAttempts && $failedLogins >= $maxAttempts) {
                 $message .= PHP_EOL
                     .'<span data-reach-attempts="true">'.$this->plugin->get_lang('MaxAttemptsReached').'</span>'
-                    .PHP_EOL
-                    .'<br><strong>'
+                    .PHP_EOL.PHP_EOL
+                    .'<strong>'
                     .$this->plugin->get_lang('LoginWithUsernameAndPassword')
                     .'</strong>';
 
@@ -224,7 +233,7 @@ class AuthenticationController extends BaseController
                 $message .= PHP_EOL.$this->plugin->get_lang('TryAgain');
 
                 if ('true' === api_get_setting('allow_lostpassword')) {
-                    $message .= '<br>'
+                    $message .= PHP_EOL
                         .Display::url(
                             get_lang('LostPassword'),
                             api_get_path(WEB_CODE_PATH).'auth/lostPassword.php',
@@ -235,7 +244,7 @@ class AuthenticationController extends BaseController
         }
 
         $result['resultHtml'] = Display::return_message(
-            $message,
+            nl2br($message),
             $success ? 'success' : 'warning',
             false
         );
@@ -339,6 +348,7 @@ class AuthenticationController extends BaseController
 
         $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
         $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
+        $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 
         $pageTitle = $this->plugin->get_title();
 

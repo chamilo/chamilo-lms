@@ -141,8 +141,14 @@ $htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
 $htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
 
 $htmlHeadXtra[] = '<script>
+
 async function exportToPdf() {
     window.jsPDF = window.jspdf.jsPDF;
+
+    $(".question-item img, #pdf_table img").hide();
+    $(".question-item video, #pdf_table video").hide();
+    $(".question-item audio, #pdf_table audio").hide();
+
     var doc = document.getElementById("question_results");
     var pdf = new jsPDF("", "pt", "a4");
     //var a4Height = 841.89;
@@ -163,7 +169,6 @@ async function exportToPdf() {
     var pages = [];
     var page = 1;
     for (var i = 0; i < divs.length; i += 1) {
-        const svg = divs[i].querySelector("svg");
         // Two parameters after addImage control the size of the added image,
         // where the page height is compressed according to the width-height ratio column of a4 paper.
         if (!pages[page]) {
@@ -171,11 +176,6 @@ async function exportToPdf() {
         }
 
         var positionY = 180;
-        /*var positionY = headerY + 180;
-        if (positionY > 800) {
-             pdf.addPage();
-             page++;
-        }*/
         pages[page] += 1;
         var diff = 250;
         if (page > 1) {
@@ -191,27 +191,19 @@ async function exportToPdf() {
         pdf.setFontSize(12);
         pdf.text(40, positionY, title.text());
 
+        var svg = divs[i].querySelector("svg");
         svg2pdf(svg, pdf, {
               xOffset: 10,
-              yOffset: positionY+10,
-              scale: 0.5
+              yOffset: positionY +  10,
+              scale: 0.45
         });
 
-        const tables = divs[i].getElementsByClassName("table");
-        var config= {
-            ignoreElements: function (element) {
-                if (element.nodeName == "IMG" || element.nodeName =="VIDEO"|| element.nodeName =="AUDIO") {
-                    return true;
-                }
-
-                return false;
-            }
-        };
-
+        var tables = divs[i].getElementsByClassName("display-survey");
+        var config= {};
         for (var j = 0; j < tables.length; j += 1) {
             await html2canvas(tables[j], config).then(function(canvas) {
                 var pageData = canvas.toDataURL("image/jpeg", 0.8);
-                pdf.addImage(pageData, "JPEG", 40, positionY + 210, 520, 530.28/canvas.width * canvas.height);
+                pdf.addImage(pageData, "JPEG", 40, positionY + 200, 500, 500/canvas.width * canvas.height);
             });
         }
 
@@ -219,37 +211,11 @@ async function exportToPdf() {
              pdf.addPage();
              page++;
         }
-
-        /*await html2canvas(divs[i], {}).then(function(canvas) {
-            // Returns the image data URL, parameter: image format and clarity (0-1)
-            var pageData = canvas.toDataURL("image/jpeg", 0.8);
-
-            // Two parameters after addImage control the size of the added image,
-            // where the page height is compressed according to the width-height ratio column of a4 paper.
-            if (!pages[page]) {
-                pages[page] = 0;
-            }
-            pages[page] += 1;
-
-            var positionY = 200;
-            var diff = 250;
-            if (page > 1) {
-                positionY = 60;
-                diff = 220;
-            }
-            if (pages[page] > 1) {
-                positionY = pages[page] * diff + 10;
-            }
-
-            pdf.addImage(url, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
-
-            //pdf.addImage(pageData, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
-            if (i > 0 && (i -1) % 2 === 0) {
-                 pdf.addPage();
-                 page++;
-            }
-        });*/
     }
+
+    $(".question-item img, #pdf_table img").show();
+    $(".question-item video, #pdf_table video").show();
+    $(".question-item audio, #pdf_table audio").show();
 
     pdf.save("reporting.pdf");
 }

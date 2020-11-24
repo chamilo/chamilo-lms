@@ -4627,7 +4627,6 @@ EOT;
         }
 
         $question_list_answers = [];
-        $media_list = [];
         $category_list = [];
         $loadChoiceFromSession = false;
         $fromDatabase = true;
@@ -5987,15 +5986,24 @@ EOT;
                     }
                     foreach ($notificationList as $attemptData) {
                         $skipNotification = false;
-                        $skipNotificationList = isset($attemptData['skip_notification_if_user_in_extra_field']) ? $attemptData['skip_notification_if_user_in_extra_field'] : [];
+                        $skipNotificationList = isset($attemptData['send_notification_if_user_in_extra_field']) ? $attemptData['send_notification_if_user_in_extra_field'] : [];
                         if (!empty($skipNotificationList)) {
                             foreach ($skipNotificationList as $skipVariable => $skipValues) {
                                 $userExtraFieldValue = $extraFieldValueUser->get_values_by_handler_and_field_variable(
                                     $studentId,
                                     $skipVariable
                                 );
-                                if (!empty($userExtraFieldValue) && isset($userExtraFieldValue['value'])) {
-                                    if (in_array($userExtraFieldValue['value'], $skipValues)) {
+
+                                if (empty($userExtraFieldValue)) {
+                                    $skipNotification = true;
+                                    break;
+                                } else {
+                                    if (isset($userExtraFieldValue['value'])) {
+                                        if (!in_array($userExtraFieldValue['value'], $skipValues)) {
+                                            $skipNotification = true;
+                                            break;
+                                        }
+                                    } else {
                                         $skipNotification = true;
                                         break;
                                     }
@@ -6155,7 +6163,7 @@ EOT;
     {
         $exeId = (int) $exeId;
 
-        $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
+        $trackExerciseInfo = self::get_exercise_track_exercise_info($exeId);
 
         if (empty($trackExerciseInfo)) {
             return;

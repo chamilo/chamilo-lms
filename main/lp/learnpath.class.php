@@ -4946,7 +4946,8 @@ class learnpath
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
                 if ($debug) {
-                    error_log("Skip saving score with value: $score");
+                    error_log("Return false: Dont save score: $score");
+                    error_log("progress: $progress");
                 }
 
                 return false;

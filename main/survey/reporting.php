@@ -145,14 +145,13 @@ $htmlHeadXtra[] = '<script>
 async function exportToPdf() {
     window.jsPDF = window.jspdf.jsPDF;
 
-    $(".question-item img").hide();
-    $(".question-item video").hide();
-    $(".question-item audio").hide();
+    $(".question-item img, #pdf_table img").hide();
+    $(".question-item video, #pdf_table video").hide();
+    $(".question-item audio, #pdf_table audio").hide();
 
     var doc = document.getElementById("question_results");
     var pdf = new jsPDF("", "pt", "a4");
     //var a4Height = 841.89;
-
 
     // Adding title
     pdf.setFontSize(16);
@@ -214,9 +213,9 @@ async function exportToPdf() {
         }
     }
 
-    $(".question-item img").show();
-    $(".question-item video").show();
-    $(".question-item audio").show();
+    $(".question-item img, #pdf_table img").show();
+    $(".question-item video, #pdf_table video").show();
+    $(".question-item audio, #pdf_table audio").show();
 
     pdf.save("reporting.pdf");
 }

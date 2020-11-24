@@ -116,29 +116,23 @@ class ApiRequest
 
         $langIso = api_get_language_isocode($user ? $user->getLanguage() : null);
 
-        try {
-            $this->sendRequest(
-                'post',
-                'auth',
-                $token,
-                $langIso,
+        $this->sendRequest(
+            'post',
+            'auth',
+            $token,
+            $langIso,
+            [
                 [
-                    [
-                        'name' => 'speaker',
-                        'contents' => $wsid->getValue(),
-                    ],
-                    [
-                        'name' => 'file',
-                        'contents' => fopen($audioFilePath, 'r'),
-                        'filename' => basename($audioFilePath),
-                    ],
-                ]
-            );
-
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+                    'name' => 'speaker',
+                    'contents' => $wsid->getValue(),
+                ],
+                [
+                    'name' => 'file',
+                    'contents' => fopen($audioFilePath, 'r'),
+                    'filename' => basename($audioFilePath),
+                ],
+            ]
+        );
     }
 
     /**
@@ -180,11 +174,19 @@ class ApiRequest
             $responseBody = $requestException->getResponse()->getBody()->getContents();
             $json = json_decode($responseBody, true);
 
-            if (empty($json['message'])) {
-                throw new \Exception($requestException->getMessage());
-            }
+            $message = '';
 
-            $message = is_array($json['message']) ? implode(PHP_EOL, $json['message']) : $json['message'];
+            if (isset($json['asserts'])) {
+                foreach ($json['asserts'] as $assert) {
+                    if (in_array($assert['value'], ['valid_audio', 'invalid_audio'])) {
+                        $message .= $assert['message'].PHP_EOL;
+                    }
+                }
+            } elseif (empty($json['message'])) {
+                $message = $requestException->getMessage();
+            } else {
+                $message = is_array($json['message']) ? implode(PHP_EOL, $json['message']) : $json['message'];
+            }
 
             throw new \Exception($message);
         } catch (Exception $exception) {

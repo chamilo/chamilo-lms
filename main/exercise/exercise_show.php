@@ -810,11 +810,7 @@ foreach ($questionList as $questionId) {
 
     $score = [];
     if ($show_results) {
-        $scorePassed = $my_total_score >= $my_total_weight;
-        if (function_exists('bccomp')) {
-            $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-            $scorePassed = $compareResult === 1 || $compareResult === 0;
-        }
+        $scorePassed = ExerciseLib::scorePassed($my_total_score, $my_total_weight);
         $score['result'] = ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,

@@ -4627,7 +4627,6 @@ EOT;
         }
 
         $question_list_answers = [];
-        $media_list = [];
         $category_list = [];
         $loadChoiceFromSession = false;
         $fromDatabase = true;
@@ -4693,12 +4692,7 @@ EOT;
 
                 $my_total_score = $result['score'];
                 $my_total_weight = $result['weight'];
-
-                $scorePassed = $my_total_score >= $my_total_weight;
-                if (function_exists('bccomp')) {
-                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-                    $scorePassed = $compareResult === 1 || $compareResult === 0;
-                }
+                $scorePassed = self::scorePassed($my_total_score, $my_total_weight);
 
                 // Category report
                 $category_was_added_for_this_test = false;
@@ -4819,7 +4813,7 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-                    if (false == $showQuestionScore) {
+                    if (false === $showQuestionScore) {
                         $score = [];
                     }
 
@@ -5242,7 +5236,7 @@ EOT;
         $countPendingQuestions = 0
     ) {
         $hide = (int) $objExercise->getPageConfigurationAttribute('hide_total_score');
-        if ($hide === 1) {
+        if (1 === $hide) {
             return '';
         }
 
@@ -5992,15 +5986,24 @@ EOT;
                     }
                     foreach ($notificationList as $attemptData) {
                         $skipNotification = false;
-                        $skipNotificationList = isset($attemptData['skip_notification_if_user_in_extra_field']) ? $attemptData['skip_notification_if_user_in_extra_field'] : [];
+                        $skipNotificationList = isset($attemptData['send_notification_if_user_in_extra_field']) ? $attemptData['send_notification_if_user_in_extra_field'] : [];
                         if (!empty($skipNotificationList)) {
                             foreach ($skipNotificationList as $skipVariable => $skipValues) {
                                 $userExtraFieldValue = $extraFieldValueUser->get_values_by_handler_and_field_variable(
                                     $studentId,
                                     $skipVariable
                                 );
-                                if (!empty($userExtraFieldValue) && isset($userExtraFieldValue['value'])) {
-                                    if (in_array($userExtraFieldValue['value'], $skipValues)) {
+
+                                if (empty($userExtraFieldValue)) {
+                                    $skipNotification = true;
+                                    break;
+                                } else {
+                                    if (isset($userExtraFieldValue['value'])) {
+                                        if (!in_array($userExtraFieldValue['value'], $skipValues)) {
+                                            $skipNotification = true;
+                                            break;
+                                        }
+                                    } else {
                                         $skipNotification = true;
                                         break;
                                     }
@@ -6160,7 +6163,7 @@ EOT;
     {
         $exeId = (int) $exeId;
 
-        $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
+        $trackExerciseInfo = self::get_exercise_track_exercise_info($exeId);
 
         if (empty($trackExerciseInfo)) {
             return;
@@ -6184,5 +6187,19 @@ EOT;
             $exeId.'-'.$trackExerciseInfo['exe_user_id'],
             api_get_utc_datetime()
         );
+    }
+
+    public static function scorePassed($score, $total)
+    {
+        $compareResult = bccomp($score, $total, 3);
+        $scorePassed = 1 === $compareResult || 0 === $compareResult;
+        if (false === $scorePassed) {
+            $epsilon = 0.00001;
+            if (abs($score - $total) < $epsilon) {
+                $scorePassed = true;
+            }
+        }
+
+        return $scorePassed;
     }
 }

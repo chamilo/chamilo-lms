@@ -1689,11 +1689,11 @@ HOTSPOT;
                 get_lang('Course'),
                 get_lang('Session'),
                 get_lang('Quiz'),
-                get_lang('Link')
+                get_lang('LinkToTheQuestionListOfThatTest')
             ];
 
             $title = Display::div(
-                'This question is used in the following tests:',
+                get_lang('QuestionUsedInTheFollowingTests'),
                 [
                     'class' => 'section-title',
                     'style' => 'margin-top: 25px; border-bottom: none'

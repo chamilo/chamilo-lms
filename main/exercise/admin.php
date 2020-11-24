@@ -422,6 +422,7 @@ if ($newQuestion || $editQuestion) {
             echo '</div>';
         } else {
             require 'question_admin.inc.php';
+            ExerciseLib::showExtraInfoWhereQuestionUsed($objQuestion->iid);
         }
     }
 }

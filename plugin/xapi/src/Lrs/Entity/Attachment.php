@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\Attachment as AttachmentModel;
@@ -35,7 +35,7 @@ class Attachment
     public $identifier;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Statement", inversedBy="attachments")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Statement", inversedBy="attachments")
      */
     public $statement;
 
@@ -105,7 +105,7 @@ class Attachment
     /**
      * @param \Xabbuh\XApi\Model\Attachment $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\Attachment
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\Attachment
      */
     public static function fromModel(AttachmentModel $model)
     {

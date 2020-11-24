@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\Statement as StatementModel;
@@ -37,7 +37,7 @@ class Statement
     /**
      * @var StatementObject
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $actor;
@@ -45,7 +45,7 @@ class Statement
     /**
      * @var Verb
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Verb", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Verb", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $verb;
@@ -53,7 +53,7 @@ class Statement
     /**
      * @var StatementObject
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $object;
@@ -61,7 +61,7 @@ class Statement
     /**
      * @var Result
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Result", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Result", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $result;
@@ -69,7 +69,7 @@ class Statement
     /**
      * @var StatementObject
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $authority;
@@ -91,7 +91,7 @@ class Statement
     /**
      * @var Context
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Context", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Context", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $context;
@@ -106,14 +106,14 @@ class Statement
     /**
      * @var Attachment[]|null
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Attachment", mappedBy="statement", cascade={"ALL"})
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Attachment", mappedBy="statement", cascade={"ALL"})
      */
     public $attachments;
 
     /**
      * @param \Xabbuh\XApi\Model\Statement $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\Statement
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\Statement
      */
     public static function fromModel(StatementModel $model)
     {

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\Extensions as ExtensionsModel;
@@ -41,7 +41,7 @@ class Extensions
     /**
      * @param \Xabbuh\XApi\Model\Extensions $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\Extensions
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\Extensions
      */
     public static function fromModel(ExtensionsModel $model)
     {

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\Result as ResultModel;
@@ -98,7 +98,7 @@ class Result
     /**
      * @var Extensions|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Extensions", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Extensions", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $extensions;
@@ -106,7 +106,7 @@ class Result
     /**
      * @param \Xabbuh\XApi\Model\Result $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\Result
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\Result
      */
     public static function fromModel(ResultModel $model)
     {

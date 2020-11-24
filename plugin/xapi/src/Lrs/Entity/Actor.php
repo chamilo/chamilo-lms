@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\Account;
@@ -96,7 +96,7 @@ class Actor
     /**
      * @param \Xabbuh\XApi\Model\Actor $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\Actor
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\Actor
      */
     public static function fromModel(ActorModel $model)
     {

@@ -4,7 +4,7 @@
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
-use Chamilo\PluginBundle\Entity\XApi\Statement as StatementEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Statement as StatementEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

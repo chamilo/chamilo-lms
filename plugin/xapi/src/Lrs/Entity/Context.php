@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\PluginBundle\Entity\XApi;
+namespace Chamilo\PluginBundle\Entity\XApi\Lrs;
 
 use Doctrine\ORM\Mapping as ORM;
 use Xabbuh\XApi\Model\Context as ContextModel;
@@ -44,7 +44,7 @@ class Context
     /**
      * @var StatementObject|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $instructor;
@@ -52,7 +52,7 @@ class Context
     /**
      * @var StatementObject|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $team;
@@ -67,28 +67,28 @@ class Context
     /**
      * @var StatementObject[]|null
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", mappedBy="parentContext", cascade={"ALL"})
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", mappedBy="parentContext", cascade={"ALL"})
      */
     public $parentActivities;
 
     /**
      * @var StatementObject[]|null
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", mappedBy="groupingContext", cascade={"ALL"})
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", mappedBy="groupingContext", cascade={"ALL"})
      */
     public $groupingActivities;
 
     /**
      * @var StatementObject[]|null
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", mappedBy="categoryContext", cascade={"ALL"})
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", mappedBy="categoryContext", cascade={"ALL"})
      */
     public $categoryActivities;
 
     /**
      * @var StatementObject[]|null
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\StatementObject", mappedBy="otherContext", cascade={"ALL"})
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject", mappedBy="otherContext", cascade={"ALL"})
      */
     public $otherActivities;
 
@@ -123,7 +123,7 @@ class Context
     /**
      * @var Extensions|null
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Extensions", cascade={"ALL"})
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Lrs\Extensions", cascade={"ALL"})
      * @ORM\JoinColumn(referencedColumnName="identifier")
      */
     public $extensions;
@@ -131,7 +131,7 @@ class Context
     /**
      * @param \Xabbuh\XApi\Model\Context $model
      *
-     * @return \Chamilo\PluginBundle\Entity\XApi\Context
+     * @return \Chamilo\PluginBundle\Entity\XApi\Lrs\Context
      */
     public static function fromModel(ContextModel $model)
     {

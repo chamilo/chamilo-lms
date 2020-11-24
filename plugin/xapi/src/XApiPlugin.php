@@ -2,18 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\Entity\XApi\Actor as ActorEntity;
-use Chamilo\PluginBundle\Entity\XApi\Attachment as AttachmentEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Actor as ActorEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Attachment as AttachmentEntity;
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
-use Chamilo\PluginBundle\Entity\XApi\Context as ContextEntity;
-use Chamilo\PluginBundle\Entity\XApi\Extensions as ExtensionsEntity;
-use Chamilo\PluginBundle\Entity\XApi\Result as ResultEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Context as ContextEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Extensions as ExtensionsEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Result as ResultEntity;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
-use Chamilo\PluginBundle\Entity\XApi\Statement as StatementEntity;
-use Chamilo\PluginBundle\Entity\XApi\StatementObject as StatementObjectEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Statement as StatementEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject as StatementObjectEntity;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
-use Chamilo\PluginBundle\Entity\XApi\Verb as VerbEntity;
+use Chamilo\PluginBundle\Entity\XApi\Lrs\Verb as VerbEntity;
 use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;

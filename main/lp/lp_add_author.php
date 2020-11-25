@@ -322,8 +322,8 @@ echo '</div>';
 echo '</div>';
 if ($form->validate()) {
     if (isset($_GET['sub_action']) && ($_GET['sub_action'] === 'author_view')) {
-        $authors = $_POST['authorItemSelect'];
-        $items = $_POST['itemSelected'];
+        $authors = isset($_POST['authorItemSelect']) ? $_POST['authorItemSelect'] : [];
+        $items = isset($_POST['itemSelected']) ? $_POST['itemSelected'] : [];
         $price = api_float_val($_POST['price']);
         unset($author);
         $saveExtraFieldItem = [];
@@ -333,9 +333,6 @@ if ($form->validate()) {
             $itemName = $item->name;
             $itemId = $item->iId;
             if (isset($items[$itemId])) {
-                if (count($authors) == 0) {
-                    $saveExtraFieldItem[$itemId][0] = 0;
-                }
                 foreach ($authors as $author) {
                     if ($author == 0 || $removeExist == 1) {
                         $saveExtraFieldItem[$itemId][0] = 0;
@@ -358,8 +355,7 @@ if ($form->validate()) {
             }
         }
 
-        if (count($saveExtraFieldItem) > 0) {
-            $messages = '';
+        if (count($saveExtraFieldItem) > 0 || $price > 0) {
             $lastEdited = [];
             foreach ($saveExtraFieldItem as $saveItemId => $values) {
                 $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -372,10 +368,12 @@ if ($form->validate()) {
                     'item_id' => $saveItemId,
                 ]);
                 $lastEdited = $values;
-                $saveAuthor[] = $options[$author];
+                if (isset($options[$author])) {
+                    $saveAuthor[] = $options[$author];
+                }
             }
             $saveAuthor = array_unique($saveAuthor);
-            $messages .= implode(' / ', $saveAuthor);
+            $messages = implode(' / ', $saveAuthor);
             $currentUrl = api_request_uri();
             $redirect = false;
             $sms = [];

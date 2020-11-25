@@ -214,7 +214,9 @@ function aiken_import_exercise($file)
                 $answer->new_position[$key] = $key;
                 $answer->new_comment[$key] = '';
                 // Correct answers ...
-                if (in_array($key, $question_array['correct_answers'])) {
+                if (isset($question_array['correct_answers']) &&
+                    in_array($key, $question_array['correct_answers'])
+                ) {
                     $answer->new_correct[$key] = 1;
                     if (isset($question_array['feedback'])) {
                         $answer->new_comment[$key] = $question_array['feedback'];

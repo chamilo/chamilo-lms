@@ -228,6 +228,7 @@ $form_search = new FormValidator(
 $form_search->addHidden('from', Security::remove_XSS($from));
 $form_search->addHidden('session_id', $sessionId);
 $form_search->addHidden('id_session', $sessionId);
+$form_search->addHidden('cidReq', $courseCode);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('SearchUsers'));
 echo Display::toolbarAction(

@@ -76,28 +76,33 @@ if (Security::check_token('post') && (
     $hiddenFields['sec_token'] = Security::get_token();
     CourseSelectForm::display_form($course, $hiddenFields, true);
 } else {
-    $table_c = Database::get_main_table(TABLE_MAIN_COURSE);
-    $table_cu = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $user_info = api_get_user_info();
     $course_info = api_get_course_info();
 
-    $courseList = CourseManager::get_courses_list_by_user_id(
-        $user_info['user_id'],
+    $courseList = CourseManager::getCoursesFollowedByUser(
+        api_get_user_id(),
+        COURSEMANAGER,
+        null,
+        null,
+        null,
+        null,
         false,
+        null,
+        null,
         false,
-        false,
-        [$course_info['real_id']]
+        'ORDER BY c.title'
     );
 
-    if (empty($courseList)) {
-        echo Display::return_message(get_lang('No destination course available'), 'normal');
-    } else {
-        $options = [];
+    $courses = [];
         foreach ($courseList as $courseItem) {
-            $courseInfo = api_get_course_info_by_id($courseItem['real_id']);
-            $options[$courseInfo['code']] = $courseInfo['title'].' ('.$courseInfo['code'].')';
+        if ($courseItem['real_id'] == $course_info['real_id']) {
+            continue;
+        }
+        $courses[$courseItem['code']] = $courseItem['title'].' ('.$courseItem['code'].')';
         }
 
+    if (empty($courses)) {
+        echo Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal');
+    } else {
         $form = new FormValidator(
             'copy_course',
             'post',

@@ -611,11 +611,11 @@ if (api_is_western_name_order()) {
 $table->set_header(5, get_lang('Login'));
 $table->set_header(6, get_lang('e-mail'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('active'), true, 'width="15px"');
-$table->set_header(9, get_lang('Registration date'), true, 'width="90px"');
-$table->set_header(10, get_lang('Request type'), true, 'width="15px"');
-$table->set_header(11, get_lang('Request date'), true, 'width="15px"');
-$table->set_header(12, get_lang('Action'), false, 'width="220px"');
+$table->set_header(8, get_lang('active'));
+$table->set_header(9, get_lang('Registration date'));
+$table->set_header(10, get_lang('Request type'));
+$table->set_header(11, get_lang('Request date'));
+$table->set_header(12, get_lang('Action'), false);
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');

@@ -87,7 +87,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $html .= $includeFile;
 
             $html .= '<script type="text/javascript" charset="utf-8">
-            $(document).ready(function () {
+            $(function() {
                 $(".add_img_link").on("click", function(e){
                     e.preventDefault();
                     e.stopPropagation();
@@ -434,7 +434,9 @@ class UniqueAnswerImage extends UniqueAnswer
             }
             $header .= '<th>'.get_lang('Answer').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';
-            $header .= '<th>'.get_lang('Comment').'</th>';
+            if (false === $exercise->hideComment) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
             $header .= '</tr>';
         } else {
             $header = parent::return_header($exercise, $counter, $score);

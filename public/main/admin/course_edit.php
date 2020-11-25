@@ -271,6 +271,14 @@ $extra = $extra_field->addElements(
     true
 );
 
+if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')) {
+    $urls = UrlManager::get_access_url_from_course($courseId);
+    $urlToString = '';
+    foreach ($urls as $url) {
+        $urlToString .= $url['url'].'<br />';
+    }
+    $form->addLabel('URLs', $urlToString);
+}
 $htmlHeadXtra[] = '
 <script>
 $(function() {
@@ -430,10 +438,8 @@ if ($form->validate()) {
     Display::addFlash(Display::return_message(get_lang('Item updated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));
-        header('Location: course_list.php');
-    } else {
-        header('Location: course_list.php');
     }
+    header('Location: course_list.php');
     exit;
 }
 
@@ -442,6 +448,10 @@ Display::display_header($tool_name);
 echo '<div class="actions">';
 echo Display::url(Display::return_icon('back.png', get_lang('Back')), api_get_path(WEB_CODE_PATH).'admin/course_list.php');
 echo Display::url(Display::return_icon('course_home.png', get_lang('Course homepage')), $courseInfo['course_public_url'], ['target' => '_blank']);
+echo Display::url(
+    Display::return_icon('info2.png', get_lang('Information')),
+    api_get_path(WEB_CODE_PATH)."admin/course_information.php?code=$courseCode"
+);
 echo '</div>';
 
 echo "<script>

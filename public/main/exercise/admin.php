@@ -130,7 +130,7 @@ if (!empty($_GET['action']) && 'exportqti2' == $_GET['action'] && !empty($_GET['
 }
 
 // Exercise object creation.
-if (!is_object($objExercise)) {
+if (!($objExercise instanceof Exercise)) {
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
         $objExercise = new Exercise();
@@ -140,12 +140,12 @@ if (!is_object($objExercise)) {
             $showPagination = true;
         }
         $objExercise->read($exerciseId, $parseQuestionList);
+        Session::write('objExercise', $objExercise);
     }
-    // saves the object into the session
-    Session::write('objExercise', $objExercise);
 }
 // Exercise can be edited in their course.
 if (empty($objExercise)) {
+    Session::erase('objExercise');
     header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
     exit;
 }
@@ -444,7 +444,6 @@ if (EXERCISE_FEEDBACK_TYPE_EXAM == $objExercise->getFeedbackType()) {
     echo Display::return_message(get_lang('This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.'), 'normal');
 }
 
-Session::write('objExercise', $objExercise);
 Session::write('objQuestion', $objQuestion);
 Session::write('objAnswer', $objAnswer);
 Display::display_footer();

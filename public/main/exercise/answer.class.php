@@ -46,8 +46,6 @@ class Answer
     private $exercise;
 
     /**
-     * constructor of the class.
-     *
      * @author Olivier Brouckaert
      *
      * @param int      $questionId that answers belong to

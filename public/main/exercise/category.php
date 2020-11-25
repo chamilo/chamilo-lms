@@ -147,6 +147,6 @@ switch ($action) {
         break;
 }
 
-Display::display_header('', get_lang('Test'));
+Display::display_header();
 echo $content;
 Display::display_footer();

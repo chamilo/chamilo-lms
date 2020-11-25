@@ -91,7 +91,7 @@ function import_exercise($file)
         return 'UplZipCorrupt';
     }
 
-    $baseWorkDir .= $uploadPath;
+    $baseWorkDir = $baseWorkDir.$uploadPath;
 
     // find the different manifests for each question and parse them.
     $exerciseHandle = opendir($baseWorkDir);

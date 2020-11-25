@@ -23,33 +23,63 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$tool_name = get_lang('Completely delete this course');
-
-if (isset($_GET['delete']) && 'yes' === $_GET['delete']) {
-    CourseManager::delete_course($_course['sysCode']);
-
-    // DELETE CONFIRMATION MESSAGE
-    Session::erase('_cid');
-    Session::erase('_real_cid');
-    $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
-    $message .= get_lang('has been deleted');
-
-    Display::addFlash(Display::return_message($message, 'warning', false));
-    $url = api_get_path(WEB_CODE_PATH).'index/user_portal.php';
-    header('Location: '.$url);
-    exit;
+$tool_name = get_lang('DelCourse');
+$type_info_message = 'warning';
+if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && $_GET['course_code'] && !empty($_GET['course_code'])) {
+    if ($current_course_code == $_GET['course_code']) {
+        CourseManager::delete_course($_course['sysCode']);
+        // DELETE CONFIRMATION MESSAGE
+        Session::erase('_cid');
+        Session::erase('_real_cid');
+        $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
+        $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
+        $message .= get_lang('HasDel');
+        $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';
+    } else {
+        /* message if code course is incorrect */
+        $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
+        $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
+        $message .= '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
+        $message .= '<p><a class="btn btn-primary" href="'
+            .api_get_path(WEB_CODE_PATH)
+            .'course_info/delete_course.php?'
+            .api_get_cidreq()
+            .'">'.get_lang('BackToPreviousPage').'</a>';
+        $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';
+        $type_info_message = 'error';
+    }
 } else {
-    $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
-    $message .= '<p>'.get_lang('Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?').'</p>';
-    $message .= '<p><a class="btn btn-primary"
-        href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
-        get_lang('No').'</a>&nbsp;<a class="btn btn-danger" href="'.api_get_self().'?delete=yes&'.api_get_cidreq().'">'.
-        get_lang('Yes').'</a></p>';
+    $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
+    $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
+    $message .= '<p>'.get_lang('ByDel').'</p>';
+    $message .= '<p><span class="form_required">*</span>'
+        .get_lang('CourseCodeConfirmation')
+        .'&nbsp;<input type="text" name="course_code" id="course_code"></p>';
+
+    $message .= '<p>';
+    $message .= '<button class="btn btn-danger delete-course">'.get_lang('ValidateChanges').'</button>';
+    $message .= '&nbsp;';
+    $message .= '<a class="btn btn-primary"href="'
+        .api_get_path(WEB_CODE_PATH)
+        .'course_info/maintenance.php?'
+        .api_get_cidreq().'">'
+        .get_lang('No')
+        .'</a>';
+    $message .= '</p>';
     $interbreadcrumb[] = [
         'url' => 'maintenance.php',
-        'name' => get_lang('Backup'),
+        'name' => get_lang('Maintenance'),
     ];
-    $tpl = new Template($tool_name);
-    $tpl->assign('content', Display::return_message($message, 'warning', false));
-    $tpl->display_one_col_template();
 }
+    $htmlHeadXtra[] = '<script>
+$(function(){
+	/* Asking by course code to confirm recycling*/
+	$(".delete-course").on("click",function(){
+		window.location ="'.api_get_self().'?delete=yes&'.api_get_cidreq().'&course_code=" + $("#course_code").val();
+	})
+})
+
+</script>';
+$tpl = new Template($tool_name);
+$tpl->assign('content', Display::return_message($message, $type_info_message, false));
+$tpl->display_one_col_template();

@@ -399,18 +399,17 @@ if ($form->validate()) {
         $email = $user['email'];
         $phone = $user['phone'];
         $username = isset($user['username']) ? $user['username'] : $userInfo['username'];
-        $status = intval($user['status']);
-        $platform_admin = intval($user['platform_admin']);
-        $send_mail = intval($user['send_mail']);
-        $reset_password = intval($user['reset_password']);
+        $status = (int) $user['status'];
+        $platform_admin = (int) $user['platform_admin'];
+        $send_mail = (int) $user['send_mail'];
+        $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
         $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
 
+        $expiration_date = null;
         if (!$user_data['platform_admin'] && '1' == $user['radio_expiration_date']) {
             $expiration_date = $user['expiration_date'];
-        } else {
-            $expiration_date = null;
         }
 
         $active = $user_data['platform_admin'] ? 1 : intval($user['active']);

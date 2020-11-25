@@ -21,6 +21,7 @@ if (!api_get_multiple_access_url()) {
 $first_letter_course = '';
 $courses = [];
 $url_list = [];
+$users = [];
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
@@ -45,6 +46,10 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $courses = is_array($_POST['course_list']) ? $_POST['course_list'] : [];
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
     $first_letter_course = $_POST['first_letter_course'];
+
+    foreach ($users as $key => $value) {
+        $users[$key] = intval($value);
+    }
 
     if (1 == $form_sent) {
         if (0 == count($courses) || 0 == count($url_list)) {

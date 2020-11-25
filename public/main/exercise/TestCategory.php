@@ -30,6 +30,190 @@ class TestCategory
         $this->description = '';
     }
 
+
+    /**
+     * return the TestCategory object with id=in_id.
+     *
+     * @param int $id
+     * @param int $courseId
+     *
+     * @return TestCategory
+     */
+    public function getCategory($id, $courseId = 0)
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $id = (int) $id;
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $sql = "SELECT * FROM $table
+                WHERE id = $id AND c_id = ".$courseId;
+        $res = Database::query($sql);
+
+        if (Database::num_rows($res)) {
+            $row = Database::fetch_array($res);
+
+            $this->id = $row['id'];
+            $this->name = $row['title'];
+            $this->description = $row['description'];
+
+            return $this;
+        }
+
+        return false;
+    }
+
+    /**
+     * Save TestCategory in the database if name doesn't exists.
+     *
+     * @param int $courseId
+     *
+     * @return bool
+     */
+    public function save($courseId = 0)
+    {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+
+        // check if name already exists
+        $sql = "SELECT count(*) AS nb FROM $table
+                WHERE title = '".Database::escape_string($this->name)."' AND c_id = $courseId";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        // lets add in BDD if not the same name
+        if ($row['nb'] <= 0) {
+            $repo = Container::getQuestionCategoryRepository();
+            $course = $courseInfo['entity'];
+            $category = new CQuizQuestionCategory();
+            $category
+                ->setTitle($this->name)
+                ->setCourse($course)
+                ->setDescription($this->description)
+                ->setParent($course)
+                ->addCourseLink($course, api_get_session_entity());
+            $em = $repo->getEntityManager();
+            $em->persist($category);
+            $em->flush();
+
+            if ($category) {
+                return $category->getIid();
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes the category from the database
+     * if there were question in this category, the link between question and category is removed.
+     *
+     * @param int $id
+     *
+     * @return bool
+     */
+    public function removeCategory($id)
+    {
+        $tbl_question_rel_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $id = (int) $id;
+        $course_id = api_get_course_int_id();
+        $category = $this->getCategory($id, $course_id);
+
+        if ($category) {
+            // remove link between question and category
+            $sql = "DELETE FROM $tbl_question_rel_cat
+                    WHERE category_id = $id AND c_id=".$course_id;
+            Database::query($sql);
+
+            $repo = Container::getQuestionCategoryRepository();
+            $category = $repo->find($id);
+            $repo->hardDelete($category);
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Modify category name or description of category with id=in_id.
+     *
+     * @param int $courseId
+     *
+     * @return bool
+     */
+    public function modifyCategory($courseId = 0)
+    {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $repo = Container::getQuestionCategoryRepository();
+        /** @var CQuizQuestionCategory $category */
+        $category = $repo->find($this->id);
+        if ($category) {
+            $category
+                ->setTitle($this->name)
+                ->setDescription($this->description);
+
+            $repo->getEntityManager()->persist($category);
+            $repo->getEntityManager()->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Gets the number of question of category id=in_id.
+     */
+    public function getCategoryQuestionsNumber()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $id = (int) $this->id;
+        $sql = "SELECT count(*) AS nb
+                FROM $table
+                WHERE category_id = $id AND c_id=".api_get_course_int_id();
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+
+        return $row['nb'];
+    }
+
+
+    /**
+     * return the number of question of a category id in a test.
+     *
+     * @param int $exerciseId
+     * @param int $categoryId
+     *
+     * @return int
+     *
+     * @author hubert.borderiou 07-04-2011
+     */
+    public static function getNumberOfQuestionsInCategoryForTest($exerciseId, $categoryId)
+    {
+        $nbCatResult = 0;
+        $quiz = new Exercise();
+        $quiz->read($exerciseId);
+        $questionList = $quiz->selectQuestionList();
+        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
+        for ($i = 1; $i <= count($questionList); $i++) {
+            if (self::getCategoryForQuestion($questionList[$i]) == $categoryId) {
+                $nbCatResult++;
+            }
+        }
+
+        return $nbCatResult;
+    }
+
     /**
      * return the number of question for a test using random by category
      * input  : test_id, number of random question (min 1).
@@ -93,31 +277,6 @@ class TestCategory
         return $categories;
     }
 
-    /**
-     * return the number of question of a category id in a test.
-     *
-     * @param int $exerciseId
-     * @param int $categoryId
-     *
-     * @return int
-     *
-     * @author hubert.borderiou 07-04-2011
-     */
-    public static function getNumberOfQuestionsInCategoryForTest($exerciseId, $categoryId)
-    {
-        $nbCatResult = 0;
-        $quiz = new Exercise();
-        $quiz->read($exerciseId);
-        $questionList = $quiz->selectQuestionList();
-        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
-        for ($i = 1; $i <= count($questionList); $i++) {
-            if (self::getCategoryForQuestion($questionList[$i]) == $categoryId) {
-                $nbCatResult++;
-            }
-        }
-
-        return $nbCatResult;
-    }
 
     /**
      * Return the TestCategory id for question with question_id = $questionId
@@ -131,6 +290,17 @@ class TestCategory
      */
     public static function getCategoryForQuestion($questionId, $courseId = 0)
     {
+        $categoryInfo = self::getCategoryInfoForQuestion($questionId, $courseId);
+
+        if (!empty($categoryInfo) && isset($categoryInfo['category_id'])) {
+            return (int) $categoryInfo['category_id'];
+        }
+
+        return 0;
+    }
+
+    public static function getCategoryInfoForQuestion($questionId, $courseId = 0)
+    {
         $courseId = (int) $courseId;
         $questionId = (int) $questionId;
 
@@ -143,27 +313,43 @@ class TestCategory
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $sql = "SELECT category_id
+        $sql = "SELECT *
                 FROM $table
-                WHERE question_id = $questionId ";
+                WHERE question_id = $questionId AND c_id = $courseId";
         $res = Database::query($sql);
-        $result = 0;
         if (Database::num_rows($res) > 0) {
-            $data = Database::fetch_array($res);
-            $result = (int) $data['category_id'];
+            return Database::fetch_array($res, 'ASSOC');
         }
 
-        return $result;
+        return [];
     }
 
-    public static function getCategoriesForSelect()
+ 
+    /**
+     * Return the category name for question with question_id = $questionId
+     * In this version, a question has only 1 category.
+     *
+     * @param $questionId
+     * @param int $courseId
+     *
+     * @return string
+     */
+    public static function getCategoryNameForQuestion($questionId, $courseId = 0)
     {
-        $courseId = api_get_course_int_id();
-        $categories = self::getCategories($courseId);
-
-        $result = ['0' => get_lang('No category selected')];
-        foreach ($categories as $category) {
-            $result[$category->getIid()] = $category->getTitle();
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        $courseId = (int) $courseId;
+        $categoryId = self::getCategoryForQuestion($questionId, $courseId);
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $sql = "SELECT title
+                FROM $table
+                WHERE id = $categoryId AND c_id = $courseId";
+        $res = Database::query($sql);
+        $data = Database::fetch_array($res);
+        $result = '';
+        if (Database::num_rows($res) > 0) {
+            $result = $data['title'];
         }
 
         return $result;
@@ -255,36 +441,6 @@ class TestCategory
         }
 
         return $categories;
-    }
-
-    /**
-     * return the TestCategory object with id=in_id.
-     *
-     * @param int $id
-     * @param int $courseId
-     *
-     * @return TestCategory
-     */
-    public function getCategory($id, $courseId = 0)
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $id = (int) $id;
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $sql = "SELECT * FROM $table
-                WHERE id = $id AND c_id = ".$courseId;
-        $res = Database::query($sql);
-
-        if (Database::num_rows($res)) {
-            $row = Database::fetch_array($res);
-
-            $this->id = $row['id'];
-            $this->name = $row['title'];
-            $this->description = $row['description'];
-
-            return $this;
-        }
-
-        return false;
     }
 
     /**
@@ -532,16 +688,19 @@ class TestCategory
      *
      * @return string
      */
-    public static function get_stats_table_by_attempt(
-        $exerciseId,
-        $category_list = []
-    ) {
+    public static function get_stats_table_by_attempt($exercise, $category_list = [])
+    {
+        $exerciseId = $exercise->iId;
         if (empty($category_list)) {
             return null;
         }
-        $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
-
-        $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'category_results']);
+        $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
+        $table = new HTML_Table(
+            [
+                'class' => 'table table-hover table-striped table-bordered',
+                'id' => 'category_results',
+            ]
+        );
         $table->setHeaderContents(0, 0, get_lang('Categories'));
         $table->setHeaderContents(0, 1, get_lang('Absolute score'));
         $table->setHeaderContents(0, 2, get_lang('Relative score'));
@@ -558,9 +717,12 @@ class TestCategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        if (count($category_list) > 1) {
+        $radar = '';
+        $countCategories = count($category_list);
+        if ($countCategories > 1) {
+            $resultsArray = [];
             foreach ($category_list as $category_id => $category_item) {
-                $table->setCellContents($row, 0, $category_name_list[$category_id]);
+                $table->setCellContents($row, 0, $categoryNameList[$category_id]);
                 $table->setCellContents(
                     $row,
                     1,
@@ -581,11 +743,15 @@ class TestCategory
                         true
                     )
                 );
+                $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
                 $row++;
             }
 
+            if ($countCategories > 2 && RESULT_DISABLE_RADAR === (int) $exercise->results_disabled) {
+                $radar = $exercise->getRadar(array_column($categoryNameList, 'title'), [$resultsArray]);
+            }
             if (!empty($none_category)) {
-                $table->setCellContents($row, 0, get_lang('none'));
+                $table->setCellContents($row, 0, get_lang('None'));
                 $table->setCellContents(
                     $row,
                     1,
@@ -632,7 +798,7 @@ class TestCategory
                 );
             }
 
-            return $table->toHtml();
+            return $radar.$table->toHtml();
         }
 
         return '';
@@ -744,81 +910,9 @@ class TestCategory
         return false;
     }
 
-    /**
-     * Save TestCategory in the database if name doesn't exists.
-     *
-     * @param int $courseId
-     *
-     * @return bool
-     */
-    public function save($courseId = 0)
-    {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $courseInfo = api_get_course_info_by_id($courseId);
-        if (empty($courseInfo)) {
-            return false;
-        }
+    
 
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-
-        // check if name already exists
-        $sql = "SELECT count(*) AS nb FROM $table
-                WHERE title = '".Database::escape_string($this->name)."' AND c_id = $courseId";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        // lets add in BDD if not the same name
-        if ($row['nb'] <= 0) {
-            $repo = Container::getQuestionCategoryRepository();
-            $course = $courseInfo['entity'];
-            $category = new CQuizQuestionCategory();
-            $category
-                ->setTitle($this->name)
-                ->setCourse($course)
-                ->setDescription($this->description)
-                ->setParent($course)
-                ->addCourseLink($course, api_get_session_entity());
-            $em = $repo->getEntityManager();
-            $em->persist($category);
-            $em->flush();
-
-            if ($category) {
-                return $category->getIid();
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Removes the category from the database
-     * if there were question in this category, the link between question and category is removed.
-     *
-     * @param int $id
-     *
-     * @return bool
-     */
-    public function removeCategory($id)
-    {
-        $tbl_question_rel_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $id = (int) $id;
-        $course_id = api_get_course_int_id();
-        $category = $this->getCategory($id, $course_id);
-
-        if ($category) {
-            // remove link between question and category
-            $sql = "DELETE FROM $tbl_question_rel_cat
-                    WHERE category_id = $id AND c_id=".$course_id;
-            Database::query($sql);
-
-            $repo = Container::getQuestionCategoryRepository();
-            $category = $repo->find($id);
-            $repo->hardDelete($category);
-
-            return true;
-        }
-
-        return false;
-    }
+    
 
     /**
      * @param                                                   $primaryKeys
@@ -844,37 +938,6 @@ class TestCategory
         exit;
     }
 
-    /**
-     * Modify category name or description of category with id=in_id.
-     *
-     * @param int $courseId
-     *
-     * @return bool
-     */
-    public function modifyCategory($courseId = 0)
-    {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $courseInfo = api_get_course_info_by_id($courseId);
-        if (empty($courseInfo)) {
-            return false;
-        }
-
-        $repo = Container::getQuestionCategoryRepository();
-        /** @var CQuizQuestionCategory $category */
-        $category = $repo->find($this->id);
-        if ($category) {
-            $category
-                ->setTitle($this->name)
-                ->setDescription($this->description);
-
-            $repo->getEntityManager()->persist($category);
-            $repo->getEntityManager()->flush();
-
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * @param Exercise $exercise
@@ -1018,10 +1081,15 @@ class TestCategory
     public function returnCategoryForm(Exercise $exercise)
     {
         $categories = $this->getListOfCategoriesForTest($exercise);
+        $sortedCategories = [];
+        foreach ($categories as $catId => $cat) {
+            $sortedCategories[$cat['title']] = $cat;
+        }
+        ksort($sortedCategories);
         $saved_categories = $exercise->getCategoriesInExercise();
         $return = null;
 
-        if (!empty($categories)) {
+        if (!empty($sortedCategories)) {
             $nbQuestionsTotal = $exercise->getNumberQuestionExerciseCategory();
             $exercise->setCategoriesGrouping(true);
             $real_question_count = count($exercise->getQuestionList());
@@ -1035,7 +1103,7 @@ class TestCategory
             }
 
             $return .= $warning;
-            $return .= '<table class="data_table">';
+            $return .= '<table class="table table-hover table-bordered data_table">';
             $return .= '<tr>';
             $return .= '<th height="24">'.get_lang('Categories').'</th>';
             $return .= '<th width="70" height="24">'.get_lang('N°').'</th></tr>';
@@ -1048,9 +1116,9 @@ class TestCategory
                 'title' => get_lang('General'),
             ];
 
-            $categories[] = $emptyCategory;
+            $sortedCategories[] = $emptyCategory;
 
-            foreach ($categories as $category) {
+            foreach ($sortedCategories as $category) {
                 $cat_id = $category['iid'];
                 $return .= '<tr>';
                 $return .= '<td>';
@@ -1166,21 +1234,6 @@ class TestCategory
         return $html;
     }
 
-    /**
-     * Gets the number of question of category id=in_id.
-     */
-    public function getCategoryQuestionsNumber()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $id = (int) $this->id;
-        $sql = "SELECT count(*) AS nb
-                FROM $table
-                WHERE category_id = $id AND c_id=".api_get_course_int_id();
-        $res = Database::query($sql);
-        $row = Database::fetch_array($res);
-
-        return $row['nb'];
-    }
 
     /**
      * To allowed " in javascript dialog box without bad surprises

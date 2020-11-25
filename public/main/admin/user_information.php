@@ -391,10 +391,23 @@ if (count($sessions) > 0) {
             [$session_item['access_start_date'], $session_item['access_end_date']]
         );
 
+        $certificateLink = Display::url(
+            Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+            .http_build_query(
+                [
+                    'action' => 'export_to_pdf',
+                    'type' => 'achievement',
+                    'session_to_export' => $id_session,
+                    'student' => $userId,
+                ]
+            ),
+            ['target' => '_blank']
+        );
         $sessionInformation .= Display::page_subheader(
             '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$id_session.'">'.
             $session_item['session_name'].'</a>',
-            ' '.implode(' - ', $dates)
+            $certificateLink.' '.implode(' - ', $dates)
         );
 
         $sessionInformation .= Display::return_sortable_table(

@@ -531,7 +531,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display::encrypted_mailto_link($email, cut($email, 26));
+    return Display::encrypted_mailto_link($email, cut($email, 26), 'small clickable_email_link');
 }
 
 /**
@@ -1071,6 +1071,22 @@ $form->addText('keyword_username', get_lang('Login'), false);
 $form->addText('keyword_email', get_lang('e-mail'), false);
 $form->addText('keyword_officialcode', get_lang('Code'), false);
 
+$classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
+$options = [];
+if ($classId) {
+    $userGroup = new UserGroup();
+    $groupInfo = $userGroup->get($classId);
+    if ($groupInfo) {
+        $options = [$classId => $groupInfo['name']];
+    }
+}
+$form->addSelectAjax(
+    'class_id',
+    get_lang('SocialGroup').' / '.get_lang('Class'),
+    $options,
+    ['url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword']
+);
+
 $status_options = [];
 $status_options['%'] = get_lang('All');
 $status_options[STUDENT] = get_lang('Learner');
@@ -1115,7 +1131,11 @@ $table = new SortableTable(
     'users',
     'get_number_of_users',
     'get_user_data',
-    (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
+    (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2,
+    20,
+    'ASC',
+    null,
+    ['style' => 'font-size: 1.4rem;', 'class' => 'table table-hover table-striped table-bordered table-condensed']
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');
@@ -1177,7 +1197,7 @@ if (0 == $table->get_total_number_of_items()) {
         if (!empty($user_list)) {
             $extra_search_options = Display::page_subheader(get_lang('Users found in other portals'));
 
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $column = 0;
             $row = 0;
             $headers = [get_lang('User'), 'URL', get_lang('Detail')];
@@ -1220,11 +1240,6 @@ if (0 == $table->get_total_number_of_items()) {
                         );
                         $column++;
                     }
-                    $table->updateRowAttributes(
-                        $row,
-                        $row % 2 ? 'class="row_even"' : 'class="row_odd"',
-                        true
-                    );
                     $row++;
                 }
             }

@@ -1770,6 +1770,9 @@ $_configuration['auth_password_links'] = [
 // Enable a "Previous question" button in surveys
 // $_configuration['survey_backwards_enable'] = false;
 
+// All courses with category MY_CATEGORY will be used as course templates BT#18083
+// $_configuration['course_category_code_to_use_as_model'] = 'MY_CATEGORY';
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

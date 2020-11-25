@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -121,11 +122,21 @@ switch ($action) {
                 break;
             }
 
+            $categoryToAvoid = '';
+            if (!api_is_platform_admin()) {
+                $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+            }
+
             $list = [];
             foreach ($categories as $item) {
+                $categoryCode = $item['code'];
+                if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                    continue;
+                }
+
                 $list['items'][] = [
-                    'id' => $item['code'],
-                    'text' => '('.$item['code'].') '.strip_tags($item['name']),
+                    'id' => $categoryCode,
+                    'text' => '('.$categoryCode.') '.strip_tags($item['name']),
                 ];
             }
 
@@ -145,22 +156,34 @@ switch ($action) {
                 //TODO change this function to search not only courses STARTING with $_GET['q']
                 if (api_is_platform_admin()) {
                     $courseList = CourseManager::get_courses_list(
-                        0, //offset
-                        0, //howMany
-                        1, //$orderby = 1
+                        0,
+                        0,
+                        1,
                         'ASC',
-                        -1, //visibility
+                        -1,
                         $_GET['q'],
-                        null, //$urlId
-                        true //AlsoSearchCode
+                        null,
+                        true
                     );
                 } elseif (api_is_teacher()) {
                     $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
+                    $category = api_get_configuration_value('course_category_code_to_use_as_model');
+                    if (!empty($category)) {
+                        $alreadyAdded = [];
+                        if (!empty($courseList)) {
+                            $alreadyAdded = array_column($courseList, 'id');
+                        }
+                        $coursesInCategory = CourseCategory::getCoursesInCategory($category, $_GET['q']);
+                        foreach ($coursesInCategory as $course) {
+                            if (!in_array($course['id'], $alreadyAdded)) {
+                                $courseList[] = $course;
+                            }
+                        }
+                    }
                 }
             }
 
             $results = [];
-
             if (empty($courseList)) {
                 echo json_encode([]);
                 break;
@@ -168,7 +191,6 @@ switch ($action) {
 
             foreach ($courseList as $course) {
                 $title = $course['title'];
-
                 if (!empty($course['category_code'])) {
                     $parents = CourseCategory::getParentsToString($course['category_code']);
                     $title = $parents.$course['title'];

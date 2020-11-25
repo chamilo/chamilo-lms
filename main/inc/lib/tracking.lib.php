@@ -2762,7 +2762,7 @@ class Tracking
         }
 
         // Compose a filter based on optional session id
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if (count($lp_ids) > 0) {
             $condition_session = " AND session_id = $session_id ";
         } else {
@@ -2919,7 +2919,7 @@ class Tracking
                         echo '<h3>Item Type: '.$row_max_score['item_type'].'</h3>';
                     }
 
-                    if ($row_max_score['item_type'] == 'sco') {
+                    if ($row_max_score['item_type'] === 'sco') {
                         /* Check if it is sco (easier to get max_score)
                            when there's no max score, we assume 100 as the max score,
                            as the SCORM 1.2 says that the value should always be between 0 and 100.
@@ -2948,7 +2948,6 @@ class Tracking
                         $item_path = $row_max_score['path'];
                         $lp_item_view_id = (int) $row_max_score['lp_item_view_id'];
 
-                        $lpItemCondition = '';
                         if (empty($lp_item_view_id)) {
                             $lpItemCondition = ' (orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL) ';
                         } else {
@@ -7806,6 +7805,16 @@ class TrackingCourseLog
                 $session_id
             );
 
+            $averageBestScore = Tracking::get_avg_student_score(
+                $user['user_id'],
+                $course_code,
+                [],
+                $session_id,
+                false,
+                false,
+                true
+            );
+
             $avg_student_progress = Tracking::get_avg_student_progress(
                 $user['user_id'],
                 $course_code,
@@ -7840,6 +7849,12 @@ class TrackingCourseLog
                 $user['student_score'] = $avg_student_score.'%';
             } else {
                 $user['student_score'] = $avg_student_score;
+            }
+
+            if (is_numeric($averageBestScore)) {
+                $user['student_score_best'] = $averageBestScore.'%';
+            } else {
+                $user['student_score_best'] = $averageBestScore;
             }
 
             $user['count_assignments'] = Tracking::count_student_assignments(
@@ -7905,6 +7920,7 @@ class TrackingCourseLog
             $user_row['exercise_progress'] = $user['exercise_progress'];
             $user_row['exercise_average_best_attempt'] = $user['exercise_average_best_attempt'];
             $user_row['student_score'] = $user['student_score'];
+            $user_row['student_score_best'] = $user['student_score_best'];
             $user_row['count_assignments'] = $user['count_assignments'];
             $user_row['count_messages'] = $user['count_messages'];
 

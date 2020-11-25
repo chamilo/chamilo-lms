@@ -121,6 +121,7 @@ class Login
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
+        $email_body = nl2br($email_body);
 
         $email_admin = api_get_setting('emailAdministrator');
         $result = api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin);

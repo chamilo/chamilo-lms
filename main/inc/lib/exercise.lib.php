@@ -5944,6 +5944,26 @@ EOT;
                 );
             }
 
+            // Blocking exercise.
+            $blockPercentageExtra = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'blocking_percentage'
+            );
+            $blockPercentage = false;
+            if ($blockPercentageExtra && isset($blockPercentageExtra['value']) && $blockPercentageExtra['value']) {
+                $blockPercentage = $extraFieldData['value'];
+            }
+
+            if ($blockPercentage) {
+                $passBlock = $stats['total_percentage'] > $blockPercentage;
+                if (false === $passBlock) {
+                    $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                        $objExercise->iId,
+                        'MailIsBlockByPercentage'
+                    );
+                }
+            }
+
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $content = $extraFieldData['value'];
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
@@ -5967,18 +5987,7 @@ EOT;
                 $exerciseNotification = $extraFieldData['value'];
             }
 
-            // Blocking exercise.
-            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
-                'blocking_percentage'
-            );
-            $blockPercentage = false;
-            if ($extraFieldData && isset($extraFieldData['value']) && $extraFieldData['value']) {
-                $blockPercentage = $extraFieldData['value'];
-            }
-
             $extraFieldValueUser = new ExtraFieldValue('user');
-
             if (!empty($exerciseNotification) && !empty($notifications)) {
                 foreach ($notifications as $name => $notificationList) {
                     if ($exerciseNotification !== $name) {

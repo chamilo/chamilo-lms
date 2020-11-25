@@ -32,11 +32,13 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_CULQI = 'plugin_buycourses_culqi';
     const TABLE_GLOBAL_CONFIG = 'plugin_buycourses_global_config';
     const TABLE_INVOICE = 'plugin_buycourses_invoices';
+    const TABLE_TPV_REDSYS = 'plugin_buycourses_tpvredsys_account';
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
     const PAYMENT_TYPE_PAYPAL = 1;
     const PAYMENT_TYPE_TRANSFER = 2;
     const PAYMENT_TYPE_CULQI = 3;
+    const PAYMENT_TYPE_TPV_REDSYS = 4;
     const PAYOUT_STATUS_CANCELED = 2;
     const PAYOUT_STATUS_PENDING = 0;
     const PAYOUT_STATUS_COMPLETED = 1;
@@ -56,7 +58,7 @@ class BuyCoursesPlugin extends Plugin
     const TAX_APPLIES_TO_ONLY_COURSE = 2;
     const TAX_APPLIES_TO_ONLY_SESSION = 3;
     const TAX_APPLIES_TO_ONLY_SERVICES = 4;
-    const PAGINATION_PAGE_SIZE = 5;
+    const PAGINATION_PAGE_SIZE = 6;
 
     public $isAdminPlugin = true;
 
@@ -90,6 +92,7 @@ class BuyCoursesPlugin extends Plugin
                 'invoicing_enable' => 'boolean',
                 'tax_enable' => 'boolean',
                 'use_currency_symbol' => 'boolean',
+                'tpv_redsys_enable' => 'boolean',
             ]
         );
     }
@@ -135,6 +138,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_SERVICES_SALE,
             self::TABLE_GLOBAL_CONFIG,
             self::TABLE_INVOICE,
+            self::TABLE_TPV_REDSYS,
         ];
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -167,6 +171,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_SERVICES,
             self::TABLE_GLOBAL_CONFIG,
             self::TABLE_INVOICE,
+            self::TABLE_TPV_REDSYS,
         ];
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -272,6 +277,29 @@ class BuyCoursesPlugin extends Plugin
             PRIMARY KEY (id)
         )";
         Database::query($sql);
+
+        $table = self::TABLE_TPV_REDSYS;
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            merchantcode varchar(255) NOT NULL,
+            terminal varchar(255) NOT NULL,
+            currency varchar(255) NOT NULL,
+            kc varchar(255) NOT NULL,
+            url_redsys varchar(255) NOT NULL,
+            url_redsys_sandbox varchar(255) NOT NULL,
+            sandbox int unsigned NULL,
+            PRIMARY KEY (id)
+        )";
+        Database::query($sql);
+
+        $sql = "SELECT * FROM $table";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) == 0) {
+            Database::insert($table, [
+                'url_redsys' => 'https://sis.redsys.es/sis/realizarPago',
+                'url_redsys_sandbox' => 'https://sis-t.redsys.es:25443/sis/realizarPago',
+            ]);
+        }
 
         Display::addFlash(
             Display::return_message(
@@ -453,6 +481,45 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Gets the stored TPV Redsys params.
+     *
+     * @return array
+     */
+    public function getTpvRedsysParams()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_TPV_REDSYS),
+            ['id = ?' => 1],
+            'first'
+        );
+    }
+
+    /**
+     * Save the tpv Redsys configuration params.
+     *
+     * @param array $params
+     *
+     * @return int Rows affected. Otherwise return false
+     */
+    public function saveTpvRedsysParams($params)
+    {
+        return Database::update(
+            Database::get_main_table(self::TABLE_TPV_REDSYS),
+            [
+                'merchantcode' => $params['merchantcode'],
+                'terminal' => $params['terminal'],
+                'currency' => $params['currency'],
+                'kc' => $params['kc'],
+                'url_redsys' => $params['url_redsys'],
+                'url_redsys_sandbox' => $params['url_redsys_sandbox'],
+                'sandbox' => isset($params['sandbox']),
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
      * Save a transfer account information.
      *
      * @param array $params The transfer account
@@ -584,9 +651,9 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array|int
      */
-    public function getCatalogSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all')
+    public function getCatalogSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory = 0)
     {
-        $sessions = $this->filterSessionList($start, $end, $name, $min, $max, $typeResult);
+        $sessions = $this->filterSessionList($start, $end, $name, $min, $max, $typeResult, $sessionCategory);
 
         if ($typeResult === 'count') {
             return $sessions;
@@ -896,9 +963,14 @@ class BuyCoursesPlugin extends Plugin
     public function registerSale($itemId, $paymentType)
     {
         if (!in_array(
-            $paymentType,
-            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI]
-        )
+                $paymentType,
+                [
+                    self::PAYMENT_TYPE_PAYPAL,
+                    self::PAYMENT_TYPE_TRANSFER,
+                    self::PAYMENT_TYPE_CULQI,
+                    self::PAYMENT_TYPE_TPV_REDSYS,
+                ]
+            )
         ) {
             return false;
         }
@@ -1175,6 +1247,7 @@ class BuyCoursesPlugin extends Plugin
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
             self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer'),
             self::PAYMENT_TYPE_CULQI => 'Culqi',
+            self::PAYMENT_TYPE_TPV_REDSYS => $this->get_lang('TpvPayment'),
         ];
     }
 
@@ -3005,19 +3078,22 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int    $start
      * @param int    $end
-     * @param string $name  Optional. The name filter
-     * @param int    $min   Optional. The minimun price filter
-     * @param int    $max   Optional. The maximum price filter
+     * @param string $name            Optional. The name filter
+     * @param int    $min             Optional. The minimun price filter
+     * @param int    $max             Optional. The maximum price filter
+     * @param string $max             Optional. all and count
+     * @param int    $sessionCategory Optional. Session category id
      *
      * @return array
      */
-    private function filterSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all')
+    private function filterSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory = 0)
     {
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $min = floatval($min);
         $max = floatval($max);
+        $sessionCategory = (int) $sessionCategory;
 
         $innerJoin = "$itemTable i ON s.id = i.product_id";
         $whereConditions = [
@@ -3038,6 +3114,10 @@ class BuyCoursesPlugin extends Plugin
 
         $start = (int) $start;
         $end = (int) $end;
+
+        if ($sessionCategory != 0) {
+            $whereConditions['AND s.session_category_id = ?'] = $sessionCategory;
+        }
 
         $sessionIds = Database::select(
             's.id',

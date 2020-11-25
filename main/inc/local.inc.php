@@ -297,24 +297,36 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
             // make sure the user exists in the database
             $login = UserManager::casUserLoginName($casUser);
+            $_user = null;
             if (false === $login) {
                 // the CAS-authenticated user does not yet exist in internal database
-
                 // see whether we are supposed to create it
-                switch (api_get_setting("cas_add_user_activate")) {
+                switch (api_get_setting('cas_add_user_activate')) {
                     case PLATFORM_AUTH_SOURCE:
                         // create the new user from its CAS user identifier
                         $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
+                        $_user = api_get_user_info_from_username($login);
+                        UserManager::updateCasUser($_user);
+
                         break;
 
                     case LDAP_AUTH_SOURCE:
                         // find the new user's LDAP record from its CAS user identifier and copy information
                         $login = UserManager::createCASAuthenticatedUserFromLDAP($casUser);
+                        $_user = api_get_user_info_from_username($login);
                         break;
 
                     default:
                         // no automatic user creation is configured, just complain about it
                         throw new Exception(get_lang('NoUserMatched'));
+                }
+            } else {
+                $_user = api_get_user_info_from_username($login);
+                switch (api_get_setting('cas_add_user_activate')) {
+                    case PLATFORM_AUTH_SOURCE:
+                        UserManager::updateCasUser($_user);
+
+                        break;
                 }
             }
 
@@ -325,11 +337,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 UserManager::updateUserFromLDAP($login);
             }
 
-            $_user = api_get_user_info_from_username($login);
             Session::write('_user', $_user);
             $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
-        } else {
-            // not CAS authenticated
         }
     } elseif (isset($_POST['login']) && isset($_POST['password'])) {
         // $login && $password are given to log in
@@ -1370,7 +1379,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                                     $sequences = $repo->getRequirements($_real_cid, SequenceResource::COURSE_TYPE);
 
                                     if ($sequences) {
-                                        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
+                                        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id, $session_id);
                                         $completed = $repo->checkSequenceAreCompleted($sequenceList);
 
                                         if (false === $completed) {

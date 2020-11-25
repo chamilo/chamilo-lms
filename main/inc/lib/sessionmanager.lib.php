@@ -1845,6 +1845,13 @@ class SessionManager
         Database::query("DELETE FROM $trackCourseAccess WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $trackAccess WHERE access_session_id IN($id_checked)");
 
+        if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+            $tableGroup = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+            Database::query("DELETE FROM $tableGroup WHERE session_id IN($id_checked)");
+            $tableGroup = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+            Database::query("DELETE FROM $tableGroup WHERE session_id IN($id_checked)");
+        }
+
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
         Database::query($sql);
 
@@ -2576,10 +2583,7 @@ class SessionManager
             require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         }
 
-        $em = Database::getManager();
-
-        /** @var Session $session */
-        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = api_get_session_entity($sessionId);
 
         if (!$session) {
             return false;
@@ -2779,7 +2783,7 @@ class SessionManager
                             'allow_text_assignment' => $work['allow_text_assignment'],
                         ];
 
-                        $result = addDir(
+                        addDir(
                             $values,
                             api_get_user_id(),
                             $courseInfo,
@@ -4511,6 +4515,7 @@ class SessionManager
      * @param bool $copyTeachersAndDrh
      * @param bool $create_new_courses         New courses will be created
      * @param bool $set_exercises_lp_invisible Set exercises and LPs in the new session to invisible by default
+     * @param bool $copyWithSessionContent     Copy course session content into the courses
      *
      * @return int The new session ID on success, 0 otherwise
      *
@@ -4523,7 +4528,8 @@ class SessionManager
         $copy_courses = true,
         $copyTeachersAndDrh = true,
         $create_new_courses = false,
-        $set_exercises_lp_invisible = false
+        $set_exercises_lp_invisible = false,
+        $copyWithSessionContent = false
     ) {
         $id = (int) $id;
         $s = self::fetch($id);
@@ -4574,7 +4580,6 @@ class SessionManager
         $extraFieldsValuesToCopy = [];
         if (!empty($extraFieldsValues)) {
             foreach ($extraFieldsValues as $extraFieldValue) {
-                //$extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
                 $extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']]['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
             }
         }
@@ -4628,9 +4633,7 @@ class SessionManager
 
                     foreach ($short_courses as $course_data) {
                         $course_info = CourseManager::copy_course_simple(
-                            $course_data['title'].' '.get_lang(
-                                'CopyLabelSuffix'
-                            ),
+                            $course_data['title'].' '.get_lang('CopyLabelSuffix'),
                             $course_data['course_code'],
                             $id,
                             $sid,
@@ -4676,6 +4679,19 @@ class SessionManager
 
                 $short_courses = $new_short_courses;
                 self::add_courses_to_session($sid, $short_courses, true);
+
+                if ($copyWithSessionContent) {
+                    foreach ($courses as $course) {
+                        CourseManager::copy_course(
+                            $course['code'],
+                            $id,
+                            $course['code'],
+                            $sid,
+                            [],
+                            false
+                        );
+                    }
+                }
 
                 if ($create_new_courses === false && $copyTeachersAndDrh) {
                     foreach ($short_courses as $courseItemId) {

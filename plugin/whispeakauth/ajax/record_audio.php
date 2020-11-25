@@ -17,11 +17,15 @@ if ($isEnrollment) {
 
     $controller = new EnrollmentController();
 
+    header('Content-Type: application/json');
+
     try {
-        $controller->ajax();
+        echo json_encode($controller->ajax());
     } catch (Exception $exception) {
-        WhispeakAuthPlugin::displayNotAllowedMessage(
-            $exception->getMessage()
+        echo json_encode(
+            [
+                'resultHtml' => Display::return_message($exception->getMessage(), 'error', false),
+            ]
         );
     }
     die;
@@ -30,9 +34,15 @@ if ($isEnrollment) {
 if ($isAuthentify) {
     $controller = new AuthenticationController();
 
+    header('Content-Type: application/json');
+
     try {
-        $controller->ajax();
+        echo json_encode($controller->ajax());
     } catch (Exception $exception) {
-        echo Display::return_message($exception->getMessage(), 'error', false);
+        echo json_encode(
+            [
+                'resultHtml' => Display::return_message($exception->getMessage(), 'error', false),
+            ]
+        );
     }
 }

@@ -576,9 +576,18 @@ class CourseCategory
                 ORDER BY tree_pos";
         $res = Database::query($sql);
 
+        $categoryToAvoid = '';
+        if (!api_is_platform_admin()) {
+            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        }
+
         $categories[''] = '-';
         while ($cat = Database::fetch_array($res)) {
-            $categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
+            $categoryCode = $cat['code'];
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
+            $categories[$categoryCode] = '('.$categoryCode.') '.$cat['name'];
             ksort($categories);
         }
 
@@ -587,13 +596,22 @@ class CourseCategory
 
     /**
      * @param string $category_code
-     * @param string $searchTerm
+     * @param string $keyword
      * @paran bool  $avoidCourses
      * @paran array $conditions
      *
      * @return int
      */
-    public static function countCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $conditions = [])
+    public static function countCoursesInCategory(
+        $category_code = '',
+        $keyword = '',
+        $avoidCourses = true,
+        $conditions = []
+    ) {
+        return self::getCoursesInCategory($category_code, $keyword, $avoidCourses, $conditions, true);
+    }
+
+    public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $conditions = [], $getCount = false)
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
@@ -635,7 +653,11 @@ class CourseCategory
 
         $urlCondition = ' access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(DISTINCT course.id) as count
+        $select = " DISTINCT course.id, course.code, course.title, course.category_code ";
+        if ($getCount) {
+            $select = "count(DISTINCT course.id) as count";
+        }
+        $sql = "SELECT $select
                 FROM $tbl_course as course
                 INNER JOIN $tbl_url_rel_course as url_rel_course
                 ON (url_rel_course.c_id = course.id)
@@ -653,9 +675,14 @@ class CourseCategory
             ";
 
         $result = Database::query($sql);
-        $row = Database::fetch_array($result);
 
-        return (int) $row['count'];
+        if ($getCount) {
+            $row = Database::fetch_array($result);
+
+            return (int) $row['count'];
+        }
+
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**

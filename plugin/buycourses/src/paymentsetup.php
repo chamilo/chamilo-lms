@@ -16,6 +16,7 @@ $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $transferEnable = $plugin->get('transfer_enable');
+$tpvRedsysEnable = $plugin->get('tpv_redsys_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $culqiEnable = $plugin->get('culqi_enable');
 
@@ -209,6 +210,70 @@ $paypalForm->addCheckBox('sandbox', null, $plugin->get_lang('Sandbox'));
 $paypalForm->addButtonSave(get_lang('Save'));
 $paypalForm->setDefaults($plugin->getPaypalParams());
 
+// TPV Redsys
+$htmlTpvRedsys = Display::return_message($plugin->get_lang('NotFindRedsysFile'), 'warning', false);
+if (file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')) {
+    $tpvRedsysForm = new FormValidator('tpv_redsys');
+    $tpvRedsysForm->addHtml(
+        Display::return_message($plugin->get_lang('InfoTpvRedsysApiCredentials'), 'info', false)
+    );
+
+    if ($tpvRedsysForm->validate()) {
+        $tpvRedsysFormValues = $tpvRedsysForm->getSubmitValues();
+
+        $plugin->saveTpvRedsysParams($tpvRedsysFormValues);
+
+        Display::addFlash(
+            Display::return_message(get_lang('Saved'), 'success')
+        );
+
+        header('Location:'.api_get_self());
+        exit;
+    }
+
+    $tpvRedsysForm->addText(
+        'merchantcode',
+        [$plugin->get_lang('DS_MERCHANT_MERCHANTCODE'), 'DS_MERCHANT_MERCHANTCODE'],
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'terminal',
+        [$plugin->get_lang('DS_MERCHANT_TERMINAL'), 'DS_MERCHANT_TERMINAL'],
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'currency',
+        [$plugin->get_lang('DS_MERCHANT_CURRENCY'), 'DS_MERCHANT_CURRENCY'],
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'kc',
+        $plugin->get_lang('kc'),
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'url_redsys',
+        $plugin->get_lang('url_redsys'),
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'url_redsys_sandbox',
+        $plugin->get_lang('url_redsys_sandbox'),
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addCheckBox('sandbox', null, $plugin->get_lang('Sandbox'));
+    $tpvRedsysForm->addButtonSave(get_lang('Save'));
+    $tpvRedsysForm->setDefaults($plugin->getTpvRedsysParams());
+
+    $htmlTpvRedsys = $tpvRedsysForm->returnForm();
+}
+
 // Platform Commissions
 
 $commissionForm = new FormValidator('commissions');
@@ -325,6 +390,8 @@ $tpl->assign('paypal_enable', $paypalEnable);
 $tpl->assign('commissions_enable', $commissionsEnable);
 $tpl->assign('transfer_enable', $transferEnable);
 $tpl->assign('culqi_enable', $culqiEnable);
+$tpl->assign('tpv_redsys_enable', $tpvRedsysEnable);
+$tpl->assign('tpv_redsys_form', $htmlTpvRedsys);
 
 $content = $tpl->fetch('buycourses/view/paymentsetup.tpl');
 

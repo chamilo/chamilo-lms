@@ -623,7 +623,8 @@ switch ($action) {
                 $requirementsData = $repository->checkRequirementsForUser(
                     $sequences,
                     SequenceResource::SESSION_TYPE,
-                    $userId
+                    $userId,
+                    $sessionId
                 );
 
                 $continueWithSubscription = $repository->checkSequenceAreCompleted($requirementsData);

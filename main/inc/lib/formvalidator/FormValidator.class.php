@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -133,15 +134,7 @@ EOT;
     {
         return '
         <style>
-            .form_list {
-                display: grid;
-                grid-template-columns:  repeat(auto-fill, minmax(300px, 1fr));;
-                grid-gap: 10px 30px;
-                gap: 10px 30px;
-            }
-            .form_list .input-group {
-                display:block;
-            }
+
         </style>
         <form{attributes}>
             <div class="form_list">
@@ -553,18 +546,26 @@ EOT;
      * @param string $name          Element name (for form treatment purposes)
      * @param bool   $createElement Whether to use the create or add method
      * @param array  $attributes
+     * @param string $size
+     * @param string $class
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = [])
-    {
+    public function addButtonSend(
+        $label,
+        $name = 'submit',
+        $createElement = false,
+        $attributes = [],
+        $size = 'default',
+        $class = ''
+    ) {
         return $this->addButton(
             $name,
             $label,
             'paper-plane',
             'primary',
-            null,
-            null,
+            $size,
+            $class,
             $attributes,
             $createElement
         );

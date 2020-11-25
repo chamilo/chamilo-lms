@@ -1,6 +1,53 @@
 /* For licensing terms, see /license.txt */
 
 window.RecordAudio = (function () {
+    var timerInterval = 0,
+        $txtTimer = null;
+
+    function startTimer() {
+        stopTimer();
+
+        $txtTimer = $('#txt-timer');
+
+        $txtTimer.text('00:00').css('visibility', 'visible');
+
+        var timerData = {
+            hour: 0,
+            minute: 0,
+            second: 0
+        };
+
+        timerInterval = setInterval(function(){
+            timerData.second++;
+
+            if (timerData.second >= 60) {
+                timerData.second = 0;
+                timerData.minute++;
+            }
+
+
+            $txtTimer.text(
+                function () {
+                    var txtSeconds = timerData.minute < 10 ? '0' + timerData.minute : timerData.minute,
+                        txtMinutes = timerData.second < 10 ? '0' + timerData.second : timerData.second;
+
+                    return txtSeconds + ':' + txtMinutes;
+                }
+            );
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        if ($txtTimer) {
+            $txtTimer.css('visibility', 'hidden');
+        }
+    }
+
+
     function useRecordRTC(rtcInfo) {
         $(rtcInfo.blockId).show();
 
@@ -43,7 +90,11 @@ window.RecordAudio = (function () {
                     btnStop.prop('disabled', true).text(btnStop.data('loadingtext'));
                 }
             }).done(function (response) {
-                $('#messages-deck').html(response);
+                if (response.text) {
+                    $('#txt-sample-text').text(response.text);
+                }
+
+                $('#messages-deck').html(response.resultHtml);
 
                 if ($('#messages-deck > .alert.alert-success').length > 0) {
                     tagAudio.parents('#audio-wrapper').addClass('hidden').removeClass('show');
@@ -81,6 +132,10 @@ window.RecordAudio = (function () {
                 btnStop.prop('disabled', false).parent().removeClass('hidden');
                 btnStart.prop('disabled', true).parent().addClass('hidden');
                 tagAudio.removeClass('show').parents('#audio-wrapper').addClass('hidden');
+
+                $('.fa-microphone').addClass('text-danger');
+
+                startTimer();
             }
 
             function errorCallback(error) {
@@ -106,6 +161,10 @@ window.RecordAudio = (function () {
             if (!recordRTC) {
                 return;
             }
+
+            $('.fa-microphone').removeClass('text-danger');
+
+            stopTimer();
 
             recordRTC.stopRecording(function (audioURL) {
                 tagAudio.prop('src', audioURL);

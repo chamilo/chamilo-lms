@@ -181,17 +181,26 @@ class CoursesAndSessionsCatalog
         ];
 
         $allCategories = CourseCategory::getAllCategories();
+        $categoryToAvoid = '';
+        if (api_is_student()) {
+            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        }
         foreach ($allCategories as $category) {
+            $categoryCode = $category['code'];
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
+
             if (empty($category['parent_id'])) {
-                $list[$category['code']] = $category;
-                $list[$category['code']]['level'] = 0;
-                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                $list[$categoryCode] = $category;
+                $list[$categoryCode]['level'] = 0;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $categoryCode, 0);
                 foreach ($subList as $item) {
                     $list[$item['code']] = $item;
                 }
                 // Real course count
-                $countCourses = CourseCategory::countCoursesInCategory($category['code']);
-                $list[$category['code']]['number_courses'] = $childrenCount + $countCourses;
+                $countCourses = CourseCategory::countCoursesInCategory($categoryCode);
+                $list[$categoryCode]['number_courses'] = $childrenCount + $countCourses;
             }
         }
 
@@ -332,7 +341,7 @@ class CoursesAndSessionsCatalog
                           1=1
                           $avoidCoursesCondition
                           $visibilityCondition
-                    ORDER BY title $limitFilter ";
+                        ORDER BY title $limitFilter ";
             } else {
                 $sql = "SELECT *, id as real_id FROM $tbl_course course
                         WHERE
@@ -1200,15 +1209,13 @@ class CoursesAndSessionsCatalog
         $btnBing = false
     ) {
         $sessionId = (int) $sessionId;
-
+        $class = 'btn-sm';
         if ($btnBing) {
-            $btnBing = 'btn-lg btn-block';
-        } else {
-            $btnBing = 'btn-sm';
+            $class = 'btn-lg btn-block';
         }
 
         if ($checkRequirements) {
-            return self::getRequirements($sessionId, SequenceResource::SESSION_TYPE, $includeText, $btnBing);
+            return self::getRequirements($sessionId, SequenceResource::SESSION_TYPE, $includeText, $class);
         }
 
         $catalogSessionAutoSubscriptionAllowed = false;
@@ -1231,7 +1238,7 @@ class CoursesAndSessionsCatalog
                 'pencil',
                 'primary',
                 [
-                    'class' => $btnBing.' ajax',
+                    'class' => $class.' ajax',
                     'data-title' => get_lang('AreYouSureToSubscribe'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe'),
@@ -1250,7 +1257,7 @@ class CoursesAndSessionsCatalog
                 $url,
                 'pencil',
                 'primary',
-                ['class' => $btnBing],
+                ['class' => $class],
                 $includeText
             );
         }
@@ -1270,18 +1277,17 @@ class CoursesAndSessionsCatalog
         return $result;
     }
 
-    public static function getRequirements($id, $type, $includeText, $btnBing)
+    public static function getRequirements($id, $type, $includeText, $class, $sessionId = 0)
     {
         $id = (int) $id;
         $type = (int) $type;
-
-        $url = api_get_path(WEB_AJAX_PATH);
-        $url .= 'sequence.ajax.php?';
+        $url = api_get_path(WEB_AJAX_PATH).'sequence.ajax.php?';
         $url .= http_build_query(
             [
                 'a' => 'get_requirements',
                 'id' => $id,
                 'type' => $type,
+                'sid' => $sessionId,
             ]
         );
 
@@ -1291,7 +1297,7 @@ class CoursesAndSessionsCatalog
             'shield',
             'info',
             [
-                'class' => $btnBing.' ajax',
+                'class' => $class.' ajax',
                 'data-title' => get_lang('CheckRequirements'),
                 'data-size' => 'md',
                 'title' => get_lang('CheckRequirements'),
@@ -1648,14 +1654,8 @@ class CoursesAndSessionsCatalog
                     ? api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId
                     : '',
                 'coach_name' => $coachName,
-                'coach_avatar' => UserManager::getUserPicture(
-                    $coachId,
-                    USER_IMAGE_SIZE_SMALL
-                ),
-                'is_subscribed' => SessionManager::isUserSubscribedAsStudent(
-                    $session->getId(),
-                    $userId
-                ),
+                'coach_avatar' => UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL),
+                'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => self::getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
                 'price' => !empty($isThisSessionOnSale['html']) ? $isThisSessionOnSale['html'] : '',

@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.ticket
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 'true') {
@@ -13,11 +11,15 @@ if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 
 
 api_block_anonymous_users();
 $courseId = api_get_course_int_id();
+$sessionId = api_get_session_id();
+$exerciseId = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? (int) $_GET['exerciseId'] : 0;
+$lpId = (isset($_GET['lpId']) && !empty($_GET['lpId'])) ? (int) $_GET['lpId'] : 0;
 
 $htmlHeadXtra[] = '<script>
 function updateCourseList(sessionId) {
-    $selectCourse = $("select#course_id");
-    $selectCourse.empty();        
+    var $selectCourse = $("select#course_id");
+    $selectCourse.empty();
+
     $.get("'.api_get_path(WEB_AJAX_PATH).'session.ajax.php", {
         a: "get_courses_inside_session",
         session_id : sessionId
@@ -26,28 +28,104 @@ function updateCourseList(sessionId) {
             value: 0,
             text: "'.get_lang('Select').'"
         }).appendTo($selectCourse);
-        
-        if (courseList.length > 0) {            
+
+        if (courseList.length > 0) {
             $.each(courseList, function (index, course) {
                 $("<option>", {
                     value: course.id,
                     text: course.name
                 }).appendTo($selectCourse);
             });
-            $("select#course_id option[value=\''.$courseId.'\']").attr("selected",true);
-            $("select#course_id").selectpicker("refresh");
-        }        
-    }, "json");    
+
+            $selectCourse.find("option[value=\''.$courseId.'\']").attr("selected",true);
+            $selectCourse.selectpicker("refresh");
+        }
+    }, "json");
 }
 
-$(function() {  
-    $("select#session_id").on("change", function () {        
+function updateExerciseList(courseId, sessionId) {
+    var $selectExercise = $("select#exercise_id");
+    $selectExercise.empty();
+
+    $.get("'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php", {
+        a: "get_exercise_by_course",
+        course_id: courseId,
+        session_id : sessionId
+    }, function (exerciseList) {
+        $("<option>", {
+            value: 0,
+            text: "'.get_lang('Select').'"
+        }).appendTo($selectExercise);
+
+        if (exerciseList.length > 0) {
+            $.each(exerciseList, function (index, exercise) {
+                $("<option>", {
+                    value: exercise.id,
+                    text: exercise.text
+                }).appendTo($selectExercise);
+            });
+
+            $selectExercise.find("option[value=\''.$exerciseId.'\']").attr("selected",true);
+        }
+
+        $selectExercise.selectpicker("refresh");
+    }, "json");
+}
+
+function updateLpList(courseId, sessionId) {
+    var $selectLp = $("select#lp_id");
+    $selectLp.empty();
+
+    $.get("'.api_get_path(WEB_AJAX_PATH).'lp.ajax.php", {
+        a: "get_lp_list_by_course",
+        course_id: courseId,
+        session_id: sessionId
+    }, function (lpList) {
+        $("<option>", {
+            value: 0,
+            text: "'.get_lang('Select').'"
+        }).appendTo($selectLp);
+
+        if (lpList.length > 0) {
+            $.each(lpList, function (index, lp) {
+                $("<option>", {
+                    value: lp.id,
+                    text: lp.text
+                }).appendTo($selectLp);
+            });
+            $selectLp.find("option[value=\''.$lpId.'\']").attr("selected",true);
+        }
+
+        $selectLp.selectpicker("refresh");
+    }, "json");
+}
+
+$(document).ready(function() {
+    var $selectSession = $("select#session_id");
+    var $selectCourse = $("select#course_id");
+
+    $selectSession.on("change", function () {
         var sessionId = parseInt(this.value, 10);
+
         updateCourseList(sessionId);
-    });    
-            
-    var sessionId = $("select#session_id").val();
+        updateExerciseList(0, sessionId);
+        updateLpList(0);
+    });
+
+    $selectCourse.on("change", function () {
+        var sessionId = $selectSession.val();
+        var courseId = parseInt(this.value, 10);
+
+        updateExerciseList(courseId, sessionId);
+        updateLpList(courseId);
+    });
+
+    var sessionId = $selectSession.val() ? $selectSession.val() : '.$sessionId.';
+    var courseId = $selectCourse.val() ? $selectCourse.val() : '.$courseId.';
+
     updateCourseList(sessionId);
+    updateExerciseList(courseId, sessionId);
+    updateLpList(courseId, sessionId);
 });
 
 var counter_image = 1;
@@ -139,6 +217,8 @@ function save_ticket()
     $course_id = isset($_POST['course_id']) ? (int) $_POST['course_id'] : '';
     $sessionId = isset($_POST['session_id']) ? (int) $_POST['session_id'] : '';
     $category_id = isset($_POST['category_id']) ? (int) $_POST['category_id'] : '';
+    $exercise_id = isset($_POST['exercise_id']) ? (int) $_POST['exercise_id'] : null;
+    $lp_id = isset($_POST['lp_id']) ? (int) $_POST['lp_id'] : null;
 
     $project_id = (int) $_POST['project_id'];
     $subject = $_POST['subject'];
@@ -163,7 +243,9 @@ function save_ticket()
         $source,
         $priority,
         $status,
-        $user_id
+        $user_id,
+        $exercise_id,
+        $lp_id
     )) {
         header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
         exit;
@@ -371,6 +453,12 @@ if (api_is_platform_admin() || !empty($sessionList)) {
 
 $form->addSelect('course_id', get_lang('Course'), [], ['id' => 'course_id']);
 
+if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+    $form->addSelect('exercise_id', get_lang('Exercise'), [], ['id' => 'exercise_id']);
+
+    $form->addSelect('lp_id', get_lang('LearningPath'), [], ['id' => 'lp_id']);
+}
+
 $courseInfo = api_get_course_info();
 $params = [];
 
@@ -380,8 +468,19 @@ if (!empty($courseInfo)) {
     ];
 
     $sessionInfo = api_get_session_info(api_get_session_id());
+
     if (!empty($sessionInfo)) {
         $params['session_id'] = $sessionInfo['id'];
+    }
+
+    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+        if ($exerciseId !== '') {
+            $params['exercise_id'] = $exerciseId;
+        }
+
+        if ($lpId !== '') {
+            $params['lp_id'] = $lpId;
+        }
     }
 }
 

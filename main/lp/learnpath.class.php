@@ -1116,6 +1116,15 @@ class learnpath
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);
 
+        if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+            $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+            $sql = "DELETE FROM $table
+                    WHERE
+                        lp_id = {$this->lp_id} AND
+                        c_id = $course_id ";
+            Database::query($sql);
+        }
+
         $sql = "DELETE FROM $lp
                 WHERE iid = ".$this->lp_id;
         Database::query($sql);
@@ -1530,11 +1539,12 @@ class learnpath
         $maxScore = 100
     ) {
         $id = (int) $id;
-        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($id)) {
             return false;
         }
+
+        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {
             $minScore = 0;
@@ -1544,8 +1554,8 @@ class learnpath
             $maxScore = 100;
         }
 
-        $minScore = floatval($minScore);
-        $maxScore = floatval($maxScore);
+        $minScore = (float) $minScore;
+        $maxScore = (float) $maxScore;
 
         if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
@@ -1825,6 +1835,23 @@ class learnpath
         } catch (Exception $exception) {
             return 0;
         }
+    }
+
+    /**
+     * Get the learning path name by id.
+     *
+     * @param int $lpId
+     *
+     * @return mixed
+     */
+    public static function getLpNameById($lpId)
+    {
+        $em = Database::getManager();
+
+        return $em->createQuery('SELECT clp.name FROM ChamiloCourseBundle:CLp clp
+            WHERE clp.iid = :iid')
+            ->setParameter('iid', $lpId)
+            ->getSingleScalarResult();
     }
 
     /**
@@ -4525,13 +4552,10 @@ class learnpath
                             $session_condition
                         ";
                 Database::query($sql);
-            } else {
-                // Parameter and database incompatible, do nothing, exit.
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -4916,7 +4940,7 @@ class learnpath
     /**
      * Saves the last item seen's ID only in case.
      */
-    public function save_last()
+    public function save_last($score = null)
     {
         $course_id = api_get_course_int_id();
         $debug = $this->debug;
@@ -4947,39 +4971,53 @@ class learnpath
                         c_id = $course_id AND
                         lp_id = ".$this->get_id()." AND
                         user_id = ".$userId." ".$session_condition;
-
             if ($debug) {
                 error_log('Saving last item seen : '.$sql, 0);
             }
             Database::query($sql);
         }
 
-        if (api_is_invitee()) {
-            return;
-        }
+        if (!api_is_invitee()) {
+            // Save progress.
+            list($progress) = $this->get_progress_bar_text('%');
+            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                if ($debug) {
+                    error_log("Return false: Dont save score: $score");
+                    error_log("progress: $progress");
+                }
 
-        // Save progress.
-        list($progress) = $this->get_progress_bar_text('%');
+                return false;
+            }
 
-        if ($progress < 0 || $progress > 100) {
-            return;
-        }
+            /*if ($course_id == 220 && $scoreAsProgress && $scoreAsProgressSetting) {
+                error_log("HOT FIX JULIO new score has been replaced from $progress to $score");
+                $progress = $score;
+            }*/
 
-        $progress = (int) $progress;
-        $sql = "UPDATE $table SET
-                    progress = $progress
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->get_id()." AND
-                    user_id = ".$userId." ".$session_condition;
-        // Ignore errors as some tables might not have the progress field just yet.
-        Database::query($sql);
-        $this->progress_db = $progress;
+            if ($progress >= 0 && $progress <= 100) {
+                // Check database.
+                $progress = (int) $progress;
+                $sql = "UPDATE $table SET
+                            progress = $progress
+                        WHERE
+                            c_id = $course_id AND
+                            lp_id = ".$this->get_id()." AND
+                            user_id = ".$userId." ".$session_condition;
+                // Ignore errors as some tables might not have the progress field just yet.
+                Database::query($sql);
+                if ($debug) {
+                    error_log($sql);
+                }
+                $this->progress_db = $progress;
 
-        if (100 === (int) $progress && $this->lp_view_id) {
-            HookLearningPathEnd::create()
-                ->setEventData(['lp_view_id' => $this->lp_view_id])
-                ->hookLearningPathEnd();
+                if ($progress == 100) {
+                    HookLearningPathEnd::create()
+                        ->setEventData(['lp_view_id' => $this->lp_view_id])
+                        ->hookLearningPathEnd();
+                }
+            }
         }
     }
 
@@ -6615,6 +6653,7 @@ class learnpath
      * @param bool   $isConfigPage           Optional. If is the config page, show the edit button
      * @param bool   $allowExpand            Optional. Allow show the expand/contract button
      * @param string $action
+     * @param array  $extraField
      *
      * @return string
      */
@@ -6623,19 +6662,32 @@ class learnpath
         $showRequirementButtons = true,
         $isConfigPage = false,
         $allowExpand = true,
-        $action = ''
+        $action = '',
+        $extraField = []
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
-        $back = Display::url(
-            Display::return_icon(
-                'back.png',
-                get_lang('ReturnToLearningPaths'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            'lp_controller.php?'.api_get_cidreq()
-        );
+        if (!isset($extraField['backTo']) && empty($extraField['backTo'])) {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('ReturnToLearningPaths'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq()
+            );
+        } else {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('Back'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                $extraField['backTo']
+            );
+        }
 
         /*if ($backToBuild) {
             $back = Display::url(
@@ -6771,6 +6823,24 @@ class learnpath
                 $buttons,
                 true
             );
+        }
+
+        // see  BT#17943
+        if (api_is_platform_admin()) {
+            if (isset($extraField['authorlp'])) {
+                $actionsLeft .= Display::url(
+                    Display::return_icon(
+                        'add-groups.png',
+                        get_lang('Author'),
+                        '',
+                        ICON_SIZE_MEDIUM
+                    ),
+                    'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                        'action' => 'author_view',
+                        'lp_id' => $lpId,
+                    ])
+                );
+            }
         }
 
         $toolbar = Display::toolbarAction(
@@ -10072,7 +10142,8 @@ class learnpath
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
 
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                //if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                if (!isset($selectedMinScore[$item['id']]) && !empty($masteryScoreAsMinValue)) {
                     // Backwards compatibility with 1.9.x use mastery_score as min value
                     $selectedMinScoreValue = $masteryScoreAsMinValue;
                 }
@@ -12196,12 +12267,30 @@ EOD;
         }
     }
 
-    public static function getLpList($courseId)
+    public static function getLpList($courseId, $sessionId, $onlyActiveLp = true)
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_LP = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId";
+        $sql = "SELECT lp.id, lp.name
+                FROM $TABLE_LP lp
+                INNER JOIN $TABLE_ITEM_PROPERTY ip
+                ON lp.id = ip.ref
+                WHERE lp.c_id = $courseId ";
+
+        if (!empty($sessionId)) {
+            $sql .= "AND ip.session_id = $sessionId ";
+        }
+
+        if ($onlyActiveLp) {
+            $sql .= "AND ip.tool = 'learnpath' ";
+            $sql .= "AND ip.visibility = 1 ";
+        }
+
+        $sql .= "GROUP BY lp.id";
+
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
@@ -12290,15 +12379,12 @@ EOD;
     /**
      * @param int $id
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return mixed
+     * @return bool
      */
     public static function deleteCategory($id)
     {
         $em = Database::getManager();
+        $id = (int) $id;
         $item = self::getCategory($id);
         if ($item) {
             $courseId = $item->getCId();
@@ -12312,6 +12398,15 @@ EOD;
                 foreach ($lps as $lpItem) {
                     $lpItem->setCategoryId(0);
                 }
+            }
+
+            if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+                $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+                $sql = "DELETE FROM $table
+                        WHERE
+                            lp_category_id = $id AND
+                            c_id = $courseId ";
+                Database::query($sql);
             }
 
             // Removing category.

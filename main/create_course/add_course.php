@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
@@ -9,10 +10,6 @@ use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Roan Embrechts, refactoring
- *
- * @package chamilo.create_course
- * "Course validation" feature:
- *
  * @author Jose Manuel Abuin Mosquera <chema@cesga.es>, Centro de Supercomputacion de Galicia
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
@@ -115,10 +112,18 @@ if ($countCategories >= 100) {
         api_get_configuration_value('allow_base_course_category')
     );
     $categoriesOptions = [null => get_lang('None')];
+    $categoryToAvoid = '';
+    if (!api_is_platform_admin()) {
+        $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+    }
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category->__toString();
+        $categoryCode = $category->getCode();
+        if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+            continue;
+        }
+        $categoriesOptions[$categoryCode] = $category->__toString();
     }
 
     $form->addSelect(

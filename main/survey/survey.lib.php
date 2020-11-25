@@ -374,6 +374,16 @@ class SurveyManager
 
             $survey_id = Database::insert($table_survey, $params);
             if ($survey_id > 0) {
+                Event::addEvent(
+                    LOG_SURVEY_CREATED,
+                    LOG_SURVEY_ID,
+                    $survey_id,
+                    null,
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
                 $sql = "UPDATE $table_survey SET survey_id = $survey_id
                         WHERE iid = $survey_id";
                 Database::query($sql);
@@ -661,6 +671,16 @@ class SurveyManager
             Database::query($sql);
         }
 
+        Event::addEvent(
+            LOG_SURVEY_DELETED,
+            LOG_SURVEY_ID,
+            $survey_id,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
+
         // Deleting groups of this survey
         $sql = "DELETE FROM $table_survey_question_group
                 WHERE c_id = $course_id AND survey_id='".$survey_id."'";
@@ -837,7 +857,6 @@ class SurveyManager
      */
     public static function empty_survey($surveyId, $courseId = 0)
     {
-        // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -865,6 +884,16 @@ class SurveyManager
         $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
 		        WHERE c_id = '.$courseId.' AND survey_id='.$surveyId;
         Database::query($sql);
+
+        Event::addEvent(
+            LOG_SURVEY_CLEAN_RESULTS,
+            LOG_SURVEY_ID,
+            $surveyId,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
 
         return true;
     }
@@ -2281,7 +2310,7 @@ class SurveyManager
         $params = [
             'c_id' => $row['c_id'],
             'survey_id' => $row['survey_id'],
-            'survey_question' => trim($row['survey_question'])."'",
+            'survey_question' => trim($row['survey_question']),
             'survey_question_comment' => $row['survey_question_comment'],
             'type' => $row['type'],
             'display' => $row['display'],
@@ -2384,39 +2413,47 @@ class SurveyManager
             return false;
         }
 
-        $obj = new UserGroup();
-        $options['where'] = [' usergroup.course_id = ? ' => $courseId];
-        $classList = $obj->getUserGroupInCourse($options);
-
-        $classToParse = [];
-        foreach ($classList as $class) {
-            $users = $obj->get_users_by_usergroup($class['id']);
-            if (empty($users)) {
-                continue;
-            }
-            $classToParse[] = [
-                'name' => $class['name'],
-                'users' => $users,
-            ];
-        }
-
-        self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
-
         $extraFieldValue = new ExtraFieldValue('survey');
         $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($surveyId, 'group_id');
+        $groupId = null;
         if ($groupData && !empty($groupData['value'])) {
-            $groupInfo = GroupManager::get_group_properties($groupData['value']);
+            $groupId = (int) $groupData['value'];
+        }
+
+        if (null === $groupId) {
+            $obj = new UserGroup();
+            $options['where'] = [' usergroup.course_id = ? ' => $courseId];
+            $classList = $obj->getUserGroupInCourse($options);
+            $classToParse = [];
+            foreach ($classList as $class) {
+                $users = $obj->get_users_by_usergroup($class['id']);
+                if (empty($users)) {
+                    continue;
+                }
+                $classToParse[] = [
+                    'name' => $class['name'],
+                    'users' => $users,
+                ];
+            }
+            self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData, true);
+        } else {
+            $groupInfo = GroupManager::get_group_properties($groupId);
             if (!empty($groupInfo)) {
                 $users = GroupManager::getStudents($groupInfo['iid'], true);
                 if (!empty($users)) {
                     $users = array_column($users, 'id');
-                    $classToParse = [
+                    self::parseMultiplicateUserList(
                         [
-                            'name' => $groupInfo['name'],
-                            'users' => $users,
+                            [
+                                'name' => $groupInfo['name'],
+                                'users' => $users,
+                            ],
                         ],
-                    ];
-                    self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
+                        $questions,
+                        $courseId,
+                        $surveyData,
+                        false
+                    );
                 }
             }
         }
@@ -2424,7 +2461,7 @@ class SurveyManager
         return true;
     }
 
-    public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
+    public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData, $addClassNewPage = false)
     {
         if (empty($itemList) || empty($questions)) {
             return false;
@@ -2468,7 +2505,6 @@ class SurveyManager
 
                 foreach ($users as $userId) {
                     $userInfo = api_get_user_info($userId);
-
                     if (false !== strpos($text, $studentTag)) {
                         $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
                         $values = [
@@ -2495,7 +2531,7 @@ class SurveyManager
                     }
                 }
 
-                if ($classCounter < count($itemList)) {
+                if ($addClassNewPage && $classCounter < count($itemList)) {
                     // Add end page
                     $values = [
                         'c_id' => $courseId,

@@ -73,7 +73,13 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
     }
 }
 
-$form = new FormValidator('registration');
+if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
+    $layoutForm = FormValidator::LAYOUT_GRID;
+} else {
+    $layoutForm = FormValidator::LAYOUT_HORIZONTAL;
+}
+
+$form = new FormValidator('registration', 'post', '', '', [], $layoutForm);
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
@@ -258,6 +264,20 @@ if ($user_already_registered_show_terms === false &&
     }
 
     // EXTENDED FIELDS
+
+    //    MY PERSONAL OPEN AREA
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
+    ) {
+        $form->addHtmlEditor(
+            'openarea',
+            get_lang('MyPersonalOpenArea'),
+            false,
+            false,
+            ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
+        );
+    }
+    //    MY COMPETENCES
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
     ) {
@@ -269,7 +289,7 @@ if ($user_already_registered_show_terms === false &&
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
-
+    //    MY DIPLOMAS
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
     ) {
@@ -281,7 +301,7 @@ if ($user_already_registered_show_terms === false &&
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
-
+    // WHAT I AM ABLE TO TEACH
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'myteach') == 'true'
     ) {
@@ -294,38 +314,30 @@ if ($user_already_registered_show_terms === false &&
         );
     }
 
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
-    ) {
-        $form->addHtmlEditor(
-            'openarea',
-            get_lang('MyPersonalOpenArea'),
-            false,
-            false,
-            ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
-        );
-    }
-
     if (api_get_setting('extended_profile') === 'true') {
+        //    MY PERSONAL OPEN AREA
+        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') === 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') === 'true'
+        ) {
+            $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
+        }
+        //    MY COMPETENCES
         if (api_get_setting('extendedprofile_registration', 'mycomptetences') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') === 'true'
         ) {
             $form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
         }
+        //    MY DIPLOMAS
         if (api_get_setting('extendedprofile_registration', 'mydiplomas') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') === 'true'
         ) {
             $form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
         }
+        // WHAT I AM ABLE TO TEACH
         if (api_get_setting('extendedprofile_registration', 'myteach') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'myteach') === 'true'
         ) {
             $form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
-        }
-        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') === 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') === 'true'
-        ) {
-            $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
 
@@ -482,7 +494,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     $tool_name = get_lang('TermsAndConditions');
 }
 
-$home = api_get_path(SYS_APP_PATH).'home/';
+$home = api_get_path(SYS_HOME_PATH);
 if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
@@ -491,8 +503,8 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-        $home_old = api_get_path(SYS_APP_PATH).'home/';
-        $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+        $home_old = api_get_path(SYS_HOME_PATH);
+        $home = api_get_path(SYS_HOME_PATH).$clean_url;
     }
 }
 
@@ -623,7 +635,7 @@ if ($allowDoubleValidation && $showTerms == false) {
         $user_already_registered_show_terms ||
         $showTerms
     ) {
-        $form->addButtonNext(get_lang('RegisterUser'));
+        $form->addButton('register', get_lang('RegisterUser'), null, 'primary', 'btn-block');
         $formContainsSendButton = true;
     }
 }

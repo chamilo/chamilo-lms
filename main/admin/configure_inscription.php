@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This script displays a form for registering new users.
+ *    This script displays a form for registering new users.
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -25,7 +25,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
                 $term_preview = LegalManager::get_last_condition($language);
             }
             $tool_name = get_lang('TermsAndConditions');
-            Display :: display_header('');
+            Display:: display_header('');
             echo '<div class="actions-title">';
             echo $tool_name;
             echo '</div>';
@@ -34,7 +34,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
             } else {
                 echo get_lang('ComingSoon');
             }
-            Display :: display_footer();
+            Display:: display_footer();
             exit;
         }
     }
@@ -73,9 +73,9 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
 
-        $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
-        $homep_new = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path added the url
-        $new_url_dir = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+        $homep = api_get_path(SYS_HOME_PATH); //homep for Home Path
+        $homep_new = api_get_path(SYS_HOME_PATH).$clean_url; //homep for Home Path added the url
+        $new_url_dir = api_get_path(SYS_HOME_PATH).$clean_url;
         //we create the new dir for the new sites
         if (!is_dir($new_url_dir)) {
             mkdir($new_url_dir, api_get_permissions_for_new_directories());
@@ -83,7 +83,7 @@ if (api_is_multiple_url_enabled()) {
     }
 } else {
     $homep_new = '';
-    $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
+    $homep = api_get_path(SYS_HOME_PATH); //homep for Home Path
 }
 
 $topf = 'register_top'; //topf for Top File
@@ -152,7 +152,7 @@ if (!empty($action)) {
     }
 }
 
-Display :: display_header($tool_name);
+Display:: display_header($tool_name);
 
 echo Display::page_header($tool_name);
 
@@ -204,11 +204,21 @@ if ($display_all_form) {
     }
 
     //	USERNAME
-    $form->addElement('text', 'username', get_lang('UserName'), ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);
+    $form->addElement(
+        'text',
+        'username',
+        get_lang('UserName'),
+        ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']
+    );
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', get_lang('UsernameWrong'), 'username');
     $form->addRule('username', get_lang('UserTaken'), 'username_available');
-    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'username',
+        sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
 
     //	PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'), ['size' => 40, 'disabled' => 'disabled']);
@@ -236,47 +246,81 @@ if ($display_all_form) {
 
     //	STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
-        $form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT, ['disabled' => 'disabled']);
+        $form->addElement(
+            'radio',
+            'status',
+            get_lang('Status'),
+            get_lang('RegStudent'),
+            STUDENT,
+            ['disabled' => 'disabled']
+        );
         $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER, ['disabled' => 'disabled']);
     }
 
     //	EXTENDED FIELDS
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
-    ) {
-        $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
-    }
 
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
-    ) {
-        $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
-    }
-
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'myteach') == 'true'
-    ) {
-        $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
-    }
-
+    //    MY PERSONAL OPEN AREA
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
     ) {
-        $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
+        $form->addHtmlEditor(
+            'openarea',
+            get_lang('MyPersonalOpenArea'),
+            false,
+            false,
+            ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']
+        );
+    } //    MY COMPETENCES
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
+    ) {
+        $form->addHtmlEditor(
+            'competences',
+            get_lang('MyCompetences'),
+            false,
+            false,
+            ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']
+        );
     }
-
+    //    MY DIPLOMAS
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
+    ) {
+        $form->addHtmlEditor(
+            'diplomas',
+            get_lang('MyDiplomas'),
+            false,
+            false,
+            ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']
+        );
+    }
+    // WHAT I AM ABLE TO TEACH
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'myteach') == 'true'
+    ) {
+        $form->addHtmlEditor(
+            'teach',
+            get_lang('MyTeach'),
+            false,
+            false,
+            ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']
+        );
+    }
     if (api_get_setting('extended_profile') == 'true') {
+        //    MY PERSONAL OPEN AREA
+        if (api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') == 'true') {
+            $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
+        } //    MY COMPETENCES
         if (api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true') {
             $form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
         }
+        //    MY DIPLOMAS
         if (api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') == 'true') {
             $form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
         }
+        // WHAT I AM ABLE TO TEACH
         if (api_get_setting('extendedprofile_registrationrequired', 'myteach') == 'true') {
             $form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
-        }
-        if (api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') == 'true') {
-            $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
 
@@ -375,7 +419,9 @@ switch ($action) {
         );
         $renderer = &$form->defaultRenderer();
         $renderer->setHeaderTemplate('');
-        $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
+        $renderer->setFormTemplate(
+            '<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>'
+        );
         $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');
         $renderer->setRequiredNoteTemplate('');
         $form->addElement('hidden', 'formSent', '1');
@@ -398,7 +444,10 @@ switch ($action) {
     default:
         //Form of language
         api_display_language_form();
-        echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
+        echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon(
+                'edit.gif',
+                get_lang('Edit')
+            ).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
 
         $open = '';
         if (file_exists($homep.$topf.'_'.$lang.$ext)) {
@@ -416,4 +465,4 @@ switch ($action) {
         break;
 }
 
-Display :: display_footer();
+Display:: display_footer();

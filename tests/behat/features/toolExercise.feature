@@ -402,10 +402,10 @@ Feature: Exercise tool
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":
       | Categories    | Absolute score | Relative score |
-      | Categoryname2 | 50 / 70        | 71.43%         |
-      | Categoryname1 | 60 / 60        | 100%           |
-      | none          | 80 / 60        | 133.33%        |
-      | Total         | 190 / 190      | 100%           |
+      | Categoryname2 | 50 / 70        | 71.43 %         |
+      | Categoryname1 | 60 / 60        | 100 %           |
+      | none          | 80 / 60        | 133.33 %        |
+      | Total         | 190 / 190      | 100 %           |
 
   Scenario: Teacher looks at exercise results by categories
     Given I am on "/user_portal.php"
@@ -420,10 +420,10 @@ Feature: Exercise tool
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":
       | Categories    | Absolute score | Relative score |
-      | Categoryname2 | 50 / 70        | 71.43%         |
-      | Categoryname1 | 60 / 60        | 100%           |
-      | none          | 80 / 60        | 133.33%        |
-      | Total         | 190 / 190      | 100%           |
+      | Categoryname2 | 50 / 70        | 71.43 %         |
+      | Categoryname1 | 60 / 60        | 100 %           |
+      | none          | 80 / 60        | 133.33 %        |
+      | Total         | 190 / 190      | 100 %           |
 
   Scenario: Delete an exercise
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"

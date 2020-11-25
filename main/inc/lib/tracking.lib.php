@@ -2494,6 +2494,7 @@ class Tracking
                     ex.c_id = $courseId AND
                     ex.session_id  = $session_id AND
                     ex.exe_user_id = $user_id AND
+                    ex.status = '' AND
                     ex.exe_exo_id IN ('$exercise_list_imploded') ";
 
         $rs = Database::query($sql);
@@ -2761,7 +2762,7 @@ class Tracking
         }
 
         // Compose a filter based on optional session id
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if (count($lp_ids) > 0) {
             $condition_session = " AND session_id = $session_id ";
         } else {
@@ -2918,7 +2919,7 @@ class Tracking
                         echo '<h3>Item Type: '.$row_max_score['item_type'].'</h3>';
                     }
 
-                    if ($row_max_score['item_type'] == 'sco') {
+                    if ($row_max_score['item_type'] === 'sco') {
                         /* Check if it is sco (easier to get max_score)
                            when there's no max score, we assume 100 as the max score,
                            as the SCORM 1.2 says that the value should always be between 0 and 100.
@@ -2947,7 +2948,6 @@ class Tracking
                         $item_path = $row_max_score['path'];
                         $lp_item_view_id = (int) $row_max_score['lp_item_view_id'];
 
-                        $lpItemCondition = '';
                         if (empty($lp_item_view_id)) {
                             $lpItemCondition = ' (orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL) ';
                         } else {
@@ -3343,7 +3343,7 @@ class Tracking
      * @param int       $lp_id       Learning path id
      * @param int       $session_id
      *
-     * @return int Total time
+     * @return int last connection timestamp
      */
     public static function get_last_connection_time_in_lp(
         $student_id,
@@ -3352,13 +3352,47 @@ class Tracking
         $session_id = 0
     ) {
         $course = api_get_course_info($course_code);
+
+        if (empty($course)) {
+            return 0;
+        }
+
+        $course_id = $course['real_id'];
         $student_id = (int) $student_id;
         $lp_id = (int) $lp_id;
         $session_id = (int) $session_id;
         $lastTime = 0;
 
+        // Use new system
+        if (self::minimumTimeAvailable($session_id, $course_id)) {
+            $sql = "SELECT MAX(date_reg) max
+                    FROM track_e_access_complete
+                    WHERE
+                        user_id = $student_id AND
+                        c_id = $course_id AND
+                        session_id = $session_id AND
+                        tool = 'learnpath' AND
+                        tool_id = $lp_id AND
+                        action = 'view' AND
+                        login_as = 0
+                    ORDER BY date_reg ASC
+                    LIMIT 1";
+            $rs = Database::query($sql);
+
+            $lastConnection = 0;
+            if (Database::num_rows($rs) > 0) {
+                $value = Database::fetch_array($rs);
+                if (isset($value['max']) && !empty($value['max'])) {
+                    $lastConnection = api_strtotime($value['max'], 'UTC');
+                }
+            }
+
+            if (!empty($lastConnection)) {
+                return $lastConnection;
+            }
+        }
+
         if (!empty($course)) {
-            $course_id = $course['real_id'];
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
             $t_lpv = Database::get_course_table(TABLE_LP_VIEW);
             $t_lpiv = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -7771,6 +7805,16 @@ class TrackingCourseLog
                 $session_id
             );
 
+            $averageBestScore = Tracking::get_avg_student_score(
+                $user['user_id'],
+                $course_code,
+                [],
+                $session_id,
+                false,
+                false,
+                true
+            );
+
             $avg_student_progress = Tracking::get_avg_student_progress(
                 $user['user_id'],
                 $course_code,
@@ -7805,6 +7849,12 @@ class TrackingCourseLog
                 $user['student_score'] = $avg_student_score.'%';
             } else {
                 $user['student_score'] = $avg_student_score;
+            }
+
+            if (is_numeric($averageBestScore)) {
+                $user['student_score_best'] = $averageBestScore.'%';
+            } else {
+                $user['student_score_best'] = $averageBestScore;
             }
 
             $user['count_assignments'] = Tracking::count_student_assignments(
@@ -7870,6 +7920,7 @@ class TrackingCourseLog
             $user_row['exercise_progress'] = $user['exercise_progress'];
             $user_row['exercise_average_best_attempt'] = $user['exercise_average_best_attempt'];
             $user_row['student_score'] = $user['student_score'];
+            $user_row['student_score_best'] = $user['student_score_best'];
             $user_row['count_assignments'] = $user['count_assignments'];
             $user_row['count_messages'] = $user['count_messages'];
 

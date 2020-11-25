@@ -16,7 +16,6 @@ $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $htmlHeadXtra[] = '
 <script>
-
 $(function() {
     $(".scrollbar-light").scrollbar();
 
@@ -63,7 +62,7 @@ $(window).on("load", function () {
 
 //I'm in the certification module?
 $is_certificate_mode = false;
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] === 'true') {
     $is_certificate_mode = true;
 }
 
@@ -236,9 +235,7 @@ if (!($is_allowed_to_edit ||
     api_not_allowed(true);
 }
 
-/*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
-
 $display_dir = $dir;
 if (isset($group_properties)) {
     $display_dir = explode('/', $dir);
@@ -348,7 +345,6 @@ $folders = DocumentManager::get_all_document_folders(
 
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created
-
 if (!$is_certificate_mode &&
     !DocumentManager::is_my_shared_folder($userId, $dir, $current_session_id)
 ) {
@@ -387,7 +383,6 @@ if (!$is_certificate_mode &&
             if (api_get_setting('show_chat_folder') == 'false' && $val == '/chat_files') {
                 continue;
             }
-
             $escaped_folders[$key] = Database::escape_string($val);
         }
         $folder_sql = implode("','", $escaped_folders);
@@ -518,8 +513,8 @@ if ($form->validate()) {
     // Don't create file with the same name.
     if (file_exists($filepath.$filename.'.'.$extension)) {
         Display::addFlash(Display::return_message(get_lang('FileExists').' '.$title, 'error', false));
-        Display:: display_header($nameTools, 'Doc');
-        Display:: display_footer();
+        Display::display_header($nameTools, 'Doc');
+        Display::display_footer();
         exit;
     }
 

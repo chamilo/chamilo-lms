@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class Exercise.
@@ -10603,17 +10604,7 @@ class Exercise
 
         $labels = json_encode($labels);
 
-        // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
-        $colorList = [
-            'rgb(0,0,200,1.0)', // red
-            'rgb(255, 99, 132, 1.0)', // blue
-            'rgb(255, 159, 64, 1.0)', // orange
-            'rgb(255, 205, 86, 1.0)', //yellow
-            'rgb(75, 192, 192, 1.0)', // green
-            'rgb(54, 162, 235, 1.0)', // blue
-            'rgb(153, 102, 255, 1.0)', // purple
-            //'rgb(201, 203, 207)' grey
-        ];
+        $colorList = ChamiloApi::getColorPalette(true, true);
 
         $dataSetToJson = [];
         $counter = 0;
@@ -10623,7 +10614,7 @@ class Exercise
             $label = isset($dataSetLabels[$index]) ? $dataSetLabels[$index] : '';
             $background = str_replace('1.0', '0.2', $color);
             $dataSetToJson[] = [
-                'fill' => true,
+                'fill' => false,
                 'label' => $label,
                 'backgroundColor' => $background,
                 'borderColor' => $color,

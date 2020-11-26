@@ -10465,11 +10465,13 @@ class Exercise
     {
         $dataSet = [];
         $labels = [];
+        $labelsWithId = [];
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
             if (empty($labels)) {
                 $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
                 $labels = array_column($categoryNameList, 'title');
+                $labelsWithId = array_column($categoryNameList, 'title', 'id');
             }
 
             foreach ($userList as $userId) {
@@ -10493,10 +10495,20 @@ class Exercise
                     ob_end_clean();
 
                     $categoryList = $stats['category_list'];
-                    $resultsArray = [];
+
+                    $tempResult = [];
                     foreach ($categoryList as $category_id => $category_item) {
-                        $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
+                        $tempResult[$category_id] = round($category_item['score'] / $category_item['total'] * 10);
                     }
+                    $resultsArray = [];
+                    foreach ($labelsWithId as $categoryId => $label) {
+                        if (isset($tempResult[$categoryId])) {
+                            $resultsArray[] = $tempResult[$categoryId];
+                        } else {
+                            $resultsArray[] = 0;
+                        }
+                    }
+
                     $dataSet[] = $resultsArray;
                 }
             }

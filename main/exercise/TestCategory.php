@@ -395,6 +395,7 @@ class TestCategory
             $categoryId = $catInfo['id'];
             if (!empty($categoryId)) {
                 $result[$categoryId] = [
+                    'id' => $categoryId,
                     'title' => $catInfo['title'],
                     //'parent_id' =>  $catInfo['parent_id'],
                     'parent_id' => '',

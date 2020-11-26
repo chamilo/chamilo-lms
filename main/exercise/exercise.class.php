@@ -10506,7 +10506,6 @@ class Exercise
                         } else {
                             $tempResult[] = 0;
                         }
-
                     }
                     $dataSet[] = $tempResult;
                 }
@@ -10636,7 +10635,6 @@ class Exercise
                 'pointBorderWidth' => 3,
                 'pointHoverRadius' => 10,
                 'data' => $resultsArray,
-
             ];
             $counter++;
         }

@@ -55,7 +55,6 @@ $studentAverage = Tracking::get_avg_student_progress(
 $averageToUnlock = (float) $plugin->get('average_percentage_to_unlock_final_exercise');
 
 $finalExerciseTitle = '';
-$lpUrl = '';
 if ($finalData) {
     $exerciseId = $finalData['exercise_id'];
     $finalExercise = new Exercise();
@@ -69,8 +68,6 @@ if ($finalData) {
 
     $finalExerciseTitle = $finalExercise->get_formated_title();
     if (!empty($initialResults)) {
-        $lpUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
-        $lpUrl = Display::url(get_lang('LearningPath'), $lpUrl);
         if ($studentAverage >= $averageToUnlock) {
             $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exerciseId;
             if (empty($finalResults)) {
@@ -82,9 +79,13 @@ if ($finalData) {
     }
 }
 // Set the initial results as second series to make sure it appears on top
+$lpUrlAndProgress = $studentAverage.'%';
 if (!empty($initialExercise)) {
     $exercisesToRadar[] = $initialExercise;
     $exercisesToRadarLabel[] = $plugin->get_lang('InitialTest');
+    if (!empty($initialResults)) {
+        $lpUrlAndProgress = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.$studentAverage.'%</a>';
+    }
 }
 
 $radars = $initialExercise->getRadarsFromUsers(
@@ -101,8 +102,7 @@ $template = new Template($nameTools);
 $template->assign('initial_exercise', $initialExerciseTitle);
 $template->assign('final_exercise', $finalExerciseTitle);
 $template->assign('average_percentage_to_unlock_final_exercise', $averageToUnlock);
-$template->assign('average', $studentAverage);
-$template->assign('lp_url', $lpUrl);
+$template->assign('lp_url_and_progress', $lpUrlAndProgress);
 $template->assign('radars', $radars);
 $template->assign('content', $template->fetch('positioning/view/start_student.tpl'));
 $template->display_one_col_template();

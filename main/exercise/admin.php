@@ -367,16 +367,48 @@ if ($inATest) {
     }
 
     $alert = '';
+
     if ($showPagination === false) {
+        $originalSelectionType = $objExercise->questionSelectionType;
+        $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
+
+        $fullQuestionsScore = array_reduce(
+            $objExercise->selectQuestionList(true, true),
+            function ($acc, $questionId) {
+                $objQuestionTmp = Question::read($questionId);
+
+                return $acc + $objQuestionTmp->selectWeighting();
+            },
+            0
+        );
+
+        $objExercise->questionSelectionType = $originalSelectionType;
+
         $alert .= sprintf(
             get_lang('XQuestionsWithTotalScoreY'),
             $nbrQuestions,
-            $maxScoreAllQuestions
+            $fullQuestionsScore
         );
     }
     if ($objExercise->random > 0) {
         $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= sprintf(
+            '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+            $objExercise->random,
+            $maxScoreAllQuestions
+        );
     }
+
+    if ($showPagination === false) {
+        if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
+            $alert .= sprintf(
+                '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+                count($questionList),
+                $maxScoreAllQuestions
+            );
+        }
+    }
+
     echo Display::return_message($alert, 'normal', false);
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test

@@ -397,7 +397,6 @@ class TestCategory
                 $result[$categoryId] = [
                     'id' => $categoryId,
                     'title' => $catInfo['title'],
-                    //'parent_id' =>  $catInfo['parent_id'],
                     'parent_id' => '',
                     'c_id' => $catInfo['c_id'],
                 ];
@@ -797,10 +796,17 @@ class TestCategory
         $countCategories = count($category_list);
         if ($countCategories > 1) {
             $tempResult = [];
-            $labels = array_column($categoryNameList, 'title');
+            $labels = [];
             $labelsWithId = array_column($categoryNameList, 'title', 'id');
-            foreach ($category_list as $category_id => $category_item) {
-                $table->setCellContents($row, 0, $categoryNameList[$category_id]['title']);
+            asort($labelsWithId);
+            foreach ($labelsWithId as $category_id => $title) {
+                if (!isset($category_list[$category_id])) {
+                    continue;
+                }
+                $labels[] = $title;
+                $category_item = $category_list[$category_id];
+
+                $table->setCellContents($row, 0, $title);
                 $table->setCellContents(
                     $row,
                     1,

@@ -10469,9 +10469,13 @@ class Exercise
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
             if (empty($labels)) {
+                // We suppose that all exercises have the same categories.
                 $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
-                $labels = array_column($categoryNameList, 'title');
-                $labelsWithId = array_column($categoryNameList, 'title', 'id');
+                if (!empty($categoryNameList)) {
+                    $labelsWithId = array_column($categoryNameList, 'title', 'id');
+                    asort($labelsWithId);
+                    $labels = array_values($labelsWithId);
+                }
             }
 
             foreach ($userList as $userId) {
@@ -10497,19 +10501,16 @@ class Exercise
                     $categoryList = $stats['category_list'];
 
                     $tempResult = [];
-                    foreach ($categoryList as $category_id => $category_item) {
-                        $tempResult[$category_id] = round($category_item['score'] / $category_item['total'] * 10);
-                    }
-                    $resultsArray = [];
-                    foreach ($labelsWithId as $categoryId => $label) {
-                        if (isset($tempResult[$categoryId])) {
-                            $resultsArray[] = $tempResult[$categoryId];
+                    foreach ($labelsWithId as $category_id => $title) {
+                        if (isset($categoryList[$category_id])) {
+                            $category_item = $categoryList[$category_id];
+                            $tempResult[] = round($category_item['score'] / $category_item['total'] * 10);
                         } else {
-                            $resultsArray[] = 0;
+                            $tempResult[] = 0;
                         }
-                    }
 
-                    $dataSet[] = $resultsArray;
+                    }
+                    $dataSet[] = $tempResult;
                 }
             }
         }

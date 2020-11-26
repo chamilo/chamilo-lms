@@ -457,6 +457,15 @@ $saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_durat
 $questionListInSession = Session::read('questionList');
 $selectionType = $objExercise->getQuestionSelectionType();
 
+$allowBlockCategory = false;
+if (api_get_configuration_value('block_category_questions')) {
+    $extraFieldValue = new ExtraFieldValue('exercise');
+    $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'block_category');
+    if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {
+        $allowBlockCategory = true;
+    }
+}
+
 if (!isset($questionListInSession)) {
     // Selects the list of question ID
     $questionList = $objExercise->getQuestionList();
@@ -475,7 +484,7 @@ if (!isset($questionListInSession)) {
     ) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
         $categoryList = [];
-        if (api_get_configuration_value('block_category_questions')) {
+        if ($allowBlockCategory) {
             foreach ($questionList as $question) {
                 $categoryId = TestCategory::getCategoryForQuestion($question);
                 $categoryList[$categoryId][] = $question;
@@ -605,7 +614,7 @@ if (!isset($_SESSION['questionList'])) {
 }
 
 $isLastQuestionInCategory = 0;
-if (api_get_configuration_value('block_category_questions') &&
+if ($allowBlockCategory &&
     ONE_PER_PAGE == $objExercise->type &&
     EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $selectionType
 ) {

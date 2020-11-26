@@ -8634,4 +8634,12 @@ $Tariff = "Tarification";
 $ToInvoice = "À facturer";
 $LearningPathItemByAuthor = "Éléménts de parcours par auteur";
 $DeleteExerciseAttempts = "Supprimer également les tentatives des exercices concernés";
+$ExerciseCategoriesRadarMode = "Afficher uniquement un radar des scores par catégorie, au lieu d'un tableau de catégories. Ne montre pas les scores ou les commentaires individuels.";
+$ExerciseBlockBecausePercentageX = "Toutes les tentatives ont été bloquées car vous n’avez pas atteint le score minimum de %s % à l’une de vos tentatives.";
+$RegisteredAuthors = "Auteurs qui ont été enregistrés :";
+$Price = "Prix";
+$PriceUpdated = "Prix mis à jour";
+$RemoveSelected = "Retirer les auteurs sélectionnés";
+$DeletedAuthors = "Les auteurs ont été retirés";
+$HideCategoryTable = "Cacher le tableau de catégories";
 ?>

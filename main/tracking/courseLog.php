@@ -493,7 +493,7 @@ if ($nbStudents > 0) {
                 $scoresDistribution[$reducedAverage]++;
             }
             $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
-            list($hours, $minutes, $seconds) = preg_split('/:/', $userTracking[4]);
+            [$hours, $minutes, $seconds] = preg_split('/:/', $userTracking[4]);
             $minutes = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
 
             $certificate = false;
@@ -548,9 +548,6 @@ if ($nbStudents > 0) {
     $mainForm->addHtml($formClass->returnForm());
     $mainForm->addHtml($formExtraField->returnForm());
     $mainForm->addHtml('</div>');
-
-    //$html .= $formClass->returnForm();
-    //$html .= $formExtraField->returnForm();
     $html .= $mainForm->returnForm();
 
     $getLangXDays = get_lang('XDays');
@@ -671,6 +668,7 @@ if ($nbStudents > 0) {
         false
     );
     $headers['exercise_average'] = get_lang('ExerciseAverage');
+
     $table->set_header(
         $headerCounter++,
         get_lang('Score').'&nbsp;'.
@@ -686,6 +684,27 @@ if ($nbStudents > 0) {
         false
     );
     $headers['score_best'] = $bestScoreLabel;
+
+    $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+    $exerciseResultHeaders = [];
+    if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
+        isset($addExerciseOption['courses'][$courseCode])
+    ) {
+        foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
+            $exercise = new Exercise();
+            $exercise->read($exerciseId);
+            if ($exercise->iId) {
+                $title = get_lang('Exercise').': '.$exercise->get_formated_title();
+                $table->set_header(
+                    $headerCounter++,
+                    $title,
+                    false
+                );
+                $exerciseResultHeaders[] = $title;
+                $headers['exercise_'.$exercise->iId] = $title;
+            }
+        }
+    }
 
     $table->set_header($headerCounter++, get_lang('Student_publication'), false);
     $headers['student_publication'] = get_lang('Student_publication');
@@ -986,6 +1005,11 @@ if ($export_csv) {
     $csv_headers[] = get_lang('ExerciseAverage');
     $csv_headers[] = get_lang('Score');
     $csv_headers[] = $bestScoreLabel;
+    if (!empty($exerciseResultHeaders)) {
+        foreach ($exerciseResultHeaders as $exerciseLabel) {
+            $csv_headers[] = $exerciseLabel;
+        }
+    }
     $csv_headers[] = get_lang('Student_publication');
     $csv_headers[] = get_lang('Messages');
     if (empty($sessionId)) {

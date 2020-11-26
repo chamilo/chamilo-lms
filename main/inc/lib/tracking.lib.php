@@ -7566,7 +7566,7 @@ class TrackingCourseLog
                         }
 
                         if ($result_extra_field['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {
-                            list($level1, $level2, $level3) = explode(';', $row['value']);
+                            [$level1, $level2, $level3] = explode(';', $row['value']);
 
                             $row['value'] = $result_extra_field['options'][$level1]['display_text'].' / ';
                             $row['value'] .= $result_extra_field['options'][$level2]['display_text'].' / ';
@@ -7786,6 +7786,21 @@ class TrackingCourseLog
         $sortByFirstName = api_sort_by_first_name();
         Session::write('user_id_list', []);
         $userIdList = [];
+
+        $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+        $exerciseResultsToCheck = [];
+        if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
+            isset($addExerciseOption['courses'][$courseCode])
+        ) {
+            foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
+                $exercise = new Exercise();
+                $exercise->read($exerciseId);
+                if ($exercise->iId) {
+                    $exerciseResultsToCheck[] = $exercise;
+                }
+            }
+        }
+
         while ($user = Database::fetch_array($res, 'ASSOC')) {
             $userIdList[] = $user['user_id'];
             $user['official_code'] = $user['col0'];
@@ -7857,6 +7872,27 @@ class TrackingCourseLog
                 $user['student_score_best'] = $averageBestScore;
             }
 
+            $exerciseResults = [];
+            if (!empty($exerciseResultsToCheck)) {
+                foreach ($exerciseResultsToCheck as $exercise) {
+                    $bestExerciseResult = Event::get_best_attempt_exercise_results_per_user(
+                        $user['user_id'],
+                        $exercise->iId,
+                        $courseId,
+                        $session_id,
+                        false
+                    );
+
+                    $best = null;
+                    if ($bestExerciseResult) {
+                        $best = $bestExerciseResult['exe_result'] / $bestExerciseResult['exe_weighting'];
+                        $best = round($best, 2) * 100;
+                        $best .= '%';
+                    }
+                    $exerciseResults['exercise_'.$exercise->iId] = $best;
+                }
+            }
+
             $user['count_assignments'] = Tracking::count_student_assignments(
                 $user['user_id'],
                 $course_code,
@@ -7921,6 +7957,12 @@ class TrackingCourseLog
             $user_row['exercise_average_best_attempt'] = $user['exercise_average_best_attempt'];
             $user_row['student_score'] = $user['student_score'];
             $user_row['student_score_best'] = $user['student_score_best'];
+            if (!empty($exerciseResults)) {
+                foreach ($exerciseResults as $exerciseId => $bestResult) {
+                    $user_row[$exerciseId] = $bestResult;
+                }
+            }
+
             $user_row['count_assignments'] = $user['count_assignments'];
             $user_row['count_messages'] = $user['count_messages'];
 

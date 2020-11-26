@@ -108,9 +108,13 @@ if (api_get_configuration_value('block_category_questions') &&
     ONE_PER_PAGE == $objExercise->type &&
     EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $selectionType
 ) {
-    // get last category question list
-    $categoryList = Session::read('categoryList');
-    $question_list = end($categoryList);
+    $extraFieldValue = new ExtraFieldValue('exercise');
+    $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'block_category');
+    if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {
+        // get last category question list
+        $categoryList = Session::read('categoryList');
+        $question_list = end($categoryList);
+    }
 }
 
 echo $objExercise->getReminderTable($question_list, $exercise_stat_info);

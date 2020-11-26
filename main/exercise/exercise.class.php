@@ -2198,6 +2198,12 @@ class Exercise
                         null,
                         get_lang('HideQuestionScore')
                     ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_category_table',
+                        null,
+                        get_lang('HideCategoryTable')
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
@@ -8288,8 +8294,6 @@ class Exercise
 
     /**
      * @param array $values
-     *
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function setPageResultConfiguration($values)
     {
@@ -8299,6 +8303,7 @@ class Exercise
                 'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
                 'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
                 'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
+                'hide_category_table' => isset($values['hide_category_table']) ? $values['hide_category_table'] : '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
@@ -8324,11 +8329,6 @@ class Exercise
     {
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
-            /*$params = [
-                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
-                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : ''
-            ];*/
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
 

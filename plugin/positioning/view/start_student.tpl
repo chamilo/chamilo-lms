@@ -2,9 +2,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-6">
-                    <img style="float:left;" src="/plugin/positioning/img/positioning-line.png" >
-
+                <div class="col-md-5">
+                    <img style="float:left;" src="/plugin/positioning/img/positioning-line.png" />
                     <table style="height:380px;margin-left: auto;margin-right: auto;" >
                         <tr>
                             <td>{{ "InviteToTakePositioningTest"| get_plugin_lang('Positioning') }}{{ "InitialTest"| get_plugin_lang('Positioning') }}:<br>{{ initial_exercise }}</td>
@@ -17,7 +16,9 @@
                         </tr>
                     </table>
                 </div>
-                <div>
+                <div class="col-md-7">
+                    <br />
+                    <br />
                     {{ radars }}
                 </div>
             </div>

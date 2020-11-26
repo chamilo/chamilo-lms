@@ -379,6 +379,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable->addColumn('next_number_invoice', \Doctrine\DBAL\Types\Type::INTEGER);
     $globalTable->addColumn('invoice_series', \Doctrine\DBAL\Types\Type::STRING);
     $globalTable->addColumn('sale_email', \Doctrine\DBAL\Types\Type::STRING);
+    $globalTable->addColumn('info_email_extra', \Doctrine\DBAL\Types\Type::TEXT);
     $globalTable->setPrimaryKey(['id']);
 }
 

@@ -1744,6 +1744,7 @@ $_configuration['auth_password_links'] = [
 
 // Block question categories BT#17789
 //ALTER TABLE track_e_exercises ADD COLUMN blocked_categories LONGTEXT;
+// Requires an exercise extra field "block_category" type checkbox (Yes)
 //$_configuration['block_category_questions'] = false;
 
 // Make questions mandatory selectable when using question select type = 5 (category-random)

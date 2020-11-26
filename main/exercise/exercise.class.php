@@ -1958,6 +1958,7 @@ class Exercise
             $this->id,
             $this->sessionId
         );
+
         if ($linkInfo !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
@@ -3076,6 +3077,7 @@ class Exercise
         $categories = $exerciseObject->getCategoriesInExercise(true);
         // Get all questions no matter the order/category settings
         $questionList = $exerciseObject->getQuestionOrderedList();
+        $sourceId = $exerciseObject->iId;
         // Force the creation of a new exercise
         $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
         // Hides the new exercise
@@ -3092,6 +3094,9 @@ class Exercise
         $em = Database::getManager();
 
         if ($newId && !empty($questionList)) {
+            $extraField = new ExtraFieldValue('exercise');
+            $extraField->copy($sourceId, $newId);
+
             // Question creation
             foreach ($questionList as $oldQuestionId) {
                 $oldQuestionObj = Question::read($oldQuestionId, null, false);
@@ -3099,7 +3104,6 @@ class Exercise
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        //$newQuestionObj->addToList($newId);
                         $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                                 VALUES ($courseId, ".$newQuestionId.", ".$newId.", '$count')";
                         Database::query($sql);

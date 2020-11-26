@@ -796,7 +796,9 @@ class TestCategory
         $radar = '';
         $countCategories = count($category_list);
         if ($countCategories > 1) {
-            $resultsArray = [];
+            $tempResult = [];
+            $labels = array_column($categoryNameList, 'title');
+            $labelsWithId = array_column($categoryNameList, 'title', 'id');
             foreach ($category_list as $category_id => $category_item) {
                 $table->setCellContents($row, 0, $categoryNameList[$category_id]['title']);
                 $table->setCellContents(
@@ -819,13 +821,21 @@ class TestCategory
                         true
                     )
                 );
-                $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
+                $tempResult[$category_id] = round($category_item['score'] / $category_item['total'] * 10);
                 $row++;
             }
 
             // Radar requires more than 3 categories.
             if ($countCategories > 2 && RESULT_DISABLE_RADAR === (int) $exercise->results_disabled) {
-                $radar = $exercise->getRadar(array_column($categoryNameList, 'title'), [$resultsArray]);
+                $resultsArray = [];
+                foreach ($labelsWithId as $categoryId => $label) {
+                    if (isset($tempResult[$categoryId])) {
+                        $resultsArray[] = $tempResult[$categoryId];
+                    } else {
+                        $resultsArray[] = 0;
+                    }
+                }
+                $radar = $exercise->getRadar($labels, [$resultsArray]);
             }
 
             if (!empty($none_category)) {

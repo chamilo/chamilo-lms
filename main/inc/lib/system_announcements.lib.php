@@ -809,25 +809,46 @@ class SystemAnnouncementManager
     public static function displayAnnouncementsSlider($visible, $id = null)
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
-        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $tableAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $tableUserGroup = Database::get_main_table(TABLE_USERGROUP);
+        $tableUserGroupRelAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableUserRelUserGroup = Database::get_main_table(TABLE_USERGROUP_REL_USER);
 
         $cut_size = 500;
         $now = api_get_utc_datetime();
-        $sql = "SELECT * FROM $table
+        $currentUserId = api_get_user_id();
+        $sql = "SELECT a.*
+                FROM $tableAnnouncements a
+                INNER JOIN $tableUserGroupRelAnnouncements b
+                    ON a.id = b.announcement_id
+                INNER JOIN $tableUserGroup c
+                    ON b.group_id = c.id
+                INNER JOIN $tableUserRelUserGroup d
+                    ON c.id = d.usergroup_id
+                INNER JOIN $tableUser e
+                    ON d.user_id = e.id
                 WHERE
-                    (lang = '$user_selected_language' OR lang = '') AND
-                    ('$now' >= date_start AND '$now' <= date_end) ";
+                    e.id = $currentUserId AND
+                    (a.lang = '$user_selected_language' OR a.lang = '') AND
+                    ('$now' >= a.date_start AND '$now' <= a.date_end)";
+        
+        $list = self::getVisibilityList();
+        $visibilityCondition = " AND a.".self::VISIBLE_GUEST." = 1 ";
+        if (in_array($visible, array_keys($list))) {
+            $visibilityCondition = " AND a.$visible = 1 ";
+        }
 
-        $sql .= self::getVisibilityCondition($visible);
+        $sql .= $visibilityCondition;
 
         if (isset($id) && !empty($id)) {
             $id = (int) $id;
-            $sql .= " AND id = $id ";
+            $sql .= " AND a.id = $id ";
         }
 
         if (api_is_multiple_url_enabled()) {
             $current_url_id = api_get_current_access_url_id();
-            $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
+            $sql .= " AND a.access_url_id IN ('1', '$current_url_id') ";
         }
 
         $checkCareers = api_get_configuration_value('allow_careers_in_global_announcements') === true;
@@ -835,9 +856,10 @@ class SystemAnnouncementManager
         $userId = api_get_user_id();
 
         $promotion = new Promotion();
-        $sql .= ' ORDER BY date_start DESC';
+        $sql .= ' ORDER BY a.date_start DESC';
         $result = Database::query($sql);
         $announcements = [];
+
         if (Database::num_rows($result) > 0) {
             while ($announcement = Database::fetch_object($result)) {
                 if ($checkCareers && !empty($announcement->career_id)) {

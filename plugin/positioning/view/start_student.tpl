@@ -6,7 +6,7 @@
                     <img style="float:left;" src="/plugin/positioning/img/positioning-line.png" />
                     <table style="height:380px;margin-left: auto;margin-right: auto;" >
                         <tr>
-                            <td>{{ "InviteToTakePositioningTest"| get_plugin_lang('Positioning') }}{{ "InitialTest"| get_plugin_lang('Positioning') }}:<br>{{ initial_exercise }}</td>
+                            <td>{{ "InviteToTakePositioningTest"| get_plugin_lang('Positioning') }}<br>{{ "InitialTest"| get_plugin_lang('Positioning') }}: {{ initial_exercise }}</td>
                         </tr>
                         <tr>
                             <td>{{ "YouMustCompleteAThresholdToTakeFinalTest"| get_plugin_lang('Positioning') | format(average_percentage_to_unlock_final_exercise) }}<br>{{ "Average"| get_lang }}: {{ average }} %</td>

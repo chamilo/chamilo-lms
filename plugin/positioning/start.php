@@ -119,10 +119,10 @@ if (!empty($users) && $initialData && $initialData['exercise_id']) {
     if ($finalData && $finalData['exercise_id']) {
         $finalExercise = new Exercise();
         $finalExercise->read($finalData['exercise_id']);
-        $result[] = $finalExercise;
+        $results[] = $finalExercise;
     }
-    $result[] = $initialExercise;
-    $radars = $initialExercise->getRadarsFromUsers($users, $result, $courseId, $sessionId);
+    $results[] = $initialExercise;
+    $radars = $initialExercise->getRadarsFromUsers($users, $results, $courseId, $sessionId);
     $initialExerciseTitle = $initialExercise->get_formated_title();
 }
 

@@ -24,10 +24,13 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script(true);
 $origin = api_get_origin();
-
+$clearExercise = false;
 /** @var Exercise $objExercise */
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
+    if ($objExercise->getPreventBackwards()) {
+        $clearExercise = true;
+    }
 }
 
 $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
@@ -287,6 +290,16 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
     $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
     $showFooter = false;
+}
+
+if ($clearExercise == true) {
+    $pageBottom .= "<script>
+window.history.pushState(null, '', window.location.href);
+window.onpopstate = function () {
+    window.history.pushState(null, '', window.location.href);
+};
+</script>  ";
+
 }
 
 $template = new Template($nameTools, $showHeader, $showFooter);

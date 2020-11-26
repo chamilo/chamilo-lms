@@ -360,7 +360,7 @@ class ChamiloApi
     public static function getColorPalette(
         $decimalOpacity = false,
         $wrapInRGBA = false,
-        $fillUpTo = null
+        $fillUpTo = 0
     ) {
         // Get the common colors from the palette used for pchart
         $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';

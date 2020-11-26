@@ -757,10 +757,16 @@ class TestCategory
      */
     public static function get_stats_table_by_attempt($exercise, $category_list = [])
     {
-        $exerciseId = $exercise->iId;
-        if (empty($category_list)) {
+        if (empty($category_list) || empty($exercise)) {
             return null;
         }
+
+        $hide = (int) $exercise->getPageConfigurationAttribute('hide_category_table');
+        if (1 === $hide) {
+            return null;
+        }
+
+        $exerciseId = $exercise->iId;
         $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
         $table = new HTML_Table(
             [

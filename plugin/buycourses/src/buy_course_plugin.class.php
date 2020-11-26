@@ -206,7 +206,7 @@ class BuyCoursesPlugin extends Plugin
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
             }
         }
-        
+
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'info_email_extra'";
         $res = Database::query($sql);
 

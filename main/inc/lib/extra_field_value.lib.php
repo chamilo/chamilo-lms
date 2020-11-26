@@ -1231,7 +1231,7 @@ class ExtraFieldValue extends Model
             if (!empty($sourceValues) && isset($sourceValues['value']) && $sourceValues['value'] != '') {
                 $params = [
                     'extra_'.$variable => $sourceValues['value'],
-                    'item_id' => $destinationId
+                    'item_id' => $destinationId,
                 ];
                 $extraFieldValue->saveFieldValues($params, true);
             }

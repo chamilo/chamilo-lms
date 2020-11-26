@@ -53,7 +53,7 @@ $studentAverage = Tracking::get_avg_student_progress(
     $sessionId
 );
 
-$averageToUnlock = (int) $plugin->get('average_percentage_to_unlock_final_exercise');
+$averageToUnlock = (float) $plugin->get('average_percentage_to_unlock_final_exercise');
 
 $finalExerciseTitle = '';
 $lpUrl = '';
@@ -63,7 +63,7 @@ if ($finalData) {
     $finalExercise->read($exerciseId);
     $finalResults = Event::getExerciseResultsByUser(
         api_get_user_id(),
-        $initialData['exercise_id'],
+        $finalData['exercise_id'],
         $courseId,
         $sessionId
     );

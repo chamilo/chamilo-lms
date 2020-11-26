@@ -10515,8 +10515,8 @@ class Exercise
 
         // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
         $colorList = [
-            'rgb(255, 99, 132, 1.0)',
             'rgb(0,0,200,1.0)', // red
+            'rgb(255, 99, 132, 1.0)', // blue
             'rgb(255, 159, 64, 1.0)', // orange
             'rgb(255, 205, 86, 1.0)', //yellow
             'rgb(75, 192, 192, 1.0)', // green
@@ -10550,22 +10550,23 @@ class Exercise
         $resultsToJson = json_encode($dataSetToJson);
 
         return "
-                <canvas id='categoryRadar' width='400' height='200'></canvas>
+                <canvas id='categoryRadar' height='200'></canvas>
                 <script>
                     var data = {
                         labels: $labels,
                         datasets: $resultsToJson
                     }
                     var options = {
+                        responsive: true,
                         scale: {
                             angleLines: {
                                 display: false
                             },
                             ticks: {
                                 beginAtZero: true,
-                                  min: 0,
-                                  max: 10,
-                                  stepSize: 1
+                                min: 0,
+                                max: 10,
+                                stepSize: 1,
                             },
                             pointLabels: {
                               fontSize: 14,
@@ -10581,7 +10582,11 @@ class Exercise
                         legend: {
                             //position: 'bottom'
                             display: false
-                        }
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        },
                     };
                     var ctx = document.getElementById('categoryRadar').getContext('2d');
                     var myRadarChart = new Chart(ctx, {

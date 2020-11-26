@@ -10469,10 +10469,9 @@ class Exercise
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
             if (empty($labels)) {
-                // We suppose that all exercises have the same categories.
                 $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
                 if (!empty($categoryNameList)) {
-                    $labelsWithId = array_column($categoryNameList, 'title', 'id');
+                $labelsWithId = array_column($categoryNameList, 'title', 'id');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
                 }

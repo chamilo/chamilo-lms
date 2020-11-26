@@ -110,11 +110,19 @@ $radars = '';
 
 $initialExerciseTitle = '';
 if (!empty($users) && $initialData && $initialData['exercise_id']) {
+    $results = [];
     $users = array_column($users, 'user_id');
     $exerciseId = $initialData['exercise_id'];
     $initialExercise = new Exercise();
     $initialExercise->read($exerciseId);
-    $radars = $initialExercise->getRadarsFromUsers($users, [$initialExercise], $courseId, $sessionId);
+    $finalData = $plugin->getFinalExercise($courseId, $sessionId);
+    if ($finalData && $finalData['exercise_id']) {
+        $finalExercise = new Exercise();
+        $finalExercise->read($finalData['exercise_id']);
+        $result[] = $finalExercise;
+    }
+    $result[] = $initialExercise;
+    $radars = $initialExercise->getRadarsFromUsers($users, $result, $courseId, $sessionId);
     $initialExerciseTitle = $initialExercise->get_formated_title();
 }
 

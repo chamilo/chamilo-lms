@@ -397,6 +397,7 @@ class TestCategory
                 $result[$categoryId] = [
                     'id' => $categoryId,
                     'title' => $catInfo['title'],
+                    //'parent_id' =>  $catInfo['parent_id'],
                     'parent_id' => '',
                     'c_id' => $catInfo['c_id'],
                 ];

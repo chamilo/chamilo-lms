@@ -299,7 +299,6 @@ window.onpopstate = function () {
     window.history.pushState(null, '', window.location.href);
 };
 </script>  ";
-
 }
 
 $template = new Template($nameTools, $showHeader, $showFooter);

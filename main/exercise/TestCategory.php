@@ -759,16 +759,17 @@ class TestCategory
     public static function get_stats_table_by_attempt($exercise, $category_list = [])
     {
         if (empty($category_list) || empty($exercise)) {
-            return null;
+            return '';
         }
 
         $hide = (int) $exercise->getPageConfigurationAttribute('hide_category_table');
         if (1 === $hide) {
-            return null;
+            return '';
         }
 
         $exerciseId = $exercise->iId;
         $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
+
         $table = new HTML_Table(
             [
                 'class' => 'table table-hover table-striped table-bordered',
@@ -797,7 +798,7 @@ class TestCategory
         if ($countCategories > 1) {
             $resultsArray = [];
             foreach ($category_list as $category_id => $category_item) {
-                $table->setCellContents($row, 0, $categoryNameList[$category_id]);
+                $table->setCellContents($row, 0, $categoryNameList[$category_id]['title']);
                 $table->setCellContents(
                     $row,
                     1,

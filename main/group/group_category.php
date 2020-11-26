@@ -399,7 +399,6 @@ if ($form->validate()) {
                 $values['id'],
                 $values['title'],
                 $values['description'],
-
                 $values['doc_state'],
                 $values['work_state'],
                 $values['calendar_state'],

@@ -26,6 +26,7 @@ $initialExerciseTitle = '';
 $radar = '';
 $initialResults = null;
 $exercisesToRadar = [];
+$exercisesToRadarLabel = [];
 if ($initialData) {
     $exerciseId = $initialData['exercise_id'];
     $initialExercise = new Exercise();
@@ -43,6 +44,7 @@ if ($initialData) {
         $initialExerciseTitle = Display::url($initialExercise->get_formated_title(), $url);
     } else {
         $exercisesToRadar[] = $initialExercise;
+        $exercisesToRadarLabel[] = $plugin->get_lang('InitialTest');
     }
 }
 
@@ -79,10 +81,17 @@ if ($finalData) {
             }
         }
         $exercisesToRadar[] = $finalExercise;
+        $exercisesToRadarLabel[] = $plugin->get_lang('FinalTest');
     }
 }
 
-$radars = $initialExercise->getRadarsFromUsers([$currentUserId], $exercisesToRadar, $courseId, $sessionId);
+$radars = $initialExercise->getRadarsFromUsers(
+    [$currentUserId],
+    $exercisesToRadar,
+    $exercisesToRadarLabel,
+    $courseId,
+    $sessionId
+);
 $nameTools = $plugin->get_lang('Positioning');
 
 $template = new Template($nameTools);

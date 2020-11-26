@@ -64,6 +64,11 @@ $actions = function ($row) use ($plugin, $url, $courseId, $sessionId) {
         ['class' => $classFinal]
     );
 
+    $actions .= '&nbsp;'.Display::url(
+        Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['iid']
+    );
+
     return $actions;
 };
 
@@ -111,6 +116,7 @@ $radars = '';
 $initialExerciseTitle = '';
 if (!empty($users) && $initialData && $initialData['exercise_id']) {
     $results = [];
+    $labels = [];
     $users = array_column($users, 'user_id');
     $exerciseId = $initialData['exercise_id'];
     $initialExercise = new Exercise();
@@ -120,9 +126,12 @@ if (!empty($users) && $initialData && $initialData['exercise_id']) {
         $finalExercise = new Exercise();
         $finalExercise->read($finalData['exercise_id']);
         $results[] = $finalExercise;
+        $labels[] = $plugin->get_lang('FinalTest');
     }
     $results[] = $initialExercise;
-    $radars = $initialExercise->getRadarsFromUsers($users, $results, $courseId, $sessionId);
+    $labels[] = $plugin->get_lang('InitialTest');
+    //$radars = $initialExercise->getRadarsFromUsers($users, $results, $labels, $courseId, $sessionId);
+    $radars = $initialExercise->getAverageRadarsFromUsers($users, $results, $labels, $courseId, $sessionId);
     $initialExerciseTitle = $initialExercise->get_formated_title();
 }
 

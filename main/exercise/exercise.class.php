@@ -10461,7 +10461,7 @@ class Exercise
         return $content;
     }
 
-    public function getRadarsFromUsers($userList, $exercises, $courseId, $sessionId)
+    public function getRadarsFromUsers($userList, $exercises, $dataSetLabels, $courseId, $sessionId)
     {
         $dataSet = [];
         $labels = [];
@@ -10471,7 +10471,7 @@ class Exercise
             if (empty($labels)) {
                 $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
                 if (!empty($categoryNameList)) {
-                $labelsWithId = array_column($categoryNameList, 'title', 'id');
+                    $labelsWithId = array_column($categoryNameList, 'title', 'id');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
                 }
@@ -10498,7 +10498,6 @@ class Exercise
                     ob_end_clean();
 
                     $categoryList = $stats['category_list'];
-
                     $tempResult = [];
                     foreach ($labelsWithId as $category_id => $title) {
                         if (isset($categoryList[$category_id])) {
@@ -10514,13 +10513,93 @@ class Exercise
             }
         }
 
-        return $this->getRadar($labels, $dataSet);
+        return $this->getRadar($labels, $dataSet, $dataSetLabels);
     }
 
-    public function getRadar($labels, $dataSet)
+    public function getAverageRadarsFromUsers($userList, $exercises, $dataSetLabels, $courseId, $sessionId)
+    {
+        $dataSet = [];
+        $labels = [];
+        $labelsWithId = [];
+        $totals = [];
+
+        $tempResult = [];
+        /** @var Exercise $exercise */
+        foreach ($exercises as $exercise) {
+            $exerciseId = $exercise->iId;
+            if (empty($labels)) {
+                $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
+                if (!empty($categoryNameList)) {
+                    $labelsWithId = array_column($categoryNameList, 'title', 'id');
+                    asort($labelsWithId);
+                    $labels = array_values($labelsWithId);
+                }
+            }
+
+            foreach ($userList as $userId) {
+                $results = Event::getExerciseResultsByUser(
+                    $userId,
+                    $exerciseId,
+                    $courseId,
+                    $sessionId
+                );
+
+                if ($results) {
+                    $firstAttempt = current($results);
+                    $exeId = $firstAttempt['exe_id'];
+
+                    ob_start();
+                    $stats = ExerciseLib::displayQuestionListByAttempt(
+                        $exercise,
+                        $exeId,
+                        false
+                    );
+                    ob_end_clean();
+
+                    $categoryList = $stats['category_list'];
+                    foreach ($labelsWithId as $category_id => $title) {
+                        if (isset($categoryList[$category_id])) {
+                            $category_item = $categoryList[$category_id];
+                            if (!isset($tempResult[$exerciseId][$category_id])) {
+                                $tempResult[$exerciseId][$category_id] = 0;
+                            }
+                            //var_dump($exerciseId,  $category_id, $category_item['score'] / $category_item['total']);
+                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total'] * 10;
+                        }
+                    }
+                }
+            }
+        }
+        //var_dump($tempResult);
+
+        $totalUsers = count($userList);
+
+        foreach ($exercises as $exercise) {
+            $exerciseId = $exercise->iId;
+            $data = [];
+            foreach ($labelsWithId as $category_id => $title) {
+                if (isset($tempResult[$exerciseId]) && isset($tempResult[$exerciseId][$category_id])) {
+                    $data[] = round($tempResult[$exerciseId][$category_id] / $totalUsers);
+                } else {
+                    $data[] = 0;
+                }
+            }
+            //var_dump($data);
+            $dataSet[] = $data;
+        }
+
+        return $this->getRadar($labels, $dataSet, $dataSetLabels);
+    }
+
+    public function getRadar($labels, $dataSet, $dataSetLabels = [])
     {
         if (empty($labels) || empty($dataSet)) {
             return '';
+        }
+
+        $displayLegend = 0;
+        if (!empty($dataSetLabels)) {
+            $displayLegend = 1;
         }
 
         $labels = json_encode($labels);
@@ -10539,13 +10618,14 @@ class Exercise
 
         $dataSetToJson = [];
         $counter = 0;
-        foreach ($dataSet as $resultsArray) {
+        foreach ($dataSet as $index => $resultsArray) {
             $color = isset($colorList[$counter]) ? $colorList[$counter] : 'rgb('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1.0)';
 
+            $label = isset($dataSetLabels[$index]) ? $dataSetLabels[$index] : '';
             $background = str_replace('1.0', '0.2', $color);
             $dataSetToJson[] = [
                 'fill' => true,
-                //'label' =>  '".get_lang('Categories')."',
+                'label' => $label,
                 'backgroundColor' => $background,
                 'borderColor' => $color,
                 'pointBackgroundColor' => $color,
@@ -10556,6 +10636,7 @@ class Exercise
                 'pointBorderWidth' => 3,
                 'pointHoverRadius' => 10,
                 'data' => $resultsArray,
+
             ];
             $counter++;
         }
@@ -10593,7 +10674,7 @@ class Exercise
                         },
                         legend: {
                             //position: 'bottom'
-                            display: false
+                            display: $displayLegend
                         },
                         animation: {
                             animateScale: true,

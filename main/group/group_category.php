@@ -303,6 +303,7 @@ $group = [
     $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('PrivateBetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 $form->addGroup(
     $group,
@@ -398,6 +399,7 @@ if ($form->validate()) {
                 $values['id'],
                 $values['title'],
                 $values['description'],
+
                 $values['doc_state'],
                 $values['work_state'],
                 $values['calendar_state'],

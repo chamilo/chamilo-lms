@@ -1773,6 +1773,13 @@ $_configuration['auth_password_links'] = [
 // All courses with category MY_CATEGORY will be used as course templates BT#18083
 // $_configuration['course_category_code_to_use_as_model'] = 'MY_CATEGORY';
 
+// Shows the best exercise score attempt for a student in the reports.
+/*$_configuration['add_exercise_best_attempt_in_report'] = [
+    'courses' => [
+        'ABC' => [88, 89], // Where ABC is the course code and 88 is the exercise id
+    ]
+];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

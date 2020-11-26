@@ -1775,10 +1775,11 @@ class Event
     /**
      * Get the last best result from all attempts in exercises per user (out of learning paths).
      *
-     * @param int $user_id
-     * @param int $exercise_id
-     * @param int $courseId
-     * @param int $session_id
+     * @param int  $user_id
+     * @param int  $exercise_id
+     * @param int  $courseId
+     * @param int  $session_id
+     * @param bool $skipLpResults
      *
      * @return array
      */
@@ -1786,7 +1787,8 @@ class Event
         $user_id,
         $exercise_id,
         $courseId,
-        $session_id = 0
+        $session_id = 0,
+        $skipLpResults = true
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $courseId = (int) $courseId;
@@ -1800,17 +1802,23 @@ class Event
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
                     session_id = $session_id  AND
-                    exe_user_id = $user_id AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                ORDER BY exe_id";
+                    exe_user_id = $user_id
+                ";
+
+        if ($skipLpResults) {
+            $sql .= ' AND
+                orig_lp_id = 0 AND
+                orig_lp_item_id = 0 ';
+        }
+
+        $sql .= ' ORDER BY exe_id ';
 
         $res = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
         }
-        //Getting the best results of every student
+        // Getting the best results of every student.
         $best_score_return = [];
         $best_score_return['exe_result'] = 0;
 

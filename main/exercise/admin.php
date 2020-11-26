@@ -342,7 +342,7 @@ if ($inATest) {
 
     $maxScoreAllQuestions = 0;
     if ($showPagination === false) {
-        $questionList = $objExercise->selectQuestionList(true, true);
+        $questionList = $objExercise->selectQuestionList(true, $objExercise->random > 0 ? false : true);
         if (!empty($questionList)) {
             foreach ($questionList as $questionItemId) {
                 $question = Question::read($questionItemId);

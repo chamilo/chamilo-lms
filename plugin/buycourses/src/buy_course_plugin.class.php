@@ -206,6 +206,17 @@ class BuyCoursesPlugin extends Plugin
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
             }
         }
+        
+        $sql = "SHOW COLUMNS FROM $table WHERE Field = 'info_email_extra'";
+        $res = Database::query($sql);
+
+        if (Database::num_rows($res) === 0) {
+            $sql = "ALTER TABLE $table ADD (info_email_extra TEXT NOT NULL)";
+            $res = Database::query($sql);
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
 
         $table = self::TABLE_ITEM;
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
@@ -535,6 +546,37 @@ class BuyCoursesPlugin extends Plugin
                 'account' => $params['taccount'],
                 'swift' => $params['tswift'],
             ]
+        );
+    }
+
+    /**
+     * Save email message information in transfer.
+     *
+     * @param array $params The transfer message
+     *
+     * @return int Rows affected. Otherwise return false
+     */
+    public function saveTransferInfoEmail($params)
+    {
+        return Database::update(
+            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
+            ['info_email_extra' => $params['tinfo_email_extra']],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Gets message information for transfer email.
+     *
+     * @return array
+     */
+    public function getTransferInfoExtra()
+    {
+        return Database::select(
+            'info_email_extra AS tinfo_email_extra',
+            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
+            ['id = ?' => 1],
+            'first'
         );
     }
 

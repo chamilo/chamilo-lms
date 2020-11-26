@@ -42,9 +42,6 @@ if ($initialData) {
     if (empty($initialResults)) {
         $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exerciseId;
         $initialExerciseTitle = Display::url($initialExercise->get_formated_title(), $url);
-    } else {
-        $exercisesToRadar[] = $initialExercise;
-        $exercisesToRadarLabel[] = $plugin->get_lang('InitialTest');
     }
 }
 
@@ -83,6 +80,11 @@ if ($finalData) {
         $exercisesToRadar[] = $finalExercise;
         $exercisesToRadarLabel[] = $plugin->get_lang('FinalTest');
     }
+}
+// Set the initial results as second series to make sure it appears on top
+if (!empty($initialExercise)) {
+    $exercisesToRadar[] = $initialExercise;
+    $exercisesToRadarLabel[] = $plugin->get_lang('InitialTest');
 }
 
 $radars = $initialExercise->getRadarsFromUsers(

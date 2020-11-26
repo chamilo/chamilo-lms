@@ -1958,6 +1958,7 @@ class Exercise
             $this->id,
             $this->sessionId
         );
+
         if ($linkInfo !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
@@ -3076,6 +3077,7 @@ class Exercise
         $categories = $exerciseObject->getCategoriesInExercise(true);
         // Get all questions no matter the order/category settings
         $questionList = $exerciseObject->getQuestionOrderedList();
+        $sourceId = $exerciseObject->iId;
         // Force the creation of a new exercise
         $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
         // Hides the new exercise
@@ -3092,6 +3094,9 @@ class Exercise
         $em = Database::getManager();
 
         if ($newId && !empty($questionList)) {
+            $extraField = new ExtraFieldValue('exercise');
+            $extraField->copy($sourceId, $newId);
+
             // Question creation
             foreach ($questionList as $oldQuestionId) {
                 $oldQuestionObj = Question::read($oldQuestionId, null, false);
@@ -3099,7 +3104,6 @@ class Exercise
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        //$newQuestionObj->addToList($newId);
                         $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                                 VALUES ($courseId, ".$newQuestionId.", ".$newId.", '$count')";
                         Database::query($sql);
@@ -3620,6 +3624,7 @@ class Exercise
             error_log('$learnpath_id: '.$learnpath_id);
             error_log('$learnpath_item_id: '.$learnpath_item_id);
             error_log('$choice: '.print_r($choice, 1));
+            error_log('-----------------------------');
         }
 
         $final_overlap = 0;
@@ -3717,7 +3722,7 @@ class Exercise
         }
 
         $user_answer = '';
-        // Get answer list for matching
+        // Get answer list for matching.
         $sql = "SELECT id_auto, id, answer
                 FROM $table_ans
                 WHERE c_id = $course_id AND question_id = $questionId";
@@ -3728,12 +3733,24 @@ class Exercise
             $answerMatching[$real_answer['id_auto']] = $real_answer['answer'];
         }
 
-        $real_answers = [];
-        $quiz_question_options = Question::readQuestionOption(
-            $questionId,
-            $course_id
-        );
+        // Get first answer needed for global question, no matter the answer shuffle option;
+        $firstAnswer = [];
+        if ($answerType == MULTIPLE_ANSWER_COMBINATION ||
+            $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
+        ) {
+            $sql = "SELECT *
+                    FROM $table_ans
+                    WHERE c_id = $course_id AND question_id = $questionId
+                    ORDER BY position
+                    LIMIT 1";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $firstAnswer = Database::fetch_array($result);
+            }
+        }
 
+        $real_answers = [];
+        $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
         $organs_at_risk_hit = 0;
         $questionScore = 0;
         $orderedHotSpots = [];
@@ -3769,7 +3786,7 @@ class Exercise
                 error_log("answerWeighting: $answerWeighting");
             }
 
-            // Delineation
+            // Delineation.
             $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
             $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
 
@@ -5626,13 +5643,16 @@ class Exercise
             }
         }
 
-        //we add the total score after dealing with the answers
+        // We add the total score after dealing with the answers.
         if ($answerType == MULTIPLE_ANSWER_COMBINATION ||
             $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
         ) {
             if ($final_answer) {
                 //getting only the first score where we save the weight of all the question
                 $answerWeighting = $objAnswerTmp->selectWeighting(1);
+                if (empty($answerWeighting) && !empty($firstAnswer) && isset($firstAnswer['ponderation'])) {
+                    $answerWeighting = $firstAnswer['ponderation'];
+                }
                 $questionScore += $answerWeighting;
             }
         }

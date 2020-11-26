@@ -40,7 +40,7 @@ $form->addElement(
     Display::url(
         get_lang('ExampleCSVFile'),
         api_get_path(WEB_CODE_PATH).'group/example.csv',
-        ['download' => true]
+        ['download' => 'example.csv']
     )
 );
 $form->addButtonImport(get_lang('Import'));

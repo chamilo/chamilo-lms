@@ -1644,7 +1644,7 @@ $_configuration['auth_password_links'] = [
 /*$_configuration['exercise_finished_notification_settings'] = [
     'notification_teacher' => [ // Notification label
         'for teacher' => [ // for teacher
-            'skip_notification_if_user_in_extra_field' => [
+            'send_notification_if_user_in_extra_field' => [
                 'company_variable' => ['Company A', 'Company B'],
             ],
             'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
@@ -1769,6 +1769,9 @@ $_configuration['auth_password_links'] = [
 
 // Enable a "Previous question" button in surveys
 // $_configuration['survey_backwards_enable'] = false;
+
+// All courses with category MY_CATEGORY will be used as course templates BT#18083
+// $_configuration['course_category_code_to_use_as_model'] = 'MY_CATEGORY';
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

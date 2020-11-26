@@ -160,6 +160,20 @@ class ExtraFieldValue extends Model
                 continue;
             }
 
+            // see  BT#17943
+            $authors = false;
+            if (
+                $extraFieldInfo['variable'] == 'authors'
+                || $extraFieldInfo['variable'] == 'authorlp'
+                || $extraFieldInfo['variable'] == 'authorlpitem'
+                || $extraFieldInfo['variable'] == 'price'
+            ) {
+                $authors = true;
+            }
+            if (!api_is_platform_admin() && $authors == true) {
+                continue;
+            }
+
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
             $dirPermissions = api_get_permissions_for_new_directories();
@@ -1200,5 +1214,29 @@ class ExtraFieldValue extends Model
         }
 
         return $valueList;
+    }
+
+    public function copy($sourceId, $destinationId)
+    {
+        if (empty($sourceId) || empty($destinationId)) {
+            return false;
+        }
+
+        $extraField = new ExtraField($this->type);
+        $allFields = $extraField->get_all();
+        $extraFieldValue = new ExtraFieldValue($this->type);
+        foreach ($allFields as $field) {
+            $variable = $field['variable'];
+            $sourceValues = $extraFieldValue->get_values_by_handler_and_field_variable($sourceId, $variable);
+            if (!empty($sourceValues) && isset($sourceValues['value']) && $sourceValues['value'] != '') {
+                $params = [
+                    'extra_'.$variable => $sourceValues['value'],
+                    'item_id' => $destinationId
+                ];
+                $extraFieldValue->saveFieldValues($params, true);
+            }
+        }
+
+        return true;
     }
 }

@@ -4627,7 +4627,6 @@ EOT;
         }
 
         $question_list_answers = [];
-        $media_list = [];
         $category_list = [];
         $loadChoiceFromSession = false;
         $fromDatabase = true;
@@ -5945,6 +5944,26 @@ EOT;
                 );
             }
 
+            // Blocking exercise.
+            $blockPercentageExtra = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'blocking_percentage'
+            );
+            $blockPercentage = false;
+            if ($blockPercentageExtra && isset($blockPercentageExtra['value']) && $blockPercentageExtra['value']) {
+                $blockPercentage = $extraFieldData['value'];
+            }
+
+            if ($blockPercentage) {
+                $passBlock = $stats['total_percentage'] > $blockPercentage;
+                if (false === $passBlock) {
+                    $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                        $objExercise->iId,
+                        'MailIsBlockByPercentage'
+                    );
+                }
+            }
+
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $content = $extraFieldData['value'];
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
@@ -5968,18 +5987,7 @@ EOT;
                 $exerciseNotification = $extraFieldData['value'];
             }
 
-            // Blocking exercise.
-            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
-                'blocking_percentage'
-            );
-            $blockPercentage = false;
-            if ($extraFieldData && isset($extraFieldData['value']) && $extraFieldData['value']) {
-                $blockPercentage = $extraFieldData['value'];
-            }
-
             $extraFieldValueUser = new ExtraFieldValue('user');
-
             if (!empty($exerciseNotification) && !empty($notifications)) {
                 foreach ($notifications as $name => $notificationList) {
                     if ($exerciseNotification !== $name) {
@@ -5987,15 +5995,24 @@ EOT;
                     }
                     foreach ($notificationList as $attemptData) {
                         $skipNotification = false;
-                        $skipNotificationList = isset($attemptData['skip_notification_if_user_in_extra_field']) ? $attemptData['skip_notification_if_user_in_extra_field'] : [];
+                        $skipNotificationList = isset($attemptData['send_notification_if_user_in_extra_field']) ? $attemptData['send_notification_if_user_in_extra_field'] : [];
                         if (!empty($skipNotificationList)) {
                             foreach ($skipNotificationList as $skipVariable => $skipValues) {
                                 $userExtraFieldValue = $extraFieldValueUser->get_values_by_handler_and_field_variable(
                                     $studentId,
                                     $skipVariable
                                 );
-                                if (!empty($userExtraFieldValue) && isset($userExtraFieldValue['value'])) {
-                                    if (in_array($userExtraFieldValue['value'], $skipValues)) {
+
+                                if (empty($userExtraFieldValue)) {
+                                    $skipNotification = true;
+                                    break;
+                                } else {
+                                    if (isset($userExtraFieldValue['value'])) {
+                                        if (!in_array($userExtraFieldValue['value'], $skipValues)) {
+                                            $skipNotification = true;
+                                            break;
+                                        }
+                                    } else {
                                         $skipNotification = true;
                                         break;
                                     }
@@ -6155,7 +6172,7 @@ EOT;
     {
         $exeId = (int) $exeId;
 
-        $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
+        $trackExerciseInfo = self::get_exercise_track_exercise_info($exeId);
 
         if (empty($trackExerciseInfo)) {
             return;

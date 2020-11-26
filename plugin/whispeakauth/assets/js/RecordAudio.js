@@ -1,6 +1,53 @@
 /* For licensing terms, see /license.txt */
 
 window.RecordAudio = (function () {
+    var timerInterval = 0,
+        $txtTimer = null;
+
+    function startTimer() {
+        stopTimer();
+
+        $txtTimer = $('#txt-timer');
+
+        $txtTimer.text('00:00').css('visibility', 'visible');
+
+        var timerData = {
+            hour: 0,
+            minute: 0,
+            second: 0
+        };
+
+        timerInterval = setInterval(function(){
+            timerData.second++;
+
+            if (timerData.second >= 60) {
+                timerData.second = 0;
+                timerData.minute++;
+            }
+
+
+            $txtTimer.text(
+                function () {
+                    var txtSeconds = timerData.minute < 10 ? '0' + timerData.minute : timerData.minute,
+                        txtMinutes = timerData.second < 10 ? '0' + timerData.second : timerData.second;
+
+                    return txtSeconds + ':' + txtMinutes;
+                }
+            );
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        if ($txtTimer) {
+            $txtTimer.css('visibility', 'hidden');
+        }
+    }
+
+
     function useRecordRTC(rtcInfo) {
         $(rtcInfo.blockId).show();
 
@@ -87,7 +134,8 @@ window.RecordAudio = (function () {
                 tagAudio.removeClass('show').parents('#audio-wrapper').addClass('hidden');
 
                 $('.fa-microphone').addClass('text-danger');
-                $('#txt-timer').epiclock({mode: $.epiclock.modes.countup, format: 'e:s'});
+
+                startTimer();
             }
 
             function errorCallback(error) {
@@ -115,7 +163,8 @@ window.RecordAudio = (function () {
             }
 
             $('.fa-microphone').removeClass('text-danger');
-            $('#txt-timer').text('');
+
+            stopTimer();
 
             recordRTC.stopRecording(function (audioURL) {
                 tagAudio.prop('src', audioURL);

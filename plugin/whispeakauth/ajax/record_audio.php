@@ -20,7 +20,7 @@ if ($isEnrollment) {
     header('Content-Type: application/json');
 
     try {
-       echo json_encode($controller->ajax());
+        echo json_encode($controller->ajax());
     } catch (Exception $exception) {
         echo json_encode(
             [

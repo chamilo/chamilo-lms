@@ -103,11 +103,11 @@ if ('1' === $lp->getSubscribeUsers()) {
     }
 } else {
     $categoryId = $lp->getCategoryId();
+    $users = [];
     if (!empty($categoryId)) {
         /** @var CLpCategory $category */
         $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
         $subscribedUsersInCategory = $category->getUsers();
-        $users = [];
         if (!empty($subscribedUsersInCategory)) {
             foreach ($subscribedUsersInCategory as $item) {
                 $user = $item->getUser();
@@ -116,7 +116,9 @@ if ('1' === $lp->getSubscribeUsers()) {
                 }
             }
         }
-    } else {
+    }
+
+    if (empty($categoryId) || empty($users)) {
         if (empty($sessionId)) {
             $users = CourseManager::get_user_list_from_course_code(
                 $courseCode,

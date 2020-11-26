@@ -725,7 +725,6 @@ switch ($action) {
                 if ($debug) {
                     error_log('duration to save in DB:'.$duration);
                 }
-
                 Session::write('duration_time', [$key => $now]);
                 Event::updateEventExercise(
                     $exeId,
@@ -776,6 +775,10 @@ switch ($action) {
         }
 
         if ($type === 'all') {
+            if ($debug) {
+                error_log("result: ok - all");
+                error_log(" ------ end ajax call ------- ");
+            }
             echo 'ok';
             exit;
         }

@@ -7880,7 +7880,7 @@ class TrackingCourseLog
                         $exercise->iId,
                         $courseId,
                         $session_id,
-                        true
+                        false
                     );
 
                     $best = null;

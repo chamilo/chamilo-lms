@@ -91,9 +91,11 @@ class GoogleMeetPlugin extends Plugin
         $src2 = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/64/google_meet_na.png';
         $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet.png';
         $dest2 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet_na.png';
+        $dest3 = api_get_path(SYS_CODE_PATH).'img/icons/32/google_meet.png';
 
         copy($src1, $dest1);
         copy($src2, $dest2);
+        copy($src1, $dest3);
     }
 
     /**
@@ -114,11 +116,15 @@ class GoogleMeetPlugin extends Plugin
         }
         $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet.png';
         $dest2 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet_na.png';
+        $dest3 = api_get_path(SYS_CODE_PATH).'img/icons/32/google_meet.png';
         if (file_exists($dest1)) {
             @unlink($dest1);
         }
         if (file_exists($dest2)) {
             @unlink($dest2);
+        }
+        if (file_exists($dest3)) {
+            @unlink($dest3);
         }
 
         $this->manageTab(false);

@@ -205,6 +205,11 @@ class ZoomPlugin extends Plugin
             ]
         );
         $this->install_course_fields_in_all_courses();
+
+        $src1 = api_get_path(SYS_CODE_PATH).'img/icons/64/zoom_na.png';
+        $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/32/zoom.png';
+
+        copy($src1, $dest1);
     }
 
     /**
@@ -222,6 +227,11 @@ class ZoomPlugin extends Plugin
             ]
         );
         $this->uninstall_course_fields_in_all_courses();
+
+        $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/32/zoom.png';
+        if (file_exists($dest1)) {
+            @unlink($dest1);
+        }
     }
 
     /**

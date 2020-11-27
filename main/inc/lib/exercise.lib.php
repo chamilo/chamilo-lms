@@ -1688,7 +1688,8 @@ HOTSPOT;
                 $tmp[0] = $row['course_title'];
                 $tmp[1] = $row['session_name'];
                 $tmp[2] = $row['quiz_title'];
-                $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'];
+                // Send do other test with r=1 to reset current test session variables
+                $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'].'&r=1';
                 $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::return_icon('quiz.png', get_lang('Edit')).'</a>';
                 if ((int) $row['session_id'] == 0) {
                     $tmp[1] = '-';

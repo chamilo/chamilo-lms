@@ -10563,7 +10563,7 @@ class Exercise
                                 $tempResult[$exerciseId][$category_id] = 0;
                             }
                             //var_dump($exerciseId,  $category_id, $category_item['score'] / $category_item['total']);
-                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total']*10;
+                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total'] * 10;
                         }
                     }
                 }

@@ -17,3 +17,4 @@ $strings['InitialTest'] = 'Initial test';
 $strings['YouMustCompleteAThresholdToTakeFinalTest'] = 'You must complete at least %s%% percent of progress on average for all learning paths to unlock the final test.';
 $strings['FinalTest'] = 'Final test';
 $strings['Positioning'] = 'Positioning';
+$strings['ChartShowsAverageForAllStudentsUsingZeroForIncompleteTests'] = 'Note: This chart shows average scores for all students, using zero for incomplete tests.';

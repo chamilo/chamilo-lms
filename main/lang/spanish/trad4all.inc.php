@@ -8738,4 +8738,7 @@ $PriceUpdated = "Precio actualizado";
 $RemoveSelected = "Eliminar autores seleccionados";
 $DeletedAuthors = "Los autores han sido eliminados";
 $HideCategoryTable = "Esconder la tabla de categorías";
+$XQuestionsSelectedWithTotalScoreY = "Solo se seleccionarán %d preguntas según la configuración del ejercicio, para una puntuación total de %s.";
+$QuestionAlsoUsedInTheFollowingTests = "Esta pregunta se usa también en los ejercicios siguientes";
+$LinkToTestEdition = "Vínculo a la edición del ejercicio";
 ?>

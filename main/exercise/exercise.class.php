@@ -10487,7 +10487,7 @@ class Exercise
                 );
 
                 if ($results) {
-                    $firstAttempt = current($results);
+                    $firstAttempt = end($results);
                     $exeId = $firstAttempt['exe_id'];
 
                     ob_start();
@@ -10545,7 +10545,7 @@ class Exercise
                 );
 
                 if ($results) {
-                    $firstAttempt = current($results);
+                    $firstAttempt = end($results);
                     $exeId = $firstAttempt['exe_id'];
 
                     ob_start();

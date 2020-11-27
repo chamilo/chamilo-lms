@@ -1647,6 +1647,65 @@ HOTSPOT;
         return $nbrAnswers;
     }
 
+    public static function showExtraInfoWhereQuestionUsed($exerciseId)
+    {
+        $sql = "SELECT q.title quiz_title,
+                        c.title course_title,
+                        s.name session_name,
+                        q.iid as quiz_id,
+                        q.c_id,
+                        q.session_id
+                FROM c_quiz q,
+                    c_quiz_rel_question qq,
+                    course c,
+                    session s
+                WHERE q.c_id = c.id AND
+                    (q.session_id = s.id OR q.session_id = 0) AND
+                    qq.exercice_id = q.iid AND
+                    qq.question_id = $exerciseId
+                GROUP BY qq.iid";
+
+        $result = [];
+        $html = "";
+
+        $sqlResult = Database::query($sql);
+
+        if (Database::num_rows($sqlResult) >= 2) {
+            while ($row = Database::fetch_array($sqlResult, 'ASSOC')) {
+                $tmp = [];
+                $tmp[0] = $row['course_title'];
+                $tmp[1] = $row['session_name'];
+                $tmp[2] = $row['quiz_title'];
+                $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'];
+                $tmp[3] = Display::url('Link to the questions list of that test', $urlToQuiz);
+                if ((int) $row['session_id'] == 0) {
+                    $tmp[1] = '-';
+                }
+
+                $result[] = $tmp;
+            }
+
+            $headers = [
+                get_lang('Course'),
+                get_lang('Session'),
+                get_lang('Quiz'),
+                get_lang('LinkToTheQuestionListOfThatTest')
+            ];
+
+            $title = Display::div(
+                get_lang('QuestionUsedInTheFollowingTests'),
+                [
+                    'class' => 'section-title',
+                    'style' => 'margin-top: 25px; border-bottom: none'
+                ]
+            );
+
+            $html = $title . Display::table($headers, $result);
+        }
+
+        echo $html;
+    }
+
     /**
      * @param int $exeId
      *

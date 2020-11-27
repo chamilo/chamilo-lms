@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class Exercise.
@@ -10521,7 +10521,6 @@ class Exercise
         $dataSet = [];
         $labels = [];
         $labelsWithId = [];
-        $totals = [];
 
         $tempResult = [];
         /** @var Exercise $exercise */
@@ -10564,15 +10563,16 @@ class Exercise
                                 $tempResult[$exerciseId][$category_id] = 0;
                             }
                             //var_dump($exerciseId,  $category_id, $category_item['score'] / $category_item['total']);
-                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total'] * 10;
+                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total']*10;
                         }
                     }
                 }
             }
         }
-        //var_dump($tempResult);
 
         $totalUsers = count($userList);
+        //var_dump($tempResult, $totalUsers);
+        //exit;
 
         foreach ($exercises as $exercise) {
             $exerciseId = $exercise->iId;

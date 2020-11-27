@@ -110,7 +110,11 @@ if (!empty($table)) {
 }
 
 $initialData = $plugin->getInitialExercise($courseId, $sessionId);
-$users = CourseManager::get_user_list_from_course_code(api_get_course_id(), $sessionId);
+$filter = STUDENT;
+if (!empty($sessionId)) {
+    $filter = 0;
+}
+$users = CourseManager::get_user_list_from_course_code(api_get_course_id(), $sessionId, null, null, $filter);
 $radars = '';
 
 $initialExerciseTitle = '';

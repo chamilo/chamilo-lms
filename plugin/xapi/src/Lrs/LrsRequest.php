@@ -48,7 +48,7 @@ class LrsRequest
             && method_exists($controllerName, $methodName)
         ) {
             /** @var HttpResponse $response */
-            $response = call_user_func([new $controllerName, $methodName]);
+            $response = call_user_func([new $controllerName(), $methodName]);
         } else {
             $response = HttpResponse::create('Not Found', HttpResponse::HTTP_NOT_FOUND);
         }

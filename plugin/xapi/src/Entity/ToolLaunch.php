@@ -94,7 +94,7 @@ class ToolLaunch
      * @ORM\Column(name="lrs_auth_password", type="string", nullable=true)
      */
     private $lrsAuthPassword;
-    /***
+    /*
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -109,19 +109,11 @@ class ToolLaunch
         $this->allowMultipleAttempts = true;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return ToolLaunch
-     */
     public function setId(int $id): ToolLaunch
     {
         $this->id = $id;
@@ -129,19 +121,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return ToolLaunch
-     */
     public function setTitle(string $title): ToolLaunch
     {
         $this->title = $title;
@@ -149,19 +133,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $description
-     *
-     * @return ToolLaunch
-     */
     public function setDescription(?string $description): ToolLaunch
     {
         $this->description = $description;
@@ -169,19 +145,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\Course
-     */
     public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     *
-     * @return ToolLaunch
-     */
     public function setCourse(Course $course): ToolLaunch
     {
         $this->course = $course;
@@ -189,19 +157,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\Session|null
-     */
     public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
-     *
-     * @return ToolLaunch
-     */
     public function setSession(?Session $session): ToolLaunch
     {
         $this->session = $session;
@@ -209,19 +169,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLaunchUrl(): string
     {
         return $this->launchUrl;
     }
 
-    /**
-     * @param string $launchUrl
-     *
-     * @return ToolLaunch
-     */
     public function setLaunchUrl(string $launchUrl): ToolLaunch
     {
         $this->launchUrl = $launchUrl;
@@ -229,19 +181,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getActivityId(): ?string
     {
         return $this->activityId;
     }
 
-    /**
-     * @param string|null $activityId
-     *
-     * @return ToolLaunch
-     */
     public function setActivityId(?string $activityId): ToolLaunch
     {
         $this->activityId = $activityId;
@@ -249,19 +193,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     *
-     * @return ToolLaunch
-     */
     public function setCreatedAt(DateTime $createdAt): ToolLaunch
     {
         $this->createdAt = $createdAt;
@@ -269,19 +205,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getActivityType(): ?string
     {
         return $this->activityType;
     }
 
-    /**
-     * @param string|null $activityType
-     *
-     * @return ToolLaunch
-     */
     public function setActivityType(?string $activityType): ToolLaunch
     {
         $this->activityType = $activityType;
@@ -289,19 +217,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowMultipleAttempts(): bool
     {
         return $this->allowMultipleAttempts;
     }
 
-    /**
-     * @param bool $allowMultipleAttempts
-     *
-     * @return ToolLaunch
-     */
     public function setAllowMultipleAttempts(bool $allowMultipleAttempts): ToolLaunch
     {
         $this->allowMultipleAttempts = $allowMultipleAttempts;
@@ -309,19 +229,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLrsUrl(): ?string
     {
         return $this->lrsUrl;
     }
 
-    /**
-     * @param string|null $lrsUrl
-     *
-     * @return ToolLaunch
-     */
     public function setLrsUrl(?string $lrsUrl): ToolLaunch
     {
         $this->lrsUrl = $lrsUrl;
@@ -329,19 +241,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLrsAuthUsername(): ?string
     {
         return $this->lrsAuthUsername;
     }
 
-    /**
-     * @param string|null $lrsAuthUsername
-     *
-     * @return ToolLaunch
-     */
     public function setLrsAuthUsername(?string $lrsAuthUsername): ToolLaunch
     {
         $this->lrsAuthUsername = $lrsAuthUsername;
@@ -349,19 +253,11 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLrsAuthPassword(): ?string
     {
         return $this->lrsAuthPassword;
     }
 
-    /**
-     * @param string|null $lrsAuthPassword
-     *
-     * @return ToolLaunch
-     */
     public function setLrsAuthPassword(?string $lrsAuthPassword): ToolLaunch
     {
         $this->lrsAuthPassword = $lrsAuthPassword;

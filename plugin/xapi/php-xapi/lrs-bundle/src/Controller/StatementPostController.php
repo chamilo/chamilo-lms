@@ -24,7 +24,6 @@ final class StatementPostController
     }
 
     /**
-     * @param Request     $request
      * @param Statement[] $statements
      */
     public function postStatements(Request $request, array $statements)

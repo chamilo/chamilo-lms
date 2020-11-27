@@ -21,8 +21,6 @@ use Xabbuh\XApi\Model\Verb;
 trait XApiStatementTrait
 {
     /**
-     * @param UserEntity $user
-     *
      * @return \Xabbuh\XApi\Model\Agent
      */
     protected function generateActor(UserEntity $user)
@@ -87,9 +85,6 @@ trait XApiStatementTrait
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Course       $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
-     *
      * @return \Xabbuh\XApi\Model\Activity
      */
     protected function generateActivityFromCourse(

@@ -36,7 +36,7 @@ $page = $request->query->getInt('page', 1);
 $start = ($page - 1) * $length;
 $countStudentList = CourseManager::get_student_list_from_course_code(
     $course->getCode(),
-    !!$session,
+    (bool) $session,
     $session ? $session->getId() : 0,
     null,
     null,
@@ -71,7 +71,7 @@ $pagination->renderer = function ($data) use ($statsUrl) {
 
 $students = CourseManager::get_student_list_from_course_code(
     $course->getCode(),
-    !!$session,
+    (bool) $session,
     $session ? $session->getId() : 0,
     null,
     null,

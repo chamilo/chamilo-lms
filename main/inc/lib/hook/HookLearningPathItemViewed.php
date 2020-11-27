@@ -18,7 +18,7 @@ class HookLearningPathItemViewed extends HookEvent implements HookLearningPathIt
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function notifyLearningPathItemViewed()
     {

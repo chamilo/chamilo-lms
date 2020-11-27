@@ -62,27 +62,16 @@ class SharedStatement
         $this->sent = $sent;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUuid(): ?string
     {
         return $this->uuid;
     }
 
-    /**
-     * @param string|null $uuid
-     *
-     * @return SharedStatement
-     */
     public function setUuid(?string $uuid): SharedStatement
     {
         $this->uuid = $uuid;
@@ -90,19 +79,11 @@ class SharedStatement
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getStatement(): array
     {
         return $this->statement;
     }
 
-    /**
-     * @param array $statement
-     *
-     * @return SharedStatement
-     */
     public function setStatement(array $statement): SharedStatement
     {
         $this->statement = $statement;
@@ -110,19 +91,11 @@ class SharedStatement
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSent(): bool
     {
         return $this->sent;
     }
 
-    /**
-     * @param bool $sent
-     *
-     * @return SharedStatement
-     */
     public function setSent(bool $sent): SharedStatement
     {
         $this->sent = $sent;

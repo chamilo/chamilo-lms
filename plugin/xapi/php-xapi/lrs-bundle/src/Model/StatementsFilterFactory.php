@@ -31,8 +31,6 @@ class StatementsFilterFactory
     }
 
     /**
-     * @param ParameterBag $parameters
-     *
      * @return StatementsFilter
      */
     public function createFromParameterBag(ParameterBag $parameters)

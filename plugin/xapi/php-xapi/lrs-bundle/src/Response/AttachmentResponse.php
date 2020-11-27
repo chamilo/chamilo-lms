@@ -22,9 +22,6 @@ class AttachmentResponse extends Response
 {
     protected $attachment;
 
-    /**
-     * @param Attachment $attachment
-     */
     public function __construct(Attachment $attachment)
     {
         parent::__construct(null);
@@ -70,7 +67,7 @@ class AttachmentResponse extends Response
     /**
      * {@inheritdoc}
      *
-     * @return null|string
+     * @return string|null
      */
     public function getContent()
     {

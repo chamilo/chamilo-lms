@@ -762,7 +762,7 @@ switch ($action) {
                             ],
                             'question' => [
                                 'id' => (int) $my_question_id,
-                                'weight' => (float) $result['weight']
+                                'weight' => (float) $result['weight'],
                             ],
                         ]
                     )

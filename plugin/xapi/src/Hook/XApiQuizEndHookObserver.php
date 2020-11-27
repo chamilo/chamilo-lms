@@ -26,7 +26,7 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
     private $quiz;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function hookQuizEnd(HookQuizEndEventInterface $hookEvent)
     {
@@ -51,7 +51,7 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActor()
     {
@@ -61,7 +61,7 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getVerb()
     {
@@ -72,7 +72,7 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActivity()
     {
@@ -102,7 +102,7 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActivityResult()
     {

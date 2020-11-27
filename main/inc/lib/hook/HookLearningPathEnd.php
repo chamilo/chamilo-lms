@@ -18,7 +18,7 @@ class HookLearningPathEnd extends HookEvent implements HookLearningPathEndEventI
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function hookLearningPathEnd()
     {

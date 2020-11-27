@@ -15,7 +15,7 @@ use Exception;
 class TinCanImporter extends AbstractImporter
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function create(array $fileInfo, Course $course)
     {
@@ -23,7 +23,7 @@ class TinCanImporter extends AbstractImporter
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function validPackage()
     {
@@ -43,5 +43,4 @@ class TinCanImporter extends AbstractImporter
             throw new Exception('Incorrect package. Missing "tincan.xml" file');
         }
     }
-
 }

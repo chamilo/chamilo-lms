@@ -63,22 +63,14 @@ class XApiQuizQuestionAnsweredHookObserver
         $this->session = api_get_session_entity($this->exe->getSessionId());
 
         try {
-            $statement = $this
-                ->createStatement()
-                ->withCreated(
-                    $this->attempt->getTms()
-                );
-
-            $sharedStmt = $this->sendStatementToLrs($statement);
-
-            $this->saveSharedStatement(
-                $sharedStmt->getId(),
-                XApiPlugin::DATA_TYPE_ATTEMPT,
-                $this->attempt->getId()
+            $statement = $this->createStatement(
+                $this->attempt->getTms()
             );
         } catch (Exception $e) {
             return;
         }
+
+        $this->saveSharedStatement($statement);
     }
 
     /**

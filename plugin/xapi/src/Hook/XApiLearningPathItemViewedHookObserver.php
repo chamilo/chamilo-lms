@@ -53,18 +53,11 @@ class XApiLearningPathItemViewedHookObserver
 
         try {
             $statement = $this->createStatement();
-
-            $sharedStmt = $this->sendStatementToLrs($statement);
-
-            $this->saveSharedStatement(
-                $sharedStmt->getId(),
-                XApiPlugin::DATA_TYPE_LP_ITEM_VIEW,
-                $this->lpItemView->getId()
-            );
         } catch (Exception $e) {
             return;
         }
 
+        $this->saveSharedStatement($statement);
     }
 
     /**

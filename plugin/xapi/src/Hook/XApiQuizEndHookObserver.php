@@ -40,19 +40,14 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
         $this->session = api_get_session_entity($this->exe->getSessionId());
 
         try {
-            $statement = $this->createStatement();
-
-            $sharedStmt = $this->sendStatementToLrs($statement);
-
-            $this->saveSharedStatement(
-                $sharedStmt->getId(),
-                XApiPlugin::DATA_TYPE_EXERCISE,
-                $this->exe->getExeId()
+            $statement = $this->createStatement(
+                $this->exe->getExeDate()
             );
         } catch (Exception $e) {
             return;
         }
 
+        $this->saveSharedStatement($statement);
     }
 
     /**

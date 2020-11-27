@@ -5951,7 +5951,7 @@ EOT;
             );
             $blockPercentage = false;
             if ($blockPercentageExtra && isset($blockPercentageExtra['value']) && $blockPercentageExtra['value']) {
-                $blockPercentage = $extraFieldData['value'];
+                $blockPercentage = $blockPercentageExtra['value'];
             }
 
             if ($blockPercentage) {
@@ -6041,7 +6041,6 @@ EOT;
                             }
 
                             if ($blockPercentage && isset($attempt['is_block_by_percentage'])) {
-                                $passBlock = $stats['total_percentage'] > $blockPercentage;
                                 if ($attempt['is_block_by_percentage']) {
                                     if ($passBlock) {
                                         continue;

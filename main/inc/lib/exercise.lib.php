@@ -1647,22 +1647,34 @@ HOTSPOT;
         return $nbrAnswers;
     }
 
-    public static function showExtraInfoWhereQuestionUsed($exerciseId)
+    /**
+     * Get an HTML string with the list of exercises where the given question
+     * is being used
+     * @param int $questionId The iid of the question being observed
+     * @param int $excludeTestId If defined, exclude this (current) test from the list of results
+     * @return string An HTML string containing a div and a table
+     */
+    public static function showTestsWhereQuestionIsUsed(int $questionId, int $excludeTestId = 0)
     {
-        $sql = "SELECT q.title quiz_title,
+        $questionId = (int) $questionId;
+        $sql = "SELECT qz.title quiz_title,
                         c.title course_title,
                         s.name session_name,
-                        q.iid as quiz_id,
-                        q.c_id,
-                        q.session_id
-                FROM c_quiz q,
+                        qz.iid as quiz_id,
+                        qz.c_id,
+                        qz.session_id
+                FROM c_quiz qz,
                     c_quiz_rel_question qq,
                     course c,
                     session s
-                WHERE q.c_id = c.id AND
-                    (q.session_id = s.id OR q.session_id = 0) AND
-                    qq.exercice_id = q.iid AND
-                    qq.question_id = $exerciseId
+                WHERE qz.c_id = c.id AND
+                    (qz.session_id = s.id OR qz.session_id = 0) AND
+                    qq.exercice_id = qz.iid AND ";
+        if (!empty($excludeTestId)) {
+            $excludeTestId = (int) $excludeTestId;
+            $sql .= " qz.iid != $excludeTestId AND ";
+        }
+        $sql .= "     qq.question_id = $questionId
                 GROUP BY qq.iid";
 
         $result = [];
@@ -1670,14 +1682,14 @@ HOTSPOT;
 
         $sqlResult = Database::query($sql);
 
-        if (Database::num_rows($sqlResult) >= 2) {
+        if (Database::num_rows($sqlResult) != 0) {
             while ($row = Database::fetch_array($sqlResult, 'ASSOC')) {
                 $tmp = [];
                 $tmp[0] = $row['course_title'];
                 $tmp[1] = $row['session_name'];
                 $tmp[2] = $row['quiz_title'];
                 $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'];
-                $tmp[3] = Display::url('Link to the questions list of that test', $urlToQuiz);
+                $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::return_icon('quiz.png', get_lang('Edit')).'</a>';
                 if ((int) $row['session_id'] == 0) {
                     $tmp[1] = '-';
                 }
@@ -1689,11 +1701,11 @@ HOTSPOT;
                 get_lang('Course'),
                 get_lang('Session'),
                 get_lang('Quiz'),
-                get_lang('LinkToTheQuestionListOfThatTest')
+                get_lang('LinkToTestEdition')
             ];
 
             $title = Display::div(
-                get_lang('QuestionUsedInTheFollowingTests'),
+                get_lang('QuestionAlsoUsedInTheFollowingTests'),
                 [
                     'class' => 'section-title',
                     'style' => 'margin-top: 25px; border-bottom: none'

@@ -28,8 +28,10 @@ $clearExercise = false;
 /** @var Exercise $objExercise */
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
-    if ($objExercise->getPreventBackwards()) {
-        $clearExercise = true;
+    if (function_exists('getPreventBackwards')) {
+        if ($objExercise->getPreventBackwards()) {
+            $clearExercise = true;
+        }
     }
 }
 

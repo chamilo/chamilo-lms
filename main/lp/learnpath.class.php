@@ -9389,7 +9389,7 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_link_form($action = 'add', $id = 0, $extra_info = '')
+    public function display_link_form($action = 'add', $id = 0, $extra_info = '', $item = null)
     {
         $course_id = api_get_course_int_id();
         $tbl_link = Database::get_course_table(TABLE_LINK);
@@ -9398,10 +9398,12 @@ class learnpath
         $item_description = '';
         $item_url = '';
 
+        $previousId = 0;
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
             $item_url = stripslashes($extra_info['url']);
+            $previousId = $extra_info['previous_item_id'];
         } elseif (is_numeric($extra_info)) {
             $extra_info = (int) $extra_info;
             $sql = "SELECT title, description, url
@@ -9412,6 +9414,10 @@ class learnpath
             $item_title = $row['title'];
             $item_description = $row['description'];
             $item_url = $row['url'];
+        }
+
+        if ($item instanceof learnpathItem) {
+            $previousId = $extra_info->previous;
         }
 
         $form = new FormValidator(
@@ -9431,9 +9437,9 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $legend = get_lang('CreateTheLink');
-        } elseif ($action == 'move') {
+        } elseif ($action === 'move') {
             $legend = get_lang('MoveCurrentLink');
         } else {
             $legend = get_lang('EditCurrentLink');
@@ -9441,7 +9447,7 @@ class learnpath
 
         $form->addHeader($legend);
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $this->setItemTitle($form);
             $defaults['title'] = $item_title;
         }
@@ -9512,15 +9518,15 @@ class learnpath
                     $arrLP[$i]['id']
                 );
 
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                if ($previousId == $arrLP[$i]['id']) {
                     $selectPrevious->setSelected($arrLP[$i]['id']);
-                } elseif ($action == 'add') {
+                } elseif ($action === 'add') {
                     $selectPrevious->setSelected($arrLP[$i]['id']);
                 }
             }
         }
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $urlAttributes = ['class' => 'learnpath_item_form'];
 
             if (is_numeric($extra_info)) {
@@ -9542,13 +9548,13 @@ class learnpath
             $extraField->addElements($form, $id);
         }
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $form->addButtonSave(get_lang('AddLinkToCourse'), 'submit_button');
         } else {
             $form->addButtonSave(get_lang('EditCurrentLink'), 'submit_button');
         }
 
-        if ($action == 'move') {
+        if ($action === 'move') {
             $form->addHidden('title', $item_title);
             $form->addHidden('description', $item_description);
         }
@@ -9579,15 +9585,18 @@ class learnpath
     public function display_student_publication_form(
         $action = 'add',
         $id = 0,
-        $extra_info = ''
+        $extra_info = '',
+        $item = null
     ) {
         $course_id = api_get_course_int_id();
         $tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
         $item_title = get_lang('Student_publication');
+        $previousId = 0;
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
+            $previousId = $extra_info['previous_item_id'];
         } elseif (is_numeric($extra_info)) {
             $extra_info = (int) $extra_info;
             $sql = "SELECT title, description
@@ -9599,6 +9608,12 @@ class learnpath
             if ($row) {
                 $item_title = $row['title'];
             }
+        }
+
+        if ($item instanceof learnpathItem) {
+            $item_title = $item->get_title();
+            $item_description = $item->get_description();
+            $previousId = $item->previous;
         }
 
         $parent = 0;
@@ -9614,15 +9629,15 @@ class learnpath
 
         $form = new FormValidator('frm_student_publication', 'post', '#');
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $form->addHeader(get_lang('Student_publication'));
-        } elseif ($action == 'move') {
+        } elseif ($action === 'move') {
             $form->addHeader(get_lang('MoveCurrentStudentPublication'));
         } else {
             $form->addHeader(get_lang('EditCurrentStudentPublication'));
         }
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $this->setItemTitle($form);
         }
 
@@ -9658,7 +9673,7 @@ class learnpath
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if ($arrLP[$i]['item_type'] == 'dir') {
+                if ($arrLP[$i]['item_type'] === 'dir') {
                     $parentSelect->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
@@ -9690,9 +9705,9 @@ class learnpath
                     $arrLP[$i]['id']
                 );
 
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                if ($previousId == $arrLP[$i]['id']) {
                     $previousSelect->setSelected($arrLP[$i]['id']);
-                } elseif ($action == 'add') {
+                } elseif ($action === 'add') {
                     $previousSelect->setSelected($arrLP[$i]['id']);
                 }
             }
@@ -9703,13 +9718,13 @@ class learnpath
             $extraField->addElements($form, $id);
         }
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $form->addButtonCreate(get_lang('AddAssignmentToCourse'), 'submit_button');
         } else {
             $form->addButtonCreate(get_lang('EditCurrentStudentPublication'), 'submit_button');
         }
 
-        if ($action == 'move') {
+        if ($action === 'move') {
             $form->addHidden('title', $item_title);
             $form->addHidden('description', $item_description);
         }
@@ -9931,6 +9946,7 @@ class learnpath
         if ($item) {
             $item_id = $item->getIid();
             $type = $item->get_type();
+            $path = (int) $item->get_path();
 
             switch ($type) {
                 case 'dir':
@@ -9950,7 +9966,7 @@ class learnpath
                     break;
                 case TOOL_LINK:
                     $return .= $this->display_manipulate($item_id, $type);
-                    $return .= $this->display_link_form('move', $item_id, $item);
+                    $return .= $this->display_link_form('move', $item_id, $path, $item);
                     break;
                 case TOOL_HOTPOTATOES:
                     $return .= $this->display_manipulate($item_id, $type);
@@ -9962,15 +9978,15 @@ class learnpath
                     break;
                 case TOOL_STUDENTPUBLICATION:
                     $return .= $this->display_manipulate($item_id, $type);
-                    $return .= $this->display_student_publication_form('move', $item_id, $item);
+                    $return .= $this->display_student_publication_form('move', $item_id, $path, $item);
                     break;
                 case TOOL_FORUM:
                     $return .= $this->display_manipulate($item_id, $type);
-                    $return .= $this->display_forum_form('move', $item_id, $item);
+                    $return .= $this->display_forum_form('move', $item_id, $path);
                     break;
                 case TOOL_THREAD:
                     $return .= $this->display_manipulate($item_id, $type);
-                    $return .= $this->display_forum_form('move', $item_id, $item);
+                    $return .= $this->display_forum_form('move', $item_id, $path);
                     break;
             }
         }

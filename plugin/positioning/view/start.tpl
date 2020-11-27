@@ -4,6 +4,7 @@
 {{ table }}
 
 {% if radars %}
-    <h4>{{ "InitialTest"| get_plugin_lang('Positioning') }}: {{ initial_exercise }}</h4>
     {{ radars }}
+    <br>
+    {{ "ChartShowsAverageForAllStudentsUsingZeroForIncompleteTests"| get_plugin_lang('Positioning') }}
 {% endif %}

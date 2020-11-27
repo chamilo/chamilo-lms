@@ -10562,7 +10562,6 @@ class Exercise
                             if (!isset($tempResult[$exerciseId][$category_id])) {
                                 $tempResult[$exerciseId][$category_id] = 0;
                             }
-                            //var_dump($exerciseId,  $category_id, $category_item['score'] / $category_item['total']);
                             $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total'] * 10;
                         }
                     }
@@ -10571,8 +10570,6 @@ class Exercise
         }
 
         $totalUsers = count($userList);
-        //var_dump($tempResult, $totalUsers);
-        //exit;
 
         foreach ($exercises as $exercise) {
             $exerciseId = $exercise->iId;
@@ -10584,7 +10581,6 @@ class Exercise
                     $data[] = 0;
                 }
             }
-            //var_dump($data);
             $dataSet[] = $data;
         }
 

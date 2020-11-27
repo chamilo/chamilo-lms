@@ -17,3 +17,4 @@ $strings['InitialTest'] = 'Prueba initial';
 $strings['YouMustCompleteAThresholdToTakeFinalTest'] = 'Completa mínimo %s%% de progreso promedio en las lecciones para desbloquear la prueba final.';
 $strings['FinalTest'] = 'Prueba final';
 $strings['Positioning'] = 'Posicionamiento';
+$strings['ChartShowsAverageForAllStudentsUsingZeroForIncompleteTests'] = 'Nota: Este gráfico muestra las notas promedias para todos los estudiantes, considerando un valor de cero para las pruebas no tomadas.';

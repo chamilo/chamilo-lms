@@ -17,3 +17,4 @@ $strings['InitialTest'] = 'Test initial';
 $strings['YouMustCompleteAThresholdToTakeFinalTest'] = 'Vous devez compléter au moins %s%% de progrès moyen dans les parcours pour débloquer le test final.';
 $strings['FinalTest'] = 'Test final';
 $strings['Positioning'] = 'Positionnement';
+$strings['ChartShowsAverageForAllStudentsUsingZeroForIncompleteTests'] = 'Note: Ce graphique montre les scores moyens, utilisant zéro pour les tests non passés.';

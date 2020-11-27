@@ -8642,4 +8642,7 @@ $PriceUpdated = "Prix mis à jour";
 $RemoveSelected = "Retirer les auteurs sélectionnés";
 $DeletedAuthors = "Les auteurs ont été retirés";
 $HideCategoryTable = "Cacher le tableau de catégories";
+$XQuestionsSelectedWithTotalScoreY = "Seules %d questions seront sélectionnées d'après la configuration de l'exercice, pour un score total de %s.";
+$QuestionAlsoUsedInTheFollowingTests = "Question utilisée également dans les exercices suivants";
+$LinkToTestEdition = "Lien vers l'édition de l'exercice";
 ?>

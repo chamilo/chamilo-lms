@@ -8710,4 +8710,7 @@ $PriceUpdated = "Price updated";
 $RemoveSelected = "Remove selected authors";
 $DeletedAuthors = "Authors have been removed";
 $HideCategoryTable = "Hide category table";
+$XQuestionsSelectedWithTotalScoreY = "Only %d questions will be selected based on the test configuration, for a total score of %s.";
+$QuestionAlsoUsedInTheFollowingTests = "This question is also used in the following tests";
+$LinkToTestEdition = "Link to test edition";
 ?>

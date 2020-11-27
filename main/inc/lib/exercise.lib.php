@@ -5985,7 +5985,7 @@ EOT;
 
         // If there are no pending questions (Open questions).
         if (0 === $countPendingQuestions) {
-            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+            /*$extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
                 $objExercise->iId,
                 'signature_mandatory'
             );
@@ -5997,6 +5997,16 @@ EOT;
                         //return false;
                     }
                 }
+            }*/
+
+            // Notifications.
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'notifications'
+            );
+            $exerciseNotification = '';
+            if ($extraFieldData && isset($extraFieldData['value'])) {
+                $exerciseNotification = $extraFieldData['value'];
             }
 
             $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
@@ -6025,7 +6035,6 @@ EOT;
             if ($blockPercentageExtra && isset($blockPercentageExtra['value']) && $blockPercentageExtra['value']) {
                 $blockPercentage = $blockPercentageExtra['value'];
             }
-
             if ($blockPercentage) {
                 $passBlock = $stats['total_percentage'] > $blockPercentage;
                 if (false === $passBlock) {
@@ -6036,6 +6045,8 @@ EOT;
                 }
             }
 
+            $extraFieldValueUser = new ExtraFieldValue('user');
+
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $content = $extraFieldData['value'];
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
@@ -6045,22 +6056,50 @@ EOT;
                     }
                 }
 
+                $sendMessage = true;
+                if (!empty($exerciseNotification)) {
+                    foreach ($notifications as $name => $notificationList) {
+                        if ($exerciseNotification !== $name) {
+                            continue;
+                        }
+                        foreach ($notificationList as $notificationName => $attemptData) {
+                            if ('student_check' === $notificationName) {
+                                $sendMsgIfInList = isset($attemptData['send_notification_if_user_in_extra_field']) ? $attemptData['send_notification_if_user_in_extra_field'] : '';
+                                if (!empty($sendMsgIfInList)) {
+                                    foreach ($sendMsgIfInList as $skipVariable => $skipValues) {
+                                        $userExtraFieldValue = $extraFieldValueUser->get_values_by_handler_and_field_variable(
+                                            $studentId,
+                                            $skipVariable
+                                        );
+
+                                        if (empty($userExtraFieldValue)) {
+                                            $sendMessage = false;
+                                            break;
+                                        } else {
+                                            $sendMessage = false;
+                                            if (isset($userExtraFieldValue['value']) &&
+                                                in_array($userExtraFieldValue['value'], $skipValues)
+                                            ) {
+                                                $sendMessage = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
                 // Send to student.
-                MessageManager::send_message($currentUserId, $subject, $content);
+                if ($sendMessage) {
+                    MessageManager::send_message($currentUserId, $subject, $content);
+                }
             }
 
-            // Notifications.
-            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
-                'notifications'
-            );
-            $exerciseNotification = '';
-            if ($extraFieldData && isset($extraFieldData['value'])) {
-                $exerciseNotification = $extraFieldData['value'];
-            }
-
-            $extraFieldValueUser = new ExtraFieldValue('user');
-            if (!empty($exerciseNotification) && !empty($notifications)) {
+            if (!empty($exerciseNotification)) {
                 foreach ($notifications as $name => $notificationList) {
                     if ($exerciseNotification !== $name) {
                         continue;

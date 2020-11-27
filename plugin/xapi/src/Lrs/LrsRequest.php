@@ -6,7 +6,10 @@ namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Xabbuh\XApi\Common\Exception\AccessDeniedException;
 
 /**
  * Class LrsRequest.
@@ -30,6 +33,8 @@ class LrsRequest
 
     public function send()
     {
+        $this->validAuth();
+
         $version = $this->request->headers->get('X-Experience-API-Version');
 
         if (null === $version) {
@@ -100,5 +105,45 @@ class LrsRequest
         }
 
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    private function validAuth()
+    {
+        if (!$this->request->headers->has('Authorization')) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $authHeader = $this->request->headers->get('Authorization');
+
+        $parts = explode('Basic ', $authHeader, 2);
+
+        if (empty($parts[1])) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $authDecoded = base64_decode($parts[1]);
+
+        $parts = explode(':', $authDecoded, 2);
+
+        if (empty($parts) || count($parts) !== 2) {
+            throw new AccessDeniedHttpException();
+        }
+
+        list($username, $password) = $parts;
+
+        $auth = \Database::getManager()
+            ->getRepository(\LrsAuth::class)
+            ->findOneBy(
+                ['username' => $username, 'password' => $password]
+            );
+
+        if (null == $auth) {
+            throw new AccessDeniedHttpException();
+        }
+
+        return true;
     }
 }

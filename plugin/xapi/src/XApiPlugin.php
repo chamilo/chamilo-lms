@@ -13,7 +13,6 @@ use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ramsey\Uuid\Uuid;
 use Xabbuh\XApi\Client\XApiClientBuilder;
-use Xabbuh\XApi\Client\XApiClientBuilderInterface;
 use Xabbuh\XApi\Model\IRI;
 
 /**
@@ -104,6 +103,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             [
                 'xapi_shared_statement',
                 'xapi_tool_launch',
+                'xapi_lrs_auth',
 
                 'xapi_attachment',
                 'xapi_object',
@@ -166,6 +166,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             [
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
+                $em->getClassMetadata(LrsAuth::class),
             ]
         );
 
@@ -431,6 +432,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             [
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
+                $em->getClassMetadata(LrsAuth::class),
             ]
         );
 
@@ -513,5 +515,19 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
             ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/index.php%']);
+
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'plugin', 'link' => 'xapi/cmi5/index.php%']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAdminUrl()
+    {
+        $webPath = api_get_path(WEB_PLUGIN_PATH).$this->get_name();
+
+        return "$webPath/admin.php";
     }
 }

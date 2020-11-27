@@ -6328,14 +6328,16 @@ class DocumentManager
      *
      * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
      *
-     * @param string $action   - action type require : 'delete' or 'update'
-     * @param string $old_path - old path info stored to change
-     * @param string $new_path - new path info to substitute
+     * @param string $action     - action type require : 'delete' or 'update'
+     * @param string $old_path   - old path info stored to change
+     * @param string $new_path   - new path info to substitute
+     * @param int    $documentId - iid of specific document
      *
      * @desc Update the file or directory path in the document db document table
      */
-    public static function updateDbInfo($action, $old_path, $new_path = '')
+    public static function updateDbInfo($action, $old_path, $new_path = '', $documentId = 0)
     {
+        $documentId = (int) $documentId;
         $dbTable = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
         $old_path = Database::escape_string($old_path);
@@ -6363,6 +6365,9 @@ class DocumentManager
                           WHERE
                                 c_id = $course_id AND
                                 (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
+                if ($documentId != 0) {
+                    $query .= " AND iid = $documentId";
+                }
                 Database::query($query);
                 break;
         }

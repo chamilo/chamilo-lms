@@ -1,0 +1,4 @@
+suites:
+  default:
+    namespace: XApi\LrsBundle
+    psr4_prefix: XApi\LrsBundle

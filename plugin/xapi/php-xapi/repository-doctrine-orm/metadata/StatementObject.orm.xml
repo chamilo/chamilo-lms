@@ -1,0 +1,83 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="XApi\Repository\Doctrine\Mapping\StatementObject" table="xapi_object">
+        <id name="identifier" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <!-- discriminator column -->
+        <field name="type" type="string" nullable="true" />
+
+        <!-- activity -->
+        <field name="activityId" type="string" nullable="true" />
+        <field name="hasActivityDefinition" type="boolean" nullable="true" />
+        <field name="hasActivityName" type="boolean" nullable="true" />
+        <field name="activityName" type="json_array" nullable="true" />
+        <field name="hasActivityDescription" type="boolean" nullable="true" />
+        <field name="activityDescription" type="json_array" nullable="true" />
+        <field name="activityType" type="string" nullable="true" />
+        <field name="activityMoreInfo" type="string" nullable="true" />
+
+        <!-- actor -->
+        <field name="mbox" type="string" nullable="true" />
+        <field name="mboxSha1Sum" type="string" nullable="true" />
+        <field name="openId" type="string" nullable="true" />
+        <field name="accountName" type="string" nullable="true" />
+        <field name="accountHomePage" type="string" nullable="true" />
+        <field name="name" type="string" nullable="true" />
+
+        <!-- statement reference -->
+        <field name="referencedStatementId" type="string" nullable="true" />
+
+        <!-- sub statement -->
+        <one-to-one field="actor" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="verb" target-entity="XApi\Repository\Doctrine\Mapping\Verb">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="object" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+
+        <!-- activity extensions -->
+        <one-to-one field="activityExtensions" target-entity="XApi\Repository\Doctrine\Mapping\Extensions">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+
+        <!-- group members -->
+        <one-to-many target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" mapped-by="group" field="members" />
+        <many-to-one target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" field="group" inversed-by="members">
+            <join-column referenced-column-name="identifier" />
+        </many-to-one>
+
+        <!-- context activities -->
+        <many-to-one target-entity="XApi\Repository\Doctrine\Mapping\Context" field="parentContext" inversed-by="parentActivities">
+            <join-column referenced-column-name="identifier" />
+        </many-to-one>
+        <many-to-one target-entity="XApi\Repository\Doctrine\Mapping\Context" field="groupingContext" inversed-by="groupingActivities">
+            <join-column referenced-column-name="identifier" />
+        </many-to-one>
+        <many-to-one target-entity="XApi\Repository\Doctrine\Mapping\Context" field="categoryContext" inversed-by="categoryActivities">
+            <join-column referenced-column-name="identifier" />
+        </many-to-one>
+        <many-to-one target-entity="XApi\Repository\Doctrine\Mapping\Context" field="otherContext" inversed-by="otherActivities">
+            <join-column referenced-column-name="identifier" />
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

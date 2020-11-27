@@ -1,0 +1,41 @@
+{
+    "name": "php-xapi/repository-doctrine-orm",
+    "description": "Doctrine based ORM implementations of an Experience API (xAPI) repository",
+    "keywords": ["xAPI", "Tin Can API", "Experience API", "storage", "database", "repository", "entity", "Doctrine", "ORM"],
+    "homepage": "https://github.com/php-xapi/repository-orm/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "doctrine/orm": "^2.3",
+        "php-xapi/repository-api": "^0.4",
+        "php-xapi/repository-doctrine": "^0.4"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^3.4 || ^4.0"
+    },
+    "provide": {
+        "php-xapi/repository-implementation": "0.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "XApi\\Repository\\ORM\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "XApi\\Repository\\ORM\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}

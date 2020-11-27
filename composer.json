@@ -84,7 +84,7 @@
         "onelogin/php-saml": "^3.0",
         "paragonie/random-lib": "2.0.0",
         "patchwork/utf8": "~1.2",
-        "php": ">=5.6",
+        "php": "^7.1",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
         "phpmailer/phpmailer": "~6.1",
         "phpoffice/phpexcel": "~1.8",
@@ -105,7 +105,6 @@
         "symfony/filesystem": "~2.8",
         "symfony/http-foundation": "~2.8",
         "symfony/security": "~2.8",
-        "symfony/serializer": "~3.0",
         "symfony/validator": "~2.8",
         "symfony/yaml": "~2.3",
         "szymach/c-pchart": "3.0.6",
@@ -118,7 +117,12 @@
         "zendframework/zend-config": "~2.6|^3.0",
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
-        "zendframework/zend-soap": "~2.6|^3.0"
+        "zendframework/zend-soap": "~2.6|^3.0",
+        "php-xapi/model": "dev-master as 1.2",
+        "php-xapi/symfony-serializer": "2.1.0 as 2.0",
+        "php-xapi/client": "dev-master",
+        "php-http/guzzle6-adapter": "^2.0",
+        "php-xapi/repository-doctrine": "dev-master"
     },
     "require-dev": {
         "behat/behat": "3.5.0",

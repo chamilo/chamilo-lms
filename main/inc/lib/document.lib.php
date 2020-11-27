@@ -6331,7 +6331,7 @@ class DocumentManager
      * @param string $action     - action type require : 'delete' or 'update'
      * @param string $old_path   - old path info stored to change
      * @param string $new_path   - new path info to substitute
-     * @param Int    $documentId - Id of specific document
+     * @param int    $documentId - iid of specific document
      *
      * @desc Update the file or directory path in the document db document table
      */
@@ -6366,7 +6366,7 @@ class DocumentManager
                                 c_id = $course_id AND
                                 (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
                 if ($documentId != 0) {
-                    $query .= " AND id = $documentId";
+                    $query .= " AND iid = $documentId";
                 }
                 Database::query($query);
                 break;

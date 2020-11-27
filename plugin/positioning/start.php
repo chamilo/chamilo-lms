@@ -125,8 +125,6 @@ if (!empty($users) && $initialData && $initialData['exercise_id']) {
     $exerciseId = $initialData['exercise_id'];
     $initialExercise = new Exercise();
     $initialExercise->read($exerciseId);
-    $results[] = $initialExercise;
-    $labels[] = $plugin->get_lang('InitialTest');
 
     $finalData = $plugin->getFinalExercise($courseId, $sessionId);
     if ($finalData && $finalData['exercise_id']) {
@@ -135,8 +133,9 @@ if (!empty($users) && $initialData && $initialData['exercise_id']) {
         $results[] = $finalExercise;
         $labels[] = $plugin->get_lang('FinalTest');
     }
+    $results[] = $initialExercise;
+    $labels[] = $plugin->get_lang('InitialTest');
 
-    //$radars = $initialExercise->getRadarsFromUsers($users, $results, $labels, $courseId, $sessionId);
     $radars = $initialExercise->getAverageRadarsFromUsers($users, $results, $labels, $courseId, $sessionId);
     $initialExerciseTitle = $initialExercise->get_formated_title();
 }

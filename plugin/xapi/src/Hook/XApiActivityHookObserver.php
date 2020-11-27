@@ -3,13 +3,15 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
+use Doctrine\ORM\OptimisticLockException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\StatementIdAlreadyExistsException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Model\Context;
 use Xabbuh\XApi\Model\ContextActivities;
 use Xabbuh\XApi\Model\Statement;
-use Xabbuh\XApi\Model\StatementId;
+use Xabbuh\XApi\Serializer\Symfony\Serializer;
+use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 
 /**
  * Class XApiActivityHookObserver.
@@ -51,57 +53,44 @@ abstract class XApiActivityHookObserver extends HookObserver
     /**
      * @param \Xabbuh\XApi\Model\Statement $statement
      *
-     * @throws \Exception
-     *
-     * @return \Xabbuh\XApi\Model\Statement
+     * @return \Chamilo\PluginBundle\Entity\XApi\SharedStatement|null
      */
-    protected function sendStatementToLrs(Statement $statement)
+    protected function saveSharedStatement(Statement $statement)
     {
-        $client = XApiPlugin::create()->getXApiStatementClient();
+        $statementSerialized = $this->serializeStatement($statement);
 
-        try {
-            return $client->storeStatement($statement);
-        } catch (ConflictException $e) {
-            throw new Exception($e->getMessage());
-        } catch (XApiException $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    /**
-     * @param \Xabbuh\XApi\Model\StatementId $uuid
-     * @param string                         $dataType
-     * @param int                            $dataId
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return \Chamilo\PluginBundle\Entity\XApi\SharedStatement
-     */
-    protected function saveSharedStatement(StatementId $uuid, $dataType, $dataId)
-    {
-        $sharedStmt = new SharedStatement();
-        $sharedStmt
-            ->setUuid($uuid->getValue())
-            ->setDataType($dataType)
-            ->setDataId($dataId);
+        $sharedStmt = new SharedStatement(
+            json_decode($statementSerialized, true)
+        );
 
         $em = Database::getManager();
         $em->persist($sharedStmt);
-        $em->flush();
+
+        try {
+            $em->flush();
+        } catch (OptimisticLockException $e) {
+            return null;
+        }
 
         return $sharedStmt;
     }
 
     /**
+     * @param \DateTime|null $createdAt
+     *
      * @throws \Xabbuh\XApi\Common\Exception\StatementIdAlreadyExistsException
      *
      * @return \Xabbuh\XApi\Model\Statement
      */
-    protected function createStatement()
+    protected function createStatement(DateTime $createdAt = null)
     {
         $id = $this->getId();
 
-        if ($this->statementAlreadyShared($id->getValue())) {
+        $sharedStmt = Database::getManager()
+            ->getRepository(SharedStatement::class)
+            ->findOneByUuid($id->getValue());
+
+        if ($sharedStmt) {
             throw new StatementIdAlreadyExistsException($id->getValue());
         }
 
@@ -112,7 +101,7 @@ abstract class XApiActivityHookObserver extends HookObserver
             $this->getActivity(),
             $this->getActivityResult(),
             null,
-            null,
+            $createdAt,
             null,
             $this->getContext()
         );
@@ -122,24 +111,6 @@ abstract class XApiActivityHookObserver extends HookObserver
      * @return \Xabbuh\XApi\Model\StatementId
      */
     abstract protected function getId();
-
-    /**
-     * @param string $uuid
-     *
-     * @return bool
-     */
-    protected function statementAlreadyShared($uuid)
-    {
-        $sharedStmt = Database::getManager()
-            ->getRepository(SharedStatement::class)
-            ->findOneByUuid($uuid);
-
-        if ($sharedStmt) {
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * @return \Xabbuh\XApi\Model\Agent
@@ -186,20 +157,17 @@ abstract class XApiActivityHookObserver extends HookObserver
     }
 
     /**
+     * Serialize a statement to JSON.
+     *
      * @param \Xabbuh\XApi\Model\Statement $statement
      *
-     * @return bool
+     * @return string
      */
-    protected function isStatementAlreadySent(Statement $statement)
+    private function serializeStatement(Statement $statement)
     {
-        $sharedStmt = Database::getManager()
-            ->getRepository(SharedStatement::class)
-            ->findOneByUuid($statement->getId()->getValue());
+        $serializer = Serializer::createSerializer();
+        $statementSerializer = new StatementSerializer($serializer);
 
-        if ($sharedStmt) {
-            return true;
-        }
-
-        return false;
+        return $statementSerializer->serializeStatement($statement);
     }
 }

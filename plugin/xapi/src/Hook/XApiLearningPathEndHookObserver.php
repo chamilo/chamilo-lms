@@ -41,17 +41,11 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
 
         try {
             $statement = $this->createStatement();
-
-            $sharedStmt = $this->sendStatementToLrs($statement);
-
-            $this->saveSharedStatement(
-                $sharedStmt->getId(),
-                XApiPlugin::DATA_TYPE_LP_VIEW,
-                $this->lpView->getId()
-            );
         } catch (Exception $e) {
             return;
         }
+
+        $this->saveSharedStatement($statement);
     }
 
     /**

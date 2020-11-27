@@ -14,10 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="xapi_shared_statement",
  *     indexes={
- *         @ORM\Index(name="idx_datatype_dataid", columns={"data_type", "data_id"})
- *     },
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="idx_uuid", columns={"uuid"})
+ *         @ORM\Index(name="idx_uuid", columns={"uuid"})
  *     }
  * )
  * @ORM\Entity()
@@ -33,58 +30,60 @@ class SharedStatement
      */
     private $id;
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="uuid", type="string")
+     * @ORM\Column(name="uuid", type="string", nullable=true)
      */
     private $uuid;
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="data_type", type="string")
+     * @ORM\Column(name="statement", type="array")
      */
-    private $dataType;
+    private $statement;
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="data_id", type="integer")
+     * @ORM\Column(name="sent", type="boolean", options={"default":false})
      */
-    private $dataId;
+    private $sent;
+
+    /**
+     * SharedStatement constructor.
+     *
+     * @param array $statement
+     * @param null  $uuid
+     * @param false $sent
+     */
+    public function __construct($statement, $uuid = null, $sent = false)
+    {
+        $this->statement = $statement;
+        $this->uuid = $uuid;
+        $this->sent = $sent;
+    }
 
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
-     *
-     * @return SharedStatement
+     * @return string|null
      */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUuid()
+    public function getUuid(): ?string
     {
         return $this->uuid;
     }
 
     /**
-     * @param string $uuid
+     * @param string|null $uuid
      *
      * @return SharedStatement
      */
-    public function setUuid($uuid)
+    public function setUuid(?string $uuid): SharedStatement
     {
         $this->uuid = $uuid;
 
@@ -92,41 +91,41 @@ class SharedStatement
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getDataType()
+    public function getStatement(): array
     {
-        return $this->dataType;
+        return $this->statement;
     }
 
     /**
-     * @param string $dataType
+     * @param array $statement
      *
      * @return SharedStatement
      */
-    public function setDataType($dataType)
+    public function setStatement(array $statement): SharedStatement
     {
-        $this->dataType = $dataType;
+        $this->statement = $statement;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getDataId()
+    public function isSent(): bool
     {
-        return $this->dataId;
+        return $this->sent;
     }
 
     /**
-     * @param int $dataId
+     * @param bool $sent
      *
      * @return SharedStatement
      */
-    public function setDataId($dataId)
+    public function setSent(bool $sent): SharedStatement
     {
-        $this->dataId = $dataId;
+        $this->sent = $sent;
 
         return $this;
     }

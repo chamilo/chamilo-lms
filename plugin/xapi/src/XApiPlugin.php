@@ -2,17 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\Lrs\Actor as ActorEntity;
-use Chamilo\PluginBundle\Entity\XApi\Lrs\Attachment as AttachmentEntity;
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
-use Chamilo\PluginBundle\Entity\XApi\Lrs\Context as ContextEntity;
-use Chamilo\PluginBundle\Entity\XApi\Lrs\Extensions as ExtensionsEntity;
-use Chamilo\PluginBundle\Entity\XApi\Lrs\Result as ResultEntity;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
-use Chamilo\PluginBundle\Entity\XApi\Lrs\Statement as StatementEntity;
-use Chamilo\PluginBundle\Entity\XApi\Lrs\StatementObject as StatementObjectEntity;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
-use Chamilo\PluginBundle\Entity\XApi\Lrs\Verb as VerbEntity;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;
@@ -139,21 +134,27 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     private function installPluginDbTables()
     {
         $em = Database::getManager();
+        $pluginEm = self::getEntityManager();
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(
             [
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
+            ]
+        );
 
-                $em->getClassMetadata(AttachmentEntity::class),
-                $em->getClassMetadata(StatementObjectEntity::class),
-                $em->getClassMetadata(ResultEntity::class),
-                $em->getClassMetadata(VerbEntity::class),
-                $em->getClassMetadata(ExtensionsEntity::class),
-                $em->getClassMetadata(ContextEntity::class),
-                $em->getClassMetadata(ActorEntity::class),
-                $em->getClassMetadata(StatementEntity::class),
+        $pluginSchemaTool = new SchemaTool($pluginEm);
+        $pluginSchemaTool->createSchema(
+            [
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Attachment::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\StatementObject::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Result::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Verb::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Extensions::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Context::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Actor::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Statement::class),
             ]
         );
     }
@@ -216,21 +217,27 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public function uninstallPluginDbTables()
     {
         $em = Database::getManager();
+        $pluginEm = self::getEntityManager();
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(
             [
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
+            ]
+        );
 
-                $em->getClassMetadata(AttachmentEntity::class),
-                $em->getClassMetadata(StatementObjectEntity::class),
-                $em->getClassMetadata(ResultEntity::class),
-                $em->getClassMetadata(VerbEntity::class),
-                $em->getClassMetadata(ExtensionsEntity::class),
-                $em->getClassMetadata(ContextEntity::class),
-                $em->getClassMetadata(ActorEntity::class),
-                $em->getClassMetadata(StatementEntity::class),
+        $pluginSchemaTool = new SchemaTool($pluginEm);
+        $pluginSchemaTool->dropSchema(
+            [
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Attachment::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\StatementObject::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Result::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Verb::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Extensions::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Context::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Actor::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Statement::class),
             ]
         );
     }
@@ -452,5 +459,62 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         }
 
         return 'en';
+    }
+
+    public function generateLaunchUrl(
+        $type,
+        $launchUrl,
+        $activityId,
+        Agent $actor,
+        $attemptId,
+        $customLrsUrl = null,
+        $customLrsUsername = null,
+        $customLrsPassword = null
+    ) {
+        $lrsUrl = $customLrsUrl ?: $this->get(self::SETTING_LRS_URL);
+        $lrsAuthUsername = $customLrsUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
+        $lrsAuthPassword = $customLrsPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD);
+
+        $queryData = [
+            'endpoint' => trim($lrsUrl, "/ \t\n\r\0\x0B"),
+            'actor' => Serializer::createSerializer()->serialize($actor, 'json'),
+            'registration' => $attemptId,
+        ];
+
+        if ('tincan' === $type) {
+            $queryData['auth'] = 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword));
+            $queryData['activity_id'] = $activityId;
+        } elseif ('cmi5' === $type) {
+            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'xapi/cmi5/token.php';
+            $queryData['activityId'] = $activityId;
+        }
+
+        return $launchUrl.'?'.http_build_query($queryData, null, '&', PHP_QUERY_RFC3986);
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager|null
+     */
+    public static function getEntityManager()
+    {
+        $em = Database::getManager();
+
+        $prefixes = [
+            __DIR__.'/../php-xapi/repository-doctrine-orm/metadata' => 'XApi\Repository\Doctrine\Mapping'
+        ];
+
+        $driver = new SimplifiedXmlDriver($prefixes);
+        $driver->setGlobalBasename('global');
+
+        $config = Database::getDoctrineConfig(api_get_configuration_value('root_sys'));
+        $config->setMetadataDriverImpl($driver);
+
+        try {
+            return EntityManager::create($em->getConnection()->getParams(), $config);
+        } catch (ORMException $e) {
+            api_not_allowed(true, $e->getMessage());
+        }
+
+        return null;
     }
 }

@@ -1,0 +1,23 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="XApi\Repository\Doctrine\Mapping\Attachment" table="xapi_attachment">
+        <id name="identifier" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="usageType" type="string" />
+        <field name="contentType" type="string" />
+        <field name="length" type="integer" />
+        <field name="sha2" type="string" />
+        <field name="display" type="json_array" />
+        <field name="hasDescription" type="boolean" />
+        <field name="description" type="json_array" nullable="true" />
+        <field name="fileUrl" type="string" nullable="true" />
+        <field name="content" type="text" nullable="true" />
+
+        <many-to-one field="statement" target-entity="XApi\Repository\Doctrine\Mapping\Statement" inversed-by="attachments" />
+    </entity>
+</doctrine-mapping>

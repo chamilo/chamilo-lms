@@ -1,0 +1,59 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="XApi\Repository\Doctrine\Mapping\Context" table="xapi_context">
+        <id name="identifier" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="registration" type="string" nullable="true" />
+        <field name="hasContextActivities" type="boolean" nullable="true" />
+        <field name="revision" type="string" nullable="true" />
+        <field name="platform" type="string" nullable="true" />
+        <field name="language" type="string" nullable="true" />
+        <field name="statement" type="string" nullable="true" />
+
+        <one-to-one field="instructor" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="team" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="extensions" target-entity="XApi\Repository\Doctrine\Mapping\Extensions">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+
+        <!-- context activities -->
+        <one-to-many field="parentActivities" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" mapped-by="parentContext">
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </one-to-many>
+        <one-to-many field="groupingActivities" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" mapped-by="groupingContext">
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </one-to-many>
+        <one-to-many field="categoryActivities" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" mapped-by="categoryContext">
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </one-to-many>
+        <one-to-many field="otherActivities" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" mapped-by="otherContext">
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

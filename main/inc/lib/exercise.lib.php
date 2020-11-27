@@ -1649,9 +1649,11 @@ HOTSPOT;
 
     /**
      * Get an HTML string with the list of exercises where the given question
-     * is being used
-     * @param int $questionId The iid of the question being observed
+     * is being used.
+     *
+     * @param int $questionId    The iid of the question being observed
      * @param int $excludeTestId If defined, exclude this (current) test from the list of results
+     *
      * @return string An HTML string containing a div and a table
      */
     public static function showTestsWhereQuestionIsUsed(int $questionId, int $excludeTestId = 0)
@@ -1702,18 +1704,18 @@ HOTSPOT;
                 get_lang('Course'),
                 get_lang('Session'),
                 get_lang('Quiz'),
-                get_lang('LinkToTestEdition')
+                get_lang('LinkToTestEdition'),
             ];
 
             $title = Display::div(
                 get_lang('QuestionAlsoUsedInTheFollowingTests'),
                 [
                     'class' => 'section-title',
-                    'style' => 'margin-top: 25px; border-bottom: none'
+                    'style' => 'margin-top: 25px; border-bottom: none',
                 ]
             );
 
-            $html = $title . Display::table($headers, $result);
+            $html = $title.Display::table($headers, $result);
         }
 
         echo $html;
@@ -6091,7 +6093,6 @@ EOT;
                         }
                     }
                 }
-
 
                 // Send to student.
                 if ($sendMessage) {

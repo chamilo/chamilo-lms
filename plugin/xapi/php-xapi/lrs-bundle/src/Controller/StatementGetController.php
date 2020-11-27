@@ -32,7 +32,7 @@ use XApi\Repository\Api\StatementRepositoryInterface;
  */
 final class StatementGetController
 {
-    private static $getParameters = array(
+    private static $getParameters = [
         'statementId' => true,
         'voidedStatementId' => true,
         'agent' => true,
@@ -47,7 +47,7 @@ final class StatementGetController
         'format' => true,
         'attachments' => true,
         'ascending' => true,
-    );
+    ];
 
     private $repository;
     private $statementSerializer;
@@ -63,8 +63,6 @@ final class StatementGetController
     }
 
     /**
-     * @param Request $request
-     *
      * @throws BadRequestHttpException if the query parameters does not comply with xAPI specification
      *
      * @return Response
@@ -91,7 +89,7 @@ final class StatementGetController
                 $response = $this->buildMultiStatementsResponse($statements, $includeAttachments);
             }
         } catch (NotFoundException $e) {
-            $response = $this->buildMultiStatementsResponse(array());
+            $response = $this->buildMultiStatementsResponse([]);
         }
 
         $now = new \DateTime();
@@ -101,8 +99,7 @@ final class StatementGetController
     }
 
     /**
-     * @param Statement $statement
-     * @param bool      $includeAttachments true to include the attachments in the response, false otherwise
+     * @param bool $includeAttachments true to include the attachments in the response, false otherwise
      *
      * @return JsonResponse|MultipartResponse
      */
@@ -110,10 +107,10 @@ final class StatementGetController
     {
         $json = $this->statementSerializer->serializeStatement($statement);
 
-        $response = new JsonResponse($json, 200, array(), true);
+        $response = new JsonResponse($json, 200, [], true);
 
         if ($includeAttachments) {
-            $response = $this->buildMultipartResponse($response, array($statement));
+            $response = $this->buildMultipartResponse($response, [$statement]);
         }
 
         $response->setLastModified($statement->getStored());
@@ -131,7 +128,7 @@ final class StatementGetController
     {
         $json = $this->statementResultSerializer->serializeStatementResult(new StatementResult($statements));
 
-        $response = new JsonResponse($json, 200, array(), true);
+        $response = new JsonResponse($json, 200, [], true);
 
         if ($includeAttachments) {
             $response = $this->buildMultipartResponse($response, $statements);
@@ -141,14 +138,13 @@ final class StatementGetController
     }
 
     /**
-     * @param JsonResponse $statementResponse
-     * @param Statement[]  $statements
+     * @param Statement[] $statements
      *
      * @return MultipartResponse
      */
     protected function buildMultipartResponse(JsonResponse $statementResponse, array $statements)
     {
-        $attachmentsParts = array();
+        $attachmentsParts = [];
 
         foreach ($statements as $statement) {
             foreach ((array) $statement->getAttachments() as $attachment) {
@@ -161,8 +157,6 @@ final class StatementGetController
 
     /**
      * Validate the parameters.
-     *
-     * @param ParameterBag $query
      *
      * @throws BadRequestHttpException if the parameters does not comply with the xAPI specification
      */

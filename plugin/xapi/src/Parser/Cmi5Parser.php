@@ -31,9 +31,7 @@ class Cmi5Parser
     /**
      * Cmi5Parser constructor.
      *
-     * @param string                                  $filePath
-     * @param \Chamilo\CoreBundle\Entity\Course       $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
+     * @param string $filePath
      */
     protected function __construct($filePath, Course $course, Session $session = null)
     {
@@ -44,9 +42,7 @@ class Cmi5Parser
     }
 
     /**
-     * @param string                                  $filePath
-     * @param \Chamilo\CoreBundle\Entity\Course       $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
+     * @param string $filePath
      *
      * @return \Chamilo\PluginBundle\XApi\Parser\Cmi5Parser
      */

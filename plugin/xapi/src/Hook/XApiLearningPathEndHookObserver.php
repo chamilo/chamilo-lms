@@ -26,7 +26,7 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
     private $lp;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function notifyLearningPathEnd(HookLearningPathEndEventInterface $event)
     {
@@ -49,7 +49,7 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getActivityResult()
     {
@@ -65,7 +65,7 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActivity()
     {
@@ -92,7 +92,7 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getId()
     {
@@ -103,7 +103,7 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActor()
     {
@@ -113,7 +113,7 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getVerb()
     {

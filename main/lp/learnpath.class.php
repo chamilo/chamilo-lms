@@ -22,7 +22,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
-use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Model\Uuid;
 
 /**

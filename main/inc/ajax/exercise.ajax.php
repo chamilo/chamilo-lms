@@ -751,13 +751,13 @@ switch ($action) {
                             ],
                             'question' => [
                                 'id' => (int) $my_question_id,
-                                'weight' => (float) $result['weight']
+                                'weight' => (float) $result['weight'],
                             ],
                         ]
                     )
                     ->notifyQuizQuestionAnswered();
 
-		if (api_get_configuration_value('allow_time_per_question')) {
+                if (api_get_configuration_value('allow_time_per_question')) {
                     $questionStart = Session::read('question_start', []);
                     if (!empty($questionStart)) {
                         if (isset($questionStart[$my_question_id])) {

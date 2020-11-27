@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Entity\Course;
 class Cmi5Importer extends AbstractImporter
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function create(array $fileInfo, Course $course)
     {

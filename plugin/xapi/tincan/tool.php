@@ -163,7 +163,6 @@ if ($stateDocument) {
     $pageContent .= $table->toHtml();
 }
 
-
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
     'index.php?'.api_get_cidreq()
@@ -180,4 +179,3 @@ $view->assign(
 );
 $view->assign('content', $pageContent);
 $view->display_one_col_template();
-

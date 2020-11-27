@@ -29,13 +29,11 @@ class MultipartResponse extends Response
     protected $parts;
 
     /**
-     * @param JsonResponse         $statementPart
      * @param AttachmentResponse[] $attachmentsParts
      * @param int                  $status
-     * @param array                $headers
-     * @param null|string          $subtype
+     * @param string|null          $subtype
      */
-    public function __construct(JsonResponse $statementPart, array $attachmentsParts = array(), $status = 200, array $headers = array(), $subtype = null)
+    public function __construct(JsonResponse $statementPart, array $attachmentsParts = [], $status = 200, array $headers = [], $subtype = null)
     {
         parent::__construct(null, $status, $headers);
 
@@ -51,8 +49,6 @@ class MultipartResponse extends Response
     }
 
     /**
-     * @param AttachmentResponse $part
-     *
      * @return $this
      */
     public function addAttachmentPart(AttachmentResponse $part)
@@ -71,7 +67,7 @@ class MultipartResponse extends Response
      */
     public function setAttachmentsParts(array $attachmentsParts)
     {
-        $this->parts = array($this->statementPart);
+        $this->parts = [$this->statementPart];
 
         foreach ($attachmentsParts as $part) {
             $this->addAttachmentPart($part);

@@ -18,7 +18,7 @@ class HookQuizQuestionAnswered extends HookEvent implements HookQuizQuestionAnsw
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function notifyQuizQuestionAnswered()
     {

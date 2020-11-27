@@ -7,7 +7,6 @@ namespace Chamilo\PluginBundle\XApi\Parser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
-use Database;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -77,8 +76,6 @@ class TinCanParser
     }
 
     /**
-     * @param \Symfony\Component\DomCrawler\Crawler $launchNode
-     *
      * @return string
      */
     private function parseLaunchUrl(Crawler $launchNode)

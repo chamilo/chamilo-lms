@@ -12,9 +12,7 @@ use Xabbuh\XApi\Model\Result as ActivityResult;
 /**
  * Class XApiLearningPathItemViewedHookObserver.
  */
-class XApiLearningPathItemViewedHookObserver
-    extends XApiActivityHookObserver
-    implements HookLearningPathItemViewedObserverInterface
+class XApiLearningPathItemViewedHookObserver extends XApiActivityHookObserver implements HookLearningPathItemViewedObserverInterface
 {
     use XApiStatementTrait;
 
@@ -32,7 +30,7 @@ class XApiLearningPathItemViewedHookObserver
     private $lpView;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function hookLearningPathItemViewed(HookLearningPathItemViewedEventInterface $event)
     {
@@ -61,7 +59,7 @@ class XApiLearningPathItemViewedHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActor()
     {
@@ -71,7 +69,7 @@ class XApiLearningPathItemViewedHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getVerb()
     {
@@ -82,7 +80,7 @@ class XApiLearningPathItemViewedHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActivity()
     {
@@ -109,7 +107,7 @@ class XApiLearningPathItemViewedHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getActivityResult()
     {
@@ -129,7 +127,7 @@ class XApiLearningPathItemViewedHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getContext()
     {
@@ -148,7 +146,7 @@ class XApiLearningPathItemViewedHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getId()
     {

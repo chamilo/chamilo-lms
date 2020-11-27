@@ -43,27 +43,16 @@ class Cmi5Item
      */
     private $url;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getActivityId(): string
     {
         return $this->activityId;
     }
 
-    /**
-     * @param string $activityId
-     *
-     * @return Cmi5Item
-     */
     public function setActivityId(string $activityId): Cmi5Item
     {
         $this->activityId = $activityId;
@@ -71,19 +60,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getActivityType(): string
     {
         return $this->activityType;
     }
 
-    /**
-     * @param string $activityType
-     *
-     * @return Cmi5Item
-     */
     public function setActivityType(string $activityType): Cmi5Item
     {
         $this->activityType = $activityType;
@@ -91,19 +72,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     * @param string $url
-     *
-     * @return Cmi5Item
-     */
     public function setUrl(string $url): Cmi5Item
     {
         $this->url = $url;

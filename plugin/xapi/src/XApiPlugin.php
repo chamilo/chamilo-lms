@@ -130,63 +130,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @throws \Doctrine\ORM\Tools\ToolsException
-     */
-    private function installPluginDbTables()
-    {
-        $em = Database::getManager();
-        $pluginEm = self::getEntityManager();
-
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(SharedStatement::class),
-                $em->getClassMetadata(ToolLaunch::class),
-                $em->getClassMetadata(Cmi5Item::class),
-            ]
-        );
-
-        $pluginSchemaTool = new SchemaTool($pluginEm);
-        $pluginSchemaTool->createSchema(
-            [
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Attachment::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\StatementObject::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Result::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Verb::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Extensions::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Context::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Actor::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Statement::class),
-            ]
-        );
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function installUuid()
-    {
-        $uuidNamespace = Uuid::uuid1();
-
-        $pluginName = $this->get_name();
-        $urlId = api_get_current_access_url_id();
-
-        api_add_setting(
-            $uuidNamespace,
-            $pluginName.'_'.self::SETTING_UUID_NAMESPACE,
-            $pluginName,
-            'setting',
-            'Plugins',
-            $pluginName,
-            '',
-            '',
-            '',
-            $urlId,
-            1
-        );
-    }
-
-    /**
      * Process to uninstall plugin.
      */
     public function uninstall()
@@ -197,7 +140,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function uninstallHook()
     {
@@ -268,29 +211,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param string|null $lrsUrl
-     * @param string|null $lrsAuthUsername
-     * @param string|null $lrsAuthPassword
-     *
-     * @return \Xabbuh\XApi\Client\XApiClientInterface
-     */
-    private function createXApiClient($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
-    {
-        $baseUrl = $lrsUrl ?: $this->get(self::SETTING_LRS_URL);
-        $lrsAuthUsername = $lrsAuthUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
-        $lrsAuthPassword = $lrsAuthPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD);
-
-        $clientBuilder = new XApiClientBuilder();
-        $clientBuilder
-            ->setHttpClient(Client::createWithConfig([RequestOptions::VERIFY => false]))
-            ->setRequestFactory(new GuzzleMessageFactory())
-            ->setBaseUrl(trim($baseUrl, "/ \t\n\r\0\x0B"))
-            ->setAuth(trim($lrsAuthUsername), trim($lrsAuthPassword));
-
-        return $clientBuilder->build();
-    }
-
-    /**
      * Perform actions after save the plugin configuration.
      *
      * @return \XApiPlugin
@@ -335,7 +255,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function installHook()
     {
@@ -398,27 +318,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         );
     }
 
-    private function addCourseTools()
-    {
-        $courses = Database::getManager()
-            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
-            ->getResult();
-
-        foreach ($courses as $course) {
-            $this->addCourseToolForTinCan($course['id']);
-        }
-    }
-
-    private function deleteCourseTools()
-    {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/index.php%']);
-    }
-
     /**
-     * @param \Xabbuh\XApi\Model\LanguageMap $languageMap
-     * @param string                         $language
+     * @param string $language
      *
      * @return mixed|string
      */
@@ -438,7 +339,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param array  $haystack
      * @param string $needle
      *
      * @return string
@@ -497,7 +397,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $em = Database::getManager();
 
         $prefixes = [
-            __DIR__.'/../php-xapi/repository-doctrine-orm/metadata' => 'XApi\Repository\Doctrine\Mapping'
+            __DIR__.'/../php-xapi/repository-doctrine-orm/metadata' => 'XApi\Repository\Doctrine\Mapping',
         ];
 
         $driver = new SimplifiedXmlDriver($prefixes);
@@ -513,5 +413,103 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         }
 
         return null;
+    }
+
+    /**
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
+    private function installPluginDbTables()
+    {
+        $em = Database::getManager();
+        $pluginEm = self::getEntityManager();
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(SharedStatement::class),
+                $em->getClassMetadata(ToolLaunch::class),
+                $em->getClassMetadata(Cmi5Item::class),
+            ]
+        );
+
+        $pluginSchemaTool = new SchemaTool($pluginEm);
+        $pluginSchemaTool->createSchema(
+            [
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Attachment::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\StatementObject::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Result::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Verb::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Extensions::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Context::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Actor::class),
+                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Statement::class),
+            ]
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function installUuid()
+    {
+        $uuidNamespace = Uuid::uuid1();
+
+        $pluginName = $this->get_name();
+        $urlId = api_get_current_access_url_id();
+
+        api_add_setting(
+            $uuidNamespace,
+            $pluginName.'_'.self::SETTING_UUID_NAMESPACE,
+            $pluginName,
+            'setting',
+            'Plugins',
+            $pluginName,
+            '',
+            '',
+            '',
+            $urlId,
+            1
+        );
+    }
+
+    /**
+     * @param string|null $lrsUrl
+     * @param string|null $lrsAuthUsername
+     * @param string|null $lrsAuthPassword
+     *
+     * @return \Xabbuh\XApi\Client\XApiClientInterface
+     */
+    private function createXApiClient($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
+    {
+        $baseUrl = $lrsUrl ?: $this->get(self::SETTING_LRS_URL);
+        $lrsAuthUsername = $lrsAuthUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
+        $lrsAuthPassword = $lrsAuthPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD);
+
+        $clientBuilder = new XApiClientBuilder();
+        $clientBuilder
+            ->setHttpClient(Client::createWithConfig([RequestOptions::VERIFY => false]))
+            ->setRequestFactory(new GuzzleMessageFactory())
+            ->setBaseUrl(trim($baseUrl, "/ \t\n\r\0\x0B"))
+            ->setAuth(trim($lrsAuthUsername), trim($lrsAuthPassword));
+
+        return $clientBuilder->build();
+    }
+
+    private function addCourseTools()
+    {
+        $courses = Database::getManager()
+            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
+            ->getResult();
+
+        foreach ($courses as $course) {
+            $this->addCourseToolForTinCan($course['id']);
+        }
+    }
+
+    private function deleteCourseTools()
+    {
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'plugin', 'link' => 'xapi/tincan/index.php%']);
     }
 }

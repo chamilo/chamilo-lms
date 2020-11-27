@@ -61,7 +61,7 @@ class AlternateRequestSyntaxListener
         }
 
         foreach ($request->request as $key => $value) {
-            if (in_array($key, array('Authorization', 'X-Experience-API-Version', 'Content-Type', 'Content-Length', 'If-Match', 'If-None-Match'), true)) {
+            if (in_array($key, ['Authorization', 'X-Experience-API-Version', 'Content-Type', 'Content-Length', 'If-Match', 'If-None-Match'], true)) {
                 $request->headers->set($key, $value);
             } else {
                 $request->query->set($key, $value);

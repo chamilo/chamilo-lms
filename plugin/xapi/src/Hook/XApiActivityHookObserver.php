@@ -4,9 +4,7 @@
 
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Doctrine\ORM\OptimisticLockException;
-use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\StatementIdAlreadyExistsException;
-use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Model\Context;
 use Xabbuh\XApi\Model\ContextActivities;
 use Xabbuh\XApi\Model\Statement;
@@ -51,8 +49,6 @@ abstract class XApiActivityHookObserver extends HookObserver
     }
 
     /**
-     * @param \Xabbuh\XApi\Model\Statement $statement
-     *
      * @return \Chamilo\PluginBundle\Entity\XApi\SharedStatement|null
      */
     protected function saveSharedStatement(Statement $statement)
@@ -158,8 +154,6 @@ abstract class XApiActivityHookObserver extends HookObserver
 
     /**
      * Serialize a statement to JSON.
-     *
-     * @param \Xabbuh\XApi\Model\Statement $statement
      *
      * @return string
      */

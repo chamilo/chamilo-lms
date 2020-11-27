@@ -45,7 +45,7 @@ if (!$toolLaunch || !$student) {
 $userIsSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
     $student->getId(),
     $course->getCode(),
-    !!$session,
+    (bool) $session,
     $session ? $session->getId() : 0
 );
 

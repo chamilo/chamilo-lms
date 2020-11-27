@@ -186,10 +186,10 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         if (empty($data)) {
             $this->authorsField = $data;
         } else {
-            $authorsField = $this->authorsField;
+            $data = $this->authorsField;
         }
 
-        return $authorsField;
+        return $data;
     }
 
     /**

@@ -60,7 +60,7 @@ class ImsAssessmentItem
             }
         }
 
-        $string = '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+        return '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd"
                 identifier="'.$this->questionIdent.'"
@@ -68,7 +68,6 @@ class ImsAssessmentItem
                 category = "'.$categoryTitle.'"
         >'."\n";
 
-        return $string;
     }
 
     /**
@@ -264,7 +263,7 @@ class ImsSection
                   ."<questestinterop>\n";
             $foot = "</questestinterop>\n";
         }
-        $out = $head
+        return $head
              .$this->start_section()
              .$this->export_duration()
              .$this->export_presentation()
@@ -272,8 +271,6 @@ class ImsSection
              .$this->exportQuestions()
              .$this->end_section()
              .$foot;
-
-        return $out;
     }
 }
 

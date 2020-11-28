@@ -171,7 +171,7 @@ class ScormQuestion extends Question
         $title = $this->selectTitle();
         $description = $this->selectDescription();
         $cols = 2;
-        $s = '<tr>
+        return '<tr>
             <td colspan="'.$cols.'" id="question_'.$this->id.'_title" valign="middle" style="background-color:#d6d6d6;">
             '.$title.'
             </td>
@@ -181,8 +181,6 @@ class ScormQuestion extends Question
             <i>'.$description.'</i>
             </td>
             </tr>';
-
-        return $s;
     }
 
     /**

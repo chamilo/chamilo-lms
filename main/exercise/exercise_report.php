@@ -313,7 +313,7 @@ if (isset($_REQUEST['comments']) &&
             if ($prereqCheck) {
                 $passed = true;
             }
-            if ($passed === false) {
+            if (false === $passed) {
                 if (!empty($objExerciseTmp->pass_percentage)) {
                     $passed = ExerciseLib::isSuccessExerciseResult(
                         $tot,
@@ -334,9 +334,9 @@ if (isset($_REQUEST['comments']) &&
         }
 
         $sql = "UPDATE $TBL_LP_ITEM_VIEW
-                SET score = '".floatval($tot)."'
+                SET score = '".(float) $tot."'
                 $statusCondition
-                WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
+                WHERE c_id = $course_id AND id = $lp_item_view_id";
         Database::query($sql);
 
         header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
@@ -675,7 +675,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
-    if ($officialCodeInList === 'true') {
+    if ('true' === $officialCodeInList) {
         $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
         $column_model = array_merge([$officialCodeRow], $column_model);
     }

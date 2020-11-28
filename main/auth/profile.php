@@ -13,7 +13,7 @@ use ChamiloSession as Session;
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-apiBlockInactiveUser();
+api_block_inactive_user();
 
 $this_section = SECTION_MYPROFILE;
 $allowSocialTool = api_get_setting('allow_social_tool') === 'true';

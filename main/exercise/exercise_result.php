@@ -276,7 +276,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id
         .'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId
         .'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
-    $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
+    $href = 'fullscreen' === $lp_mode ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();

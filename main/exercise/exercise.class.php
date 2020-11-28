@@ -23,7 +23,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class Exercise
 {
-    const PAGINATION_ITEMS_PER_PAGE = 20;
+    public const PAGINATION_ITEMS_PER_PAGE = 20;
     public $iId;
     public $id;
     public $name;
@@ -6462,7 +6462,7 @@ class Exercise
 
         if (!empty($track_exercise_info)) {
             $totalScore = 0;
-            $objExercise = new Exercise();
+            $objExercise = new self();
             $objExercise->read($track_exercise_info['exe_exo_id']);
             if (!empty($track_exercise_info['data_tracking'])) {
                 $question_list = explode(',', $track_exercise_info['data_tracking']);

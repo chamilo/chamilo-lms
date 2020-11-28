@@ -1,11 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
-use PHPMailer\PHPMailer\PHPMailer as PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -14,8 +15,6 @@ use Symfony\Component\Finder\Finder;
  * This library is in process of being transferred to src/Chamilo/CoreBundle/Component/Utils/ChamiloApi.
  * Whenever a function is transferred to the ChamiloApi class, the places where it is used should include
  * the "use Chamilo\CoreBundle\Component\Utils\ChamiloApi;" statement.
- *
- * @package chamilo.library
  */
 
 // PHP version requirement.
@@ -1287,7 +1286,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
-    apiBlockInactiveUser();
+    api_block_inactive_user();
 
     return true;
 }
@@ -1315,18 +1314,18 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
         return false;
     }
 
-    apiBlockInactiveUser();
+    api_block_inactive_user();
 
     return true;
 }
 
 /**
- * Blocks inactive users with a currently active session from accessing more
- * pages "live".
+ * Blocks inactive users with a currently active session from accessing more pages "live".
  *
- * @return bool Returns true if the feature is disabled or the user account is still enabled. Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
+ * @return bool Returns true if the feature is disabled or the user account is still enabled.
+ *              Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
  */
-function apiBlockInactiveUser()
+function api_block_inactive_user()
 {
     $data = true;
     if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
@@ -1335,7 +1334,7 @@ function apiBlockInactiveUser()
 
     $userId = api_get_user_id();
     $homeUrl = api_get_path(WEB_PATH);
-    if (($userId) == 0) {
+    if ($userId == 0) {
         return $data;
     }
 
@@ -1345,7 +1344,6 @@ function apiBlockInactiveUser()
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
-
         $data = (bool) $result_array['active'];
     }
     if ($data == false) {

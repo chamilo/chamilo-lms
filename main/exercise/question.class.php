@@ -1917,10 +1917,8 @@ abstract class Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question.
-     *
-     * @param FormValidator $form
      */
-    abstract public function createAnswersForm($form);
+    abstract public function createAnswersForm(FormValidator $form);
 
     /**
      * abstract function which process the creation of answers.
@@ -2236,7 +2234,7 @@ abstract class Question
                 ['class' => 'question_description']
             );
         } else {
-            if ($score['pass'] == true) {
+            if (true == $score['pass']) {
                 $message = Display::div(
                     sprintf(
                         get_lang('ReadingQuestionCongratsSpeedXReachedForYWords'),
@@ -2294,10 +2292,10 @@ abstract class Question
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tbl_quiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        $quiz_id = intval($quiz_id);
+        $quiz_id = (int) $quiz_id;
         $max_score = (float) $max_score;
-        $type = intval($type);
-        $level = intval($level);
+        $type = (int) $type;
+        $level = (int) $level;
 
         // Get the max position
         $sql = "SELECT max(position) as max_position
@@ -2543,7 +2541,7 @@ abstract class Question
 
         return
             in_array($this->type, $this->questionTypeWithFeedback) &&
-            $exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM;
+            EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType();
     }
 
     /**

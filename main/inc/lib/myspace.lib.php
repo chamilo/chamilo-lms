@@ -1522,7 +1522,7 @@ class MySpace
                             $table .= "<td>$title</td>";
                         }
                         $table .= "<td>$price</td>";
-                        $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id']);
+                        $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id'], true);
                         $studenRegister = count($registeredUsers);
                         $table .= "<td>$studenRegister</td>";
                         $facturar = ($studenRegister * $price);
@@ -1537,8 +1537,8 @@ class MySpace
                                 "</a>".
                                 "<div id='$hiddenField' class='hidden'>";
                             for ($i = 0; $i < $studenRegister; $i++) {
-                                $tempStudent = api_get_user_info($registeredUsers[$i]);
-                                $table .= $tempStudent['complete_name']."<br>";
+                                $tempStudent = api_get_user_info($registeredUsers[$i]['id']);
+                                $table .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].")<br>";
                             }
                             $index++;
                             $table .= "</div>".
@@ -1632,7 +1632,7 @@ class MySpace
                     $csv_row[] = $autor['complete_name'];
                     $csv_row[] = $title;
                     $csv_row[] = $price;
-                    $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id']);
+                    $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id'], true);
                     $studenRegister = count($registeredUsers);
                     $csv_row[] = $studenRegister;
                     $facturar = ($studenRegister * $price);
@@ -1641,8 +1641,8 @@ class MySpace
                     if ($studenRegister != 0) {
                         $studentsName = '';
                         for ($i = 0; $i < $studenRegister; $i++) {
-                            $tempStudent = api_get_user_info($registeredUsers[$i]);
-                            $studentsName .= $tempStudent['complete_name']." / ";
+                            $tempStudent = api_get_user_info($registeredUsers[$i]['id']);
+                            $studentsName .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].") / ";
 
                             $totalStudent++;
                         }
@@ -3986,10 +3986,16 @@ class MySpace
      * @param string|null $startDate
      * @param string|null $endDate
      * @param int         $lpId
+     * @param bool        $whitCompany
      *
      * @return array
      */
-    protected static function getCompanyLearnpathSubscription($startDate = null, $endDate = null, $lpId = 0)
+    protected static function getCompanyLearnpathSubscription(
+        $startDate = null,
+        $endDate = null,
+        $lpId = 0,
+        $whitCompany = false
+)
     {
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
@@ -4091,7 +4097,14 @@ class MySpace
                 }
                 // $lpId = $row['ref'];
                 if ($lpId != 0 && $studentId != 0) {
-                    $companys[] = $studentId;
+                    if ($whitCompany == true) {
+                        $companys[] = [
+                            'id' => $studentId,
+                            'company' => $company,
+                        ];
+                    } else {
+                        $companys[] = $studentId;
+                    }
                 } else {
                     $companys[$company][] = $studentId;
                     $companys[$company] = array_unique($companys[$company]);

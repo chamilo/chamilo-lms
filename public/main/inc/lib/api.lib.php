@@ -28,7 +28,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '7.2');
+define('REQUIRED_PHP_VERSION', '7.3');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -285,6 +285,10 @@ define('LOG_QUESTION_UPDATED', 'question_updated');
 define('LOG_QUESTION_DELETED', 'question_deleted');
 define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
+define('LOG_SURVEY_ID', 'survey_id');
+define('LOG_SURVEY_CREATED', 'survey_created');
+define('LOG_SURVEY_DELETED', 'survey_deleted');
+define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
 //used when login_is_email setting is true
@@ -468,6 +472,7 @@ define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAY
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
+define('RESULT_DISABLE_RADAR', 9);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -1061,6 +1066,43 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
+    if ($is_visible && 'true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+        $plugin = Positioning::create();
+        $block = $plugin->get('block_course_if_initial_exercise_not_attempted');
+        if ('true' === $block) {
+            $currentPath = $_SERVER['PHP_SELF'];
+            // Allowed only this course paths.
+            $paths = [
+                '/plugin/positioning/start.php',
+                '/plugin/positioning/start_student.php',
+                '/main/course_home/course_home.php',
+                '/main/exercise/overview.php',
+            ];
+
+            if (!in_array($currentPath, $paths, true)) {
+                // Check if entering an exercise.
+                global $current_course_tool;
+                if ('quiz' !== $current_course_tool) {
+                    $initialData = $plugin->getInitialExercise($course_info['real_id'], $session_id);
+                    if ($initialData && isset($initialData['exercise_id'])) {
+                        $results = Event::getExerciseResultsByUser(
+                            api_get_user_id(),
+                            $initialData['exercise_id'],
+                            $course_info['real_id'],
+                            $session_id
+                        );
+                        if (empty($results)) {
+                            api_not_allowed($print_headers);
+
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    apiBlockInactiveUser();
     return true;
 }
 

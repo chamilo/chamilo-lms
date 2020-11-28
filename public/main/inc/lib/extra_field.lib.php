@@ -158,6 +158,9 @@ class ExtraField extends Model
             case 'forum_post':
                 $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
                 break;
+            case 'track_exercise':
+                $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -187,6 +190,7 @@ class ExtraField extends Model
             'forum_category',
             'forum_post',
             'exercise',
+            'track_exercise',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

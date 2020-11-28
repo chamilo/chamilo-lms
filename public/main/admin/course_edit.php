@@ -24,6 +24,7 @@ if (empty($courseId)) {
 }
 
 $courseInfo = api_get_course_info_by_id($courseId);
+$courseCode = $courseInfo['code'];
 
 if (empty($courseInfo)) {
     api_not_allowed(true);
@@ -166,7 +167,6 @@ $form->addSelectAjax(
 $courseInfo['course_categories'] = $courseCategoryIds;
 
 $courseTeacherNames = [];
-
 foreach ($course_teachers as $courseTeacherId) {
     $courseTeacher = api_get_user_entity($courseTeacherId);
     $courseTeacherNames[$courseTeacher->getId()] = UserManager::formatUserFullName($courseTeacher, true);

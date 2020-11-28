@@ -1104,4 +1104,28 @@ class ExtraFieldValue extends Model
 
         return $valueList;
     }
+
+    public function copy($sourceId, $destinationId)
+    {
+        if (empty($sourceId) || empty($destinationId)) {
+            return false;
+        }
+
+        $extraField = new ExtraField($this->type);
+        $allFields = $extraField->get_all();
+        $extraFieldValue = new ExtraFieldValue($this->type);
+        foreach ($allFields as $field) {
+            $variable = $field['variable'];
+            $sourceValues = $extraFieldValue->get_values_by_handler_and_field_variable($sourceId, $variable);
+            if (!empty($sourceValues) && isset($sourceValues['value']) && $sourceValues['value'] != '') {
+                $params = [
+                    'extra_'.$variable => $sourceValues['value'],
+                    'item_id' => $destinationId,
+                ];
+                $extraFieldValue->saveFieldValues($params, true);
+            }
+        }
+
+        return true;
+    }
 }

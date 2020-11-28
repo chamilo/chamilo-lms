@@ -31,6 +31,7 @@ abstract class Question
     public $category_list;
     public $parent_id;
     public $category;
+    public $mandatory;
     public $isContent;
     public $course;
     public $feedback;
@@ -94,6 +95,7 @@ abstract class Question
         $this->course = api_get_course_info();
         $this->category_list = [];
         $this->parent_id = 0;
+        $this->mandatory = 0;
         // See BT#12611
         $this->questionTypeWithFeedback = [
             MATCHING,
@@ -169,6 +171,19 @@ abstract class Question
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
                 $objQuestion->code = isset($object->code) ? $object->code : '';
+                $categoryInfo = TestCategory::getCategoryInfoForQuestion($id, $course_id);
+
+                if (!empty($categoryInfo)) {
+                    if (isset($categoryInfo['category_id'])) {
+                        $objQuestion->category = (int) $categoryInfo['category_id'];
+                    }
+
+                    if (api_get_configuration_value('allow_mandatory_question_in_category') &&
+                        isset($categoryInfo['mandatory'])
+                    ) {
+                        $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
+                    }
+                }
 
                 if ($getExerciseList) {
                     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -344,6 +359,10 @@ abstract class Question
         $this->category = $category;
     }
 
+    public function setMandatory($value)
+    {
+        $this->mandatory = (int) $value;
+    }
     /**
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry.
@@ -977,6 +996,10 @@ abstract class Question
                         question_id = ".$id;
             Database::query($sql);
 
+            // Add extra fields.
+            $extraField = new ExtraFieldValue('question');
+            $extraField->deleteValuesByItem($this->iid);
+
             /*api_item_property_update(
                 $this->course,
                 TOOL_QUIZ,
@@ -1075,6 +1098,11 @@ abstract class Question
         $newQuestionId = Database::insert($questionTable, $params);
 
         if ($newQuestionId) {
+
+            // Add extra fields.
+            $extraField = new ExtraFieldValue('question');
+            $extraField->copy($this->iid, $newQuestionId);
+
             if (!empty($options)) {
                 // Saving the quiz_options
                 foreach ($options as $item) {
@@ -1192,7 +1220,7 @@ abstract class Question
             echo $includeFile;
 
             echo '<script type="text/javascript" charset="utf-8">
-            $(document).ready(function () {
+            $(function() {
                 $(".create_img_link").click(function(e){
                     e.preventDefault();
                     e.stopPropagation();
@@ -1202,12 +1230,10 @@ abstract class Question
                 });
 
                 $("input[name=\'imageZoom\']").on("click", function(){
-                    console.log("click en campo");
                     var elf = $("#elfinder").elfinder({
                         url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
                         getFileCallback: function(file) {
                             var filePath = file; //file contains the relative url.
-                            console.log(filePath);
                             var imgPath = "<img src = \'"+filePath+"\'/>";
                             $("input[name=\'imageZoom\']").val(filePath.url);
                             $("#elfinder").remove(); //close the window after image is selected
@@ -1257,7 +1283,7 @@ abstract class Question
         }
 
         $form->addButtonAdvancedSettings('advanced_params');
-        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addHtml('<div id="advanced_params_options" style="display:none">');
 
         if (isset($zoomOptions['options'])) {
             $form->addElement('text', 'imageZoom', get_lang('ImageURL'));
@@ -1276,23 +1302,29 @@ abstract class Question
 
         if (MEDIA_QUESTION != $this->type) {
             // Advanced parameters
-            $select_level = self::get_default_levels();
             $form->addElement(
                 'select',
                 'questionLevel',
                 get_lang('Difficulty'),
-                $select_level
+                self::get_default_levels()
             );
 
             // Categories
-            $tabCat = TestCategory::getCategoriesForSelect();
 
             $form->addElement(
                 'select',
                 'questionCategory',
                 get_lang('Category'),
-                $tabCat
+                TestCategory::getCategoriesIdAndName()
             );
+            if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
+                api_get_configuration_value('allow_mandatory_question_in_category')
+            ) {
+                $form->addCheckBox(
+                    'mandatory',
+                    get_lang('IsMandatory')
+                );
+            }
 
             global $text;
 
@@ -1390,6 +1422,7 @@ abstract class Question
         $defaults['questionLevel'] = $this->level;
         $defaults['questionCategory'] = $this->category;
         $defaults['feedback'] = $this->feedback;
+        $defaults['mandatory'] = $this->mandatory;
 
         // Came from he question pool
         if (isset($_GET['fromExercise'])) {
@@ -1418,6 +1451,7 @@ abstract class Question
         $this->updateDescription($form->getSubmitValue('questionDescription'));
         $this->updateLevel($form->getSubmitValue('questionLevel'));
         $this->updateCategory($form->getSubmitValue('questionCategory'));
+        $this->setMandatory($form->getSubmitValue('mandatory'));
         $this->setFeedback($form->getSubmitValue('feedback'));
 
         //Save normal question if NOT media
@@ -1773,7 +1807,13 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if (isset($score['pass']) && false === $score['pass']) {
+        if ($exercise->hideComment && $this->type == HOT_SPOT) {
+            $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
+
+            return $header;
+        }
+
+        if (isset($score['pass']) && $score['pass'] === false) {
             if ($this->showFeedback($exercise)) {
                 $header .= $this->returnFormatFeedback();
             }
@@ -2044,6 +2084,9 @@ abstract class Question
      */
     public function showFeedback($exercise)
     {
+        if (false === $exercise->hideComment) {
+            return false;
+        }
         return
             in_array($this->type, $this->questionTypeWithFeedback) &&
             EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType();

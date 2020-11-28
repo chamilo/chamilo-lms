@@ -998,7 +998,7 @@ if ($form->validate() && $isEditable) {
         : null;
 
     if (!empty($pdf_export_watermark_path['name'])) {
-        $pdf_export_watermark_path_result = PDF::upload_watermark(
+        PDF::upload_watermark(
             $pdf_export_watermark_path['name'],
             $pdf_export_watermark_path['tmp_name'],
             $course_code
@@ -1043,14 +1043,13 @@ if ($form->validate() && $isEditable) {
     }
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->saveFieldValues($updateValues);
+    $courseFieldValue->saveFieldValues($updateValues, true);
 
     $appPlugin->saveCourseSettingsHook($updateValues);
     $courseParams = api_get_cidreq();
     $cidReset = true;
     $cidReq = $course_code;
     Display::addFlash(Display::return_message(get_lang('Update successful')));
-
     $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.$courseParams;
     header("Location: $url");
     exit;
@@ -1066,9 +1065,6 @@ if ($show_delete_watermark_text_message) {
 $tpl = new Template($nameTools);
 
 Display::display_header($nameTools, 'Settings');
-
-//$form->display();
-
 $tpl->assign('course_settings', $form->returnForm());
 $courseInfoLayout = $tpl->get_template("course_info/index.html.twig");
 $content = $tpl->fetch($courseInfoLayout);

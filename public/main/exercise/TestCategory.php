@@ -187,6 +187,46 @@ class TestCategory
         return $row['nb'];
     }
 
+    /**
+     * Return an array of all Category objects in the database
+     * If $field=="" Return an array of all category objects in the database
+     * Otherwise, return an array of all in_field value
+     * in the database (in_field = id or name or description).
+     *
+     * @param string $field
+     * @param int    $courseId
+     *
+     * @return array
+     */
+    public static function getCategoryListInfo($field = '', $courseId = 0)
+    {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $categories = [];
+        if (empty($field)) {
+            $sql = "SELECT id FROM $table
+                    WHERE c_id = $courseId
+                    ORDER BY title ASC";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+                $category = new TestCategory();
+                $categories[] = $category->getCategory($row['id'], $courseId);
+            }
+        } else {
+            $field = Database::escape_string($field);
+            $sql = "SELECT $field FROM $table
+                    WHERE c_id = $courseId
+                    ORDER BY $field ASC";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+                $categories[] = $row[$field];
+            }
+        }
+
+        return $categories;
+    }
+
 
     /**
      * return the number of question of a category id in a test.
@@ -248,35 +288,6 @@ class TestCategory
 
         return $count;
     }
-
-    /**
-     * Return the list of differents categories ID for a test in the current course
-     * input : test_id
-     * return : array of category id (integer)
-     * hubert.borderiou 07-04-2011.
-     *
-     * @param int $exerciseId
-     * @param int $courseId
-     *
-     * @return array
-     */
-    public static function getListOfCategoriesIDForTest($exerciseId, $courseId = 0)
-    {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
-        $exercise = new Exercise($courseId);
-        $exercise->read($exerciseId, false);
-        $categoriesInExercise = $exercise->getQuestionWithCategories();
-        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
-        $categories = [];
-        if (!empty($categoriesInExercise)) {
-            foreach ($categoriesInExercise as $category) {
-                $categories[$category['id']] = $category;
-            }
-        }
-
-        return $categories;
-    }
-
 
     /**
      * Return the TestCategory id for question with question_id = $questionId
@@ -356,6 +367,91 @@ class TestCategory
     }
 
     /**
+     * Return the list of different categories ID for a test in the current course
+     * hubert.borderiou 07-04-2011.
+     *
+     * @param int $exerciseId
+     * @param int $courseId
+     *
+     * @return array
+     */
+    public static function getListOfCategoriesIDForTest($exerciseId, $courseId = 0)
+    {
+        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        $exercise = new Exercise($courseId);
+        $exercise->read($exerciseId, false);
+        $categoriesInExercise = $exercise->getQuestionWithCategories();
+        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
+        $categories = [];
+        if (!empty($categoriesInExercise)) {
+            foreach ($categoriesInExercise as $category) {
+                $categories[$category['id']] = $category;
+            }
+        }
+
+        return $categories;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
+    {
+        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        $categories_in_exercise = [];
+        $question_list = $exercise->getQuestionOrderedListByName();
+
+        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
+        foreach ($question_list as $questionInfo) {
+            $question_id = $questionInfo['question_id'];
+            $category_list = self::getCategoryForQuestion($question_id);
+            if (is_numeric($category_list)) {
+                $category_list = [$category_list];
+            }
+
+            if (!empty($category_list)) {
+                $categories_in_exercise = array_merge($categories_in_exercise, $category_list);
+            }
+        }
+        if (!empty($categories_in_exercise)) {
+            $categories_in_exercise = array_unique(array_filter($categories_in_exercise));
+        }
+
+        return $categories_in_exercise;
+    }
+
+
+    /**
+     * Return the list of different categories NAME for a test.
+     *
+     * @param int $exerciseId
+     * @param bool
+     *
+     * @return array
+     *
+     * @author function rewrote by jmontoya
+     */
+    public static function getListOfCategoriesNameForTest($exerciseId, $grouped_by_category = true)
+    {
+        $result = [];
+        $categories = self::getListOfCategoriesIDForTest($exerciseId);
+
+        foreach ($categories as $catInfo) {
+            $categoryId = $catInfo['id'];
+            if (!empty($categoryId)) {
+                $result[$categoryId] = [
+                    'title' => $catInfo['title'],
+                    //'parent_id' =>  $catInfo['parent_id'],
+                    'parent_id' => '',
+                    'c_id' => $catInfo['c_id'],
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param int $courseId
      * @param int $sessionId
      *
@@ -403,45 +499,6 @@ class TestCategory
         return $result;
     }
 
-    /**
-     * Return an array of all Category objects in the database
-     * If $field=="" Return an array of all category objects in the database
-     * Otherwise, return an array of all in_field value
-     * in the database (in_field = id or name or description).
-     *
-     * @param string $field
-     * @param int    $courseId
-     *
-     * @return array
-     */
-    public static function getCategoryListInfo($field = '', $courseId = 0)
-    {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $categories = [];
-        if (empty($field)) {
-            $sql = "SELECT id FROM $table
-                    WHERE c_id = $courseId
-                    ORDER BY title ASC";
-            $res = Database::query($sql);
-            while ($row = Database::fetch_array($res)) {
-                $category = new TestCategory();
-                $categories[] = $category->getCategory($row['id'], $courseId);
-            }
-        } else {
-            $field = Database::escape_string($field);
-            $sql = "SELECT $field FROM $table
-                    WHERE c_id = $courseId
-                    ORDER BY $field ASC";
-            $res = Database::query($sql);
-            while ($row = Database::fetch_array($res)) {
-                $categories[] = $row[$field];
-            }
-        }
-
-        return $categories;
-    }
 
     /**
      * Returns an array of question ids for each category
@@ -805,36 +862,6 @@ class TestCategory
     }
 
     /**
-     * Return the list of different categories NAME for a test.
-     *
-     * @param int $exerciseId
-     * @param bool
-     *
-     * @return array
-     *
-     * @author function rewrote by jmontoya
-     */
-    public static function getListOfCategoriesNameForTest($exerciseId, $grouped_by_category = true)
-    {
-        $result = [];
-        $categories = self::getListOfCategoriesIDForTest($exerciseId);
-
-        foreach ($categories as $catInfo) {
-            $categoryId = $catInfo['id'];
-            if (!empty($categoryId)) {
-                $result[$categoryId] = [
-                    'title' => $catInfo['title'],
-                    //'parent_id' =>  $catInfo['parent_id'],
-                    'parent_id' => '',
-                    'c_id' => $catInfo['c_id'],
-                ];
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Return true if a category already exists with the same name.
      *
      * @param string $name
@@ -1161,33 +1188,6 @@ class TestCategory
         return $result;
     }
 
-    /**
-     * @return array
-     */
-    public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
-    {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
-        $categories_in_exercise = [];
-        $question_list = $exercise->getQuestionOrderedListByName();
-
-        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
-        foreach ($question_list as $questionInfo) {
-            $question_id = $questionInfo['question_id'];
-            $category_list = self::getCategoryForQuestion($question_id);
-            if (is_numeric($category_list)) {
-                $category_list = [$category_list];
-            }
-
-            if (!empty($category_list)) {
-                $categories_in_exercise = array_merge($categories_in_exercise, $category_list);
-            }
-        }
-        if (!empty($categories_in_exercise)) {
-            $categories_in_exercise = array_unique(array_filter($categories_in_exercise));
-        }
-
-        return $categories_in_exercise;
-    }
 
     /**
      * @param int $courseId

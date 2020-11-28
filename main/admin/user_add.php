@@ -42,20 +42,15 @@ function password_switch_radio_button() {
 
 var is_platform_id = "'.$is_platform_admin.'";
 
-function display_drh_list(){
+function updateStatus(){
     if (document.getElementById("status_select").value=='.STUDENT.') {
-        document.getElementById("drh_list").style.display="block";
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
 
     } else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
-        document.getElementById("drh_list").style.display="none";
-
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
     } else {
-        document.getElementById("drh_list").style.display="none";
-
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
     }
@@ -238,7 +233,7 @@ $form->addElement(
     $status,
     [
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
+        'onchange' => 'javascript: updateStatus();',
     ]
 );
 

@@ -1438,6 +1438,10 @@ abstract class Question
                         question_id = ".$id;
             Database::query($sql);
 
+            // Add extra fields.
+            $extraField = new ExtraFieldValue('question');
+            $extraField->deleteValuesByItem($this->iid);
+
             api_item_property_update(
                 $this->course,
                 TOOL_QUIZ,
@@ -1454,7 +1458,7 @@ abstract class Question
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);
-            if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+            if (api_get_setting('search_enabled') === 'true' && extension_loaded('xapian')) {
                 // disassociate question with this exercise
                 $this->search_engine_edit($deleteFromEx, false, true);
             }
@@ -1483,7 +1487,7 @@ abstract class Question
      *
      * @param array $courseInfo Course info of the destination course
      *
-     * @return false|string ID of the new question
+     * @return false|int ID of the new question
      */
     public function duplicate($courseInfo = [])
     {
@@ -1540,6 +1544,10 @@ abstract class Question
                     SET id = iid
                     WHERE iid = $newQuestionId";
             Database::query($sql);
+
+            // Add extra fields.
+            $extraField = new ExtraFieldValue('question');
+            $extraField->copy($this->iid, $newQuestionId);
 
             if (!empty($options)) {
                 // Saving the quiz_options

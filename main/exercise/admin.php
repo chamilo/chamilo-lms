@@ -49,6 +49,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
+if ($_GET['r'] == 1) {
+    Exercise::cleanSessionVariables();
+}
+
 // Access control
 api_protect_course_script(true);
 
@@ -422,6 +426,7 @@ if ($newQuestion || $editQuestion) {
             echo '</div>';
         } else {
             require 'question_admin.inc.php';
+            ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->selectId());
         }
     }
 }

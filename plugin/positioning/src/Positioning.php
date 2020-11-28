@@ -47,7 +47,7 @@ class Positioning extends Plugin
         Database::query($sql);
 
         // Installing course settings
-        $this->install_course_fields_in_all_courses();
+        $this->install_course_fields_in_all_courses(true, 'positioning.png');
     }
 
     public function uninstall()
@@ -128,14 +128,19 @@ class Positioning extends Plugin
                     return true;
                 }
 
-                $averageToUnlock = (int) $this->get('average_percentage_to_unlock_final_exercise');
+                $averageToUnlock = (float) $this->get('average_percentage_to_unlock_final_exercise');
                 if (empty($averageToUnlock)) {
                     return false;
                 }
 
                 // Check average
                 $courseInfo = api_get_course_info_by_id($courseId);
-                $userAverage = (int) Tracking::getAverageStudentScore($userId, $courseInfo['code'], [], $sessionId);
+                $userAverage = (float) Tracking::get_avg_student_progress(
+                    $userId,
+                    $courseInfo['code'],
+                    [],
+                    $sessionId
+                );
 
                 if ($userAverage >= $averageToUnlock) {
                     return false;

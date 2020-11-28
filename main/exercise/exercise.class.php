@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
@@ -1958,6 +1959,7 @@ class Exercise
             $this->id,
             $this->sessionId
         );
+
         if ($linkInfo !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
@@ -2196,6 +2198,12 @@ class Exercise
                         'hide_question_score',
                         null,
                         get_lang('HideQuestionScore')
+                    ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_category_table',
+                        null,
+                        get_lang('HideCategoryTable')
                     ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
@@ -3076,6 +3084,7 @@ class Exercise
         $categories = $exerciseObject->getCategoriesInExercise(true);
         // Get all questions no matter the order/category settings
         $questionList = $exerciseObject->getQuestionOrderedList();
+        $sourceId = $exerciseObject->iId;
         // Force the creation of a new exercise
         $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
         // Hides the new exercise
@@ -3092,6 +3101,9 @@ class Exercise
         $em = Database::getManager();
 
         if ($newId && !empty($questionList)) {
+            $extraField = new ExtraFieldValue('exercise');
+            $extraField->copy($sourceId, $newId);
+
             // Question creation
             foreach ($questionList as $oldQuestionId) {
                 $oldQuestionObj = Question::read($oldQuestionId, null, false);
@@ -3099,7 +3111,6 @@ class Exercise
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        //$newQuestionObj->addToList($newId);
                         $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                                 VALUES ($courseId, ".$newQuestionId.", ".$newId.", '$count')";
                         Database::query($sql);
@@ -8284,8 +8295,6 @@ class Exercise
 
     /**
      * @param array $values
-     *
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function setPageResultConfiguration($values)
     {
@@ -8295,6 +8304,7 @@ class Exercise
                 'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
                 'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
                 'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
+                'hide_category_table' => isset($values['hide_category_table']) ? $values['hide_category_table'] : '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
@@ -8320,11 +8330,6 @@ class Exercise
     {
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
-            /*$params = [
-                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
-                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : ''
-            ];*/
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
 
@@ -10457,15 +10462,20 @@ class Exercise
         return $content;
     }
 
-    public function getRadarsFromUsers($userList, $exercises, $courseId, $sessionId)
+    public function getRadarsFromUsers($userList, $exercises, $dataSetLabels, $courseId, $sessionId)
     {
         $dataSet = [];
         $labels = [];
+        $labelsWithId = [];
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
             if (empty($labels)) {
                 $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
-                $labels = array_column($categoryNameList, 'title');
+                if (!empty($categoryNameList)) {
+                    $labelsWithId = array_column($categoryNameList, 'title', 'id');
+                    asort($labelsWithId);
+                    $labels = array_values($labelsWithId);
+                }
             }
 
             foreach ($userList as $userId) {
@@ -10477,7 +10487,7 @@ class Exercise
                 );
 
                 if ($results) {
-                    $firstAttempt = current($results);
+                    $firstAttempt = end($results);
                     $exeId = $firstAttempt['exe_id'];
 
                     ob_start();
@@ -10489,47 +10499,119 @@ class Exercise
                     ob_end_clean();
 
                     $categoryList = $stats['category_list'];
-                    $resultsArray = [];
-                    foreach ($categoryList as $category_id => $category_item) {
-                        $resultsArray[] = round($category_item['score'] / $category_item['total'] * 10);
+                    $tempResult = [];
+                    foreach ($labelsWithId as $category_id => $title) {
+                        if (isset($categoryList[$category_id])) {
+                            $category_item = $categoryList[$category_id];
+                            $tempResult[] = round($category_item['score'] / $category_item['total'] * 10);
+                        } else {
+                            $tempResult[] = 0;
+                        }
                     }
-                    $dataSet[] = $resultsArray;
+                    $dataSet[] = $tempResult;
                 }
             }
         }
 
-        return $this->getRadar($labels, $dataSet);
+        return $this->getRadar($labels, $dataSet, $dataSetLabels);
     }
 
-    public function getRadar($labels, $dataSet)
+    public function getAverageRadarsFromUsers($userList, $exercises, $dataSetLabels, $courseId, $sessionId)
+    {
+        $dataSet = [];
+        $labels = [];
+        $labelsWithId = [];
+
+        $tempResult = [];
+        /** @var Exercise $exercise */
+        foreach ($exercises as $exercise) {
+            $exerciseId = $exercise->iId;
+            if (empty($labels)) {
+                $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
+                if (!empty($categoryNameList)) {
+                    $labelsWithId = array_column($categoryNameList, 'title', 'id');
+                    asort($labelsWithId);
+                    $labels = array_values($labelsWithId);
+                }
+            }
+
+            foreach ($userList as $userId) {
+                $results = Event::getExerciseResultsByUser(
+                    $userId,
+                    $exerciseId,
+                    $courseId,
+                    $sessionId
+                );
+
+                if ($results) {
+                    $firstAttempt = end($results);
+                    $exeId = $firstAttempt['exe_id'];
+
+                    ob_start();
+                    $stats = ExerciseLib::displayQuestionListByAttempt(
+                        $exercise,
+                        $exeId,
+                        false
+                    );
+                    ob_end_clean();
+
+                    $categoryList = $stats['category_list'];
+                    foreach ($labelsWithId as $category_id => $title) {
+                        if (isset($categoryList[$category_id])) {
+                            $category_item = $categoryList[$category_id];
+                            if (!isset($tempResult[$exerciseId][$category_id])) {
+                                $tempResult[$exerciseId][$category_id] = 0;
+                            }
+                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total'] * 10;
+                        }
+                    }
+                }
+            }
+        }
+
+        $totalUsers = count($userList);
+
+        foreach ($exercises as $exercise) {
+            $exerciseId = $exercise->iId;
+            $data = [];
+            foreach ($labelsWithId as $category_id => $title) {
+                if (isset($tempResult[$exerciseId]) && isset($tempResult[$exerciseId][$category_id])) {
+                    $data[] = round($tempResult[$exerciseId][$category_id] / $totalUsers);
+                } else {
+                    $data[] = 0;
+                }
+            }
+            $dataSet[] = $data;
+        }
+
+        return $this->getRadar($labels, $dataSet, $dataSetLabels);
+    }
+
+    public function getRadar($labels, $dataSet, $dataSetLabels = [])
     {
         if (empty($labels) || empty($dataSet)) {
             return '';
         }
 
+        $displayLegend = 0;
+        if (!empty($dataSetLabels)) {
+            $displayLegend = 1;
+        }
+
         $labels = json_encode($labels);
 
-        // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
-        $colorList = [
-            'rgb(255, 99, 132, 1.0)',
-            'rgb(0,0,200,1.0)', // red
-            'rgb(255, 159, 64, 1.0)', // orange
-            'rgb(255, 205, 86, 1.0)', //yellow
-            'rgb(75, 192, 192, 1.0)', // green
-            'rgb(54, 162, 235, 1.0)', // blue
-            'rgb(153, 102, 255, 1.0)', // purple
-            //'rgb(201, 203, 207)' grey
-        ];
+        $colorList = ChamiloApi::getColorPalette(true, true);
 
         $dataSetToJson = [];
         $counter = 0;
-        foreach ($dataSet as $resultsArray) {
+        foreach ($dataSet as $index => $resultsArray) {
             $color = isset($colorList[$counter]) ? $colorList[$counter] : 'rgb('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1.0)';
 
+            $label = isset($dataSetLabels[$index]) ? $dataSetLabels[$index] : '';
             $background = str_replace('1.0', '0.2', $color);
             $dataSetToJson[] = [
-                'fill' => true,
-                //'label' =>  '".get_lang('Categories')."',
+                'fill' => false,
+                'label' => $label,
                 'backgroundColor' => $background,
                 'borderColor' => $color,
                 'pointBackgroundColor' => $color,
@@ -10546,22 +10628,23 @@ class Exercise
         $resultsToJson = json_encode($dataSetToJson);
 
         return "
-                <canvas id='categoryRadar' width='400' height='200'></canvas>
+                <canvas id='categoryRadar' height='200'></canvas>
                 <script>
                     var data = {
                         labels: $labels,
                         datasets: $resultsToJson
                     }
                     var options = {
+                        responsive: true,
                         scale: {
                             angleLines: {
                                 display: false
                             },
                             ticks: {
                                 beginAtZero: true,
-                                  min: 0,
-                                  max: 10,
-                                  stepSize: 1
+                                min: 0,
+                                max: 10,
+                                stepSize: 1,
                             },
                             pointLabels: {
                               fontSize: 14,
@@ -10576,8 +10659,12 @@ class Exercise
                         },
                         legend: {
                             //position: 'bottom'
-                            display: false
-                        }
+                            display: $displayLegend
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        },
                     };
                     var ctx = document.getElementById('categoryRadar').getContext('2d');
                     var myRadarChart = new Chart(ctx, {

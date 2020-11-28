@@ -8703,4 +8703,14 @@ $ToInvoice = "To invoice";
 $LearningPathItemByAuthor = "LP item by author";
 $DeleteExerciseAttempts = "Delete also the exercise attempts. If not check then the exercise results will still be available in the exercise tool.";
 $ExerciseCategoriesRadarMode = "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback.";
+$ExerciseBlockBecausePercentageX = "All attemps blocked because you did not reach the minimum score of %s % at one of your attemps.";
+$RegisteredAuthors = "Authors that have been registered :";
+$Price = "Price";
+$PriceUpdated = "Price updated";
+$RemoveSelected = "Remove selected authors";
+$DeletedAuthors = "Authors have been removed";
+$HideCategoryTable = "Hide category table";
+$XQuestionsSelectedWithTotalScoreY = "Only %d questions will be selected based on the test configuration, for a total score of %s.";
+$QuestionAlsoUsedInTheFollowingTests = "This question is also used in the following tests";
+$LinkToTestEdition = "Link to test edition";
 ?>

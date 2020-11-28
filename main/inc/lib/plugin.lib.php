@@ -256,6 +256,7 @@ class AppPlugin
             'openmeetings',
             'pausetraining',
             'pens',
+            'positioning',
             'questionoptionsevaluation',
             'redirection',
             'reports',

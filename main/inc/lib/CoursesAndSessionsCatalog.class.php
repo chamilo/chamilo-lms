@@ -181,17 +181,26 @@ class CoursesAndSessionsCatalog
         ];
 
         $allCategories = CourseCategory::getAllCategories();
+        $categoryToAvoid = '';
+        if (api_is_student()) {
+            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        }
         foreach ($allCategories as $category) {
+            $categoryCode = $category['code'];
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
+
             if (empty($category['parent_id'])) {
-                $list[$category['code']] = $category;
-                $list[$category['code']]['level'] = 0;
-                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                $list[$categoryCode] = $category;
+                $list[$categoryCode]['level'] = 0;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $categoryCode, 0);
                 foreach ($subList as $item) {
                     $list[$item['code']] = $item;
                 }
                 // Real course count
-                $countCourses = CourseCategory::countCoursesInCategory($category['code']);
-                $list[$category['code']]['number_courses'] = $childrenCount + $countCourses;
+                $countCourses = CourseCategory::countCoursesInCategory($categoryCode);
+                $list[$categoryCode]['number_courses'] = $childrenCount + $countCourses;
             }
         }
 

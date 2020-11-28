@@ -1648,6 +1648,80 @@ HOTSPOT;
     }
 
     /**
+     * Get an HTML string with the list of exercises where the given question
+     * is being used.
+     *
+     * @param int $questionId    The iid of the question being observed
+     * @param int $excludeTestId If defined, exclude this (current) test from the list of results
+     *
+     * @return string An HTML string containing a div and a table
+     */
+    public static function showTestsWhereQuestionIsUsed(int $questionId, int $excludeTestId = 0)
+    {
+        $questionId = (int) $questionId;
+        $sql = "SELECT qz.title quiz_title,
+                        c.title course_title,
+                        s.name session_name,
+                        qz.iid as quiz_id,
+                        qz.c_id,
+                        qz.session_id
+                FROM c_quiz qz,
+                    c_quiz_rel_question qq,
+                    course c,
+                    session s
+                WHERE qz.c_id = c.id AND
+                    (qz.session_id = s.id OR qz.session_id = 0) AND
+                    qq.exercice_id = qz.iid AND ";
+        if (!empty($excludeTestId)) {
+            $excludeTestId = (int) $excludeTestId;
+            $sql .= " qz.iid != $excludeTestId AND ";
+        }
+        $sql .= "     qq.question_id = $questionId
+                GROUP BY qq.iid";
+
+        $result = [];
+        $html = "";
+
+        $sqlResult = Database::query($sql);
+
+        if (Database::num_rows($sqlResult) != 0) {
+            while ($row = Database::fetch_array($sqlResult, 'ASSOC')) {
+                $tmp = [];
+                $tmp[0] = $row['course_title'];
+                $tmp[1] = $row['session_name'];
+                $tmp[2] = $row['quiz_title'];
+                // Send do other test with r=1 to reset current test session variables
+                $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'].'&r=1';
+                $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::return_icon('quiz.png', get_lang('Edit')).'</a>';
+                if ((int) $row['session_id'] == 0) {
+                    $tmp[1] = '-';
+                }
+
+                $result[] = $tmp;
+            }
+
+            $headers = [
+                get_lang('Course'),
+                get_lang('Session'),
+                get_lang('Quiz'),
+                get_lang('LinkToTestEdition'),
+            ];
+
+            $title = Display::div(
+                get_lang('QuestionAlsoUsedInTheFollowingTests'),
+                [
+                    'class' => 'section-title',
+                    'style' => 'margin-top: 25px; border-bottom: none',
+                ]
+            );
+
+            $html = $title.Display::table($headers, $result);
+        }
+
+        echo $html;
+    }
+
+    /**
      * @param int $exeId
      *
      * @return array
@@ -5913,7 +5987,7 @@ EOT;
 
         // If there are no pending questions (Open questions).
         if (0 === $countPendingQuestions) {
-            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+            /*$extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
                 $objExercise->iId,
                 'signature_mandatory'
             );
@@ -5925,6 +5999,16 @@ EOT;
                         //return false;
                     }
                 }
+            }*/
+
+            // Notifications.
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'notifications'
+            );
+            $exerciseNotification = '';
+            if ($extraFieldData && isset($extraFieldData['value'])) {
+                $exerciseNotification = $extraFieldData['value'];
             }
 
             $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
@@ -5944,6 +6028,27 @@ EOT;
                 );
             }
 
+            // Blocking exercise.
+            $blockPercentageExtra = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'blocking_percentage'
+            );
+            $blockPercentage = false;
+            if ($blockPercentageExtra && isset($blockPercentageExtra['value']) && $blockPercentageExtra['value']) {
+                $blockPercentage = $blockPercentageExtra['value'];
+            }
+            if ($blockPercentage) {
+                $passBlock = $stats['total_percentage'] > $blockPercentage;
+                if (false === $passBlock) {
+                    $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                        $objExercise->iId,
+                        'MailIsBlockByPercentage'
+                    );
+                }
+            }
+
+            $extraFieldValueUser = new ExtraFieldValue('user');
+
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $content = $extraFieldData['value'];
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
@@ -5953,33 +6058,49 @@ EOT;
                     }
                 }
 
+                $sendMessage = true;
+                if (!empty($exerciseNotification)) {
+                    foreach ($notifications as $name => $notificationList) {
+                        if ($exerciseNotification !== $name) {
+                            continue;
+                        }
+                        foreach ($notificationList as $notificationName => $attemptData) {
+                            if ('student_check' === $notificationName) {
+                                $sendMsgIfInList = isset($attemptData['send_notification_if_user_in_extra_field']) ? $attemptData['send_notification_if_user_in_extra_field'] : '';
+                                if (!empty($sendMsgIfInList)) {
+                                    foreach ($sendMsgIfInList as $skipVariable => $skipValues) {
+                                        $userExtraFieldValue = $extraFieldValueUser->get_values_by_handler_and_field_variable(
+                                            $studentId,
+                                            $skipVariable
+                                        );
+
+                                        if (empty($userExtraFieldValue)) {
+                                            $sendMessage = false;
+                                            break;
+                                        } else {
+                                            $sendMessage = false;
+                                            if (isset($userExtraFieldValue['value']) &&
+                                                in_array($userExtraFieldValue['value'], $skipValues)
+                                            ) {
+                                                $sendMessage = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 // Send to student.
-                MessageManager::send_message($currentUserId, $subject, $content);
+                if ($sendMessage) {
+                    MessageManager::send_message($currentUserId, $subject, $content);
+                }
             }
 
-            // Notifications.
-            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
-                'notifications'
-            );
-            $exerciseNotification = '';
-            if ($extraFieldData && isset($extraFieldData['value'])) {
-                $exerciseNotification = $extraFieldData['value'];
-            }
-
-            // Blocking exercise.
-            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
-                'blocking_percentage'
-            );
-            $blockPercentage = false;
-            if ($extraFieldData && isset($extraFieldData['value']) && $extraFieldData['value']) {
-                $blockPercentage = $extraFieldData['value'];
-            }
-
-            $extraFieldValueUser = new ExtraFieldValue('user');
-
-            if (!empty($exerciseNotification) && !empty($notifications)) {
+            if (!empty($exerciseNotification)) {
                 foreach ($notifications as $name => $notificationList) {
                     if ($exerciseNotification !== $name) {
                         continue;
@@ -6032,7 +6153,6 @@ EOT;
                             }
 
                             if ($blockPercentage && isset($attempt['is_block_by_percentage'])) {
-                                $passBlock = $stats['total_percentage'] > $blockPercentage;
                                 if ($attempt['is_block_by_percentage']) {
                                     if ($passBlock) {
                                         continue;

@@ -130,8 +130,8 @@ function display_form()
 
     $options = '<div class="radio"><label><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
     $options .= get_lang('FullCopy').'</label></div>';
-    $options .= '<div class="radio"><label><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
-    $options .= ' '.get_lang('LetMeSelectItems').'</label></div>';
+    /*$options .= '<div class="radio"><label><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
+    $options .= ' '.get_lang('LetMeSelectItems').'</label></div>';*/
 
     $options .= '<div class="checkbox"><label><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label></div>';
 

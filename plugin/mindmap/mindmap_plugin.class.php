@@ -59,11 +59,15 @@ class MindmapPlugin extends Plugin
         // Copy icons to the main Chamilo directory
         $p1 = api_get_path(SYS_PATH).'plugin/mindmap/img/mindmap64.png';
         $p2 = api_get_path(SYS_PATH).'main/img/icons/64/mindmap.png';
-        copy($p1, $p2);
+        if (!is_file($p2)) {
+            copy($p1, $p2);
+        }
 
         $p3 = api_get_path(SYS_PATH).'plugin/mindmap/img/mindmap64_na.png';
         $p4 = api_get_path(SYS_PATH).'main/img/icons/64/mindmap_na.png';
-        copy($p3, $p4);
+        if (!is_file($p4)) {
+            copy($p3, $p4);
+        }
 
         // Installing course settings
         $this->install_course_fields_in_all_courses();

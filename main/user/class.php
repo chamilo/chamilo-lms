@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -6,17 +7,15 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script(true, false, 'user');
 
-if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
+if ('false' === api_get_setting('allow_user_course_subscription_by_course_admin')) {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
 }
 
 $tool_name = get_lang('Classes');
-
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-// Extra entries in breadcrumb
 $interbreadcrumb[] = [
     'url' => 'user.php?'.api_get_cidreq(),
     'name' => get_lang('ToolUser'),
@@ -39,7 +38,7 @@ $actionsLeft = '';
 $actionsRight = '';
 $usergroup = new UserGroup();
 $actions = '';
-
+$sessionId = api_get_session_id();
 if (api_is_allowed_to_edit()) {
     if ($type === 'registered') {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
@@ -81,8 +80,7 @@ if (api_is_allowed_to_edit()) {
     switch ($action) {
         case 'add_class_to_course':
             $id = $_GET['id'];
-            $idSession = (int) isset($_GET['id_session']) ? $_GET['id_session'] : 0;
-            if (!empty($id) and $idSession == 0) {
+            if (!empty($id) && $sessionId == 0) {
                 /* To suscribe Groups*/
                 $usergroup->subscribe_courses_to_usergroup(
                     $id,
@@ -92,9 +90,9 @@ if (api_is_allowed_to_edit()) {
                 Display::addFlash(Display::return_message(get_lang('Added')));
                 header('Location: class.php?'.api_get_cidreq().'&type=registered');
                 exit;
-            } elseif ($idSession != 0) {
+            } elseif ($sessionId != 0) {
                 /* To suscribe session*/
-                $usergroup->subscribe_sessions_to_usergroup($id, [$idSession]);
+                $usergroup->subscribe_sessions_to_usergroup($id, [$sessionId]);
                 Display::addFlash(Display::return_message(get_lang('Added')));
                 header('Location: class.php?'.api_get_cidreq().'&type=registered');
                 exit;
@@ -102,15 +100,13 @@ if (api_is_allowed_to_edit()) {
             break;
         case 'remove_class_from_course':
             $id = $_GET['id'];
-            $idSession = (int) isset($_GET['id_session']) ? $_GET['id_session'] : 0;
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,
                     [api_get_course_int_id()],
-                    $idSession
+                    $sessionId
                 );
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
-                /* Remove class */
                 $user_list = $usergroup->get_users_by_usergroup($id);
                 if (!empty($user_list)) {
                     foreach ($user_list as $user_id) {
@@ -119,17 +115,16 @@ if (api_is_allowed_to_edit()) {
                 }
                 Database::delete(
                     $usergroup->usergroup_rel_session_table,
-                    ['usergroup_id = ? AND session_id = ?' => [$id, $idSession]]
+                    ['usergroup_id = ? AND session_id = ?' => [$id, $sessionId]]
                 );
-                /* Remove class */
             }
             break;
     }
 }
 
 // jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter.'&keyword='.$keyword;
-
+$url = api_get_path(WEB_AJAX_PATH).
+    'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter.'&keyword='.$keyword;
 // The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Name'),
@@ -141,7 +136,8 @@ $columns = [
 
 // Column config
 $columnModel = [
-    ['name' => 'name',
+    [
+        'name' => 'name',
         'index' => 'name',
         'width' => '35',
         'align' => 'left',
@@ -172,6 +168,7 @@ $columnModel = [
         'sortable' => 'false',
     ],
 ];
+
 // Autowidth
 $extraParams['autowidth'] = 'true';
 // height auto

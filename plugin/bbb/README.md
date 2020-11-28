@@ -68,3 +68,11 @@ ALTER TABLE plugin_bbb_room ADD close INT NOT NULL DEFAULT 0;
 
 ## Improve access tracking in BBB
 You need to configure the cron using the *cron_close_meeting.php* file.
+
+# Digital ocean VM
+
+In order to use DigitalOceanVM classes a new package is required:
+  
+```
+composer requires toin0u/digitalocean
+``` 

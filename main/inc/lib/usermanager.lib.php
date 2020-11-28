@@ -73,10 +73,13 @@ class UserManager
 
         if (!isset($userManager)) {
             $encoderFactory = self::getEncoderFactory();
+            $passwordUpdater = new \FOS\UserBundle\Util\PasswordUpdater($encoderFactory);
+            $canonicalFieldUpdater = new \FOS\UserBundle\Util\CanonicalFieldsUpdater(
+                new \FOS\UserBundle\Util\Canonicalizer(), new \FOS\UserBundle\Util\Canonicalizer()
+            );
             $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
-                $encoderFactory,
-                new \FOS\UserBundle\Util\Canonicalizer(),
-                new \FOS\UserBundle\Util\Canonicalizer(),
+                $passwordUpdater,
+                $canonicalFieldUpdater,
                 Database::getManager(),
                 'Chamilo\\UserBundle\\Entity\\User'
             );

@@ -6141,7 +6141,7 @@ EOT;
                         if (empty($emailList)) {
                             continue;
                         }
-                        $attempts = $attemptData['attempts'];
+                        $attempts = isset($attemptData['attempts']) ? $attemptData['attempts'] : [];
                         foreach ($attempts as $attempt) {
                             $sendMessage = false;
                             if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {

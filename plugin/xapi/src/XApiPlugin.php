@@ -420,6 +420,16 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getAdminUrl()
+    {
+        $webPath = api_get_path(WEB_PLUGIN_PATH).$this->get_name();
+
+        return "$webPath/admin.php";
+    }
+
+    /**
      * @throws \Doctrine\ORM\Tools\ToolsException
      */
     private function installPluginDbTables()
@@ -519,15 +529,5 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
             ->execute(['category' => 'plugin', 'link' => 'xapi/cmi5/index.php%']);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getAdminUrl()
-    {
-        $webPath = api_get_path(WEB_PLUGIN_PATH).$this->get_name();
-
-        return "$webPath/admin.php";
     }
 }

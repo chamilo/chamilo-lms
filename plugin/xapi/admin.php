@@ -170,7 +170,7 @@ switch ($request->query->getAlpha('action')) {
                     Display::url(
                         Display::return_icon('delete.png', get_lang('Edit')),
                         $pageBaseUrl.'?action=delete&id='.$auth->getId()
-                    )
+                    ),
                 ];
 
                 $table->setCellContents($row, 0, $auth->getUsername());

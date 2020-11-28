@@ -45,27 +45,16 @@ class LrsAuth
      */
     private $createdAt;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return LrsAuth
-     */
     public function setUsername(string $username): LrsAuth
     {
         $this->username = $username;
@@ -73,19 +62,11 @@ class LrsAuth
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @param string $password
-     *
-     * @return LrsAuth
-     */
     public function setPassword(string $password): LrsAuth
     {
         $this->password = $password;
@@ -93,19 +74,11 @@ class LrsAuth
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @param bool $enabled
-     *
-     * @return LrsAuth
-     */
     public function setEnabled(bool $enabled): LrsAuth
     {
         $this->enabled = $enabled;
@@ -123,8 +96,6 @@ class LrsAuth
 
     /**
      * @param \DateTime $createdAt
-     *
-     * @return LrsAuth
      */
     public function setCreatedAt(DateTime $createdAt): LrsAuth
     {

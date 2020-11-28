@@ -49,7 +49,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
-if ($_GET['r'] == 1) {
+if (isset($_GET['r']) && 1 == $_GET['r']) {
     Exercise::cleanSessionVariables();
 }
 

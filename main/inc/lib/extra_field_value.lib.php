@@ -119,7 +119,7 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            if ($forceSave === false) {
+            if (false === $forceSave) {
                 // if the field is not visible to the user in the end, we need to apply special rules.
                 if (1 != $fieldDetails['visible_to_self']) {
                     //only admins should be able to add those values

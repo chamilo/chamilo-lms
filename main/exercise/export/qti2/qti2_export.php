@@ -67,7 +67,6 @@ class ImsAssessmentItem
                 title = "'.htmlspecialchars(formatExerciseQtiText($this->question->selectTitle())).'"
                 category = "'.$categoryTitle.'"
         >'."\n";
-
     }
 
     /**
@@ -263,6 +262,7 @@ class ImsSection
                   ."<questestinterop>\n";
             $foot = "</questestinterop>\n";
         }
+
         return $head
              .$this->start_section()
              .$this->export_duration()

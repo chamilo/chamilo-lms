@@ -171,6 +171,7 @@ class ScormQuestion extends Question
         $title = $this->selectTitle();
         $description = $this->selectDescription();
         $cols = 2;
+
         return '<tr>
             <td colspan="'.$cols.'" id="question_'.$this->id.'_title" valign="middle" style="background-color:#d6d6d6;">
             '.$title.'

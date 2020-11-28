@@ -11,33 +11,33 @@ use Chamilo\CoreBundle\Entity\Tag;
  */
 class ExtraField extends Model
 {
-    const FIELD_TYPE_TEXT = 1;
-    const FIELD_TYPE_TEXTAREA = 2;
-    const FIELD_TYPE_RADIO = 3;
-    const FIELD_TYPE_SELECT = 4;
-    const FIELD_TYPE_SELECT_MULTIPLE = 5;
-    const FIELD_TYPE_DATE = 6;
-    const FIELD_TYPE_DATETIME = 7;
-    const FIELD_TYPE_DOUBLE_SELECT = 8;
-    const FIELD_TYPE_DIVIDER = 9;
-    const FIELD_TYPE_TAG = 10;
-    const FIELD_TYPE_TIMEZONE = 11;
-    const FIELD_TYPE_SOCIAL_PROFILE = 12;
-    const FIELD_TYPE_CHECKBOX = 13;
-    const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
-    const FIELD_TYPE_INTEGER = 15;
-    const FIELD_TYPE_FILE_IMAGE = 16;
-    const FIELD_TYPE_FLOAT = 17;
-    const FIELD_TYPE_FILE = 18;
-    const FIELD_TYPE_VIDEO_URL = 19;
-    const FIELD_TYPE_LETTERS_ONLY = 20;
-    const FIELD_TYPE_ALPHANUMERIC = 21;
-    const FIELD_TYPE_LETTERS_SPACE = 22;
-    const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
-    const FIELD_TYPE_GEOLOCALIZATION = 24;
-    const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
-    const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
-    const FIELD_TYPE_TRIPLE_SELECT = 27;
+    public const FIELD_TYPE_TEXT = 1;
+    public const FIELD_TYPE_TEXTAREA = 2;
+    public const FIELD_TYPE_RADIO = 3;
+    public const FIELD_TYPE_SELECT = 4;
+    public const FIELD_TYPE_SELECT_MULTIPLE = 5;
+    public const FIELD_TYPE_DATE = 6;
+    public const FIELD_TYPE_DATETIME = 7;
+    public const FIELD_TYPE_DOUBLE_SELECT = 8;
+    public const FIELD_TYPE_DIVIDER = 9;
+    public const FIELD_TYPE_TAG = 10;
+    public const FIELD_TYPE_TIMEZONE = 11;
+    public const FIELD_TYPE_SOCIAL_PROFILE = 12;
+    public const FIELD_TYPE_CHECKBOX = 13;
+    public const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
+    public const FIELD_TYPE_INTEGER = 15;
+    public const FIELD_TYPE_FILE_IMAGE = 16;
+    public const FIELD_TYPE_FLOAT = 17;
+    public const FIELD_TYPE_FILE = 18;
+    public const FIELD_TYPE_VIDEO_URL = 19;
+    public const FIELD_TYPE_LETTERS_ONLY = 20;
+    public const FIELD_TYPE_ALPHANUMERIC = 21;
+    public const FIELD_TYPE_LETTERS_SPACE = 22;
+    public const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
+    public const FIELD_TYPE_GEOLOCALIZATION = 24;
+    public const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
+    public const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
+    public const FIELD_TYPE_TRIPLE_SELECT = 27;
     public $columns = [
         'id',
         'field_type',

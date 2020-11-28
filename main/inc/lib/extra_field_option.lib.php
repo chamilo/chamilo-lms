@@ -816,7 +816,7 @@ class ExtraFieldOption extends Model
 
         $defaults = [];
 
-        if ($action === 'edit') {
+        if ('edit' == $action) {
             // Setting the defaults
             $defaults = $this->get($id, false);
             $form->freeze('option_value');

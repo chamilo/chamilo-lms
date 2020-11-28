@@ -402,8 +402,8 @@ Feature: Exercise tool
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":
       | Categories    | Absolute score | Relative score |
-      | Categoryname2 | 50 / 70        | 71.43 %         |
       | Categoryname1 | 60 / 60        | 100 %           |
+      | Categoryname2 | 50 / 70        | 71.43 %         |
       | none          | 80 / 60        | 133.33 %        |
       | Total         | 190 / 190      | 100 %           |
 
@@ -420,8 +420,8 @@ Feature: Exercise tool
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":
       | Categories    | Absolute score | Relative score |
-      | Categoryname2 | 50 / 70        | 71.43 %         |
       | Categoryname1 | 60 / 60        | 100 %           |
+      | Categoryname2 | 50 / 70        | 71.43 %         |
       | none          | 80 / 60        | 133.33 %        |
       | Total         | 190 / 190      | 100 %           |
 

@@ -3995,8 +3995,7 @@ class MySpace
         $endDate = null,
         $lpId = 0,
         $whitCompany = false
-)
-    {
+    ) {
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);

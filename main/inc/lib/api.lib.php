@@ -1412,7 +1412,7 @@ function api_block_anonymous_users($printHeaders = true)
 
         return false;
     }
-    apiBlockInactiveUser();
+    api_block_inactive_user();
 
     return true;
 }

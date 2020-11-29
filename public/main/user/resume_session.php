@@ -216,7 +216,7 @@ if ('true' === $allowTutors) {
     <?php
     echo Display::page_subheader(get_lang('Course list').$url); ?>
     <!--List of courses -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
     <tr>
       <th width="35%"><?php echo get_lang('Course title'); ?></th>
       <th width="30%"><?php echo get_lang('Course coach'); ?></th>
@@ -295,7 +295,7 @@ if ('true' === $allowTutors) {
     <?php
     echo Display::page_subheader(get_lang('User list').$url); ?>
     <!--List of users -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
         <tr>
             <th>
                 <?php echo get_lang('User'); ?>

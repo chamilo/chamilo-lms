@@ -9,6 +9,7 @@
  * @todo    Display error message if no group ID specified
  */
 require_once __DIR__.'/../inc/global.inc.php';
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true, false, 'group');

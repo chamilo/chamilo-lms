@@ -198,12 +198,9 @@ if (api_is_allowed_to_edit(false, true)) {
     $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add-groups.png', get_lang('Create new group(s)'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    if ('true' === api_get_setting('allow_group_categories') && empty($sessionId)) {
+    if (empty($sessionId) && 'true' === api_get_setting('allow_group_categories')) {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
-            Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM).'</a>';
-    } else {
-        $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.
-            Display::return_icon('settings.png', get_lang('Edit settings'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
     $actionsLeft .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.

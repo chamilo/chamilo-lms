@@ -130,7 +130,8 @@ if (!$exportToXLS) {
     echo '<h3>'.sprintf(get_lang('Filtering with score %s'), $filter_score).'%</h3>';
 }
 
-$html = '<table  class="data_table">';
+$html = '<div class="table-responsive">';
+$html .= '<table  class="table table-hover table-striped data_table">';
 if ($global) {
     $html .= '<tr>';
     $html .= '<th>'.get_lang('Courses').'</th>';
@@ -340,6 +341,7 @@ if (!empty($courseList) && is_array($courseList)) {
 }
 
 $html .= '</table>';
+$html .= '</div>';
 
 if (!$exportToXLS) {
     echo $html;

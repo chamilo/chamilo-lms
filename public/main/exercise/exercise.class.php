@@ -2985,7 +2985,7 @@ class Exercise
         $exerciseObject->sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
         $exerciseObject->save();
-        $newId = $exerciseObject->selectId();
+        $newId = $exerciseObject->getId();
         $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $count = 1;

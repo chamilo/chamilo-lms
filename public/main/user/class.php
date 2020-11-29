@@ -41,6 +41,7 @@ $actionsRight = '';
 $usergroup = new UserGroup();
 $actions = '';
 
+$sessionId = api_get_session_id();
 if (api_is_allowed_to_edit()) {
     if ('registered' === $type) {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
@@ -82,12 +83,18 @@ if (api_is_allowed_to_edit()) {
     switch ($action) {
         case 'add_class_to_course':
             $id = $_GET['id'];
-            if (!empty($id)) {
+            if (!empty($id) && $sessionId == 0) {
                 $usergroup->subscribe_courses_to_usergroup(
                     $id,
                     [api_get_course_int_id()],
                     false
                 );
+                Display::addFlash(Display::return_message(get_lang('Added')));
+                header('Location: class.php?'.api_get_cidreq().'&type=registered');
+                exit;
+            } elseif ($sessionId != 0) {
+                /* To suscribe session*/
+                $usergroup->subscribe_sessions_to_usergroup($id, [$sessionId]);
                 Display::addFlash(Display::return_message(get_lang('Added')));
                 header('Location: class.php?'.api_get_cidreq().'&type=registered');
                 exit;
@@ -98,9 +105,20 @@ if (api_is_allowed_to_edit()) {
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,
-                    [api_get_course_int_id()]
+                    [api_get_course_int_id()],
+                    $sessionId
                 );
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
+                $user_list = $usergroup->get_users_by_usergroup($id);
+                if (!empty($user_list)) {
+                    foreach ($user_list as $user_id) {
+                        SessionManager::unsubscribe_user_from_session($id, $user_id);
+                    }
+                }
+                Database::delete(
+                    $usergroup->usergroup_rel_session_table,
+                    ['usergroup_id = ? AND session_id = ?' => [$id, $sessionId]]
+                );
             }
             break;
     }
@@ -120,7 +138,8 @@ $columns = [
 
 // Column config
 $columnModel = [
-    ['name' => 'name',
+    [
+        'name' => 'name',
         'index' => 'name',
         'width' => '35',
         'align' => 'left',

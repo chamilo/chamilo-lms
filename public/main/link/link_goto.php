@@ -16,6 +16,7 @@
  * @author Thomas Depraetere, Hugues Peeters, Christophe Gesch� - original versions
  */
 require_once __DIR__.'/../inc/global.inc.php';
+$this_section = SECTION_COURSES;
 $linkId = isset($_GET['link_id']) ? $_GET['link_id'] : 0;
 
 $linkInfo = Link::getLinkInfo($linkId);

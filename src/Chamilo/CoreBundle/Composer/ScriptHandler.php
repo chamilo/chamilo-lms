@@ -67,6 +67,10 @@ class ScriptHandler
     public static function getFoldersToDelete()
     {
         $paths = [
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/docs',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/nuget',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/grunt',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/test-infra',
             __DIR__.'/../../../../archive/',
             __DIR__.'/../../../../main/announcements/resources',
             __DIR__.'/../../../../main/conference/',
@@ -103,16 +107,11 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/pear/excelreader/',
             __DIR__.'/../../../../main/resourcelinker',
-            // Remove from 1.10
-            __DIR__.'/../../../../plugin/ticket',
-            __DIR__.'/../../../../plugin/skype',
             __DIR__.'/../../../../main/newscorm',
             __DIR__.'/../../../../main/exercice',
-            // js files
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/docs',
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/nuget',
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/grunt',
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/test-infra',
+            __DIR__.'/../../../../plugin/ticket',
+            __DIR__.'/../../../../plugin/skype',
+            __DIR__.'/../../../../vendor/pclzip',
             __DIR__.'/../../../../web/assets/bootstrap/grunt',
             __DIR__.'/../../../../web/assets/bootstrap/nuget',
             __DIR__.'/../../../../web/assets/bootstrap/docs',

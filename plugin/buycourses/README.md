@@ -11,3 +11,8 @@ and lets the user proceed with the purchase.
 
 Finally, the user receives an e-mail confirming the purchase and him/her is can access to the
 course/session.
+
+*****************************************************
+Update Note
+=========================================
+It is necessary to execute the update.php file for those installations that were in production after updating the code.

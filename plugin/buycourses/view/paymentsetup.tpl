@@ -113,6 +113,9 @@
                         </table>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    {{ transfer_info_form }}
+                </div>
             </div>
         </div>
     </div>

@@ -1859,21 +1859,40 @@ abstract class Question
         $extraField->addElements($form, $this->iid);
 
         // default values
-        $defaults = [];
-        $defaults['questionName'] = $this->question;
-        $defaults['questionDescription'] = $this->description;
-        $defaults['questionLevel'] = $this->level;
-        $defaults['questionCategory'] = $this->category;
-        $defaults['feedback'] = $this->feedback;
-        $defaults['mandatory'] = $this->mandatory;
 
         // Came from he question pool
-        if (isset($_GET['fromExercise'])) {
-            $form->setDefaults($defaults);
-        }
+        if (isset($_GET['fromExercise'])
+            || (!isset($_GET['newQuestion']) || $isContent)
+        ) {
+            try {
+                $form->getElement('questionName')->setValue($this->question);
+            } catch (Exception $exception) {
+            }
 
-        if (!isset($_GET['newQuestion']) || $isContent) {
-            $form->setDefaults($defaults);
+            try {
+                $form->getElement('questionDescription')->setValue($this->description);
+            } catch (Exception $e) {
+            }
+
+            try {
+                $form->getElement('questionLevel')->setValue($this->level);
+            } catch (Exception $e) {
+            }
+
+            try {
+                $form->getElement('questionCategory')->setValue($this->category);
+            } catch (Exception $e) {
+            }
+
+            try {
+                $form->getElement('feedback')->setValue($this->feedback);
+            } catch (Exception $e) {
+            }
+
+            try {
+                $form->getElement('mandatory')->setValue($this->mandatory);
+            } catch (Exception $e) {
+            }
         }
 
         /*if (!empty($_REQUEST['myid'])) {

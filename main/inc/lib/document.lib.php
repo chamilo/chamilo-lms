@@ -4202,16 +4202,6 @@ class DocumentManager
      */
     public static function is_folder_to_avoid($path, $is_certificate_mode = false)
     {
-        $foldersToAvoid = [
-            '/HotPotatoes_files',
-            '/certificates',
-        ];
-        $systemFolder = api_get_course_setting('show_system_folders');
-
-        if ($systemFolder == 1) {
-            $foldersToAvoid = [];
-        }
-
         if (basename($path) == 'css') {
             return true;
         }
@@ -4223,6 +4213,23 @@ class DocumentManager
             }
         }
 
+        $foldersToAvoid = [
+            '/HotPotatoes_files',
+            '/certificates',
+        ];
+        $showSystemFolder = api_get_course_setting('show_system_folders');
+
+        // Admin setting for Hide/Show Default folders to all users
+        if (api_get_setting('show_default_folders') == 'false'
+            || 2 == $showSystemFolder
+        ) {
+            $foldersToAvoid[] = '/images';
+            $foldersToAvoid[] = '/flash';
+            $foldersToAvoid[] = '/audio';
+            $foldersToAvoid[] = '/video';
+            $foldersToAvoid[] = '/learning_path';
+        }
+
         // Admin setting for Hide/Show the folders of all users
         if (api_get_setting('show_users_folders') == 'false') {
             $foldersToAvoid[] = '/shared_folder';
@@ -4230,14 +4237,6 @@ class DocumentManager
             if (strstr($path, 'shared_folder_session_')) {
                 return true;
             }
-        }
-
-        // Admin setting for Hide/Show Default folders to all users
-        if (api_get_setting('show_default_folders') == 'false') {
-            $foldersToAvoid[] = '/images';
-            $foldersToAvoid[] = '/flash';
-            $foldersToAvoid[] = '/audio';
-            $foldersToAvoid[] = '/video';
         }
 
         // Admin setting for Hide/Show chat history folder

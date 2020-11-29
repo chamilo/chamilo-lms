@@ -426,6 +426,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 {
     $groupInfo = GroupManager::get_group_properties(api_get_group_id());
     $course_id = api_get_course_int_id();
+    $column = (int) $column;
 
     if (empty($groupInfo) || empty($course_id)) {
         return 0;

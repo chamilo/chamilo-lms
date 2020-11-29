@@ -7,6 +7,13 @@
 require_once __DIR__.'/../../vendor/autoload.php';
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
+$isGlobal = isset($_GET['global']) ? true : false;
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
+
+// If global setting is used then we delete the course sessions (cidReq/id_session)
+if ($isGlobalPerUser || $isGlobal) {
+    $cidReset = true;
+}
 require_once __DIR__.'/config.php';
 
 $logInfo = [
@@ -20,8 +27,6 @@ $tpl = new Template($tool_name);
 $vmIsEnabled = false;
 $host = '';
 $salt = '';
-$isGlobal = isset($_GET['global']) ? true : false;
-$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 $interface = isset($_GET['interface']) ? (int) $_GET['interface'] : 0;
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);

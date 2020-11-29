@@ -8,6 +8,7 @@ use Chamilo\PluginBundle\Zoom\MeetingActivity;
 use Chamilo\PluginBundle\Zoom\Recording;
 use Symfony\Component\HttpFoundation\Response;
 
+require_once __DIR__.'/config.php';
 if ('POST' !== $_SERVER['REQUEST_METHOD']) {
     http_response_code(Response::HTTP_NOT_FOUND); // Not found
     exit;
@@ -16,9 +17,9 @@ if ('POST' !== $_SERVER['REQUEST_METHOD']) {
 // @todo handle non-apache installations
 $authorizationHeaderValue = apache_request_headers()['Authorization'];
 
-require_once __DIR__.'/config.php';
 
 if (api_get_plugin_setting('zoom', 'verificationToken') !== $authorizationHeaderValue) {
+    error_log('verificationToken not valid, please check your zoom configuration');
     http_response_code(Response::HTTP_UNAUTHORIZED);
     exit;
 }

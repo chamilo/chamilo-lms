@@ -180,6 +180,20 @@ class ZoomPlugin extends Plugin
      */
     public function install()
     {
+        $schemaManager = Database::getManager()->getConnection()->getSchemaManager();
+
+        $tablesExists = $schemaManager->tablesExist(
+            [
+                'plugin_zoom_meeting',
+                'plugin_zoom_meeting_activity',
+                'plugin_zoom_recording',
+                'plugin_zoom_registrant',
+            ]
+        );
+
+        if ($tablesExists) {
+            return;
+        }
         (new SchemaTool(Database::getManager()))->createSchema(
             [
                 Database::getManager()->getClassMetadata(Meeting::class),

@@ -379,7 +379,19 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable->addColumn('next_number_invoice', \Doctrine\DBAL\Types\Type::INTEGER);
     $globalTable->addColumn('invoice_series', \Doctrine\DBAL\Types\Type::STRING);
     $globalTable->addColumn('sale_email', \Doctrine\DBAL\Types\Type::STRING);
+    $globalTable->addColumn('info_email_extra', \Doctrine\DBAL\Types\Type::TEXT);
     $globalTable->setPrimaryKey(['id']);
+}
+
+$settingsTable = BuyCoursesPlugin::TABLE_GLOBAL_CONFIG;
+$sql = "SHOW COLUMNS FROM $settingsTable WHERE Field = 'info_email_extra'";
+$res = Database::query($sql);
+if (Database::num_rows($res) === 0) {
+    $sql = "ALTER TABLE $settingsTable ADD (info_email_extra TEXT NOT NULL)";
+    $res = Database::query($sql);
+    if (!$res) {
+        echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+    }
 }
 
 if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {

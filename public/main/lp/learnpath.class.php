@@ -1033,6 +1033,15 @@ class learnpath
             }
         }
 
+       if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+            $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+            $sql = "DELETE FROM $table
+                    WHERE
+                        lp_id = {$this->lp_id} AND
+                        c_id = $course_id ";
+            Database::query($sql);
+        }
+
         /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
         $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
         // Delete tools
@@ -1450,8 +1459,8 @@ class learnpath
             $maxScore = 100;
         }
 
-        $minScore = floatval($minScore);
-        $maxScore = floatval($maxScore);
+        $minScore = (float) $minScore;
+        $maxScore = (float) $maxScore;
 
         if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
@@ -1731,6 +1740,23 @@ class learnpath
         } catch (Exception $exception) {
             return 0;
         }
+    }
+
+    /**
+     * Get the learning path name by id.
+     *
+     * @param int $lpId
+     *
+     * @return mixed
+     */
+    public static function getLpNameById($lpId)
+    {
+        $em = Database::getManager();
+
+        return $em->createQuery('SELECT clp.name FROM ChamiloCourseBundle:CLp clp
+            WHERE clp.iid = :iid')
+            ->setParameter('iid', $lpId)
+            ->getSingleScalarResult();
     }
 
     /**
@@ -6527,6 +6553,7 @@ class learnpath
      * @param bool   $isConfigPage           Optional. If is the config page, show the edit button
      * @param bool   $allowExpand            Optional. Allow show the expand/contract button
      * @param string $action
+     * @param array  $extraField
      *
      * @return string
      */
@@ -6535,10 +6562,12 @@ class learnpath
         $showRequirementButtons = true,
         $isConfigPage = false,
         $allowExpand = true,
-        $action = ''
+        $action = '',
+        $extraField = []
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
+        if (!isset($extraField['backTo']) && empty($extraField['backTo'])) {
         $back = Display::url(
             Display::return_icon(
                 'back.png',
@@ -6548,6 +6577,17 @@ class learnpath
             ),
             'lp_controller.php?'.api_get_cidreq()
         );
+        } else {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('Back'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                $extraField['backTo']
+            );
+        }
 
         /*if ($backToBuild) {
             $back = Display::url(
@@ -6868,6 +6908,10 @@ class learnpath
         $filename = $title;
         $content = !empty($content) ? $content : $_POST['content_lp'];
         $tmp_filename = $filename;
+        $i = 0;
+        while (file_exists($filepath.$tmp_filename.'.'.$extension)) {
+            $tmp_filename = $filename.'_'.++$i;
+        }
         $filename = $tmp_filename.'.'.$extension;
 
         if ('html' === $extension) {
@@ -10181,7 +10225,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return mixed
+     * @return CLpCategory[]
      */
     public static function getCategories($courseId)
     {

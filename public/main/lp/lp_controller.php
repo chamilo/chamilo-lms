@@ -21,6 +21,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
+$current_course_tool = TOOL_LEARNPATH;
 $_course = api_get_course_info();
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
@@ -226,14 +227,11 @@ $htmlHeadXtra[] = '
                 );
             },
             receive: function(event, ui) {
-                /*var id = $(ui.item).attr("data_id");
+                var id = $(ui.item).attr("data_id");
                 var type = $(ui.item).attr("data_type");
-                var title = $(ui.item).attr("title");*/
-                var id = $(ui.item).find(".link_with_id").attr("data_id");
-                var type = $(ui.item).find(".link_with_id").attr("data_type");
-                var title = $(ui.item).find(".link_with_id").html();
-
+                var title = $(ui.item).attr("title");
                 processReceive = true;
+
                 if (ui.item.parent()[0]) {
                     var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");
@@ -1403,6 +1401,9 @@ switch ($action) {
                     break;
                 case 'my_courses':
                     $url = api_get_path(WEB_PATH).'user_portal.php';
+                    break;
+                case 'portal_home':
+                    $url = api_get_path(WEB_PATH);
                     break;
             }
             header('location: '.$url);

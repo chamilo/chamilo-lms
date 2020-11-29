@@ -11,6 +11,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
+    api_not_allowed(true);
+}
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (!$is_allowed_to_edit) {
@@ -23,10 +27,8 @@ if (empty($lpId)) {
     api_not_allowed(true);
 }
 
-$subscriptionSettings = learnpath::getSubscriptionSettings();
-if (false == $subscriptionSettings['allow_add_users_to_lp']) {
-    api_not_allowed(true);
-}
+$allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
+$currentUser = api_get_user_entity(api_get_user_id());
 
 $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
@@ -149,13 +151,142 @@ $groupMultiSelect = $form->addElement(
 
 $form->addButtonSave(get_lang('Save'));
 
+if ($allowUserGroups) {
+    $formUserGroup = new FormValidator('usergroup_form', 'post', $url);
+    $formUserGroup->addHidden('usergroup_form', 1);
+
+    $userGroup = new UserGroup();
+    $conditions = [];
+    $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
+    $groups = $userGroup->getUserGroupInCourse($conditions);
+    $allOptions = array_column($groups, 'name', 'id');
+    $items = $userGroup->getGroupsByLp($lpId, $courseId, $sessionId);
+
+    $selectedUserGroupChoices = [];
+    if (!empty($items)) {
+        foreach ($items as $data) {
+            if (isset($allOptions[$data['usergroup_id']])) {
+                $selectedUserGroupChoices[] = $data['usergroup_id'];
+            }
+        }
+    }
+
+    $userGroupMultiSelect = $formUserGroup->addElement(
+        'advmultiselect',
+        'usergroups',
+        get_lang('Classes'),
+        $allOptions
+    );
+
+    $formUserGroup->setDefaults(['usergroups' => $selectedUserGroupChoices]);
+    $formUserGroup->addButtonSave(get_lang('Save'));
+    $sessionCondition = api_get_session_condition($sessionId, true);
+    if ($formUserGroup->validate()) {
+        $values = $formUserGroup->getSubmitValues();
+        $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+        if (isset($values['usergroups'])) {
+            $userGroups = $values['usergroups'];
+            foreach ($selectedUserGroupChoices as $userGroupId) {
+                $userGroupId = (int) $userGroupId;
+                if (!in_array($userGroupId, $userGroups)) {
+                    $sql = "DELETE FROM $table
+                            WHERE
+                                c_id = $courseId AND
+                                lp_id = $lpId AND
+                                usergroup_id = $userGroupId
+                                $sessionCondition
+                            ";
+                    Database::query($sql);
+
+                    $userList = $userGroup->get_users_by_usergroup($userGroupId);
+                    $itemRepo->unsubcribeUsersToItem(
+                        'learnpath',
+                        $course,
+                        $session,
+                        $lpId,
+                        $userList
+                    );
+                }
+            }
+
+            foreach ($userGroups as $userGroupId) {
+                $userGroupId = (int) $userGroupId;
+                $sql = "SELECT id FROM $table
+                        WHERE
+                            c_id = $courseId AND
+                            lp_id = $lpId AND
+                            usergroup_id = $userGroupId
+                            $sessionCondition
+                            ";
+                $result = Database::query($sql);
+
+                if (0 == Database::num_rows($result)) {
+                    $params = [
+                        'lp_id' => $lpId,
+                        'c_id' => $courseId,
+                        'usergroup_id' => $userGroupId,
+                        'created_at' => api_get_utc_datetime(),
+                    ];
+                    if (!empty($sessionId)) {
+                        $params['session_id'] = $sessionId;
+                    }
+                    Database::insert($table, $params);
+                }
+            }
+
+            $groups = $userGroup->getGroupsByLp($lpId, $courseId, $sessionId);
+            $userList = [];
+            foreach ($groups as $groupId) {
+                $userList = $userGroup->get_users_by_usergroup($groupId);
+                $itemRepo->subscribeUsersToItem(
+                    $currentUser,
+                    'learnpath',
+                    $course,
+                    $session,
+                    $lpId,
+                    $userList,
+                    false
+                );
+            }
+
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        } else {
+            foreach ($groups as $group) {
+                $userList = $userGroup->get_users_by_usergroup($group['id']);
+                $itemRepo->unsubcribeUsersToItem(
+                    'learnpath',
+                    $course,
+                    $session,
+                    $lpId,
+                    $userList
+                );
+            }
+
+            // Clean all
+            $sql = "DELETE FROM $table
+                    WHERE
+                        c_id = $courseId AND
+                        lp_id = $lpId
+                        $sessionCondition
+                    ";
+            Database::query($sql);
+        }
+        header("Location: $url");
+        exit;
+    }
+}
+
+$defaults = [];
+if (!empty($selectedChoices)) {
+    $defaults['users'] = $selectedChoices;
+}
+
+$formUsers->setDefaults($defaults);
 $defaults = [];
 if (!empty($selectedGroupChoices)) {
     $defaults['groups'] = $selectedGroupChoices;
 }
 $form->setDefaults($defaults);
-
-$currentUser = api_get_user_entity(api_get_user_id());
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
@@ -202,9 +333,15 @@ $headers = [
     get_lang('Subscribe groups to learning path'),
 ];
 
+$items = [$formUsers->toHtml(), $form->toHtml()];
+
+if ($allowUserGroups) {
+    $headers[] = get_lang('SubscribeUserGroupsToLp');
+    $items[] = $formUserGroup->toHtml();
+}
 $menu = $oLP->build_action_menu(true, false, true, false);
 
 $tpl = new Template();
-$tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
+$tabs = Display::tabs($headers, $items);
 $tpl->assign('content', $menu.$message.$tabs);
 $tpl->display_one_col_template();

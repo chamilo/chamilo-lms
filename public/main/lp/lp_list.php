@@ -13,6 +13,7 @@ use ChamiloSession as Session;
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
+$this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || 1 != $lp_controller_touched) {
     header('Location: lp_controller.php?action=list&'.api_get_cidreq());

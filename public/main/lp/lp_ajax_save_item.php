@@ -65,11 +65,10 @@ function save_item(
 
     if ($debug > 0) {
         error_log('--------------------------------------');
-        error_log('lp_ajax_save_item.php : save_item() params: ');
-        error_log("item_id: $item_id");
-        error_log("lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
-        error_log("score: $score - max:$max - min: $min - status:$status");
-        error_log("time:$time - suspend: $suspend - location: $location - core_exit: $core_exit");
+        error_log('SAVE ITEM - lp_ajax_save_item.php : save_item() params: ');
+        error_log("item_id: $item_id - lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
+        error_log("SCORE: $score - max:$max - min: $min - status:$status");
+        error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
         error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
     }
 

@@ -34,6 +34,10 @@ $oLP = UnserializeApi::unserialize(
     'lp',
     Session::read('lpobject')
 );
+if (!is_object($oLP)) {
+    error_log('New LP - scorm_api - Could not load oLP object', 0);
+    exit;
+}
 /** @var learnpathItem $oItem */
 $oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
 
@@ -471,7 +475,7 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id'){
         // ---- cmi.core.student_id
-        result='<?php echo $userId; ?>';
+        result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php

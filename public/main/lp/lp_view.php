@@ -123,7 +123,7 @@ if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheade
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
+        $(function() {
             $("img").each(function() {
                 var attr = $(this).attr("data-zoom-image");
                 // For some browsers, `attr` is undefined; for others,
@@ -295,12 +295,12 @@ if (!isset($src)) {
 $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
-/*if ($debug) {
+if ($debug) {
     error_log('$type_quiz: '.$type_quiz);
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
     error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id']));
-}*/
+}
 
 if (!empty($_REQUEST['exeId']) &&
     isset($lp_id) &&
@@ -422,6 +422,10 @@ switch ($returnLink) {
     case 2: // user portal
         $buttonHomeUrl .= '&redirectTo=my_courses';
         $buttonHomeText = get_lang('My courses');
+        break;
+    case 3: // Portal home
+        $buttonHomeUrl .= '&redirectTo=portal_home';
+        $buttonHomeText = get_lang('Home');
         break;
 }
 

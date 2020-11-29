@@ -338,6 +338,30 @@ $transferForm->addButtonCreate(get_lang('Add'));
 
 $transferAccounts = $plugin->getTransferAccounts();
 
+$transferInfoForm = new FormValidator('transfer_info');
+
+if ($transferInfoForm->validate()) {
+    $transferInfoFormValues = $transferInfoForm->getSubmitValues();
+
+    $plugin->saveTransferInfoEmail($transferInfoFormValues);
+
+    Display::addFlash(
+        Display::return_message(get_lang('Saved'), 'success')
+    );
+
+    header('Location:'.api_get_self());
+    exit;
+}
+$transferInfoForm->addHtmlEditor(
+    'tinfo_email_extra',
+    $plugin->get_lang('InfoEmailExtra'),
+    false,
+    false,
+    ['ToolbarSet' => 'Minimal']
+);
+$transferInfoForm->addButtonCreate(get_lang('Save'));
+$transferInfoForm->setDefaults($plugin->getTransferInfoExtra());
+
 // Culqi main configuration
 
 $culqiForm = new FormValidator('culqi_config');
@@ -384,6 +408,7 @@ $tpl->assign('global_config_form', $globalSettingForm->returnForm());
 $tpl->assign('paypal_form', $paypalForm->returnForm());
 $tpl->assign('commission_form', $commissionForm->returnForm());
 $tpl->assign('transfer_form', $transferForm->returnForm());
+$tpl->assign('transfer_info_form', $transferInfoForm->returnForm());
 $tpl->assign('culqi_form', $culqiForm->returnForm());
 $tpl->assign('transfer_accounts', $transferAccounts);
 $tpl->assign('paypal_enable', $paypalEnable);

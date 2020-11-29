@@ -163,3 +163,4 @@ $strings['Names'] = "Nom";
 $strings['ExportReport'] = "Export du rapport des ventes";
 $strings['OrderTime'] = "Heure de commande";
 $strings['SelectDateRange'] = "Sélectionnez une date de début et une date de fin pour le rapport";
+$strings['InfoEmailExtra'] = "Informations additionnelles dans l'e-mail de paiement";

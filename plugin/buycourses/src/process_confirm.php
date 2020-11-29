@@ -104,6 +104,7 @@ switch ($sale['payment_type']) {
         }
 
         $transferAccounts = $plugin->getTransferAccounts();
+        $infoEmailExtra = $plugin->getTransferInfoExtra()['tinfo_email_extra'];
 
         $form = new FormValidator(
             'success',
@@ -139,6 +140,7 @@ switch ($sale['payment_type']) {
                 ]
             );
             $messageTemplate->assign('transfer_accounts', $transferAccounts);
+            $messageTemplate->assign('info_email_extra', $infoEmailExtra);
 
             MessageManager::send_message_simple(
                 $userInfo['user_id'],

@@ -5,9 +5,8 @@
     "homepage": "http://www.chamilo.org",
     "license": "GPL-3.0",
     "support": {
-        "docs": "https://github.com/chamilo/docs",
-        "forum": "https://chamilo.org/forum",
-        "irc": "irc://irc.freenode.org/chamilo",
+        "docs": "https://docs.chamilo.org/",
+        "forum": "https://forum.chamilo.org/",
         "issues": "https://github.com/chamilo/chamilo-lms/issues",
         "source": "https://github.com/chamilo/chamilo-lms"
     },

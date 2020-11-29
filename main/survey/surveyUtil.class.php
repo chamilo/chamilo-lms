@@ -928,7 +928,7 @@ class SurveyUtil
         echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
         echo '		<th>'.get_lang('Percentage').'</th>';
         echo '		<th>'.get_lang('VisualRepresentation').'</th>';
-        echo '	<tr>';
+        echo '	</tr>';
 
         // Displaying the table: the content
         foreach ($options as $key => &$value) {
@@ -3423,7 +3423,7 @@ class SurveyUtil
             LEFT JOIN $table_survey_question survey_question
             ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
             LEFT JOIN $table_user user
-            ON (survey.author = user.user_id)
+            ON (survey.author = user.id)
             WHERE survey.c_id = $course_id
             $search_restriction
             $condition_session
@@ -3573,7 +3573,7 @@ class SurveyUtil
             LEFT JOIN $table_survey_question survey_question
             ON (survey.survey_id = survey_question.survey_id AND survey.c_id = survey_question.c_id),
             $table_user user
-            WHERE survey.author = user.user_id AND survey.c_id = $course_id $list_condition
+            WHERE survey.author = user.id AND survey.c_id = $course_id $list_condition
         ";
         $sql .= ' GROUP BY survey.survey_id';
         $sql .= " ORDER BY col$column $direction ";

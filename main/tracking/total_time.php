@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.tracking
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -19,7 +16,7 @@ $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : 0;
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ('myspace' == $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }

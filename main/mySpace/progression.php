@@ -39,8 +39,14 @@ if (Database::num_rows($result_course) > 0) {
         $export_result = export_csv($header, $data, 'test.csv'); // TODO: There is no data for exporting yet.
         echo Display::return_message($export_result, 'error');
     }
-    echo '<table class="table table-hover table-striped data_table"><tr><th>'.get_lang('Course').'</th><th>'.get_lang('TempsFrequentation').'</th><th>'.get_lang('Progression').'</th><th>'.get_lang('MoyenneTest').'</th></tr>';
-    $header = [get_lang('Course', ''), get_lang('TempsFrequentation', ''), get_lang('Progression', ''), get_lang('MoyenneTest', '')];
+    echo '<table class="table table-hover table-striped data_table">
+            <tr>
+                <th>'.get_lang('Course').'</th>
+                <th>'.get_lang('TempsFrequentation').'</th>
+                <th>'.get_lang('Progression').'</th>
+                <th>'.get_lang('MoyenneTest').'</th>
+            </tr>';
+    $header = [get_lang('Course'), get_lang('TempsFrequentation'), get_lang('Progression'), get_lang('MoyenneTest')];
     while ($a_course = Database::fetch_array($result_course)) {
         // TODO: This query is to be checked, there are no HotPotatoes tests results.
         $sql_moy_test = "SELECT exe_result,exe_weighting
@@ -53,7 +59,7 @@ if (Database::num_rows($result_course) > 0) {
             $result = $result + $moy_test['exe_result'];
             $weighting = $weighting + $moy_test['exe_weighting'];
         }
-        if ($weighting != 0) {
+        if (0 != $weighting) {
             $moyenne_test = round(($result * 100) / $weighting);
         } else {
             $moyenne_test = null;

@@ -19,24 +19,24 @@ use Sylius\Component\Attribute\Model\Attribute as BaseAttribute;
  */
 class ExtraField extends BaseAttribute
 {
-    const USER_FIELD_TYPE = 1;
-    const COURSE_FIELD_TYPE = 2;
-    const SESSION_FIELD_TYPE = 3;
-    const QUESTION_FIELD_TYPE = 4;
-    const CALENDAR_FIELD_TYPE = 5;
-    const LP_FIELD_TYPE = 6;
-    const LP_ITEM_FIELD_TYPE = 7;
-    const SKILL_FIELD_TYPE = 8;
-    const WORK_FIELD_TYPE = 9;
-    const CAREER_FIELD_TYPE = 10;
-    const USER_CERTIFICATE = 11;
-    const SURVEY_FIELD_TYPE = 12;
-    const SCHEDULED_ANNOUNCEMENT = 13;
-    const TERMS_AND_CONDITION_TYPE = 14;
-    const FORUM_CATEGORY_TYPE = 15;
-    const FORUM_POST_TYPE = 16;
-    const EXERCISE_FIELD_TYPE = 17;
-    const TRACK_EXERCISE_FIELD_TYPE = 18;
+    public const USER_FIELD_TYPE = 1;
+    public const COURSE_FIELD_TYPE = 2;
+    public const SESSION_FIELD_TYPE = 3;
+    public const QUESTION_FIELD_TYPE = 4;
+    public const CALENDAR_FIELD_TYPE = 5;
+    public const LP_FIELD_TYPE = 6;
+    public const LP_ITEM_FIELD_TYPE = 7;
+    public const SKILL_FIELD_TYPE = 8;
+    public const WORK_FIELD_TYPE = 9;
+    public const CAREER_FIELD_TYPE = 10;
+    public const USER_CERTIFICATE = 11;
+    public const SURVEY_FIELD_TYPE = 12;
+    public const SCHEDULED_ANNOUNCEMENT = 13;
+    public const TERMS_AND_CONDITION_TYPE = 14;
+    public const FORUM_CATEGORY_TYPE = 15;
+    public const FORUM_POST_TYPE = 16;
+    public const EXERCISE_FIELD_TYPE = 17;
+    public const TRACK_EXERCISE_FIELD_TYPE = 18;
 
     /**
      * @var int

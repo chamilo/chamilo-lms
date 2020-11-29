@@ -21,7 +21,7 @@ if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
 }
 
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : api_get_session_id();
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv';
+$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'];
 $user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();
@@ -30,7 +30,7 @@ $csv_content = [];
 $courseInfo = api_get_course_info($courseCode);
 
 if (empty($courseInfo) || empty($lp_id)) {
-    api_not_allowed(api_get_origin() !== 'learnpath');
+    api_not_allowed('learnpath' !== api_get_origin());
 }
 $userInfo = api_get_user_info($user_id);
 $name = $userInfo['complete_name'];
@@ -46,7 +46,7 @@ if (!$isBoss &&
     api_not_allowed(api_get_origin() !== 'learnpath');
 }
 
-if ($origin === 'user_course') {
+if ('user_course' === $origin) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
         'name' => $courseInfo['name'],

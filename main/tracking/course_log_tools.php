@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.tracking
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 

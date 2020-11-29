@@ -1164,19 +1164,19 @@ class SurveyManager
         if (strlen($form_content['question']) > 1) {
             // Checks length of the question
             $empty_answer = false;
-            if ($survey_data['survey_type'] == 1) {
+            if (1 == $survey_data['survey_type']) {
                 if (empty($form_content['choose'])) {
                     return 'PleaseChooseACondition';
                 }
 
-                if (($form_content['choose'] == 2) &&
+                if ((2 == $form_content['choose']) &&
                     ($form_content['assigned1'] == $form_content['assigned2'])
                 ) {
                     return 'ChooseDifferentCategories';
                 }
             }
 
-            if ($form_content['type'] !== 'percentage') {
+            if ('percentage' !== $form_content['type']) {
                 if (isset($form_content['answers'])) {
                     for ($i = 0; $i < count($form_content['answers']); $i++) {
                         if (strlen($form_content['answers'][$i]) < 1) {
@@ -1611,7 +1611,7 @@ class SurveyManager
         $type = $form_content['type'];
 
         // A percentage question type has options 1 -> 100
-        if ($type === 'percentage') {
+        if ('percentage' === $type) {
             for ($i = 1; $i < 101; $i++) {
                 $form_content['answers'][] = $i;
             }
@@ -1933,9 +1933,9 @@ class SurveyManager
 			            answered_user.user as invited_user,
 			            user.firstname,
 			            user.lastname,
-			            user.user_id
+			            user.id as user_id
                     FROM $table_survey_answer answered_user
-                    LEFT JOIN $table_user as user ON answered_user.user = user.user_id
+                    LEFT JOIN $table_user as user ON answered_user.user = user.id
                     WHERE
                         answered_user.c_id = $course_id AND
                         survey_id= '".$survey_id."' ".
@@ -2623,7 +2623,7 @@ class SurveyManager
         $result = Database::query($sql);
         $countOfQuestions = Database::result($result, 0, 0);
 
-        if ($survey['one_question_per_page'] == 1) {
+        if (1 == $survey['one_question_per_page']) {
             if (!empty($countOfQuestions)) {
                 return $countOfQuestions;
             }

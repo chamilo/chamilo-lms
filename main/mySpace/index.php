@@ -3,8 +3,6 @@
 
 /**
  * Homepage for the MySpace directory.
- *
- * @package chamilo.reporting
  */
 
 // resetting the course id
@@ -22,7 +20,7 @@ $this_section = SECTION_TRACKING;
 
 ob_start();
 $nameTools = get_lang('MySpace');
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = [];
 $user_id = api_get_user_id();

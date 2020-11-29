@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * @package chamilo.classes
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;

@@ -13,7 +13,7 @@ if (!api_is_allowed_to_create_course() && !api_is_drh()) {
     api_not_allowed(true);
 }
 
-$allowCustomCertificate = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true';
+$allowCustomCertificate = 'true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate');
 $plugin = CustomCertificatePlugin::create();
 
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -351,7 +351,7 @@ if ($allowCustomCertificate) {
 echo Display::toolbarAction('actions', [$actions]);
 echo $form->returnForm();
 
-if (count($certificateList) == 0) {
+if (0 == count($certificateList)) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
     echo '<table class="table table-hover table-striped  data_table">';

@@ -3,8 +3,6 @@
 
 /**
  * List sessions in an efficient and usable way.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 

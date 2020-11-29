@@ -38,9 +38,13 @@ $sql = "SELECT user.id as user_id,lastname,firstname,email
 $result_admins = Database::query($sql);
 
 if (api_is_western_name_order()) {
-    echo '<table class="data_table"><tr><th>'.get_lang('First name').'</th><th>'.get_lang('Last name').'</th><th>'.get_lang('e-mail').'</th></tr>';
+    echo '<table class="table table-hover table-striped data_table">
+            <tr><th>'.get_lang('First name').'</th>
+            <th>'.get_lang('Last name').'</th><th>'.get_lang('e-mail').'</th></tr>';
 } else {
-    echo '<table class="data_table"><tr><th>'.get_lang('Last name').'</th><th>'.get_lang('First name').'</th><th>'.get_lang('e-mail').'</th></tr>';
+    echo '<table class="table table-hover table-striped data_table">
+            <tr><th>'.get_lang('Last name').'</th>
+            <th>'.get_lang('First name').'</th><th>'.get_lang('e-mail').'</th></tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {

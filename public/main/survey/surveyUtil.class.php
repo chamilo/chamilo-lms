@@ -221,9 +221,9 @@ class SurveyUtil
             Display::display_header($tool_name);
             Display::display_footer();
             exit;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -575,7 +575,7 @@ class SurveyUtil
         $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
         $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
         $surveyId = (int) $survey_data['survey_id'];
-        $action = Security::remove_XSS($_GET['action']);
+        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $course_id = api_get_course_int_id();
 
         // Database table definitions
@@ -585,14 +585,40 @@ class SurveyUtil
         $questions = [];
 
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
+        echo '<a
+            href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back to').' '.get_lang('Reporting overview'),
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
+        echo Display::url(
+            Display::return_icon(
+                'pdf.png',
+                get_lang('ExportToPdf'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            'javascript: void(0);',
+            ['onclick' => 'exportToPdf();']
+        );
         echo '</div>';
+        $fromUntil = sprintf(get_lang('FromXUntilY'), $survey_data['avail_from'], $survey_data['avail_till']);
+        $data = [
+            get_lang('SurveyTitle') => $survey_data['title'],
+            get_lang('SurveySubTitle') => $survey_data['subtitle'],
+            get_lang('Dates') => $fromUntil,
+            get_lang('SurveyIntroduction') => $survey_data['intro'],
+        ];
+
+        $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);
+        $row = 0;
+        foreach ($data as $label => $item) {
+            $table->setCellContents($row, 0, $label);
+            $table->setCellContents($row, 1, $item);
+            $row++;
+        }
 
         if ($survey_data['number_of_questions'] > 0) {
             $limitStatement = null;
@@ -636,7 +662,9 @@ class SurveyUtil
                 $questions[$row['question_id']] = $row;
             }
         }
+        echo '<div id="question_results">';
         foreach ($questions as $question) {
+            echo '<div class="question-item">';
             $chartData = [];
             $options = [];
             $questionId = (int) $question['question_id'];
@@ -705,18 +733,19 @@ class SurveyUtil
                     array_push($chartData, ['option' => $optionText, 'votes' => $votes]);
                 }
                 $chartContainerId = 'chartContainer'.$question['question_id'];
-                echo '<div id="'.$chartContainerId.'" class="col-md-12">';
+                echo '<div id="'.$chartContainerId.'" >';
+                echo self::drawChart($chartData, false, $chartContainerId, false);
+                echo '</div>';
 
-                echo self::drawChart($chartData, false, $chartContainerId);
 
                 // displaying the table: headers
-                echo '<table class="display-survey table">';
+                echo '<table class="display-survey table" id="table_'.$chartContainerId.'">';
                 echo '	<tr>';
                 echo '		<th>&nbsp;</th>';
                 echo '		<th>'.get_lang('Absolute total').'</th>';
                 echo '		<th>'.get_lang('Percentage').'</th>';
                 echo '		<th>'.get_lang('Graphic').'</th>';
-                echo '	<tr>';
+                echo '	</tr>';
 
                 // Displaying the table: the content
                 if (is_array($options)) {
@@ -756,8 +785,11 @@ class SurveyUtil
                         echo '		<td class="center">';
                         $size = $answers_number * 2;
                         if ($size > 0) {
-                            echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'
-                                .$size.'px">&nbsp;</div>';
+                            echo '<div
+                                    style="border:1px solid #264269; background-color:#aecaf4; height:10px;
+                                    width:'.$size.'px">
+                                    &nbsp;
+                                    </div>';
                         } else {
                             echo '<div style="text-align: left;">'.get_lang("No data available").'</div>';
                         }
@@ -776,16 +808,21 @@ class SurveyUtil
                 }
 
                 // displaying the table: footer (totals)
-                echo '	<tr>';
-                echo '		<td class="total"><b>'.get_lang('Total').'</b></td>';
-                echo '		<td class="total"><b>'.$optionResult.'</b></td>';
-                echo '		<td class="total">&nbsp;</td>';
-                echo '		<td class="total">&nbsp;</td>';
-                echo '	</tr>';
-                echo '</table>';
+                echo '	<tr>
+                            <td class="total"><b>'.get_lang('Total').'</b></td>
+                            <td class="total"><b>'.$optionResult.'</b></td>
+                            <td class="total">&nbsp;</td>
+                            <td class="total">&nbsp;</td>
+                        </tr>
+                        </table>';
+            }
                 echo '</div>';
             }
-        }
+        echo '</div>';
+
+        // Survey information, needed for the PDF export.
+        echo Display::page_subheader(get_lang('Survey')).'<br />';
+        $table->display();
 
         if (isset($_GET['viewoption'])) {
             echo '<div class="answered-people">';
@@ -892,7 +929,7 @@ class SurveyUtil
         echo '		<th>'.get_lang('Absolute total').'</th>';
         echo '		<th>'.get_lang('Percentage').'</th>';
         echo '		<th>'.get_lang('Graphic').'</th>';
-        echo '	<tr>';
+        echo '	</tr>';
         // Displaying the table: the content
         foreach ($options as $key => &$value) {
             for ($i = 1; $i <= $question['max_value']; $i++) {
@@ -1004,7 +1041,7 @@ class SurveyUtil
             .$surveyId.'&'.api_get_cidreq().'">';
 
         // The table
-        $content .= '<br /><table class="data_table" border="1">';
+        $content .= '<br /><table class="table table-hover table-striped data_table" border="1">';
         // Getting the number of options per question
         $content .= '	<tr>';
         $content .= '		<th>';
@@ -2917,6 +2954,7 @@ class SurveyUtil
         $table->set_column_filter(8, 'anonymous_filter');
         $actions = [
             'export_all' => get_lang('ExportResults'),
+            'export_by_class' => get_lang('ExportByClass'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
             'multiplicate' => get_lang('MultiplicateQuestions'),
             'delete' => get_lang('DeleteSurvey'),
@@ -3836,62 +3874,69 @@ class SurveyUtil
      *
      * @return string (direct output)
      */
-    public static function drawChart(
-        $chartData,
-        $hasSerie = false,
-        $chartContainerId = 'chartContainer'
-    ) {
+    public static function drawChart($chartData, $hasSerie = false, $chartContainerId = 'chartContainer', $loadLibs = true)
+    {
         $htmlChart = '';
         if (api_browser_support('svg')) {
-            $htmlChart .= api_get_js('d3/d3.v3.5.4.min.js');
-            $htmlChart .= api_get_js('dimple.v2.1.2.min.js').'
-            <script>
-            var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
-            var data = [';
             $serie = [];
             $order = [];
+            $data = '';
             foreach ($chartData as $chartDataElement) {
-                $htmlChart .= '{"';
+                $data .= '{"';
+                $option = str_replace(["\n", "\r"], '', $chartDataElement['option']);
+                $serieValue = isset($chartDataElement['serie']) ? $chartDataElement['serie'] : null;
                 if (!$hasSerie) {
-                    $htmlChart .= get_lang("Option").'":"'.$chartDataElement['option'].'", "';
-                    array_push($order, $chartDataElement['option']);
+                    $data .= get_lang("Option").'":"'.$option.'", "';
+                    array_push($order, $option);
                 } else {
-                    if (!is_array($chartDataElement['serie'])) {
-                        $htmlChart .= get_lang("Option").'":"'.$chartDataElement['serie'].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
-                        array_push($serie, $chartDataElement['serie']);
+                    if (!is_array($serieValue)) {
+                        $data .=
+                            get_lang("Option").'":"'.$serieValue.'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
+                        array_push($serie, $serieValue);
                     } else {
-                        $htmlChart .= get_lang("Serie").'":"'.$chartDataElement['serie'][0].'", "'.
-                            get_lang("Option").'":"'.$chartDataElement['serie'][1].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
+                        $data .=
+                            get_lang("Serie").'":"'.$serieValue[0].'", "'.
+                            get_lang("Option").'":"'.$serieValue[1].'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
                     }
                 }
-                $htmlChart .= get_lang("Votes").'":"'.$chartDataElement['votes'].
-                    '"},';
+                $data .= get_lang("Votes").'":"'.$chartDataElement['votes'].'"},';
+                rtrim($data, ",");
             }
-            rtrim($htmlChart, ",");
-            $htmlChart .= '];
+            if ($loadLibs) {
+                $htmlChart .= api_get_js('d3/d3.v3.5.4.min.js');
+                $htmlChart .= api_get_js('dimple.v2.1.2.min.js');
+            }
+
+            $htmlChart .= '
+            <script>
+                var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
+                var data = ['.$data.'];
                 var myChart = new dimple.chart(svg, data);
                 myChart.addMeasureAxis("y", "'.get_lang("Votes").'");';
             if (!$hasSerie) {
-                $htmlChart .= 'var xAxisCategory = myChart.addCategoryAxis("x", "'.get_lang("Option").'");
+                $htmlChart .= '
+                    var xAxisCategory = myChart.addCategoryAxis("x", "'.get_lang("Option").'");
                     xAxisCategory.addOrderRule('.json_encode($order).');
                     myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
             } else {
                 if (!is_array($chartDataElement['serie'])) {
                     $serie = array_values(array_unique($serie));
-                    $htmlChart .= 'var xAxisCategory = myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'
-                        .get_lang("Score").'"]);
+                    $htmlChart .= '
+                        var xAxisCategory =
+                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
                         xAxisCategory.addOrderRule('.json_encode($serie).');
                         xAxisCategory.addGroupOrderRule("'.get_lang("Score").'");
                         myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
                 } else {
-                    $htmlChart .= 'myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
+                    $htmlChart .= '
+                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
                         myChart.addSeries("'.get_lang("Serie").'", dimple.plot.bar);';
                 }
             }
-            $htmlChart .= 'myChart.draw();
-                </script>';
+            $htmlChart .= 'myChart.draw();';
+            $htmlChart .= '</script>';
         }
 
         return $htmlChart;

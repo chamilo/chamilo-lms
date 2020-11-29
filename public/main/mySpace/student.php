@@ -21,28 +21,28 @@ if (!$allowToTrack) {
 
 $nameTools = get_lang('Learners');
 
-$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-$active = isset($_GET['active']) ? intval($_GET['active']) : 1;
-$sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+$active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
+$sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
 $this_section = SECTION_TRACKING;
 
 $webCodePath = api_get_path(WEB_CODE_PATH);
 
 $interbreadcrumb[] = [
-    "url" => api_is_student_boss() ? "#" : "index.php",
-    "name" => get_lang('Reporting'),
+    'url' => api_is_student_boss() ? '#' : 'index.php',
+    'name' => get_lang('Reporting'),
 ];
 
-if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && !isset($_GET["type"])) {
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) {
     $interbreadcrumb[] = [
-        "url" => "teachers.php",
-        "name" => get_lang('Teachers'),
+        'url' => 'teachers.php',
+        'name' => get_lang('Teachers'),
     ];
 }
 
-if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "coach" == $_GET["type"]) {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' === $_GET['type']) {
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
 }
 
 function get_count_users()

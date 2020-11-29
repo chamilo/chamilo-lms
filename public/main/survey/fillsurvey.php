@@ -4,6 +4,7 @@
 
 use ChamiloSession as Session;
 
+$lastQuestion = 0;
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
@@ -572,7 +573,7 @@ if (
     Session::erase('page_questions_sec');
     $paged_questions_sec = [];
     if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        echo '<div class="survey_content">'.Security::remove_XSS($survey_data['survey_introduction']).'</div>';
     }
     $limit = 0;
 }
@@ -639,7 +640,7 @@ if ($survey_data['form_fields'] &&
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
-    echo $survey_data['survey_thanks'];
+    echo Security::remove_XSS($survey_data['survey_thanks']);
 
     SurveyManager::update_survey_answered(
         $survey_data,
@@ -653,6 +654,7 @@ if (isset($_POST['finish_survey'])) {
     );
 
     if ($courseInfo && !api_is_anonymous()) {
+        echo '<br /><br />';
         echo Display::toolbarButton(
             get_lang('Return to Course Homepage'),
             api_get_course_url($courseInfo['code']),
@@ -807,6 +809,11 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                     $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
                 }
                 $counter++;
+                if (isset($_GET['show']) && (int) $_GET['show'] >= 0) {
+                    $lastQuestion = (int) $_GET['show'] - 1;
+                } else {
+                    $lastQuestion = (int) $row['question_option_id'];
+                }
             }
         }
     } elseif ('1' === $survey_data['survey_type']) {
@@ -1340,6 +1347,17 @@ if ('0' == $survey_data['survey_type']) {
                     'success'
                 );
             } else {
+                if (
+                api_get_configuration_value('survey_backwards_enable')
+                ) {
+                    if ($lastQuestion >= 0) {
+                        $form->addHtml(
+                            "<a class=\" btn btn-warning \" href=\"$url&show=$lastQuestion\">".
+                            "<em class=\"fa fa-arrow-left\"></em> "
+                            .get_lang('Back')." </a>"
+                        );
+                    }
+                }
                 $form->addButton(
                     'next_survey_page',
                     get_lang('Next'),

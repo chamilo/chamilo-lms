@@ -113,7 +113,6 @@ function get_users($from, $limit, $column, $direction)
     $all_datas = [];
     $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
     foreach ($students as $student_data) {
-        var_dump($student_data);
         $student_id = $student_data['user_id'];
         $student_data = api_get_user_info($student_id);
         if (isset($_GET['id_session'])) {

@@ -383,6 +383,17 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable->setPrimaryKey(['id']);
 }
 
+$settingsTable = BuyCoursesPlugin::TABLE_GLOBAL_CONFIG;
+$sql = "SHOW COLUMNS FROM $settingsTable WHERE Field = 'info_email_extra'";
+$res = Database::query($sql);
+if (Database::num_rows($res) === 0) {
+    $sql = "ALTER TABLE $settingsTable ADD (info_email_extra TEXT NOT NULL)";
+    $res = Database::query($sql);
+    if (!$res) {
+        echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+    }
+}
+
 if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {
     $invoiceTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_INVOICE);
     $invoiceTable->addColumn(

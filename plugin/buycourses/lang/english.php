@@ -205,4 +205,4 @@ $strings['kc'] = "Secret encryption key";
 $strings['url_redsys'] = "Redsys connection URL";
 $strings['url_redsys_sandbox'] = "Redsys connection URL (Sandbox)";
 $strings['InfoTpvRedsysApiCredentials'] = "You must complete the following fields of the form with the information provided by the Redsys POS Technical Support:";
-$strings['InfoEmailExtra'] = "Email extra info ";
+$strings['InfoEmailExtra'] = "Extra info in payment e-mail";

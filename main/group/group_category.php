@@ -8,10 +8,6 @@ $current_course_tool = TOOL_GROUP;
 
 api_protect_course_script(true);
 
-if ('false' === api_get_setting('allow_group_categories')) {
-    api_not_allowed(true);
-}
-
 $sessionId = api_get_session_id();
 
 if (!api_is_allowed_to_edit(false, true) ||

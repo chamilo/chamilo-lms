@@ -655,7 +655,7 @@ class bbb
      */
     public function isConferenceManager()
     {
-        if (api_is_coach() || api_is_platform_admin()) {
+        if (api_is_coach() || api_is_platform_admin(false, true)) {
             return true;
         }
 

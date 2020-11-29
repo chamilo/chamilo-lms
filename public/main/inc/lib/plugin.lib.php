@@ -170,6 +170,111 @@ class AppPlugin
         return $installedPlugins;
     }
 
+    public function getInstalledPluginsInCurrentUrl()
+    {
+        $installedPlugins = [];
+        $urlId = api_get_current_access_url_id();
+        $plugins = api_get_settings_params(
+            [
+                'variable = ? AND selected_value = ? AND category = ? AND access_url = ?' => ['status', 'installed', 'Plugins', $urlId],
+            ]
+        );
+
+        if (!empty($plugins)) {
+            foreach ($plugins as $row) {
+                $installedPlugins[$row['subkey']] = true;
+            }
+            $installedPlugins = array_keys($installedPlugins);
+        }
+
+        return $installedPlugins;
+    }
+
+    /**
+     * Returns a list of all official (delivered with the Chamilo package)
+     * plugins. This list is maintained manually and updated with every new
+     * release to avoid hacking.
+     *
+     * @return array
+     */
+    public function getOfficialPlugins()
+    {
+        static $officialPlugins = null;
+        // Please keep this list alphabetically sorted
+        $officialPlugins = [
+            'add_cas_login_button',
+            'add_cas_logout_button',
+            'add_facebook_login_button',
+            'add_shibboleth_login_button',
+            'advanced_subscription',
+            'azure_active_directory',
+            'bbb',
+            'before_login',
+            'buycourses',
+            'card_game',
+            'check_extra_field_author_company',
+            'cleandeletedfiles',
+            'clockworksms',
+            'courseblock',
+            'coursehomenotify',
+            'courselegal',
+            'createdrupaluser',
+            'customcertificate',
+            'customfooter',
+            'dashboard',
+            'date',
+            'dictionary',
+            'embedregistry',
+            'exercise_signature',
+            'ext_auth_chamilo_logout_button_behaviour',
+            'follow_buttons',
+            'formLogin_hide_unhide',
+            'google_maps',
+            'google_meet',
+            'grading_electronic',
+            'h5p',
+            'hello_world',
+            'ims_lti',
+            'jcapture',
+            'justification',
+            'kannelsms',
+            'keycloak',
+            'learning_calendar',
+            'maintenancemode',
+            'migrationmoodle',
+            'mindmap',
+            'nosearchindex',
+            'notebookteacher',
+            'oauth2',
+            'olpc_peru_filter',
+            'openmeetings',
+            'pausetraining',
+            'pens',
+            'positioning',
+            'questionoptionsevaluation',
+            'redirection',
+            'reports',
+            'resubscription',
+            'rss',
+            'search_course',
+            'sepe',
+            'share_buttons',
+            'show_regions',
+            'show_user_info',
+            'static',
+            'studentfollowup',
+            'surveyexportcsv',
+            'surveyexporttxt',
+            'test2pdf',
+            'tour',
+            'userremoteservice',
+            'vchamilo',
+            'whispeakauth',
+            'zoom',
+        ];
+
+        return $officialPlugins;
+    }
     /**
      * @param string $pluginName
      * @param int    $urlId
@@ -489,13 +594,14 @@ class AppPlugin
      */
     public function removeAllRegions($plugin)
     {
+        $access_url_id = api_get_current_access_url_id();
         if (!empty($plugin)) {
             api_delete_settings_params(
                 [
                     'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => [
                         'Plugins',
                         'region',
-                        api_get_current_access_url_id(),
+                        $access_url_id,
                         $plugin,
                     ],
                 ]
@@ -640,6 +746,12 @@ class AppPlugin
                             $obj->get_lang($setting['name'])
                         );
                         if (isset($setting['init_value']) && 1 == $setting['init_value']) {
+                            $element->setChecked(true);
+                        }
+                            }
+                        }
+
+                        if (isset($setting['init_value']) && $setting['init_value'] == 1) {
                             $element->setChecked(true);
                         }
                         $form->addElement($element);

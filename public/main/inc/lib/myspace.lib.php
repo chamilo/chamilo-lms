@@ -53,10 +53,53 @@ class MySpace
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
-                'content' => get_lang('SurveyReport'),
+                'content' => get_lang('SurveysReport'),
+            ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/tc_report.php',
+                'content' => get_lang('TCReport'),
+            ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/ti_report.php',
+                'content' => get_lang('TIReport'),
+            ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global.php',
+                'content' => get_lang('QuestionStats'),
+            ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php',
+                'content' => get_lang('QuestionStatsDetailedReport'),
             ],
         ];
 
+        $field = new ExtraField('user');
+        $companyField = $field->get_handler_field_info_by_field_variable('company');
+        if (!empty($companyField)) {
+            $actions[] =
+                [
+                    'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=company',
+                    'content' => get_lang('UserByEntityReport'),
+                ];
+        }
+        $field = new ExtraField('lp');
+        $authorsField = $field->get_handler_field_info_by_field_variable('authors');
+        if (!empty($authorsField)) {
+            $actions[] =
+                [
+                    'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPath',
+                    'content' => get_lang('LpByAuthor'),
+                ];
+        }
+        $field = new ExtraField('lp_item');
+        $authorsItemField = $field->get_handler_field_info_by_field_variable('authorlpitem');
+        if (!empty($authorsItemField)) {
+            $actions[] =
+                [
+                    'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPathByItem',
+                    'content' => get_lang('LearningPathItemByAuthor'),
+                ];
+        }
         return Display::actions($actions, null);
     }
 
@@ -767,6 +810,637 @@ class MySpace
                     false
                 );
             }
+        }
+    }
+
+    /**
+     * Export to cvs a list of users who were enrolled in the lessons.
+     * It is necessary that in the extra field, a company is defined.
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     *
+     * @return array
+     */
+    public static function exportCompanyResumeCsv($startDate, $endDate)
+    {
+        $companys = self::getCompanyLearnpathSubscription($startDate, $endDate);
+        $csv_content = [];
+        // Printing table
+        $total = 0;
+        $displayText = get_lang('Company');
+        // the first line of the csv file with the column headers
+        $csv_row = [];
+        $csv_row[] = $displayText;
+
+        $csv_row[] = get_lang('CountOfSubscribedUsers');
+        $csv_content[] = $csv_row;
+
+        foreach ($companys as $entity => $student) {
+            $csv_row = [];
+            // user official code
+            $csv_row[] = $entity;
+            $csv_row[] = count($student);
+            $total += count($student);
+            $csv_content[] = $csv_row;
+        }
+
+        $csv_row = [];
+        // user official code
+        $csv_row[] = get_lang('GeneralTotal');
+        $csv_row[] = $total;
+        $csv_content[] = $csv_row;
+        Export::arrayToCsv($csv_content, 'reporting_company_resume');
+        exit;
+    }
+
+    /**
+     * Displays a list as a table of users who were enrolled in the lessons.
+     * It is necessary that in the extra field, a company is defined.
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     */
+    public static function displayResumeCompany(
+        $startDate = null,
+        $endDate = null
+    ) {
+        $companys = self::getCompanyLearnpathSubscription($startDate, $endDate);
+        $tableHtml = '';
+        // Printing table
+        $total = 0;
+        $table = '<div class="table-responsive"><table class="table table-hover table-striped table-bordered data_table">';
+
+        $displayText = get_lang('Company');
+        $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
+
+        foreach ($companys as $entity => $student) {
+            $table .= "<tr><td>$entity</td><td>".count($student)."</td></tr>";
+            $total += count($student);
+        }
+        $table .= "<tr><td>".get_lang('GeneralTotal')."</td><td>$total</td></tr>";
+        $table .= '</tbody></table></div>';
+
+        if (!empty($startDate) or !empty($endDate)) {
+            $tableHtml = $table;
+        }
+
+        $form = new FormValidator('searchDate', 'get');
+        $form->addHidden('display', 'company');
+        $today = new DateTime();
+        if (empty($startDate)) {
+            $startDate = api_get_local_time($today->modify('first day of this month')->format('Y-m-d'));
+        }
+        if (empty($endDate)) {
+            $endDate = api_get_local_time($today->modify('last day of this month')->format('Y-m-d'));
+        }
+        $form->addDatePicker(
+            'startDate',
+            get_lang('DateStart'),
+            [
+                'value' => $startDate,
+            ]);
+        $form->addDatePicker(
+            'endDate',
+            get_lang('DateEnd'),
+            [
+                'value' => $endDate,
+            ]);
+        $form->addButtonSearch(get_lang('Search'));
+        if (count($companys) != 0) {
+            //$form->addButtonSave(get_lang('Ok'), 'export');
+            $form
+                ->addButton(
+                    'export_csv',
+                    get_lang('ExportAsCSV'),
+                    'check',
+                    'primary',
+                    null,
+                    null,
+                    [
+                    ]
+                );
+        }
+
+        $tableContent = $form->returnForm();
+        $tableContent .= $tableHtml;
+        // $tableContent .= $table->return_table();
+
+        $tpl = new Template('', false, false, false, false, false, false);
+        $tpl->assign('table', $tableContent);
+        $templateName = $tpl->get_template('my_space/course_summary.tpl');
+        $tpl->display($templateName);
+    }
+
+    /**
+     *  Displays a list as a table of teachers who are set authors by a extra_field authors.
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param bool        $csv
+     */
+    public static function displayResumeLP(
+        $startDate = null,
+        $endDate = null,
+        $csv = false
+    ) {
+        $tableHtml = '';
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $query = "
+        SELECT
+            item_id AS lp_id,
+            REPLACE (s.value, ';', ',') AS users_id
+        FROM
+            $tblExtraFieldValue s
+        INNER JOIN $tblExtraField sf ON (s.field_id = sf.id)
+        WHERE
+            field_id IN (
+                SELECT
+                    id
+                FROM
+                    $tblExtraField
+                WHERE
+                    variable = 'authors'
+            )
+        AND sf.extra_field_type = ".ExtraField::FIELD_TYPE_DATE."
+        AND (s.value != '' OR s.value IS NOT NULL)
+";
+        $queryResult = Database::query($query);
+        $data = [];
+        while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+            $lp_id = (int) $row['lp_id'];
+            $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lp_id);
+            if (!empty($registeredUsers)) {
+                $lpInfo = [];
+                $teacherList = [];
+                $teachersId = explode(',', trim($row['users_id'], ","));
+                $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+                $query = "
+            SELECT $lp_table.*,
+                   $tblCourse.title as courseTitle,
+                   $tblCourse.code as courseCode
+            FROM
+                $lp_table
+            INNER JOIN $tblCourse ON $tblCourse.id = $lp_table.c_id
+            WHERE
+                $lp_table.iid = $lp_id
+                ";
+                $res = Database::query($query);
+                if (Database::num_rows($res)) {
+                    $lpInfo = Database::fetch_array($res);
+                }
+                $studentUsers = [];
+                for ($i = 0; $i < count($registeredUsers); $i++) {
+                    $studentUsers[] = api_get_user_info($registeredUsers[$i]);
+                }
+                $teacherList = [];
+                for ($i = 0; $i < count($teachersId); $i++) {
+                    $teacherId = $teachersId[$i];
+                    $teacher = api_get_user_info($teacherId);
+                    $data[$teacher['complete_name']][$lpInfo['name']] = [
+                        'students' => count($studentUsers),
+                        'studentList' => $studentUsers,
+                        'lpInfo' => $lpInfo,
+                    ];
+                    $teacherList[] = $teacher;
+                }
+            }
+        }
+        if ($csv == false) {
+            $table = "<div class='table-responsive'>".
+                "<table class='table table-hover table-striped table-bordered data_table'>".
+                "<thead>".
+                "<tr>".
+                "<th class=\"th-header\">".get_lang('Author')."</th>".
+                "<th class=\"th-header\">".get_lang('LearningPathList')."</th>".
+                "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
+                "<th class=\"th-header\">".get_lang('StudentList')."</th>".
+                "</tr>".
+                "</thead>".
+                "<tbody>";
+            $index = 0;
+            //icons for show and hode
+            $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+            $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+            $teacherNameTemp = '';
+            foreach ($data as $teacherName => $reportData) {
+                $lpCount = 0;
+                $totalStudent = 0;
+                foreach ($reportData as $lpName => $row) {
+                    $hiddenField = 'student_show_'.$index;
+                    $hiddenFieldLink = 'student_show_'.$index.'_';
+                    $printTeacherName = ($teacherName == $teacherNameTemp) ? '' : $teacherName;
+                    $lpInfo = $row['lpInfo'];
+                    $teacherNameTemp = $teacherName;
+                    $table .=
+                        "<tr>".
+                        "<td>$printTeacherName</td>".
+                        "<td>$lpName</td>".
+                        "<td>".$row['students']."</td>".
+                        "<td>".
+                        "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
+                        "<div class='icon_add'>$iconAdd</div>".
+                        "<div class='icon_remove hidden'>$iconRemove</div>".
+                        "</a>".
+                        "<div id='$hiddenField' class='hidden'>";
+                    foreach ($row['studentList'] as $student) {
+                        $reportLink = Display::url(
+                            Display::return_icon('statistics.png', get_lang('Stats')),
+                            api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
+                            $student['id']
+                            .'&id_session='.$lpInfo['session_id']
+                            .'&course='.$lpInfo['courseCode']
+                        );
+                        $table .= "$reportLink ".$student['complete_name']."<br>";
+                        $totalStudent++;
+                    }
+                    $index++;
+                    $lpCount++;
+                    $table .= "</div>".
+                        "</td>".
+                        "</tr>";
+                }
+                $table .=
+                    "<tr>".
+                    "<td></td>".
+                    "<td><strong>".get_lang('LearnpathsTotal')." $lpCount</strong></td>".
+                    "<td><strong>$totalStudent</strong></td>".
+                    "<td></td>".
+                    "</tr>";
+            }
+            $table .= "</tbody>".
+                "</table>".
+                "</div>";
+            if (!empty($startDate) or !empty($endDate)) {
+                $tableHtml = $table;
+            }
+
+            $form = new FormValidator('searchDate', 'get');
+            $form->addHidden('display', 'learningPath');
+            $today = new DateTime();
+            if (empty($startDate)) {
+                $startDate = $today->modify('first day of this month')->format('Y-m-d');
+            }
+            if (empty($endDate)) {
+                $endDate = $today->modify('last day of this month')->format('Y-m-d');
+            }
+            $form->addDatePicker(
+                'startDate',
+                get_lang('DateStart'),
+                [
+                    'value' => $startDate,
+                ]);
+            $form->addDatePicker(
+                'endDate',
+                get_lang('DateEnd'),
+                [
+                    'value' => $endDate,
+                ]);
+            $form->addButtonSearch(get_lang('Search'));
+            if (count($data) != 0) {
+                //$form->addButtonSave(get_lang('Ok'), 'export');
+                $form
+                    ->addButton(
+                        'export_csv',
+                        get_lang('ExportAsCSV'),
+                        'check',
+                        'primary',
+                        null,
+                        null,
+                        [
+                        ]
+                    );
+            }
+            $tableContent = $form->returnForm();
+            $tableContent .= $tableHtml;
+            $tpl = new Template('', false, false, false, false, false, false);
+            $tpl->assign('table', $tableContent);
+            $templateName = $tpl->get_template('my_space/course_summary.tpl');
+            $tpl->display($templateName);
+        } else {
+            $csv_content = [];
+            $csv_row = [];
+            $csv_row[] = get_lang('Author');
+            $csv_row[] = get_lang('LearningPathList');
+            $csv_row[] = get_lang('CountOfSubscribedUsers');
+            $csv_row[] = get_lang('StudentList');
+            $csv_content[] = $csv_row;
+            foreach ($data as $teacherName => $reportData) {
+                foreach ($reportData as $lpName => $row) {
+                    $csv_row = [];
+                    $csv_row[] = $teacherName;
+                    $csv_row[] = $lpName;
+                    $csv_row[] = $row['students'];
+                    $studentsName = '';
+                    foreach ($row['studentList'] as $student) {
+                        $studentsName .= $student['complete_name']." / ";
+                    }
+                    $csv_row[] = trim($studentsName, " / ");
+                    $csv_content[] = $csv_row;
+                }
+            }
+            Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');
+        }
+    }
+
+    /**
+     *  Displays a list as a table of teachers who are set authors of lp's item by a extra_field authors.
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param bool        $csv
+     */
+    public static function displayResumeLpByItem(
+        $startDate = null,
+        $endDate = null,
+        $csv = false
+    ) {
+        $tableHtml = '';
+        $table = '';
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $extraFieldLpByAutorName = 'authorlpitem';
+        $extraFieldLpPrice = 'price';
+
+        $queryExtraFieldPrice = "SELECT id  ".
+            " FROM $tblExtraField ".
+            " WHERE variable = '$extraFieldLpPrice'";
+        $queryExtraFieldValue = "SELECT id ".
+            " FROM $tblExtraField ".
+            " WHERE variable = '$extraFieldLpByAutorName'";
+
+        // search items of lp
+        $cLpItemsQuery = "select item_id as lp_item_id ".
+            " from $tblExtraFieldValue ".
+            " where field_id IN ( $queryExtraFieldValue ) ".
+            " group by lp_item_id";
+        $queryResult = Database::query($cLpItemsQuery);
+        $cLpItems = [];
+        while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+            $cLpItems[] = (int) $row['lp_item_id'];
+        }
+        if (count($cLpItems) == 0) {
+            $tableContent = "<div class='table-responsive'>".
+                "<table class='table table-hover table-striped table-bordered data_table'>".
+                "<thead>".
+                "<tr>".
+                "<th class=\"th-header\">".get_lang('NoDataAvailable')."</th>".
+                "</tr>".
+                "</thead>".
+                "</tbody>".
+                "</tbody>".
+                "</table>".
+                "</div>";
+            $tableHtml = $tableContent;
+        } else {
+            $cLpItems = implode(',', $cLpItems);
+            // search by price
+            $cLpItemsPriceQuery = "select value as price, item_id as lp_item_id ".
+                " from $tblExtraFieldValue ".
+                " where field_id IN ( $queryExtraFieldPrice ) and item_id in ($cLpItems)";
+            $queryResult = Database::query($cLpItemsPriceQuery);
+            $lpItemPrice = [];
+            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+                $lpItemPrice[$row['lp_item_id']] = $row['price'];
+            }
+            // search authors of lp
+            $autorsStr = '';
+            $autorsQuery = "select value as users_id ".
+                " from $tblExtraFieldValue ".
+                " where field_id IN ( $queryExtraFieldValue ) ".
+                " group by users_id ";
+            $queryResult = Database::query($autorsQuery);
+            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+                $autorsStr .= " ".str_replace(';', ' ', $row['users_id']);
+                $autorsStr = trim($autorsStr);
+            }
+            $autorsStr = str_replace(' ', ',', $autorsStr);
+
+            //search autors detailed
+            $authors = [];
+            if (!empty($autorsStr)) {
+                $autorsStr = explode(',', $autorsStr);
+                foreach ($autorsStr as $item) {
+                    $authors[$item] = api_get_user_info($item);
+                }
+            }
+            unset($autorsStr);
+
+            //search info of lp's items
+            $cLpItemsData = [];
+            if (!empty($cLpItems)) {
+                $query = "select * ".
+                    " from c_lp_item ".
+                    " where iid in ($cLpItems)";
+                $queryResult = Database::query($query);
+                while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+                    $row['price'] = isset($lpItemPrice[$row['iid']]) ? $lpItemPrice[$row['iid']] : 0;
+                    $cLpItemsData[$row['iid']] = $row;
+                }
+            }
+
+            $query = "select item_id as lp_item_id ,value as users_id ".
+                " from $tblExtraFieldValue ".
+                " where field_id IN ( $queryExtraFieldValue )";
+            $queryResult = Database::query($query);
+            $printData = [];
+            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+                $cLpItem = (int) $row['lp_item_id'];
+                // get full lp data
+                $cLpItemData = isset($cLpItemsData[$cLpItem]) ? $cLpItemsData[$cLpItem] : [];
+                $authorData = $row['users_id'];
+                if (!empty($authorData)) {
+                    if (strpos($authorData, ";") === false) {
+                        $printData[(int) $authorData][$cLpItem] = $cLpItemData;
+                    } else {
+                        foreach (explode(';', $authorData) as $item) {
+                            $printData[$item][$cLpItem] = $cLpItemData;
+                        }
+                    }
+                }
+            }
+            $index = 0;
+        }
+        if ($csv == false) {
+            if (empty($tableHtml)) {
+                $table .= "<div class='table-responsive'>".
+                    "<table class='table table-hover table-striped table-bordered data_table'>".
+                    "<thead>".
+                    "<tr>".
+                    "<th class=\"th-header\">".get_lang('Author')."</th>".
+                    "<th class=\"th-header\">".get_lang('ContentList')."</th>".
+                    "<th class=\"th-header\">".get_lang('Tariff')."</th>".
+                    "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
+                    "<th class=\"th-header\">".get_lang('ToInvoice')."</th>".
+                    "<th class=\"th-header\">".get_lang('StudentList')."</th>".
+                    "</tr>".
+                    "</thead>".
+                    "<tbody>";
+                //Icon Constant
+                $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+                $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+
+                $lastAuthor = '';
+                $total = 0;
+                foreach ($printData as $authorId => $lpItemData) {
+                    $autor = $authors[$authorId];
+                    $totalSudent = 0;
+                    foreach ($lpItemData as $lpItemId => $lpitem) {
+                        $title = $lpitem['title'];
+                        $price = $lpitem['price'];
+                        $hide = "class='author_$authorId hidden' ";
+                        if ($lastAuthor != $autor) {
+                            $table .= "<tr>";
+                            $table .= "<td>".$autor['complete_name'].
+                                "</td>";
+                        } else {
+                            $table .= "<tr $hide >";
+                            $table .= "<td></td>";
+                        }
+
+                        $hiddenField = 'student_show_'.$index;
+                        $hiddenFieldLink = 'student_show_'.$index.'_';
+                        if ($lastAuthor != $autor) {
+                            $table .= "<td>$title".
+                                "</td>";
+                        } else {
+                            $table .= "<td>$title</td>";
+                        }
+                        $table .= "<td>$price</td>";
+                        $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id'], true);
+                        $studenRegister = count($registeredUsers);
+                        $table .= "<td>$studenRegister</td>";
+                        $facturar = ($studenRegister * $price);
+                        $table .= "<td>$facturar</td>";
+                        $total += $facturar;
+                        $totalSudent += $studenRegister;
+                        if ($studenRegister != 0) {
+                            $table .= "<td>".
+                                "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
+                                "<div class='icon_add'>$iconAdd</div>".
+                                "<div class='icon_remove hidden'>$iconRemove</div>".
+                                "</a>".
+                                "<div id='$hiddenField' class='hidden'>";
+                            for ($i = 0; $i < $studenRegister; $i++) {
+                                $tempStudent = api_get_user_info($registeredUsers[$i]['id']);
+                                $table .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].")<br>";
+                            }
+                            $index++;
+                            $table .= "</div>".
+                                "</td>";
+                        } else {
+                            $table .= "<td></td>";
+                        }
+                        $table .= "</tr>";
+                        $lastAuthor = $autor;
+                    }
+                    //footer
+                    $table .= "<tr><th class=\"th-header\"></th>".
+                        "<th class=\"th-header\">".
+                        "<a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>".
+                        "<div class='icon_add_author_$authorId'>$iconAdd</div>".
+                        "<div class='icon_remove_author_$authorId hidden'>$iconRemove</div>".
+                        "</a>"."</th>".
+                        "<th class=\"th-header\"></th>".
+                        "<th class=\"th-header\">$totalSudent</th>".
+                        "<th class=\"th-header\">$total</th>".
+                        "<th class=\"th-header\"></tr>";
+                    $total = 0;
+                }
+                $table .= "</tbody>".
+                    "</table>".
+                    "</div>";
+                $tableHtml = $table;
+            }
+
+            $form = new FormValidator('searchDate', 'get');
+            $form->addHidden('display', 'learningPathByItem');
+            $today = new DateTime();
+            if (empty($startDate)) {
+                $startDate = $today->modify('first day of this month')->format('Y-m-d');
+            }
+            if (empty($endDate)) {
+                $endDate = $today->modify('last day of this month')->format('Y-m-d');
+            }
+            $form->addDatePicker(
+                'startDate',
+                get_lang('DateStart'),
+                [
+                    'value' => $startDate,
+                ]);
+            $form->addDatePicker(
+                'endDate',
+                get_lang('DateEnd'),
+                [
+                    'value' => $endDate,
+                ]);
+            $form->addButtonSearch(get_lang('Search'));
+
+            if (count($printData) != 0) {
+                //$form->addButtonSave(get_lang('Ok'), 'export');
+                $form
+                    ->addButton(
+                        'export_csv',
+                        get_lang('ExportAsCSV'),
+                        'check',
+                        'primary',
+                        null,
+                        null,
+                        [
+                        ]
+                    );
+            }
+            $tableContent = $form->returnForm();
+            $tableContent .= $tableHtml;
+            $tpl = new Template('', false, false, false, false, false, false);
+            $tpl->assign('table', $tableContent);
+            $templateName = $tpl->get_template('my_space/course_summary.tpl');
+            $tpl->display($templateName);
+        } else {
+            $csv_content = [];
+            $csv_row = [];
+
+            $csv_row[] = get_lang('Author');
+            $csv_row[] = get_lang('ContentList');
+            $csv_row[] = get_lang('Tariff');
+            $csv_row[] = get_lang('CountOfSubscribedUsers');
+            $csv_row[] = get_lang('ToInvoice');
+            $csv_row[] = get_lang('StudentList');
+            $csv_content[] = $csv_row;
+            foreach ($printData as $authorId => $lpItemData) {
+                $autor = $authors[$authorId];
+                foreach ($lpItemData as $lpItemId => $lpitem) {
+                    $title = $lpitem['title'];
+                    $price = $lpitem['price'];
+
+                    $csv_row = [];
+                    $csv_row[] = $autor['complete_name'];
+                    $csv_row[] = $title;
+                    $csv_row[] = $price;
+                    $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id'], true);
+                    $studenRegister = count($registeredUsers);
+                    $csv_row[] = $studenRegister;
+                    $facturar = ($studenRegister * $price);
+                    $csv_row[] = $facturar;
+                    $totalSudent += $studenRegister;
+                    if ($studenRegister != 0) {
+                        $studentsName = '';
+                        for ($i = 0; $i < $studenRegister; $i++) {
+                            $tempStudent = api_get_user_info($registeredUsers[$i]['id']);
+                            $studentsName .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].") / ";
+
+                            $totalStudent++;
+                        }
+                        $csv_row[] = trim($studentsName, " / ");
+                        $csv_content[] = $csv_row;
+                        $index++;
+                        $lpCount++;
+                    }
+                }
+            }
+            Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');
         }
     }
 
@@ -2455,8 +3129,13 @@ class MySpace
      * @param int $sessionId
      * @param int $studentId
      */
-    public static function displayTrackingAccessOverView($courseId, $sessionId, $studentId)
-    {
+    public static function displayTrackingAccessOverView(
+        $courseId,
+        $sessionId,
+        $studentId,
+        $perPage = 20,
+        $dates = null
+    ) {
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $studentId = (int) $studentId;
@@ -2558,9 +3237,8 @@ class MySpace
             true,
             [
                 'id' => 'date_range',
-                'format' => 'YYYY-MM-DD',
-                'timePicker' => 'false',
-                'validate_format' => 'Y-m-d',
+                'format' => 'YYYY-MM-DD HH:mm',
+                'timePicker' => 'true',
             ]
         );
         $form->addHidden('display', 'accessoverview');
@@ -2569,26 +3247,36 @@ class MySpace
         $form->addButton('submit', get_lang('Generate'), 'gear', 'primary');
 
         $table = null;
+        if (!empty($dates)) {
 
-        if ($form->validate()) {
             $table = new SortableTable(
                 'tracking_access_overview',
                 ['MySpace', 'getNumberOfTrackAccessOverview'],
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
-                0
+                0,
+                $perPage
             );
-            $table->set_header(0, get_lang('Login date'), true);
+            $table->set_additional_parameters(
+                [
+                    'course_id' => $courseId,
+                    'session_id' => $sessionId,
+                    'student_id' => $studentId,
+                    'date' => $dates,
+                    'tracking_access_overview_per_page' => $perPage,
+                    'display' => 'accessoverview',
+                ]
+            );
+            $table->set_header(0, get_lang('LoginDate'), true);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
-                $table->set_header(2, get_lang('First name'), true);
-                $table->set_header(3, get_lang('Last name'), true);
+                $table->set_header(2, get_lang('FirstName'), true);
+                $table->set_header(3, get_lang('LastName'), true);
             } else {
-                $table->set_header(2, get_lang('Last name'), true);
-                $table->set_header(3, get_lang('First name'), true);
+                $table->set_header(2, get_lang('LastName'), true);
+                $table->set_header(3, get_lang('FirstName'), true);
             }
-            $table->set_header(4, get_lang('clicks'), false);
-            $table->set_header(5, get_lang('IP'), false);
-            $table->set_header(6, get_lang('Time connected (hh:mm)'), false);
+            $table->set_header(4, get_lang('IP'), false);
+            $table->set_header(5, get_lang('TimeLoggedIn'), false);
         }
 
         $template = new Template(
@@ -2618,7 +3306,11 @@ class MySpace
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
-        return $row['count'];
+        if ($row) {
+            return $row['count'];
+        }
+
+        return 0;
     }
 
     /**
@@ -2643,7 +3335,7 @@ class MySpace
         $user = Database::get_main_table(TABLE_MAIN_USER);
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         global $export_csv;
         $is_western_name_order = api_is_western_name_order();
@@ -2664,42 +3356,20 @@ class MySpace
                         u.firstname AS col3,
                 "
         )."
+                a.login_course_date,
                 a.logout_course_date,
                 c.title,
                 c.code,
-                u.user_id
-            FROM $track_e_course_access a
-            INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.c_id = c.id
+                u.id as user_id,
+                user_ip
+            FROM $trackCourseAccess a
+            INNER JOIN $user u
+            ON a.user_id = u.id
+            INNER JOIN $course c
+            ON a.c_id = c.id
             WHERE 1=1 ";
 
-        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int) $_GET['course_id'];
-            $sql .= " AND c.id = ".$courseId;
-        }
-
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int) $_GET['session_id'];
-            $sql .= " AND a.session_id = ".$sessionId;
-        }
-
-        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
-            $userId = (int) $_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
-        }
-
-        if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date');
-            $dates = $dateRangePicker->parseDateRange($_GET['date']);
-            if (isset($dates['start']) && !empty($dates['start'])) {
-                $dates['start'] = Database::escape_string($dates['start']);
-                $sql .= " AND login_course_date >= '".$dates['start']."'";
-            }
-            if (isset($dates['end']) && !empty($dates['end'])) {
-                $dates['end'] = Database::escape_string($dates['end']);
-                $sql .= " AND logout_course_date <= '".$dates['end']."'";
-            }
-        }
+        $sql = self::getDataAccessTrackingFilters($sql);
 
         $sql .= " ORDER BY col$column $orderDirection ";
         $sql .= " LIMIT $from,$numberItems";
@@ -2714,33 +3384,16 @@ class MySpace
         $return = [];
         //TODO: Dont use numeric index
         foreach ($data as $key => $info) {
-            $start_date = $info['col0'];
-            $end_date = $info['logout_course_date'];
-
-            $return[$info['user_id']] = [
-                $start_date,
+            $return[] = [
+                api_get_local_time($info['login_course_date']),
                 $info['col1'],
                 $info['col2'],
                 $info['col3'],
-                $info['user_id'],
-                'ip',
-                //TODO is not correct/precise, it counts the time not logged between two loggins
-                gmdate("H:i:s", strtotime($end_date) - strtotime($start_date)),
+                $info['user_ip'],
+                gmdate('H:i:s', strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
             ];
         }
 
-        foreach ($return as $key => $info) {
-            $ipResult = Database::select(
-                'user_ip',
-                $track_e_login,
-                ['where' => [
-                    '? BETWEEN login_date AND logout_date' => $info[0],
-                ]],
-                'first'
-            );
-
-            $return[$key][5] = $ipResult['user_ip'];
-        }
 
         return $return;
     }
@@ -3097,5 +3750,177 @@ class MySpace
             'UTF-8'
         );
         }
+    }
+
+    /**
+     * Gets a list of users who were enrolled in the lessons.
+     * It is necessary that in the extra field, a company is defined.
+     *
+     *  if lpId is different to 0, this search by lp id too
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param int         $lpId
+     * @param bool        $whitCompany
+     *
+     * @return array
+     */
+    protected static function getCompanyLearnpathSubscription(
+        $startDate = null,
+        $endDate = null,
+        $lpId = 0,
+        $whitCompany = false
+    ) {
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        $whereCondition = '';
+
+        //Validating dates
+        if (!empty($startDate)) {
+            $startDate = new DateTime($startDate);
+        }
+        if (!empty($endDate)) {
+            $endDate = new DateTime($endDate);
+        }
+        if (!empty($startDate) and !empty($endDate)) {
+            if ($startDate > $endDate) {
+                $dateTemp = $endDate;
+                $endDate = $startDate;
+                $startDate = $dateTemp;
+                unset($dateTemp);
+            }
+        }
+
+        // Settings condition and parametter GET to right date
+        if (!empty($startDate)) {
+            $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
+            $_GET['startDate'] = $startDate;
+            $whereCondition .= "
+            AND $tblItemProperty.lastedit_date >= '$startDate' ";
+        }
+        if (!empty($endDate)) {
+            $endDate = api_get_utc_datetime($endDate->setTime(23, 59, 59)->format('Y-m-d H:i:s'));
+            $_GET['endDate'] = $endDate;
+            $whereCondition .= "
+            AND $tblItemProperty.lastedit_date <= '$endDate' ";
+        }
+        if ($lpId != 0) {
+            $whereCondition .= "
+            AND c_item_property.ref = $lpId ";
+        }
+
+        $companys = [];
+        if (!empty($startDate) or !empty($endDate)) {
+            // get Compnay data
+            $selectToCompany = " (
+            SELECT
+                value
+            FROM
+                $tblExtraFieldValue
+            WHERE
+                field_id IN (
+                    SELECT
+                        id
+                    FROM
+                        $tblExtraField
+                    WHERE
+                        variable = 'company'
+                )
+            AND item_id = $tblItemProperty.to_user_id
+            ) ";
+            $query = "
+            SELECT
+                * ,
+                 $selectToCompany  as company,
+                    (
+                    SELECT
+                        name
+                    FROM
+                        $tblLp
+                    WHERE
+                    $tblLp.iid = c_item_property.ref
+                 ) as name_lp
+            FROM
+                $tblItemProperty
+            WHERE
+                c_id IN (
+                    SELECT
+                        c_id
+                    FROM
+                        ".TABLE_MAIN_COURSE_USER."
+                    WHERE
+                        STATUS = 5
+                )
+                AND lastedit_type = 'LearnpathSubscription'
+
+                ";
+            // -- AND $selectToCompany IS NOT NULL
+            if (strlen($whereCondition) > 2) {
+                $query .= $whereCondition;
+            }
+            $queryResult = Database::query($query);
+            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+                // $courseId = (int)$row['c_id'];
+                $studentId = (int) $row['to_user_id'];
+                $company = isset($row['company']) ? $row['company'] : '';
+                if ($company == '') {
+                    $company = get_lang('NoEntity');
+                }
+                // $lpId = $row['ref'];
+                if ($lpId != 0 && $studentId != 0) {
+                    if ($whitCompany == true) {
+                        $companys[] = [
+                            'id' => $studentId,
+                            'company' => $company,
+                        ];
+                    } else {
+                        $companys[] = $studentId;
+                    }
+                } else {
+                    $companys[$company][] = $studentId;
+                    $companys[$company] = array_unique($companys[$company]);
+                }
+            }
+        }
+
+        return $companys;
+    }
+
+    private static function getDataAccessTrackingFilters($sql)
+    {
+        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
+            $courseId = (int) $_GET['course_id'];
+            $sql .= " AND c.id = ".$courseId;
+        }
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+            $sessionId = (int) $_GET['session_id'];
+            $sql .= " AND a.session_id = ".$sessionId;
+        }
+
+        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
+            $userId = (int) $_GET['student_id'];
+            $sql .= " AND u.user_id = ".$userId;
+        }
+
+        $sql .= " AND u.status <> ".ANONYMOUS;
+
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
+            if (isset($dates['start']) && !empty($dates['start'])) {
+                $dates['start'] = Database::escape_string(api_get_utc_datetime($dates['start']));
+                $sql .= " AND login_course_date >= '".$dates['start']."'";
+            }
+            if (isset($dates['end']) && !empty($dates['end'])) {
+                $dates['end'] = Database::escape_string(api_get_utc_datetime($dates['end']));
+                $sql .= " AND logout_course_date <= '".$dates['end']."'";
+            }
+        }
+
+        return $sql;
     }
 }

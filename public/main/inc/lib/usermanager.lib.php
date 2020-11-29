@@ -813,6 +813,7 @@ class UserManager
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->deleteValuesByItem($user_id);
 
+        UrlManager::deleteUserFromAllUrls($user_id);
         //UrlManager::deleteUserFromAllUrls($user_id);
 
         if ('true' === api_get_setting('allow_social_tool')) {
@@ -1178,6 +1179,7 @@ class UserManager
         }
 
         $userManager->updateUser($user, true);
+        Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $user_id);
 
         if (1 == $change_active) {
             if (1 == $active) {
@@ -3054,30 +3056,34 @@ class UserManager
 
         $sessionData = [];
         // First fill $sessionData with student sessions
+        if (!empty($sessionDataStudent)) {
         foreach ($sessionDataStudent as $row) {
             $sessionData[$row['id']] = $row;
+        }
         }
         // Overwrite session data of the user as a student with session data
         // of the user as a coach.
         // There shouldn't be such duplicate rows, but just in case...
+        if (!empty($sessionDataCoach)) {
         foreach ($sessionDataCoach as $row) {
             $sessionData[$row['id']] = $row;
+            }
         }
 
         $collapsable = api_get_configuration_value('allow_user_session_collapsable');
         $extraField = new ExtraFieldValue('session');
         $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
 
+        if (empty($sessionData)) {
+            return [];
+        }
         $categories = [];
         foreach ($sessionData as $row) {
             $session_id = $row['id'];
             $coachList = SessionManager::getCoachesBySession($session_id);
             $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
             $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
-            $courseList = self::get_courses_list_by_session(
-                $user_id,
-                $session_id
-            );
+            $courseList = self::get_courses_list_by_session($user_id, $session_id);
             $daysLeft = SessionManager::getDayLeftInSession($row, $user_id);
 
             // User portal filters:
@@ -3462,10 +3468,12 @@ class UserManager
         session_rel_course_user table if there are courses registered
         to our user or not */
         $sql = "SELECT DISTINCT
+                    c.title,
                     c.visibility,
                     c.id as real_id,
                     c.code as course_code,
-                    sc.position
+                    sc.position,
+                    c.unsubscribe
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
                 ON (scu.session_id = sc.session_id AND scu.c_id = sc.c_id)
@@ -3498,10 +3506,12 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT
+                        c.title,
                         c.visibility,
                         c.id as real_id,
                         c.code as course_code,
-                        sc.position
+                        sc.position,
+                        c.unsubscribe
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s
                     ON (scu.session_id = s.id)
@@ -4367,16 +4377,6 @@ class UserManager
                 return $row['count'];
             }
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (isset($return[$row['id']]) &&
-                    !empty($return[$row['id']]['tag'])
-                ) {
-                    $url = Display::url(
-                        $row['tag'],
-                        api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'],
-                        ['class' => 'tag']
-                    );
-                    $row['tag'] = $url;
-                }
                 $return[$row['id']] = $row;
             }
         }
@@ -5399,35 +5399,31 @@ class UserManager
         return $icon_link;
     }
 
-    public static function add_user_as_admin(User $user)
+    public static function addUserAsAdmin(User $user)
     {
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         if ($user) {
             $userId = $user->getId();
 
             if (!self::is_admin($userId)) {
-                $sql = "INSERT INTO $table_admin SET user_id = $userId";
+                $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+                $sql = "INSERT INTO $table SET user_id = $userId";
                 Database::query($sql);
             }
 
-            $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => 'ADMIN']);
-            if ($group) {
-                $user->addGroup($group);
-            }
+            $user->addRole('ROLE_SUPER_ADMIN');
             self::getManager()->updateUser($user, true);
         }
     }
 
-    /**
-     * @param int $userId
-     */
-    public static function remove_user_admin($userId)
+    public static function removeUserAdmin(User $user)
     {
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $userId = (int) $userId;
+        $userId = (int) $user->getId();
         if (self::is_admin($userId)) {
-            $sql = "DELETE FROM $table_admin WHERE user_id = $userId";
+            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+            $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
+            $user->removeRole('ROLE_SUPER_ADMIN');
+            self::getManager()->updateUser($user, true);
         }
     }
 
@@ -5524,6 +5520,13 @@ class UserManager
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
+                $bossInfo = api_get_user_info($bossId);
+
+                if (empty($bossInfo)) {
+                    continue;
+                }
+
+                $bossLanguage = $bossInfo['language'];
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
                 $insertId = Database::query($sql);

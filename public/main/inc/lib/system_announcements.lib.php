@@ -141,7 +141,7 @@ class SystemAnnouncementManager
         $user_id = ''
     ) {
         $user_selected_language = api_get_interface_language();
-        $start = intval($start);
+        $start = (int) $start;
         $userGroup = new UserGroup();
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);

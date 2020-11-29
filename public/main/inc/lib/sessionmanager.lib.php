@@ -2574,6 +2574,7 @@ class SessionManager
      *                                              existing courses and users (true, default) or not (false)
      * @param bool  $copyEvaluation                 from base course to session course
      * @param bool  $copyCourseTeachersAsCoach
+     * @param bool  $importAssignments
      *
      * @throws Exception
      *
@@ -2584,12 +2585,17 @@ class SessionManager
         $courseList,
         $removeExistingCoursesWithUsers = true,
         $copyEvaluation = false,
-        $copyCourseTeachersAsCoach = false
+        $copyCourseTeachersAsCoach = false,
+        $importAssignments = false
     ) {
         $sessionId = (int) $sessionId;
 
         if (empty($sessionId) || empty($courseList)) {
             return false;
+        }
+
+        if ($importAssignments) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         }
 
         $session = api_get_session_entity($sessionId);
@@ -2773,6 +2779,34 @@ class SessionManager
                     }
                 }
 
+                if ($importAssignments) {
+                    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                    $sql = " SELECT * FROM $workTable
+                             WHERE active = 1 AND
+                                   c_id = $courseId AND
+                                   parent_id = 0 AND
+                                   (session_id IS NULL OR session_id = 0)";
+                    $result = Database::query($sql);
+                    $workList = Database::store_result($result, 'ASSOC');
+
+                    foreach ($workList as $work) {
+                        $values = [
+                            'work_title' => $work['title'],
+                            'new_dir' => $work['url'].'_session_'.$sessionId,
+                            'description' => $work['description'],
+                            'qualification' => $work['qualification'],
+                            'allow_text_assignment' => $work['allow_text_assignment'],
+                        ];
+
+                        addDir(
+                            $values,
+                            api_get_user_id(),
+                            $courseInfo,
+                            0,
+                            $sessionId
+                        );
+                    }
+                }
                 // If the course isn't subscribed yet
                 $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id, nbr_users, position)
                         VALUES ($sessionId, $courseId, 0, 0)";
@@ -3303,9 +3337,8 @@ class SessionManager
             foreach ($conditions as $field => $options) {
                 $operator = strtolower($options['operator']);
                 $value = Database::escape_string($options['value']);
-                $sql_query .= ' AND ';
                 if (in_array($field, $availableFields) && in_array($operator, $availableOperator)) {
-                    $sql_query .= $field." $operator '".$value."'";
+                    $sql_query .= ' AND '.$field." $operator '".$value."'";
                 }
             }
         }

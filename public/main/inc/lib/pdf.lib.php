@@ -751,13 +751,12 @@ class PDF
                         $this->pdf->showWatermarkImage = true;
                     }
                 }
-                if ($courseCode) {
-                    $watermark_text = api_get_course_setting('pdf_export_watermark_text');
-                    if (empty($watermark_text)) {
-                        $watermark_text = api_get_setting('pdf_export_watermark_text');
+                $watermark_text = api_get_setting('pdf_export_watermark_text');
+                if ($courseCode && 'true' === api_get_setting('pdf_export_watermark_by_course')) {
+                    $courseWaterMark = api_get_course_setting('pdf_export_watermark_text');
+                    if (!empty($courseWaterMark) && -1 != $courseWaterMark) {
+                        $watermark_text = $courseWaterMark;
                     }
-                } else {
-                    $watermark_text = api_get_setting('pdf_export_watermark_text');
                 }
                 if (!empty($watermark_text)) {
                     $this->pdf->SetWatermarkText(

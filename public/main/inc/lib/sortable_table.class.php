@@ -142,7 +142,7 @@ class SortableTable extends HTML_Table
 
         if (empty($attributes)) {
             $attributes = [];
-            $attributes['class'] = 'table table-bordered data_table';
+            $attributes['class'] = 'table table-hover table-striped table-bordered data_table';
             $attributes['id'] = $table_id;
         }
 
@@ -169,22 +169,30 @@ class SortableTable extends HTML_Table
         $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
 
         // If per page changed, then reset the page to 1
-        if (!empty($this->per_page) && isset($_GET[$this->param_prefix.'per_page']) && $this->per_page != $_GET[$this->param_prefix.'per_page']) {
+        if (!empty($this->per_page) && isset($_GET[$this->param_prefix.'per_page']) &&
+            $this->per_page != $_GET[$this->param_prefix.'per_page']
+        ) {
             Session::erase($this->param_prefix.'page_nr');
             $_GET[$this->param_prefix.'page_nr'] = 1;
         }
 
-        $this->per_page = isset($_GET[$this->param_prefix.'per_page']) ? (int) $_GET[$this->param_prefix.'per_page'] : $this->per_page;
+        $this->per_page = isset($_GET[$this->param_prefix.'per_page'])
+            ? (int) $_GET[$this->param_prefix.'per_page']
+            : $this->per_page;
 
         if (isset($_GET[$this->param_prefix.'per_page'])) {
             Session::erase($this->param_prefix.'page_nr');
         }
 
         $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
-        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
+        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr'])
+            ? (int) $_GET[$this->param_prefix.'page_nr']
+            : $this->page_nr;
 
         $this->column = Session::read($this->param_prefix.'column', $default_column);
-        $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
+        $this->column = isset($_GET[$this->param_prefix.'column'])
+            ? (int) $_GET[$this->param_prefix.'column']
+            : $this->column;
 
         // Default direction.
         if (in_array(strtoupper($default_order_direction), ['ASC', 'DESC'])) {
@@ -215,6 +223,8 @@ class SortableTable extends HTML_Table
                     $this->direction = 'DESC';
                 }
             }
+        } else {
+            $this->direction = 'ASC';
         }
 
         Session::write($this->param_prefix.'per_page', $this->per_page);

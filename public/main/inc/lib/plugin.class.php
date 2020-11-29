@@ -456,6 +456,37 @@ class Plugin
     }
 
     /**
+     * @param string $variable
+     * @param string $language
+     *
+     * @return string
+     */
+    public function getLangFromFile($variable, $language)
+    {
+        static $langStrings = [];
+
+        if (empty($langStrings[$language])) {
+            $root = api_get_path(SYS_PLUGIN_PATH);
+            $pluginName = $this->get_name();
+
+            $englishPath = "$root$pluginName/lang/$language.php";
+
+            if (is_readable($englishPath)) {
+                $strings = [];
+                include $englishPath;
+
+                $langStrings[$language] = $strings;
+            }
+        }
+
+        if (isset($langStrings[$language][$variable])) {
+            return $langStrings[$language][$variable];
+        }
+
+        return $this->get_lang($variable);
+    }
+
+    /**
      * Caller for the install_course_fields() function.
      *
      * @param int  $courseId

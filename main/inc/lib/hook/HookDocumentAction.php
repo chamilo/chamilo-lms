@@ -2,8 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
+/**
+ * Class HookDocumentAction.
+ */
 class HookDocumentAction extends HookEvent implements HookDocumentActionEventInterface
 {
+    /**
+     * HookDocumentAction constructor.
+     *
+     * @throws \Exception
+     */
     protected function __construct()
     {
         parent::__construct('HookDocumentAction');

@@ -395,8 +395,8 @@ div.items-course-info h4.title{
     overflow: hidden;
 }
 
-@media (max-width: 991px) {
-    .pagination {
-        padding-bottom: 90px;
+@media (min-width: 991px) {
+    .col-sm-6 .items-course .items-course-image figure {
+        max-height: 135px;
     }
 }

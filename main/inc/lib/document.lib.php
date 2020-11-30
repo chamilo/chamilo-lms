@@ -5595,6 +5595,16 @@ class DocumentManager
         // is from a non-session context, hide the edition capabilities
         $modify_icons = [];
         $modify_icons[] = self::getButtonEdit($is_read_only, $document_data, $extension, $is_certificate_mode);
+
+        $hook = HookDocumentItemAction::create();
+        if (!empty($hook)) {
+            $hook->setEventData($document_data);
+            $data = $hook->notifyDocumentItemAction(HOOK_EVENT_TYPE_PRE);
+            if (isset($data['action'])) {
+                $modify_icons[] = $data['action'];
+            }
+        }
+
         $modify_icons[] = self::getButtonMove($is_read_only, $document_data, $is_certificate_mode, $parent_id);
         $modify_icons[] = self::getButtonVisibility(
             $is_read_only,

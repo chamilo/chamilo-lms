@@ -217,7 +217,6 @@ $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpat
 
 switch ($action) {
     case 'replace':
-
         if (($isAllowedToEdit ||
                 $groupMemberWithUploadRights ||
                 DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
@@ -1839,6 +1838,14 @@ if ($isAllowedToEdit ||
             Display::return_icon('clouddoc_new.png', get_lang('AddCloudLink'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$documentIdFromGet
         );
+    }
+
+    $hook = HookDocumentAction::create();
+    if (!empty($hook)) {
+        $data = $hook->notifyDocumentAction(HOOK_EVENT_TYPE_PRE);
+        if (isset($data['action'])) {
+            $actionsLeft .= $data['action'];
+        }
     }
 }
 

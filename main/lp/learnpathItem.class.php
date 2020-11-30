@@ -271,16 +271,15 @@ class learnpathItem
                     true
                 );
             } else {
-                $this->status = $this->possible_status[2];
-
+                /*$this->status = $this->possible_status[2];
                 if (self::DEBUG) {
                     error_log("STATUS changed to: ".$this->status);
-                }
+                }*/
             }
         }
         if ($this->save_on_close) {
             if ($debug) {
-                error_log("save_on_close: ");
+                error_log('save_on_close');
             }
             $this->save();
         }

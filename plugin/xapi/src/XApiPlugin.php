@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Doctrine\ORM\EntityManager;
@@ -331,18 +332,19 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         $iso = self::findLanguageIso($languageMap->languageTags(), $language);
 
+        $text = current($languageMap);
+
         if (isset($languageMap[$iso])) {
-            return $languageMap[$iso];
+            $text = trim($languageMap[$iso]);
+        } elseif (isset($languageMap['und'])) {
+            $text = $languageMap['und'];
         }
 
-        if (isset($languageMap['und'])) {
-            return $languageMap['und'];
-        }
-
-        return array_pop($languageMap);
+        return $text;
     }
 
     /**
+     * @param array  $haystack
      * @param string $needle
      *
      * @return string
@@ -359,7 +361,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             }
         }
 
-        return 'en';
+        return $haystack[0];
     }
 
     public function generateLaunchUrl(

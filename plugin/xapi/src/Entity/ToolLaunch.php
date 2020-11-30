@@ -21,7 +21,7 @@ class ToolLaunch
     /**
      * @var int
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="id")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      */

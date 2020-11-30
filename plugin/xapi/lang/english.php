@@ -3,11 +3,11 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = 'Experience API (xAPI)';
-$strings['plugin_comment'] = 'Allow to incorporate an Learning Record Store and clients to xAPI';
+$strings['plugin_comment'] = 'Allow to incorporate an external Learning Record Store and use activities with the xAPI specification.';
 
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE] = 'UUID Namespace';
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE.'_help'] = 'Namespace for universally unique identifiers used as statement IDs.'
-    .'<br>This is automatically by Chamilo LMS. <strong>Don\'t replace it.</strong>';
+    .'<br>This is generated automatically by Chamilo LMS. <strong>Don\'t replace it.</strong>';
 $strings['lrs_url'] = 'LRS endpoint';
 $strings['lrs_url_help'] = 'Base URL from the LRS';
 $strings['lrs_auth_username'] = 'LRS user';

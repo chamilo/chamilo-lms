@@ -1843,8 +1843,10 @@ if ($isAllowedToEdit ||
     $hook = HookDocumentAction::create();
     if (!empty($hook)) {
         $data = $hook->notifyDocumentAction(HOOK_EVENT_TYPE_PRE);
-        if (isset($data['action'])) {
-            $actionsLeft .= $data['action'];
+        if (isset($data['actions'])) {
+            foreach ($data['actions'] as $action) {
+                $actionsLeft .= $action;
+            }
         }
     }
 }

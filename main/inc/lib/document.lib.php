@@ -5600,8 +5600,10 @@ class DocumentManager
         if (!empty($hook)) {
             $hook->setEventData($document_data);
             $data = $hook->notifyDocumentItemAction(HOOK_EVENT_TYPE_PRE);
-            if (isset($data['action'])) {
-                $modify_icons[] = $data['action'];
+            if (isset($data['actions'])) {
+                foreach ($data['actions'] as $action) {
+                    $modify_icons[] = $action;
+                }
             }
         }
 

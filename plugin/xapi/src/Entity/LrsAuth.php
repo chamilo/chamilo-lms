@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class LrsAuth.
  *
+ * @package Chamilo\PluginBundle\Entity\XApi
+ *
  * @ORM\Table(name="xapi_lrs_auth")
  * @ORM\Entity()
  */

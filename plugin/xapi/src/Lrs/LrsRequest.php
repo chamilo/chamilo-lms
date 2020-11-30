@@ -4,6 +4,7 @@
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
+use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -133,9 +134,9 @@ class LrsRequest
         list($username, $password) = $parts;
 
         $auth = \Database::getManager()
-            ->getRepository(\LrsAuth::class)
+            ->getRepository(LrsAuth::class)
             ->findOneBy(
-                ['username' => $username, 'password' => $password]
+                ['username' => $username, 'password' => $password, 'enabled' => true]
             );
 
         if (null == $auth) {

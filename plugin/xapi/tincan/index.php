@@ -42,7 +42,12 @@ $table = new SortableTable(
         /** @var ToolLaunch $toolLaunch */
         foreach ($tools as $toolLaunch) {
             $datum = [];
-            $datum[] = [$toolLaunch->getId(), $toolLaunch->getTitle(), $toolLaunch->getDescription()];
+            $datum[] = [
+                $toolLaunch->getId(),
+                $toolLaunch->getTitle(),
+                $toolLaunch->getDescription(),
+                $toolLaunch->getActivityType(),
+            ];
 
             if ($isAllowedToEdit) {
                 $datum[] = $toolLaunch->getId();
@@ -59,9 +64,13 @@ $table->set_header(0, $plugin->get_lang('ActivityTitle'), true);
 $table->set_column_filter(
     0,
     function (array $toolInfo) use ($cidReq) {
-        list($id, $title, $description) = $toolInfo;
+        list($id, $title, $description, $ativityType) = $toolInfo;
 
-        $data = Display::url($title, "tool.php?id=$id&$cidReq", ['class' => 'show']);
+        $data = Display::url(
+            $title,
+            ('cmi5' === $ativityType ? '../cmi5/tool.php' : 'tool.php')."?id=$id&$cidReq",
+            ['class' => 'show']
+        );
 
         if ($description) {
             $data .= PHP_EOL.Display::tag('small', $description, ['class' => 'text-muted']);

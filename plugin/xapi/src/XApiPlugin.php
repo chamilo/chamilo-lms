@@ -14,7 +14,9 @@ use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ramsey\Uuid\Uuid;
 use Xabbuh\XApi\Client\XApiClientBuilder;
+use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 /**
  * Class XApiPlugin.
@@ -210,13 +212,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         return $this->createXApiClient()->getStatementsApiClient();
     }
 
-    public function getXApi($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
-    {
-        $this
-            ->createXApiClient($lrsUrl, $lrsAuthUsername, $lrsAuthPassword)
-            ->getStateApiClient()->getDocument();
-    }
-
     /**
      * Perform actions after save the plugin configuration.
      *
@@ -374,7 +369,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $attemptId,
         $customLrsUrl = null,
         $customLrsUsername = null,
-        $customLrsPassword = null
+        $customLrsPassword = null,
+        $viewSessionId = null
     ) {
         $lrsUrl = $customLrsUrl ?: $this->get(self::SETTING_LRS_URL);
         $lrsAuthUsername = $customLrsUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
@@ -390,7 +386,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $queryData['auth'] = 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword));
             $queryData['activity_id'] = $activityId;
         } elseif ('cmi5' === $type) {
-            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'xapi/cmi5/token.php';
+            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'xapi/cmi5/token.php?session='.$viewSessionId;
             $queryData['activityId'] = $activityId;
         }
 

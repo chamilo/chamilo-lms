@@ -6,12 +6,14 @@ namespace Chamilo\PluginBundle\Entity\XApi;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class Cmi5Item.
  *
+ * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="xapi_cmi5_item")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
 class Cmi5Item
 {
@@ -90,19 +92,6 @@ class Cmi5Item
      */
     private $entitlementKey;
     /**
-     * @var \Chamilo\PluginBundle\Entity\XApi\Cmi5Item|null
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
-    private $parent;
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item", mappedBy="parent")
-     */
-    private $children;
-    /**
      * @var string|null
      *
      * @ORM\Column(name="status", type="string", nullable=true)
@@ -112,9 +101,54 @@ class Cmi5Item
      * @var \Chamilo\PluginBundle\Entity\XApi\ToolLaunch
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\ToolLaunch")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $tool;
+
+    /**
+     * @var int
+     *
+     * @Gedmo\TreeLeft()
+     * @ORM\Column(name="lft", type="integer")
+     */
+    private $lft;
+    /**
+     * @var int
+     *
+     * @Gedmo\TreeLevel()
+     * @ORM\Column(name="lvl", type="integer")
+     */
+    private $lvl;
+    /**
+     * @var int
+     *
+     * @Gedmo\TreeRight()
+     * @ORM\Column(name="rgt", type="integer")
+     */
+    private $rgt;
+    /**
+     * @var \Chamilo\PluginBundle\Entity\XApi\Cmi5Item
+     *
+     * @Gedmo\TreeRoot()
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item")
+     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $root;
+    /**
+     * @var \Chamilo\PluginBundle\Entity\XApi\Cmi5Item|null
+     *
+     * @Gedmo\TreeParent()
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $parent;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item", mappedBy="parent")
+     * @ORM\OrderBy({"lft"="ASC"})
+     */
+    private $children;
 
     /**
      * Cmi5Item constructor.
@@ -442,5 +476,13 @@ class Cmi5Item
         $this->tool = $tool;
 
         return $this;
+    }
+
+    /**
+     * @return \Chamilo\PluginBundle\Entity\XApi\Cmi5Item
+     */
+    public function getRoot(): Cmi5Item
+    {
+        return $this->root;
     }
 }

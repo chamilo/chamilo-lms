@@ -1,0 +1,40 @@
+.section-global {
+    margin: 0;
+}
+
+#pnl-left ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#pnl-left ul li a {
+    padding: 5px 0;
+    display: block;
+}
+#pnl-left ul ul li {
+    padding: 0 0 0 15px ;
+}
+
+@media (min-width: 992px) {
+    #pnl-left {
+        overflow: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+    }
+    #pnl-right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+    #ifr-content {
+        min-width: 100%;
+        min-height: 100%;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        right: 0;
+    }
+}

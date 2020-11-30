@@ -5,8 +5,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class PDF.
- *
- * @package chamilo.library
  */
 class PDF
 {

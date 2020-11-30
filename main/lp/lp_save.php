@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * Script that handles the saving of item status.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -26,7 +24,7 @@ use ChamiloSession as Session;
 <?php
 /** @var learnpath $lp */
 $lp = Session::read('oLP');
-if ($lp->mode != 'fullscreen') {
+if ('fullscreen' != $lp->mode) {
 }
 ?>
 </script>

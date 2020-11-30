@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * This script contains the server part of the AJAX interaction process.
  * The client part is located * in lp_api.php or other api's.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -110,7 +108,7 @@ function save_item(
     $myLPI->set_lp_view($view_id);
 
     // Launch the prerequisites check and set error if needed
-    if ($prerequisitesCheck !== true) {
+    if (true !== $prerequisitesCheck) {
         // If prerequisites were not matched, don't update any item info
         if ($debug) {
             error_log("prereq_check: ".intval($prerequisitesCheck));

@@ -6,8 +6,6 @@
  * This is a first attempt at using xajax and AJAX in general,
  * so the code might be a bit unsettling.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 

@@ -7,8 +7,8 @@
  */
 class IndexManager
 {
-    const VIEW_BY_DEFAULT = 0;
-    const VIEW_BY_SESSION = 1;
+    public const VIEW_BY_DEFAULT = 0;
+    public const VIEW_BY_SESSION = 1;
 
     // An instance of the template engine
     // No need to initialize because IndexManager is not static,

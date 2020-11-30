@@ -6,8 +6,6 @@
  * This class handles the <item> elements from an imsmanifest file.
  * Container for the scormItem class that deals with <item> elements in an imsmanifest file.
  *
- * @package	chamilo.learnpath.scorm
- *
  * @author	Yannick Warnier	<ywarnier@beeznest.org>
  */
 class scormItem extends learnpathItem
@@ -57,33 +55,33 @@ class scormItem extends learnpathItem
                                 switch ($child->tagName) {
                                     case 'title':
                                         $tmp_children = $child->childNodes;
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->title = $child->firstChild->nodeValue;
                                         }
                                         break;
                                     case 'max_score':
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->max_score = $child->firstChild->nodeValue;
                                         }
                                         break;
                                     case 'maxtimeallowed':
                                     case 'adlcp:maxtimeallowed':
                                         $tmp_children = $child->childNodes;
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->max_time_allowed = $child->firstChild->nodeValue;
                                         }
                                         break;
                                     case 'prerequisites':
                                     case 'adlcp:prerequisites':
                                         $tmp_children = $child->childNodes;
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->prereq_string = $child->firstChild->nodeValue;
                                         }
                                         break;
                                     case 'timelimitaction':
                                     case 'adlcp:timelimitaction':
                                         $tmp_children = $child->childNodes;
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->timelimitaction = $child->firstChild->nodeValue;
                                         }
                                         break;
@@ -91,20 +89,20 @@ class scormItem extends learnpathItem
                                     case 'adlcp:datafromlms':
                                     case 'adlcp:launchdata': //in some cases (Wouters)
                                         $tmp_children = $child->childNodes;
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->datafromlms = $child->firstChild->nodeValue;
                                         }
                                         break;
                                     case 'masteryscore':
                                     case 'adlcp:masteryscore':
                                         $tmp_children = $child->childNodes;
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->mastery_score = $child->firstChild->nodeValue;
                                         }
                                         break;
                                     case 'item':
                                         $oItem = new scormItem('manifest', $child);
-                                        if ($oItem->identifier != '') {
+                                        if ('' != $oItem->identifier) {
                                             $this->sub_items[$oItem->identifier] = $oItem;
                                         }
                                         break;

@@ -32,8 +32,8 @@ use Symfony\Component\Finder\Finder;
  */
 class learnpath
 {
-    const MAX_LP_ITEM_TITLE_LENGTH = 32;
-    const STATUS_CSS_CLASS_NAME = [
+    public const MAX_LP_ITEM_TITLE_LENGTH = 32;
+    public const STATUS_CSS_CLASS_NAME = [
         'not attempted' => 'scorm_not_attempted',
         'incomplete' => 'scorm_not_attempted',
         'failed' => 'scorm_failed',
@@ -119,9 +119,6 @@ class learnpath
     {
         $debug = $this->debug;
         $this->encoding = api_get_system_encoding();
-        if ($debug) {
-            error_log('In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')');
-        }
         if (empty($course)) {
             $course = api_get_course_id();
         }

@@ -4,16 +4,11 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously
- * learnpath_handler.php.
- *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
  * @author Julio Montoya  - Improving the list of templates
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 

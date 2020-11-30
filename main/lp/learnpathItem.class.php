@@ -255,9 +255,6 @@ class learnpathItem
      */
     public function close()
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::close()', 0);
-        }
         $this->current_stop_time = time();
         $type = $this->get_type();
         if ($type !== 'sco') {

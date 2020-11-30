@@ -219,7 +219,7 @@ class SortableTable extends HTML_Table
             } else {
                 if ('ASC' === $my_get_direction) {
                     $this->direction = 'ASC';
-                } elseif ($my_get_direction === 'DESC') {
+                } elseif ('DESC' === $my_get_direction) {
                     $this->direction = 'DESC';
                 }
             }
@@ -293,7 +293,7 @@ class SortableTable extends HTML_Table
      */
     public function get_pager()
     {
-        if ($this->pager === null) {
+        if (null === $this->pager) {
             $params['mode'] = 'Sliding';
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $this->get_total_number_of_items();
@@ -1142,7 +1142,7 @@ class SortableTable extends HTML_Table
         $sort = null
     ) {
         $data = [];
-        if ($this->get_data_function !== null) {
+        if (null !== $this->get_data_function) {
             $data = call_user_func(
                 $this->get_data_function,
                 $from,

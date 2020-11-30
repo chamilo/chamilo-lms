@@ -7,13 +7,13 @@
  */
 class SystemAnnouncementManager
 {
-    const VISIBLE_GUEST = 'visible_guest';
-    const VISIBLE_STUDENT = 'visible_student';
-    const VISIBLE_TEACHER = 'visible_teacher';
+    public const VISIBLE_GUEST = 'visible_guest';
+    public const VISIBLE_STUDENT = 'visible_student';
+    public const VISIBLE_TEACHER = 'visible_teacher';
     // Requires DB change
-    const VISIBLE_DRH = 'visible_drh';
-    const VISIBLE_SESSION_ADMIN = 'visible_session_admin';
-    const VISIBLE_STUDENT_BOSS = 'visible_boss';
+    public const VISIBLE_DRH = 'visible_drh';
+    public const VISIBLE_SESSION_ADMIN = 'visible_session_admin';
+    public const VISIBLE_STUDENT_BOSS = 'visible_boss';
 
     /**
      * @return array

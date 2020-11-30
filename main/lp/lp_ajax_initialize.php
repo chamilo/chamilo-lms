@@ -6,8 +6,6 @@
  * This script, in particular, enables the process of SCO's initialization. It
  * resets the JavaScript values for each SCO to the current LMS status.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -76,7 +74,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      */
     $myscore = $mylpi->get_score();
     $mymax = $mylpi->get_max();
-    if ($mymax === '') {
+    if ('' === $mymax) {
         $mymax = "''";
     }
     $mymin = $mylpi->get_min();

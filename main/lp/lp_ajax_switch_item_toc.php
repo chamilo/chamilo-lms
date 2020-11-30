@@ -8,8 +8,6 @@ use ChamiloSession as Session;
  * in lp_api.php or other api's.
  * This script updated the TOC of the SCORM without updating the SCO's attributes.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -120,7 +118,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     $totalItems = $myLP->getTotalItemsCountWithoutDirs();
     $completedItems = $myLP->get_complete_items_count();
     $progressMode = $myLP->get_progress_bar_mode();
-    $progressMode = ($progressMode == '' ? '%' : $progressMode);
+    $progressMode = ('' == $progressMode ? '%' : $progressMode);
     $nextItemId = $myLP->get_next_item_id();
     $previousItemId = $myLP->get_previous_item_id();
     $itemType = $myLPI->get_type();
@@ -155,7 +153,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
 
     $progressBarSpecial = false;
     $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
-    if ($scoreAsProgressSetting === true) {
+    if (true === $scoreAsProgressSetting) {
         $scoreAsProgress = $myLP->getUseScoreAsProgress();
         if ($scoreAsProgress) {
             $score = $myLPI->get_score();

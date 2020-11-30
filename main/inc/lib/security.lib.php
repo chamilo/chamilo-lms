@@ -23,8 +23,6 @@ use ChamiloSession as Session;
  * For basic filtering, use filter()
  * For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
  *
- * @package chamilo.library
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 

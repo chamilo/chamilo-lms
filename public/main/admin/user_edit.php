@@ -459,16 +459,12 @@ if ($form->validate()) {
 
         $currentUserId = api_get_user_id();
 
-        $userObj = api_get_user_entity($user_id);
-
-        UserManager::add_user_as_admin($userObj);
-
         if ($user_id != $currentUserId) {
-            if (1 == $platform_admin) {
                 $userObj = api_get_user_entity($user_id);
-                UserManager::add_user_as_admin($userObj);
+            if ($platform_admin == 1) {
+                UserManager::addUserAsAdmin($userObj);
             } else {
-                UserManager::remove_user_admin($user_id);
+                UserManager::removeUserAdmin($userObj);
             }
         }
 

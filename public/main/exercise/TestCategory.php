@@ -335,7 +335,7 @@ class TestCategory
         return [];
     }
 
- 
+
     /**
      * Return the category name for question with question_id = $questionId
      * In this version, a question has only 1 category.
@@ -648,36 +648,6 @@ class TestCategory
     }
 
     /**
-     * Return the category name for question with question_id = $questionId
-     * In this version, a question has only 1 category.
-     *
-     * @param     $questionId
-     * @param int $courseId
-     *
-     * @return string
-     */
-    public static function getCategoryNameForQuestion($questionId, $courseId = 0)
-    {
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-        $courseId = (int) $courseId;
-        $categoryId = self::getCategoryForQuestion($questionId, $courseId);
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT title
-                FROM $table
-                WHERE iid = $categoryId ";
-        $res = Database::query($sql);
-        $data = Database::fetch_array($res);
-        $result = '';
-        if (Database::num_rows($res) > 0) {
-            $result = $data['title'];
-        }
-
-        return $result;
-    }
-
-    /**
      * sortTabByBracketLabel ($tabCategoryQuestions)
      * key of $tabCategoryQuestions are the category id (0 for not in a category)
      * value is the array of question id of this category
@@ -937,9 +907,9 @@ class TestCategory
         return false;
     }
 
-    
 
-    
+
+
 
     /**
      * @param                                                   $primaryKeys

@@ -552,10 +552,11 @@ class CourseCategory
                     ).' '.$category['name'].' ('.$category['code'].')',
                     $url
                 );
+                $countCourses = self::countCoursesInCategory($category['code'], null, false);
                 $content = [
                     $title,
                     $category['children_count'],
-                    $category['nbr_courses'],
+                    $countCourses,
                     implode('', $actions),
                 ];
                 $column = 0;
@@ -567,9 +568,8 @@ class CourseCategory
             }
 
             return $table->toHtml();
-        } else {
-            return Display::return_message(get_lang('There are no categories here'), 'warning');
         }
+        return Display::return_message(get_lang('NoCategories'), 'warning');
     }
 
     /**
@@ -605,8 +605,16 @@ class CourseCategory
                 ORDER BY tree_pos";
         $res = Database::query($sql);
 
+        $categoryToAvoid = '';
+        if (!api_is_platform_admin()) {
+            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        }
         $categories[''] = '-';
         while ($cat = Database::fetch_array($res)) {
+            $categoryCode = $cat['code'];
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
             $categories[$cat['id']] = '('.$cat['code'].') '.$cat['name'];
             ksort($categories);
         }
@@ -614,21 +622,18 @@ class CourseCategory
         return $categories;
     }
 
-    /**
-     * @param string $category_code
-     * @param string $searchTerm
-     *
-     * @return int
-     */
-    public static function countCoursesInCategory($category_code = '', $searchTerm = '')
-    {
+    public static function getCoursesInCategory($category_code = '', $searchTerm = '', $avoidCourses = true, $conditions = [], $getCount = false)
+{
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $avoidCoursesCondition = '';
+        if ($avoidCourses) {
+            $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        }
 
         $categoryCode = Database::escape_string($category_code);
         $searchTerm = Database::escape_string($searchTerm);
 
-        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $categoryJoin = '';
@@ -669,9 +674,13 @@ class CourseCategory
             ";
 
         $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        if ($getCount) {
+            $row = Database::fetch_array($result);
 
-        return (int) $row['count'];
+            return (int) $row['count'];
+        }
+
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**

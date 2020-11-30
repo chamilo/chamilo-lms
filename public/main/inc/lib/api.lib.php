@@ -165,6 +165,7 @@ define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
+define('SECTION_CUSTOMPAGE', 'custompage');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -1102,7 +1103,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
-    apiBlockInactiveUser();
+    api_block_inactive_user();
     return true;
 }
 
@@ -1128,8 +1129,66 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 
         return false;
     }
+    api_block_inactive_user();
 
     return true;
+}
+
+/**
+ * Blocks inactive users with a currently active session from accessing more pages "live".
+ *
+ * @return bool Returns true if the feature is disabled or the user account is still enabled.
+ *              Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
+ */
+function api_block_inactive_user()
+{
+    $data = true;
+    if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
+        return $data;
+    }
+
+    $userId = api_get_user_id();
+    $homeUrl = api_get_path(WEB_PATH);
+    if ($userId == 0) {
+        return $data;
+    }
+
+    $sql = "SELECT active FROM ".Database::get_main_table(TABLE_MAIN_USER)."
+            WHERE id = $userId";
+
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        $data = (bool) $result_array['active'];
+    }
+    if ($data == false) {
+        $tpl = new Template(null, true, true, false, true, false, true, 0);
+        $tpl->assign('hide_login_link', 1);
+
+        //api_not_allowed(true, get_lang('AccountInactive'));
+        // we were not in a course, return to home page
+        $msg = Display::return_message(
+            get_lang('AccountInactive'),
+            'error',
+            false
+        );
+
+        $msg .= '<p class="text-center">
+                 <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
+
+        if (api_is_anonymous()) {
+            $form = api_get_not_allowed_login_form();
+            $msg .= '<div class="well">';
+            $msg .= $form->returnForm();
+            $msg .= '</div>';
+        }
+
+        $tpl->assign('content', $msg);
+        $tpl->display_one_col_template();
+        exit;
+    }
+
+    return $data;
 }
 
 /**
@@ -1168,6 +1227,7 @@ function api_block_anonymous_users($printHeaders = true)
 
         return false;
     }
+    api_block_inactive_user();
 
     return true;
 }
@@ -2590,6 +2650,20 @@ function get_status_from_code($status_code)
             return get_lang('SessionsAdmin', '');
         case DRH:
             return get_lang('Drh', '');
+        case ANONYMOUS:
+            return get_lang('Anonymous', '');
+        case PLATFORM_ADMIN:
+            return get_lang('Administrator', '');
+        case SESSION_COURSE_COACH:
+            return get_lang('SessionCourseCoach', '');
+        case SESSION_GENERAL_COACH:
+            return get_lang('SessionGeneralCoach', '');
+        case COURSE_TUTOR:
+            return get_lang('CourseAssistant', '');
+        case STUDENT_BOSS:
+            return get_lang('StudentBoss', '');
+        case INVITEE:
+            return get_lang('Invitee', '');
     }
 }
 

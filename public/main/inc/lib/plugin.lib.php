@@ -715,21 +715,27 @@ class AppPlugin
                 }
 
                 $form->addHtml('<div class="panel panel-default">');
-                $form->addHtml('
+                $form->addHtml(
+                    '
                     <div class="panel-heading" role="tab" id="heading-'.$pluginName.'-settings">
                         <h4 class="panel-title">
                             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'.$pluginName.'-settings" aria-expanded="false" aria-controls="collapse-'.$pluginName.'-settings">
-                ');
+                '
+                );
                 $form->addHtml($icon.' '.$pluginTitle);
-                $form->addHtml('
+                $form->addHtml(
+                    '
                             </a>
                         </h4>
                     </div>
-                ');
-                $form->addHtml('
+                '
+                );
+                $form->addHtml(
+                    '
                     <div id="collapse-'.$pluginName.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$pluginName.'-settings">
                         <div class="panel-body">
-                ');
+                '
+                );
 
                 $groups = [];
                 foreach ($obj->course_settings as $setting) {
@@ -748,30 +754,30 @@ class AppPlugin
                         if (isset($setting['init_value']) && 1 == $setting['init_value']) {
                             $element->setChecked(true);
                         }
-                            }
-                        }
-
-                        if (isset($setting['init_value']) && $setting['init_value'] == 1) {
-                            $element->setChecked(true);
-                        }
-                        $form->addElement($element);
-
-                        if (isset($setting['group'])) {
-                            $groups[$setting['group']][] = $element;
-                        }
                     }
                 }
-                foreach ($groups as $k => $v) {
-                    $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
+
+                if (isset($setting['init_value']) && $setting['init_value'] == 1) {
+                    $element->setChecked(true);
                 }
-                $form->addButtonSave(get_lang('Save settings'));
-                $form->addHtml('
-                        </div>
-                    </div>
-                ');
-                $form->addHtml('</div>');
+                $form->addElement($element);
+
+                if (isset($setting['group'])) {
+                    $groups[$setting['group']][] = $element;
+                }
             }
         }
+        foreach ($groups as $k => $v) {
+            $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
+        }
+        $form->addButtonSave(get_lang('Save settings'));
+        $form->addHtml(
+            '
+                        </div>
+                    </div>
+                '
+        );
+        $form->addHtml('</div>');
     }
 
     /**

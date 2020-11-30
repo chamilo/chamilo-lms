@@ -21,9 +21,11 @@ class Auth
     /**
      * This function get all the courses in the particular user category.
      *
+     * @param bool $hidePrivate
+     *
      * @return array
      */
-    public function getCoursesInCategory()
+    public function getCoursesInCategory($hidePrivate = true)
     {
         $user_id = api_get_user_id();
 
@@ -31,7 +33,7 @@ class Auth
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $hidePrivate);
 
         $sql = "SELECT
                     course.id as real_id,
@@ -301,7 +303,7 @@ class Auth
      *
      * @return bool True if it success
      */
-    public function remove_user_from_course($course_code)
+    public function remove_user_from_course($course_code, $sessionId = 0)
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -311,6 +313,9 @@ class Auth
         $result = true;
 
         $courseInfo = api_get_course_info($course_code);
+        if ('1' !== $courseInfo['unsubscribe']) {
+            return false;
+        }
         $courseId = $courseInfo['real_id'];
 
         // we check (once again) if the user is not course administrator
@@ -327,7 +332,9 @@ class Auth
             $result = false;
         }
 
-        CourseManager::unsubscribe_user($current_user_id, $course_code);
+        if ($result) {
+            CourseManager::unsubscribe_user($current_user_id, $course_code, $sessionId);
+        }
 
         return $result;
     }

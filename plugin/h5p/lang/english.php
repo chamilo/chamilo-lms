@@ -1,6 +1,6 @@
 <?php
 $strings['plugin_title'] = "H5P";
-$strings['plugin_comment'] = "Create H5P contents.";
+$strings['plugin_comment'] = "Create H5P contents. Open README.md for installation instructions.";
 $strings['tool_enable'] = "Enable plugin";
 
 $strings['TypeContent'] = "Type of content";

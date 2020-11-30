@@ -255,20 +255,40 @@ class learnpathItem
      */
     public function close()
     {
+        if (self::DEBUG) {
+            error_log('Start - learnpathItem:close');
+        }
         $this->current_stop_time = time();
         $type = $this->get_type();
+        if (self::DEBUG) {
+            error_log("Type: ".$type);
+            error_log("get_id: ".$this->get_id());
+        }
         if ($type !== 'sco') {
             if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
                 $this->get_status(
                     true,
                     true
-                ); // Update status (second option forces the update).
+                );
             } else {
+                /*if ($this->prerequisites_match()) {
+                }*/
                 $this->status = $this->possible_status[2];
+
+                if (self::DEBUG) {
+                    error_log("STATUS changed to: ".$this->status);
+                }
             }
         }
         if ($this->save_on_close) {
+            if (self::DEBUG) {
+                error_log("save_on_close: ");
+            }
             $this->save();
+        }
+
+        if (self::DEBUG) {
+            error_log('End - learnpathItem:close');
         }
 
         return true;
@@ -830,10 +850,10 @@ class learnpathItem
                         WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
-                    $this->error = "Could not find parent learnpath in lp table";
+                    $this->error = 'Could not find parent learnpath in lp table';
                     if (self::DEBUG > 2) {
                         error_log(
-                            'New LP - End of learnpathItem::get_prevent_reinit() - Returning false',
+                            'LearnpathItem::get_prevent_reinit() - Returning false',
                             0
                         );
                     }
@@ -849,10 +869,7 @@ class learnpathItem
             }
         }
         if (self::DEBUG > 2) {
-            error_log(
-                'New LP - End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit,
-                0
-            );
+            error_log('End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit);
         }
 
         return $this->prevent_reinit;
@@ -1463,12 +1480,12 @@ class learnpathItem
     {
         $courseId = $this->courseId;
         $debug = self::DEBUG;
-        if ($debug > 0) {
-            error_log('learnpathItem::get_status() on item '.$this->db_id, 0);
+        if ($debug) {
+            error_log('learnpathItem::get_status() on item '.$this->db_id);
         }
         if ($check_db) {
-            if ($debug > 2) {
-                error_log('learnpathItem::get_status(): checking db', 0);
+            if ($debug) {
+                error_log('learnpathItem::get_status(): checking db');
             }
             if (!empty($this->db_item_view_id) && !empty($courseId)) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -1481,16 +1498,30 @@ class learnpathItem
                 if (Database::num_rows($res) == 1) {
                     $row = Database::fetch_array($res);
                     if ($update_local) {
+                        if ($debug) {
+                            error_log('Status to be updated to: '.$row['status']);
+                        }
                         $this->set_status($row['status']);
+                    }
+
+                    if ($debug) {
+                        error_log('Return of $row[status]: '.$row['status']);
                     }
 
                     return $row['status'];
                 }
             }
         } else {
+            if ($debug) {
+                error_log('Status from this->status: '.$this->status);
+            }
             if (!empty($this->status)) {
                 return $this->status;
             }
+        }
+
+        if ($debug) {
+            error_log('Return default: '.$this->possible_status[0]);
         }
 
         return $this->possible_status[0];
@@ -2671,7 +2702,7 @@ class learnpathItem
     {
         $debug = self::DEBUG;
         if ($debug) {
-            error_log('learnpathItem::save()', 0);
+            error_log('learnpathItem::save()');
         }
         // First check if parameters passed via GET can be saved here
         // in case it's a SCORM, we should get:
@@ -2832,10 +2863,7 @@ class learnpathItem
         }
 
         if ($debug) {
-            error_log(
-                'New LP - End of learnpathItem::save() - Calling write_to_db()',
-                0
-            );
+            error_log('End of learnpathItem::save() - Calling write_to_db() now');
         }
 
         return $this->write_to_db();
@@ -3126,8 +3154,8 @@ class learnpathItem
      */
     public function set_status($status)
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::set_status('.$status.')', 0);
+        if (self::DEBUG) {
+            error_log('learnpathItem::set_status('.$status.')');
         }
 
         $found = false;
@@ -3139,16 +3167,19 @@ class learnpathItem
 
         if ($found) {
             $this->status = $status;
-            if (self::DEBUG > 1) {
+            if (self::DEBUG) {
                 error_log(
                     'learnpathItem::set_status() - '.
-                        'Updated object status of item '.$this->db_id.
-                        ' to '.$this->status,
-                    0
+                    'Updated object status of item '.$this->db_id.
+                    ' to '.$this->status
                 );
             }
 
             return true;
+        }
+
+        if (self::DEBUG) {
+            error_log('Setting status: '.$this->possible_status[0]);
         }
 
         $this->status = $this->possible_status[0];
@@ -3559,7 +3590,8 @@ class learnpathItem
     {
         $debug = self::DEBUG;
         if ($debug) {
-            error_log('learnpathItem::write_to_db()', 0);
+            error_log('------------------------');
+            error_log('learnpathItem::write_to_db()');
         }
 
         // Check the session visibility.
@@ -3570,7 +3602,11 @@ class learnpathItem
 
             return false;
         }
+
         if (api_is_invitee()) {
+            if ($debug) {
+                error_log('api_is_invitee');
+            }
             // If the user is an invitee, we don't write anything to DB
             return true;
         }
@@ -3670,10 +3706,7 @@ class learnpathItem
                         lp_view_id = ".$this->view_id." AND
                         view_count = ".$this->get_attempt_id();
             if ($debug) {
-                error_log(
-                    'learnpathItem::write_to_db() - Querying item_view: '.$sql,
-                    0
-                );
+                error_log('learnpathItem::write_to_db() - Querying item_view: '.$sql);
             }
 
             $check_res = Database::query($sql);
@@ -3709,6 +3742,9 @@ class learnpathItem
                     Database::query($sql);
                 }
             } else {
+                if ($debug) {
+                    error_log('item is: '.$this->type);
+                }
                 if ($this->type === 'hotpotatoes') {
                     $params = [
                         'total_time' => $this->get_total_time(),
@@ -3731,9 +3767,6 @@ class learnpathItem
                 } else {
                     // For all other content types...
                     if ($this->type === 'quiz') {
-                        if ($debug) {
-                            error_log("item is quiz:");
-                        }
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
@@ -3752,6 +3785,10 @@ class learnpathItem
                         }
                     } else {
                         $my_type_lp = learnpath::get_type_static($this->lp_id);
+                        if ($debug) {
+                            error_log('get_type_static: '.$my_type_lp);
+                        }
+
                         // This is a array containing values finished
                         $case_completed = [
                             'completed',
@@ -3774,12 +3811,17 @@ class learnpathItem
                                         view_count="'.$this->get_attempt_id().'"
                                     ';
                             $rs_verified = Database::query($sql);
-                            $row_verified = Database::fetch_array($rs_verified);
+                            $row_verified = Database::fetch_array($rs_verified, 'ASSOC');
 
-                            // Get type lp: 1=lp dokeos and  2=scorm.
+                            if ($debug) {
+                                error_log("Query: $sql");
+                                error_log("With result: ".print_r($row_verified, 1));
+                            }
+
+                            // Get type lp: 1 = Chamilo and 2 = Scorm.
                             // If not is completed or passed or browsed and learning path is scorm.
                             if (!in_array($this->get_status(false), $case_completed) &&
-                                $my_type_lp == 2
+                                2 == $my_type_lp
                             ) {
                                 $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
@@ -3788,16 +3830,17 @@ class learnpathItem
                                 }
                             } else {
                                 // Verified into database.
-                                if (!in_array($row_verified['status'], $case_completed) &&
-                                    $my_type_lp == 2
+                                if (2 == $my_type_lp &&
+                                    !in_array($row_verified['status'], $case_completed)
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
                                     if ($debug) {
                                         error_log("total_time time changed case 1: $total_time");
                                     }
-                                } elseif (in_array($row_verified['status'], $case_completed) &&
-                                    $my_type_lp == 2 && $this->type != 'sco'
+                                } elseif (2 == $my_type_lp &&
+                                    $this->type != 'sco' &&
+                                    in_array($row_verified['status'], $case_completed)
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
@@ -3849,6 +3892,11 @@ class learnpathItem
                                             lp_view_id="'.$this->view_id.'" AND
                                             view_count="'.$this->get_attempt_id().'" ';
                                 $rs_status = Database::query($sql);
+                                if ($debug) {
+                                    error_log("Query: $sql");
+                                    error_log("With result: ".print_r($rs_status, 1));
+                                }
+
                                 $current_status = Database::result($rs_status, 0, 'status');
                                 if (in_array($current_status, $case_completed)) {
                                     $my_status = '';

@@ -101,7 +101,7 @@ switch ($action) {
             $orderList = [];
 
             foreach ($sections as $items) {
-                list($id, $parentId) = explode('|', $items);
+                [$id, $parentId] = explode('|', $items);
 
                 $orderList[$id] = $parentId;
             }
@@ -298,6 +298,11 @@ switch ($action) {
         if (empty($lp) || empty($itemId)) {
             exit;
         }
+        if ($lp->debug) {
+            error_log('--------------------------------------');
+            error_log('get_item_prerequisites');
+        }
+
         $result = $lp->prerequisites_match($itemId);
         if ($result) {
             echo '1';

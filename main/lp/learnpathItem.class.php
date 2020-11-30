@@ -250,6 +250,7 @@ class learnpathItem
     /**
      * Closes/stops the item viewing. Finalises runtime values.
      * If required, save to DB.
+     *
      * @param bool $prerequisitesCheck Needed to check if asset can be set as completed or not
      *
      * @return bool True on success, false otherwise

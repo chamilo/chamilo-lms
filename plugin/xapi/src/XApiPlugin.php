@@ -344,7 +344,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param array  $haystack
      * @param string $needle
      *
      * @return string

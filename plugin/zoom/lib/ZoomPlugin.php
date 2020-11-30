@@ -259,7 +259,6 @@ class ZoomPlugin extends Plugin
                 @unlink($dest);
             }
         }
-
     }
 
     /**

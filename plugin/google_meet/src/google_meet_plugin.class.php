@@ -87,13 +87,23 @@ class GoogleMeetPlugin extends Plugin
 
         Database::query($sql);
 
-        $src1 = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/64/google_meet.png';
-        $src2 = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/64/google_meet_na.png';
-        $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet.png';
-        $dest2 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet_na.png';
-
-        copy($src1, $dest1);
-        copy($src2, $dest2);
+        // Copy icons into the main/img/icons folder
+        $iconName = 'google_meet';
+        $iconsList = [
+            '64/'.$iconName.'.png',
+            '64/'.$iconName.'_na.png',
+            '32/'.$iconName.'.png',
+            '32/'.$iconName.'_na.png',
+            '22/'.$iconName.'.png',
+            '22/'.$iconName.'_na.png',
+        ];
+        $sourceDir = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/';
+        $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+        foreach ($iconsList as $icon) {
+            $src = $sourceDir.$icon;
+            $dest = $destinationDir.$icon;
+            copy($src, $dest);
+        }
     }
 
     /**
@@ -122,6 +132,22 @@ class GoogleMeetPlugin extends Plugin
         }
 
         $this->manageTab(false);
+
+        // Remove icons from the main/img/icons folder
+        $iconName = 'google_meet';
+        $iconsList = [
+            '64/'.$iconName.'.png',
+            '64/'.$iconName.'_na.png',
+            '32/'.$iconName.'.png',
+            '32/'.$iconName.'_na.png',
+            '22/'.$iconName.'.png',
+            '22/'.$iconName.'_na.png',
+        ];
+        $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+        foreach ($iconsList as $icon) {
+            $dest = $destinationDir.$icon;
+            unlink($dest);
+        }
     }
 
     /**
@@ -153,7 +179,8 @@ class GoogleMeetPlugin extends Plugin
         }
         $table = Database::get_main_table(self::TABLE_MEET_LIST);
 
-        $idCourse = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
         $url = self::filterUrl($values['meet_url']);
         if (!isset($values['type_meet'])) {
             $values['type_meet'] = 1;
@@ -165,10 +192,10 @@ class GoogleMeetPlugin extends Plugin
             'type_meet' => $values['type_meet'],
             'meet_description' => $values['meet_description'],
             'meet_color' => $values['meet_color'],
-            'c_id' => $idCourse,
+            'c_id' => $courseId,
             'start_time' => null,
             'end_time' => null,
-            'session_id' => null,
+            'session_id' => $sessionId,
             'activate' => 1,
         ];
 
@@ -179,12 +206,14 @@ class GoogleMeetPlugin extends Plugin
         }
     }
 
-    public function listMeets($idCourse)
+    public function listMeets($courseId, $sessionId = 0)
     {
         $list = [];
         $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
-        $sql = "SELECT * FROM $tableMeetList WHERE c_id = $idCourse AND activate = 1";
+        $sql = "SELECT * FROM $tableMeetList WHERE c_id = $courseId AND session_id = $sessionId AND activate = 1";
 
         $result = Database::query($sql);
 
@@ -268,7 +297,8 @@ class GoogleMeetPlugin extends Plugin
         }
         $table = Database::get_main_table(self::TABLE_MEET_LIST);
 
-        $idCourse = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
         $url = self::filterUrl($values['meet_url']);
         if (!isset($values['type_meet'])) {
             $values['type_meet'] = 1;
@@ -280,10 +310,10 @@ class GoogleMeetPlugin extends Plugin
             'type_meet' => $values['type_meet'],
             'meet_description' => $values['meet_description'],
             'meet_color' => $values['meet_color'],
-            'c_id' => $idCourse,
+            'c_id' => $courseId,
             'start_time' => null,
             'end_time' => null,
-            'session_id' => null,
+            'session_id' => $sessionId,
             'activate' => 1,
         ];
 

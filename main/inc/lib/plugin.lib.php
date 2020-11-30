@@ -277,6 +277,7 @@ class AppPlugin
             'vchamilo',
             'whispeakauth',
             'zoom',
+            'xapi',
         ];
 
         return $officialPlugins;

@@ -110,9 +110,14 @@ $view->assign('header', $pageTitle);
 
 if ($isAllowedToEdit) {
     $actions = Display::url(
-        Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
-        "add.php?$cidReq"
-    );
+            Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+            "add.php?$cidReq"
+        )
+        .PHP_EOL
+        .Display::url(
+            Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+            "../cmi5/add.php?$cidReq"
+        );
 
     $view->assign(
         'actions',

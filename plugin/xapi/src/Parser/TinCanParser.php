@@ -14,35 +14,18 @@ use Symfony\Component\DomCrawler\Crawler;
  *
  * @package Chamilo\PluginBundle\XApi\Parser
  */
-class TinCanParser
+class TinCanParser extends AbstractParser
 {
     /**
-     * @var string
+     * @inheritDoc
      */
-    private $filePath;
-    /**
-     * @var Course
-     */
-    private $course;
-    /**
-     * @var Session|null
-     */
-    private $session;
-
-    protected function __construct($filePath, Course $course, Session $session = null)
-    {
-        $this->filePath = $filePath;
-        $this->course = $course;
-        $this->session = $session;
-    }
-
     public static function create($filePath, Course $course, Session $session = null)
     {
         return new self($filePath, $course, $session);
     }
 
     /**
-     * @return \Chamilo\PluginBundle\Entity\XApi\ToolLaunch
+     * @inheritDoc
      */
     public function parse()
     {
@@ -76,6 +59,8 @@ class TinCanParser
     }
 
     /**
+     * @param \Symfony\Component\DomCrawler\Crawler $launchNode
+     *
      * @return string
      */
     private function parseLaunchUrl(Crawler $launchNode)

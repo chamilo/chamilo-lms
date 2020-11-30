@@ -28,7 +28,7 @@ abstract class AbstractImporter
     /**
      * @var string
      */
-    protected $toolDirectoryPath;
+    protected $toolDirectory;
     /**
      * @var string
      */
@@ -41,22 +41,34 @@ abstract class AbstractImporter
     /**
      * AbstractImporter constructor.
      *
-     * @param string $toolDirectory
+     * @param array                             $fileInfo
+     * @param string                            $toolDirectory
+     * @param \Chamilo\CoreBundle\Entity\Course $course
      */
-    protected function __construct(array $fileInfo, $toolDirectory, Course $course)
+    protected function __construct(array $fileInfo, string $toolDirectory, Course $course)
     {
         $this->course = $course;
 
         $pathInfo = pathinfo($fileInfo['name']);
 
         $this->courseDirectoryPath = api_get_path(SYS_COURSE_PATH).$this->course->getDirectory();
-        $this->toolDirectoryPath = $this->courseDirectoryPath.'/'.$toolDirectory;
-        $this->packageDirectoryPath = $this->toolDirectoryPath.'/'.api_replace_dangerous_char($pathInfo['filename']);
+        $this->toolDirectory = $toolDirectory;
+        $this->packageDirectoryPath = implode(
+            '/',
+            [
+                $this->courseDirectoryPath,
+                $this->toolDirectory,
+                api_replace_dangerous_char($pathInfo['filename'])
+            ]
+        );
 
         $this->zipFile = new PclZip($fileInfo['tmp_name']);
     }
 
     /**
+     * @param array                             $fileInfo
+     * @param \Chamilo\CoreBundle\Entity\Course $course
+     *
      * @return \Chamilo\PluginBundle\XApi\Importer\AbstractImporter
      */
     abstract public static function create(array $fileInfo, Course $course);
@@ -80,7 +92,7 @@ abstract class AbstractImporter
 
         $this->zipFile->extract($this->packageDirectoryPath);
 
-        return "{$this->packageDirectoryPath}/tincan.xml";
+        return "{$this->packageDirectoryPath}/{$this->toolDirectory}.xml";
     }
 
     /**

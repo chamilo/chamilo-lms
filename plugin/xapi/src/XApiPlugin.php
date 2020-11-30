@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Doctrine\ORM\EntityManager;
@@ -104,6 +105,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 'xapi_shared_statement',
                 'xapi_tool_launch',
                 'xapi_lrs_auth',
+                'xapi_cmi5_item',
 
                 'xapi_attachment',
                 'xapi_object',
@@ -167,6 +169,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(LrsAuth::class),
+                $em->getClassMetadata(Cmi5Item::class),
             ]
         );
 
@@ -444,6 +447,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(LrsAuth::class),
+                $em->getClassMetadata(Cmi5Item::class),
             ]
         );
 

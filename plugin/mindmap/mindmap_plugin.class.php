@@ -100,7 +100,9 @@ class MindmapPlugin extends Plugin
         $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
         foreach ($iconsList as $icon) {
             $dest = $destinationDir.$icon;
-            unlink($dest);
+            if (is_file($dest)) {
+                @unlink($dest);
+            }
         }
 
         // Deleting course settings and course home icons

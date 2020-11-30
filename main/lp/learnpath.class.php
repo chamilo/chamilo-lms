@@ -4313,6 +4313,9 @@ class learnpath
         }
 
         $currentItem = $this->getItem($itemId);
+        if ($debug > 0) {
+            error_log("Checking item id $itemId");
+        }
 
         if ($currentItem) {
             if ($this->type == 2) {
@@ -4350,12 +4353,13 @@ class learnpath
         } else {
             $result = true;
             if ($debug > 1) {
-                error_log('$this->items['.$itemId.'] was not an object', 0);
+                error_log('$this->items['.$itemId.'] was not an object');
             }
         }
 
         if ($debug > 1) {
-            error_log('End of prerequisites_match(). Error message is now '.$this->error, 0);
+            error_log('Result: '.$result);
+            error_log('End of prerequisites_match(). Error message is now '.$this->error);
         }
 
         return $result;

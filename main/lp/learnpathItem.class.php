@@ -12,7 +12,7 @@
  */
 class learnpathItem
 {
-    const DEBUG = 0; // Logging parameter.
+    public const DEBUG = 0; // Logging parameter.
     public $iId;
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
@@ -250,17 +250,17 @@ class learnpathItem
     /**
      * Closes/stops the item viewing. Finalises runtime values.
      * If required, save to DB.
+     * @param bool $prerequisitesCheck Needed to check if asset can be set as completed or not
      *
      * @return bool True on success, false otherwise
      */
     public function close()
     {
-        if (self::DEBUG) {
-            error_log('Start - learnpathItem:close');
-        }
+        $debug = self::DEBUG;
         $this->current_stop_time = time();
         $type = $this->get_type();
-        if (self::DEBUG) {
+        if ($debug) {
+            error_log('Start - learnpathItem:close');
             error_log("Type: ".$type);
             error_log("get_id: ".$this->get_id());
         }
@@ -271,8 +271,6 @@ class learnpathItem
                     true
                 );
             } else {
-                /*if ($this->prerequisites_match()) {
-                }*/
                 $this->status = $this->possible_status[2];
 
                 if (self::DEBUG) {
@@ -281,13 +279,13 @@ class learnpathItem
             }
         }
         if ($this->save_on_close) {
-            if (self::DEBUG) {
+            if ($debug) {
                 error_log("save_on_close: ");
             }
             $this->save();
         }
 
-        if (self::DEBUG) {
+        if ($debug) {
             error_log('End - learnpathItem:close');
         }
 

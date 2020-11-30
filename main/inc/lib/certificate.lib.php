@@ -1,13 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
 
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
- *
- * @package chamilo.library.certificates
  */
 class Certificate extends Model
 {

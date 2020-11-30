@@ -14,7 +14,7 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class CoursesAndSessionsCatalog
 {
-    const PAGE_LENGTH = 12;
+    public const PAGE_LENGTH = 12;
 
     /**
      * Check the configuration for the courses and sessions catalog.

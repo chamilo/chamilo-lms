@@ -7,8 +7,6 @@
  * Contains several functions dealing with displaying,
  * editing,... of a blog
  *
- * @package chamilo.blogs
- *
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  */
@@ -127,7 +125,7 @@ class Blog
         $res = Database::query($sql);
         $info_count = Database::result($res, 0, 0);
 
-        if ($info_count == 0) {
+        if (0 == $info_count) {
             // Create the blog
             $params = [
                 'blog_id' => 0,
@@ -689,7 +687,7 @@ class Blog
 
         $tool = 'BLOG_'.$blog_id;
 
-        if ($articleDelete == 'on') {
+        if ('on' == $articleDelete) {
             $sql = "INSERT INTO $tbl_tasks_permissions ( c_id,  task_id, tool, action)
                     VALUES ($course_id, $task_id, '$tool', 'article_delete')";
             Database::query($sql);
@@ -702,7 +700,7 @@ class Blog
             }
         }
 
-        if ($articleEdit == 'on') {
+        if ('on' == $articleEdit) {
             $sql = "
                 INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action )
                 VALUES ($course_id, $task_id, '$tool', 'article_edit')";
@@ -715,7 +713,7 @@ class Blog
             }
         }
 
-        if ($commentsDelete == 'on') {
+        if ('on' == $commentsDelete) {
             $sql = "
                 INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action )
                 VALUES ($course_id, $task_id, '$tool', 'article_comments_delete')";

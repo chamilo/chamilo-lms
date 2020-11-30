@@ -4805,7 +4805,7 @@ class CourseManager
         // Course legal
         $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 
-        if ($enabled === 'true') {
+        if ('true' == $enabled) {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
             $plugin = CourseLegalPlugin::create();
 
@@ -4819,7 +4819,7 @@ class CourseManager
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $result = Database::fetch_array($result);
-                if ($result['legal_agreement'] == 1) {
+                if (1 == $result['legal_agreement']) {
                     return true;
                 }
             }
@@ -4832,7 +4832,7 @@ class CourseManager
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $result = Database::fetch_array($result);
-                if ($result['legal_agreement'] == 1) {
+                if (1 == $result['legal_agreement']) {
                     return true;
                 }
             }
@@ -6577,7 +6577,7 @@ class CourseManager
                             ['class' => 'btn btn-primary btn-large']
                         );
 
-                        $exercise_redirect = intval(Session::read('exercise_redirect'));
+                        $exercise_redirect = (int) Session::read('exercise_redirect');
                         // Specify the course id as the current context does not
                         // hold a global $_course array
                         $objExercise = new Exercise($course_info['real_id']);

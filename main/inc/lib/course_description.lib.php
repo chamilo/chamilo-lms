@@ -7,14 +7,10 @@
  * course_description_controller (MVC pattern).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.course_description
  */
 
 /**
  * Class CourseDescription course descriptions.
- *
- * @package chamilo.course_description
  */
 class CourseDescription
 {

@@ -51,7 +51,7 @@ class PNGImageBaker
         if (array_key_exists($type, $this->_chunks)) {
             foreach (array_keys($this->_chunks[$type]) as $typekey) {
                 list($key, $data) = explode("\0", $this->_chunks[$type][$typekey]);
-                if (strcmp($key, $check) == 0) {
+                if (0 == strcmp($key, $check)) {
                     echo 'Key "'.$check.'" already exists in "'.$type.'" chunk.';
 
                     return false;
@@ -146,7 +146,7 @@ class PNGImageBaker
         // Read the magic bytes and verify
         $retval = substr($png, 0, 8);
         $ipos = 8;
-        if ($retval != "\x89PNG\x0d\x0a\x1a\x0a") {
+        if ("\x89PNG\x0d\x0a\x1a\x0a" != $retval) {
             return false;
         }
 
@@ -157,7 +157,7 @@ class PNGImageBaker
             // Extract length and type from binary data
             $chunk = @unpack('Nsize/a4type', $chunkHeader);
             $skip = false;
-            if ($chunk['type'] == 'tEXt') {
+            if ('tEXt' == $chunk['type']) {
                 $data = substr($png, $ipos, $chunk['size']);
                 $sections = explode("\0", $data);
                 if ($sections[0] == $key) {

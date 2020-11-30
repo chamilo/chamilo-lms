@@ -26,7 +26,7 @@ if (empty($categoryId)) {
 }
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
-if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+if (false == $subscriptionSettings['allow_add_users_to_lp_category']) {
     api_not_allowed(true);
 }
 

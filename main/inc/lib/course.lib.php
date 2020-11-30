@@ -1326,14 +1326,16 @@ class CourseManager
     /**
      * Is the user a teacher in the given course?
      *
-     * @param int    $user_id     , the id (int) of the user
-     * @param string $course_code , the course code
+     * @param int    $user_id
+     * @param string $course_code
      *
      * @return bool if the user is a teacher in the course, false otherwise
      */
     public static function is_course_teacher($user_id, $course_code)
     {
-        if ($user_id != strval(intval($user_id))) {
+        $user_id = (int) $user_id;
+
+        if (empty($user_id)) {
             return false;
         }
 
@@ -4150,14 +4152,14 @@ class CourseManager
             $params['course_code'] = $row['course_code'];
             $params['code'] = $row['course_code'];
 
-            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+            if ($showCustomIcon === 'true' && $iconName !== 'course.png') {
                 $params['thumbnails'] = $course_info['course_image'];
                 $params['image'] = $course_info['course_image_large'];
             }
 
             $thumbnails = null;
             $image = null;
-            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+            if ($showCustomIcon === 'true' && $iconName !== 'course.png') {
                 $thumbnails = $course_info['course_image'];
                 $image = $course_info['course_image_large'];
             } else {
@@ -4177,7 +4179,10 @@ class CourseManager
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
-                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    $params['document'] = '<a
+                        id="document_preview_'.$course_info['real_id'].'_0"
+                        class="document_preview btn btn-default btn-sm"
+                        href="javascript:void(0);">'
                                .Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div(
                         '',
@@ -4189,7 +4194,10 @@ class CourseManager
                 }
             }
             if ($load_dirs) {
-                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                $params['document'] = '<a
+                    id="document_preview_'.$course_info['real_id'].'_0"
+                    class="document_preview btn btn-default btn-sm"
+                    href="javascript:void(0);">'
                     .Display::returnFontAwesomeIcon('folder-open').'</a>';
                 $params['document'] .= Display::div(
                     '',
@@ -4237,11 +4245,12 @@ class CourseManager
             $params['category'] = $course_info['categoryName'];
             $params['category_code'] = $course_info['categoryCode'];
             $params['teachers'] = $teachers;
-            $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
+            $params['extrafields'] = self::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
 
-            if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page')
-                && '1' === $course_info['unsubscribe']
+            if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page') &&
+                '1' === $course_info['unsubscribe'] &&
+                false === $params['current_user_is_teacher']
             ) {
                 $params['unregister_button'] = CoursesAndSessionsCatalog::return_unregister_button(
                     $course_info,
@@ -4381,6 +4390,7 @@ class CourseManager
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
         $course_visibility = (int) $course_info['visibility'];
+        $allowUnsubscribe = api_get_configuration_value('enable_unsubscribe_button_on_my_course_page');
 
         if ($course_visibility === COURSE_VISIBILITY_HIDDEN) {
             return '';
@@ -4536,6 +4546,17 @@ class CourseManager
         $params['edit_actions'] = '';
         $params['document'] = '';
         $params['category'] = $course_info['categoryName'];
+        if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
+            false === $is_coach && $allowUnsubscribe && '1' === $course_info['unsubscribe']) {
+            $params['unregister_button'] =
+                CoursesAndSessionsCatalog::return_unregister_button(
+                    ['code' => $course_info['code']],
+                    Security::get_existing_token(),
+                    '',
+                    '',
+                    $session_id
+                );
+        }
 
         if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
             $course_visibility != COURSE_VISIBILITY_HIDDEN
@@ -4555,7 +4576,8 @@ class CourseManager
                 }
             }
         }
-        if (api_get_setting('display_teacher_in_courselist') === 'true') {
+
+        if ('true' === api_get_setting('display_teacher_in_courselist')) {
             $teacher_list = self::getTeachersFromCourse($course_info['real_id'], true);
             $course_coachs = self::get_coachs_from_course(
                 $session_id,
@@ -4589,7 +4611,8 @@ class CourseManager
             $session_category_id = self::get_session_category_id_by_session_id($course_info['id_session']);
 
             if (
-                $sessionInfo['access_start_date'] === '0000-00-00 00:00:00' || empty($sessionInfo['access_start_date']) ||
+                $sessionInfo['access_start_date'] === '0000-00-00 00:00:00' ||
+                empty($sessionInfo['access_start_date']) ||
                 $sessionInfo['access_start_date'] === '0000-00-00'
             ) {
                 $sessionInfo['dates'] = '';

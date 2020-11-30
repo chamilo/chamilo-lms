@@ -54,6 +54,7 @@ class Positioning extends Plugin
     {
         $table = $this->table;
         Database::query("DROP TABLE IF EXISTS $table");
+        $this->uninstall_course_fields_in_all_courses();
     }
 
     public function isInitialExercise($exerciseId, $courseId, $sessionId)

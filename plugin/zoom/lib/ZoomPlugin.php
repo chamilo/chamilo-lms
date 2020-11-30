@@ -204,7 +204,26 @@ class ZoomPlugin extends Plugin
                 Database::getManager()->getClassMetadata(Registrant::class),
             ]
         );
-        $this->install_course_fields_in_all_courses();
+
+        // Copy icons into the main/img/icons folder
+        $iconName = 'zoom_meet';
+        $iconsList = [
+            '64/'.$iconName.'.png',
+            '64/'.$iconName.'_na.png',
+            '32/'.$iconName.'.png',
+            '32/'.$iconName.'_na.png',
+            '22/'.$iconName.'.png',
+            '22/'.$iconName.'_na.png',
+        ];
+        $sourceDir = api_get_path(SYS_PLUGIN_PATH).'zoom/resources/img/';
+        $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+        foreach ($iconsList as $icon) {
+            $src = $sourceDir.$icon;
+            $dest = $destinationDir.$icon;
+            copy($src, $dest);
+        }
+        
+        $this->install_course_fields_in_all_courses(true, 'zoom_meet.png');
     }
 
     /**
@@ -222,6 +241,23 @@ class ZoomPlugin extends Plugin
             ]
         );
         $this->uninstall_course_fields_in_all_courses();
+
+        // Remove icons from the main/img/icons folder
+        $iconName = 'zoom_meet';
+        $iconsList = [
+            '64/'.$iconName.'.png',
+            '64/'.$iconName.'_na.png',
+            '32/'.$iconName.'.png',
+            '32/'.$iconName.'_na.png',
+            '22/'.$iconName.'.png',
+            '22/'.$iconName.'_na.png',
+        ];
+        $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+        foreach ($iconsList as $icon) {
+            $dest = $destinationDir.$icon;
+            unlink($dest);
+        }
+
     }
 
     /**

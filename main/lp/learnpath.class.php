@@ -32,8 +32,8 @@ use Symfony\Component\Finder\Finder;
  */
 class learnpath
 {
-    const MAX_LP_ITEM_TITLE_LENGTH = 32;
-    const STATUS_CSS_CLASS_NAME = [
+    public const MAX_LP_ITEM_TITLE_LENGTH = 32;
+    public const STATUS_CSS_CLASS_NAME = [
         'not attempted' => 'scorm_not_attempted',
         'incomplete' => 'scorm_not_attempted',
         'failed' => 'scorm_failed',
@@ -119,9 +119,6 @@ class learnpath
     {
         $debug = $this->debug;
         $this->encoding = api_get_system_encoding();
-        if ($debug) {
-            error_log('In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')');
-        }
         if (empty($course)) {
             $course = api_get_course_id();
         }
@@ -1615,13 +1612,22 @@ class learnpath
             $completedStatusList[] = 'failed';
         }
 
+        if ($this->debug) {
+            error_log('START - get_complete_items_count');
+            error_log('Counting steps with status in: '.print_r($completedStatusList, 1));
+        }
+
         foreach ($this->items as $id => $dummy) {
             // Trying failed and browsed considered "progressed" as well.
             if ($this->items[$id]->status_is($completedStatusList) &&
-                $this->items[$id]->get_type() != 'dir'
+                $this->items[$id]->get_type() !== 'dir'
             ) {
                 $i++;
             }
+        }
+
+        if ($this->debug) {
+            error_log('END - Count: '.$i);
         }
 
         return $i;
@@ -3177,7 +3183,7 @@ class learnpath
      *
      * @param int $lp_id
      *
-     * @return mixed Type ID or name, depending on the parameter
+     * @return mixed Returns the lp_type: 1 = Chamilo lms / 2 = SCORM
      */
     public static function get_type_static($lp_id = 0)
     {
@@ -4307,6 +4313,9 @@ class learnpath
         }
 
         $currentItem = $this->getItem($itemId);
+        if ($debug > 0) {
+            error_log("Checking item id $itemId");
+        }
 
         if ($currentItem) {
             if ($this->type == 2) {
@@ -4344,12 +4353,13 @@ class learnpath
         } else {
             $result = true;
             if ($debug > 1) {
-                error_log('$this->items['.$itemId.'] was not an object', 0);
+                error_log('$this->items['.$itemId.'] was not an object');
             }
         }
 
         if ($debug > 1) {
-            error_log('End of prerequisites_match(). Error message is now '.$this->error, 0);
+            error_log('Result: '.$result);
+            error_log('End of prerequisites_match(). Error message is now '.$this->error);
         }
 
         return $result;
@@ -4868,10 +4878,6 @@ class learnpath
         if (isset($this->items[$item_id]) &&
             is_object($this->items[$item_id])
         ) {
-            if ($debug) {
-                error_log('Object exists');
-            }
-
             // Saving the item.
             $res = $this->items[$item_id]->save(
                 $from_outside,
@@ -5527,10 +5533,8 @@ class learnpath
             }
         }
         if ($debug) {
-            error_log('lp_view_session_id');
-            error_log($this->lp_view_session_id);
-            error_log('api session id');
-            error_log(api_get_session_id());
+            error_log('lp_view_session_id: '.$this->lp_view_session_id);
+            error_log('api_get_session_id: '.api_get_session_id());
             error_log('End of learnpath::start_current_item()');
         }
 
@@ -5546,7 +5550,7 @@ class learnpath
     {
         $debug = $this->debug;
         if ($debug) {
-            error_log('In learnpath::stop_previous_item()', 0);
+            error_log('In learnpath::stop_previous_item()');
         }
 
         if ($this->last != 0 && $this->last != $this->current &&

@@ -1,0 +1,18 @@
+<html>
+<head></head>
+<body>
+<div style="position: absolute;top: -10000px;left: -10000px;width: 1000px;height: 1000px;">
+	test markup, will be hidden
+	<div id="parent_fix">
+		<div id="child_fix">child</div>
+	</div>
+</div>
+<script>
+var c = document.getElementById('child_fix');
+var p = document.getElementById('parnet_fix');
+console.log( c.parentNode === p );
+console.log( c.parentNode );
+console.log( p );
+</script>
+</body>
+</html>

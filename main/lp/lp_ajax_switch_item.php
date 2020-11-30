@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
  * This is a first attempt at using xajax and AJAX in general, so the code might be a bit unsettling.
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -31,10 +30,9 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $debug = 0;
     $return = '';
     if ($debug > 0) {
-        error_log(
-            'In xajax_switch_item_details('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')',
-            0
-        );
+        error_log('--------------------------------------');
+        error_log('SWITCH');
+        error_log('Params('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')');
     }
     //$objResponse = new xajaxResponse();
     /*$item_id may be one of:
@@ -119,7 +117,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      */
     $myscore = $mylpi->get_score();
     $mymax = $mylpi->get_max();
-    if ($mymax === '') {
+    if ('' === $mymax) {
         $mymax = "''";
     }
     $mymin = $mylpi->get_min();
@@ -190,7 +188,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mytotal = $mylp->getTotalItemsCountWithoutDirs();
     $mycomplete = $mylp->get_complete_items_count();
     $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
+    $myprogress_mode = ('' == $myprogress_mode ? '%' : $myprogress_mode);
     $mynext = $mylp->get_next_item_id();
     $myprevious = $mylp->get_previous_item_id();
     $myitemtype = $mylpi->get_type();
@@ -270,6 +268,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
     if ($debug > 1) {
+        error_log($return);
         error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
     }
     // Save the new item ID for the exercise tool to use.

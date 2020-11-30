@@ -7,8 +7,8 @@
  */
 class IndexManager
 {
-    const VIEW_BY_DEFAULT = 0;
-    const VIEW_BY_SESSION = 1;
+    public const VIEW_BY_DEFAULT = 0;
+    public const VIEW_BY_SESSION = 1;
 
     // An instance of the template engine
     // No need to initialize because IndexManager is not static,
@@ -1840,6 +1840,7 @@ class IndexManager
             $listSession = [];
             // Get timestamp in UTC to compare to DB values (in UTC by convention)
             $session_now = strtotime(api_get_utc_datetime(time()));
+            $allowUnsubscribe = api_get_configuration_value('enable_unsubscribe_button_on_my_course_page');
             if (is_array($session_categories)) {
                 foreach ($session_categories as $session_category) {
                     $session_category_id = $session_category['session_category']['id'];
@@ -1982,18 +1983,14 @@ class IndexManager
                                             }
 
                                             $course_session['extrafields'] = CourseManager::getExtraFieldsToBePresented($course['real_id']);
-
-                                            if (api_get_configuration_value(
-                                                'enable_unsubscribe_button_on_my_course_page'
-                                                )
-                                                && '1' === $course['unsubscribe']
-                                            ) {
+                                            if (false === $is_coach_course && $allowUnsubscribe && '1' === $course['unsubscribe']) {
                                                 $course_session['unregister_button'] =
                                                     CoursesAndSessionsCatalog::return_unregister_button(
                                                         ['code' => $course['course_code']],
                                                         Security::get_existing_token(),
                                                         '',
-                                                        ''
+                                                        '',
+                                                        $session_id
                                                     );
                                             }
 

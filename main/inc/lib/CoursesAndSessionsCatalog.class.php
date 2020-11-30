@@ -1170,21 +1170,27 @@ class CoursesAndSessionsCatalog
     /**
      * Display the unregister button of a course in the course catalog.
      *
-     * @param $course
-     * @param $stok
-     * @param $search_term
-     * @param $categoryCode
+     * @param array  $course
+     * @param string $stok
+     * @param string $search_term
+     * @param string $categoryCode
+     * @param int    $sessionId
      *
      * @return string
      */
-    public static function return_unregister_button($course, $stok, $search_term, $categoryCode)
+    public static function return_unregister_button($course, $stok, $search_term, $categoryCode, $sessionId = 0)
     {
         $title = get_lang('Unsubscription');
+        $search_term = Security::remove_XSS($search_term);
+        $categoryCode = Security::remove_XSS($categoryCode);
+        $sessionId = (int) $sessionId;
+
+        $url = api_get_self().'?action=unsubscribe&sec_token='.$stok.'&sid='.$sessionId.'&course_code='.$course['code'].
+            '&search_term='.$search_term.'&category_code='.$categoryCode;
 
         return Display::url(
             Display::returnFontAwesomeIcon('sign-in').'&nbsp;'.$title,
-            api_get_self().'?action=unsubscribe&sec_token='.$stok
-            .'&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
+            $url,
             ['class' => 'btn btn-danger', 'title' => $title, 'aria-label' => $title]
         );
     }

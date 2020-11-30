@@ -27,8 +27,8 @@ $_course = api_get_course_info();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 if ($showGlossary) {
-    if (api_get_setting('show_glossary_in_documents') === 'ismanual' ||
-        api_get_setting('show_glossary_in_documents') === 'isautomatic'
+    if ('ismanual' === api_get_setting('show_glossary_in_documents') ||
+        'isautomatic' === api_get_setting('show_glossary_in_documents')
     ) {
         $htmlHeadXtra[] = '<script>
     <!--
@@ -118,12 +118,9 @@ $htmlHeadXtra[] = '
 
                         // We are brothers!
                         if (parentId == myParentId) {
-                            console.log("Brothers");
-                            console.log(subItems.length);
                             if (subItems.length > 0) {
                                 var lastItem = $(jItems[index - 1]).find("li.sub_item");
                                 parentIndex = jItems.index(lastItem);
-                                console.log(parentIndex);
                                 jItem.detach().insertAfter(lastItem);
                                 //console.log("not classic");
                             } else {
@@ -294,25 +291,17 @@ $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
 $refresh = Session::read('refresh');
-if ($refresh == 1) {
+if (1 == $refresh) {
     // Check if we should do a refresh of the oLP object (for example after editing the LP).
     // If refresh is set, we regenerate the oLP object from the database (kind of flush).
     Session::erase('refresh');
     $myrefresh = 1;
 }
 
-if ($debug > 0) {
-    error_log(' $refresh: '.$refresh);
-    error_log(' $myrefresh: '.$myrefresh);
-}
-
 $lp_controller_touched = 1;
 $lp_found = false;
 $lpObject = Session::read('lpobject');
 if (!empty($lpObject)) {
-    if ($debug) {
-        error_log(' SESSION[lpobject] is defined');
-    }
     /** @var learnpath $oLP */
     $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
@@ -487,7 +476,7 @@ if (isset($_POST['title'])) {
     $post_title = Security::remove_XSS($_POST['title']);
     if (isset($_POST['type']) &&
         isset($_POST['title']) &&
-        $_POST['type'] == TOOL_QUIZ &&
+        TOOL_QUIZ == $_POST['type'] &&
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
@@ -1502,9 +1491,6 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('Trying to impress this LP item to '.$_REQUEST['item_id'], 0);
-            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }

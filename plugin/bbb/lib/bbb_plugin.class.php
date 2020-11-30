@@ -252,8 +252,25 @@ class BBBPlugin extends Plugin
             ]
         );
 
+        // Copy icons into the main/img/icons folder
+        $iconName = 'bigbluebutton';
+        $iconsList = [
+            '64/'.$iconName.'.png',
+            '64/'.$iconName.'_na.png',
+            '32/'.$iconName.'.png',
+            '32/'.$iconName.'_na.png',
+            '22/'.$iconName.'.png',
+            '22/'.$iconName.'_na.png',
+        ];
+        $sourceDir = api_get_path(SYS_PLUGIN_PATH).'bbb/resources/img/';
+        $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+        foreach ($iconsList as $icon) {
+            $src = $sourceDir.$icon;
+            $dest = $destinationDir.$icon;
+            copy($src, $dest);
+        }
         // Installing course settings
-        $this->install_course_fields_in_all_courses();
+        $this->install_course_fields_in_all_courses(true, 'bigbluebutton.png');
     }
 
     /**
@@ -329,6 +346,22 @@ class BBBPlugin extends Plugin
 
             // Deleting course settings
             $this->uninstall_course_fields_in_all_courses($this->course_settings);
+
+            // Remove icons from the main/img/icons folder
+            $iconName = 'bigbluebutton';
+            $iconsList = [
+                '64/'.$iconName.'.png',
+                '64/'.$iconName.'_na.png',
+                '32/'.$iconName.'.png',
+                '32/'.$iconName.'_na.png',
+                '22/'.$iconName.'.png',
+                '22/'.$iconName.'_na.png',
+            ];
+            $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+            foreach ($iconsList as $icon) {
+                $dest = $destinationDir.$icon;
+                unlink($dest);
+            }
         }
     }
 

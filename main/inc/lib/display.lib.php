@@ -2708,24 +2708,32 @@ class Display
             $contentClass .= $params['class'] ?? '';
             $ariaExpanded = $open ? 'true' : 'false';
 
-            $collapseDiv = self::div(
-                '<div class="panel-body">'.$content.'</div>',
-                array_merge(
+            $attributes = [
+                'id' => $idCollapse,
+                'class' => $contentClass,
+                'role' => 'tabpanel',
+            ];
+
+            if (!empty($params)) {
+                $attributes = array_merge(
                     $params,
-                    [
-                        'id' => $idCollapse,
-                        'class' => $contentClass,
-                        'role' => 'tabpanel',
-                    ]
-                )
-            );
+                    $attributes
+                );
+            }
+
+            $collapseDiv = self::div('<div class="panel-body">'.$content.'</div>', $attributes);
 
             $html = <<<HTML
                 <div class="panel-group" id="$idAccordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="$id">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                                <a class="$headerClass" role="button" data-toggle="collapse" data-parent="#$idAccordion" href="#$idCollapse" aria-expanded="$ariaExpanded" aria-controls="$idCollapse">$title</a>
+                                <a
+                                    class="$headerClass"
+                                    role="button" data-toggle="collapse"
+                                    data-parent="#$idAccordion" href="#$idCollapse"
+                                    aria-expanded="$ariaExpanded"
+                                    aria-controls="$idCollapse">$title</a>
                             </h4>
                         </div>
                         $collapseDiv

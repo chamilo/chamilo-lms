@@ -8,6 +8,10 @@ in making this plugin available for our community at large.
 
 # Changelog
 
+## Version 1.1 - 2020-11-29
+
+Add sessions management
+
 ## Version 1.0 - 2020-07-09
 
 Initial release. Includes the possibility to create meetings manually, through

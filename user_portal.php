@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -38,8 +39,6 @@ $logInfo = [
     'tool' => SECTION_COURSES,
     'tool_id' => 0,
     'tool_id_detail' => 0,
-    'action' => '',
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -66,9 +65,17 @@ if (array_key_exists('action', $_REQUEST)) {
         case 'unsubscribe':
             if (\Security::check_token('get')) {
                 $auth = new Auth();
-                if ($auth->remove_user_from_course($_GET['course_code'])) {
+                $sessionId = isset($_REQUEST['sid']) ? $_REQUEST['sid'] : 0;
+                $courseCode = isset($_REQUEST['course_code']) ? $_REQUEST['course_code'] : '';
+
+                if (empty($courseCode)) {
+                    api_location(api_get_self());
+                }
+
+                if ($auth->remove_user_from_course($courseCode, $sessionId)) {
                     Display::addFlash(Display::return_message(get_lang('YouAreNowUnsubscribed')));
                 }
+
                 header('Location: user_portal.php');
                 exit;
             }

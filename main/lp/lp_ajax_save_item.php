@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * This script contains the server part of the AJAX interaction process.
  * The client part is located * in lp_api.php or other api's.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -64,22 +62,23 @@ function save_item(
 ) {
     $debug = 0;
     $return = null;
-
-    if ($debug > 0) {
-        error_log('--------------------------------------');
-        error_log('SAVE ITEM - lp_ajax_save_item.php : save_item() params: ');
-        error_log("item_id: $item_id - lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
-        error_log("SCORE: $score - max:$max - min: $min - status:$status");
-        error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
-        error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
-    }
-
     $courseCode = api_get_course_id();
     if (!empty($courseId)) {
         $courseInfo = api_get_course_info_by_id($courseId);
         if ($courseInfo) {
             $courseCode = $courseInfo['code'];
         }
+    }
+
+    if ($debug > 0) {
+        error_log('--------------------------------------');
+        error_log('SAVE ITEM - lp_ajax_save_item.php');
+        error_log('--------------------------------------');
+        error_log("item_id: $item_id - lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
+        error_log("SCORE: $score - max:$max - min: $min - status:$status");
+        error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
+        error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
+        error_log("courseCode: $courseCode");
     }
 
     $myLP = learnpath::getLpFromSession($courseCode, $lp_id, $user_id);
@@ -103,20 +102,20 @@ function save_item(
             error_log("item #$item_id not found in the items array: ".print_r($myLP->items, 1));
         }
 
-        return false;
+        return null;
     }
 
     // This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
     $myLPI->set_lp_view($view_id);
 
     // Launch the prerequisites check and set error if needed
-    if ($prerequisitesCheck !== true) {
+    if (true !== $prerequisitesCheck) {
         // If prerequisites were not matched, don't update any item info
         if ($debug) {
-            error_log("prereq_check: ".intval($prerequisitesCheck));
+            error_log("prereq_check failed: ".intval($prerequisitesCheck));
         }
 
-        return $return;
+        return null;
     } else {
         if ($debug > 1) {
             error_log('Prerequisites are OK');

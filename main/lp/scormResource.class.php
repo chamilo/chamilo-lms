@@ -4,8 +4,6 @@
 /**
  * Container for the scormResource class.
  *
- * @package chamilo.learnpath.scorm
- *
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 

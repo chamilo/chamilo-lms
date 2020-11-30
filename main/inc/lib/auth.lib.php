@@ -302,7 +302,7 @@ class Auth
      *
      * @return bool True if it success
      */
-    public function remove_user_from_course($course_code)
+    public function remove_user_from_course($course_code, $sessionId = 0)
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -312,6 +312,11 @@ class Auth
         $result = true;
 
         $courseInfo = api_get_course_info($course_code);
+
+        // Check if course can be unsubscribe
+        if ('1' !== $courseInfo['unsubscribe']) {
+            return false;
+        }
         $courseId = $courseInfo['real_id'];
 
         // we check (once again) if the user is not course administrator
@@ -328,7 +333,9 @@ class Auth
             $result = false;
         }
 
-        CourseManager::unsubscribe_user($current_user_id, $course_code);
+        if ($result) {
+            CourseManager::unsubscribe_user($current_user_id, $course_code, $sessionId);
+        }
 
         return $result;
     }

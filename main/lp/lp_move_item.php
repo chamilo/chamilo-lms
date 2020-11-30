@@ -104,7 +104,7 @@ echo '<div class="col-md-3">';
 echo '</div>';
 
 echo '<div class="col-md-9">';
-if (isset($is_success) && $is_success === true) {
+if (isset($is_success) && true === $is_success) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been moved.';
     $msg .= '</div>';

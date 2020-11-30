@@ -12,8 +12,9 @@ To enable:
 * change permissions on disk for the plugin/h5p/cache-h5p/launch folder to be writeable by the web server
 
 Once enabled, permissions granted for the web server to write in plugin/h5p/cache-h5p/launch/ 
-and the pre_footer region set for the plugin, a new H5P logo will appear in the 
-document creation section, exclusively in the learning path document creation
+and the pre_footer region set for the plugin, a new H5P logo will appear in the
+new document creation form (the WYSIWIG editor), as a small icon at the end of
+the editor interface, exclusively in the learning path document creation
 interface (don't look for it anywhere else at this point).
 
 However, it is still very limited at this stage: the H5P files are created in a

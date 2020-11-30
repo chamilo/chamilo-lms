@@ -1,0 +1,174 @@
+/* app css start */
+html, body, .map-container{
+    width:100%;
+    height:100%;
+}
+
+.dropdown-menu .short-cut{
+    float: right;
+    font-size: 12px;
+}
+
+.app-tool-bar{
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+}
+
+.app-tool-bar .dropdown-menu{
+    min-width: 250px;
+}
+
+.app-tool-bar > .dropdown-menu{
+    display: block;
+    min-width: 40px;
+}
+
+.app-tool-bar .dropdown-menu > li > a{
+    padding: 5px 10px;
+}
+
+.app-tool-bar .dropdown-submenu > a:after{
+    margin-right: -5px;
+    margin-top: 3px;
+}
+
+.app-container {
+    position: relative;
+    width:100%;
+    height:100%;
+    overflow: hidden;
+}
+
+.map{
+    width: 2000px;
+    height: 2000px;
+    background:url('../img/bg.gif') repeat;
+}
+
+.app-footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #000;
+    text-align: center;
+    z-index: 9999;
+}
+
+.app-footer:after{
+    clear: both;
+}
+
+.app-footer a{
+    color: #333;
+}
+
+.app-footer a:hover{
+    text-decoration: none;
+    color: #fff;
+}
+
+.app-footer .brand{
+    color: #000000;
+    font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255, 0.125);
+    -webkit-transition: all .2s linear;
+    -moz-transition: all .2s linear;
+    transition: all .2s linear;
+    font-size: 20px;
+    position: absolute;
+    right: 90px;
+    top: 0px;
+}
+
+div.node{
+    position: absolute;
+    cursor: default;
+}
+
+div.node-caption{
+    min-width: 100px;
+    max-width: 300px;
+    padding:10px;
+    z-index: 99;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius : 6px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: black;
+    color: white;
+    position: absolute;
+}
+
+div.node-caption textarea{
+    margin: 0;
+}
+
+div.node-caption.black{
+    border-color: #222 #222 black;
+    background-color: #363636;
+    background-image: -webkit-linear-gradient(top, #444, #222);
+    background-repeat: repeat-x;
+}
+
+div.node-caption.red{
+    border-color: #BD362F #BD362F #802420;
+    background-color: #DA4F49;
+    background-image: -webkit-linear-gradient(top, #EE5F5B, #BD362F);
+    background-repeat: repeat-x;
+}
+
+div.node-caption.orange{
+    border-color: #F89406 #F89406 #AD6704;
+    background-color: #FAA732;
+    background-image: -webkit-linear-gradient(top, #FBB450, #F89406);
+    background-repeat: repeat-x;
+}
+
+div.node-caption.green{
+    border-color: #51A351 #51A351 #387038;
+    background-color: #5BB75B;
+    background-image: -webkit-linear-gradient(top, #62C462, #51A351);
+    background-repeat: repeat-x;
+}
+
+div.node-caption.blue{
+    border-color: #2F96B4 #2F96B4 #1F6377;
+    background-color: #2F96B4;
+    background-image: -webkit-linear-gradient(top, #5BC0DE, #2F96B4);
+    background-image: -moz-linear-gradient(top, #5BC0DE, #2F96B4);
+    background-repeat: repeat-x;
+}
+
+div.node-caption.dark-blue{
+    border-color: #04C #04C #002A80;
+    background-color: #04C;
+    background-image: -webkit-linear-gradient(top, #08C, #04C);
+    background-repeat: repeat-x;
+}
+
+div.node-caption:hover{
+    background-position: 0 -15px;
+    transition: background-position 0.1s linear 0s;
+}
+
+div.node-caption.blue:hover{
+    background-color: #2F96B4;
+}
+
+div.node canvas{
+    position:absolute;
+}
+
+.modal .app-file-list{
+    max-height: 200px;
+    overflow: auto;
+}
+
+.modal .app-file-name{
+    padding-top: 20px;
+}

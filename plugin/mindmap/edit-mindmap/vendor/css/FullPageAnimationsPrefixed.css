@@ -1,0 +1,223 @@
+﻿/* Copyright © Microsoft Corporation. All Rights Reserved. */
+/* Demo Author: Charilaos "Harris" Papadopoulos, Microsoft Corporation */
+
+
+/*
+    Predefined full-page animations for the CSS Animation/Transform IE Test Drive Demo
+    Please check FullPageAnimations.js for more information  
+*/
+
+
+@-ms-keyframes rotateInLeft {
+
+    from {
+        -ms-transform-origin: 0% 0%;
+        -ms-transform: rotateY(180deg);
+    }
+
+    to {    
+        -ms-transform-origin: 0% 0%;    
+        -ms-transform: rotateY(0deg);
+    }
+}
+
+@-ms-keyframes rotateOutLeft {
+
+    from {
+        -ms-transform-origin: 0% 0%;
+    }
+
+    to {
+        -ms-transform-origin: 0% 0%;
+        -ms-transform: rotateY(180deg);
+    }
+}
+
+@-ms-keyframes rotateInRight {
+
+    from {
+        -ms-transform-origin: 100% 0%;
+        -ms-transform: rotateY(-180deg);
+        
+    }
+
+    to {
+        -ms-transform-origin: 100% 0%;
+    }    
+}
+
+@-ms-keyframes rotateInRightWithoutToKeyframe {
+
+    from {
+        -ms-transform-origin: 100% 0%;
+        -ms-transform: rotateY(-180deg);
+    }
+}
+
+@-ms-keyframes rotateOutRight {
+
+    from {
+        -ms-transform-origin: 100% 0%;
+    }
+
+    to {
+        -ms-transform-origin: 100% 0%;
+        -ms-transform: rotateY(-180deg);
+    }
+}
+
+@-ms-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+}
+
+@-ms-keyframes fadeOut {    
+    to {
+        opacity: 0;
+    }        
+}
+
+@-ms-keyframes whirlIn {
+    from {
+        -ms-transform-origin: 50% 50%;
+        -ms-transform: scale(0) rotateZ(1260deg);
+    }
+    
+    to {
+        -ms-transform-origin: 50% 50%;
+    }
+    
+}
+
+@-ms-keyframes whirlOut {
+    from {
+        -ms-transform-origin: 50% 50%;
+    }
+    
+    to {
+        -ms-transform-origin: 50% 50%;
+        -ms-transform: scale(0) rotateZ(1260deg);
+    }
+    
+}
+
+@-ms-keyframes fallFromTop {
+    from {
+        -ms-transform-origin: 0% 0%;
+        -ms-transform: rotateX(-180deg);
+        animation-timing-function: ease;
+    }
+
+    50% {
+        -ms-transform-origin: 0% 0%;
+        -ms-transform: rotateX(30deg);
+        animation-timing-function: ease;
+    }
+
+    85% {
+        -ms-transform-origin: 0% 0%;
+        -ms-transform: rotateX(-10deg);
+        animation-timing-function: ease;
+    }
+        
+    to {
+        -ms-transform-origin: 0% 0%;
+        -ms-transform: rotateX(0deg);
+        animation-timing-function: ease;
+    }    
+}
+
+@-ms-keyframes dropToBottom {
+    from {
+        -ms-transform-origin: 0% 100%;
+    }
+        
+    to {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform: rotateX(180deg);
+    }    
+}
+
+@-ms-keyframes slideInSkew {
+    from {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform: translateX(-200%) skewX(-45deg);
+    }
+
+    50% {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform: translateX(0%) skewX(-45deg);
+    }
+
+    90% {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform: translateX(0%) skewX(10deg);
+    }
+    
+    to {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform:translateX(0%) skewX(0deg);
+    }
+}
+
+@-ms-keyframes slideOutSkew {    
+    from {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform: translateX(0%);
+    }
+    
+    to {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform: skewX(-45deg) translateX(200%) ;
+    }
+}
+
+@-ms-keyframes tumbleIn {
+    from {
+        -ms-transform-origin: 0% 100%;
+        -ms-transform: rotateZ(-180deg);        
+    }
+
+    to {
+        -ms-transform-origin: 0% 100%;
+    }
+    
+}
+
+@-ms-keyframes tumbleOut {
+    from {
+        -ms-transform-origin: 100% 100%;       
+    }
+
+    to {
+        -ms-transform-origin: 100% 100%;
+        -ms-transform: rotateZ(180deg); 
+    }    
+    
+}
+
+@-ms-keyframes expandIn {
+    from {
+        -ms-transform: scale(0);
+    }
+
+    50% {
+        
+        -ms-transform: scale(1);
+    }
+
+    75% {
+        -ms-transform: scale(1.2);
+    }
+
+    to {
+        -ms-transform: scale(1);
+    }
+}
+
+@-ms-keyframes collapseOut {
+    to {
+        -ms-transform: scale(0);
+    }
+}

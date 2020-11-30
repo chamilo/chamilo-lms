@@ -21,3 +21,4 @@ You can use the xAPI statement API to save some statements from another service.
 You need create credentials (username/password) to do this. First you need set the "menu_administrator" plugin region
 to xAPI plugin. Then you can create the credentials with the new page "Experience API (xAPI)"
 inside de Plugins block in the Administration panel.
+The endpoint for the statements API is "https://CHAMILO_DOMAIN/plugin/xapi/lrs.php/";

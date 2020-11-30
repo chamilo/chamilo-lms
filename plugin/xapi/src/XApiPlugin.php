@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Doctrine\ORM\EntityManager;

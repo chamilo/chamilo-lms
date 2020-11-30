@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
 use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -14,7 +15,9 @@ use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ramsey\Uuid\Uuid;
 use Xabbuh\XApi\Client\XApiClientBuilder;
+use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 /**
  * Class XApiPlugin.
@@ -105,6 +108,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 'xapi_shared_statement',
                 'xapi_tool_launch',
                 'xapi_lrs_auth',
+                'xapi_cmi5_item',
 
                 'xapi_attachment',
                 'xapi_object',
@@ -168,6 +172,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(LrsAuth::class),
+                $em->getClassMetadata(Cmi5Item::class),
             ]
         );
 
@@ -206,13 +211,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public function getXApiStatementClient()
     {
         return $this->createXApiClient()->getStatementsApiClient();
-    }
-
-    public function getXApi($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
-    {
-        $this
-            ->createXApiClient($lrsUrl, $lrsAuthUsername, $lrsAuthPassword)
-            ->getStateApiClient()->getDocument();
     }
 
     /**
@@ -344,6 +342,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * @param array  $haystack
      * @param string $needle
      *
      * @return string
@@ -371,7 +370,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $attemptId,
         $customLrsUrl = null,
         $customLrsUsername = null,
-        $customLrsPassword = null
+        $customLrsPassword = null,
+        $viewSessionId = null
     ) {
         $lrsUrl = $customLrsUrl ?: $this->get(self::SETTING_LRS_URL);
         $lrsAuthUsername = $customLrsUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
@@ -387,7 +387,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $queryData['auth'] = 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword));
             $queryData['activity_id'] = $activityId;
         } elseif ('cmi5' === $type) {
-            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'xapi/cmi5/token.php';
+            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'xapi/cmi5/token.php?session='.$viewSessionId;
             $queryData['activityId'] = $activityId;
         }
 
@@ -444,6 +444,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(LrsAuth::class),
+                $em->getClassMetadata(Cmi5Item::class),
             ]
         );
 

@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = 'Experience API (xAPI)';
-$strings['plugin_comment'] = 'Allow to incorporate an external Learning Record Store and use activities with the xAPI specification.';
+$strings['plugin_comment'] = 'Allows you to connect to an external Learning Record Store and use activities compatible with the xAPI standard.';
 
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE] = 'UUID Namespace';
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE.'_help'] = 'Namespace for universally unique identifiers used as statement IDs.'

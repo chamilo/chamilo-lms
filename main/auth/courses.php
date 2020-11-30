@@ -518,7 +518,9 @@ switch ($action) {
                             $courseUrl.$course['directory'].'/index.php?id_session=0',
                             ['class' => 'btn btn-primary']
                         );
-                        if (!$courseClosed && $course_unsubscribe_allowed && false === $userRegisteredInCourseAsTeacher) {
+                        if (!$courseClosed && $course_unsubscribe_allowed &&
+                            false === $userRegisteredInCourseAsTeacher
+                        ) {
                             $course['unregister_formatted'] = CoursesAndSessionsCatalog::return_unregister_button(
                                 $course,
                                 $stok,

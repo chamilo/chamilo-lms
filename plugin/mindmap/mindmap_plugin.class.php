@@ -56,21 +56,26 @@ class MindmapPlugin extends Plugin
             PRIMARY KEY (id));";
         Database::query($sql);
 
-        // Copy icons to the main Chamilo directory
-        $p1 = api_get_path(SYS_PATH).'plugin/mindmap/img/mindmap64.png';
-        $p2 = api_get_path(SYS_PATH).'main/img/icons/64/mindmap.png';
-        if (!is_file($p2)) {
-            copy($p1, $p2);
-        }
-
-        $p3 = api_get_path(SYS_PATH).'plugin/mindmap/img/mindmap64_na.png';
-        $p4 = api_get_path(SYS_PATH).'main/img/icons/64/mindmap_na.png';
-        if (!is_file($p4)) {
-            copy($p3, $p4);
+        // Copy icons into the main/img/icons folder
+        $iconName = 'mindmap';
+        $iconsList = [
+            '64/'.$iconName.'.png',
+            '64/'.$iconName.'_na.png',
+            '32/'.$iconName.'.png',
+            '32/'.$iconName.'_na.png',
+            '22/'.$iconName.'.png',
+            '22/'.$iconName.'_na.png',
+        ];
+        $sourceDir = api_get_path(SYS_PLUGIN_PATH).'mindmap/img/';
+        $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+        foreach ($iconsList as $icon) {
+            $src = $sourceDir.$icon;
+            $dest = $destinationDir.$icon;
+            copy($src, $dest);
         }
 
         // Installing course settings
-        $this->install_course_fields_in_all_courses();
+        $this->install_course_fields_in_all_courses(true, 'mindmap.png');
     }
 
     public function uninstall()
@@ -81,16 +86,24 @@ class MindmapPlugin extends Plugin
         if ($sm->tablesExist('plugin_mindmap')) {
             Database::query('DROP TABLE IF EXISTS plugin_mindmap');
         }
+
+        // Remove icons from the main/img/icons folder
+        $iconName = 'mindmap';
+        $iconsList = [
+            '64/'.$iconName.'.png',
+            '64/'.$iconName.'_na.png',
+            '32/'.$iconName.'.png',
+            '32/'.$iconName.'_na.png',
+            '22/'.$iconName.'.png',
+            '22/'.$iconName.'_na.png',
+        ];
+        $destinationDir = api_get_path(SYS_CODE_PATH).'img/icons/';
+        foreach ($iconsList as $icon) {
+            $dest = $destinationDir.$icon;
+            unlink($dest);
+        }
+
         // Deleting course settings and course home icons
         $this->uninstall_course_fields_in_all_courses();
-
-        $p2 = api_get_path(SYS_PATH).'main/img/icons/64/mindmap.png';
-        if (file_exists($p2) && is_writable($p2)) {
-            unlink($p2);
-        }
-        $p4 = api_get_path(SYS_PATH).'main/img/icons/64/mindmap_na.png';
-        if (file_exists($p4) && is_writable($p4)) {
-            unlink($p4);
-        }
     }
 }

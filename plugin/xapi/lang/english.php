@@ -9,7 +9,7 @@ $strings[XApiPlugin::SETTING_UUID_NAMESPACE] = 'UUID Namespace';
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE.'_help'] = 'Namespace for universally unique identifiers used as statement IDs.'
     .'<br>This is automatically by Chamilo LMS. <strong>Don\'t replace it.</strong>';
 $strings['lrs_url'] = 'LRS endpoint';
-$strings['lrs_url_help'] = 'Base URL from the LRS';
+$strings['lrs_url_help'] = 'Base URL of the LRS';
 $strings['lrs_auth_username'] = 'LRS user';
 $strings['lrs_auth_username_help'] = 'Username for basic HTTP authentication';
 $strings['lrs_auth_password'] = 'LRS password';

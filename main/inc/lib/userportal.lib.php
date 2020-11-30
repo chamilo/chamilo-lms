@@ -1993,7 +1993,8 @@ class IndexManager
                                                         ['code' => $course['course_code']],
                                                         Security::get_existing_token(),
                                                         '',
-                                                        ''
+                                                        '',
+                                                        $session_id
                                                     );
                                             }
 

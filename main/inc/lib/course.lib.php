@@ -4150,14 +4150,14 @@ class CourseManager
             $params['course_code'] = $row['course_code'];
             $params['code'] = $row['course_code'];
 
-            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+            if ($showCustomIcon === 'true' && $iconName !== 'course.png') {
                 $params['thumbnails'] = $course_info['course_image'];
                 $params['image'] = $course_info['course_image_large'];
             }
 
             $thumbnails = null;
             $image = null;
-            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+            if ($showCustomIcon === 'true' && $iconName !== 'course.png') {
                 $thumbnails = $course_info['course_image'];
                 $image = $course_info['course_image_large'];
             } else {
@@ -4177,7 +4177,10 @@ class CourseManager
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
-                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    $params['document'] = '<a
+                        id="document_preview_'.$course_info['real_id'].'_0"
+                        class="document_preview btn btn-default btn-sm"
+                        href="javascript:void(0);">'
                                .Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div(
                         '',
@@ -4189,7 +4192,10 @@ class CourseManager
                 }
             }
             if ($load_dirs) {
-                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                $params['document'] = '<a
+                    id="document_preview_'.$course_info['real_id'].'_0"
+                    class="document_preview btn btn-default btn-sm"
+                    href="javascript:void(0);">'
                     .Display::returnFontAwesomeIcon('folder-open').'</a>';
                 $params['document'] .= Display::div(
                     '',

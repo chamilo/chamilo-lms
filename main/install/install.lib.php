@@ -1120,8 +1120,8 @@ function display_requirements(
     } else {
         $error = false;
         // First, attempt to set writing permissions if we don't have them yet
-        $perm = api_get_permissions_for_new_directories();
-        $perm_file = api_get_permissions_for_new_files();
+        $perm = octdec('0777');
+        $perm_file = octdec('0666');
         $notWritable = [];
 
         $checked_writable = api_get_path(SYS_APP_PATH);

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\Entity\XApi;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**

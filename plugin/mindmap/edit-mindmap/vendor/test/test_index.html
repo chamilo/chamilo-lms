@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>test mapController.js</title>
+		<script type="text/javascript" src="../js/base.js"></script>
+		<script type="text/javascript">
+			kampfer.require('mindMap.MapController');
+		</script>
+		<style type="text/css">
+			*{padding:0;margin:0;}
+			.map{width:3000px;height:1500px;position:absolute;background-color:blue;}
+			#container{width:1000px;height:500px;overflow:hidden;position:relative;background-color:red;}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<script type="text/javascript">
+			//fake data
+			var data = {
+				//节点信息
+				nodes : {
+					//根节点
+					root : {
+						id : 'root',
+						//父节点列表
+						parents : [],
+						//子节点列表
+						children : [],
+						//内容（文字）
+						content : '',
+						//位置信息
+						offset : {
+							x : 10,
+							y : 10
+						},
+						//样式信息
+						style : 'root'
+					},
+					//其他节点
+					nodeOne : {
+						id : 'a',
+					},
+					nodeTwo : {
+						id : 'b',
+					}
+				},
+				//map配置信息
+				config : {}
+			};
+			
+			var map = new kampfer.mindMap.MapController(data, {
+				cssName : 'map',
+				parentNode : document.getElementById('container')
+			});
+			map.render();
+			map.show();
+			
+			var map2 = new kampfer.mindMap.MapController(data, {
+				cssName : 'map2',
+				parentNode : document.getElementById('container')
+			});
+			map2.render();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Kampfer's MindMap</title>
+        <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/app.css">
+        <script type="text/javascript" src="./js/base.js"></script>
+    </head>
+    <body>
+        <!-- toolbar
+        ================================================== -->
+        <div class="app-tool-bar" id="app-tool-bar">
+            <ul class="dropdown-menu">
+                <li class="dropdown-submenu" role="menu-trigger">
+                    <a href="javascript:void(0);" title="File" tabindex="-1"><i class="icon-file"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a tabindex="-1" href="javascript:void(0);" command="CreateNewMap"><span class="short-cut">Ctrl+M</span>Create New Map</a></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="OpenMapInStorage">Open Map In Storage</a></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="OpenMapInDisk">Open Map In Disk</a></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="SaveMapInStorage"><span class="short-cut">Ctrl+S</span>Save Map In Storage</a></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="SaveMapInDisk"><span class="short-cut">Ctrl+Shift+S</span>Save Map In Disk</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu" role="menu-trigger">
+                    <a href="javascript:void(0);" title="Edit" tabindex="-1"><i class="icon-edit"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a tabindex="-1" href="javascript:void(0);" command="Copy"><span class="short-cut">Ctrl+C</span>Copy</a></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="Cut"><span class="short-cut">Ctrl+X</span>Cut</a></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="Paste"><span class="short-cut">Ctrl+V</span>Paste</a></li>
+                        <li class="divider"></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="Undo"><span class="short-cut">Ctrl+Z</span>Undo</a></li>
+                        <li><a tabindex="-1" href="javascript:void(0);" command="Redo"><span class="short-cut">Ctrl+Y</span>Redo</a></li>
+                    </ul>
+                </li>
+                <li class="divider"></li>
+                <li id="help"><a href="help/introduce.html" title="Help" tabindex="-1"><i class="icon-question-sign"></i></a></li>
+            </ul>
+        </div>
+        
+        <!-- MapContainer
+        ================================================== -->
+        <div class="app-container" id="map-container">
+            <!-- map document
+            ==================================================
+            <div class="map">
+                <div class="node" style="right:10px;top:50px;" role="node">
+                    <div class="node-caption blue">As a thank you, we ask you to include an optional link back to Glyphicons whenever practical.</div>
+                    <canvas></canvas>
+                </div>
+            </div>
+            -->
+            
+            <!-- drop menu for map
+            ================================================== -->
+            <ul class="dropdown-menu" id="context-menu">
+                <li><a tabindex="-1" href="javascript:void(0);" command="CreateNewRootNode">Create New Root Node</a></li>
+                <li class="divider"></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Copy"><span class="short-cut">Ctrl+C</span>Copy</a></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Cut"><span class="short-cut">Ctrl+X</span>Cut</a></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Paste"><span class="short-cut">Ctrl+V</span>Paste</a></li>
+                <li class="divider"></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Undo"><span class="short-cut">Ctrl+Z</span>Undo</a></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Redo"><span class="short-cut">Ctrl+Y</span>Redo</a></li>
+                <!--
+                <li class="divider"></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="SelectAll"><span class="short-cut">Ctrl+A</span>Select All</a></li>
+                -->
+            </ul>
+
+            <!-- drop menu for node
+            ================================================== -->
+            <ul class="dropdown-menu" id="node-context-menu">
+                <li><a tabindex="-1" href="javascript:void(0);" command="AppendChildNode">Append Child Node</a></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="EditNodeContent">Edit Node</a></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="DeleteNode">Delete</a></li>
+                <li class="divider"></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Copy"><span class="short-cut">Ctrl+C</span>Copy</a></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Cut"><span class="short-cut">Ctrl+X</span>Cut</a></li>
+                <li><a tabindex="-1" href="javascript:void(0);" command="Paste"><span class="short-cut">Ctrl+V</span>Paste</a></li>
+            </ul>
+        </div>
+
+        <!-- footer
+        ================================================== -->
+        <div class="app-footer">
+            <div class="container">
+                <p>© 2012-2013 <a href="javascript:void(0);">kampfer</a></p>
+                <a href="javascript:void(0);" class="brand">Kampfer's MindMap</a>
+            </div>
+        </div>
+
+        <!-- others
+        ================================================== -->
+        <div style="display:none;">
+            <input type="file" name="mapJson" id="mapJson" />
+        </div>
+        
+        <!--
+        <script type="text/javascript">
+            kampfer.require('mindMap');
+        </script>
+        -->
+        <script type="text/javascript" src="js/mindmap.js"></script>
+
+        <script type="text/javascript">
+            kampfer.mindMap.init();
+        </script>
+    </body>
+</html>

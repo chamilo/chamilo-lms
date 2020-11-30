@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>test Composition</title>
+		<!--	共用文件，不要修改	start	-->
+		<link href="../css/qunit.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../js/base.js"></script>
+		<script type="text/javascript" src="../js/lib/tools/qunit.js"></script>
+		<!--	共用文件，不要修改	end	-->
+		<script type="text/javascript">
+			/*global ok, console, k, kampfer, test, QUnit*/
+			kampfer.require('mindMap.Composition');
+		</script>
+	</head>
+	<body>
+		<!--	共用文件，不要修改	start	-->
+		<h1 id="qunit-header">QUnit for Composition</h1>
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">
+			test markup, will be hidden
+		</div>
+		<!--	共用文件，不要修改	end	-->
+		<script type="text/javascript">
+			test('实例化Composition对象', function() {
+				var obj = new kampfer.mindMap.Composition();
+				ok(obj, '成功实例化Composition对象');
+				ok(obj.constructor === kampfer.mindMap.Composition, 'constructor正确');
+				ok(obj instanceof kampfer.mindMap.Composition, 'instanceof Composition : true');
+				ok(obj instanceof kampfer.events.EventTarget, 'instanceof EventTarget : true');
+				ok(obj instanceof kampfer.Class, 'instanceof Class : true');
+				ok(('_parent' in obj) && !obj._parent, '_parent属性存在,但未初始化');
+				ok(('_id' in obj) && !obj._id, '_id属性存在,但未初始化');
+				ok(('_children' in obj) && !obj._children, '_children属性存在,但未初始化');
+			});
+			
+			test('Composition.setParent', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var p = {name:'parent'};
+				var parent = new kampfer.mindMap.Composition(); 
+				
+				try{
+					obj.setParent(obj);
+				}catch(e) {
+					ok(!obj._parent, '无法将composition对象的parent设为它自己');
+				}
+				
+				try{
+					obj.setParent(p);
+				}catch(e) {
+					ok(!obj._parent, 'composition对象的parent不能是非composition对象');
+				}
+				
+				obj.setParent(parent);
+				ok(obj._parent === parent, '可以通过setParent方法设置parent');
+				ok(obj._parentEventTarget === parent, 'setParent方法会设置_parentEventTarget');
+				
+				var pp = new kampfer.mindMap.Composition();
+				try {
+					obj.setParent(pp);
+				} catch(e) {
+					ok(true, 'composition有parent后无法再设置parent');
+				}
+				
+				obj.setParent(null);
+				//不要使用setParent(null)来达到删除parent的目的
+				ok(obj.getParent() === null, '可以设置parent为null');
+			});
+			
+			test('Composition.getParent', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var p = new kampfer.mindMap.Composition();
+				obj.setParent(p);
+				ok(obj.getParent() === p, '可以通过getParent方法获得_parent');
+			});
+			
+			test('Composition.addChlid', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var c = new kampfer.mindMap.Composition();
+				var o = {};
+				
+				try{
+					obj.addChild(o);
+				} catch(e) {
+					ok(true, 'addChild方法只接受composition对象作为参数');
+				}
+				
+				var hasId = !!c._id;
+				obj.addChild(c);
+				
+				var cid = c._id;
+				ok(!hasId && cid, 'addChild调用child的getId方法');
+				ok(obj._children[cid] === c, 'addChild设置parent的_children属性');
+				ok(c._parent === obj, 'addChild设置child的_parent属性');
+			});
+			
+			test('Composition.getChild', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var c = new kampfer.mindMap.Composition();
+				var cid = 'kampfer';
+				
+				ok(obj.getChild(cid) == null, '');
+				
+				c.setId(cid);
+				obj.addChild(c);
+				ok(obj.getChild(cid) === c, '');
+			});
+			
+			test('Composition.eachChild', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var c = new kampfer.mindMap.Composition();
+				var c1 = new kampfer.mindMap.Composition();
+				
+				var execed = false;
+				obj.eachChild(function(child, id) {
+					execed = true;
+				});
+				ok(!execed, 'parent没有child时,callback不执行');
+				
+				obj.addChild(c);
+				obj.eachChild(function(child, id) {
+					if(obj.getChild(id) === child) {
+						execed = true;
+					}
+				});
+				ok(execed, 'callback接受两个参数，第一个是child，第二个是id');
+				
+				obj.addChild(c1);
+				var execCount1 = 0;
+				obj.eachChild(function(child, id) {
+					execCount1++;
+				});
+				var execCount2 = 0;
+				obj.eachChild(function(child, id) {
+					execCount2++;
+					if(child === c) {
+						return false;
+					}
+				});
+				ok(execCount1 === 2 && execCount2 === 1, 'callback返回false会提前终止迭代');
+			});
+			
+			test('Composition.removeChlid', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var c = new kampfer.mindMap.Composition();
+				var c1 = new kampfer.mindMap.Composition();
+				obj.addChild(c);
+				
+				obj.removeChild(c._id);
+				ok( true, 'removeChild接受id字符串作为参数' );
+				ok( !obj.getChild(c._id), 'removeChild将parent的children[child.id]设置为null' );
+				ok( c.getParent() === null, 'removeChild将child的parnet设置为null' );
+				
+				obj.addChild(c);
+				
+				obj.removeChild(c);
+				if( !obj.getChild(c._id) && c.getParent() === null ) {
+					ok( true, 'removeChild也接受composition对象作为参数' );
+				}
+				
+				obj.addChild(c);
+				
+				obj.removeChild('kampfer');
+				obj.removeChild(c1);
+				ok(c._id in obj._children, '删除不存在child对parent不造成影响' );
+			});
+			
+			//未测试有parent的情况
+			test('Composition.setId', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var c = new kampfer.mindMap.Composition();
+				obj.addChild(c);
+				var oldId = c._id;
+				c.setId('kampfer');
+				ok(c._id === 'kampfer', '修改child的id');
+				ok(obj.getChild('kampfer') === c, '修改parent中保存的child');
+				ok(!obj.getChild(oldId), 'parent中不再保留旧id');
+			});
+			
+			test('Composition.getId', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var hasId = !!obj._id;
+				ok( !hasId && obj.getId(), 'composition没有id的情况下调用getId，将生成一个id');
+				
+				obj = new kampfer.mindMap.Composition();
+				obj.setId('kampfer');
+				ok( obj.getId() === 'kampfer', 'composition有id时调用getId将直接返回id' );
+			});
+			
+			test('Composition.dispose', function() {
+				var obj = new kampfer.mindMap.Composition();
+				var c = new kampfer.mindMap.Composition();
+				var p = new kampfer.mindMap.Composition();
+				//obj.setParent(p);
+				p.addChild(obj);
+				obj.addChild(c);
+				//console.log(obj);
+				var hasParent = !!obj._parent;
+				var hasChild = obj._children && obj._children[c._id];
+				obj.dispose();
+				ok( hasParent && !obj._parent, '_parent被释放');
+				ok( hasChild && !obj._children, '_children被释放');
+				console.log(obj);
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,216 @@
+﻿/*Styles used for the various demonstration divs that need to be vendor prefixed*/
+.TransformDemoPerspective200 {
+    -ms-perspective: 200px;
+}
+
+.TransformDemoPerspectiveOrigin3050 {
+    -ms-perspective-origin: 30% 50%;
+}
+
+.TransformDemoPerspectiveOrigin8050 {
+    -ms-perspective-origin: 80% 50%;
+}
+
+.TransformDemoDivRotate45 {
+}
+
+.TransformDemoDivRotate45:hover {
+    -ms-transform: rotate(45deg);
+}
+
+.TransformDemoDivSkewX45:hover {
+    -ms-transform: skewX(45deg);
+}
+
+.Transform3DDemoDivRotateX:hover {
+    -ms-transform: rotateX(45deg);
+}
+
+.Transform3DDemoDivRotateY:hover {
+    -ms-transform: rotateY(45deg);
+}
+
+.Transform3DDemoDivTranslateZ:hover {
+    -ms-transform: translateZ(-50px);
+}
+
+.Transform3DDemoDivRotateYTranslateZ:hover {
+    -ms-transform: rotateY(45deg) translateZ(-50px);
+}
+.Transform3DDemoDivTranslateZRotateY:hover {
+    -ms-transform: translateZ(-50px) rotateY(45deg);
+}
+
+@-ms-keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@-ms-keyframes fadeOutInOut {
+    0% {
+        opacity: 1;
+    }
+    25% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }    
+}
+
+@-ms-keyframes fadeOutInOutSwirl {
+    0% {
+        opacity: 1;
+    }
+    25% {
+        opacity: 0.5;
+        -ms-transform: rotateZ(0deg);
+    }
+    75% {
+        opacity: 0.5;
+        -ms-transform: rotateZ(180deg);
+    }
+    100% {
+        opacity: 1.0;        
+        -ms-transform: rotateZ(360deg);
+    }    
+}
+
+
+@-ms-keyframes fullPageInOut {
+    50% {
+        opacity: 0.5;
+        -ms-transform: scale(0.1) rotateZ(360deg);
+    }
+}
+
+.TransformDemoDivFadeOut:hover {
+    -ms-animation-duration: 2s;
+    -ms-animation-name: fadeOut;    
+}
+
+.TransformDemoDivFadeOutInOut:hover {
+    -ms-animation-duration: 2s;
+    -ms-animation-name: fadeOutInOut;    
+}
+
+.TransformDemoDivFadeOutInOutSwirl:hover {
+    -ms-animation-duration: 2s;
+    -ms-animation-name: fadeOutInOutSwirl;    
+}
+
+.TransformTranslateX400px {
+    -ms-transform: translateX(400px);
+}
+
+.TransformTranslateY300px {
+    -ms-transform: translateY(300px);
+}
+
+.TransformRotate45 {
+    -ms-transform: rotate(45deg);
+}
+
+.TransformRotateMinus35 {
+    -ms-transform: rotate(-35deg);
+}
+
+.TransformSkewX25 {
+    -ms-transform: skewX(25deg);
+}
+
+.TransformSkewY25 {
+    -ms-transform: skewY(25deg);
+}
+
+.TransformScale075 {
+    -ms-transform: scale(0.75);
+}
+
+.TransformScaleX075 {
+    -ms-transform: scaleX(0.75);
+}
+
+.TransformScaleY075 {
+    -ms-transform: scaleY(0.75);
+}
+
+.TransformScaleX125 {
+    -ms-transform: scaleX(1.25);
+}
+
+.TransformScaleY125 {
+    -ms-transform: scaleY(1.25);
+}
+
+.TransformRotate45TranslateX200px {
+    -ms-transform: rotate(45deg) translateX(200px);
+}
+
+.TransformTranslateX200pxRotate45 {
+    -ms-transform: translateX(200px) rotate(45deg);
+}
+
+.TransformOrigin0050 {
+    -ms-transform-origin: 0% 50%;
+}
+
+.TransformOrigin0000 {
+    -ms-transform-origin: 0% 0%;
+}
+
+.TransformOrigin00100 {
+    -ms-transform-origin: 0% 100%;
+}
+
+.TransformOrigin100100 {
+    -ms-transform-origin: 100% 100%;
+}
+
+.TransformOrigin2525 {
+    -ms-transform-origin: 25% 25%;
+}
+
+.TransformOrigin5000 {
+    -ms-transform-origin: 50% 0%;
+}
+
+.TransformOrigin50100 {
+    -ms-transform-origin: 50% 100%;
+}
+
+.TransformOrigin6666 {
+    -ms-transform-origin: 66% 66%;
+}
+
+.AnimationTimingEase {
+    -ms-animation-timing-function: ease;
+}
+
+.AnimationTimingEaseIn {
+    -ms-animation-timing-function: ease-in;
+}
+
+.AnimationTimingEaseOut {
+    -ms-animation-timing-function: ease-out;
+}
+
+.AnimationTimingEaseInOut {
+    -ms-animation-timing-function: ease-in-out;
+}
+
+.AnimationTimingLinear {
+    -ms-animation-timing-function: linear;
+}
+
+.Animation3Iterations {
+    -ms-animation-iteration-count: 3;
+}
+

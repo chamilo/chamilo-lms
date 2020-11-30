@@ -1,0 +1,74 @@
+/**
+ * map.json
+ * map的数据结构采用树型结构, 大致如下所示:
+ * root
+ *	|---child1
+ *		|---child1-1
+ *			|---child1-1-1
+ *		|---child1-2
+ *	|---child2
+ *	|---child3
+ *
+ * 目前node支持如下属性:
+ * node
+ *	|---id
+ *	|---content
+ *	|---offset
+ *	|---parent
+ *	|---children
+ *
+ * map
+ *	|---tree
+ *	|---name
+ *	|---lastModified
+ */
+{
+	"document" : [
+		{
+			"id" : "child1",
+			"content" : "child1",
+			"offset" : {"x" : 100, "y" : 200},
+			"parent" : "map",
+			"children" : [
+				{
+					"id" : "child1-1",
+					"content" : "child1-1",
+					"offset" : {"x" : 100, "y" : 200},
+					"parent" : "child1",
+					"children" : [
+						{
+							"id" : "child1-1-1",
+							"content" : "child1-1-1",
+							"offset" : {"x" : 200, "y" : 200},
+							"parent" : "child1-1",
+							"children" : null
+						}
+					]
+				},
+				{
+					"id" : "child1-2",
+					"content" : "child1-2",
+					"offset" : {"x" : 200, "y" : 200},
+					"parent" : "child1",
+					"children" : null
+				}
+			]
+		},
+		{
+			"id" : "child2",
+			"content" : "child2",
+			"offset" : {"x" : 100, "y" : 100},
+			"parent" : "map",
+			"children" : null
+		},
+		{
+			"id" : "child3",
+			"content" : "child3",
+			"offset" : {"x" : 200, "y" : 100},
+			"parent" : "map",
+			"children" : null
+		}
+	],
+	"name" : "untitled",
+	"lastModified" : 123456789
+}

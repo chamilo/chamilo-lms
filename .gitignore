@@ -48,7 +48,7 @@ main/cron/incoming/*
 plugin/vchamilo/templates/*
 
 # Stuff updated through composer - Remove just before release
-vendor
+/vendor
 web/assets/*
 node_modules
 yarn.lock

@@ -30,7 +30,7 @@ $urlAddMeet = api_get_path(WEB_PLUGIN_PATH).'google_meet/meets.php?action=add&'.
 
 if ($enable) {
     if ($isAdmin || $isTeacher || $isStudent) {
-        $meets = $plugin->listMeets($courseInfo['real_id']);
+        $meets = $plugin->listMeets($courseInfo['real_id'], api_get_session_id());
     }
 }
 

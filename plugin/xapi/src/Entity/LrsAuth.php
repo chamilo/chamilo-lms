@@ -93,7 +93,7 @@ class LrsAuth
     /**
      * @return \DateTime
      */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -101,7 +101,7 @@ class LrsAuth
     /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt(DateTime $createdAt): LrsAuth
+    public function setCreatedAt(\DateTime $createdAt): LrsAuth
     {
         $this->createdAt = $createdAt;
 

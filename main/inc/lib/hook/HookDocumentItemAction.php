@@ -28,7 +28,7 @@ class HookDocumentItemAction extends HookEvent implements HookDocumentItemAction
     {
         $this->eventData['type'] = $type;
 
-        /** @var HookDocumentItemActionEventInterface $observer */
+        /** @var \HookDocumentItemActionObserverInterface $observer */
         foreach ($this->observers as $observer) {
             $data = $observer->notifyDocumentItemAction($this);
             $this->setEventData($data);

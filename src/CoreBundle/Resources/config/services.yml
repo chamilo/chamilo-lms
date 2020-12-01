@@ -164,51 +164,11 @@ services:
         tags:
             - {name: kernel.event_listener}
 
-#    # Menu listener
-#    chamilo_core.listener.navbar_menu_listener:
-#        class: Chamilo\CoreBundle\EventListener\MenuListener
-#        arguments: ['@service_container']
-#        tags:
-#            - {name: kernel.event_listener, event: theme.sidebar_left_menu, method: onSetupMenu}
-#            - {name: kernel.event_listener, event: theme.breadcrumb, method: onSetupMenu}
-
-#    chamilo_core.listener.navbar_user_listener:
-#        class: Chamilo\CoreBundle\EventListener\ShowUserListener
-#        arguments: ['@service_container']
-#        tags:
-#            - {name: kernel.event_listener, event: theme.navbar_user, method: onShowUser}
-#            - {name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser}
-
-    # Menu
-#    chamilo_core.listener.message_listener:
-#        class: Chamilo\CoreBundle\EventListener\MessageListener
-#        arguments: ['@service_container']
-#        tags:
-#            - {name: kernel.event_listener, event: theme.messages, method: onListMessages}
-
     # Course upload listener
     Chamilo\CoreBundle\EventListener\ResourceUploadListener:
         arguments: ['@router']
         tags:
             - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
-
-#    chamilo_core.menu.nav_builder:
-#        class: Chamilo\CoreBundle\Menu\NavBuilder
-#        arguments:
-#            - '@knp_menu.factory'
-#            - '@security.authorization_checker'
-#        calls:
-#            - [setContainer, ['@service_container']]
-#        tags:
-##            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
-#            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp}
-
-#    chamilo_core.menu.course_menu_builder:
-#        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
-#        calls:
-#            - [setContainer, ['@service_container']]
-#        tags:
-#            - {name: mopa_bootstrap.menu, alias: chamilo_core.left.nav}
 
     # Auth listeners
     chamilo_core.listener.login_success_handler:
@@ -217,9 +177,12 @@ services:
         tags:
             - {name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin}
 
-    chamilo_core.listener.logout_success_handler:
-        class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler
-        arguments: ['@router', '@security.authorization_checker', '@security.token_storage']
+    Chamilo\CoreBundle\EventListener\LogoutListener:
+        tags:
+            -  name: kernel.event_listener
+               event: Symfony\Component\Security\Http\Event\LogoutEvent
+               dispatcher: security.event_dispatcher.admin
+               priority: 20
 
     Chamilo\CoreBundle\Twig\SettingsHelper:
         arguments:

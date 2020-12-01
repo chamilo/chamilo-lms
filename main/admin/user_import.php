@@ -403,7 +403,7 @@ function save_data(
                 $csv_content[] = $csv_row;
 
             }
-            saveCsvFile($csv_content, $targetFolder.'user_success');
+            saveCsvFile($csv_content, $targetFolder.count($userSaved).'_user_success');
         }
         if (count($userError) != 0) {
             // Save user with error
@@ -420,7 +420,7 @@ function save_data(
                 $csv_row[] = isset($user['message']) ? $user['message'] : null;
                 $csv_content[] = $csv_row;
             }
-            saveCsvFile($csv_content, $targetFolder.'user_error');
+            saveCsvFile($csv_content, $targetFolder.count($userError).'_user_error');
         }
         if (count($userWarning) != 0) {
             // Save user with warning
@@ -437,10 +437,11 @@ function save_data(
                 $csv_row[] = isset($user['message']) ? $user['message'] : null;
                 $csv_content[] = $csv_row;
             }
-            saveCsvFile($csv_content, $targetFolder.'user_warning');
+            saveCsvFile($csv_content, $targetFolder.count($userWarning).'_user_warning');
 
         }
     }
+
     return $users;
 }
 
@@ -469,6 +470,7 @@ function saveCsvFile($data = [], $file ='example', $enclosure = '"')
         $writer->writeItem($item);
     }
     $writer->finish();
+
     return null;
 }
 
@@ -873,7 +875,10 @@ if (!empty($extraSettings) && isset($extraSettings['options']) &&
 }
 
 $form->setDefaults($defaults);
-$form->addHtml("<a href='./download_import_users.php'>".get_lang('ViewHistoryChange')."</a>");
+if (is_dir(api_get_configuration_value('root_sys').'app/cache/backup/import_users')) {
+    // only show if backup exist
+    $form->addHtml("<a href='./download_import_users.php'>".get_lang('ViewHistoryChange')."</a>");
+}
 $form->display();
 
 if ($formContinue) {

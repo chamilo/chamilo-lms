@@ -24,23 +24,21 @@ set_time_limit(0);
 function ReadAllElement($path = null, $parentFile = null, $userId = 0)
 {
     $data = [];
-    $basePath = api_get_configuration_value('root_sys').'app/cache/backup/import_users';
+    $basePath = api_get_configuration_value('root_sys').'app/cache/backup/import_users/'.api_get_user_id();
     if ($path == null) $path = $basePath;
     foreach (scandir($path) as $dir) {
         // exclude . .. and .htaccess
         if ($dir == '.') continue;
         if ($dir == '..') continue;
         if ($dir == '.htaccess') continue;
-        if ($userId == 0) $userId = $dir;
         $currentPath = $path.DIRECTORY_SEPARATOR.$dir;
         if (is_dir($currentPath)) {
             $data[$dir] = ReadAllElement($currentPath, $dir, $userId);
         } elseif (is_file($currentPath)) {
             $downloadItem = isset($_GET['download']) ? (int)$_GET['download'] : null;
 
-            if (api_get_user_id() == $userId &&
+            if (
                 strpos($dir, '.csv') !== false
-            //    || api_is_platform_admin()
             ) {
                 $data[$dir] = $currentPath;
                 if (
@@ -60,7 +58,7 @@ function ReadAllElement($path = null, $parentFile = null, $userId = 0)
 
 function printTable()
 {
-    $data = ReadAllElement(api_get_configuration_value('root_sys').'app/cache/backup/import_users');
+    $data = ReadAllElement(api_get_configuration_value('root_sys').'app/cache/backup/import_users/'.api_get_user_id());
     $table = new HTML_Table(['class' => 'table table-responsive']);
     $headers = [
         get_lang('SelectUser'),
@@ -75,25 +73,27 @@ function printTable()
     }
 
     $row++;
-    foreach ($data as $userId => $items) {
-        $userInfo = api_get_user_info($userId);
-        foreach ($items as $date => $elements) {
-            $dateTime = DateTime::createFromFormat('Ymdhis', $date)->format('Y-m-d H:i:s');
-            $files = '';
-            foreach ($elements as $fileName => $file) {
-                $files .= "<a href='".api_get_self()."?download=$date$fileName'>".
-                    Display::return_icon('down.png', get_lang('Down'), '', ICON_SIZE_SMALL).
-                    " $fileName </a> <br>";
-            }
-            if (!empty($files)) {
-                $table->setCellContents($row, 0, $userInfo['complete_name']);
-                $table->setCellContents($row, 1, $dateTime);
+    $userId = api_get_user_id();
+
+    //foreach ($data as $userId => $items) {
+    $userInfo = api_get_user_info($userId);
+    foreach ($data as $date => $elements) {
+        $dateTime = DateTime::createFromFormat('Ymdhis', $date)->format('Y-m-d H:i:s');
+        $files = '';
+        foreach ($elements as $fileName => $file) {
+            $files .= "<a href='".api_get_self()."?download=$date$fileName'>".
+                Display::return_icon('down.png', get_lang('Down'), '', ICON_SIZE_SMALL).
+                " $fileName </a> <br>";
+        }
+        if (!empty($files)) {
+            $table->setCellContents($row, 0, $userInfo['complete_name']);
+            $table->setCellContents($row, 1, $dateTime);
                 $table->setCellContents($row, 2, $files);
                 $row++;
             }
 
         }
-    }
+    //}
 
     return $table->toHtml();
 }

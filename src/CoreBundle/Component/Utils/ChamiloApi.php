@@ -70,35 +70,87 @@ class ChamiloApi
      *
      * @param string $theme
      * @param bool   $getSysPath
+     * @param bool   $forcedGetter
      *
      * @return string
      */
-    public static function getPlatformLogoPath($theme = '', $getSysPath = false)
+    public static function getPlatformLogoPath($theme = '', $getSysPath = false, $forcedGetter = false)
     {
+        static $logoPath;
+
+        // If call from CLI it should be reload.
+        if ('cli' === PHP_SAPI) {
+            $logoPath = null;
+        }
+
+        if (!isset($logoPath) || $forcedGetter) {
         $theme = empty($theme) ? api_get_visual_theme() : $theme;
         $accessUrlId = api_get_current_access_url_id();
+            if ('cli' === PHP_SAPI) {
+                $accessUrl = api_get_configuration_value('access_url');
+                if (!empty($accessUrl)) {
+                    $accessUrlId = $accessUrl;
+                }
+            }
         $themeDir = \Template::getThemeDir($theme);
         $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
 
+            $svgIcons = api_get_setting('icons_mode_svg');
+            if ($svgIcons === 'true') {
+                $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
+                if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG")) {
+                    if ($getSysPath) {
+                        $logoPath = api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG";
+
+                        return $logoPath;
+                    }
+                    $logoPath = api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
+
+                    return $logoPath;
+                }
+            }
         if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
             if ($getSysPath) {
-                return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
+                    $logoPath = api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
+
+                    return $logoPath;
             }
 
-            return api_get_path(WEB_CSS_PATH).$customLogoPath;
+                $logoPath = api_get_path(WEB_CSS_PATH).$customLogoPath;
+
+                return $logoPath;
         }
 
-        $originalLogoPath = $themeDir.'images/header-logo.png';
+            $originalLogoPath = $themeDir."images/header-logo.png";
+            if ($svgIcons === 'true') {
+                $originalLogoPathSVG = $themeDir."images/header-logo.svg";
+                if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
+                    if ($getSysPath) {
+                        $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
+
+                        return $logoPath;
+                    }
+                    $logoPath = api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
+
+                    return $logoPath;
+                }
+            }
 
         if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
             if ($getSysPath) {
-                return api_get_path(SYS_CSS_PATH).$originalLogoPath;
+                    $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPath;
+
+                    return $logoPath;
             }
 
-            return api_get_path(WEB_CSS_PATH).$originalLogoPath;
+                $logoPath = api_get_path(WEB_CSS_PATH).$originalLogoPath;
+
+                return $logoPath;
+            }
+            $logoPath = '';
         }
 
-        return '';
+        return $logoPath;
     }
 
     /**
@@ -108,12 +160,17 @@ class ChamiloApi
      * @param string $theme
      * @param array  $imageAttributes optional
      * @param bool   $getSysPath
+     * @param bool   $forcedGetter
      *
      * @return string
      */
-    public static function getPlatformLogo($theme = '', $imageAttributes = [], $getSysPath = false)
-    {
-        $logoPath = self::getPlatformLogoPath($theme, $getSysPath);
+    public static function getPlatformLogo(
+        $theme = '',
+        $imageAttributes = [],
+        $getSysPath = false,
+        $forcedGetter = false
+    ) {
+        $logoPath = self::getPlatformLogoPath($theme, $getSysPath, $forcedGetter);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');
@@ -159,9 +216,9 @@ class ChamiloApi
     public static function stripGivenTags($string, $tags)
     {
         foreach ($tags as $tag) {
-            $string2 = preg_replace('#</'.$tag.'[^>]*>#i', ' ', $string);
+            $string2 = preg_replace('#</\b'.$tag.'\b[^>]*>#i', ' ', $string);
             if ($string2 != $string) {
-                $string = preg_replace('/<'.$tag.'[^>]*>/i', ' ', $string2);
+                $string = preg_replace('/<\b'.$tag.'\b[^>]*>/i', ' ', $string2);
             }
         }
 

@@ -78,6 +78,8 @@ class Basic extends Toolbar
         $config = [],
         $prefix = null
     ) {
+        $isAllowedToEdit = api_is_allowed_to_edit();
+        $isPlatformAdmin = api_is_platform_admin();
         // Adding plugins depending of platform conditions
         $plugins = [];
 
@@ -131,6 +133,13 @@ class Basic extends Toolbar
             $plugins[] = 'scayt';
         }
 
+        if (api_get_configuration_sub_value('ckeditor_vimeo_embed/config') && ($isAllowedToEdit || $isPlatformAdmin)) {
+            $plugins[] = 'ckeditor_vimeo_embed';
+        }
+
+        if (api_get_configuration_value('ck_editor_block_image_copy_paste')) {
+            $plugins[] = 'blockimagepaste';
+        }
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
         parent::__construct($router, $toolbar, $config, $prefix);
     }
@@ -230,7 +239,19 @@ class Basic extends Toolbar
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Image',
+                'Video',
+                'Oembed',
+                'Flash',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
@@ -258,6 +279,7 @@ class Basic extends Toolbar
                 'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'leaflet',
                 'Smiley',

@@ -29,8 +29,9 @@ class AllowIframes extends HTMLPurifier_Filter
     public function preFilter($html, $config, $context)
     {
         $html = preg_replace('#<iframe#i', '<img class="MyIframe"', $html);
+        $html = preg_replace('#</iframe>#i', '</img>', $html);
 
-        return preg_replace('#</iframe>#i', '</img>', $html);
+        return $html;
     }
 
     /**

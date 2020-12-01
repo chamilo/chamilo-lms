@@ -5661,11 +5661,7 @@ class Exercise
                             .$final_missing < 0 ? 0 : (int) $final_missing.'</td>
                                 </tr>
                             </table>';
-                        if (0 == $next) {
-                            /*$try = $try_hotspot;
-                            $lp = $lp_hotspot;
-                            $destinationid = $select_question_hotspot;
-                            $url = $url_hotspot;*/
+                        if ($next == 0) {
                         } else {
                             $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
                             $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
@@ -7630,7 +7626,6 @@ class Exercise
         $realQuestionList,
         $generateJS = true
     ) {
-        return false;
 
         // With this option on the question is loaded via AJAX
         //$generateJS = true;
@@ -8668,13 +8663,29 @@ class Exercise
      *
      * @param int    $categoryId
      * @param string $keyword
+     * @param int    $userId
+     * @param int    $courseId
+     * @param int    $sessionId
+     * @param bool   $returnData
+     * @param int    $minCategoriesInExercise
+     * @param int    $filterByResultDisabled
+     * @param int    $filterByAttempt
      *
-     * @return string
+     * @return string|SortableTableFromArrayConfig
      */
-    public static function exerciseGridResource($categoryId, $keyword)
-    {
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
+    public static function exerciseGridResource(
+        $categoryId,
+        $keyword = '',
+        $userId = 0,
+        $courseId = 0,
+        $sessionId = 0,
+        $returnData = false,
+        $minCategoriesInExercise = 0,
+        $filterByResultDisabled = 0,
+        $filterByAttempt = 0,
+        $myActions = null,
+        $returnTable = false
+    ) {
 
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
@@ -8716,12 +8727,14 @@ class Exercise
 
         $is_allowedToEdit = api_is_allowed_to_edit(null, true);
         $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : api_get_course_info();
+        $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
         $courseId = $courseInfo['real_id'];
         $tableRows = [];
         $origin = api_get_origin();
-        $userId = api_get_user_id();
+        $userInfo = $userId ? api_get_user_info($userId) : api_get_user_info();
         $charset = 'utf-8';
         $token = Security::get_token();
+        $userId = $userId ? (int) $userId : api_get_user_id();
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, $courseInfo);
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
@@ -8744,6 +8757,16 @@ class Exercise
         $page = $table->page_nr;
         $from = $limit * ($page - 1);
 
+        $categoryCondition = '';
+        if (api_get_configuration_value('allow_exercise_categories')) {
+            if (!empty($categoryId)) {
+                $categoryCondition = " AND exercise_category_id = $categoryId ";
+            } else {
+                $categoryCondition = ' AND exercise_category_id IS NULL ';
+            }
+        }
+
+        $keywordCondition = '';
         if (!empty($keyword)) {
             $qb->andWhere($qb->expr()->eq('resource.title', $keyword));
         }

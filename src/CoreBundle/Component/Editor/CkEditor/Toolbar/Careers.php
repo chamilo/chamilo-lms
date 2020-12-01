@@ -44,6 +44,7 @@ class Careers extends Basic
                 'Video',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Flash',
                 'Audio',
                 'leaflet',
@@ -90,7 +91,7 @@ class Careers extends Basic
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'VimeoEmbed', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],

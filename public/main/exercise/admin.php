@@ -49,6 +49,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
+if (isset($_GET['r']) && 1 == $_GET['r']) {
+    Exercise::cleanSessionVariables();
+}
 // Access control
 api_protect_course_script(true);
 
@@ -62,20 +65,6 @@ if (!$is_allowedToEdit) {
 }
 
 $exerciseId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-/*  stripslashes POST data  */
-if ('POST' == $_SERVER['REQUEST_METHOD']) {
-    foreach ($_POST as $key => $val) {
-        if (is_string($val)) {
-            $_POST[$key] = stripslashes($val);
-        } elseif (is_array($val)) {
-            foreach ($val as $key2 => $val2) {
-                $_POST[$key][$key2] = stripslashes($val2);
-            }
-        }
-        $GLOBALS[$key] = $_POST[$key];
-    }
-}
 
 $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
 $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
@@ -334,7 +323,7 @@ if ($inATest) {
 
     $maxScoreAllQuestions = 0;
     if (false === $showPagination) {
-        $questionList = $objExercise->selectQuestionList(true, true);
+        $questionList = $objExercise->selectQuestionList(true, $objExercise->random > 0 ? false : true);
         if (!empty($questionList)) {
             foreach ($questionList as $questionItemId) {
                 $question = Question::read($questionItemId);
@@ -364,15 +353,43 @@ if ($inATest) {
     }
 
     $alert = '';
-    if (false === $showPagination) {
+    if ($showPagination === false) {
+        $originalSelectionType = $objExercise->questionSelectionType;
+        $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
+
+        $fullQuestionsScore = array_reduce(
+            $objExercise->selectQuestionList(true, true),
+            function ($acc, $questionId) {
+                $objQuestionTmp = Question::read($questionId);
+
+                return $acc + $objQuestionTmp->selectWeighting();
+            },
+            0
+        );
+
+        $objExercise->questionSelectionType = $originalSelectionType;
         $alert .= sprintf(
             get_lang('%d questions, for a total score (all questions) of %s.'),
             $nbrQuestions,
-            $maxScoreAllQuestions
+            $fullQuestionsScore
         );
     }
     if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
+        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= sprintf(
+            '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+            $objExercise->random,
+            $maxScoreAllQuestions
+        );
+    }
+    if ($showPagination === false) {
+        if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
+            $alert .= sprintf(
+                '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+                count($questionList),
+                $maxScoreAllQuestions
+            );
+        }
     }
     echo Display::return_message($alert, 'normal', false);
 } elseif (isset($_GET['newQuestion'])) {
@@ -419,6 +436,7 @@ if ($newQuestion || $editQuestion) {
             echo '</div>';
         } else {
             require 'question_admin.inc.php';
+            ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->selectId());
         }
     }
 }

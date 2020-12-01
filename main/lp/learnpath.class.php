@@ -4964,6 +4964,22 @@ class learnpath
                 $progress = $score;
             }*/
 
+            $storedProgress = self::getProgress(
+                $this->get_id(),
+                $userId,
+                $course_id,
+                $this->get_lp_session_id()
+            );
+
+            // Check if the stored progress is higher than the new value
+            if ($storedProgress >= $progress) {
+                if ($debug) {
+                    error_log("Return false: New progress value is lower than stored value - Current value: $storedProgress - New value: $progress");
+                }
+
+                return false;
+            }
+
             if ($progress >= 0 && $progress <= 100) {
                 // Check database.
                 $progress = (int) $progress;

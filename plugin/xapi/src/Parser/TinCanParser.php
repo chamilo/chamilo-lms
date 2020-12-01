@@ -17,7 +17,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class TinCanParser extends AbstractParser
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function create($filePath, Course $course, Session $session = null)
     {
@@ -25,7 +25,7 @@ class TinCanParser extends AbstractParser
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function parse()
     {
@@ -59,8 +59,6 @@ class TinCanParser extends AbstractParser
     }
 
     /**
-     * @param \Symfony\Component\DomCrawler\Crawler $launchNode
-     *
      * @return string
      */
     private function parseLaunchUrl(Crawler $launchNode)

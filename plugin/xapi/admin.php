@@ -19,8 +19,6 @@ $pageActions = '';
 $pageContent = '';
 
 /**
- * @param \Chamilo\PluginBundle\Entity\XApi\LrsAuth|null $auth
- *
  * @throws \Exception
  *
  * @return \FormValidator

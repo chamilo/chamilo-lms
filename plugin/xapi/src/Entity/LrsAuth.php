@@ -90,17 +90,11 @@ class LrsAuth
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
     public function setCreatedAt(\DateTime $createdAt): LrsAuth
     {
         $this->createdAt = $createdAt;

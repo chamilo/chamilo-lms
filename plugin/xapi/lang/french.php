@@ -39,4 +39,3 @@ $strings['LrsConfiguration'] = 'Configuration LRS';
 $strings['Verb'] = 'Verbe';
 $strings['Actor'] = 'Acteur';
 $strings['ToolTinCan'] = 'Activités';
-

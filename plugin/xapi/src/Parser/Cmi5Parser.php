@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Symfony\Component\DomCrawler\Crawler;
-use Xabbuh\XApi\Model\LanguageMap;
 
 /**
  * Class Cmi5Parser.
@@ -24,7 +23,7 @@ class Cmi5Parser extends AbstractParser
     private $toc;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function create($filePath, Course $course, Session $session = null)
     {
@@ -32,7 +31,7 @@ class Cmi5Parser extends AbstractParser
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function parse()
     {
@@ -71,8 +70,14 @@ class Cmi5Parser extends AbstractParser
     }
 
     /**
-     * @param \Symfony\Component\DomCrawler\Crawler $node
-     *
+     * @return array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
+     */
+    public function getToc()
+    {
+        return $this->toc;
+    }
+
+    /**
      * @return array
      */
     private function getLanguageStrings(Crawler $node)
@@ -90,8 +95,6 @@ class Cmi5Parser extends AbstractParser
     }
 
     /**
-     * @param \Symfony\Component\DomCrawler\Crawler $xml
-     *
      * @return array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
      */
     private function generateToC(Crawler $xml)
@@ -169,14 +172,6 @@ class Cmi5Parser extends AbstractParser
         }
 
         return $items;
-    }
-
-    /**
-     * @return array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
-     */
-    public function getToc()
-    {
-        return $this->toc;
     }
 
     /**

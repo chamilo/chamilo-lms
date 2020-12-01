@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Interface HookDocumentActionEventInterface
+ * Interface HookDocumentActionEventInterface.
  */
 interface HookDocumentActionEventInterface extends HookEventInterface
 {

@@ -40,10 +40,6 @@ abstract class AbstractImporter
 
     /**
      * AbstractImporter constructor.
-     *
-     * @param array                             $fileInfo
-     * @param string                            $toolDirectory
-     * @param \Chamilo\CoreBundle\Entity\Course $course
      */
     protected function __construct(array $fileInfo, string $toolDirectory, Course $course)
     {
@@ -58,7 +54,7 @@ abstract class AbstractImporter
             [
                 $this->courseDirectoryPath,
                 $this->toolDirectory,
-                api_replace_dangerous_char($pathInfo['filename'])
+                api_replace_dangerous_char($pathInfo['filename']),
             ]
         );
 
@@ -66,9 +62,6 @@ abstract class AbstractImporter
     }
 
     /**
-     * @param array                             $fileInfo
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     *
      * @return \Chamilo\PluginBundle\XApi\Importer\AbstractImporter
      */
     abstract public static function create(array $fileInfo, Course $course);

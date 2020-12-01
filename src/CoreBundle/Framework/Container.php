@@ -170,7 +170,7 @@ class Container
     }
 
     /**
-     * @return object|Environment|null
+     * @return Environment
      */
     public static function getTemplating()
     {
@@ -510,8 +510,6 @@ class Container
         $em = $container->get('doctrine.orm.entity_manager');
         \Database::setManager($em);
         \CourseManager::setEntityManager($em);
-        //self::setSettingsManager($container->get('chamilo.settings.manager'));
-        //self::setUserManager($container->get('fos_user.user_manager'));
         \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get(ToolChain::class));

@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 /**
  * Class CourseListener.
@@ -30,6 +31,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class CourseListener
 {
     use ContainerAwareTrait;
+
+    private $twig;
+
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
 
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
@@ -60,7 +68,7 @@ class CourseListener
         $sessionHandler = $request->getSession();
         $container = $this->container;
         $translator = $container->get('translator');
-        $twig = $container->get('twig');
+        $twig = $this->twig;
 
         $course = null;
         $courseInfo = [];

@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 /**
  * Class LegacyListener
@@ -21,6 +22,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class LegacyListener
 {
     use ContainerAwareTrait;
+
+    private $twig;
+
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
 
     public function onKernelRequest(RequestEvent $event)
     {
@@ -47,7 +55,7 @@ class LegacyListener
             throw new \Exception('Chamilo is not installed');
         }
 
-        $twig = $container->get('twig');
+        $twig = $this->twig;
         $token = $container->get('security.token_storage')->getToken();
 
         $userObject = null;

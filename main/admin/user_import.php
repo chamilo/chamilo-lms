@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use ChamiloSession as Session;
+use Ddeboer\DataImport\Writer\CsvWriter;
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
@@ -17,6 +18,29 @@ $userId = api_get_user_id();
 api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
 set_time_limit(0);
+
+/**
+ * Create directories and subdirectories for backup import csv data
+ *
+ * @param null $path
+ * @return string|null
+ */
+function createDirectory($path = null)
+{
+    if ($path == null) return $path;
+    $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+    $realPath = explode(DIRECTORY_SEPARATOR, $path);
+    $data = '';
+    foreach ($realPath as $pth) {
+        if (strlen($pth) > 0) {
+            $data .= DIRECTORY_SEPARATOR.$pth;
+            if (!is_dir($data)) {
+                mkdir($data, api_get_permissions_for_new_directories());
+            }
+        }
+    }
+    return $data;
+}
 
 /**
  * @param array $users
@@ -212,13 +236,22 @@ function complete_missing_data($user)
  * @uses \global variable $inserted_in_course, which returns the list of
  * courses the user was inserted in
  */
-function save_data($users, $sendMail = false)
-{
+function save_data(
+    $users,
+    $sendMail = false,
+    $targetFolder = null
+) {
     global $inserted_in_course, $extra_fields;
 
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
         $inserted_in_course = [];
+    }
+
+    if (!empty($targetFolder)) {
+        $userSaved = [];
+        $userError = [];
+        $userWarning = [];
     }
 
     $usergroup = new UserGroup();
@@ -229,6 +262,7 @@ function save_data($users, $sendMail = false)
 
         foreach ($users as &$user) {
             if ($user['has_error']) {
+                $userError[] = $user;
                 continue;
             }
 
@@ -321,14 +355,109 @@ function save_data($users, $sendMail = false)
 
                     UserManager::update_extra_field_value($user_id, $key, $value);
                 }
+                $userSaved[] = $user;
             } else {
                 $returnMessage = Display::return_message(get_lang('Error'), 'warning');
+                $userWarning[] = $user;
             }
             $user['message'] = $returnMessage;
         }
     }
 
+    // Save with success, error and warning users
+    if (!empty($targetFolder)) {
+        $header = [
+            'id',
+            'FirstName',
+            'LastName',
+            'Status',
+            'Email',
+            'UserName',
+            'message',
+        ];
+        // Save user with success
+        if (count($userSaved) != 0) {
+            $csv_content = [];
+            $csv_row = $header;
+            $csv_content[] = $csv_row;
+            foreach ($userSaved as $user) {
+                $csv_row = [];
+                $csv_row[] = isset($user['id']) ? $user['id'] : null;
+                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : null;
+                $csv_row[] = isset($user['Status']) ? $user['Status'] : null;
+                $csv_row[] = isset($user['Email']) ? $user['Email'] : null;
+                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : null;
+                $csv_row[] = isset($user['message']) ? $user['message'] : null;
+                $csv_content[] = $csv_row;
+
+            }
+            saveCsvFile($csv_content, $targetFolder.'user_success');
+        }
+        if (count($userError) != 0) {
+            // Save user with error
+            $csv_content = [];
+            $csv_row = $header;
+            $csv_content[] = $csv_row;
+            foreach ($userError as $user) {
+                $csv_row = [];
+                $csv_row[] = isset($user['id']) ? $user['id'] : null;
+                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : null;
+                $csv_row[] = isset($user['Status']) ? $user['Status'] : null;
+                $csv_row[] = isset($user['Email']) ? $user['Email'] : null;
+                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : null;
+                $csv_row[] = isset($user['message']) ? $user['message'] : null;
+                $csv_content[] = $csv_row;
+            }
+            saveCsvFile($csv_content, $targetFolder.'user_error');
+        }
+        if (count($userWarning) != 0) {
+            // Save user with warning
+            $csv_content = [];
+            $csv_row = $header;
+            $csv_content[] = $csv_row;
+            foreach ($userWarning as $user) {
+                $csv_row = [];
+                $csv_row[] = isset($user['id']) ? $user['id'] : null;
+                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : null;
+                $csv_row[] = isset($user['Status']) ? $user['Status'] : null;
+                $csv_row[] = isset($user['Email']) ? $user['Email'] : null;
+                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : null;
+                $csv_row[] = isset($user['message']) ? $user['message'] : null;
+                $csv_content[] = $csv_row;
+            }
+            saveCsvFile($csv_content, $targetFolder.'user_warning');
+
+        }
+    }
     return $users;
+}
+
+/**
+ * Save array to a specific file
+ *
+ * @param array $data
+ * @param $file
+ * @param string $enclosure
+ *
+ */
+function saveCsvFile($data = [], $file ='example', $enclosure = '"')
+{
+
+    $filePath = $file.'.csv';
+    $stream = fopen($filePath, 'w');
+    $writer = new CsvWriter(';', $enclosure, $stream, true);
+    $writer->prepare();
+
+    foreach ($data as $item) {
+        if (empty($item)) {
+            $writer->writeItem([]);
+            continue;
+        }
+        $item = array_map('trim', $item);
+        $writer->writeItem($item);
+    }
+    $writer->finish();
+    return null;
 }
 
 /**
@@ -455,12 +584,13 @@ function parse_xml_data($file)
 }
 
 /**
- * @param array $users
- * @param bool  $sendMail
+ * @param array   $users
+ * @param bool    $sendMail
+ * @param string  $targetFolder
  */
-function processUsers(&$users, $sendMail)
+function processUsers(&$users, $sendMail, $targetFolder = null)
 {
-    $users = save_data($users, $sendMail);
+    $users = save_data($users, $sendMail, $targetFolder);
 
     $warningMessage = '';
     if (!empty($users)) {
@@ -530,12 +660,26 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     $resume = isset($_POST['resume_import']) ? true : false;
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
-
+    $targetFolder = null;
     $users = [];
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 &&
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
+            $user = api_get_user_info();
+            $userId = (int)$user['id'];
+            $today = new DateTime();
+            $today = $today->format('Ymdhis');
+            $targetFolder = api_get_configuration_value('root_sys').'app/cache/backup/import_users';
+            $targetFolder .= DIRECTORY_SEPARATOR.$userId.DIRECTORY_SEPARATOR.$today;
+            $targetFolder = createDirectory($targetFolder).DIRECTORY_SEPARATOR;
+            $originalFile = $targetFolder.$_FILES['import_file']['name'];
+            // save original file
+            if (!file_exists($originalFile)) {
+                touch($originalFile);
+                file_put_contents($originalFile, file_get_contents($_FILES['import_file']['tmp_name']));
+            }
+
             Session::erase('user_import_data_'.$userId);
             $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
             $users = parse_csv_data(
@@ -553,7 +697,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $error_kind_file = false;
         }
 
-        processUsers($users, $sendMail);
+        processUsers($users, $sendMail, $targetFolder);
 
         if ($error_kind_file) {
             Display::addFlash(

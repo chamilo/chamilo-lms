@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -17,8 +19,6 @@ $pageActions = '';
 $pageContent = '';
 
 /**
- * @param \LrsAuth|null $auth
- *
  * @throws \Exception
  *
  * @return \FormValidator

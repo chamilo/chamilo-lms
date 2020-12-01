@@ -113,7 +113,6 @@ $interbreadcrumb[] = ['url' => '../tincan/index.php', 'name' => $plugin->get_lan
 
 $langAddActivity = $plugin->get_lang('AddActivity');
 
-
 $view = new Template($langAddActivity);
 $view->assign('header', $langAddActivity);
 $view->assign('content', $pageContent);

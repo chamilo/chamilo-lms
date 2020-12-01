@@ -30,9 +30,7 @@ abstract class AbstractParser
     /**
      * AbstractParser constructor.
      *
-     * @param                                         $filePath
-     * @param \Chamilo\CoreBundle\Entity\Course       $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
+     * @param $filePath
      */
     protected function __construct($filePath, Course $course, Session $session = null)
     {
@@ -42,9 +40,7 @@ abstract class AbstractParser
     }
 
     /**
-     * @param string                                  $filePath
-     * @param \Chamilo\CoreBundle\Entity\Course       $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
+     * @param string $filePath
      *
      * @return mixed
      */

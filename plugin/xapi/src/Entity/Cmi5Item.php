@@ -158,19 +158,11 @@ class Cmi5Item
         $this->children = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Cmi5Item
-     */
     public function setId(int $id): Cmi5Item
     {
         $this->id = $id;
@@ -178,19 +170,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
-    /**
-     * @param string $identifier
-     *
-     * @return Cmi5Item
-     */
     public function setIdentifier(string $identifier): Cmi5Item
     {
         $this->identifier = $identifier;
@@ -198,19 +182,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return Cmi5Item
-     */
     public function setType(string $type): Cmi5Item
     {
         $this->type = $type;
@@ -218,19 +194,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getTitle(): array
     {
         return $this->title;
     }
 
-    /**
-     * @param array $title
-     *
-     * @return Cmi5Item
-     */
     public function setTitle(array $title): Cmi5Item
     {
         $this->title = $title;
@@ -238,19 +206,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDescription(): array
     {
         return $this->description;
     }
 
-    /**
-     * @param array $description
-     *
-     * @return Cmi5Item
-     */
     public function setDescription(array $description): Cmi5Item
     {
         $this->description = $description;
@@ -258,19 +218,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * @param string|null $url
-     *
-     * @return Cmi5Item
-     */
     public function setUrl(?string $url): Cmi5Item
     {
         $this->url = $url;
@@ -278,19 +230,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getActivityType(): ?string
     {
         return $this->activityType;
     }
 
-    /**
-     * @param string|null $activityType
-     *
-     * @return Cmi5Item
-     */
     public function setActivityType(?string $activityType): Cmi5Item
     {
         $this->activityType = $activityType;
@@ -298,19 +242,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLaunchMethod(): ?string
     {
         return $this->launchMethod;
     }
 
-    /**
-     * @param string|null $launchMethod
-     *
-     * @return Cmi5Item
-     */
     public function setLaunchMethod(?string $launchMethod): Cmi5Item
     {
         $this->launchMethod = $launchMethod;
@@ -318,19 +254,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getMoveOn(): ?string
     {
         return $this->moveOn;
     }
 
-    /**
-     * @param string|null $moveOn
-     *
-     * @return Cmi5Item
-     */
     public function setMoveOn(?string $moveOn): Cmi5Item
     {
         $this->moveOn = $moveOn;
@@ -338,19 +266,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getMasteryScore(): ?float
     {
         return $this->masteryScore;
     }
 
-    /**
-     * @param float|null $masteryScore
-     *
-     * @return Cmi5Item
-     */
     public function setMasteryScore(?float $masteryScore): Cmi5Item
     {
         $this->masteryScore = $masteryScore;
@@ -358,19 +278,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLaunchParameters(): ?string
     {
         return $this->launchParameters;
     }
 
-    /**
-     * @param string|null $launchParameters
-     *
-     * @return Cmi5Item
-     */
     public function setLaunchParameters(?string $launchParameters): Cmi5Item
     {
         $this->launchParameters = $launchParameters;
@@ -378,19 +290,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEntitlementKey(): ?string
     {
         return $this->entitlementKey;
     }
 
-    /**
-     * @param string|null $entitlementKey
-     *
-     * @return Cmi5Item
-     */
     public function setEntitlementKey(?string $entitlementKey): Cmi5Item
     {
         $this->entitlementKey = $entitlementKey;
@@ -408,8 +312,6 @@ class Cmi5Item
 
     /**
      * @param \Chamilo\PluginBundle\Entity\XApi\Cmi5Item|null $parent
-     *
-     * @return Cmi5Item
      */
     public function setParent(?Cmi5Item $parent): Cmi5Item
     {
@@ -418,19 +320,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
     public function getChildren(): ArrayCollection
     {
         return $this->children;
     }
 
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $children
-     *
-     * @return Cmi5Item
-     */
     public function setChildren(ArrayCollection $children): Cmi5Item
     {
         $this->children = $children;
@@ -438,19 +332,11 @@ class Cmi5Item
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    /**
-     * @param string|null $status
-     *
-     * @return Cmi5Item
-     */
     public function setStatus(?string $status): Cmi5Item
     {
         $this->status = $status;
@@ -468,8 +354,6 @@ class Cmi5Item
 
     /**
      * @param \Chamilo\PluginBundle\Entity\XApi\ToolLaunch $tool
-     *
-     * @return Cmi5Item
      */
     public function setTool(ToolLaunch $tool): Cmi5Item
     {

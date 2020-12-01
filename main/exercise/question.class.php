@@ -1937,7 +1937,7 @@ abstract class Question
     /**
      * abstract function which creates the form to create / edit the answers of the question.
      */
-    abstract public function createAnswersForm(FormValidator $form);
+    abstract public function createAnswersForm($form);
 
     /**
      * abstract function which process the creation of answers.

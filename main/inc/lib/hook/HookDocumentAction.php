@@ -2,8 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
+/**
+ * Class HookDocumentAction.
+ */
 class HookDocumentAction extends HookEvent implements HookDocumentActionEventInterface
 {
+    /**
+     * HookDocumentAction constructor.
+     *
+     * @throws \Exception
+     */
     protected function __construct()
     {
         parent::__construct('HookDocumentAction');
@@ -20,7 +28,7 @@ class HookDocumentAction extends HookEvent implements HookDocumentActionEventInt
     {
         $this->eventData['type'] = $type;
 
-        /** @var HookDocumentActionEventInterface $observer */
+        /** @var \HookDocumentActionObserverInterface $observer */
         foreach ($this->observers as $observer) {
             $data = $observer->notifyDocumentAction($this);
             $this->setEventData($data);

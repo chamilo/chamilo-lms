@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class LrsAuth.
  *
+ * @package Chamilo\PluginBundle\Entity\XApi
+ *
  * @ORM\Table(name="xapi_lrs_auth")
  * @ORM\Entity()
  */
@@ -88,18 +90,12 @@ class LrsAuth
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt(DateTime $createdAt): LrsAuth
+    public function setCreatedAt(\DateTime $createdAt): LrsAuth
     {
         $this->createdAt = $createdAt;
 

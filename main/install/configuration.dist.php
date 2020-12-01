@@ -75,7 +75,7 @@ $_configuration['url_append'] = '{URL_APPEND_PATH}';
 ];*/
 
 // NEW LDAP IMPLEMENTATION BASED ON external_login info
-// -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
+// -> Uncomment the two lines bellow to activate LDAP AND edit app/config/auth.conf.php for configuration
 // $extAuthSource["extldap"]["login"] = $_configuration['root_sys']."main/auth/external_login/login.ldap.php";
 // $extAuthSource["extldap"]["newUser"] = $_configuration['root_sys']."main/auth/external_login/newUser.ldap.php";
 //
@@ -84,7 +84,7 @@ $_configuration['url_append'] = '{URL_APPEND_PATH}';
 // $_configuration['facebook_auth'] = 1;
 //
 // OTHER EXTERNAL LOGIN INFORMATION
-// To fetch external login information, uncomment those 2 lines and modify  files auth/external_login/newUser.php and auth/external_login/updateUser.php files
+// To fetch external login information, uncomment those 2 lines and modify the following files: auth/external_login/newUser.php and auth/external_login/updateUser.php
 // $extAuthSource["external_login"]["newUser"] = $_configuration['root_sys']."main/auth/external_login/newUser.php";
 // $extAuthSource["external_login"]["updateUser"] = $_configuration['root_sys']."main/auth/external_login/updateUser.php";
 
@@ -1704,6 +1704,17 @@ $_configuration['auth_password_links'] = [
                 ],
             ],
         ],
+    ],
+];*/
+
+// After a user updates his profile, send notifications.
+/*$_configuration['user_notification_settings'] = [
+    'notification1' => [ // Notification label
+        'email' => 'admin1@example.com,admin2@example.com', // multiple emails allowed
+        //'if_extra_field_changes' => ['variable1', 'variable2'],
+        'if_field_changes' => ['phone', 'email'],
+        'subject' => 'User profile update',
+        'content' => '/mail/user_profile_update.dist.tpl',
     ],
 ];*/
 

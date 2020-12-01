@@ -7,14 +7,14 @@ namespace Chamilo\PluginBundle\XApi\Importer;
 use Chamilo\CoreBundle\Entity\Course;
 
 /**
- * Class Cmi5Importer
+ * Class Cmi5Importer.
  *
  * @package Chamilo\PluginBundle\XApi\Importer
  */
 class Cmi5Importer extends AbstractImporter
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function create(array $fileInfo, Course $course)
     {

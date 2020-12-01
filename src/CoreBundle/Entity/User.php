@@ -17,12 +17,11 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
@@ -77,8 +76,6 @@ class User implements UserInterface, EquatableInterface
     protected $id;
 
     /**
-     * @var UuidInterface|null
-     *
      * @ORM\Column(type="uuid", unique=true)
      */
     protected $uuid;
@@ -734,7 +731,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function __construct()
     {
-        $this->uuid = Uuid::uuid4()->toString();
+        $this->uuid = Uuid::v4();
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
@@ -786,7 +783,7 @@ class User implements UserInterface, EquatableInterface
         $this->id = $userId;
     }
 
-    public function getUuid(): UuidInterface
+    public function getUuid()
     {
         return $this->uuid;
     }

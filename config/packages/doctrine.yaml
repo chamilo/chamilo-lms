@@ -15,6 +15,7 @@ doctrine:
             row_format: DYNAMIC
         types:
             json: Doctrine\DBAL\Types\JsonType
+            uuid: Symfony\Bridge\Doctrine\Types\UuidType
     orm:
         auto_generate_proxy_classes: true
 #        metadata_cache_driver:

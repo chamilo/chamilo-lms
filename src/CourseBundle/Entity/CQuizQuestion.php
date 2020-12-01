@@ -130,12 +130,20 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $relQuizzes;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="mandatory", type="integer")
+     */
+    protected $mandatory;
+
+    /**
      * CQuizQuestion constructor.
      */
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->ponderation = 0.0;
+        $this->mandatory = 0;
     }
 
     public function __toString(): string

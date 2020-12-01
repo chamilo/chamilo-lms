@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -152,6 +153,18 @@ class TrackEExercises
      * @ORM\Column(name="questions_to_check", type="text", nullable=false)
      */
     protected $questionsToCheck;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="blocked_categories", type="text", nullable=true)
+     */
+    protected $blockedCategories;
+
+    public function __construct()
+    {
+        $this->blockedCategories = '';
+    }
 
     /**
      * Set exeUserId.

@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -37,6 +38,14 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
+
+    /**
+     * @var Session
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     */
+    protected $session;
 
     /**
      * @var string

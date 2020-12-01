@@ -115,6 +115,18 @@ class TrackEAttempt
     protected $course;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="second_spent", type="integer")
+     */
+    protected $secondSpent;
+
+    public function __construct()
+    {
+        $this->secondSpent = 0;
+    }
+
+    /**
      * Set exeId.
      *
      * @param int $exeId

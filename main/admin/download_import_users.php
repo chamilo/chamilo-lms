@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
-use ChamiloSession as Session;
-use Ddeboer\DataImport\Writer\CsvWriter;
-use Symfony\Component\DomCrawler\Crawler;
-
 /**
  * This tool allows platform admins to check history by csv file.
  */
@@ -20,22 +15,29 @@ api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
 set_time_limit(0);
 
-
 function ReadAllElement($path = null, $parentFile = null, $userId = 0)
 {
     $data = [];
     $basePath = api_get_configuration_value('root_sys').'app/cache/backup/import_users/'.api_get_user_id();
-    if ($path == null) $path = $basePath;
+    if ($path == null) {
+        $path = $basePath;
+    }
     foreach (scandir($path) as $dir) {
         // exclude . .. and .htaccess
-        if ($dir == '.') continue;
-        if ($dir == '..') continue;
-        if ($dir == '.htaccess') continue;
+        if ($dir == '.') {
+            continue;
+        }
+        if ($dir == '..') {
+            continue;
+        }
+        if ($dir == '.htaccess') {
+            continue;
+        }
         $currentPath = $path.DIRECTORY_SEPARATOR.$dir;
         if (is_dir($currentPath)) {
             $data[$dir] = ReadAllElement($currentPath, $dir, $userId);
         } elseif (is_file($currentPath)) {
-            $downloadItem = isset($_GET['download']) ? (int)$_GET['download'] : null;
+            $downloadItem = isset($_GET['download']) ? (int) $_GET['download'] : null;
 
             if (
                 strpos($dir, '.csv') !== false
@@ -44,7 +46,6 @@ function ReadAllElement($path = null, $parentFile = null, $userId = 0)
                 if (
                     $downloadItem !== null &&
                     $downloadItem == "$parentFile$dir"
-
                 ) {
                     echo "";
                     DocumentManager::file_send_for_download($currentPath, true, $dir);
@@ -88,11 +89,10 @@ function printTable()
         if (!empty($files)) {
             $table->setCellContents($row, 0, $userInfo['complete_name']);
             $table->setCellContents($row, 1, $dateTime);
-                $table->setCellContents($row, 2, $files);
-                $row++;
-            }
-
+            $table->setCellContents($row, 2, $files);
+            $row++;
         }
+    }
     //}
 
     return $table->toHtml();
@@ -106,7 +106,7 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
 
 $tool_name = "<strong>".get_lang('History')."</strong> ".get_lang('ImportUserListXMLCSV');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$reloadImport = (isset($_REQUEST['reload_import']) && (int)$_REQUEST['reload_import'] === 1);
+$reloadImport = (isset($_REQUEST['reload_import']) && (int) $_REQUEST['reload_import'] === 1);
 
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $printTable = printTable();

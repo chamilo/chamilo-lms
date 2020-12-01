@@ -20,14 +20,17 @@ api_protect_limit_for_session_admin();
 set_time_limit(0);
 
 /**
- * Create directories and subdirectories for backup import csv data
+ * Create directories and subdirectories for backup import csv data.
  *
  * @param null $path
+ *
  * @return string|null
  */
 function createDirectory($path = null)
 {
-    if ($path == null) return $path;
+    if ($path == null) {
+        return $path;
+    }
     $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
     $realPath = explode(DIRECTORY_SEPARATOR, $path);
     $data = '';
@@ -45,12 +48,13 @@ Options -Indexes';
 
                 $fp = fopen($data.'/.htaccess', 'w');
                 if ($fp) {
-                 fwrite($fp, $block);
+                    fwrite($fp, $block);
                 }
                 fclose($fp);
             }
         }
     }
+
     return $data;
 }
 
@@ -401,7 +405,6 @@ function save_data(
                 $csv_row[] = isset($user['UserName']) ? $user['UserName'] : null;
                 $csv_row[] = isset($user['message']) ? $user['message'] : null;
                 $csv_content[] = $csv_row;
-
             }
             saveCsvFile($csv_content, $targetFolder.count($userSaved).'_user_success');
         }
@@ -438,7 +441,6 @@ function save_data(
                 $csv_content[] = $csv_row;
             }
             saveCsvFile($csv_content, $targetFolder.count($userWarning).'_user_warning');
-
         }
     }
 
@@ -446,16 +448,14 @@ function save_data(
 }
 
 /**
- * Save array to a specific file
+ * Save array to a specific file.
  *
  * @param array $data
  * @param $file
  * @param string $enclosure
- *
  */
-function saveCsvFile($data = [], $file ='example', $enclosure = '"')
+function saveCsvFile($data = [], $file = 'example', $enclosure = '"')
 {
-
     $filePath = $file.'.csv';
     $stream = fopen($filePath, 'w');
     $writer = new CsvWriter(';', $enclosure, $stream, true);
@@ -598,9 +598,9 @@ function parse_xml_data($file)
 }
 
 /**
- * @param array   $users
- * @param bool    $sendMail
- * @param string  $targetFolder
+ * @param array  $users
+ * @param bool   $sendMail
+ * @param string $targetFolder
  */
 function processUsers(&$users, $sendMail, $targetFolder = null)
 {
@@ -681,7 +681,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
             $user = api_get_user_info();
-            $userId = (int)$user['id'];
+            $userId = (int) $user['id'];
             $today = new DateTime();
             $today = $today->format('Ymdhis');
             $targetFolder = api_get_configuration_value('root_sys').'app/cache/backup/import_users';

@@ -4975,7 +4975,7 @@ class learnpath
                 // Check if the stored progress is higher than the new value
                 if ($storedProgress >= $progress) {
                     if ($debug) {
-                        error_log("Return false: New progress value is lower than stored value - Current value: $storedProgress - New value: $progress");
+                        error_log("Return false: New progress value is lower than stored value - Current value: $storedProgress - New value: $progress [lp ".$this->get_id()." - user ".$userId."]");
                     }
 
                     return false;

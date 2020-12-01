@@ -36,6 +36,18 @@ function createDirectory($path = null)
             $data .= DIRECTORY_SEPARATOR.$pth;
             if (!is_dir($data)) {
                 mkdir($data, api_get_permissions_for_new_directories());
+                $block =
+                    '<FilesMatch "\.(csv|xml)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+Options -Indexes';
+
+                $fp = fopen($data.'/.htaccess', 'w');
+                if ($fp) {
+                 fwrite($fp, $block);
+                }
+                fclose($fp);
             }
         }
     }
@@ -861,6 +873,7 @@ if (!empty($extraSettings) && isset($extraSettings['options']) &&
 }
 
 $form->setDefaults($defaults);
+$form->addHtml("<a href='./download_import_users.php'>".get_lang('ViewHistoryChange')."</a>");
 $form->display();
 
 if ($formContinue) {

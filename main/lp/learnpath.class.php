@@ -4972,7 +4972,7 @@ class learnpath
             );
 
             // Check if the stored progress is higher than the new value
-            if ($scoreAsProgress && $storedProgress >= $progress) {
+            if ($scoreAsProgress && $scoreAsProgressSetting && $storedProgress >= $progress) {
                 if ($debug) {
                     error_log("Return false: New progress value is lower than stored value - Current value: $storedProgress - New value: $progress");
                 }

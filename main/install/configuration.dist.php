@@ -1707,6 +1707,17 @@ $_configuration['auth_password_links'] = [
     ],
 ];*/
 
+// After a user updates his profile, send notifications.
+/*$_configuration['user_notification_settings'] = [
+    'notification1' => [ // Notification label
+        'email' => 'admin1@example.com,admin2@example.com', // multiple emails allowed
+        //'if_extra_field_changes' => ['variable1', 'variable2'],
+        'if_field_changes' => ['phone', 'email'],
+        'subject' => 'User profile update',
+        'content' => '/mail/user_profile_update.dist.tpl',
+    ],
+];*/
+
 // Shows a marker if the course was shared in other portals.
 //$_configuration['multiple_access_url_show_shared_course_marker'] = false;
 

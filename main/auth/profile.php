@@ -84,7 +84,7 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 /*
  * Get initial values for all fields.
  */
-$user_data = api_get_user_info(
+$user_data = $originalUserInfo = api_get_user_info(
     api_get_user_id(),
     false,
     false,
@@ -672,6 +672,36 @@ if ($form->validate()) {
         true
     );
     Session::write('_user', $userInfo);
+
+    $notification = api_get_configuration_value('user_notification_settings');
+    if (!empty($notification)) {
+        foreach ($notification as $label => $notificationSettings) {
+            $sendMessage = false;
+            if (isset($notificationSettings['if_field_changes'])) {
+                foreach ($notificationSettings['if_field_changes'] as $field) {
+                    if ($originalUserInfo[$field] != $userInfo[$field]) {
+                        $sendMessage = true;
+                        break;
+                    }
+                }
+            }
+
+            if ($sendMessage) {
+                $subject = $notificationSettings['subject'];
+                $content = $notificationSettings['content'];
+                $userInfo['extra_fields'] = UserManager::get_extra_user_data(api_get_user_id());
+                $template = new Template();
+                $template->assign('old', $originalUserInfo);
+                $template->assign('new', $userInfo);
+                $content = $template->fetch($template->get_template($content));
+
+                $emails = explode(',', $notificationSettings['email']);
+                foreach ($emails as $email) {
+                    api_mail_html('', $email, $subject, $content);
+                }
+            }
+        }
+    }
 
     if ($hook) {
         Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)

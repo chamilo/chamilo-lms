@@ -27,7 +27,7 @@ export default {
             return state.isAuthenticated;
         },
         isAdmin(state, getters) {
-            return getters.isAuthenticated && getters.hasRole('ROLE_ADMIN');
+            return getters.isAuthenticated && (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN'));
         },
         getUser(state) {
             return state.user;
@@ -76,6 +76,7 @@ export default {
                 commit(AUTHENTICATING_SUCCESS, response.data);
                 return response.data;
             } catch (error) {
+                console.log(error);
                 commit(AUTHENTICATING_ERROR, error);
                 return null;
             }

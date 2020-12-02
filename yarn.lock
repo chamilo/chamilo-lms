@@ -4037,10 +4037,10 @@ bootstrap-select@^1.13.17:
   resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.18.tgz#4557119d58dc1159189977161c803962220e4dda"
   integrity sha512-V1IzK4rxBq5FrJtkzSH6RmFLFBsjx50byFbfAf8jYyXROWs7ZpprGjdHeoyq2HSsHyjJhMMwjsQhRoYAfxCGow==
 
-bootstrap-vue@^2.16.0:
-  version "2.20.0"
-  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-2.20.0.tgz#bc53b028016473cd3401e199e1fc2538e6b2c298"
-  integrity sha512-yM/EK4w+qKo9niniBfUJdTUClB2Qk92NAkx2Buu79rBSRUbB09+eax3Ei3aLnOa99XrV1gDffEP2ZanVdCBTiw==
+bootstrap-vue@^2.20:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-2.20.1.tgz#1b6cd4368632c1a6dd4a5ed161242baa131c3cd5"
+  integrity sha512-s+w83q0T2mo/RbFwTM8gExbLJMEOYpdTUqmyFaHv2Ir+TFprMvTWpeAzeNuawJ130W1gePZ3LW3cNp1t/tZbOw==
   dependencies:
     "@nuxt/opencollective" "^0.3.2"
     bootstrap ">=4.5.3 <5.0.0"
@@ -4048,7 +4048,7 @@ bootstrap-vue@^2.16.0:
     portal-vue "^2.1.7"
     vue-functional-data-merge "^3.1.0"
 
-"bootstrap@>=4.5.3 <5.0.0", bootstrap@^4.5.2:
+"bootstrap@>=4.5.3 <5.0.0", bootstrap@^4.5:
   version "4.5.3"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.5.3.tgz#c6a72b355aaf323920be800246a6e4ef30997fe6"
   integrity sha512-o9ppKQioXGqhw8Z7mah6KdTYpNQY//tipnkxppWhPbiSWdD+1raYsnhwEZjkTHYbGee4cVQ0Rx65EhOY/HNLcQ==
@@ -4804,9 +4804,9 @@ cli-cursor@^3.1.0:
     restore-cursor "^3.1.0"
 
 cli-highlight@^2.1.4:
-  version "2.1.8"
-  resolved "https://registry.yarnpkg.com/cli-highlight/-/cli-highlight-2.1.8.tgz#aa3130b481649d631ab913ae60becf81c69c3887"
-  integrity sha512-mFuTW5UOV3/S0wZE9/1b0EcAM0XOJIhoAWPhWm5voiJ6ugVBkvYBIEL7sbHo9sEtWdEmwDIWab32qpaRI3cfqQ==
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/cli-highlight/-/cli-highlight-2.1.9.tgz#4f4ecb05326d70d56d4b4249fabf9a70fb002497"
+  integrity sha512-t8RNIZgiI24i/mslZ8XT8o660RUj5ZbUJpEZrZa/BNekTzdC2LfMRAnt0Y7sgzNM4FGW5tmWg/YnbTH8o1eIOQ==
   dependencies:
     chalk "^4.0.0"
     highlight.js "^10.0.0"

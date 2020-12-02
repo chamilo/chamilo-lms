@@ -4488,10 +4488,20 @@ class Exercise
                                  ";
                         $resq = Database::query($query);
                         $row = Database::fetch_assoc($resq);
-                        $choice = $row['answer'];
-                        $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-                        $questionScore = $row['marks'];
+
+                        $choice = [
+                            'answer' => '',
+                            'marks' => 0,
+                        ];
+                        $questionScore = 0;
+
+                        if (is_array($row)) {
+                            $choice = $row['answer'];
+                            $choice = str_replace('\r\n', '', $choice);
+                            $choice = stripslashes($choice);
+                            $questionScore = $row['marks'];
+                        }
+
                         if ($questionScore == -1) {
                             $totalScore += 0;
                         } else {

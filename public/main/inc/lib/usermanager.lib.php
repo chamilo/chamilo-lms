@@ -370,7 +370,7 @@ class UserManager
 
         if (!empty($userId)) {
             if ($isAdmin) {
-                self::add_user_as_admin($user);
+                self::addUserAsAdmin($user);
             }
 
             if ($addUserToUrl) {

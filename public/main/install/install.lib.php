@@ -3198,6 +3198,8 @@ function finishInstallationWithContainer(
 
     /** @var User $admin */
     $admin = $userManager->find($adminId);
+    $admin->addRole('ROLE_GLOBAL_ADMIN');
+    $manager->persist($admin);
 
     // Login as admin
     $token = new UsernamePasswordToken(

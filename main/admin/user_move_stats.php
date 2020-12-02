@@ -52,17 +52,18 @@ if (isset($_REQUEST['load_ajax'])) {
                 $update_database = false;
             }
 
-            //Check if the same course exist in the session destination
+            // Check if the same course exist in the session destination
             if ($course_founded) {
                 $result = SessionManager::get_users_by_session($new_session_id);
                 if (empty($result) || !in_array($user_id, array_keys($result))) {
                     if ($debug) {
                         echo 'User added to the session';
                     }
-                    //Registering user to the new session
+                    // Registering user to the new session
                     SessionManager::subscribeUsersToSession(
                         $new_session_id,
                         [$user_id],
+                        false,
                         false
                     );
                 }
@@ -116,14 +117,12 @@ $htmlHeadXtra[] = '<script>
             }
         });
     }
-
-
- </script>';
+    </script>';
 
 function get_courses_list_by_user_id_based_in_exercises($user_id)
 {
     $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
     $sql = "SELECT DISTINCT exe_user_id, c_id, session_id
             FROM $TABLETRACK_EXERCICES
             WHERE exe_user_id = $user_id
@@ -147,7 +146,8 @@ Display::addFlash(
 );
 Display::display_header(get_lang('MoveUserStats'));
 echo  '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="../admin/index.php">'.
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Some pagination

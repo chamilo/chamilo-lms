@@ -7056,23 +7056,28 @@ class Tracking
         return (int) $result['c'];
     }
 
-    public static function processUserDataMove($user_id, $course_info, $origin_session_id, $new_session_id, $update_database, $debug = false)
-    {
+    public static function processUserDataMove(
+        $user_id,
+        $course_info,
+        $origin_session_id,
+        $new_session_id,
+        $update_database,
+        $debug = false
+    ) {
         // Begin with the import process
         $origin_course_code = $course_info['code'];
         $course_id = $course_info['real_id'];
         $user_id = (int) $user_id;
         $origin_session_id = (int) $origin_session_id;
         $new_session_id = (int) $new_session_id;
-
         $session = api_get_session_entity($new_session_id);
         $em = Database::getManager();
 
         $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $attemptRecording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
         $TBL_TRACK_E_COURSE_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $TBL_TRACK_E_LAST_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-
         $TBL_LP_VIEW = Database::get_course_table(TABLE_LP_VIEW);
         $TBL_NOTEBOOK = Database::get_course_table(TABLE_NOTEBOOK);
         $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -7094,12 +7099,23 @@ class Tracking
         }
 
         $result_message = [];
+        $result_message_compare = [];
         if (!empty($list)) {
             foreach ($list as $exe_id => $data) {
                 if ($update_database) {
                     $sql = "UPDATE $TABLETRACK_EXERCICES SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
                     Database::query($sql);
-                    $result_message['TABLETRACK_EXERCICES']++;
+
+                    $sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
+                    Database::query($sql);
+
+                    $sql = "UPDATE $attemptRecording SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
+                    Database::query($sql);
+
+                    if (!isset($result_message[$TABLETRACK_EXERCICES])) {
+                        $result_message[$TABLETRACK_EXERCICES] = 0;
+                    }
+                    $result_message[$TABLETRACK_EXERCICES]++;
                 } else {
                     if (!empty($data['orig_lp_id']) && !empty($data['orig_lp_item_id'])) {
                         $result_message['TRACK_E_EXERCISES'][$exe_id] = $data;
@@ -7146,7 +7162,7 @@ class Tracking
         // Nothing to do because there are not relationship with a session
         // 3. track_e_course_access
         $sql = "SELECT * FROM $TBL_TRACK_E_COURSE_ACCESS
-                WHERE c_id  = $course_id AND session_id = $origin_session_id  AND user_id = $user_id ";
+                WHERE c_id = $course_id AND session_id = $origin_session_id  AND user_id = $user_id ";
         $res = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -7163,12 +7179,15 @@ class Tracking
                         echo $sql;
                     }
                     Database::query($sql);
+                    if (!isset($result_message[$TBL_TRACK_E_COURSE_ACCESS])) {
+                        $result_message[$TBL_TRACK_E_COURSE_ACCESS] = 0;
+                    }
                     $result_message[$TBL_TRACK_E_COURSE_ACCESS]++;
                 }
             }
         }
 
-        //4. track_e_lastaccess
+        // 4. track_e_lastaccess
         $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
                 WHERE
                     c_id = $course_id AND
@@ -7191,6 +7210,9 @@ class Tracking
                     }
                     Database::query($sql);
                     //if ($debug) var_dump($res);
+                    if (!isset($result_message[$TBL_TRACK_E_LAST_ACCESS])) {
+                        $result_message[$TBL_TRACK_E_LAST_ACCESS] = 0;
+                    }
                     $result_message[$TBL_TRACK_E_LAST_ACCESS]++;
                 }
             }
@@ -7205,7 +7227,6 @@ class Tracking
         // Getting the list of LPs in the new session
         $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
         $flat_list = $lp_list->get_flat_list();
-
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             // Checking if the LP exist in the new session
@@ -7218,8 +7239,8 @@ class Tracking
             foreach ($list as $id => $data) {
                 if ($update_database) {
                     $sql = "UPDATE $TBL_LP_VIEW
-                                    SET session_id = $new_session_id
-                                    WHERE c_id = $course_id AND id = $id ";
+                            SET session_id = $new_session_id
+                            WHERE c_id = $course_id AND id = $id ";
                     if ($debug) {
                         var_dump($sql);
                     }
@@ -7229,14 +7250,14 @@ class Tracking
                     }
                     $result_message[$TBL_LP_VIEW]++;
                 } else {
-                    //Getting all information of that lp_item_id
-                    $score = Tracking::get_avg_student_score(
+                    // Getting all information of that lp_item_id
+                    $score = self::get_avg_student_score(
                         $user_id,
                         $origin_course_code,
                         [$data['lp_id']],
                         $origin_session_id
                     );
-                    $progress = Tracking::get_avg_student_progress(
+                    $progress = self::get_avg_student_progress(
                         $user_id,
                         $origin_course_code,
                         [$data['lp_id']],
@@ -7269,14 +7290,14 @@ class Tracking
 
             if (!empty($list)) {
                 foreach ($list as $id => $data) {
-                    //Getting all information of that lp_item_id
-                    $score = Tracking::get_avg_student_score(
+                    // Getting all information of that lp_item_id
+                    $score = self::get_avg_student_score(
                         $user_id,
                         $origin_course_code,
                         [$data['lp_id']],
                         $new_session_id
                     );
-                    $progress = Tracking::get_avg_student_progress(
+                    $progress = self::get_avg_student_progress(
                         $user_id,
                         $origin_course_code,
                         [$data['lp_id']],
@@ -7290,8 +7311,8 @@ class Tracking
             }
         }
 
-        //6. Agenda
-        //calendar_event_attachment no problems no session_id
+        // 6. Agenda
+        // calendar_event_attachment no problems no session_id
         $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY
                 WHERE tool = 'calendar_event' AND insert_user_id = $user_id AND c_id = $course_id ";
         $res = Database::query($sql);
@@ -7310,8 +7331,8 @@ class Tracking
             }
         }
 
-        //7. Forum ?? So much problems when trying to import data
-        //8. Student publication - Works
+        // 7. Forum ?? So much problems when trying to import data
+        // 8. Student publication - Works
         $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY
                 WHERE tool = 'work' AND insert_user_id = $user_id AND c_id = $course_id";
         if ($debug) {
@@ -7420,10 +7441,10 @@ class Tracking
                             Database::query($sql_add_publication);
                             $id = Database::insert_id();
 
-                            $sql_update = "UPDATE ".$TBL_STUDENT_PUBLICATION." SET ".
-                                        "has_properties         = '".$id."',
-                                        view_properties    = '1'
-                                       WHERE id   = ".$new_parent_id;
+                            $sql_update = "UPDATE $TBL_STUDENT_PUBLICATION
+                                           SET  has_properties = '".$id."',
+                                                view_properties = '1'
+                                           WHERE id = ".$new_parent_id;
                             if ($debug) {
                                 echo $sql_update;
                             }
@@ -7439,7 +7460,7 @@ class Tracking
                     $new_url = str_replace($parent_data['url'], $created_dir, $doc_url);
 
                     if ($update_database) {
-                        //Creating a new work
+                        // Creating a new work
                         $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
 
                         $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
@@ -7548,32 +7569,31 @@ class Tracking
         }*/
 
         if ($update_database) {
-            echo '<h2>'.get_lang('StatsMoved').'</h2>';
+            echo Display::return_message(get_lang('StatsMoved'));
             if (is_array($result_message)) {
                 foreach ($result_message as $table => $times) {
                     echo 'Table '.$table.' - '.$times.' records updated <br />';
                 }
             }
         } else {
-            echo '<h2>'.get_lang('UserInformationOfThisCourse').'</h2>';
-
+            echo '<h4>'.get_lang('UserInformationOfThisCourse').'</h4>';
             echo '<br />';
             echo '<table class="table" width="100%">';
             echo '<tr>';
             echo '<td width="50%" valign="top">';
 
             if ($origin_session_id == 0) {
-                echo '<h4>'.get_lang('OriginCourse').'</h4>';
+                echo '<h5>'.get_lang('OriginCourse').'</h5>';
             } else {
-                echo '<h4>'.get_lang('OriginSession').' #'.$origin_session_id.'</h4>';
+                echo '<h5>'.get_lang('OriginSession').' #'.$origin_session_id.'</h5>';
             }
             self::compareUserData($result_message);
             echo '</td>';
             echo '<td width="50%" valign="top">';
             if ($new_session_id == 0) {
-                echo '<h4>'.get_lang('DestinyCourse').'</h4>';
+                echo '<h5>'.get_lang('DestinyCourse').'</h5>';
             } else {
-                echo '<h4>'.get_lang('DestinySession').' #'.$new_session_id.'</h4>';
+                echo '<h5>'.get_lang('DestinySession').' #'.$new_session_id.'</h5>';
             }
             self::compareUserData($result_message_compare);
             echo '</td>';

@@ -703,7 +703,7 @@ if ($form->validate()) {
                         $subject,
                         $content,
                         $userInfo['complete_name'],
-                        $userInfo['email'],
+                        $notificationSettings['sender_email'],
                         [
                             'reply_to' => [
                                 'mail' => $userInfo['mail'],

@@ -218,6 +218,7 @@ olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
 var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
+var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
 
 /**
  * Add the "addListeners" function to the "onload" event of the window and
@@ -1361,30 +1362,13 @@ function update_stats() {
     if (olms.execute_stats) {
         try {
             cont_f = document.getElementById('content_id');
-            cont_f.src = "lp_controller.php?action=stats";
+            cont_f.src = statsUrl;
             cont_f.reload();
         } catch (e) {
             return false;
         }
     }
     olms.execute_stats = false;
-}
-
-/**
- * Update the stats frame using a reload of the frame to avoid unsynched data
- */
-function update_stats_page() {
-    logit_lms('update_stats_page',3);
-    var myframe = document.getElementById('content_id');
-    var mysrc = myframe.location.href;
-    if(mysrc == 'lp_controller.php?action=stats'){
-        if(myframe && myframe.src){
-            var mysrc = myframe.src;
-            myframe.src = mysrc;
-        }
-        // = mysrc; //refresh page
-    }
-    return true;
 }
 
 /**

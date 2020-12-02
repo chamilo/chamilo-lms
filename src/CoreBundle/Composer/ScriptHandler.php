@@ -57,7 +57,7 @@ class ScriptHandler
      */
     public static function getFoldersToDelete()
     {
-        $paths = [
+        return [
             __DIR__.'/../../../../app/Resources/public/assets/bootstrap/docs',
             __DIR__.'/../../../../app/Resources/public/assets/bootstrap/nuget',
             __DIR__.'/../../../../app/Resources/public/assets/bootstrap/grunt',
@@ -112,7 +112,6 @@ class ScriptHandler
             __DIR__.'/../../../../web/assets/bootstrap/docs',
             __DIR__.'/../../../../web/assets/bootstrap/test-infra',
         ];
-        return $paths;
     }
 
     /**

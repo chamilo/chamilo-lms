@@ -4959,11 +4959,6 @@ class learnpath
                 return false;
             }
 
-            /*if ($course_id == 220 && $scoreAsProgress && $scoreAsProgressSetting) {
-                error_log("HOT FIX JULIO new score has been replaced from $progress to $score");
-                $progress = $score;
-            }*/
-
             if ($scoreAsProgress && $scoreAsProgressSetting) {
                 $storedProgress = self::getProgress(
                     $this->get_id(),
@@ -4971,7 +4966,7 @@ class learnpath
                     $course_id,
                     $this->get_lp_session_id()
                 );
-    
+
                 // Check if the stored progress is higher than the new value
                 if ($storedProgress >= $progress) {
                     if ($debug) {

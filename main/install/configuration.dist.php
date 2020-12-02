@@ -1711,6 +1711,7 @@ $_configuration['auth_password_links'] = [
 /*$_configuration['user_notification_settings'] = [
     'notification1' => [ // Notification label
         'email' => 'admin1@example.com,admin2@example.com', // multiple emails allowed
+        'sender_email' => 'sender@example.com',
         //'if_extra_field_changes' => ['variable1', 'variable2'],
         'if_field_changes' => ['phone', 'email'],
         'subject' => 'User profile update',

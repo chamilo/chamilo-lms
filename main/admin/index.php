@@ -523,6 +523,12 @@ if (api_is_platform_admin() || ($allowCareer && api_is_session_admin())) {
             'label' => get_lang('MoveUserStats'),
         ];
     }
+
+    $items[] = [
+        'url' => '../coursecopy/move_users_from_course_to_session.php',
+        'label' => get_lang('MoveUsersFromCourseToSession'),
+    ];
+
     $items[] = [
         'url' => 'career_dashboard.php',
         'label' => get_lang('CareersAndPromotions'),

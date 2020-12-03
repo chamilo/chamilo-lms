@@ -44,13 +44,14 @@
               <span v-if="file.invalidMessage">
                 - {{ file.invalidMessage }}
               </span>
-            </div>
-            <span>
+              <span>
               <a @click.prevent="files.splice(index, 1)"
                  class="delete">
                 <font-awesome-icon icon="trash"/>
               </a>
             </span>
+            </div>
+
           </div>
         </div>
       </b-col>

@@ -79,6 +79,7 @@ export default {
 
     resetFilter() {
       this.filters = {};
+      this.onUpdateOptions(this.options);
     },
 
     addHandler() {

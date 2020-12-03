@@ -224,7 +224,7 @@ export default {
         this.deleteItem(item);
       }*/
 
-      this.delMultiple(this.selected);
+      this.deleteMultipleItem(this.selected);
       this.onUpdateOptions(this.options);
 
       /*const promises = this.selected.map(async item => {

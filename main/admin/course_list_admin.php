@@ -484,14 +484,14 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     //$table->set_header($column++, get_lang('SubscriptionAllowed'), true, 'width="60px"');
     //$table->set_header($column++, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
     if ($addTeacherColumn) {
-        $table->set_header($column++, get_lang('Teachers'), true);
+        $table->set_header($column++, get_lang('Teachers'), true, ['style' => 'width:350px;']);
     }
     $table->set_header(
         $column++,
         get_lang('Action'),
         false,
         null,
-        ['class' => 'td_actions']
+        ['class' => 'td_actions', 'style' => 'width:145px;']
     );
     $table->set_form_actions(
         ['delete_courses' => get_lang('DeleteCourse')],

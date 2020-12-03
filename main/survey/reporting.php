@@ -144,7 +144,6 @@ $htmlHeadXtra[] = '<script>
 
 async function exportToPdf() {
     window.jsPDF = window.jspdf.jsPDF;
-
     $(".question-item img, #pdf_table img").hide();
     $(".question-item video, #pdf_table video").hide();
     $(".question-item audio, #pdf_table audio").hide();
@@ -175,7 +174,7 @@ async function exportToPdf() {
             pages[page] = 0;
         }
 
-        var positionY = 180;
+        var positionY = 160;
         pages[page] += 1;
         var diff = 250;
         if (page > 1) {

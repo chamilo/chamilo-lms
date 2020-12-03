@@ -603,11 +603,12 @@ class SurveyUtil
         echo '</div>';
 
         $fromUntil = sprintf(get_lang('FromXUntilY'), $survey_data['avail_from'], $survey_data['avail_till']);
+        $max = 80;
         $data = [
-            get_lang('SurveyTitle') => $survey_data['title'],
-            get_lang('SurveySubTitle') => $survey_data['subtitle'],
+            get_lang('SurveyTitle') => cut(strip_tags($survey_data['title']), $max),
+            get_lang('SurveySubTitle') => cut(strip_tags($survey_data['subtitle']), $max),
             get_lang('Dates') => $fromUntil,
-            get_lang('SurveyIntroduction') => $survey_data['intro'],
+            get_lang('SurveyIntroduction') => cut(strip_tags($survey_data['intro']), $max)
         ];
 
         $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);

@@ -395,8 +395,25 @@ div.items-course-info h4.title{
     overflow: hidden;
 }
 
+
+/** to center img into figure **/
+@media (min-width: 319px) {
+    .col-sm-6 .items-course .items-course-image figure {
+        height: 155px;
+    }
+}
+@media (min-width: 479px) {
+    .col-sm-6 .items-course .items-course-image figure {
+        height: 220px;
+    }
+}
+@media (min-width: 767px) {
+    .col-sm-6 .items-course .items-course-image figure {
+        height: 170px;
+    }
+}
 @media (min-width: 991px) {
     .col-sm-6 .items-course .items-course-image figure {
-        max-height: 135px;
+        height: 135px;
     }
 }

@@ -608,7 +608,7 @@ class SurveyUtil
             get_lang('SurveyTitle') => cut(strip_tags($survey_data['title']), $max),
             get_lang('SurveySubTitle') => cut(strip_tags($survey_data['subtitle']), $max),
             get_lang('Dates') => $fromUntil,
-            get_lang('SurveyIntroduction') => cut(strip_tags($survey_data['intro']), $max)
+            get_lang('SurveyIntroduction') => cut(strip_tags($survey_data['intro']), $max),
         ];
 
         $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);

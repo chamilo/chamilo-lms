@@ -974,7 +974,6 @@ class CourseHome
                             }
                         }
                     } elseif ($allowEditionInSession) {
-
                         $criteria = [
                             'cId' => $courseId,
                             'name' => $tool['name'],

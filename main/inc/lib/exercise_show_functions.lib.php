@@ -2,16 +2,6 @@
 
 /* See license terms in /license.txt */
 
-/**
- * EVENTS LIBRARY.
- *
- * This is the events library for Chamilo.
- * Functions of this library are used to record informations when some kind
- * of event occur. Each event has his own types of informations then each event
- * use its own function.
- *
- * @todo convert queries to use Database API
- */
 class ExerciseShowFunctions
 {
     /**
@@ -232,6 +222,15 @@ class ExerciseShowFunctions
                     $hide_expected_answer = false;
                 }
                 break;
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
+                $hide_expected_answer = true;
+                if ($showTotalScoreAndUserChoices) {
+                    $hide_expected_answer = false;
+                }
+                if (empty($studentChoice)) {
+                    return '';
+                }
+                break;
         }
 
         if (!$hide_expected_answer
@@ -370,6 +369,11 @@ class ExerciseShowFunctions
                     $hide_expected_answer = false;
                 }
                 break;
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
+                if (empty($studentChoiceInt)) {
+                    return '';
+                }
+                break;
         }
 
         $icon = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
@@ -500,6 +504,11 @@ class ExerciseShowFunctions
                 $hide_expected_answer = true;
                 if ($showTotalScoreAndUserChoices) {
                     $hide_expected_answer = false;
+                }
+                break;
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
+                if (empty($studentChoice)) {
+                    return '';
                 }
                 break;
         }
@@ -725,10 +734,14 @@ class ExerciseShowFunctions
                     $hide_expected_answer = false;
                 }
                 break;
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
+                if (empty($studentChoice)) {
+                    return '';
+                }
+                break;
         }
 
         echo '<tr>';
-
         if (false === $hideStudentChoice) {
             echo '<td width="5%">';
             // Your choice

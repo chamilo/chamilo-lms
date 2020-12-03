@@ -71,15 +71,12 @@ export default {
     actions: {
         async login({commit}, payload) {
             commit(AUTHENTICATING);
-            try {
-                let response = await SecurityAPI.login(payload.login, payload.password);
+            await SecurityAPI.login(payload.login, payload.password).then(response => {
                 commit(AUTHENTICATING_SUCCESS, response.data);
                 return response.data;
-            } catch (error) {
-                console.log(error);
+            }).catch(error => {
                 commit(AUTHENTICATING_ERROR, error);
-                return null;
-            }
+            });
         },
         onRefresh({commit}, payload) {
             commit(PROVIDING_DATA_ON_REFRESH_SUCCESS, payload);

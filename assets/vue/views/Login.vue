@@ -41,6 +41,20 @@
               </b-button>
             </div>
 
+            <div
+                v-if="isLoading"
+                class="row col"
+            >
+              <p><font-awesome-icon icon="spinner" /></p>
+            </div>
+
+            <div
+                v-else-if="hasError"
+                class="row col"
+            >
+              <error-message :error="error" />
+            </div>
+
             <a href="/main/auth/lostPassword.php" id="forgot">Forgot password?</a>
           </form>
         </b-col>
@@ -88,8 +102,8 @@
               this.performLogin();
             },
             async performLogin() {
-                let payload = {login: this.$data.login, password: this.$data.password},
-                    redirect = this.$route.query.redirect;
+                let payload = {login: this.$data.login, password: this.$data.password};
+                let redirect = this.$route.query.redirect;
                 await this.$store.dispatch("security/login", payload);
                 if (!this.$store.getters["security/hasError"]) {
                     if (typeof redirect !== "undefined") {

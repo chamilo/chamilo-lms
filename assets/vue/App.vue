@@ -178,7 +178,8 @@ export default {
     axios.interceptors.response.use(undefined, (err) => {
       return new Promise(() => {
         if (err.response.status === 401) {
-          this.$router.push({path: "/login"})
+          // Redirect to the login if status 401.
+          this.$router.push({path: "/login"}).catch(()=>{});
         } else if (err.response.status === 500) {
           document.open();
           document.write(err.response.data);

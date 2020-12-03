@@ -3,6 +3,7 @@
 /* For license terms, see /license.txt */
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Plugin database installation script. Can only be executed if included
@@ -381,16 +382,11 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable->addColumn('sale_email', \Doctrine\DBAL\Types\Type::STRING);
     $globalTable->addColumn('info_email_extra', \Doctrine\DBAL\Types\Type::TEXT);
     $globalTable->setPrimaryKey(['id']);
-}
+} else {
+    $globalTable = $pluginSchema->getTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 
-$settingsTable = BuyCoursesPlugin::TABLE_GLOBAL_CONFIG;
-$sql = "SHOW COLUMNS FROM $settingsTable WHERE Field = 'info_email_extra'";
-$res = Database::query($sql);
-if (Database::num_rows($res) === 0) {
-    $sql = "ALTER TABLE $settingsTable ADD (info_email_extra TEXT NOT NULL)";
-    $res = Database::query($sql);
-    if (!$res) {
-        echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+    if (!$globalTable->hasColumn('info_email_extra')) {
+        $globalTable->addColumn('info_email_extra', Types::TEXT);
     }
 }
 

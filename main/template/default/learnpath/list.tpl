@@ -349,7 +349,8 @@
                             {% if is_allowed_to_edit %}
                                 <div class="tools-actions pull-right">
                                     {% if lp_data.category.getId() > 0 %}
-                                        {% if not _c.session_id %}
+{#                                      {% if not _c.session_id %}#}
+                                        {% if lp_data.category.sessionId == _c.session_id %}
                                             <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}"
                                                title="{{ "Edit"|get_lang }}">
                                                 <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|get_lang }}">
@@ -429,6 +430,10 @@
                                    href="#collapse-{{ lp_data.category.getId() }}" aria-expanded="true"
                                    aria-controls="collapse-{{ lp_data.category.getId() }}">
                                     {{ lp_data.category.getName() }}
+
+                                    {% if lp_data.category.sessionId %}
+                                        {{ session_star_icon }}
+                                    {% endif %}
                                 </a>
                             </h4>
                         </div>

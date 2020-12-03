@@ -2140,7 +2140,7 @@ class BuyCoursesPlugin extends Plugin
                 $payoutsTable,
                 [
                     'date' => $sale['date'],
-                    'payout_date' => getdate(),
+                    'payout_date' => api_get_utc_datetime(),
                     'sale_id' => (int) $saleId,
                     'user_id' => $beneficiary['user_id'],
                     'commission' => number_format(

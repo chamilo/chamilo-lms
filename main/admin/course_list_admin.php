@@ -148,6 +148,8 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     $path = api_get_path(WEB_CODE_PATH);
     $coursePath = api_get_path(WEB_COURSE_PATH);
 
+    $icon = Display::return_icon('teacher.png', get_lang('Teacher'), [], ICON_SIZE_TINY);
+
     while ($course = Database::fetch_array($res)) {
         $courseId = $course['id'];
         $courseCode = $course['code'];
@@ -215,7 +217,9 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                     }
                 }
             }
-            $courseItem[] = implode(', ', $teacherList);
+            $courseItem[] = '<ul class="list-inline"><li>'
+                ."$icon ".implode("</li><li>$icon ", $teacherList)
+                .'</li></ul>';
         }
         $courseItem[] = implode(PHP_EOL, $actions);
         $courses[] = $courseItem;

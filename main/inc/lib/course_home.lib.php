@@ -752,7 +752,7 @@ class CourseHome
 
         switch ($course_tool_category) {
             case TOOL_AUTHORING:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id
@@ -765,7 +765,7 @@ class CourseHome
                 $sql_links = null;
                 break;
             case TOOL_STUDENT_VIEW:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id
@@ -778,7 +778,7 @@ class CourseHome
                         ";
                 break;
             case TOOL_ADMIN:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id

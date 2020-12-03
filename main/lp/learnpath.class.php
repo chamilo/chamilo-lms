@@ -12362,7 +12362,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return array
+     * @return CLpCategory[]
      */
     public static function getCategoryByCourse($courseId)
     {
@@ -12439,9 +12439,22 @@ EOD;
             $cats = [get_lang('SelectACategory')];
         }
 
+        $checkSession = false;
+        $sessionId = api_get_session_id();
+        if (api_get_configuration_value('allow_session_lp_category')) {
+            $checkSession = true;
+        }
+
         if (!empty($items)) {
             foreach ($items as $cat) {
-                $cats[$cat->getId()] = $cat->getName();
+                $categoryId = $cat->getId();
+                if ($checkSession) {
+                    $inSession = self::getCategorySessionId($categoryId);
+                    if ($inSession != $sessionId) {
+                        continue;
+                    }
+                }
+                $cats[$categoryId] = $cat->getName();
             }
         }
 

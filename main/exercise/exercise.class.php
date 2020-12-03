@@ -4747,7 +4747,6 @@ class Exercise
                                                 }
                                             }
                                             echo '</td>';
-
                                         }
                                         echo '</tr>';
                                         break;

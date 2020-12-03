@@ -7,6 +7,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
  * This file generates a json answer to the question preview.
+ *
  * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
  */
 require_once __DIR__.'/../inc/global.inc.php';

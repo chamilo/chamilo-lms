@@ -3637,7 +3637,7 @@ class learnpath
                             }
                             break;
                         case 'dir':
-                            $file = 'lp_content.php?type=dir';
+                            $file = 'lp_content.php?type=dir&'.api_get_cidreq();
                             break;
                         case 'link':
                             if (Link::is_youtube_link($file)) {
@@ -3786,7 +3786,7 @@ class learnpath
                             $file .= (strstr($file, '?') === false ? '?' : '').$lp_item_params;
                         }
                     } else {
-                        $file = 'lp_content.php?type=dir';
+                        $file = 'lp_content.php?type=dir&'.api_get_cidreq();
                     }
                     break;
                 case 3:
@@ -3839,7 +3839,7 @@ class learnpath
                             $file .= $aicc_append;
                         }
                     } else {
-                        $file = 'lp_content.php?type=dir';
+                        $file = 'lp_content.php?type=dir&'.api_get_cidreq();
                     }
                     break;
                 case 4:
@@ -13194,10 +13194,15 @@ EOD;
                 return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
                 $linkInfo = Link::getLinkInfo($id);
-                if (isset($linkInfo['url'])) {
-                    return $linkInfo['url'];
+                if ($linkInfo) {
+                    $itemPropertyInfo = api_get_item_property_info($course_id, TOOL_LINK, $id, $session_id);
+                    if ($itemPropertyInfo && 0 === (int) $itemPropertyInfo['visibility']) {
+                        return '';
+                    }
+                    if (isset($linkInfo['url'])) {
+                        return $linkInfo['url'];
+                    }
                 }
-
                 return '';
             case TOOL_QUIZ:
                 if (empty($id)) {

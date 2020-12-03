@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * Script that displays a blank page (with later a message saying why).
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -22,6 +21,9 @@ body { background: none;}
 $message = '';
 if (isset($_GET['error'])) {
     switch ($_GET['error']) {
+        case 'document_protected':
+            $message = Display::return_message(get_lang('ProtectedDocument'), 'warning');
+            break;
         case 'document_deleted':
             $message = Display::return_message(get_lang('DocumentHasBeenDeleted'), 'error');
             break;
@@ -58,10 +60,9 @@ if (isset($_GET['error'])) {
         default:
             break;
     }
-} elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
+} elseif (isset($_GET['msg']) && $_GET['msg'] === 'exerciseFinished') {
     $message = Display::return_message(get_lang('ExerciseFinished'));
 }
-
 $template = new Template();
 $template->assign('content', $message);
 $template->display_blank_template();

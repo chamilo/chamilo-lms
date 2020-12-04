@@ -2,12 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * Copy resources from one course in a session to another one.
- *
- * @author Christian Fasanando
- * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -18,18 +12,19 @@ api_protect_limit_for_session_admin();
 api_set_more_memory_and_time_limits();
 
 $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
-$sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+$sourceSessionId = isset($_REQUEST['source_session_id']) ? (int) $_REQUEST['source_session_id'] : 0;
+$destinationSessionId = isset($_REQUEST['destination_session_id']) ? (int) $_REQUEST['destination_session_id'] : 0;
 
 $courseOptions = [];
 $defaults = [];
 $courseInfo = [];
 if (!empty($courseId)) {
-    $defaults['course_id'] = $defaults;
+    $defaults['course_id'] = $courseId;
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseOptions[$courseId] = $courseInfo['name'];
 }
-Display::display_header();
-$form = new FormValidator('course', 'GET', api_get_self());
+
+$form = new FormValidator('course', 'GET', api_get_self().'?course_id='.$courseId);
 $form->addHeader(get_lang('MoveUsersFromCourseToSession'));
 $form->addSelectAjax(
     'course_id',
@@ -41,21 +36,32 @@ $form->addSelectAjax(
 );
 $form->addButtonSearch(get_lang('Search'));
 $content = '';
-if ($form->validate()) {
+if ($form->validate() && !empty($courseId)) {
     $values = $form->getSubmitValues();
-    if (!empty($courseId)) {
-        $sessions = SessionManager::get_session_by_course($courseId);
-        if (!empty($sessions)) {
-            $sessions = array_column($sessions, 'name', 'id');
-            $form->addSelect(
-                'session_id',
-                get_lang('Session'),
-                $sessions
-            );
+    if (!empty($sourceSessionId) && $sourceSessionId === $destinationSessionId) {
+        Display::addFlash(Display::return_message(get_lang('CantMoveToTheSameSession')));
+        api_location(api_get_self());
+    }
 
-            $form->addButtonSearch(get_lang('CompareStats'), 'compare');
-            $form->addButtonCopy(get_lang('Move'), 'move');
-        }
+    $sessions = SessionManager::get_session_by_course($courseId);
+    if (!empty($sessions)) {
+        $sessions = array_column($sessions, 'name', 'id');
+        $form->addHtml(Display::page_subheader2(get_lang('Sessions')));
+        $sessionsWithBase  = [0 => get_lang('BaseCourse')] + $sessions;
+        $form->addSelect(
+            'source_session_id',
+            get_lang('Source'),
+            $sessionsWithBase
+        );
+
+        $form->addSelect(
+            'destination_session_id',
+            get_lang('Destination'),
+            $sessions
+        );
+
+        $form->addButtonSearch(get_lang('CompareStats'), 'compare');
+        $form->addButtonCopy(get_lang('Move'), 'move');
     }
 
     $count = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, null, null, STUDENT, true);
@@ -94,8 +100,7 @@ if ($form->validate()) {
             $studentId = $student['user_id'];
             $name = $student['firstname'].' '.$student['lastname'];
             $content .= "<h2>$name #$studentId </h2>";
-
-            $subscribed = SessionManager::isUserSubscribedAsStudent($sessionId, $studentId);
+            $subscribed = SessionManager::isUserSubscribedAsStudent($destinationSessionId, $studentId);
 
             if ($subscribed) {
                 $content .= Display::return_message(get_lang('AlreadySubscribed'));
@@ -105,7 +110,7 @@ if ($form->validate()) {
             if (isset($values['move'])) {
                 // Registering user to the new session.
                 SessionManager::subscribeUsersToSession(
-                    $sessionId,
+                    $destinationSessionId,
                     [$studentId],
                     false,
                     false
@@ -116,8 +121,8 @@ if ($form->validate()) {
             Tracking::processUserDataMove(
                 $studentId,
                 $courseInfo,
-                0,
-                $sessionId,
+                $sourceSessionId,
+                $destinationSessionId,
                 isset($values['move'])
             );
             $tableResult = ob_get_contents();
@@ -127,6 +132,8 @@ if ($form->validate()) {
     }
 }
 
+Display::display_header();
+$form->setDefaults($defaults);
 $form->display();
 echo $content;
 Display::display_footer();

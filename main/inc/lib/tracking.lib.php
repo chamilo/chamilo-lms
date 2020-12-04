@@ -7209,7 +7209,6 @@ class Tracking
                         echo $sql;
                     }
                     Database::query($sql);
-                    //if ($debug) var_dump($res);
                     if (!isset($result_message[$TBL_TRACK_E_LAST_ACCESS])) {
                         $result_message[$TBL_TRACK_E_LAST_ACCESS] = 0;
                     }
@@ -7248,6 +7247,9 @@ class Tracking
                     if ($debug) {
                         var_dump($res);
                     }
+                    if (!isset($result_message[$TBL_LP_VIEW])) {
+                        $result_message[$TBL_LP_VIEW] = 0;
+                    }
                     $result_message[$TBL_LP_VIEW]++;
                 } else {
                     // Getting all information of that lp_item_id
@@ -7271,9 +7273,10 @@ class Tracking
             }
         }
 
-        // CHECk DESTINY
+        // Check destination.
         if (!$update_database) {
-            $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
+            $sql = "SELECT * FROM $TBL_LP_VIEW
+                    WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
             $res = Database::query($sql);
 
             // Getting the list of LPs in the new session
@@ -7327,6 +7330,9 @@ class Tracking
                 if ($debug) {
                     var_dump($res_update);
                 }
+                if (!isset($result_message['agenda'])) {
+                    $result_message['agenda'] = 0;
+                }
                 $result_message['agenda']++;
             }
         }
@@ -7357,10 +7363,7 @@ class Tracking
                     $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
                             WHERE id = $parent_id AND c_id = $course_id";
                     $select_res = Database::query($sql);
-                    $parent_data = Database::fetch_array(
-                        $select_res,
-                        'ASSOC'
-                    );
+                    $parent_data = Database::fetch_array($select_res, 'ASSOC');
                     if ($debug) {
                         var_dump($parent_data);
                     }
@@ -7374,7 +7377,10 @@ class Tracking
                     $search_this = "folder_moved_from_session_id_$origin_session_id";
                     $search_this2 = $parent_data['url'];
                     $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
-                            WHERE description like '%$search_this%' AND url LIKE '%$search_this2%' AND session_id = $new_session_id AND c_id = $course_id
+                            WHERE description like '%$search_this%' AND
+                                  url LIKE '%$search_this2%' AND
+                                  session_id = $new_session_id AND
+                                  c_id = $course_id
                             ORDER BY id desc  LIMIT 1";
                     if ($debug) {
                         echo $sql;
@@ -7451,6 +7457,9 @@ class Tracking
                             Database::query($sql_update);
                             if ($debug) {
                                 var_dump($sql_update);
+                            }
+                            if (!isset($result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT])) {
+                                $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT] = 0;
                             }
                             $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT]++;
                         }
@@ -7536,6 +7545,9 @@ class Tracking
                 $res = Database::query($sql);
                 if ($debug) {
                     var_dump($res);
+                }
+                if (!isset($result_message[$TBL_DROPBOX_FILE])) {
+                    $result_message[$TBL_DROPBOX_FILE] = 0;
                 }
                 $result_message[$TBL_DROPBOX_FILE]++;
             }

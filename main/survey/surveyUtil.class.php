@@ -740,11 +740,12 @@ class SurveyUtil
 
                 // displaying the table: headers
                 echo '<table class="display-survey table" id="table_'.$chartContainerId.'">';
+                echo '';
                 echo '	<tr>';
-                echo '		<th>&nbsp;</th>';
-                echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
-                echo '		<th>'.get_lang('Percentage').'</th>';
-                echo '		<th>'.get_lang('VisualRepresentation').'</th>';
+                echo '		<th style="width: 50%">&nbsp;</th>';
+                echo '		<th style="width: 10%">'.get_lang('AbsoluteTotal').'</th>';
+                echo '		<th style="width: 10%">'.get_lang('Percentage').'</th>';
+                echo '		<th style="width: 30%">'.get_lang('VisualRepresentation').'</th>';
                 echo '	</tr>';
 
                 // Displaying the table: the content
@@ -769,9 +770,9 @@ class SurveyUtil
                         } else {
                             $answers_number = $absolute_number / $number_of_answers[$option['question_id']] * 100;
                         }
-                        echo '	<tr>';
-                        echo '		<td class="center">'.$value['option_text'].'</td>';
-                        echo '		<td class="center">';
+                        echo '<tr>';
+                        echo '<td>'.$value['option_text'].'</td>';
+                        echo '<td>';
                         if ($absolute_number != 0) {
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
                                 .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='
@@ -779,10 +780,9 @@ class SurveyUtil
                         } else {
                             echo '0';
                         }
-
                         echo '</td>';
-                        echo '<td class="center">'.round($answers_number, 2).' %</td>';
-                        echo '<td class="center">';
+                        echo '<td>'.round($answers_number, 2).' %</td>';
+                        echo '<td>';
                         $size = $answers_number * 2;
                         if ($size > 0) {
                             echo '<div
@@ -809,10 +809,10 @@ class SurveyUtil
 
                 // displaying the table: footer (totals)
                 echo '	<tr>
-                            <td class="total"><b>'.get_lang('Total').'</b></td>
-                            <td class="total"><b>'.$optionResult.'</b></td>
-                            <td class="total">&nbsp;</td>
-                            <td class="total">&nbsp;</td>
+                            <td><b>'.get_lang('Total').'</b></td>
+                            <td><b>'.$optionResult.'</b></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
                         </tr>
                         </table>';
             }

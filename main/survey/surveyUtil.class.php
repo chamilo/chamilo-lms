@@ -734,7 +734,7 @@ class SurveyUtil
                     array_push($chartData, ['option' => $optionText, 'votes' => $votes]);
                 }
                 $chartContainerId = 'chartContainer'.$question['question_id'];
-                echo '<div id="'.$chartContainerId.'" >';
+                echo '<div id="'.$chartContainerId.'" style="text-align:center;">';
                 echo self::drawChart($chartData, false, $chartContainerId, false);
                 echo '</div>';
 
@@ -3911,23 +3911,23 @@ class SurveyUtil
                 $serieValue = isset($chartDataElement['serie']) ? $chartDataElement['serie'] : null;
 
                 if (!$hasSerie) {
-                    $data .= get_lang("Option").'":"'.$option.'", "';
+                    $data .= get_lang('Option').'":"'.$option.'", "';
                     array_push($order, $option);
                 } else {
                     if (!is_array($serieValue)) {
                         $data .=
-                            get_lang("Option").'":"'.$serieValue.'", "'.
-                            get_lang("Score").'":"'.$option.'", "';
+                            get_lang('Option').'":"'.$serieValue.'", "'.
+                            get_lang('Score').'":"'.$option.'", "';
                         array_push($serie, $serieValue);
                     } else {
                         $data .=
-                            get_lang("Serie").'":"'.$serieValue[0].'", "'.
-                            get_lang("Option").'":"'.$serieValue[1].'", "'.
-                            get_lang("Score").'":"'.$option.'", "';
+                            get_lang('Serie').'":"'.$serieValue[0].'", "'.
+                            get_lang('Option').'":"'.$serieValue[1].'", "'.
+                            get_lang('Score').'":"'.$option.'", "';
                     }
                 }
-                $data .= get_lang("Votes").'":"'.$chartDataElement['votes'].'"},';
-                rtrim($data, ",");
+                $data .= get_lang('Votes').'":"'.$chartDataElement['votes'].'"},';
+                rtrim($data, ',');
             }
 
             if ($loadLibs) {
@@ -3937,14 +3937,18 @@ class SurveyUtil
 
             $htmlChart .= '
             <script>
-                var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
+                var svg = dimple.newSvg("#'.$chartContainerId.'", 600, 400);
                 var data = ['.$data.'];
                 var myChart = new dimple.chart(svg, data);
-                myChart.addMeasureAxis("y", "'.get_lang("Votes").'");';
+                myChart.setBounds(50, 30, 550, 300);
+                var yAxis = myChart.addMeasureAxis("y", "'.get_lang('Votes').'");
+                yAxis.fontSize = "14px";
+            ';
 
             if (!$hasSerie) {
                 $htmlChart .= '
                     var xAxisCategory = myChart.addCategoryAxis("x", "'.get_lang("Option").'");
+                    xAxisCategory.fontSize = "14px";
                     xAxisCategory.addOrderRule('.json_encode($order).');
                     myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
             } else {
@@ -3952,14 +3956,15 @@ class SurveyUtil
                     $serie = array_values(array_unique($serie));
                     $htmlChart .= '
                         var xAxisCategory =
-                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
+                        myChart.addCategoryAxis("x", ["'.get_lang('Option').'","'.get_lang("Score").'"]);
                         xAxisCategory.addOrderRule('.json_encode($serie).');
-                        xAxisCategory.addGroupOrderRule("'.get_lang("Score").'");
-                        myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
+                        xAxisCategory.addGroupOrderRule("'.get_lang('Score').'");
+
+                        myChart.addSeries("'.get_lang('Option').'", dimple.plot.bar);';
                 } else {
                     $htmlChart .= '
-                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
-                        myChart.addSeries("'.get_lang("Serie").'", dimple.plot.bar);';
+                        myChart.addCategoryAxis("x", ["'.get_lang('Option').'","'.get_lang("Score").'"]);
+                        myChart.addSeries("'.get_lang('Serie').'", dimple.plot.bar);';
                 }
             }
 

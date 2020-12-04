@@ -161,7 +161,7 @@ async function exportToPdf() {
     await html2canvas(table).then(function(canvas) {
         var pageData = canvas.toDataURL("image/jpeg", 1);
         headerY = 530.28/canvas.width * canvas.height;
-        pdf.addImage(pageData, "JPEG", 40, 60, 530, headerY);
+        pdf.addImage(pageData, "JPEG", 35, 60, 530, headerY);
     });
 
     var divs = doc.getElementsByClassName("question-item");
@@ -174,7 +174,7 @@ async function exportToPdf() {
             pages[page] = 0;
         }
 
-        var positionY = 160;
+        var positionY = 150;
         pages[page] += 1;
         var diff = 250;
         if (page > 1) {
@@ -183,17 +183,17 @@ async function exportToPdf() {
             diff = 220;
         }
         if (pages[page] > 1) {
-            positionY = pages[page] * diff + 10;
+            positionY = pages[page] * diff + 5;
         }
 
         const title = $(divs[i]).find(".title-question");
-        pdf.setFontSize(12);
+        pdf.setFontSize(10);
         pdf.text(40, positionY, title.text());
 
         var svg = divs[i].querySelector("svg");
         svg2pdf(svg, pdf, {
-              xOffset: 10,
-              yOffset: positionY +  10,
+              xOffset: 150,
+              yOffset: positionY,
               scale: 0.45
         });
 
@@ -201,8 +201,8 @@ async function exportToPdf() {
         var config= {};
         for (var j = 0; j < tables.length; j += 1) {
             await html2canvas(tables[j], config).then(function(canvas) {
-                var pageData = canvas.toDataURL("image/jpeg", 0.8);
-                pdf.addImage(pageData, "JPEG", 40, positionY + 200, 500, 500/canvas.width * canvas.height);
+                var pageData = canvas.toDataURL("image/jpeg", 0.7);
+                pdf.addImage(pageData, "JPEG", 40, positionY + 175, 500, 500/canvas.width * canvas.height);
             });
         }
 

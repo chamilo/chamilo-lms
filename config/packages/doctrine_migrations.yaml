@@ -1,6 +1,10 @@
 doctrine_migrations:
     migrations_paths:
-        'Chamilo\CoreBundle\Migrations\Schema\V200': '%kernel.project_dir%/src/CoreBundle/Migrations/Schema/V200'
+        'Chamilo\CoreBundle\Migrations\Schema\V200': 'src/CoreBundle/Migrations/Schema/V200'
 
+    # Run all migrations in a transaction.
     all_or_nothing: true
+
+    # Adds an extra check in the generated migrations to ensure that is executed on the same database type.
     check_database_platform: true
+    connection: default

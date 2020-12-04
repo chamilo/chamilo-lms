@@ -3894,13 +3894,19 @@ class CourseManager
                 if (api_is_platform_admin()) {
                     $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'];
                     if ($load_dirs) {
-                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                        $params['document'] = '<a
+                            id="document_preview_'.$courseId.'_0"
+                            class="document_preview btn btn-default btn-sm"
+                            href="javascript:void(0);">'
                            .Display::returnFontAwesomeIcon('folder-open').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 } else {
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED && $load_dirs) {
-                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                        $params['document'] = '<a
+                            id="document_preview_'.$courseId.'_0"
+                            class="document_preview btn btn-default btn-sm"
+                            href="javascript:void(0);">'
                            .Display::returnFontAwesomeIcon('folder-open').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
@@ -3937,7 +3943,7 @@ class CourseManager
                     );
                 }
 
-                $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
+                $params['extrafields'] = self::getExtraFieldsToBePresented($course_info['real_id']);
 
                 if ($showCustomIcon === 'true') {
                     $params['thumbnails'] = $course_info['course_image'];

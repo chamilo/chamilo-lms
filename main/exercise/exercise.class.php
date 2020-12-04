@@ -9588,7 +9588,7 @@ class Exercise
                                     RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                                     RESULT_DISABLE_SHOW_SCORE_ONLY,
                                     RESULT_DISABLE_RANKING,
-                                    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK
+                                    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                                 ]
                             )
                             ) {

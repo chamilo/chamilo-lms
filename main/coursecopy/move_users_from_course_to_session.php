@@ -47,7 +47,7 @@ if ($form->validate() && !empty($courseId)) {
     if (!empty($sessions)) {
         $sessions = array_column($sessions, 'name', 'id');
         $form->addHtml(Display::page_subheader2(get_lang('Sessions')));
-        $sessionsWithBase  = [0 => get_lang('BaseCourse')] + $sessions;
+        $sessionsWithBase = [0 => get_lang('BaseCourse')] + $sessions;
         $form->addSelect(
             'source_session_id',
             get_lang('Source'),

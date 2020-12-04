@@ -8646,4 +8646,5 @@ $XQuestionsSelectedWithTotalScoreY = "Seules %d questions seront sélectionnées
 $QuestionAlsoUsedInTheFollowingTests = "Question utilisée également dans les exercices suivants";
 $LinkToTestEdition = "Lien vers l'édition de l'exercice";
 $MoveUsersFromCourseToSession = "Déplacer les résultats utilisateurs de tout un cours dans/vers une session";
+$BackToAttemptList = "Retour à la liste des tentatives";
 ?>

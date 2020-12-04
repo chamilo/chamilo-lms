@@ -8715,4 +8715,5 @@ $QuestionAlsoUsedInTheFollowingTests = "This question is also used in the follow
 $LinkToTestEdition = "Link to test edition";
 $MoveUsersFromCourseToSession = "Move users results from base course to a session";
 $IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments = "If your quiz have hotspot questions included, you should select the images related from the documents.";
+$BackToAttemptList = "Back to the attempt list";
 ?>

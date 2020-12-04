@@ -8743,4 +8743,5 @@ $QuestionAlsoUsedInTheFollowingTests = "Esta pregunta se usa también en los eje
 $LinkToTestEdition = "Vínculo a la edición del ejercicio";
 $MoveUsersFromCourseToSession = "Mover resultados de usuarios del curso base a una sesión";
 $IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments = "Si su ejercicio tiene preguntas del tipo Zona interactiva, debería seleccionar las imágenes relacionadas desde los documentos.";
+$BackToAttemptList = "Regresar a la lista de intentos";
 ?>

@@ -157,6 +157,15 @@ switch ($action) {
         break;
 }
 
+$pageBottom = '<div class="question-return">';
+$pageBottom .= Display::url(
+    get_lang('BackToAttemptList'),
+    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
+    ['class' => 'btn btn-primary']
+);
+$pageBottom .= '</div>';
+$pageContent .= $pageBottom;
+
 $template = new Template('', $show_headers, $show_headers);
 $template->assign('page_content', $pageContent);
 $template->assign('allow_signature', $allowSignature);

@@ -1,15 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * Chamilo LMS.
- *
- * Only updates the  main/inc/conf/configuration.php
+ * Only updates the configuration.php file
  */
 if (defined('SYSTEM_INSTALLATION')) {
-    error_log("Starting ".basename(__FILE__));
+    error_log('Starting '.basename(__FILE__));
     $perm = api_get_permissions_for_new_files();
-
     $newConfFile = api_get_path(CONFIGURATION_PATH).'configuration.php';
 
     // Edit the configuration file.

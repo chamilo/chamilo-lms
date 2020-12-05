@@ -65,7 +65,6 @@ $installationLanguage = 'en';
 if (!empty($_POST['language_list'])) {
     $search = ['../', '\\0'];
     $installationLanguage = str_replace($search, '', urldecode($_POST['language_list']));
-//$_SESSION['install_language'] = $installationLanguage;
 } else {
     // Trying to switch to the browser's language, it is covenient for most of the cases.
     $installationLanguage = detect_browser_language();
@@ -131,7 +130,7 @@ $installationGuideLink = '../../documentation/installation_guide.html';
 error_reporting(E_ALL);
 
 // Upgrading from any subversion of 1.11.x
-$update_from_version_8 = [
+$upgradeFromVersion = [
     '1.11.0',
     '1.11.1',
     '1.11.2',
@@ -155,15 +154,14 @@ if (!empty($_POST['old_version'])) {
     $my_old_version = $tmp_version;
 }
 
-require_once __DIR__.'/version.php';
+$versionData = require __DIR__.'/version.php';
+$new_version = $versionData['new_version'];
 
 // A protection measure for already installed systems.
-if (isAlreadyInstalledSystem()) {
-    // The system has already been installed, so block re-installation.
-    $global_error_code = 6;
+/*if (isAlreadyInstalledSystem()) {
     echo 'Portal already installed';
     exit;
-}
+}*/
 
 /* STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 $badUpdatePath = false;
@@ -182,9 +180,10 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
         $installType = 'update';
         if (isset($_POST['step2_update_8'])) {
             $emptyUpdatePath = false;
-            $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
+            $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYMFONY_SYS_PATH) : $_POST['updatePath']);
+
             if (file_exists($proposedUpdatePath)) {
-                if (in_array($my_old_version, $update_from_version_8)) {
+                if (in_array($my_old_version, $upgradeFromVersion)) {
                     $_POST['step2'] = 1;
                 } else {
                     $badUpdatePath = true;
@@ -203,7 +202,7 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
     $installType = isset($_GET['installType']) ? $_GET['installType'] : '';
     $updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
 }
-if ('update' === $installType && in_array($my_old_version, $update_from_version_8)) {
+if ('update' === $installType && in_array($my_old_version, $upgradeFromVersion)) {
     // This is the main configuration file of the system before the upgrade.
     // Old configuration file.
     // Don't change to include_once
@@ -227,7 +226,7 @@ if (!isset($_GET['running'])) {
         $emailForm = $_SERVER['SERVER_ADMIN'];
     }
     $email_parts = explode('@', $emailForm);
-    if (isset($email_parts[1]) && 'localhost' == $email_parts[1]) {
+    if (isset($email_parts[1]) && 'localhost' === $email_parts[1]) {
         $emailForm .= '.localdomain';
     }
 
@@ -236,7 +235,6 @@ if (!isset($_GET['running'])) {
     $institutionUrlForm = 'http://www.chamilo.org';
     $languageForm = api_get_interface_language();
     $checkEmailByHashSent = 0;
-
     $userMailCanBeEmpty = 1;
     $allowSelfReg = 'approval';
     $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
@@ -260,11 +258,12 @@ if (!isset($_GET['running'])) {
 
 /* NEXT STEPS IMPLEMENTATION */
 $total_steps = 7;
+$current_step = 1;
 if (!$_POST) {
     $current_step = 1;
-} elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) || ((!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath or $badUpdatePath))) {
+} elseif (!empty($_POST['language_list']) || !empty($_POST['step1']) || ((!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath || $badUpdatePath))) {
     $current_step = 2;
-} elseif (!empty($_POST['step2']) or (!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6'])))) {
+} elseif (!empty($_POST['step2']) || (!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6'])))) {
     $current_step = 3;
 } elseif (!empty($_POST['step3'])) {
     $current_step = 4;
@@ -286,16 +285,16 @@ if ('1' == $encryptPassForm) {
 }
 
 $form = '';
-$instalation_type_label = '';
-if ('new' == $installType) {
-    $instalation_type_label = get_lang('New installation');
-} elseif ('update' == $installType) {
+$label = '';
+if ('new' === $installType) {
+    $label = get_lang('New installation');
+} elseif ('update' === $installType) {
     $update_from_version = isset($update_from_version) ? $update_from_version : null;
-    $instalation_type_label = get_lang('Update from Chamilo').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
+    $label = get_lang('Update from Chamilo').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
 }
 
-if (!empty($instalation_type_label) && empty($_POST['step6'])) {
-    $form .= '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
+if (!empty($label) && empty($_POST['step6'])) {
+    $form .= '<div class="page-header"><h2>'.$label.'</h2></div>';
 }
 
 if (empty($installationProfile)) {
@@ -307,7 +306,7 @@ if (empty($installationProfile)) {
 
 $institutionUrlFormResult = api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES);
 
-$form .= '<input type="hidden" name="updatePath"  value="'.(!$badUpdatePath ? api_htmlentities($proposedUpdatePath, ENT_QUOTES) : '').'" />';
+$form .= '<input type="hidden" name="updatePath" value="'.(!$badUpdatePath ? api_htmlentities($proposedUpdatePath, ENT_QUOTES) : '').'" />';
 $form .= '<input type="hidden" name="urlAppendPath"      value="'.api_htmlentities($urlAppendPath, ENT_QUOTES).'"/>';
 $form .= '<input type="hidden" name="pathForm"           value="'.api_htmlentities($pathForm, ENT_QUOTES).'"/>';
 $form .= '<input type="hidden" name="urlForm"            value="'.api_htmlentities($urlForm, ENT_QUOTES).'"/>';
@@ -360,7 +359,6 @@ if (isset($_POST['step2'])) {
     ob_end_clean();
 } elseif (isset($_POST['step4'])) {
     //STEP 5 : CONFIGURATION SETTINGS
-    //if update, try getting settings from the database...
     if ('update' === $installType) {
         $db_name = $dbNameForm;
         $database = connectToDatabase(
@@ -465,7 +463,7 @@ if (isset($_POST['step2'])) {
     </div>
 
     <?php
-    if ('new' == $installType) {
+    if ('new' === $installType) {
         echo get_lang('Administrator login').' : <strong>'.$loginForm.'</strong><br />';
         echo get_lang('Administrator password (<font color="red">you may want to change this</font>)').' : <strong>'.$passForm.'</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
@@ -478,7 +476,7 @@ if (isset($_POST['step2'])) {
     <?php echo get_lang('Port').' : '.$dbPortForm; ?><br />
     <?php echo get_lang('Database Login').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('Database Password').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-    <?php echo get_lang('Main Chamilo database (DB)').' : <strong>'.$dbNameForm; ?></strong><br />
+    <?php echo get_lang('Chamilo database (DB)').' : <strong>'.$dbNameForm; ?></strong><br />
     <?php echo get_lang('Allow self-registration').' : '.$allowSelfRegistrationLiteral; ?><br />
     <?php echo get_lang('Encryption method').' : ';
     echo $encryptPassForm; ?>
@@ -488,11 +486,12 @@ if (isset($_POST['step2'])) {
     <?php echo get_lang('URL of this company').' : '.$institutionUrlForm; ?><br />
     <?php echo get_lang('Chamilo URL').' : '.$urlForm; ?><br /><br />
     <?php
-    if ('new' == $installType) {
+    if ('new' === $installType) {
         echo Display::return_message(
             '<h4 style="text-align: center">'.get_lang(
                 'Warning'
-            ).'</h4>'.get_lang('The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.'),
+            ).'</h4>'.
+            get_lang('The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.'),
             'warning',
             false
         );
@@ -507,7 +506,11 @@ if (isset($_POST['step2'])) {
             <td align="right">
                 <input type="hidden" name="is_executable" id="is_executable" value="-" />
                 <input type="hidden" name="step6" value="1" />
-                <button id="button_step6" class="btn btn-success" type="submit" name="button_step6" value="<?php echo get_lang('Install chamilo'); ?>">
+                <button
+                        id="button_step6"
+                        class="btn btn-success"
+                        type="submit"
+                        name="button_step6" value="<?php echo get_lang('Install Chamilo'); ?>">
                     <em class="fa fa-floppy-o"> </em>
                     <?php echo get_lang('Install chamilo'); ?>
                 </button>
@@ -527,18 +530,25 @@ if (isset($_POST['step2'])) {
         $msg = get_lang('Update process execution');
     }
     $form .= '<div class="RequirementHeading">
-      <h3>'.display_step_sequence().$msg.'</h3>';
+                <h3>'.display_step_sequence().$msg.'</h3>';
     if (!empty($installationProfile)) {
         $form .= '    <h3>('.$installationProfile.')</h3>';
     }
-    $form .= '<div id="pleasewait" class="alert alert-success">'.get_lang('Please wait. This could take a while...').'
-      <div class="progress">
-      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-        <span class="sr-only">100% Complete</span>
-      </div>
-    </div>
-      </div>
-      </div>';
+    $form .= '<div id="pleasewait" class="alert alert-success">'.
+                    get_lang('Please wait. This could take a while...').'
+                  <div class="progress">
+                    <div
+                        class="progress-bar progress-bar-striped active"
+                        role="progressbar"
+                        aria-valuenow="100"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        style="width: 100%">
+                    <span class="sr-only">100% Complete</span>
+                  </div>
+                </div>
+              </div>
+            </div>';
 
     if ('update' === $installType) {
         $database = connectToDatabase(
@@ -549,10 +559,13 @@ if (isset($_POST['step2'])) {
             $dbPortForm
         );
         $manager = $database->getManager();
-        $perm = api_get_permissions_for_new_directories();
-        $perm_file = api_get_permissions_for_new_files();
+        //$perm = api_get_permissions_for_new_directories();
+        //$perm_file = api_get_permissions_for_new_files();
+        // @todo fix permissions.
+        $perm = octdec('0777');
+        $perm_file = octdec('0777');
         migrateSwitch($my_old_version, $manager);
-
+exit;
         // Create .env.local file
         $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
         $distFile = api_get_path(SYMFONY_SYS_PATH).'.env';
@@ -695,8 +708,9 @@ if (isset($_POST['step2'])) {
     if (empty($proposedUpdatePath)) {
         $proposedUpdatePath = $_POST['updatePath'];
     }
+
     ob_start();
-    display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8);
+    display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $upgradeFromVersion);
     $form .= ob_get_contents();
     ob_end_clean();
 } else {
@@ -707,7 +721,10 @@ if (isset($_POST['step2'])) {
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
     }
-    echo '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'" />';
+    echo '<input
+        type="hidden"
+        name="installationProfile"
+        value="'.api_htmlentities($installationProfile, ENT_QUOTES).'" />';
     $form .= ob_get_contents();
     ob_end_clean();
 }
@@ -716,11 +733,11 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 ?>
 <!DOCTYPE html>
 <head>
-    <title>&mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?></title>
-
+    <title>
+        &mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?>
+    </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link rel="stylesheet" href="../../build/css/app.css">
     <script type="text/javascript" src="../../../build/runtime.js"></script>
     <script type="text/javascript" src="../../../build/app.js"></script>

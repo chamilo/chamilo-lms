@@ -16,9 +16,6 @@
 // Enable access to database management for platform admins.
 $_configuration['db_manager_enabled'] = false;
 
-// Path to the webroot of system, example: /var/www/
-$_configuration['root_sys'] = '{ROOT_SYS}';
-
 /**
  * Hosting settings - Allows you to set limits to the Chamilo portal when
  * hosting it for a third party. These settings can be overwritten by an
@@ -87,15 +84,8 @@ $_configuration['cdn'] = [
     // copy the line above and modify following your needs
 ];
 
-/**
- * Misc. settings.
- */
 // Security word for password recovery
 $_configuration['security_key'] = '{SECURITY_KEY}';
-// Hash function method
-$_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
-// Session lifetime
-$_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
 // When enabling multi-url, settings can be configured by multi-url using a simple
 // sub-element. E.g. $_configuration['session_lifetime'][1] = true; could be turned into
@@ -106,9 +96,6 @@ $_configuration['software_name'] = 'Chamilo';
 $_configuration['software_url'] = 'https://chamilo.org/';
 // Deny the elimination of users
 $_configuration['deny_delete_users'] = false;
-// Version settings
-$_configuration['system_version'] = '{NEW_VERSION}';
-$_configuration['system_stable'] = NEW_VERSION_STABLE;
 
 /**
  * Settings to be included as settings_current in future versions.

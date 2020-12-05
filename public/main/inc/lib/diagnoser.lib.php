@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,10 +12,10 @@
  */
 class Diagnoser
 {
-    const STATUS_OK = 1;
-    const STATUS_WARNING = 2;
-    const STATUS_ERROR = 3;
-    const STATUS_INFORMATION = 4;
+    public const STATUS_OK = 1;
+    public const STATUS_WARNING = 2;
+    public const STATUS_ERROR = 3;
+    public const STATUS_INFORMATION = 4;
 
     /**
      * Contructor.

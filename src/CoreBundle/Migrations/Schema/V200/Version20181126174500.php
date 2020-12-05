@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20181126174500.
+ * LTI.
  */
 class Version20181126174500 extends AbstractMigrationChamilo
 {
@@ -20,8 +20,9 @@ class Version20181126174500 extends AbstractMigrationChamilo
             return;
         }
 
-        $this->addSql(
-            'CREATE TABLE lti_external_tool (
+        if (false === $schema->hasTable('lti_external_tool')) {
+            $this->addSql(
+                'CREATE TABLE lti_external_tool (
                 id INT AUTO_INCREMENT NOT NULL,
                 c_id INT DEFAULT NULL,
                 gradebook_eval_id INT DEFAULT NULL,
@@ -39,18 +40,17 @@ class Version20181126174500 extends AbstractMigrationChamilo
                 INDEX IDX_DB0E04E4727ACA70 (parent_id),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
-        );
-        $this->addSql(
-            'ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
-        );
-        $this->addSql(
-            'ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id)
-                REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;'
-        );
-        $this->addSql(
-            'ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E4727ACA70 FOREIGN KEY (parent_id)
-                REFERENCES lti_external_tool (id);'
-        );
+            );
+            $this->addSql(
+                'ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
+            );
+            $this->addSql(
+                'ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;'
+            );
+            $this->addSql(
+                'ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E4727ACA70 FOREIGN KEY (parent_id) REFERENCES lti_external_tool (id);'
+            );
+        }
     }
 
     public function down(Schema $schema): void

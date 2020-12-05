@@ -7,8 +7,7 @@
  */
 if (defined('SYSTEM_INSTALLATION')) {
     error_log('Starting '.basename(__FILE__));
-    $perm = api_get_permissions_for_new_files();
-    $newConfFile = api_get_path(CONFIGURATION_PATH).'configuration.php';
+    $newConfFile = api_get_path(SYMFONY_SYS_PATH).'config/configuration.php';
 
     // Edit the configuration file.
     $file = file($newConfFile);
@@ -21,7 +20,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     $found_software_name = false;
     $found_software_url = false;
 
-    foreach ($file as $line) {
+    /*foreach ($file as $line) {
         $ignore = false;
         if (false !== stripos($line, '$_configuration[\'system_version\']')) {
             $found_version = true;
@@ -36,15 +35,15 @@ if (defined('SYSTEM_INSTALLATION')) {
             $found_software_url = true;
             $line = '$_configuration[\'software_url\'] = \''.$GLOBALS['software_url'].'\';'."\r\n";
         } elseif (false !== stripos($line, '$userPasswordCrypted')) {
-            $line = '$_configuration[\'password_encryption\'] = \''.$userPasswordCrypted.'\';'."\r\n";
+            //$line = '$_configuration[\'password_encryption\'] = \''.$userPasswordCrypted.'\';'."\r\n";
         } elseif (false !== stripos($line, '?>')) {
             $ignore = true;
         }
         if (!$ignore) {
             fwrite($fh, $line);
         }
-    }
-
+    }*/
+    /*
     if (!$found_version) {
         fwrite($fh, '$_configuration[\'system_version\'] = \''.$new_version.'\';'."\r\n");
     }
@@ -56,7 +55,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
     if (!$found_software_url) {
         fwrite($fh, '$_configuration[\'software_url\'] = \''.$software_url.'\';'."\r\n");
-    }
+    }*/
     fclose($fh);
 
     error_log("configuration.php file updated.");

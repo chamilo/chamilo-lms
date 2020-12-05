@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20191206150000.
+ * Extra fields.
  */
 class Version20191206150000 extends AbstractMigrationChamilo
 {
@@ -16,10 +16,18 @@ class Version20191206150000 extends AbstractMigrationChamilo
     {
         $this->getEntityManager();
 
-        $this->addSql('ALTER TABLE extra_field ADD helper_text text DEFAULT NULL AFTER display_text');
-        $tableObj = $schema->getTable('personal_agenda');
-        if ($tableObj->hasColumn('course')) {
-            $this->addSql('ALTER TABLE personal_agenda DROP course');
+        $table = $schema->getTable('extra_field');
+        if (false === $table->hasColumn('helper_text')) {
+            $this->addSql('ALTER TABLE extra_field ADD helper_text text DEFAULT NULL AFTER display_text');
+        }
+        $this->addSql('ALTER TABLE extra_field_values CHANGE value value LONGTEXT DEFAULT NULL;');
+        if (false === $table->hasColumn('description')) {
+            $this->addSql('ALTER TABLE extra_field ADD description LONGTEXT DEFAULT NULL');
+        }
+
+        $table = $schema->getTable('extra_field_values');
+        if (!$table->hasIndex('idx_efv_item')) {
+            $this->addSql('CREATE INDEX idx_efv_item ON extra_field_values (item_id)');
         }
     }
 

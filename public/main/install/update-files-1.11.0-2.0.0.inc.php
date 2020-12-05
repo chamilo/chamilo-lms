@@ -23,6 +23,11 @@ if (defined('SYSTEM_INSTALLATION')) {
         @rrmdir($ltiPluginPath);
     }
 
+    // Copy configuration.php from app/config/configuration.php to config/configuration.php
+    $old = api_get_path(SYMFONY_SYS_PATH).'app/config/configuration.php';
+    $new = api_get_path(SYMFONY_SYS_PATH).'config/configuration.php';
+    copy($old, $new);
+
     error_log('Finish script '.basename(__FILE__));
 } else {
     echo 'You are not allowed here !'.__FILE__;

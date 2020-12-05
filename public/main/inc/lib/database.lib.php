@@ -1,10 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -23,13 +25,9 @@ class Database
      *
      * @param array  $params
      * @param string $entityRootPath
-     *
-     * @throws \Doctrine\ORM\ORMException
      */
-    public function connect(
-        $params = [],
-        $entityRootPath = ''
-    ) {
+    public function connect($params = [], $entityRootPath = '')
+    {
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
         $config->setEntityNamespaces(
@@ -41,21 +39,34 @@ class Database
         );
 
         $params['charset'] = 'utf8';
-        $entityManager = EntityManager::create($params, $config);
-        $connection = $entityManager->getConnection();
-
-        //$sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
         $sysPath = api_get_path(SYMFONY_SYS_PATH);
+
+        $cache = new Doctrine\Common\Cache\ArrayCache();
+        // standard annotation reader
+        $annotationReader = new Doctrine\Common\Annotations\AnnotationReader();
+        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
+            $annotationReader, // use reader
+            $cache // and a cache driver
+        );
+
+        $evm = new \Doctrine\Common\EventManager();
+        $timestampableListener = new Gedmo\Timestampable\TimestampableListener();
+        $timestampableListener->setAnnotationReader($cachedAnnotationReader);
+        $evm->addEventSubscriber($timestampableListener);
+
+        $driverChain = new \Doctrine\Persistence\Mapping\Driver\MappingDriverChain();
+        // load superclass metadata mapping only, into driver chain
+        // also registers Gedmo annotations.NOTE: you can personalize it
+        Gedmo\DoctrineExtensions::registerAbstractMappingIntoDriverChainORM(
+            $driverChain, // our metadata driver chain, to hook into
+            $cachedAnnotationReader // our cached annotation reader
+        );
+
+        $entityManager = EntityManager::create($params, $config, $evm);
+        $connection = $entityManager->getConnection();
         AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
+            $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php'
         );
-
-        // Registering gedmo extensions
-        AnnotationRegistry::registerAutoloadNamespace(
-            'Gedmo\Mapping\Annotation',
-            $sysPath."vendor/gedmo/doctrine-extensions/lib"
-        );
-
         $this->setConnection($connection);
         $this->setManager($entityManager);
     }
@@ -630,41 +641,29 @@ class Database
      *
      * @param string $path
      *
-     * @return \Doctrine\ORM\Configuration
+     * @return Configuration
      */
     public static function getDoctrineConfig($path)
     {
         $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
-        $path = !empty($path) ? $path : api_get_path(SYS_PATH);
+        $path = !empty($path) ? $path : api_get_path(SYMFONY_SYS_PATH);
 
         $paths = [
-            //$path.'src/Chamilo/ClassificationBundle/Entity',
-            //$path.'src/Chamilo/MediaBundle/Entity',
-            //$path.'src/Chamilo/PageBundle/Entity',
             $path.'src/Chamilo/CoreBundle/Entity',
-            //$path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
-            $path.'src/Chamilo/TicketBundle/Entity',
-            $path.'src/Chamilo/SkillBundle/Entity',
-            $path.'src/Chamilo/PluginBundle/Entity',
-            //$path.'vendor/sonata-project/user-bundle/Entity',
-            //$path.'vendor/sonata-project/user-bundle/Model',
-            //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
         ];
 
         $proxyDir = $path.'var/cache/';
 
-        $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+        return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,
             $isDevMode,
             $proxyDir,
             $cache,
             $isSimpleMode
         );
-
-        return $config;
     }
 
     /**

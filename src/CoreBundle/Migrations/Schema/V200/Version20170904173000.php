@@ -9,26 +9,53 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 
 /**
- * Class Version20170904173000.
+ * Group changes.
  */
 class Version20170904173000 extends AbstractMigrationChamilo
 {
-    public function getOrder()
-    {
-        return 3;
-    }
-
-    /**
-     * @throws \Doctrine\DBAL\Schema\SchemaException
-     */
     public function up(Schema $schema): void
     {
-        $tblQuestion = $schema->getTable('c_survey_question');
+        $table = $schema->getTable('c_group_rel_user');
 
-        if (!$tblQuestion->hasColumn('is_required')) {
-            $tblQuestion
-                ->addColumn('is_required', Types::BOOLEAN)
-                ->setDefault(false);
+        $this->addSql('DELETE FROM c_group_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM c_group_rel_user WHERE group_id NOT IN (SELECT iid FROM c_group_info)');
+        if (false === $table->hasForeignKey('FK_C5D3D49FA76ED395')) {
+            $this->addSql(
+                'ALTER TABLE c_group_rel_user ADD CONSTRAINT FK_C5D3D49FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)'
+            );
+        }
+
+        if (false === $table->hasForeignKey('FK_C5D3D49FFE54D947')) {
+            $this->addSql(
+                'ALTER TABLE c_group_rel_user ADD CONSTRAINT FK_C5D3D49FFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid)'
+            );
+        }
+        if (false === $table->hasIndex('IDX_C5D3D49FA76ED395')) {
+            $this->addSql('CREATE INDEX IDX_C5D3D49FA76ED395 ON c_group_rel_user (user_id)');
+        }
+        if (false === $table->hasIndex('IDX_C5D3D49FFE54D947')) {
+            $this->addSql('CREATE INDEX IDX_C5D3D49FFE54D947 ON c_group_rel_user (group_id)');
+        }
+
+        $this->addSql('DELETE FROM c_group_rel_tutor WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM c_group_rel_tutor WHERE group_id NOT IN (SELECT iid FROM c_group_info)');
+
+        $table = $schema->getTable('c_group_rel_tutor');
+        if (false === $table->hasForeignKey('FK_F6FF71ABA76ED395')) {
+            $this->addSql(
+                'ALTER TABLE c_group_rel_tutor ADD CONSTRAINT FK_F6FF71ABA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)'
+            );
+        }
+        if (false === $table->hasForeignKey('FK_F6FF71ABFE54D947')) {
+            $this->addSql(
+                'ALTER TABLE c_group_rel_tutor ADD CONSTRAINT FK_F6FF71ABFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid)'
+            );
+        }
+        if (false === $table->hasIndex('IDX_F6FF71ABA76ED395')) {
+            $this->addSql('CREATE INDEX IDX_F6FF71ABA76ED395 ON c_group_rel_tutor (user_id)');
+        }
+        if (false === $table->hasIndex('IDX_F6FF71ABFE54D947')) {
+            $this->addSql('CREATE INDEX IDX_F6FF71ABFE54D947 ON c_group_rel_tutor (group_id)');
         }
     }
 

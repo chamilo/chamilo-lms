@@ -84,7 +84,7 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_track_e_attempt_tms ON track_e_attempt (tms)');
         }
 
-
+        $this->addSql("CREATE TABLE IF NOT EXISTS track_e_exercise_confirmation (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, course_id INT NOT NULL, attempt_id INT NOT NULL, quiz_id INT NOT NULL, session_id INT NOT NULL, confirmed TINYINT(1) DEFAULT '0' NOT NULL, questions_count INT NOT NULL, saved_answers_count INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_980C28C7A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
     }
 
     public function down(Schema $schema): void

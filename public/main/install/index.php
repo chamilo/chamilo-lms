@@ -565,7 +565,7 @@ if (isset($_POST['step2'])) {
         $perm = octdec('0777');
         $perm_file = octdec('0777');
         migrateSwitch($my_old_version, $manager);
-exit;
+
         // Create .env.local file
         $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
         $distFile = api_get_path(SYMFONY_SYS_PATH).'.env';
@@ -618,11 +618,9 @@ exit;
 
         // Drop and create the database anyways
         error_log("Drop database $dbNameForm");
-
         $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
 
         error_log("Connect to database $dbNameForm with user $dbUsernameForm");
-
         $database = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
@@ -692,7 +690,7 @@ exit;
                 $allowSelfRegProf,
                 $installationProfile
             );
-            include 'install_files.inc.php';
+            writeSystemConfigFile(api_get_path(SYMFONY_SYS_PATH).'config/configuration.php');
         }
     }
 

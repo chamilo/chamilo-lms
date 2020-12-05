@@ -333,7 +333,7 @@ function set_file_folder_permissions()
  *
  * @param string $path Path to the config file
  */
-function write_system_config_file($path)
+function writeSystemConfigFile($path)
 {
     $content = file_get_contents(__DIR__.'/'.SYSTEM_CONFIG_FILENAME);
     $config['{DATE_GENERATED}'] = date('r');
@@ -2666,7 +2666,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             // Migrate using the migration files located in:
             // /srv/http/chamilo2/src/CoreBundle/Migrations/Schema/V200
             $result = migrate( $manager);
-
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
                 $sql = "UPDATE settings_current SET selected_value = '2.0.0' WHERE variable = 'chamilo_database_version'";
@@ -2675,7 +2674,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     error_log('Update config files');
                     include __DIR__.'/update-files-1.11.0-2.0.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
-                    include __DIR__.'/update-configuration.inc.php';
+                    //include __DIR__.'/update-configuration.inc.php';
                 }
                 error_log('Upgrade 2.0.0 process concluded!  ('.date('Y-m-d H:i:s').')');
             } else {

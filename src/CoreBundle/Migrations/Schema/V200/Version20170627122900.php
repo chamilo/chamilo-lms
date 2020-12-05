@@ -68,7 +68,6 @@ class Version20170627122900 extends AbstractMigrationChamilo
             );
         }
 
-
         // Fixes missing options show_glossary_in_extra_tools
         $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
         $this->addSql(

@@ -44,7 +44,6 @@ class Version20180927172830 extends AbstractMigrationChamilo
         if (!$table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
             $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid)');
         }
-
     }
 
     public function down(Schema $schema): void

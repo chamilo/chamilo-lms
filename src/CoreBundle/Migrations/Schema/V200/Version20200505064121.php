@@ -21,6 +21,5 @@ final class Version20200505064121 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE reset_password_request');
     }
 }

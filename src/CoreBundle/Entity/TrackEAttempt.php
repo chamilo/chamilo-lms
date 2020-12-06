@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="exe_id", columns={"exe_id"}),
  *      @ORM\Index(name="user_id", columns={"user_id"}),
  *      @ORM\Index(name="question_id", columns={"question_id"}),
+ *      @ORM\Index(name="session_id", columns={"session_id"}),
  *      @ORM\Index(name="idx_track_e_attempt_tms", columns={"tms"}),
  *  }
  * )

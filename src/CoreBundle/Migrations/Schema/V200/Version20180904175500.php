@@ -80,11 +80,27 @@ class Version20180904175500 extends AbstractMigrationChamilo
                 );
             }
         }
+
         if (!$table->hasIndex('idx_track_e_attempt_tms')) {
             $this->addSql('CREATE INDEX idx_track_e_attempt_tms ON track_e_attempt (tms)');
         }
 
-        $this->addSql("CREATE TABLE IF NOT EXISTS track_e_exercise_confirmation (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, course_id INT NOT NULL, attempt_id INT NOT NULL, quiz_id INT NOT NULL, session_id INT NOT NULL, confirmed TINYINT(1) DEFAULT '0' NOT NULL, questions_count INT NOT NULL, saved_answers_count INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_980C28C7A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+        if (false === $table->hasColumn('second_spent')) {
+            $this->addSql('ALTER TABLE track_e_attempt ADD second_spent INT NOT NULL, CHANGE user_id user_id INT DEFAULT NULL');
+        }
+
+        if (false === $table->hasForeignKey('FK_A89CC3B691D79BD3')) {
+            $this->addSql('ALTER TABLE track_e_attempt ADD CONSTRAINT FK_F8C342C3A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
+        }
+
+        if (false === $schema->hasTable('track_e_exercise_confirmation')) {
+            $this->addSql(
+                "CREATE TABLE track_e_exercise_confirmation (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, course_id INT NOT NULL, attempt_id INT NOT NULL, quiz_id INT NOT NULL, session_id INT NOT NULL, confirmed TINYINT(1) DEFAULT '0' NOT NULL, questions_count INT NOT NULL, saved_answers_count INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_980C28C7A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;"
+            );
+            $this->addSql(
+                'ALTER TABLE track_e_exercise_confirmation ADD CONSTRAINT FK_980C28C7A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
+            );
+        }
     }
 
     public function down(Schema $schema): void

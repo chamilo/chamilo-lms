@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * Class TrackEExerciseConfirmation.
- *
  * @ORM\Table(name="track_e_exercise_confirmation")
  * @ORM\Entity()
  */

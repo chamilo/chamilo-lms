@@ -2075,9 +2075,28 @@ function migrate(EntityManager $manager)
     $to = null; // if $to == null then schema will be migrated to latest version
     //echo '<pre>';
     //try {
+        // Loading migration configuration.
         $config = new PhpFile('./migrations.php');
         $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
+
+        // Check if version table exists, use new version.
+        $schema = $manager->getConnection()->getSchemaManager();
+        $dropOldVersionTable = false;
+        if ($schema->tablesExist('version')) {
+            $columns = $schema->listTableColumns('version');
+            if (in_array('id', array_keys($columns), true)) {
+                $dropOldVersionTable = true;
+            }
+        }
+
+        if ($dropOldVersionTable) {
+            $schema->dropTable('version');
+        }
+
+        // Creates "version" table.
         $dependency->getMetadataStorage()->ensureInitialized();
+
+        // Loading migrations.
         $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
         $result = '';
         $input = new Symfony\Component\Console\Input\StringInput($result);
@@ -2090,7 +2109,7 @@ function migrate(EntityManager $manager)
         foreach ($plan->getItems() as $item) {
             $item->getMigration()->setEntityManager($manager);
         }
-        // Execute migration!
+        // Execute migration!!
         $migratedSQL = $migrator->migrate($plan, $migratorConfiguration);
 
         if ($debug) {

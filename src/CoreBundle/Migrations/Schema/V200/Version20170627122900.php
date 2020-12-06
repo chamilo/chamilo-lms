@@ -4,9 +4,7 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CourseBundle\Entity\CSurvey;
 use Doctrine\DBAL\Schema\Schema;
 
 /**

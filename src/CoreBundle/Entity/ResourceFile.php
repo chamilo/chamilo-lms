@@ -115,7 +115,7 @@ class ResourceFile
      *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
     protected $size;
 
@@ -176,6 +176,7 @@ class ResourceFile
     {
         $this->metadata = [];
         $this->dimensions = [];
+        $this->size = 0;
     }
 
     public function __toString(): string

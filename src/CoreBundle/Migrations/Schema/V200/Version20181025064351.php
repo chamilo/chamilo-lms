@@ -74,6 +74,33 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_ge_cat ON gradebook_evaluation (category_id)');
         }
 
+        if (false === $table->hasColumn('best_score')) {
+            $this->addSql('ALTER TABLE gradebook_evaluation ADD best_score DOUBLE PRECISION DEFAULT NULL');
+        }
+        if (false === $table->hasColumn('average_score')) {
+            $this->addSql('ALTER TABLE gradebook_evaluation ADD average_score DOUBLE PRECISION DEFAULT NULL');
+        }
+        if (false === $table->hasColumn('score_weight')) {
+            $this->addSql('ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL');
+        }
+        if (false === $table->hasColumn('user_score_list')) {
+            $this->addSql(
+                'ALTER TABLE gradebook_evaluation ADD user_score_list LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\''
+            );
+        }
+        $this->addSql('ALTER TABLE gradebook_evaluation CHANGE user_id user_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_DDDED804A76ED395')) {
+            $this->addSql(
+                'ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED804A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (false === $table->hasIndex('IDX_DDDED804A76ED395')) {
+            $this->addSql('CREATE INDEX IDX_DDDED804A76ED395 ON gradebook_evaluation (user_id)');
+        }
+
+
         $table = $schema->getTable('gradebook_link');
         if (false === $table->hasColumn('c_id')) {
             $this->addSql('ALTER TABLE gradebook_link ADD c_id INT DEFAULT NULL');
@@ -105,12 +132,50 @@ class Version20181025064351 extends AbstractMigrationChamilo
             );
         }
 
+        $this->addSql('ALTER TABLE gradebook_certificate CHANGE user_id user_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_650669DA76ED395')) {
+            $this->addSql(
+                'ALTER TABLE gradebook_certificate ADD CONSTRAINT FK_650669DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+
         $table = $schema->hasTable('gradebook_result_attempt');
         if (false === $table) {
             $this->addSql(
                 'CREATE TABLE gradebook_result_attempt (id INT AUTO_INCREMENT NOT NULL, comment LONGTEXT DEFAULT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
         }
+
+
+        $this->addSql(
+            'ALTER TABLE gradebook_link ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\', CHANGE user_id user_id INT DEFAULT NULL'
+        );
+        $this->addSql(
+            'ALTER TABLE gradebook_link ADD CONSTRAINT FK_4F0F595FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+        );
+        $this->addSql('CREATE INDEX IDX_4F0F595FA76ED395 ON gradebook_link (user_id)');
+        $this->addSql('ALTER TABLE gradebook_linkeval_log CHANGE user_id_log user_id_log INT DEFAULT NULL');
+        $this->addSql(
+            'ALTER TABLE gradebook_linkeval_log ADD CONSTRAINT FK_1F554C7474C99BA2 FOREIGN KEY (user_id_log) REFERENCES user (id) ON DELETE CASCADE'
+        );
+        $this->addSql('CREATE INDEX IDX_1F554C7474C99BA2 ON gradebook_linkeval_log (user_id_log)');
+        $this->addSql('ALTER TABLE gradebook_result CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql(
+            'ALTER TABLE gradebook_result ADD CONSTRAINT FK_B88AEB67A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+        );
+        $this->addSql('CREATE INDEX IDX_B88AEB67A76ED395 ON gradebook_result (user_id)');
+        $this->addSql('ALTER TABLE gradebook_result_log CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql(
+            'ALTER TABLE gradebook_result_log ADD CONSTRAINT FK_C5C4CABBA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+        );
+        $this->addSql('CREATE INDEX IDX_C5C4CABBA76ED395 ON gradebook_result_log (user_id)');
+        $this->addSql('ALTER TABLE gradebook_score_log CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql(
+            'ALTER TABLE gradebook_score_log ADD CONSTRAINT FK_640C6449A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+        );
+
+
     }
 
     public function down(Schema $schema): void

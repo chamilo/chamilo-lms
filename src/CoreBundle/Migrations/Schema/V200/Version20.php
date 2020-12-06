@@ -31,7 +31,14 @@ class Version20 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_4B019DDB5E237E06 ON fos_group (name);');
         }
+        $this->addSql('ALTER TABLE fos_group CHANGE name name VARCHAR(255) NOT NULL');
 
+
+        $table = $schema->getTable('fos_user_user_group');
+        if ($table->hasForeignKey('fos_user_user_group')) {
+            $this->addSql('ALTER TABLE fos_user_user_group DROP FOREIGN KEY FK_B3C77447A76ED395');
+            $this->addSql('ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        }
 
         $this->addSql('ALTER TABLE course_request CHANGE user_id user_id INT DEFAULT NULL;');
         $table = $schema->getTable('course_request');
@@ -55,6 +62,29 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE hook_observer CHANGE class_name class_name VARCHAR(190) DEFAULT NULL');
         $this->addSql('ALTER TABLE hook_event CHANGE class_name class_name VARCHAR(190) DEFAULT NULL;');
+        $this->addSql('ALTER TABLE sequence_value CHANGE user_id user_id INT DEFAULT NULL');
+
+        $table = $schema->getTable('sequence_value');
+        if ($table->hasForeignKey('FK_66FBF12DA76ED395')) {
+            $this->addSql(
+                'ALTER TABLE sequence_value ADD CONSTRAINT FK_66FBF12DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+        if ($table->hasIndex('IDX_66FBF12DA76ED395')) {
+            $this->addSql('CREATE INDEX IDX_66FBF12DA76ED395 ON sequence_value (user_id)');
+        }
+
+        $table = $schema->getTable('branch_sync');
+        $this->addSql('ALTER TABLE branch_sync CHANGE access_url_id access_url_id INT DEFAULT NULL');
+        if ($table->hasForeignKey('FK_F62F45ED73444FD5')) {
+            $this->addSql('ALTER TABLE branch_sync ADD CONSTRAINT FK_F62F45ED73444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
+        }
+        if ($table->hasIndex('IDX_F62F45ED73444FD5')) {
+            $this->addSql('CREATE INDEX IDX_F62F45ED73444FD5 ON branch_sync (access_url_id)');
+        }
+
+
+
 
         $table = $schema->getTable('c_tool');
         if (false === $table->hasForeignKey('FK_8456658091D79BD3')) {
@@ -69,12 +99,30 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
 
 
+        if ($table->hasColumn('course')) {
+            $this->addSql('ALTER TABLE c_tool ADD tool_id INT NOT NULL');
+        }
+        if ($table->hasColumn('position')) {
+            $this->addSql('ALTER TABLE c_tool ADD position INT NOT NULL');
+        }
+        if ($table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_tool ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665808F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id)');
+            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665801BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('CREATE INDEX IDX_845665808F7B22CC ON c_tool (tool_id)');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_845665801BAD783F ON c_tool (resource_node_id)');
+        }
+
         $table = $schema->getTable('personal_agenda');
         if ($table->hasColumn('course')) {
             $this->addSql('ALTER TABLE personal_agenda DROP course');
         }
+        if ($table->hasForeignKey('FK_D86124608D93D649')) {
+            $this->addSql('ALTER TABLE personal_agenda ADD CONSTRAINT FK_D86124608D93D649 FOREIGN KEY (user) REFERENCES user (id) ON DELETE CASCADE');
+        }
 
-        $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
+
         //$this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
         /*$table = $schema->getTable('course_rel_class');
@@ -127,56 +175,24 @@ class Version20 extends AbstractMigrationChamilo
                 ");
         */
 
+        // Create tables.
         $this->addSql(
             'CREATE TABLE IF NOT EXISTS scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
         );
-
-        // Skills
-        if (!$schema->hasTable('skill_rel_item_rel_user')) {
-            $this->addSql(
-                'CREATE TABLE skill_rel_item_rel_user (id INT AUTO_INCREMENT NOT NULL, skill_rel_item_id INT NOT NULL, user_id INT NOT NULL, result_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_D1133E0DFD4B12DC (skill_rel_item_id), INDEX IDX_D1133E0DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
-            );
-            $this->addSql(
-                'CREATE TABLE skill_rel_item (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, item_type INT NOT NULL, item_id INT NOT NULL, obtain_conditions VARCHAR(255) DEFAULT NULL, requires_validation TINYINT(1) NOT NULL, is_real TINYINT(1) NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_EB5B2A0D5585C142 (skill_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
-            );
-            $this->addSql(
-                'CREATE TABLE skill_rel_course (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, c_id INT NOT NULL, session_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_E7CEC7FA5585C142 (skill_id), INDEX IDX_E7CEC7FA91D79BD3 (c_id), INDEX IDX_E7CEC7FA613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
-            );
-            $this->addSql(
-                'ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DFD4B12DC FOREIGN KEY (skill_rel_item_id) REFERENCES skill_rel_item (id);'
-            );
-            $this->addSql(
-                'ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);'
-            );
-            $this->addSql(
-                'ALTER TABLE skill_rel_item ADD CONSTRAINT FK_EB5B2A0D5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);'
-            );
-            $this->addSql(
-                'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);'
-            );
-            $this->addSql(
-                'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);'
-            );
-            $this->addSql(
-                'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id);'
-            );
-        }
-
-        $table = $schema->getTable('skill_rel_user');
-        if (!$table->hasColumn('validation_status')) {
-            $this->addSql('ALTER TABLE skill_rel_user ADD validation_status INT NOT NULL');
-        }
-
         $this->addSql(
             'CREATE TABLE IF NOT EXISTS ext_translations (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(190) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content LONGTEXT DEFAULT NULL, INDEX translations_lookup_idx (locale, object_class, foreign_key), UNIQUE INDEX lookup_unique_idx (locale, object_class, field, foreign_key), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
         );
         $this->addSql(
             'CREATE TABLE IF NOT EXISTS ext_log_entries (id INT AUTO_INCREMENT NOT NULL, action VARCHAR(8) NOT NULL, logged_at DATETIME NOT NULL, object_id VARCHAR(64) DEFAULT NULL, object_class VARCHAR(191) NOT NULL, version INT NOT NULL, data LONGTEXT DEFAULT NULL COMMENT "(DC2Type:array)", username VARCHAR(191) DEFAULT NULL, INDEX log_class_lookup_idx (object_class), INDEX log_date_lookup_idx (logged_at), INDEX log_user_lookup_idx (username), INDEX log_version_lookup_idx (object_id, object_class, version), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
         );
-
         $this->addSql(
-            'CREATE TABLE IF NOT EXISTS tool (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, image VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
+            'CREATE TABLE IF NOT EXISTS mail_template (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, template LONGTEXT DEFAULT NULL, type VARCHAR(255) NOT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, default_template TINYINT(1) NOT NULL, `system` INT DEFAULT 0 NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
         );
+
+        $table = $schema->getTable('usergroup');
+        if (!$table->hasColumn('author_id')) {
+            $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
+        }
 
         $table = $schema->getTable('c_group_info');
         if (!$table->hasColumn('document_access')) {
@@ -186,11 +202,6 @@ class Version20 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_group_category');
         if (!$table->hasColumn('document_access')) {
             $this->addSql('ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;');
-        }
-
-        $table = $schema->getTable('usergroup');
-        if (!$table->hasColumn('author_id')) {
-            $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
         }
 
         // Update template.
@@ -206,13 +217,14 @@ class Version20 extends AbstractMigrationChamilo
             );
             $this->addSql('UPDATE templates SET c_id = (SELECT id FROM course WHERE code = course_code)');
         }
+        $this->addSql('ALTER TABLE templates CHANGE user_id user_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_6F287D8EA76ED395')) {
+            $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        }
+
 
         $this->addSql('ALTER TABLE c_group_info CHANGE category_id category_id INT DEFAULT NULL');
-
-        $table = $schema->getTable('user_course_category');
-        if (!$table->hasColumn('collapsed')) {
-            $this->addSql('ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL');
-        }
 
         // Drop unused columns
         $dropColumnsAndIndex = [
@@ -257,6 +269,7 @@ class Version20 extends AbstractMigrationChamilo
             }
         }
         $this->addSql('DROP TABLE c_resource');
+        $this->addSql('DROP TABLE track_e_item_property');
     }
 
     public function down(Schema $schema): void

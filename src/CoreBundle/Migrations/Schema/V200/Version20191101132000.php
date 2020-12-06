@@ -44,6 +44,29 @@ class Version20191101132000 extends AbstractMigrationChamilo
             }
         }
 
+        if ($courseTable->hasForeignKey('FK_8EB34CC5591CC992')) {
+            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC5591CC992');
+        }
+        if ($courseTable->hasForeignKey('FK_8EB34CC56628AD36')) {
+            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC56628AD36');
+        }
+        if ($courseTable->hasForeignKey('FK_8EB34CC5591CC992')) {
+            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC5591CC992');
+        }
+        if ($courseTable->hasForeignKey('FK_8EB34CC56628AD36')) {
+            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC56628AD36');
+        }
+        if ($courseTable->hasForeignKey('FK_16B33772591CC992')) {
+            $this->addSql(
+                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B33772591CC992 FOREIGN KEY (course_id) REFERENCES course (id)'
+            );
+        }
+        if ($courseTable->hasForeignKey('FK_16B337726628AD36')) {
+            $this->addSql(
+                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B337726628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id)'
+            );
+        }
+
         $connection = $this->getEntityManager()->getConnection();
         $sql = 'SELECT * FROM course_category';
         $result = $connection->executeQuery($sql);

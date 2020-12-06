@@ -104,7 +104,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @var string
      * @Groups({"user:read", "user:write"})
-     * @ORM\Column(name="website", type="string", length=64, nullable=true)
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
     protected $website;
 

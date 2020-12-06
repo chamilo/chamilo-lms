@@ -22,6 +22,37 @@ class Version20170626122900 extends AbstractMigrationChamilo
         if ($table->hasIndex('UNIQ_8D93D649C05FB297')) {
             $this->addSql('DROP INDEX UNIQ_8D93D649C05FB297 ON user;');
         }
+        if ($table->hasIndex('idx_user_uid')) {
+            $this->addSql('DROP INDEX idx_user_uid ON user');
+        }
+
+        if ($table->hasColumn('user_id')) {
+            $this->addSql('ALTER TABLE user DROP user_id');
+        }
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE user ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql(
+                'ALTER TABLE user ADD CONSTRAINT FK_8D93D6491BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
+            );
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D6491BAD783F ON user (resource_node_id);');
+        }
+
+
+        $this->addSql(
+            'ALTER TABLE user CHANGE salt salt VARCHAR(255) NOT NULL, CHANGE created_at created_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL'
+        );
+        $this->addSql(
+            'ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(255) DEFAULT NULL, CHANGE website website VARCHAR(255) DEFAULT NULL'
+        );
+
+        if (false === $table->hasColumn('user_id')) {
+
+        }
+        if (false === $table->hasColumn('user_id')) {
+
+        }
+
 
         $em = $this->getEntityManager();
 
@@ -84,9 +115,35 @@ class Version20170626122900 extends AbstractMigrationChamilo
         $this->addSql(
             'UPDATE user SET updated_at = registration_date WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"'
         );
+
+        $table = $schema->getTable('admin');
+        $this->addSql('ALTER TABLE admin CHANGE user_id user_id INT DEFAULT NULL');
+        if (false === $table->hasForeignKey('FK_880E0D76A76ED395')) {
+            $this->addSql(
+                'ALTER TABLE admin ADD CONSTRAINT FK_880E0D76A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (false === $table->hasIndex('user_id')) {
+            $this->addSql('DROP INDEX user_id ON admin');
+        }
+
+        if (false === $table->hasIndex('UNIQ_880E0D76A76ED395')) {
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_880E0D76A76ED395 ON admin (user_id)');
+        }
+
+        $table = $schema->getTable('user_course_category');
+        if (!$table->hasColumn('collapsed')) {
+            $this->addSql('ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL');
+        }
     }
 
     public function down(Schema $schema): void
     {
+    }
+
+    public function getDescription(): string
+    {
+        return 'User changes';
     }
 }

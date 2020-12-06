@@ -19,6 +19,14 @@ final class Version20200922224343 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE sys_announcement ADD COLUMN visible_drh TINYINT(1) NOT NULL');
         }
 
+        if ($table->hasColumn('career_id')) {
+            $this->addSql('ALTER TABLE sys_announcement ADD career_id INT DEFAULT NULL');
+        }
+
+        if ($table->hasColumn('promotion_id')) {
+            $this->addSql('ALTER TABLE sys_announcement ADD promotion_id INT DEFAULT NULL');
+        }
+
         if ($table->hasColumn('visible_session_admin')) {
             $this->addSql(
                 'ALTER TABLE sys_announcement CHANGE visible_session_admin visible_session_admin TINYINT(1) NOT NULL'
@@ -41,6 +49,8 @@ final class Version20200922224343 extends AbstractMigrationChamilo
         if ($table->hasColumn('promotion_id')) {
             $this->addSql('ALTER TABLE sys_announcement ADD promotion_id INT DEFAULT NULL;');
         }
+
+        $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
     }
 
     public function down(Schema $schema): void

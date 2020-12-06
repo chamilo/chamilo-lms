@@ -36,6 +36,12 @@ class Version20180904175500 extends AbstractMigrationChamilo
                 'CREATE INDEX user_course_session_date ON track_e_course_access (user_id, c_id, session_id, login_course_date)'
             );
         }
+        $this->addSql('ALTER TABLE track_e_course_access CHANGE user_id user_id INT DEFAULT NULL');
+        if (!$table->hasForeignKey('FK_E8C05DC5A76ED395')) {
+            $this->addSql(
+                'ALTER TABLE track_e_course_access ADD CONSTRAINT FK_E8C05DC5A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
 
         $table = $schema->getTable('track_e_access');
         if (!$table->hasIndex('user_course_session_date')) {
@@ -49,6 +55,9 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql(
                 'CREATE TABLE track_e_access_complete (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, date_reg DATETIME NOT NULL, tool VARCHAR(255) NOT NULL, tool_id INT NOT NULL, tool_id_detail INT NOT NULL, action VARCHAR(255) NOT NULL, action_details VARCHAR(255) NOT NULL, current_id INT NOT NULL, ip_user VARCHAR(255) NOT NULL, user_agent VARCHAR(255) NOT NULL, session_id INT NOT NULL, c_id INT NOT NULL, ch_sid VARCHAR(255) NOT NULL, login_as INT NOT NULL, info LONGTEXT NOT NULL, url LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
+            $this->addSql('ALTER TABLE track_e_access_complete CHANGE user_id user_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE track_e_access_complete ADD CONSTRAINT FK_57FAFDBFA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+            $this->addSql('CREATE INDEX IDX_57FAFDBFA76ED395 ON track_e_access_complete (user_id)');
         }
         //$this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_result score SMALLINT NOT NULL');
         //$this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_weighting max_score SMALLINT NOT NULL');
@@ -59,6 +68,10 @@ class Version20180904175500 extends AbstractMigrationChamilo
         }
         if ($table->hasColumn('exe_result')) {
             $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_result score DOUBLE PRECISION NOT NULL');
+        }
+
+        if (false === $table->hasColumn('blocked_categories')) {
+            $this->addSql('ALTER TABLE track_e_exercises ADD blocked_categories LONGTEXT DEFAULT NULL');
         }
 
         $table = $schema->getTable('track_e_hotspot');
@@ -72,13 +85,12 @@ class Version20180904175500 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('track_e_attempt');
-        if (false === $table->hasColumn('c_id')) {
-            $this->addSql('ALTER TABLE track_e_attempt CHANGE c_id c_id INT DEFAULT NULL');
-            if (false === $table->hasForeignKey('FK_F8C342C391D79BD3')) {
-                $this->addSql(
-                    'ALTER TABLE track_e_attempt ADD CONSTRAINT FK_F8C342C391D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
-                );
-            }
+        $this->addSql('ALTER TABLE track_e_attempt CHANGE c_id c_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_F8C342C391D79BD3')) {
+            $this->addSql(
+                'ALTER TABLE track_e_attempt ADD CONSTRAINT FK_F8C342C391D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
+            );
         }
 
         if (!$table->hasIndex('idx_track_e_attempt_tms')) {
@@ -100,6 +112,12 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql(
                 'ALTER TABLE track_e_exercise_confirmation ADD CONSTRAINT FK_980C28C7A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
             );
+        }
+
+
+        $table = $schema->getTable('track_e_attempt_recording');
+        if (false === $table->hasColumn('answer')) {
+            $this->addSql('ALTER TABLE track_e_attempt_recording ADD answer LONGTEXT DEFAULT NULL');
         }
     }
 

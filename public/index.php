@@ -25,7 +25,13 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts([$trustedHosts]);
 }
 
+
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+if (empty($_ENV['APP_INSTALLED']) or $_ENV['APP_INSTALLED'] == '{{APP_INSTALLED}}') {
+    // Does not support subdirectories for now
+    header('Location: /main/install/index.php');
+    exit;
+}
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

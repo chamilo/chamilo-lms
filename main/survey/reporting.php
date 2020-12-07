@@ -191,12 +191,14 @@ async function exportToPdf() {
         pdf.text(40, positionY, title.text());
 
         var svg = divs[i].querySelector("svg");
-        svg2pdf(svg, pdf, {
-              xOffset: 150,
-              yOffset: positionY + 10,
-              scale: 0.5
-        });
 
+        if (svg) {
+            svg2pdf(svg, pdf, {
+                  xOffset: 150,
+                  yOffset: positionY + 10,
+                  scale: 0.5,
+            });
+        }
         var tables = divs[i].getElementsByClassName("display-survey");
         var config= {};
         for (var j = 0; j < tables.length; j += 1) {

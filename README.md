@@ -22,7 +22,7 @@ apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-c
 # otherwise, you can use the following directly:
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
-composer install (If composer asks to accept recipes, just press enter or "n")
+composer install (when composer asks to accept recipes, about 11 times, press enter or "n")
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 yarn install
 yarn run encore dev

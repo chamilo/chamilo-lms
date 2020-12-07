@@ -14,6 +14,10 @@ api_set_more_memory_and_time_limits();
 $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
 $sourceSessionId = isset($_REQUEST['source_session_id']) ? (int) $_REQUEST['source_session_id'] : 0;
 $destinationSessionId = isset($_REQUEST['destination_session_id']) ? (int) $_REQUEST['destination_session_id'] : 0;
+$page = 1;
+if (isset($_GET['page']) && !empty($_GET['page'])) {
+    $page = (int) $_GET['page'];
+}
 
 $courseOptions = [];
 $defaults = [];
@@ -23,6 +27,9 @@ if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseOptions[$courseId] = $courseInfo['name'];
 }
+
+$currentUrl = api_get_self().'?course_id='.$courseId.
+    '&source_session_id='.$sourceSessionId.'&destination_session_id='.$destinationSessionId;
 
 $form = new FormValidator('course', 'GET', api_get_self().'?course_id='.$courseId);
 $form->addHeader(get_lang('MoveUsersFromCourseToSession'));
@@ -34,10 +41,10 @@ $form->addSelectAjax(
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
     ]
 );
+$form->addHidden('page', $page);
 $form->addButtonSearch(get_lang('Search'));
 $content = '';
-if ($form->validate() && !empty($courseId)) {
-    $values = $form->getSubmitValues();
+if (!empty($courseId)) {
     if (!empty($sourceSessionId) && $sourceSessionId === $destinationSessionId) {
         Display::addFlash(Display::return_message(get_lang('CantMoveToTheSameSession')));
         api_location(api_get_self());
@@ -66,12 +73,8 @@ if ($form->validate() && !empty($courseId)) {
 
     $count = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, null, null, STUDENT, true);
     $students = [];
-    if (isset($values['compare']) || isset($values['move'])) {
+    if (isset($_REQUEST['compare']) || isset($_REQUEST['move'])) {
         $default = 20;
-        $page = 1;
-        if (isset($_GET['page']) && !empty($_GET['page'])) {
-            $page = (int) $_GET['page'];
-        }
         $nro_pages = round($count / $default) + 1;
         $begin = $default * ($page - 1);
         $end = $default * $page;
@@ -79,14 +82,15 @@ if ($form->validate() && !empty($courseId)) {
         if ($count > $default) {
             $navigation = "$begin - $end  / $count<br />";
             if ($page > 1) {
-                $navigation .= '<a href="'.api_get_self().'?page='.($page - 1).'">'.get_lang('Previous').'</a>';
+                $navigation .= '<a href="'.$currentUrl.'&compare=1&page='.($page - 1).'">'.get_lang('Previous').'</a>';
             } else {
                 $navigation .= get_lang('Previous');
             }
             $navigation .= '&nbsp;';
-            $page++;
+
             if ($page < $nro_pages) {
-                $navigation .= '<a href="'.api_get_self().'?page='.$page.'">'.get_lang('Next').'</a>';
+                $page++;
+                $navigation .= '<a href="'.$currentUrl.'&compare=1&page='.$page.'">'.get_lang('Next').'</a>';
             } else {
                 $navigation .= get_lang('Next');
             }
@@ -107,7 +111,7 @@ if ($form->validate() && !empty($courseId)) {
                 continue;
             }
 
-            if (isset($values['move'])) {
+            if (isset($_REQUEST['move'])) {
                 // Registering user to the new session.
                 SessionManager::subscribeUsersToSession(
                     $destinationSessionId,
@@ -123,7 +127,7 @@ if ($form->validate() && !empty($courseId)) {
                 $courseInfo,
                 $sourceSessionId,
                 $destinationSessionId,
-                isset($values['move'])
+                isset($_REQUEST['move'])
             );
             $tableResult = ob_get_contents();
             ob_get_clean();

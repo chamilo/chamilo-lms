@@ -4656,7 +4656,7 @@ class Exercise
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
                                         if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
-                                            if (empty($s_user_answer)) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
                                                 break;
                                             }
                                         }
@@ -4714,7 +4714,7 @@ class Exercise
                                             $s_answer_label = '';
                                         }
                                         if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
-                                            if (empty($s_user_answer)) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
                                                 break;
                                             }
                                         }

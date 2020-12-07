@@ -193,8 +193,8 @@ async function exportToPdf() {
         var svg = divs[i].querySelector("svg");
         svg2pdf(svg, pdf, {
               xOffset: 150,
-              yOffset: positionY,
-              scale: 0.45
+              yOffset: positionY + 10,
+              scale: 0.5
         });
 
         var tables = divs[i].getElementsByClassName("display-survey");

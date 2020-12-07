@@ -223,8 +223,6 @@ class SortableTable extends HTML_Table
                     $this->direction = 'DESC';
                 }
             }
-        } else {
-            $this->direction = 'ASC';
         }
 
         Session::write($this->param_prefix.'per_page', $this->per_page);
@@ -1143,6 +1141,7 @@ class SortableTable extends HTML_Table
     ) {
         $data = [];
         if (null !== $this->get_data_function) {
+            var_dump($this->direction);
             $data = call_user_func(
                 $this->get_data_function,
                 $from,

@@ -2731,7 +2731,7 @@ function checkCanCreateFile($file)
         }
     } else {
         $write = @file_put_contents($file, '');
-        if ($write) {
+        if ($write !== false) {
             unlink($file);
 
             return Display::label(get_lang('Writable'), 'success');

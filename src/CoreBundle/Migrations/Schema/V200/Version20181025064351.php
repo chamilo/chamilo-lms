@@ -100,7 +100,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_DDDED804A76ED395 ON gradebook_evaluation (user_id)');
         }
 
-
         $table = $schema->getTable('gradebook_link');
         if (false === $table->hasColumn('c_id')) {
             $this->addSql('ALTER TABLE gradebook_link ADD c_id INT DEFAULT NULL');
@@ -147,7 +146,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
             );
         }
 
-
         $this->addSql(
             'ALTER TABLE gradebook_link ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\', CHANGE user_id user_id INT DEFAULT NULL'
         );
@@ -174,8 +172,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $this->addSql(
             'ALTER TABLE gradebook_score_log ADD CONSTRAINT FK_640C6449A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
         );
-
-
     }
 
     public function down(Schema $schema): void

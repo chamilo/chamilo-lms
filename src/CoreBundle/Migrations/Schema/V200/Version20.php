@@ -33,7 +33,6 @@ class Version20 extends AbstractMigrationChamilo
         }
         $this->addSql('ALTER TABLE fos_group CHANGE name name VARCHAR(255) NOT NULL');
 
-
         $table = $schema->getTable('fos_user_user_group');
         if ($table->hasForeignKey('fos_user_user_group')) {
             $this->addSql('ALTER TABLE fos_user_user_group DROP FOREIGN KEY FK_B3C77447A76ED395');
@@ -83,9 +82,6 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_F62F45ED73444FD5 ON branch_sync (access_url_id)');
         }
 
-
-
-
         $table = $schema->getTable('c_tool');
         if (false === $table->hasForeignKey('FK_8456658091D79BD3')) {
             $this->addSql(
@@ -97,7 +93,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
         $this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
         $this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
-
 
         if ($table->hasColumn('course')) {
             $this->addSql('ALTER TABLE c_tool ADD tool_id INT NOT NULL');
@@ -121,7 +116,6 @@ class Version20 extends AbstractMigrationChamilo
         if ($table->hasForeignKey('FK_D86124608D93D649')) {
             $this->addSql('ALTER TABLE personal_agenda ADD CONSTRAINT FK_D86124608D93D649 FOREIGN KEY (user) REFERENCES user (id) ON DELETE CASCADE');
         }
-
 
         //$this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
@@ -194,16 +188,6 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
         }
 
-        $table = $schema->getTable('c_group_info');
-        if (!$table->hasColumn('document_access')) {
-            $this->addSql('ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;');
-        }
-
-        $table = $schema->getTable('c_group_category');
-        if (!$table->hasColumn('document_access')) {
-            $this->addSql('ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;');
-        }
-
         // Update template.
         $table = $schema->getTable('templates');
         if ($table->hasColumn('course_code')) {
@@ -219,12 +203,13 @@ class Version20 extends AbstractMigrationChamilo
         }
         $this->addSql('ALTER TABLE templates CHANGE user_id user_id INT DEFAULT NULL');
 
+        if (false === $table->hasIndex('IDX_6F287D8EA76ED395')) {
+            $this->addSql('CREATE INDEX IDX_6F287D8EA76ED395 ON templates (user_id)');
+        }
+
         if (false === $table->hasForeignKey('FK_6F287D8EA76ED395')) {
             $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         }
-
-
-        $this->addSql('ALTER TABLE c_group_info CHANGE category_id category_id INT DEFAULT NULL');
 
         // Drop unused columns
         $dropColumnsAndIndex = [

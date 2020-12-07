@@ -14,6 +14,29 @@ class Version20170904173000 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {
+        $table = $schema->getTable('c_group_info');
+        if ($table->hasIndex('session_id')) {
+            $this->addSql('DROP INDEX session_id ON c_group_info');
+        }
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_group_info');
+        }
+        if (!$table->hasColumn('document_access')) {
+            $this->addSql('ALTER TABLE c_group_info ADD document_access INT DEFAULT 0 NOT NULL;');
+        }
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_group_info ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE0653241BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_CE0653241BAD783F ON c_group_info (resource_node_id)');
+        }
+
+        if (false === $table->hasIndex('IDX_CE06532412469DE2')) {
+            $this->addSql('CREATE INDEX IDX_CE06532412469DE2 ON c_group_info (category_id)');
+        }
+
+        $this->addSql('ALTER TABLE c_group_info CHANGE category_id category_id INT DEFAULT NULL');
+
         $table = $schema->getTable('c_group_rel_user');
 
         $this->addSql('DELETE FROM c_group_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
@@ -55,6 +78,25 @@ class Version20170904173000 extends AbstractMigrationChamilo
         }
         if (false === $table->hasIndex('IDX_F6FF71ABFE54D947')) {
             $this->addSql('CREATE INDEX IDX_F6FF71ABFE54D947 ON c_group_rel_tutor (group_id)');
+        }
+
+        $table = $schema->getTable('c_group_category');
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_group_category');
+        }
+
+        if (!$table->hasColumn('document_access')) {
+            $this->addSql('ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;');
+        }
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_group_category ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_group_category ADD CONSTRAINT FK_F8E479F61BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_F8E479F61BAD783F ON c_group_category (resource_node_id)');
+        }
+
+        if (false === $schema->getTable('c_group_info')->hasForeignKey('FK_CE06532412469DE2')) {
+            $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE06532412469DE2 FOREIGN KEY (category_id) REFERENCES c_group_category (iid) ON DELETE CASCADE');
         }
     }
 

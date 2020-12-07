@@ -26,47 +26,83 @@ class Version20191101132000 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_169E6FB91BAD783F ON course (resource_node_id);');
         }
+        if ($table->hasForeignKey('FK_169E6FB912469DE2')) {
+            $this->addSql('ALTER TABLE course DROP FOREIGN KEY FK_169E6FB912469DE2');
+        }
+        if ($table->hasForeignKey('IDX_169E6FB912469DE2')) {
+            $this->addSql('DROP INDEX IDX_169E6FB912469DE2 ON course');
+        }
 
+        $table = $schema->getTable('course_rel_category');
         if (false === $schema->hasTable('course_rel_category')) {
-            $this->addSql('CREATE TABLE course_rel_category (course_id INT NOT NULL, course_category_id INT NOT NULL, INDEX IDX_8EB34CC5591CC992 (course_id), INDEX IDX_8EB34CC56628AD36 (course_category_id), PRIMARY KEY(course_id, course_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
-            $this->addSql('ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC5591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE');
-            $this->addSql('ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC56628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE');
-
-            $courseTable = $schema->getTable('course');
-            if ($courseTable->hasForeignKey('FK_169E6FB912469DE2')) {
-                $this->addSql('ALTER TABLE course DROP FOREIGN KEY FK_169E6FB912469DE2');
-            }
-            if ($courseTable->hasForeignKey('IDX_169E6FB912469DE2')) {
-                $this->addSql('DROP INDEX IDX_169E6FB912469DE2 ON course');
-            }
-            if ($courseTable->hasColumn('category_id')) {
-                $this->addSql('ALTER TABLE course DROP category_id');
-            }
+            $this->addSql(
+                'CREATE TABLE course_rel_category (course_id INT NOT NULL, course_category_id INT NOT NULL, INDEX IDX_8EB34CC5591CC992 (course_id), INDEX IDX_8EB34CC56628AD36 (course_category_id), PRIMARY KEY(course_id, course_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+            );
+            $this->addSql(
+                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC5591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE'
+            );
+            $this->addSql(
+                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC56628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE'
+            );
         }
 
-        if ($courseTable->hasForeignKey('FK_8EB34CC5591CC992')) {
+        if ($schema->getTable('course')->hasColumn('category_id')) {
+            $this->addSql('ALTER TABLE course DROP category_id');
+        }
+
+        if ($table->hasForeignKey('FK_8EB34CC5591CC992')) {
             $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC5591CC992');
         }
-        if ($courseTable->hasForeignKey('FK_8EB34CC56628AD36')) {
+        if ($table->hasForeignKey('FK_8EB34CC56628AD36')) {
             $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC56628AD36');
         }
-        if ($courseTable->hasForeignKey('FK_8EB34CC5591CC992')) {
+        if ($table->hasForeignKey('FK_8EB34CC5591CC992')) {
             $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC5591CC992');
         }
-        if ($courseTable->hasForeignKey('FK_8EB34CC56628AD36')) {
+        if ($table->hasForeignKey('FK_8EB34CC56628AD36')) {
             $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC56628AD36');
         }
-        if ($courseTable->hasForeignKey('FK_16B33772591CC992')) {
+        if ($table->hasForeignKey('FK_16B33772591CC992')) {
             $this->addSql(
                 'ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B33772591CC992 FOREIGN KEY (course_id) REFERENCES course (id)'
             );
         }
-        if ($courseTable->hasForeignKey('FK_16B337726628AD36')) {
+        if ($table->hasForeignKey('FK_16B337726628AD36')) {
             $this->addSql(
                 'ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B337726628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id)'
             );
         }
 
+        if ($table->hasIndex('idx_8eb34cc5591cc992')) {
+            $this->addSql('DROP INDEX idx_8eb34cc5591cc992 ON course_rel_category');
+        }
+        if ($table->hasIndex('idx_8eb34cc56628ad36')) {
+            $this->addSql('DROP INDEX idx_8eb34cc56628ad36 ON course_rel_category');
+        }
+        if (false === $table->hasIndex('IDX_16B337726628AD36')) {
+            $this->addSql('CREATE INDEX IDX_16B337726628AD36 ON course_rel_category (course_category_id)');
+        }
+
+        if (false === $table->hasForeignKey('FK_8EB34CC5591CC992')) {
+            $this->addSql(
+                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC5591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (false === $table->hasForeignKey('FK_8EB34CC56628AD36')) {
+            $this->addSql(
+                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC56628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE'
+            );
+        }
+
+        $table = $schema->getTable('course_rel_user');
+        if (false === $table->hasIndex('course_rel_user_user_id')) {
+            $this->addSql('CREATE INDEX course_rel_user_user_id ON course_rel_user (id, user_id)');
+        }
+        if (false === $table->hasIndex('course_rel_user_c_id_user_id')) {
+            $this->addSql('CREATE INDEX course_rel_user_c_id_user_id ON course_rel_user (id, c_id, user_id)');
+        }
+        //$this->addSql('ALTER TABLE course DROP category_code');
         $connection = $this->getEntityManager()->getConnection();
         $sql = 'SELECT * FROM course_category';
         $result = $connection->executeQuery($sql);

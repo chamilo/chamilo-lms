@@ -114,7 +114,6 @@ class Version20180904175500 extends AbstractMigrationChamilo
             );
         }
 
-
         $table = $schema->getTable('track_e_attempt_recording');
         if (false === $table->hasColumn('answer')) {
             $this->addSql('ALTER TABLE track_e_attempt_recording ADD answer LONGTEXT DEFAULT NULL');

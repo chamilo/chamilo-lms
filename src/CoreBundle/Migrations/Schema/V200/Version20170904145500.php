@@ -163,6 +163,47 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 'ALTER TABLE c_quiz_rel_question ADD CONSTRAINT FK_485736AC89D40298 FOREIGN KEY (exercice_id) REFERENCES c_quiz (iid)'
             );
         }
+
+        $table = $schema->getTable('c_quiz_question_rel_category');
+        $this->addSql('ALTER TABLE c_quiz_question_rel_category MODIFY iid INT NOT NULL');
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_quiz_question_rel_category');
+        }
+
+        $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY');
+        //$this->addSql('ALTER TABLE c_quiz_question_rel_category DROP iid, DROP c_id');
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_quiz_question_category ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql(
+                'ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
+            );
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_1414369D1BAD783F ON c_quiz_question_category (resource_node_id)');
+        }
+
+        if (false === $table->hasForeignKey('FK_A468585C12469DE2')) {
+            $this->addSql(
+                'ALTER TABLE c_quiz_question_rel_category ADD CONSTRAINT FK_A468585C12469DE2 FOREIGN KEY (category_id) REFERENCES c_quiz_question (iid)'
+            );
+        }
+
+        if (false === $table->hasForeignKey('FK_A468585C1E27F6BF')) {
+            $this->addSql(
+                'ALTER TABLE c_quiz_question_rel_category ADD CONSTRAINT FK_A468585C1E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question_category (iid)'
+            );
+        }
+
+        if (false === $table->hasIndex('IDX_A468585C12469DE2')) {
+            $this->addSql('CREATE INDEX IDX_A468585C12469DE2 ON c_quiz_question_rel_category (category_id)');
+        }
+
+        //$this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');
+        if ($table->hasIndex('idx_qqrc_qid')) {
+            $this->addSql('DROP INDEX idx_qqrc_qid ON c_quiz_question_rel_category');
+        }
+        if (false === $table->hasIndex('idx_qqrc_qid')) {
+            $this->addSql('CREATE INDEX IDX_A468585C1E27F6BF ON c_quiz_question_rel_category (question_id)');
+        }
     }
 
     public function down(Schema $schema): void

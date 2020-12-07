@@ -63,7 +63,11 @@ class Database
         );
 
         $entityManager = EntityManager::create($params, $config, $evm);
-        \Doctrine\DBAL\Types\Type::addType('uuid', 'Symfony\Bridge\Doctrine\Types\UuidType');
+
+        if (false === Type::hasType('uuid')) {
+            Type::addType('uuid', \Symfony\Bridge\Doctrine\Types\UuidType::class);
+        }
+
         $connection = $entityManager->getConnection();
         AnnotationRegistry::registerFile(
             $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php'

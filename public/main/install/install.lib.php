@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
@@ -1466,7 +1467,7 @@ function display_database_settings_form(
         <?php
     }
 
-    $database_exists_text = '';
+    $databaseExistsText = '';
     $manager = null;
     try {
         if ('update' === $installType) {
@@ -1507,17 +1508,18 @@ function display_database_settings_form(
             $schemaManager = $manager->getConnection()->getSchemaManager();
             $databases = $schemaManager->listDatabases();
             if (in_array($dbNameForm, $databases)) {
-                $database_exists_text = '<div class="alert alert-warning">'.
-                get_lang('A database with the same name <b>already exists</b>.').'</div>';
+                $databaseExistsText = '<div class="alert alert-warning">'.
+                get_lang('A database with the same name <b>already exists</b>. It will be <b>deleted</b>.').
+                    '</div>';
             }
         }
     } catch (Exception $e) {
-        $database_exists_text = $e->getMessage();
+        $databaseExistsText = $e->getMessage();
         $manager = false;
     }
 
     if ($manager && $manager->getConnection()->isConnected()) {
-        echo $database_exists_text; ?>
+        echo $databaseExistsText; ?>
         <div id="db_status" class="alert alert-success">
             Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br/>
             Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br/>
@@ -1536,7 +1538,7 @@ function display_database_settings_form(
             <p>
                 <?php echo get_lang('The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.'); ?>
             </p>
-            <code><?php echo $database_exists_text; ?></code>
+            <code><?php echo $databaseExistsText; ?></code>
         </div>
     <?php } ?>
 
@@ -2349,11 +2351,6 @@ function finishInstallationWithContainer(
     $manager = Database::getManager();
     $connection = $manager->getConnection();
     $trans = $container->get('translator');
-
-    // Add version table
-    $connection->executeQuery($sql);
-
-    error_log("Create $sql ");
 
     // Add tickets defaults
     $ticketProject = new TicketProject();

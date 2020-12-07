@@ -2313,9 +2313,8 @@ class MessageManager
         }
 
         $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
-        $html = self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
 
-        return $html;
+        return self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
     }
 
     /**

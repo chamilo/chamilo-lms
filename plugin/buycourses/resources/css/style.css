@@ -396,22 +396,19 @@ div.items-course-info h4.title{
 }
 
 
-/** to center img into figure **/
-@media (min-width: 319px) {
-    .col-sm-6 .items-course .items-course-image figure {
-        height: 155px;
-    }
-}
-@media (min-width: 479px) {
+/** XS like old android or ios devices  */
+@media (max-width: 767px) {
     .col-sm-6 .items-course .items-course-image figure {
         height: 220px;
     }
 }
-@media (min-width: 767px) {
+/** SM  display **/
+@media (min-width: 768px) {
     .col-sm-6 .items-course .items-course-image figure {
         height: 170px;
     }
 }
+/** Md and LG display **/
 @media (min-width: 991px) {
     .col-sm-6 .items-course .items-course-image figure {
         height: 135px;

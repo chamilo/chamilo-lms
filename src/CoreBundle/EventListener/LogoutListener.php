@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Entity\User;
 use Database;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -46,37 +47,40 @@ class LogoutListener
             $chat = new \Chat();
             $chat->setUserStatus(0);
         }*/
+        $token = $this->storage->getToken();
+        $user = $token->getUser();
+        if ($user instanceof User) {
+            $userId = $token->getUser()->getId();
+            $table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $userId = $this->storage->getToken()->getUser()->getId();
+            $sql = "SELECT login_id, login_date
+                    FROM $table
+                    WHERE login_user_id = $userId
+                    ORDER BY login_date DESC
+                    LIMIT 0,1";
+            $loginId = null;
+            $connection = $this->em->getConnection();
+            $result = $connection->executeQuery($sql);
+            if ($result->rowCount() > 0) {
+                $row = $result->fetchAssociative();
+                if ($row) {
+                    $loginId = $row['login_id'];
+                }
+            }
 
-        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $loginAs = $this->checker->isGranted('ROLE_PREVIOUS_ADMIN');
+            if (!$loginAs) {
+                $current_date = api_get_utc_datetime();
+                $sql = "UPDATE $table
+                        SET logout_date='".$current_date."'
+                        WHERE login_id='$loginId'";
+                $connection->executeQuery($sql);
+            }
 
-        $sql = "SELECT login_id, login_date
-                FROM $table
-                WHERE login_user_id = $userId
-                ORDER BY login_date DESC
-                LIMIT 0,1";
-        //$row = Database::query($sql);
-        $loginId = null;
-        $connection = $this->em->getConnection();
-        $result = $connection->executeQuery($sql);
-        if ($result->rowCount() > 0) {
-            $row = $result->fetchAssociative();
-            $loginId = $row['login_id'];
-        }
-
-        $loginAs = $this->checker->isGranted('ROLE_PREVIOUS_ADMIN');
-        if (!$loginAs) {
-            $current_date = api_get_utc_datetime();
-            $sql = "UPDATE $table
-                    SET logout_date='".$current_date."'
-        		    WHERE login_id='$loginId'";
+            $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+            $sql = 'DELETE FROM '.$online_table." WHERE login_user_id = $userId";
             $connection->executeQuery($sql);
         }
-
-        $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $sql = 'DELETE FROM '.$online_table." WHERE login_user_id = $userId";
-        $connection->executeQuery($sql);
 
         $login = $this->router->generate('home');
 

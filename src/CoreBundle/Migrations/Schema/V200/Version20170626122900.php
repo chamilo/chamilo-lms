@@ -16,14 +16,13 @@ class Version20170626122900 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('user');
-        if (false === $table->hasIndex('idx_user_uid')) {
+
+        if ($table->hasIndex('idx_user_uid')) {
             $this->addSql('DROP INDEX idx_user_uid ON user;');
         }
+
         if ($table->hasIndex('UNIQ_8D93D649C05FB297')) {
             $this->addSql('DROP INDEX UNIQ_8D93D649C05FB297 ON user;');
-        }
-        if ($table->hasIndex('idx_user_uid')) {
-            $this->addSql('DROP INDEX idx_user_uid ON user');
         }
 
         if ($table->hasColumn('user_id')) {
@@ -38,23 +37,33 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D6491BAD783F ON user (resource_node_id);');
         }
 
-        $this->addSql(
-            'ALTER TABLE user CHANGE salt salt VARCHAR(255) NOT NULL, CHANGE created_at created_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL'
-        );
-        $this->addSql(
-            'ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(255) DEFAULT NULL, CHANGE website website VARCHAR(255) DEFAULT NULL'
-        );
-
-        if (false === $table->hasColumn('user_id')) {
+        if ($table->hasColumn('salt')) {
+            $this->addSql('ALTER TABLE user CHANGE salt salt VARCHAR(255) NOT NULL');
         }
-        if (false === $table->hasColumn('user_id')) {
+
+        if ($table->hasColumn('created_at')) {
+            $this->addSql('ALTER TABLE user CHANGE created_at created_at DATETIME NOT NULL');
+        }
+
+        if ($table->hasColumn('updated_at')) {
+            $this->addSql('ALTER TABLE user CHANGE updated_at updated_at DATETIME NOT NULL');
+        }
+
+        if ($table->hasColumn('confirmation_token')) {
+            $this->addSql('ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(255) DEFAULT NULL');
+        }
+
+        if ($table->hasColumn('website')) {
+            $this->addSql('ALTER TABLE user CHANGE website website VARCHAR(255) DEFAULT NULL');
+        } else {
+            $this->addSql('ALTER TABLE user ADD website VARCHAR(255) DEFAULT NULL');
         }
 
         $em = $this->getEntityManager();
 
         if (false === $table->hasColumn('uuid')) {
             $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");
-            $sql = 'SELECT * FROM user';
+            $sql = 'SELECT id FROM user';
             $result = $em->getConnection()->executeQuery($sql);
             $data = $result->fetchAllAssociative();
             foreach ($data as $item) {
@@ -63,10 +72,10 @@ class Version20170626122900 extends AbstractMigrationChamilo
                 $sql = "UPDATE user SET uuid = '$uuid' WHERE id = $userId";
                 $this->addSql($sql);
             }
-        }
 
-        if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649D17F50A6 ON user (uuid);');
+            if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {
+                $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649D17F50A6 ON user (uuid);');
+            }
         }
 
         if (false === $table->hasColumn('api_token')) {
@@ -76,9 +85,6 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
         if (false === $table->hasColumn('date_of_birth')) {
             $this->addSql('ALTER TABLE user ADD date_of_birth DATETIME DEFAULT NULL');
-        }
-        if (false === $table->hasColumn('website')) {
-            $this->addSql('ALTER TABLE user ADD website VARCHAR(255) DEFAULT NULL');
         }
         if (false === $table->hasColumn('biography')) {
             $this->addSql('ALTER TABLE user ADD biography LONGTEXT DEFAULT NULL');

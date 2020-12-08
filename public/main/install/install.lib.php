@@ -1649,12 +1649,39 @@ function display_configuration_settings_form(
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
-    echo "<h2>".display_step_sequence().get_lang("ConfigurationSettings")."</h2>";
+    echo "<h2>".display_step_sequence().get_lang('Configuration settings')."</h2>";
     echo '</div>';
 
     // Parameter 1: administrator's login
-    $html = '';
-    $html .= display_configuration_parameter(
+    if ('update' === $installType) {
+        $rootSys = get_config_param('root_web');
+        $html = display_configuration_parameter(
+            $installType,
+            get_lang('Chamilo URL'),
+            'loginForm',
+            $rootSys,
+            true
+        );
+        $rootSys = get_config_param('root_sys');
+        $html .= display_configuration_parameter(
+            $installType,
+            get_lang('Path'),
+            'loginForm',
+            $rootSys,
+            true
+        );
+        $systemVersion = get_config_param('system_version');
+        $html .= display_configuration_parameter(
+            $installType,
+            get_lang('Version'),
+            'loginForm',
+            $systemVersion,
+            true
+        );
+        echo Display::panel($html, get_lang('System'));
+    }
+
+    $html = display_configuration_parameter(
         $installType,
         get_lang('Administrator login'),
         'loginForm',
@@ -1714,20 +1741,19 @@ function display_configuration_settings_form(
     $html .='</div>';
 
     // Second parameter: Chamilo URL
-    $html .= '<div class="form-group row">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('Chamilo URL').get_lang('Required field').'</label>';
-
-    if ('update' === $installType) {
-        $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";
-    } else {
+    if ('install' === $installType) {
+        $html .= '<div class="form-group row">';
+        $html .= '<label class="col-sm-6 control-label">'.get_lang('Chamilo URL').'</label>';
         $html .= '<div class="col-sm-6">';
         $html .= '<input
             class="form-control"
             type="text" size="40"
+            required
             maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES).'" />';
         $html .= '</div>';
+
+        $html .= '</div>';
     }
-    $html .= '</div>';
 
     // Parameter 9: campus name
     $html .= display_configuration_parameter(
@@ -1754,7 +1780,7 @@ function display_configuration_settings_form(
     );
 
     $html .= '<div class="form-group row">
-            <label class="col-sm-6 control-label">'.get_lang("Encryption method").'</label>
+            <label class="col-sm-6 control-label">'.get_lang('Encryption method').'</label>
         <div class="col-sm-6">';
     if ('update' === $installType) {
         $html .= '<input type="hidden" name="encryptPassForm" value="'.$encryptPassForm.'" />'.$encryptPassForm;
@@ -1765,7 +1791,7 @@ function display_configuration_settings_form(
                             type="radio"
                             name="encryptPassForm"
                             value="bcrypt"
-                            id="encryptPass1" '.('bcrypt' == $encryptPassForm ? 'checked="checked" ' : '').'/> bcrypt
+                            id="encryptPass1" '.('bcrypt' === $encryptPassForm ? 'checked="checked" ' : '').'/> bcrypt
                     </label>';
 
         $html .= '<label>
@@ -1773,14 +1799,14 @@ function display_configuration_settings_form(
                             type="radio"
                             name="encryptPassForm"
                             value="sha1"
-                            id="encryptPass1" '.('sha1' == $encryptPassForm ? 'checked="checked" ' : '').'/> sha1
+                            id="encryptPass1" '.('sha1' === $encryptPassForm ? 'checked="checked" ' : '').'/> sha1
                     </label>';
 
         $html .= '<label>
                         <input type="radio"
                             name="encryptPassForm"
                             value="md5"
-                            id="encryptPass0" '.('md5' == $encryptPassForm ? 'checked="checked" ' : '').'/> md5
+                            id="encryptPass0" '.('md5' === $encryptPassForm ? 'checked="checked" ' : '').'/> md5
                     </label>';
 
         $html .= '<label>
@@ -1789,7 +1815,7 @@ function display_configuration_settings_form(
                             name="encryptPassForm"
                             value="none"
                             id="encryptPass2" '.
-                            ('none' == $encryptPassForm ? 'checked="checked" ' : '').'/>'.get_lang('none').'
+                            ('none' === $encryptPassForm ? 'checked="checked" ' : '').'/>'.get_lang('none').'
                     </label>';
         $html .= '</div>';
     }
@@ -1799,9 +1825,9 @@ function display_configuration_settings_form(
             <label class="col-sm-6 control-label">'.get_lang('Allow self-registration').'</label>
             <div class="col-sm-6">';
     if ('update' === $installType) {
-        if ('true' == $allowSelfReg) {
+        if ('true' === $allowSelfReg) {
             $label = get_lang('Yes');
-        } elseif ('false' == $allowSelfReg) {
+        } elseif ('false' === $allowSelfReg) {
             $label = get_lang('No');
         } else {
             $label = get_lang('After approval');
@@ -2092,6 +2118,7 @@ function migrate(EntityManager $manager)
         }
 
         if ($dropOldVersionTable) {
+            error_log('Drop version table');
             $schema->dropTable('version');
         }
 
@@ -2109,26 +2136,34 @@ function migrate(EntityManager $manager)
         $lastVersion = $migrations->getLast();
         $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
         foreach ($plan->getItems() as $item) {
+            //error_log('Versions to process: '.$item->getVersion());
             $item->getMigration()->setEntityManager($manager);
         }
         // Execute migration!!
-        $migratedSQL = $migrator->migrate($plan, $migratorConfiguration);
+        /** @var  $migratedVersions */
+        $versions = $migrator->migrate($plan, $migratorConfiguration);
 
         if ($debug) {
-            foreach ($migratedSQL as $version => $sqlList) {
-                echo "VERSION: $version<br>";
+            /** @var \Doctrine\Migrations\Query\Query[] $queries */
+            $versionCounter = 1;
+            foreach ($versions as $version => $queries) {
+                $total = count($queries);
                 echo '----------------------------------------------<br />';
-                $total = count($sqlList);
-                error_log("VERSION: $version");
-                error_log("# queries: $total");
+                $message = "VERSION: $versionCounter / $total - $version";
+                echo "$message<br/>";
+                error_log('-------------------------------------');
+                error_log($message);
                 $counter = 1;
-                foreach ($sqlList as $sql) {
+                foreach ($queries as $query) {
+                    $sql = $query->getStatement();
                     echo "<code>$sql</code><br>";
                     error_log("$counter/$total : $sql");
                     $counter++;
                 }
+                $versionCounter++;
             }
-            echo "<br>DONE!<br>";
+            echo "<br/>DONE!<br />";
+            error_log('DONE!');
         }
 
         return true;
@@ -2660,6 +2695,7 @@ function rrmdir($dir)
  */
 function migrateSwitch($fromVersion, $manager, $processFiles = true)
 {
+    error_log('-----------------------------------------');
     error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
     //echo '<a class="btn btn-secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
     //echo '<div id="details" style="display:none">';
@@ -2677,11 +2713,12 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.11.10':
         case '1.11.12':
         case '1.11.14':
-            $database = new Database();
-            $database->setManager($manager);
+            $start = time();
             // Migrate using the migration files located in:
             // /srv/http/chamilo2/src/CoreBundle/Migrations/Schema/V200
             $result = migrate( $manager);
+            error_log('-----------------------------------------');
+
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
                 $sql = "UPDATE settings_current SET selected_value = '2.0.0' WHERE variable = 'chamilo_database_version'";
@@ -2692,9 +2729,12 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     // Only updates the configuration.inc.php with the new version
                     //include __DIR__.'/update-configuration.inc.php';
                 }
-                error_log('Upgrade 2.0.0 process concluded!  ('.date('Y-m-d H:i:s').')');
+                $finish = time();
+                $total = round(($finish - $start) / 60);
+                error_log('Database migration finished:  ('.date('Y-m-d H:i:s').') took '.$total.' minutes');
             } else {
                 error_log('There was an error during running migrations. Check error.log');
+                exit;
             }
             break;
         default:

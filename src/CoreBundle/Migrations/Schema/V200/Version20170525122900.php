@@ -162,7 +162,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
         }
 
         $this->addSql(
-            'CREATE TABLE IF NOT EXISTS resource_file (id INT AUTO_INCREMENT NOT NULL,name VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, ADD dimensions LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:simple_array)\',ADD crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL,  metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\',  created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            'CREATE TABLE IF NOT EXISTS resource_file (id INT AUTO_INCREMENT NOT NULL,name VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)",crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL,  metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\',  created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
         );
         if (false === $schema->hasTable('resource_node')) {
             $this->addSql(

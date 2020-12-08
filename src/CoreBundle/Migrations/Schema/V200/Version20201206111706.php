@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
 
-final class Version20201206111706 extends AbstractMigration
+final class Version20201206111706 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {

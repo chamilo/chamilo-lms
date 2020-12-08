@@ -83,9 +83,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         if (false === $table->hasColumn('prevent_backwards')) {
             $this->addSql(
-                'ALTER TABLE c_quiz ADD prevent_backwards INT DEFAULT 0 NOT NULL, CHANGE type type INT NOT NULL, CHANGE id resource_node_id INT DEFAULT NULL'
+                'ALTER TABLE c_quiz ADD prevent_backwards INT DEFAULT 0 NOT NULL'
             );
         }
+        $this->addSql('ALTER TABLE c_quiz CHANGE type type INT NOT NULL');
 
         if ($table->hasForeignKey('FK_B7A1C35FB48D66')) {
             $this->addSql(
@@ -96,7 +97,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         // answer
         $table = $schema->getTable('c_quiz_answer');
         if ($table->hasColumn('id_auto')) {
-            $this->addSql('ALTER TABLE c_quiz_answer DROP id_auto, DROP id');
+            $this->addSql('ALTER TABLE c_quiz_answer DROP id_auto');
         }
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_quiz_answer DROP id');
@@ -113,7 +114,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('mandatory')) {
-            $this->addSql('ALTER TABLE c_quiz_question ADD mandatory INT NOT NULL, DROP id');
+            $this->addSql('ALTER TABLE c_quiz_question ADD mandatory INT NOT NULL');
         }
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_quiz_question DROP id');
@@ -164,15 +165,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
             );
         }
 
-        $table = $schema->getTable('c_quiz_question_rel_category');
-        $this->addSql('ALTER TABLE c_quiz_question_rel_category MODIFY iid INT NOT NULL');
-        if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_quiz_question_rel_category');
-        }
-
-        $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY');
-        //$this->addSql('ALTER TABLE c_quiz_question_rel_category DROP iid, DROP c_id');
-
+        $table = $schema->getTable('c_quiz_question_category');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_quiz_question_category ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
@@ -181,6 +174,15 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_1414369D1BAD783F ON c_quiz_question_category (resource_node_id)');
         }
 
+        $table = $schema->getTable('c_quiz_question_rel_category');
+        $this->addSql('ALTER TABLE c_quiz_question_rel_category MODIFY iid INT NOT NULL');
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_quiz_question_rel_category');
+        }
+
+        if ($table->hasPrimaryKey()) {
+            $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY');
+        }
         if (false === $table->hasForeignKey('FK_A468585C12469DE2')) {
             $this->addSql(
                 'ALTER TABLE c_quiz_question_rel_category ADD CONSTRAINT FK_A468585C12469DE2 FOREIGN KEY (category_id) REFERENCES c_quiz_question (iid)'
@@ -198,10 +200,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         //$this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');
-        if ($table->hasIndex('idx_qqrc_qid')) {
+        /*if ($table->hasIndex('idx_qqrc_qid')) {
             $this->addSql('DROP INDEX idx_qqrc_qid ON c_quiz_question_rel_category');
-        }
-        if (false === $table->hasIndex('idx_qqrc_qid')) {
+        }*/
+        if (false === $table->hasIndex('IDX_A468585C1E27F6BF')) {
             $this->addSql('CREATE INDEX IDX_A468585C1E27F6BF ON c_quiz_question_rel_category (question_id)');
         }
     }

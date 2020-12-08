@@ -71,9 +71,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_link_category');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql(
-                'ALTER TABLE c_link_category ADD resource_node_id INT DEFAULT NULL, DROP c_id, DROP id, DROP session_id'
-            );
+            $this->addSql('ALTER TABLE c_link_category ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_link_category ADD CONSTRAINT FK_319D6C9C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -106,6 +104,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_student_publication CHANGE active active INT DEFAULT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_student_publication ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_student_publication ADD CONSTRAINT FK_5246F7461BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -148,7 +147,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_calendar_event_attachment');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_calendar_event_attachment ADD id resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event_attachment ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_calendar_event_attachment ADD CONSTRAINT FK_DDD745A6EA67784A FOREIGN KEY (agenda_id) REFERENCES c_calendar_event (iid) ON DELETE CASCADE'
             );

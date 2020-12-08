@@ -76,7 +76,6 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_B5BEF5591BAD783F ON c_forum_post (resource_node_id)');
             $this->addSql('ALTER TABLE c_forum_post ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF55929CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE SET NULL'
@@ -87,6 +86,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql(
                 'ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF559E2904019 FOREIGN KEY (thread_id) REFERENCES c_forum_thread (iid) ON DELETE SET NULL'
             );
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_B5BEF5591BAD783F ON c_forum_post (resource_node_id)');
         }
 
         $table = $schema->getTable('c_course_description');

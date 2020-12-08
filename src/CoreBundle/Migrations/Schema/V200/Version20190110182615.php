@@ -42,13 +42,13 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX session ON c_lp');
         }
 
-        $table = $schema->getTable('c_lp_category');
         if (false === $table->hasForeignKey('FK_F67ABBEB12469DE2')) {
             $this->addSql(
                 'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB12469DE2 FOREIGN KEY (category_id) REFERENCES c_lp_category (iid)'
             );
         }
 
+        $table = $schema->getTable('c_lp_category');
         if (false === $table->hasColumn('session_id')) {
             $this->addSql('ALTER TABLE c_lp_category ADD session_id INT DEFAULT NULL');
         }
@@ -87,7 +87,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_lp_item DROP id');
         }
-        $this->addSql('ALTER TABLE CHANGE lp_id lp_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp_item CHANGE lp_id lp_id INT DEFAULT NULL');
 
         if (false === $table->hasForeignKey('FK_CCC9C1ED68DFD1EF')) {
             $this->addSql(

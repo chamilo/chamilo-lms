@@ -38,30 +38,24 @@ class Version20191101132000 extends AbstractMigrationChamilo
             $this->addSql(
                 'CREATE TABLE course_rel_category (course_id INT NOT NULL, course_category_id INT NOT NULL, INDEX IDX_8EB34CC5591CC992 (course_id), INDEX IDX_8EB34CC56628AD36 (course_category_id), PRIMARY KEY(course_id, course_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
-            $this->addSql(
+            /*$this->addSql(
                 'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC5591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE'
-            );
-            $this->addSql(
+            );*/
+            /*$this->addSql(
                 'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC56628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE'
-            );
+            );*/
         }
 
         if ($schema->getTable('course')->hasColumn('category_id')) {
             $this->addSql('ALTER TABLE course DROP category_id');
         }
 
-        if ($table->hasForeignKey('FK_8EB34CC5591CC992')) {
+        /*if ($table->hasForeignKey('FK_8EB34CC5591CC992')) {
             $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC5591CC992');
-        }
-        if ($table->hasForeignKey('FK_8EB34CC56628AD36')) {
+        }*/
+        /*if ($table->hasForeignKey('FK_8EB34CC56628AD36')) {
             $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC56628AD36');
-        }
-        if ($table->hasForeignKey('FK_8EB34CC5591CC992')) {
-            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC5591CC992');
-        }
-        if ($table->hasForeignKey('FK_8EB34CC56628AD36')) {
-            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC56628AD36');
-        }
+        }*/
         if ($table->hasForeignKey('FK_16B33772591CC992')) {
             $this->addSql(
                 'ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B33772591CC992 FOREIGN KEY (course_id) REFERENCES course (id)'

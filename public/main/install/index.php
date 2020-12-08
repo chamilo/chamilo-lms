@@ -42,8 +42,15 @@ define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
 api_check_php_version();
-ob_implicit_flush(true);
+ob_implicit_flush();
 Debug::enable();
+
+// Create .env.local file
+$envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
+if (file_exists($envFile)) {
+    echo "Chamilo is already installed. File $envFile exists.";
+    exit;
+}
 
 // Defaults settings
 putenv('APP_LOCALE=en');
@@ -461,31 +468,49 @@ if (isset($_POST['step2'])) {
     <div class="RequirementContent">
         <?php echo get_lang('Here are the values you entered'); ?>
     </div>
-
     <?php
     if ('new' === $installType) {
         echo get_lang('Administrator login').' : <strong>'.$loginForm.'</strong><br />';
-        echo get_lang('Administrator password (<font color="red">you may want to change this</font>)').' : <strong>'.$passForm.'</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
+        echo get_lang('Administrator password (<font color="red">you may want to change this</font>)').' : <strong>'.$passForm.'</strong><br /><br />';
     }
-    $allowSelfRegistrationLiteral = ('true' == $allowSelfReg) ? get_lang('Yes') : ('approval' == $allowSelfReg ? get_lang('Approval') : get_lang('No'));
-    echo get_lang('Administrator first name').' : '.$adminFirstName, '<br />', get_lang('Administrator last name').' : '.$adminLastName, '<br />';
-    echo get_lang('Administrator e-mail').' : '.$emailForm; ?><br />
-    <?php echo get_lang('Administrator telephone').' : '.$adminPhoneForm; ?><br />
-    <?php echo get_lang('Main language').' : '.$languageForm; ?><br /><br />
-    <?php echo get_lang('Database Host').' : '.$dbHostForm; ?><br />
-    <?php echo get_lang('Port').' : '.$dbPortForm; ?><br />
-    <?php echo get_lang('Database Login').' : '.$dbUsernameForm; ?><br />
-    <?php echo get_lang('Database Password').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-    <?php echo get_lang('Chamilo database (DB)').' : <strong>'.$dbNameForm; ?></strong><br />
-    <?php echo get_lang('Allow self-registration').' : '.$allowSelfRegistrationLiteral; ?><br />
-    <?php echo get_lang('Encryption method').' : ';
-    echo $encryptPassForm; ?>
-    <br /><br />
-    <?php echo get_lang('Your portal name').' : '.$campusForm; ?><br />
-    <?php echo get_lang('Your company short name').' : '.$institutionForm; ?><br />
-    <?php echo get_lang('URL of this company').' : '.$institutionUrlForm; ?><br />
-    <?php echo get_lang('Chamilo URL').' : '.$urlForm; ?><br /><br />
-    <?php
+
+    $allowSelfRegistrationLiteral = 'true' === $allowSelfReg ? get_lang('Yes') : 'approval' === $allowSelfReg ? get_lang('Approval') : get_lang('No');
+
+    if ('update' === $installType) {
+        $urlForm = get_config_param('root_web');
+    }
+
+    $params = [
+        get_lang('Your portal name').' : '.$campusForm,
+        get_lang('Chamilo URL').' : '.$urlForm,
+        get_lang('Encryption method').' : '.$encryptPassForm,
+    ];
+    $content = implode('<br />', $params);
+    echo Display::panel($content);
+
+    $params = [
+        get_lang('Database Host').' : '.$dbHostForm,
+        get_lang('Port').' : '.$dbPortForm,
+        get_lang('Database Login').' : '.$dbUsernameForm,
+        get_lang('Database Password').' : '.str_repeat('*', api_strlen($dbPassForm)),
+        get_lang('Database name').' : <strong>'.$dbNameForm.'</strong>',
+    ];
+    $content = implode('<br />', $params);
+    echo Display::panel($content);
+
+    $params = [
+        get_lang('Administrator first name').' : '.$adminFirstName,
+        get_lang('Administrator last name').' : '.$adminLastName,
+        get_lang('Administrator e-mail').' : '.$emailForm,
+        get_lang('Administrator telephone').' : '.$adminPhoneForm,
+        get_lang('Main language').' : '.$languageForm,
+        get_lang('Allow self-registration').' : '.$allowSelfRegistrationLiteral,
+        get_lang('Your company short name').' : '.$institutionForm,
+        get_lang('URL of this company').' : '.$institutionUrlForm,
+    ];
+    $content = implode('<br />', $params);
+    echo Display::panel($content);
+
     if ('new' === $installType) {
         echo Display::return_message(
             '<h4 style="text-align: center">'.get_lang(
@@ -499,7 +524,8 @@ if (isset($_POST['step2'])) {
     <table width="100%">
         <tr>
             <td>
-                <button type="submit" class="btn btn-secondary" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
+                <button type="submit"
+                        class="btn btn-secondary" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
                     <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
                 </button>
             </td>
@@ -602,6 +628,8 @@ if (isset($_POST['step2'])) {
         $containerDatabase = $kernel->getContainer();
         upgradeWithContainer($containerDatabase);
         error_log('Set upgradeWithContainer');
+        error_log('------------------------------');
+        error_log('Upgrade 2.0.0 process concluded!  ('.date('Y-m-d H:i:s').')');
     } else {
         set_file_folder_permissions();
         error_log("connectToDatabase as user $dbUsernameForm");

@@ -112,7 +112,7 @@ if ($user_already_registered_show_terms === false &&
     api_get_setting('allow_registration') !== 'false'
 ) {
     // STUDENT/TEACHER
-    if (api_get_setting('allow_registration_as_teacher') != 'false') {
+    if (api_get_setting('allow_registration_as_teacher') !== 'false') {
         if (in_array('status', $allowedFields)) {
             $form->addRadio(
                 'status',

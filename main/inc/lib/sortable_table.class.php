@@ -1141,7 +1141,6 @@ class SortableTable extends HTML_Table
     ) {
         $data = [];
         if (null !== $this->get_data_function) {
-            var_dump($this->direction);
             $data = call_user_func(
                 $this->get_data_function,
                 $from,

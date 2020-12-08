@@ -462,6 +462,7 @@ function extldapGetUserAttributeValue($filter, $attribute)
                 return $values[0];
             }
             throw new Exception(get_lang('MoreThanOneAttributeValueFound'));
+            // no break;
         default:
             throw new Exception(get_lang('MoreThanOneUserMatched'));
     }

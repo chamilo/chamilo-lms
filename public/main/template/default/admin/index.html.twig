@@ -53,14 +53,14 @@
             {% endfor %}
             </div>
 
-            <div class="row">
-                {% for role in app.user.roles %}
-                    {% set role = role | lower | replace ({ 'role_' : ''}) %}
-                    {% if role in ['global_admin'] %}
-                        {% include '@ChamiloCore/Admin/' ~ role ~ '/role_index.html.twig' %}
-                    {% endif %}
-                {% endfor %}
-            </div>
+{#            <div class="row">#}
+{#                {% for role in app.user.roles %}#}
+{#                    {% set role = role | lower | replace ({ 'role_' : ''}) %}#}
+{#                    {% if role in ['global_admin'] %}#}
+{#                        {% include '@ChamiloCore/Admin/' ~ role ~ '/role_index.html.twig' %}#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            </div>#}
         </div>
 
         {% if is_granted('ROLE_ADMIN') %}

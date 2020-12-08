@@ -194,7 +194,7 @@ async function exportToPdf() {
         if (svg) {
             svg2pdf(svg, pdf, {
                   xOffset: 150,
-                  yOffset: positionY + 10,
+                  yOffset: positionY,
                   scale: 0.45,
             });
         }
@@ -204,7 +204,17 @@ async function exportToPdf() {
             await html2canvas(tables[j], config).then(function(canvas) {
                 var pageData = canvas.toDataURL("image/jpeg", 0.7);
                 if (pageData) {
-                    pdf.addImage(pageData, "JPEG", 40, positionY + 175, 500, 500/canvas.width * canvas.height);
+                    pdf.addImage(pageData, "JPEG", 40, positionY + 180, 500, 500/canvas.width * canvas.height);
+                }
+            });
+        }
+
+        var tables = divs[i].getElementsByClassName("open-question");
+        for (var j = 0; j < tables.length; j += 1) {
+            await html2canvas(tables[j], config).then(function(canvas) {
+                var pageData = canvas.toDataURL("image/jpeg", 0.7);
+                if (pageData) {
+                    pdf.addImage(pageData, "JPEG", 40, positionY + 10, 500, 500/canvas.width * canvas.height);
                 }
             });
         }

@@ -677,6 +677,7 @@ class SurveyUtil
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
             } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
+                echo '<div class="open-question">';
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE
@@ -687,6 +688,7 @@ class SurveyUtil
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     echo $row['option_id'].'<hr noshade="noshade" size="1" />';
                 }
+                echo '</div>';
             } else {
                 // Getting the options ORDER BY sort ASC
                 $sql = "SELECT * FROM $table_survey_question_option

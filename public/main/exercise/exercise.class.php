@@ -285,20 +285,6 @@ class Exercise
         return cut($title, EXERCISE_MAX_NAME_SIZE);
     }
 
-    /**
-     * returns the exercise ID.
-     *
-     * @deprecated
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return int - exercise ID
-     */
-    public function selectId()
-    {
-        return $this->iId;
-    }
-
     public function getId()
     {
         return (int) $this->iId;
@@ -1027,7 +1013,7 @@ class Exercise
 
                     /** @var CQuizCategory $categoryParent */
                     // @todo check code
-                    /*foreach ($path as $categoryParent) {
+                    foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
                         if (0 == $visibility) {
                             $categoryParentId = $categoryId;
@@ -1048,7 +1034,7 @@ class Exercise
                         $categoryParentInfo['parent_id'] = null;
 
                         break;
-                    }*/
+                    }
                 }
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = [
@@ -1984,7 +1970,7 @@ class Exercise
                 $form->addGroup($radios, null, get_lang('Questions per page'));
             } else {
                 // if is Direct feedback but has not questions we can allow to modify the question type
-                if (0 === $this->getQuestionCount()) {
+                if (empty($this->iId) || 0 === $this->getQuestionCount()) {
                     $this->setResultFeedbackGroup($form);
                     $this->setResultDisabledGroup($form);
 
@@ -2098,6 +2084,12 @@ class Exercise
                     'hide_question_score',
                     null,
                     get_lang('Hide question score')
+                ), 
+                $form->createElement(
+                    'checkbox',
+                    'hide_category_table',
+                    null,
+                    get_lang('HideCategoryTable')
                 ),
             ];
             $form->addGroup($group, null, get_lang('Results and feedback and feedback and feedback and feedback and feedback and feedback page configuration'));
@@ -2116,10 +2108,7 @@ class Exercise
                     break;
             }
 
-            $form->addElement(
-                'html',
-                '<div id="hidden_random" style="display:'.$displayRandom.'">'
-            );
+            $form->addHtml('<div id="hidden_random" style="display:'.$displayRandom.'">');
             // Number of random question.
             $max = $this->getId() > 0 ? $this->getQuestionCount() : 10;
             $option = range(0, $max);
@@ -2135,12 +2124,8 @@ class Exercise
                 $option,
                 ['id' => 'randomQuestions']
             );
-            $form->addElement('html', '</div>');
-
-            $form->addElement(
-                'html',
-                '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
-            );
+            $form->addHtml('</div>');
+            $form->addHtml('<div id="hidden_matrix" style="display:'.$displayMatrix.'">');
 
             // Category selection.
             $cat = new TestCategory();
@@ -2149,7 +2134,7 @@ class Exercise
                 $cat_form = '<span class="label label-warning">'.get_lang('No categories defined').'</span>';
             }
             $form->addElement('label', null, $cat_form);
-            $form->addElement('html', '</div>');
+            $form->addHtml('</div>');
 
             // Random answers.
             $radios_random_answers = [
@@ -2229,9 +2214,9 @@ class Exercise
             );
 
             if (!empty($this->end_time)) {
-                $form->addElement('html', '<div id="end_date_div" style="display:block;">');
+                $form->addHtml('<div id="end_date_div" style="display:block;">');
             } else {
-                $form->addElement('html', '<div id="end_date_div" style="display:none;">');
+                $form->addHtml('<div id="end_date_div" style="display:none;">');
             }
 
             $form->addElement('date_time_picker', 'end_time');
@@ -3512,7 +3497,7 @@ class Exercise
             error_log('<------ manage_answer ------> ');
             error_log('exe_id: '.$exeId);
             error_log('$from:  '.$from);
-            error_log('$saved_results: '.(int) $saved_results);
+            error_log('$save_results: '.(int) $save_results);
             error_log('$from_database: '.(int) $from_database);
             error_log('$show_result: '.(int) $show_result);
             error_log('$propagate_neg: '.$propagate_neg);
@@ -4393,11 +4378,20 @@ class Exercise
                                  ";
                         $resq = Database::query($query);
                         $row = Database::fetch_assoc($resq);
-                        $choice = $row['answer'];
-                        $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-                        $questionScore = $row['marks'];
-                        if (-1 == $questionScore) {
+                        $choice = [
+                            'answer' => '',
+                            'marks' => 0,
+                        ];
+                        $questionScore = 0;
+
+                        if (is_array($row)) {
+                            $choice = $row['answer'];
+                            $choice = str_replace('\r\n', '', $choice);
+                            $choice = stripslashes($choice);
+                            $questionScore = $row['marks'];
+                        }
+
+                        if ($questionScore == -1) {
                             $totalScore += 0;
                         } else {
                             $totalScore += $questionScore;
@@ -4551,6 +4545,11 @@ class Exercise
                                 switch ($answerType) {
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
+                                        if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
+                                                break;
+                                            }
+                                        }
                                         echo '<tr>';
                                         if (!in_array(
                                             $this->results_disabled,
@@ -4603,6 +4602,11 @@ class Exercise
                                     case DRAGGABLE:
                                         if (false == $showTotalScoreAndUserChoicesInLastAttempt) {
                                             $s_answer_label = '';
+                                        }
+                                        if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
+                                                break;
+                                            }
                                         }
                                         echo '<tr>';
                                         if ($this->showExpectedChoice()) {
@@ -4998,12 +5002,12 @@ class Exercise
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $this,
                                 $feedback_type,
-                                ++$correctAnswerId,
+                                $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $correctAnswerId,
+                                $answerId,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif (HOT_SPOT_ORDER == $answerType) {
@@ -5394,12 +5398,12 @@ class Exercise
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $this,
                                 $feedback_type,
-                                ++$correctAnswerId,
+                                $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $correctAnswerId,
+                                $answerId,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
 
@@ -7751,7 +7755,7 @@ class Exercise
             }
 
             // Checkbox review answers
-            /*if ($this->review_answers &&
+            if ($this->review_answers &&
                 !in_array($question_obj->type, Question::question_type_no_review())
             ) {
                 $remind_question_div = Display::tag(
@@ -7771,7 +7775,7 @@ class Exercise
                     $remind_question_div,
                     ['class' => 'exercise_save_now_button']
                 );
-            }*/
+            }
 
             echo Display::div(' ', ['class' => 'clear']);
 
@@ -8774,6 +8778,17 @@ class Exercise
         $qb->setFirstResult($from);
         $qb->setMaxResults($limit);
 
+        $filterByResultDisabledCondition = '';
+        $filterByResultDisabled = (int) $filterByResultDisabled;
+        if (!empty($filterByResultDisabled)) {
+            $filterByResultDisabledCondition = ' AND e.results_disabled = '.$filterByResultDisabled;
+        }
+        $filterByAttemptCondition = '';
+        $filterByAttempt = (int) $filterByAttempt;
+        if (!empty($filterByAttempt)) {
+            $filterByAttemptCondition = ' AND e.max_attempt = '.$filterByAttempt;
+        }
+
         // Only for administrators
         if ($is_allowedToEdit) {
             $qb->andWhere($qb->expr()->neq('resource.active', -1));
@@ -8909,7 +8924,7 @@ class Exercise
                     $class_tip = '';
                     $url = $move.'<a
                         '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$exerciseId.'"
-                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&id='.$exerciseId.'">
+                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'">
                          '.Display::return_icon('quiz.png', $title).'
                          '.$title.' </a>'.PHP_EOL;
 
@@ -8930,13 +8945,13 @@ class Exercise
                         // Questions list
                         $actions = Display::url(
                             Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
-                            'admin.php?'.api_get_cidreq().'&id='.$exerciseId
+                            'admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
                         // Test settings
                         $settings = Display::url(
                             Display::return_icon('settings.png', get_lang('Configure'), '', ICON_SIZE_SMALL),
-                            'exercise_admin.php?'.api_get_cidreq().'&id='.$exerciseId
+                            'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
                         if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -8945,7 +8960,7 @@ class Exercise
                         $actions .= $settings;
 
                         // Exercise results
-                        $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&id='.$exerciseId.'">'.
+                        $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
                             Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
                         if ($limitTeacherAccess) {
@@ -8968,7 +8983,7 @@ class Exercise
                                         '',
                                         ICON_SIZE_SMALL
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 $actions .= Display::url(
@@ -8978,7 +8993,7 @@ class Exercise
                                         '',
                                         ICON_SIZE_SMALL
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
@@ -8989,7 +9004,7 @@ class Exercise
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($title)."?"."')) return false;",
-                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&id='.$exerciseId,
+                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
                             ]
                         );
 
@@ -9014,7 +9029,7 @@ class Exercise
                                                 )
                                             )." ".addslashes($title)."?"."')) return false;",
                                         'href' => 'exercise.php?'.api_get_cidreq(
-                                            ).'&choice=clean_results&sec_token='.$token.'&id='.$exerciseId,
+                                            ).'&choice=clean_results&sec_token='.$token.'&exerciseId='.$exerciseId,
                                     ]
                                 );
                             } else {
@@ -9046,7 +9061,7 @@ class Exercise
                                         '',
                                         ICON_SIZE_SMALL
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 // else if not active
@@ -9057,7 +9072,7 @@ class Exercise
                                         '',
                                         ICON_SIZE_SMALL
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
@@ -9076,7 +9091,7 @@ class Exercise
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            'exercise.php?action=exportqti2&id='.$exerciseId.'&'.api_get_cidreq()
+                            'exercise.php?action=exportqti2&exerciseId='.$exerciseId.'&'.api_get_cidreq()
                         );
 
                         if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -9108,7 +9123,7 @@ class Exercise
                                         '',
                                         ICON_SIZE_SMALL
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 // else if not active
@@ -9119,7 +9134,7 @@ class Exercise
                                         '',
                                         ICON_SIZE_SMALL
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
@@ -9129,14 +9144,14 @@ class Exercise
                         }
 
                         $actions .= $visibility;
-                        $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&id='.$exerciseId.'">'.
+                        $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
                             Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                         $actions .= Display::url(
                             Display::return_icon('cd.gif', get_lang('CopyExercise')),
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($title)."?"."')) return false;",
-                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&id='.$exerciseId,
+                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
                             ]
                         );
                     }
@@ -9155,7 +9170,7 @@ class Exercise
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
-                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&id='.$exerciseId,
+                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$exerciseId,
                                 ]
                             );
                         } else {
@@ -9172,6 +9187,12 @@ class Exercise
                         $delete = '';
                     }
 
+                        if (!empty($minCategoriesInExercise)) {
+                            $cats = TestCategory::getListOfCategoriesForTest($exercise);
+                            if (!(count($cats) >= $minCategoriesInExercise)) {
+                                continue;
+                            }
+                        }
                     $actions .= $delete;
 
                     // Number of questions
@@ -9215,12 +9236,15 @@ class Exercise
                         continue;
                     }
 
-                    $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&id='.$exerciseId.'">'.
+                    $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'">'.
                         $cut_title.'</a>';
 
                     // Link of the exercise.
                     $currentRow['title'] = $url.' '.$session_img;
                     // This query might be improved later on by ordering by the new "tms" field rather than by exe_id
+                        if ($returnData) {
+                            $currentRow['title'] = $exercise->getUnformattedTitle();
+                        }
                     // Don't remove this marker: note-query-exe-results
                     $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                             WHERE
@@ -9316,6 +9340,7 @@ class Exercise
                                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                                 RESULT_DISABLE_RANKING,
+                                    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                             ]
                         )
                         ) {
@@ -9331,6 +9356,9 @@ class Exercise
                             }
                         }
                     }
+                        if ($returnData) {
+                            $attempt_text = $num;
+                        }
                 }
 
                 $currentRow['attempt'] = $attempt_text;
@@ -9342,6 +9370,9 @@ class Exercise
                         $actions .= $additionalActions.PHP_EOL;
                     }
 
+                        if (!empty($myActions) && is_callable($myActions)) {
+                            $actions = $myActions($row);
+                        }
                     $currentRow = [
                         $exerciseId,
                         $currentRow['title'],
@@ -9355,10 +9386,17 @@ class Exercise
                     ];
 
                     if ($isDrhOfCourse) {
-                        $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&id='.$exerciseId.'">'.
+                        $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
                             Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     }
+                        if ($returnData) {
+                            $currentRow['id'] = $exercise->id;
+                            $currentRow['url'] = $webPath.'exercise/overview.php?'
+                                .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
+                                ."$mylpid$mylpitemid&exerciseId={$row['id']}";
+                            $currentRow['name'] = $currentRow[0];
                 }
+                    }
                 $tableRows[] = $currentRow;
             }
         }
@@ -9413,6 +9451,9 @@ class Exercise
                 }
             }
 
+            if ($returnTable) {
+                return $table;
+            }
             $content .= $table->return_table();
         }
 
@@ -9581,7 +9622,7 @@ class Exercise
                     </table>
                 ';
 
-            /*$answerType = $objQuestionTmp->selectType();
+            $answerType = $objQuestionTmp->selectType();
             if ($answerType != HOT_SPOT_DELINEATION) {
                 $item_list = explode('@@', $destination);
                 $try = $item_list[0];
@@ -9616,7 +9657,7 @@ class Exercise
                 echo $message;
             } else {
                 echo '<p>'.$comment.'</p>';
-            }*/
+            }
 
             // Showing the score
             /*$queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT
@@ -10414,16 +10455,6 @@ class Exercise
     }
 
     /**
-     * Changes the exercise id.
-     *
-     * @param int $id - exercise id
-     */
-    private function updateId($id)
-    {
-        $this->iId = $id;
-    }
-
-    /**
      * Sends a notification when a user ends an examn.
      *
      * @param array  $question_list_answers
@@ -10674,7 +10705,7 @@ class Exercise
             'results_disabled',
             null,
             get_lang('Auto-evaluation mode: show score and expected answers'),
-            '0',
+            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
             ['id' => 'result_disabled_0']
         );
 
@@ -10683,7 +10714,7 @@ class Exercise
             'results_disabled',
             null,
             get_lang('Exam mode: Do not show score nor answers'),
-            '1',
+           RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS,
             ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
         );
 
@@ -10692,7 +10723,7 @@ class Exercise
             'results_disabled',
             null,
             get_lang('Practice mode: Show score only, by category if at least one is used'),
-            '2',
+            RESULT_DISABLE_SHOW_SCORE_ONLY,
             ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
         );
 
@@ -10709,7 +10740,7 @@ class Exercise
             'results_disabled',
             null,
             get_lang('Show score on every attempt, show correct answers only on last attempt (only works with an attempts limit)'),
-            '4',
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
             ['id' => 'result_disabled_4']
         );
 
@@ -10718,7 +10749,7 @@ class Exercise
             'results_disabled',
             null,
             get_lang('Do not show the score (only when user finishes all attempts) but show feedback for each attempt.'),
-            '5',
+            RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
             ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
         );
 
@@ -10757,6 +10788,16 @@ class Exercise
             RESULT_DISABLE_RADAR,
             ['id' => 'result_disabled_9']
         );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback'),
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
+            ['id' => 'result_disabled_10']
+        );
+
         return $form->addGroup(
             $resultDisabledGroup,
             null,

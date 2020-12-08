@@ -64,7 +64,9 @@ class ExerciseResult
 
         if (empty($user_id)) {
             $user_id_and = null;
-            $sql = 'SELECT '.(api_is_western_name_order() ? 'firstname as userpart1, lastname userpart2' : 'lastname as userpart1, firstname as userpart2').",
+            $sql = "SELECT
+                    firstname,
+                    lastname,
                     official_code,
                     ce.title as extitle,
                     te.score as exresult ,
@@ -93,8 +95,14 @@ class ExerciseResult
                     ce.active <>-1";
         } else {
             $user_id_and = ' AND te.exe_user_id = '.api_get_user_id().' ';
+            $orderBy = 'lastname';
+            if (api_is_western_name_order()) {
+                $orderBy = 'firstname';
+            }
             // get only this user's results
-            $sql = 'SELECT '.(api_is_western_name_order() ? 'firstname as userpart1, lastname userpart2' : 'lastname as userpart1, firstname as userpart2').",
+            $sql = "SELECT
+                        firstname,
+                        lastname,
                         official_code,
                         ce.title as extitle,
                         te.score as exresult,
@@ -122,7 +130,7 @@ class ExerciseResult
                         ce.c_id = $course_id AND
                         te.c_id = ce.c_id $user_id_and $session_id_and AND
                         ce.active <>-1 AND
-                    ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
+                    ORDER BY $orderBy, te.c_id ASC, ce.title ASC, te.exe_date DESC";
         }
 
         $results = [];
@@ -208,13 +216,8 @@ class ExerciseResult
                 $return[$i] = [];
                 if (empty($user_id)) {
                     $return[$i]['official_code'] = $result['official_code'];
-                    if (api_is_western_name_order()) {
-                        $return[$i]['first_name'] = $results[$i]['userpart1'];
-                        $return[$i]['last_name'] = $results[$i]['userpart2'];
-                    } else {
-                        $return[$i]['first_name'] = $results[$i]['userpart2'];
-                        $return[$i]['last_name'] = $results[$i]['userpart1'];
-                    }
+                    $return[$i]['firstname'] = $results[$i]['firstname'];
+                    $return[$i]['lastname'] = $results[$i]['lastname'];
                     $return[$i]['user_id'] = $results[$i]['excruid'];
                     $return[$i]['email'] = $results[$i]['exemail'];
                     $return[$i]['username'] = $results[$i]['username'];
@@ -253,13 +256,8 @@ class ExerciseResult
 
                         if (empty($user_id)) {
                             $return[$i]['official_code'] = $student['official_code'];
-                            if ($isWestern) {
-                                $return[$i]['first_name'] = $student['firstname'];
-                                $return[$i]['last_name'] = $student['lastname'];
-                            } else {
-                                $return[$i]['first_name'] = $student['lastname'];
-                                $return[$i]['last_name'] = $student['firstname'];
-                            }
+                            $return[$i]['firstname'] = $student['firstname'];
+                            $return[$i]['lastname'] = $student['lastname'];
 
                             $return[$i]['user_id'] = $student['user_id'];
                             $return[$i]['email'] = $student['email'];
@@ -369,6 +367,7 @@ class ExerciseResult
         $data .= get_lang('Status').';';
         $data .= get_lang('Learning path').';';
         $data .= get_lang('The user is currently subscribed').';';
+        $data .= get_lang('Course code').';';
         $data .= "\n";
 
         //results

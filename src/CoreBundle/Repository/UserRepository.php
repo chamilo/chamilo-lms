@@ -640,13 +640,13 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         return $qb
             ->select('uru')
-            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.userId = user.id')
+            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.user = user.id')
             ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.user = uru.friendUserId')
             ->where(
                 $qb->expr()->eq('auru.url', $urlId)
             )
             ->andWhere(
-                $qb->expr()->eq('uru.userId', $userId)
+                $qb->expr()->eq('uru.user', $userId)
             )
             ->andWhere(
                 $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)

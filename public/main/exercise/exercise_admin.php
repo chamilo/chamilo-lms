@@ -125,7 +125,7 @@ $(function() {
 
 $objExercise = new Exercise();
 $course_id = api_get_course_int_id();
-$exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 //INIT FORM
 if (!empty($exerciseId)) {
     $form = new FormValidator(
@@ -183,7 +183,7 @@ if ($form->validate()) {
 
     echo '<div class="actions">';
     if (0 != $objExercise->getId()) {
-        echo '<a href="admin.php?'.api_get_cidreq().'&id='.$objExercise->getId().'">'.
+        echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {

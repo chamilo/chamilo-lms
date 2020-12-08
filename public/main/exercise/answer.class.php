@@ -134,6 +134,7 @@ class Answer
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
+            $this->id[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;

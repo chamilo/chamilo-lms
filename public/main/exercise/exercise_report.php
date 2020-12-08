@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+
+use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
  *
@@ -10,10 +13,9 @@
  *
  * @todo fix excel export
  */
-
-use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
-
 require_once __DIR__.'/../inc/global.inc.php';
+
+$this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
@@ -54,7 +56,7 @@ $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
 
@@ -434,18 +436,8 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     $exe_id = (int) $_GET['did'];
     if (!empty($exe_id)) {
-        $sql = 'DELETE FROM '.$TBL_TRACK_EXERCISES.' WHERE exe_id = '.$exe_id;
-        Database::query($sql);
-        $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
-        Database::query($sql);
-
-        Event::addEvent(
-            LOG_EXERCISE_ATTEMPT_DELETE,
-            LOG_EXERCISE_ATTEMPT,
-            $exe_id,
-            api_get_utc_datetime()
-        );
-        header('Location: exercise_report.php?'.api_get_cidreq().'&id='.$exercise_id);
+        ExerciseLib::deleteExerciseAttempt($exe_id);
+        header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     }
 }
@@ -885,7 +877,7 @@ $gridJs = Display::grid_js(
             var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
             var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
             if (confirm("<?php echo convert_double_quote_to_single(get_lang('Are you sure you want to clean results for this test before the selected date ?')).' '; ?>" + selectedDate)) {
-                self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
+                self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
             }
         }
     }

@@ -393,9 +393,6 @@ class TestCategory
 
 
     /**
-     * @param int $courseId
-     * @param int $sessionId
-     *
      * @return array
      */
     public static function getListOfCategoriesForTest(Exercise $exercise)

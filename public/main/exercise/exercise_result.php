@@ -41,7 +41,7 @@ if (empty($objExercise)) {
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
-        header('Location: overview.php?id='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
+        header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
         exit;
     }
     api_not_allowed(true);
@@ -58,11 +58,15 @@ if (api_is_in_gradebook()) {
 }
 
 $nameTools = get_lang('Tests');
+$currentUserId = api_get_user_id();
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Tests'),
 ];
+if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+}
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
@@ -114,7 +118,7 @@ $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
-    'tool_id' => $objExercise->id,
+    'tool_id' => $objExercise->iId,
     'action' => $learnpath_id,
     'action_details' => $learnpath_id,
 ];

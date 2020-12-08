@@ -56,8 +56,8 @@ echo '</div>';
 
 ?>
 
-<table class="data_table">
-    <tr class="row_odd">
+<table class="table table-hover table-striped data_table">
+    <tr>
         <th><?php echo get_lang('Question'); ?></th>
         <th width="50px"><?php echo get_lang('Value'); ?></th>
         <th><?php echo get_lang('Feedback'); ?></th>
@@ -76,13 +76,7 @@ $sql = "SELECT *, quiz_question.question, firstname, lastname
         ORDER BY position";
 $query = Database::query($sql);
 while ($row = Database::fetch_array($query)) {
-    echo '<tr';
-    if (0 == $i % 2) {
-        echo 'class="row_odd"';
-    } else {
-        echo 'class="row_even"';
-    }
-    echo '>';
+    echo '<tr>';
     echo '<td>'.$row['question'].'</td>';
     echo '<td>'.$row['marks'].'</td>';
     if (!empty($row['teacher_comment'])) {

@@ -153,7 +153,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    'url' => 'overview.php?id='.$exercise_id.'&'.api_get_cidreq(),
+    'url' => 'overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
     'name' => $objExercise->selectTitle(true),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
@@ -170,6 +170,10 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
+}
+
+if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 }
 
 if ('export' != $action) {
@@ -268,6 +272,7 @@ if (!empty($track_exercise_info)) {
             break;
         case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+        case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
             $attempts = Event::getExerciseResultsByUser(
                 $currentUserId,
                 $objExercise->id,
@@ -290,6 +295,11 @@ if (!empty($track_exercise_info)) {
                 $showTotalScoreAndUserChoicesInLastAttempt = false;
             }
 
+            if ($is_allowedToEdit &&
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $result_disabled
+            ){
+                $showTotalScoreAndUserChoicesInLastAttempt = true;
+            }
             break;
     }
 } else {
@@ -315,7 +325,9 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
     echo $objExercise->showExerciseResultHeader(
         $user_info,
         $track_exercise_info,
-        false
+        false,
+        false,
+        api_get_configuration_value('quiz_results_answers_report')
     );
 }
 
@@ -747,7 +759,12 @@ foreach ($questionList as $questionId) {
                 echo '
                     <div id="'.$marksname.'" class="hidden">
                         <form name="marksform_'.$questionId.'" method="post" action="">
-                            <select name="marks" id="select_marks_'.$questionId.'" style="display:none;" class="exercise_mark_select">
+                            <select
+                                name="marks"
+                                id="select_marks_'.$questionId.'"
+                                style="display:none;"
+                                class="exercise_mark_select"
+                            >
                                 <option value="'.$questionScore.'" >'.$questionScore.'</option>
                             </select>
                         </form>
@@ -809,11 +826,7 @@ foreach ($questionList as $questionId) {
 
     $score = [];
     if ($show_results) {
-        $scorePassed = $my_total_score >= $my_total_weight;
-        if (function_exists('bccomp')) {
-            $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-            $scorePassed = 1 === $compareResult || 0 === $compareResult;
-        }
+        $scorePassed = ExerciseLib::scorePassed($my_total_score, $my_total_weight);
         $score['result'] = ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,
@@ -911,16 +924,15 @@ if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $answerType) {
     echo $chartMultiAnswer;
 }
 
-if (!empty($category_list) && ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)) {
+if (!empty($category_list) &&
+    ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)
+) {
     // Adding total
     $category_list['total'] = [
         'score' => $myTotalScoreTemp,
         'total' => $totalWeighting,
     ];
-    echo TestCategory::get_stats_table_by_attempt(
-        $objExercise->id,
-        $category_list
-    );
+    echo TestCategory::get_stats_table_by_attempt($objExercise, $category_list);
 }
 
 if (in_array(
@@ -929,7 +941,7 @@ if (in_array(
 )) {
     echo Display::page_header(get_lang('Ranking'), null, 'h4');
     echo ExerciseLib::displayResultsInRanking(
-        $objExercise->iId,
+        $objExercise,
         $student_id,
         $courseInfo['real_id'],
         $sessionId
@@ -980,7 +992,7 @@ if ($isFeedbackAllowed && 'learnpath' != $origin && 'student_progress' != $origi
     if (in_array($origin, ['tracking_course', 'user_course', 'correct_exercise_in_lp'])) {
         $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
-            'id' => $exercise_id,
+            'exerciseId' => $exercise_id,
             'filter' => 2,
             'comments' => 'update',
             'exeid' => $id,
@@ -998,7 +1010,7 @@ if ($isFeedbackAllowed && 'learnpath' != $origin && 'student_progress' != $origi
     } else {
         $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
-            'id' => $exercise_id,
+            'exerciseId' => $exercise_id,
             'filter' => 1,
             'comments' => 'update',
             'exeid' => $id,

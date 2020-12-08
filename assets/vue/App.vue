@@ -53,9 +53,7 @@ import {mapGetters} from 'vuex';
 
 import NotificationMixin from './mixins/NotificationMixin';
 import Breadcrumb from './components/Breadcrumb';
-import Snackbar from './components/Snackbar';
 import axios from "axios";
-
 import Header from "./components/layout/Header";
 import Sidebar from "./components/layout/Sidebar";
 import Footer from "./components/layout/Footer";
@@ -67,9 +65,7 @@ export default {
     Sidebar,
     Footer,
     Breadcrumb,
-    Snackbar
   },
-
   mixins: [NotificationMixin],
   data: () => ({
     drawer: true,
@@ -111,22 +107,6 @@ export default {
             .then((response) => {
               // handle success
               this.$data.legacy_content = response.data;
-            })
-            .catch(function (error) {
-              if (error.response) {
-                // Request made and server responded
-                this.showMessage(error.response.data.detail);
-
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-              } else if (error.request) {
-                // The request was made but no response was received
-                console.log(error.request);
-              } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
-              }
             });
       }
     },
@@ -146,7 +126,6 @@ export default {
   },
   created() {
     this.$data.legacy_content = '';
-
     let isAuthenticated = false;
     if (this.$parent.$el.attributes["data-is-authenticated"].value) {
       isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value);
@@ -158,7 +137,6 @@ export default {
     }
 
     let payload = {isAuthenticated: isAuthenticated, user: user};
-
     this.$store.dispatch("security/onRefresh", payload);
     if (this.$parent.$el.attributes["data-flashes"]) {
       let flashes = JSON.parse(this.$parent.$el.attributes["data-flashes"].value);
@@ -175,17 +153,19 @@ export default {
       this.breadcrumb = JSON.parse(this.$parent.$el.attributes["data-breadcrumb"].value);
     }
 
-    axios.interceptors.response.use(undefined, (err) => {
+    axios.interceptors.response.use(undefined, (error) => {
       return new Promise(() => {
-        if (err.response.status === 401) {
+        // Unauthorized.
+        if (401 === error.response.status) {
           // Redirect to the login if status 401.
           this.$router.push({path: "/login"}).catch(()=>{});
-        } else if (err.response.status === 500) {
-          document.open();
-          document.write(err.response.data);
-          document.close();
+        } else if (500 === error.response.status) {
+          if (error.response) {
+            // Request made and server responded
+            this.showMessage(error.response.data.detail, 'warning');
+          }
         }
-        throw err;
+        return Promise.reject(error);
       });
     });
   },

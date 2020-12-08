@@ -13,7 +13,7 @@ export default {
             );*/
         },
         showError(error) {
-            //this.showMessage(error, 'danger');
+            this.showMessage(error, 'danger');
         },
         showMessage(message, type = 'success') {
             const content = {

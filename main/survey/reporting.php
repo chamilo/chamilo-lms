@@ -175,8 +175,8 @@ async function exportToPdf() {
         }
 
         var positionY = 150;
-        pages[page] += 1;
         var diff = 250;
+        pages[page] += 1;
         if (page > 1) {
             headerY = 0;
             positionY = 60;
@@ -191,12 +191,11 @@ async function exportToPdf() {
         pdf.text(40, positionY, title.text());
 
         var svg = divs[i].querySelector("svg");
-
         if (svg) {
             svg2pdf(svg, pdf, {
                   xOffset: 150,
                   yOffset: positionY + 10,
-                  scale: 0.5,
+                  scale: 0.45,
             });
         }
         var tables = divs[i].getElementsByClassName("display-survey");
@@ -204,7 +203,9 @@ async function exportToPdf() {
         for (var j = 0; j < tables.length; j += 1) {
             await html2canvas(tables[j], config).then(function(canvas) {
                 var pageData = canvas.toDataURL("image/jpeg", 0.7);
-                pdf.addImage(pageData, "JPEG", 40, positionY + 175, 500, 500/canvas.width * canvas.height);
+                if (pageData) {
+                    pdf.addImage(pageData, "JPEG", 40, positionY + 175, 500, 500/canvas.width * canvas.height);
+                }
             });
         }
 

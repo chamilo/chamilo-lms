@@ -737,9 +737,8 @@ function api_get_person_name(
     if (empty($language)) {
         // Do not set $setParentLanguageName because this function is called before
         // the main language is loaded in global.inc.php
-        $language = api_get_interface_language(false, true, false);
+        $language = api_get_language_isocode();
     }
-
     if (!isset($valid[$format][$language])) {
         if (is_int($format)) {
             switch ($format) {
@@ -2129,7 +2128,7 @@ function getLegacyToIso()
 
 /**
  * Returns returns person name convention for a given language.
- *
+ * @param string $iso
  * @param string $type The type of the requested convention.
  *                     It may be 'format' for name order convention or 'sort_by' for name sorting convention.
  *
@@ -2146,7 +2145,6 @@ function _api_get_person_name_convention($iso, $type)
 
     // Overwrite classic conventions
     $customConventions = api_get_configuration_value('name_order_conventions');
-
     if (!empty($customConventions)) {
         foreach ($customConventions as $key => $data) {
             $conventions[$key] = $data;
@@ -2172,7 +2170,7 @@ function _api_get_person_name_convention($iso, $type)
                 )
             )
         );
-        $conventions[$key]['sort_by'] = 'last_name' != strtolower($conventions[$key]['sort_by']) ? true : false;
+        $conventions[$key]['sort_by'] = 'last_name' !== strtolower($conventions[$key]['sort_by']) ? true : false;
     }
 
     switch ($type) {

@@ -40,7 +40,7 @@ class LocaleListener implements EventSubscriberInterface
         if (!$request->hasPreviousSession()) {
             return;
         }
-        $installed = 1 == $this->paremeterBag->get('installed');
+        $installed = 1 === (int) $this->paremeterBag->get('installed');
 
         if (!$installed) {
             return;
@@ -88,7 +88,6 @@ class LocaleListener implements EventSubscriberInterface
                 if (!empty($course)) {
                     $courseLocale = $course->getCourseLanguage();
                     if (!empty($courseLocale)) {
-                        //$locale = $courseLocale;
                         $localeList['course_lang'] = $platformLocale;
                     }
                 }

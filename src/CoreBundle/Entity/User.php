@@ -1383,12 +1383,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Set language.
-     *
-     * @param string $language
-     *
-     * @return User
      */
-    public function setLanguage($language)
+    public function setLanguage(string $language): User
     {
         $this->language = $language;
 

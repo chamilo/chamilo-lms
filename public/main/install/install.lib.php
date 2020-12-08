@@ -566,10 +566,8 @@ function display_step_sequence()
 /**
  * Displays a drop down box for selection the preferred language.
  */
-function display_language_selection_box(
-    $name = 'language_list',
-    $default_language = 'english'
-) {
+function display_language_selection_box($name = 'language_list', $default_language = 'en')
+{
     // Reading language list.
     $language_list = get_language_folder_list();
 
@@ -592,15 +590,13 @@ function display_language_selection_box(
     }
 
     // Displaying the box.
-    $html = Display::select(
+    return Display::select(
         'language_list',
         $language_list,
         $default_language,
-        ['class' => 'selectpicker'],
+        ['class' => 'form-control'],
         false
     );
-
-    return $html;
 }
 
 /**
@@ -1164,7 +1160,7 @@ function get_contact_registration_form()
         <div class="form-group row">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Your company\'s activity').'</label>
             <div class="col-sm-9">
-                <select class="selectpicker show-tick" name="company_activity" id="company_activity" >
+                <select class="form-control show-tick" name="company_activity" id="company_activity" >
                     <option value="">--- '.get_lang('Select one').' ---</option>
                     <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option>
                     <Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
@@ -1200,7 +1196,7 @@ function get_contact_registration_form()
         <div class="form-group row">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Your job\'s description').'</label>
             <div class="col-sm-9">
-                <select class="selectpicker show-tick" name="person_role" id="person_role" >
+                <select class="form-control show-tick" name="person_role" id="person_role" >
                     <option value="">--- '.get_lang('Select one').' ---</option>
                     <Option value="Administration">Administration</Option>
                     <Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
@@ -1241,7 +1237,7 @@ function get_contact_registration_form()
         <div class="form-group row">
             <label class="col-sm-3">'.get_lang('Preferred contact language').'</label>
             <div class="col-sm-9">
-                <select class="selectpicker show-tick" id="language" name="language">
+                <select class="form-control show-tick" id="language" name="language">
                     <option value="bulgarian">Bulgarian</option>
                     <option value="indonesian">Bahasa Indonesia</option>
                     <option value="bosnian">Bosanski</option>
@@ -1728,11 +1724,12 @@ function display_configuration_settings_form(
 
     // First parameter: language.
     $html = '<div class="form-group row">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('Main language')."</label>";
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('Language')."</label>";
     if ('update' === $installType) {
         $html .= '<input
             type="hidden"
-            name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm;
+            name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.
+            $languageForm;
     } else {
         $html .= '<div class="col-sm-6">';
         $html .= display_language_selection_box('languageForm', $languageForm);
@@ -1965,7 +1962,7 @@ function get_countries_list_from_array($combo = false)
         "Zambia", "Zimbabwe",
     ];
     if ($combo) {
-        $country_select = '<select class="selectpicker show-tick" id="country" name="country">';
+        $country_select = '<select class="form-control show-tick" id="country" name="country">';
         $country_select .= '<option value="">--- '.get_lang('Select one').' ---</option>';
         foreach ($a_countries as $country) {
             $country_select .= '<option value="'.$country.'">'.$country.'</option>';
@@ -2478,7 +2475,7 @@ function finishInstallationWithContainer(
     if ($executeResult) {
         error_log('data.sql Ok');
     }
-    $result->closeCursor();
+    $result->free();
 
     UserManager::setPasswordEncryption($encryptPassForm);
 

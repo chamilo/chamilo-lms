@@ -277,7 +277,7 @@ class UserManager
         $language = strtolower($language);
 
         // Default to english
-        if (!in_array($language, $languages)) {
+        if (!in_array($language, $languages, true)) {
             $language = 'en';
         }
 

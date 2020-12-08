@@ -631,6 +631,9 @@ if (isset($_POST['step2'])) {
         error_log('------------------------------');
         error_log('Upgrade 2.0.0 process concluded!  ('.date('Y-m-d H:i:s').')');
     } else {
+        error_log('------------------------------');
+        $start = date('Y-m-d H:i:s');
+        error_log('Chamilo installation starts:  ('.$start.')');
         set_file_folder_permissions();
         error_log("connectToDatabase as user $dbUsernameForm");
 
@@ -719,6 +722,9 @@ if (isset($_POST['step2'])) {
                 $installationProfile
             );
             writeSystemConfigFile(api_get_path(SYMFONY_SYS_PATH).'config/configuration.php');
+            error_log('Finish installation');
+        } else {
+            error_log('ERROR during installation.');
         }
     }
 

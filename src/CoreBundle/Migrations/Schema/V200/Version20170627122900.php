@@ -14,8 +14,11 @@ class Version20170627122900 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {
-        $this->addSql("UPDATE settings_current SET selected_value = 'true' WHERE variable = 'decode_utf8'");
         $this->addSql('ALTER TABLE settings_current CHANGE access_url access_url INT DEFAULT NULL');
+        $this->addSql("UPDATE settings_current SET selected_value = 'true' WHERE variable = 'decode_utf8'");
+
+        // Use .env APP_ENV setting to change server type
+        //$this->addSql("DELETE FROM settings_current WHERE variable = 'server_type'");
 
         $table = $schema->getTable('settings_current');
         if (false === $table->hasForeignKey('FK_62F79C3B9436187B')) {

@@ -84,11 +84,11 @@ class ExerciseResult
                     te.status as exstatus
                 FROM $TBL_EXERCISES AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $TBL_USER AS user
                 ON (user.id = exe_user_id)
                 LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
-                ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
+                ON (tlm.iid = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
                     te.c_id = ce.c_id $user_id_and  $session_id_and AND
@@ -121,11 +121,11 @@ class ExerciseResult
                         te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te
-                    ON (te.exe_exo_id = ce.id)
+                    ON (te.exe_exo_id = ce.iid)
                     INNER JOIN $TBL_USER AS user
                     ON (user.id = exe_user_id)
                     LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
-                    ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
+                    ON (tlm.iid = te.orig_lp_id AND tlm.c_id = ce.c_id)
                     WHERE
                         ce.c_id = $course_id AND
                         te.c_id = ce.c_id $user_id_and $session_id_and AND
@@ -318,17 +318,17 @@ class ExerciseResult
         $filename = api_replace_dangerous_char($filename);
         $data = '';
         if (api_is_western_name_order()) {
-            if (!empty($this->results[0]['first_name'])) {
+            if (!empty($this->results[0]['firstname'])) {
                 $data .= get_lang('First name').';';
             }
-            if (!empty($this->results[0]['last_name'])) {
+            if (!empty($this->results[0]['lastname'])) {
                 $data .= get_lang('Last name').';';
             }
         } else {
-            if (!empty($this->results[0]['last_name'])) {
+            if (!empty($this->results[0]['lastname'])) {
                 $data .= get_lang('Last name').';';
             }
-            if (!empty($this->results[0]['first_name'])) {
+            if (!empty($this->results[0]['firstname'])) {
                 $data .= get_lang('First name').';';
             }
         }
@@ -373,11 +373,11 @@ class ExerciseResult
         //results
         foreach ($this->results as $row) {
             if (api_is_western_name_order()) {
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['firstname']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['lastname']), ENT_QUOTES, $charset)).';';
             } else {
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['lastname']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['firstname']), ENT_QUOTES, $charset)).';';
             }
 
             // Official code
@@ -537,6 +537,7 @@ class ExerciseResult
         $list[0][] = get_lang('Status');
         $list[0][] = get_lang('Learning path');
         $list[0][] = get_lang('The user is currently subscribed');
+        $list[0][] = get_lang('Course code');
         $column = 1;
         foreach ($this->results as $row) {
             if ($withColumnUser) {
@@ -628,6 +629,7 @@ class ExerciseResult
             $list[$column][] = $row['status'];
             $list[$column][] = $row['lp_name'];
             $list[$column][] = $row['is_user_subscribed'];
+            $list[$column][] = api_get_course_id();
             $column++;
         }
         Export::arrayToXls($list, $filename);

@@ -240,7 +240,7 @@ switch ($action) {
                     WHERE t.status = 'incomplete' AND $where_condition
                     GROUP BY exe_user_id
                 ) as aa
-                ON aa.exe_user_id = user_id
+                ON aa.exe_user_id = u.id
                 ORDER BY $sidx $sord
                 LIMIT $start, $limit";
 

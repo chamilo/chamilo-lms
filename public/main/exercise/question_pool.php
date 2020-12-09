@@ -378,15 +378,7 @@ if ($course_id_changed) {
 }
 
 // Get category list for the course $selected_course
-$categoryList = TestCategory::getCategoriesForSelect();
-$selectCourseCategory = Display::select(
-    'courseCategoryId',
-    $categoryList,
-    $courseCategoryId,
-    ['onchange' => 'submit_form(this);'],
-    false
-);
-echo Display::form_row(get_lang('Questions category'), $selectCourseCategory);
+$categoryList = TestCategory::getCategoriesIdAndName($selected_course);
 
 // Get exercise list for this course
 $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
@@ -1096,12 +1088,12 @@ $html .= '<a
         class="btn btn-default"
         href="?'.$url.'selectall=1"
         onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">
-        '.get_lang('SelectAll').'</a>';
+        '.get_lang('Select all').'</a>';
 $html .= '<a
             class="btn btn-default"
             href="?'.$url.'"
             onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">
-            '.get_lang('UnSelectAll').'</a> ';
+            '.get_lang('Unselect all').'</a> ';
 $html .= '</div>';
 $html .= '<div class="btn-group">
             <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>

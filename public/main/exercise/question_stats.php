@@ -45,7 +45,7 @@ $courseId = api_get_course_int_id();
 $table = new HTML_Table(['class' => 'table table-hover table-striped']);
 $row = 0;
 $column = 0;
-$headers = [get_lang('Question'), get_lang('WrongAnswer').' / '.get_lang('Total'), '%'];
+$headers = [get_lang('Question'), get_lang('Wrong answer').' / '.get_lang('Total'), '%'];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;

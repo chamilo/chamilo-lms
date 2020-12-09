@@ -181,7 +181,7 @@ function edit_category_form($action)
         }
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('CannotEdit this category'), 'error')
+            Display::return_message(get_lang('Could not edit category'), 'error')
         );
     }
 }

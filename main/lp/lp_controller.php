@@ -912,7 +912,7 @@ switch ($action) {
                 $is_success = true;
 
                 $extraFieldValues = new ExtraFieldValue('lp_item');
-                $extraFieldValues->saveFieldValues($_POST);
+                $extraFieldValues->saveFieldValues($_POST, true);
 
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();

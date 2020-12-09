@@ -7333,8 +7333,10 @@ class learnpath
      *
      * @return string
      */
-    public function display_edit_item($item_id)
-    {
+    public function display_edit_item(
+        $item_id,
+        $exclude = []
+    ) {
         $course_id = api_get_course_int_id();
         $return = '';
         $item_id = (int) $item_id;
@@ -7359,7 +7361,8 @@ class learnpath
                         get_lang('EditCurrentChapter').' :',
                         'edit',
                         $item_id,
-                        $row
+                        $row,
+                        $exclude
                     );
                 } else {
                     $return .= $this->display_item_form(
@@ -7367,7 +7370,8 @@ class learnpath
                         get_lang('EditCurrentChapter').' :',
                         'edit_item',
                         $item_id,
-                        $row
+                        $row,
+                        $exclude
                     );
                 }
                 break;
@@ -7386,7 +7390,12 @@ class learnpath
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
 
                 if ($row['item_type'] === TOOL_DOCUMENT) {
-                    $return .= $this->display_document_form('edit', $item_id, $row_step);
+                    $return .= $this->display_document_form(
+                        'edit',
+                        $item_id,
+                        $row_step,
+                        null,
+                        $exclude);
                 }
 
                 if ($row['item_type'] === TOOL_READOUT_TEXT) {
@@ -7414,7 +7423,7 @@ class learnpath
                     }
                 }
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_link_form('edit', $item_id, $row);
+                $return .= $this->display_link_form('edit', $item_id, $row, null, $exclude);
                 break;
             case TOOL_LP_FINAL_ITEM:
                 Session::write('finalItem', true);
@@ -7429,11 +7438,11 @@ class learnpath
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_document_form('edit', $item_id, $row_step);
+                $return .= $this->display_document_form('edit', $item_id, $row_step, $exclude);
                 break;
             case TOOL_QUIZ:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_quiz_form('edit', $item_id, $row);
+                $return .= $this->display_quiz_form('edit', $item_id, $row, $exclude);
                 break;
             case TOOL_HOTPOTATOES:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -7579,8 +7588,12 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
-    {
+    public function display_quiz_form(
+        $action = 'add',
+        $id = 0,
+        $extra_info = '',
+        $exclude = []
+    ) {
         $course_id = api_get_course_int_id();
         $id = (int) $id;
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -7728,7 +7741,7 @@ class learnpath
 
         if ('edit' === $action) {
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id);
+            $extraField->addElements($form, $id, $exclude);
         }
 
         if ($action === 'add') {
@@ -8597,8 +8610,13 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_document_form($action = 'add', $id = 0, $extra_info = 'new', $item = null)
-    {
+    public function display_document_form(
+        $action = 'add',
+        $id = 0,
+        $extra_info = 'new',
+        $item = null,
+        $exclude = []
+    ) {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -8827,7 +8845,7 @@ class learnpath
 
         if ('edit' === $action) {
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id);
+            $extraField->addElements($form, $id, $exclude );
         }
 
         if ($action !== 'move') {
@@ -9412,8 +9430,13 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_link_form($action = 'add', $id = 0, $extra_info = '', $item = null)
-    {
+    public function display_link_form(
+        $action = 'add',
+        $id = 0,
+        $extra_info = '',
+        $item = null,
+        $exclude = []
+    ) {
         $course_id = api_get_course_int_id();
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
@@ -9568,7 +9591,7 @@ class learnpath
 
         if ('edit' === $action) {
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id);
+            $extraField->addElements($form, $id, $exclude);
         }
 
         if ($action === 'add') {

@@ -9710,41 +9710,28 @@ class Exercise
                 ';
 
             $answerType = $objQuestionTmp->selectType();
-            if ($answerType != HOT_SPOT_DELINEATION) {
-                $item_list = explode('@@', $destination);
-                $try = $item_list[0];
-                $lp = $item_list[1];
-                $destinationid = $item_list[2];
-                $url = $item_list[3];
-                $table_resume = '';
+            /*if ($next == 0) {
+                $try = $try_hotspot;
+                $lp = $lp_hotspot;
+                $destinationid = $select_question_hotspot;
+                $url = $url_hotspot;
             } else {
-                if ($next == 0) {
-                    $try = $try_hotspot;
-                    $lp = $lp_hotspot;
-                    $destinationid = $select_question_hotspot;
-                    $url = $url_hotspot;
-                } else {
-                    //show if no error
-                    $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
-                    $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
-                }
+                //show if no error
+                $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
+                $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
             }
-
             echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-            if ($answerType == HOT_SPOT_DELINEATION) {
-                if ($organs_at_risk_hit > 0) {
-                    $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                    $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
-                } else {
-                    $message = '<p>'.get_lang('YourDelineation').'</p>';
-                    $message .= $table_resume;
-                    $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                }
-                $message .= '<p>'.$comment.'</p>';
-                echo $message;
+            if ($organs_at_risk_hit > 0) {
+                $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
             } else {
-                echo '<p>'.$comment.'</p>';
+                $message = '<p>'.get_lang('YourDelineation').'</p>';
+                $message .= $table_resume;
+                $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
             }
+            $message .= '<p>'.$comment.'</p>';
+            echo $message;*/
+
 
             // Showing the score
             /*$queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT

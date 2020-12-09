@@ -1083,7 +1083,8 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 
             if (!in_array($currentPath, $paths, true)) {
                 // Check if entering an exercise.
-                global $current_course_tool;
+                // @todo remove global $current_course_tool
+                /*global $current_course_tool;
                 if ('quiz' !== $current_course_tool) {
                     $initialData = $plugin->getInitialExercise($course_info['real_id'], $session_id);
                     if ($initialData && isset($initialData['exercise_id'])) {
@@ -1099,7 +1100,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
                             return false;
                         }
                     }
-                }
+                }*/
             }
         }
     }

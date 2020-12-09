@@ -7370,8 +7370,7 @@ class learnpath
                         get_lang('EditCurrentChapter').' :',
                         'edit_item',
                         $item_id,
-                        $row,
-                        $exclude
+                        $row
                     );
                 }
                 break;

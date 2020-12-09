@@ -944,6 +944,7 @@ if ($form->validate()) {
     $_user['mail'] = $values['email'];
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
+    $_user['status'] = $values['status'] ?? STUDENT;
     Session::write('_user', $_user);
 
     $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;

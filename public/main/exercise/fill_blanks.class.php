@@ -323,7 +323,9 @@ class FillBlanks extends Question
         // answer
         $form->addLabel(
             null,
-            get_lang('Please type your text below').', '.get_lang('and').' '.get_lang('use square brackets [...] to define one or more blanks')
+            get_lang('Please type your text below').', '.
+            get_lang('and').' '.
+            get_lang('use square brackets [...] to define one or more blanks')
         );
         $form->addElement(
             'html_editor',
@@ -341,7 +343,7 @@ class FillBlanks extends Question
             'select_separator',
             get_lang('Select a blanks marker'),
             self::getAllowedSeparatorForSelect(),
-            ' id="select_separator" style="width:150px" class="selectpicker" onchange="changeBlankSeparator()" '
+            ' id="select_separator" style="width:150px" class="form-control" onchange="changeBlankSeparator()" '
         );
         $form->addLabel(
             null,
@@ -553,7 +555,7 @@ class FillBlanks extends Question
                     $resultOptions,
                     $selected,
                     [
-                        'class' => 'selectpicker',
+                        'class' => 'form-control',
                         'data-width' => $width,
                         'id' => $labelId,
                     ],

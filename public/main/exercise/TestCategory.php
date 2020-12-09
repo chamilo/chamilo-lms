@@ -485,7 +485,7 @@ class TestCategory
             $courseId = api_get_course_int_id();
         }
         $categories = self::getCategoryListInfo('', $courseId);
-        $result = ['0' => get_lang('NoCategorySelected')];
+        $result = ['0' => get_lang('No category selected')];
         for ($i = 0; $i < count($categories); $i++) {
             $result[$categories[$i]->id] = $categories[$i]->name;
         }

@@ -60,7 +60,8 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         $html = '<div class="alert alert-success" role="alert">'.
-                get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+                get_lang('Images will be resized (up or down) to 200x150 pixels. For a better rendering of the question, we recommend you upload only images of this size.')
+            .'</div>';
 
         $zoomOptions = api_get_configuration_value('quiz_image_zoom');
         if (isset($zoomOptions['options'])) {
@@ -69,10 +70,8 @@ class UniqueAnswerImage extends UniqueAnswer
             $html .= '<link rel="stylesheet" type="text/css" media="screen"
                 href="'.$finderFolder.'css/elfinder.full.css">';
             $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
-
             $html .= '<!-- elFinder JS (REQUIRED) -->';
             $html .= '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
-
             $html .= '<!-- elFinder translation (OPTIONAL) -->';
             $language = 'en';
             $platformLanguage = api_get_interface_language();
@@ -347,14 +346,12 @@ class UniqueAnswerImage extends UniqueAnswer
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
 
             $scenario = $form->getSubmitValue('scenario');
-
             //$listDestination = $form -> getSubmitValue('destination'.$i);
             //$destinationStr = $form -> getSubmitValue('destination'.$i);
-
-            $try = $scenario['try'.$i];
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            $try = $scenario['try'.$i] ?? null;
+            $lp = $scenario['lp'.$i] ?? null;
+            $destination = $scenario['destination'.$i] ?? null;
+            $url = trim($scenario['url'.$i] ?? null);
 
             /*
               How we are going to parse the destination value

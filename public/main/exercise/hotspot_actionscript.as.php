@@ -6,14 +6,9 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
-/*
+/**
  * This file generates the ActionScript variables code used by the HotSpot .swf.
- *
- * @package chamilo.exercise
- *
  * @author Toon Keppens
- *
- * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
  */
 session_cache_limiter('none');
 
@@ -43,42 +38,24 @@ $course_id = api_get_course_int_id();
 
 // Query db for answers
 if (HOT_SPOT_DELINEATION == $answer_type) {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation 
+    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
-	        WHERE 
-	            c_id = $course_id AND 
-	            question_id = $questionId AND 
-	            hotspot_type = 'delineation' 
+	        WHERE
+	            c_id = $course_id AND
+	            question_id = $questionId AND
+	            hotspot_type = 'delineation'
             ORDER BY iid";
 } else {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation 
+    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
-	        WHERE c_id = $course_id AND question_id = $questionId 
+	        WHERE c_id = $course_id AND question_id = $questionId
 	        ORDER BY position";
 }
 $result = Database::query($sql);
 
 $data = [];
 $data['type'] = 'user';
-$data['lang'] = [
-    'Square' => get_lang('Square'),
-    'Ellipse' => get_lang('Ellipse'),
-    'Polygon' => get_lang('Polygon'),
-    'HotspotStatus1' => get_lang('HotspotStatus1'),
-    'HotspotStatus2Polygon' => get_lang('HotspotStatus2Polygon'),
-    'HotspotStatus2Other' => get_lang('HotspotStatus2Other'),
-    'HotspotStatus3' => get_lang('HotspotStatus3'),
-    'HotspotShowUserPoints' => get_lang('HotspotShowUserPoints'),
-    'ShowHotspots' => get_lang('ShowHotspots'),
-    'Triesleft' => get_lang('Triesleft'),
-    'HotspotExerciseFinished' => get_lang('HotspotExerciseFinished'),
-    'NextAnswer' => get_lang('NextAnswer'),
-    'Delineation' => get_lang('Delineation'),
-    'CloseDelineation' => get_lang('CloseDelineation'),
-    'Oar' => get_lang('Oar'),
-    'ClosePolygon' => get_lang('ClosePolygon'),
-    'DelineationStatus1' => get_lang('DelineationStatus1'),
-];
+$data['lang'] = HotSpot::getLangVariables();
 $data['image'] = $imagePath;
 $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;

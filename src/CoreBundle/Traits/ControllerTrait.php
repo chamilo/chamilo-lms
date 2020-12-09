@@ -12,6 +12,10 @@ use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
+use Chamilo\CourseBundle\Repository\CForumForumRepository;
+use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +39,11 @@ trait ControllerTrait
         $services[] = CAnnouncementRepository::class;
         $services[] = CAnnouncementAttachmentRepository::class;
         $services[] = CCalendarEventAttachmentRepository::class;
+        $services[] = CQuizQuestionRepository::class;
+        $services[] = CQuizQuestionCategoryRepository::class;
+
+        $services[] = CForumForumRepository::class;
+        $services[] = CForumAttachmentRepository::class;
 
         /*$services[] = CAttendanceRepository::class;
         $services[] = CDocumentRepository::class;

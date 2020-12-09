@@ -72,25 +72,7 @@ $em = Database::getManager();
 
 $data = [];
 $data['type'] = 'solution';
-$data['lang'] = [
-    'Square' => get_lang('Square'),
-    'Ellipse' => get_lang('Ellipse'),
-    'Polygon' => get_lang('Polygon'),
-    'HotspotStatus1' => get_lang('HotspotStatus1'),
-    'HotspotStatus2Polygon' => get_lang('HotspotStatus2Polygon'),
-    'HotspotStatus2Other' => get_lang('HotspotStatus2Other'),
-    'HotspotStatus3' => get_lang('HotspotStatus3'),
-    'HotspotShowUserPoints' => get_lang('HotspotShowUserPoints'),
-    'ShowHotspots' => get_lang('ShowHotspots'),
-    'Triesleft' => get_lang('Triesleft'),
-    'HotspotExerciseFinished' => get_lang('HotspotExerciseFinished'),
-    'NextAnswer' => get_lang('NextAnswer'),
-    'Delineation' => get_lang('Delineation'),
-    'CloseDelineation' => get_lang('CloseDelineation'),
-    'Oar' => get_lang('Oar'),
-    'ClosePolygon' => get_lang('ClosePolygon'),
-    'DelineationStatus1' => get_lang('DelineationStatus1'),
-];
+$data['lang'] = HotSpot::getLangVariables();
 $data['image'] = $imagePath;
 $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;

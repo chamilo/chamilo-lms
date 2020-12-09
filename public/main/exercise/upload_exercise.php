@@ -7,16 +7,19 @@ use ChamiloSession as Session;
 /**
  * Upload quiz: This script shows the upload quiz feature.
  */
+$help_content = 'exercise_upload';
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$debug = false;
 $origin = api_get_origin();
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
+$this_section = SECTION_COURSES;
 $htmlHeadXtra[] = "<script>
 $(function(){
     $('#user_custom_score').click(function() {
@@ -434,8 +437,9 @@ function lp_upload_quiz_action_handling()
                                     $score,
                                     $id
                                 );
-
-                                $total += (float) $score;
+                                if ($correct) {
+                                    $total += (float) $score;
+                                }
                                 $id++;
                             }
 
@@ -558,6 +562,7 @@ function lp_upload_quiz_action_handling()
                 }
             }
         }
+        Display::addFlash(Display::return_message(get_lang('FileImported')));
 
         if (isset($_SESSION['oLP']) && isset($_GET['lp_id'])) {
             $previous = $_SESSION['oLP']->select_previous_item_id();
@@ -576,8 +581,9 @@ function lp_upload_quiz_action_handling()
             exit;
         } else {
             //  header('location: exercise.php?' . api_get_cidreq());
-            echo '<script>window.location.href = "'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
-        }
+        $exerciseUrl = api_get_path(WEB_CODE_PATH).
+            'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id();
+        api_location($exerciseUrl);
     }
 }
 

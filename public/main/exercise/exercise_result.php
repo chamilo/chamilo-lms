@@ -110,7 +110,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
         ]
     );
 }
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['orig_lp_id'] : 0;
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
@@ -165,7 +165,7 @@ $attempt_count = Event::get_attempt_count(
     $learnpath_item_id,
     $learnpath_item_view_id
 );
-	
+
 if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         Display::addFlash(

@@ -1227,10 +1227,10 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.id
+        $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     q.type = $type AND
                     e.c_id = {$this->course_id} AND
@@ -2084,7 +2084,7 @@ class Exercise
                     'hide_question_score',
                     null,
                     get_lang('Hide question score')
-                ), 
+                ),
                 $form->createElement(
                     'checkbox',
                     'hide_category_table',
@@ -3541,7 +3541,7 @@ class Exercise
         $questionName = $objQuestionTmp->selectTitle();
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
-        $quesId = $objQuestionTmp->selectId();
+        $quesId = $objQuestionTmp->getId();
         $extra = $objQuestionTmp->extra;
         $next = 1; //not for now
         $totalWeighting = 0;
@@ -5682,8 +5682,8 @@ class Exercise
                         $message .= '<p>'.$comment.'</p>';
                         echo $message;
 
-                        $_SESSION['hotspot_delineation_result'][$this->selectId()][$questionId][0] = $message;
-                        $_SESSION['hotspot_delineation_result'][$this->selectId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
+                        $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][0] = $message;
+                        $_SESSION['hotspot_delineation_result'][$this->selgetIdectId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
                     } else {
                         echo $hotspot_delineation_result[0];
                     }

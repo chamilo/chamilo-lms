@@ -168,9 +168,9 @@ class ImsSection
 
     public function start_section()
     {
-        return '<section 
-            ident = "EXO_'.$this->exercise->selectId().'" 
-            title = "'.cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"            
+        return '<section
+            ident = "EXO_'.$this->exercise->getId().'"
+            title = "'.cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"
         >'."\n";
     }
 
@@ -317,7 +317,7 @@ class ImsItem
     {
         $this->question = $question;
         $this->answer = $question->answer;
-        $this->questionIdent = 'QST_'.$question->selectId();
+        $this->questionIdent = 'QST_'.$question->getId();
     }
 
     /**

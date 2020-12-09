@@ -131,7 +131,7 @@ if (!empty($exerciseId)) {
     $form = new FormValidator(
         'exercise_admin',
         'post',
-        api_get_self().'?'.api_get_cidreq().'&id='.$exerciseId
+        api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId
     );
     $objExercise->read($exerciseId, false);
     $form->addElement('hidden', 'edit', 'true');
@@ -160,7 +160,7 @@ if ($form->validate()) {
     }
     $exercise_id = $objExercise->getId();
     Session::erase('objExercise');
-    header('Location:admin.php?id='.$exercise_id.'&'.api_get_cidreq());
+    header('Location:admin.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
     exit;
 } else {
     if (api_is_in_gradebook()) {
@@ -175,7 +175,7 @@ if ($form->validate()) {
         'name' => get_lang('Tests'),
     ];
     $interbreadcrumb[] = [
-        'url' => 'admin.php?id='.$objExercise->getId().'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 

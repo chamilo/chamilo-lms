@@ -118,13 +118,14 @@ class TrackEAttempt
     /**
      * @var int
      *
-     * @ORM\Column(name="second_spent", type="integer")
+     * @ORM\Column(name="seconds_spent", type="integer")
      */
-    protected $secondSpent;
+    protected $secondsSpent;
 
     public function __construct()
     {
-        $this->secondSpent = 0;
+        $this->teacherComment = '';
+        $this->secondsSpent = 0;
     }
 
     /**
@@ -351,5 +352,17 @@ class TrackEAttempt
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getSecondsSpent(): int
+    {
+        return $this->secondsSpent;
+    }
+
+    public function setSecondsSpent(int $secondsSpent): TrackEAttempt
+    {
+        $this->secondsSpent = $secondsSpent;
+
+        return $this;
     }
 }

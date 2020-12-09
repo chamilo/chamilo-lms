@@ -584,9 +584,9 @@ switch ($action) {
                 // This variable came from exercise_submit_modal.php.
                 $hotspot_delineation_result = null;
                 if (isset($_SESSION['hotspot_delineation_result']) &&
-                    isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])
+                    isset($_SESSION['hotspot_delineation_result'][$objExercise->getId()])
                 ) {
-                    $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
+                    $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->getId()][$my_question_id];
                 }
 
                 if ('simple' === $type) {
@@ -710,7 +710,7 @@ switch ($action) {
                 Session::write('duration_time', [$key => $now]);
                 Event::updateEventExercise(
                     $exeId,
-                    $objExercise->selectId(),
+                    $objExercise->getId(),
                     $total_score,
                     $total_weight,
                     $session_id,

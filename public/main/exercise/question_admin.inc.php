@@ -61,13 +61,13 @@ if (is_object($objQuestion)) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
                     Display::addFlash(Display::return_message(get_lang('Item updated')));
-                    $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
                     header("Location: $url");
                     exit;
                 }
 
                 Display::addFlash(Display::return_message(get_lang('Item updated')));
-                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
                 header("Location: $url");
                 exit;
             } else {
@@ -78,12 +78,12 @@ if (is_object($objQuestion)) {
                     $page = round($objExercise->getQuestionCount() / $length);
                 }
                 Display::addFlash(Display::return_message(get_lang('Item added')));
-                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
                 header("Location: $url");
                 exit;
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {

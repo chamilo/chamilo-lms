@@ -162,7 +162,7 @@ function import_exercise($file)
     }
 
     $exercise->save();
-    $last_exercise_id = $exercise->selectId();
+    $last_exercise_id = $exercise->getId();
     $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
         // For each question found...
@@ -210,7 +210,7 @@ function import_exercise($file)
             $question->updateDescription($description);
             $question->save($exercise);
 
-            $last_question_id = $question->selectId();
+            $last_question_id = $question->getId();
             //3. Create answer
             $answer = new Answer($last_question_id);
             $answerList = $question_array['answer'];
@@ -733,10 +733,10 @@ function qtiProcessManifest($filePath)
             $specialHref = Database::escape_string(preg_replace('/_/', '-', strtolower($href)));
             $specialHref = preg_replace('/(-){2,8}/', '-', $specialHref);
 
-            $sql = "SELECT iid FROM $tableDocuments 
+            $sql = "SELECT iid FROM $tableDocuments
                     WHERE
-                        c_id = ".$course['real_id']." AND 
-                        session_id = $sessionId AND 
+                        c_id = ".$course['real_id']." AND
+                        session_id = $sessionId AND
                         path = '/".$specialHref."'";
             $result = Database::query($sql);
             $documentId = 0;

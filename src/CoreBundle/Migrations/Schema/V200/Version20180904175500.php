@@ -97,8 +97,8 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_track_e_attempt_tms ON track_e_attempt (tms)');
         }
 
-        if (false === $table->hasColumn('second_spent')) {
-            $this->addSql('ALTER TABLE track_e_attempt ADD second_spent INT NOT NULL, CHANGE user_id user_id INT DEFAULT NULL');
+        if (false === $table->hasColumn('seconds_spent')) {
+            $this->addSql('ALTER TABLE track_e_attempt ADD seconds_spent INT NOT NULL, CHANGE user_id user_id INT DEFAULT NULL');
         }
 
         if (false === $table->hasForeignKey('FK_A89CC3B691D79BD3')) {

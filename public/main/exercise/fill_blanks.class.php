@@ -250,6 +250,10 @@ class FillBlanks extends Question
 
             function changeBlankSeparator()
             {
+                var definedSeparator = $("[name=select_separator] option:selected").text();
+                $("[name=select_separator] option").each(function (index, value) {
+                    $("#defineoneblank").html($("#defineoneblank").html().replace($(value).html(), definedSeparator))
+                });
                 var separatorNumber = $("#select_separator").val();
                 var tabSeparator = getSeparatorFromNumber(separatorNumber);
                 blankSeparatorStart = tabSeparator[0];
@@ -1127,18 +1131,6 @@ class FillBlanks extends Question
         $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
-        /*if (in_array($resultsDisabled, [
-            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-            RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-            ]
-        )
-        ) {
-            $resultsDisabled = true;
-            if ($showTotalScoreAndUserChoices) {
-                $resultsDisabled = false;
-            }
-        }*/
-
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
         for ($i = 0; $i < count($listStudentAnswerInfo['student_answer']); $i++) {
@@ -1163,6 +1155,11 @@ class FillBlanks extends Question
 
         // rebuild the sentence with student answer inserted
         for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
+            if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
+                if (empty($listStudentAnswerInfo['student_answer'][$i])) {
+                    continue;
+                }
+            }
             $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
             $studentLabel = isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
             $result .= $studentLabel;
@@ -1209,6 +1206,7 @@ class FillBlanks extends Question
 
                 break;
             case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
             case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
                 $hideExpectedAnswer = true;
                 if ($showTotalScoreAndUserChoices) {
@@ -1318,6 +1316,9 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false
     ) {
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
+            return '';
+        }
         return self::getHtmlAnswer(
             $answer,
             $correct,

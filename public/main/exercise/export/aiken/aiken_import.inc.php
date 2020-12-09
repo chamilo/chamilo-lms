@@ -177,7 +177,7 @@ function aiken_import_exercise($file)
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];
     $exercise->save();
-    $last_exercise_id = $exercise->selectId();
+    $last_exercise_id = $exercise->getId();
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
@@ -196,7 +196,7 @@ function aiken_import_exercise($file)
             $type = $question->selectType();
             $question->type = constant($type);
             $question->save($exercise);
-            $last_question_id = $question->selectId();
+            $last_question_id = $question->getId();
 
             // 3. Create answer
             $answer = new Answer($last_question_id, $courseId, $exercise, false);

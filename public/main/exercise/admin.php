@@ -147,7 +147,7 @@ if ($objExercise->sessionId != $sessionId) {
 // doesn't select the exercise ID if we come from the question pool
 if (!$fromExercise) {
     // gets the right exercise ID, and if 0 creates a new exercise
-    if (!$exerciseId = $objExercise->selectId()) {
+    if (!$exerciseId = $objExercise->getId()) {
         $modifyExercise = 'yes';
     }
 }
@@ -171,7 +171,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
     // checks if the object exists
     if (is_object($objQuestion)) {
         // gets the question ID
-        $questionId = $objQuestion->selectId();
+        $questionId = $objQuestion->getId();
     }
 }
 
@@ -436,7 +436,7 @@ if ($newQuestion || $editQuestion) {
             echo '</div>';
         } else {
             require 'question_admin.inc.php';
-            ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->selectId());
+            ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->getId());
         }
     }
 }

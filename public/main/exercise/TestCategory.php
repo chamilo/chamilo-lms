@@ -205,13 +205,13 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $categories = [];
         if (empty($field)) {
-            $sql = "SELECT id FROM $table
+            $sql = "SELECT iid FROM $table
                     WHERE c_id = $courseId
                     ORDER BY title ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $category = new TestCategory();
-                $categories[] = $category->getCategory($row['id'], $courseId);
+                $categories[] = $category->getCategory($row['iid'], $courseId);
             }
         } else {
             $field = Database::escape_string($field);
@@ -265,7 +265,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $sql = "SELECT *
                 FROM $table
-                WHERE question_id = $questionId AND c_id = $courseId";
+                WHERE question_id = $questionId";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             return Database::fetch_array($res, 'ASSOC');
@@ -294,7 +294,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT title
                 FROM $table
-                WHERE id = $categoryId AND c_id = $courseId";
+                WHERE iid = $categoryId AND c_id = $courseId";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
         $result = '';

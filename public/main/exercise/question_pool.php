@@ -55,7 +55,7 @@ $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_l
 
 if (!empty($objExercise->id)) {
     $interbreadcrumb[] = [
-        'url' => 'admin.php?id='.$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 }
@@ -305,7 +305,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 } else {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo "<a href='admin.php?id=0'>".
+    echo "<a href='admin.php?exerciseId=0'>".
         Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
     $titleAdd = get_lang('Manage all questions');
 }
@@ -1063,7 +1063,7 @@ echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">'
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 echo '<input type="hidden" name="action">';
 
-$table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
+$table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table'], false);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {

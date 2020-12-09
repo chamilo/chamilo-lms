@@ -269,4 +269,23 @@ class TrackEAttemptRecording
     {
         return $this->id;
     }
+
+    /**
+     * @return int
+     */
+    public function getAnswer()
+    {
+        return $this->answer;
+    }
+
+    /**
+     * @param int $answer
+     */
+    public function setAnswer($answer): self
+    {
+        $this->answer = $answer;
+
+        return $this;
+    }
+
 }

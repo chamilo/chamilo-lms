@@ -4,6 +4,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+$this_section = SECTION_COURSES;
 api_protect_course_script(true, false, true);
 
 $showPage = false;
@@ -98,7 +99,7 @@ if (!empty($question_list)) {
 }
 
 // Format A table
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
@@ -136,7 +137,8 @@ if (!empty($question_list)) {
             $question_id,
             $exerciseId,
             $courseCode,
-            $sessionId
+            $sessionId,
+            true
         );
 
         $answer = new Answer($question_id);
@@ -285,7 +287,7 @@ if (!empty($question_list)) {
 }
 
 // Format A table
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
@@ -304,18 +306,32 @@ foreach ($data as $row_table) {
     $row++;
 }
 $content .= $table->toHtml();
+$exportPdf = isset($_GET['export_pdf']) && !empty($_GET['export_pdf']) ? (int) $_GET['export_pdf'] : 0;
+if ($exportPdf) {
+    $fileName = get_lang('Report').'_'.api_get_course_id().'_'.api_get_local_time();
+    $params = [
+        'filename' => $fileName,
+        'pdf_title' => $objExercise->selectTitle(true).'<br>'.get_lang('ReportByQuestion'),
+        'pdf_description' => get_lang('Report'),
+        'format' => 'A4',
+        'orientation' => 'P',
+    ];
+
+    Export::export_html_to_pdf($content, $params);
+    exit;
+}
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    'url' => "admin.php?id=$exerciseId&".api_get_cidreq(),
+    'url' => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
     'name' => $objExercise->selectTitle(true),
 ];
 
 $tpl = new Template(get_lang('Report by question'));
-$actions = '<a href="exercise_report.php?id='.$exerciseId.'&'.api_get_cidreq().'">'.
+$actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
     Display:: return_icon(
         'back.png',
         get_lang('Go back to the questions list'),
@@ -323,6 +339,10 @@ $actions = '<a href="exercise_report.php?id='.$exerciseId.'&'.api_get_cidreq().'
         ICON_SIZE_MEDIUM
     )
     .'</a>';
+$actions .= Display::url(
+    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+    'stats.php?exerciseId='.$exerciseId.'&export_pdf=1&'.api_get_cidreq()
+);
 $actions = Display::div($actions, ['class' => 'actions']);
 $content = $actions.$content;
 $tpl->assign('content', $content);

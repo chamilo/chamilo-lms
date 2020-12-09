@@ -117,7 +117,11 @@ class MultipleAnswerTrueFalse extends Question
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
-                        $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+                        $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+
+                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $id == $_POST['correct'][$i]) {
+                            $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
+                        }
                         $j++;
                         if (3 == $j) {
                             break;
@@ -141,6 +145,9 @@ class MultipleAnswerTrueFalse extends Question
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 
+            if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+                $form->getElement("answer[$i]")->setValue(Security::remove_XSS($_POST['answer'][$i]));
+            }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
                 $form->addElement(
@@ -154,6 +161,9 @@ class MultipleAnswerTrueFalse extends Question
                         'Height' => '100',
                     ]
                 );
+                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+                    $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));
+                }
             }
 
             $form->addHtml('</tr>');
@@ -206,9 +216,9 @@ class MultipleAnswerTrueFalse extends Question
             $scores = explode(':', $this->extra);
 
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; $i++) {
-                    $defaults['option['.$i.']'] = $scores[$i - 1];
-                }
+                $txtOption1->setValue($scores[0]);
+                $txtOption2->setValue($scores[1]);
+                $txtOption3->setValue($scores[2]);
             }
         }
 
@@ -224,9 +234,7 @@ class MultipleAnswerTrueFalse extends Question
             $form->addGroup($buttonGroup);
         }
 
-        if (!empty($this->id)) {
-            $form->setDefaults($defaults);
-        } else {
+        if (!empty($this->id) && !$form->isSubmitted()) {
             $form->setDefaults($defaults);
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
@@ -327,7 +335,9 @@ class MultipleAnswerTrueFalse extends Question
                 ]
             )
         ) {
-            $header .= '<th>'.get_lang('Comment').'</th>';
+            if (false === $exercise->hideComment) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
         }
         $header .= '</tr>';
 

@@ -109,6 +109,11 @@ abstract class Question
         ];
     }
 
+    public function getId()
+    {
+        return $this->iid;
+    }
+
     /**
      * @return int|null
      */
@@ -212,18 +217,6 @@ abstract class Question
 
         // question not found
         return false;
-    }
-
-    /**
-     * returns the question ID.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return int - question ID
-     */
-    public function selectId()
-    {
-        return $this->id;
     }
 
     /**
@@ -395,9 +388,15 @@ abstract class Question
                         c_id = ".$courseId;
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
+            $allowMandatory = api_get_configuration_value('allow_mandatory_question_in_category');
             if ($row['nb'] > 0) {
+                $extraMandatoryCondition = '';
+                if ($allowMandatory) {
+                    $extraMandatoryCondition = ", mandatory = {$this->mandatory}";
+                }
                 $sql = "UPDATE $table
                         SET category_id = $categoryId
+                        $extraMandatoryCondition
                         WHERE
                             question_id = $question_id ";
                 Database::query($sql);
@@ -405,6 +404,14 @@ abstract class Question
                 $sql = "INSERT INTO $table (question_id, category_id)
                         VALUES ($question_id, $categoryId)";
                 Database::query($sql);
+                if ($allowMandatory) {
+                    $id = Database::insert_id();
+                    if ($id) {
+                        $sql = "UPDATE $table SET mandatory = {$this->mandatory}
+                                WHERE iid = $id";
+                        Database::query($sql);
+                    }
+                }
             }
 
             return true;
@@ -1537,7 +1544,7 @@ abstract class Question
             $explanation = $type->getExplanation();
             echo '<li>';
             echo '<div class="icon-image">';
-            $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'&id='.$exerciseId.'">'.
+            $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'&exerciseId='.$exerciseId.'">'.
                 Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
 
             if (false === $objExercise->force_edit_exercise_in_lp) {

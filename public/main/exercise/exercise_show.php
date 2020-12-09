@@ -881,7 +881,7 @@ if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $answerType) {
     $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
 
     if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-        $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+        $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());
 
         if (!empty($formula)) {
             $totalScore = $pluginEvaluation->getResultWithFormula($id, $formula);

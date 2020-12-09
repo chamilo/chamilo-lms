@@ -2396,7 +2396,7 @@ HOTSPOT;
                             );
 
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
-                            $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&id='.$exercise_id.'&delete=delete&did='.$id.'"
+                            $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                             onclick="javascript:if(!confirm(\''.sprintf(
                                 addslashes(get_lang('Delete attempt?')),
                                 $results[$i]['username'],

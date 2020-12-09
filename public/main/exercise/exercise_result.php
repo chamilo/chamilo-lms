@@ -104,7 +104,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
                 'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
             )
             .Display::url(
-                Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32),
+                Display::return_icon('settings.png', get_lang('ModifyExercise'), [], 32),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
             ),
         ]
@@ -152,7 +152,7 @@ if ('embeddable' !== $origin) {
             'learnpath_item_id' => $learnpath_item_id,
             'learnpath_item_view_id' => $learnpath_item_view_id,
         ]),
-        'pencil-square-o',
+        'far fa-edit',
         'info'
     );
 }
@@ -243,9 +243,9 @@ ExerciseLib::sendNotification(
     $stats
 );
 
-$hookQuizEnd = HookQuizEnd::create();
+/*$hookQuizEnd = HookQuizEnd::create();
 $hookQuizEnd->setEventData(['exe_id' => $exeId]);
-$hookQuizEnd->notifyQuizEnd();
+$hookQuizEnd->notifyQuizEnd();*/
 //Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,

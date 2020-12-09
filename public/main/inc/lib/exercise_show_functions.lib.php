@@ -342,7 +342,6 @@ class ExerciseShowFunctions
 
         $studentChoiceInt = (int) $studentChoice;
         $answerCorrectChoice = (int) $answerCorrect;
-
         $hide_expected_answer = false;
         $showComment = false;
         switch ($resultsDisabled) {

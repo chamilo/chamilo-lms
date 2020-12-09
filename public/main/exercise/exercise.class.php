@@ -3678,6 +3678,7 @@ class Exercise
                 case UNIQUE_ANSWER_IMAGE:
                 case UNIQUE_ANSWER_NO_OPTION:
                 case READING_COMPREHENSION:
+
                     if ($from_database) {
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
@@ -4412,7 +4413,7 @@ class Exercise
                 case MATCHING_DRAGGABLE:
                 case MATCHING:
                     if ($from_database) {
-                        $sql = "SELECT id, answer, id_auto
+                        $sql = "SELECT iid, answer
                                 FROM $table_ans
                                 WHERE
                                     c_id = $course_id AND
@@ -4423,16 +4424,16 @@ class Exercise
                         // Getting the real answer
                         $real_list = [];
                         while ($realAnswer = Database::fetch_array($result)) {
-                            $real_list[$realAnswer['id_auto']] = $realAnswer['answer'];
+                            $real_list[$realAnswer['iid']] = $realAnswer['answer'];
                         }
 
-                        $sql = "SELECT id, answer, correct, id_auto, ponderation
+                        $sql = "SELECT iid, answer, correct, ponderation
                                 FROM $table_ans
                                 WHERE
                                     c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct <> 0
-                                ORDER BY id_auto";
+                                ORDER BY iid";
                         $result = Database::query($sql);
                         $options = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -4442,10 +4443,10 @@ class Exercise
                         $questionScore = 0;
                         $counterAnswer = 1;
                         foreach ($options as $a_answers) {
-                            $i_answer_id = $a_answers['id']; //3
+                            $i_answer_id = $a_answers['iid']; //3
                             $s_answer_label = $a_answers['answer']; // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
-                            $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
+                            $i_answer_id_auto = $a_answers['iid']; // 3 - 4
 
                             $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                     WHERE
@@ -6285,7 +6286,6 @@ class Exercise
         }
 
         $start_date = null;
-
         if (isset($trackExerciseInfo['start_date'])) {
             $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
         }
@@ -6319,17 +6319,10 @@ class Exercise
             $array[] = array('title' => get_lang("Description"), 'content' => $this->description);
         }
         */
-        if (!empty($start_date)) {
-            $data['start_date'] = $start_date;
-        }
 
-        if (!empty($duration)) {
-            $data['duration'] = $duration;
-        }
-
-        if (!empty($ip)) {
-            $data['ip'] = $ip;
-        }
+        $data['start_date'] = $start_date;
+        $data['duration'] = $duration;
+        $data['ip'] = $ip;
 
         if (api_get_configuration_value('save_titles_as_html')) {
             $data['title'] = $this->get_formated_title().get_lang('Result');

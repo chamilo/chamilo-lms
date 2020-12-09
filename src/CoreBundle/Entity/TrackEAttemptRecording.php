@@ -88,6 +88,7 @@ class TrackEAttemptRecording
 
     public function __construct()
     {
+        $this->teacherComment = '';
         $this->answer = '';
         $this->sessionId = 0;
     }
@@ -287,5 +288,4 @@ class TrackEAttemptRecording
 
         return $this;
     }
-
 }

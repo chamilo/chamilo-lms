@@ -2,29 +2,45 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
+use Chamilo\CoreBundle\Entity\TrackEExercises;
 use ChamiloSession as Session;
 
-/**
- * Responses to AJAX calls.
- */
 require_once __DIR__.'/../global.inc.php';
+$current_course_tool = TOOL_QUIZ;
 $debug = false;
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 
-if ($debug) {
-    error_log('-----------------------------------------------------');
-    error_log("$action ajax call");
-    error_log('-----------------------------------------------------');
-}
 
 $course_id = api_get_course_int_id();
 $session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : api_get_session_id();
+$course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
+$currentUserId = api_get_user_id();
+$exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
 switch ($action) {
+    case 'get_exercise_by_course':
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
+        $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        $data = [];
+        $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
+        $results = ExerciseLib::get_all_exercises_for_course_id(
+            null,
+            $session_id,
+            $course_id,
+            $onlyActiveExercises
+        );
+
+        if (!empty($results)) {
+            foreach ($results as $exercise) {
+                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
+            }
+        }
+
+        echo json_encode($data);
+        break;
     case 'update_duration':
-        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
         if (Session::read('login_as')) {
             if ($debug) {
@@ -68,7 +84,6 @@ switch ($action) {
         $now = $nowObject->getTimestamp();
         $exerciseId = $attempt->getExeExoId();
         $userId = $attempt->getExeUserId();
-        $currentUserId = api_get_user_id();
 
         if ($userId != $currentUserId) {
             if ($debug) {
@@ -352,25 +367,19 @@ switch ($action) {
     case 'add_question_to_reminder':
         /** @var Exercise $objExercise */
         $objExercise = Session::read('objExercise');
-        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
         if (empty($objExercise) || empty($exeId)) {
             echo 0;
             exit;
-        } else {
+        }
             $option = isset($_GET['option']) ? $_GET['option'] : '';
             switch ($option) {
                 case 'add_all':
                     $questionListInSession = Session::read('questionList');
-                    $objExercise->addAllQuestionToRemind(
-                        $exeId,
-                        $questionListInSession
-                    );
+                $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
                     break;
                 case 'remove_all':
-                    $objExercise->removeAllQuestionToRemind(
-                        $exeId
-                    );
+                $objExercise->removeAllQuestionToRemind($exeId);
                     break;
                 default:
                     $objExercise->editQuestionToRemind(
@@ -380,7 +389,8 @@ switch ($action) {
                     );
                     break;
             }
-        }
+        echo 1;
+        exit;
         break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info_by_id($course_id);
@@ -410,8 +420,6 @@ switch ($action) {
             $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 
             // Attempt id.
-            $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
-
             if ($debug) {
                 error_log("exe_id = $exeId");
                 error_log("type = $type");
@@ -547,15 +555,9 @@ switch ($action) {
                     }
                     continue;
                 }
-                if ($debug) {
-                    error_log("Saving question_id = $my_question_id ");
-                }
 
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
 
-                if ($debug) {
-                    error_log("my_choice = ".print_r($my_choice, 1)."");
-                }
 
                 // Creates a temporary Question object
                 $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
@@ -606,6 +608,21 @@ switch ($action) {
                     $total_score = $total_score - $old_result['score'];
                 }
 
+                $questionDuration = 0;
+                if (api_get_configuration_value('allow_time_per_question')) {
+                    $extraFieldValue = new ExtraFieldValue('question');
+                    $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
+                    if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
+                        $questionDuration = Event::getAttemptQuestionDuration($exeId, $objQuestionTmp->iid);
+                        if (empty($questionDuration)) {
+                            echo 'error';
+                            if ($debug) {
+                                error_log("Question duration = 0, in exeId: $exeId, question_id: $my_question_id");
+                            }
+                            exit;
+                        }
+                    }
+                }
                 // Deleting old attempt
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
@@ -650,7 +667,11 @@ switch ($action) {
                         false,
                         false,
                         $objExercise->selectPropagateNeg(),
-                        $hotspot_delineation_result
+                        $hotspot_delineation_result,
+                        true,
+                        false,
+                        false,
+                        $questionDuration
                     );
                 } else {
                     $result = $objExercise->manage_answer(
@@ -663,7 +684,11 @@ switch ($action) {
                         false,
                         false,
                         $objExercise->selectPropagateNeg(),
-                        $hotspot_delineation_result
+                        $hotspot_delineation_result,
+                        true,
+                        false,
+                        false,
+                        $questionDuration
                     );
                 }
 
@@ -723,6 +748,32 @@ switch ($action) {
                     $remind_list
                 );
 
+                if (api_get_configuration_value('allow_time_per_question')) {
+                    $questionStart = Session::read('question_start', []);
+                    if (!empty($questionStart)) {
+                        if (isset($questionStart[$my_question_id])) {
+                            unset($questionStart[$my_question_id]);
+                        }
+                        array_filter($questionStart);
+                        Session::write('question_start', $questionStart);
+                    }
+                }
+
+                /*HookQuizQuestionAnswered::create()
+                    ->setEventData(
+                        [
+                            'exe_id' => (int) $exeId,
+                            'quiz' => [
+                                'id' => (int) $objExercise->id,
+                                'title' => $objExercise->selectTitle(true),
+                            ],
+                            'question' => [
+                                'id' => (int) $my_question_id,
+                                'weight' => (float) $result['weight'],
+                            ],
+                        ]
+                    )
+                    ->notifyQuizQuestionAnswered();*/
                 // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
@@ -905,6 +956,29 @@ switch ($action) {
             echo Display::return_message($exception->getMessage(), 'error');
         }
 
+        break;
+    case 'sign_attempt':
+        api_block_anonymous_users();
+        if ('true' !== api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+            exit;
+        }
+
+        $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
+        if (empty($exeId) || empty($file)) {
+            echo 0;
+            exit;
+        }
+
+        $file = str_replace(' ', '+', $file);
+        $track = ExerciseLib::get_exercise_track_exercise_info($exeId);
+        if ($track) {
+            $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);
+            if ($result) {
+                echo 1;
+                exit;
+            }
+        }
+        echo 0;
         break;
     default:
         echo '';

@@ -143,7 +143,7 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
-            //$this->autoId[$i] = $object->id_auto;
+            $this->autoId[$i] = $object->iid;
             $this->iid[$i] = $object->iid;
             $i++;
         }
@@ -271,7 +271,6 @@ class Answer
                     hotspot_coordinates,
                     hotspot_type,
                     destination,
-                    id_auto,
                     iid
                 FROM $TBL_ANSWER
                 WHERE
@@ -297,7 +296,7 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
-            $this->autoId[$i] = $object->id_auto;
+            $this->autoId[$i] = $object->iid;
             $this->iid[$i] = $object->iid;
             $i++;
         }
@@ -311,7 +310,7 @@ class Answer
             $this->hotspot_coordinates[$i] = isset($object->hotspot_coordinates) ? $object->hotspot_coordinates : 0;
             $this->hotspot_type[$i] = isset($object->hotspot_type) ? $object->hotspot_type : 0;
             $this->destination[$i] = $doubt_data->destination;
-            $this->autoId[$i] = $doubt_data->id_auto;
+            $this->autoId[$i] = $doubt_data->iid;
             $this->iid[$i] = $doubt_data->iid;
             $i++;
         }
@@ -395,8 +394,8 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT id, answer, id_auto FROM $table
-                WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $sql = "SELECT iid, answer FROM $table
+                WHERE c_id = {$this->course_id} AND iid='$auto_id'";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -708,7 +707,7 @@ class Answer
             $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
             $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
             $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
-            $autoId = $this->selectAutoId($i);
+            //$autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
             if (!isset($this->position[$i])) {
@@ -787,7 +786,7 @@ class Answer
                         $sql = "UPDATE $answerTable
                             SET correct = '$correct'
                             WHERE
-                                id_auto = $myAutoId
+                                iid = $myAutoId
                             ";
                         Database::query($sql);
                     }
@@ -802,7 +801,7 @@ class Answer
                         $sql = "UPDATE $answerTable
                             SET correct = '$correct'
                             WHERE
-                                id_auto = $myAutoId
+                                iid = $myAutoId
                             ";
                         Database::query($sql);
                     }

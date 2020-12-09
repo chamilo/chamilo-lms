@@ -1548,12 +1548,15 @@ class Rest extends WebService
     {
         $sessionId = $params['id_session'];
         $courseList = $params['list_courses'];
+        $importAssignments = isset($params['import_assignments']) ? 1 === (int) $params['import_assignments'] : false;
 
         $result = SessionManager::add_courses_to_session(
             $sessionId,
             $courseList,
             true,
-            false
+            false,
+            false,
+            $importAssignments
         );
 
         if ($result) {
@@ -1561,12 +1564,11 @@ class Rest extends WebService
                 'status' => $result,
                 'message' => get_lang('Updated'),
             ];
-        } else {
+        }
             return [
                 'status' => $result,
                 'message' => get_lang('ErrorOccurred'),
             ];
-        }
     }
 
     /**

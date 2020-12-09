@@ -13,6 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GLOSSARY;
 
 // Notification for unauthorized people.
+$this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Additional javascripts.

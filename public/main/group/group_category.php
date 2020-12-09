@@ -9,10 +9,6 @@ $current_course_tool = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-if ('false' == api_get_setting('allow_group_categories')) {
-    api_not_allowed(true);
-}
-
 $sessionId = api_get_session_id();
 
 if (!api_is_allowed_to_edit(false, true) ||
@@ -297,6 +293,7 @@ $group = [
     $form->createElement('radio', 'announcements_state', get_lang('Announcements'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('PrivateBetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 $form->addGroup(
     $group,

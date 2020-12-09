@@ -401,8 +401,11 @@ switch ($action) {
 
         break;
     case 'get_requirements':
+        $sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : 0;
         $userId = api_get_user_id();
 
+        $resourceName = '';
+        $template = '';
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
                 $resourceData = api_get_session_info($id);
@@ -416,7 +419,7 @@ switch ($action) {
                 break;
         }
 
-        if (empty($resourceData)) {
+        if (empty($resourceData) || empty($template)) {
             exit;
         }
 
@@ -426,7 +429,7 @@ switch ($action) {
             exit;
         }
 
-        $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId);
+        $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId, $sessionId);
         $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted($sequenceList);
 
         $view = new Template(null, false, false, false, false, false);

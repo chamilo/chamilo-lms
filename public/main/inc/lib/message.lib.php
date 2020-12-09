@@ -439,6 +439,7 @@ class MessageManager
     /**
      * Sends a message to a user/group.
      *
+     * @param int    $receiverUserId
      * @param string $subject
      * @param string $content
      * @param array  $attachments                files array($_FILES) (optional)
@@ -1349,6 +1350,9 @@ class MessageManager
 
         $table = Database::get_main_table(TABLE_MESSAGE);
 
+        if (empty($type)) {
+            return '';
+        }
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
                 $status = MESSAGE_STATUS_OUTBOX;
@@ -2314,9 +2318,8 @@ class MessageManager
         }
 
         $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
-        $html = self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
 
-        return $html;
+        return self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
     }
 
     /**

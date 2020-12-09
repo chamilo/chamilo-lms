@@ -742,7 +742,7 @@ class AppPlugin
                     if (false === $obj->validateCourseSetting($setting['name'])) {
                         continue;
                     }
-                    if ('checkbox' != $setting['type']) {
+                    if ('checkbox' !== $setting['type']) {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
                         $element = &$form->createElement(

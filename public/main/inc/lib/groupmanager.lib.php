@@ -99,6 +99,7 @@ class GroupManager
      * @param int   $status      group status
      * @param int   $sessionId
      * @param bool  $getCount
+     * @param bool  $notInGroup  Get groups not in a category
      *
      * @return array an array with all information about the groups
      */
@@ -180,6 +181,9 @@ class GroupManager
         }
 
         //$sql .= " AND g.c_id = $course_id ";
+        if ($notInGroup) {
+            $sql .= "  AND (g.category_id IS NULL OR g.category_id = 0) ";
+        }
 
         if (!empty($session_condition)) {
             $sql .= $session_condition;

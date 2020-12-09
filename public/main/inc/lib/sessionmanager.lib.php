@@ -2797,14 +2797,14 @@ class SessionManager
                             'qualification' => $work['qualification'],
                             'allow_text_assignment' => $work['allow_text_assignment'],
                         ];
-
-                        addDir(
+                        // @todo add addDir with resources
+                        /*addDir(
                             $values,
                             api_get_user_id(),
                             $courseInfo,
                             0,
                             $sessionId
-                        );
+                        );*/
                     }
                 }
                 // If the course isn't subscribed yet

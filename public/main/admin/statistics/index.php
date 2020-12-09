@@ -595,7 +595,7 @@ switch ($report) {
         $form->addHidden('report', 'user_session');
         $form->addButtonSearch(get_lang('Search'));
 
-        $date = new DateTime($now);
+        $date = new DateTime();
         $startDate = $date->format('Y-m-d').' 00:00:00';
         $endDate = $date->format('Y-m-d').' 23:59:59';
         $start = $startDate;

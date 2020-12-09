@@ -397,6 +397,14 @@ class CourseSelectForm
                             }
                         }
 
+                        if ($type == RESOURCE_QUIZ) {
+                            echo Display::return_message(
+                                get_lang(
+                                    'IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments'
+                                ),
+                                'warning'
+                            );
+                        }
                         if ($showItems) {
                             echo '<div class="well">';
                             echo '<div class="btn-group">';
@@ -772,6 +780,7 @@ class CourseSelectForm
 
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 
+        $icon = Display::returnIconPath('progress_bar.gif');
         echo '<div class="tool-backups-options">';
         echo '<form method="post" id="upload_form" name="course_select_form">';
         echo '<input type="hidden" name="action" value="course_select_form"/>';

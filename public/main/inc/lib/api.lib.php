@@ -1178,10 +1178,10 @@ function api_block_inactive_user()
                  <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
 
         if (api_is_anonymous()) {
-            $form = api_get_not_allowed_login_form();
+            /*$form = api_get_not_allowed_login_form();
             $msg .= '<div class="well">';
             $msg .= $form->returnForm();
-            $msg .= '</div>';
+            $msg .= '</div>';*/
         }
 
         $tpl->assign('content', $msg);

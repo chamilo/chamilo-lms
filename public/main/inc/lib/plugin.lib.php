@@ -271,6 +271,7 @@ class AppPlugin
             'vchamilo',
             'whispeakauth',
             'zoom',
+            'xapi',
         ];
 
         return $officialPlugins;
@@ -715,24 +716,25 @@ class AppPlugin
                 }
 
                 $form->addHtml('<div class="panel panel-default">');
-                $form->addHtml(
-                    '
+                $form->addHtml('
                     <div class="panel-heading" role="tab" id="heading-'.$pluginName.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'.$pluginName.'-settings" aria-expanded="false" aria-controls="collapse-'.$pluginName.'-settings">
-                '
-                );
+                            <a class="collapsed"
+                                role="button" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapse-'.$pluginName.'-settings" aria-expanded="false"
+                                aria-controls="collapse-'.$pluginName.'-settings">
+                ');
                 $form->addHtml($icon.' '.$pluginTitle);
-                $form->addHtml(
-                    '
+                $form->addHtml('
                             </a>
                         </h4>
                     </div>
-                '
-                );
-                $form->addHtml(
-                    '
-                    <div id="collapse-'.$pluginName.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$pluginName.'-settings">
+                ');
+                $form->addHtml('
+                    <div
+                        id="collapse-'.$pluginName.'-settings"
+                        class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="heading-'.$pluginName.'-settings">
                         <div class="panel-body">
                 '
                 );
@@ -751,7 +753,11 @@ class AppPlugin
                             '',
                             $obj->get_lang($setting['name'])
                         );
-                        if (isset($setting['init_value']) && 1 == $setting['init_value']) {
+                        $courseSetting = api_get_course_setting($setting['name']);
+                        if (-1 === $courseSetting) {
+                            $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
+                            if (!empty($defaultValue)) {
+                                if ('true' === $defaultValue) {
                             $element->setChecked(true);
                         }
                     }
@@ -778,6 +784,8 @@ class AppPlugin
                 '
         );
         $form->addHtml('</div>');
+    }
+        }
     }
 
     /**

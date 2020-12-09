@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CQuizCategory.
  *
+ * Manages quiz question categories inside an exercise.
+ *
  * @ORM\Table(name="c_quiz_rel_category")
  * @ORM\Entity
  */

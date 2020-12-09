@@ -618,9 +618,13 @@ class CourseRecycler
     {
         $learningPathTable = Database::get_course_table(TABLE_LP_MAIN);
         $learningPathCategoryTable = Database::get_course_table(TABLE_LP_CATEGORY);
+        $tblCTool = Database::get_course_table(TABLE_TOOL_LIST);
         if (isset($this->course->resources[RESOURCE_LEARNPATH_CATEGORY])) {
             foreach ($this->course->resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $learnpathCategory) {
                 $categoryId = $learnpathCategory->object->getId();
+                $sql = "DELETE FROM $tblCTool WHERE c_id = {$this->course_id}
+                    AND link LIKE '%lp_controller.php%action=view_category&id=$categoryId%'";
+                Database::query($sql);
                 // Dissociate learning paths from categories that will be deleted
                 $sql = "UPDATE $learningPathTable SET category_id = 0 WHERE category_id = ".$categoryId;
                 Database::query($sql);

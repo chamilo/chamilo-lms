@@ -20,6 +20,7 @@ use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
@@ -314,6 +315,11 @@ class Container
     public static function getCourseCategoryRepository(): CourseCategoryRepository
     {
         return self::$container->get(CourseCategoryRepository::class);
+    }
+
+    public static function getCourseDescriptionRepository(): CCourseDescriptionRepository
+    {
+        return self::$container->get(CCourseDescriptionRepository::class);
     }
 
     public static function getCalendarEventRepository(): CCalendarEventRepository

@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+
 /**
  * Class CourseDescriptionController
  * This file contains class used like controller,
@@ -36,18 +39,13 @@ class CourseDescriptionController
         $session_id = api_get_session_id();
         $data = [];
         $course_description->set_session_id($session_id);
-        $course_description_data = $course_description->get_description_data();
-        $data['descriptions'] = isset($course_description_data['descriptions']) ? $course_description_data['descriptions'] : '';
+        $data['descriptions'] = $course_description->get_description_data();
         $data['default_description_titles'] = $course_description->get_default_description_title();
         $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
         $data['default_description_icon'] = $course_description->get_default_description_icon();
         $data['messages'] = $messages;
 
         api_protect_course_script(true);
-
-        if (!is_array($data['descriptions'])) {
-            $data['descriptions'] = [$data['descriptions']];
-        }
 
         // Prepare confirmation code for item deletion
         global $htmlHeadXtra;
@@ -61,7 +59,7 @@ class CourseDescriptionController
         }
         </script>";
 
-        foreach ($data['descriptions'] as $id => $description) {
+        /*foreach ($data['descriptions'] as $id => $description) {
             if (!empty($description['content'])
                 && false !== strpos($description['content'], '<iframe')
             ) {
@@ -71,7 +69,7 @@ class CourseDescriptionController
             if ($description) {
                 $data['descriptions'][$id]['title_js'] = addslashes(strip_tags($description['title']));
             }
-        }
+        }*/
         $actions = null;
         $actionLeft = null;
         // display actions menu
@@ -109,7 +107,7 @@ class CourseDescriptionController
             }
             $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
         }
-var_dump($data);
+
         $tpl = new Template(get_lang('Description'));
         $tpl->assign('listing', $data);
         $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
@@ -149,12 +147,24 @@ var_dump($data);
                             $description_type
                         );
                         if (count($description) > 0) {
-                            $id = $description['id'];
+                            $id = $description['iid'];
                         }
                         // If no corresponding description is found, edit a new one
                     }
                     $progress = isset($_POST['progress']) ? $_POST['progress'] : '';
-                    $course_description->set_description_type($description_type);
+                    $repo = Container::getCourseDescriptionRepository();
+
+                    /** @var CCourseDescription $courseDescription */
+                    $courseDescription = $repo->find($id);
+                    $courseDescription
+                        ->setTitle($title)
+                        ->setProgress($progress)
+                        ->setContent($content)
+                    ;
+                    $repo->getEntityManager()->persist($courseDescription);
+                    $repo->getEntityManager()->flush();
+
+                    /*$course_description->set_description_type($description_type);
                     $course_description->set_title($title);
                     $course_description->set_content($content);
                     $course_description->set_progress($progress);
@@ -165,7 +175,7 @@ var_dump($data);
                         $course_description->update();
                     } else {
                         $course_description->insert();
-                    }
+                    }*/
 
                     Display::addFlash(
                         Display::return_message(

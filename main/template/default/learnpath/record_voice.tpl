@@ -31,6 +31,8 @@
 
 <script>
     $(function() {
+        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
         function startTimer() {
             $("#timer").show();
             var timerData = {
@@ -87,22 +89,11 @@
                     return false;
                 }
 
-                navigator.getUserMedia = navigator.getUserMedia ||
-                        navigator.mozGetUserMedia ||
-                        navigator.webkitGetUserMedia;
-
-                if (navigator.getUserMedia) {
-                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-                } else if (navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia(mediaConstraints)
-                            .then(successCallback).error(errorCallback);
-                }
-
                 function successCallback(stream) {
                     stopTimer();
                     startTimer();
                     recordRTC = RecordRTC(stream, {
-                        numberOfAudioChannels: 1,
+                        recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
                         type: 'audio'
                     });
                     recordRTC.startRecording();
@@ -113,8 +104,18 @@
 
                 function errorCallback(error) {
                     stopTimer();
-                    alert(error.message);
+                    alert(error);
                 }
+
+                if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
+                    return;
+                }
+
+                navigator.mediaDevices.getUserMedia(mediaConstraints)
+                    .then(successCallback)
+                    .catch(errorCallback);
             });
 
             btnStop.on('click', function () {

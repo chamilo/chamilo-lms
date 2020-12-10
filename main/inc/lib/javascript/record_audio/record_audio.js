@@ -1,6 +1,8 @@
 /* For licensing terms, see /license.txt */
 
 window.RecordAudio = (function () {
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     function startTimer() {
         $("#timer").show();
         var timerData = {
@@ -120,13 +122,11 @@ window.RecordAudio = (function () {
                 }
             }
 
-            navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
-
             function successCallback(stream) {
                 stopTimer();
                 startTimer();
                 recordRTC = RecordRTC(stream, {
-                    numberOfAudioChannels: 1,
+                    recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
                     type: 'audio'
                 });
                 recordRTC.startRecording();
@@ -143,16 +143,18 @@ window.RecordAudio = (function () {
 
             function errorCallback(error) {
                 stopTimer();
-                alert(error.message);
+                alert(error);
             }
 
-            if (navigator.getUserMedia) {
+            if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
                 navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-            } else if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia(mediaConstraints)
-                    .then(successCallback)
-                    .error(errorCallback);
+                return;
             }
+
+            navigator.mediaDevices.getUserMedia(mediaConstraints)
+                .then(successCallback)
+                .catch(errorCallback);
         });
 
         btnPause.on('click', function () {

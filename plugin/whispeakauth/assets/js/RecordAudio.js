@@ -1,6 +1,53 @@
 /* For licensing terms, see /license.txt */
 
 window.RecordAudio = (function () {
+    var timerInterval = 0,
+        $txtTimer = null,
+        isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    function startTimer() {
+        stopTimer();
+
+        $txtTimer = $('#txt-timer');
+
+        $txtTimer.text('00:00').css('visibility', 'visible');
+
+        var timerData = {
+            hour: 0,
+            minute: 0,
+            second: 0
+        };
+
+        timerInterval = setInterval(function(){
+            timerData.second++;
+
+            if (timerData.second >= 60) {
+                timerData.second = 0;
+                timerData.minute++;
+            }
+
+
+            $txtTimer.text(
+                function () {
+                    var txtSeconds = timerData.minute < 10 ? '0' + timerData.minute : timerData.minute,
+                        txtMinutes = timerData.second < 10 ? '0' + timerData.second : timerData.second;
+
+                    return txtSeconds + ':' + txtMinutes;
+                }
+            );
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        if ($txtTimer) {
+            $txtTimer.css('visibility', 'hidden');
+        }
+    }
+
     function useRecordRTC(rtcInfo) {
         $(rtcInfo.blockId).show();
 
@@ -60,8 +107,7 @@ window.RecordAudio = (function () {
                 localStream = stream;
 
                 recordRTC = RecordRTC(stream, {
-                    recorderType: StereoAudioRecorder,
-                    numberOfAudioChannels: 1,
+                    recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
                     type: 'audio'
                 });
                 recordRTC.startRecording();
@@ -73,22 +119,18 @@ window.RecordAudio = (function () {
             }
 
             function errorCallback(error) {
-                alert(error.message);
+                alert(error);
             }
 
-            if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia(mediaConstraints)
-                    .then(successCallback)
-                    .catch(errorCallback);
-
+            if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
                 return;
             }
 
-            navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
-
-            if (navigator.getUserMedia) {
-                navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-            }
+            navigator.mediaDevices.getUserMedia(mediaConstraints)
+                .then(successCallback)
+                .catch(errorCallback);
         });
 
         btnStop.on('click', function () {

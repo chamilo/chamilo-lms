@@ -21,12 +21,11 @@ jobs:
                     MYSQL_ROOT_PASSWORD: chamilo
                     MYSQL_DATABASE: chamilo
                 ports:
-                    - 3306
+                    - 3306/tcp
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
         steps:
             - name: Checkout
-              uses: actions/checkout@v1
+              uses: actions/checkout@v2
 
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2

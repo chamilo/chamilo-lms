@@ -42,7 +42,6 @@ class CourseDescriptionController
         $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
         $data['default_description_icon'] = $course_description->get_default_description_icon();
         $data['messages'] = $messages;
-        $browser = api_get_navigator();
 
         api_protect_course_script(true);
 
@@ -65,7 +64,6 @@ class CourseDescriptionController
         foreach ($data['descriptions'] as $id => $description) {
             if (!empty($description['content'])
                 && false !== strpos($description['content'], '<iframe')
-                && 'Chrome' == $browser['name']
             ) {
                 header("X-XSS-Protection: 0");
             }
@@ -111,7 +109,7 @@ class CourseDescriptionController
             }
             $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
         }
-
+var_dump($data);
         $tpl = new Template(get_lang('Description'));
         $tpl->assign('listing', $data);
         $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);

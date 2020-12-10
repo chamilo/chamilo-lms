@@ -2144,7 +2144,7 @@ class Attendance
         $users = $data['users'];
         $results = $data['results'];
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
@@ -2197,7 +2197,7 @@ class Attendance
         $users = $data['users'];
         $results = $data['results'];
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('User'));
         $table->setHeaderContents(0, 1, get_lang('Date'));
 

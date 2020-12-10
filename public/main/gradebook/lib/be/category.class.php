@@ -2671,7 +2671,7 @@ class Category implements GradebookItem
             $cat->set_locked($data['locked']);
             $cat->setGenerateCertificates($data['generate_certificates']);
             $cat->setIsRequirement($data['is_requirement']);
-            $cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
+            //$cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
             $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
             $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
             $cat->setDocumentId($data['document_id']);

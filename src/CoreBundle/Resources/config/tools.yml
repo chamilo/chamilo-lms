@@ -119,7 +119,7 @@ services:
         arguments:
             - 'course_description'
             - 'authoring'
-            - '/resources/course_description/course_descriptions'
+            - '/main/course_description/index.php'
             - '@chamilo_course.settings.course_description'
             -
                 course_descriptions:

@@ -124,8 +124,7 @@ class ExerciseCategoryManager extends Model
                 ->setDescription($params['description'])
             ;
 
-            $repo->getEntityManager()->persist($category);
-            $repo->getEntityManager()->flush();
+            $repo->update($category);
 
             return true;
         }

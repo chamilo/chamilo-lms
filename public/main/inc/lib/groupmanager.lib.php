@@ -773,8 +773,7 @@ class GroupManager
             ->setDocumentAccess($documentAccess)
         ;
 
-        $repo->getEntityManager()->persist($group);
-        $repo->getEntityManager()->flush();
+        $repo->update($group);
 
         /* Here we are updating a field in the table forum_forum that perhaps
         duplicates the table group_info.forum_state cvargas*/

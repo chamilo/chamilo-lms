@@ -82,7 +82,7 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        error_log('resource listener prePersist for obj: '.get_class($resource));
+        error_log('Resource listener prePersist for obj: '.get_class($resource));
         $em = $event->getEntityManager();
         $request = $this->request;
 
@@ -229,7 +229,6 @@ class ResourceListener
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
         error_log('Resource listener preUpdate');
-
         $this->setLinks($resource->getResourceNode(), $resource, $event->getEntityManager());
 
         if ($resource->hasUploadFile()) {

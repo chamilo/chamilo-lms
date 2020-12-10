@@ -161,9 +161,7 @@ class CourseDescriptionController
                         ->setProgress($progress)
                         ->setContent($content)
                     ;
-                    $repo->getEntityManager()->persist($courseDescription);
-                    $repo->getEntityManager()->flush();
-
+                    $repo->update($courseDescription);
                     /*$course_description->set_description_type($description_type);
                     $course_description->set_title($title);
                     $course_description->set_content($content);

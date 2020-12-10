@@ -561,8 +561,7 @@ class Link extends Model
             $link->setCategory($category);
         }
 
-        $repo->getEntityManager()->persist($link);
-        $repo->getEntityManager()->flush();
+        $repo->update($link);
 
         // Update search enchine and its values table if enabled.
         if ('true' === api_get_setting('search_enabled')) {
@@ -721,8 +720,7 @@ class Link extends Model
             ->setDescription($values['description'])
         ;
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->update($category);
 
         Display::addFlash(Display::return_message(get_lang('The category has been modified.')));
 

@@ -4910,7 +4910,7 @@ function deleteWorkItem($item_id, $courseInfo)
             /** @var CStudentPublication $work */
             $work = $repo->find($item_id);
             $work->setActive(2);
-            $repo->getEntityManager()->persist($work);
+            $repo->update($work);
 
             $repo = Container::getStudentPublicationAssignmentRepository();
             $params = ['cId' => $course_id, 'publicationId' => $item_id];
@@ -5127,8 +5127,7 @@ function makeVisible($itemId, $course_info)
     $studentPublication = $repo->find($itemId);
     if ($studentPublication) {
         $studentPublication->setAccepted(1);
-        $repo->getEntityManager()->persist($studentPublication);
-        $repo->getEntityManager()->flush();
+        $repo->update($studentPublication);
     }
     /*
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -5160,8 +5159,7 @@ function makeInvisible($itemId, $course_info)
     $studentPublication = $repo->find($itemId);
     if ($studentPublication) {
         $studentPublication->setAccepted(0);
-        $repo->getEntityManager()->persist($studentPublication);
-        $repo->getEntityManager()->flush();
+        $repo->update($studentPublication);
     }
 
     /*api_item_property_update(

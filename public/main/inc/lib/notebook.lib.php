@@ -121,8 +121,7 @@ class NotebookManager
             ->setDescription($values['note_comment'])
         ;
 
-        $repo->getEntityManager()->persist($notebook);
-        $repo->getEntityManager()->flush();
+        $repo->update($notebook);
 
         return true;
     }

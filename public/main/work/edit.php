@@ -266,8 +266,7 @@ if ($form->validate()) {
                     ->setDescription($description)
                     ->setTitle($title)
                 ;
-                $repo->getEntityManager()->persist($studentPublication);
-                $repo->getEntityManager()->flush();
+                $repo->update($studentPublication);
             }
 
             /*api_item_property_update(

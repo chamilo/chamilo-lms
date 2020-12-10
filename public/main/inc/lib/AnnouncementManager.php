@@ -903,8 +903,7 @@ class AnnouncementManager
             $announcement->addCourseLink($course, $session);
         }
 
-        $repo->getEntityManager()->persist($announcement);
-        $repo->getEntityManager()->flush();
+        $repo->update($announcement);
 
         return $announcement;
     }

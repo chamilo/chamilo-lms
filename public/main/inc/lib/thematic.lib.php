@@ -1025,8 +1025,7 @@ class Thematic
                 $thematic->getPlans()->removeElement($plan);
             }
         }
-        $repo->getEntityManager()->persist($thematic);
-        $repo->getEntityManager()->flush();
+        $repo->update($thematic);
 
         return false;
 

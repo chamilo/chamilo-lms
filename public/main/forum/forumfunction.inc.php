@@ -166,8 +166,7 @@ function handleForum($url)
                     }
 
                     $resource->setLocked($locked);
-                    $repo->getEntityManager()->persist($resource);
-                    $repo->getEntityManager()->flush();
+                    $repo->update($resource);
 
                     Display::addFlash(
                         Display::return_message($message, 'confirmation', false)
@@ -664,9 +663,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             ->setCatComment(isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '')
             ->setCatTitle($values['forum_category_title'])
         ;
-
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->updateResource($category);
         $message = get_lang('The forum category has been modified');
 
         $logInfo = [
@@ -837,9 +834,8 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $session = api_get_session_entity($session_id);
 
     if (isset($values['forum_id'])) {
-        // Edit
-        $repo->getEntityManager()->persist($forum);
-        $repo->getEntityManager()->flush();
+        // Update.
+        $repo->update($forum);
 
         if (isset($upload_ok)) {
             if ($has_attachment) {
@@ -1306,8 +1302,7 @@ function move_up_down($content, $direction, $id)
         /** @var CForumForum $forum */
         $forum = $repo->find($id);
         $forum->setForumOrder($next_sort);
-        $repo->getEntityManager()->persist($forum);
-        $repo->getEntityManager()->flush();
+        $repo->update($forum);
 
         Display::addFlash(Display::return_message(get_lang('Updated')));
     } else {
@@ -1317,8 +1312,7 @@ function move_up_down($content, $direction, $id)
             $category = $repo->find($id);
             if ($category) {
                 $category->setCatOrder($next_sort);
-                $repo->getEntityManager()->persist($category);
-                $repo->getEntityManager()->flush();
+                $repo->update($category);
 
                 Display::addFlash(Display::return_message(get_lang('Updated')));
             }
@@ -3839,8 +3833,7 @@ function store_edit_post(CForumForum $forum, $values)
         if ($updateStatus) {
             $post->setStatus($status);
         }
-        $repo->getEntityManager()->persist($post);
-        $repo->getEntityManager()->flush();
+        $repo->update($post);
     }
 
     // Update attached files
@@ -5108,8 +5101,7 @@ function delete_attachment($postId, $attachmentId)
             $post->removeAttachment($attachment);
             $repo->getEntityManager()->remove($attachment);
         }
-        $repo->getEntityManager()->persist($post);
-        $repo->getEntityManager()->flush();
+        $repo->update($post);
 
         Display::addFlash(Display::return_message(get_lang('The attached file has been deleted'), 'confirmation'));
     }

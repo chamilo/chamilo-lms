@@ -421,8 +421,7 @@ class Attendance
             ;
 
             $repo = Container::getAttendanceRepository();
-            $repo->getEntityManager()->persist($attendance);
-            $repo->getEntityManager()->flush();
+            $repo->update($attendance);
 
             /*$params = [
                 'name' => $this->name,
@@ -544,8 +543,7 @@ class Attendance
 
         $repo = Container::getAttendanceRepository();
         $attendance->setActive(2);
-        $repo->getEntityManager()->persist($attendance);
-        $repo->getEntityManager()->flush();
+        $repo->update($attendance);
 
         Skill::deleteSkillsFromItem($attendance->getIid(), ITEM_TYPE_ATTENDANCE);
 

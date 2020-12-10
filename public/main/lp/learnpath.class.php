@@ -7008,8 +7008,7 @@ class learnpath
             }
 
             $document->setTitle($_REQUEST['title']);
-            $repo->getEntityManager()->persist($document);
-            $repo->getEntityManager()->flush();
+            $repo->update($document);
         }
     }
 

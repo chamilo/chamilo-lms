@@ -233,6 +233,14 @@ class ResourceRepository extends EntityRepository
         $em->flush();
     }*/
 
+    public function update(AbstractResource $resource): void
+    {
+        $resource->getResourceNode()->setTitle($resource->getResourceName());
+
+        $this->getEntityManager()->persist($resource);
+        $this->getEntityManager()->flush();
+    }
+
     public function updateNodeForResource(ResourceInterface $resource): ResourceNode
     {
         $em = $this->getEntityManager();

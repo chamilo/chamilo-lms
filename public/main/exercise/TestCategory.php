@@ -161,8 +161,7 @@ class TestCategory
                 ->setTitle($this->name)
                 ->setDescription($this->description);
 
-            $repo->getEntityManager()->persist($category);
-            $repo->getEntityManager()->flush();
+            $repo->update($category);
 
             return true;
         }

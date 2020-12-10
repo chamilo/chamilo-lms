@@ -35,7 +35,7 @@ $excludeExtraFields = [
     'authorlpitem',
     'price',
 ];
-if (api_is_platform_admin() ) {
+if (api_is_platform_admin()) {
     // Only admins can edit this items
     $excludeExtraFields = [];
 }

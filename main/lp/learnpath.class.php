@@ -7455,7 +7455,7 @@ class learnpath
                 break;
             case TOOL_STUDENTPUBLICATION:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_student_publication_form('edit', $item_id, $row,null,$excludeExtraFields);
+                $return .= $this->display_student_publication_form('edit', $item_id, $row, null, $excludeExtraFields);
                 break;
             case TOOL_FORUM:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -7955,8 +7955,7 @@ class learnpath
         $id = 0,
         $extra_info = '',
         $excludeExtraFields = []
-    )
-    {
+    ) {
         $course_id = api_get_course_int_id();
         $tbl_forum = Database::get_course_table(TABLE_FORUM);
 
@@ -8855,7 +8854,7 @@ class learnpath
 
         if ('edit' === $action) {
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id, $excludeExtraFields );
+            $extraField->addElements($form, $id, $excludeExtraFields);
         }
 
         if ($action !== 'move') {

@@ -202,6 +202,8 @@ class CourseHomeController extends ToolBaseController
     }
 
     /**
+     * Redirects the page to a tool, following the tools.yml settings.
+     *
      * @Route("/{cid}/tool/{toolId}", name="chamilo_core_course_redirect_tool")
      */
     public function redirectTool($toolId, ToolChain $toolChain)

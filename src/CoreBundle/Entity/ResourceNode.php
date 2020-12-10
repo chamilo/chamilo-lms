@@ -74,11 +74,6 @@ class ResourceNode
     protected $slug;
 
     /**
-     * @ORM\Column(type="uuid", unique=true)
-     */
-    protected $uuid;
-
-    /**
      * @var ResourceType
      *
      * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
@@ -167,6 +162,11 @@ class ResourceNode
     protected $comments;
 
     /**
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
+
+    /**
      * @var \DateTime
      *
      * @Groups({"resource_node:read", "document:read"})
@@ -193,9 +193,6 @@ class ResourceNode
 
     protected $content;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->uuid = Uuid::v4();

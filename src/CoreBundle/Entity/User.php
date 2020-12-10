@@ -76,11 +76,6 @@ class User implements UserInterface, EquatableInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="uuid", unique=true)
-     */
-    protected $uuid;
-
-    /**
      * @ORM\Column(type="string", unique=true, nullable=true)
      */
     protected $apiToken;
@@ -727,8 +722,10 @@ class User implements UserInterface, EquatableInterface
     protected $admin;
 
     /**
-     * Constructor.
+     * @ORM\Column(type="uuid", unique=true)
      */
+    protected $uuid;
+
     public function __construct()
     {
         $this->uuid = Uuid::v4();

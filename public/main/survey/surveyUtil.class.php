@@ -605,11 +605,12 @@ class SurveyUtil
         );
         echo '</div>';
         $fromUntil = sprintf(get_lang('FromXUntilY'), $survey_data['avail_from'], $survey_data['avail_till']);
+        $max = 80;
         $data = [
-            get_lang('SurveyTitle') => $survey_data['title'],
-            get_lang('SurveySubTitle') => $survey_data['subtitle'],
+            get_lang('SurveyTitle') => cut(strip_tags($survey_data['title']), $max),
+            get_lang('SurveySubTitle') => cut(strip_tags($survey_data['subtitle']), $max),
             get_lang('Dates') => $fromUntil,
-            get_lang('SurveyIntroduction') => $survey_data['intro'],
+            get_lang('SurveyIntroduction') => cut(strip_tags($survey_data['intro']), $max),
         ];
 
         $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);
@@ -675,7 +676,8 @@ class SurveyUtil
             if ('score' == $question['type']) {
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
-            } elseif ('open' == $question['type'] || 'comment' == $question['type']) {
+            } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
+                echo '<div class="open-question">';
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE
@@ -686,6 +688,7 @@ class SurveyUtil
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     echo $row['option_id'].'<hr noshade="noshade" size="1" />';
                 }
+                echo '</div>';
             } else {
                 // Getting the options ORDER BY sort ASC
                 $sql = "SELECT * FROM $table_survey_question_option
@@ -733,18 +736,19 @@ class SurveyUtil
                     array_push($chartData, ['option' => $optionText, 'votes' => $votes]);
                 }
                 $chartContainerId = 'chartContainer'.$question['question_id'];
-                echo '<div id="'.$chartContainerId.'" >';
+                echo '<div id="'.$chartContainerId.'" style="text-align:center;">';
                 echo self::drawChart($chartData, false, $chartContainerId, false);
                 echo '</div>';
 
 
                 // displaying the table: headers
                 echo '<table class="display-survey table" id="table_'.$chartContainerId.'">';
+                echo '';
                 echo '	<tr>';
-                echo '		<th>&nbsp;</th>';
-                echo '		<th>'.get_lang('Absolute total').'</th>';
-                echo '		<th>'.get_lang('Percentage').'</th>';
-                echo '		<th>'.get_lang('Graphic').'</th>';
+                echo '		<th style="width: 50%">&nbsp;</th>';
+                echo '		<th style="width: 10%">'.get_lang('AbsoluteTotal').'</th>';
+                echo '		<th style="width: 10%">'.get_lang('Percentage').'</th>';
+                echo '		<th style="width: 30%">'.get_lang('VisualRepresentation').'</th>';
                 echo '	</tr>';
 
                 // Displaying the table: the content
@@ -770,9 +774,9 @@ class SurveyUtil
                             $answers_number = $absolute_number / $number_of_answers[$option['question_id']] * 100;
                         }
                         echo '	<tr>';
-                        echo '		<td class="center">'.$value['option_text'].'</td>';
-                        echo '		<td class="center">';
-                        if (0 != $absolute_number) {
+                        echo '<td>'.$value['option_text'].'</td>';
+                        echo '<td>';
+                        if ($absolute_number != 0) {
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
                                 .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='
                                 .$value['question_option_id'].'">'.$absolute_number.'</a>';
@@ -781,8 +785,8 @@ class SurveyUtil
                         }
 
                         echo '      </td>';
-                        echo '		<td class="center">'.round($answers_number, 2).' %</td>';
-                        echo '		<td class="center">';
+                        echo '<td>'.round($answers_number, 2).' %</td>';
+                        echo '<td>';
                         $size = $answers_number * 2;
                         if ($size > 0) {
                             echo '<div
@@ -809,10 +813,10 @@ class SurveyUtil
 
                 // displaying the table: footer (totals)
                 echo '	<tr>
-                            <td class="total"><b>'.get_lang('Total').'</b></td>
-                            <td class="total"><b>'.$optionResult.'</b></td>
-                            <td class="total">&nbsp;</td>
-                            <td class="total">&nbsp;</td>
+                            <td><b>'.get_lang('Total').'</b></td>
+                            <td><b>'.$optionResult.'</b></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
                         </tr>
                         </table>';
             }
@@ -2132,7 +2136,7 @@ class SurveyUtil
             $answers_y = self::get_answers_of_question_by_user($surveyId, $yAxis);
 
             // Displaying the table
-            $tableHtml = '<table border="1" class="data_table">';
+            $tableHtml = '<table border="1" class="table table-hover table-striped data_table">';
             $xOptions = [];
             // The header
             $tableHtml .= '<tr>';
@@ -3911,13 +3915,17 @@ class SurveyUtil
 
             $htmlChart .= '
             <script>
-                var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
+                var svg = dimple.newSvg("#'.$chartContainerId.'", 600, 400);
                 var data = ['.$data.'];
                 var myChart = new dimple.chart(svg, data);
-                myChart.addMeasureAxis("y", "'.get_lang("Votes").'");';
+                myChart.setBounds(50, 30, 550, 300);
+                var yAxis = myChart.addMeasureAxis("y", "'.get_lang('Votes').'");
+                yAxis.fontSize = "14px";
+            ';
             if (!$hasSerie) {
                 $htmlChart .= '
                     var xAxisCategory = myChart.addCategoryAxis("x", "'.get_lang("Option").'");
+                    xAxisCategory.fontSize = "14px";
                     xAxisCategory.addOrderRule('.json_encode($order).');
                     myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
             } else {
@@ -3925,14 +3933,15 @@ class SurveyUtil
                     $serie = array_values(array_unique($serie));
                     $htmlChart .= '
                         var xAxisCategory =
-                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
+                        myChart.addCategoryAxis("x", ["'.get_lang('Option').'","'.get_lang("Score").'"]);
                         xAxisCategory.addOrderRule('.json_encode($serie).');
-                        xAxisCategory.addGroupOrderRule("'.get_lang("Score").'");
-                        myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
+                        xAxisCategory.addGroupOrderRule("'.get_lang('Score').'");
+
+                        myChart.addSeries("'.get_lang('Option').'", dimple.plot.bar);';
                 } else {
                     $htmlChart .= '
-                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
-                        myChart.addSeries("'.get_lang("Serie").'", dimple.plot.bar);';
+                        myChart.addCategoryAxis("x", ["'.get_lang('Option').'","'.get_lang("Score").'"]);
+                        myChart.addSeries("'.get_lang('Serie').'", dimple.plot.bar);';
                 }
             }
             $htmlChart .= 'myChart.draw();';

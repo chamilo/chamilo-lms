@@ -2300,7 +2300,7 @@ class SurveyManager
         $params = [
             'c_id' => $row['c_id'],
             'survey_id' => $row['survey_id'],
-            'survey_question' => trim($row['survey_question'])."'",
+            'survey_question' => trim($row['survey_question']),
             'survey_question_comment' => $row['survey_question_comment'],
             'type' => $row['type'],
             'display' => $row['display'],

@@ -6751,6 +6751,7 @@ class learnpath
         $dir = 'learning_path';
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
         $folder = false;
+
         $folderData = create_unexisting_directory(
             $course,
             $creatorId,
@@ -6908,10 +6909,10 @@ class learnpath
         $filename = $title;
         $content = !empty($content) ? $content : $_POST['content_lp'];
         $tmp_filename = $filename;
-        $i = 0;
+        /*$i = 0;
         while (file_exists($filepath.$tmp_filename.'.'.$extension)) {
             $tmp_filename = $filename.'_'.++$i;
-        }
+        }*/
         $filename = $tmp_filename.'.'.$extension;
 
         if ('html' === $extension) {

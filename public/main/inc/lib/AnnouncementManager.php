@@ -545,8 +545,8 @@ class AnnouncementManager
             /** @var CAnnouncementAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $attachmentId = $attachment->getIid();
-                $url = $repo->getResourceFileDownloadUrl($attachment);
-                $html .= "<tr><td>";
+                $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
+                $html .= '<tr><td>';
                 $html .= '<br/>';
                 $html .= Display::returnFontAwesomeIcon('paperclip');
                 $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';

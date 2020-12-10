@@ -7437,7 +7437,13 @@ class learnpath
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_document_form('edit', $item_id, $row_step, $excludeExtraFields);
+                $return .= $this->display_document_form(
+                    'edit',
+                    $item_id,
+                    $row_step,
+                    null,
+                    $excludeExtraFields
+                );
                 break;
             case TOOL_QUIZ:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -7449,11 +7455,11 @@ class learnpath
                 break;
             case TOOL_STUDENTPUBLICATION:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_student_publication_form('edit', $item_id, $row);
+                $return .= $this->display_student_publication_form('edit', $item_id, $row,null,$excludeExtraFields);
                 break;
             case TOOL_FORUM:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
-                $return .= $this->display_forum_form('edit', $item_id, $row);
+                $return .= $this->display_forum_form('edit', $item_id, $row, $excludeExtraFields);
                 break;
             case TOOL_THREAD:
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -7944,7 +7950,12 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_forum_form($action = 'add', $id = 0, $extra_info = '')
+    public function display_forum_form(
+        $action = 'add',
+        $id = 0,
+        $extra_info = '',
+        $excludeExtraFields = []
+    )
     {
         $course_id = api_get_course_int_id();
         $tbl_forum = Database::get_course_table(TABLE_FORUM);
@@ -8098,7 +8109,7 @@ class learnpath
 
         if ('edit' === $action) {
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id);
+            $extraField->addElements($form, $id, $excludeExtraFields);
         }
 
         if ($action == 'add') {
@@ -9631,7 +9642,8 @@ class learnpath
         $action = 'add',
         $id = 0,
         $extra_info = '',
-        $item = null
+        $item = null,
+        $excludeExtraFields = []
     ) {
         $course_id = api_get_course_int_id();
         $tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -9760,7 +9772,7 @@ class learnpath
 
         if ('edit' === $action) {
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id);
+            $extraField->addElements($form, $id, $excludeExtraFields);
         }
 
         if ($action === 'add') {

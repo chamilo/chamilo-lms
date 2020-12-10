@@ -8584,8 +8584,6 @@ class Exercise
      * @param array $courseInfo
      * @param int   $sessionId
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
      * @return bool
      */
     public function generateStats($exerciseId, $courseInfo, $sessionId)
@@ -8668,6 +8666,7 @@ class Exercise
         $bestResult = 0;
         $sumResult = 0;
         $result = Database::query($sql);
+        $students = [];
         while ($data = Database::fetch_array($result, 'ASSOC')) {
             // Only take into account users in the current student list.
             if (!empty($studentIdList)) {

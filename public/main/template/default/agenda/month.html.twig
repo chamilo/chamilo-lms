@@ -200,7 +200,6 @@
                                         window.location.replace(url);
                                     }*/
                                 }
-
                                 calendar.refetchEvents();
                                 $('#modalDialogForm').modal('toggle');
                             }
@@ -261,7 +260,6 @@
                     $("#simple_content").html(calEvent.description);
                     $("#simple_comment").html(calEvent.comment);
                     $("#simple_attachment").html(calEvent.attachment);
-
                     $("#calendar_course_info_simple").html('');
 
                     if (calEvent.course_name) {
@@ -341,7 +339,6 @@
                             });
 
                             var buttons = newDiv.dialog("option", "buttons");
-
                             if (calEvent.has_children == '0') {
                                 buttons.push({
                                     text: '{{ "Delete this item" | trans }}',
@@ -349,11 +346,11 @@
                                         $.ajax({
                                             url: delete_url,
                                             success:function() {
-                                                calendar.fullCalendar('removeEvents',
-                                                    calEvent
-                                                );
-                                                calendar.fullCalendar("refetchEvents");
-                                                calendar.fullCalendar("rerenderEvents");
+                                                //calendar.fullCalendar('removeEvents', calEvent);
+                                                event.remove();
+                                                calendar.refetchEvents();
+                                                //calendar.fullCalendar('refetchEvents');
+                                                //calendar.fullCalendar('rerenderEvents');
                                                 $("#dialog-form").dialog("close");
                                                 newDiv.dialog( "destroy" );
                                             }
@@ -370,11 +367,11 @@
                                     $.ajax({
                                         url: delete_url+'&delete_all_events=1',
                                         success:function() {
-                                            calendar.fullCalendar('removeEvents',
-                                                calEvent
-                                            );
-                                            calendar.fullCalendar('refetchEvents');
-                                            calendar.fullCalendar('rerenderEvents');
+                                            //calendar.fullCalendar('removeEvents', calEvent);
+                                            event.remove();
+                                            calendar.refetchEvents();
+                                            //calendar.fullCalendar('refetchEvents');
+                                            //calendar.fullCalendar('rerenderEvents');
                                             $("#dialog-form").dialog('close');
                                             newDiv.dialog( "destroy" );
                                         }
@@ -389,17 +386,16 @@
                         $.ajax({
                             url: delete_url,
                             success:function() {
-                                calendar.fullCalendar('removeEvents',
-                                    calEvent
-                                );
+                                event.remove();
+                                calendar.refetchEvents();
+                                /*calendar.fullCalendar('removeEvents', calEvent);
                                 calendar.fullCalendar('refetchEvents');
-                                calendar.fullCalendar('rerenderEvents');
+                                calendar.fullCalendar('rerenderEvents');*/
                                 //close modal
                                 $('#calendarModal').modal('toggle');
                             }
                         });
                     });
-
                 } else {
                     // Simple form
                     $('#simple_start_date').html(startDateToString);

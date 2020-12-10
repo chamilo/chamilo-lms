@@ -5,12 +5,10 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -31,7 +29,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -52,9 +49,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
     private $fileContentName = 'file_content';
 
     /**
+     * @deprecated in favor of vue CRUD methods
+     *
      * @Route("/{tool}/{type}", name="chamilo_core_resource_index")
      *
-     * @deprecated
      * Example: /document/files (See the 'tool' and the 'resource_type' DB tables.)
      * For the tool value check the Tool entity.
      * For the type value check the ResourceType entity.
@@ -67,14 +65,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $parentResourceNode = $this->getParentResourceNode($request);
         $repository = $this->getRepositoryFromRequest($request);
         $settings = $repository->getResourceSettings();
-
-        /*$grid = $this->getGrid(
-            $request,
-            $repository,
-            $grid,
-            $parentResourceNode->getId(),
-            'chamilo_core_resource_index'
-        );*/
 
         // The base resource node is the course.
         $id = $parentResourceNode->getId();
@@ -93,324 +83,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated
-     */
-    public function getGrid(Request $request, ResourceRepository $repository, int $resourceNodeId, string $routeName): Grid
-    {
-        $class = $repository->getRepository()->getClassName();
-
-        // The group 'resource' is set in the @GRID\Source annotation in the entity.
-        $source = new Entity($class, 'resource');
-        /** @var ResourceNode $parentNode */
-        $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $parentNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $settings = $repository->getResourceSettings();
-        $course = $this->getCourse();
-        $session = $this->getSession();
-        /** @var QueryBuilder $qb */
-        $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);
-
-        //$qb->getQuery()->setFetchMode(\Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER);
-
-        // 3. Set QueryBuilder to the source.
-        $source->initQueryBuilder($qb);
-        $grid->setSource($source);
-
-        $resourceParams = $this->getResourceParams($request);
-
-        if (0 === $resourceParams['id']) {
-            $resourceParams['id'] = $resourceNodeId;
-        }
-
-        $grid->setRouteUrl($this->generateUrl($routeName, $resourceParams));
-
-        $routeParams = $resourceParams;
-        $routeParams['id'] = null;
-
-        /** @var Column $titleColumn */
-        $titleColumn = $repository->getTitleColumn($grid);
-
-        $titleColumn->setSafe(false); // allows links in the title
-
-        // Title link.
-        $titleColumn->setTitle($this->trans('Name'));
-        $titleColumn->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($routeParams, $settings) {
-                /** @var Router $router */
-                /** @var ResourceInterface $entity */
-                $entity = $row->getEntity();
-                $resourceNode = $entity->getResourceNode();
-                $id = $resourceNode->getId();
-
-                $myParams = $routeParams;
-                $myParams['id'] = $id;
-                unset($myParams[0]);
-
-                $icon = $resourceNode->getIcon().' &nbsp;';
-
-                if ($resourceNode->hasResourceFile()) {
-                    // Process node that contains a file, process previews.
-                    if ($resourceNode->isResourceFileAnImage()) {
-                        $url = $router->generate('chamilo_core_resource_view', $myParams);
-
-                        return $icon.'<a data-fancybox="gallery" href="'.$url.'">'.$value.'</a>';
-                    }
-
-                    if ($resourceNode->isResourceFileAVideo()) {
-                        $url = $router->generate('chamilo_core_resource_view', $myParams);
-
-                        return '
-                        <video width="640" height="320" controls id="video'.$id.'" controls preload="metadata" style="display:none;">
-                            <source src="'.$url.'" type="video/mp4">
-                            Your browser doesn\'t support HTML5 video tag.
-                        </video>
-                        '.$icon.' <a data-fancybox="gallery"  data-width="640" data-height="360" href="#video'.$id.'">'.$value.'</a>';
-                    }
-
-                    $url = $router->generate('chamilo_core_resource_preview', $myParams);
-
-                    return $icon.
-                        '<a data-fancybox="gallery" data-type="iframe" data-src="'.$url.'" href="javascript:;" >'.
-                        $value.'</a>';
-                } else {
-                    if ($settings->isAllowNodeCreation()) {
-                        $url = $router->generate(
-                            'chamilo_core_resource_list',
-                            $myParams
-                        );
-                    } else {
-                        $url = $router->generate('chamilo_core_resource_view_resource', $myParams);
-                    }
-
-                    return $icon.'<a href="'.$url.'">'.$value.'</a>';
-                }
-            }
-        );
-
-        /*if ($grid->hasColumn('filetype')) {
-            $grid->getColumn('filetype')->manipulateRenderCell(
-                function ($value, Row $row, $router) {
-                    $entity = $row->getEntity();
-                    $resourceNode = $entity->getResourceNode();
-
-                    if ($resourceNode->hasResourceFile()) {
-                        $file = $resourceNode->getResourceFile();
-
-                        return $file->getMimeType();
-                    }
-
-                    return $this->trans('Folder');
-                }
-            );
-        }*/
-
-        if ($grid->hasColumn('iid')) {
-            $grid->setHiddenColumns(['iid']);
-        }
-
-        // Delete mass action.
-        if ($this->isGranted(ResourceNodeVoter::DELETE, $parentNode)) {
-            $routeParams['icon'] = 'far fa-trash-alt';
-            $deleteMassAction = new MassAction(
-                'Delete',
-                'ChamiloCoreBundle:Resource:deleteMass',
-                true,
-                $routeParams
-            );
-            $grid->addMassAction($deleteMassAction);
-        }
-
-        // Info action.
-        $myRowAction = new RowAction(
-            $this->trans('Info'),
-            'chamilo_core_resource_info',
-            false,
-            '_self',
-            [
-                'class' => 'btn btn-secondary info_action resource_info_row',
-                'icon' => 'fa-info-circle',
-                'iframe' => false,
-            ]
-        );
-
-        $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
-            $id = $row->getEntity()->getResourceNode()->getId();
-            $routeParams['id'] = $id;
-            $action->setRouteParameters($routeParams);
-            $attributes = $action->getAttributes();
-            $attributes['data-action'] = $action->getRoute();
-            $attributes['data-action-id'] = $action->getRoute().'_'.$id;
-            $attributes['data-node-id'] = $id;
-            $attributes['title'] = $this->trans('Info').' '.$row->getEntity()->getResourceName();
-            $action->setAttributes($attributes);
-
-            return $action;
-        };
-
-        $myRowAction->addManipulateRender($setNodeParameters);
-        $grid->addRowAction($myRowAction);
-
-        // Download action.
-        $myRowAction = new RowAction(
-            $this->trans('Download'),
-            'chamilo_core_resource_download',
-            false,
-            '_self',
-            [
-                'class' => 'btn btn-secondary download_action',
-                'icon' => 'fa-download',
-                'title' => $this->trans('Download'),
-            ]
-        );
-
-        $setNodeDownloadParameters = function (RowAction $action, Row $row) use ($routeParams) {
-            /** @var ResourceNode $resourceNode */
-            $resourceNode = $row->getEntity()->getResourceNode();
-            if (false === $resourceNode->hasResourceFile()) {
-                return null;
-            }
-            $id = $row->getEntity()->getResourceNode()->getId();
-            $routeParams['id'] = $id;
-            $action->setRouteParameters($routeParams);
-            $attributes = $action->getAttributes();
-            $action->setAttributes($attributes);
-
-            return $action;
-        };
-        $myRowAction->addManipulateRender($setNodeDownloadParameters);
-        $grid->addRowAction($myRowAction);
-
-        // Set EDIT/DELETE
-        $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
-            $id = $row->getEntity()->getResourceNode()->getId();
-            $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $row->getEntity()->getResourceNode());
-
-            if (false === $allowedEdit) {
-                return null;
-            }
-
-            $routeParams['id'] = $id;
-
-            $action->setRouteParameters($routeParams);
-            $attributes = $action->getAttributes();
-            //$attributes['data-action'] = $action->getRoute();
-            //$attributes['data-action-id'] = $action->getRoute().'_'.$id;
-            //$attributes['data-node-id'] = $id;
-            $action->setAttributes($attributes);
-
-            return $action;
-        };
-
-        if ($this->isGranted(ResourceNodeVoter::EDIT, $parentNode)) {
-            // Enable/Disable
-            $myRowAction = new RowAction(
-                '',
-                'chamilo_core_resource_change_visibility',
-                false,
-                '_self'
-            );
-
-            $setVisibleParameters = function (RowAction $action, Row $row) use ($routeParams) {
-                /** @var AbstractResource $resource */
-                $resource = $row->getEntity();
-                $resourceNode = $resource->getResourceNode();
-                $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $resourceNode);
-
-                if (false === $allowedEdit) {
-                    return null;
-                }
-
-                $id = $resourceNode->getId();
-                $icon = 'fa-eye-slash';
-
-                if ($this->hasCourse()) {
-                    $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
-                } else {
-                    $link = $resource->getFirstResourceLink();
-                }
-                if (null === $link) {
-                    return null;
-                }
-
-                if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-                    $icon = 'fa-eye';
-                }
-                $routeParams['id'] = $id;
-                $action->setRouteParameters($routeParams);
-                $attributes = [
-                    'class' => 'btn btn-secondary change_visibility',
-                    'data-id' => $id,
-                    'icon' => $icon,
-                ];
-                $action->setAttributes($attributes);
-
-                return $action;
-            };
-
-            $myRowAction->addManipulateRender($setVisibleParameters);
-            $grid->addRowAction($myRowAction);
-
-            if ($settings->isAllowResourceEdit()) {
-                // Edit action.
-                $myRowAction = new RowAction(
-                    $this->trans('Edit'),
-                    'chamilo_core_resource_edit',
-                    false,
-                    '_self',
-                    ['class' => 'btn btn-secondary', 'icon' => 'fa fa-pen']
-                );
-                $myRowAction->addManipulateRender($setNodeParameters);
-                $grid->addRowAction($myRowAction);
-            }
-
-            // More action.
-            /*$myRowAction = new RowAction(
-                $this->trans('More'),
-                'chamilo_core_resource_preview',
-                false,
-                '_self',
-                ['class' => 'btn btn-secondary edit_resource', 'icon' => 'fa fa-ellipsis-h']
-            );
-
-            $myRowAction->addManipulateRender($setNodeParameters);
-            $grid->addRowAction($myRowAction);*/
-
-            // Delete action.
-            $myRowAction = new RowAction(
-                $this->trans('Delete'),
-                'chamilo_core_resource_delete',
-                true,
-                '_self',
-                [
-                    'class' => 'btn btn-danger',
-                    //'data_hidden' => true,
-                ]
-            );
-            $myRowAction->addManipulateRender($setNodeParameters);
-            $grid->addRowAction($myRowAction);
-        }
-        /*$grid->addExport(new CSVExport($this->trans('CSV export'), 'export', ['course' => $courseIdentifier]));
-        $grid->addExport(
-            new ExcelExport(
-                $this->trans('Excel export'),
-                'export',
-                ['course' => $courseIdentifier]
-            )
-        );*/
-
-        return $grid;
-    }
-
-    /**
+     * @deprecated in favor of vue CRUD methods
      * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
-     *
-     * @deprecated
      *
      * If node has children show it
      */
@@ -423,10 +97,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
         $settings = $repository->getResourceSettings();
 
-        $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
+        /*$grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
         $parentResourceNode = $this->getParentResourceNode($request);
-
-        $this->setBreadCrumb($request, $parentResourceNode);
+        $this->setBreadCrumb($request, $parentResourceNode);*/
 
         //return $grid->getGridResponse(
         return $this->render(
@@ -443,7 +116,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated
+     * @deprecated in favor of vue CRUD methods
      *
      * @Route("/{tool}/{type}/{id}/new_folder", methods={"GET", "POST"}, name="chamilo_core_resource_new_folder")
      */
@@ -453,7 +126,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated
+     * @deprecated in favor of vue CRUD methods
      *
      * @Route("/{tool}/{type}/{id}/new", methods={"GET", "POST"}, name="chamilo_core_resource_new")
      */
@@ -538,7 +211,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated
+     * @deprecated in favor of vue CRUD methods
+     *
      * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, IllustrationRepository $illustrationRepository): Response
@@ -852,8 +526,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         ];
 
         return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
-
-        //return $this->showFile($request, $resourceNode, $mode, $filter);
     }
 
     /**
@@ -882,7 +554,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->redirect($url);
         }
 
-        return $this->showFile($request, $resourceNode, 'show', $filter);
+        return $this->processFile($request, $resourceNode, 'show', $filter);
     }
 
     /**
@@ -913,7 +585,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // If resource node has a file just download it. Don't download the children.
         if ($resourceNode->hasResourceFile()) {
             // Redirect to download single file.
-            return $this->showFile($request, $resourceNode, 'download');
+            return $this->processFile($request, $resourceNode, 'download');
         }
 
         $zipName = $resourceNode->getSlug().'.zip';
@@ -996,12 +668,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param string $mode
-     * @param string $filter
-     *
      * @return mixed|StreamedResponse
      */
-    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
+    private function processFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

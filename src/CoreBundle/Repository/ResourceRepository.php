@@ -645,7 +645,16 @@ class ResourceRepository extends EntityRepository
 
                 $referenceType = $referenceType ?? UrlGeneratorInterface::ABSOLUTE_PATH;
 
-                return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
+                $mode = $params['mode'] ?? 'view';
+                // Remove mode from params and sent directly to the controller.
+                unset($params['mode']);
+
+                switch ($mode) {
+                    case 'download':
+                        return $this->router->generate('chamilo_core_resource_download', $params, $referenceType);
+                    case 'view':
+                        return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
+                }
             }
 
             return '';

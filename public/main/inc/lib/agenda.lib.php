@@ -1660,7 +1660,7 @@ class Agenda
                 );
                 /** @var CCalendarEventAttachment $attachment */
                 foreach ($attachmentList as $attachment) {
-                    $url = $repo->getResourceFileDownloadUrl($attachment);
+                    $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
                     $event['attachment'] .= $icon.
                         Display::url(
                             $attachment->getFilename(),

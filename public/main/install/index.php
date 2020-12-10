@@ -469,10 +469,19 @@ if (isset($_POST['step2'])) {
         <?php echo get_lang('Here are the values you entered'); ?>
     </div>
     <?php
+    $params = [];
     if ('new' === $installType) {
-        echo get_lang('Administrator login').' : <strong>'.$loginForm.'</strong><br />';
-        echo get_lang('Administrator password (<font color="red">you may want to change this</font>)').' : <strong>'.$passForm.'</strong><br /><br />';
+        $params[] = get_lang('Administrator login').' : <strong>'.$loginForm.'</strong>';
+        $params[] = get_lang('Administrator password (<font color="red">you may want to change this</font>)').' : <strong>'.$passForm.'</strong>';
     }
+
+    $params[] = get_lang('Administrator first name').' : '.$adminFirstName;
+    $params[] = get_lang('Administrator last name').' : '.$adminLastName;
+    $params[] = get_lang('Administrator e-mail').' : '.$emailForm;
+    $params[] = get_lang('Administrator telephone').' : '.$adminPhoneForm;
+
+    $content = implode('<br />', $params);
+    echo Display::panel($content);
 
     $allowSelfRegistrationLiteral = 'true' === $allowSelfReg ? get_lang('Yes') : 'approval' === $allowSelfReg ? get_lang('Approval') : get_lang('No');
 
@@ -482,8 +491,12 @@ if (isset($_POST['step2'])) {
 
     $params = [
         get_lang('Your portal name').' : '.$campusForm,
-        get_lang('Chamilo URL').' : '.$urlForm,
-        get_lang('Encryption method').' : '.$encryptPassForm,
+        get_lang('Main language').' : '.$languageForm,
+        get_lang('Allow self-registration').' : '.$allowSelfRegistrationLiteral,
+        get_lang('Your company short name').' : '.$institutionForm,
+        get_lang('URL of this company').' : '.$institutionUrlForm,
+        //get_lang('Chamilo URL').' : '.$urlForm,
+        //get_lang('Encryption method').' : '.$encryptPassForm,
     ];
     $content = implode('<br />', $params);
     echo Display::panel($content);
@@ -494,19 +507,6 @@ if (isset($_POST['step2'])) {
         get_lang('Database Login').' : '.$dbUsernameForm,
         get_lang('Database Password').' : '.str_repeat('*', api_strlen($dbPassForm)),
         get_lang('Database name').' : <strong>'.$dbNameForm.'</strong>',
-    ];
-    $content = implode('<br />', $params);
-    echo Display::panel($content);
-
-    $params = [
-        get_lang('Administrator first name').' : '.$adminFirstName,
-        get_lang('Administrator last name').' : '.$adminLastName,
-        get_lang('Administrator e-mail').' : '.$emailForm,
-        get_lang('Administrator telephone').' : '.$adminPhoneForm,
-        get_lang('Main language').' : '.$languageForm,
-        get_lang('Allow self-registration').' : '.$allowSelfRegistrationLiteral,
-        get_lang('Your company short name').' : '.$institutionForm,
-        get_lang('URL of this company').' : '.$institutionUrlForm,
     ];
     $content = implode('<br />', $params);
     echo Display::panel($content);
@@ -861,7 +861,8 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
             <div class="row">
                 <div class="col-md-4">
                     <div class="logo-install">
-                        <img src="../../build/css/themes/chamilo/images/header-logo.png" class="img-fluid" alt="Chamilo" />
+                        <img src="../../build/css/themes/chamilo/images/header-logo.png"
+                             class="img-fluid" alt="Chamilo" />
                     </div>
                     <div class="install-steps">
                         <ol class="list-group">
@@ -902,7 +903,8 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <form class="form-horizontal" id="install_form" method="post"
+                    <form
+                        class="form-horizontal" id="install_form" method="post"
                           action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
                         <?php echo $form; ?>
                     </form>

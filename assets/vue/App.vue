@@ -107,7 +107,20 @@ export default {
             .then((response) => {
               // handle success
               this.$data.legacy_content = response.data;
-            });
+            }).catch(function (error) {
+              if (error.response) {
+                // Request made and server responded
+                //this.showMessage(error.response.data.detail);
+                /*console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);*/
+              } else if (error.request) {
+                // The request was made but no response was received
+                //console.log(error.request);
+              } else {
+                //console.log('Error', error.message);
+              }
+          })
       }
     },
     legacy_content: {
@@ -138,6 +151,7 @@ export default {
 
     let payload = {isAuthenticated: isAuthenticated, user: user};
     this.$store.dispatch("security/onRefresh", payload);
+
     if (this.$parent.$el.attributes["data-flashes"]) {
       let flashes = JSON.parse(this.$parent.$el.attributes["data-flashes"].value);
       if (flashes) {
@@ -153,23 +167,21 @@ export default {
       this.breadcrumb = JSON.parse(this.$parent.$el.attributes["data-breadcrumb"].value);
     }
 
-    axios.interceptors.response.use(undefined, (error) => {
+    axios.interceptors.response.use(undefined, (err) => {
       return new Promise(() => {
         // Unauthorized.
-        if (401 === error.response.status) {
+        if (401 === err.response.status) {
           // Redirect to the login if status 401.
           this.$router.push({path: "/login"}).catch(()=>{});
-        } else if (500 === error.response.status) {
-          if (error.response) {
+        } else if (500 === err.response.status) {
+          if (err.response) {
             // Request made and server responded
-            this.showMessage(error.response.data.detail, 'warning');
+            this.showMessage(err.response.data.detail, 'warning');
           }
         }
-        return Promise.reject(error);
+        throw err;
       });
     });
-  },
-  beforeMount() {
   }
 }
 </script>

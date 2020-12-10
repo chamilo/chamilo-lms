@@ -927,7 +927,7 @@ if (api_is_platform_admin()) {
             }
 
             if (!is_writable($adminExtraContentDir)) {
-                die;
+                exit;
             }
 
             $fullFilePath = $adminExtraContentDir.$extraData['block'];

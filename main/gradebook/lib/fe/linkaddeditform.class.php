@@ -37,7 +37,7 @@ class LinkAddEditForm extends FormValidator
             $link->set_session_id(api_get_session_id());
             $link->set_category_id($category_object[0]->get_id());
         } else {
-            die('LinkAddEditForm error: define link_type/category_object or link_object');
+            exit('LinkAddEditForm error: define link_type/category_object or link_object');
         }
 
         $defaults = [];

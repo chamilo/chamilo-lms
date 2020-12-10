@@ -19,7 +19,7 @@ require_once __DIR__.'/../../inc/global.inc.php';
 // check if this client has been called by php_cli (command line or cron)
 if (php_sapi_name() != 'cli') {
     echo 'You can\'t call this service through a browser';
-    die();
+    exit();
 }
 
 // create client

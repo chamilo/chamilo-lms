@@ -19,12 +19,12 @@ if (isset($params['waminame']) && isset($params['wamidir']) && isset($params['wa
     $wamiuserid = $params['wamiuserid'];
 } else {
     api_not_allowed();
-    die();
+    exit();
 }
 
 if (empty($wamiuserid)) {
     api_not_allowed();
-    die();
+    exit();
 }
 
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'document'; // can be document or message
@@ -49,7 +49,7 @@ $ext = explode('.', $waminame);
 $ext = strtolower($ext[sizeof($ext) - 1]);
 
 if ($ext != 'wav') {
-    die();
+    exit();
 }
 
 switch ($type) {
@@ -67,7 +67,7 @@ switch ($type) {
         $documentPath = $saveDir.'/'.$waminame_to_save;
 
         // Add to disk
-        $fh = fopen($documentPath, 'w') or die("can't open file");
+        $fh = fopen($documentPath, 'w') or exit("can't open file");
         fwrite($fh, $content);
         fclose($fh);
 

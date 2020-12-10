@@ -827,7 +827,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             openid_begin(trim($_POST['openid_url']), api_get_path(WEB_PATH).'index.php');
             //this last function should trigger a redirect, so we can die here safely
-            die('Openid login redirection should be in progress');
+            exit('Openid login redirection should be in progress');
         } elseif (!empty($_GET['openid_identity'])) { //it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
             include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             $res = openid_complete($_GET);
@@ -1365,7 +1365,6 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                                     }
                                     break;
                                 case '0': //Student
-
                                     $is_courseMember = true;
                                     $is_courseTutor = false;
                                     $is_courseAdmin = false;

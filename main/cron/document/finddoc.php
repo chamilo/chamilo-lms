@@ -5,7 +5,7 @@
 /**
  * Code init - comment die() call to enable.
  */
-die();
+exit();
 require '../../inc/global.inc.php';
 if (empty($_GET['doc'])) {
     echo "To add a document name to search, add ?doc=abc to the URL";

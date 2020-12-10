@@ -307,7 +307,7 @@ switch ($action) {
                 }
             );
             $documentAndFolders = array_map(
-                function (array $documentData) use ($course, $session, $courseInfo, $currentUserId, $http_www, $folderName, $id) {
+                function (array $documentData) use ($course, $session, $folderName) {
                     $downloadUrl = api_get_path(WEB_CODE_PATH).'document/document.php?'
                         .api_get_cidreq_params($course->getCode(), $session->getId()).'&'
                         .http_build_query(['action' => 'download', 'id' => $documentData['id']]);

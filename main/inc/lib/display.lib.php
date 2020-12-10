@@ -2348,7 +2348,7 @@ class Display
         }
         $link = self::url($label.' ', $link_to_show, $linkAttributes);
 
-        return  '<li class = "'.$class.'">'.$link.'</li>';
+        return '<li class = "'.$class.'">'.$link.'</li>';
     }
 
     /**

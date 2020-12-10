@@ -303,7 +303,7 @@ if ($displayMode == "viewDefEdit") {
         } ?>
         </SELECT>
          <?php
-         echo'<p></p>  ';
+         echo '<p></p>  ';
         if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed)) {
         } else {
             echo "<td>", get_lang('CourseManager'), "</td>\n";

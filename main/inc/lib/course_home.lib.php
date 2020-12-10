@@ -642,7 +642,7 @@ class CourseHome
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
         // If exists same tool (by name) from session in base course then avoid it. Allow them pass in other cases
-        $tools = array_filter($tools, function (array $toolToFilter) use ($sessionId, $tools) {
+        $tools = array_filter($tools, function (array $toolToFilter) use ($tools) {
             if (!empty($toolToFilter['session_id'])) {
                 foreach ($tools as $originalTool) {
                     if ($toolToFilter['name'] == $originalTool['name'] && empty($originalTool['session_id'])) {

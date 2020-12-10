@@ -339,9 +339,7 @@ class UserDataGenerator
         }
         $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_AVERAGE;
-        /*if ($ignore_score_color)
-            $displaytype |= SCORE_IGNORE_SPLIT;
-        */
+
         return $scoredisplay->display_score($avgscore, $displaytype);
     }
 

@@ -55,7 +55,7 @@ if ($global) {
     // Get exam lists
     $courseId = api_get_course_int_id();
 
-    $sql = "SELECT quiz.title, id FROM $quizTable AS quiz
+    $sql = "SELECT quiz.title, iid FROM $quizTable AS quiz
             WHERE
                 c_id = $courseId AND
                 active = 1
@@ -171,14 +171,14 @@ if (!empty($courseList) && is_array($courseList)) {
         $courseId = $courseInfo['real_id'];
 
         if ($global) {
-            $sql = "SELECT count(id) as count
+            $sql = "SELECT count(iid) as count
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND  active = 1 AND (session_id = 0 OR session_id IS NULL)";
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseCount = $countExercises[0]['count'];
 
-            $sql = "SELECT count(id) as count
+            $sql = "SELECT count(iid) as count
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND active = 1 AND session_id <> 0";
             $result = Database::query($sql);
@@ -205,14 +205,14 @@ if (!empty($courseList) && is_array($courseList)) {
         if (1 == Database::result($result, 0, 'visibility')) {
             // Getting the exam list.
             if ($global) {
-                $sql = "SELECT quiz.title, id, session_id
+                $sql = "SELECT quiz.title, iid, session_id
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND active = 1
                     ORDER BY session_id, quiz.title ASC";
             } else {
                 //$sessionCondition = api_get_session_condition($sessionId, true, false);
                 if (!empty($exerciseId)) {
-                    $sql = "SELECT quiz.title, id, session_id
+                    $sql = "SELECT quiz.title, iid, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
@@ -222,7 +222,7 @@ if (!empty($courseList) && is_array($courseList)) {
 
                             ORDER BY session_id, quiz.title ASC";
                 } else {
-                    $sql = "SELECT quiz.title, id, session_id
+                    $sql = "SELECT quiz.title, iid, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 //$cidReset = true;
@@ -28,7 +29,9 @@ if ($add_result_form->validate()) {
     $values = $add_result_form->exportValues();
     $nr_users = $values['nr_users'];
     if ('0' == $nr_users) {
-        Display::addFlash(Display::return_message(get_lang('There are no learners to add results for'), 'warning', false));
+        Display::addFlash(
+            Display::return_message(get_lang('There are no learners to add results for'), 'warning', false)
+        );
         header('Location: gradebook_view_result.php?addresultnostudents=&selecteval='.$selectEval.'&'.api_get_cidreq());
         exit;
     }

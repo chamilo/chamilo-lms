@@ -145,7 +145,7 @@ $lpInfo = Database::select(
     [
         'where' => [
             'c_id = ? AND ' => $courseId,
-            'id = ?' => $lpId,
+            'iid = ?' => $lpId,
         ],
     ],
     'first'

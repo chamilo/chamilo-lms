@@ -923,6 +923,7 @@ if (!empty($groupList)) {
         $sessionId
     );
     $averageTime = null;
+    $time = null;
     if (!empty($timeInSeconds)) {
         $time = api_time_to_hms($timeInSeconds);
         $averageTime = $timeInSeconds / $nbStudents;

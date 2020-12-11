@@ -242,7 +242,7 @@ switch ($action) {
 }
 
 // user info
-$user_info = api_get_user_info($studentId);
+$user_info = $userInfo = api_get_user_info($studentId);
 $courses_in_session = [];
 
 //See #4676
@@ -1117,7 +1117,7 @@ if (!empty($studentId)) {
                 'quiz.session_id'
             );
 
-            $sql = "SELECT quiz.title, id FROM $t_quiz AS quiz
+            $sql = "SELECT quiz.title, iid FROM $t_quiz AS quiz
                             WHERE
                                 quiz.c_id = ".$courseInfo['real_id']." AND
                                 active IN (0, 1)
@@ -2233,7 +2233,7 @@ if (empty($_GET['details'])) {
         ];
 
     $t_quiz = Database:: get_course_table(TABLE_QUIZ_TEST);
-    $sql = "SELECT quiz.title, id FROM ".$t_quiz." AS quiz
+    $sql = "SELECT quiz.title, iid FROM ".$t_quiz." AS quiz
                 WHERE
                     quiz.c_id = $c_id AND
                     (quiz.session_id = $session_id OR quiz.session_id = 0) AND

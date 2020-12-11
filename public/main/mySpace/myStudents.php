@@ -87,7 +87,7 @@ if (empty($studentId)) {
     api_not_allowed(true);
 }
 
-$user_info = api_get_user_info($studentId);
+$user_info = $userInfo = api_get_user_info($studentId);
 
 if (empty($user_info)) {
     api_not_allowed(true);
@@ -1560,7 +1560,7 @@ if (empty($details)) {
         $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
         $categoryTest = new CLpCategory();
         //$categoryTest->setId(0);
-        $categoryTest->setId(0);
+        //$categoryTest->setId(0);
         $categoryTest->setName(get_lang('WithOutCategory'));
         $categoryTest->setPosition(0);
         $categories = [
@@ -1615,7 +1615,7 @@ if (empty($details)) {
                 // Get progress in lp
                 $progress = Tracking::get_avg_student_progress(
                     $studentId,
-                    $course_code,
+                    $courseCode,
                     [$lp_id],
                     $sessionId
                 );
@@ -1751,7 +1751,7 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
-                if ($hookLpTracking) {
+/*                if ($hookLpTracking) {
                     $hookContents = $hookLpTracking->notifyTrackingContent($lp_id, $studentId);
 
                     foreach ($hookContents as $hookContent) {
@@ -1761,7 +1761,7 @@ if (empty($details)) {
                             echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
                         }
                     }
-                }
+                }*/
 
                 $csv_content[] = $contentToExport;
 

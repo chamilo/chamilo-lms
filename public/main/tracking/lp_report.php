@@ -320,7 +320,7 @@ function getData($from, $numberOfItems, $column, $direction)
             $lpTimeList = Tracking::getCalculateTime($userId, $courseId, $sessionId);
         }
         foreach ($lps as $lp) {
-            $lpId = $lp['id'];
+            $lpId = $lp['iid'];
             $progress = Tracking::get_avg_student_progress(
                 $userId,
                 $courseCode,

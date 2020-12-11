@@ -182,7 +182,7 @@ if ($exerciseReporting) {
     );
     echo '<table class="data_table">';
     $course_id = api_get_course_int_id();
-    $sql = "SELECT id, title FROM $TABLEQUIZ
+    $sql = "SELECT iid, title FROM $TABLEQUIZ
             WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
     $rs = Database::query($sql);
 
@@ -202,7 +202,7 @@ if ($exerciseReporting) {
                     $avg_student_score = Tracking::get_avg_student_exercise_score(
                         $student_id,
                         $course_code,
-                        $quiz['id'],
+                        $quiz['iid'],
                         $session_id
                     );
                     $quiz_avg_score += $avg_student_score;
@@ -210,7 +210,7 @@ if ($exerciseReporting) {
             }
             $studentCount = (0 == $studentCount || is_null($studentCount) || '' == $studentCount) ? 1 : $studentCount;
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
-            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
+            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['iid'].$course_path_params;
 
             echo '<tr><td>';
             echo Display::url(

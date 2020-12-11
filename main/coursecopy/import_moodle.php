@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Import a backup from moodle system.
  *
  * @author José Loguercio <jose.loguercio@beeznest.com>
- *
- * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -35,9 +34,7 @@ $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
     $file = $_FILES['moodle_file'];
-
     $moodleImport = new MoodleImport();
-
     try {
         $responseImport = $moodleImport->import($file);
 
@@ -60,8 +57,6 @@ $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('coursecopy/import_moodle.tpl');
 $content = $template->fetch($templateName);
-
 $template->assign('header', get_lang('ImportFromMoodle'));
 $template->assign('content', $content);
-
 $template->display_one_col_template();

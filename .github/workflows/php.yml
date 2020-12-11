@@ -50,8 +50,14 @@ jobs:
                 key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                 restore-keys: ${{ runner.os }}-composer-
 
-            - name: Install dependencies
+            - name: Install dependencies with composer
               run: composer install --prefer-dist --no-progress --no-suggest
+
+            - name: Install assets
+              run: php bin/console assets:install
+
+            - name: Generate fos_js_routes.json
+              run: php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 
             - name: Get yarn cache directory
               id: yarn-cache

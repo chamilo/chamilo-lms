@@ -994,19 +994,6 @@ class ExtraField extends Model
                         continue;
                     }
                 }
-                // see  BT#17943
-                $authors = false;
-                if (
-                    $field_details['variable'] == 'authors'
-                    || $field_details['variable'] == 'authorlp'
-                    || $field_details['variable'] == 'authorlpitem'
-                    || $field_details['variable'] == 'price'
-                ) {
-                    $authors = true;
-                }
-                if (!api_is_platform_admin() && $authors == true) {
-                    continue;
-                }
 
                 // Getting default value id if is set
                 $defaultValueId = null;

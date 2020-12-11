@@ -178,9 +178,11 @@ class ApiRequest
 
             if (isset($json['asserts'])) {
                 foreach ($json['asserts'] as $assert) {
-                    if (in_array($assert['value'], ['valid_audio', 'invalid_audio'])) {
+// Removed message filter because Whispeak indicates that all message should be presented to student.
+// Leaving the code and only commenting because if it's not modified on their side it should come back
+//                    if (in_array($assert['value'], ['valid_audio', 'invalid_audio'])) {
                         $message .= $assert['message'].PHP_EOL;
-                    }
+//                    }
                 }
             } elseif (empty($json['message'])) {
                 $message = $requestException->getMessage();

@@ -51,7 +51,7 @@ jobs:
                 restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies
-              run: composer install --prefer-dist --no-progress --no-suggest --no-scripts
+              run: composer install --prefer-dist --no-progress --no-suggest
 
             - name: Get yarn cache directory
               id: yarn-cache

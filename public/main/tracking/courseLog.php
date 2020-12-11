@@ -970,10 +970,12 @@ if (!empty($groupList)) {
                 $bestScoreAverageNotInLP += $best;
             }
         }
-        $bestScoreAverageNotInLP = round(
-            $bestScoreAverageNotInLP / count($exerciseList) * 100 / $nbStudents,
-            2
-        ).' %';
+        if (!empty($nbStudents)) {
+            $bestScoreAverageNotInLP = round(
+                $bestScoreAverageNotInLP / count($exerciseList) * 100 / $nbStudents,
+                2
+            ).' %';
+        }
     }
 
     $row = 1;

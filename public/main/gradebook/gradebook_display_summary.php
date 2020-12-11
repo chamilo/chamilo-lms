@@ -142,7 +142,7 @@ switch ($action) {
     case 'download':
         $userId = isset($_GET['user_id']) && $_GET['user_id'] ? $_GET['user_id'] : null;
         $cats = Category::load($cat_id, null, null, null, null, null, false);
-        GradebookUtils::generateTable($courseInfo, $userId, $cats);
+        GradebookUtils::generateTable($courseInfo, $userId, $cats, false, false, $userList);
         break;
 }
 
@@ -174,7 +174,8 @@ $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 if (0 == count($userList)) {
     echo Display::return_message(get_lang('No results available'), 'warning');
 } else {
-    echo '<br /><br /><table class="data_table">';
+    echo '<br /><br /><div class="table-responsive">
+            <table class="table table-hover table-striped table-bordered data_table">';
     echo '<tr><th>';
     echo get_lang('Learner');
     echo '</th>';
@@ -182,9 +183,9 @@ if (0 == count($userList)) {
     echo get_lang('Action');
     echo '</th></tr>';
     foreach ($userList as $index => $value) {
+        $userData = api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
         echo '<tr>
-                <td width="70%">'
-                .api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].') </td>';
+                <td width="70%">'.$userData.'</td>';
         echo '<td>';
         $link = '';
         if ($allowSkillRelItem) {
@@ -206,7 +207,7 @@ if (0 == count($userList)) {
         echo $link;
         echo '</td></tr>';
     }
-    echo '</table>';
+    echo '</table></div>';
 }
 
 Display::display_footer();

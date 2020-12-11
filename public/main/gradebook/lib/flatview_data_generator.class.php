@@ -224,7 +224,13 @@ class FlatViewDataGenerator
             }
         }
 
-        $headers[] = '<span class="text-center">'.api_strtoupper(get_lang('Total')).'</span>';
+        $headers[] = '<span class="text-center">'.api_strtoupper(get_lang('GradebookQualificationTotal')).'</span>';
+
+        if (api_get_configuration_value('gradebook_score_display_custom_standalone')
+            && ScoreDisplay::instance()->is_custom()
+        ) {
+            $headers[] = get_lang('GradebookScoreDisplayCustomValues');
+        }
 
         return $headers;
     }
@@ -570,6 +576,8 @@ class FlatViewDataGenerator
             $item_value_total += $result['item_value_total'];
             $total_score = [$item_value_total, $item_total];
             $style = api_get_configuration_value('gradebook_report_score_style');
+            $customDisplayIsStandalone = api_get_configuration_value('gradebook_score_display_custom_standalone')
+                && $scoreDisplay->is_custom();
 
             if (!$show_all) {
                 $defaultStyle = empty($style) ? SCORE_DIV_PERCENT : (int) $style;
@@ -592,6 +600,13 @@ class FlatViewDataGenerator
                     $row['total'] = $displayScore;
                 } else {
                     $row[] = $displayScore;
+                }
+            }
+            if ($customDisplayIsStandalone) {
+                if ($export_to_pdf) {
+                    $row['display_custom'] = $scoreDisplay->display_custom($total_score);
+                } else {
+                    $row[] = $scoreDisplay->display_custom($total_score);
                 }
             }
             unset($score);

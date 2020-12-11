@@ -321,7 +321,7 @@ if ($showTrackingReporting) {
             get_lang('Tools most used')
         ).' '.get_lang('Tools most used')
     );
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
 
     $tools_most_used = Tracking::get_tools_most_used_by_course(
         $course_id,
@@ -371,7 +371,7 @@ if ($documentReporting) {
         ).'&nbsp;'.get_lang('Documents most downloaded').$link
     );
 
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course(
         $course_code,
         $session_id,
@@ -425,7 +425,7 @@ if ($linkReporting) {
             get_lang('Links most visited')
         ).'&nbsp;'.get_lang('Links most visited')
     );
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $links_most_visited = Tracking::get_links_most_visited_by_course(
         $course_code,
         $session_id

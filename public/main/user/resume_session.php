@@ -131,7 +131,7 @@ if ('true' === $allowTutors) {
     );
     echo Display::page_subheader(get_lang('General properties').$url); ?>
     <!-- General properties -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
     <tr>
         <td><?php echo get_lang('General coach'); ?> :</td>
         <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')'; ?></td>

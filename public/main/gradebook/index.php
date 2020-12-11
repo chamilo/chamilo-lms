@@ -937,6 +937,11 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
         $allowGraph = false === api_get_configuration_value('gradebook_hide_graph');
         $isAllow = api_is_allowed_to_edit(null, true);
 
+        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $showFeedBack = true;
+        if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
+            $showFeedBack = false;
+        }
         /** @var Category $cat */
         foreach ($cats as $cat) {
             $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
@@ -1026,13 +1031,13 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                         'orientation' => 'P',
                     ];
 
+                    $feedback = '';
+                    if ($showFeedBack) {
+                        $feedback = '<br />'.get_lang('Feedback').'<br />
+                                      <textarea rows="5" cols="100" >&nbsp;</textarea>';
+                    }
                     $pdf = new PDF('A4', $params['orientation'], $params);
-                    $pdf->html_to_pdf_with_template(
-                        $table.
-                        $graph.
-                        '<br />'.get_lang('Feedback').'<br />
-                        <textarea rows="5" cols="100" >&nbsp;</textarea>'
-                    );
+                    $pdf->html_to_pdf_with_template($table.$graph.$feedback);
                 } else {
                     echo $table;
                     echo $graph;

@@ -10,6 +10,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+api_block_inactive_user();
 
 $logInfo = [
     'tool' => 'MyCertificates',

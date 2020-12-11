@@ -28,9 +28,9 @@ class UserForm extends FormValidator
         if (isset($user)) {
             $this->user_info = $user;
         }
-        /*if (isset($result_object)) {
+        if (isset($result_object)) {
             $this->result_object = $result_object;
-        }*/
+        }
         if (self::TYPE_USER_INFO == $this->form_type) {
             $this->build_user_info_form();
         } elseif (self::TYPE_SIMPLE_SEARCH == $this->form_type) {

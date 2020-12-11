@@ -20,7 +20,7 @@ if (!$is_allowedToTrack) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$lps = learnpath::getLpList($courseId);
+$lps = learnpath::getLpList($courseId, $sessionId);
 Session::write('lps', $lps);
 
 /**

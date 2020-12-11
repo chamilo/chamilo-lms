@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CAttendance;
+
 /**
  * Gradebook link to attendance item.
  *
@@ -48,7 +51,7 @@ class AttendanceLink extends AbstractLink
             return [];
         }
         $sessionId = $this->get_session_id();
-        $repo = \Chamilo\CoreBundle\Framework\Container::getStudentPublicationRepository();
+        $repo = Container::getAttendanceRepository();
         $qb = $repo->getResourcesByCourse(api_get_course_entity($this->course_id), api_get_session_entity($sessionId));
         $qb->andWhere('resource.active = 1');
         $links = $qb->getQuery()->getResult();
@@ -62,7 +65,7 @@ class AttendanceLink extends AbstractLink
                     att.session_id = '.$sessionId;
         $result = Database::query($sql);*/
 
-        /** @var \Chamilo\CourseBundle\Entity\CAttendance $link */
+        /** @var CAttendance $link */
         foreach ($links as $link) {
             $title = $link->getAttendanceQualifyTitle();
             if (!empty($title)) {

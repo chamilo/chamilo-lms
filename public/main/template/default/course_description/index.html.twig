@@ -19,13 +19,13 @@
                                 </a>
                             {% endif %}
 
-{#                            {% if is_granted('DELETE', description.resourceNode) %}#}
-{#                                <a href="{{ _p.web_self }}?action=delete&amp;id={{ description.iid }}&amp;{{ course_url_params }}"#}
-{#                                   onclick="javascript:return confirmation('{{ description.title | e(js)}}');"#}
-{#                                   title="{{ 'Delete'|get_lang }}">#}
-{#                                    <img src="{{ 'delete.png'|icon(22) }}"/>#}
-{#                                </a>#}
-{#                            {% endif %}#}
+                            {% if is_granted('DELETE', description.resourceNode) %}
+                                <a href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=delete&id={{ description.iid }}&{{ course_url_params }}"
+                                   onclick="javascript:return confirmation('{{ description.title | e('js')}}');"
+                                   title="{{ 'Delete'|get_lang }}">
+                                    <img src="{{ 'delete.png'|icon(22) }}"/>
+                                </a>
+                            {% endif %}
 
 {#                            {% if session_id == description.session_id %}#}
 {#                                <a href="{{ _p.web_self }}?action=edit&amp;id={{ description.iid }}&amp;{{ _p.web_cid_query }}"#}

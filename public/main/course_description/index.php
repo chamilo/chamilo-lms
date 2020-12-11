@@ -88,7 +88,7 @@ switch ($action) {
         $descriptionController->edit($id, $description_type);
         break;
     case 'delete':
-        $descriptionController->destroy($id);
+        $descriptionController->delete($id);
         break;
     case 'listing':
     default:

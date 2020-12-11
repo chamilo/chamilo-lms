@@ -302,29 +302,20 @@ class CourseDescription
      *
      * @return int affected rows
      */
-    public function delete()
+    public function delete($id)
     {
-        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $course_id = api_get_course_int_id();
-        $sql = "DELETE FROM $table
-			 	WHERE
-			 	    c_id = $course_id AND
-			 	    id = '".intval($this->id)."' AND
-			 	    session_id = '".intval($this->session_id)."'";
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
-        if ($this->id > 0) {
-            //insert into item_property
-            api_item_property_update(
-                api_get_course_info(),
-                TOOL_COURSE_DESCRIPTION,
-                $this->id,
-                'CourseDescriptionDeleted',
-                api_get_user_id()
-            );
+        $repo = Container::getCourseDescriptionRepository();
+
+        /** @var CCourseDescription $courseDescription */
+        $courseDescription = $repo->find($id);
+        if ($courseDescription) {
+            $repo->getEntityManager()->remove($courseDescription);
+            $repo->getEntityManager()->flush();
+
+            return true;
         }
 
-        return $affected_rows;
+        return false;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -14,7 +15,6 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 class CourseDescriptionController
 {
     private $toolname;
-    private $view;
 
     /**
      * Constructor.
@@ -141,7 +141,6 @@ class CourseDescriptionController
         $session_id = api_get_session_id();
         $course_description->set_session_id($session_id);
         $data = [];
-        $data['id'] = $id;
         $affected_rows = null;
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
@@ -222,12 +221,6 @@ class CourseDescriptionController
                     $session_id
                 );
             }
-
-            // render to the view
-            /*$this->view->set_data($data);
-            $this->view->set_layout('layout');
-            $this->view->set_template('edit');
-            $this->view->render();*/
 
             if (empty($id)) {
                 $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : '';
@@ -400,14 +393,13 @@ class CourseDescriptionController
      *
      * @param int $id description type
      */
-    public function destroy($id)
+    public function delete($id)
     {
         $course_description = new CourseDescription();
         $session_id = api_get_session_id();
         $course_description->set_session_id($session_id);
         if (!empty($id)) {
-            $course_description->set_id($id);
-            $course_description->delete();
+            $course_description->delete($id);
             Display::addFlash(
                 Display::return_message(get_lang('Description has been deleted'))
             );

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: chamilo-lms\n"
+"Project-Id-Version: chamilo\n"
 "Language: fr_FR\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -4628,11 +4628,11 @@ msgstr "Coordonnées téléphoniques de l'administrateur de la plate-forme"
 msgid "Send mail to new user"
 msgstr "Envoyer un courriel au nouvel utilisateur"
 
-msgid "Extended profile"
-msgstr "Utiliser le Profil Etendu"
+msgid "Portfolio"
+msgstr "Utiliser le portfolio"
 
-msgid "If this setting is set to 'True', a user can fill in following (optional) fields: 'My competences', 'My diplomas', 'What I am able to teach' and 'My personal open area'"
-msgstr "Si \"Oui\" est coché, l'utilisateur pourra compléter les champs facultatifs suivants: \"Mes compétences\", \"Mes diplômes\", \"Mes compétences professionnelles\", \"Mon espace personnel\""
+msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
+msgstr "En activant cette option, l'utilisateur pourra compléter les champs facultatifs suivants: \"Mon espace personnel\", \"Mes compétences\", \"Mes diplômes\", \"Mes compétences professionnelles\", qui définiront son portfolio sur le réseau social."
 
 msgid "Classes"
 msgstr "Classes"
@@ -5342,17 +5342,17 @@ msgstr "Palette de caractères"
 msgid "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default UTF-8 should be alright."
 msgstr "La palette de caractères est ce qui détermine la façon dont certaines chaînes de caractères de langues spécifiques sont affichées. Si vous utilisez le russe ou le japonais par exemple, vous aurez certainement besoin de modifier cette variable. Pour toutes les langues anglaises, latines et ouest-européennes, le défaut UTF-8 devrait être parfaitement adapté."
 
-msgid "Extended profile fields in registration"
-msgstr "Champs du profil étendu lors de l'enregistrement"
+msgid "Portfolio fields at registration"
+msgstr "Champs du portfolio à l'enregistrement"
 
-msgid "Which of the following fields of the extended profile have to be available in the user registration process? This requires that the extended profile is activated (see above)."
-msgstr "Parmi les champs suivants du profil étendu, lesquels doivent être disponibles lors du processus d'enregistrement des utilisateurs? Ceci nécessite que le profil étendu lors de l'enregistrement soit activé (voir plus haut)."
+msgid "Which of the following fields of the portfolio have to be available in the user registration process? This requires that the portfolio option be enabled (see above)."
+msgstr "Parmi les champs suivants du portfolio, lesquels doivent être disponibles lors du processus d'enregistrement des utilisateurs? Ceci nécessite que le portfolio à l'enregistrement soit activé (voir plus haut)."
 
-msgid "Required extended profile fields in registration"
-msgstr "Champs du profil étendu demandés lors de l'enregistrement"
+msgid "Required portfolio fields in registration"
+msgstr "Champs du portfolio demandés lors de l'enregistrement"
 
-msgid "Which of the following fields of the extende profile are required in the user registration process? This requires that the extended profile is activated and that the field is also available in the registration form (see above)."
-msgstr "Parmi les champs du profil étendun lesquels sont requis lors de l'enregistrement des utilisateurs? Ceci nécessite que l'option du profil étendu à l'enregistrement soit activée et que les champs soient disponibles dans le formulaire d'inscription (voir ci-dessus)."
+msgid "Which of the following fields of the portfolio are *required* in the user registration process? This requires that the portfolio option be enabled and that the field be also available in the registration form (see above)."
+msgstr "Parmi les champs du portfolio, lesquels sont obligatoires lors de l'enregistrement des utilisateurs? Ceci nécessite que l'option du portfolio à l'enregistrement soit activée et que les champs soient disponibles dans le formulaire d'inscription (voir ci-dessus)."
 
 msgid "No-reply e-mail address"
 msgstr "Adresse de courriel \"no-reply\""
@@ -7754,7 +7754,7 @@ msgstr "Veuillez compléter les deux listes ci-dessous"
 msgid "Please type the text"
 msgstr "Veuillez introduire le texte"
 
-msgid "Please define at least one blank with square brackets [...]"
+msgid "Please define at least one blank with the selected marker"
 msgstr "Veuillez définir au moins un blanc en utilisant les crochets [...]"
 
 msgid "Please type the question's answers"
@@ -9149,7 +9149,7 @@ msgstr "Mes diplômes"
 msgid "My personal open area"
 msgstr "Mon espace personnel"
 
-msgid "What I am able to teach"
+msgid "What I can teach"
 msgstr "Mes compétences professionnelles"
 
 msgid "h"
@@ -22376,9 +22376,6 @@ msgstr "Vous devez créer un profil de compétences"
 msgid "Skill level"
 msgstr "Niveau de compétence"
 
-msgid "Portfolio"
-msgstr "Portfolio"
-
 msgid "Add item to portfolio"
 msgstr "Ajouter au portfolio"
 
@@ -23375,7 +23372,7 @@ msgstr "Votre plugin a le même nom qu'un plugin officiel. Les plugins officiels
 msgid "Courses of %s %s"
 msgstr "Cours de %s %s"
 
-msgid "You can not subscrive to the course any more because your session has expired."
+msgid "You cannot subscribe to the course any more because your session has expired."
 msgstr "Vous ne pouvez plus vous inscrire à des cours car votre session a expiré."
 
 msgid "Certificate of achievement by day"
@@ -23926,4 +23923,151 @@ msgstr "Parcours par auteur"
 
 msgid "Import assignments from base course"
 msgstr "Importer les travaux du cours de base"
+
+msgid "Redirect to the platform home page"
+msgstr "Rediriger vers la page d'accueil de la plateforme"
+
+msgid "My learning paths"
+msgstr "Mes parcours"
+
+msgid "Last visited learning path"
+msgstr "Dernier parcours visité"
+
+msgid "You haven't visited any learning paths yet, here is the list of your learning paths."
+msgstr "Vous n'avez encore visité aucun parcours, voici la liste de vos parcours."
+
+msgid "This course is used in at least one other portal"
+msgstr "Ce cours est utilisé sur au moins un autre portail"
+
+msgid "Add classes to a learning path"
+msgstr "Inscription de classes au parcours"
+
+msgid "Replace file"
+msgstr "Remplacer le fichier"
+
+msgid "Subscribe classes to category"
+msgstr "Inscrire de classes à la catégorie"
+
+msgid "Export response report"
+msgstr "Exporter le rapport de réponse"
+
+msgid "Response report"
+msgstr "Rapport de réponses"
+
+msgid "Results only available online"
+msgstr "Résultat disponible uniquement en ligne"
+
+msgid "Question stats"
+msgstr "Statistiques des questions"
+
+msgid "Wrong answer"
+msgstr "Mauvaise réponse"
+
+msgid "Failure on attempt %s at %s"
+msgstr "Échec à la tentative %s de %s"
+
+msgid "Validation of exercise at %s"
+msgstr "Validation de l'exercice pour %s"
+
+msgid "You finished the questions related to this question category, it's your last chance to go back and revise those questions. Once you click on follow exercise you will go to the next question category and will not be able to go back to this part of the test."
+msgstr "Vous avez terminé les questions de cette catégorie, c'est votre dernière chance de revenir en arrière et réviser ces questions. Une fois que vous cliquerez sur le bouton pour continuer l'exercice vous passerez à la prochaine catégorie de questions et vous ne pourrez pas revenir sur cette partie de l'exercice."
+
+msgid "Remaining time to finish exercise"
+msgstr "Temps restant pour terminer l'exercice"
+
+msgid "Remaining time to finish question"
+msgstr "Temps restant pour terminer la question"
+
+msgid "Detailed questions stats"
+msgstr "Rapport détaillé des questions"
+
+msgid "A short presentation of yourself, your professional or personal experiences and beliefs."
+msgstr "Une brève présentation de vous-même, de vos expériences professionnelles ou personnelles et de vos convictions."
+
+msgid "The skills you have acquired, formally or non-formally, social or technical."
+msgstr "Les compétences que vous avez acquises, formelles ou informelles, sociales ou techniques."
+
+msgid "The relevant diplomas and certificates you have obtained and you are proud of. You should specify at a minimum the title that appears on the document, the organization and the year."
+msgstr "Les diplômes et certificats importants que vous avez obtenu et qui vous donnent une certaine fierté. Vous devriez spécifier au minimum le titre qui apparaît sur le document, l'organisation qui vous l'a attribué et l'année."
+
+msgid "Given your experience and skills, you can usually teach in the fields where your skills are at the highest level. If you feel you could indeed teach someone else in some specific field, mention it here. Otherwise leave empty."
+msgstr "Sur base de votre expérience et de vos compétences, vous pouvez habituellement enseigner dans certains domaines pour lesquels vos compétences sont de haut niveau. Si vous pensez que vous pourriez enseigner à d'autres dans un de ces domaines, mentionnez-le ici. Sinon, laissez ce champ vide."
+
+msgid "User guides"
+msgstr "Guides utilisateur"
+
+msgid "You have written a paper that you can share, or want to attach your CV for download? Add those here."
+msgstr "Un de vos articles a été publié, ou vous souhaiteriez mettre votre CV à disposition? Placez-les ici."
+
+msgid "Correct attempts"
+msgstr "Tentatives correctes"
+
+msgid "Incorrect attempts"
+msgstr "Tentatives incorrectes"
+
+msgid "Students with correct answers"
+msgstr "Étudiants avec réponses correctes"
+
+msgid "Students with incorrect answers"
+msgstr "Étudiants avec réponses incorrectes"
+
+msgid "List of contents"
+msgstr "Liste de contenus"
+
+msgid "Tariff"
+msgstr "Tarification"
+
+msgid "To invoice"
+msgstr "À facturer"
+
+msgid "LP item by author"
+msgstr "Éléménts de parcours par auteur"
+
+msgid "Delete also the exercise attempts. If not check then the exercise results will still be available in the exercise tool."
+msgstr "Supprimer également les tentatives des exercices concernés"
+
+msgid "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback."
+msgstr "Afficher uniquement un radar des scores par catégorie, au lieu d'un tableau de catégories. Ne montre pas les scores ou les commentaires individuels."
+
+msgid "All attemps blocked because you did not reach the minimum score of %s % at one of your attemps."
+msgstr "Toutes les tentatives ont été bloquées car vous n’avez pas atteint le score minimum de %s % à l’une de vos tentatives."
+
+msgid "Authors that have been registered :"
+msgstr "Auteurs qui ont été enregistrés :"
+
+msgid "Price"
+msgstr "Prix"
+
+msgid "Price updated"
+msgstr "Prix mis à jour"
+
+msgid "Remove selected authors"
+msgstr "Retirer les auteurs sélectionnés"
+
+msgid "Authors have been removed"
+msgstr "Les auteurs ont été retirés"
+
+msgid "Hide category table"
+msgstr "Cacher le tableau de catégories"
+
+msgid "Only %d questions will be selected based on the test configuration, for a total score of %s."
+msgstr "Seules %d questions seront sélectionnées d'après la configuration de l'exercice, pour un score total de %s."
+
+msgid "This question is also used in the following tests"
+msgstr "Question utilisée également dans les exercices suivants"
+
+msgid "Link to test edition"
+msgstr "Lien vers l'édition de l'exercice"
+
+msgid "Move users results from base course to a session"
+msgstr "Déplacer les résultats utilisateurs de tout un cours dans/vers une session"
+
+msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
+msgstr ""
+
+msgid "Back to the attempt list"
+msgstr "Retour à la liste des tentatives"
+
+msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
+msgstr "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte."
 

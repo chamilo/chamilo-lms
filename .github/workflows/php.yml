@@ -32,7 +32,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php-versions }}
                   tools: behat
-                  extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
+                  extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath, symfony
 
             - name: Start mysql service
               run: sudo /etc/init.d/mysql start
@@ -84,8 +84,7 @@ jobs:
 
             - name: Install database
               run: |
-                  php bin/console doctrine:database:create || echo "Error while creating the DB"
-
+                  symfony console doctrine:database:create || echo "Error while creating the DB"
               env:
                 DATABASE_URL: mysql://root:chamilo@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
                 DATABASE_HOST: 127.0.0.1

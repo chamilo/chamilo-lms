@@ -53,12 +53,36 @@ jobs:
             - name: Install dependencies
               run: composer install --prefer-dist --no-progress --no-suggest --no-scripts
 
+            - name: Get yarn cache directory
+              id: yarn-cache
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+            - name: Cache composer dependencies
+              uses: actions/cache@v2
+              with:
+                id: yarn-cache
+                path: ${{ steps.yarn-cache.outputs.dir }}
+                # Use composer.json for key, if composer.lock is not committed.
+                # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                restore-keys: ${{ runner.os }}-yarn-
+
+            - name: Yarn install
+              uses: borales/actions-yarn@v2.0.0
+              with:
+                cmd: install # will run `yarn install` command
+
+            - name: Yarn install
+              uses: borales/actions-yarn@v2.0.0
+              with:
+                cmd: run encore dev # will run `yarn install` command
+
             - name: Install database
               run: |
                   php bin/console doctrine:database:create || echo "Error while creating the DB"
 
               env:
-                #DATABASE_URL: mysql://root:chamilo@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
+                DATABASE_URL: mysql://root:chamilo@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
                 DATABASE_HOST: 127.0.0.1
                 DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
                 DATABASE_NAME: chamilo

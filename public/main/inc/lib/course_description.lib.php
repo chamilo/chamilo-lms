@@ -239,7 +239,7 @@ class CourseDescription
         $courseDescription
             ->setTitle($this->title)
             ->setContent($this->content)
-            ->setProgress($this->progress)
+            ->setProgress((int) $this->progress)
             ->setDescriptionType($this->description_type)
         ;
 
@@ -251,28 +251,6 @@ class CourseDescription
         $repo = Container::getCourseDescriptionRepository();
         $repo->getEntityManager()->persist($courseDescription);
         $repo->getEntityManager()->flush();
-
-        /*$table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $params = [
-            'description_type' => $this->description_type,
-            'progress' => intval($this->progress),
-            'session_id' => $this->session_id,
-        ];
-
-        $last_id = Database::insert($table, $params);
-
-        if ($last_id > 0) {
-            // insert into item_property
-            api_item_property_update(
-                api_get_course_info(),
-                TOOL_COURSE_DESCRIPTION,
-                $last_id,
-                'CourseDescriptionAdded',
-                api_get_user_id()
-            );
-        }
-
-        return $last_id > 0 ? 1 : 0;*/
 
         return true;
     }

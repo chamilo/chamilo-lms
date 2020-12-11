@@ -25,6 +25,52 @@ class CourseDescriptionController
         $this->view = new View($this->toolname);
     }
 
+    public function getToolbar()
+    {
+        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+        $course_description = new CourseDescription();
+        $list = $course_description->get_default_description_title();
+        $iconList = $course_description->get_default_description_icon();
+        $actions = '';
+        $actionLeft = '';
+        if ($is_allowed_to_edit) {
+            $categories = [];
+            foreach ($list as $id => $title) {
+                $categories[$id] = $title;
+            }
+            $categories[ADD_BLOCK] = get_lang('Other');
+            $i = 1;
+
+            ksort($categories);
+            foreach ($categories as $id => $title) {
+                if (ADD_BLOCK == $i) {
+                    $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=add">'.
+                        Display::return_icon(
+                            $iconList[$id],
+                            $title,
+                            '',
+                            ICON_SIZE_MEDIUM
+                        ).
+                        '</a>';
+                    break;
+                } else {
+                    $actionLeft .= '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
+                        Display::return_icon(
+                            $iconList[$id],
+                            $title,
+                            '',
+                            ICON_SIZE_MEDIUM
+                        ).
+                        '</a>';
+                    $i++;
+                }
+            }
+            $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
+        }
+
+        return $actions;
+    }
+
     /**
      * It's used for listing course description,
      * render to listing view.
@@ -70,43 +116,7 @@ class CourseDescriptionController
                 $data['descriptions'][$id]['title_js'] = addslashes(strip_tags($description['title']));
             }
         }*/
-        $actions = null;
-        $actionLeft = null;
-        // display actions menu
-        if ($is_allowed_to_edit) {
-            $categories = [];
-            foreach ($data['default_description_titles'] as $id => $title) {
-                $categories[$id] = $title;
-            }
-            $categories[ADD_BLOCK] = get_lang('Other');
-            $i = 1;
-
-            ksort($categories);
-            foreach ($categories as $id => $title) {
-                if (ADD_BLOCK == $i) {
-                    $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=add">'.
-                        Display::return_icon(
-                            $data['default_description_icon'][$id],
-                            $title,
-                            '',
-                            ICON_SIZE_MEDIUM
-                        ).
-                        '</a>';
-                    break;
-                } else {
-                    $actionLeft .= '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
-                        Display::return_icon(
-                            $data['default_description_icon'][$id],
-                            $title,
-                            '',
-                            ICON_SIZE_MEDIUM
-                        ).
-                        '</a>';
-                    $i++;
-                }
-            }
-            $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
-        }
+        $actions = self::getToolbar();
 
         $tpl = new Template(get_lang('Description'));
         $tpl->assign('listing', $data);
@@ -134,71 +144,50 @@ class CourseDescriptionController
         $data = [];
         $data['id'] = $id;
         $affected_rows = null;
-        if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
+        if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
-                if (1) {
-                    $title = $_POST['title'];
-                    $content = $_POST['contentDescription'];
-                    $description_type = $_POST['description_type'];
-                    $id = $_POST['id'];
-                    if (empty($id)) {
-                        // If the ID was not provided, find the first matching description item given the item type
-                        $description = $course_description->get_data_by_description_type(
-                            $description_type
-                        );
-                        if (count($description) > 0) {
-                            $id = $description['iid'];
-                        }
-                        // If no corresponding description is found, edit a new one
+                $title = $_POST['title'];
+                $content = $_POST['contentDescription'];
+                $description_type = $_POST['description_type'];
+                $id = $_POST['id'];
+                if (empty($id)) {
+                    // If the ID was not provided, find the first matching description item given the item type
+                    $description = $course_description->get_data_by_description_type(
+                        $description_type
+                    );
+                    if (count($description) > 0) {
+                        $id = $description['iid'];
                     }
-                    $progress = isset($_POST['progress']) ? $_POST['progress'] : '';
-                    $repo = Container::getCourseDescriptionRepository();
+                    // If no corresponding description is found, edit a new one
+                }
+                $progress = isset($_POST['progress']) ? $_POST['progress'] : 0;
+                $repo = Container::getCourseDescriptionRepository();
 
-                    /** @var CCourseDescription $courseDescription */
-                    $courseDescription = $repo->find($id);
+                /** @var CCourseDescription $courseDescription */
+                $courseDescription = $repo->find($id);
+                if ($courseDescription) {
                     $courseDescription
                         ->setTitle($title)
                         ->setProgress($progress)
                         ->setContent($content)
                     ;
                     $repo->update($courseDescription);
-                    /*$course_description->set_description_type($description_type);
+                } else {
+                    $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
-                    $course_description->set_content($content);
                     $course_description->set_progress($progress);
-                    $thematic_advance = $course_description->get_data_by_id($id);
-
-                    if (!empty($thematic_advance)) {
-                        $course_description->set_id($id);
-                        $course_description->update();
-                    } else {
-                        $course_description->insert();
-                    }*/
-
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('The description has been updated')
-                        )
-                    );
+                    $course_description->set_content($content);
+                    $course_description->insert(api_get_course_int_id());
                 }
-                $this->listing(false);
-            } else {
-                $data['error'] = 1;
-                $data['default_description_titles'] = $course_description->get_default_description_title();
-                $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-                $data['default_description_icon'] = $course_description->get_default_description_icon();
-                $data['question'] = $course_description->get_default_question();
-                $data['information'] = $course_description->get_default_information();
-                $data['description_title'] = $_POST['title'];
-                $data['description_content'] = $_POST['contentDescription'];
-                $data['description_type'] = $_POST['description_type'];
-                $data['progress'] = $_POST['progress'];
-                $data['descriptions'] = $course_description->get_data_by_id($_POST['id']);
-                // render to the view
-                $this->view->set_data($data);
-                $this->view->set_layout('layout');
-                $this->view->set_template('edit');
-                $this->view->render();
+
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('The description has been updated')
+                    )
+                );
+
+                $url = api_get_path(WEB_CODE_PATH).'course_description/index.php?'.api_get_cidreq();
+                api_location($url);
             }
         } else {
             $data['default_description_titles'] = $course_description->get_default_description_title();
@@ -206,7 +195,6 @@ class CourseDescriptionController
             $data['default_description_icon'] = $course_description->get_default_description_icon();
             $data['question'] = $course_description->get_default_question();
             $data['information'] = $course_description->get_default_information();
-
             $data['description_type'] = $description_type;
             if (empty($id)) {
                 // If the ID was not provided, find the first matching description item given the item type
@@ -253,55 +241,68 @@ class CourseDescriptionController
         $course_description = new CourseDescription();
         $session_id = api_get_session_id();
         $course_description->set_session_id($session_id);
+        $actions = self::getToolbar();
 
-        $data = [];
-        if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
+        if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
-                if (1) {
-                    $title = $_POST['title'];
-                    $content = $_POST['contentDescription'];
-                    $description_type = $_POST['description_type'];
-                    if ($description_type >= ADD_BLOCK) {
-                        $course_description->set_description_type($description_type);
-                        $course_description->set_title($title);
-                        $course_description->set_content($content);
-                        $course_description->insert(api_get_course_int_id());
-                    }
-
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('The description has been updated')
-                        )
-                    );
+                $title = $_POST['title'];
+                $content = $_POST['contentDescription'];
+                $description_type = $_POST['description_type'];
+                if ($description_type >= ADD_BLOCK) {
+                    $course_description->set_description_type($description_type);
+                    $course_description->set_title($title);
+                    $course_description->set_content($content);
+                    $course_description->insert(api_get_course_int_id());
                 }
-                $this->listing(false);
-            } else {
-                $data['error'] = 1;
-                $data['default_description_titles'] = $course_description->get_default_description_title();
-                $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-                $data['default_description_icon'] = $course_description->get_default_description_icon();
-                $data['question'] = $course_description->get_default_question();
-                $data['information'] = $course_description->get_default_information();
-                $data['description_title'] = $_POST['title'];
-                $data['description_content'] = $_POST['contentDescription'];
-                $data['description_type'] = $_POST['description_type'];
-                $this->view->set_data($data);
-                $this->view->set_layout('layout');
-                $this->view->set_template('add');
-                $this->view->render();
+
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('The description has been added')
+                    )
+                );
+                $url = api_get_path(WEB_CODE_PATH).'course_description/index.php?'.api_get_cidreq();
+                api_location($url);
             }
         } else {
-            $data['default_description_titles'] = $course_description->get_default_description_title();
-            $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-            $data['default_description_icon'] = $course_description->get_default_description_icon();
-            $data['question'] = $course_description->get_default_question();
-            $data['information'] = $course_description->get_default_information();
-            $data['description_type'] = $course_description->get_max_description_type();
-            // render to the view
-            $this->view->set_data($data);
-            $this->view->set_layout('layout');
-            $this->view->set_template('add');
-            $this->view->render();
+            // display form
+            $form = new FormValidator(
+                'course_description',
+                'POST',
+                'index.php?action=add&'.api_get_cidreq()
+            );
+            //$form->addElement('header', $header);
+            $form->addElement('hidden', 'description_type', ADD_BLOCK);
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $form->addHtmlEditor(
+                    'title',
+                    get_lang('Title'),
+                    true,
+                    false,
+                    ['ToolbarSet' => 'TitleAsHtml']
+                );
+            } else {
+                $form->addText('title', get_lang('Title'));
+                $form->applyFilter('title', 'html_filter');
+            }
+            $form->addHtmlEditor(
+                'contentDescription',
+                get_lang('Content'),
+                true,
+                false,
+                [
+                    'ToolbarSet' => 'Basic',
+                    'Width' => '100%',
+                    'Height' => '200',
+                ]
+            );
+            $form->addButtonCreate(get_lang('Save'));
+
+            $tpl = new Template(get_lang('Description'));
+            //$tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
+            $tpl->assign('actions', $actions);
+            $tpl->assign('session_id', $session_id);
+            $tpl->assign('content', $form->returnForm());
+            $tpl->display_one_col_template();
         }
     }
 
@@ -323,6 +324,8 @@ class CourseDescriptionController
                 Display::return_message(get_lang('Description has been deleted'))
             );
         }
-        $this->listing(false);
+
+        $url = api_get_path(WEB_CODE_PATH).'course_description/index.php?'.api_get_cidreq();
+        api_location($url);
     }
 }

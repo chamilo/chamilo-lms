@@ -1,6 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 
 /**
@@ -55,7 +58,7 @@ class GlossaryManager
         $course_id = api_get_course_int_id();
         $glossary_id = (int) $glossary_id;
 
-        $sql = "SELECT description 
+        $sql = "SELECT description
                 FROM $table
                 WHERE c_id = $course_id  AND glossary_id =".$glossary_id;
         $rs = Database::query($sql);
@@ -147,6 +150,12 @@ class GlossaryManager
 
             return false;
         } else {
+
+            // @todo
+            $repo = Container::getGlossaryRepository();
+            $glossary = new CGlossary();
+            throw new Exception('implement resources');
+
             $params = [
                 'glossary_id' => 0,
                 'c_id' => api_get_course_int_id(),
@@ -156,6 +165,7 @@ class GlossaryManager
                 'session_id' => $session_id,
             ];
             $id = Database::insert($table, $params);
+
 
             if ($id) {
                 $sql = "UPDATE $table SET glossary_id = $id WHERE iid = $id";
@@ -313,10 +323,10 @@ class GlossaryManager
                     ip.insert_date      as insert_date,
                     ip.lastedit_date    as update_date,
                     g.session_id
-                FROM $t_glossary g 
+                FROM $t_glossary g
                 INNER JOIN $t_item_propery ip
                 ON (g.glossary_id = ip.ref AND g.c_id = ip.c_id)
-                WHERE                    
+                WHERE
                     tool = '".TOOL_GLOSSARY."' AND
                     g.glossary_id = '".intval($glossary_id)."' AND
                     g.c_id = ".api_get_course_int_id()." AND
@@ -351,9 +361,9 @@ class GlossaryManager
 
         $glossary_id = (int) $glossary_id;
 
-        $sql = "DELETE FROM $table 
-                WHERE 
-                    c_id = $course_id AND 
+        $sql = "DELETE FROM $table
+                WHERE
+                    c_id = $course_id AND
                     glossary_id='".$glossary_id."'";
         $result = Database::query($sql);
         if (false === $result || Database::affected_rows($result) < 1) {
@@ -620,11 +630,11 @@ class GlossaryManager
 					glossary.description as col1,
 					$col2
 					glossary.session_id
-				FROM $t_glossary glossary 
+				FROM $t_glossary glossary
 				INNER JOIN $t_item_propery ip
 				ON (glossary.glossary_id = ip.ref AND glossary.c_id = ip.c_id)
-				WHERE				    
-					tool = '".TOOL_GLOSSARY."' 
+				WHERE
+					tool = '".TOOL_GLOSSARY."'
 					$condition_session AND
 					glossary.c_id = ".api_get_course_int_id()." AND
 					ip.c_id = ".api_get_course_int_id()."

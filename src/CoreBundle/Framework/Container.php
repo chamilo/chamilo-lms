@@ -28,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
+use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
@@ -320,6 +321,11 @@ class Container
     public static function getCourseDescriptionRepository(): CCourseDescriptionRepository
     {
         return self::$container->get(CCourseDescriptionRepository::class);
+    }
+
+    public static function getGlossaryRepository(): CGlossaryRepository
+    {
+        return self::$container->get(CGlossaryRepository::class);
     }
 
     public static function getCalendarEventRepository(): CCalendarEventRepository

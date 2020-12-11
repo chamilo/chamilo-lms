@@ -28,11 +28,15 @@ trait ControllerTrait
     {
         $services = parent::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
-        //$services['breadcrumb'] = BreadcrumbBlockService::class;
         $services['resource_factory'] = ResourceFactory::class;
         $services['glide'] = Glide::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+
+        /*
+            The following classes are needed in order to load the resources files when using the /r/ path
+            For example: http://my.chamilomaster.net/r/agenda/event_attachments/96/download?cid=1&sid=0&gid=0
+        */
 
         $services[] = IllustrationRepository::class;
         $services[] = CDocumentRepository::class;
@@ -41,7 +45,6 @@ trait ControllerTrait
         $services[] = CCalendarEventAttachmentRepository::class;
         $services[] = CQuizQuestionRepository::class;
         $services[] = CQuizQuestionCategoryRepository::class;
-
         $services[] = CForumForumRepository::class;
         $services[] = CForumAttachmentRepository::class;
 

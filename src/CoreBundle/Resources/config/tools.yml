@@ -241,7 +241,7 @@ services:
         arguments:
             - 'glossary'
             - 'authoring'
-            - '/resources/glossary/words'
+            - '/main/glossary/index.php'
             - '@chamilo_course.settings.glossary'
             -
                 words:

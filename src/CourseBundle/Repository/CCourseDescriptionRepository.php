@@ -48,17 +48,15 @@ final class CCourseDescriptionRepository extends ResourceRepository implements G
     public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         /** @var CCourseDescription $newResource */
-        $newResource = $form->getData();
+        return $form->getData();
 
-        $newResource
+        /*$newResource
             ->setCId($course->getId())
         ;
 
         if ($session) {
             $newResource->setSessionId($session->getId());
-        }
-
-        return $newResource;
+        }*/
     }
 
     public function getResourceFormType(): string

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/V2TestCase.php';
-require_once __DIR__.'/../../../../../vendor/autoload.php';
+require_once __DIR__.'/../../../../vendor/autoload.php';
 
 /**
  * Class SaveUserTest
@@ -31,8 +31,8 @@ class SaveUserTest extends V2TestCase
         $userId = $this->integer(
             [
                 'loginname' => $loginName,
-                'firstname' => $loginName,
-                'lastname' => $loginName,
+                'firstname' => 'Małgorzata',
+                'lastname' => 'Summer',
                 'original_user_id_name' => 'external_user_id',
                 'original_user_id_value' => $loginName,
                 'email' => $email,
@@ -73,8 +73,8 @@ class SaveUserTest extends V2TestCase
                 'original_user_id_value' => $loginName,
                 'status' => 5,
                 'password' => 'test',
-                'firstname' => $loginName,
-                'lastname' => $loginName,
+                'firstname' => 'Małgorzata',
+                'lastname' => 'Summer',
                 'extra' => [
                     ['field_name' => $extraFieldName, 'field_value' => $extraFieldOriginalValue],
                 ],

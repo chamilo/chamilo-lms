@@ -83,7 +83,7 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $messageStatus = Rest::POST_USER_MESSAGE_READ === $action ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
+            $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
 
             $data = array_flip($messagesId);
 
@@ -342,7 +342,7 @@ try {
             exit;
             break;
         case Rest::UPDATE_USER_PAUSE_TRAINING:
-            $allow = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
+            $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
 
             if (false === $allow) {
                 throw new Exception(get_lang('Plugin configured'));

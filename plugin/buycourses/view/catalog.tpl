@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 <div id="buy-courses-tabs">
     {% if sessions_are_included %}
         <ul class="nav nav-tabs buy-courses-tabs" role="tablist">

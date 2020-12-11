@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-<script type="text/javascript" src="../resources/js/modals.js"></script>
-
 <div id="buy-courses-tabs">
     <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
         <li id="buy-courses-tab" class="" role="presentation">

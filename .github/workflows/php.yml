@@ -31,8 +31,8 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  tools: behat
-                  extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath, symfony
+                  tools: behat, symfony
+                  extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
 
             - name: Start mysql service
               run: sudo /etc/init.d/mysql start

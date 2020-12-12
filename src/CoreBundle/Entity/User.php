@@ -76,7 +76,7 @@ class User implements UserInterface, EquatableInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
+     * @ORM\Column(name="api_token", type="string", unique=true, nullable=true)
      */
     protected $apiToken;
 
@@ -691,6 +691,20 @@ class User implements UserInterface, EquatableInterface
     protected $hrDeptId;
 
     /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    protected $updatedAt;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
@@ -795,6 +809,11 @@ class User implements UserInterface, EquatableInterface
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
+    }
+
+    public function hasResourceNode(): bool
+    {
+        return $this->resourceNode instanceof ResourceNode;
     }
 
     /**

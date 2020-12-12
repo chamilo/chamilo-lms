@@ -121,7 +121,6 @@ class Version20170626122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE user CHANGE firstname firstname VARCHAR(64) DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE phone phone VARCHAR(64) DEFAULT NULL');
 
-
         $table = $schema->getTable('admin');
         $this->addSql('ALTER TABLE admin CHANGE user_id user_id INT DEFAULT NULL');
         if (false === $table->hasForeignKey('FK_880E0D76A76ED395')) {

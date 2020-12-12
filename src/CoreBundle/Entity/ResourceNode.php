@@ -162,11 +162,6 @@ class ResourceNode
     protected $comments;
 
     /**
-     * @ORM\Column(type="uuid", unique=true)
-     */
-    protected $uuid;
-
-    /**
      * @var \DateTime
      *
      * @Groups({"resource_node:read", "document:read"})
@@ -192,6 +187,11 @@ class ResourceNode
     protected $fileEditableText;
 
     protected $content;
+
+    /**
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
 
     public function __construct()
     {

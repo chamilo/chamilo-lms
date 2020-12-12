@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\BranchSync;
-use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\TicketCategory;
 use Chamilo\CoreBundle\Entity\TicketPriority;
@@ -13,7 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
-use Doctrine\Migrations\Configuration\Migration\PhpFile;use Doctrine\Migrations\Configuration\Migration\YamlFile;
+use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
@@ -2284,10 +2283,9 @@ function installTools($container, $manager, $upgrade = false)
 
 /**
  * @param SymfonyContainer $container
- * @param EntityManager    $manager
  * @param bool             $upgrade
  */
-function installSchemas($container, $manager, $upgrade = false)
+function installSchemas($container, $upgrade = false)
 {
     error_log('installSchemas');
     $settingsManager = $container->get('chamilo.settings.manager');
@@ -2333,7 +2331,7 @@ function upgradeWithContainer($container)
     installGroups($manager);
     // @todo check if adminId = 1
     installTools($container, $manager, true);
-    installSchemas($container, $manager, true);
+    installSchemas($container, true);
 }
 
 /**
@@ -2382,7 +2380,6 @@ function finishInstallationWithContainer(
     error_log('setLegacyServices');
 
     $manager = Database::getManager();
-    $connection = $manager->getConnection();
     $trans = $container->get('translator');
 
     // Add tickets defaults
@@ -2541,13 +2538,13 @@ function finishInstallationWithContainer(
         false,
         false
     );
-    $userManager = $container->get('Chamilo\CoreBundle\Repository\UserRepository');
+    $userRepo = $container->get('Chamilo\CoreBundle\Repository\UserRepository');
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
 
     installTools($container, $manager, false);
 
     /** @var User $admin */
-    $admin = $userManager->find($adminId);
+    $admin = $userRepo->find($adminId);
     $admin->addRole('ROLE_GLOBAL_ADMIN');
     $manager->persist($admin);
 
@@ -2560,11 +2557,11 @@ function finishInstallationWithContainer(
     );
     $container->get('security.token_storage')->setToken($token);
 
-    $userManager->addUserToResourceNode($adminId, $adminId);
-    $userManager->addUserToResourceNode($anonId, $adminId);
+    $userRepo->addUserToResourceNode($adminId, $adminId);
+    $userRepo->addUserToResourceNode($anonId, $adminId);
     $manager->flush();
 
-    installSchemas($container, $manager, false);
+    installSchemas($container, false);
     $accessUrl = $urlRepo->find(1);
 
     UrlManager::add_user_to_url($adminId, $adminId);
@@ -2719,7 +2716,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-                $sql = "UPDATE settings_current SET selected_value = '2.0.0' WHERE variable = 'chamilo_database_version'";
+                $sql = "UPDATE settings_current SET selected_value = '2.0.0'
+                        WHERE variable = 'chamilo_database_version'";
                 $connection->executeQuery($sql);
                 if ($processFiles) {
                     error_log('Update config files');

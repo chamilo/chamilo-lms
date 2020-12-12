@@ -46,11 +46,11 @@ ob_implicit_flush();
 Debug::enable();
 
 // Create .env.local file
-$envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
+/*$envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
 if (file_exists($envFile)) {
     echo "Chamilo is already installed. File $envFile exists.";
     exit;
-}
+}*/
 
 // Defaults settings
 putenv('APP_LOCALE=en');
@@ -590,7 +590,6 @@ if (isset($_POST['step2'])) {
         // @todo fix permissions.
         $perm = octdec('0777');
         $perm_file = octdec('0777');
-        migrateSwitch($my_old_version, $manager);
 
         // Create .env.local file
         $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
@@ -625,8 +624,13 @@ if (isset($_POST['step2'])) {
         // Boot kernel and get the doctrine from Symfony container
         $kernel->boot();
         error_log('Boot');
-        $containerDatabase = $kernel->getContainer();
-        upgradeWithContainer($containerDatabase);
+        $container = $kernel->getContainer();
+        Container::setContainer($container);
+
+        migrateSwitch($my_old_version, $manager);
+
+        exit;
+        upgradeWithContainer($container);
         error_log('Set upgradeWithContainer');
         error_log('------------------------------');
         error_log('Upgrade 2.0.0 process concluded!  ('.date('Y-m-d H:i:s').')');

@@ -6,6 +6,9 @@ namespace Chamilo\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\UserRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -35,6 +38,22 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     public function getContainer()
     {
         return $this->container;
+    }
+
+    public function getAdmin(): User
+    {
+        $container = $this->getContainer();
+        $em = $this->getEntityManager();
+        /** @var Connection $connection */
+        $connection = $em->getConnection();
+        $userRepo = $container->get(UserRepository::class);
+
+        $sql = 'SELECT id, user_id FROM admin ORDER BY id LIMIT 1';
+        $result = $connection->executeQuery($sql);
+        $adminRow = $result->fetchAssociative();
+        $adminId = $adminRow['user_id'];
+
+        return $userRepo->find($adminId);
     }
 
     /**

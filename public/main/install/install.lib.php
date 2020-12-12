@@ -2277,6 +2277,7 @@ function installTools($container, $manager, $upgrade = false)
 {
     error_log('installTools');
     // Install course tools (table "tool")
+    /** @var ToolChain $toolChain */
     $toolChain = $container->get(ToolChain::class);
     $toolChain->createTools($manager);
 }

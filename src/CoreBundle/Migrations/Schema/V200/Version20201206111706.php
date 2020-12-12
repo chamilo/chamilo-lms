@@ -20,9 +20,6 @@ final class Version20201206111706 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE block CHANGE path path VARCHAR(190) NOT NULL');
-
-        $connection = $this->getEntityManager()->getConnection();
-
     }
 
     public function down(Schema $schema): void

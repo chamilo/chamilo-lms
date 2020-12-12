@@ -82,20 +82,22 @@ class ToolChain
     {
         $manager = $this->entityManager;
         $tools = $this->getTools();
+        $repo = $manager->getRepository(Tool::class);
 
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
-            $toolEntity = new Tool();
-            $toolEntity
-                ->setName($tool->getName())
-            ;
+            $name = $tool->getName();
+            $toolExists = $repo->findOneBy(['name' => $name]);
+            if ($toolExists) {
+                continue;
+            }
 
+            $toolEntity = new Tool();
+            $toolEntity->setName($name);
             if ($tool->isCourseTool()) {
                 $this->setToolPermissions($toolEntity);
             }
-
             $manager->persist($toolEntity);
-
             $types = $tool->getResourceTypes();
             if (!empty($types)) {
                 foreach ($types as $name => $data) {

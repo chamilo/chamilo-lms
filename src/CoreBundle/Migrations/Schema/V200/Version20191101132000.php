@@ -35,7 +35,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('course_rel_category')) {
             $this->addSql('CREATE TABLE course_rel_category (course_id INT NOT NULL, course_category_id INT NOT NULL, INDEX IDX_16B33772591CC992 (course_id), INDEX IDX_16B337726628AD36 (course_category_id), PRIMARY KEY(course_id, course_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
-            $this->addSql('ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B33772591CC992 FOREIGN KEY (course_id) REFERENCES course (id)') ;
+            $this->addSql('ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B33772591CC992 FOREIGN KEY (course_id) REFERENCES course (id)');
             $this->addSql('ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B337726628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id);');
         }
 

@@ -42,10 +42,20 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('created_at')) {
+            $this->addSql(
+                'UPDATE user SET created_at = registration_date WHERE CAST(created_at AS CHAR(20)) = "0000-00-00 00:00:00"'
+            );
+            $this->addSql('UPDATE user SET created_at = registration_date WHERE created_at IS NULL');
+            //$this->addSql('UPDATE user SET created_at = NOW() WHERE created_at = NULL OR created_at = ""');
             $this->addSql('ALTER TABLE user CHANGE created_at created_at DATETIME NOT NULL');
         }
 
         if ($table->hasColumn('updated_at')) {
+            $this->addSql(
+                'UPDATE user SET updated_at = registration_date WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"'
+            );
+            $this->addSql('UPDATE user SET updated_at = registration_date WHERE updated_at IS NULL');
+            //$this->addSql('UPDATE user SET updated_at = NOW() WHERE updated_at = NULL OR updated_at = ""');
             $this->addSql('ALTER TABLE user CHANGE updated_at updated_at DATETIME NOT NULL');
         }
 
@@ -110,12 +120,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE user CHANGE lastname lastname VARCHAR(64) DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE firstname firstname VARCHAR(64) DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE phone phone VARCHAR(64) DEFAULT NULL');
-        $this->addSql(
-            'UPDATE user SET created_at = registration_date WHERE CAST(created_at AS CHAR(20)) = "0000-00-00 00:00:00"'
-        );
-        $this->addSql(
-            'UPDATE user SET updated_at = registration_date WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"'
-        );
+
 
         $table = $schema->getTable('admin');
         $this->addSql('ALTER TABLE admin CHANGE user_id user_id INT DEFAULT NULL');

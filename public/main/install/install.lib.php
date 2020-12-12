@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;use Doctrine\Migrations\Configuration\Migration\YamlFile;
 use Doctrine\Migrations\DependencyFactory;
-use Doctrine\Migrations\Version\Direction;use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -2133,8 +2133,8 @@ function migrate(EntityManager $manager)
         $lastVersion = $migrations->getLast();
         $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
         foreach ($plan->getItems() as $item) {
-            //error_log('Versions to process: '.$item->getVersion());
             $item->getMigration()->setEntityManager($manager);
+            $item->getMigration()->setContainer(Container::$container);
         }
         // Execute migration!!
         /** @var  $migratedVersions */

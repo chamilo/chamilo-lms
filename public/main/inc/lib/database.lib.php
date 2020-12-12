@@ -21,7 +21,7 @@ class Database
     private static $connection;
 
     /**
-     * Only used by the installer.
+     *  Setup doctrine for the installation.
      *
      * @param array  $params
      * @param string $entityRootPath
@@ -34,7 +34,6 @@ class Database
             [
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
             ]
         );
 
@@ -62,6 +61,54 @@ class Database
             $cachedAnnotationReader // our cached annotation reader
         );
 
+        AnnotationRegistry::registerLoader(
+            function ($class) use ($sysPath) {
+                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
+                $file = str_replace('Symfony/Component/Validator', '', $file);
+                $file = str_replace('Symfony\Component\Validator', '', $file);
+                $file = str_replace('Symfony/Component/Serializer', '', $file);
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
+
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/serializer/'.$file;
+
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+            }
+        );
+
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiResource.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiFilter.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiProperty.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiSubresource.php'
+        );
+
         $entityManager = EntityManager::create($params, $config, $evm);
 
         if (false === Type::hasType('uuid')) {
@@ -72,6 +119,7 @@ class Database
         AnnotationRegistry::registerFile(
             $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php'
         );
+
         $this->setConnection($connection);
         $this->setManager($entityManager);
     }

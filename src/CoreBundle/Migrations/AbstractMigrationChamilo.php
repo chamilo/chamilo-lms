@@ -8,17 +8,33 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class AbstractMigrationChamilo.
  */
-abstract class AbstractMigrationChamilo extends AbstractMigration
+abstract class AbstractMigrationChamilo extends AbstractMigration implements ContainerAwareInterface
 {
     private $manager;
+    private $container;
 
     public function setEntityManager(EntityManager $manager)
     {
         $this->manager = $manager;
+    }
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**

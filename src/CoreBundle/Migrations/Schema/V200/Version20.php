@@ -18,6 +18,14 @@ class Version20 extends AbstractMigrationChamilo
         // Use $schema->createTable
         $this->addSql('set sql_mode=""');
 
+        // Global tool.
+        if (false === $schema->hasTable('tool')) {
+            $this->addSql(
+                'CREATE TABLE IF NOT EXISTS tool (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
+            );
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_20F33ED15E237E06 ON tool (name)');
+        }
+
         $table = $schema->getTable('language');
         if ($table->hasIndex('idx_language_dokeos_folder')) {
             $this->addSql('DROP INDEX idx_language_dokeos_folder ON language;');
@@ -34,8 +42,10 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE fos_group CHANGE name name VARCHAR(255) NOT NULL');
 
         $table = $schema->getTable('fos_user_user_group');
-        if ($table->hasForeignKey('fos_user_user_group')) {
+        if ($table->hasForeignKey('FK_B3C77447A76ED395')) {
             $this->addSql('ALTER TABLE fos_user_user_group DROP FOREIGN KEY FK_B3C77447A76ED395');
+            $this->addSql('ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        } else {
             $this->addSql('ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         }
 
@@ -64,56 +74,30 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE sequence_value CHANGE user_id user_id INT DEFAULT NULL');
 
         $table = $schema->getTable('sequence_value');
-        if ($table->hasForeignKey('FK_66FBF12DA76ED395')) {
+        if (false === $table->hasForeignKey('FK_66FBF12DA76ED395')) {
             $this->addSql(
                 'ALTER TABLE sequence_value ADD CONSTRAINT FK_66FBF12DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
         }
-        if ($table->hasIndex('IDX_66FBF12DA76ED395')) {
+
+        if (false === $table->hasIndex('IDX_66FBF12DA76ED395')) {
             $this->addSql('CREATE INDEX IDX_66FBF12DA76ED395 ON sequence_value (user_id)');
         }
 
         $table = $schema->getTable('branch_sync');
         $this->addSql('ALTER TABLE branch_sync CHANGE access_url_id access_url_id INT DEFAULT NULL');
-        if ($table->hasForeignKey('FK_F62F45ED73444FD5')) {
+        if (false === $table->hasForeignKey('FK_F62F45ED73444FD5')) {
             $this->addSql('ALTER TABLE branch_sync ADD CONSTRAINT FK_F62F45ED73444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
         }
-        if ($table->hasIndex('IDX_F62F45ED73444FD5')) {
+        if (false === $table->hasIndex('IDX_F62F45ED73444FD5')) {
             $this->addSql('CREATE INDEX IDX_F62F45ED73444FD5 ON branch_sync (access_url_id)');
-        }
-
-        $table = $schema->getTable('c_tool');
-        if (false === $table->hasForeignKey('FK_8456658091D79BD3')) {
-            $this->addSql(
-                'ALTER TABLE c_tool ADD CONSTRAINT FK_8456658091D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
-            );
-        }
-        $this->addSql('UPDATE c_tool SET name = "blog" WHERE name = "blog_management" ');
-        $this->addSql('UPDATE c_tool SET name = "agenda" WHERE name = "calendar_event" ');
-        $this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
-        $this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
-        $this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
-
-        if ($table->hasColumn('course')) {
-            $this->addSql('ALTER TABLE c_tool ADD tool_id INT NOT NULL');
-        }
-        if ($table->hasColumn('position')) {
-            $this->addSql('ALTER TABLE c_tool ADD position INT NOT NULL');
-        }
-        if ($table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_tool ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665808F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id)');
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665801BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE INDEX IDX_845665808F7B22CC ON c_tool (tool_id)');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_845665801BAD783F ON c_tool (resource_node_id)');
         }
 
         $table = $schema->getTable('personal_agenda');
         if ($table->hasColumn('course')) {
             $this->addSql('ALTER TABLE personal_agenda DROP course');
         }
-        if ($table->hasForeignKey('FK_D86124608D93D649')) {
+        if (false === $table->hasForeignKey('FK_D86124608D93D649')) {
             $this->addSql('ALTER TABLE personal_agenda ADD CONSTRAINT FK_D86124608D93D649 FOREIGN KEY (user) REFERENCES user (id) ON DELETE CASCADE');
         }
 

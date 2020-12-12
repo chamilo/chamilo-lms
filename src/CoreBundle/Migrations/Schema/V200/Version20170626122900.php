@@ -103,14 +103,13 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE user ADD confirmation_token VARCHAR(255) DEFAULT NULL');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649C05FB297 ON user (confirmation_token)');
         } else {
-            $this->addSql('ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(180) DEFAULT NULL');
+            $this->addSql('ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(255) DEFAULT NULL');
         }
 
         $this->addSql('ALTER TABLE user CHANGE username_canonical username_canonical VARCHAR(180) NOT NULL');
         $this->addSql('ALTER TABLE user CHANGE lastname lastname VARCHAR(64) DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE firstname firstname VARCHAR(64) DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE phone phone VARCHAR(64) DEFAULT NULL');
-        $this->addSql('ALTER TABLE user CHANGE salt salt VARCHAR(255) DEFAULT NULL');
         $this->addSql(
             'UPDATE user SET created_at = registration_date WHERE CAST(created_at AS CHAR(20)) = "0000-00-00 00:00:00"'
         );
@@ -126,8 +125,8 @@ class Version20170626122900 extends AbstractMigrationChamilo
             );
         }
 
-        if (false === $table->hasIndex('user_id')) {
-            $this->addSql('DROP INDEX user_id ON admin');
+        if ($table->hasIndex('user_id')) {
+            //$this->addSql('DROP INDEX user_id ON admin');
         }
 
         if (false === $table->hasIndex('UNIQ_880E0D76A76ED395')) {

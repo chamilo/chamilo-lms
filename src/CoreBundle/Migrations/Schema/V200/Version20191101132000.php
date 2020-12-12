@@ -33,60 +33,14 @@ class Version20191101132000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX IDX_169E6FB912469DE2 ON course');
         }
 
-        $table = $schema->getTable('course_rel_category');
         if (false === $schema->hasTable('course_rel_category')) {
-            $this->addSql(
-                'CREATE TABLE course_rel_category (course_id INT NOT NULL, course_category_id INT NOT NULL, INDEX IDX_8EB34CC5591CC992 (course_id), INDEX IDX_8EB34CC56628AD36 (course_category_id), PRIMARY KEY(course_id, course_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
-            );
-            /*$this->addSql(
-                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC5591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE'
-            );*/
-            /*$this->addSql(
-                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC56628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE'
-            );*/
+            $this->addSql('CREATE TABLE course_rel_category (course_id INT NOT NULL, course_category_id INT NOT NULL, INDEX IDX_16B33772591CC992 (course_id), INDEX IDX_16B337726628AD36 (course_category_id), PRIMARY KEY(course_id, course_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+            $this->addSql('ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B33772591CC992 FOREIGN KEY (course_id) REFERENCES course (id)') ;
+            $this->addSql('ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B337726628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id);');
         }
 
         if ($schema->getTable('course')->hasColumn('category_id')) {
-            $this->addSql('ALTER TABLE course DROP category_id');
-        }
-
-        /*if ($table->hasForeignKey('FK_8EB34CC5591CC992')) {
-            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC5591CC992');
-        }*/
-        /*if ($table->hasForeignKey('FK_8EB34CC56628AD36')) {
-            $this->addSql('ALTER TABLE course_rel_category DROP FOREIGN KEY FK_8EB34CC56628AD36');
-        }*/
-        if ($table->hasForeignKey('FK_16B33772591CC992')) {
-            $this->addSql(
-                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B33772591CC992 FOREIGN KEY (course_id) REFERENCES course (id)'
-            );
-        }
-        if ($table->hasForeignKey('FK_16B337726628AD36')) {
-            $this->addSql(
-                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_16B337726628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id)'
-            );
-        }
-
-        if ($table->hasIndex('idx_8eb34cc5591cc992')) {
-            $this->addSql('DROP INDEX idx_8eb34cc5591cc992 ON course_rel_category');
-        }
-        if ($table->hasIndex('idx_8eb34cc56628ad36')) {
-            $this->addSql('DROP INDEX idx_8eb34cc56628ad36 ON course_rel_category');
-        }
-        if (false === $table->hasIndex('IDX_16B337726628AD36')) {
-            $this->addSql('CREATE INDEX IDX_16B337726628AD36 ON course_rel_category (course_category_id)');
-        }
-
-        if (false === $table->hasForeignKey('FK_8EB34CC5591CC992')) {
-            $this->addSql(
-                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC5591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE'
-            );
-        }
-
-        if (false === $table->hasForeignKey('FK_8EB34CC56628AD36')) {
-            $this->addSql(
-                'ALTER TABLE course_rel_category ADD CONSTRAINT FK_8EB34CC56628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE'
-            );
+            //$this->addSql('ALTER TABLE course DROP category_id');
         }
 
         $table = $schema->getTable('course_rel_user');

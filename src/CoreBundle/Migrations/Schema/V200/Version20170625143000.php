@@ -27,11 +27,11 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E972395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)');
             $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid)');
-            $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            //$this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_62798E971BAD783F ON c_thematic_advance (resource_node_id)');
         }
 
-        if ($table->hasIndex('IDX_62798E97163DDA15')) {
+        if (false === $table->hasIndex('IDX_62798E97163DDA15')) {
             $this->addSql('CREATE INDEX IDX_62798E97163DDA15 ON c_thematic_advance (attendance_id)');
         }
 

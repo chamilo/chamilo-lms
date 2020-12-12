@@ -14,11 +14,10 @@ class Version20170525122900 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {
-        if (false === $schema->hasTable('tool')) {
+        if (false === $schema->hasTable('resource_file')) {
             $this->addSql(
-                'CREATE TABLE IF NOT EXISTS tool (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
+                'CREATE TABLE resource_file (id INT AUTO_INCREMENT NOT NULL,name VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)",crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL,  metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\',  created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_20F33ED15E237E06 ON tool (name)');
         }
 
         if (false === $schema->hasTable('resource_node')) {
@@ -42,16 +41,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
             $this->addSql(
                 'CREATE TABLE resource_comment (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, author_id INT DEFAULT NULL, parent_id INT DEFAULT NULL, content VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, root INT DEFAULT NULL, lvl INT NOT NULL, lft INT NOT NULL, rgt INT NOT NULL, INDEX IDX_C9D4B5841BAD783F (resource_node_id), INDEX IDX_C9D4B584F675F31B (author_id), INDEX IDX_C9D4B584727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
-            $this->addSql(
-                'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B5841BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE SET NULL;'
-            );
-            $this->addSql(
-                'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B584F675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE SET NULL;'
-            );
-            $this->addSql(
-                'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B584727ACA70 FOREIGN KEY (parent_id) REFERENCES resource_comment (id) ON DELETE CASCADE;'
-            );
-
             $this->addSql(
                 'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B5841BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE SET NULL'
             );
@@ -115,7 +104,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
             );
         }
 
-        $table = $schema->getTable('tool_resource_right');
         if (false === $schema->hasTable('tool_resource_right')) {
             $this->addSql(
                 'CREATE TABLE IF NOT EXISTS tool_resource_right (id INT AUTO_INCREMENT NOT NULL, tool_id INT DEFAULT NULL, role VARCHAR(255) NOT NULL, mask INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
@@ -123,17 +111,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
             $this->addSql(
                 'ALTER TABLE tool_resource_right ADD CONSTRAINT FK_E5C562598F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id);'
             );
-        }
-
-        if ($table->hasForeignKey('FK_E5C562598F7B22CC')) {
-            $this->addSql('ALTER TABLE tool_resource_right DROP FOREIGN KEY FK_E5C562598F7B22CC');
-        }
-
-        if ($table->hasIndex('fk_e5c562598f7b22cc')) {
-            $this->addSql('DROP INDEX fk_e5c562598f7b22cc ON tool_resource_right');
-        }
-
-        if (false === $table->hasIndex('IDX_E5C562598F7B22CC')) {
             $this->addSql('CREATE INDEX IDX_E5C562598F7B22CC ON tool_resource_right (tool_id)');
         }
 
@@ -146,12 +123,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
             );
         }
 
-        if (false === $table->hasForeignKey('FK_E5C562598F7B22CC')) {
-            $this->addSql(
-                'ALTER TABLE tool_resource_right ADD CONSTRAINT FK_E5C562598F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id)'
-            );
-        }
-
         if (false === $schema->hasTable('resource_type')) {
             $this->addSql(
                 'CREATE TABLE IF NOT EXISTS resource_type (id INT AUTO_INCREMENT NOT NULL, tool_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_83FEF7938F7B22CC (tool_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
@@ -161,9 +132,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
             );
         }
 
-        $this->addSql(
-            'CREATE TABLE IF NOT EXISTS resource_file (id INT AUTO_INCREMENT NOT NULL,name VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)",crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL,  metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\',  created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
-        );
         if (false === $schema->hasTable('resource_node')) {
             $this->addSql(
                 'ALTER TABLE resource_node ADD CONSTRAINT FK_8A5F48FF98EC6B7B FOREIGN KEY (resource_type_id) REFERENCES resource_type (id);'
@@ -181,13 +149,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
                 'ALTER TABLE resource_node ADD CONSTRAINT FK_8A5F48FF727ACA70 FOREIGN KEY (parent_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
         }
-
-        /*$table = $schema->getTable('resource_type');
-        if (false === $table->hasForeignKey('FK_83BF96AAEA9FDD75')) {
-            $this->addSql(
-                'ALTER TABLE resource_file ADD CONSTRAINT FK_83BF96AAEA9FDD75 FOREIGN KEY (media_id) REFERENCES media__media (id);'
-            );
-        }*/
 
         if (false === $schema->hasTable('illustration')) {
             $this->addSql(

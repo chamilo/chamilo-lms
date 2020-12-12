@@ -33,16 +33,20 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_quiz');
         if ($table->hasColumn('exercise_category_id')) {
             $this->addSql('ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;');
+            if (false === $table->hasForeignKey('FK_B7A1C35FB48D66')) {
+                $this->addSql(
+                    'ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id) ON DELETE SET NULL'
+                );
+            }
         } else {
             $this->addSql('ALTER TABLE c_quiz ADD COLUMN exercise_category_id BIGINT DEFAULT NULL;');
+            $this->addSql(
+                'ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id) ON DELETE SET NULL'
+            );
         }
+
         if (!$table->hasColumn('autolaunch')) {
             $this->addSql('ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0');
-        }
-        if (false === $table->hasForeignKey('FK_B7A1C35FB48D66')) {
-            $this->addSql(
-                'ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id);'
-            );
         }
         if (false === $table->hasIndex('IDX_B7A1C35FB48D66')) {
             $this->addSql('CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);');
@@ -182,6 +186,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         if ($table->hasPrimaryKey()) {
             $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY');
+            $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');
         }
         if (false === $table->hasForeignKey('FK_A468585C12469DE2')) {
             $this->addSql(

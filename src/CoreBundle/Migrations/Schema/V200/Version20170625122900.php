@@ -18,13 +18,9 @@ class Version20170625122900 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_document ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
-                'ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id);'
+                'ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_C9FA0CBD1BAD783F ON c_document (resource_node_id);');
-        }
-
-        if ($table->hasForeignKey('FK_C9FA0CBD1BAD783F')) {
-            $this->addSql('ALTER TABLE c_document DROP FOREIGN KEY FK_C9FA0CBD1BAD783F');
         }
 
         if (false === $table->hasColumn('template')) {
@@ -34,12 +30,6 @@ class Version20170625122900 extends AbstractMigrationChamilo
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_document DROP id');
             //$this->addSql('ALTER TABLE c_document DROP id, DROP c_id, DROP path, DROP size, DROP session_id');
-        }
-
-        if ($table->hasForeignKey('FK_C9FA0CBD1BAD783F')) {
-            $this->addSql(
-                'ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
-            );
         }
 
         if (false === $table->hasIndex('idx_cdoc_type')) {

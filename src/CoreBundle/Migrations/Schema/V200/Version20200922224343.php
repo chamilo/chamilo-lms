@@ -19,11 +19,11 @@ final class Version20200922224343 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE sys_announcement ADD COLUMN visible_drh TINYINT(1) NOT NULL');
         }
 
-        if ($table->hasColumn('career_id')) {
+        if (false === $table->hasColumn('career_id')) {
             $this->addSql('ALTER TABLE sys_announcement ADD career_id INT DEFAULT NULL');
         }
 
-        if ($table->hasColumn('promotion_id')) {
+        if (false === $table->hasColumn('promotion_id')) {
             $this->addSql('ALTER TABLE sys_announcement ADD promotion_id INT DEFAULT NULL');
         }
 

@@ -1,0 +1,12 @@
+body {
+    padding-bottom: 40px;
+    padding-top: 60px;
+}
+
+h1, h2, h3 {
+    border-bottom: 1px solid #DDDDDD;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    padding-bottom: 10px;
+    line-height: 1;
+    margin: 20px 0px 20px 0px;
+}

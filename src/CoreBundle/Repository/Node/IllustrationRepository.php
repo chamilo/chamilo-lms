@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Repository;
+namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
@@ -12,8 +12,12 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Resource\IllustrationType;
+use Chamilo\CoreBundle\Repository\GridInterface;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -22,6 +26,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class IllustrationRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Illustration::class);
+    }
+
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $repo = $this->getRepository();

@@ -27,11 +27,18 @@ services:
         class: Chamilo\CourseBundle\Repository\CCourseSettingRepository
 
     Chamilo\CourseBundle\Repository\:
-        resource: ../../Repository
-#        exclude: '../../Repository/{CQuizRepository.php}'
-#        tags: ['doctrine.repository_service']
-
-#    resources.asset.illustration:
-#        arguments:
-#            $entityName: 'Chamilo\CoreBundle\Entity\Illustration'
-#            $repository: 'Chamilo\CoreBundle\Repository\IllustrationRepository'
+        resource: '../../Repository/'
+        tags: ['doctrine.repository_service']
+        calls:
+            - setAuthorizationChecker: [ '@security.authorization_checker' ]
+            - setRouter: [ '@router' ]
+            - setSlugify: [ '@cocur_slugify' ]
+            - setToolChain: [ '@Chamilo\CoreBundle\ToolChain' ]
+            - setResourceNodeRepository: [ '@Chamilo\CoreBundle\Repository\ResourceNodeRepository' ]
+        exclude: '../../Repository/CCourseSettingRepository.php'
+    #        parent: Chamilo\CoreBundle\Repository\ResourceRepository
+#
+#    Chamilo\CourseBundle\Repository\:
+#        resource: ../../Repository
+##        exclude: '../../Repository/{CQuizRepository.php}'
+##        tags: ['doctrine.repository_service']

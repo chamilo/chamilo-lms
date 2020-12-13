@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;

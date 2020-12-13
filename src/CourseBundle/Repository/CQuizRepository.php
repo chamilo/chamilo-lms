@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -15,6 +16,11 @@ use Symfony\Component\Routing\RouterInterface;
  */
 final class CQuizRepository extends ResourceRepository implements ResourceWithLinkInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CQuiz::class);
+    }
+
     public function getLink(ResourceInterface $resource, RouterInterface $router, $extraParams = []): string
     {
         $params = ['name' => 'exercise/overview.php', 'exerciseId' => $resource->getResourceIdentifier()];

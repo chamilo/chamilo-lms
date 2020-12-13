@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\UserRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use ChamiloSession as Session;
 
 /**
@@ -55,7 +55,7 @@ class UserManager
      */
     public static function getRepository()
     {
-        return Container::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
+        return Container::$container->get('Chamilo\CoreBundle\Repository\Node\UserRepository');
     }
 
     /**
@@ -328,7 +328,7 @@ class UserManager
         }
 
         $em = Database::getManager();
-        $repo = Container::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
+        $repo = Container::$container->get('Chamilo\CoreBundle\Repository\Node\UserRepository');
         $repo->updateUser($user, false);
 
         // Add user as a node

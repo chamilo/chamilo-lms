@@ -6,14 +6,14 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Manager\SettingsManager;
-use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
-use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Repository\UserRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;

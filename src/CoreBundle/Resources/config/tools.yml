@@ -18,11 +18,11 @@ services:
             - ''
             -
                 urls:
-                    repository: Chamilo\CoreBundle\Repository\AccessUrlRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\AccessUrlRepository
                 courses:
-                    repository: Chamilo\CoreBundle\Repository\CourseRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\CourseRepository
                 users:
-                    repository: Chamilo\CoreBundle\Repository\UserRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\UserRepository
         tags:
             - {name: chamilo_core.tool}
 
@@ -35,7 +35,7 @@ services:
             - ''
             -
                 illustrations:
-                    repository: Chamilo\CoreBundle\Repository\IllustrationRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\IllustrationRepository
         tags:
             - {name: chamilo_core.tool}
 

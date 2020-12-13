@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Manager\SettingsManager;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 

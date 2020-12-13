@@ -16,10 +16,16 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 
 final class CCourseDescriptionRepository extends ResourceRepository implements GridInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CCourseDescription::class);
+    }
+
     public function getResourceSettings(): Settings
     {
         $settings = parent::getResourceSettings();

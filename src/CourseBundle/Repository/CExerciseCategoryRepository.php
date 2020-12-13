@@ -5,12 +5,19 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class CExerciseCategoryRepository.
  */
 final class CExerciseCategoryRepository extends ResourceRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CExerciseCategory::class);
+    }
+
     /**
      * @param int $courseId
      *

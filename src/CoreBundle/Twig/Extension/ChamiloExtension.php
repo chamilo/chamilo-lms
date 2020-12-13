@@ -5,7 +5,7 @@
 namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 

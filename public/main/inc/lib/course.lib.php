@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;

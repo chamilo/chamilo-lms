@@ -2,17 +2,19 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Repository;
+namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class CourseRepository.
@@ -21,6 +23,11 @@ use Doctrine\ORM\QueryBuilder;
  */
 class CourseRepository extends ResourceRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Course::class);
+    }
+
     /**
      * @param Session $session
      *
@@ -70,7 +77,7 @@ class CourseRepository extends ResourceRepository
     public function getSubscribedUsers(Course $course)
     {
         // Course builder
-        $queryBuilder = $this->getRepository()->createQueryBuilder('c');
+        $queryBuilder = $this->createQueryBuilder('c');
 
         // Selecting user info.
         $queryBuilder->select('DISTINCT user');

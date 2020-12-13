@@ -6,12 +6,18 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class CGroupRepository.
  */
 final class CGroupRepository extends ResourceRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CGroup::class);
+    }
+
     /**
      * @param string $code
      */

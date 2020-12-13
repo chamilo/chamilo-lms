@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Repository;
+namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
@@ -32,6 +32,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CBlogPost;
@@ -49,6 +50,7 @@ use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -67,6 +69,11 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, User::class);
+    }
+
     /**
      * @var UserPasswordEncoderInterface
      */

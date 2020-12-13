@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -36,7 +37,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * Class ResourceRepository.
  * Extends EntityRepository is needed to process settings.
  */
-class ResourceRepository extends EntityRepository
+abstract class ResourceRepository extends ServiceEntityRepository
 {
     /**
      * @var EntityRepository
@@ -83,7 +84,7 @@ class ResourceRepository extends EntityRepository
     /**
      * ResourceRepository constructor.
      */
-    public function __construct(
+    /*public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         EntityManager $entityManager,
         RouterInterface $router,
@@ -100,12 +101,72 @@ class ResourceRepository extends EntityRepository
         $this->toolChain = $toolChain;
         $this->settings = new Settings();
         $this->templates = new Template();
+    }*/
+
+    public function setResourceNodeRepository(ResourceNodeRepository $resourceNodeRepository): ResourceRepository
+    {
+        $this->resourceNodeRepository = $resourceNodeRepository;
+
+        return $this;
+    }
+
+
+    public function setRouter(RouterInterface $router): ResourceRepository
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
+    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): ResourceRepository
+    {
+        $this->authorizationChecker = $authorizationChecker;
+
+        return $this;
+    }
+
+    public function setSlugify(SlugifyInterface $slugify): ResourceRepository
+    {
+        $this->slugify = $slugify;
+
+        return $this;
+    }
+
+    public function setToolChain(ToolChain $toolChain): ResourceRepository
+    {
+        $this->toolChain = $toolChain;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $settings
+     *
+     * @return ResourceRepository
+     */
+    public function setSettings($settings)
+    {
+        $this->settings = $settings;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $templates
+     *
+     * @return ResourceRepository
+     */
+    public function setTemplates($templates)
+    {
+        $this->templates = $templates;
+
+        return $this;
     }
 
     public function getClassName()
     {
         $class = get_class($this);
-        //Chamilo\CoreBundle\Repository\IllustrationRepository
+        //Chamilo\CoreBundle\Repository\Node\IllustrationRepository
         $class = str_replace('\\Repository\\', '\\Entity\\', $class);
         $class = str_replace('Repository', '', $class);
         if (false === class_exists($class)) {
@@ -143,10 +204,10 @@ class ResourceRepository extends EntityRepository
         return $this->resourceNodeRepository;
     }
 
-    public function getEntityManager(): EntityManager
-    {
-        return $this->getRepository()->getEntityManager();
-    }
+    /*    public function getEntityManager(): EntityManager
+        {
+            return $this->getRepository()->getEntityManager();
+        }*/
 
     /**
      * @return EntityRepository
@@ -171,26 +232,15 @@ class ResourceRepository extends EntityRepository
         return $formFactory->create($formType, $resource, $options);
     }
 
-    /**
-     * @param null $lockMode
-     * @param null $lockVersion
-     *
-     * @return ResourceInterface
-     */
-    public function find($id, $lockMode = null, $lockVersion = null)
-    {
-        return $this->getRepository()->find($id, $lockMode, $lockVersion);
-    }
-
     public function getResourceByResourceNode(ResourceNode $resourceNode)
     {
-        return $this->getRepository()->findOneBy(['resourceNode' => $resourceNode]);
+        return $this->findOneBy(['resourceNode' => $resourceNode]);
     }
 
-    public function findOneBy(array $criteria, array $orderBy = null)
+    /*public function findOneBy(array $criteria, array $orderBy = null)
     {
-        return $this->getRepository()->findOneBy($criteria, $orderBy);
-    }
+        return $this->findOneBy($criteria, $orderBy);
+    }*/
 
     /*public function updateResource(AbstractResource $resource)
     {
@@ -333,18 +383,17 @@ class ResourceRepository extends EntityRepository
 
     public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
+        $className = $this->getClassName();
         $checker = $this->getAuthorizationChecker();
-        $reflectionClass = $repo->getClassMetadata()->getReflectionClass();
+        //$reflectionClass = $repo->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
-        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        //$loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
         $resourceTypeName = $this->getResourceTypeName();
 
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            //->from($className, 'resource')
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')

@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Migrations;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\UserRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class AbstractMigrationChamilo extends AbstractMigration implements ContainerAwareInterface
 {
+    public const BATCH_SIZE = 20;
     private $manager;
     private $container;
 
@@ -44,7 +45,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     {
         $container = $this->getContainer();
         $em = $this->getEntityManager();
-        /** @var Connection $connection */
         $connection = $em->getConnection();
         $userRepo = $container->get(UserRepository::class);
 

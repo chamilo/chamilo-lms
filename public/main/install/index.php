@@ -625,7 +625,11 @@ if (isset($_POST['step2'])) {
         $kernel->boot();
         error_log('Boot');
         $container = $kernel->getContainer();
+
         Container::setContainer($container);
+        $manager = $container->get('doctrine')->getManager();
+        $repo = $manager->getRepository(\Chamilo\CoreBundle\Entity\AccessUrl::class);
+        $repo->findAll();exit;
 
         migrateSwitch($my_old_version, $manager);
 

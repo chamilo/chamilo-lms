@@ -6,15 +6,16 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CoreBundle\Repository\AccessUrlRepository;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Repository\UserRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
+use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20201212195011 extends AbstractMigrationChamilo
 {
@@ -35,20 +36,25 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         $courseRepo = $container->get(CourseRepository::class);
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
-
         $userRepo = $container->get(UserRepository::class);
+
+        /** @var Kernel $kernel */
+        $kernel = $container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
 
         $userList = [];
         $groupList = [];
         $sessionList = [];
 
-        //$urlRepo = $container->get(AccessUrlRepository::class);
+        $batchSize = self::BATCH_SIZE;
         $urlRepo = $em->getRepository(AccessUrl::class);
         $admin = $this->getAdmin();
 
+        // Adding courses to the resource node tree.
         $urls = $urlRepo->findAll();
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
+            $counter = 1;
             $accessUrlRelCourses = $url->getCourses();
             /** @var AccessUrlRelCourse $accessUrlRelCourse */
             foreach ($accessUrlRelCourses as $accessUrlRelCourse) {
@@ -58,24 +64,33 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 }
                 $courseRepo->addResourceNode($course, $admin, $url);
                 $em->persist($course);
+                if (0 === $counter % $batchSize) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                $counter++;
             }
         }
         $em->flush();
+        $em->clear();
 
+        // Adding documents to the resource node tree.
         $admin = $this->getAdmin();
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
             $accessUrlRelCourses = $url->getCourses();
             /** @var AccessUrlRelCourse $accessUrlRelCourse */
             foreach ($accessUrlRelCourses as $accessUrlRelCourse) {
+                $counter = 1;
+
                 $course = $accessUrlRelCourse->getCourse();
                 $courseId = $course->getId();
 
                 $sql = "SELECT * FROM c_document WHERE c_id = $courseId";
                 $result = $connection->executeQuery($sql);
                 $documents = $result->fetchAllAssociative();
-                foreach ($documents as $document) {
-                    $documentId = $document['iid'];
+                foreach ($documents as $documentData) {
+                    $documentId = $documentData['iid'];
                     /** @var CDocument $document */
                     $document = $documentRepo->find($courseId);
                     if ($document->hasResourceNode()) {
@@ -86,6 +101,8 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                             WHERE tool = 'document' AND c_id = $courseId AND ref = $documentId";
                     $result = $connection->executeQuery($sql);
                     $items = $result->fetchAllAssociative();
+
+                    $createNode = false;
 
                     $resourceNode = null;
                     foreach ($items as $item) {
@@ -139,11 +156,48 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                             $documentRepo->addResourceNode($document, $user, $course);
                         }
                         $document->addCourseLink($course, $session, $group, $newVisibility);
+                        $createNode = true;
                     }
-                    $em->persist($document);
+
+                    $documentPath = $documentData['path'];
+                    $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
+                    if (!is_dir($filePath)) {
+                        $createNode = false;
+                        if (file_exists($filePath)) {
+                            $mimeType = mime_content_type($filePath);
+                            $file = new UploadedFile($filePath, basename($documentPath), $mimeType, null, true);
+                            if ($file) {
+                                $createNode = true;
+                                $documentRepo->addFile($document, $file);
+                            } else {
+                                $this->warnIf(
+                                    true,
+                                    'Cannot migrate doc #'.$documentData['iid'].' path: '.$documentPath.' '
+                                );
+                                $createNode = false;
+                            }
+                        } else {
+                            $this->warnIf(
+                                true,
+                                'Cannot migrate doc #'.$documentData['iid'].' file not found: '.$documentPath
+                            );
+                        }
+                    }
+
+                    if ($createNode) {
+                        $em->persist($document);
+                        if (0 === $counter % $batchSize) {
+                            $em->flush();
+                            $em->clear();
+                        }
+                        $counter++;
+                    }
                 }
+
                 $em->flush();
+                $em->clear();
             }
         }
+        exit;
     }
 }

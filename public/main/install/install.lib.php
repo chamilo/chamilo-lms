@@ -14,11 +14,12 @@ use Chamilo\CoreBundle\ToolChain;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Query\Query;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-/**
+/*
  * Chamilo LMS
  * This file contains functions used by the install and upgrade scripts.
  *
@@ -682,7 +683,7 @@ function display_requirements(
     @unlink($dir.'/'.$fileToCreate);
     @rmdir($dir);
 
-    echo '<h2 class="install-title">'.display_step_sequence().get_lang('Requirements')."</h2>";
+    echo '<h2 class="install-title">'.display_step_sequence().get_lang('Requirements').'</h2>';
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('Please read the following requirements thoroughly.').'</strong><br />';
     echo get_lang('For more details').'
@@ -701,7 +702,7 @@ function display_requirements(
     if (!$timezone) {
         echo "<div class='alert alert-warning'>
             <i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\"></i>&nbsp;".
-            get_lang('We have detected that your PHP installation does not define the date.timezone setting. This is a requirement of Chamilo. Please make sure it is configured by checking your php.ini configuration, otherwise you will run into problems. We warned you!')."</div>";
+            get_lang('We have detected that your PHP installation does not define the date.timezone setting. This is a requirement of Chamilo. Please make sure it is configured by checking your php.ini configuration, otherwise you will run into problems. We warned you!').'</div>';
     }
 
     echo '<div class="install-requirement">'.get_lang('Server requirementsInfo').'</div>';
@@ -1057,7 +1058,7 @@ function display_requirements(
             <button
                 type="submit" name="step2_install"
                 class="btn btn-success"
-                value="<?php echo get_lang("New installation"); ?>" <?php if ($error) {
+                value="<?php echo get_lang('New installation'); ?>" <?php if ($error) {
             echo 'disabled="disabled"';
         } ?> >
                 <em class="fa fa-forward"> </em> <?php echo get_lang('New installation'); ?>
@@ -1393,7 +1394,7 @@ function display_database_settings_form(
             <dl class="row">
                 <dt class="col-sm-4">'.get_lang('Database Host').'</dt>';
     if ('update' === $installType) {
-       echo '<dd class="col-sm-8">
+        echo '<dd class="col-sm-8">
                 <input
                     type="hidden"
                     name="dbHostForm" value="'.htmlentities($dbHostForm).'" />'.$dbHostForm.'
@@ -1411,7 +1412,7 @@ function display_database_settings_form(
 
     echo '<dt class="col-sm-4">'.get_lang('Port').'</dt>';
     if ('update' === $installType) {
-    echo '<dd class="col-sm-8">
+        echo '<dd class="col-sm-8">
             <input
                 type="hidden"
                 name="dbPortForm" value="'.htmlentities($dbPortForm).'" />'.$dbPortForm.'
@@ -1528,7 +1529,8 @@ function display_database_settings_form(
                     echo get_lang('DropColumnWorks').' <strong>Ok</strong>';
                 } ?>
         </div>
-    <?php } else { ?>
+    <?php
+    } else { ?>
         <div id="db_status" class="alert alert-danger">
             <p>
                 <?php echo get_lang('The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.'); ?>
@@ -1544,20 +1546,20 @@ function display_database_settings_form(
        </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
        <?php if ($manager) {
-                    ?>
+        ?>
            <button type="submit" class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
-                } else {
-                    ?>
+    } else {
+        ?>
            <button
                    disabled="disabled"
                    type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
-                } ?>
+    } ?>
    </div>
     <?php
 }
@@ -1597,9 +1599,9 @@ function display_configuration_parameter(
                         maxlength="'.MAX_FORM_FIELD_LENGTH.'"
                         name="'.$formFieldName.'"
                         value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />
-                    '."</div>";
+                    '.'</div>';
     }
-    $html .= "</div>";
+    $html .= '</div>';
 
     return $html;
 }
@@ -1644,7 +1646,7 @@ function display_configuration_settings_form(
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
-    echo "<h2>".display_step_sequence().get_lang('Configuration settings')."</h2>";
+    echo '<h2>'.display_step_sequence().get_lang('Configuration settings').'</h2>';
     echo '</div>';
 
     // Parameter 1: administrator's login
@@ -1723,7 +1725,7 @@ function display_configuration_settings_form(
 
     // First parameter: language.
     $html = '<div class="form-group row">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('Language')."</label>";
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('Language').'</label>';
     if ('update' === $installType) {
         $html .= '<input
             type="hidden"
@@ -1734,7 +1736,7 @@ function display_configuration_settings_form(
         $html .= display_language_selection_box('languageForm', $languageForm);
         $html .= '</div>';
     }
-    $html .='</div>';
+    $html .= '</div>';
 
     // Second parameter: Chamilo URL
     if ('install' === $installType) {
@@ -1884,8 +1886,7 @@ function display_configuration_settings_form(
     }
     $html .= '</div>
     </div>';
-    echo Display::panel($html, get_lang('Portal'));
-    ?>
+    echo Display::panel($html, get_lang('Portal')); ?>
     <div class='btn-group'>
         <button
             type="submit"
@@ -1935,30 +1936,30 @@ function display_after_install_message()
 function get_countries_list_from_array($combo = false)
 {
     $a_countries = [
-        "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
-        "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
-        "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombi", "Comoros", "Congo (Brazzaville)", "Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic",
-        "Denmark", "Djibouti", "Dominica", "Dominican Republic",
-        "East Timor (Timor Timur)", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia",
-        "Fiji", "Finland", "France",
-        "Gabon", "Gambia, The", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
-        "Haiti", "Honduras", "Hungary",
-        "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy",
-        "Jamaica", "Japan", "Jordan",
-        "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan",
-        "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
-        "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Morocco", "Mozambique", "Myanmar",
-        "Namibia", "Nauru", "Nepa", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway",
-        "Oman",
-        "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
-        "Qatar",
-        "Romania", "Russia", "Rwanda",
-        "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria",
-        "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
-        "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
-        "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
-        "Yemen",
-        "Zambia", "Zimbabwe",
+        'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan',
+        'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi',
+        'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Central African Republic', 'Chad', 'Chile', 'China', 'Colombi', 'Comoros', 'Congo (Brazzaville)', 'Congo', 'Costa Rica', "Cote d'Ivoire", 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic',
+        'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic',
+        'East Timor (Timor Timur)', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia',
+        'Fiji', 'Finland', 'France',
+        'Gabon', 'Gambia, The', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana',
+        'Haiti', 'Honduras', 'Hungary',
+        'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy',
+        'Jamaica', 'Japan', 'Jordan',
+        'Kazakhstan', 'Kenya', 'Kiribati', 'Korea, North', 'Korea, South', 'Kuwait', 'Kyrgyzstan',
+        'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+        'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Morocco', 'Mozambique', 'Myanmar',
+        'Namibia', 'Nauru', 'Nepa', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Norway',
+        'Oman',
+        'Pakistan', 'Palau', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal',
+        'Qatar',
+        'Romania', 'Russia', 'Rwanda',
+        'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia and Montenegro', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Swaziland', 'Sweden', 'Switzerland', 'Syria',
+        'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu',
+        'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan',
+        'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam',
+        'Yemen',
+        'Zambia', 'Zimbabwe',
     ];
     if ($combo) {
         $country_select = '<select class="form-control show-tick" id="country" name="country">';
@@ -2099,70 +2100,72 @@ function migrate(EntityManager $manager)
     $to = null; // if $to == null then schema will be migrated to latest version
     //echo '<pre>';
     //try {
-        // Loading migration configuration.
-        $config = new PhpFile('./migrations.php');
-        $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
+    // Loading migration configuration.
+    $config = new PhpFile('./migrations.php');
+    $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
-        // Check if version table exists, use new version.
-        $schema = $manager->getConnection()->getSchemaManager();
-        $dropOldVersionTable = false;
-        if ($schema->tablesExist('version')) {
-            $columns = $schema->listTableColumns('version');
-            if (in_array('id', array_keys($columns), true)) {
-                $dropOldVersionTable = true;
+    // Check if version table exists, use new version.
+    $schema = $manager->getConnection()->getSchemaManager();
+    $dropOldVersionTable = false;
+    if ($schema->tablesExist('version')) {
+        $columns = $schema->listTableColumns('version');
+        if (in_array('id', array_keys($columns), true)) {
+            $dropOldVersionTable = true;
+        }
+    }
+
+    if ($dropOldVersionTable) {
+        error_log('Drop version table');
+        $schema->dropTable('version');
+    }
+
+    // Creates "version" table.
+    $dependency->getMetadataStorage()->ensureInitialized();
+
+    // Loading migrations.
+    $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
+    $result = '';
+    $input = new Symfony\Component\Console\Input\StringInput($result);
+    $migratorConfiguration = $migratorConfigurationFactory->getMigratorConfiguration($input);
+    $migrator = $dependency->getMigrator();
+    $planCalculator = $dependency->getMigrationPlanCalculator();
+    $migrations = $planCalculator->getMigrations();
+    $lastVersion = $migrations->getLast();
+    $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
+
+    foreach ($plan->getItems() as $item) {
+        $item->getMigration()->setEntityManager($manager);
+        $item->getMigration()->setContainer(Container::$container);
+    }
+
+    // Execute migration!!
+    /** @var $migratedVersions */
+    $versions = $migrator->migrate($plan, $migratorConfiguration);
+
+    if ($debug) {
+        /** @var Query[] $queries */
+        $versionCounter = 1;
+        foreach ($versions as $version => $queries) {
+            $total = count($queries);
+            echo '----------------------------------------------<br />';
+            $message = "VERSION: $versionCounter / $total - $version";
+            echo "$message<br/>";
+            error_log('-------------------------------------');
+            error_log($message);
+            $counter = 1;
+            foreach ($queries as $query) {
+                $sql = $query->getStatement();
+                echo "<code>$sql</code><br>";
+                error_log("$counter/$total : $sql");
+                $counter++;
             }
+            $versionCounter++;
         }
+        echo '<br/>DONE!<br />';
+        error_log('DONE!');
+    }
 
-        if ($dropOldVersionTable) {
-            error_log('Drop version table');
-            $schema->dropTable('version');
-        }
-
-        // Creates "version" table.
-        $dependency->getMetadataStorage()->ensureInitialized();
-
-        // Loading migrations.
-        $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
-        $result = '';
-        $input = new Symfony\Component\Console\Input\StringInput($result);
-        $migratorConfiguration = $migratorConfigurationFactory->getMigratorConfiguration($input);
-        $migrator = $dependency->getMigrator();
-        $planCalculator = $dependency->getMigrationPlanCalculator();
-        $migrations = $planCalculator->getMigrations();
-        $lastVersion = $migrations->getLast();
-        $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
-        foreach ($plan->getItems() as $item) {
-            $item->getMigration()->setEntityManager($manager);
-            $item->getMigration()->setContainer(Container::$container);
-        }
-        // Execute migration!!
-        /** @var  $migratedVersions */
-        $versions = $migrator->migrate($plan, $migratorConfiguration);
-
-        if ($debug) {
-            /** @var \Doctrine\Migrations\Query\Query[] $queries */
-            $versionCounter = 1;
-            foreach ($versions as $version => $queries) {
-                $total = count($queries);
-                echo '----------------------------------------------<br />';
-                $message = "VERSION: $versionCounter / $total - $version";
-                echo "$message<br/>";
-                error_log('-------------------------------------');
-                error_log($message);
-                $counter = 1;
-                foreach ($queries as $query) {
-                    $sql = $query->getStatement();
-                    echo "<code>$sql</code><br>";
-                    error_log("$counter/$total : $sql");
-                    $counter++;
-                }
-                $versionCounter++;
-            }
-            echo "<br/>DONE!<br />";
-            error_log('DONE!');
-        }
-
-        return true;
+    return true;
     /*} catch (Exception $ex) {
         if ($debug) {
             echo "ERROR: {$ex->getMessage()}<br>";
@@ -2290,7 +2293,7 @@ function installSchemas($container, $upgrade = false)
     error_log('installSchemas');
     $settingsManager = $container->get('chamilo.settings.manager');
 
-    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\Node\AccessUrlRepository');
     $accessUrl = $urlRepo->find(1);
     if (!$accessUrl) {
         $em = $urlRepo->getEntityManager();
@@ -2538,8 +2541,8 @@ function finishInstallationWithContainer(
         false,
         false
     );
-    $userRepo = $container->get('Chamilo\CoreBundle\Repository\UserRepository');
-    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    $userRepo = $container->get('Chamilo\CoreBundle\Repository\Node\UserRepository');
+    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\Node\AccessUrlRepository');
 
     installTools($container, $manager, false);
 
@@ -2665,11 +2668,11 @@ function rrmdir($dir)
     if (is_dir($dir)) {
         $objects = scandir($dir);
         foreach ($objects as $object) {
-            if ("." != $object && ".." != $object) {
-                if ("dir" == filetype($dir."/".$object)) {
-                    @rrmdir($dir."/".$object);
+            if ('.' != $object && '..' != $object) {
+                if ('dir' == filetype($dir.'/'.$object)) {
+                    @rrmdir($dir.'/'.$object);
                 } else {
-                    @unlink($dir."/".$object);
+                    @unlink($dir.'/'.$object);
                 }
             }
         }
@@ -2686,7 +2689,6 @@ function rrmdir($dir)
  * @param bool          $processFiles
  *
  * @return bool Always returns true except if the process is broken
- *
  */
 function migrateSwitch($fromVersion, $manager, $processFiles = true)
 {
@@ -2695,8 +2697,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
     //echo '<a class="btn btn-secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
     //echo '<div id="details" style="display:none">';
     $connection = $manager->getConnection();
-    $database = new Database();
-    $database->setManager($manager);
+//    $database = new Database();
+//    $database->setManager($manager);
 
     switch ($fromVersion) {
         case '1.11.0':
@@ -2711,7 +2713,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             $start = time();
             // Migrate using the migration files located in:
             // /srv/http/chamilo2/src/CoreBundle/Migrations/Schema/V200
-            $result = migrate( $manager);
+            $result = migrate($manager);
             error_log('-----------------------------------------');
 
             if ($result) {
@@ -2767,7 +2769,7 @@ function checkCanCreateFile($file)
         }
     } else {
         $write = @file_put_contents($file, '');
-        if ($write !== false) {
+        if (false !== $write) {
             unlink($file);
 
             return Display::label(get_lang('Writable'), 'success');

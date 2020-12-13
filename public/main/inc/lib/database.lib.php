@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
@@ -48,7 +49,7 @@ class Database
             $cache // and a cache driver
         );
 
-        $evm = new \Doctrine\Common\EventManager();
+        $evm = new EventManager();
         $timestampableListener = new Gedmo\Timestampable\TimestampableListener();
         $timestampableListener->setAnnotationReader($cachedAnnotationReader);
         $evm->addEventSubscriber($timestampableListener);

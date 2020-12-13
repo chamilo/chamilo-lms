@@ -58,6 +58,7 @@ class Version20180928172830 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_tool ADD resource_node_id INT DEFAULT NULL');
             $this->addSql('UPDATE c_tool SET session_id = NULL WHERE session_id = 0');
+            $this->addSql('UPDATE c_tool SET tool_id = NULL WHERE tool_id = 0');
 
             $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
             $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665808F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id)');

@@ -75,8 +75,8 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");
             $sql = 'SELECT id FROM user';
             $result = $em->getConnection()->executeQuery($sql);
-            $data = $result->fetchAllAssociative();
-            foreach ($data as $item) {
+            $users = $result->fetchAllAssociative();
+            foreach ($users as $item) {
                 $uuid = Uuid::v4()->toBinary();
                 $userId = $item['id'];
                 $sql = "UPDATE user SET uuid = '$uuid' WHERE id = $userId";

@@ -249,6 +249,13 @@ class CSurvey
     protected $isMandatory = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="display_question_number", type="boolean", nullable=true)
+     */
+    protected $displayQuestionNumber;
+
+    /**
      * CSurvey constructor.
      */
     public function __construct()
@@ -1017,5 +1024,17 @@ class CSurvey
     public function isMandatory()
     {
         return $this->isMandatory;
+    }
+
+    /**
+     * @param bool $displayQuestionNumber
+     *
+     * @return CSurvey
+     */
+    public function setDisplayQuestionNumber($displayQuestionNumber)
+    {
+        $this->displayQuestionNumber = $displayQuestionNumber;
+
+        return $this;
     }
 }

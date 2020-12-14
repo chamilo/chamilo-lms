@@ -29,8 +29,6 @@ class CourseRepository extends ResourceRepository
     }
 
     /**
-     * @param Session $session
-     *
      * @return ArrayCollection
      */
     public function getTools(Course $course, Session $session = null)

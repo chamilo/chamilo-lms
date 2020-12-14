@@ -203,10 +203,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository;
     }
 
-    /*    public function getEntityManager(): EntityManager
-        {
-            return $this->getRepository()->getEntityManager();
-        }*/
+    /*public function getEntityManager(): EntityManager
+    {
+        return $this->getRepository()->getEntityManager();
+    }*/
 
     /**
      * @return EntityRepository

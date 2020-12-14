@@ -63,12 +63,9 @@ final class CShortcutRepository extends ResourceRepository
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
-
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'

@@ -49,8 +49,6 @@ final class Version20200922224343 extends AbstractMigrationChamilo
         if ($table->hasColumn('promotion_id')) {
             $this->addSql('ALTER TABLE sys_announcement ADD promotion_id INT DEFAULT NULL;');
         }
-
-        $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
     }
 
     public function down(Schema $schema): void

@@ -2138,7 +2138,7 @@ function getLegacyToIso()
 function _api_get_person_name_convention($iso, $type)
 {
     $conventions = getLegacyOrderConventions();
-    $languageName = null;
+    $languageName = '';
     if (isset(getIsoToLegacy()[$iso])) {
         $languageName = getIsoToLegacy()[$iso];
     }
@@ -2150,7 +2150,6 @@ function _api_get_person_name_convention($iso, $type)
             $conventions[$key] = $data;
         }
     }
-
     $search1 = ['FIRST_NAME', 'LAST_NAME', 'TITLE'];
     $replacement1 = ['%F', '%L', '%T'];
     $search2 = ['first_name', 'last_name', 'title'];

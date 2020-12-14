@@ -14,10 +14,6 @@ class Version20191101132000 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {
-        // Update iso
-        $sql = 'UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language);';
-        $this->addSql($sql);
-
         $table = $schema->getTable('course');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE course ADD COLUMN resource_node_id INT DEFAULT NULL;');

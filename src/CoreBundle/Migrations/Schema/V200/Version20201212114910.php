@@ -15,7 +15,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Create tools. Migrate portals and users';
+        return 'Migrate portals and users';
     }
 
     public function up(Schema $schema): void
@@ -49,10 +49,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
             if (false === $url->hasResourceNode()) {
-                /*$cleanUrl = $slugify->slugify($url->getUrl());
-                $cleanUrl = str_replace(['http-', 'https-'], '', $cleanUrl);*/
-                $resourceNode = $urlRepo->addResourceNode($url, $admin);
-                //$resourceNode->setTitle($cleanUrl);
+                $urlRepo->addResourceNode($url, $admin);
                 $em->persist($url);
             }
         }

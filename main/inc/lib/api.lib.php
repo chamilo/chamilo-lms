@@ -5222,7 +5222,7 @@ function api_get_visual_theme()
         $visual_theme = null;
     }
 
-    if (!isset($visual_theme)) {
+    
         $cacheAvailable = api_get_configuration_value('apc');
         $userThemeAvailable = api_get_setting('user_selected_theme') == 'true';
         $courseThemeAvailable = api_get_setting('allow_course_theme') == 'true';
@@ -5307,7 +5307,7 @@ function api_get_visual_theme()
         if ($useCache) {
             apcu_store($apcVar, $visual_theme, 120);
         }
-    }
+    
 
     return $visual_theme;
 }

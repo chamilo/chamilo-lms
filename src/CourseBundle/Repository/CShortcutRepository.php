@@ -28,15 +28,13 @@ final class CShortcutRepository extends ResourceRepository
 
     public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
     {
-        $repo = $this->getRepository();
         $criteria = ['shortCutNode' => $resource->getResourceNode()];
 
-        return $repo->findOneBy($criteria);
+        return $this->findOneBy($criteria);
     }
 
     public function addShortCut(AbstractResource $resource, $parent, Course $course, Session $session = null)
     {
-        $em = $this->getRepository()->getEntityManager();
         $shortcut = $this->getShortcutFromResource($resource);
 
         if (null === $shortcut) {
@@ -46,14 +44,14 @@ final class CShortcutRepository extends ResourceRepository
                 ->setShortCutNode($resource->getResourceNode())
                 ->setParent($parent)
                 ->addCourseLink($course, $session);
-            $em->persist($shortcut);
-            $em->flush();
+
+            $this->create($shortcut);
         }
     }
 
     public function removeShortCut(AbstractResource $resource)
     {
-        $em = $this->getRepository()->getEntityManager();
+        $em = $this->getEntityManager();
         $shortcut = $this->getShortcutFromResource($resource);
         if (null !== $shortcut) {
             $em->remove($shortcut);

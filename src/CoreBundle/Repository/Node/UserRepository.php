@@ -138,7 +138,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
     public function getRootUser(): User
     {
-        $qb = $this->getRepository()->createQueryBuilder('u');
+        $qb = $this->createQueryBuilder('u');
         $qb
             ->innerJoin(
                 'u.resourceNode',

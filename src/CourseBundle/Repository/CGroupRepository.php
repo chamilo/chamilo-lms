@@ -18,19 +18,13 @@ final class CGroupRepository extends ResourceRepository
         parent::__construct($registry, CGroup::class);
     }
 
-    /**
-     * @param string $code
-     */
-    public function findOneByCode($code): ?CGroup
+    public function findOneByCode(string $code): ?CGroup
     {
-        return $this->getRepository()->findOneByCode($code);
+        return $this->findOneBy(['code' => $code]);
     }
 
-    /**
-     * @param string $name
-     */
-    public function findOneByTitle($name): ?CGroup
+    public function findOneByTitle(string $name): ?CGroup
     {
-        return $this->getRepository()->findOneByTitle($name);
+        return $this->findOneBy(['name' => $name]);
     }
 }

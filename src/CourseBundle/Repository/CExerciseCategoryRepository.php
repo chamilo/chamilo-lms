@@ -25,7 +25,7 @@ final class CExerciseCategoryRepository extends ResourceRepository
      */
     public function getCategories($courseId)
     {
-        $query = $this->getRepository()->createQueryBuilder('e');
+        $query = $this->createQueryBuilder('e');
         $query->where('e.course = :cId');
         $query->setParameter('cId', $courseId);
         $query->orderBy('e.position');

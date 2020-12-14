@@ -198,7 +198,7 @@ class CourseDescriptionController
                 // If the ID was not provided, find the first matching description item given the item type
                 $description = $course_description->get_data_by_description_type($description_type);
                 if (count($description) > 0) {
-                    $id = $description['id'];
+                    $id = $description['iid'];
                 }
                 // If no corresponding description is found, edit a new one
             }

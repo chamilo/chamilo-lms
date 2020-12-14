@@ -24,7 +24,7 @@ class AccessUrlRepository extends ResourceRepository
      */
     public function getFirstId()
     {
-        $qb = $this->getRepository()->createQueryBuilder('a');
+        $qb = $this->createQueryBuilder('a');
         $qb->select('MIN (a.id)');
         $q = $qb->getQuery();
 

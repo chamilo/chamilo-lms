@@ -6256,9 +6256,8 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->addCourseLink($courseEntity, $session, $group)
         ;
 
-        $em = $documentRepo->getEntityManager();
+        $em = Database::getManager();
         $em->persist($document);
-
         $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
 
         if ($document) {

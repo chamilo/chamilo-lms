@@ -155,7 +155,7 @@ class CourseRepository extends ResourceRepository
 
     public function getCoursesWithNoSession($urlId)
     {
-        $queryBuilder = $this->getRepository()->createQueryBuilder('c');
+        $queryBuilder = $this->createQueryBuilder('c');
         $queryBuilder = $queryBuilder
             ->select('c')
             ->leftJoin('c.urls', 'u')

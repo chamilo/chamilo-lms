@@ -274,11 +274,11 @@ echo '</thead>';
 $question_counter = 1;
 $sql = "SELECT * FROM $table_survey_question_group
         WHERE c_id = $course_id AND survey_id = $survey_id 
-        ORDER BY id";
+        ORDER BY iid";
 $result = Database::query($sql);
 $groups = [];
 while ($row = Database::fetch_array($result)) {
-    $groups[$row['id']] = $row['name'];
+    $groups[$row['iid']] = $row['name'];
 }
 $sql = "SELECT survey_question.*, count(survey_question_option.question_option_id) as number_of_options
         FROM $table_survey_question survey_question

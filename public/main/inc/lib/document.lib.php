@@ -1127,7 +1127,7 @@ class DocumentManager
 
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
-            $sql = "SELECT id FROM $table
+            $sql = "SELECT iid FROM $table
                     WHERE
                         c_id = $courseId AND
                         path LIKE BINARY '$path'
@@ -1138,7 +1138,7 @@ class DocumentManager
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
 
-                return (int) $row['id'];
+                return (int) $row['iid'];
             }
         }
 

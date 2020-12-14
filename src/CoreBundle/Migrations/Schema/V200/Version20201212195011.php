@@ -87,13 +87,16 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 $counter = 1;
                 $course = $accessUrlRelCourse->getCourse();
                 $courseId = $course->getId();
+                $courseCode = $course->getCode();
                 $course = $courseRepo->find($courseId);
 
-                $sql = "SELECT * FROM c_document WHERE c_id = $courseId";
+                $sql = "SELECT * FROM c_document WHERE c_id = $courseId ORDER BY filetype DESC";
                 $result = $connection->executeQuery($sql);
                 $documents = $result->fetchAllAssociative();
                 foreach ($documents as $documentData) {
                     $documentId = $documentData['iid'];
+                    $documentPath = $documentData['path'];
+
                     /** @var CDocument $document */
                     $document = $documentRepo->find($documentId);
                     if ($document->hasResourceNode()) {
@@ -112,7 +115,31 @@ final class Version20201212195011 extends AbstractMigrationChamilo
 
                     $createNode = false;
                     $resourceNode = null;
-                    $document->setParent($course);
+                    $parent = null;
+                    if ('.' !== dirname($documentPath)) {
+                        $parentId = \DocumentManager::get_document_id(
+                            ['real_id' => $courseId],
+                            dirname($documentPath)
+                        );
+                        $parent = $documentRepo->find($parentId);
+                        /*$dirList = explode('/', $documentPath);
+                        $dirList = array_filter($dirList);
+                        $len = count($dirList) + 1;
+                        $realDir = '';
+                        for ($i = 1; $i < $len; $i++) {
+                            $realDir .= '/'.(isset($dirList[$i]) ? $dirList[$i] : '');
+                            $parentId = \DocumentManager::get_document_id(['real_id'=> $courseId], $realDir);
+                            var_dump($parentId);
+                            if (!empty($parentId)) {
+                            }
+                        }*/
+                    }
+
+                    if (null === $parent) {
+                        $parent = $course;
+                    }
+
+                    $document->setParent($parent);
                     foreach ($items as $item) {
                         $sessionId = $item['session_id'];
                         $visibility = $item['visibility'];
@@ -161,7 +188,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                         }
 
                         if (null === $resourceNode) {
-                            $resourceNode = $documentRepo->addResourceNode($document, $user, $course);
+                            $resourceNode = $documentRepo->addResourceNode($document, $user, $parent);
                             $em->persist($resourceNode);
                         }
                         $document->addCourseLink($course, $session, $group, $newVisibility);
@@ -169,7 +196,6 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                         $createNode = true;
                     }
 
-                    $documentPath = $documentData['path'];
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
                     if (!is_dir($filePath)) {
                         $createNode = false;

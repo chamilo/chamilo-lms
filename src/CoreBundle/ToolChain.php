@@ -53,11 +53,13 @@ class ToolChain
     protected $entityManager;
     protected $settingsManager;
     protected $security;
+    protected $repoEntityList;
 
     public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)
     {
         $this->tools = [];
         $this->typeList = [];
+        $this->repoEntityList = [];
         $this->entityManager = $entityManager;
         $this->settingsManager = $settingsManager;
         $this->security = $security;
@@ -214,4 +216,6 @@ class ToolChain
 
         throw new InvalidArgumentException(sprintf("The Resource type '%s' doesn't exist.", $repo));
     }
+
+
 }

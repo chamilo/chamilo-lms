@@ -745,6 +745,7 @@ class AddCourse
             return 0;
         }
 
+        $em = Database::getManager();
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
@@ -783,8 +784,7 @@ class AddCourse
                 }
             }
 
-            $repo->getEntityManager()->persist($course);
-            $repo->getEntityManager()->flush();
+            $repo->create($course);
 
             $course_id = $course->getId();
             if ($course_id) {
@@ -802,7 +802,7 @@ class AddCourse
                         ->setRelationType(0)
                         ->setUserCourseCat(0)
                     ;
-                    Database::getManager()->persist($courseRelTutor);
+                    $em->persist($courseRelTutor);
                 }
 
                 if (!empty($teachers)) {
@@ -831,9 +831,11 @@ class AddCourse
                             ->setRelationType(0)
                             ->setUserCourseCat(0)
                         ;
-                        Database::getManager()->persist($courseRelTeacher);
+                        $em->persist($courseRelTeacher);
                     }
                 }
+
+                $em->flush();
 
                 // Adding the course to an URL.
                 //UrlManager::add_course_to_url($course_id, $accessUrlId);

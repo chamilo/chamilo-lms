@@ -249,8 +249,7 @@ class CourseDescription
         $courseDescription->addCourseLink($course, $session);
 
         $repo = Container::getCourseDescriptionRepository();
-        $repo->getEntityManager()->persist($courseDescription);
-        $repo->getEntityManager()->flush();
+        $repo->create($courseDescription);
 
         return true;
     }

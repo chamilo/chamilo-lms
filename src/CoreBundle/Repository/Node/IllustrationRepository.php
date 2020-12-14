@@ -33,12 +33,9 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
-
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'
@@ -53,8 +50,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
     public function saveUpload(UploadedFile $file)
     {
-        /** @var Illustration $resource */
-        $resource = $this->create();
+        $resource = new Illustration();
         $resource->setName($file->getClientOriginalName());
 
         return $resource;

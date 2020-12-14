@@ -67,9 +67,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     /** @var ResourceNodeRepository */
     protected $resourceNodeRepository;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
+    /** @var AuthorizationCheckerInterface */
     protected $authorizationChecker;
 
     /** @var SlugifyInterface */
@@ -180,16 +178,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->authorizationChecker;
     }
 
-    /**
-     * @return AbstractResource
-     */
-    public function create()
-    {
-        $class = $this->repository->getClassName();
-
-        return new $class();
-    }
-
     public function getRouter(): RouterInterface
     {
         return $this->router;
@@ -201,14 +189,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourceNodeRepository()
     {
         return $this->resourceNodeRepository;
-    }
-
-    /**
-     * @return EntityRepository
-     */
-    public function getRepository()
-    {
-        return $this->repository;
     }
 
     /**
@@ -277,10 +257,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->flush();
     }*/
 
+    public function create(AbstractResource $resource): void
+    {
+        $this->getEntityManager()->persist($resource);
+        $this->getEntityManager()->flush();
+    }
+
     public function update(AbstractResource $resource): void
     {
         $resource->getResourceNode()->setTitle($resource->getResourceName());
-
         $this->getEntityManager()->persist($resource);
         $this->getEntityManager()->flush();
     }
@@ -462,14 +447,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null)
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
         $resourceTypeName = $this->getResourceTypeName();
 
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'
@@ -482,8 +465,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setParameter('course', $course)
         ;
 
-        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
-            $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $isAdmin = $checker->isGranted('ROLE_ADMIN') || $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
         // Do not show deleted resources
         $qb
@@ -512,12 +494,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
      */
     public function getResourcesByCreator(User $user, ResourceNode $parentNode = null)
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
-
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'
@@ -559,14 +538,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourcesByLinkedUser(User $user, ResourceNode $parentNode = null): QueryBuilder
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
         $resourceTypeName = $this->getResourceTypeName();
 
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'
@@ -607,7 +584,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourceFromResourceNode(int $resourceNodeId): ?AbstractResource
     {
         // Include links
-        $qb = $this->getRepository()->createQueryBuilder('resource')
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
             ->addSelect('node')
             ->addSelect('links')
@@ -844,9 +821,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getTotalSpaceByCourse(Course $course, CGroup $group = null, Session $session = null): int
     {
-        $repo = $this->getRepository();
-
-        $qb = $repo->createQueryBuilder('resource');
+        $qb = $this->createQueryBuilder('resource');
         $qb
             ->select('SUM(file.size) as total')
             ->innerJoin('resource.resourceNode', 'node')
@@ -903,7 +878,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 /** @var ResourceNode $child */
                 foreach ($children as $child) {
                     $criteria = ['resourceNode' => $child];
-                    $childDocument = $this->getRepository()->findOneBy($criteria);
+                    $childDocument = $this->findOneBy($criteria);
                     if ($childDocument) {
                         $this->setLinkVisibility($childDocument, $visibility);
                     }

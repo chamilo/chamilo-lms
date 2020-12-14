@@ -117,9 +117,12 @@ class ResourceListener
 
         // @todo use static table instead of Doctrine
         $repo = $em->getRepository(ResourceType::class);
-        $class = str_replace('Entity', 'Repository', get_class($event->getEntity()));
-        $class .= 'Repository';
-        $name = $this->toolChain->getResourceTypeNameFromRepository($class);
+        $entityClass = get_class($event->getEntity());
+        $repoClass = str_replace('Entity', 'Repository', $entityClass).'Repository';
+        if (strpos($repoClass, 'CoreBundle')) {
+            $repoClass = str_replace('Entity', 'Repository\Node', $entityClass).'Repository';
+        }
+        $name = $this->toolChain->getResourceTypeNameFromRepository($repoClass);
         $resourceType = $repo->findOneBy(['name' => $name]);
 
         if (null === $resourceType) {

@@ -110,7 +110,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this;
     }
 
-
     public function setRouter(RouterInterface $router): ResourceRepository
     {
         $this->router = $router;

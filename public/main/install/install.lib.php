@@ -2697,8 +2697,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
     //echo '<a class="btn btn-secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
     //echo '<div id="details" style="display:none">';
     $connection = $manager->getConnection();
-//    $database = new Database();
-//    $database->setManager($manager);
 
     switch ($fromVersion) {
         case '1.11.0':

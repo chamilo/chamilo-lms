@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ToolChain;
+use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
@@ -22,16 +22,13 @@ final class Version20201212114910 extends AbstractMigrationChamilo
     {
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
+        /** @var Slugify $slugify */
+        $slugify = new Slugify();
         $em = $doctrine->getManager();
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        // Install tools.
-        $toolChain = $container->get(ToolChain::class);
-        $toolChain->createTools($em);
-
         $urlRepo = $container->get(AccessUrlRepository::class);
-        var_dump(get_class($urlRepo));
         $userRepo = $container->get(UserRepository::class);
 
         $userList = [];
@@ -51,13 +48,14 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         $urls = $urlRepo->findAll();
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
-            var_dump($url->getUrl());
             if (false === $url->hasResourceNode()) {
-                $urlRepo->addResourceNode($url, $admin);
+                /*$cleanUrl = $slugify->slugify($url->getUrl());
+                $cleanUrl = str_replace(['http-', 'https-'], '', $cleanUrl);*/
+                $resourceNode = $urlRepo->addResourceNode($url, $admin);
+                //$resourceNode->setTitle($cleanUrl);
                 $em->persist($url);
             }
         }
-
         $em->flush();
 
         // Adding users to the resource node tree.

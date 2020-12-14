@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\ToolChain;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -14,6 +15,12 @@ class Version20170625122900 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {
+        // Install tools.
+        $em = $this->getEntityManager();
+        $container = $this->getContainer();
+        $toolChain = $container->get(ToolChain::class);
+        $toolChain->createTools($em);
+
         $table = $schema->getTable('c_document');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_document ADD resource_node_id INT DEFAULT NULL');

@@ -64,6 +64,9 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 }
                 $courseRepo->addResourceNode($course, $admin, $url);
                 $em->persist($course);
+
+                // Add groups.
+                //$course = $course->getGroups();
                 if (0 === $counter % $batchSize) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
@@ -82,9 +85,9 @@ final class Version20201212195011 extends AbstractMigrationChamilo
             /** @var AccessUrlRelCourse $accessUrlRelCourse */
             foreach ($accessUrlRelCourses as $accessUrlRelCourse) {
                 $counter = 1;
-
                 $course = $accessUrlRelCourse->getCourse();
                 $courseId = $course->getId();
+                $course = $courseRepo->find($courseId);
 
                 $sql = "SELECT * FROM c_document WHERE c_id = $courseId";
                 $result = $connection->executeQuery($sql);
@@ -92,19 +95,24 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 foreach ($documents as $documentData) {
                     $documentId = $documentData['iid'];
                     /** @var CDocument $document */
-                    $document = $documentRepo->find($courseId);
+                    $document = $documentRepo->find($documentId);
                     if ($document->hasResourceNode()) {
                         continue;
                     }
-                    $document->setParent($course);
+
                     $sql = "SELECT * FROM c_item_property
                             WHERE tool = 'document' AND c_id = $courseId AND ref = $documentId";
                     $result = $connection->executeQuery($sql);
                     $items = $result->fetchAllAssociative();
 
-                    $createNode = false;
+                    // For some reason this document doesnt have a c_item_property value.
+                    if (empty($items)) {
+                        continue;
+                    }
 
+                    $createNode = false;
                     $resourceNode = null;
+                    $document->setParent($course);
                     foreach ($items as $item) {
                         $sessionId = $item['session_id'];
                         $visibility = $item['visibility'];
@@ -153,9 +161,11 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                         }
 
                         if (null === $resourceNode) {
-                            $documentRepo->addResourceNode($document, $user, $course);
+                            $resourceNode = $documentRepo->addResourceNode($document, $user, $course);
+                            $em->persist($resourceNode);
                         }
                         $document->addCourseLink($course, $session, $group, $newVisibility);
+                        $em->persist($document);
                         $createNode = true;
                     }
 
@@ -184,20 +194,26 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                         }
                     }
 
-                    if ($createNode) {
+                    //var_dump($createNode,$documentPath, $documentData['iid'], file_exists($filePath));
+                    $em->persist($document);
+                    $em->flush();
+                    //$em->clear();
+                    /*if ($createNode) {
                         $em->persist($document);
                         if (0 === $counter % $batchSize) {
                             $em->flush();
                             $em->clear();
                         }
-                        $counter++;
-                    }
-                }
 
-                $em->flush();
-                $em->clear();
+                        $counter++;
+                    } else {
+                        $em->clear();
+                    }*/
+                }
             }
+
+            $em->flush();
+            $em->clear();
         }
-        exit;
     }
 }

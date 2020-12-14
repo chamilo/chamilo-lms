@@ -628,12 +628,7 @@ if (isset($_POST['step2'])) {
 
         Container::setContainer($container);
         $manager = $container->get('doctrine')->getManager();
-        $repo = $manager->getRepository(\Chamilo\CoreBundle\Entity\AccessUrl::class);
-        $repo->findAll();exit;
-
         migrateSwitch($my_old_version, $manager);
-
-        exit;
         upgradeWithContainer($container);
         error_log('Set upgradeWithContainer');
         error_log('------------------------------');

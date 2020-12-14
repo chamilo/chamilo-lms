@@ -309,7 +309,8 @@ class ResourceNode
      */
     public function getPathForDisplay()
     {
-        return self::convertPathForDisplay($this->path);
+        return $this->path;
+        //return $this->convertPathForDisplay($this->path);
     }
 
     public function getPathForDisplayToArray($baseRoot = null)
@@ -340,7 +341,7 @@ class ResourceNode
     {
         $path = str_replace($base, '', $this->path);
 
-        return self::convertPathForDisplay($path);
+        return $this->convertPathForDisplay($path);
     }
 
     public function getSlug()
@@ -378,7 +379,7 @@ class ResourceNode
      *
      * @return string
      */
-    public static function convertPathForDisplay($path)
+    public function convertPathForDisplay($path)
     {
         /*$pathForDisplay = preg_replace(
             '/-\d+'.self::PATH_SEPARATOR.'/',
@@ -389,13 +390,14 @@ class ResourceNode
             $pathForDisplay = substr_replace($pathForDisplay, '', -3);
         }
         */
+        var_dump($this->getTitle(), $path);
         $pathForDisplay = preg_replace(
             '/-\d+'.self::PATH_SEPARATOR.'/',
             '/',
             $path
         );
 
-        if (null !== $pathForDisplay && strlen($pathForDisplay) > 0) {
+        if (null !== $pathForDisplay && '' !== $pathForDisplay) {
             $pathForDisplay = substr_replace($pathForDisplay, '', -1);
         }
 

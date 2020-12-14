@@ -2796,11 +2796,11 @@ class SurveyUtil
 
         if (!empty($defaults['course_users'])) {
             $user_ids = implode("','", $defaults['course_users']);
-            $sql = "SELECT user_id FROM $table_user WHERE user_id IN ('$user_ids') $order_clause";
+            $sql = "SELECT id FROM $table_user WHERE id IN ('$user_ids') $order_clause";
             $result = Database::query($sql);
             $fixed_users = [];
             while ($row = Database::fetch_array($result)) {
-                $fixed_users[] = $row['user_id'];
+                $fixed_users[] = $row['id'];
             }
             $defaults['course_users'] = $fixed_users;
         }

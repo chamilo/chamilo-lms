@@ -653,7 +653,7 @@ class Agenda
                 break;
             case 'course':
                 $repo = Container::getCalendarEventRepository();
-                $em = $repo->getEntityManager();
+                $em = Database::getManager();
                 /** @var CCalendarEvent $event */
                 $event = $repo->find($id);
 
@@ -876,8 +876,8 @@ class Agenda
                     $event = $repo->find($id);
 
                     if ($event) {
-                        $repo->getEntityManager()->remove($event);
-                        $repo->getEntityManager()->flush();
+                        Database::getManager()->remove($event);
+                        Database::getManager()->flush();
 
                         // Removing from events.
                         /*Database::delete(
@@ -2431,7 +2431,7 @@ class Agenda
         if ($valid) {
             // user's file name
             $fileName = $file->getClientOriginalName();
-
+            $em = Database::getManager();
             $attachment = new CCalendarEventAttachment();
             $attachment
                 ->setFilename($fileName)
@@ -2445,12 +2445,12 @@ class Agenda
                 );
 
             $repo = Container::getCalendarEventAttachmentRepository();
-            $repo->getEntityManager()->persist($attachment);
-            $repo->getEntityManager()->flush();
+            $em->persist($attachment);
+            $em->flush();
 
             $repo->addFile($attachment, $file);
-            $repo->getEntityManager()->persist($attachment);
-            $repo->getEntityManager()->flush();
+            $em->persist($attachment);
+            $em->flush();
         }
     }
 
@@ -2491,13 +2491,13 @@ class Agenda
         $repo = Container::getCalendarEventAttachmentRepository();
         /** @var CCalendarEventAttachment $attachment */
         $attachment = $repo->find($attachmentId);
-
+        $em = Database::getManager();
         if (empty($attachment)) {
             return false;
         }
 
-        $repo->getEntityManager()->remove($attachment);
-        $repo->getEntityManager()->flush();
+        $em->remove($attachment);
+        $em->flush();
 
         return Display::return_message(
             get_lang("The attached file has been deleted"),

@@ -308,8 +308,7 @@ class CourseDescription
         /** @var CCourseDescription $courseDescription */
         $courseDescription = $repo->find($id);
         if ($courseDescription) {
-            $repo->getEntityManager()->remove($courseDescription);
-            $repo->getEntityManager()->flush();
+            $repo->delete($courseDescription);
 
             return true;
         }

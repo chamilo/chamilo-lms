@@ -2943,7 +2943,7 @@ class DocumentManager
         ];
 
         $type = $repo->getResourceType();
-        $em = $repo->getEntityManager();
+        $em = Database::getManager();
         $query = $em
             ->createQueryBuilder()
             ->select('node')

@@ -357,9 +357,7 @@ class Attendance
         ;
 
         $repo = Container::getAttendanceRepository();
-        $em = $repo->getEntityManager();
-        $em->persist($attendance);
-        $em->flush();
+        $repo->create($attendance);
         $last_id = $attendance->getIid();
 
         // add link to gradebook
@@ -586,10 +584,8 @@ class Attendance
         $status = (int) $status;
 
         $repo = Container::getAttendanceRepository();
-        $em = $repo->getEntityManager();
         $attendance->setActive($status);
-        $em->persist($attendance);
-        $em->flush();
+        $repo->update($attendance);
 
         return true;
         /*
@@ -624,10 +620,8 @@ class Attendance
     public function lock(CAttendance $attendance, $lock = true)
     {
         $repo = Container::getAttendanceRepository();
-        $em = $repo->getEntityManager();
         $attendance->setLocked($lock);
-        $em->persist($attendance);
-        $em->flush();
+        $repo->update($attendance);
 
         return true;
 

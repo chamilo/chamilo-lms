@@ -32,7 +32,7 @@ $courseId = api_get_course_int_id();
 $repo = Container::getCourseRepository();
 $courseCategoryRepo = Container::getCourseCategoryRepository();
 $illustrationRepo = Container::getIllustrationRepository();
-$em = $repo->getEntityManager();
+$em = Database::getManager();
 $isEditable = true;
 
 if (!$isAllowToEdit) {

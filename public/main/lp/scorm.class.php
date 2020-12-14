@@ -383,9 +383,7 @@ class scorm extends learnpath
             ;
 
             $repo = Container::getLpRepository();
-            $em = $repo->getEntityManager();
-            $em->persist($lp);
-            $em->flush();
+            $repo->create($lp);
 
             /*if ($lp_id) {
                 $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";

@@ -216,6 +216,4 @@ class ToolChain
 
         throw new InvalidArgumentException(sprintf("The Resource type '%s' doesn't exist.", $repo));
     }
-
-
 }

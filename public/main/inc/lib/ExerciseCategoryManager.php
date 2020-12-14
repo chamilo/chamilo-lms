@@ -144,8 +144,6 @@ class ExerciseCategoryManager extends Model
         $course = api_get_course_entity($courseId);
 
         $repo = Container::getExerciseCategoryRepository();
-        $em = $repo->getEntityManager();
-
         $category = new CExerciseCategory();
         $category
             ->setName($params['name'])
@@ -170,8 +168,7 @@ class ExerciseCategoryManager extends Model
             }
             $category->setPosition($position);
 */
-        $em->persist($category);
-        $em->flush();
+        $repo->create($category);
 
         return $category;
     }

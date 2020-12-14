@@ -266,8 +266,9 @@ class AnnouncementManager
         $repo = Container::getAnnouncementRepository();
         $announcement = $repo->find($id);
         if ($announcement) {
-            $repo->getEntityManager()->remove($announcement);
-            $repo->getEntityManager()->flush();
+            $em = Database::getManager();
+            $em->remove($announcement);
+            $em->flush();
         }
 
         /*
@@ -292,10 +293,10 @@ class AnnouncementManager
             $courseInfo,
             api_get_session_id()
         );
-
+        $em = Database::getManager();
         if (!empty($announcements)) {
             foreach ($announcements as $announcement) {
-                $repo->getEntityManager()->remove($announcement);
+                $em->remove($announcement);
                 /*api_item_property_update(
                     $courseInfo,
                     TOOL_ANNOUNCEMENT,
@@ -305,7 +306,7 @@ class AnnouncementManager
                 );*/
             }
         }
-        $repo->getEntityManager()->flush();
+        $em->flush();
     }
 
     /**
@@ -731,7 +732,7 @@ class AnnouncementManager
         $courseInfo = api_get_course_info();
 
         $order = self::getLastAnnouncementOrder($courseInfo);
-
+        $em = Database::getManager();
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
@@ -750,7 +751,7 @@ class AnnouncementManager
             );
 
         $repo = Container::getAnnouncementRepository();
-        $repo->getEntityManager()->flush();
+        $em->flush();
         $last_id = $announcement->getIid();
 
         // Store the attach file
@@ -1172,7 +1173,7 @@ class AnnouncementManager
     {
         $return = 0;
         $courseId = api_get_course_int_id();
-
+        $em = Database::getManager();
         if (is_array($file) && 0 == $file['error']) {
             // Try to add an extension to the file if it hasn't one
             $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
@@ -1203,16 +1204,16 @@ class AnnouncementManager
                         api_get_group_entity()
                     )
                 ;
-                $repo->getEntityManager()->persist($attachment);
-                $repo->getEntityManager()->flush();
+                $em->persist($attachment);
+                $em->flush();
 
                 $request = Container::getRequest();
                 $file = $request->files->get('user_upload');
 
                 if (!empty($file)) {
                     $repo->addFile($attachment, $file);
-                    $repo->getEntityManager()->persist($attachment);
-                    $repo->getEntityManager()->flush();
+                    $em->persist($attachment);
+                    $em->flush();
 
                     return 1;
                 }
@@ -1307,9 +1308,10 @@ class AnnouncementManager
     {
         $id = (int) $id;
         $repo = Container::getAnnouncementAttachmentRepository();
+        $em = Database::getManager();
         $attachment = $repo->find($id);
-        $repo->getEntityManager()->remove($attachment);
-        $repo->getEntityManager()->flush();
+        $em->remove($attachment);
+        $em->flush();
 
         return true;
     }

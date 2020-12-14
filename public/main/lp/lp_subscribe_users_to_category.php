@@ -316,11 +316,11 @@ if ($formUsers->validate()) {
                 foreach ($diff as $groupIdToDelete) {
                     foreach ($links as $link) {
                         if ($link->getGroup() && $link->getGroup()->getIid()) {
-                            $repo->getEntityManager()->remove($link);
+                            $em->remove($link);
                         }
                     }
                 }
-                $repo->getEntityManager()->flush();
+                $em->flush();
             }
         }
 
@@ -329,8 +329,8 @@ if ($formUsers->validate()) {
             $category->addGroupLink($group);
         }
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $em->persist($category);
+        $em->flush();
 
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }

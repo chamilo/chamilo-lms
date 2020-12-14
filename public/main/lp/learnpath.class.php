@@ -783,7 +783,7 @@ class learnpath
                 ;
 
                 $repo = Container::getLpRepository();
-                $em = $repo->getEntityManager();
+                $em = Database::getManager();
                 $em->persist($lp);
                 $em->flush();
 
@@ -1054,8 +1054,8 @@ class learnpath
         Database::query($sql);*/
         $repo = Container::getLpRepository();
         $lp = $repo->find($this->lp_id);
-        $repo->getEntityManager()->remove($lp);
-        $repo->getEntityManager()->flush();
+        Database::getManager()->remove($lp);
+        Database::getManager()->flush();
 
         // Updates the display order of all lps.
         $this->update_display_order();
@@ -10128,9 +10128,7 @@ EOD;
         ;
 
         $repo = Container::getLpCategoryRepository();
-        $em = $repo->getEntityManager();
-        $em->persist($item);
-        $em->flush();
+        $repo->create($item);
 
         /*api_item_property_update(
             api_get_course_info(),
@@ -10295,7 +10293,7 @@ EOD;
         /** @var CLpCategory $category */
         $category = $repo->find($id);
         if ($category) {
-            $em = $repo->getEntityManager();
+            $em = Database::getManager();
             $lps = $category->getLps();
 
             foreach ($lps as $lp) {

@@ -294,8 +294,7 @@ class GroupManager
         ;
 
         $repo = Container::getGroupRepository();
-        $repo->getEntityManager()->persist($group);
-        $repo->getEntityManager()->flush();
+        $repo->create($group);
         $lastId = $group->getIid();
 
         if ($lastId) {
@@ -1065,8 +1064,7 @@ class GroupManager
         ;
 
         $repo = Container::getGroupCategoryRepository();
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->create($category);
 
         return $category->getIid();
     }

@@ -318,9 +318,6 @@ class Thematic
      */
     public function thematic_save()
     {
-        // definition database table
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-
         // protect data
         $id = intval($this->thematic_id);
         $title = $this->thematic_title;
@@ -331,7 +328,6 @@ class Thematic
         $max_thematic_item = $this->get_max_thematic_item(false);
 
         $repo = Container::getThematicRepository();
-        $em = $repo->getEntityManager();
 
         if (empty($id)) {
             $thematic = new CThematic();
@@ -347,8 +343,7 @@ class Thematic
                 ->addCourseLink($courseEntity, api_get_session_entity())
             ;
 
-            $em->persist($thematic);
-            $em->flush();
+            $repo->create($thematic);
 
             // insert
             /*$params = [
@@ -374,9 +369,7 @@ class Thematic
                     ->setTitle($title)
                     ->setContent($content)
                 ;
-
-                $em->persist($thematic);
-                $em->flush();
+                $repo->update($thematic);
             }
 
             // Update
@@ -680,7 +673,6 @@ class Thematic
         $start_date = $this->start_date;
         $duration = intval($this->duration);
         $repo = Container::getThematicAdvanceRepository();
-        $em = $repo->getEntityManager();
 
         /** @var CThematicAdvance $advance */
         $advance = $repo->find($id);
@@ -715,8 +707,7 @@ class Thematic
                 ->setParent($courseEntity)
                 ->addCourseLink($courseEntity, api_get_session_entity())
             ;
-            $em->persist($advance);
-            $em->flush();
+            $repo->create($advance);
 
             $last_id = $advance->getIid();
         } else {
@@ -734,8 +725,7 @@ class Thematic
             if ($attendance) {
                 $advance->setAttendance($attendance);
             }
-            $em->persist($advance);
-            $em->flush();
+            $repo->update($advance);
         }
 
         return $last_id;
@@ -754,8 +744,7 @@ class Thematic
         $advance = $repo->find($id);
 
         if ($advance) {
-            $repo->getEntityManager()->remove($advance);
-            $repo->getEntityManager()->flush();
+            $repo->delete($advance);
         }
 
         return true;
@@ -937,7 +926,6 @@ class Thematic
             'thematic' => $thematic_id,
             'descriptionType' => $description_type,
         ];
-        $em = $repo->getEntityManager();
         /** @var CThematicPlan $plan */
         $plan = $repo->findOneBy($criteria);
 
@@ -953,8 +941,7 @@ class Thematic
                 ->setTitle($title)
                 ->setDescription($description)
             ;
-            $em->persist($plan);
-            $em->flush();
+            $repo->update($plan);
 
         // update
             /*$params = [
@@ -988,9 +975,7 @@ class Thematic
                 ->addCourseLink($course, api_get_session_entity())
             ;
 
-            $em->persist($plan);
-            $em->flush();
-
+            $repo->create($plan);
             if ($plan && $plan->getIid()) {
                 /*
                 api_item_property_update(
@@ -1108,8 +1093,7 @@ class Thematic
     public function update_done_thematic_advances($advanceId)
     {
         $repo = Container::getThematicRepository();
-        $em = $repo->getEntityManager();
-
+        $em = Database::getManager();
         $list = self::get_thematic_list(api_get_course_id());
         $ordered = [];
 
@@ -1129,12 +1113,12 @@ class Thematic
             if ($advanceId === $advance->getIid()) {
                 $done = false;
                 $advance->setDoneAdvance(true);
-                $em->persist($advance);
+                $repo->update($advance, false);
                 continue;
             }
 
             $advance->setDoneAdvance($done);
-            $em->persist($advance);
+            $repo->update($advance, false);
         }
 
         $em->flush();

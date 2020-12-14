@@ -263,11 +263,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function update(AbstractResource $resource): void
+    public function update(AbstractResource $resource, $andFlush = true): void
     {
         $resource->getResourceNode()->setTitle($resource->getResourceName());
         $this->getEntityManager()->persist($resource);
-        $this->getEntityManager()->flush();
+        if ($andFlush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     public function updateNodeForResource(ResourceInterface $resource): ResourceNode

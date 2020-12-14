@@ -689,8 +689,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             ->setParent($course)
             ->addCourseLink($course, $session)
         ;
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->create($category);
 
         $last_id = $category->getIid();
         if ($last_id > 0) {
@@ -928,8 +927,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         $forum
             ->setParent($course)
             ->addCourseLink($course, $session);
-        $repo->getEntityManager()->persist($forum);
-        $repo->getEntityManager()->flush();
+        $repo->update($forum);
 
         $forumId = $forum->getIid();
         if ($forumId > 0) {
@@ -2452,9 +2450,7 @@ function store_thread(
     ;
 
     $repo = Container::getForumThreadRepository();
-    $em = $repo->getEntityManager();
-    $em->persist($thread);
-    $em->flush();
+    $repo->create($thread);
 
     if (!$thread->getIid()) {
         return null;
@@ -2559,12 +2555,11 @@ function store_thread(
     }
 
     $repo = Container::getForumPostRepository();
-    $em = $repo->getEntityManager();
-    $em->persist($post);
-    $em->flush();
+    $repo->create($post);
 
     $postId = $post->getIid();
     $thread->setThreadLastPost($postId);
+    $em = Database::getManager();
     $em->persist($thread);
     $em->flush();
 
@@ -3507,9 +3502,7 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
             );
 
         $repo = Container::getForumPostRepository();
-        $em = $repo->getEntityManager();
-        $em->persist($post);
-        $em->flush();
+        $repo->create($post);
 
         $new_post_id = $post->getIid();
         if ($new_post_id) {
@@ -4441,10 +4434,7 @@ function store_move_post($values)
             );
 
         $repo = Container::getForumThreadRepository();
-        $em = $repo->getEntityManager();
-        $em->persist($thread);
-        $em->flush();
-
+        $repo->create($thread);
         $new_thread_id = $thread->getIid();
 
         // Storing a new thread.
@@ -4940,9 +4930,7 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
             );
 
         $repo = Container::getForumAttachmentRepository();
-        $em = $repo->getEntityManager();
-        $em->persist($attachment);
-        $em->flush();
+        $repo->create($attachment);
 
         /*$last_id_file = Database::insert(
             $agenda_forum_attachment,
@@ -5092,6 +5080,7 @@ function get_attachment($postId)
 function delete_attachment($postId, $attachmentId)
 {
     $repo = Container::getForumPostRepository();
+    $em = Database::getManager();
     /** @var CForumPost $post */
     $post = $repo->find($postId);
     if ($post) {
@@ -5099,7 +5088,7 @@ function delete_attachment($postId, $attachmentId)
         $attachment = $repoAttachment->find($attachmentId);
         if ($attachment) {
             $post->removeAttachment($attachment);
-            $repo->getEntityManager()->remove($attachment);
+            $em->remove($attachment);
         }
         $repo->update($post);
 

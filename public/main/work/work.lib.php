@@ -3638,6 +3638,7 @@ function getWorkComment($id, $courseInfo = [])
 function deleteCommentFile($id, $courseInfo = [])
 {
     $repo = Container::getStudentPublicationCommentRepository();
+    $em = Database::getManager();
     $criteria = [
         'iid' => $id,
         'cId' => $courseInfo['real_id'],
@@ -3650,8 +3651,8 @@ function deleteCommentFile($id, $courseInfo = [])
         $file = $commentEntity->getResourceNode()->getResourceFile();
 
         $commentEntity->getResourceNode()->setResourceFile(null);
-        $repo->getEntityManager()->remove($file);
-        $repo->getEntityManager()->flush();
+        $em->remove($file);
+        $em->flush();
     }
 
     /*
@@ -3701,6 +3702,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         $fileObject = $fileObject[0];
     }
 
+    $em = Database::getManager();
     $comment = new CStudentPublicationComment();
     $comment
         ->setCId($courseId)
@@ -3715,9 +3717,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         );
 
     $repo = Container::getStudentPublicationCommentRepository();
-    $em = $repo->getEntityManager();
-    $em->persist($comment);
-    $em->flush();
+    $repo->create($comment);
 
     if ($fileObject) {
         $repo->addFile($comment, $fileObject);
@@ -4352,7 +4352,7 @@ function processWorkForm(
             ->addCourseLink($courseEntity, $session, api_get_group_entity())
         ;
 
-        $em = $repo->getEntityManager();
+        $em = Database::getManager();
         $em->persist($studentPublication);
         $repo->addFile($studentPublication, $content);
         $em->flush();
@@ -4516,9 +4516,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     ;
 
     $repo = Container::getStudentPublicationRepository();
-    $em = $repo->getEntityManager();
-    $em->persist($studentPublication);
-    $em->flush();
+    $repo->create($studentPublication);
 
     // Folder created
     /*api_item_property_update(
@@ -4906,6 +4904,7 @@ function deleteWorkItem($item_id, $courseInfo)
                 }
             } // end of considered_working_time check section
 
+            $em = Database::getManager();
             $repo = Container::getStudentPublicationRepository();
             /** @var CStudentPublication $work */
             $work = $repo->find($item_id);
@@ -4915,12 +4914,12 @@ function deleteWorkItem($item_id, $courseInfo)
             $repo = Container::getStudentPublicationAssignmentRepository();
             $params = ['cId' => $course_id, 'publicationId' => $item_id];
 
-            $items = $repo->getRepository()->findBy($params);
+            $items = $repo->findBy($params);
             foreach ($items as $item) {
-                $repo->remove($item);
+                $repo->delete($item);
             }
 
-            $repo->getEntityManager()->flush();
+            $em->flush();
 
             /*$sql = "DELETE FROM $TSTDPUBASG
                     WHERE c_id = $course_id AND publication_id = $item_id";

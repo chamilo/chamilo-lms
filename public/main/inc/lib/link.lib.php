@@ -148,8 +148,7 @@ class Link extends Model
                 ;
             }
 
-            $repo->getEntityManager()->persist($link);
-            $repo->getEntityManager()->flush();
+            $repo->create($link);
             $link_id = $link->getIid();
 
             if (('true' === api_get_setting('search_enabled')) &&
@@ -336,8 +335,7 @@ class Link extends Model
             ->addCourseLink($courseEntity, $sessionEntity)
         ;
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->create($category);
         $linkId = $category->getIid();
 
         if ($linkId) {
@@ -386,8 +384,7 @@ class Link extends Model
         $repo = Container::getLinkRepository();
         $link = $repo->find($id);
         if ($link) {
-            $repo->getEntityManager()->remove($link);
-            $repo->getEntityManager()->flush();
+            $repo->delete($link);
             self::delete_link_from_search_engine(api_get_course_id(), $id);
             Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
             Display::addFlash(Display::return_message(get_lang('The link has been deleted')));

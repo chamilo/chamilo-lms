@@ -24,18 +24,17 @@ final class CToolRepository extends ResourceRepository
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
-        $reflectionClass = $repo->getClassMetadata()->getReflectionClass();
+        //$reflectionClass = $repo->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
-        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        //$loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        $loadBaseSessionContent = true;
+        $classes = class_implements($this);
 
         $resourceTypeName = $this->getResourceTypeName();
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'

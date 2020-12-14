@@ -94,9 +94,7 @@ class TestCategory
                 ->setDescription($this->description)
                 ->setParent($course)
                 ->addCourseLink($course, api_get_session_entity());
-            $em = $repo->getEntityManager();
-            $em->persist($category);
-            $em->flush();
+            $repo->create($category);
 
             if ($category) {
                 return $category->getIid();

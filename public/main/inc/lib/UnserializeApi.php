@@ -112,13 +112,13 @@ class UnserializeApi
         }
 
         if ($ignoreErrors) {
-            return unserialize(
+            return @unserialize(
                 $serialized,
                 ['allowed_classes' => $allowedClasses]
             );
         }
 
-        return unserialize(
+        return @unserialize(
             $serialized,
             ['allowed_classes' => $allowedClasses]
         );

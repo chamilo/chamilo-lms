@@ -26,7 +26,7 @@ class SessionCategory
     /**
      * @var int
      * @Groups({"session_category:read"})
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */

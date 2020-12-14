@@ -53,9 +53,9 @@ class Session
     /**
      * @var int
      * @Groups({"session:read"})
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue()
      */
     protected $id;
 

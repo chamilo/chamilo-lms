@@ -203,11 +203,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository;
     }
 
-    /*public function getEntityManager(): EntityManager
-    {
-        return $this->getRepository()->getEntityManager();
-    }*/
-
     /**
      * @return EntityRepository
      */
@@ -382,14 +377,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
     {
-        $className = $this->getClassName();
         $checker = $this->getAuthorizationChecker();
         //$reflectionClass = $repo->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
         //$loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        $loadBaseSessionContent = true;
         $resourceTypeName = $this->getResourceTypeName();
-
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
             //->from($className, 'resource')

@@ -79,8 +79,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
             foreach ($users as $item) {
                 $uuid = Uuid::v4()->toBinary();
                 $userId = $item['id'];
-                $sql = "UPDATE user SET uuid = '$uuid' WHERE id = $userId";
-                $this->addSql($sql);
+                $this->addSql('UPDATE user SET uuid = :uuid WHERE id = :id ', ['uuid' => $uuid, 'id' => $userId]);
             }
 
             if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {

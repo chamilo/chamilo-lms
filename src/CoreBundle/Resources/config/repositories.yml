@@ -21,6 +21,7 @@ services:
         exclude: '../../Repository/{Node,ResourceRepository.php,BranchSyncRepository.php}'
         tags: ['doctrine.repository_service']
 
+    # Core repositories
     Chamilo\CoreBundle\Repository\Node\:
         resource: '../../Repository/Node'
         calls:
@@ -31,23 +32,7 @@ services:
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
         tags: ['doctrine.repository_service']
 
-    # Resource repositories
-#    Chamilo\CoreBundle\Repository\Node\AccessUrlRepository:
-#        arguments:
-#            $className: 'Chamilo\CoreBundle\Entity\AccessUrl'
-
-#    Chamilo\CoreBundle\Repository\Node\CourseRepository:
-#        arguments:
-#            $className: 'Chamilo\CoreBundle\Entity\Course'
-#
-#    Chamilo\CoreBundle\Repository\Node\IllustrationRepository:
-#        arguments:
-#            $className: 'Chamilo\CoreBundle\Entity\Illustration'
-#
-#    Chamilo\CoreBundle\Repository\PersonalFileRepository:
-#        arguments:
-#            $className: 'Chamilo\CoreBundle\Entity\PersonalFile'
-
+    # User repository
     Chamilo\CoreBundle\Repository\Node\UserRepository:
         calls:
             - setEncoder: ['@security.user_password_encoder.generic']

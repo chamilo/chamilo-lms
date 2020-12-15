@@ -2148,7 +2148,7 @@ function migrate(EntityManager $manager)
         foreach ($versions as $version => $queries) {
             $total = count($queries);
             echo '----------------------------------------------<br />';
-            $message = "VERSION: $versionCounter / $total - $version";
+            $message = "VERSION: $version";
             echo "$message<br/>";
             error_log('-------------------------------------');
             error_log($message);

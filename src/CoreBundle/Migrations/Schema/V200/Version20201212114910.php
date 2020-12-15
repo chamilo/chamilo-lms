@@ -1,5 +1,7 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
@@ -20,11 +22,6 @@ final class Version20201212114910 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $table = $schema->getTable('user');
-        if (false === $table->hasColumn('uuid')) {
-            $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");
-        }
-
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
@@ -59,19 +56,16 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         $em->flush();
 
         // Adding users to the resource node tree.
-        $sql = 'SELECT * FROM user';
-        $result = $connection->executeQuery($sql);
-        $users = $result->fetchAllAssociative();
         $batchSize = self::BATCH_SIZE;
         $counter = 1;
-        foreach ($users as $user) {
-            /** @var User $userEntity */
-            $userEntity = $userRepo->find($user['id']);
+        $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        /** @var User $userEntity */
+        foreach ($q->toIterable() as $userEntity) {
             if ($userEntity->hasResourceNode()) {
                 continue;
             }
             $userEntity->setUuid(Uuid::v4());
-            $creatorId = $user['creator_id'];
+            $creatorId = $userEntity->getCreatorId();
             $creator = null;
             if (isset($userList[$adminId])) {
                 $creator = $userList[$adminId];
@@ -94,6 +88,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         $em->flush();
         $em->clear();
 
+        $table = $schema->getTable('user');
         if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {
             $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649D17F50A6 ON user (uuid);');
         }

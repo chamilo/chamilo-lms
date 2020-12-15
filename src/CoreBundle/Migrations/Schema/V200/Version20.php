@@ -18,6 +18,11 @@ class Version20 extends AbstractMigrationChamilo
         // Use $schema->createTable
         $this->addSql('set sql_mode=""');
 
+        $table = $schema->getTable('user');
+        if (false === $table->hasColumn('uuid')) {
+            $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");
+        }
+
         // Global tool.
         if (false === $schema->hasTable('tool')) {
             $this->addSql(

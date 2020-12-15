@@ -1,9 +1,9 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -22,7 +22,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate agenda';
+        return 'Migrate c_calendar_event, calendar_event_attachment';
     }
 
     public function up(Schema $schema): void
@@ -33,7 +33,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $urlRepo = $em->getRepository(AccessUrlRepository::class);
+        $urlRepo = $container->get(AccessUrlRepository::class);
         $eventRepo = $container->get(CCalendarEventRepository::class);
         $eventAttachmentRepo = $container->get(CCalendarEventAttachmentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
@@ -47,67 +47,76 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
         $urls = $urlRepo->findAll();
 
-        /** @var AccessUrl $url */
-        foreach ($urls as $url) {
-            $accessUrlRelCourses = $url->getCourses();
-            /** @var AccessUrlRelCourse $accessUrlRelCourse */
-            foreach ($accessUrlRelCourses as $accessUrlRelCourse) {
-                $counter = 1;
-                $course = $accessUrlRelCourse->getCourse();
-                $courseId = $course->getId();
-                $courseCode = $course->getCode();
-                $course = $courseRepo->find($courseId);
+        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        foreach ($q->toIterable() as $course) {
+            $counter = 1;
+            $courseId = $course->getId();
+            $course = $courseRepo->find($courseId);
 
-                $sql = "SELECT * FROM c_calendar_event WHERE c_id = $courseId
-                        ORDER BY iid";
-                $result = $connection->executeQuery($sql);
-                $events = $result->fetchAllAssociative();
-                foreach ($events as $event) {
-                    $id = $event['iid'];
-                    /** @var CCalendarEvent $event */
-                    $event = $eventRepo->find($id);
-                    if ($event->hasResourceNode()) {
-                        continue;
-                    }
-                    $sql = "SELECT * FROM c_item_property
-                            WHERE tool = 'calendar_event' AND c_id = $courseId AND ref = $id";
-                    $result = $connection->executeQuery($sql);
-                    $items = $result->fetchAllAssociative();
-
-                    // For some reason this document doesnt have a c_item_property value.
-                    if (empty($items)) {
-                        continue;
-                    }
-                    $parent = null;
-                    if (!empty($event['parent_event_id'])) {
-                        $parent = $eventRepo->find($event['parent_event_id']);
-                    }
-                    if (null === $parent) {
-                        $parent = $course;
-                    }
-                    $this->fixItemProperty($eventRepo, $course, $admin, $event, $parent, $items);
+            $sql = "SELECT * FROM c_calendar_event WHERE c_id = $courseId
+                    ORDER BY iid";
+            $result = $connection->executeQuery($sql);
+            $events = $result->fetchAllAssociative();
+            foreach ($events as $eventData) {
+                $id = $eventData['iid'];
+                /** @var CCalendarEvent $event */
+                $event = $eventRepo->find($id);
+                if ($event->hasResourceNode()) {
+                    continue;
                 }
-
-                $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = $courseId
-                        ORDER BY iid";
+                $sql = "SELECT * FROM c_item_property
+                        WHERE tool = 'calendar_event' AND c_id = $courseId AND ref = $id";
                 $result = $connection->executeQuery($sql);
-                $events = $result->fetchAllAssociative();
-                foreach ($events as $event) {
-                    $id = $event['iid'];
-                    $attachmentPath = $event['filename'];
-                    /** @var CCalendarEventAttachment $event */
-                    $event = $eventAttachmentRepo->find($id);
-                    if ($event->hasResourceNode()) {
-                        continue;
-                    }
-                    $sql = "SELECT * FROM c_item_property
-                            WHERE tool = 'calendar_event_attachment' AND c_id = $courseId AND ref = $id";
-                    $result = $connection->executeQuery($sql);
-                    $items = $result->fetchAllAssociative();
-                    $this->fixItemProperty($eventAttachmentRepo, $event, $parent, $items);
-                    $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/calendar/'.$attachmentPath;
-                    $this->addLegacyFileToResource($filePath, $eventAttachmentRepo, $event, $id);
+                $items = $result->fetchAllAssociative();
+
+                // For some reason this event doesnt have a c_item_property value, then we added to the main course.
+                if (empty($items)) {
+                    $items[] = [
+                        'visibility' => 1,
+                        'insert_user_id' => $admin->getId(),
+                        'to_group_id' => 0,
+                        'session_id' => $eventData['session_id'],
+                    ];
+                    $this->fixItemProperty($eventRepo, $course, $admin, $event, $course, $items);
+                    $em->persist($event);
+                    $em->flush();
+                    continue;
                 }
+                $parent = null;
+                if (!empty($eventData['parent_event_id'])) {
+                    $parent = $eventRepo->find($eventData['parent_event_id']);
+                }
+                if (null === $parent) {
+                    $parent = $course;
+                }
+                $this->fixItemProperty($eventRepo, $course, $admin, $event, $parent, $items);
+                $em->persist($event);
+                $em->flush();
+            }
+
+            $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = $courseId
+                    ORDER BY iid";
+            $result = $connection->executeQuery($sql);
+            $attachments = $result->fetchAllAssociative();
+            foreach ($attachments as $attachmentData) {
+                $id = $attachmentData['iid'];
+                $attachmentPath = $attachmentData['path'];
+                $fileName = $attachmentData['filename'];
+                /** @var CCalendarEventAttachment $attachment */
+                $attachment = $eventAttachmentRepo->find($id);
+                if ($attachment->hasResourceNode()) {
+                    continue;
+                }
+                $sql = "SELECT * FROM c_item_property
+                        WHERE tool = 'calendar_event_attachment' AND c_id = $courseId AND ref = $id";
+                $result = $connection->executeQuery($sql);
+                $items = $result->fetchAllAssociative();
+                $parent = $attachment->getEvent();
+                $this->fixItemProperty($eventAttachmentRepo, $course, $admin, $attachment, $parent, $items);
+                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/calendar/'.$attachmentPath;
+                $this->addLegacyFileToResource($filePath, $eventAttachmentRepo, $attachment, $id, $fileName);
+                $em->persist($attachment);
+                $em->flush();
             }
         }
     }

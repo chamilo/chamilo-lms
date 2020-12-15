@@ -1,5 +1,7 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
@@ -64,44 +66,42 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         $em->flush();
         $em->clear();
 
-        foreach ($urls as $url) {
-            $accessUrlRelCourses = $url->getCourses();
-            /** @var AccessUrlRelCourse $accessUrlRelCourse */
-            foreach ($accessUrlRelCourses as $accessUrlRelCourse) {
-                $counter = 1;
-                $course = $accessUrlRelCourse->getCourse();
-                $courseId = $course->getId();
-                $sql = "SELECT * FROM c_tool
-                        WHERE c_id = $courseId ";
-                $result = $connection->executeQuery($sql);
-                $tools = $result->fetchAllAssociative();
-                foreach ($tools as $toolData) {
-                    /** @var CTool $tool */
-                    $tool = $toolRepo->find($toolData['iid']);
-                    if ($tool->hasResourceNode()) {
-                        continue;
-                    }
-                    $course = $courseRepo->find($course->getId());
-                    $session = null;
-                    if (!empty($toolData['session_id'])) {
-                        $session = $sessionRepo->find($toolData['session_id']);
-                    }
+        // Migrating c_tool.
+        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        foreach ($q->toIterable() as $course) {
+            $counter = 1;
+            $courseId = $course->getId();
+            $sql = "SELECT * FROM c_tool
+                    WHERE c_id = $courseId ";
+            $result = $connection->executeQuery($sql);
+            $tools = $result->fetchAllAssociative();
 
-                    $admin = $this->getAdmin();
-                    $tool->setParent($course);
-                    $toolRepo->addResourceNode($tool, $admin, $course);
-                    $newVisibility = 1 === $toolData['visibility'] ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_PENDING;
-                    $tool->addCourseLink($course, $session, null, $newVisibility);
-                    $em->persist($tool);
-                    if (0 === $counter % $batchSize) {
-                        $em->flush();
-                        $em->clear(); // Detaches all objects from Doctrine!
-                    }
-                    $counter++;
+            foreach ($tools as $toolData) {
+                /** @var CTool $tool */
+                $tool = $toolRepo->find($toolData['iid']);
+                if ($tool->hasResourceNode()) {
+                    continue;
                 }
+
+                $course = $courseRepo->find($courseId);
+                $session = null;
+                if (!empty($toolData['session_id'])) {
+                    $session = $sessionRepo->find($toolData['session_id']);
+                }
+
+                $admin = $this->getAdmin();
+                $tool->setParent($course);
+                $toolRepo->addResourceNode($tool, $admin, $course);
+                $newVisibility = 1 === $toolData['visibility'] ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_PENDING;
+                $tool->addCourseLink($course, $session, null, $newVisibility);
+                $em->persist($tool);
+                if (0 === $counter % $batchSize) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                $counter++;
             }
         }
-
         $em->flush();
         $em->clear();
     }

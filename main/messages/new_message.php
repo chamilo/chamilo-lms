@@ -161,6 +161,9 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                             }
                         }
                     }
+                    if (!empty($teachers)) {
+                        asort($teachers);
+                    }
                     $form->addSelect(
                         'users',
                         get_lang('SendMessageTo'),

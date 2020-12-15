@@ -33,10 +33,10 @@
                             {% for course in courses %}
                                 {% set courseCounter = courseCounter + 1 %}
                                 {% if courseCounter == 4 %}
-                                    <div class="clearfix .d-sm-none .d-md-block"></div>
+                                    <div class="clearfix d-sm-none d-md-block"></div>
                                     {% set courseCounter = 0 %}
                                 {% elseif courseCounter == 3 %}
-                                    <div class="clearfix .d-md-none .d-lg-block"></div>
+                                    <div class="clearfix d-md-none d-lg-block"></div>
                                 {% endif %}
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">

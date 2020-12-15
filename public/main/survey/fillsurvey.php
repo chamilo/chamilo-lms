@@ -1299,7 +1299,7 @@ if (isset($questions) && is_array($questions)) {
 
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
-        if ($showNumber) {
+        if ($showNumber && $survey_data['display_question_number']) {
             $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
         }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');

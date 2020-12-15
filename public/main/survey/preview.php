@@ -230,7 +230,7 @@ if (is_array($questions) && count($questions) > 0) {
         $js .= survey_question::getQuestionJs($question);
 
         $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
-        if ($showNumber) {
+        if ($showNumber && $survey_data['display_question_number']) {
             $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
         }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');

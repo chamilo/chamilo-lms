@@ -227,6 +227,7 @@ class SurveyManager
         $courseCode = api_get_course_id();
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $shared_survey_id = 0;
+        $display_question_number = isset($values['display_question_number']) ? (int) $values['display_question_number'] : null;
 
         if (!isset($values['survey_id'])) {
             // Check if the code doesn't soon exists in this language
@@ -364,6 +365,7 @@ class SurveyManager
                 ->setAnonymous($values['anonymous'])
                 ->setSessionId(api_get_session_id())
                 ->setVisibleResults($values['visible_results'])
+                ->setDisplayQuestionNumber($display_question_number)
             ;
 
             $em = Database::getManager();
@@ -477,6 +479,7 @@ class SurveyManager
                 'anonymous' => $values['anonymous'],
                 'session_id' => api_get_session_id(),
                 'visible_results' => $values['visible_results'],
+                'display_question_number' => $display_question_number,
             ];
 
             $params = array_merge($params, $extraParams);

@@ -271,6 +271,7 @@ if ('add' == $action) {
 
 $form->addElement('checkbox', 'one_question_per_page', null, get_lang('One question per page'));
 $form->addElement('checkbox', 'shuffle', null, get_lang('Enable shuffle mode'));
+$form->addElement('checkbox', 'display_question_number', null, get_lang('Display question number'));
 
 $input_name_list = null;
 

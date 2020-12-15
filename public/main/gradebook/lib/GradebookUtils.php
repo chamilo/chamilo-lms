@@ -974,7 +974,7 @@ class GradebookUtils
 
     /**
      * @param FlatViewTable $flatviewtable
-     * @param Category      $cat
+     * @param array         $cat
      * @param               $users
      * @param               $alleval
      * @param               $alllinks
@@ -990,9 +990,10 @@ class GradebookUtils
         $params = [],
         $mainCourseCategory = null
     ) {
+        $cat = $cat[0] ?? null;
         // Getting data
         $printable_data = self::get_printable_data(
-            $cat[0],
+            $cat,
             $users,
             $alleval,
             $alllinks,
@@ -1001,7 +1002,7 @@ class GradebookUtils
         );
 
         // HTML report creation first
-        $course_code = trim($cat[0]->get_course_code());
+        $course_code = trim($cat->get_course_code());
 
         $displayscore = ScoreDisplay::instance();
         $customDisplays = $displayscore->get_custom_score_display_settings();
@@ -1019,10 +1020,10 @@ class GradebookUtils
             }
         }
 
-        $parent_id = $cat[0]->get_parent_id();
-        if (isset($cat[0]) && isset($parent_id)) {
+        $parent_id = $cat->get_parent_id();
+        if (isset($cat) && isset($parent_id)) {
             if (0 == $parent_id) {
-                $grade_model_id = $cat[0]->get_grade_model_id();
+                $grade_model_id = $cat->get_grade_model_id();
             } else {
                 $parent_cat = Category::load($parent_id);
                 $grade_model_id = $parent_cat[0]->get_grade_model_id();

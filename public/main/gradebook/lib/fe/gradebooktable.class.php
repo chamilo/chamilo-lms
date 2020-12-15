@@ -1225,7 +1225,7 @@ class GradebookTable extends SortableTable
     {
         $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
         $categoryId = $item->getCategory()->get_id();
-
+        $is_student = api_is_student();
         $cat = new Category();
         switch ($item->get_item_type()) {
             case 'C':

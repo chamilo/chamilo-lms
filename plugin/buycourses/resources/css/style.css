@@ -398,19 +398,19 @@ div.items-course-info h4.title{
 
 /** XS like old android or ios devices  */
 @media (max-width: 767px) {
-    .col-sm-6 .items-course .items-course-image figure {
+    .col-sm-6 .items-course .items-course-image img {
         height: 220px;
     }
 }
 /** SM  display **/
 @media (min-width: 768px) {
-    .col-sm-6 .items-course .items-course-image figure {
+    .col-sm-6 .items-course .items-course-image img {
         height: 170px;
     }
 }
 /** Md and LG display **/
 @media (min-width: 991px) {
-    .col-sm-6 .items-course .items-course-image figure {
+    .col-sm-6 .items-course .items-course-image img {
         height: 135px;
     }
 }

@@ -33,11 +33,9 @@
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
-                                            <figure  class="img-responsive">
                                                 <img alt="{{ course.title }}"
                                                      class="img-responsive"
                                                      src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
-                                            </figure>
                                         </div>
                                         <div class="items-course-info">
                                             {% set course_description_url = _p.web_ajax ~ 'course_home.ajax.php?' ~ {'code': course.code, 'a': 'show_course_information'}|url_encode() %}
@@ -85,10 +83,8 @@
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
-                                            <figure  class="img-responsive">
                                                 <img alt="{{ session.name }}" class="img-responsive"
                                                      src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
-                                            </figure>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
@@ -145,11 +141,9 @@
                                     <div class="items-course">
                                         <div class="items-course-image">
                                             <a href="{{ _p.web }}service/{{ service.id }}">
-                                                <figure class="img-responsive">
                                                     <img alt="{{ service.name }}"
                                                          class="img-responsive"
                                                          src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
-                                                </figure>
                                             </a>
                                         </div>
                                         <div class="items-course-info">

@@ -1793,6 +1793,9 @@ $_configuration['auth_password_links'] = [
     ]
 ];*/
 
+// For a student: Shows only the list of teachers from my courses in the Chamilo inbox.
+// $_configuration['send_only_messages_to_teachers'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

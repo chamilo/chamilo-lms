@@ -8647,5 +8647,5 @@ $QuestionAlsoUsedInTheFollowingTests = "Question utilisée également dans les e
 $LinkToTestEdition = "Lien vers l'édition de l'exercice";
 $MoveUsersFromCourseToSession = "Déplacer les résultats utilisateurs de tout un cours dans/vers une session";
 $BackToAttemptList = "Retour à la liste des tentatives";
-$ShowScoreAndSelectedFeedbackEveryAttemptShowAnswersLastAttempt = "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte.";
+$ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte.";
 ?>

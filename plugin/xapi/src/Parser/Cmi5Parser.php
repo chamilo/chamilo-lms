@@ -16,11 +16,6 @@ use Symfony\Component\DomCrawler\Crawler;
 class Cmi5Parser extends PackageParser
 {
     /**
-     * @var array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
-     */
-    private $toc;
-
-    /**
      * @inheritDoc
      */
     public function parse(): ToolLaunch
@@ -54,7 +49,11 @@ class Cmi5Parser extends PackageParser
             ->setCourse($this->course)
             ->setSession($this->session);
 
-        $this->toc = $this->generateToC($xml);
+        $toc = $this->generateToC($xml);
+
+        foreach ($toc as $cmi5Item) {
+            $toolLaunch->addItem($cmi5Item);
+        }
 
         return $toolLaunch;
     }
@@ -175,13 +174,5 @@ class Cmi5Parser extends PackageParser
         }
 
         return $url;
-    }
-
-    /**
-     * @return array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
-     */
-    public function getToc()
-    {
-        return $this->toc;
     }
 }

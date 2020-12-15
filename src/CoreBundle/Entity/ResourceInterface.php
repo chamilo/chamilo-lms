@@ -4,6 +4,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CGroup;
+
 /**
  * Interface ResourceInterface.
  */
@@ -22,4 +24,8 @@ interface ResourceInterface
     public function getResourceNode(): ResourceNode;
 
     public function setResourceNode(ResourceNode $resourceNode): AbstractResource;
+
+    public function setParent(AbstractResource $parent);
+
+    public function addCourseLink(Course $course, Session $session = null, CGroup $group = null, int $visibility);
 }

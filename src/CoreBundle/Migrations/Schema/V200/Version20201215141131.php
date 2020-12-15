@@ -58,16 +58,18 @@ final class Version20201215141131 extends AbstractMigrationChamilo
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
-                $sql = "SELECT * FROM c_item_property
-                        WHERE tool = 'link_category' AND c_id = $courseId AND ref = $id";
-                $result = $connection->executeQuery($sql);
-                $items = $result->fetchAllAssociative();
+                $result = $this->fixItemProperty(
+                    'link_category',
+                    $linkCategoryRepo,
+                    $course,
+                    $admin,
+                    $resource,
+                    $course
+                );
 
-                // For some reason this event doesnt have a c_item_property value, then we added to the main course.
-                if (empty($items)) {
+                if (false === $result) {
                     continue;
                 }
-                $this->fixItemProperty($linkCategoryRepo, $course, $admin, $resource, $course, $items);
                 $em->persist($resource);
                 $em->flush();
             }

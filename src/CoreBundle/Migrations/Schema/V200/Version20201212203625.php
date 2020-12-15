@@ -68,16 +68,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $sql = "SELECT * FROM c_item_property
-                        WHERE tool = 'document' AND c_id = $courseId AND ref = $documentId";
-                $result = $connection->executeQuery($sql);
-                $items = $result->fetchAllAssociative();
-
-                // For some reason this document doesnt have a c_item_property value.
-                if (empty($items)) {
-                    continue;
-                }
-
                 $resourceNode = null;
                 $parent = null;
                 if ('.' !== dirname($documentPath)) {
@@ -92,7 +82,12 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $parent = $course;
                 }
 
-                $this->fixItemProperty($documentRepo, $course, $admin, $document, $parent, $items);
+                $result = $this->fixItemProperty('document', $documentRepo, $course, $admin, $document, $parent);
+
+                if (false === $result) {
+                    continue;
+                }
+
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
                 $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
 

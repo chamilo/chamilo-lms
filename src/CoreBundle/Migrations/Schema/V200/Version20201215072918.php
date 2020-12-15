@@ -64,6 +64,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 if ($event->hasResourceNode()) {
                     continue;
                 }
+
                 $sql = "SELECT * FROM c_item_property
                         WHERE tool = 'calendar_event' AND c_id = $courseId AND ref = $id";
                 $result = $connection->executeQuery($sql);
@@ -89,7 +90,11 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 if (null === $parent) {
                     $parent = $course;
                 }
-                $this->fixItemProperty($eventRepo, $course, $admin, $event, $parent, $items);
+                $result = $this->fixItemProperty('calendar_event', $eventRepo, $course, $admin, $event, $parent);
+
+                if (false === $result) {
+                    continue;
+                }
                 $em->persist($event);
                 $em->flush();
             }
@@ -107,12 +112,20 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 if ($attachment->hasResourceNode()) {
                     continue;
                 }
-                $sql = "SELECT * FROM c_item_property
-                        WHERE tool = 'calendar_event_attachment' AND c_id = $courseId AND ref = $id";
-                $result = $connection->executeQuery($sql);
-                $items = $result->fetchAllAssociative();
                 $parent = $attachment->getEvent();
-                $this->fixItemProperty($eventAttachmentRepo, $course, $admin, $attachment, $parent, $items);
+                $result = $this->fixItemProperty(
+                    'calendar_event_attachment',
+                    $eventRepo,
+                    $course,
+                    $admin,
+                    $attachment,
+                    $parent
+                );
+
+                if (false === $result) {
+                    continue;
+                }
+
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/calendar/'.$attachmentPath;
                 $this->addLegacyFileToResource($filePath, $eventAttachmentRepo, $attachment, $id, $fileName);
                 $em->persist($attachment);

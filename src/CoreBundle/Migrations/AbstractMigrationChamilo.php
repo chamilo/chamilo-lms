@@ -4,12 +4,15 @@
 
 namespace Chamilo\CoreBundle\Migrations;
 
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
@@ -184,14 +187,17 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         //to be implemented
     }
 
-    public function addLegacyFileToResource($filePath, $repo, $resource, $id)
+    public function addLegacyFileToResource($filePath, $repo, $resource, $id, $fileName = '')
     {
         if (!is_dir($filePath)) {
             $class = get_class($resource);
             $documentPath = basename($filePath);
             if (file_exists($filePath)) {
                 $mimeType = mime_content_type($filePath);
-                $file = new UploadedFile($filePath, basename($documentPath), $mimeType, null, true);
+                if (empty($fileName)) {
+                    $fileName = basename($documentPath);
+                }
+                $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
                 if ($file) {
                     $repo->addFile($resource, $file);
                 } else {
@@ -203,10 +209,30 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         }
     }
 
-    public function fixItemProperty($repo, $course, $admin, $resource, $parent, $items)
+    public function fixItemProperty($tool, $repo, $course, $admin, ResourceInterface $resource, $parent)
     {
+        $container = $this->getContainer();
+        $doctrine = $container->get('doctrine');
+        $em = $doctrine->getManager();
+        /** @var Connection $connection */
+        $connection = $em->getConnection();
+
+        $documentRepo = $container->get(CDocumentRepository::class);
+        $courseRepo = $container->get(CourseRepository::class);
+        $sessionRepo = $container->get(SessionRepository::class);
+        $groupRepo = $container->get(CGroupRepository::class);
+        $userRepo = $container->get(UserRepository::class);
+        $courseId = $course->getId();
+        $id = $resource->getResourceIdentifier();
+
+        $sql = "SELECT * FROM c_item_property
+                WHERE tool = '$tool' AND c_id = $courseId AND ref = $id";
+        $result = $connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        // For some reason this document doesnt have a c_item_property value.
         if (empty($items)) {
-            return;
+            return false;
         }
 
         $container = $this->getContainer();
@@ -275,5 +301,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $resource->addCourseLink($course, $session, $group, $newVisibility);
             $em->persist($resource);
         }
+
+        return true;
     }
 }

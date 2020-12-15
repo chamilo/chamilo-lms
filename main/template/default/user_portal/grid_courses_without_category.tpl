@@ -19,7 +19,6 @@
                                 <span class="category">{{ item.category }}</span>
                                 <div class="cribbon"></div>
                             {% endif %}
-
                             {% if item.edit_actions != '' %}
                                 <div class="admin-actions">
                                     {% if item.document == '' %}
@@ -121,6 +120,8 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
+
+                            {{ item.unregister_button }}
                         </div>
                     </div>
                 </div>

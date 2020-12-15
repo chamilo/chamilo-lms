@@ -46,6 +46,9 @@ $toolbar = Display::toolbarButton(
 );
 
 $templateName = get_lang('TabsDashboard');
+
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);
 $tpl->assign('sessions_are_included', $includeSessions);

@@ -160,6 +160,16 @@ if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extens
 echo '</div>';
 echo '<div id="doc_form" class="col-md-8">';
 
+$excludeExtraFields = [
+    'authors',
+    'authorlp',
+    'authorlpitem',
+    'price',
+];
+if (api_is_platform_admin()) {
+    // Only admins can edit this items
+    $excludeExtraFields = [];
+}
 if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been edited.';
@@ -167,7 +177,10 @@ if (isset($is_success) && $is_success === true) {
     echo $learnPath->display_item($_GET['id'], $msg);
 } else {
     $item = $learnPath->getItem($_GET['id']);
-    echo $learnPath->display_edit_item($item->getIid());
+    echo $learnPath->display_edit_item(
+        $item->getIid(),
+        $excludeExtraFields
+    );
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
         echo '<script>$("#frmModel").remove()</script>';

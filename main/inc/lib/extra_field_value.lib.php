@@ -160,20 +160,6 @@ class ExtraFieldValue extends Model
                 continue;
             }
 
-            // see  BT#17943
-            $authors = false;
-            if (
-                $extraFieldInfo['variable'] == 'authors'
-                || $extraFieldInfo['variable'] == 'authorlp'
-                || $extraFieldInfo['variable'] == 'authorlpitem'
-                || $extraFieldInfo['variable'] == 'price'
-            ) {
-                $authors = true;
-            }
-            if (!api_is_platform_admin() && $authors == true) {
-                continue;
-            }
-
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
             $dirPermissions = api_get_permissions_for_new_directories();

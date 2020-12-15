@@ -41,14 +41,14 @@ switch ($action) {
         $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
         if (empty($blockName)) {
-            die;
+            exit;
         }
 
         if (api_is_multiple_url_enabled()) {
             $accessUrlId = api_get_current_access_url_id();
 
             if ($accessUrlId == -1) {
-                die;
+                exit;
             }
 
             $urlInfo = api_get_access_url($accessUrlId);
@@ -60,15 +60,15 @@ switch ($action) {
         }
 
         if (!file_exists($newUrlDir)) {
-            die;
+            exit;
         }
 
         if (!Security::check_abs_path("{$newUrlDir}{$blockName}_extra.html", $newUrlDir)) {
-            die;
+            exit;
         }
 
         if (!file_exists("{$newUrlDir}{$blockName}_extra.html")) {
-            die;
+            exit;
         }
 
         echo file_get_contents("{$newUrlDir}{$blockName}_extra.html");

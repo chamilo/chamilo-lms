@@ -37,6 +37,10 @@ $form->addButtonSearch(get_lang('Search'), 'search');
 $servicesSales = $plugin->getServiceSales(null, $selectedStatus);
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
 
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH);
+$htmlHeadXtra[] = api_get_css($webPluginPath.'buycourses/resources/css/style.css');
+$htmlHeadXtra[] = api_get_css($webPluginPath.'buycourses/resources/js/modals.js');
+
 $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);

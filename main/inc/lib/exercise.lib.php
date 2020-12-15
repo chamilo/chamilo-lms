@@ -4649,6 +4649,16 @@ EOT;
                     $show_only_score = false;
                     $showTotalScoreAndUserChoicesInLastAttempt = true;
                 }
+
+                if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
+                    $showTotalScore = true;
+                    $show_results = true;
+                    $show_only_score = false;
+                    $showTotalScoreAndUserChoicesInLastAttempt = false;
+                    if ($numberAttempts >= $objExercise->attempts) {
+                        $showTotalScoreAndUserChoicesInLastAttempt = true;
+                    }
+                }
             }
 
             if ($objExercise->results_disabled ==

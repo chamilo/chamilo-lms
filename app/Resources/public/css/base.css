@@ -6752,6 +6752,9 @@ div#chat-remote-video video {
     margin-top: 15px;
     margin-bottom: 15px;
 }
+.grid-courses .alert:last-child {
+    margin-bottom: 0;
+}
 
 .title-session,
 .title-courses {
@@ -7498,7 +7501,6 @@ div#chat-remote-video video {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    min-height: 330px;
     margin-bottom: 10px;
 }
 
@@ -9733,7 +9735,6 @@ ul.dropdown-menu.inner > li > a {
 
     .items-course {
         padding: 5px;
-        min-height: 300px;
     }
 
     .gallery .canvas-two {

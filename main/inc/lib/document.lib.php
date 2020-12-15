@@ -2254,8 +2254,11 @@ class DocumentManager
                 WHERE c_id = $course_id AND path='/certificates' ";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
+        if ($row) {
+            return $row['id'];
+        }
 
-        return $row['id'];
+        return 0;
     }
 
     /**

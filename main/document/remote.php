@@ -33,7 +33,7 @@ $user_id = api_get_user_id();
 $coursePath = api_get_path(SYS_COURSE_PATH).$cidReq.'/document';
 $_course = api_get_course_info($cidReq);
 if (empty($_course)) {
-    die("problem when fetching course information");
+    exit("problem when fetching course information");
 }
 // stupid variable initialisation for old version of DocumentManager functions.
 $_course['path'] = $_course['directory'];
@@ -60,7 +60,7 @@ if (strlen($cwd) == 0) {
     $cwd = '/';
 }
 if (Security::check_abs_path($cwd, api_get_path(SYS_PATH))) {
-    die();
+    exit();
 }
 if ($action == 'list') {
     /*==== List files ====*/

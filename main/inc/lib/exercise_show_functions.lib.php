@@ -227,7 +227,7 @@ class ExerciseShowFunctions
                 if ($showTotalScoreAndUserChoices) {
                     $hide_expected_answer = false;
                 }
-                if (empty($studentChoice)) {
+                if (false === $showTotalScoreAndUserChoices && empty($studentChoice)) {
                     return '';
                 }
                 break;
@@ -370,7 +370,7 @@ class ExerciseShowFunctions
                 }
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
-                if (empty($studentChoiceInt)) {
+                if (false === $showTotalScoreAndUserChoices && empty($studentChoiceInt)) {
                     return '';
                 }
                 break;
@@ -507,7 +507,7 @@ class ExerciseShowFunctions
                 }
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
-                if (empty($studentChoice)) {
+                if (false === $showTotalScoreAndUserChoices && empty($studentChoice)) {
                     return '';
                 }
                 break;
@@ -735,7 +735,7 @@ class ExerciseShowFunctions
                 }
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
-                if (empty($studentChoice)) {
+                if (false === $showTotalScoreAndUserChoices && empty($studentChoice)) {
                     return '';
                 }
                 break;

@@ -2,7 +2,8 @@
 
 window.RecordAudio = (function () {
     var timerInterval = 0,
-        $txtTimer = null;
+        $txtTimer = null,
+        isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     function startTimer() {
         stopTimer();
@@ -46,7 +47,6 @@ window.RecordAudio = (function () {
             $txtTimer.css('visibility', 'hidden');
         }
     }
-
 
     function useRecordRTC(rtcInfo) {
         $(rtcInfo.blockId).show();
@@ -123,8 +123,7 @@ window.RecordAudio = (function () {
                 localStream = stream;
 
                 recordRTC = RecordRTC(stream, {
-                    recorderType: StereoAudioRecorder,
-                    numberOfAudioChannels: 1,
+                    recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
                     type: 'audio'
                 });
                 recordRTC.startRecording();
@@ -139,22 +138,18 @@ window.RecordAudio = (function () {
             }
 
             function errorCallback(error) {
-                alert(error.message);
+                alert(error);
             }
 
-            if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia(mediaConstraints)
-                    .then(successCallback)
-                    .catch(errorCallback);
-
+            if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
                 return;
             }
 
-            navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
-
-            if (navigator.getUserMedia) {
-                navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-            }
+            navigator.mediaDevices.getUserMedia(mediaConstraints)
+                .then(successCallback)
+                .catch(errorCallback);
         });
 
         btnStop.on('click', function () {

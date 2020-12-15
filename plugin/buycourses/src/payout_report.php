@@ -11,7 +11,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="../resources/css/style.css" type="text/css">';
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
 $htmlHeadXtra[] =
     '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>';
 

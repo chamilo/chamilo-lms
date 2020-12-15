@@ -25,7 +25,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 if (php_sapi_name() !== 'cli') {
-    die("This script must be run from the command-line. Goodbye.\n");
+    exit("This script must be run from the command-line. Goodbye.\n");
 }
 require __DIR__.'/../../main/inc/global.inc.php';
 ini_set('max_execution_time', 0);
@@ -42,7 +42,7 @@ $archiveNumber = 5000000;
 foreach ($tables as $table) {
     $tableArchive = $table.'_'.date('Y');
     if (!checkAndCreateTable($tableArchive, $table)) {
-        die("Could not create table $tableArchive. Please check your database user has the CREATE TABLE permission.\n");
+        exit("Could not create table $tableArchive. Please check your database user has the CREATE TABLE permission.\n");
     }
     $sql = "SELECT count(*) FROM $table";
     $res = Database::query($sql);

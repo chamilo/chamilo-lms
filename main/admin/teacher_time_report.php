@@ -354,7 +354,7 @@ if (isset($_GET['export'])) {
             Export::export_table_xls_html($dataToExport, $fileName);
             break;
     }
-    die;
+    exit;
 }
 
 $form->addSelect(

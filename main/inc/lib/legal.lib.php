@@ -27,6 +27,10 @@ class LegalManager
      */
     public static function add($language, $content, $type, $changes, $extraFieldValuesToSave = [])
     {
+        if (empty($content)) {
+            return 0;
+        }
+
         $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
         $type = (int) $type;
@@ -160,6 +164,10 @@ class LegalManager
                 LIMIT 1 ";
         $result = Database::query($sql);
         $result = Database::fetch_array($result, 'ASSOC');
+
+        if (empty($result)) {
+            return [];
+        }
 
         if (isset($result['content'])) {
             $result['content'] = self::replaceTags($result['content']);
@@ -429,7 +437,7 @@ class LegalManager
      */
     public static function getTreatmentTypeList()
     {
-        return  [
+        return [
             'privacy_terms_collection' => 'collection',
             'privacy_terms_recording' => 'recording',
             'privacy_terms_organization' => 'organization',

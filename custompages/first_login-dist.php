@@ -12,7 +12,7 @@ require_once __DIR__.'/language.php';
  * Security checks.
  */
 if (!isset($_SESSION['conditional_login']['uid'])) {
-    die("Not Authorised");
+    exit("Not Authorised");
 }
 
 if (isset($_POST['password'])) {

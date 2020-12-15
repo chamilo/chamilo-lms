@@ -10,6 +10,8 @@ $plugin = BuyCoursesPlugin::create();
 $allow = $plugin->get('unregistered_users_enable');
 
 if (($allow === 'true' && api_is_anonymous()) || !api_is_anonymous()) {
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+
     $tpl = new Template();
     $content = $tpl->fetch('buycourses/view/index.tpl');
     $tpl->assign('content', $content);

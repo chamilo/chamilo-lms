@@ -248,7 +248,7 @@ if (!empty($msg)) {
         <p><?php echo get_lang('FirstLetterCourse'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
             <option value="%">--</option>
-            <?php  echo Display :: get_alphabet_options($firstLetter); ?>
+            <?php echo Display :: get_alphabet_options($firstLetter); ?>
         </select>
         <?php
     } ?>

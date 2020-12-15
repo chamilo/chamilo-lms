@@ -642,7 +642,7 @@ class CourseHome
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
         // If exists same tool (by name) from session in base course then avoid it. Allow them pass in other cases
-        $tools = array_filter($tools, function (array $toolToFilter) use ($sessionId, $tools) {
+        $tools = array_filter($tools, function (array $toolToFilter) use ($tools) {
             if (!empty($toolToFilter['session_id'])) {
                 foreach ($tools as $originalTool) {
                     if ($toolToFilter['name'] == $originalTool['name'] && empty($originalTool['session_id'])) {
@@ -752,7 +752,7 @@ class CourseHome
 
         switch ($course_tool_category) {
             case TOOL_AUTHORING:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id
@@ -765,7 +765,7 @@ class CourseHome
                 $sql_links = null;
                 break;
             case TOOL_STUDENT_VIEW:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id
@@ -778,7 +778,7 @@ class CourseHome
                         ";
                 break;
             case TOOL_ADMIN:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id
@@ -974,7 +974,6 @@ class CourseHome
                             }
                         }
                     } elseif ($allowEditionInSession) {
-
                         $criteria = [
                             'cId' => $courseId,
                             'name' => $tool['name'],

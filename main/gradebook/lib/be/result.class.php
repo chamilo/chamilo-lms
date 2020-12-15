@@ -217,7 +217,7 @@ class Result
             $sql .= ")";
             Database::query($sql);
         } else {
-            die('Error in Result add: required field empty');
+            exit('Error in Result add: required field empty');
         }
     }
 
@@ -248,7 +248,7 @@ class Result
 
             Database::query($sql);
         } else {
-            die('Error in Result add: required field empty');
+            exit('Error in Result add: required field empty');
         }
     }
 

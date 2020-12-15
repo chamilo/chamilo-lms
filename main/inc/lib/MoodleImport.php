@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  *
  * @author  José Loguercio <jose.loguercio@beeznest.com>,
  * @author  Julio Montoya <gugli100@gmail.com>
- *
- * @package chamilo.library
  */
 class MoodleImport
 {
@@ -22,6 +21,7 @@ class MoodleImport
      */
     public function import($uploadedFile)
     {
+        $debug = false;
         if (UPLOAD_ERR_OK !== $uploadedFile['error']) {
             throw new Exception(get_lang('UploadError'));
         }
@@ -37,19 +37,18 @@ class MoodleImport
         }
 
         $filePath = $cachePath.$name;
-
         if (!is_readable($filePath)) {
             throw new Exception(get_lang('UploadError'));
         }
 
         $mimeType = mime_content_type($filePath);
-
         $folder = api_get_unique_id();
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
 
         mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
 
         switch ($mimeType) {
+            case 'application/gzip':
             case 'application/x-gzip':
                 $backUpFile = new PharData($filePath);
 
@@ -69,7 +68,7 @@ class MoodleImport
 
                 if (!empty($packageContent)) {
                     foreach ($packageContent as $index => $value) {
-                        if ($value['filename'] == 'moodle_backup.xml') {
+                        if ($value['filename'] === 'moodle_backup.xml') {
                             $mainFileKey = $index;
                             break;
                         }
@@ -107,6 +106,13 @@ class MoodleImport
         $mainFileModuleValues = $this->getAllQuestionFiles($filesXml);
         $currentResourceFilePath = $destinationDir.'/files/';
         $importedFiles = [];
+        if ($debug) {
+            error_log('loading files');
+        }
+
+        $_POST['moodle_import'] = true;
+        $_POST['language'] = $courseInfo['language'];
+
         foreach ($mainFileModuleValues as $fileInfo) {
             $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
             foreach (new RecursiveIteratorIterator($dirs) as $file) {
@@ -114,6 +120,13 @@ class MoodleImport
                     continue;
                 }
 
+                if (isset($importedFiles[$fileInfo['filename']])) {
+                    continue;
+                }
+
+                if ($debug) {
+                    error_log($fileInfo['filename']);
+                }
                 $files = [];
                 $files['file']['name'] = $fileInfo['filename'];
                 $files['file']['tmp_name'] = $file->getPathname();
@@ -122,20 +135,19 @@ class MoodleImport
                 $files['file']['size'] = $fileInfo['filesize'];
                 $files['file']['from_file'] = true;
                 $files['file']['move_file'] = true;
-                $_POST['language'] = $courseInfo['language'];
-                $_POST['moodle_import'] = true;
+
+                $title = isset($fileInfo['title']) ? $fileInfo['title'] : pathinfo($fileInfo['filename'], PATHINFO_FILENAME);
 
                 $data = DocumentManager::upload_document(
                     $files,
                     '/moodle',
-                    isset($fileInfo['title']) ? $fileInfo['title'] : pathinfo($fileInfo['filename'], PATHINFO_FILENAME),
+                    $title,
                     '',
                     null,
-                    null,
+                    'overwrite',
                     true,
                     true,
                     'file',
-                    // This is to validate spaces as hyphens
                     false
                 );
 
@@ -146,7 +158,6 @@ class MoodleImport
         }
 
         $xml = @file_get_contents($destinationDir.'/moodle_backup.xml');
-
         $doc = new DOMDocument();
         $res = @$doc->loadXML($xml);
 
@@ -157,23 +168,31 @@ class MoodleImport
             throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
         }
         $activities = $doc->getElementsByTagName('activity');
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        if ($debug) {
+            error_log('Loading activities: '.count($activities));
+        }
+
         foreach ($activities as $activity) {
             if (empty($activity->childNodes->length)) {
                 continue;
             }
 
             $currentItem = [];
-
             foreach ($activity->childNodes as $item) {
                 $currentItem[$item->nodeName] = $item->nodeValue;
             }
 
             $moduleName = isset($currentItem['modulename']) ? $currentItem['modulename'] : false;
+            if ($debug) {
+                error_log('moduleName: '.$moduleName);
+            }
+
             switch ($moduleName) {
                 case 'forum':
-                    require_once '../forum/forumfunction.inc.php';
                     $catForumValues = [];
-
                     // Read the current forum module xml.
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
@@ -212,6 +231,10 @@ class MoodleImport
                     // var_dump($moduleValues); // <-- uncomment this to see the final array
 
                     $exercise = new Exercise($courseInfo['real_id']);
+                    if ($debug) {
+                        error_log('quiz:'.$moduleValues['name']);
+                    }
+
                     $title = Exercise::format_title_variable($moduleValues['name']);
                     $exercise->updateTitle($title);
                     $exercise->updateDescription($moduleValues['intro']);
@@ -241,10 +264,7 @@ class MoodleImport
 
                     // Ok, we got the Quiz and create it, now its time to add the Questions
                     foreach ($moduleValues['question_instances'] as $index => $question) {
-                        $questionsValues = $this->readMainQuestionsXml(
-                            $questionsXml,
-                            $question['questionid']
-                        );
+                        $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
                         $moduleValues['question_instances'][$index] = $questionsValues;
                         // Set Question Type from Moodle XML element <qtype>
                         $qType = $moduleValues['question_instances'][$index]['qtype'];
@@ -257,6 +277,9 @@ class MoodleImport
 
                         if (empty($questionInstance)) {
                             continue;
+                        }
+                        if ($debug) {
+                            error_log('question: '.$question['questionid']);
                         }
 
                         $questionInstance->updateTitle(
@@ -282,7 +305,6 @@ class MoodleImport
                         //Save normal question if NOT media
                         if ($questionInstance->type != MEDIA_QUESTION) {
                             $questionInstance->save($exercise);
-
                             // modify the exercise
                             $exercise->addToList($questionInstance->id);
                             $exercise->update_question_positions();
@@ -354,9 +376,13 @@ class MoodleImport
                     $_POST['category_id'] = 0;
                     $_POST['target'] = '_blank';
 
-                    Link::addlinkcategory("link");
+                    Link::addlinkcategory('link');
                     break;
             }
+        }
+
+        if ($debug) {
+            error_log('Finish');
         }
 
         removeDir($destinationDir);
@@ -916,7 +942,7 @@ class MoodleImport
     /**
      * Process Chamilo True False.
      *
-     * @param object $objAnswer
+     * @param Answer $objAnswer
      * @param array  $answerValues
      * @param int    $position
      * @param int    $questionWeighting

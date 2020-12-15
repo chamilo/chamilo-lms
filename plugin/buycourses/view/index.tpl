@@ -1,4 +1,3 @@
-<link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
 {% if _u.is_admin %}
     <div class="row">
         <div class="col-md-12">

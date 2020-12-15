@@ -10,7 +10,7 @@
  * Init.
  */
 if (PHP_SAPI != 'cli') {
-    die('For security reasons, this script can only be launched from cron or from the command line');
+    exit('For security reasons, this script can only be launched from cron or from the command line');
 }
 
 require __DIR__.'/../../inc/global.inc.php';

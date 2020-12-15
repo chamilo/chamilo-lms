@@ -4656,7 +4656,7 @@ class Exercise
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
                                         if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
-                                            if (empty($s_user_answer)) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
                                                 break;
                                             }
                                         }
@@ -4714,7 +4714,7 @@ class Exercise
                                             $s_answer_label = '';
                                         }
                                         if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
-                                            if (empty($s_user_answer)) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
                                                 break;
                                             }
                                         }
@@ -4747,7 +4747,6 @@ class Exercise
                                                 }
                                             }
                                             echo '</td>';
-
                                         }
                                         echo '</tr>';
                                         break;
@@ -8585,8 +8584,6 @@ class Exercise
      * @param array $courseInfo
      * @param int   $sessionId
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
      * @return bool
      */
     public function generateStats($exerciseId, $courseInfo, $sessionId)
@@ -8669,6 +8666,7 @@ class Exercise
         $bestResult = 0;
         $sumResult = 0;
         $result = Database::query($sql);
+        $students = [];
         while ($data = Database::fetch_array($result, 'ASSOC')) {
             // Only take into account users in the current student list.
             if (!empty($studentIdList)) {
@@ -9589,6 +9587,7 @@ class Exercise
                                     RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                                     RESULT_DISABLE_SHOW_SCORE_ONLY,
                                     RESULT_DISABLE_RANKING,
+                                    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                                 ]
                             )
                             ) {

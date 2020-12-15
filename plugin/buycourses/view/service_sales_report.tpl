@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-<script type="text/javascript" src="../resources/js/modals.js"></script>
-
 <ul class="nav nav-tabs buy-courses-sessions-tabs" role="tablist">
     <li id="buy-courses-sessions-tab" class="" role="presentation">
         <a href="sales_report.php" aria-controls="buy-courses_sessions"

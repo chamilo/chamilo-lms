@@ -12,7 +12,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 if (PHP_SAPI != 'cli') {
-    die('Run this script through the command line or comment this line in the code');
+    exit('Run this script through the command line or comment this line in the code');
 }
 
 if (file_exists('multiple_url_fix.php')) {

@@ -2883,7 +2883,7 @@ class GroupManager
             case 'settings':
                 $activeSettings = 'active';
                 break;
-            case'tutor':
+            case 'tutor':
                 $activeTutor = 'active';
                 break;
             case 'member':

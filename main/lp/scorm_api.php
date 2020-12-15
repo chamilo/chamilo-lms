@@ -1458,12 +1458,21 @@ function process_scorm_values() {
  */
 function reinit_updatable_vars_list() {
     logit_scorm('Cleaning updatable_vars_list: reinit_updatable_vars_list');
+    var defaultStatus = 'not attempted';
+    if (olms.updatable_vars_list['cmi.core.lesson_status']) {
+        if (olms.lesson_status != '') {
+            defaultStatus = olms.lesson_status;
+        }
+    }
+
     for (i=0;i < olms.scorm_variables.length;i++) {
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.updatable_vars_list[olms.scorm_variables[i]]=false;
         }
     }
-    olms.lesson_status = 'not attempted';
+
+    logit_lms('Status after reinit: ' + defaultStatus, 3);
+    olms.lesson_status = defaultStatus;
 }
 
 /**

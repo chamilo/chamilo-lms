@@ -8741,5 +8741,8 @@ $HideCategoryTable = "Esconder la tabla de categorías";
 $XQuestionsSelectedWithTotalScoreY = "Solo se seleccionarán %d preguntas según la configuración del ejercicio, para una puntuación total de %s.";
 $QuestionAlsoUsedInTheFollowingTests = "Esta pregunta se usa también en los ejercicios siguientes";
 $LinkToTestEdition = "Vínculo a la edición del ejercicio";
-$MoveUsersFromCourseToSession = "Mover usuarios del curso base a una sesión";
+$MoveUsersFromCourseToSession = "Mover resultados de usuarios del curso base a una sesión";
+$IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments = "Si su ejercicio tiene preguntas del tipo Zona interactiva, debería seleccionar las imágenes relacionadas desde los documentos.";
+$BackToAttemptList = "Regresar a la lista de intentos";
+$ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Mostrar el resultado al alumno: mostrar la puntuación, la elección del alumno y sus comentarios en cada intento, agrega la respuesta correcta y sus comentarios cuando se alcance el límite de intentos elegido.";
 ?>

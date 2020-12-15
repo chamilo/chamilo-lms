@@ -112,7 +112,7 @@ if ($user_already_registered_show_terms === false &&
     api_get_setting('allow_registration') !== 'false'
 ) {
     // STUDENT/TEACHER
-    if (api_get_setting('allow_registration_as_teacher') != 'false') {
+    if (api_get_setting('allow_registration_as_teacher') !== 'false') {
         if (in_array('status', $allowedFields)) {
             $form->addRadio(
                 'status',
@@ -944,6 +944,7 @@ if ($form->validate()) {
     $_user['mail'] = $values['email'];
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
+    $_user['status'] = $values['status'] ?? STUDENT;
     Session::write('_user', $_user);
 
     $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;

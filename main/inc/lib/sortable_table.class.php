@@ -223,8 +223,6 @@ class SortableTable extends HTML_Table
                     $this->direction = 'DESC';
                 }
             }
-        } else {
-            $this->direction = 'ASC';
         }
 
         Session::write($this->param_prefix.'per_page', $this->per_page);

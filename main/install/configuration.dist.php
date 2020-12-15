@@ -1793,6 +1793,12 @@ $_configuration['auth_password_links'] = [
     ]
 ];*/
 
+// For a student: Shows only the list of teachers from my courses in the Chamilo inbox.
+// $_configuration['send_only_messages_to_teachers'] = true;
+
+// Survey duplicate: Order survey questions by student name
+// $_configuration['survey_duplicate_order_by_name'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

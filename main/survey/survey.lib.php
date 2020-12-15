@@ -2509,7 +2509,7 @@ class SurveyManager
                         'survey_id' => $surveyId,
                         'question_id' => 0,
                         'shared_question_id' => 0,
-                        'answers' => $question['answers'],
+                        'answers' => $question['answers'] ?? null,
                     ];
                     self::save_question($surveyData, $values, false);
                     $classCounter++;

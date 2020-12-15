@@ -2350,7 +2350,7 @@ class Category implements GradebookItem
      */
     public static function userFinishedCourse(
         $userId,
-        \Category $category,
+        Category $category,
         $recalculateScore = false
     ) {
         if (empty($category)) {

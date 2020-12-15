@@ -1,4 +1,5 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Test script for soap.php.
  *

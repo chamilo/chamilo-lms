@@ -663,7 +663,7 @@ function WSCreateUser($params)
         return 0;
     }
 
-    return  $userId;
+    return $userId;
 }
 
 /* Register WSCreateUsersPasswordCrypted function */
@@ -2035,7 +2035,7 @@ function WSEditUser($params)
         }
     }
 
-    return  $user_id;
+    return $user_id;
 }
 
 /* Register WSEditUserWithPicture function */

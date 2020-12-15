@@ -5689,8 +5689,6 @@ class UserManager
     /**
      * Return the user id of teacher or session administrator.
      *
-     * @param array $courseInfo
-     *
      * @return int|bool The user id, or false if the session ID was negative
      */
     public static function get_user_id_of_course_admin_or_session_admin(array $courseInfo)

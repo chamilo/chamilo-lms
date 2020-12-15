@@ -1,4 +1,5 @@
-<?php /* License: see /license.txt */
+<?php
+/* License: see /license.txt */
 //Needed in order to show the plugin title
 $strings['plugin_title'] = "OpenMeetings";
 $strings['plugin_comment'] = "Añade una sala de videoconferencia en los cursos de Chamilo con OpenMeetings (om)";

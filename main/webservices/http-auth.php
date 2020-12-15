@@ -32,7 +32,7 @@ if ($digestParts['response'] != $validResponse) {
 } else {
     // We're in!
     echo 'a7532ae474e5e66a0c16eddab02e02a7';
-    die();
+    exit();
 }
 
 // This function returns the digest string
@@ -62,7 +62,7 @@ function requireLogin($realm, $nonce)
     header('WWW-Authenticate: Digest realm="'.$realm.'",qop="auth",nonce="'.$nonce.'",opaque="'.md5($realm).'"');
     header('HTTP/1.1 401');
     echo 'Authentication Canceled';
-    die();
+    exit();
 }
 
 // This function extracts the separate values from the digest string

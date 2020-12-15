@@ -326,7 +326,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      *
      * @return mixed|string
      */
-    public static function extractVerbInLanguage(\Xabbuh\XApi\Model\LanguageMap $languageMap, $language)
+    public static function extractVerbInLanguage(Xabbuh\XApi\Model\LanguageMap $languageMap, $language)
     {
         $iso = self::findLanguageIso($languageMap->languageTags(), $language);
 

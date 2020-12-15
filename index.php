@@ -56,7 +56,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     );
     echo 'Attempted breakin - sysadmins notified.';
     session_destroy();
-    die();
+    exit();
 }
 // Delete session item necessary to check for legal terms
 if (api_get_setting('allow_terms_conditions') === 'true') {

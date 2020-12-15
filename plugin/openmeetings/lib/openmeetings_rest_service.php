@@ -58,7 +58,7 @@ class OpenMeetingsRestService
 
         // Confirm that the request was transmitted to the OpenMeetings! Image Search Service
         if (!$response) {
-            die("Request OpenMeetings! OpenMeetings Service failed and no response was returned in ".__CLASS__.'::'.__FUNCTION__.'()');
+            exit("Request OpenMeetings! OpenMeetings Service failed and no response was returned in ".__CLASS__.'::'.__FUNCTION__.'()');
         }
 
         // Create an array to store the HTTP response codes

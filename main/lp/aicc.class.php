@@ -1013,7 +1013,7 @@ class aicc extends learnpath
                     break;
                 case "\r":
                     if (!$enclosed && $data[$i + 1] == "\n") {
-                        continue;
+                        break;
                     }
                     // no break
                 case "\n":
@@ -1027,7 +1027,7 @@ class aicc extends learnpath
                     break;
                 case "\\r":
                     if (!$enclosed && $data[$i + 1] == "\\n") {
-                        continue;
+                        break;
                     }
                     // no break
                 case "\\n":

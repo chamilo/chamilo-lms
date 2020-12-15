@@ -760,7 +760,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int    $min  Optional. The minimum price filter
      * @param int    $max  Optional. The maximum price filter
      *
-     * @return array
+     * @return array|int
      */
     public function getCatalogCourseList($first, $pageSize, $name = null, $min = 0, $max = 0, $typeResult = 'all')
     {
@@ -2399,7 +2399,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * List additional services.
      *
-     * @return array
+     * @param int    $start
+     * @param int    $end
+     * @param string $typeResult
+     *
+     * @return array|int
      */
     public function getServices($start, $end, $typeResult = 'all')
     {

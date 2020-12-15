@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 <div id="buy-courses-tabs">
     {% if sessions_are_included %}
         <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
@@ -29,7 +27,7 @@
                     {{ search_filter_form }}
                 </div>
                 <div class="col-md-9">
-                    <div class="row">
+                    <div class="row grid-courses">
                         {% if showing_courses %}
                             {% for course in courses %}
                                 <div class="col-md-4 col-sm-6">

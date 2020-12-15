@@ -1,4 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 <ul class="nav nav-tabs buy-courses-sessions-tabs" role="tablist">
     <li id="buy-courses-sessions-tab" class="active" role="presentation">
         <a href="sales_report.php" aria-controls="buy-courses_sessions"

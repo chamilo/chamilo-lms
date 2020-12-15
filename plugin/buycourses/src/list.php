@@ -55,6 +55,8 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('AvailableCourses');
 
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+
 $tpl = new Template($templateName);
 
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);

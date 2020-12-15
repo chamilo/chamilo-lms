@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
@@ -2309,6 +2310,13 @@ class User implements UserInterface, EquatableInterface
     public function getDateOfBirth()
     {
         return $this->dateOfBirth;
+    }
+
+    public function setUuid(UuidV4 $uuid): User
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 
     public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection

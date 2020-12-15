@@ -4,15 +4,19 @@
 
 namespace Chamilo\CoreBundle\Migrations;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class AbstractMigrationChamilo.
@@ -178,5 +182,98 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     public function removeSettingCurrent($variable)
     {
         //to be implemented
+    }
+
+    public function addLegacyFileToResource($filePath, $repo, $resource, $id)
+    {
+        if (!is_dir($filePath)) {
+            $class = get_class($resource);
+            $documentPath = basename($filePath);
+            if (file_exists($filePath)) {
+                $mimeType = mime_content_type($filePath);
+                $file = new UploadedFile($filePath, basename($documentPath), $mimeType, null, true);
+                if ($file) {
+                    $repo->addFile($resource, $file);
+                } else {
+                    $this->warnIf(true, "Cannot migrate $class #$id path: $documentPath ");
+                }
+            } else {
+                $this->warnIf(true, "Cannot migrate $class #'.$id.' file not found: $documentPath");
+            }
+        }
+    }
+
+    public function fixItemProperty($repo, $course, $admin, $resource, $parent, $items)
+    {
+        if (empty($items)) {
+            return;
+        }
+
+        $container = $this->getContainer();
+        $doctrine = $container->get('doctrine');
+        $em = $doctrine->getManager();
+        $sessionRepo = $container->get(SessionRepository::class);
+        $groupRepo = $container->get(CGroupRepository::class);
+        $userRepo = $container->get(UserRepository::class);
+
+        $resource->setParent($parent);
+        $resourceNode = null;
+        $userList = [];
+        $groupList = [];
+        $sessionList = [];
+        foreach ($items as $item) {
+            $visibility = $item['visibility'];
+            $sessionId = $item['session_id'];
+            $userId = $item['insert_user_id'];
+            $groupId = $item['to_group_id'];
+
+            $newVisibility = ResourceLink::VISIBILITY_PENDING;
+            switch ($visibility) {
+                case 0:
+                    $newVisibility = ResourceLink::VISIBILITY_PENDING;
+                    break;
+                case 1:
+                    $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+                    break;
+                case 2:
+                    $newVisibility = ResourceLink::VISIBILITY_DELETED;
+                    break;
+            }
+
+            if (isset($userList[$userId])) {
+                $user = $userList[$userId];
+            } else {
+                $user = $userList[$userId] = $userRepo->find($userId);
+            }
+
+            if (null === $user) {
+                $user = $admin;
+            }
+
+            $session = null;
+            if (!empty($sessionId)) {
+                if (isset($sessionList[$sessionId])) {
+                    $session = $sessionList[$sessionId];
+                } else {
+                    $session = $sessionList[$sessionId] = $sessionRepo->find($sessionId);
+                }
+            }
+
+            $group = null;
+            if (!empty($groupId)) {
+                if (isset($groupList[$groupId])) {
+                    $group = $groupList[$groupId];
+                } else {
+                    $group = $groupList[$groupId] = $groupRepo->find($groupId);
+                }
+            }
+
+            if (null === $resourceNode) {
+                $resourceNode = $repo->addResourceNode($resource, $user, $parent);
+                $em->persist($resourceNode);
+            }
+            $resource->addCourseLink($course, $session, $group, $newVisibility);
+            $em->persist($resource);
+        }
     }
 }

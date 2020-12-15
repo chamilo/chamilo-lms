@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -17,7 +16,6 @@ use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -51,11 +49,11 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         $groupList = [];
         $sessionList = [];
         $batchSize = self::BATCH_SIZE;
+
+        $admin = $this->getAdmin();
         $urlRepo = $em->getRepository(AccessUrl::class);
         $urls = $urlRepo->findAll();
 
-        // Adding documents to the resource node tree.
-        $admin = $this->getAdmin();
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
             $accessUrlRelCourses = $url->getCourses();
@@ -67,7 +65,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $courseCode = $course->getCode();
                 $course = $courseRepo->find($courseId);
 
-                $sql = "SELECT * FROM c_document WHERE c_id = $courseId ORDER BY filetype DESC";
+                $sql = "SELECT * FROM c_document WHERE c_id = $courseId
+                        ORDER BY filetype DESC";
                 $result = $connection->executeQuery($sql);
                 $documents = $result->fetchAllAssociative();
                 foreach ($documents as $documentData) {
@@ -99,105 +98,16 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                             dirname($documentPath)
                         );
                         $parent = $documentRepo->find($parentId);
-                        /*$dirList = explode('/', $documentPath);
-                        $dirList = array_filter($dirList);
-                        $len = count($dirList) + 1;
-                        $realDir = '';
-                        for ($i = 1; $i < $len; $i++) {
-                            $realDir .= '/'.(isset($dirList[$i]) ? $dirList[$i] : '');
-                            $parentId = \DocumentManager::get_document_id(['real_id'=> $courseId], $realDir);
-                            var_dump($parentId);
-                            if (!empty($parentId)) {
-                            }
-                        }*/
                     }
 
                     if (null === $parent) {
                         $parent = $course;
                     }
 
-                    $document->setParent($parent);
-                    foreach ($items as $item) {
-                        $sessionId = $item['session_id'];
-                        $visibility = $item['visibility'];
-                        $userId = $item['insert_user_id'];
-                        $groupId = $item['to_group_id'];
-
-                        $newVisibility = ResourceLink::VISIBILITY_PENDING;
-                        switch ($visibility) {
-                            case 0:
-                                $newVisibility = ResourceLink::VISIBILITY_PENDING;
-                                break;
-                            case 1:
-                                $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-                                break;
-                            case 2:
-                                $newVisibility = ResourceLink::VISIBILITY_DELETED;
-                                break;
-                        }
-
-                        if (isset($userList[$userId])) {
-                            $user = $userList[$userId];
-                        } else {
-                            $user = $userList[$userId] = $userRepo->find($userId);
-                        }
-
-                        if (null === $user) {
-                            $user = $admin;
-                        }
-
-                        $session = null;
-                        if (!empty($sessionId)) {
-                            if (isset($sessionList[$sessionId])) {
-                                $session = $sessionList[$sessionId];
-                            } else {
-                                $session = $sessionList[$sessionId] = $sessionRepo->find($sessionId);
-                            }
-                        }
-
-                        $group = null;
-                        if (!empty($groupId)) {
-                            if (isset($groupList[$groupId])) {
-                                $group = $groupList[$groupId];
-                            } else {
-                                $group = $groupList[$groupId] = $groupRepo->find($groupId);
-                            }
-                        }
-
-                        if (null === $resourceNode) {
-                            $resourceNode = $documentRepo->addResourceNode($document, $user, $parent);
-                            $em->persist($resourceNode);
-                        }
-                        $document->addCourseLink($course, $session, $group, $newVisibility);
-                        $em->persist($document);
-                        $createNode = true;
-                    }
-
+                    $this->fixItemProperty($documentRepo, $course, $admin, $document, $parent, $items);
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
-                    if (!is_dir($filePath)) {
-                        $createNode = false;
-                        if (file_exists($filePath)) {
-                            $mimeType = mime_content_type($filePath);
-                            $file = new UploadedFile($filePath, basename($documentPath), $mimeType, null, true);
-                            if ($file) {
-                                $createNode = true;
-                                $documentRepo->addFile($document, $file);
-                            } else {
-                                $this->warnIf(
-                                    true,
-                                    'Cannot migrate doc #'.$documentData['iid'].' path: '.$documentPath.' '
-                                );
-                                $createNode = false;
-                            }
-                        } else {
-                            $this->warnIf(
-                                true,
-                                'Cannot migrate doc #'.$documentData['iid'].' file not found: '.$documentPath
-                            );
-                        }
-                    }
+                    $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
 
-                    //var_dump($createNode,$documentPath, $documentData['iid'], file_exists($filePath));
                     $em->persist($document);
                     $em->flush();
                     //$em->clear();
@@ -213,6 +123,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                         $em->clear();
                     }*/
                 }
+                $em->clear();
             }
 
             $em->flush();

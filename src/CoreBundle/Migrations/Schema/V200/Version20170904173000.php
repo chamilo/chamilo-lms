@@ -95,6 +95,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_F8E479F61BAD783F ON c_group_category (resource_node_id)');
         }
 
+        $this->addSql('UPDATE c_group_info SET category_id = NULL WHERE category_id NOT IN (select iid FROM c_group_category)');
         if (false === $schema->getTable('c_group_info')->hasForeignKey('FK_CE06532412469DE2')) {
             $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE06532412469DE2 FOREIGN KEY (category_id) REFERENCES c_group_category (iid) ON DELETE CASCADE');
         }

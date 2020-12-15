@@ -8,13 +8,6 @@ services:
 #    Chamilo\CoreBundle\Repository\ResourceFactory: ~
     Chamilo\CoreBundle\Repository\ResourceNodeRepository: ~
 
-#    Chamilo\CoreBundle\Repository\ResourceRepository:
-#        abstract: true
-#        calls:
-#            - setAuthorizationChecker: ['@security.authorization_checker']
-#            - setRouter: ['@router']
-#            - setSlugify: [Cocur\Slugify\Slugify]
-
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
         resource: '../../Repository'
@@ -41,5 +34,3 @@ services:
             - setSlugify: [ '@cocur_slugify' ]
             - setToolChain: [ '@Chamilo\CoreBundle\ToolChain' ]
             - setResourceNodeRepository: [ '@Chamilo\CoreBundle\Repository\ResourceNodeRepository' ]
-
-    Chamilo\CoreBundle\Repository\GroupRepository: ~

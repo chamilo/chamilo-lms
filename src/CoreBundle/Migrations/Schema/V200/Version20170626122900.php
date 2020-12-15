@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * User.
@@ -67,24 +66,6 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE user CHANGE website website VARCHAR(255) DEFAULT NULL');
         } else {
             $this->addSql('ALTER TABLE user ADD website VARCHAR(255) DEFAULT NULL');
-        }
-
-        $em = $this->getEntityManager();
-
-        if (false === $table->hasColumn('uuid')) {
-            $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");
-            $sql = 'SELECT id FROM user';
-            $result = $em->getConnection()->executeQuery($sql);
-            $users = $result->fetchAllAssociative();
-            foreach ($users as $item) {
-                $uuid = Uuid::v4()->toBinary();
-                $userId = $item['id'];
-                $this->addSql('UPDATE user SET uuid = :uuid WHERE id = :id ', ['uuid' => $uuid, 'id' => $userId]);
-            }
-
-            if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {
-                $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649D17F50A6 ON user (uuid);');
-            }
         }
 
         if (false === $table->hasColumn('api_token')) {

@@ -7,23 +7,26 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Symfony\Component\Uid\Uuid;
 
 final class Version20201212114910 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate portals and users';
+        return 'Migrate access_url, users';
     }
 
     public function up(Schema $schema): void
     {
+        $table = $schema->getTable('user');
+        if (false === $table->hasColumn('uuid')) {
+            $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");
+        }
+
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
-        /** @var Slugify $slugify */
-        $slugify = new Slugify();
         $em = $doctrine->getManager();
         /** @var Connection $connection */
         $connection = $em->getConnection();
@@ -67,6 +70,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
             if ($userEntity->hasResourceNode()) {
                 continue;
             }
+            $userEntity->setUuid(Uuid::v4());
             $creatorId = $user['creator_id'];
             $creator = null;
             if (isset($userList[$adminId])) {
@@ -89,5 +93,9 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         }
         $em->flush();
         $em->clear();
+
+        if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649D17F50A6 ON user (uuid);');
+        }
     }
 }

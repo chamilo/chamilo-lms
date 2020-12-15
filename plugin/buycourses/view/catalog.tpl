@@ -29,7 +29,15 @@
                 <div class="col-md-9">
                     <div class="row grid-courses">
                         {% if showing_courses %}
+                            {% set courseCounter = 0 %}
                             {% for course in courses %}
+                                {% set courseCounter = courseCounter + 1 %}
+                                {% if courseCounter == 4 %}
+                                    <div class="clearfix .d-sm-none .d-md-block"></div>
+                                    {% set courseCounter = 0 %}
+                                {% elseif courseCounter == 3 %}
+                                    <div class="clearfix .d-md-none .d-lg-block"></div>
+                                {% endif %}
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
@@ -81,7 +89,15 @@
                         {% endif %}
 
                         {% if showing_sessions %}
+                            {% set sessionCounter = 0 %}
                             {% for session in sessions %}
+                                {% set sessionCounter = sessionCounter + 1 %}
+                                {% if sessionCounter == 4 %}
+                                    <div class="clearfix hidden-xs hidden-sm"></div>
+                                    {% set sessionCounter = 0 %}
+                                {% elseif sessionCounter == 3 %}
+                                    <div class="clearfix hidden-xs hidden-md hidden-lg"></div>
+                                {% endif %}
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">

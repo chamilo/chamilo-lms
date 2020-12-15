@@ -74,7 +74,7 @@ if (!empty($courseId)) {
     $count = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, null, null, STUDENT, true);
     $students = [];
     if (isset($_REQUEST['compare']) || isset($_REQUEST['move'])) {
-        $default = 20;
+        /*$default = 20;
         $nro_pages = round($count / $default) + 1;
         $begin = $default * ($page - 1);
         $end = $default * $page;
@@ -96,9 +96,10 @@ if (!empty($courseId)) {
             }
 
             $content .= $navigation;
-        }
+        }*/
 
-        $limit = "LIMIT $begin, $default";
+        //$limit = "LIMIT $begin, $default";
+        $limit = null;
         $students = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, $limit, null, STUDENT);
         foreach ($students as $student) {
             $studentId = $student['user_id'];

@@ -621,7 +621,8 @@ abstract class Question
                 ->setExtra($this->extra)
                 ->setLevel($this->level)
                 ->setFeedback($this->feedback)
-                ->setParent($exerciseEntity)
+                //->setParent($exerciseEntity)
+                ->setParent($courseEntity)
                 ->addCourseLink(
                     $courseEntity,
                     api_get_session_entity(),

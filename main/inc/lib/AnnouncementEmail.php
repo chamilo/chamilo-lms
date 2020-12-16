@@ -231,7 +231,6 @@ class AnnouncementEmail
         // Build the link by hand because api_get_cidreq() doesn't accept course params
         $course_param = 'cidReq='.$courseCode.'&id_session='.$session_id.'&gidReq='.api_get_group_id();
         $course_name = $this->course('title');
-
         $result = "<div>$content</div>";
 
         // Adding attachment
@@ -240,17 +239,25 @@ class AnnouncementEmail
             $result .= '<br />';
             $result .= Display::url(
                 $attachment['filename'],
-                api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
+                api_get_path(WEB_CODE_PATH).
+                'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
             );
             $result .= '<br />';
         }
 
         $result .= '<hr />';
+
         $userInfo = api_get_user_info();
         if (!empty($userInfo)) {
-            $result .= '<a href="mailto:'.$userInfo['mail'].'">'.$userInfo['complete_name'].'</a><br/>';
+            if ('true' === api_get_setting('show_email_addresses')) {
+                $result .= '<a href="mailto:'.$userInfo['mail'].'">'.$userInfo['complete_name'].'</a><br/>';
+            } else {
+                $result .= '<p>'.$userInfo['complete_name'].'</p><br/>';
+            }
         }
-        $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.$course_name.'</a><br/>';
+
+        $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.
+            $course_name.'</a><br/>';
 
         return $result;
     }
@@ -266,7 +273,7 @@ class AnnouncementEmail
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = $this->announcement('id');
         $course_id = $this->course('real_id');
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND announcement_id = $id ";
         $rs = Database::query($sql);
         $course_path = $this->course('directory');
@@ -347,7 +354,7 @@ class AnnouncementEmail
             } else {
                 if (!empty($this->logger)) {
                     $this->logger->addInfo(
-                        'Message "'.$subject.'" was already sent. Announcement: #'.$this->announcement('id').'. 
+                        'Message "'.$subject.'" was already sent. Announcement: #'.$this->announcement('id').'.
                         User: #'.$user['user_id']
                     );
                 }
@@ -401,12 +408,12 @@ class AnnouncementEmail
         $id = $this->announcement('id');
         $courseId = $this->course('real_id');
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $sql = "UPDATE $table SET 
+        $sql = "UPDATE $table SET
                 email_sent = 1
-                WHERE 
-                    c_id = $courseId AND 
-                    id = $id AND 
-                    session_id = {$this->session_id} 
+                WHERE
+                    c_id = $courseId AND
+                    id = $id AND
+                    session_id = {$this->session_id}
                 ";
         Database::query($sql);
     }

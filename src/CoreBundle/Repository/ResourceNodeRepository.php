@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
+use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
@@ -37,7 +38,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
     }
 
     /**
-     * @return \League\Flysystem\FilesystemInterface
+     * @return FilesystemInterface
      */
     public function getFileSystem()
     {

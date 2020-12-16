@@ -123,13 +123,13 @@ final class Version20201216105331 extends AbstractMigrationChamilo
             $em->clear();*/
 
             // c_thematic_plan.
-            $sql = "SELECT * FROM c_thematic_plan WHERE c_id = $courseId
+            /*$sql = "SELECT * FROM c_thematic_plan WHERE c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
-                /** @var CThematicPlan $resource */
+                // @var CThematicPlan $resource
                 $resource = $thematicPlanRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
@@ -150,9 +150,8 @@ final class Version20201216105331 extends AbstractMigrationChamilo
                 $em->persist($resource);
                 $em->flush();
             }
-
             $em->flush();
-            $em->clear();
+            $em->clear();*/
         }
     }
 }

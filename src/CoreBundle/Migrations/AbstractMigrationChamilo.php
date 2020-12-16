@@ -9,10 +9,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
@@ -217,11 +215,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $documentRepo = $container->get(CDocumentRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
-        $userRepo = $container->get(UserRepository::class);
         $courseId = $course->getId();
         $id = $resource->getResourceIdentifier();
 

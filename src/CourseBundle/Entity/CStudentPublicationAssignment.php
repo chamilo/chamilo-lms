@@ -4,8 +4,6 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CStudentPublicationAssignment extends AbstractResource implements ResourceInterface
+class CStudentPublicationAssignment
 {
     /**
      * @var int
@@ -226,9 +224,7 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
         return $this->cId;
     }
 
-    /**
-     * Resource identifier.
-     */
+    /*
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
@@ -242,5 +238,5 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
     public function setResourceName(string $name): self
     {
         //return $this->setTitle($name);
-    }
+    }*/
 }

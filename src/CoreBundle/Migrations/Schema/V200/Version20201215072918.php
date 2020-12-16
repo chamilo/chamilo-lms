@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -79,7 +78,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                         'to_group_id' => 0,
                         'session_id' => $eventData['session_id'],
                     ];
-                    $this->fixItemProperty($eventRepo, $course, $admin, $event, $course, $items);
+                    $this->fixItemProperty('calendar_event',$eventRepo, $course, $admin, $event, $course, $items);
                     $em->persist($event);
                     $em->flush();
                     continue;

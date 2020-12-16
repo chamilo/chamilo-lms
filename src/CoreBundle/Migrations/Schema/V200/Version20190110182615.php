@@ -42,6 +42,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX session ON c_lp');
         }
 
+        $this->addSql('UPDATE c_lp SET category_id = NULL WHERE category_id = 0');
         if (false === $table->hasForeignKey('FK_F67ABBEB12469DE2')) {
             $this->addSql(
                 'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB12469DE2 FOREIGN KEY (category_id) REFERENCES c_lp_category (iid)'

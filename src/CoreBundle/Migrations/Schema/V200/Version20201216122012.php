@@ -88,11 +88,14 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CLp $resource */
                 $resource = $lpRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
+
+                $course = $courseRepo->find($courseId);
 
                 $result = $this->fixItemProperty(
                     'learnpath',

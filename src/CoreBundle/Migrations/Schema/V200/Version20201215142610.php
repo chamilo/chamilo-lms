@@ -12,13 +12,10 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CQuizAnswer;
-use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
-use Chamilo\CourseBundle\Repository\CQuizCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -115,11 +112,16 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                 }*/
             }
 
+            $em->flush();
+            $em->clear();
+
             // Question categories
             $sql = "SELECT * FROM c_quiz_question_category WHERE c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
+
+            $course = $courseRepo->find($courseId);
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 /** @var CQuizQuestionCategory $resource */
@@ -143,21 +145,29 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                 $em->flush();
             }
 
+            $em->flush();
+            $em->clear();
+
+            $courseAdmin = $userRepo->find($courseAdmin->getId());
+
             $sql = "SELECT * FROM c_quiz_question WHERE c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+                $course = $courseRepo->find($courseId);
                 /** @var CQuizQuestion $resource */
                 $resource = $quizQuestionRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
 
-                $resourceNode = $quizQuestionRepo->addResourceNode($resource, $courseAdmin, $course);
+                $resource->setParent($course);
+                //$resourceNode = $quizQuestionRepo->addResourceNode($resource, $courseAdmin, $course);
                 $resource->addCourseLink($course, null, null, ResourceLink::VISIBILITY_PUBLISHED);
-                $em->persist($resourceNode);
+                //$em->persist($resourceNode);
+                $em->persist($resource);
 
                 $pictureId = $resource->getPicture();
                 if (!empty($pictureId)) {
@@ -165,13 +175,16 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     $document = $documentRepo->find($pictureId);
                     if ($document && $document->hasResourceNode() && $document->getResourceNode()->hasResourceFile()) {
                         $resourceFile = $document->getResourceNode()->getResourceFile();
-                        $resourceNode->setResourceFile($resourceFile);
+                        $resource->getResourceNode()->setResourceFile($resourceFile);
+                        //$em->persist($resourceNode);
                     }
                 }
 
                 $em->persist($resource);
                 $em->flush();
             }
+            $em->flush();
+            $em->clear();
         }
     }
 }

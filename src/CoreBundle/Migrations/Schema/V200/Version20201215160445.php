@@ -106,6 +106,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     continue;
                 }
 
+                $course = $courseRepo->find($courseId);
                 $categoryId = $itemData['forum_category'];
                 $parent = $forumCategoryRepo->find($categoryId);
                 // Parent should not be null, because every forum must have a category, in this case use the course
@@ -156,6 +157,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     continue;
                 }
 
+                $course = $courseRepo->find($courseId);
                 /** @var CForumForum $resource */
                 $forum = $forumRepo->find($forumId);
 
@@ -196,6 +198,8 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 if (empty($threadId)) {
                     continue;
                 }
+
+                $course = $courseRepo->find($courseId);
 
                 /** @var CForumThread $resource */
                 $thread = $forumThreadRepo->find($threadId);

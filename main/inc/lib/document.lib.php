@@ -836,7 +836,7 @@ class DocumentManager
 
                 if (!empty($document_folders)) {
                     // natsort($document_folders);
-                     natcasesort ($document_folders);
+                    natcasesort($document_folders);
                 }
 
                 return $document_folders;
@@ -926,7 +926,7 @@ class DocumentManager
             if (is_array($visibleFolders) && is_array($invisibleFolders)) {
                 $document_folders = array_diff($visibleFolders, $invisibleFolders);
                 // natsort($document_folders);
-                natcasesort ($document_folders);
+                natcasesort($document_folders);
 
                 return $document_folders;
             } elseif (is_array($visibleFolders)) {

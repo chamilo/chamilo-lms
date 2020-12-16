@@ -4,7 +4,7 @@
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 
-require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script(true);
 api_block_anonymous_users();
@@ -68,7 +68,7 @@ $table->set_column_filter(
 
         $data = Display::url(
             $title,
-            ('cmi5' === $ativityType ? '../cmi5/tool.php' : 'tool.php')."?id=$id&$cidReq",
+            ('cmi5' === $ativityType ? 'cmi5/view.php' : 'tincan/view.php')."?id=$id&$cidReq",
             ['class' => 'show']
         );
 
@@ -81,7 +81,9 @@ $table->set_column_filter(
 );
 
 if ($isAllowedToEdit) {
-    $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-right'], ['class' => 'text-right']);
+    $thAttributes = ['class' => 'text-right', 'style' => 'width: 100px;'];
+
+    $table->set_header(1, get_lang('Actions'), false, $thAttributes, $thAttributes);
     $table->set_column_filter(
         1,
         function ($id) use ($cidReq, $isAllowedToEdit) {
@@ -90,15 +92,15 @@ if ($isAllowedToEdit) {
             if ($isAllowedToEdit) {
                 $actions[] = Display::url(
                     Display::return_icon('statistics.png', get_lang('Reporting')),
-                    "stats.php?$cidReq&id=$id"
+                    "tincan/stats.php?$cidReq&id=$id"
                 );
                 $actions[] = Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),
-                    "edit.php?$cidReq&edit=$id"
+                    "tool_edit.php?$cidReq&edit=$id"
                 );
                 $actions[] = Display::url(
                     Display::return_icon('delete.png', get_lang('Delete')),
-                    "delete.php?$cidReq&delete=$id"
+                    "tool_delete.php?$cidReq&delete=$id"
                 );
             }
 
@@ -119,14 +121,9 @@ $view->assign('header', $pageTitle);
 
 if ($isAllowedToEdit) {
     $actions = Display::url(
-            Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
-            "add.php?$cidReq"
-        )
-        .PHP_EOL
-        .Display::url(
-            Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
-            "../cmi5/add.php?$cidReq"
-        );
+        Display::return_icon('import_scorm.png', get_lang('Import'), [], ICON_SIZE_MEDIUM),
+        "tool_import.php?$cidReq"
+    );
 
     $view->assign(
         'actions',

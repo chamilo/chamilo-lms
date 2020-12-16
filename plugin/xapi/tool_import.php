@@ -2,21 +2,33 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\XApi\Importer\Cmi5Importer;
-use Chamilo\PluginBundle\XApi\Parser\Cmi5Parser;
+use Chamilo\PluginBundle\XApi\Importer\PackageImporter;
+use Chamilo\PluginBundle\XApi\Importer\XmlPackageImporter;
+use Chamilo\PluginBundle\XApi\Parser\PackageParser;
+use Chamilo\PluginBundle\XApi\Parser\TinCanParser;
 
-require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script(true);
 api_protect_teacher_script();
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();
+$cidReq = api_get_cidreq();
 
 $plugin = XApiPlugin::create();
+$pluginIndex = "./start.php?$cidReq";
 
-$frmActivity = new FormValidator('frm_cmi5', 'post', api_get_self().'?'.api_get_cidreq());
-$frmActivity->addFile('file', $plugin->get_lang('Cmi5Package'));
+$langAddActivity = $plugin->get_lang('AddActivity');
+
+$frmActivity = new FormValidator('frm_activity', 'post', api_get_self().'?'.api_get_cidreq());
+$frmActivity->addFile('file', $plugin->get_lang('XApiPackage'));
+$frmActivity->addButtonAdvancedSettings('advanced_params');
+$frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
+$frmActivity->addText('title', get_lang('Title'), false);
+$frmActivity->addTextarea('description', get_lang('Description'));
+$frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('TinCanAllowMultipleAttempts'));
+$frmActivity->addHtml('</div>');
 $frmActivity->addButtonAdvancedSettings('lrs_params', $plugin->get_lang('LrsConfiguration'));
 $frmActivity->addHtml('<div id="lrs_params_options" style="display:none">');
 $frmActivity->addText(
@@ -28,7 +40,7 @@ $frmActivity->addText(
     false
 );
 $frmActivity->addText(
-    'lrs_auth',
+    'lrs_auth_username',
     [
         $plugin->get_lang('lrs_auth_username'),
         $plugin->get_lang('lrs_auth_username_help'),
@@ -36,7 +48,7 @@ $frmActivity->addText(
     false
 );
 $frmActivity->addText(
-    'lrs_auth',
+    'lrs_auth_password',
     [
         $plugin->get_lang('lrs_auth_password'),
         $plugin->get_lang('lrs_auth_password_help'),
@@ -48,9 +60,9 @@ $frmActivity->addButtonImport(get_lang('Import'));
 $frmActivity->addRule('file', get_lang('ThisFileIsRequired'), 'required');
 $frmActivity->addRule(
     'file',
-    $plugin->get_lang('OnlyZipAllowed'),
+    $plugin->get_lang('OnlyZipOrXmlAllowed'),
     'filetype',
-    ['zip']
+    ['zip', 'xml']
 );
 $frmActivity->applyFilter('title', 'trim');
 $frmActivity->applyFilter('description', 'trim');
@@ -62,17 +74,35 @@ if ($frmActivity->validate()) {
     $zipFileInfo = $_FILES['file'];
 
     try {
-        $packageFile = Cmi5Importer::create($zipFileInfo, $course)->import();
+        $importer = PackageImporter::create($zipFileInfo, $course);
+        $packageFile = $importer->import();
 
-        $parser = Cmi5Parser::create($packageFile, $course, $session);
-
+        $parser = PackageParser::create(
+            $importer->getPackageType(),
+            $packageFile,
+            $course,
+            $session
+        );
         $toolLaunch = $parser->parse();
     } catch (Exception $e) {
         Display::addFlash(
             Display::return_message($e->getMessage(), 'error')
         );
 
+        header("Location: $pluginIndex");
         exit;
+    }
+
+    if ('tincan' === $importer->getPackageType() && isset($values['allow_multiple_attempts'])) {
+        $toolLaunch->setAllowMultipleAttempts(true);
+    }
+
+    if (!empty($values['title'])) {
+        $toolLaunch->setTitle($values['title']);
+    }
+
+    if (!empty($values['description'])) {
+        $toolLaunch->setDescription($values['description']);
     }
 
     if (!empty($values['lrs_url'])
@@ -87,33 +117,35 @@ if ($frmActivity->validate()) {
 
     $em = Database::getManager();
     $em->persist($toolLaunch);
-
-    foreach ($parser->getToc() as $cmi5Item) {
-        $cmi5Item->setTool($toolLaunch);
-
-        $em->persist($cmi5Item);
-    }
-
     $em->flush();
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('ActivityImported'), 'success')
     );
 
-    header('Location: '.api_get_course_url());
+    header("Location: $pluginIndex");
     exit;
 }
 
 $frmActivity->setDefaults(['allow_multiple_attempts' => true]);
 
-$pageTitle = $plugin->get_title();
+$actions = Display::url(
+    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    'start.php?'.api_get_cidreq()
+);
+
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => '../tincan/index.php', 'name' => $plugin->get_lang('ToolTinCan')];
-
-$langAddActivity = $plugin->get_lang('AddActivity');
+$interbreadcrumb[] = ['url' => 'start.php', 'name' => $plugin->get_lang('ToolTinCan')];
 
 $view = new Template($langAddActivity);
 $view->assign('header', $langAddActivity);
+$view->assign(
+    'actions',
+    Display::toolbarAction(
+        'xapi_actions',
+        [$actions]
+    )
+);
 $view->assign('content', $pageContent);
 $view->display_one_col_template();

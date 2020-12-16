@@ -62,7 +62,7 @@ $tocHtml = $itemsRepo->buildTree(
 
             return Display::url(
                 $title,
-                "launch_item.php?tool={$toolLaunch->getId()}&id={$node['id']}&$cidReq",
+                "launch.php?tool={$toolLaunch->getId()}&id={$node['id']}&$cidReq",
                 [
                     'target' => 'ifr_content',
                     'class' => 'text-left btn-link',

@@ -100,7 +100,7 @@ class Cmi5Item
     /**
      * @var \Chamilo\PluginBundle\Entity\XApi\ToolLaunch
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\ToolLaunch")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\ToolLaunch", inversedBy="items")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $tool;

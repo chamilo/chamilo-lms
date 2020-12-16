@@ -109,7 +109,7 @@ $content .= $pagination;
 // View
 $interbreadcrumb[] = [
     'name' => $plugin->get_title(),
-    'url' => 'index.php',
+    'url' => '../start.php',
 ];
 
 $htmlHeadXtra[] = "<script>
@@ -150,7 +150,7 @@ $htmlHeadXtra[] = "<script>
 
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    "index.php?$cidReq"
+    "../start.php?$cidReq"
 );
 
 $view = new Template($toolLaunch->getTitle());

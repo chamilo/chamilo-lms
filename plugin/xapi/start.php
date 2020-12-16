@@ -81,7 +81,9 @@ $table->set_column_filter(
 );
 
 if ($isAllowedToEdit) {
-    $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-right'], ['class' => 'text-right']);
+    $thAttributes = ['class' => 'text-right', 'style' => 'width: 100px;'];
+
+    $table->set_header(1, get_lang('Actions'), false, $thAttributes, $thAttributes);
     $table->set_column_filter(
         1,
         function ($id) use ($cidReq, $isAllowedToEdit) {

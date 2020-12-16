@@ -925,9 +925,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
         }
         $forum
-            ->setParent($course)
+            ->setParent($forumCategory)
             ->addCourseLink($course, $session);
-        $repo->update($forum);
+        $repo->create($forum);
 
         $forumId = $forum->getIid();
         if ($forumId > 0) {

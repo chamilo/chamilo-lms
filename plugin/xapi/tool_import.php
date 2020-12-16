@@ -40,7 +40,7 @@ $frmActivity->addText(
     false
 );
 $frmActivity->addText(
-    'lrs_auth',
+    'lrs_auth_username',
     [
         $plugin->get_lang('lrs_auth_username'),
         $plugin->get_lang('lrs_auth_username_help'),
@@ -48,7 +48,7 @@ $frmActivity->addText(
     false
 );
 $frmActivity->addText(
-    'lrs_auth',
+    'lrs_auth_password',
     [
         $plugin->get_lang('lrs_auth_password'),
         $plugin->get_lang('lrs_auth_password_help'),

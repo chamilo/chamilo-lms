@@ -68,7 +68,7 @@ $table->set_column_filter(
 
         $data = Display::url(
             $title,
-            ('cmi5' === $ativityType ? 'cmi5/tool.php' : 'tincan/tool.php')."?id=$id&$cidReq",
+            ('cmi5' === $ativityType ? 'cmi5/view.php' : 'tincan/view.php')."?id=$id&$cidReq",
             ['class' => 'show']
         );
 
@@ -94,11 +94,11 @@ if ($isAllowedToEdit) {
                 );
                 $actions[] = Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),
-                    "tincan/edit.php?$cidReq&edit=$id"
+                    "tool_edit.php?$cidReq&edit=$id"
                 );
                 $actions[] = Display::url(
                     Display::return_icon('delete.png', get_lang('Delete')),
-                    "tincan/delete.php?$cidReq&delete=$id"
+                    "tool_delete.php?$cidReq&delete=$id"
                 );
             }
 
@@ -120,7 +120,7 @@ $view->assign('header', $pageTitle);
 if ($isAllowedToEdit) {
     $actions = Display::url(
         Display::return_icon('import_scorm.png', get_lang('Import'), [], ICON_SIZE_MEDIUM),
-        "import.php?$cidReq"
+        "tool_import.php?$cidReq"
     );
 
     $view->assign(

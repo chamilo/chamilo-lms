@@ -5,7 +5,7 @@
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
-require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script(true);
 api_protect_teacher_script();

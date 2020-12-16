@@ -12,7 +12,7 @@ use Doctrine\DBAL\Types\Types;
  * Check if script can be called.
  */
 if (!function_exists('api_get_path')) {
-    die('This script must be loaded through the Chamilo plugin installer sequence');
+    exit('This script must be loaded through the Chamilo plugin installer sequence');
 }
 
 $entityManager = Database::getManager();

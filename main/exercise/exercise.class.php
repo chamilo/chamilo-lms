@@ -4261,7 +4261,7 @@ class Exercise
                                 $studentAnswerToShow = $studentAnswer;
 
                                 if (empty($studentAnswer)) {
-                                    continue;
+                                    break;
                                 }
 
                                 if ($debug) {

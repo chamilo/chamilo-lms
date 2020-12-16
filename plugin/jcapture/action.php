@@ -5,7 +5,7 @@
  * @author Pavel Vlasov
  */
 if (!defined('DOKU_INC')) {
-    die();
+    exit();
 }
 if (!defined('DOKU_PLUGIN')) {
     define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');

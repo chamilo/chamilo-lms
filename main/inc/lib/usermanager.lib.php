@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\UserBundle\Entity\User;
@@ -5688,11 +5689,9 @@ class UserManager
     /**
      * Return the user id of teacher or session administrator.
      *
-     * @param array $courseInfo
-     *
-     * @return mixed The user id, or false if the session ID was negative
+     * @return int|bool The user id, or false if the session ID was negative
      */
-    public static function get_user_id_of_course_admin_or_session_admin($courseInfo)
+    public static function get_user_id_of_course_admin_or_session_admin(array $courseInfo)
     {
         $session = api_get_session_id();
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -5705,39 +5704,39 @@ class UserManager
 
         $courseId = $courseInfo['real_id'];
 
-        if ($session == 0 || is_null($session)) {
+        if (empty($session)) {
             $sql = 'SELECT u.id uid FROM '.$table_user.' u
                     INNER JOIN '.$table_course_user.' ru
                     ON ru.user_id = u.id
                     WHERE
-                        ru.status = 1 AND
+                        ru.status = '.COURSEMANAGER.' AND
                         ru.c_id = "'.$courseId.'" ';
-            $rs = Database::query($sql);
-            $num_rows = Database::num_rows($rs);
-            if ($num_rows == 1) {
-                $row = Database::fetch_array($rs);
-
-                return $row['uid'];
-            } else {
-                $my_num_rows = $num_rows;
-                $my_user_id = Database::result($rs, $my_num_rows - 1, 'uid');
-
-                return $my_user_id;
-            }
-        } elseif ($session > 0) {
+        } else {
             $sql = 'SELECT u.id uid FROM '.$table_user.' u
                     INNER JOIN '.$table_session_course_user.' sru
                     ON sru.user_id=u.id
                     WHERE
                         sru.c_id="'.$courseId.'" AND
-                        sru.status=2';
-            $rs = Database::query($sql);
-            $row = Database::fetch_array($rs);
-
-            return $row['uid'];
+                        sru.status = '.SessionEntity::COACH;
         }
 
-        return false;
+        $rs = Database::query($sql);
+        $num_rows = Database::num_rows($rs);
+
+        if (0 === $num_rows) {
+            return false;
+        }
+
+        if (1 === $num_rows) {
+            $row = Database::fetch_array($rs);
+
+            return (int) $row['uid'];
+        }
+
+        $my_num_rows = $num_rows;
+        $my_user_id = Database::result($rs, $my_num_rows - 1, 'uid');
+
+        return (int) $my_user_id;
     }
 
     /**

@@ -169,7 +169,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                         get_lang('SendMessageTo'),
                         $teachers,
                         [
-                            'multiple' => 'multiple'
+                            'multiple' => 'multiple',
                         ]
                     );
                 } else {

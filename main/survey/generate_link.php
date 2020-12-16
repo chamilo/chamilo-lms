@@ -44,7 +44,7 @@ echo '<div class="row">';
     echo get_lang('GenerateSurveyAccessLinkExplanation');
 
     echo '<pre>';
-    echo  $link;
+    echo $link;
     echo '</pre>';
 
     echo '</div>';

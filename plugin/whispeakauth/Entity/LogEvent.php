@@ -140,6 +140,6 @@ class LogEvent
      */
     public function getTypeString()
     {
-        return  '-';
+        return '-';
     }
 }

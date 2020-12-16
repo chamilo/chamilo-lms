@@ -56,7 +56,7 @@ class SectionSequenceLookup extends LoadedKeyLookup
                     $this->calledClass = CourseModulesQuizTask::class;
                     break;
                 default:
-                    continue;
+                    break;
             }
 
             $lpItemId = parent::transform([$mModuleId]);

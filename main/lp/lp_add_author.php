@@ -393,7 +393,7 @@ if ($form->validate()) {
                     Session::write('message', implode(' / ', $sms));
                 }
                 echo "<script>window.location.replace(\"$currentUrl\");</script>";
-                die();
+                exit();
             }
         }
     }

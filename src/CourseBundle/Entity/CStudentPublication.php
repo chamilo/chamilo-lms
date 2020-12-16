@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -796,9 +797,20 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getCorrection(): ?ResourceNode
+    {
+        if ($this->hasResourceNode()) {
+            $children = $this->getResourceNode()->getChildren();
+            foreach ($children as $child) {
+                if ($child instanceof CStudentPublicationCorrection) {
+                    return $child;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

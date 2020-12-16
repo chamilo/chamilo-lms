@@ -112,7 +112,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_5246F7461BAD783F ON c_student_publication (resource_node_id)');
         }
 
-        $table = $schema->getTable('c_student_publication_assignment');
+        /*$table = $schema->getTable('c_student_publication_assignment');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_student_publication_assignment ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
@@ -121,6 +121,12 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql(
                 'CREATE UNIQUE INDEX UNIQ_25687EB81BAD783F ON c_student_publication_assignment (resource_node_id)'
             );
+        }
+        */
+
+        if (false === $schema->hasTable('c_student_publication_correction')) {
+            $this->addSql('CREATE TABLE c_student_publication_correction (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_B7309BBA1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
+            $this->addSql('ALTER TABLE c_student_publication_correction ADD CONSTRAINT FK_B7309BBA1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
         }
 
         $table = $schema->getTable('c_student_publication_comment');
@@ -133,6 +139,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
                 'CREATE UNIQUE INDEX UNIQ_35C509F61BAD783F ON c_student_publication_comment (resource_node_id)'
             );
         }
+
         $table = $schema->getTable('c_calendar_event');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id INT DEFAULT NULL');

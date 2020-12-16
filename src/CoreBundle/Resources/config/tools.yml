@@ -85,6 +85,8 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository
                 student_publications_comments:
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository
+                student_publications_corrections:
+                    repository: Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository
         tags:
             - {name: chamilo_core.tool}
 

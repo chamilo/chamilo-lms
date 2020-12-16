@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CThematicAdvance extends AbstractResource implements ResourceInterface
+class CThematicAdvance //extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -271,10 +271,7 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     {
         return $this->iid;
     }
-
-    /**
-     * Resource identifier.
-     */
+    /*
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
@@ -288,5 +285,5 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setContent($name);
-    }
+    }*/
 }

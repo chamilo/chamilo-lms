@@ -52,7 +52,6 @@ final class Version20201216105331 extends AbstractMigrationChamilo
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
-            $course = $courseRepo->find($courseId);
 
             // c_thematic.
             $sql = "SELECT * FROM c_thematic WHERE c_id = $courseId
@@ -66,6 +65,9 @@ final class Version20201216105331 extends AbstractMigrationChamilo
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
+
+                $course = $courseRepo->find($courseId);
+
                 $result = $this->fixItemProperty(
                     'thematic',
                     $thematicRepo,
@@ -83,18 +85,23 @@ final class Version20201216105331 extends AbstractMigrationChamilo
                 $em->flush();
             }
 
+            $em->flush();
+            $em->clear();
+
             // c_thematic_advance.
-            $sql = "SELECT * FROM c_thematic_advance WHERE c_id = $courseId
+            /*$sql = "SELECT * FROM c_thematic_advance WHERE c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
-                /** @var CThematicAdvance $resource */
+                // @var CThematicAdvance $resource
                 $resource = $thematicAdvanceRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
+
+                $course = $courseRepo->find($courseId);
                 $result = $this->fixItemProperty(
                     'thematic_advance',
                     $thematicAdvanceRepo,
@@ -111,6 +118,9 @@ final class Version20201216105331 extends AbstractMigrationChamilo
                 $em->persist($resource);
                 $em->flush();
             }
+
+            $em->flush();
+            $em->clear();*/
 
             // c_thematic_plan.
             $sql = "SELECT * FROM c_thematic_plan WHERE c_id = $courseId

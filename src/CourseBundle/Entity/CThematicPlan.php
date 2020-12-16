@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-class CThematicPlan extends AbstractResource implements ResourceInterface
+class CThematicPlan //extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -211,10 +211,7 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
 
         return $this;
     }
-
-    /**
-     * Resource identifier.
-     */
+    /*
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
@@ -228,5 +225,5 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
-    }
+    }*/
 }

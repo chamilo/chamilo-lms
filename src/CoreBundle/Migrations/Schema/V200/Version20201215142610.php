@@ -4,12 +4,23 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
+use Chamilo\CourseBundle\Repository\CQuizCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -30,6 +41,10 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         $connection = $em->getConnection();
 
         $quizRepo = $container->get(CQuizRepository::class);
+        $quizQuestionRepo = $container->get(CQuizQuestionRepository::class);
+        $quizQuestionCategoryRepo = $container->get(CQuizQuestionCategoryRepository::class);
+
+        $documentRepo = $container->get(CDocumentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
@@ -38,10 +53,24 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);
+            $courseRelUserList = $course->getTeachers();
+            $courseAdmin = null;
+            if (!empty($courseRelUserList)) {
+                foreach ($courseRelUserList as $courseRelUser) {
+                    $courseAdmin = $courseRelUser->getUser();
+                    break;
+                }
+            }
 
+            if (null === $courseAdmin) {
+                $courseAdmin = $admin;
+            }
+
+            // Quiz
             $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
@@ -57,7 +86,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     'quiz',
                     $quizRepo,
                     $course,
-                    $admin,
+                    $courseAdmin,
                     $resource,
                     $course
                 );
@@ -84,6 +113,64 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                 $items = $result->fetchAllAssociative();
                 foreach ($items as $itemData) {
                 }*/
+            }
+
+            // Question categories
+            $sql = "SELECT * FROM c_quiz_question_category WHERE c_id = $courseId
+                    ORDER BY iid";
+            $result = $connection->executeQuery($sql);
+            $items = $result->fetchAllAssociative();
+            foreach ($items as $itemData) {
+                $id = $itemData['iid'];
+                /** @var CQuizQuestionCategory $resource */
+                $resource = $quizQuestionCategoryRepo->find($id);
+                if ($resource->hasResourceNode()) {
+                    continue;
+                }
+                $result = $this->fixItemProperty(
+                    'test_category',
+                    $quizQuestionCategoryRepo,
+                    $course,
+                    $courseAdmin,
+                    $resource,
+                    $course
+                );
+                if (false === $result) {
+                    continue;
+                }
+
+                $em->persist($resource);
+                $em->flush();
+            }
+
+            $sql = "SELECT * FROM c_quiz_question WHERE c_id = $courseId
+                    ORDER BY iid";
+            $result = $connection->executeQuery($sql);
+            $items = $result->fetchAllAssociative();
+            foreach ($items as $itemData) {
+                $id = $itemData['iid'];
+                /** @var CQuizQuestion $resource */
+                $resource = $quizQuestionRepo->find($id);
+                if ($resource->hasResourceNode()) {
+                    continue;
+                }
+
+                $resourceNode = $quizQuestionRepo->addResourceNode($resource, $courseAdmin, $course);
+                $resource->addCourseLink($course, null, null, ResourceLink::VISIBILITY_PUBLISHED);
+                $em->persist($resourceNode);
+
+                $pictureId = $resource->getPicture();
+                if (!empty($pictureId)) {
+                    /** @var CDocument $document */
+                    $document = $documentRepo->find($pictureId);
+                    if ($document && $document->hasResourceNode() && $document->getResourceNode()->hasResourceFile()) {
+                        $resourceFile = $document->getResourceNode()->getResourceFile();
+                        $resourceNode->setResourceFile($resourceFile);
+                    }
+                }
+
+                $em->persist($resource);
+                $em->flush();
             }
         }
     }

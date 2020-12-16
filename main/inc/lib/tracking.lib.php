@@ -7527,13 +7527,13 @@ class Tracking
         }
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $id = $row['id'];
+            $id = (int) $row['id'];
             if ($update_database) {
                 $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = $new_session_id WHERE c_id = $course_id AND id = $id";
                 if ($debug) {
                     var_dump($sql);
                 }
-                $res = Database::query($sql);
+                Database::query($sql);
                 if ($debug) {
                     var_dump($res);
                 }
@@ -7542,7 +7542,7 @@ class Tracking
                 if ($debug) {
                     var_dump($sql);
                 }
-                $res = Database::query($sql);
+                Database::query($sql);
                 if ($debug) {
                     var_dump($res);
                 }

@@ -14,7 +14,7 @@ use Exception;
 class XmlPackageImporter extends PackageImporter
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function import(): string
     {

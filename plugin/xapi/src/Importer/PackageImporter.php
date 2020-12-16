@@ -32,9 +32,6 @@ abstract class PackageImporter
 
     /**
      * AbstractImporter constructor.
-     *
-     * @param array                             $fileInfo
-     * @param \Chamilo\CoreBundle\Entity\Course $course
      */
     protected function __construct(array $fileInfo, Course $course)
     {
@@ -45,9 +42,6 @@ abstract class PackageImporter
     }
 
     /**
-     * @param array                             $fileInfo
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     *
      * @return \Chamilo\PluginBundle\XApi\Importer\XmlPackageImporter|\Chamilo\PluginBundle\XApi\Importer\ZipPackageImporter
      */
     public static function create(array $fileInfo, Course $course)
@@ -66,9 +60,6 @@ abstract class PackageImporter
      */
     abstract public function import(): string;
 
-    /**
-     * @return string
-     */
     public function getPackageType(): string
     {
         return $this->packageType;

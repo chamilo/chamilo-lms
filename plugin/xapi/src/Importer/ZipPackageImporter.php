@@ -10,14 +10,14 @@ use PclZip;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Class ZipImporter
+ * Class ZipImporter.
  *
  * @package Chamilo\PluginBundle\XApi\Importer
  */
 class ZipPackageImporter extends PackageImporter
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function import(): string
     {
@@ -55,8 +55,6 @@ class ZipPackageImporter extends PackageImporter
     }
 
     /**
-     * @param int $packageSize
-     *
      * @throws \Exception
      */
     protected function validateEnoughSpace(int $packageSize)
@@ -68,11 +66,6 @@ class ZipPackageImporter extends PackageImporter
         }
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
     private function generatePackageDirectory(string $name): string
     {
         $directoryPath = implode(

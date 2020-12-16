@@ -274,9 +274,6 @@ class ToolLaunch
         return $this;
     }
 
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
     public function getItems(): ArrayCollection
     {
         return $this->items;

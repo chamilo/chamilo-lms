@@ -16,7 +16,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class Cmi5Parser extends PackageParser
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function parse(): ToolLaunch
     {

@@ -15,7 +15,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class TinCanParser extends PackageParser
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function parse(): ToolLaunch
     {
@@ -48,9 +48,6 @@ class TinCanParser extends PackageParser
         return $toolLaunch;
     }
 
-    /**
-     * @return string
-     */
     private function parseLaunchUrl(Crawler $launchNode): string
     {
         $launchUrl = $launchNode->text();
@@ -69,5 +66,4 @@ class TinCanParser extends PackageParser
 
         return $launchUrl;
     }
-
 }

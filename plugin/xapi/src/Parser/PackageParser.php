@@ -30,9 +30,7 @@ abstract class PackageParser
     /**
      * AbstractParser constructor.
      *
-     * @param                                         $filePath
-     * @param \Chamilo\CoreBundle\Entity\Course       $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
+     * @param $filePath
      */
     protected function __construct($filePath, Course $course, Session $session = null)
     {
@@ -42,11 +40,6 @@ abstract class PackageParser
     }
 
     /**
-     * @param string                                  $packageType
-     * @param string                                  $filePath
-     * @param \Chamilo\CoreBundle\Entity\Course       $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
-     *
      * @throws \Exception
      *
      * @return mixed
@@ -63,8 +56,5 @@ abstract class PackageParser
         }
     }
 
-    /**
-     * @return \Chamilo\PluginBundle\Entity\XApi\ToolLaunch
-     */
     abstract public function parse(): \Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 }

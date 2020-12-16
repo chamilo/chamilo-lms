@@ -20,6 +20,8 @@ class Version20180319145700 extends AbstractMigrationChamilo
         if (!$survey->hasColumn('is_mandatory')) {
             $this->addSql('ALTER TABLE c_survey ADD COLUMN is_mandatory TINYINT(1) DEFAULT "0" NOT NULL');
         }
+
+
         /*if (!$survey->hasIndex('idx_survey_code')) {
             $this->addSql('CREATE INDEX idx_survey_code ON c_survey (code)');
         }*/

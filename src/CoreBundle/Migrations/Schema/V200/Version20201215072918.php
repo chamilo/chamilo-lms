@@ -78,7 +78,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                         'to_group_id' => 0,
                         'session_id' => $eventData['session_id'],
                     ];
-                    $this->fixItemProperty('calendar_event',$eventRepo, $course, $admin, $event, $course, $items);
+                    $this->fixItemProperty('calendar_event', $eventRepo, $course, $admin, $event, $course, $items);
                     $em->persist($event);
                     $em->flush();
                     continue;

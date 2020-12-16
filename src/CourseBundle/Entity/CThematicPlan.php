@@ -211,6 +211,7 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
 
         return $this;
     }
+
     /*
     public function getResourceIdentifier(): int
     {

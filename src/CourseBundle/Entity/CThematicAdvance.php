@@ -271,6 +271,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     {
         return $this->iid;
     }
+
     /*
     public function getResourceIdentifier(): int
     {

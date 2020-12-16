@@ -265,9 +265,6 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->advances;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

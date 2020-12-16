@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -21,7 +22,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate announcements';
+        return 'Migrate c_announcement, c_announcement_attachment';
     }
 
     public function up(Schema $schema): void
@@ -34,7 +35,6 @@ final class Version20201215153517 extends AbstractMigrationChamilo
 
         $announcementRepo = $container->get(CAnnouncementRepository::class);
         $announcementAttachmentRepo = $container->get(CAnnouncementAttachmentRepository::class);
-
         $courseRepo = $container->get(CourseRepository::class);
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
@@ -43,10 +43,10 @@ final class Version20201215153517 extends AbstractMigrationChamilo
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
-
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);

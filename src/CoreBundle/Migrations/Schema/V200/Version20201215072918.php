@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -33,7 +34,6 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $urlRepo = $container->get(AccessUrlRepository::class);
         $eventRepo = $container->get(CCalendarEventRepository::class);
         $eventAttachmentRepo = $container->get(CCalendarEventAttachmentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
@@ -45,9 +45,9 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
-        $urls = $urlRepo->findAll();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $counter = 1;
             $courseId = $course->getId();
@@ -70,7 +70,8 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $result = $connection->executeQuery($sql);
                 $items = $result->fetchAllAssociative();
 
-                // For some reason this event doesnt have a c_item_property value, then we added to the main course.
+                // For some reason this event doesnt have a c_item_property value,
+                // then we added to the main course and assign the admin as the creator.
                 if (empty($items)) {
                     $items[] = [
                         'visibility' => 1,
@@ -83,6 +84,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                     $em->flush();
                     continue;
                 }
+                // Assign parent.
                 $parent = null;
                 if (!empty($eventData['parent_event_id'])) {
                     $parent = $eventRepo->find($eventData['parent_event_id']);

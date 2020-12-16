@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -37,6 +38,7 @@ final class Version20201215135838 extends AbstractMigrationChamilo
 
         $admin = $this->getAdmin();
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $counter = 1;
             $courseId = $course->getId();

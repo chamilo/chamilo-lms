@@ -131,12 +131,12 @@ $frmActivity->setDefaults(['allow_multiple_attempts' => true]);
 
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    'index.php?'.api_get_cidreq()
+    'start.php?'.api_get_cidreq()
 );
 
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => $plugin->get_lang('ToolTinCan')];
+$interbreadcrumb[] = ['url' => 'start.php', 'name' => $plugin->get_lang('ToolTinCan')];
 
 $view = new Template($langAddActivity);
 $view->assign('header', $langAddActivity);

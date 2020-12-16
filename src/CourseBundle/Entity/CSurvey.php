@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-class CSurvey
+class CSurvey extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -1017,5 +1019,25 @@ class CSurvey
     public function isMandatory()
     {
         return $this->isMandatory;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

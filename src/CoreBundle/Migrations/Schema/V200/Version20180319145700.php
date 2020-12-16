@@ -17,10 +17,15 @@ class Version20180319145700 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $survey = $schema->getTable('c_survey');
-        if (!$survey->hasColumn('is_mandatory')) {
+        if (false === $survey->hasColumn('is_mandatory')) {
             $this->addSql('ALTER TABLE c_survey ADD COLUMN is_mandatory TINYINT(1) DEFAULT "0" NOT NULL');
         }
 
+        if (false === $survey->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_survey ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_survey ADD CONSTRAINT FK_F246DB301BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_F246DB301BAD783F ON c_survey (resource_node_id);');
+        }
 
         /*if (!$survey->hasIndex('idx_survey_code')) {
             $this->addSql('CREATE INDEX idx_survey_code ON c_survey (code)');

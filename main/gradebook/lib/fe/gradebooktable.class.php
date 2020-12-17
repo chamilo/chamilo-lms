@@ -412,7 +412,6 @@ class GradebookTable extends SortableTable
                 $invisibility_span_open = $isAllowedToEdit && $item->is_visible() == '0' ? '<span class="text-muted">' : '';
                 $invisibility_span_close = $isAllowedToEdit && $item->is_visible() == '0' ? '</span>' : '';
 
-                // Id
                 if ($this->teacherView) {
                     if (false == $this->exportToPdf) {
                         $row[] = $this->build_id_column($item);
@@ -768,6 +767,7 @@ class GradebookTable extends SortableTable
                 $sortable_data[] = $row;
             }
         } else {
+            $showPercentage = false === $this->datagen->hidePercentage;
             // Total for student.
             if (count($main_cat) > 1) {
                 $main_weight = (int) $main_cat[0]->get_weight();
@@ -783,7 +783,10 @@ class GradebookTable extends SortableTable
                 $totalResult[1] = $main_weight;
 
                 if (!empty($model)) {
-                    $totalResult = ExerciseLib::show_score($totalResult[0], $totalResult[1], false);
+                    $totalResult = ExerciseLib::show_score(
+                        $totalResult[0],
+                        $totalResult[1]
+                    );
                 } else {
                     $totalResult = $scoredisplay->display_score(
                         $totalResult,
@@ -883,7 +886,7 @@ class GradebookTable extends SortableTable
                                 $totalBestScore = $totalBest;
                             }
 
-                            $totalBest = ExerciseLib::show_score($totalBestScore[0], $totalBestScore[1], true);
+                            $totalBest = ExerciseLib::show_score($totalBestScore[0], $totalBestScore[1], $showPercentage);
                         } else {
                             $totalBest = $scoredisplay->display_score(
                                 $totalBest,
@@ -914,7 +917,7 @@ class GradebookTable extends SortableTable
                                 $totalAverageScore = $totalAverage;
                             }
 
-                            $totalAverage = ExerciseLib::show_score($totalAverageScore[0], $totalAverageScore[1], true);
+                            $totalAverage = ExerciseLib::show_score($totalAverageScore[0], $totalAverageScore[1], $showPercentage);
                         } else {
                             $totalAverage = $scoredisplay->display_score(
                                 $totalAverage,

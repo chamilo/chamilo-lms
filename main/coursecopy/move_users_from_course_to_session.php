@@ -71,7 +71,19 @@ if (!empty($courseId)) {
         $form->addButtonCopy(get_lang('Move'), 'move');
     }
 
-    $count = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, null, null, STUDENT, true);
+    if (empty($sourceSessionId)) {
+        $count = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, null, null, STUDENT, true);
+    } else {
+        $count = CourseManager::get_user_list_from_course_code(
+            $courseInfo['code'],
+            $sourceSessionId,
+            null,
+            null,
+            0,
+            true
+        );
+    }
+
     $students = [];
     if (isset($_REQUEST['compare']) || isset($_REQUEST['move'])) {
         /*$default = 20;
@@ -100,7 +112,17 @@ if (!empty($courseId)) {
 
         //$limit = "LIMIT $begin, $default";
         $limit = null;
-        $students = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, $limit, null, STUDENT);
+        if (empty($sourceSessionId)) {
+            $students = CourseManager::get_user_list_from_course_code($courseInfo['code'], 0, $limit, null, STUDENT);
+        } else {
+            $students = CourseManager::get_user_list_from_course_code(
+                $courseInfo['code'],
+                $sourceSessionId,
+                $limit,
+                null,
+                0
+            );
+        }
         foreach ($students as $student) {
             $studentId = $student['user_id'];
             $name = $student['firstname'].' '.$student['lastname'];

@@ -424,7 +424,8 @@ switch ($action) {
 }
 
 $content = $tpl->fetch($blogLayout);
-
+$tpl->assign('course_code', api_get_course_id());
+$tpl->assign('session_id', api_get_session_id());
 if ($actionsLeft) {
     $tpl->assign(
         'actions',

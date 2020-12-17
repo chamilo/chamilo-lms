@@ -14,8 +14,10 @@
                     {{ 'Search'|get_lang }}
                 </div>
                 <div class="panel-body">
-                    <form action="blog.php" method="get" enctype="multipart/form-data">
+                    <form action="blog.php?{{ _p.web_cid_query }}" method="get" enctype="multipart/form-data">
                         <div class="form-group">
+                            <input type="hidden" name="cidReq" value="{{ course_code }}"/>
+                            <input type="hidden" name="id_session" value="{{ session_id }}"/>
                             <input type="hidden" name="blog_id" value="{{ id_blog }}"/>
                             <input type="hidden" name="action" value="view_search_result"/>
                             <input type="text" class="form-control" size="20" name="q" value="{{ search }}"/>

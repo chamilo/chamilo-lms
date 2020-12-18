@@ -935,10 +935,7 @@ function LMSCommit(val) {
     olms.G_LastErrorMessage = 'No error';
     savedata(olms.lms_item_id);
 
-    reinit_updatable_vars_list();
-    //now changes have been commited, no need to update until next SetValue()
-    //commit = 'false' ;
-
+    //reinit_updatable_vars_list();
     logit_scorm('LMSCommit() end ');
 
     return('true');

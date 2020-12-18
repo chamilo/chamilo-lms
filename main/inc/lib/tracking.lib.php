@@ -7409,12 +7409,20 @@ class Tracking
                                 )
                                 ->setActive(false)
                                 ->setAccepted(true)
+                                ->setPostGroupId(0)
+                                ->setHasProperties($parent_data['has_properties'])
+                                ->setWeight($parent_data['weight'])
+                                ->setContainsFile($parent_data['contains_file'])
                                 ->setFiletype('folder')
                                 ->setSentDate($now)
                                 ->setQualification($parent_data['qualification'])
                                 ->setParentId(0)
                                 ->setQualificatorId(0)
+                                ->setUserId($parent_data['user_id'])
+                                ->setAllowTextAssignment($parent_data['allow_text_assignment'])
                                 ->setSession($session);
+
+                            $publication->setDocumentId($parent_data['document_id']);
 
                             Database::getManager()->persist($publication);
                             Database::getManager()->flush();
@@ -7433,6 +7441,9 @@ class Tracking
                                 $new_session_id
                             );
                             $new_parent_id = $id;
+                            if (!isset($result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir])) {
+                                $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir] = 0;
+                            }
                             $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir]++;
                         }
                     }
@@ -7482,7 +7493,7 @@ class Tracking
                     if ($update_database) {
                         // Creating a new work
                         $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
-
+                        $data['post_group_id']  = (int) $data['post_group_id'] ;
                         $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
                         $publication
                             ->setUrl($new_url)
@@ -7491,10 +7502,18 @@ class Tracking
                             ->setDescription($data['description'].' file moved')
                             ->setActive($data['active'])
                             ->setAccepted($data['accepted'])
-                            ->setPostGroupId($data['post_group_id'] ?? 0)
+                            ->setPostGroupId($data['post_group_id'])
                             ->setSentDate($data['sent_date'])
                             ->setParentId($new_parent_id)
-                            ->setSession($session);
+                            ->setWeight($data['weight'])
+                            ->setHasProperties(0)
+                            ->setWeight($data['weight'])
+                            ->setContainsFile($data['contains_file'])
+                            ->setSession($session)
+                            ->setUserId($data['user_id'])
+                            ->setFiletype('file')
+                            ->setDocumentId(0)
+                        ;
 
                         $em->persist($publication);
                         $em->flush();
@@ -7512,6 +7531,9 @@ class Tracking
                             null,
                             $new_session_id
                         );
+                        if (!isset($result_message[$TBL_STUDENT_PUBLICATION])) {
+                            $result_message[$TBL_STUDENT_PUBLICATION] = 0;
+                        }
                         $result_message[$TBL_STUDENT_PUBLICATION]++;
                         $full_file_name = $course_dir.'/'.$doc_url;
                         $new_file = $course_dir.'/'.$new_url;

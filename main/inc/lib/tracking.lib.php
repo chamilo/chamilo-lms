@@ -7445,23 +7445,21 @@ class Tracking
                                 echo $sql_add_publication;
                             }
                             Database::query($sql_add_publication);
-                            $id = Database::insert_id();
-
-                            $sql_update = "UPDATE $TBL_STUDENT_PUBLICATION
-                                           SET  has_properties = '".$id."',
-                                                view_properties = '1'
-                                           WHERE id = ".$new_parent_id;
-                            if ($debug) {
-                                echo $sql_update;
+                            $id = (int) Database::insert_id();
+                            if ($id) {
+                                $sql_update = "UPDATE $TBL_STUDENT_PUBLICATION
+                                               SET  has_properties = '".$id."',
+                                                    view_properties = '1'
+                                               WHERE id = ".$new_parent_id;
+                                if ($debug) {
+                                    echo $sql_update;
+                                }
+                                Database::query($sql_update);
+                                if (!isset($result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT])) {
+                                    $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT] = 0;
+                                }
+                                $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT]++;
                             }
-                            Database::query($sql_update);
-                            if ($debug) {
-                                var_dump($sql_update);
-                            }
-                            if (!isset($result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT])) {
-                                $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT] = 0;
-                            }
-                            $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT]++;
                         }
                     }
 
@@ -7499,11 +7497,13 @@ class Tracking
                             $result = copy($full_file_name, $new_file);
                             if ($result) {
                                 unlink($full_file_name);
-                                $sql = "DELETE FROM $TBL_STUDENT_PUBLICATION WHERE id= ".$data['id'];
-                                if ($debug) {
-                                    var_dump($sql);
+                                if (isset($data['id'])) {
+                                    $sql = "DELETE FROM $TBL_STUDENT_PUBLICATION WHERE id= ".$data['id'];
+                                    if ($debug) {
+                                        var_dump($sql);
+                                    }
+                                    Database::query($sql);
                                 }
-                                Database::query($sql);
                                 api_item_property_update(
                                     $course_info,
                                     'work',
@@ -7593,7 +7593,6 @@ class Tracking
             echo '<table class="table" width="100%">';
             echo '<tr>';
             echo '<td width="50%" valign="top">';
-
             if ($origin_session_id == 0) {
                 echo '<h5>'.get_lang('OriginCourse').'</h5>';
             } else {

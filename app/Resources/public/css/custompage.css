@@ -3,9 +3,6 @@
     --success-color: #16D090;
 }
 
-body, html {
-    height: 100%;
-}
 body {
     margin: 0;
     line-height: 1.5;

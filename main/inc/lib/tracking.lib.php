@@ -7387,7 +7387,7 @@ class Tracking
                     }
                     $sub_res = Database::query($sql);
                     $num_rows = Database::num_rows($sub_res);
-
+                    $new_parent_id = 0;
                     if ($num_rows > 0) {
                         $new_result = Database::fetch_array($sub_res, 'ASSOC');
                         $created_dir = $new_result['url'];
@@ -7398,7 +7398,7 @@ class Tracking
                             $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
                             $created_dir = '/'.$created_dir;
                             $now = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-                            //Creating directory
+                            // Creating directory
                             $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
                             $publication
                                 ->setUrl($created_dir)
@@ -7416,9 +7416,22 @@ class Tracking
                                 ->setQualificatorId(0)
                                 ->setSession($session);
 
+                            Database::getManager()->persist($publication);
+                            Database::getManager()->flush();
                             $id = $publication->getIid();
-                            //Folder created
-                            api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', api_get_user_id());
+                            // Folder created
+                            api_item_property_update(
+                                $course_info,
+                                'work',
+                                $id,
+                                'DirectoryCreated',
+                                api_get_user_id(),
+                                null,
+                                null,
+                                null,
+                                null,
+                                $new_session_id
+                            );
                             $new_parent_id = $id;
                             $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir]++;
                         }
@@ -7432,7 +7445,7 @@ class Tracking
                     }
                     $rest_select = Database::query($sql);
                     if (Database::num_rows($rest_select) > 0) {
-                        if ($update_database) {
+                        if ($update_database && $new_parent_id) {
                             $assignment_data = Database::fetch_array($rest_select, 'ASSOC');
                             $sql_add_publication = "INSERT INTO ".$TBL_STUDENT_PUBLICATION_ASSIGNMENT." SET
                                     	c_id = '$course_id',
@@ -7487,7 +7500,18 @@ class Tracking
                         $em->flush();
 
                         $id = $publication->getIid();
-                        api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id);
+                        api_item_property_update(
+                            $course_info,
+                            'work',
+                            $id,
+                            'DocumentAdded',
+                            $user_id,
+                            null,
+                            null,
+                            null,
+                            null,
+                            $new_session_id
+                        );
                         $result_message[$TBL_STUDENT_PUBLICATION]++;
                         $full_file_name = $course_dir.'/'.$doc_url;
                         $new_file = $course_dir.'/'.$new_url;

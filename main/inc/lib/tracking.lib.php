@@ -7491,7 +7491,7 @@ class Tracking
                             ->setDescription($data['description'].' file moved')
                             ->setActive($data['active'])
                             ->setAccepted($data['accepted'])
-                            ->setPostGroupId($data['post_group_id'])
+                            ->setPostGroupId($data['post_group_id'] ?? 0)
                             ->setSentDate($data['sent_date'])
                             ->setParentId($new_parent_id)
                             ->setSession($session);

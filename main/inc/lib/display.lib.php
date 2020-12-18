@@ -590,7 +590,10 @@ class Display
                         }
                     }
                 }
-                $hmail .= '&body='.rawurlencode($content);
+
+                if (!empty($content)) {
+                    $hmail .= '&body='.rawurlencode($content);
+                }
             }
         }
 

@@ -676,7 +676,7 @@ class Thematic
         $em = Database::getManager();
 
         /** @var CThematicAdvance $advance */
-        $advance = $em->find($id);
+        $advance = $repo->find($id);
 
         $repoThematic = Container::getThematicRepository();
         $thematic = $repoThematic->find($thematic_id);
@@ -975,8 +975,8 @@ class Thematic
                 ->setCId($this->course_int_id)
                 ->setThematic($thematic)
                 ->setDescriptionType($description_type)
-                ->setParent($course)
-                ->addCourseLink($course, api_get_session_entity())
+                //->setParent($course)
+                //->addCourseLink($course, api_get_session_entity())
             ;
 
             $repo->create($plan);

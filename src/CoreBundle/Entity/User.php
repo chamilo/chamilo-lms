@@ -68,18 +68,17 @@ class User implements UserInterface, EquatableInterface
     public const ANONYMOUS = 6;
 
     /**
-     * @var int
      * @Groups({"user:read", "resource_node:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\Column(name="api_token", type="string", unique=true, nullable=true)
      */
-    protected $apiToken;
+    protected string $apiToken;
 
     /**
      * @var string

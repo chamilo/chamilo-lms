@@ -7,11 +7,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * LPs.
- */
 class Version20190110182615 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Migrate c_lp';
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE c_lp CHANGE author author LONGTEXT NOT NULL');
@@ -137,9 +139,5 @@ class Version20190110182615 extends AbstractMigrationChamilo
                 'ALTER TABLE c_lp_rel_usergroup ADD CONSTRAINT FK_DB8689FFD2112630 FOREIGN KEY (usergroup_id) REFERENCES usergroup (id);'
             );
         }
-    }
-
-    public function down(Schema $schema): void
-    {
     }
 }

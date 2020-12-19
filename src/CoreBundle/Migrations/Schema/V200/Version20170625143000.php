@@ -17,31 +17,57 @@ class Version20170625143000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_thematic');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_thematic ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_thematic ADD CONSTRAINT FK_6D8F59B91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql(
+                'ALTER TABLE c_thematic ADD CONSTRAINT FK_6D8F59B91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
+            );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_6D8F59B91BAD783F ON c_thematic (resource_node_id)');
         }
 
-        /*$table = $schema->getTable('c_thematic_advance');
-        $this->addSql('ALTER TABLE c_thematic_advance CHANGE thematic_id thematic_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL');
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E972395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)');
-            $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid)');
-            //$this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_62798E971BAD783F ON c_thematic_advance (resource_node_id)');
+        $table = $schema->getTable('c_thematic_advance');
+        $this->addSql(
+            'ALTER TABLE c_thematic_advance CHANGE thematic_id thematic_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL'
+        );
+
+        if (false === $table->hasForeignKey('FK_62798E972395FCED')) {
+            $this->addSql(
+                'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E972395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)'
+            );
+        }
+        if (false === $table->hasForeignKey('FK_62798E97163DDA15')) {
+            $this->addSql(
+                'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid)'
+            );
+        }
+        if (false === $table->hasIndex('IDX_62798E97163DDA15')) {
+            $this->addSql('CREATE INDEX IDX_62798E97163DDA15 ON c_thematic_advance (attendance_id);');
         }
 
-        if (false === $table->hasIndex('IDX_62798E97163DDA15')) {
-            $this->addSql('CREATE INDEX IDX_62798E97163DDA15 ON c_thematic_advance (attendance_id)');
+        /*
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id INT DEFAULT NULL');
+
+            //$this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_62798E971BAD783F ON c_thematic_advance (resource_node_id)');
         }*/
 
-        /*$table = $schema->getTable('c_thematic_plan');
+        $table = $schema->getTable('c_thematic_plan');
         $this->addSql('ALTER TABLE c_thematic_plan CHANGE thematic_id thematic_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_1197487C2395FCED')) {
+            $this->addSql(
+                'ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C2395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)'
+            );
+        }
+
+        if (false === $table->hasIndex('IDX_1197487C2395FCED')) {
+            $this->addSql('CREATE INDEX IDX_1197487C2395FCED ON c_thematic_plan (thematic_id)');
+        }
+
+        /*
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_thematic_plan ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C2395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)');
+
             $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE INDEX IDX_1197487C2395FCED ON c_thematic_plan (thematic_id)');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_1197487C1BAD783F ON c_thematic_plan (resource_node_id)');
         }*/
 
@@ -125,8 +151,12 @@ class Version20170625143000 extends AbstractMigrationChamilo
         */
 
         if (false === $schema->hasTable('c_student_publication_correction')) {
-            $this->addSql('CREATE TABLE c_student_publication_correction (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_B7309BBA1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
-            $this->addSql('ALTER TABLE c_student_publication_correction ADD CONSTRAINT FK_B7309BBA1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
+            $this->addSql(
+                'CREATE TABLE c_student_publication_correction (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_B7309BBA1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+            );
+            $this->addSql(
+                'ALTER TABLE c_student_publication_correction ADD CONSTRAINT FK_B7309BBA1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
+            );
         }
 
         $table = $schema->getTable('c_student_publication_comment');

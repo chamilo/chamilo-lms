@@ -91,7 +91,6 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 if (null === $parent) {
                     $parent = $course;
                 }
-                $result = $this->fixItemProperty('calendar_event', $eventRepo, $course, $admin, $event, $parent);
 
                 if (false === $result) {
                     continue;

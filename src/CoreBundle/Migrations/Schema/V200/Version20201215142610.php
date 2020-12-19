@@ -26,7 +26,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate c_quiz';
+        return 'Migrate c_quiz, c_quiz_question_category, c_quiz_question';
     }
 
     public function up(Schema $schema): void
@@ -115,7 +115,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $em->flush();
             $em->clear();
 
-            // Question categories
+            // Question categories.
             $sql = "SELECT * FROM c_quiz_question_category WHERE c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);

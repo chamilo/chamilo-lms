@@ -4,12 +4,14 @@
 
 namespace Chamilo\CoreBundle\Migrations;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\DBAL\Connection;
@@ -185,8 +187,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         //to be implemented
     }
 
-    public function addLegacyFileToResource($filePath, $repo, $resource, $id, $fileName = '')
-    {
+    public function addLegacyFileToResource(
+        string $filePath,
+        ResourceRepository $repo,
+        AbstractResource $resource,
+        $id,
+        $fileName = '',
+        $description = ''
+    ) {
         if (!is_dir($filePath)) {
             $class = get_class($resource);
             $documentPath = basename($filePath);

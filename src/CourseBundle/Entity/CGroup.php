@@ -11,16 +11,21 @@ use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     normalizationContext={"groups"={"group:read"}},
+ * )
+ *
  * @ORM\Table(
  *  name="c_group_info",
  *  indexes={
  *  }
  * )
  *
- * @ApiResource()
  * @ORM\Entity
  */
 class CGroup extends AbstractResource implements ResourceInterface
@@ -31,6 +36,7 @@ class CGroup extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
+     * @Groups({"group:read", "group:write"})
      */
     protected $iid;
 
@@ -38,12 +44,13 @@ class CGroup extends AbstractResource implements ResourceInterface
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @Groups({"group:read", "group:write"})
      */
     protected $name;
 
     /**
      * @var bool
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="status", type="boolean", nullable=true)
      */
     protected $status;

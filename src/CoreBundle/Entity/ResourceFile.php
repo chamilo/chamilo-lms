@@ -170,6 +170,13 @@ class ResourceFile
     protected $video;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    protected $description;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -377,6 +384,18 @@ class ResourceFile
         return $this;
     }
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function getFile(): ?File
     {
         return $this->file;
@@ -385,7 +404,7 @@ class ResourceFile
     /**
      * @param File|UploadedFile $file
      */
-    public function setFile(File $file = null): void
+    public function setFile(File $file = null): self
     {
         $this->file = $file;
 
@@ -394,6 +413,8 @@ class ResourceFile
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
+
+        return $this;
     }
 
     public function getContentUrl(): ?string

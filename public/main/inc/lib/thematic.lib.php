@@ -932,7 +932,7 @@ class Thematic
         ];
         /** @var CThematicPlan $plan */
         $plan = $repo->findOneBy($criteria);
-
+        $em = Database::getManager();
         // check thematic plan type already exists
         /*$sql = "SELECT id FROM $tbl_thematic_plan
                 WHERE
@@ -945,7 +945,9 @@ class Thematic
                 ->setTitle($title)
                 ->setDescription($description)
             ;
-            $repo->update($plan);
+            $em->persist($plan);
+            $em->flush();
+            //$repo->update($plan);
 
         // update
             /*$params = [
@@ -979,7 +981,9 @@ class Thematic
                 //->addCourseLink($course, api_get_session_entity())
             ;
 
-            $repo->create($plan);
+            //$repo->create($plan);
+            $em->persist($plan);
+            $em->flush();
             if ($plan && $plan->getIid()) {
                 /*
                 api_item_property_update(
@@ -1014,6 +1018,7 @@ class Thematic
                 $thematic->getPlans()->removeElement($plan);
             }
         }
+
         $repo->update($thematic);
 
         return false;

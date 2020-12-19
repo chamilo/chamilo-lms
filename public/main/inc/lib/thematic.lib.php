@@ -673,9 +673,10 @@ class Thematic
         $start_date = $this->start_date;
         $duration = intval($this->duration);
         $repo = Container::getThematicAdvanceRepository();
+        $em = Database::getManager();
 
         /** @var CThematicAdvance $advance */
-        $advance = $repo->find($id);
+        $advance = $em->find($id);
 
         $repoThematic = Container::getThematicRepository();
         $thematic = $repoThematic->find($thematic_id);
@@ -688,8 +689,8 @@ class Thematic
             $advance
                 ->setCId($this->course_int_id)
                 ->setContent($content)
-                //->setThematic($thematic)
-                //->setAttendance($attendance)
+                ->setThematic($thematic)
+                ->setAttendance($attendance)
                 ->setStartDate(api_get_utc_datetime($start_date, true, true))
                 ->setDuration($duration)
             ;
@@ -703,11 +704,12 @@ class Thematic
             }
 
             $courseEntity = api_get_course_entity();
-            $advance
+            /*$advance
                 ->setParent($courseEntity)
                 ->addCourseLink($courseEntity, api_get_session_entity())
-            ;
-            $repo->create($advance);
+            ;*/
+            $em->persist($advance);
+            $em->flush();
 
             $last_id = $advance->getIid();
         } else {
@@ -725,7 +727,9 @@ class Thematic
             if ($attendance) {
                 $advance->setAttendance($attendance);
             }
-            $repo->update($advance);
+            //$repo->update($advance);
+            $em->persist($advance);
+            $em->flush();
         }
 
         return $last_id;

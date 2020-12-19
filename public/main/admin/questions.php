@@ -98,7 +98,7 @@ if ($formSent) {
     if ($pagination) {
         $urlExercise = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
-        $warningText = addslashes(api_htmlentities(get_lang('ConfirmYourChoice')));
+        $warningText = addslashes(api_htmlentities(get_lang('Please confirm your choice')));
 
         /** @var CQuizQuestion $question */
         for ($i = 0; $i < $length; $i++) {

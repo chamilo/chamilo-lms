@@ -78,7 +78,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @ORM\Column(name="api_token", type="string", unique=true, nullable=true)
      */
-    protected string $apiToken;
+    protected $apiToken;
 
     /**
      * @var string
@@ -743,6 +743,7 @@ class User implements UserInterface, EquatableInterface
     public function __construct()
     {
         $this->uuid = Uuid::v4();
+        $this->apiToken = '';
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;

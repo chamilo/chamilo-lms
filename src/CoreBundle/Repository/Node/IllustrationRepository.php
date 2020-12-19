@@ -80,7 +80,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             $em->persist($illustration);
             $this->addResourceNode($illustration, $user, $resource);
         } else {
-            $illustration = $this->repository->findOneBy(['resourceNode' => $illustrationNode]);
+            $illustration = $this->findOneBy(['resourceNode' => $illustrationNode]);
         }
 
         //$this->addResourceToEveryone($illustrationNode);
@@ -101,7 +101,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             $illustration->setParentResourceNode($user->getResourceNode()->getId());
             $em->persist($illustration);
         } else {
-            $illustration = $this->repository->findOneBy(['resourceNode' => $illustrationNode]);
+            $illustration = $this->findOneBy(['resourceNode' => $illustrationNode]);
         }
 
         $file = $this->addFile($illustration, $uploadFile);

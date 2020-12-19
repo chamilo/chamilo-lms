@@ -195,7 +195,7 @@ class CourseRepository extends ResourceRepository
      */
     public function getCoursesByUser(User $user, AccessUrl $url)
     {
-        $qb = $this->repository->createQueryBuilder('course');
+        $qb = $this->createQueryBuilder('course');
 
         $qb
             ->innerJoin('user.courses', 'courseRelUser')

@@ -205,7 +205,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
     public function findByUsername(string $username): ?User
     {
-        $user = $this->repository->findOneBy(['username' => $username]);
+        $user = $this->findOneBy(['username' => $username]);
 
         if (null === $user) {
             throw new UsernameNotFoundException(sprintf("User with id '%s' not found.", $username));
@@ -221,8 +221,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function findByRole($role)
     {
-        $em = $this->repository->getEntityManager();
-        $qb = $em->createQueryBuilder();
+        $qb = $this->createQueryBuilder('u');
 
         $qb->select('u')
             ->from($this->_entityName, 'u')
@@ -237,7 +236,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function searchUserByKeyword($keyword)
     {
-        $qb = $this->repository->createQueryBuilder('a');
+        $qb = $this->createQueryBuilder('a');
 
         // Selecting user info
         $qb->select('DISTINCT b');
@@ -263,7 +262,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getCourses(User $user, AccessUrl $url, int $status, $keyword = '')
     {
-        $qb = $this->repository->createQueryBuilder('user');
+        $qb = $this->createQueryBuilder('user');
 
         $qb
             ->select('DISTINCT course')
@@ -340,7 +339,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     public function findByStatus($query, $status, $accessUrlId = null)
     {
         $accessUrlId = (int) $accessUrlId;
-        $queryBuilder = $this->repository->createQueryBuilder('u');
+        $queryBuilder = $this->createQueryBuilder('u');
 
         if ($accessUrlId > 0) {
             $queryBuilder->innerJoin(
@@ -369,12 +368,10 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      *
      * @param Session $session The session
      * @param Course  $course  The course
-     *
-     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCoachesForSessionCourse(Session $session, Course $course)
     {
-        $queryBuilder = $this->repository->createQueryBuilder('u');
+        $queryBuilder = $this->createQueryBuilder('u');
 
         $queryBuilder->select('u')
             ->innerJoin(
@@ -463,7 +460,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getSessionAdmins(User $user)
     {
-        $queryBuilder = $this->repository->createQueryBuilder('u');
+        $queryBuilder = $this->createQueryBuilder('u');
         $queryBuilder
             ->distinct()
             ->innerJoin(
@@ -496,7 +493,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getStudentBosses(User $user)
     {
-        $queryBuilder = $this->repository->createQueryBuilder('u');
+        $queryBuilder = $this->createQueryBuilder('u');
         $queryBuilder
             ->distinct()
             ->innerJoin(
@@ -522,7 +519,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getCountUsersByUrl(AccessUrl $url)
     {
-        return $this->repository->createQueryBuilder('a')
+        return $this->createQueryBuilder('a')
             ->select('COUNT(a)')
             ->innerJoin('a.portals', 'u')
             ->where('u.portal = :u')
@@ -538,7 +535,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getCountTeachersByUrl(AccessUrl $url)
     {
-        $qb = $this->repository->createQueryBuilder('a');
+        $qb = $this->createQueryBuilder('a');
 
         return $qb
             ->select('COUNT(a)')
@@ -643,7 +640,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getAssignedHrmUserList($userId, $urlId)
     {
-        $qb = $this->repository->createQueryBuilder('user');
+        $qb = $this->createQueryBuilder('user');
 
         return $qb
             ->select('uru')

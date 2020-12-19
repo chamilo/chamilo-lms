@@ -5690,6 +5690,27 @@ class Exercise
                             $final_overlap = 100;
                         }
 
+                        $overlap = 0;
+                        if ($final_overlap > 0) {
+                            $overlap = (int) $final_overlap;
+                        }
+
+                        $overlap = 0;
+                        if ($final_overlap > 0) {
+                            $overlap = (int) $final_overlap;
+                        }
+
+                        $excess = 0;
+                        if ($final_excess > 0) {
+                            $excess = (int) $final_excess;
+                        }
+
+                        $missing = 0;
+                        if ($final_missing > 0) {
+                            $missing = (int) $final_missing;
+                        }
+
+
                         $table_resume = '<table class="table table-hover table-striped data_table">
                                 <tr class="row_odd" >
                                     <td></td>
@@ -5698,21 +5719,21 @@ class Exercise
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Overlapping areaping area').'</b></td>
-                                    <td>'.get_lang('Minimumimum').' '.$threadhold1.'</td>
+                                    <td>'.get_lang('Minimum').' '.$threadhold1.'</td>
                                     <td class="text-right '.($overlap_color ? 'text-success' : 'text-danger').'">'
-                        .$final_overlap < 0 ? 0 : (int) $final_overlap.'</td>
+                                    .$overlap.'</td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excessive areaive area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold2.'</td>
                                     <td class="text-right '.($excess_color ? 'text-success' : 'text-danger').'">'
-                        .$final_excess < 0 ? 0 : (int) $final_excess.'</td>
+                                    .$excess.'</td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing area area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold3.'</td>
                                     <td class="text-right '.($missing_color ? 'text-success' : 'text-danger').'">'
-                        .$final_missing < 0 ? 0 : (int) $final_missing.'</td>
+                                    .$missing.'</td>
                                 </tr>
                             </table>';
                         if ($next == 0) {

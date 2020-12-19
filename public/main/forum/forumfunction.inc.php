@@ -6031,7 +6031,8 @@ function getAttachedFiles(
     $courseId = (int) $courseId;
     $attachId = (int) $attachId;
     $postId = (int) $postId;
-    $threadId = !empty($threadId) ? (int) $threadId : isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : '';
+    $threadId = (int) $threadId;
+
     if (empty($courseId)) {
         // $courseId can be null, use api method
         $courseId = api_get_course_int_id();

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
@@ -9,10 +10,7 @@ require_once __DIR__.'/../global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 $debug = false;
 api_protect_course_script(true);
-
 $action = $_REQUEST['a'];
-
-
 $course_id = api_get_course_int_id();
 $session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
@@ -405,8 +403,7 @@ switch ($action) {
             $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : [];
 
             // certainty degree choice
-            $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty'])
-                ? $_REQUEST['choiceDegreeCertainty'] : [];
+            $choiceDegreeCertainty = $_REQUEST['choiceDegreeCertainty'] ?? [];
 
             // Hot spot coordinates from all questions.
             $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : [];

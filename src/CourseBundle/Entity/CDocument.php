@@ -119,8 +119,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
  *  }
  * )
- * GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
- * GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Entity
  */
@@ -139,6 +137,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     * @Assert\NotBlank
      * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */

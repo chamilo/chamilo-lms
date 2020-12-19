@@ -96,6 +96,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
+                $course = $courseRepo->find($courseId);
                 $id = $itemData['iid'];
                 $path = $itemData['url'];
                 $title = $itemData['title'];

@@ -1023,7 +1023,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
 
     public function __toString(): string
     {
-        return $this->getTitle();
+        return $this->getCode();
     }
 
     public function getResourceIdentifier(): int
@@ -1033,11 +1033,11 @@ class CSurvey extends AbstractResource implements ResourceInterface
 
     public function getResourceName(): string
     {
-        return $this->getTitle();
+        return $this->getCode();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setTitle($name);
+        return $this->setCode($name);
     }
 }

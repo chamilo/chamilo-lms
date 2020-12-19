@@ -342,7 +342,7 @@ ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à
 SCORE: 20";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
-$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 
+$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci:
 A. Réponse 1";
 $ExerciseAikenErrorNoCorrectAnswerDefined = "Le fichier importé comporte au moins une question sans réponse correcte définie. Assurez-vous que toutes les questions comprennent la réponse: [Lettre] ligne.";
 $SearchCourseBySession = "Recherche de cours par session";
@@ -2637,7 +2637,7 @@ $MailCronCourseExpirationReminderBody = "Cher/Chère %s,
 
 Nous avons remarqué que vous n'avez pas terminé le cours %s alors que sa date de fin a été établie au %s, vous laissant %s jour(s) pour le terminer. Nous vous rappelons que vous ne disposez de la possibilité de suivre ce cours qu'une fois par an. Nous vous invitons donc avec insistance à le compléter dans le délai qu'il vous reste. Vous pouvez retrouver le cours en vous connectant à la plate-forme à cette adresse: %s
 
--- 
+--
 
 Cordialement,
 
@@ -8647,5 +8647,5 @@ $QuestionAlsoUsedInTheFollowingTests = "Question utilisée également dans les e
 $LinkToTestEdition = "Lien vers l'édition de l'exercice";
 $MoveUsersFromCourseToSession = "Déplacer les résultats utilisateurs de tout un cours dans/vers une session";
 $BackToAttemptList = "Retour à la liste des tentatives";
-$ShowScoreAndSelectedFeedbackEveryAttemptShowAnswersLastAttempt = "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte.";
+$ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte.";
 ?>

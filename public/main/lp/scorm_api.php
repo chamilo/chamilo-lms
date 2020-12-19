@@ -200,7 +200,6 @@ olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit(); ?>';
 olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
 olms.lms_session_id = '<?php echo api_get_session_id(); ?>';
 olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
-olms.lms_course_id =  '<?php echo $oLP->get_course_int_id(); ?>';
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types'); ?>
 
 // Following definition of cmi.core.score.raw in SCORM 1.2, "LMS should
@@ -219,6 +218,7 @@ olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
 var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id;
+var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
 
 /**
  * Add the "addListeners" function to the "onload" event of the window and
@@ -929,14 +929,14 @@ function savedata(item_id) {
  * @param   string      Must be empty string for conformance with SCORM 1.2
  */
 function LMSCommit(val) {
-    logit_scorm('LMSCommit() + val');
+    logit_scorm('LMSCommit() val:' + val, 0);
 
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
     savedata(olms.lms_item_id);
 
-    reinit_updatable_vars_list();
     //now changes have been commited, no need to update until next SetValue()
+    logit_scorm('LMSCommit() end ', 0);
     //commit = 'false' ;
     return('true');
 }
@@ -1362,30 +1362,13 @@ function update_stats() {
     if (olms.execute_stats) {
         try {
             cont_f = document.getElementById('content_id');
-            cont_f.src = "lp_controller.php?action=stats";
+            cont_f.src = statsUrl;
             cont_f.reload();
         } catch (e) {
             return false;
         }
     }
     olms.execute_stats = false;
-}
-
-/**
- * Update the stats frame using a reload of the frame to avoid unsynched data
- */
-function update_stats_page() {
-    logit_lms('update_stats_page',3);
-    var myframe = document.getElementById('content_id');
-    var mysrc = myframe.location.href;
-    if(mysrc == 'lp_controller.php?action=stats'){
-        if(myframe && myframe.src){
-            var mysrc = myframe.src;
-            myframe.src = mysrc;
-        }
-        // = mysrc; //refresh page
-    }
-    return true;
 }
 
 /**
@@ -1475,12 +1458,21 @@ function process_scorm_values() {
  */
 function reinit_updatable_vars_list() {
     logit_scorm('Cleaning updatable_vars_list: reinit_updatable_vars_list');
+    logit_scorm('Original status: ' + olms.lesson_status);
+
+    var defaultStatus = 'not attempted';
+    if (olms.updatable_vars_list['cmi.core.lesson_status']) {
+        if (olms.lesson_status != '') {
+            defaultStatus = olms.lesson_status;
+        }
+    }
     for (i=0;i < olms.scorm_variables.length;i++) {
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.updatable_vars_list[olms.scorm_variables[i]]=false;
         }
     }
-    olms.lesson_status = 'not attempted';
+    logit_lms('Status after reinit: ' + defaultStatus, 3);
+    olms.lesson_status = defaultStatus;
 }
 
 /**

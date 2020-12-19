@@ -8716,5 +8716,5 @@ $LinkToTestEdition = "Link to test edition";
 $MoveUsersFromCourseToSession = "Move users results from base course to a session";
 $IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments = "If your quiz have hotspot questions included, you should select the images related from the documents.";
 $BackToAttemptList = "Back to the attempt list";
-$ShowScoreAndSelectedFeedbackEveryAttemptShowAnswersLastAttempt = "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached.";
+$ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached.";
 ?>

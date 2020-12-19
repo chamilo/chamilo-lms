@@ -181,6 +181,7 @@ window.onload = function() {
                 <div class="panel-body">
                     <h4 class="tracking-box-title">{{ 'Outstanding students'|trans }}</h4>
                     <ul class="list-top">
+                        {% set counter = 1 %}
                         {% for student in top_students %}
                             {% set counter = counter + 1 %}
                             {% if counter <= 3 %}

@@ -8,8 +8,11 @@ use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
+use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
+use Chamilo\CourseBundle\Repository\CAttendanceRepository;
+use Chamilo\CourseBundle\Repository\CBlogRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
@@ -38,15 +41,18 @@ trait ControllerTrait
             For example: http://my.chamilomaster.net/r/agenda/event_attachments/96/download?cid=1&sid=0&gid=0
         */
 
-        $services[] = IllustrationRepository::class;
-        $services[] = CDocumentRepository::class;
         $services[] = CAnnouncementRepository::class;
         $services[] = CAnnouncementAttachmentRepository::class;
+        $services[] = CAttendanceRepository::class;
+        $services[] = CBlogRepository::class;
         $services[] = CCalendarEventAttachmentRepository::class;
+        $services[] = CDocumentRepository::class;
         $services[] = CQuizQuestionRepository::class;
         $services[] = CQuizQuestionCategoryRepository::class;
         $services[] = CForumForumRepository::class;
         $services[] = CForumAttachmentRepository::class;
+
+        $services[] = IllustrationRepository::class;
 
         /*$services[] = CAttendanceRepository::class;
         $services[] = CDocumentRepository::class;

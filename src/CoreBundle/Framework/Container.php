@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
+use Chamilo\CourseBundle\Repository\CBlogRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -48,6 +49,7 @@ use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
 use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
+use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -488,6 +490,16 @@ class Container
     public static function getThematicAdvanceRepository(): CThematicAdvanceRepository
     {
         return self::$container->get(CThematicAdvanceRepository::class);
+    }
+
+    public static function getBlogRepository(): CBlogRepository
+    {
+        return self::$container->get(CBlogRepository::class);
+    }
+
+    public static function getWikiRepository(): CBlogRepository
+    {
+        return self::$container->get(CWikiRepository::class);
     }
 
     /**

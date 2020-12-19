@@ -312,7 +312,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $resourceNode;
     }
 
-    public function addFile(ResourceInterface $resource, UploadedFile $file): ?ResourceFile
+    public function addFile(ResourceInterface $resource, UploadedFile $file, $description = ''): ?ResourceFile
     {
         $resourceNode = $resource->getResourceNode();
 
@@ -326,10 +326,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
 
         $em = $this->getEntityManager();
-        $resourceFile->setFile($file);
-        $resourceFile->setName($resource->getResourceName());
+        $resourceFile
+            ->setFile($file)
+            ->setDescription($description)
+            ->setName($resource->getResourceName())
+        ;
         $em->persist($resourceFile);
-
         $resourceNode->setResourceFile($resourceFile);
         $em->persist($resourceNode);
 

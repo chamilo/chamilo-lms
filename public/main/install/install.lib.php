@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
@@ -1087,45 +1088,53 @@ function display_license_agreement()
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
     echo '<p>'.get_lang('Chamilo is free software distributed under the GNU General Public licence (GPL).').'</p>';
     echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('Printable version').'</a></p>';
-    echo '</div>'; ?>
-    <div class="form-group">
+    $license = api_htmlentities(@file_get_contents(api_get_path(SYMFONY_SYS_PATH).'public/documentation/license.txt'));
+    echo '</div>';
+
+
+
+    echo '<div class="form-group">
         <pre style="overflow: auto; height: 200px; margin-top: 5px;">
-            <?php echo api_htmlentities(@file_get_contents(api_get_path(SYMFONY_SYS_PATH).'documentation/license.txt')); ?>
+            '.$license.'
         </pre>
     </div>
     <div class="form-group form-check">
         <input type="checkbox" name="accept" id="accept_licence" value="1">
-        <label for="accept_licence"><?php echo get_lang('I Accept'); ?></label>
+        <label for="accept_licence">'.get_lang('I Accept').'</label>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <p class="alert alert-info"><?php echo get_lang('The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel\'s and Denis Hoa\'s courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href="http://creativecommons.org/licenses/by-sa/3.0/">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page.'); ?></p>
+            <p class="alert alert-info">'.
+            get_lang('The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel\'s and Denis Hoa\'s courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href="http://creativecommons.org/licenses/by-sa/3.0/">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page.').'
+            </p>
         </div>
     </div>
-
     <!-- Contact information form -->
     <div class="section-parameters">
         <a href="javascript://" class = "advanced_parameters" >
-        <span id="img_plus_and_minus">&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('Contact information'); ?></span>
+        <span id="img_plus_and_minus">&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;'.get_lang('Contact information').'</span>
         </a>
     </div>
-
     <div id="id_contact_form" style="display:block">
-        <div class="normal-message"><?php echo get_lang('Contact informationDescription'); ?></div>
+        <div class="normal-message">'.get_lang('Contact informationDescription').'</div>
         <div id="contact_registration">
-            <p><?php echo get_contact_registration_form(); ?></p><br />
+            <p>'.get_contact_registration_form().'</p><br />
         </div>
     </div>
     <div class="text-center">
-    <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
-        <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
+    <button type="submit" class="btn btn-default" name="step1" value="&lt; '.get_lang('Previous').'" >
+        <em class="fa fa-backward"> </em> '.get_lang('Previous').'
     </button>
     <input type="hidden" name="is_executable" id="is_executable" value="-" />
-    <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('You must accept the licence'); ?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
-        <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
+    <button
+        type="submit"
+        id="license-next"
+        class="btn btn-success" name="step3"
+        onclick="javascript:if(!document.getElementById(\'accept_licence\').checked) { alert(\''.get_lang('You must accept the licence').'\');return false;}"
+        value="'.get_lang('Next').' &gt;">
+        <em class="fa fa-forward"> </em>'.get_lang('Next').'
     </button>
-    </div>
-    <?php
+    </div>';
 }
 
 /**
@@ -2293,10 +2302,10 @@ function installSchemas($container, $upgrade = false)
     error_log('installSchemas');
     $settingsManager = $container->get('chamilo.settings.manager');
 
-    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\Node\AccessUrlRepository');
+    $urlRepo = $container->get(AccessUrlRepository::class);
     $accessUrl = $urlRepo->find(1);
     if (!$accessUrl) {
-        $em = $urlRepo->getEntityManager();
+        $em = Database::getManager();
 
         // Creating AccessUrl
         $accessUrl = new AccessUrl();

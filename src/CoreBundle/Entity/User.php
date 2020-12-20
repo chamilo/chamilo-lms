@@ -53,7 +53,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @UniqueEntity("username")
  * @ORM\Entity
  */
-class User implements UserInterface, EquatableInterface
+class User implements UserInterface, EquatableInterface, ResourceInterface
 {
     use TimestampableEntity;
 
@@ -757,6 +757,9 @@ class User implements UserInterface, EquatableInterface
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
         $this->groups = new ArrayCollection();
+        $this->gradeBookCertificates = new ArrayCollection();
+        $this->courseGroupsAsMember = new ArrayCollection();
+        $this->courseGroupsAsTutor = new ArrayCollection();
         //$this->extraFields = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
@@ -767,32 +770,67 @@ class User implements UserInterface, EquatableInterface
         $this->roles = [];
         $this->credentialsExpired = false;
 
-        $this->courseGroupsAsMember = new ArrayCollection();
-        $this->courseGroupsAsTutor = new ArrayCollection();
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function __toString()
+    public static function getPasswordConstraints()
     {
-        return $this->username;
+        return
+            [
+                new Assert\Length(['min' => 5]),
+                // Alpha numeric + "_" or "-"
+                new Assert\Regex(
+                    [
+                        'pattern' => '/^[a-z\-_0-9]+$/i',
+                        'htmlPattern' => '/^[a-z\-_0-9]+$/i',
+                    ]
+                ),
+                // Min 3 letters - not needed
+                /*new Assert\Regex(array(
+                    'pattern' => '/[a-z]{3}/i',
+                    'htmlPattern' => '/[a-z]{3}/i')
+                ),*/
+                // Min 2 numbers
+                new Assert\Regex(
+                    [
+                        'pattern' => '/[0-9]{2}/',
+                        'htmlPattern' => '/[0-9]{2}/',
+                    ]
+                ),
+            ];
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        return $this->id;
+        //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
+        //$metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
+        //$metadata->addPropertyConstraint('email', new Assert\Email());
+        /*
+        $metadata->addPropertyConstraint('password',
+            new Assert\Collection(self::getPasswordConstraints())
+        );*/
+
+        /*$metadata->addConstraint(new UniqueEntity(array(
+            'fields'  => 'username',
+            'message' => 'This value is already used.',
+        )));*/
+
+        /*$metadata->addPropertyConstraint(
+            'username',
+            new Assert\Length(array(
+                'min'        => 2,
+                'max'        => 50,
+                'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
+                'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
+            ))
+        );*/
     }
 
-    /**
-     * @param int $userId
-     */
-    public function setId($userId)
+    public function __toString(): string
     {
-        $this->id = $userId;
+        return (string) $this->username;
     }
 
     public function getUuid()
@@ -800,9 +838,9 @@ class User implements UserInterface, EquatableInterface
         return $this->uuid;
     }
 
-    public function setResourceNode(ResourceNode $resourceNode): self
+    public function setUuid(UuidV4 $uuid): User
     {
-        $this->resourceNode = $resourceNode;
+        $this->uuid = $uuid;
 
         return $this;
     }
@@ -810,6 +848,13 @@ class User implements UserInterface, EquatableInterface
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
+    }
+
+    public function setResourceNode(ResourceNode $resourceNode): ResourceInterface
+    {
+        $this->resourceNode = $resourceNode;
+
+        return $this;
     }
 
     public function hasResourceNode(): bool
@@ -853,6 +898,14 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @param ArrayCollection $value
+     */
+    public function setDropBoxSentFiles($value)
+    {
+        $this->dropBoxSentFiles = $value;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getDropBoxReceivedFiles()
@@ -863,17 +916,14 @@ class User implements UserInterface, EquatableInterface
     /**
      * @param ArrayCollection $value
      */
-    public function setDropBoxSentFiles($value)
-    {
-        $this->dropBoxSentFiles = $value;
-    }
-
-    /**
-     * @param ArrayCollection $value
-     */
     public function setDropBoxReceivedFiles($value)
     {
         $this->dropBoxReceivedFiles = $value;
+    }
+
+    public function getCourses()
+    {
+        return $this->courses;
     }
 
     /**
@@ -886,85 +936,12 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function getCourses()
-    {
-        return $this->courses;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getPasswordConstraints()
-    {
-        return
-            [
-                new Assert\Length(['min' => 5]),
-                // Alpha numeric + "_" or "-"
-                new Assert\Regex(
-                    [
-                        'pattern' => '/^[a-z\-_0-9]+$/i',
-                        'htmlPattern' => '/^[a-z\-_0-9]+$/i', ]
-                ),
-                // Min 3 letters - not needed
-                /*new Assert\Regex(array(
-                    'pattern' => '/[a-z]{3}/i',
-                    'htmlPattern' => '/[a-z]{3}/i')
-                ),*/
-                // Min 2 numbers
-                new Assert\Regex(
-                    [
-                        'pattern' => '/[0-9]{2}/',
-                        'htmlPattern' => '/[0-9]{2}/', ]
-                ),
-            ]
-            ;
-    }
-
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
-        //$metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
-        //$metadata->addPropertyConstraint('email', new Assert\Email());
-        /*
-        $metadata->addPropertyConstraint('password',
-            new Assert\Collection(self::getPasswordConstraints())
-        );*/
-
-        /*$metadata->addConstraint(new UniqueEntity(array(
-            'fields'  => 'username',
-            'message' => 'This value is already used.',
-        )));*/
-
-        /*$metadata->addPropertyConstraint(
-            'username',
-            new Assert\Length(array(
-                'min'        => 2,
-                'max'        => 50,
-                'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
-                'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
-            ))
-        );*/
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getPortals()
-    {
-        return $this->portals;
-    }
-
     /**
      * @param $portal
      */
     public function setPortal($portal)
     {
         $this->portals->add($portal);
-    }
-
-    public function setPortals(array $value)
-    {
-        $this->portals = $value;
     }
 
     /**
@@ -987,26 +964,17 @@ class User implements UserInterface, EquatableInterface
         return true === $this->active;
     }
 
-    public function isActive(): bool
-    {
-        return $this->getIsActive();
-    }
-
     public function isEnabled()
     {
         return $this->isActive();
     }
 
     /**
-     * Set salt.
-     *
-     * @param string $salt
-     *
-     * @return User
+     * @param $boolean
      */
-    public function setSalt($salt)
+    public function setEnabled($boolean): self
     {
-        $this->salt = $salt;
+        $this->enabled = (bool) $boolean;
 
         return $this;
     }
@@ -1022,23 +990,17 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @param ArrayCollection $classes
+     * Set salt.
      *
-     * @return $this
+     * @param string $salt
+     *
+     * @return User
      */
-    public function setClasses($classes)
+    public function setSalt($salt)
     {
-        $this->classes = $classes;
+        $this->salt = $salt;
 
         return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getClasses()
-    {
-        return $this->classes;
     }
 
     public function getLps()
@@ -1077,25 +1039,21 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Set lastname.
-     *
-     * @return User
+     * @return ArrayCollection
      */
-    public function setLastname(string $lastname): self
+    public function getClasses()
     {
-        $this->lastname = $lastname;
-
-        return $this;
+        return $this->classes;
     }
 
     /**
-     * Set firstname.
+     * @param ArrayCollection $classes
      *
-     * @return User
+     * @return $this
      */
-    public function setFirstname(string $firstname): self
+    public function setClasses($classes)
     {
-        $this->firstname = $firstname;
+        $this->classes = $classes;
 
         return $this;
     }
@@ -1113,6 +1071,16 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * Get authSource.
+     *
+     * @return string
+     */
+    public function getAuthSource()
+    {
+        return $this->authSource;
+    }
+
+    /**
      * Set authSource.
      *
      * @param string $authSource
@@ -1127,13 +1095,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get authSource.
+     * Get email.
      *
      * @return string
      */
-    public function getAuthSource()
+    public function getEmail()
     {
-        return $this->authSource;
+        return $this->email;
     }
 
     /**
@@ -1151,35 +1119,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get email.
+     * Get officialCode.
      *
      * @return string
      */
-    public function getEmail()
+    public function getOfficialCode()
     {
-        return $this->email;
-    }
-
-    /**
-     * Set status.
-     *
-     * @return User
-     */
-    public function setStatus(int $status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status.
-     *
-     * @return int
-     */
-    public function getStatus()
-    {
-        return (int) $this->status;
+        return $this->officialCode;
     }
 
     /**
@@ -1197,13 +1143,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get officialCode.
+     * Get phone.
      *
      * @return string
      */
-    public function getOfficialCode()
+    public function getPhone()
     {
-        return $this->officialCode;
+        return $this->phone;
     }
 
     /**
@@ -1221,13 +1167,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get phone.
+     * Get address.
      *
      * @return string
      */
-    public function getPhone()
+    public function getAddress()
     {
-        return $this->phone;
+        return $this->address;
     }
 
     /**
@@ -1245,13 +1191,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get address.
+     * Get creatorId.
      *
-     * @return string
+     * @return int
      */
-    public function getAddress()
+    public function getCreatorId()
     {
-        return $this->address;
+        return $this->creatorId;
     }
 
     /**
@@ -1269,13 +1215,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get creatorId.
+     * Get competences.
      *
-     * @return int
+     * @return string
      */
-    public function getCreatorId()
+    public function getCompetences()
     {
-        return $this->creatorId;
+        return $this->competences;
     }
 
     /**
@@ -1293,13 +1239,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get competences.
+     * Get diplomas.
      *
      * @return string
      */
-    public function getCompetences()
+    public function getDiplomas()
     {
-        return $this->competences;
+        return $this->diplomas;
     }
 
     /**
@@ -1317,13 +1263,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get diplomas.
+     * Get openarea.
      *
      * @return string
      */
-    public function getDiplomas()
+    public function getOpenarea()
     {
-        return $this->diplomas;
+        return $this->openarea;
     }
 
     /**
@@ -1341,13 +1287,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get openarea.
+     * Get teach.
      *
      * @return string
      */
-    public function getOpenarea()
+    public function getTeach()
     {
-        return $this->openarea;
+        return $this->teach;
     }
 
     /**
@@ -1365,13 +1311,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get teach.
+     * Get productions.
      *
      * @return string
      */
-    public function getTeach()
+    public function getProductions()
     {
-        return $this->teach;
+        return $this->productions;
     }
 
     /**
@@ -1389,13 +1335,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get productions.
+     * Get language.
      *
      * @return string
      */
-    public function getProductions()
+    public function getLanguage()
     {
-        return $this->productions;
+        return $this->language;
     }
 
     /**
@@ -1409,13 +1355,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get language.
+     * Get registrationDate.
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getLanguage()
+    public function getRegistrationDate()
     {
-        return $this->language;
+        return $this->registrationDate;
     }
 
     /**
@@ -1433,13 +1379,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get registrationDate.
+     * Get expirationDate.
      *
      * @return \DateTime
      */
-    public function getRegistrationDate()
+    public function getExpirationDate()
     {
-        return $this->registrationDate;
+        return $this->expirationDate;
     }
 
     /**
@@ -1457,13 +1403,18 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get expirationDate.
+     * Get active.
      *
-     * @return \DateTime
+     * @return bool
      */
-    public function getExpirationDate()
+    public function getActive()
     {
-        return $this->expirationDate;
+        return $this->active;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->getIsActive();
     }
 
     /**
@@ -1481,13 +1432,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get active.
+     * Get openid.
      *
-     * @return bool
+     * @return string
      */
-    public function getActive()
+    public function getOpenid()
     {
-        return $this->active;
+        return $this->openid;
     }
 
     /**
@@ -1505,13 +1456,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get openid.
+     * Get theme.
      *
      * @return string
      */
-    public function getOpenid()
+    public function getTheme()
     {
-        return $this->openid;
+        return $this->theme;
     }
 
     /**
@@ -1529,13 +1480,13 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Get theme.
+     * Get hrDeptId.
      *
-     * @return string
+     * @return int
      */
-    public function getTheme()
+    public function getHrDeptId()
     {
-        return $this->theme;
+        return $this->hrDeptId;
     }
 
     /**
@@ -1550,16 +1501,6 @@ class User implements UserInterface, EquatableInterface
         $this->hrDeptId = $hrDeptId;
 
         return $this;
-    }
-
-    /**
-     * Get hrDeptId.
-     *
-     * @return int
-     */
-    public function getHrDeptId()
-    {
-        return $this->hrDeptId;
     }
 
     /**
@@ -1587,11 +1528,39 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function setId($userId)
+    {
+        $this->id = $userId;
+    }
+
+    /**
      * @return string
      */
     public function getSlug()
     {
         return $this->getUsername();
+    }
+
+    public function getUsername(): string
+    {
+        return (string) $this->username;
+    }
+
+    public function setUsername($username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     /**
@@ -1604,25 +1573,14 @@ class User implements UserInterface, EquatableInterface
         return $this->setUsername($slug);
     }
 
-    public function setUsername($username): self
+    /**
+     * Get lastLogin.
+     *
+     * @return \DateTime
+     */
+    public function getLastLogin()
     {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function setUsernameCanonical($usernameCanonical)
-    {
-        $this->usernameCanonical = $usernameCanonical;
-
-        return $this;
-    }
-
-    public function setEmailCanonical($emailCanonical): self
-    {
-        $this->emailCanonical = $emailCanonical;
-
-        return $this;
+        return $this->lastLogin;
     }
 
     /**
@@ -1635,16 +1593,6 @@ class User implements UserInterface, EquatableInterface
         $this->lastLogin = $lastLogin;
 
         return $this;
-    }
-
-    /**
-     * Get lastLogin.
-     *
-     * @return \DateTime
-     */
-    public function getLastLogin()
-    {
-        return $this->lastLogin;
     }
 
     /**
@@ -1682,6 +1630,12 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    public function isPasswordRequestNonExpired($ttl)
+    {
+        return $this->getPasswordRequestedAt() instanceof \DateTime &&
+            $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+    }
+
     /**
      * @return \DateTime
      */
@@ -1690,15 +1644,11 @@ class User implements UserInterface, EquatableInterface
         return $this->passwordRequestedAt;
     }
 
-    public function isPasswordRequestNonExpired($ttl)
+    public function setPasswordRequestedAt(\DateTime $date = null)
     {
-        return $this->getPasswordRequestedAt() instanceof \DateTime &&
-            $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
-    }
+        $this->passwordRequestedAt = $date;
 
-    public function getUsername(): string
-    {
-        return (string) $this->username;
+        return $this;
     }
 
     public function getPlainPassword(): ?string
@@ -1727,6 +1677,13 @@ class User implements UserInterface, EquatableInterface
         return $this->expiresAt;
     }
 
+    public function setExpiresAt(\DateTime $date): self
+    {
+        $this->expiresAt = $date;
+
+        return $this;
+    }
+
     /**
      * Returns the credentials expiration date.
      *
@@ -1747,13 +1704,66 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function addGroup($group): self
+    public function getFullname(): string
     {
-        if (!$this->getGroups()->contains($group)) {
-            $this->getGroups()->add($group);
-        }
+        return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+    }
+
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Set firstname.
+     *
+     * @return User
+     */
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
 
         return $this;
+    }
+
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set lastname.
+     *
+     * @return User
+     */
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function hasGroup($name): bool
+    {
+        return in_array($name, $this->getGroupNames());
+    }
+
+    public function getGroupNames(): array
+    {
+        $names = [];
+        foreach ($this->getGroups() as $group) {
+            $names[] = $group->getName();
+        }
+
+        return $names;
+    }
+
+    public function getGroups()
+    {
+        return $this->groups;
     }
 
     /**
@@ -1770,32 +1780,13 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function getFullname(): string
+    public function addGroup($group): self
     {
-        return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
-    }
-
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    public function getGroupNames(): array
-    {
-        $names = [];
-        foreach ($this->getGroups() as $group) {
-            $names[] = $group->getName();
+        if (!$this->getGroups()->contains($group)) {
+            $this->getGroups()->add($group);
         }
 
-        return $names;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function hasGroup($name): bool
-    {
-        return in_array($name, $this->getGroupNames());
+        return $this;
     }
 
     public function removeGroup($group): self
@@ -1805,42 +1796,6 @@ class User implements UserInterface, EquatableInterface
         }
 
         return $this;
-    }
-
-    /**
-     * @param string $role
-     */
-    public function addRole($role): self
-    {
-        $role = strtoupper($role);
-        if ($role === static::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the user roles.
-     *
-     * @return array The roles
-     */
-    public function getRoles()
-    {
-        $roles = $this->roles;
-
-        foreach ($this->getGroups() as $group) {
-            $roles = array_merge($roles, $group->getRoles());
-        }
-
-        // we need to make sure to have at least one role
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
     }
 
     public function isAccountNonExpired()
@@ -1894,16 +1849,6 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @param $boolean
-     */
-    public function setEnabled($boolean): self
-    {
-        $this->enabled = (bool) $boolean;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function getExpired()
@@ -1923,13 +1868,6 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function setExpiresAt(\DateTime $date): self
-    {
-        $this->expiresAt = $date;
-
-        return $this;
-    }
-
     public function getLocked(): bool
     {
         return $this->locked;
@@ -1941,44 +1879,6 @@ class User implements UserInterface, EquatableInterface
     public function setLocked($boolean): self
     {
         $this->locked = $boolean;
-
-        return $this;
-    }
-
-    public function setPasswordRequestedAt(\DateTime $date = null)
-    {
-        $this->passwordRequestedAt = $date;
-
-        return $this;
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = [];
-
-        foreach ($roles as $role) {
-            $this->addRole($role);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get achievedSkills.
-     *
-     * @return ArrayCollection
-     */
-    public function getAchievedSkills()
-    {
-        return $this->achievedSkills;
-    }
-
-    /**
-     * @param string[] $value
-     */
-    public function setAchievedSkills(array $value): self
-    {
-        $this->achievedSkills = $value;
 
         return $this;
     }
@@ -2002,6 +1902,26 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * Get achievedSkills.
+     *
+     * @return ArrayCollection
+     */
+    public function getAchievedSkills()
+    {
+        return $this->achievedSkills;
+    }
+
+    /**
+     * @param string[] $value
+     */
+    public function setAchievedSkills(array $value): self
+    {
+        $this->achievedSkills = $value;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isProfileCompleted()
@@ -2014,6 +1934,14 @@ class User implements UserInterface, EquatableInterface
         $this->profileCompleted = $profileCompleted;
 
         return $this;
+    }
+
+    /**
+     * @return AccessUrl
+     */
+    public function getCurrentUrl()
+    {
+        return $this->currentUrl;
     }
 
     /**
@@ -2035,11 +1963,16 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @return AccessUrl
+     * @return ArrayCollection
      */
-    public function getCurrentUrl()
+    public function getPortals()
     {
-        return $this->currentUrl;
+        return $this->portals;
+    }
+
+    public function setPortals(array $value)
+    {
+        $this->portals = $value;
     }
 
     /**
@@ -2160,19 +2093,14 @@ class User implements UserInterface, EquatableInterface
         return $this->courseGroupsAsMember->matching($criteria);
     }
 
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
     public function eraseCredentials()
     {
         $this->plainPassword = null;
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->hasRole('ROLE_SUPER_ADMIN');
     }
 
     public function hasRole($role)
@@ -2180,9 +2108,51 @@ class User implements UserInterface, EquatableInterface
         return in_array(strtoupper($role), $this->getRoles(), true);
     }
 
-    public function isSuperAdmin()
+    /**
+     * Returns the user roles.
+     *
+     * @return array The roles
+     */
+    public function getRoles()
     {
-        return $this->hasRole('ROLE_SUPER_ADMIN');
+        $roles = $this->roles;
+
+        foreach ($this->getGroups() as $group) {
+            $roles = array_merge($roles, $group->getRoles());
+        }
+
+        // we need to make sure to have at least one role
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = [];
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $role
+     */
+    public function addRole($role): self
+    {
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
     }
 
     public function isUser(UserInterface $user = null)
@@ -2205,9 +2175,31 @@ class User implements UserInterface, EquatableInterface
         return $this->usernameCanonical;
     }
 
+    public function setUsernameCanonical($usernameCanonical)
+    {
+        $this->usernameCanonical = $usernameCanonical;
+
+        return $this;
+    }
+
     public function getEmailCanonical()
     {
         return $this->emailCanonical;
+    }
+
+    public function setEmailCanonical($emailCanonical): self
+    {
+        $this->emailCanonical = $emailCanonical;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
     }
 
     /**
@@ -2225,9 +2217,9 @@ class User implements UserInterface, EquatableInterface
     /**
      * @return string
      */
-    public function getTimezone()
+    public function getLocale()
     {
-        return $this->timezone;
+        return $this->locale;
     }
 
     /**
@@ -2240,14 +2232,6 @@ class User implements UserInterface, EquatableInterface
         $this->locale = $locale;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**
@@ -2295,6 +2279,14 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
      * @param \DateTime $dateOfBirth
      */
     public function setDateOfBirth($dateOfBirth): self
@@ -2304,19 +2296,83 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getDateOfBirth()
+    public function getProfileUrl(): string
     {
-        return $this->dateOfBirth;
+        return '/social/profile.php?u='.$this->id;
     }
 
-    public function setUuid(UuidV4 $uuid): User
+    public function getIconStatus(): string
     {
-        $this->uuid = $uuid;
+        $status = $this->getStatus();
+        $hasCertificates = $this->getGradeBookCertificates()->count() > 0;
+        $urlImg = '/';
+        $iconStatus = '';
+        switch ($status) {
+            case STUDENT:
+                if ($hasCertificates) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
+                }
+                break;
+            case COURSEMANAGER:
+                if ($this->isAdmin()) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                }
+                break;
+            case STUDENT_BOSS:
+                $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                break;
+        }
+
+        return $iconStatus;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return (int) $this->status;
+    }
+
+    /**
+     * Set status.
+     *
+     * @return User
+     */
+    public function setStatus(int $status)
+    {
+        $this->status = $status;
 
         return $this;
+    }
+
+    /**
+     * @return GradebookCertificate[]|ArrayCollection
+     */
+    public function getGradeBookCertificates()
+    {
+        return $this->gradeBookCertificates;
+    }
+
+    /**
+     * @param GradebookCertificate[]|ArrayCollection $gradeBookCertificates
+     */
+    public function setGradeBookCertificates($gradeBookCertificates): self
+    {
+        $this->gradeBookCertificates = $gradeBookCertificates;
+
+        return $this;
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('ROLE_ADMIN');
     }
 
     public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection
@@ -2327,6 +2383,16 @@ class User implements UserInterface, EquatableInterface
         );
 
         return $this->courseGroupsAsTutor->matching($criteria);
+    }
+
+    /**
+     * Retreives this user's related student sessions.
+     *
+     * @return Session[]
+     */
+    public function getStudentSessions()
+    {
+        return $this->getSessions(0);
     }
 
     /**
@@ -2346,16 +2412,6 @@ class User implements UserInterface, EquatableInterface
         }
 
         return $sessions;
-    }
-
-    /**
-     * Retreives this user's related student sessions.
-     *
-     * @return Session[]
-     */
-    public function getStudentSessions()
-    {
-        return $this->getSessions(0);
     }
 
     /**
@@ -2387,6 +2443,25 @@ class User implements UserInterface, EquatableInterface
         return $sessions;
     }
 
+    public function getResourceIdentifier(): int
+    {
+        return $this->id;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getUsername();
+    }
+
+    public function setResourceName(string $name)
+    {
+        $this->setUsername($name);
+    }
+
+    public function setParent(AbstractResource $parent) {
+
+    }
+
     /**
      * Find the largest sort value in a given UserCourseCategory
      * This method is used when we are moving a course to a different category
@@ -2411,7 +2486,7 @@ class User implements UserInterface, EquatableInterface
             ? 0
             : max(
                 $categoryCourses->map(
-                    /** @var CourseRelUser $courseRelUser */
+                /** @var CourseRelUser $courseRelUser */
                     function ($courseRelUser) {
                         return $courseRelUser->getSort();
                     }

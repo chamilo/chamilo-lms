@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -105,6 +106,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         }
 
         $file = $this->addFile($illustration, $uploadFile);
+        $em->persist($file);
         $em->flush();
 
         return $file;
@@ -142,7 +144,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     /**
      * @param string $filter See: services.yaml parameter "glide_media_filters" to see the list of filters.
      */
-    public function getIllustrationUrl(AbstractResource $resource, string $filter = ''): string
+    public function getIllustrationUrl(ResourceInterface $resource, string $filter = ''): string
     {
         return $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
     }

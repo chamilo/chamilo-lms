@@ -215,7 +215,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
      */
-    public function editAction(Request $request, IllustrationRepository $illustrationRepository): Response
+    public function editAction(Request $request, IllustrationRepository $illustrationRepo): Response
     {
         $resourceNodeId = $request->get('id');
 
@@ -271,15 +271,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             if ($form->has('illustration')) {
                 $illustration = $form->get('illustration')->getData();
                 if ($illustration) {
-                    $file = $illustrationRepository->addIllustration($newResource, $this->getUser(), $illustration);
-                    $em = $illustrationRepository->getEntityManager();
-                    $em->persist($file);
-                    $em->flush();
+                    $file = $illustrationRepo->addIllustration($newResource, $this->getUser(), $illustration);
+                    $illustrationRepo->update($file);
                 }
             }
 
             $this->addFlash('success', $this->trans('Updated'));
-
             $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
             $routeParams['id'] = $resourceNodeParentId;
 

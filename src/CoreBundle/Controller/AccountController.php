@@ -41,7 +41,7 @@ class AccountController extends BaseController
     /**
      * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
      */
-    public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepository)
+    public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo)
     {
         $user = $this->getUser();
 
@@ -51,20 +51,14 @@ class AccountController extends BaseController
 
         $form = $this->createForm(ProfileType::class, $user);
         $form->setData($user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $illustration = $form['illustration']->getData();
             if ($illustration) {
-                $file = $illustrationRepository->addIllustrationToUser($this->getUser(), $illustration);
-                $em = $illustrationRepository->getEntityManager();
-                $em->persist($file);
-                $em->flush();
+                $illustrationRepo->addIllustrationToUser($this->getUser(), $illustration);
             }
-
             $userRepository->updateUser($user);
-
             $this->addFlash('success', $this->trans('Updated'));
             $url = $this->generateUrl('chamilo_core_account_home', ['username' => $user->getUsername()]);
 

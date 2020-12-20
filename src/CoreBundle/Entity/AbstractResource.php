@@ -331,7 +331,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function setResourceNode(ResourceNode $resourceNode): self
+    public function setResourceNode(ResourceNode $resourceNode): ResourceInterface
     {
         $this->resourceNode = $resourceNode;
 

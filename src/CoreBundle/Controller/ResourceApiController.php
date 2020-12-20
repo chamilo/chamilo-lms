@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ResourceApiController.
  * RouteResource("Resource").
  *
+ * @deprecated experimental code
  * debug api routes with: bin/console debug:router | grep api
  */
 class ResourceApiController extends AbstractController implements CourseControllerInterface

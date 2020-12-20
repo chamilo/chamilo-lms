@@ -96,6 +96,7 @@ if (empty($user_info)) {
 if ($export) {
     ob_start();
 }
+$codePath = api_get_path(WEB_CODE_PATH);
 $csv_content = [];
 $from_myspace = false;
 $this_section = SECTION_COURSES;
@@ -711,7 +712,7 @@ if (!empty($studentId) && !empty($courseCode)) {
 }
 
 $notebookTeacherEnable = 'true' === api_get_plugin_setting('notebookteacher', 'enable_plugin_notebookteacher');
-if ($notebookTeacherEnable && !empty($studentId) && !empty($course_code)) {
+if ($notebookTeacherEnable && !empty($studentId) && !empty($courseCode)) {
     // link notebookteacher
     $optionsLink = 'student_id='.$studentId.'&origin='.$origin.'&cid='.$courseId.'&id_session='.$sessionId;
     echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
@@ -948,14 +949,14 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             $icon = Display::return_icon('accept.png');
             $btn = Display::url(
                 get_lang('Delete legal agreement'),
-                api_get_self().'?action=delete_legal&student='.$studentId.'&course='.$course_code,
+                api_get_self().'?action=delete_legal&student='.$studentId.'&course='.$courseCode,
                 ['class' => 'btn btn-danger']
             );
             $timeLegalAccept = api_get_local_time($legalTime);
         } else {
             $btn = Display::url(
                 get_lang('Send message legal agreement'),
-                api_get_self().'?action=send_legal&student='.$studentId.'&course='.$course_code,
+                api_get_self().'?action=send_legal&student='.$studentId.'&course='.$courseCode,
                 ['class' => 'btn btn-primary']
             );
             $timeLegalAccept = get_lang('Not Registered');
@@ -1772,7 +1773,7 @@ if (empty($details)) {
                     }
                     $link = Display::url(
                         Display::return_icon('2rightarrow.png', get_lang('Details')),
-                        $codePath.'mySpace/lp_tracking.php?cid='.$courseInfo['real_id'].'&course='.$course_code.$from.'&origin='.$origin
+                        $codePath.'mySpace/lp_tracking.php?cid='.$courseInfo['real_id'].'&course='.$courseCode.$from.'&origin='.$origin
                         .'&lp_id='.$lp_id.'&student_id='.$studentId.'&sid='.$sessionId
                     );
                     echo Display::tag('td', $link);
@@ -1782,7 +1783,7 @@ if (empty($details)) {
                     echo '<td>';
                     if (true === $any_result) {
                         $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cid='.$courseInfo['real_id'].'&course='
-                            .$course_code.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='
+                            .$courseCode.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='
                             .$studentId.'&details=true&sid='.$sessionId;
                         echo Display::url(
                             Display::return_icon('clean.png', get_lang('Clean')),
@@ -1935,7 +1936,7 @@ if (empty($details)) {
                 }
 
                 echo '<tr class="'.$css_class.'"><td>'.Exercise::get_formated_title_variable(
-                        $exercices['title']
+                        $exercise->getTitle()
                     ).'</td>';
                 echo '<td>';
 
@@ -2012,12 +2013,12 @@ if (empty($details)) {
                 }
 
                 echo '</tr>';
-                $data_exercices[$i][] = $exercices['title'];
+                $data_exercices[$i][] = $exercise->getTitle();
                 $data_exercices[$i][] = $score_percentage.'%';
                 $data_exercices[$i][] = $count_attempts;
 
                 $csv_content[] = [
-                    $exercices['title'],
+                    $exercise->getTitle(),
                     $lp_name,
                     $score_percentage,
                     $count_attempts,

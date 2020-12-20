@@ -414,7 +414,7 @@ if ('add' !== $action) {
                         $html .= Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY).' ';
                         $html .= Display::dateToStringAgoAndLongDate($forum->getForumLastPost())
                             .' '.get_lang('By').' '
-                            .display_user_link($poster_id, $name);
+                            .displayUserLink($forum->getForumLastPost()->getUser());
                     }
                     $html .= '</div>';
                     $html .= '<div class="col-md-4">';

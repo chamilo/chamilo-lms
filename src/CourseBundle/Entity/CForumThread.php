@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -65,18 +66,12 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $threadReplies;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="thread_poster_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="thread_poster_id", referencedColumnName="id")
      */
-    protected $threadPosterId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="thread_poster_name", type="string", length=100, nullable=true)
-     */
-    protected $threadPosterName;
+    protected $user;
 
     /**
      * @var int
@@ -86,9 +81,10 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $threadViews;
 
     /**
-     * @var int
+     * @var CForumPost
      *
-     * @ORM\Column(name="thread_last_post", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")
+     * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid")
      */
     protected $threadLastPost;
 
@@ -279,54 +275,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set threadPosterId.
-     *
-     * @param int $threadPosterId
-     *
-     * @return CForumThread
-     */
-    public function setThreadPosterId($threadPosterId)
-    {
-        $this->threadPosterId = $threadPosterId;
-
-        return $this;
-    }
-
-    /**
-     * Get threadPosterId.
-     *
-     * @return int
-     */
-    public function getThreadPosterId()
-    {
-        return $this->threadPosterId;
-    }
-
-    /**
-     * Set threadPosterName.
-     *
-     * @param string $threadPosterName
-     *
-     * @return CForumThread
-     */
-    public function setThreadPosterName($threadPosterName)
-    {
-        $this->threadPosterName = $threadPosterName;
-
-        return $this;
-    }
-
-    /**
-     * Get threadPosterName.
-     *
-     * @return string
-     */
-    public function getThreadPosterName()
-    {
-        return $this->threadPosterName;
-    }
-
-    /**
      * Set threadViews.
      *
      * @param int $threadViews
@@ -348,30 +296,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     public function getThreadViews()
     {
         return $this->threadViews;
-    }
-
-    /**
-     * Set threadLastPost.
-     *
-     * @param int $threadLastPost
-     *
-     * @return CForumThread
-     */
-    public function setThreadLastPost($threadLastPost)
-    {
-        $this->threadLastPost = $threadLastPost;
-
-        return $this;
-    }
-
-    /**
-     * Get threadLastPost.
-     *
-     * @return int
-     */
-    public function getThreadLastPost()
-    {
-        return $this->threadLastPost;
     }
 
     /**
@@ -622,6 +546,18 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     /**
      * @return ArrayCollection|CForumPost[]
      */
@@ -630,9 +566,18 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->posts;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getThreadLastPost(): ?CForumPost
+    {
+        return $this->threadLastPost;
+    }
+
+    public function setThreadLastPost(CForumPost $threadLastPost): self
+    {
+        $this->threadLastPost = $threadLastPost;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

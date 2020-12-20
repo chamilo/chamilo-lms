@@ -7,9 +7,6 @@ use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
-/**
- * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -334,13 +331,16 @@ foreach ($posts as $post) {
         $username = sprintf(get_lang('Login: %s'), $post['username']);
     }
 
-    $name = $post['complete_name'];
+    /*$name = $post['complete_name'];
     if (empty($posterId)) {
         $name = $post['poster_name'];
-    }
+    }*/
 
     $post['user_data'] = '';
-    if ('learnpath' != $origin) {
+    $post['author'] = $postEntity->getUser();
+    $posterId = $postEntity->getUser()->getId();
+
+    /*if ('learnpath' !== $origin) {
         if ($allowUserImageForum) {
             $post['user_data'] = '<div class="thumbnail">'.
                 display_user_image($posterId, $name, $origin).'</div>';
@@ -369,7 +369,7 @@ foreach ($posts as $post) {
                 'class' => 'lead',
             ]
         );
-    }
+    }*/
 
     if ('learnpath' !== $origin) {
         $post['user_data'] .= Display::tag(
@@ -408,7 +408,7 @@ foreach ($posts as $post) {
             $editButton = Display::toolbarButton(
                 get_lang('Edit'),
                 $editUrl,
-                'pencil',
+                'pencil-alt',
                 'default'
             );
         }
@@ -464,7 +464,7 @@ foreach ($posts as $post) {
         }
     }
 
-    $userCanQualify = 1 == $threadEntity->isThreadPeerQualify() && $post['poster_id'] != $userId;
+    $userCanQualify = 1 == $threadEntity->isThreadPeerQualify() && $posterId != $userId;
     if (api_is_allowed_to_edit(null, true)) {
         $userCanQualify = true;
     }
@@ -472,7 +472,7 @@ foreach ($posts as $post) {
     $postIsARevision = false;
     $flagRevision = '';
 
-    if ($post['poster_id'] == $userId) {
+    if ($posterId == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
             $askForRevision = getAskRevisionButton($postEntity, $threadEntity);
@@ -662,7 +662,6 @@ foreach ($posts as $post) {
             $post['post_attachments'] .= Display::return_icon('attachment.png', get_lang('Attachment'));
             $url = $repo->getResourceFileDownloadUrl($attachment);
             $post['post_attachments'] .= Display::url($attachment->getFilename(), $url);
-
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
             if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) &&

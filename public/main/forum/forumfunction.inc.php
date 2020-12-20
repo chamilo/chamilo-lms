@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -1587,44 +1588,6 @@ function get_forums(
 }
 
 /**
- * @param int  $course_id
- * @param int  $thread_id
- * @param int  $forum_id
- * @param bool $show_visible
- *
- * @return array|bool
- */
-function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visible = true)
-{
-    if (empty($thread_id) || empty($forum_id) || empty($course_id)) {
-        return false;
-    }
-
-    $thread_id = (int) $thread_id;
-    $forum_id = (int) $forum_id;
-    $course_id = (int) $course_id;
-
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $sql = "SELECT * FROM $table_posts
-            WHERE
-                c_id = $course_id AND
-                thread_id = $thread_id AND
-                forum_id = $forum_id";
-
-    if (false == $show_visible) {
-        $sql .= ' AND visible = 1 ';
-    }
-
-    $sql .= ' ORDER BY iid DESC LIMIT 1';
-    $result = Database::query($sql);
-    if (Database::num_rows($result)) {
-        return Database::fetch_array($result, 'ASSOC');
-    } else {
-        return false;
-    }
-}
-
-/**
  * This function gets all the last post information of a certain forum.
  *
  * @param int    $forum_id        the id of the forum we want to know the last post information of
@@ -1967,8 +1930,8 @@ function getPosts(
             'post_text' => $post->getPostText(),
             'thread_id' => $post->getThread() ? $post->getThread()->getIid() : 0,
             'forum_id' => $post->getForum()->getIid(),
-            'poster_id' => $post->getPosterId(),
-            'poster_name' => $post->getPosterName(),
+            //'poster_id' => $post->getPosterId(),
+            //'poster_name' => $post->getPosterName(),
             'post_date' => $post->getPostDate(),
             'post_notification' => $post->getPostNotification(),
             'post_parent_id' => $post->getPostParentId(),
@@ -1978,7 +1941,7 @@ function getPosts(
             'entity' => $post,
         ];
 
-        $posterId = $post->getPosterId();
+        /*$posterId = $post->getPosterId();
         if (!empty($posterId)) {
             $user = api_get_user_entity($posterId);
             if ($user) {
@@ -1989,7 +1952,7 @@ function getPosts(
                 $postInfo['firstname'] = $user->getFirstname();
                 $postInfo['complete_name'] = UserManager::formatUserFullName($user);
             }
-        }
+        }*/
 
         $list[] = $postInfo;
 
@@ -3878,51 +3841,20 @@ function store_edit_post(CForumForum $forum, $values)
     echo Display::return_message($message, 'confirmation', false);
 }
 
-/**
- * This function displays the firstname and lastname of the user as a link to the user tool.
- *
- * @param string $user_id names
- * @ in_title : title tootip
- *
- * @return string HTML
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function display_user_link($user_id, $name, $origin = '', $in_title = '')
+function displayUserLink(User $user)
 {
-    if (0 != $user_id) {
-        $userInfo = api_get_user_info($user_id);
-
-        return '<a href="'.$userInfo['profile_url'].'">'.Security::remove_XSS($userInfo['complete_name']).'</a>';
-    } else {
-        return $name.' ('.get_lang('Anonymous').')';
-    }
+    return '<a href="'.$user->getProfileUrl().'">'.
+        Security::remove_XSS(UserManager::formatUserFullName($user)).'</a>';
 }
 
-/**
- * This function displays the user image from the profile, with a link to the user's details.
- *
- * @param int    $user_id User's database ID
- * @param string $name    User's name
- * @param string $origin  the origin where the forum is called (example : learnpath)
- *
- * @return string An HTML with the anchor and the image of the user
- *
- * @author Julio Montoya <gugli100@gmail.com>
- */
-function display_user_image($user_id, $name, $origin = '')
+function displayUserImage(User $user)
 {
-    $userInfo = api_get_user_info($user_id);
-    $link = '<a href="'.(!empty($origin) ? '#' : $userInfo['profile_url']).'" '.(!empty($origin) ? 'target="_self"' : '').'>';
+    $url = Container::getIllustrationRepository()->getIllustrationUrl($user);
 
-    if (0 != $user_id) {
-        return $link.'<img src="'.$userInfo['avatar'].'"  alt="'.$name.'"  title="'.$name.'" /></a>';
-    } else {
-        return $link.Display::return_icon('unknown.jpg', $name).'</a>';
-    }
+    return '<div class="thumbnail"><img src="'.$url.'?w=100"/></div>';
 }
+
+
 
 /**
  * The thread view counter gets increased every time someone looks at the thread.
@@ -4407,10 +4339,6 @@ function store_move_post($values)
 
     if ('0' == $values['thread']) {
         $repoPost = Container::getForumPostRepository();
-        $repoThread = Container::getForumThreadRepository();
-        $repoForum = Container::getForumRepository();
-
-        $em = $repoPost->getEntityManager();
 
         /** @var CForumPost $post */
         $post = $repoPost->find($values['post_id']);
@@ -4422,8 +4350,7 @@ function store_move_post($values)
             ->setCId($course_id)
             ->setThreadTitle($post->getPostTitle())
             ->setForum($post->getForum())
-            ->setThreadPosterId($post->getPosterId())
-            ->setThreadPosterName($post->getPosterName())
+            ->setThreadPosterId($post->getUser()->getId())
             ->setThreadLastPost($post->getIid())
             ->setThreadDate($post->getPostDate())
             ->setParent($post->getForum())

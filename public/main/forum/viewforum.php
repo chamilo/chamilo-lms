@@ -6,34 +6,13 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 
-/**
- * These files are a complete rework of the forum. The database structure is
- * based on phpBB but all the code is rewritten. A lot of new functionalities
- * are added:
- * - forum categories and forums can be sorted up or down, locked or made invisible
- * - consistent and integrated forum administration
- * - forum options:     are students allowed to edit their post?
- *                      moderation of posts (approval)
- *                      reply only forums (students cannot create new threads)
- *                      multiple forums per group
- * - sticky messages
- * - new view option: nested view
- * - quoting a message.
- *
- * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @Copyright Ghent University
- * @Copyright Patrick Cool
- */
 require_once __DIR__.'/../inc/global.inc.php';
-
-api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_FORUM);
-
+api_protect_course_script(true);
 $nameTools = get_lang('Forums');
 $origin = api_get_origin();
 
 require_once 'forumfunction.inc.php';
-
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 
 $viewForumUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
@@ -270,16 +249,15 @@ if ('learnpath' == $origin) {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 
-/* Action links */
-echo '<div class="actions">';
-if ('learnpath' != $origin) {
+$actions = '<div class="actions">';
+if ('learnpath' !== $origin) {
     if (!empty($groupId)) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
+        $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
             .Display::return_icon('back.png', get_lang('Back to')
             .' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<span style="float:right;">'.search_link().'</span>';
-        echo '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
+        $actions .= '<span style="float:right;">'.search_link().'</span>';
+        $actions .= '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
             .Display::return_icon('back.png', get_lang('Back toForumOverview'), '', ICON_SIZE_MEDIUM)
             .'</a>';
     }
@@ -295,18 +273,19 @@ if (api_is_allowed_to_edit(false, true) ||
 ) {
     if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
         if (!api_is_anonymous() && !api_is_invitee()) {
-            echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='
+            $actions .= '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='
                 .$forumId.'">'
                 .Display::return_icon('new_thread.png', get_lang('Create thread'), '', ICON_SIZE_MEDIUM)
                 .'</a>';
         }
     } else {
-        echo get_lang('Forum blocked');
+        $actions .= get_lang('Forum blocked');
     }
 }
-echo '</div>';
+$actions .= '</div>';
 
-/* Display the action messages */
+echo $actions;
+
 if (!empty($message)) {
     echo $message;
 }
@@ -345,8 +324,8 @@ echo $html;
 
 // Getting al the threads
 $threads = get_threads($forumId);
-//$whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 $course_id = api_get_course_int_id();
+$illustrationRepo = Container::getIllustrationRepository();
 
 echo '<div class="forum_display">';
 if (is_array($threads)) {
@@ -358,17 +337,6 @@ if (is_array($threads)) {
         if (api_is_allowed_to_edit(false, true) ||
             !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity, $sessionEntity))
         ) {
-            /*$my_whatsnew_post_info = null;
-            if (isset($whatsnew_post_info[$forumId][$thread['thread_id']])) {
-                $my_whatsnew_post_info = $whatsnew_post_info[$forumId][$thread['thread_id']];
-            }
-            $newPost = '';
-            if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
-                $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-            }*/
-
-            //$name = api_get_person_name($thread['firstname'], $thread['lastname']);
-
             $linkPostForum = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId
                 ."&thread={$threadId}&search="
                 .Security::remove_XSS(urlencode($my_search)).'">'
@@ -382,47 +350,29 @@ if (is_array($threads)) {
             $html .= '<div class="col-md-2">';
 
             // display the author name
-            $tab_poster_info = api_get_user_info($thread->getThreadPosterId());
-            $poster_username = sprintf(get_lang('Login: %s'), $tab_poster_info['username']);
+            $author = $thread->getUser();
+            $completeName = UserManager::formatUserFullName($author);
+            $poster_username = sprintf(get_lang('Login: %s'), $thread->getUser()->getUsername());
             $authorName = '';
-
-            if ('learnpath' != $origin) {
-                $authorName = display_user_link(
-                    $thread->getThreadPosterId(),
-                    $tab_poster_info['complete_name'],
-                    '',
-                    $poster_username
-                );
+            if ('learnpath' !== $origin) {
+                $authorName = displayUserLink($author);
             } else {
                 $authorName = Display::tag(
                     'span',
-                    $tab_poster_info['complete_name'],
+                    $completeName,
                     [
                         'title' => api_htmlentities($poster_username, ENT_QUOTES),
                     ]
                 );
             }
 
-            $iconStatus = $tab_poster_info['icon_status'];
-            $last_post_info = get_last_post_by_thread(
-                $thread->getCId(),
-                $threadId,
-                $thread->getForum()->getIid(),
-                api_is_allowed_to_edit()
-            );
-            $last_post = null;
-            if ($last_post_info) {
-                $poster_info = api_get_user_info($last_post_info['poster_id']);
-                $post_date = api_convert_and_format_date($last_post_info['post_date']);
-                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
-                    $last_post_info['poster_id'],
-                    $poster_info['complete_name'],
-                    '',
-                    $poster_info['username']
-                );
+            $iconStatus = $author->getIconStatus();
+            if ($thread->getThreadLastPost()) {
+                $post_date = api_convert_and_format_date($thread->getThreadLastPost()->getPostDate()->format('Y-m-d H:i:s'));
+                $last_post = $post_date.'<br>'.get_lang('By').' '.displayUserLink($thread->getThreadLastPost()->getUser());
             }
 
-            $html .= '<div class="thumbnail">'.display_user_image($thread->getThreadPosterId(), $poster_username, $origin).'</div>';
+            $html .= displayUserImage($thread->getUser());
             $html .= '</div>';
             $html .= '<div class="col-md-10">';
             $html .= Display::tag(
@@ -434,8 +384,8 @@ if (is_array($threads)) {
             );
             $html .= '<p>'.get_lang('By').' '.$iconStatus.' '.$authorName.'</p>';
 
-            if ($last_post_info) {
-                $html .= '<p>'.Security::remove_XSS(cut($last_post_info['post_text'], 140)).'</p>';
+            if ($thread->getThreadLastPost()) {
+                $html .= '<p>'.Security::remove_XSS(cut($thread->getThreadLastPost()->getPostText(), 140)).'</p>';
             }
 
             $html .= '<p>'.Display::dateToStringAgoAndLongDate($thread->getThreadDate()).'</p>';
@@ -456,7 +406,6 @@ if (is_array($threads)) {
 
             $html .= '</div>';
             $html .= '</div>';
-
             $html .= '</div>';
 
             $html .= '<div class="col-md-6">';
@@ -472,22 +421,10 @@ if (is_array($threads)) {
             ).' '.$thread->getThreadReplies().' '.get_lang('Views').'<br>';
             $html .= '</div>';
 
-            $last_post_info = get_last_post_by_thread(
-                $thread->getCId(),
-                $threadId,
-                $thread->getForum()->getIid(),
-                api_is_allowed_to_edit()
-            );
-            $last_post = null;
-
-            if ($last_post_info) {
-                $poster_info = api_get_user_info($last_post_info['poster_id']);
-                $post_date = Display::dateToStringAgoAndLongDate($last_post_info['post_date']);
-                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
-                    $last_post_info['poster_id'],
-                    $poster_info['complete_name'],
-                    '',
-                    $poster_info['username']
+            if ($thread->getThreadLastPost()) {
+                $post_date = api_convert_and_format_date($thread->getThreadLastPost()->getPostDate()->format('Y-m-d H:i:s'));
+                $last_post = $post_date.'<br>'.get_lang('By').' '.displayUserLink(
+                    $thread->getThreadLastPost()->getUser()
                 );
             }
 
@@ -496,10 +433,6 @@ if (is_array($threads)) {
                 .' '.$last_post;
             $html .= '</div>';
             $html .= '<div class="col-md-3">';
-            // Get attachment id.
-            /*if (isset($thread['post_id'])) {
-                $attachment_list = get_attachment($thread['post_id']);
-            }*/
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
             $iconsEdit = '';
             if ('learnpath' !== $origin) {
@@ -553,6 +486,7 @@ if (is_array($threads)) {
                         .'</a>';
                 }
             }
+
             $iconnotify = 'notification_mail_na.png';
             if (is_array(
                 isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
@@ -577,7 +511,6 @@ if (is_array($threads)) {
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
-
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';

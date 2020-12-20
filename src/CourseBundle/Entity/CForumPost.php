@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,7 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="c_forum_post",
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="poster_id", columns={"poster_id"}),
  *      @ORM\Index(name="forum_id", columns={"forum_id"}),
  *      @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}),
  *      @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
@@ -78,18 +78,10 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $forum;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="poster_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      */
-    protected $posterId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="poster_name", type="string", length=100, nullable=true)
-     */
-    protected $posterName;
+    protected $user;
 
     /**
      * @var \DateTime
@@ -212,54 +204,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function getThread()
     {
         return $this->thread;
-    }
-
-    /**
-     * Set posterId.
-     *
-     * @param int $posterId
-     *
-     * @return CForumPost
-     */
-    public function setPosterId($posterId)
-    {
-        $this->posterId = $posterId;
-
-        return $this;
-    }
-
-    /**
-     * Get posterId.
-     *
-     * @return int
-     */
-    public function getPosterId()
-    {
-        return $this->posterId;
-    }
-
-    /**
-     * Set posterName.
-     *
-     * @param string $posterName
-     *
-     * @return CForumPost
-     */
-    public function setPosterName($posterName)
-    {
-        $this->posterName = $posterName;
-
-        return $this;
-    }
-
-    /**
-     * Get posterName.
-     *
-     * @return string
-     */
-    public function getPosterName()
-    {
-        return $this->posterName;
     }
 
     /**
@@ -438,8 +382,20 @@ class CForumPost extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Resource identifier.
+     * @return mixed
      */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -71,9 +72,10 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $forumPosts;
 
     /**
-     * @var int
+     * @var CForumPost
      *
-     * @ORM\Column(name="forum_last_post", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")
+     * @ORM\JoinColumn(name="forum_last_post", referencedColumnName="iid")
      */
     protected $forumLastPost;
 
@@ -328,30 +330,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     public function getForumPosts()
     {
         return $this->forumPosts;
-    }
-
-    /**
-     * Set forumLastPost.
-     *
-     * @param int $forumLastPost
-     *
-     * @return CForumForum
-     */
-    public function setForumLastPost($forumLastPost)
-    {
-        $this->forumLastPost = $forumLastPost;
-
-        return $this;
-    }
-
-    /**
-     * Get forumLastPost.
-     *
-     * @return int
-     */
-    public function getForumLastPost()
-    {
-        return $this->forumLastPost;
     }
 
     /**
@@ -791,9 +769,18 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->threads;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getForumLastPost(): ?CForumPost
+    {
+        return $this->forumLastPost;
+    }
+
+    public function setForumLastPost(CForumPost $forumLastPost): self
+    {
+        $this->forumLastPost = $forumLastPost;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

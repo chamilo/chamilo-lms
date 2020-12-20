@@ -769,7 +769,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
         $this->expired = false;
         $this->roles = [];
         $this->credentialsExpired = false;
-
     }
 
     /**
@@ -2458,8 +2457,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
         $this->setUsername($name);
     }
 
-    public function setParent(AbstractResource $parent) {
-
+    public function setParent(AbstractResource $parent)
+    {
     }
 
     /**
@@ -2486,7 +2485,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
             ? 0
             : max(
                 $categoryCourses->map(
-                /** @var CourseRelUser $courseRelUser */
+                    /** @var CourseRelUser $courseRelUser */
                     function ($courseRelUser) {
                         return $courseRelUser->getSort();
                     }

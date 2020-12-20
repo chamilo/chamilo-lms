@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 class learnpathItem
 {
-    const DEBUG = 0; // Logging parameter.
+    public const DEBUG = 0; // Logging parameter.
     public $iId;
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
@@ -252,26 +252,43 @@ class learnpathItem
      * Closes/stops the item viewing. Finalises runtime values.
      * If required, save to DB.
      *
+     * @param bool $prerequisitesCheck Needed to check if asset can be set as completed or not
+     *
      * @return bool True on success, false otherwise
      */
     public function close()
     {
+        $debug = self::DEBUG;
         $this->current_stop_time = time();
         $type = $this->get_type();
-        if ('sco' != $type) {
-            if (TOOL_QUIZ == $type || TOOL_HOTPOTATOES == $type) {
+        if ($debug) {
+            error_log('Start - learnpathItem:close');
+            error_log("Type: ".$type);
+            error_log("get_id: ".$this->get_id());
+        }
+        if ($type !== 'sco') {
+            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
                 $this->get_status(
                     true,
                     true
                 ); // Update status (second option forces the update).
             } else {
-                $this->status = $this->possible_status[2];
+                /*$this->status = $this->possible_status[2];
+                if (self::DEBUG) {
+                    error_log("STATUS changed to: ".$this->status);
+                }*/
             }
         }
         if ($this->save_on_close) {
+            if ($debug) {
+                error_log('save_on_close');
+            }
             $this->save();
         }
 
+        if ($debug) {
+            error_log('End - learnpathItem:close');
+        }
         return true;
     }
 
@@ -850,10 +867,7 @@ class learnpathItem
             }
         }
         if (self::DEBUG > 2) {
-            error_log(
-                'New LP - End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit,
-                0
-            );
+            error_log('End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit);
         }
 
         return $this->prevent_reinit;
@@ -1464,12 +1478,12 @@ class learnpathItem
     {
         $courseId = $this->courseId;
         $debug = self::DEBUG;
-        if ($debug > 0) {
-            error_log('learnpathItem::get_status() on item '.$this->db_id, 0);
+        if ($debug) {
+            error_log('learnpathItem::get_status() on item '.$this->db_id);
         }
         if ($check_db) {
-            if ($debug > 2) {
-                error_log('learnpathItem::get_status(): checking db', 0);
+            if ($debug) {
+                error_log('learnpathItem::get_status(): checking db');
             }
             if (!empty($this->db_item_view_id) && !empty($courseId)) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -2437,7 +2451,10 @@ class learnpathItem
 
                                         return $returnstatus;
                                     } else {
-                                        $status = $itemToCheck->get_status(false);
+                                        $status = $itemToCheck->get_status(true);
+                                        if (self::DEBUG) {
+                                            error_log('Status:'.$status);
+                                        }
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         // Check results from another sessions.
@@ -2515,7 +2532,7 @@ class learnpathItem
                 }
                 $orstatus = false;
                 foreach ($list as $condition) {
-                    if (self::DEBUG > 1) {
+                    if (self::DEBUG) {
                         error_log(
                             'New LP - Found OR, adding it ('.$condition.')',
                             0
@@ -2805,10 +2822,7 @@ class learnpathItem
         }
 
         if ($debug) {
-            error_log(
-                'New LP - End of learnpathItem::save() - Calling write_to_db()',
-                0
-            );
+            error_log('End of learnpathItem::save() - Calling write_to_db() now');
         }
 
         return $this->write_to_db();
@@ -3112,12 +3126,11 @@ class learnpathItem
 
         if ($found) {
             $this->status = $status;
-            if (self::DEBUG > 1) {
+            if (self::DEBUG) {
                 error_log(
                     'learnpathItem::set_status() - '.
                         'Updated object status of item '.$this->db_id.
-                        ' to '.$this->status,
-                    0
+                    ' to '.$this->status
                 );
             }
 
@@ -3643,10 +3656,7 @@ class learnpathItem
                         lp_view_id = ".$this->view_id." AND
                         view_count = ".$this->get_attempt_id();
             if ($debug) {
-                error_log(
-                    'learnpathItem::write_to_db() - Querying item_view: '.$sql,
-                    0
-                );
+                error_log('learnpathItem::write_to_db() - Querying item_view: '.$sql);
             }
 
             $check_res = Database::query($sql);
@@ -4081,30 +4091,27 @@ class learnpathItem
     /**
      * Adds an audio file to the current item, using a file already in documents.
      *
-     * @param int $doc_id
+     * @param int $documentId
      *
      * @return string
      */
-    public function add_audio_from_documents($doc_id)
+    public function add_audio_from_documents($documentId)
     {
-        $course_info = api_get_course_info();
-        $document_data = DocumentManager::get_document_data_by_id(
-            $doc_id,
-            $course_info['code']
-        );
+        $courseInfo = api_get_course_info();
+        $documentData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
 
-        $file_path = '';
-        if (!empty($document_data)) {
-            $file_path = basename($document_data['path']);
+        $path = '';
+        if (!empty($documentData)) {
+            $path = $documentData['path'];
             // Store the mp3 file in the lp_item table.
             $table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $table SET
-                        audio = '".Database::escape_string($file_path)."'
-                    WHERE iid = ".intval($this->db_id);
+                        audio = '".Database::escape_string($path)."'
+                    WHERE iid = ".$this->db_id;
             Database::query($sql);
         }
 
-        return $file_path;
+        return $path;
     }
 
     /**

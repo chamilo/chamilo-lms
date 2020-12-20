@@ -297,9 +297,9 @@ $autostart = 'true';
 
 if ($debug) {
     error_log('$type_quiz: '.$type_quiz);
-    error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
+    error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId'] ?? 0));
     error_log('$lp_id: '.$lp_id);
-    error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id']));
+    error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id'] ?? 0));
 }
 
 if (!empty($_REQUEST['exeId']) &&

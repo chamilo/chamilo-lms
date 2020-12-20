@@ -29,10 +29,9 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $debug = 0;
     $return = '';
     if ($debug > 0) {
-        error_log(
-            'In xajax_switch_item_details('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')',
-            0
-        );
+        error_log('--------------------------------------');
+        error_log('SWITCH');
+        error_log('Params('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')');
     }
     //$objResponse = new xajaxResponse();
     /*$item_id may be one of:
@@ -268,6 +267,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
     if ($debug > 1) {
+        error_log($return);
         error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
     }
     // Save the new item ID for the exercise tool to use.

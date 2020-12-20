@@ -60,8 +60,6 @@ class Version20180927172830 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_47A9C99F2E82C87 ON c_forum_forum (forum_last_post);');
         }
 
-
-
         $table = $schema->getTable('c_forum_thread');
         if (false === $table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
             $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid)');

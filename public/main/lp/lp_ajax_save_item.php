@@ -62,22 +62,23 @@ function save_item(
 ) {
     $debug = 0;
     $return = null;
-
-    if ($debug > 0) {
-        error_log('--------------------------------------');
-        error_log('SAVE ITEM - lp_ajax_save_item.php : save_item() params: ');
-        error_log("item_id: $item_id - lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
-        error_log("SCORE: $score - max:$max - min: $min - status:$status");
-        error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
-        error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
-    }
-
     $courseCode = api_get_course_id();
     if (!empty($courseId)) {
         $courseInfo = api_get_course_info_by_id($courseId);
         if ($courseInfo) {
             $courseCode = $courseInfo['code'];
         }
+    }
+
+    if ($debug > 0) {
+        error_log('--------------------------------------');
+        error_log('SAVE ITEM - lp_ajax_save_item.php');
+        error_log('--------------------------------------');
+        error_log("item_id: $item_id - lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
+        error_log("SCORE: $score - max:$max - min: $min - status:$status");
+        error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
+        error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
+        error_log("courseCode: $courseCode");
     }
 
     $myLP = learnpath::getLpFromSession($courseCode, $lp_id, $user_id);
@@ -487,9 +488,11 @@ function save_item(
     if (true === $scoreAsProgressSetting) {
         $scoreAsProgress = $myLP->getUseScoreAsProgress();
         if ($scoreAsProgress) {
-            $score = $myLPI->get_score();
-            $maxScore = $myLPI->get_max();
-            $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            if (isset($score) && $score != -1) {
+                $score = $myLPI->get_score();
+                $maxScore = $myLPI->get_max();
+                $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            }
             $progressBarSpecial = true;
         }
     }
@@ -524,7 +527,7 @@ function save_item(
     }
 
     // To be sure progress is updated.
-    $myLP->save_last();
+    $myLP->save_last($score);
 
     Session::write('lpobject', serialize($myLP));
     Session::write('oLP', $myLP);

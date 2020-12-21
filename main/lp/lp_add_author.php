@@ -1,16 +1,15 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * This is a learning path editor autor.
+ * This is a learning path editor author.
  *
  * @author Carlos Alvarado
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
  * @author Julio Montoya  - Improving the list of templates
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 
@@ -24,7 +23,8 @@ $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
-$listUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq().'&isStudentView=true';
+$listUrl = api_get_path(WEB_CODE_PATH).
+    'lp/lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq().'&isStudentView=true';
 if (!$is_allowed_to_edit) {
     header("Location: $listUrl");
     exit;
@@ -128,7 +128,6 @@ $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 
 Display::display_header(null, 'Path');
-
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
     <script>
@@ -193,20 +192,24 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
     </script>
 <?php
 $extraField = [];
-$form = new FormValidator('configure_homepage_'.$action,
+$form = new FormValidator(
+    'configure_homepage_'.$action,
     'post',
     $_SERVER['REQUEST_URI'].'&sub_action=author_view',
     '',
-    ['style' => 'margin: 0px;']);
+    ['style' => 'margin: 0px;']
+);
 
 $extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.intval($lpId).'&'.api_get_cidreq();
 
-echo $learnPath->build_action_menu(false,
+echo $learnPath->build_action_menu(
+    false,
     true,
     false,
     true,
     '',
-    $extraField);
+    $extraField
+);
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
@@ -215,7 +218,7 @@ echo $learnPath->return_new_tree(null, false);
 $message = Session::read('message');
 $messageError = Session::read('messageError');
 // Show the template list.
-if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
+if (($type === 'document' || $type === 'step') && !isset($_GET['file'])) {
     // Show the template list.
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
     echo '</div>';
@@ -239,14 +242,8 @@ $defaultAuthor = [];
 foreach ($_SESSION['oLP']->items as $item) {
     $itemName = $item->name;
     $itemId = $item->iId;
-    $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
-        $itemId,
-        strtolower('AuthorLPItem')
-    );
-    $priceItem = $extraFieldValue->get_values_by_handler_and_field_variable(
-        $itemId,
-        strtolower('price')
-    );
+    $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, 'authorlpitem');
+    $priceItem = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, 'price');
     $authorName = [];
     if (!empty($extraFieldValues)) {
         if ($extraFieldValues != false) {
@@ -255,7 +252,6 @@ foreach ($_SESSION['oLP']->items as $item) {
                 foreach ($authors as $author) {
                     if ($author != 0) {
                         $defaultAuthor[$author] = $author;
-                        // $default["itemSelected[$itemId]"] = true;
                         $teacher = api_get_user_info($author);
                         $authorName[] = $teacher['complete_name'];
                     }
@@ -271,18 +267,20 @@ foreach ($_SESSION['oLP']->items as $item) {
     if (isset($priceItem['value']) && !empty($priceItem['value'])) {
         $authorName .= "<br><small>".get_lang('Price')." (".$priceItem['value'].")</small>";
     }
-    $form->addCheckBox("itemSelected[$itemId]", null, Display::return_icon('lp_document.png', $itemName).$itemName.$authorName);
-    $default["itemSelected"][$itemId] = false;
+    $form->addCheckBox(
+        "itemSelected[$itemId]",
+        null,
+        Display::return_icon('lp_document.png', $itemName).$itemName.$authorName
+    );
+    $default['itemSelected'][$itemId] = false;
 }
 
 $options = [0 => get_lang('RemoveSelected')];
-$default["authorItemSelect"] = [];
+$default['authorItemSelect'] = [];
 $form->addHtml('</div>');
-/* Authors*/
 $teachers = [];
 $field = new ExtraField('user');
 $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
-
 $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
 if ($idExtraField != 0) {
     $extraFieldValueUser = new ExtraFieldValue('user');
@@ -299,20 +297,15 @@ if ($idExtraField != 0) {
         $teachers[] = $teacher;
     }
 }
-/* Authors*/
+
 foreach ($teachers as $key => $value) {
     $authorId = $value['id'];
     $authorName = $value['complete_name'];
     if (!empty($authorName)) {
         $options[$authorId] = $authorName;
-        if (isset($defaultAuthor[$authorId])) {
-            // $default["authorItemSelect"][$authorId] = $authorId;
-        }
     }
 }
-$form->addSelect('authorItemSelect', get_lang('Authors'), $options, [
-    'multiple' => 'multiple',
-]);
+$form->addSelect('authorItemSelect', get_lang('Authors'), $options, ['multiple' => 'multiple']);
 $form->addNumeric('price', get_lang('Price'));
 $form->addHtml('</div>');
 $form->addButtonCreate(get_lang('Send'));
@@ -360,10 +353,10 @@ if ($form->validate()) {
             foreach ($saveExtraFieldItem as $saveItemId => $values) {
                 $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $saveItemId,
-                    'AuthorLPItem'
+                    'authorlpitem'
                 );
                 $extraFieldValue->save([
-                    'variable' => 'AuthorLPItem',
+                    'variable' => 'authorlpitem',
                     'value' => $values,
                     'item_id' => $saveItemId,
                 ]);

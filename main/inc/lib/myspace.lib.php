@@ -1365,88 +1365,78 @@ class MySpace
      * @param string|null $endDate
      * @param bool        $csv
      */
-    public static function displayResumeLpByItem(
-        $startDate = null,
-        $endDate = null,
-        $csv = false
-    ) {
+    public static function displayResumeLpByItem($startDate = null, $endDate = null, $csv = false)
+    {
         $tableHtml = '';
         $table = '';
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $extraFieldLpByAutorName = 'authorlpitem';
-        $extraFieldLpPrice = 'price';
-
-        $queryExtraFieldPrice = "SELECT id  ".
-            " FROM $tblExtraField ".
-            " WHERE variable = '$extraFieldLpPrice'";
-        $queryExtraFieldValue = "SELECT id ".
-            " FROM $tblExtraField ".
-            " WHERE variable = '$extraFieldLpByAutorName'";
+        $queryExtraFieldPrice = "SELECT id FROM $tblExtraField WHERE variable = 'price'";
+        $queryExtraFieldValue = "SELECT id FROM $tblExtraField WHERE variable = 'authorlpitem'";
 
         // search items of lp
-        $cLpItemsQuery = "select item_id as lp_item_id ".
-            " from $tblExtraFieldValue ".
-            " where field_id IN ( $queryExtraFieldValue ) ".
-            " group by lp_item_id";
-        $queryResult = Database::query($cLpItemsQuery);
+        $sql = "SELECT item_id as lp_item_id
+                FROM $tblExtraFieldValue
+                WHERE field_id IN ( $queryExtraFieldValue )
+                GROUP BY lp_item_id";
+        $queryResult = Database::query($sql);
         $cLpItems = [];
         while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
             $cLpItems[] = (int) $row['lp_item_id'];
         }
+
         if (count($cLpItems) == 0) {
-            $tableContent = "<div class='table-responsive'>".
-                "<table class='table table-hover table-striped table-bordered data_table'>".
-                "<thead>".
-                "<tr>".
-                "<th class=\"th-header\">".get_lang('NoDataAvailable')."</th>".
-                "</tr>".
-                "</thead>".
-                "</tbody>".
-                "</tbody>".
-                "</table>".
-                "</div>";
-            $tableHtml = $tableContent;
+            $tableHtml = "<div class='table-responsive'>
+                <table class='table table-hover table-striped table-bordered data_table'>
+                <thead>
+                    <tr>
+                    <th class=\"th-header\">".get_lang('NoDataAvailable')."</th>
+                </tr>
+                </thead>
+                </tbody>
+                </tbody>
+                </table>
+                </div>";
         } else {
             $cLpItems = implode(',', $cLpItems);
             // search by price
-            $cLpItemsPriceQuery = "select value as price, item_id as lp_item_id ".
-                " from $tblExtraFieldValue ".
-                " where field_id IN ( $queryExtraFieldPrice ) and item_id in ($cLpItems)";
-            $queryResult = Database::query($cLpItemsPriceQuery);
+            $sql = "SELECT value as price, item_id as lp_item_id
+                    FROM $tblExtraFieldValue
+                    WHERE
+                        field_id IN ( $queryExtraFieldPrice ) AND
+                        item_id in ($cLpItems)";
+            $queryResult = Database::query($sql);
             $lpItemPrice = [];
             while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
                 $lpItemPrice[$row['lp_item_id']] = $row['price'];
             }
             // search authors of lp
-            $autorsStr = '';
-            $autorsQuery = "select value as users_id ".
-                " from $tblExtraFieldValue ".
-                " where field_id IN ( $queryExtraFieldValue ) ".
-                " group by users_id ";
-            $queryResult = Database::query($autorsQuery);
+            $authorString = '';
+            $sql = "SELECT value as users_id
+                    FROM $tblExtraFieldValue
+                    WHERE field_id IN ( $queryExtraFieldValue )
+                    GROUP by users_id ";
+            $queryResult = Database::query($sql);
             while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
-                $autorsStr .= " ".str_replace(';', ' ', $row['users_id']);
-                $autorsStr = trim($autorsStr);
+                $authorString .= " ".str_replace(';', ' ', $row['users_id']);
+                $authorString = trim($authorString);
             }
-            $autorsStr = str_replace(' ', ',', $autorsStr);
-
+            $authorString = str_replace(' ', ',', $authorString);
             //search autors detailed
             $authors = [];
-            if (!empty($autorsStr)) {
-                $autorsStr = explode(',', $autorsStr);
-                foreach ($autorsStr as $item) {
+            if (!empty($authorString)) {
+                $authorString = explode(',', $authorString);
+                foreach ($authorString as $item) {
                     $authors[$item] = api_get_user_info($item);
                 }
             }
-            unset($autorsStr);
+            unset($authorString);
 
             //search info of lp's items
             $cLpItemsData = [];
             if (!empty($cLpItems)) {
-                $query = "select * ".
-                    " from c_lp_item ".
-                    " where iid in ($cLpItems)";
+                $query = "SELECT * FROM c_lp_item
+                          WHERE iid in ($cLpItems)";
                 $queryResult = Database::query($query);
                 while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
                     $row['price'] = isset($lpItemPrice[$row['iid']]) ? $lpItemPrice[$row['iid']] : 0;
@@ -1454,9 +1444,9 @@ class MySpace
                 }
             }
 
-            $query = "select item_id as lp_item_id ,value as users_id ".
-                " from $tblExtraFieldValue ".
-                " where field_id IN ( $queryExtraFieldValue )";
+            $query = "SELECT item_id as lp_item_id, value as users_id
+                      FROM $tblExtraFieldValue
+                      WHERE field_id IN ( $queryExtraFieldValue )";
             $queryResult = Database::query($query);
             $printData = [];
             while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
@@ -1478,19 +1468,19 @@ class MySpace
         }
         if ($csv == false) {
             if (empty($tableHtml)) {
-                $table .= "<div class='table-responsive'>".
-                    "<table class='table table-hover table-striped table-bordered data_table'>".
-                    "<thead>".
-                    "<tr>".
-                    "<th class=\"th-header\">".get_lang('Author')."</th>".
-                    "<th class=\"th-header\">".get_lang('ContentList')."</th>".
-                    "<th class=\"th-header\">".get_lang('Tariff')."</th>".
-                    "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
-                    "<th class=\"th-header\">".get_lang('ToInvoice')."</th>".
-                    "<th class=\"th-header\">".get_lang('StudentList')."</th>".
-                    "</tr>".
-                    "</thead>".
-                    "<tbody>";
+                $table .= "<div class='table-responsive'>
+                    <table class='table table-hover table-striped table-bordered data_table'>
+                    <thead>
+                    <tr>
+                    <th class=\"th-header\">".get_lang('Author')."</th>
+                    <th class=\"th-header\">".get_lang('ContentList')."</th>
+                    <th class=\"th-header\">".get_lang('Tariff')."</th>
+                    <th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>
+                    <th class=\"th-header\">".get_lang('ToInvoice')."</th>
+                    <th class=\"th-header\">".get_lang('StudentList')."</th>
+                    </tr>
+                    </thead>
+                    <tbody>";
                 //Icon Constant
                 $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
                 $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
@@ -1522,7 +1512,12 @@ class MySpace
                             $table .= "<td>$title</td>";
                         }
                         $table .= "<td>$price</td>";
-                        $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id'], true);
+                        $registeredUsers = self::getCompanyLearnpathSubscription(
+                            $startDate,
+                            $endDate,
+                            $lpitem['lp_id'],
+                            true
+                        );
                         $studenRegister = count($registeredUsers);
                         $table .= "<td>$studenRegister</td>";
                         $facturar = ($studenRegister * $price);
@@ -1530,19 +1525,18 @@ class MySpace
                         $total += $facturar;
                         $totalSudent += $studenRegister;
                         if ($studenRegister != 0) {
-                            $table .= "<td>".
-                                "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
-                                "<div class='icon_add'>$iconAdd</div>".
-                                "<div class='icon_remove hidden'>$iconRemove</div>".
-                                "</a>".
-                                "<div id='$hiddenField' class='hidden'>";
+                            $table .= "<td>
+                                <a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>
+                                <div class='icon_add'>$iconAdd</div>
+                                <div class='icon_remove hidden'>$iconRemove</div>
+                                </a>
+                                <div id='$hiddenField' class='hidden'>";
                             for ($i = 0; $i < $studenRegister; $i++) {
                                 $tempStudent = api_get_user_info($registeredUsers[$i]['id']);
                                 $table .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].")<br>";
                             }
                             $index++;
-                            $table .= "</div>".
-                                "</td>";
+                            $table .= "</div></td>";
                         } else {
                             $table .= "<td></td>";
                         }
@@ -1550,21 +1544,22 @@ class MySpace
                         $lastAuthor = $autor;
                     }
                     //footer
-                    $table .= "<tr><th class=\"th-header\"></th>".
-                        "<th class=\"th-header\">".
-                        "<a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>".
-                        "<div class='icon_add_author_$authorId'>$iconAdd</div>".
-                        "<div class='icon_remove_author_$authorId hidden'>$iconRemove</div>".
-                        "</a>"."</th>".
-                        "<th class=\"th-header\"></th>".
-                        "<th class=\"th-header\">$totalSudent</th>".
-                        "<th class=\"th-header\">$total</th>".
-                        "<th class=\"th-header\"></tr>";
+                    $table .= "<tr><th class=\"th-header\"></th>
+                        <th class=\"th-header\">
+                            <a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>
+                                <div class='icon_add_author_$authorId'>$iconAdd</div>
+                                <div class='icon_remove_author_$authorId hidden'>$iconRemove</div>
+                            </a>
+                        </th>
+                        <th class=\"th-header\"></th>
+                        <th class=\"th-header\">$totalSudent</th>
+                        <th class=\"th-header\">$total</th>
+                        <th class=\"th-header\"></tr>";
                     $total = 0;
                 }
-                $table .= "</tbody>".
-                    "</table>".
-                    "</div>";
+                $table .= "</tbody>
+                    </table>
+                    </div>";
                 $tableHtml = $table;
             }
 
@@ -1582,28 +1577,28 @@ class MySpace
                 get_lang('DateStart'),
                 [
                     'value' => $startDate,
-                ]);
+                ]
+            );
             $form->addDatePicker(
                 'endDate',
                 get_lang('DateEnd'),
                 [
                     'value' => $endDate,
-                ]);
+                ]
+            );
             $form->addButtonSearch(get_lang('Search'));
 
             if (count($printData) != 0) {
-                //$form->addButtonSave(get_lang('Ok'), 'export');
-                $form
-                    ->addButton(
-                        'export_csv',
-                        get_lang('ExportAsCSV'),
-                        'check',
-                        'primary',
-                        null,
-                        null,
-                        [
-                        ]
-                    );
+                $form->addButton(
+                    'export_csv',
+                    get_lang('ExportAsCSV'),
+                    'check',
+                    'primary',
+                    null,
+                    null,
+                    [
+                    ]
+                );
             }
             $tableContent = $form->returnForm();
             $tableContent .= $tableHtml;
@@ -1614,7 +1609,6 @@ class MySpace
         } else {
             $csv_content = [];
             $csv_row = [];
-
             $csv_row[] = get_lang('Author');
             $csv_row[] = get_lang('ContentList');
             $csv_row[] = get_lang('Tariff');
@@ -1632,7 +1626,12 @@ class MySpace
                     $csv_row[] = $autor['complete_name'];
                     $csv_row[] = $title;
                     $csv_row[] = $price;
-                    $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id'], true);
+                    $registeredUsers = self::getCompanyLearnpathSubscription(
+                        $startDate,
+                        $endDate,
+                        $lpitem['lp_id'],
+                        true
+                    );
                     $studenRegister = count($registeredUsers);
                     $csv_row[] = $studenRegister;
                     $facturar = ($studenRegister * $price);

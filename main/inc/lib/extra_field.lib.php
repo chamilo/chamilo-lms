@@ -1178,8 +1178,6 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');
                         }
-                        // When a variable is 'authors', this will be a
-                        // select element of teachers (see BT#17648)
                         $variable = $field_details['variable'];
                         $authors = ($variable == 'authors' || $variable == 'authorlpitem') ? true : false;
                         if ($authors == false) {
@@ -1215,7 +1213,6 @@ class ExtraField extends Model
 
                                     foreach ($arrayExtraFieldValueUser as $item) {
                                         $teacher = api_get_user_info($item['item_id']);
-                                        // $teachers[] = $teacher;
                                         $options[$teacher['id']] = $teacher['complete_name'];
                                     }
                                 }

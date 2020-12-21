@@ -1807,6 +1807,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 */
 // $_configuration['allow_gradebook_comments'] = true;
 
+// Allow anon users to send emails to the platform admin.
+// $_configuration['allow_email_editor_for_anonymous'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

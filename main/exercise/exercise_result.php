@@ -276,6 +276,10 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_id,
     $learnpath_item_id
 );
+
+// See BT#18165
+$objExercise->advanceCourseList();
+
 ExerciseLib::delete_chat_exercise_session($exeId);
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {

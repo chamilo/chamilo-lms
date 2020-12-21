@@ -195,6 +195,7 @@ class ExtraField extends Model
             $result[] = 'scheduled_announcement';
         }
         sort($result);
+
         return $result;
     }
 

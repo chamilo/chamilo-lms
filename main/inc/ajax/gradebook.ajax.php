@@ -18,7 +18,7 @@ switch ($action) {
         }
         if (api_is_allowed_to_edit(null, true)) {
             $userId = $_REQUEST['user_id'] ?? 0;
-            $gradeBookId = $_REQUEST['gradebook_id']?? 0;
+            $gradeBookId = $_REQUEST['gradebook_id'] ?? 0;
             $comment = $_REQUEST['comment'] ?? '';
             GradebookUtils::saveComment($gradeBookId, $userId, $comment);
             echo 1;

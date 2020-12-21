@@ -177,10 +177,7 @@ if (isset($is_success) && $is_success === true) {
     echo $learnPath->display_item($_GET['id'], $msg);
 } else {
     $item = $learnPath->getItem($_GET['id']);
-    echo $learnPath->display_edit_item(
-        $item->getIid(),
-        $excludeExtraFields
-    );
+    echo $learnPath->display_edit_item($item->getIid(), $excludeExtraFields);
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
         echo '<script>$("#frmModel").remove()</script>';

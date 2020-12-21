@@ -7333,10 +7333,8 @@ class learnpath
      *
      * @return string
      */
-    public function display_edit_item(
-        $item_id,
-        $excludeExtraFields = []
-    ) {
+    public function display_edit_item($item_id, $excludeExtraFields = [])
+    {
         $course_id = api_get_course_int_id();
         $return = '';
         $item_id = (int) $item_id;

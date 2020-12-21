@@ -7493,7 +7493,7 @@ class Tracking
                     if ($update_database) {
                         // Creating a new work
                         $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
-                        $data['post_group_id']  = (int) $data['post_group_id'] ;
+                        $data['post_group_id'] = (int) $data['post_group_id'];
                         $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
                         $publication
                             ->setUrl($new_url)

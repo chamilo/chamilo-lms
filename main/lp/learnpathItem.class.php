@@ -2495,7 +2495,7 @@ class learnpathItem
                                     } else {
                                         $status = $itemToCheck->get_status(true);
                                         if (self::DEBUG) {
-                                            error_log('Status:' .$status);
+                                            error_log('Status:'.$status);
                                         }
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 

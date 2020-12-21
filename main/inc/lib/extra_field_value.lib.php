@@ -799,12 +799,11 @@ class ExtraFieldValue extends Model
                 if ($result['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
                     if (!empty($result['value'])) {
                         $options = explode('::', $result['value']);
-
                         $field_option = new ExtraFieldOption($this->type);
                         $result = $field_option->get($options[0]);
-
                         if (!empty($result)) {
-                            $result['value'] = $result['display_text'].'&rarr;'.$options[1];                        }
+                            $result['value'] = $result['display_text'].'&rarr;'.$options[1];
+                        }
                     }
                 }
                 if ($result['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {

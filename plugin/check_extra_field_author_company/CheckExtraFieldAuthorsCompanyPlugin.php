@@ -272,29 +272,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     }
 
     /**
-     * Returns the array of an element in the database that matches the variable.
-     *
-     * @param string $variableName
-     *
-     * @return array
-     */
-    protected function getInfoExtrafield($variableName = null)
-    {
-        if ($variableName == null) {
-            return [];
-        }
-        $variableName = strtolower(Database::escape_string($variableName));
-        $tblExtraField = $this->tblExtraField;
-        $query = "SELECT * FROM $tblExtraField WHERE variable = '$variableName'";
-        $data = Database::fetch_assoc(Database::query($query));
-        if ($data == false || !isset($data['display_text'])) {
-            return [];
-        }
-
-        return $data;
-    }
-
-    /**
      * Verify that the "authors" field exists in the database.
      *
      * @return bool
@@ -381,5 +358,28 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
                 $obj->delete($data['id']);
             }
         }
+    }
+
+    /**
+     * Returns the array of an element in the database that matches the variable.
+     *
+     * @param string $variableName
+     *
+     * @return array
+     */
+    protected function getInfoExtrafield($variableName = null)
+    {
+        if ($variableName == null) {
+            return [];
+        }
+        $variableName = strtolower(Database::escape_string($variableName));
+        $tblExtraField = $this->tblExtraField;
+        $query = "SELECT * FROM $tblExtraField WHERE variable = '$variableName'";
+        $data = Database::fetch_assoc(Database::query($query));
+        if ($data == false || !isset($data['display_text'])) {
+            return [];
+        }
+
+        return $data;
     }
 }

@@ -6668,20 +6668,7 @@ class learnpath
             );
         }
 
-        /*if ($backToBuild) {
-            $back = Display::url(
-                Display::return_icon(
-                    'back.png',
-                    get_lang('GoBack'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
-                "lp_controller.php?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq()
-            );
-        }*/
-
         $actionsLeft = $back;
-
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'preview_view.png',
@@ -6711,7 +6698,6 @@ class learnpath
         );
 
         $subscriptionSettings = self::getSubscriptionSettings();
-
         $request = api_request_uri();
         if (strpos($request, 'edit') === false) {
             $actionsLeft .= Display::url(

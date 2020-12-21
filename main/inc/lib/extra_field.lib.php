@@ -869,7 +869,7 @@ class ExtraField extends Model
                             $extra_data['extra_'.$field['variable']]['extra_'.$field['variable']] = $field_value;
                             break;
                         case self::FIELD_TYPE_TRIPLE_SELECT:
-                            list($level1, $level2, $level3) = explode(';', $field_value);
+                            [$level1, $level2, $level3] = explode(';', $field_value);
 
                             $extra_data["extra_$variable"]["extra_$variable"] = $level1;
                             $extra_data["extra_$variable"]["extra_{$variable}_second"] = $level2;
@@ -1195,12 +1195,11 @@ class ExtraField extends Model
                                     $options[$teacher['id']] = $teacher['complete_name'];
                                 }
                             } elseif ($variable == 'authorlpitem') {
-                                /* Authors*/
                                 $options = [];
                                 $field = new ExtraField('user');
                                 $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
 
-                                $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
+                                $idExtraField = (int) isset($authorLp['id']) ? $authorLp['id'] : 0;
                                 if ($idExtraField != 0) {
                                     $extraFieldValueUser = new ExtraFieldValue('user');
                                     $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
@@ -1210,15 +1209,16 @@ class ExtraField extends Model
                                         false,
                                         true
                                     );
-
-                                    foreach ($arrayExtraFieldValueUser as $item) {
-                                        $teacher = api_get_user_info($item['item_id']);
-                                        $options[$teacher['id']] = $teacher['complete_name'];
+                                    if (!empty($arrayExtraFieldValueUser)) {
+                                        foreach ($arrayExtraFieldValueUser as $item) {
+                                            $teacher = api_get_user_info($item['item_id']);
+                                            $options[$teacher['id']] = $teacher['complete_name'];
+                                        }
                                     }
                                 }
-                                /* Authors*/
                             }
                         }
+
                         $form->addElement(
                             'select',
                             'extra_'.$field_details['variable'],

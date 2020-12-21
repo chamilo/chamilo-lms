@@ -68,18 +68,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         if (empty($authorsField)) {
             $this->authorsExist = true;
             $this->authorsField = $authorsField;
-        } else {
-            $this->authorsField = [
-                'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                'variable' => 'authors',
-                'display_text' => 'Authors',
-                'default_value' => '',
-                'field_order' => 0,
-                'visible_to_self' => 1,
-                'visible_to_others' => 0,
-                'changeable' => 1,
-                'filter' => 1,
-            ];
         }
     }
 
@@ -170,17 +158,17 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
      */
     public function saveAuthorsField()
     {
-        $data = $this->authorsField;
-        $data['field_type'] = (int) $data['field_type'];
-        $data['field_order'] = (int) $data['field_order'];
-        $data['visible_to_self'] = (int) $data['visible_to_self'];
-        $data['visible_to_others'] = (int) $data['visible_to_others'];
-        $data['changeable'] = (int) $data['changeable'];
-        $data['filter'] = (int) $data['filter'];
-        $data['default_value'] = null;
-        $data['variable'] = 'authors';
-        $data['visible'] = 1;
-        $data['display_text'] = strtolower($data['display_text']);
+        $data = [
+            'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+            'variable' => 'authors',
+            'display_text' => 'Authors',
+            'default_value' => '',
+            'field_order' => 0,
+            'visible_to_self' => 1,
+            'visible_to_others' => 0,
+            'changeable' => 1,
+            'filter' => 1,
+        ];
         $schedule = new ExtraField('lp');
         $schedule->save($data);
     }
@@ -190,8 +178,8 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
      */
     public function savePrice()
     {
-        $data = $this->authorsField;
         $schedule = new ExtraField('lp_item');
+        $data = [];
         $data['visible_to_self'] = 1;
         $data['visible_to_others'] = 1;
         $data['changeable'] = 1;
@@ -208,8 +196,8 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
      */
     public function saveAuthorLPItem()
     {
-        $data = $this->authorsField;
         $schedule = new ExtraField('lp_item');
+        $data = [];
         $data['visible_to_self'] = 0;
         $data['visible_to_others'] = 0;
         $data['changeable'] = 1;
@@ -217,8 +205,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['variable'] = 'authorlpitem';
         $data['display_text'] = 'LearningPathItemByAuthor';
         $data['field_type'] = ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
-
-        $this->authorsField['id'] = $schedule->save($data);
+        $schedule->save($data);
     }
 
     /**
@@ -227,24 +214,15 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function saveAuthorLp()
     {
         $schedule = new ExtraField('user');
-        $data = $schedule->get_handler_field_info_by_field_variable('authorlp');
-        if (empty($data)) {
-            $data = $this->authorsField;
-        }
-        if (!isset($data['id']) || (int) $data['id'] == 0) {
-            $data['variable'] = 'authorlp';
-            $data['display_text'] = 'authors';
-            $data['changeable'] = 1;
-            $data['visible_to_self'] = 1;
-            $data['visible_to_others'] = 0;
-            $data['filter'] = 0;
-            $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
-            $id = $schedule->save($data);
-        } else {
-            $this->authorsField = $data;
-            $id = $data['id'];
-        }
-
+        $data = [];
+        $data['variable'] = 'authorlp';
+        $data['display_text'] = 'authors';
+        $data['changeable'] = 1;
+        $data['visible_to_self'] = 1;
+        $data['visible_to_others'] = 0;
+        $data['filter'] = 0;
+        $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
+        $id = $schedule->save($data);
         $this->setYesNoToAuthor($id);
     }
 
@@ -264,12 +242,14 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         if ($authorId != 0) {
             $extraFieldValueUser = new ExtraFieldOption('user');
             $items = $extraFieldValueUser->get_field_options_by_field($authorLpId);
-            foreach ($items as $item) {
-                if (isset($options[0]) &&
-                    (isset($item['option_value']) == $options[0] || isset($item['option_value']) == $options[1])
-                ) {
-                    unset($options[$item['option_value']]);
-                    $order++;
+            if (!empty($items)) {
+                foreach ($items as $item) {
+                    if (isset($options[0]) &&
+                        (isset($item['option_value']) == $options[0] || isset($item['option_value']) == $options[1])
+                    ) {
+                        unset($options[$item['option_value']]);
+                        $order++;
+                    }
                 }
             }
 

@@ -493,7 +493,6 @@ if ($debug > 0) {
 
 switch ($action) {
     case 'author_view':
-        /* Authors*/
         $teachers = [];
         $field = new ExtraField('user');
         $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
@@ -508,13 +507,13 @@ switch ($action) {
                 false,
                 true
             );
-
-            foreach ($arrayExtraFieldValueUser as $item) {
-                $teacher = api_get_user_info($item['item_id']);
-                $teachers[] = $teacher;
+            if (!empty($arrayExtraFieldValueUser)) {
+                foreach ($arrayExtraFieldValueUser as $item) {
+                    $teacher = api_get_user_info($item['item_id']);
+                    $teachers[] = $teacher;
+                }
             }
         }
-        /* Authors*/
         $_SESSION['oLP']->authorsAvaible = $teachers;
         Session::write('oLP', $_SESSION['oLP']);
         if (!$is_allowed_to_edit) {

@@ -195,12 +195,12 @@ $extraField = [];
 $form = new FormValidator(
     'configure_homepage_'.$action,
     'post',
-    $_SERVER['REQUEST_URI'].'&sub_action=author_view',
+    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&sub_action=author_view',
     '',
     ['style' => 'margin: 0px;']
 );
 
-$extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.intval($lpId).'&'.api_get_cidreq();
+$extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
 
 echo $learnPath->build_action_menu(
     false,
@@ -291,10 +291,11 @@ if ($idExtraField != 0) {
         false,
         true
     );
-
-    foreach ($arrayExtraFieldValueUser as $item) {
-        $teacher = api_get_user_info($item['item_id']);
-        $teachers[] = $teacher;
+    if (!empty($arrayExtraFieldValueUser)) {
+        foreach ($arrayExtraFieldValueUser as $item) {
+            $teacher = api_get_user_info($item['item_id']);
+            $teachers[] = $teacher;
+        }
     }
 }
 
@@ -305,6 +306,7 @@ foreach ($teachers as $key => $value) {
         $options[$authorId] = $authorName;
     }
 }
+
 $form->addSelect('authorItemSelect', get_lang('Authors'), $options, ['multiple' => 'multiple']);
 $form->addNumeric('price', get_lang('Price'));
 $form->addHtml('</div>');

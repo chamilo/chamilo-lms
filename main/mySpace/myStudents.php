@@ -618,10 +618,7 @@ if ($first_connection_date == '') {
     $first_connection_date = get_lang('NoConnexion');
 }
 
-$last_connection_date = Tracking::get_last_connection_date(
-    $user_info['user_id'],
-    true
-);
+$last_connection_date = Tracking::get_last_connection_date($user_info['user_id'], true);
 if ($last_connection_date == '') {
     $last_connection_date = get_lang('NoConnexion');
 }
@@ -729,6 +726,10 @@ $userInfo['student_score'] = (float) $score;
 $userInfo['student_progress'] = (float) $avg_student_progress;
 $userInfo['first_connection'] = $first_connection_date;
 $userInfo['last_connection'] = $last_connection_date;
+$userInfo['last_connection_in_course'] = api_format_date(
+    Tracking::getLastConnectionInAnyCourse($user_info['user_id']),
+    DATE_FORMAT_SHORT
+);
 if ($details === 'true') {
     $userInfo['time_spent_course'] = $time_spent_on_the_course;
 }

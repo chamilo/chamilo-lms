@@ -194,9 +194,14 @@ $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
 $userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
 $userInfo['last_connection'] = Tracking::get_last_connection_date($userId, true);
+$userInfo['last_connection_in_course'] = api_format_date(
+    Tracking::getLastConnectionInAnyCourse($userId),
+    DATE_FORMAT_SHORT
+);
 $data = [
     get_lang('FirstLogin') => $userInfo['first_connection'],
     get_lang('LatestLogin') => $userInfo['last_connection'],
+    get_lang('LatestLoginInAnyCourse') => $userInfo['last_connection_in_course'],
 ];
 
 if (api_get_setting('allow_terms_conditions') === 'true') {

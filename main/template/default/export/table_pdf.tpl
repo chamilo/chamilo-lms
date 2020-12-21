@@ -81,6 +81,19 @@
         </td>
     </tr>
     {% endif %}
+
+    {% if extra_rows %}
+        {% for row in extra_rows %}
+        <tr>
+            <td style="background-color: #E5E5E5; text-align: left; width:130px;">
+                <strong>{{ row.label }}:</strong>
+            </td>
+            <td>
+                {{ row.content }}
+            </td>
+        </tr>
+        {% endfor %}
+    {% endif %}
 </table>
 <br />
 

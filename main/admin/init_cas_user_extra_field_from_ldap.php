@@ -199,7 +199,7 @@ foreach ($databaseUsers as $user) {
             echo "\033[2K\r$ldapUsernameAttribute: $ldapUsername, $ldapCASUserAttribute: $ldapCASUser, ";
             $problems = [];
             if ($username === $ldapUsername) {
-                true;
+                //true;
             } elseif (in_array(
                 strtolower(trim($username)),
                 [strtolower(trim($ldapUsername)), strtolower(trim($ldapCASUser))]

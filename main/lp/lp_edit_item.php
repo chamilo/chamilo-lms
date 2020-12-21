@@ -125,7 +125,8 @@ $authorLpField = $field->get_handler_field_info_by_field_variable('authorlpitem'
 if ($authorLpField != null) {
     $extraField['authorlp'] = $authorLpField;
 }
-echo $learnPath->build_action_menu(false,
+echo $learnPath->build_action_menu(
+    false,
     true,
     false,
     true,

@@ -1155,7 +1155,6 @@ class ExtraField extends Model
                                 'checkbox',
                                 'extra_'.$field_details['variable'],
                                 null,
-                                //$field_details['display_text'].'<br />',
                                 get_lang('Yes'),
                                 $checkboxAttributes
                             );
@@ -1178,45 +1177,8 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');
                         }
-                        $variable = $field_details['variable'];
-                        $authors = ($variable == 'authors' || $variable == 'authorlpitem') ? true : false;
-                        if ($authors == false) {
-                            foreach ($field_details['options'] as $optionDetails) {
-                                $options[$optionDetails['option_value']] = $optionDetails['display_text'];
-                            }
-                        } else {
-                            if ($variable == 'authors') {
-                                $conditions = [
-                                    'enabled' => 1,
-                                    'status' => COURSEMANAGER,
-                                ];
-                                $teachers = UserManager::get_user_list($conditions);
-                                foreach ($teachers as $teacher) {
-                                    $options[$teacher['id']] = $teacher['complete_name'];
-                                }
-                            } elseif ($variable == 'authorlpitem') {
-                                $options = [];
-                                $field = new ExtraField('user');
-                                $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
-
-                                $idExtraField = (int) isset($authorLp['id']) ? $authorLp['id'] : 0;
-                                if ($idExtraField != 0) {
-                                    $extraFieldValueUser = new ExtraFieldValue('user');
-                                    $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-                                        $authorLp['variable'],
-                                        1,
-                                        true,
-                                        false,
-                                        true
-                                    );
-                                    if (!empty($arrayExtraFieldValueUser)) {
-                                        foreach ($arrayExtraFieldValueUser as $item) {
-                                            $teacher = api_get_user_info($item['item_id']);
-                                            $options[$teacher['id']] = $teacher['complete_name'];
-                                        }
-                                    }
-                                }
-                            }
+                        foreach ($field_details['options'] as $optionDetails) {
+                            $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                         }
 
                         $form->addElement(

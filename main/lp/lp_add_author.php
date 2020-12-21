@@ -158,9 +158,7 @@ $form = new FormValidator(
     '',
     ['style' => 'margin: 0px;']
 );
-
 $extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
-
 $form->addHtml('<div id="doc_form" class="col-md-12 row">');
 $extraFieldValue = new ExtraFieldValue('lp_item');
 $form->addHeader(get_lang('LpByAuthor'));
@@ -305,7 +303,7 @@ if ($form->validate()) {
                 Display::addFlash(Display::return_message(get_lang('PriceUpdated')));
                 $redirect = true;
             } elseif (!empty($messages)) {
-                Display::addFlash(Display::return_message(get_lang('RegisteredAuthors')." ".$messages));
+                Display::addFlash(Display::return_message(get_lang('RegisteredAuthors').' '.$messages));
                 $redirect = true;
             }
 

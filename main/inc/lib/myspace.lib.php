@@ -76,29 +76,26 @@ class MySpace
         $field = new ExtraField('user');
         $companyField = $field->get_handler_field_info_by_field_variable('company');
         if (!empty($companyField)) {
-            $actions[] =
-                [
-                    'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=company',
-                    'content' => get_lang('UserByEntityReport'),
-                ];
+            $actions[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=company',
+                'content' => get_lang('UserByEntityReport'),
+            ];
         }
         $field = new ExtraField('lp');
         $authorsField = $field->get_handler_field_info_by_field_variable('authors');
         if (!empty($authorsField)) {
-            $actions[] =
-                [
-                    'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPath',
-                    'content' => get_lang('LpByAuthor'),
-                ];
+            $actions[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPath',
+                'content' => get_lang('LpByAuthor'),
+            ];
         }
         $field = new ExtraField('lp_item');
         $authorsItemField = $field->get_handler_field_info_by_field_variable('authorlpitem');
         if (!empty($authorsItemField)) {
-            $actions[] =
-                [
-                    'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPathByItem',
-                    'content' => get_lang('LearningPathItemByAuthor'),
-                ];
+            $actions[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPathByItem',
+                'content' => get_lang('LearningPathItemByAuthor'),
+            ];
         }
 
         return Display::actions($actions, null);

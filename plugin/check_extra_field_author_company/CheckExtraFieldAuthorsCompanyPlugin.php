@@ -221,54 +221,8 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['visible_to_self'] = 1;
         $data['visible_to_others'] = 0;
         $data['filter'] = 0;
-        $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
-        $id = $schedule->save($data);
-        $this->setYesNoToAuthor($id);
-    }
-
-    /**
-     *  Set Yes or Not selector for authorlp field.
-     *
-     * @param $authorLpId
-     */
-    public function setYesNoToAuthor($authorLpId)
-    {
-        $options = [
-            0 => 'No',
-            1 => 'Yes',
-        ];
-        $order = 0;
-        $authorId = (int) $authorLpId;
-        if ($authorId != 0) {
-            $extraFieldValueUser = new ExtraFieldOption('user');
-            $items = $extraFieldValueUser->get_field_options_by_field($authorLpId);
-            if (!empty($items)) {
-                foreach ($items as $item) {
-                    if (isset($options[0]) &&
-                        (isset($item['option_value']) == $options[0] || isset($item['option_value']) == $options[1])
-                    ) {
-                        unset($options[$item['option_value']]);
-                        $order++;
-                    }
-                }
-            }
-
-            for ($i = 0; $i < count($options); $i++) {
-                if (isset($options[$i])) {
-                    $extraFieldOptionValue = $options[$i];
-                    $fieldOption = new ExtraFieldOption('user');
-                    $fieldOption->saveOptions(
-                        [
-                            'field_id' => $authorLpId,
-                            'option_value' => $order,
-                            'display_text' => $extraFieldOptionValue,
-                            'option_order' => $order,
-                        ]
-                    );
-                }
-                $order++;
-            }
-        }
+        $data['field_type'] = ExtraField::FIELD_TYPE_CHECKBOX;
+        $schedule->save($data);
     }
 
     /**

@@ -43,46 +43,6 @@ if ($learnPath->get_lp_session_id() != api_get_session_id()) {
     exit;
 }
 
-$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."
-function load_cbo(id, previousId) {
-    if (!id) {
-        return false;
-    }
-
-    previousId = previousId || 'previous';
-
-    var cbo = document.getElementById(previousId);
-    for (var i = cbo.length - 1; i > 0; i--) {
-        cbo.options[i] = null;
-    }
-
-    var k=0;
-    for (var i = 1; i <= child_name[id].length; i++){
-        var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-        option.style.paddingLeft = '40px';
-        cbo.options[i] = option;
-        k = i;
-    }
-
-    cbo.options[k].selected = true;
-    $('#' + previousId).selectpicker('refresh');
-}
-
-$(function() {
-    if ($('#previous')) {
-        if('parent is'+$('#idParent').val()) {
-            load_cbo($('#idParent').val());
-        }
-    }
-    $('.lp_resource_element').click(function() {
-        window.location.href = $('a', this).attr('href');
-    });
-    CKEDITOR.on('instanceReady', function (e) {
-        showTemplates('content_lp');
-    });
-});
-</script>";
-
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -127,7 +87,6 @@ if ($action === 'add_item' && $type === 'document') {
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 
-Display::display_header(null, 'Path');
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
     <script>
@@ -195,47 +154,16 @@ $extraField = [];
 $form = new FormValidator(
     'configure_homepage_'.$action,
     'post',
-    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&sub_action=author_view',
+    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=author_view&sub_action=author_view',
     '',
     ['style' => 'margin: 0px;']
 );
 
 $extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
 
-echo $learnPath->build_action_menu(
-    false,
-    true,
-    false,
-    true,
-    '',
-    $extraField
-);
-
-echo '<div class="row">';
-echo '<div id="lp_sidebar" class="col-md-4">';
-echo $learnPath->return_new_tree(null, false);
-// Second Col
-$message = Session::read('message');
-$messageError = Session::read('messageError');
-// Show the template list.
-if (($type === 'document' || $type === 'step') && !isset($_GET['file'])) {
-    // Show the template list.
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
-    echo '</div>';
-}
-echo '</div>';
-
 $form->addHtml('<div id="doc_form" class="col-md-12 row">');
-if (!empty($message)) {
-    $form->addHtml(Display::return_message($message));
-    Session::erase('message');
-}
-if (!empty($messageError)) {
-    $form->addHtml(Display::return_message($messageError, 'warning'));
-    Session::erase('messageError');
-}
 $extraFieldValue = new ExtraFieldValue('lp_item');
-$form->addHtml('<h1 class="col-md-12 text-center">'.get_lang('LpByAuthor').'</h1>');
+$form->addHeader(get_lang('LpByAuthor'));
 $default = [];
 $form->addHtml('<div class="col-xs-12 row" >');
 $defaultAuthor = [];
@@ -265,7 +193,7 @@ foreach ($_SESSION['oLP']->items as $item) {
         $authorName = '';
     }
     if (isset($priceItem['value']) && !empty($priceItem['value'])) {
-        $authorName .= "<br><small>".get_lang('Price')." (".$priceItem['value'].")</small>";
+        $authorName .= "<br /><small>".get_lang('Price')." (".$priceItem['value'].")</small>";
     }
     $form->addCheckBox(
         "itemSelected[$itemId]",
@@ -313,9 +241,7 @@ $form->addNumeric('price', get_lang('Price'));
 $form->addHtml('</div>');
 $form->addButtonCreate(get_lang('Send'));
 $form->setDefaults($default);
-$form->display();
-echo '</div>';
-echo '</div>';
+
 if ($form->validate()) {
     if (isset($_GET['sub_action']) && ($_GET['sub_action'] === 'author_view')) {
         $authors = isset($_POST['authorItemSelect']) ? $_POST['authorItemSelect'] : [];
@@ -372,26 +298,46 @@ if ($form->validate()) {
             $messages = implode(' / ', $saveAuthor);
             $currentUrl = api_request_uri();
             $redirect = false;
-            $sms = [];
             if ($removeExist) {
-                Session::write('messageError', get_lang('DeletedAuthors'));
+                Display::addFlash(Display::return_message(get_lang('DeletedAuthors')));
                 $redirect = true;
             } elseif ($price > 0) {
-                $sms[] = get_lang('PriceUpdated');
+                Display::addFlash(Display::return_message(get_lang('PriceUpdated')));
                 $redirect = true;
             } elseif (!empty($messages)) {
-                $sms[] = get_lang(get_lang('RegisteredAuthors')." ".$messages);
+                Display::addFlash(Display::return_message(get_lang('RegisteredAuthors')." ".$messages));
                 $redirect = true;
             }
 
-            if ($redirect == true) {
-                if (count($sms) > 0) {
-                    Session::write('message', implode(' / ', $sms));
-                }
-                echo "<script>window.location.replace(\"$currentUrl\");</script>";
-                exit();
+            if ($redirect) {
+                api_location($currentUrl);
             }
         }
     }
 }
+
+Display::display_header(null, 'Path');
+
+echo $learnPath->build_action_menu(
+    false,
+    true,
+    false,
+    true,
+    '',
+    $extraField
+);
+
+echo '<div class="row">';
+echo '<div id="lp_sidebar" class="col-md-4">';
+echo $learnPath->return_new_tree(null, false);
+// Show the template list.
+if (($type === 'document' || $type === 'step') && !isset($_GET['file'])) {
+    // Show the template list.
+    echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
+    echo '</div>';
+}
+echo '</div>';
+$form->display();
+echo '</div>';
+echo '</div>';
 Display::display_footer();

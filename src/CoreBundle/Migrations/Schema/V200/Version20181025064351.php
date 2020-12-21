@@ -7,11 +7,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * GradeBook.
- */
 class Version20181025064351 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Migrate gradebook_category';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('gradebook_result_log');
@@ -172,6 +174,13 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $this->addSql(
             'ALTER TABLE gradebook_score_log ADD CONSTRAINT FK_640C6449A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
         );
+
+        $table = $schema->hasTable('gradebook_comment');
+        if (false === $table) {
+            $this->addSql('CREATE TABLE gradebook_comment (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, gradebook_id INT DEFAULT NULL, comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_C3B70763A76ED395 (user_id), INDEX IDX_C3B70763AD3ED51C (gradebook_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+            $this->addSql('ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
+            $this->addSql('ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gradebook_id) REFERENCES gradebook_category (id) ON DELETE CASCADE;');
+        }
     }
 
     public function down(Schema $schema): void

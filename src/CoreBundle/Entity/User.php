@@ -406,6 +406,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
     protected $gradeBookCertificates;
 
     /**
+     * @var ArrayCollection|GradebookComment[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="user")
+     */
+    protected $gradeBookComments;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(

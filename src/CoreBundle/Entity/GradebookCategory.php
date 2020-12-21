@@ -5,11 +5,10 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookCategory.
- *
  * @ORM\Table(name="gradebook_category",
  *  indexes={
  *     @ORM\Index(name="idx_gb_cat_parent", columns={"parent_id"}),
@@ -161,10 +160,18 @@ class GradebookCategory
     protected $gradeBooksToValidateInDependence;
 
     /**
+     * @var ArrayCollection|GradebookComment[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradebook")
+     */
+    protected $comments;
+
+    /**
      * GradebookCategory constructor.
      */
     public function __construct()
     {
+        $this->comments = new ArrayCollection();
         $this->locked = 0;
         $this->generateCertificates = false;
         $this->isRequirement = false;

@@ -8,8 +8,6 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookCertificate.
- *
  * @ORM\Table(
  *     name="gradebook_certificate",
  *     indexes={

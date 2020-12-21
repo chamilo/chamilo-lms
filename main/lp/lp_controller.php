@@ -496,12 +496,11 @@ switch ($action) {
         $teachers = [];
         $field = new ExtraField('user');
         $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
-
-        $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
+        $idExtraField = isset($authorLp['id']) ? (int) $authorLp['id'] : 0;
         if ($idExtraField != 0) {
             $extraFieldValueUser = new ExtraFieldValue('user');
             $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-                $authorLp['variable'],
+                'authorlp',
                 1,
                 true,
                 false,
@@ -514,7 +513,6 @@ switch ($action) {
                 }
             }
         }
-        $_SESSION['oLP']->authorsAvaible = $teachers;
         Session::write('oLP', $_SESSION['oLP']);
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

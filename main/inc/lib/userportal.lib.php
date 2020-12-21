@@ -237,8 +237,6 @@ class IndexManager
 
             if (trim($home_top_temp) == '' && api_is_platform_admin()) {
                 $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
-            } else {
-                $home_top_temp;
             }
             $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));

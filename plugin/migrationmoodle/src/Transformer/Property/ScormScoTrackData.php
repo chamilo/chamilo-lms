@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
@@ -7,13 +8,11 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 
 /**
  * Class ScormScoTrackData.
- *
- * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
 class ScormScoTrackData implements TransformPropertyInterface
 {
-    const SEPARATOR_COMPONENTS = '|@|';
-    const SEPARATOR_VALUES = '==>>';
+    public const SEPARATOR_COMPONENTS = '|@|';
+    public const SEPARATOR_VALUES = '==>>';
 
     /**
      * {@inheritdoc}
@@ -97,8 +96,6 @@ class ScormScoTrackData implements TransformPropertyInterface
         if (empty($value)) {
             return 'none';
         }
-
-        $value;
     }
 
     /**

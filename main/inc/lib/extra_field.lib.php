@@ -194,7 +194,7 @@ class ExtraField extends Model
         if (api_get_configuration_value('allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
         }
-
+        sort($result);
         return $result;
     }
 

@@ -2946,6 +2946,32 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * @param string $baseUrl
+     * @param string $currentPage
+     * @param string $pagesCount
+     * @param string $totalItems
+     *
+     * @return string
+     */
+    public static function returnPagination(
+        $baseUrl,
+        $currentPage,
+        $pagesCount,
+        $totalItems,
+        array $extraQueryParams = []
+    ) {
+        $queryParams = HttpRequest::createFromGlobals()->query->all();
+
+        unset($queryParams['page']);
+
+        $url = $baseUrl.'?'.http_build_query(
+            array_merge($queryParams, $extraQueryParams)
+        );
+
+        return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+    }
+
+    /**
      * Filter the registered courses for show in plugin catalog.
      */
     private function getCourses($first, $maxResults)
@@ -3283,32 +3309,5 @@ class BuyCoursesPlugin extends Plugin
             ['status' => (int) $newStatus],
             ['id = ?' => (int) $serviceSaleId]
         );
-    }
-
-    /**
-     * @param string $baseUrl
-     * @param string $currentPage
-     * @param string $pagesCount
-     * @param string $totalItems
-     * @param array  $extraQueryParams
-     *
-     * @return string
-     */
-    public static function returnPagination(
-        $baseUrl,
-        $currentPage,
-        $pagesCount,
-        $totalItems,
-        array $extraQueryParams = []
-    ) {
-        $queryParams = HttpRequest::createFromGlobals()->query->all();
-
-        unset($queryParams['page']);
-
-        $url = $baseUrl.'?'.http_build_query(
-            array_merge($queryParams, $extraQueryParams)
-        );
-
-        return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
     }
 }

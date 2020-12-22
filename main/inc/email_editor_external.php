@@ -5,11 +5,11 @@
 use ChamiloSession as Session;
 
 /**
- * This script contains the code to send an e-mail to the portal admin
+ * This script contains the code to send an e-mail to the portal admin.
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (false === api_get_configuration_value('allow_external_email_editor')) {
+if (false === api_get_configuration_value('allow_email_editor_for_anonymous')) {
     api_not_allowed(true);
 }
 

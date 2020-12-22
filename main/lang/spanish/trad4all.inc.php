@@ -8745,4 +8745,6 @@ $MoveUsersFromCourseToSession = "Mover resultados de usuarios del curso base a u
 $IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments = "Si su ejercicio tiene preguntas del tipo Zona interactiva, debería seleccionar las imágenes relacionadas desde los documentos.";
 $BackToAttemptList = "Regresar a la lista de intentos";
 $ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Mostrar el resultado al alumno: mostrar la puntuación, la elección del alumno y sus comentarios en cada intento, agrega la respuesta correcta y sus comentarios cuando se alcance el límite de intentos elegido.";
+$AddGradebookComment = "Comentario";
+$LatestLoginInAnyCourse = "Último acceso en un curso";
 ?>

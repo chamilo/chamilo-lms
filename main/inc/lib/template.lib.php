@@ -823,7 +823,7 @@ class Template
                 $template = $this->get_template('mail_editor/email_link.js.tpl');
                 $js_file_to_string .= $this->fetch($template);
             } else {
-                if (api_get_configuration_value('allow_external_email_editor')) {
+                if (api_get_configuration_value('allow_email_editor_for_anonymous')) {
                     $link = 'email_editor_external.php';
                     $this->assign('email_editor', $link);
                     $template = $this->get_template('mail_editor/email_link.js.tpl');

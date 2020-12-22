@@ -16,8 +16,10 @@ $data = [];
 
 $students = CourseManager::get_student_list_from_course_code($courseCode);
 $categories = TestCategory::getCategoryListInfo('', $courseId);
-
-$sql = "SELECT iid, title FROM c_quiz WHERE c_id = $courseId AND active <> 2 order by iid";
+$table = Database::get_course_table(TABLE_QUIZ_TEST);
+$sql = "SELECT iid, title FROM $table
+        WHERE c_id = $courseId AND active <> -1
+        ORDER by iid";
 $result = Database::query($sql);
 $exercises = Database::store_result($result);
 $list = [];
@@ -46,16 +48,12 @@ $objExercise = new Exercise();
 
 foreach ($students as $studentInfo) {
     $studentId = $studentInfo['user_id'];
-    //$userExtra = UserManager::get_extra_user_data($studentId);
-
     $data = [];
     $data[] = $studentInfo['username'];
     $data[] = $studentInfo['lastname'];
     $data[] = $studentInfo['firstname'];
     $data[] = $studentInfo['email'];
     $data[] = $studentInfo['official_code'];
-    //$data[] = isset($userExtra['extra_nif']) ? $userExtra['extra_nif'] : '';
-
     $userExerciseData = [];
     $categoryData = [];
     foreach ($exercises as $exerciseInfo) {

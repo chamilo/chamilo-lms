@@ -16,6 +16,21 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 switch ($action) {
+    case 'get_lp_list_by_course':
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
+        $session_id = (isset($_GET['session_id']) && !empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        $onlyActiveLp = !(api_is_platform_admin(true) || api_is_course_admin());
+        $results = learnpath::getLpList($course_id, $session_id, $onlyActiveLp);
+        $data = [];
+
+        if (!empty($results)) {
+            foreach ($results as $lp) {
+                $data[] = ['id' => $lp['id'], 'text' => html_entity_decode($lp['name'])];
+            }
+        }
+
+        echo json_encode($data);
+        break;
     case 'get_documents':
         $courseInfo = api_get_course_info();
         $folderId = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
@@ -49,9 +64,9 @@ switch ($action) {
         $learningPath = Session::read('oLP');
         if ($learningPath) {
             $learningPath->set_modified_on();
-            $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
-            $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
-            $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+            $title = $_REQUEST['title'] ?? '';
+            $type = $_REQUEST['type'] ?? '';
+            $id = $_REQUEST['id'] ?? 0;
             error_log($id);
             error_log($type);
             switch ($type) {
@@ -96,7 +111,7 @@ switch ($action) {
             $orderList = [];
 
             foreach ($sections as $items) {
-                list($id, $parentId) = explode('|', $items);
+                [$id, $parentId] = explode('|', $items);
 
                 $orderList[$id] = $parentId;
             }

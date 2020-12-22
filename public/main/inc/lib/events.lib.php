@@ -758,6 +758,251 @@ class Event
     }
 
     /**
+     * Records information for common (or admin) events (in the track_e_default table).
+     *
+     * @author Yannick Warnier <yannick.warnier@beeznest.com>
+     *
+     * @param string $event_type       Type of event
+     * @param string $event_value_type Type of value
+     * @param mixed  $event_value      Value (string, or array in the case of user info)
+     * @param string $datetime         Datetime (UTC) (defaults to null)
+     * @param int    $user_id          User ID (defaults to null)
+     * @param int    $course_id        Course ID (defaults to null)
+     * @param int    $sessionId        Session ID
+     *
+     * @return bool
+     * @assert ('','','') === false
+     */
+    public static function addEvent(
+        $event_type,
+        $event_value_type,
+        $event_value,
+        $datetime = null,
+        $user_id = null,
+        $course_id = null,
+        $sessionId = 0
+    ) {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+
+        if (empty($event_type)) {
+            return false;
+        }
+        $event_type = Database::escape_string($event_type);
+        $event_value_type = Database::escape_string($event_value_type);
+        if (!empty($course_id)) {
+            $course_id = (int) $course_id;
+        } else {
+            $course_id = api_get_course_int_id();
+        }
+        if (!empty($sessionId)) {
+            $sessionId = (int) $sessionId;
+        } else {
+            $sessionId = api_get_session_id();
+        }
+
+        //Clean the user_info
+        if ($event_value_type == LOG_USER_OBJECT) {
+            if (is_array($event_value)) {
+                unset($event_value['complete_name']);
+                unset($event_value['complete_name_with_username']);
+                unset($event_value['firstName']);
+                unset($event_value['lastName']);
+                unset($event_value['avatar_small']);
+                unset($event_value['avatar']);
+                unset($event_value['mail']);
+                unset($event_value['password']);
+                unset($event_value['last_login']);
+                unset($event_value['picture_uri']);
+                $event_value = serialize($event_value);
+            }
+        }
+        // If event is an array then the $event_value_type should finish with
+        // the suffix _array for example LOG_WORK_DATA = work_data_array
+        if (is_array($event_value)) {
+            $event_value = serialize($event_value);
+        }
+
+        $event_value = Database::escape_string($event_value);
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+
+        if (!isset($datetime)) {
+            $datetime = api_get_utc_datetime();
+        }
+
+        $datetime = Database::escape_string($datetime);
+
+        if (!isset($user_id)) {
+            $user_id = api_get_user_id();
+        }
+
+        $params = [
+            'default_user_id' => $user_id,
+            'c_id' => $course_id,
+            'default_date' => $datetime,
+            'default_event_type' => $event_type,
+            'default_value_type' => $event_value_type,
+            'default_value' => $event_value,
+            'session_id' => $sessionId,
+        ];
+        Database::insert($table, $params);
+
+        return true;
+    }
+
+    /**
+     * Get every email stored in the database.
+     *
+     * @deprecated
+     *
+     * @return array
+     * @assert () !== false
+     */
+    public static function get_all_event_types()
+    {
+        global $event_config;
+
+        $sql = 'SELECT etm.id, event_type_name, activated, language_id, message, subject, dokeos_folder
+                FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' etm
+                INNER JOIN '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
+                ON etm.language_id = l.id';
+
+        $events_types = Database::store_result(Database::query($sql), 'ASSOC');
+
+        $to_return = [];
+        foreach ($events_types as $et) {
+            $et['nameLangVar'] = $event_config[$et["event_type_name"]]["name_lang_var"];
+            $et['descLangVar'] = $event_config[$et["event_type_name"]]["desc_lang_var"];
+            $to_return[] = $et;
+        }
+
+        return $to_return;
+    }
+
+    /**
+     * Get the users related to one event.
+     *
+     * @param string $event_name
+     *
+     * @return string
+     */
+    public static function get_event_users($event_name)
+    {
+        $event_name = Database::escape_string($event_name);
+        $sql = 'SELECT user.user_id,  user.firstname, user.lastname
+                FROM '.Database::get_main_table(TABLE_MAIN_USER).' user
+                JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser
+                ON relUser.user_id = user.user_id
+                WHERE user.status <> '.ANONYMOUS.' AND relUser.event_type_name = "'.$event_name.'"';
+        $user_list = Database::store_result(Database::query($sql), 'ASSOC');
+
+        return json_encode($user_list);
+    }
+
+    /**
+     * @param int    $user_id
+     * @param string $event_type
+     *
+     * @return array|bool
+     */
+    public static function get_events_by_user_and_type($user_id, $event_type)
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $user_id = (int) $user_id;
+        $event_type = Database::escape_string($event_type);
+
+        $sql = "SELECT * FROM $table
+                WHERE default_value_type = 'user_id' AND
+                      default_value = $user_id AND
+                      default_event_type = '$event_type'
+                ORDER BY default_date ";
+        $result = Database::query($sql);
+        if ($result) {
+            return Database::store_result($result, 'ASSOC');
+        }
+
+        return false;
+    }
+
+    /**
+     * Save the new message for one event and for one language.
+     *
+     * @param string $event_name
+     * @param array  $users
+     * @param string $message
+     * @param string $subject
+     * @param string $event_message_language
+     * @param int    $activated
+     */
+    public static function save_event_type_message(
+        $event_name,
+        $users,
+        $message,
+        $subject,
+        $event_message_language,
+        $activated
+    ) {
+        $event_name = Database::escape_string($event_name);
+        $activated = (int) $activated;
+        $event_message_language = Database::escape_string($event_message_language);
+
+        // Deletes then re-adds the users linked to the event
+        $sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).'
+                WHERE event_type_name = "'.$event_name.'"	';
+        Database::query($sql);
+
+        $eventTable = Database::get_main_table(TABLE_EVENT_TYPE_REL_USER);
+
+        foreach ($users as $user) {
+            $user = (int) $user;
+            $sql = "INSERT INTO $eventTable (user_id,event_type_name)
+                    VALUES($user,'$event_name')";
+            Database::query($sql);
+        }
+        $language_id = api_get_language_id($event_message_language);
+        // check if this template in this language already exists or not
+        $eventMailTable = Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE);
+        $sql = "SELECT COUNT(id) as total
+                FROM $eventMailTable
+                WHERE event_type_name = '$event_name' AND language_id = $language_id";
+
+        $sql = Database::store_result(Database::query($sql), 'ASSOC');
+
+        $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+        $message = Database::escape_string($message);
+        $subject = Database::escape_string($subject);
+        // if already exists, we update
+        if ($sql[0]["total"] > 0) {
+            $sql = "UPDATE $eventMailTable
+                SET message = '$message',
+                subject = '$subject',
+                activated = $activated
+                WHERE event_type_name = '$event_name' AND language_id = (
+                    SELECT id FROM $languageTable
+                    WHERE dokeos_folder = '$event_message_language'
+                )";
+            Database::query($sql);
+        } else { // else we create a new record
+            // gets the language_-_id
+            $lang_id = "(SELECT id FROM $languageTable
+                        WHERE dokeos_folder = '$event_message_language')";
+            $lang_id = Database::store_result(Database::query($lang_id), 'ASSOC');
+            $lang_id = $lang_id[0]['id'];
+
+            if (!empty($lang_id[0]["id"])) {
+                $sql = "INSERT INTO $eventMailTable (event_type_name, language_id, message, subject, activated)
+                    VALUES ('$event_name', $lang_id, '$message', '$subject', $activated)";
+                Database::query($sql);
+            }
+        }
+
+        // set activated at every save
+        $sql = "UPDATE $eventMailTable
+                SET activated = $activated
+                WHERE event_type_name = '$event_name'";
+        Database::query($sql);
+    }
+
+    /**
      * Gets the last attempt of an exercise based in the exe_id.
      *
      * @param int $exeId
@@ -1073,98 +1318,6 @@ class Event
             $course_id,
             $session_id
         );
-
-        return true;
-    }
-
-    /**
-     * Records information for common (or admin) events (in the track_e_default table).
-     *
-     * @param string $event_type       Type of event
-     * @param string $event_value_type Type of value
-     * @param mixed  $event_value      Value (string, or array in the case of user info)
-     * @param string $datetime         Datetime (UTC) (defaults to null)
-     * @param int    $user_id          User ID (defaults to null)
-     * @param int    $course_id        Course ID (defaults to null)
-     * @param int    $sessionId        Session ID
-     *
-     * @return bool
-     * @assert ('','','') === false
-     * @author Yannick Warnier <yannick.warnier@beeznest.com>
-     *
-     */
-    public static function addEvent(
-        $event_type,
-        $event_value_type,
-        $event_value,
-        $datetime = null,
-        $user_id = null,
-        $course_id = null,
-        $sessionId = 0
-    ) {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-
-        if (empty($event_type)) {
-            return false;
-        }
-        $event_type = Database::escape_string($event_type);
-        $event_value_type = Database::escape_string($event_value_type);
-        if (!empty($course_id)) {
-            $course_id = (int) $course_id;
-        } else {
-            $course_id = api_get_course_int_id();
-        }
-        if (!empty($sessionId)) {
-            $sessionId = (int) $sessionId;
-        } else {
-            $sessionId = api_get_session_id();
-        }
-
-        //Clean the user_info
-        if (LOG_USER_OBJECT == $event_value_type) {
-            if (is_array($event_value)) {
-                unset($event_value['complete_name']);
-                unset($event_value['complete_name_with_username']);
-                unset($event_value['firstName']);
-                unset($event_value['lastName']);
-                unset($event_value['avatar_small']);
-                unset($event_value['avatar']);
-                unset($event_value['mail']);
-                unset($event_value['password']);
-                unset($event_value['last_login']);
-                unset($event_value['picture_uri']);
-                $event_value = serialize($event_value);
-            }
-        }
-        // If event is an array then the $event_value_type should finish with
-        // the suffix _array for example LOG_WORK_DATA = work_data_array
-        if (is_array($event_value)) {
-            $event_value = serialize($event_value);
-        }
-
-        $event_value = Database::escape_string($event_value);
-        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-
-        if (!isset($datetime)) {
-            $datetime = api_get_utc_datetime();
-        }
-
-        $datetime = Database::escape_string($datetime);
-
-        if (!isset($user_id)) {
-            $user_id = api_get_user_id();
-        }
-
-        $params = [
-            'default_user_id' => $user_id,
-            'c_id' => $course_id,
-            'default_date' => $datetime,
-            'default_event_type' => $event_type,
-            'default_value_type' => $event_value_type,
-            'default_value' => $event_value,
-            'session_id' => $sessionId,
-        ];
-        Database::insert($table, $params);
 
         return true;
     }
@@ -1812,6 +1965,25 @@ class Event
         return $list;
     }
 
+    public static function getQuestionAttemptByExeIdAndQuestion($exeId, $questionId)
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $exeId = (int) $exeId;
+        $questionId = (int) $questionId;
+
+        $sql = "SELECT * FROM $table
+                WHERE
+                    exe_id = $exeId AND
+                    question_id = $questionId
+                ORDER BY position";
+        $result = Database::query($sql);
+        $attempt = [];
+        if (Database::num_rows($result)) {
+            $attempt = Database::fetch_array($result, 'ASSOC');
+        }
+
+        return $attempt;
+    }
     /**
      * Delete one record from the track_e_attempt table (recorded quiz answer)
      * and register the deletion event (LOG_QUESTION_RESULT_DELETE) in
@@ -2201,62 +2373,6 @@ class Event
     }
 
     /**
-     * Register the logout of the course (usually when logging out of the platform)
-     * from the track_e_access_complete table.
-     *
-     * @param array $logInfo Information stored by local.inc.php
-     *
-     * @return bool
-     */
-    public static function registerLog($logInfo)
-    {
-        $sessionId = api_get_session_id();
-        $courseId = api_get_course_int_id();
-
-        if (isset($logInfo['c_id']) && !empty($logInfo['c_id'])) {
-            $courseId = $logInfo['c_id'];
-        }
-
-        if (isset($logInfo['session_id']) && !empty($logInfo['session_id'])) {
-            $sessionId = $logInfo['session_id'];
-        }
-
-        if (!Tracking::minimumTimeAvailable($sessionId, $courseId)) {
-            return false;
-        }
-
-        if (false === self::isSessionLogNeedToBeSave($sessionId)) {
-            return false;
-        }
-
-        $loginAs = true === (int) Session::read('login_as');
-
-        $logInfo['user_id'] = isset($logInfo['user_id']) ? $logInfo['user_id'] : api_get_user_id();
-        $logInfo['date_reg'] = isset($logInfo['date_reg']) ? $logInfo['date_reg'] : api_get_utc_datetime();
-        $logInfo['tool'] = !empty($logInfo['tool']) ? $logInfo['tool'] : '';
-        $logInfo['tool_id'] = !empty($logInfo['tool_id']) ? (int) $logInfo['tool_id'] : 0;
-        $logInfo['tool_id_detail'] = !empty($logInfo['tool_id_detail']) ? (int) $logInfo['tool_id_detail'] : 0;
-        $logInfo['action'] = !empty($logInfo['action']) ? $logInfo['action'] : '';
-        $logInfo['action_details'] = !empty($logInfo['action_details']) ? $logInfo['action_details'] : '';
-        $logInfo['ip_user'] = api_get_real_ip();
-        $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-        $logInfo['session_id'] = $sessionId;
-        $logInfo['c_id'] = $courseId;
-        $logInfo['ch_sid'] = session_id();
-        $logInfo['login_as'] = $loginAs;
-        $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
-        $logInfo['url'] = $_SERVER['REQUEST_URI'];
-        $logInfo['current_id'] = isset($logInfo['current_id']) ? $logInfo['current_id'] : Session::read('last_id', 0);
-
-        $id = Database::insert('track_e_access_complete', $logInfo);
-        if ($id && empty($logInfo['current_id'])) {
-            Session::write('last_id', $id);
-        }
-
-        return true;
-    }
-
-    /**
      * Removes a "fake" time spent on the platform, for example to match the
      * estimated time he took to author an assignment/work, see configuration
      * setting considered_working_time.
@@ -2379,6 +2495,62 @@ class Event
         return false;
     }
 
+    /**
+     * Register the logout of the course (usually when logging out of the platform)
+     * from the track_e_access_complete table.
+     *
+     * @param array $logInfo Information stored by local.inc.php
+     *
+     * @return bool
+     */
+    public static function registerLog($logInfo)
+    {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+
+        if (isset($logInfo['c_id']) && !empty($logInfo['c_id'])) {
+            $courseId = $logInfo['c_id'];
+        }
+
+        if (isset($logInfo['session_id']) && !empty($logInfo['session_id'])) {
+            $sessionId = $logInfo['session_id'];
+        }
+
+        if (!Tracking::minimumTimeAvailable($sessionId, $courseId)) {
+            return false;
+        }
+
+        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+            return false;
+        }
+
+        $loginAs = (int) Session::read('login_as') === true;
+
+        $logInfo['user_id'] = isset($logInfo['user_id']) ? $logInfo['user_id'] : api_get_user_id();
+        $logInfo['date_reg'] = isset($logInfo['date_reg']) ? $logInfo['date_reg'] : api_get_utc_datetime();
+        $logInfo['tool'] = !empty($logInfo['tool']) ? $logInfo['tool'] : '';
+        $logInfo['tool_id'] = !empty($logInfo['tool_id']) ? (int) $logInfo['tool_id'] : 0;
+        $logInfo['tool_id_detail'] = !empty($logInfo['tool_id_detail']) ? (int) $logInfo['tool_id_detail'] : 0;
+        $logInfo['action'] = !empty($logInfo['action']) ? $logInfo['action'] : '';
+        $logInfo['action_details'] = !empty($logInfo['action_details']) ? $logInfo['action_details'] : '';
+        $logInfo['ip_user'] = api_get_real_ip();
+        $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        $logInfo['session_id'] = $sessionId;
+        $logInfo['c_id'] = $courseId;
+        $logInfo['ch_sid'] = session_id();
+        $logInfo['login_as'] = $loginAs;
+        $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
+        $logInfo['url'] = $_SERVER['REQUEST_URI'];
+        $logInfo['current_id'] = isset($logInfo['current_id']) ? $logInfo['current_id'] : Session::read('last_id', 0);
+
+        $id = Database::insert('track_e_access_complete', $logInfo);
+        if ($id && empty($logInfo['current_id'])) {
+            Session::write('last_id', $id);
+        }
+
+        return true;
+    }
+
     public static function getAttemptQuestionDuration($exeId, $questionId)
     {
         // Check current attempt.
@@ -2403,25 +2575,5 @@ class Event
         }
 
         return $now - $time;
-    }
-
-    public static function getQuestionAttemptByExeIdAndQuestion($exeId, $questionId)
-    {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $exeId = (int) $exeId;
-        $questionId = (int) $questionId;
-
-        $sql = "SELECT * FROM $table
-                WHERE
-                    exe_id = $exeId AND
-                    question_id = $questionId
-                ORDER BY position";
-        $result = Database::query($sql);
-        $attempt = [];
-        if (Database::num_rows($result)) {
-            $attempt = Database::fetch_array($result, 'ASSOC');
-        }
-
-        return $attempt;
     }
 }

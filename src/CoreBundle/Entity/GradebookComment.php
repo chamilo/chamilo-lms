@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
@@ -37,15 +36,12 @@ class GradebookComment
     protected User $user;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="comments")
      * @ORM\JoinColumn(name="gradebook_id",referencedColumnName="id",onDelete="CASCADE")
      */
     protected GradebookCategory $gradeBook;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text")
      */
     protected string $comment;

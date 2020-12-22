@@ -7,11 +7,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Track changes.
- */
 class Version20180904175500 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Migrate track_e_exercises, track_e_login';
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('DELETE FROM track_e_exercises WHERE exe_user_id = 0 OR exe_user_id IS NULL');

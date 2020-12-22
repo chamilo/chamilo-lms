@@ -6229,12 +6229,26 @@ This folder contains all sessions that have been opened in the chat. Although th
         $readonly = (int) $readonly;
         $documentRepo = Container::getDocumentRepository();
 
-        $parentNode = $courseEntity;
+        /** @var \Chamilo\CoreBundle\Entity\AbstractResource $parentResource */
+        $parentResource = $courseEntity;
         if (!empty($parentId)) {
             $parent = $documentRepo->find($parentId);
             if ($parent) {
-                $parentNode = $parent;
+                $parentResource = $parent;
             }
+        }
+
+        $document = $documentRepo->findOneByTitle(
+            $title,
+            $parentResource->getResourceNode(),
+            $courseEntity,
+            $session,
+            null
+        );
+
+        // Document already exists
+        if (null !== $document) {
+            return $document;
         }
 
 //        $criteria = ['path' => $path, 'course' => $courseEntity];
@@ -6252,7 +6266,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->setTitle($title)
             ->setComment($comment)
             ->setReadonly($readonly)
-            ->setParent($parentNode)
+            ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, $group)
         ;
 
@@ -6270,10 +6284,9 @@ This folder contains all sessions that have been opened in the chat. Although th
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$document->getIid();
+                    'document/showinframes.php?cid='.$courseInfo['code'].'&sid='.$sessionId.'&id='.$document->getIid();
                 $link = Display::url(basename($title), $url, ['target' => '_blank']);
                 $userInfo = api_get_user_info($userId);
-
                 $message = sprintf(
                     get_lang('A new document %s has been added to the document tool in your course %s by %s.'),
                     $link,

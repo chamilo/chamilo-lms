@@ -227,9 +227,11 @@ $htmlHeadXtra[] = '
                 );
             },
             receive: function(event, ui) {
-                var id = $(ui.item).attr("data_id");
-                var type = $(ui.item).attr("data_type");
-                var title = $(ui.item).attr("title");
+                var item = $(ui.item).find(".link_with_id");
+                var id = item.attr("data_id");
+                var type = item.attr("data_type");
+                var title = item.attr("title");
+
                 processReceive = true;
 
                 if (ui.item.parent()[0]) {
@@ -443,6 +445,38 @@ if (isset($_POST['title'])) {
 $redirectTo = '';
 
 switch ($action) {
+    case 'author_view':
+        $teachers = [];
+        $field = new ExtraField('user');
+        $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
+        $idExtraField = isset($authorLp['id']) ? (int) $authorLp['id'] : 0;
+        if ($idExtraField != 0) {
+            $extraFieldValueUser = new ExtraFieldValue('user');
+            $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
+                'authorlp',
+                1,
+                true,
+                false,
+                true
+            );
+            if (!empty($arrayExtraFieldValueUser)) {
+                foreach ($arrayExtraFieldValueUser as $item) {
+                    $teacher = api_get_user_info($item['item_id']);
+                    $teachers[] = $teacher;
+                }
+            }
+        }
+        Session::write('oLP', $_SESSION['oLP']);
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (!$lp_found) {
+            // Check if the learnpath ID was defined, otherwise send back to list
+            require 'lp_list.php';
+        } else {
+            require 'lp_add_author.php';
+        }
+        break;
     case 'send_notify_teacher':
         // Send notification to the teacher
         $studentInfo = api_get_user_info();

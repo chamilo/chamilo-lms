@@ -467,7 +467,7 @@ class learnpath
         $parent = (int) $parent;
         $previous = (int) $previous;
         $id = (int) $id;
-        $max_time_allowed = htmlentities($max_time_allowed);
+        $max_time_allowed = (int) $max_time_allowed;
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
@@ -1445,11 +1445,11 @@ class learnpath
         $maxScore = 100
     ) {
         $id = (int) $id;
-        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($id)) {
             return false;
         }
+        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {
             $minScore = 0;
@@ -4904,6 +4904,34 @@ class learnpath
         if (!api_is_invitee()) {
             // Save progress.
             list($progress) = $this->get_progress_bar_text('%');
+            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                if ($debug) {
+                    error_log("Return false: Dont save score: $score");
+                    error_log("progress: $progress");
+                }
+
+                return false;
+            }
+
+            if ($scoreAsProgress && $scoreAsProgressSetting) {
+                $storedProgress = self::getProgress(
+                    $this->get_id(),
+                    $userId,
+                    $course_id,
+                    $this->get_lp_session_id()
+                );
+
+                // Check if the stored progress is higher than the new value
+                if ($storedProgress >= $progress) {
+                    if ($debug) {
+                        error_log("Return false: New progress value is lower than stored value - Current value: $storedProgress - New value: $progress [lp ".$this->get_id()." - user ".$userId."]");
+                    }
+
+                    return false;
+                }
+            }
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
@@ -5944,7 +5972,7 @@ class learnpath
         if (0 == count($this->items)) {
             $return .= Display::return_message(get_lang('You should add some items to your learning path, otherwise you won\'t be able to attach audio files to them'), 'normal');
         } else {
-            $return_audio = '<table class="data_table">';
+            $return_audio = '<table class="table table-hover table-striped data_table">';
             $return_audio .= '<tr>';
             $return_audio .= '<th width="40%">'.get_lang('Title').'</th>';
             $return_audio .= '<th>'.get_lang('Audio').'</th>';
@@ -6283,7 +6311,6 @@ class learnpath
                     case TOOL_FORUM:
                     case TOOL_QUIZ:
                     case TOOL_STUDENTPUBLICATION:
-                    case TOOL_LP_FINAL_ITEM:
                     case TOOL_LINK:
                         $class = 'btn btn-default';
                         $target = '_blank';
@@ -6568,15 +6595,15 @@ class learnpath
         $actionsRight = '';
         $lpId = $this->lp_id;
         if (!isset($extraField['backTo']) && empty($extraField['backTo'])) {
-        $back = Display::url(
-            Display::return_icon(
-                'back.png',
-                get_lang('Back to learning paths'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            'lp_controller.php?'.api_get_cidreq()
-        );
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('Back to learning paths'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq()
+            );
         } else {
             $back = Display::url(
                 Display::return_icon(
@@ -6677,7 +6704,7 @@ class learnpath
                         '',
                         ICON_SIZE_MEDIUM
                     ),
-                    api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=".$lpId."&".api_get_cidreq()
+                    api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=$lpId&".api_get_cidreq()
                 );
             }
         }
@@ -6722,6 +6749,21 @@ class learnpath
                 get_lang('Prerequisites options'),
                 $buttons,
                 true
+            );
+        }
+
+        if (api_is_platform_admin() && isset($extraField['authorlp'])) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'add-groups.png',
+                    get_lang('Author'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'author_view',
+                    'lp_id' => $lpId,
+                ])
             );
         }
 
@@ -7114,7 +7156,7 @@ class learnpath
      *
      * @return string
      */
-    public function display_edit_item($lpItem)
+    public function display_edit_item($lpItem, $excludeExtraFields = [])
     {
         $course_id = api_get_course_int_id();
         $return = '';

@@ -848,10 +848,10 @@ class learnpathItem
                         WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
-                    $this->error = "Could not find parent learnpath in lp table";
+                    $this->error = 'Could not find parent learnpath in lp table';
                     if (self::DEBUG > 2) {
                         error_log(
-                            'New LP - End of learnpathItem::get_prevent_reinit() - Returning false',
+                            'LearnpathItem::get_prevent_reinit() - Returning false',
                             0
                         );
                     }
@@ -3113,8 +3113,8 @@ class learnpathItem
      */
     public function set_status($status)
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::set_status('.$status.')', 0);
+        if (self::DEBUG) {
+            error_log('learnpathItem::set_status('.$status.')');
         }
 
         $found = false;
@@ -3137,6 +3137,9 @@ class learnpathItem
             return true;
         }
 
+        if (self::DEBUG) {
+            error_log('Setting status: '.$this->possible_status[0]);
+        }
         $this->status = $this->possible_status[0];
 
         return false;
@@ -3545,7 +3548,8 @@ class learnpathItem
     {
         $debug = self::DEBUG;
         if ($debug) {
-            error_log('learnpathItem::write_to_db()', 0);
+            error_log('------------------------');
+            error_log('learnpathItem::write_to_db()');
         }
 
         // Check the session visibility.
@@ -3557,6 +3561,9 @@ class learnpathItem
             return false;
         }
         if (api_is_invitee()) {
+            if ($debug) {
+                error_log('api_is_invitee');
+            }
             // If the user is an invitee, we don't write anything to DB
             return true;
         }
@@ -3595,9 +3602,9 @@ class learnpathItem
             }
         }
 
-        if (((false === $save && 'sco' == $this->type) ||
-           ('sco' == $this->type && ('no-credit' == $credit || 'review' == $mode || 'browse' == $mode))) &&
-           (1 != $this->seriousgame_mode && 'sco' == $this->type)
+        if (((false === $save && 'sco' === $this->type) ||
+           ('sco' === $this->type && ('no-credit' === $credit || 'review' === $mode || 'browse' === $mode))) &&
+           (1 != $this->seriousgame_mode && 'sco' === $this->type)
         ) {
             if ($debug) {
                 error_log(
@@ -3613,9 +3620,9 @@ class learnpathItem
             // Check the row exists.
             $inserted = false;
             // This a special case for multiple attempts and Chamilo exercises.
-            if ('quiz' == $this->type &&
+            if ('quiz' === $this->type &&
                 0 == $this->get_prevent_reinit() &&
-                'completed' == $this->get_status()
+                'completed' === $this->get_status()
             ) {
                 // We force the item to be restarted.
                 $this->restart();
@@ -3713,10 +3720,7 @@ class learnpathItem
                     Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
-                    if ('quiz' === $this->type) {
-                        if ($debug) {
-                            error_log("item is quiz:");
-                        }
+                    if ($this->type === 'quiz') {
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {

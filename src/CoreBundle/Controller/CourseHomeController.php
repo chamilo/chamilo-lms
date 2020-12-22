@@ -206,22 +206,24 @@ class CourseHomeController extends ToolBaseController
      *
      * @Route("/{cid}/tool/{toolName}", name="chamilo_core_course_redirect_tool")
      */
-    public function redirectTool(string $toolName, ToolChain $toolChain)
+    public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain)
     {
         /** @var CTool $tool */
-        $tool = $this->getDoctrine()->getRepository(CTool::class)->findOneBy(['name' => $toolName]);
+        $tool = $repo->findOneBy(['name' => $toolName]);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $nodeId = $this->getCourse()->getResourceNode()->getId();
-
         /** @var AbstractTool $tool */
         $tool = $toolChain->getToolFromName($tool->getTool()->getName());
-
         $link = $tool->getLink();
-        $link = str_replace(':nodeId', $nodeId, $link);
+
+        if (strpos($link, 'nodeId')) {
+            $nodeId = $this->getCourse()->getResourceNode()->getId();
+            $link = str_replace(':nodeId', $nodeId, $link);
+        }
+
         $url = $link.'?'.$this->getCourseUrlQuery();
 
         return $this->redirect($url);

@@ -39,6 +39,8 @@ $sessionEntity = api_get_session_entity($sessionId);
 
 /** @var learnpath $lp */
 $lp = Session::read('oLP');
+$repo = \Chamilo\CoreBundle\Framework\Container::getLpRepository();
+$entity = $repo->find($lp_id);
 
 if (empty($lp)) {
     api_not_allowed(true);
@@ -54,7 +56,7 @@ if (!api_is_platform_admin()) {
 }
 
 // Checking visibility (eye icon)
-$visibility = $lp->getEntity()->isVisible($courseEntity, $sessionEntity);
+$visibility = $entity->isVisible($courseEntity, $sessionEntity);
 
 if (false === $visibility &&
     !api_is_allowed_to_edit(false, true, false, false)

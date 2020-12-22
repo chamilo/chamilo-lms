@@ -102,7 +102,7 @@ function save_item(
             error_log("item #$item_id not found in the items array: ".print_r($myLP->items, 1));
         }
 
-        return false;
+        return null;
     }
 
     // This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
@@ -112,10 +112,10 @@ function save_item(
     if (true !== $prerequisitesCheck) {
         // If prerequisites were not matched, don't update any item info
         if ($debug) {
-            error_log("prereq_check: ".intval($prerequisitesCheck));
+            error_log("prereq_check failed: ".intval($prerequisitesCheck));
         }
 
-        return $return;
+        return null;
     } else {
         if ($debug > 1) {
             error_log('Prerequisites are OK');

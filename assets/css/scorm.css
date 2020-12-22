@@ -6,6 +6,10 @@ See https://support.chamilo.org/issues/6976
 /* LP SCORM */
 /* Default LP left column values */
 
+body {
+    padding-top: 0px;
+}
+
 .audio-scorm #container {
     min-height: 45px;
     margin-bottom: 5px;

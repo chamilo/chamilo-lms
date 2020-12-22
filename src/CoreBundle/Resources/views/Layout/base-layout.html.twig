@@ -14,12 +14,12 @@
 </head>
 {% endblock %}
 <body
-    class="{{ section_name }} h-100"
+    class="{{ section_name }}"
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
     data-session-id="{{ session ? session.id : '' }}"
 >
-    <noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
+    <noscript>{{ "Your browser does not support Javascript" | trans }}</noscript>
     {%- block chamilo_wrap %}
         {% block page_content %}
         {% endblock %}

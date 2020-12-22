@@ -1632,6 +1632,16 @@ class GradebookUtils
         }
 
         $pdf->params['student_info'] = $userInfo;
+        $extraRows = [];
+        if (api_get_configuration_value('allow_gradebook_comments')) {
+            $commentInfo = self::getComment($cat->get_id(), $userId);
+            if ($commentInfo) {
+                $extraRows[] = [
+                    'label' => get_lang('Comment'),
+                    'content' => $commentInfo['comment'],
+                ];
+            }
+        }
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
 
         $settings = api_get_configuration_value('gradebook_pdf_export_settings');
@@ -1651,7 +1661,8 @@ class GradebookUtils
             $content,
             $saveToFile,
             $saveToHtmlFile,
-            true
+            true,
+            $extraRows
         );
 
         if ($saveToHtmlFile) {
@@ -1659,5 +1670,40 @@ class GradebookUtils
         }
 
         return $file;
+    }
+
+    public static function getComment($gradeBookId, $userId)
+    {
+        $gradeBookId = (int) $gradeBookId;
+        $userId = (int) $userId;
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_COMMENT);
+        $sql = "SELECT * FROM $table
+                WHERE user_id = $userId AND gradebook_id = $gradeBookId";
+        $result = Database::query($sql);
+
+        return Database::fetch_array($result);
+    }
+
+    public static function saveComment($gradeBookId, $userId, $comment)
+    {
+        $commentInfo = self::getComment($gradeBookId, $userId);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_COMMENT);
+        if (empty($commentInfo)) {
+            $params = [
+                'gradebook_id' => $gradeBookId,
+                'user_id' => $userId,
+                'comment' => $comment,
+                'created_at' => api_get_utc_datetime(),
+                'updated_at' => api_get_utc_datetime(),
+            ];
+            Database::insert($table, $params);
+        } else {
+            $params = [
+                'comment' => $comment,
+                'updated_at' => api_get_utc_datetime(),
+            ];
+            Database::update($table, $params, ['id = ?' => $commentInfo['id']]);
+        }
     }
 }

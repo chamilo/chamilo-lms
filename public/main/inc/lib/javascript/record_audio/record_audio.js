@@ -1,5 +1,46 @@
 /* For licensing terms, see /license.txt */
 window.RecordAudio = (function () {
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    function startTimer() {
+        $("#timer").show();
+        var timerData = {
+            hour: parseInt($("#hour").text()),
+            minute: parseInt($("#minute").text()),
+            second: parseInt($("#second").text())
+        };
+
+        clearInterval(window.timerInterval);
+        window.timerInterval = setInterval(function(){
+            // Seconds
+            timerData.second++;
+            if (timerData.second >= 60) {
+                timerData.second = 0;
+                timerData.minute++;
+            }
+
+            // Minutes
+            if (timerData.minute >= 60) {
+                timerData.minute = 0;
+                timerData.hour++;
+            }
+
+            $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+            $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+            $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+        }, 1000);
+    }
+
+    function stopTimer() {
+        $("#hour").text('00');
+        $("#minute").text('00');
+        $("#second").text('00');
+        $("#timer").hide();
+    }
+
+    function pauseTimer() {
+        clearInterval(window.timerInterval);
+    }
     function useRecordRTC(rtcInfo, fileName) {
         $(rtcInfo.blockId).show();
 
@@ -26,12 +67,16 @@ window.RecordAudio = (function () {
             var formData = new FormData();
             formData.append('audio_blob', recordedBlob, fileName + fileExtension);
             formData.append('audio_dir', rtcInfo.directory);
+            var courseParams = "";
+            if (rtcInfo.cidReq) {
+                courseParams = "&"+rtcInfo.cidReq;
+            }
 
             $.ajax({
                 url: _p.web_ajax + 'record_audio_rtc.ajax.php?' + $.param({
                     type: rtcInfo.type,
                     tool: (!!txtName.length ? 'document' : 'exercise')
-                }),
+                }) + courseParams,
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -74,11 +119,12 @@ window.RecordAudio = (function () {
                 }
             }
 
-            navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
 
             function successCallback(stream) {
+                stopTimer();
+                startTimer();
                 recordRTC = RecordRTC(stream, {
-                    numberOfAudioChannels: 1,
+                    recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
                     type: 'audio'
                 });
                 recordRTC.startRecording();
@@ -94,22 +140,25 @@ window.RecordAudio = (function () {
             }
 
             function errorCallback(error) {
-                alert(error.message);
+                stopTimer();
+                alert(error);
             }
 
-            if (navigator.getUserMedia) {
+            if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
                 navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-            } else if (navigator.mediaDevices.getUserMedia) {
+                return;
+            }
                 navigator.mediaDevices.getUserMedia(mediaConstraints)
                     .then(successCallback)
-                    .error(errorCallback);
-            }
+                .catch(errorCallback);
         });
 
         btnPause.on('click', function () {
             if (!recordRTC) {
                 return;
             }
+            pauseTimer();
 
             btnPause.prop('disabled', true).addClass('hidden');
             btnPlay.prop('disabled', false).removeClass('hidden');
@@ -126,6 +175,7 @@ window.RecordAudio = (function () {
             btnPause.prop('disabled', false).removeClass('hidden');
             btnStop.prop('disabled', false).removeClass('hidden');
             recordRTC.resumeRecording();
+            startTimer();
         });
 
         btnStop.on('click', function () {
@@ -133,6 +183,7 @@ window.RecordAudio = (function () {
                 return;
             }
 
+            stopTimer();
             recordRTC.stopRecording(function (audioURL) {
                 btnStart.prop('disabled', false).removeClass('hidden');
                 btnPause.prop('disabled', true).addClass('hidden');

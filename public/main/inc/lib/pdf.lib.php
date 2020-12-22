@@ -91,6 +91,7 @@ class PDF
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
      * @param bool       $addDefaultCss (bootstrap/default/base.css)
+     * @param array
      *
      * @return string
      */
@@ -98,7 +99,8 @@ class PDF
         $content,
         $saveToFile = false,
         $returnHtml = false,
-        $addDefaultCss = false
+        $addDefaultCss = false,
+        $extraRows = []
     ) {
         if (empty($this->template)) {
             $tpl = new Template('', false, false, false, false, true, false);
@@ -143,6 +145,7 @@ class PDF
         $tpl->assign('pdf_student_info', $this->params['student_info']);
         $tpl->assign('show_grade_generated_date', $this->params['show_grade_generated_date']);
         $tpl->assign('add_signatures', $this->params['add_signatures']);
+        $tpl->assign('extra_rows', $extraRows);
 
         // Getting template
         $tableTemplate = $tpl->get_template('export/table_pdf.tpl');

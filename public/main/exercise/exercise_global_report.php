@@ -17,7 +17,10 @@ $data = [];
 $students = CourseManager::get_student_list_from_course_code($courseCode);
 $categories = TestCategory::getCategoryListInfo('', $courseId);
 
-$sql = "SELECT iid, title FROM c_quiz WHERE c_id = $courseId AND active <> 2 order by iid";
+$table = Database::get_course_table(TABLE_QUIZ_TEST);
+$sql = "SELECT iid, title FROM $table
+        WHERE c_id = $courseId AND active <> -1
+        ORDER by iid";
 $result = Database::query($sql);
 $exercises = Database::store_result($result);
 $list = [];

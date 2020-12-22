@@ -196,6 +196,7 @@ class ExtraField extends Model
         if (api_get_configuration_value('allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
         }
+        sort($result);
 
         return $result;
     }
@@ -871,7 +872,7 @@ class ExtraField extends Model
                             $extra_data['extra_'.$field['variable']]['extra_'.$field['variable']] = $field_value;
                             break;
                         case self::FIELD_TYPE_TRIPLE_SELECT:
-                            list($level1, $level2, $level3) = explode(';', $field_value);
+                            [$level1, $level2, $level3] = explode(';', $field_value);
 
                             $extra_data["extra_$variable"]["extra_$variable"] = $level1;
                             $extra_data["extra_$variable"]["extra_{$variable}_second"] = $level2;
@@ -2483,7 +2484,9 @@ JAVASCRIPT;
         // Parse params.
         $fields = [];
         foreach ($values as $key => $value) {
-            if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
+            if (substr($key, 0, 6) !== 'extra_' &&
+                substr($key, 0, 7) !== '_extra_'
+            ) {
                 continue;
             }
             if (!empty($value)) {

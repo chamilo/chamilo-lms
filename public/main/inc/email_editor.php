@@ -68,10 +68,16 @@ $defaults = [
 $form->setDefaults($defaults);
 
 if ($form->validate()) {
+    $check = Security::check_token();
+    Security::clear_token();
+    if ($check) {
+        Security::clear_token();
     $values = $form->getSubmitValues();
-    $text = Security::remove_XSS($values['email_text'])."\n\n---\n".get_lang('E-mail sent from the platform').' '.api_get_path(WEB_PATH);
-    $email_administrator = Security::remove_XSS($values['dest']);
-    $title = Security::remove_XSS($values['email_title']);
+        $text = nl2br($values['email_text']).'<br /><br /><br />'.get_lang('EmailSentFromLMS').' '.api_get_path(
+                WEB_PATH
+            );
+        $email_administrator = $values['dest'];
+        $title = $values['email_title'];
     if (!empty($_user['mail'])) {
         api_mail_html(
             '',
@@ -79,7 +85,7 @@ if ($form->validate()) {
             $title,
             $text,
             api_get_person_name($_user['firstname'], $_user['lastname']),
-            '',
+                $_user['mail'],
             [
                 'reply_to' => [
                     'mail' => $_user['mail'],
@@ -96,11 +102,16 @@ if ($form->validate()) {
             get_lang('Anonymous')
         );
     }
+        Display::addFlash(Display::return_message(get_lang('MessageSent')));
     $orig = Session::read('origin_url');
     Session::erase('origin_url');
     header('Location:'.$orig);
     exit;
 }
-Display::display_header(get_lang('Send email'));
+}
+
+$form->addHidden('sec_token', Security::get_token());
+
+Display::display_header(get_lang('SendEmail'));
 $form->display();
 Display::display_footer();

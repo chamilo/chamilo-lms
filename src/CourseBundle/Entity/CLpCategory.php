@@ -61,7 +61,12 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected $position;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser", mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
+     *     mappedBy="category",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $users;
 

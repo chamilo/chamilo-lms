@@ -2304,7 +2304,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
 
     public function getProfileUrl(): string
     {
-        return '/social/profile.php?u='.$this->id;
+        return '/main/social/profile.php?u='.$this->id;
     }
 
     public function getIconStatus(): string

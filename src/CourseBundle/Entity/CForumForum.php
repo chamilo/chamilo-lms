@@ -188,11 +188,10 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $endTime;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="lp_id", type="integer", options={"unsigned":true})
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="forum")
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
-    protected $lpId;
+    protected $lp;
 
     /**
      * @var bool
@@ -778,6 +777,26 @@ class CForumForum extends AbstractResource implements ResourceInterface
         $this->forumLastPost = $forumLastPost;
 
         return $this;
+    }
+
+    public function getLp(): ?CLp
+    {
+        return $this->lp;
+    }
+
+    public function setLp(CLp $lp): self
+    {
+        $this->lp = $lp;
+
+        return $this;
+    }
+
+    /**
+     * @return CForumPost[]|ArrayCollection
+     */
+    public function getPosts()
+    {
+        return $this->posts;
     }
 
     public function getResourceIdentifier(): int

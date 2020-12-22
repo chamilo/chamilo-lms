@@ -281,8 +281,11 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $items;
 
     /**
-     * Constructor.
+     * @var CForumForum
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="lp")
      */
+    protected $forum;
+
     public function __construct()
     {
         $this->accumulateScormTime = 1;
@@ -1080,9 +1083,23 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->subscribeUsers;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getForum(): ?CForumForum
+    {
+        return $this->forum;
+    }
+
+    public function hasForum(): bool
+    {
+        return null !== $this->forum;
+    }
+
+    public function setForum(CForumForum $forum): self
+    {
+        $this->forum = $forum;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

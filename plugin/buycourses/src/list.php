@@ -5,6 +5,7 @@
  *
  * @package chamilo.plugin.buycourses
  */
+
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 $cidReset = true;
@@ -44,8 +45,13 @@ foreach ($courses as $course) {
 $totalItems = count($courses);
 $pagesCount = ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?type='.$type;
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(
+    api_get_self(),
+    $currentPage,
+    $pagesCount,
+    $totalItems,
+    ['type' => $type]
+);
 
 // breadcrumbs
 $interbreadcrumb[] = [

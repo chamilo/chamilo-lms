@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Plugin class for the BuyCourses plugin.
@@ -3282,5 +3283,32 @@ class BuyCoursesPlugin extends Plugin
             ['status' => (int) $newStatus],
             ['id = ?' => (int) $serviceSaleId]
         );
+    }
+
+    /**
+     * @param string $baseUrl
+     * @param string $currentPage
+     * @param string $pagesCount
+     * @param string $totalItems
+     * @param array  $extraQueryParams
+     *
+     * @return string
+     */
+    public static function returnPagination(
+        $baseUrl,
+        $currentPage,
+        $pagesCount,
+        $totalItems,
+        array $extraQueryParams = []
+    ) {
+        $queryParams = HttpRequest::createFromGlobals()->query->all();
+
+        unset($queryParams['page']);
+
+        $url = $baseUrl.'?'.http_build_query(
+            array_merge($queryParams, $extraQueryParams)
+        );
+
+        return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
     }
 }

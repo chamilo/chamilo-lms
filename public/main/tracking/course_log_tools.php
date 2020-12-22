@@ -448,7 +448,7 @@ if ($linkReporting) {
             if ($export_csv) {
                 $temp = [
                     $row['title'],
-                    $row['count_visits'].' '.get_lang('clicks', ''),
+                    $row['count_visits'].' '.get_lang('clicks'),
                 ];
                 $csv_content[] = $temp;
             }

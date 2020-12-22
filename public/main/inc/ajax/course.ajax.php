@@ -121,8 +121,16 @@ switch ($action) {
                 break;
             }
 
+            $categoryToAvoid = '';
+            if (!api_is_platform_admin()) {
+                $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+            }
             $list = [];
             foreach ($categories as $item) {
+                $categoryCode = $item['code'];
+                if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                    continue;
+                }
                 $list['items'][] = [
                     'id' => $item['id'],
                     'text' => strip_tags($item['name']),
@@ -156,6 +164,19 @@ switch ($action) {
                     );
                 } elseif (api_is_teacher()) {
                     $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
+                    $category = api_get_configuration_value('course_category_code_to_use_as_model');
+                    if (!empty($category)) {
+                        $alreadyAdded = [];
+                        if (!empty($courseList)) {
+                            $alreadyAdded = array_column($courseList, 'id');
+                        }
+                        $coursesInCategory = CourseCategory::getCoursesInCategory($category, $_GET['q']);
+                        foreach ($coursesInCategory as $course) {
+                            if (!in_array($course['id'], $alreadyAdded)) {
+                                $courseList[] = $course;
+                            }
+                        }
+                    }
                 }
             }
 

@@ -2470,9 +2470,23 @@ class SurveyManager
         }
         ksort($newQuestionList);
 
+        $order = api_get_configuration_value('survey_duplicate_order_by_name');
         foreach ($itemList as $class) {
             $className = $class['name'];
             $users = $class['users'];
+            $userInfoList = [];
+            foreach ($users as $userId) {
+                $userInfoList[] = api_get_user_info($userId);
+            }
+
+            if ($order) {
+                usort(
+                    $userInfoList,
+                    function ($a, $b) {
+                        return $a['lastname'] > $b['lastname'];
+                    }
+                );
+            }
 
             foreach ($newQuestionList as $question) {
                 $text = $question['question'];
@@ -2488,15 +2502,14 @@ class SurveyManager
                         'survey_id' => $surveyId,
                         'question_id' => 0,
                         'shared_question_id' => 0,
-                        'answers' => $question['answers'],
+                        'answers' => $question['answers'] ?? null,
                     ];
                     self::save_question($surveyData, $values, false);
                     $classCounter++;
                     continue;
                 }
 
-                foreach ($users as $userId) {
-                    $userInfo = api_get_user_info($userId);
+                foreach ($userInfoList as $userInfo) {
 
                     if (false !== strpos($text, $studentTag)) {
                         $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
@@ -2758,7 +2771,12 @@ class SurveyManager
                     if (empty($sessionId)) {
                         $subscribe = CourseManager::is_user_subscribed_in_course($userId, $courseCode);
                     } else {
-                        $subscribe = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
+                        $subscribe = CourseManager::is_user_subscribed_in_course(
+                            $userId,
+                            $courseCode,
+                            true,
+                            $sessionId
+                        );
                     }
 
                     // User is not subscribe skip!

@@ -10,6 +10,20 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 
 switch ($action) {
+    case 'add_gradebook_comment':
+        if (true !== api_get_configuration_value('allow_gradebook_comments')) {
+            exit;
+        }
+        if (api_is_allowed_to_edit(null, true)) {
+            $userId = $_REQUEST['user_id'] ?? 0;
+            $gradeBookId = $_REQUEST['gradebook_id'] ?? 0;
+            $comment = $_REQUEST['comment'] ?? '';
+            GradebookUtils::saveComment($gradeBookId, $userId, $comment);
+            echo 1;
+            exit;
+        }
+        echo 0;
+        break;
     case 'get_gradebook_weight':
         if (api_is_allowed_to_edit(null, true)) {
             $cat_id = $_GET['cat_id'];

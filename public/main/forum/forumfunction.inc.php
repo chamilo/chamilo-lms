@@ -638,6 +638,8 @@ function editForumCategoryForm(CForumCategory $category)
  * @param array $values
  * @param array $courseInfo
  * @param bool  $showMessage
+ *
+ * @return CForumCategory
  */
 function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 {
@@ -657,6 +659,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
     $last_id = null;
     $repo = Container::getForumCategoryRepository();
 
+    $message = '';
     if (isset($values['forum_category_id'])) {
         /** @var CForumCategory $category */
         $category = $repo->find($values['forum_category_id']);
@@ -664,7 +667,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             ->setCatComment(isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '')
             ->setCatTitle($values['forum_category_title'])
         ;
-        $repo->updateResource($category);
+        $repo->update($category);
         $message = get_lang('The forum category has been modified');
 
         $logInfo = [
@@ -717,7 +720,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
         Display::addFlash(Display::return_message($message, 'confirmation'));
     }
 
-    return $last_id;
+    return $category;
 }
 
 /**
@@ -1722,7 +1725,7 @@ function get_threads($forumId, $courseId = null, $sessionId = null)
 
     return $qb->getQuery()->getResult();
 
-    $groupId = api_get_group_id();
+    /*$groupId = api_get_group_id();
     $sessionId = null !== $sessionId ? (int) $sessionId : api_get_session_id();
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -1776,7 +1779,7 @@ function get_threads($forumId, $courseId = null, $sessionId = null)
                     item_properties.*,
                     users.firstname,
                     users.lastname,
-                    users.user_id,
+                    users.id as user_id,
                     thread.locked as locked,
                     thread.*
                 FROM $table_threads thread
@@ -1806,7 +1809,7 @@ function get_threads($forumId, $courseId = null, $sessionId = null)
         $alreadyAdded[] = $row['thread_id'];
     }
 
-    return $list;
+    return $list;*/
 }
 
 /**
@@ -2346,34 +2349,19 @@ function updateThread($values)
     Display::addFlash(Display::return_message($message, 'confirmation', false));
 }
 
-/**
- * This function stores a new thread. This is done through an entry in the forum_thread table AND
- * in the forum_post table because. The threads are also stored in the item_property table. (forum posts are not (yet)).
- *
- * @param bool $showMessage
- * @param int  $userId      Optional. The user ID
- * @param int  $sessionId
- *
- * @return CForumThread
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function store_thread(
+function saveThread(
     CForumForum $forum,
     array $values,
     array $courseInfo = [],
     $showMessage = true,
     $userId = 0,
     $sessionId = 0
-) {
+): ?CForumThread {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $userId = $userId ?: api_get_user_id();
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
     $sessionId = $sessionId ?: api_get_session_id();
-
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
@@ -2393,23 +2381,17 @@ function store_thread(
         ->setCId($course_id)
         ->setThreadTitle($clean_post_title)
         ->setForum($forum)
-        ->setThreadPosterId($userId)
-        ->setThreadPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
+        ->setUser($user)
         ->setThreadDate($post_date)
-        ->setThreadSticky(isset($values['thread_sticky']) ? $values['thread_sticky'] : 0)
-        ->setThreadTitleQualify(
-            isset($values['calification_notebook_title']) ? $values['calification_notebook_title'] : null
-        )
-        ->setThreadQualifyMax(isset($values['numeric_calification']) ? (int) $values['numeric_calification'] : 0)
+        ->setThreadSticky($values['thread_sticky'] ?? 0)
+        ->setThreadTitleQualify($values['calification_notebook_title'] ?? '')
+        ->setThreadQualifyMax($values['numeric_calification'] ?? 0)
         ->setThreadWeight(isset($values['weight_calification']) ? (int) $values['weight_calification'] : 0)
         ->setThreadPeerQualify(isset($values['thread_peer_qualify']) ? (bool) $values['thread_peer_qualify'] : false)
         ->setSessionId($sessionId)
         ->setLpItemId(isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0)
         ->setParent($forum)
-        ->addCourseLink(
-            $course,
-            $session
-        )
+        ->addCourseLink($course, $session)
     ;
 
     $repo = Container::getForumThreadRepository();
@@ -2498,17 +2480,14 @@ function store_thread(
         ->setPostText($values['post_text'])
         ->setThread($thread)
         ->setForum($forum)
-        ->setPosterId($userId)
-        ->setPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
+        ->setUser(api_get_user_entity($userId))
+        //->setPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
         ->setPostDate($post_date)
         ->setPostNotification(isset($values['post_notification']) ? (int) $values['post_notification'] : null)
         ->setVisible($visible)
         ->setStatus(CForumPost::STATUS_VALIDATED)
         ->setParent($thread)
-        ->addCourseLink(
-            $course,
-            $session
-        )
+        ->addCourseLink($course, $session)
     ;
 
     if ($forum->isModerated()) {
@@ -2561,12 +2540,15 @@ function store_thread(
         !api_is_allowed_to_edit(null, true)
     ) {
         $message .= get_lang('Your message has to be approved before people can view it.').'<br />';
-        $message .= get_lang('You can now return to the').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
+        $message .= get_lang('You can now return to the').
+            ' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
             get_lang('Forum').'</a><br />';
     } else {
-        $message .= get_lang('You can now return to the').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
+        $message .= get_lang('You can now return to the').
+            ' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
             get_lang('Forum').'</a><br />';
-        $message .= get_lang('You can now return to the').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&thread='.$thread->getIid().'">'.
+        $message .= get_lang('You can now return to the').
+            ' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&thread='.$thread->getIid().'">'.
             get_lang('Message').'</a>';
     }
     $reply_info['new_post_id'] = $postId;
@@ -2754,11 +2736,7 @@ function show_add_post_form(CForumForum $forum, CForumThread $thread, CForumPost
         // we are quoting or replying to a message (<> reply to a thread !!!)
         $form->addHidden('post_parent_id', $post->getIid());
         // If we are replying or are quoting then we display a default title.
-        $posterInfo = api_get_user_info($post->getPosterId());
-        $posterName = '';
-        if ($posterInfo) {
-            $posterName = $posterInfo['complete_name'];
-        }
+        $posterName = UserManager::formatUserFullName($post->getUser());
         $defaults['post_title'] = get_lang('Re:').api_html_entity_decode($post->getPostTitle(), ENT_QUOTES);
         // When we are quoting a message then we have to put that message into the wysiwyg editor.
         // Note: The style has to be hardcoded here because using class="quote" didn't work.
@@ -3065,7 +3043,7 @@ function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
                 return false;
             }
 
-            $newThread = store_thread($forum, $values);
+            $newThread = saveThread($forum, $values);
             if ($newThread) {
                 Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $newThread->getIid());
                 $postId = $newThread->getThreadLastPost();
@@ -3453,16 +3431,14 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
             ->setPostText(isset($values['post_text']) ?: null)
             ->setThread($thread)
             ->setForum($forum)
-            ->setPosterId($userId)
+            ->setUser(api_get_user_entity($userId))
             ->setPostNotification(isset($values['post_notification']) ? $values['post_notification'] : null)
             ->setPostParentId(isset($values['post_parent_id']) ? $values['post_parent_id'] : null)
             ->setVisible($visible)
             ->setPostDate(api_get_utc_datetime(null, false, true))
             ->setParent($thread)
-            ->addCourseLink(
-                $course,
-                $session
-            );
+            ->addCourseLink($course, $session)
+        ;
 
         $repo = Container::getForumPostRepository();
         $repo->create($post);
@@ -4121,7 +4097,7 @@ function handle_mail_cue($content, $id)
         }
     } elseif ('thread' === $content) {
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
-        $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email, posts.forum_id
+        $sql = "SELECT users.firstname, users.lastname, users.id as user_id, users.email, posts.forum_id
                 FROM $table_mailcue mailcue, $table_posts posts, $table_users users
                 WHERE
                     posts.c_id = $course_id AND
@@ -4129,7 +4105,7 @@ function handle_mail_cue($content, $id)
                     posts.thread_id = $id AND
                     posts.post_notification = '1' AND
                     mailcue.thread_id = $id AND
-                    users.user_id = posts.poster_id AND
+                    users.id = posts.poster_id AND
                     users.active = 1
                 GROUP BY users.email";
         $result = Database::query($sql);
@@ -4492,7 +4468,7 @@ function store_move_thread($values)
 
     // Change the thread table: Setting the forum_id to the new forum.
     $sql = "UPDATE $table_threads SET forum_id = $forumId
-            WHERE c_id = $courseId AND thread_id = $threadId";
+            WHERE c_id = $courseId AND iid = $threadId";
     Database::query($sql);
 
     // Changing all the posts of the thread: setting the forum_id to the new forum.
@@ -5557,7 +5533,7 @@ function get_thread_user_post($course_code, $thread_id, $user_id)
     }
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN  $table_users users
-                ON posts.poster_id=users.user_id
+                ON posts.poster_id=users.id
             WHERE
                 posts.c_id = $course_id AND
                 posts.thread_id='$thread_id'
@@ -5571,7 +5547,7 @@ function get_thread_user_post($course_code, $thread_id, $user_id)
         $post_list[] = $row;
         $sql = "SELECT * FROM $table_posts posts
                 LEFT JOIN $table_users users
-                ON (posts.poster_id=users.user_id)
+                ON (posts.poster_id=users.id)
                 WHERE
                     posts.c_id = $course_id AND
                     posts.thread_id='$thread_id'
@@ -5603,7 +5579,7 @@ function get_name_thread_by_id($thread_id)
     $course_id = api_get_course_int_id();
     $sql = "SELECT thread_title
             FROM $t_forum_thread
-            WHERE c_id = $course_id AND thread_id = '".(int) $thread_id."' ";
+            WHERE c_id = $course_id AND iid = '".(int) $thread_id."' ";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -5710,7 +5686,7 @@ function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10
 
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN $table_users users
-                ON posts.poster_id=users.user_id
+                ON posts.poster_id=users.id
             WHERE
                 posts.c_id = $courseId AND
                 posts.thread_id='".Database::escape_string($thread_id)."' AND
@@ -6125,7 +6101,18 @@ function getAttachmentIdsByPostId($postId, $courseId = 0)
  */
 function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
 {
-    $sessionId = (int) $sessionId;
+    $repo = Container::getForumCategoryRepository();
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
+    return $repo->findResourceByTitle(
+        $title,
+        $course->getResourceNode(),
+        $course,
+        $session
+    );
+
+    /*$sessionId = (int) $sessionId;
     $courseId = (int) $courseId;
     $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
     $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -6166,7 +6153,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
         return false;
     }
 
-    return $resultData;
+    return $resultData;*/
 }
 
 /**
@@ -6305,7 +6292,7 @@ function savePostRevision(CForumPost $post)
 {
     $userId = api_get_user_id();
 
-    if ($post->getPosterId() != $userId) {
+    if ($post->getUser()->getId() != $userId) {
         return false;
     }
 

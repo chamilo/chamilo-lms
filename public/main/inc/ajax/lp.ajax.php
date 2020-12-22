@@ -219,7 +219,7 @@ switch ($action) {
             );
 
             if (empty($forumCategory)) {
-                $forumCategoryId = store_forumcategory(
+                $forumCategory = store_forumcategory(
                     [
                         'lp_id' => 0,
                         'forum_category_title' => get_lang('Learning paths'),
@@ -228,11 +228,9 @@ switch ($action) {
                     [],
                     false
                 );
-            } else {
-                $forumCategoryId = $forumCategory['cat_id'];
             }
 
-            $forumId = $learningPath->createForum($forumCategoryId);
+            $forumId = $learningPath->createForum($forumCategory);
         } else {
             $forumId = $forum['forum_id'];
         }

@@ -4138,7 +4138,7 @@ class DocumentManager
     /**
      * @param array $_course
      *
-     * @return int
+     * @return CDocument
      */
     public static function createDefaultAudioFolder($_course)
     {
@@ -4146,7 +4146,7 @@ class DocumentManager
             return false;
         }
 
-        self::addDocument($_course, '/audio', 'folder', 0, 'Audio');
+        return self::addDocument($_course, '/audio', 'folder', 0, 'Audio');
     }
 
     /**
@@ -6238,7 +6238,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             }
         }
 
-        $document = $documentRepo->findOneByTitle(
+        $document = $documentRepo->findResourceByTitle(
             $title,
             $parentResource->getResourceNode(),
             $courseEntity,

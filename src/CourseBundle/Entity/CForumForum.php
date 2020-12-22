@@ -189,7 +189,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="forum")
-     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", nullable=true)
      */
     protected $lp;
 

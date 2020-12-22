@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
  * Class learnpathItem
@@ -4256,13 +4258,15 @@ class learnpathItem
      * @param int $courseId  The course ID from the learning path
      * @param int $sessionId Optional. The session ID from the learning path
      *
-     * @return \Chamilo\CourseBundle\Entity\CForumThread
      */
-    public function getForumThread($courseId, $sessionId = 0)
+    public function getForumThread($courseId, $sessionId = 0): ?CForumThread
     {
         $repo = Container::getForumThreadRepository();
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity($sessionId));
-        $qb->andWhere('resource.threadTitle = :title')->setParameter('title', "{$this->title} - {$this->db_id}");
+        $qb
+            ->andWhere('resource.threadTitle = :title')
+            ->setParameter('title', "{$this->title} - {$this->db_id}")
+        ;
 
         return $qb->getQuery()->getFirstResult();
 
@@ -4319,30 +4323,23 @@ class learnpathItem
     /**
      * Create a forum thread for this learning path item.
      *
-     * @param int $currentForumId The forum ID to add the new thread
-     *
      * @return int The forum thread if was created. Otherwise return false
      */
-    public function createForumThread($currentForumId)
+    public function createForumThread(CForumForum $forum)
     {
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $currentForumId = (int) $currentForumId;
-
         $em = Database::getManager();
-        $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+        $threadRepo = Container::getForumThreadRepository();
         $forumThread = $threadRepo->findOneBy([
             'threadTitle' => "{$this->title} - {$this->db_id}",
-            'forumId' => $currentForumId,
+            'forum' => $forum,
         ]);
 
-        if (!$forumThread) {
-            $repo = Container::getForumRepository();
-            $forumInfo = $repo->find($currentForumId);
-            store_thread(
-                $forumInfo,
+        if (null === $forumThread) {
+            saveThread(
+                $forum,
                 [
-                    'forum_id' => $currentForumId,
                     'thread_id' => 0,
                     'gradebook' => 0,
                     'post_title' => "{$this->name} - {$this->db_id}",

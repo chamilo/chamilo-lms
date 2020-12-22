@@ -1136,7 +1136,7 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
         $courseInfo = api_get_course_info($this->course->getCode());
-        $thread = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
+        $thread = saveThread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 
         return [
             'registered' => $thread->getIid(),

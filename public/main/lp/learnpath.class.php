@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -2455,7 +2456,7 @@ class learnpath
      */
     public function getProgressBar($mode = null)
     {
-        list($percentage, $text_add) = $this->get_progress_bar_text($mode);
+        [$percentage, $text_add] = $this->get_progress_bar_text($mode);
 
         return self::get_progress_bar($percentage, $text_add);
     }
@@ -3484,7 +3485,7 @@ class learnpath
             $lp_item_params = $row['liparams'];
 
             if (empty($lp_item_params) && false !== strpos($lp_item_path, '?')) {
-                list($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
+                [$lp_item_path, $lp_item_params] = explode('?', $lp_item_path);
             }
             //$sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
             if ('http' === $type) {
@@ -3651,7 +3652,7 @@ class learnpath
                             if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))) {
                                 // if file not found.
                                 $decoded = html_entity_decode($lp_item_path);
-                                list($decoded) = explode('?', $decoded);
+                                [$decoded] = explode('?', $decoded);
                                 if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))) {
                                     $file = self::rl_get_resource_link_for_learnpath(
                                         $course_id,
@@ -4903,7 +4904,7 @@ class learnpath
 
         if (!api_is_invitee()) {
             // Save progress.
-            list($progress) = $this->get_progress_bar_text('%');
+            [$progress] = $this->get_progress_bar_text('%');
             $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
@@ -7073,7 +7074,7 @@ class learnpath
         }
         $item_id = $lpItem->getIid();
         $itemType = $lpItem->getItemType();
-        $lpId = $lpItem->getLpId();
+        $lpId = $lpItem->getLp()->getIid();
         $path = $lpItem->getPath();
 
         Session::write('parent_item_id', 'dir' === $itemType ? $item_id : 0);
@@ -10820,11 +10821,9 @@ EOD;
     /**
      * Create a forum for this learning path.
      *
-     * @param int $forumCategoryId
-     *
      * @return int The forum ID if was created. Otherwise return false
      */
-    public function createForum($forumCategoryId)
+    public function createForum(CForumCategory $forumCategory)
     {
         require_once api_get_path(SYS_CODE_PATH).'/forum/forumfunction.inc.php';
 
@@ -10833,7 +10832,7 @@ EOD;
                 'lp_id' => $this->lp_id,
                 'forum_title' => $this->name,
                 'forum_comment' => null,
-                'forum_category' => (int) $forumCategoryId,
+                'forum_category' => $forumCategory->getIid(),
                 'students_can_edit_group' => ['students_can_edit' => 0],
                 'allow_new_threads_group' => ['allow_new_threads' => 0],
                 'default_view_type_group' => ['default_view_type' => 'flat'],

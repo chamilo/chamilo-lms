@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 
 /**
@@ -266,7 +267,6 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
-
 $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
@@ -315,6 +315,12 @@ if (!empty($lpObject)) {
 }
 
 $course_id = api_get_course_int_id();
+$lpItemId = $_REQUEST['id'] ?? 0;
+$lpItem = null;
+if (!empty($lpItemId)) {
+    $lpItemRepo = Database::getManager()->getRepository(CLpItem::class);
+    $lpItem = $lpItemRepo->find($lpItemId);
+}
 
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
     if ($debug > 0) {
@@ -650,7 +656,8 @@ switch ($action) {
                     $lp_item_obj->removeAudio();
                     Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 
-                    $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
+                    $url = api_get_self().
+                        '?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
                     header('Location: '.$url);
                     exit;
                 }
@@ -658,14 +665,14 @@ switch ($action) {
                 // Upload audio
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
                     // Updating the lp.modified_on
-                    $_SESSION['oLP']->set_modified_on();
+                    $oLP->set_modified_on();
                     $lp_item_obj->addAudio();
                     Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
                 }
 
                 //Add audio file from documents
                 if (isset($_REQUEST['document_id']) && !empty($_REQUEST['document_id'])) {
-                    $_SESSION['oLP']->set_modified_on();
+                    $oLP->set_modified_on();
                     $lp_item_obj->add_audio_from_documents($_REQUEST['document_id']);
                     Display::addFlash(Display::return_message(get_lang('Updated')));
                 }
@@ -771,7 +778,7 @@ switch ($action) {
                     $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
                     $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
 
-                    $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
+                    $accumulateScormTime = $_REQUEST['accumulate_scorm_time'] ?? 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
@@ -1364,13 +1371,13 @@ switch ($action) {
     case 'mode':
         // Switch between fullscreen and embedded mode.
         $mode = $_REQUEST['mode'];
-        if ('fullscreen' == $mode) {
+        if ('fullscreen' === $mode) {
             $_SESSION['oLP']->mode = 'fullscreen';
-        } elseif ('embedded' == $mode) {
+        } elseif ('embedded' === $mode) {
             $_SESSION['oLP']->mode = 'embedded';
-        } elseif ('embedframe' == $mode) {
+        } elseif ('embedframe' === $mode) {
             $_SESSION['oLP']->mode = 'embedframe';
-        } elseif ('impress' == $mode) {
+        } elseif ('impress' === $mode) {
             $_SESSION['oLP']->mode = 'impress';
         }
         require 'lp_view.php';
@@ -1423,10 +1430,6 @@ switch ($action) {
         } else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
-            if ($debug > 0) {
-                error_log('save_current()');
-                error_log('save_last()');
-            }
             $url = $_course['course_public_url'].'?sid='.api_get_session_id();
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
@@ -1494,31 +1497,27 @@ switch ($action) {
         }
 
         $selectedItem = null;
-        foreach ($_SESSION['oLP']->items as $item) {
+        /** @var learnpathItem $selectedItem */
+        foreach ($oLP->items as $item) {
             if ($item->db_id == $_GET['id']) {
                 $selectedItem = $item;
             }
         }
 
         if (!empty($selectedItem)) {
-            $forumThread = $selectedItem->getForumThread(
-                $_SESSION['oLP']->course_int_id,
-                $_SESSION['oLP']->lp_session_id
-            );
+            $forumThread = $selectedItem->getForumThread($oLP->course_int_id, $oLP->lp_session_id);
 
             if (empty($forumThread)) {
-                require '../forum/forumfunction.inc.php';
+                require_once '../forum/forumfunction.inc.php';
 
                 $forumCategory = getForumCategoryByTitle(
                     get_lang('Learning paths'),
-                    $_SESSION['oLP']->course_int_id,
-                    $_SESSION['oLP']->lp_session_id
+                    $oLP->course_int_id,
+                    $oLP->lp_session_id
                 );
 
-                $forumCategoryId = !empty($forumCategory) ? $forumCategory['cat_id'] : 0;
-
-                if (empty($forumCategoryId)) {
-                    $forumCategoryId = store_forumcategory(
+                if (null === $forumCategory) {
+                    $forumCategory = store_forumcategory(
                         [
                             'lp_id' => 0,
                             'forum_category_title' => get_lang('Learning paths'),
@@ -1529,29 +1528,22 @@ switch ($action) {
                     );
                 }
 
-                if (!empty($forumCategoryId)) {
-                    $forum = $_SESSION['oLP']->getForum(
-                        $_SESSION['oLP']->lp_session_id
-                    );
-
-                    $forumId = !empty($forum) ? $forum['forum_id'] : 0;
-
-                    if (empty($forumId)) {
-                        $forumId = $_SESSION['oLP']->createForum($forumCategoryId);
-                    }
-
-                    if (!empty($forumId)) {
-                        $selectedItem->createForumThread($forumId);
+                if ($forumCategory) {
+                    $forum = $oLP->getEntity()->getForum();
+                    if ($forum) {
+                        $selectedItem->createForumThread($forum);
+                    } else {
+                        $oLP->createForum($forumCategory);
                     }
                 }
             }
         }
 
         header('Location:'.api_get_self().'?'.http_build_query([
-                'action' => 'add_item',
-                'type' => 'step',
-                'lp_id' => $_SESSION['oLP']->lp_id,
-            ]));
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => $oLP->lp_id,
+        ]));
         exit;
 
         break;
@@ -1564,7 +1556,7 @@ switch ($action) {
         }
 
         $selectedItem = null;
-        foreach ($_SESSION['oLP']->items as $item) {
+        foreach ($oLP->items as $item) {
             if ($item->db_id != $_GET['id']) {
                 continue;
             }
@@ -1573,8 +1565,8 @@ switch ($action) {
 
         if (!empty($selectedItem)) {
             $forumThread = $selectedItem->getForumThread(
-                $_SESSION['oLP']->course_int_id,
-                $_SESSION['oLP']->lp_session_id
+                $oLP->course_int_id,
+                $oLP->lp_session_id
             );
 
             if (!empty($forumThread)) {
@@ -1589,10 +1581,10 @@ switch ($action) {
         }
 
         header('Location:'.api_get_self().'?'.http_build_query([
-                'action' => 'add_item',
-                'type' => 'step',
-                'lp_id' => $_SESSION['oLP']->lp_id,
-            ]));
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => $_SESSION['oLP']->lp_id,
+        ]));
         exit;
         break;
     case 'add_final_item':
@@ -1610,10 +1602,10 @@ switch ($action) {
 
         $_SESSION['oLP']->getFinalItemForm();
         $redirectTo = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                'action' => 'add_item',
-                'type' => 'step',
-                'lp_id' => intval($_SESSION['oLP']->lp_id),
-            ]);
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => $oLP->lp_id,
+        ]);
         break;
     default:
         require 'lp_list.php';

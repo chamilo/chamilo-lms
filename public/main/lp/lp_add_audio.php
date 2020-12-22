@@ -94,9 +94,9 @@ $form = new FormValidator(
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 $lpPathInfo = $lp->generate_lp_folder($courseInfo);
-DocumentManager::createDefaultAudioFolder($courseInfo);
+$document = DocumentManager::createDefaultAudioFolder($courseInfo);
 $currentDir = '/audio';
-$audioFolderId = DocumentManager::get_document_id($courseInfo, $currentDir);
+$audioFolderId = $document->getIid();
 
 if (isset($_REQUEST['folder_id'])) {
     $folderIdFromRequest = isset($_REQUEST['folder_id']) ? (int) $_REQUEST['folder_id'] : 0;
@@ -112,7 +112,7 @@ if (isset($_REQUEST['folder_id'])) {
 
 $file = null;
 if (!empty($lp_item->audio)) {
-    $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio;
+    //$file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio;
     $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio.'?'.api_get_cidreq();
 }
 
@@ -145,8 +145,7 @@ $tpl->assign('enable_record_audio', 'true' === api_get_setting('enable_record_au
 $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
 $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
-$template = $tpl->get_template('learnpath/record_voice.tpl');
-$recordVoiceForm .= $tpl->fetch($template);
+$recordVoiceForm .= $tpl->fetch('@ChamiloCore/LearnPath/record_voice.html.twig');
 $form->addElement('header', '<small class="text-muted">'.get_lang('Or').'</small> '.get_lang('AudioFile'));
 
 $audioLabel = '';
@@ -161,7 +160,8 @@ if (!empty($file)) {
         Display::getMediaPlayer($file, ['url' => $urlFile]).
         "</div>";
     $form->addElement('label', get_lang('Listen'), $audioPlayer);
-    $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?lp_id='.$lp->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH).
+        'lp/lp_controller.php?lp_id='.$lp->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
     $form->addElement(
         'label',
         null,

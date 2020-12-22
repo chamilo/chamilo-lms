@@ -15,7 +15,7 @@ class RemedialCoursePlugin extends Plugin
      * @var array
      */
     protected $remedialAdvanceField;
-//advancedCourseList
+    //advancedCourseList
 
     /**
      * RemedialCoursePlugin constructor.
@@ -84,14 +84,12 @@ class RemedialCoursePlugin extends Plugin
         $this->SaveAdvanceRemedialField();
     }
 
-
     /**
      * Save the arrangement for remedialcourselist, it is adjusted internally so that the values
      * match the necessary ones.
      */
     public function SaveRemedialField()
     {
-
         $schedule = new ExtraField('exercise');
         $data = $this->getDataRemedialField();
         $data['default_value'] = 1;
@@ -108,7 +106,6 @@ class RemedialCoursePlugin extends Plugin
      */
     public function SaveAdvanceRemedialField()
     {
-
         $schedule = new ExtraField('exercise');
         $data = $this->getDataAdvanceRemedialField();
         $data['default_value'] = 1;
@@ -120,7 +117,7 @@ class RemedialCoursePlugin extends Plugin
     }
 
     /**
-     * Make a array clean of remedialcourselist
+     * Make a array clean of remedialcourselist.
      *
      * @return array|bool
      */
@@ -132,17 +129,18 @@ class RemedialCoursePlugin extends Plugin
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : $data['field_order']; // at
         $data['variable'] = isset($data['variable']) ? $data['variable'] : 'remedialcourselist';
         $data['display_text'] = isset($data['display_text']) ? $data['display_text'] : 'remedialCourseList';
-        $data['default_value'] = (int)$install;
+        $data['default_value'] = (int) $install;
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : 0;
         $data['visible_to_self'] = isset($data['visible_to_self']) ? $data['visible_to_self'] : 1;
         $data['visible_to_others'] = isset($data['visible_to_others']) ? $data['visible_to_others'] : 0;
         $data['changeable'] = isset($data['changeable']) ? $data['changeable'] : 1;
         $data['filter'] = isset($data['filter']) ? $data['filter'] : 0;
+
         return $data;
     }
 
     /**
-     * Make a array clean of advancedcourselist
+     * Make a array clean of advancedcourselist.
      *
      * @return array|bool
      */
@@ -154,12 +152,13 @@ class RemedialCoursePlugin extends Plugin
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : $data['field_order']; // at
         $data['variable'] = isset($data['variable']) ? $data['variable'] : 'advancedcourselist';
         $data['display_text'] = isset($data['display_text']) ? $data['display_text'] : 'advancedCourseList';
-        $data['default_value'] = (int)$install;
+        $data['default_value'] = (int) $install;
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : 0;
         $data['visible_to_self'] = isset($data['visible_to_self']) ? $data['visible_to_self'] : 1;
         $data['visible_to_others'] = isset($data['visible_to_others']) ? $data['visible_to_others'] : 0;
         $data['changeable'] = isset($data['changeable']) ? $data['changeable'] : 1;
         $data['filter'] = isset($data['filter']) ? $data['filter'] : 0;
+
         return $data;
     }
 
@@ -187,5 +186,4 @@ class RemedialCoursePlugin extends Plugin
             $schedule->save($data);
         }
     }
-
 }

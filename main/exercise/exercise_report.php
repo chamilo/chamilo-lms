@@ -266,8 +266,8 @@ if (isset($_REQUEST['comments']) &&
     Database::query($sql);
 
     // See BT#18165
-     $objExerciseTmp->remedialCourseList($student_id,true);
-     $objExerciseTmp->advanceCourseList($student_id);
+    $objExerciseTmp->remedialCourseList($student_id, true);
+    $objExerciseTmp->advanceCourseList($student_id);
 
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else

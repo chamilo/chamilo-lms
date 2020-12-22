@@ -2490,7 +2490,7 @@ class Exercise
                 [
                     'notifications',
                     'remedialcourselist',
-                    'advancedcourselist'
+                    'advancedcourselist',
                     ], //exclude
                 false, // filter
                 false, // tag as select
@@ -2500,11 +2500,11 @@ class Exercise
             );
 
             // See BT#18165
-            $remedialList =[
-                'remedialcourselist'=>'remedialCourseList',
-                'advancedcourselist'=>'advancedCoursList',
-            ] ;
-            foreach($remedialList as $item=>$label){
+            $remedialList = [
+                'remedialcourselist' => 'remedialCourseList',
+                'advancedcourselist' => 'advancedCoursList',
+            ];
+            foreach ($remedialList as $item => $label) {
                 $field = new ExtraField('exercise');
                 $remedialField = $field->get_handler_field_info_by_field_variable($item);
                 $t = new ExtraFieldValue('exercise');
@@ -2514,9 +2514,9 @@ class Exercise
                     && $remedialField['default_value'] == 1 // if the plugin is activated
                 ) {
                     $optionRemedial = [];
-                    $defaults[$item]= [];
+                    $defaults[$item] = [];
                     $remedialExtraValue = $t->get_values_by_handler_and_field_id($this->iId, $remedialField['id']);
-                    $defaults[$item] = (isset($remedialExtraValue['value']))?explode(';',$remedialExtraValue['value']):[];
+                    $defaults[$item] = (isset($remedialExtraValue['value'])) ? explode(';', $remedialExtraValue['value']) : [];
                     if ($sessionId != 0) {
                         $courseList = SessionManager::getCoursesInSession($sessionId);
                         foreach ($courseList as $course) {
@@ -2551,12 +2551,10 @@ class Exercise
                         $optionRemedial,
                         [
                             'placeholder' => get_lang('SelectAnOption'),
-                            'multiple' => 'multiple'
+                            'multiple' => 'multiple',
                         ]
                     );
-
                 }
-
             }
 
             $settings = api_get_configuration_value('exercise_finished_notification_settings');
@@ -10813,6 +10811,273 @@ class Exercise
     }
 
     /**
+     * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
+     * represent the next level BT#18165.
+     *
+     * @return string|null
+     */
+    public function advanceCourseList($userId = 0)
+    {
+        $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
+        $extraMessage = null;
+
+        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
+            $userId,
+            $this->id,
+            $this->course_id,
+            $this->sessionId
+        );
+        if (!isset($bestAttempt['exe_result'])) {
+            // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
+            // for that this block is used
+            $exercise_stat_info = Event::getExerciseResultsByUser(
+                $userId,
+                $this->id,
+                $this->course_id,
+                $this->sessionId
+            );
+            $bestAttempt['exe_result'] = 0;
+            foreach ($exercise_stat_info as $attemp) {
+                if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
+                    $bestAttempt = $attemp;
+                }
+            }
+        }
+        if (
+            !isset($bestAttempt['exe_result'])
+            || !isset($bestAttempt['exe_id'])
+            || !isset($bestAttempt['exe_weighting'])
+        ) {
+            // Sin intentos, sin id de ejercicio y sin total definido
+            return '';
+        }
+
+        $resultado = $bestAttempt['exe_result'];
+        $total = $bestAttempt['exe_weighting'];
+        $objExercise = new Exercise();
+        $objExercise->read($bestAttempt['exe_id']);
+        $percentSuccess = (float) $objExercise->selectPassPercentage();
+        $pass = ExerciseLib::isPassPercentageAttemptPassed(
+            $objExercise,
+            $resultado,
+            $total
+        );
+        if ($percentSuccess == 0 && $pass == false) {
+            return '';
+        }
+        $canRemedial = ($pass == false) ? true : false;
+        //Examen de siguiente nivel
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'advancedcourselist'
+        );
+        $field = new ExtraField('exercise');
+        $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
+        if (!empty($advanceCourseExcerciseField)
+            && isset($advancedCourseField['default_value'])
+            && $advancedCourseField['default_value'] == 1 // if the plugin is activated
+            && $canRemedial == false
+        ) {
+            $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
+            $courses = [];
+            foreach ($coursesIds as $course) {
+                $courseData = api_get_course_info_by_id($course);
+                //aqui se inscribe en el curso
+                $isInASession = !empty($this->sessionId);
+                $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                    $userId,
+                    $courseData['code'],
+                    $isInASession,
+                    $this->sessionId
+                );
+
+                if (!$isSubscribed) {
+                    CourseManager::subscribeUser(
+                        $userId,
+                        $courseData['code'],
+                        STUDENT,
+                        $this->sessionId
+                    );
+                }
+                $courses[] = $courseData['title'];
+            }
+            if (count($courses) != 0) {
+                $extraMessage .= "<br>".get_lang('AdvancedCourseInscription')." <strong>".
+                    implode(' - ', $courses)."</strong> ";
+            }
+        }
+
+        return $extraMessage;
+    }
+
+    /**
+     * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
+     * courses BT#18165.
+     *
+     * @return string|null
+     */
+    public function remedialCourseList($userId = 0, $review = false)
+    {
+        $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
+        $extraMessage = null;
+        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
+            $userId,
+            $this->id,
+            $this->course_id,
+            $this->sessionId
+        );
+        if (!isset($bestAttempt['exe_result'])) {
+            // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
+            // for that this block is used
+            $exercise_stat_info = Event::getExerciseResultsByUser(
+                $userId,
+                $this->id,
+                $this->course_id,
+                $this->sessionId
+            );
+            $bestAttempt['exe_result'] = 0;
+            foreach ($exercise_stat_info as $attemp) {
+                if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
+                    $bestAttempt = $attemp;
+                }
+            }
+        }
+        $questionExcluded = [
+            5,
+        ];
+        $questionList = isset($bestAttempt['question_list']) ? $bestAttempt['question_list'] : null;
+        if (isset($bestAttempt['question_list'])) {
+            foreach ($bestAttempt['question_list'] as $questionId => $answer) {
+                $question = Question::read($questionId, api_get_course_info_by_id($bestAttempt['c_id']));
+                $type = $question->type;
+                if (in_array($type, $questionExcluded) && $review == false) {
+                    return '';
+                }
+            }
+        }
+        //https://github.com/chamilo/chamilo-lms/blob/1.11.x/main/inc/lib/exercise.lib.php#L2103
+        // CMAR
+        // Si viene por revision y no tiene preguntas abiertas por corregir
+        // if($review == true) {
+        $whereCondition = '';
+
+        $whereCondition .= " te.exe_user_id  = '$userId'";
+
+        /*
+                    if (!empty($whereCondition)) {
+                        $whereCondition = " AND $whereCondition";
+                    }
+                    */
+
+        /*
+            $count = ExerciseLib::get_count_exam_results(
+                $this->id,
+                $whereCondition
+            );
+          */
+        // CMAR Aqui se debe validar los ejercicios corregidos
+        $count = ExerciseLib::get_exam_results_data(
+            null,
+            null,
+            null,
+            null,
+            $this->id,
+            $whereCondition,
+            false
+            // ,
+           // $courseCode,
+          //  $showSession
+        );
+        $a = $count;
+        // }
+        $resultado = $bestAttempt['exe_result'];
+        $total = $bestAttempt['exe_weighting'];
+        $objExercise = new Exercise();
+        $objExercise->read($bestAttempt['exe_id']);
+        $percentSuccess = (float) $objExercise->selectPassPercentage();
+        $pass = ExerciseLib::isPassPercentageAttemptPassed(
+            $objExercise,
+            $resultado,
+            $total
+        );
+        if ($percentSuccess == 0 && $pass == false) {
+            return '';
+        }
+        $canRemedial = ($pass == false) ? true : false;
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $remedialExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'remedialcourselist'
+        );
+        $field = new ExtraField('exercise');
+        $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
+
+        // examen de recuperacion
+        if (!empty($remedialExcerciseField)
+            && isset($remedialField['default_value'])
+            && $remedialField['default_value'] == 1 // if the plugin is activated
+            && $canRemedial
+        ) {
+            $coursesIds = explode(';', $remedialExcerciseField['value']);
+            $courses = [];
+            foreach ($coursesIds as $course) {
+                $courseData = api_get_course_info_by_id($course);
+                //aqui se inscribe en el curso
+                $isInASession = !empty($this->sessionId);
+                $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                    $userId,
+                    $courseData['code'],
+                    $isInASession,
+                    $this->sessionId
+                );
+
+                if (!$isSubscribed) {
+                    CourseManager::subscribeUser(
+                        $userId,
+                        $courseData['code'],
+                        STUDENT,
+                        $this->sessionId
+                    );
+
+                    $courses[] = $courseData['title'];
+                }
+            }
+
+            if (count($courses) != 0) {
+                $extraMessage .= "<br>".get_lang('RemedialCourseInscription')." <strong>".
+                    implode(' - ', $courses)."</strong> ";
+            } else {
+                $extraMessage .= "<br>".get_lang('RemedialCourseAlreadyInscription');
+            }
+        }
+
+        return $extraMessage;
+    }
+
+    /**
+     * Get number of questions in exercise by user attempt.
+     *
+     * @return int
+     */
+    private function countQuestionsInExercise()
+    {
+        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+
+        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
+
+        if (!empty($trackInfo)) {
+            $questionIds = explode(',', $trackInfo['data_tracking']);
+
+            return count($questionIds);
+        }
+
+        return $this->getQuestionCount();
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
      * @param bool $adminView Optional.
@@ -11360,251 +11625,5 @@ class Exercise
             null,
             get_lang('ShowResultsToStudents')
         );
-    }
-
-    /**
-     * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
-     * represent the next level BT#18165
-     *
-     * @return string|null
-     */
-    public function advanceCourseList($userId =0){
-        $userId = ((int)$userId == 0)?$userId:api_get_user_id();
-        $extraMessage = null;
-        /******************************************************************/
-        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
-            $userId,
-            $this->id,
-            $this->course_id,
-            $this->sessionId
-        );
-        if (!isset($bestAttempt['exe_result'])) {
-            // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
-            // for that this block is used
-            $exercise_stat_info = Event::getExerciseResultsByUser(
-                $userId,
-                $this->id,
-                $this->course_id,
-                $this->sessionId
-            );
-            $bestAttempt['exe_result'] = 0;
-            foreach ($exercise_stat_info as $attemp) {
-                if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
-                    $bestAttempt = $attemp;
-                }
-            }
-        }
-        if(
-            !isset( $bestAttempt['exe_result'])
-            || !isset( $bestAttempt['exe_id'])
-            || !isset( $bestAttempt['exe_weighting'])
-        ) {
-            // Sin intentos, sin id de ejercicio y sin total definido
-            return '';
-        }
-
-        $resultado = $bestAttempt['exe_result'];
-        $total = $bestAttempt['exe_weighting'];
-        $objExercise = new Exercise();
-        $objExercise->read($bestAttempt['exe_id']);
-        $percentSuccess = (float)$objExercise->selectPassPercentage();
-        $pass = ExerciseLib::isPassPercentageAttemptPassed(
-            $objExercise,
-            $resultado,
-            $total
-        );
-        if ($percentSuccess == 0 && $pass == false) {
-            return '';
-        }
-        $canRemedial = ($pass == false) ? true : false;
-        //Examen de siguiente nivel
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'advancedcourselist'
-        );
-        $field = new ExtraField('exercise');
-        $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
-        if (!empty($advanceCourseExcerciseField)
-            && isset($advancedCourseField['default_value'])
-            && $advancedCourseField['default_value'] == 1 // if the plugin is activated
-            && $canRemedial == false
-        ) {
-            $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
-            $courses = [];
-            foreach ($coursesIds as $course) {
-                $courseData = api_get_course_info_by_id($course);
-                //aqui se inscribe en el curso
-                $isInASession = !empty($this->sessionId);
-                $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                    $userId,
-                    $courseData['code'],
-                    $isInASession,
-                    $this->sessionId
-                );
-
-                if (!$isSubscribed) {
-                    CourseManager::subscribeUser(
-                        $userId,
-                        $courseData['code'],
-                        STUDENT,
-                        $this->sessionId
-                    );
-
-                }
-                $courses[] = $courseData['title'];
-            }
-            if (count($courses) != 0) {
-                $extraMessage .= "<br>".get_lang('AdvancedCourseInscription')." <strong>".
-                    implode(' - ', $courses)."</strong> ";
-            }
-        }
-        /******************************************************************/
-        return $extraMessage;
-    }
-
-    /**
-     * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
-     * courses BT#18165
-     *
-     * @return string|null
-     */
-    public function remedialCourseList($userId = 0, $review = false){
-        $userId = ((int)$userId == 0)?$userId:api_get_user_id();
-        $extraMessage = null;
-        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
-            $userId,
-            $this->id,
-            $this->course_id,
-            $this->sessionId
-        );
-        if (!isset($bestAttempt['exe_result'])) {
-            // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
-            // for that this block is used
-            $exercise_stat_info = Event::getExerciseResultsByUser(
-                $userId,
-                $this->id,
-                $this->course_id,
-                $this->sessionId
-            );
-            $bestAttempt['exe_result'] = 0;
-            foreach ($exercise_stat_info as $attemp) {
-                if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
-                    $bestAttempt = $attemp;
-                }
-            }
-        }
-        $questionExcluded = [
-            5
-        ];
-        $questionList = isset($bestAttempt['question_list'])?$bestAttempt['question_list']:null;
-        if(isset($bestAttempt['question_list'])) {
-            foreach ($bestAttempt['question_list'] as $questionId => $answer) {
-                $question = Question::read($questionId, api_get_course_info_by_id($bestAttempt['c_id']));
-                $type = $question->type;
-                if (in_array($type, $questionExcluded) && $review == false) {
-                    return '';
-                }
-            }
-        }
-        //https://github.com/chamilo/chamilo-lms/blob/1.11.x/main/inc/lib/exercise.lib.php#L2103
-        // CMAR
-        // Si viene por revision y no tiene preguntas abiertas por corregir
-        // if($review == true) {
-            $whereCondition = '';
-
-
-            $whereCondition .= " te.exe_user_id  = '$userId'";
-
-/*
-            if (!empty($whereCondition)) {
-                $whereCondition = " AND $whereCondition";
-            }
-            */
-
-        /*
-            $count = ExerciseLib::get_count_exam_results(
-                $this->id,
-                $whereCondition
-            );
-          */
-        // CMAR Aqui se debe validar los ejercicios corregidos
-        $count = ExerciseLib::get_exam_results_data(
-            null,
-            null,
-            null,
-            null,
-            $this->id,
-            $whereCondition,
-            false
-            // ,
-           // $courseCode,
-          //  $showSession
-        );
-            $a = $count ;
-        // }
-        $resultado = $bestAttempt['exe_result'];
-        $total = $bestAttempt['exe_weighting'];
-        $objExercise = new Exercise();
-        $objExercise->read($bestAttempt['exe_id']);
-        $percentSuccess = (float)$objExercise->selectPassPercentage();
-        $pass = ExerciseLib::isPassPercentageAttemptPassed(
-            $objExercise,
-            $resultado,
-            $total
-        );
-        if ($percentSuccess == 0 && $pass == false) {
-            return '';
-        }
-        $canRemedial = ($pass == false) ? true : false;
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $remedialExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'remedialcourselist'
-        );
-        $field = new ExtraField('exercise');
-        $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
-
-
-        // examen de recuperacion
-        if (!empty($remedialExcerciseField)
-            && isset($remedialField['default_value'])
-            && $remedialField['default_value'] == 1 // if the plugin is activated
-            && $canRemedial
-        ) {
-            $coursesIds = explode(';', $remedialExcerciseField['value']);
-            $courses = [];
-            foreach ($coursesIds as $course) {
-                $courseData = api_get_course_info_by_id($course);
-                //aqui se inscribe en el curso
-                $isInASession = !empty($this->sessionId);
-                $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                    $userId,
-                    $courseData['code'],
-                    $isInASession,
-                    $this->sessionId
-                );
-
-                if (!$isSubscribed) {
-                    CourseManager::subscribeUser(
-                        $userId,
-                        $courseData['code'],
-                        STUDENT,
-                        $this->sessionId
-                    );
-
-                    $courses[] = $courseData['title'];
-                }
-
-            }
-
-            if (count($courses) != 0) {
-                $extraMessage .= "<br>".get_lang('RemedialCourseInscription')." <strong>".
-                    implode(' - ', $courses)."</strong> ";
-            } else {
-                $extraMessage .= "<br>".get_lang('RemedialCourseAlreadyInscription');
-            }
-        }
-        return $extraMessage;
     }
 }

@@ -1,539 +1,591 @@
 {% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
 {% block content %}
-{% autoescape false %}
-    <script>
-        function confirmation(name) {
-            if (confirm("{{ "AreYouSureToDeleteJS"|trans }} \"" + name + "\" ?")) {
-                return true;
-            } else {
-                return false;
+    {% autoescape false %}
+        <script>
+            function confirmation(name) {
+                if (confirm("{{ "AreYouSureToDeleteJS"|trans }} \"" + name + "\" ?")) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
-        }
-    </script>
-    {% set configuration = 'lp_category_accordion'|api_get_configuration_value %}
-    <div class="lp-accordion panel-group" id="lp-accordion" role="tablist" aria-multiselectable="true">
-        {% for lp_data in data %}
-            {% set show_category = true %}
+        </script>
+        {% set configuration = 'lp_category_accordion'|api_get_configuration_value %}
+        <div class="lp-accordion panel-group" id="lp-accordion" role="tablist" aria-multiselectable="true">
+            {% for lp_data in data %}
+                {% set show_category = true %}
 
-            {% if filtered_category and filtered_category != lp_data.category.iid %}
-                {% set show_category = false %}
-            {% endif %}
+                {% if filtered_category and filtered_category != lp_data.category.iid %}
+                    {% set show_category = false %}
+                {% endif %}
 
-            {% if show_category %}
-                {% if configuration == 0 %}
-                    <!--- old view -->
-                    {% if categories|length > 1 and lp_data.category.iid %}
-                        {% if is_allowed_to_edit %}
-                            <h3 class="page-header">
-                                {{ lp_data.category.getName() | trim }}
+                {% if show_category %}
+                    {% if configuration == 0 %}
+                        <!--- old view -->
+                        {% if categories|length > 1 and lp_data.category.iid %}
+                            {% if is_allowed_to_edit %}
+                                <h3 class="page-header">
+                                    {{ lp_data.category.getName() | trim }}
 
-                                {% if lp_data.category.iid > 0 %}
-                                    {% if not session %}
-                                        <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
-                                           title="{{ "Edit"|trans }}">
-                                            <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|trans }}">
-                                        </a>
-
-                                        {% if subscription_settings.allow_add_users_to_lp_category %}
-                                            <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_users_to_category&id=' ~ lp_data.category.iid }}"
-                                               title="{{ "Add users"|trans }}">
-                                                <img src="{{ "user.png"|icon }}" alt="{{ "Add users"|trans }}">
+                                    {% if lp_data.category.iid > 0 %}
+                                        {% if not session %}
+                                            <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
+                                               title="{{ "Edit"|trans }}">
+                                                <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|trans }}">
                                             </a>
-                                        {% endif %}
 
-                                        {% if loop.index0 == 1 %}
-                                            <a href="#">
-                                                <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|trans }}">
-                                            </a>
-                                        {% else %}
-                                            <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
-                                               title="{{ "Move"|trans }}">
-                                                <img src="{{ "up.png"|icon }}" alt="{{ "Move"|trans }}">
-                                            </a>
-                                        {% endif %}
-
-                                        {% if (data|length - 1) == loop.index0 %}
-                                            <a href="#">
-                                                <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|trans }}">
-                                            </a>
-                                        {% else %}
-                                            <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
-                                               title="{{ "Move"|trans }}">
-                                                <img src="{{ "down.png"|icon }}" alt="{{ "Move"|trans }}">
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-
-                                    {% if lp_data.category_visibility == 0 %}
-                                        <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
-                                           title="{{ 'Show'|trans }}">
-                                            <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|trans }}">
-                                        </a>
-                                    {% else %}
-                                        <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
-                                           title="{{ 'Hide'|trans }}">
-                                            <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|trans }}">
-                                        </a>
-                                    {% endif %}
-
-                                    {% if lp_data.category_is_published == 0 %}
-                                        <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
-                                           title="{{ 'LearnpathPublish'|trans }}">
-                                            <img src="{{ 'lp_publish_na.png'|icon }}"
-                                                 alt="{{ 'LearnpathPublish'|trans }}">
-                                        </a>
-                                    {% else %}
-                                        <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                                           title="{{ 'LearnpathDoNotPublish'|trans }}">
-                                            <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|trans }}">
-                                        </a>
-                                    {% endif %}
-                                    {% if not session %}
-                                        <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
-                                           title="{{ "Delete"|trans }}">
-                                            <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|trans }}">
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            </h3>
-                        {% elseif lp_data.lp_list is not empty %}
-                            <h3 class="page-header">{{ lp_data.category.getName() }}</h3>
-                        {% endif %}
-                    {% endif %}
-
-                    {% if lp_data.lp_list %}
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        {{ "Title"|trans }}
-                                    </th>
-                                    {% if is_allowed_to_edit %}
-                                        <th>{{ "Publication date"|trans }}</th>
-                                        <th>{{ "Expiration date"|trans }}</th>
-                                        <th>{{ "Progress"|trans }}</th>
-                                        {% if allow_min_time %}
-                                            <th>{{ "Time spent / Time required"|trans }}</th>
-                                        {% endif %}
-                                        <th>{{ "Authoring options"|trans }}</th>
-                                    {% else %}
-                                        {% if not is_invitee %}
-                                            <th>{{ "Progress"|trans }}</th>
-                                        {% endif %}
-                                        {% if allow_min_time %}
-                                            <th>{{ "Time spent / Time required"|trans }}</th>
-                                        {% endif %}
-                                        <th>{{ "Actions"|trans }}</th>
-                                    {% endif %}
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for row in lp_data.lp_list %}
-                                    <tr>
-                                        <td>
-                                            {{ row.learnpath_icon }}
-                                            <a href="{{ row.url_start }}">
-                                                {{ row.title }}
-                                                {{ row.session_image }}
-                                                {{ row.extra }}
-                                            </a>
-                                        </td>
-                                        {% if is_allowed_to_edit %}
-                                            <td>
-                                                {% if row.start_time %}
-                                                    <span class="small">{{ row.start_time }}</span>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                <span class="small">{{ row.end_time }}</span>
-                                            </td>
-                                            <td>
-                                                {{ row.dsp_progress }}
-                                            </td>
-                                            {% if allow_min_time %}
-                                                <td>
-                                                    {% if row.info_time_prerequisite %}
-                                                        {{ row.info_time_prerequisite }}
-                                                    {% endif %}
-                                                </td>
+                                            {% if subscription_settings.allow_add_users_to_lp_category %}
+                                                <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_users_to_category&id=' ~ lp_data.category.iid }}"
+                                                   title="{{ "Add users"|trans }}">
+                                                    <img src="{{ "user.png"|icon }}" alt="{{ "Add users"|trans }}">
+                                                </a>
                                             {% endif %}
+
+                                            {% if loop.index0 == 1 %}
+                                                <a href="#">
+                                                    <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                </a>
+                                            {% else %}
+                                                <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
+                                                   title="{{ "Move"|trans }}">
+                                                    <img src="{{ "up.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                </a>
+                                            {% endif %}
+
+                                            {% if (data|length - 1) == loop.index0 %}
+                                                <a href="#">
+                                                    <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                </a>
+                                            {% else %}
+                                                <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
+                                                   title="{{ "Move"|trans }}">
+                                                    <img src="{{ "down.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                </a>
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if lp_data.category_visibility == 0 %}
+                                            <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
+                                               title="{{ 'Show'|trans }}">
+                                                <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|trans }}">
+                                            </a>
+                                        {% else %}
+                                            <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
+                                               title="{{ 'Hide'|trans }}">
+                                                <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|trans }}">
+                                            </a>
+                                        {% endif %}
+
+                                        {% if lp_data.category_is_published == 0 %}
+                                            <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
+                                               title="{{ 'LearnpathPublish'|trans }}">
+                                                <img src="{{ 'lp_publish_na.png'|icon }}"
+                                                     alt="{{ 'LearnpathPublish'|trans }}">
+                                            </a>
+                                        {% else %}
+                                            <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                               title="{{ 'LearnpathDoNotPublish'|trans }}">
+                                                <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|trans }}">
+                                            </a>
+                                        {% endif %}
+                                        {% if not session %}
+                                            <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
+                                               title="{{ "Delete"|trans }}">
+                                                <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|trans }}">
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </h3>
+                            {% elseif lp_data.lp_list is not empty %}
+                                <h3 class="page-header">{{ lp_data.category.getName() }}</h3>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if lp_data.lp_list %}
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            {{ "Title"|trans }}
+                                        </th>
+                                        {% if is_allowed_to_edit %}
+                                            <th>{{ "Publication date"|trans }}</th>
+                                            <th>{{ "Expiration date"|trans }}</th>
+                                            <th>{{ "Progress"|trans }}</th>
+                                            {% if allow_min_time %}
+                                                <th>{{ "Time spent / Time required"|trans }}</th>
+                                            {% endif %}
+                                            <th>{{ "Authoring options"|trans }}</th>
                                         {% else %}
                                             {% if not is_invitee %}
+                                                <th>{{ "Progress"|trans }}</th>
+                                            {% endif %}
+                                            {% if allow_min_time %}
+                                                <th>{{ "Time spent / Time required"|trans }}</th>
+                                            {% endif %}
+                                            <th>{{ "Actions"|trans }}</th>
+                                        {% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for row in lp_data.lp_list %}
+                                        <tr>
+                                            <td>
+                                                {{ row.learnpath_icon }}
+                                                <a href="{{ row.url_start }}">
+                                                    {{ row.title }}
+                                                    {{ row.session_image }}
+                                                </a>
+                                                {{ row.extra }}
+                                            </td>
+                                            {% if is_allowed_to_edit %}
+                                                <td>
+                                                    {% if row.start_time %}
+                                                        <span class="small">{{ row.start_time }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <span class="small">{{ row.end_time }}</span>
+                                                </td>
                                                 <td>
                                                     {{ row.dsp_progress }}
                                                 </td>
-                                            {% endif %}
-                                            {% if allow_min_time %}
-                                                <td>
-                                                    {% if row.info_time_prerequisite %}
-                                                        {{ row.info_time_prerequisite }}
-                                                    {% endif %}
-                                                </td>
-                                            {% endif %}
-                                        {% endif %}
-                                        <td>
-                                            {{ row.action_build }}
-                                            {{ row.action_edit }}
-                                            {{ row.action_visible }}
-                                            {{ row.action_tracking }}
-                                            {{ row.action_publish }}
-                                            {{ row.action_subscribe_users }}
-                                            {{ row.action_serious_game }}
-                                            {{ row.action_reinit }}
-                                            {{ row.action_default_view }}
-                                            {{ row.action_debug }}
-                                            {{ row.action_export }}
-                                            {{ row.action_copy }}
-                                            {{ row.action_auto_launch }}
-                                            {{ row.action_pdf }}
-                                            {{ row.action_delete }}
-                                            {{ row.action_order }}
-                                            {{ row.action_update_scorm }}
-                                            {{ row.action_export_to_course_build }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% endif %}
-                    <!--- end old view -->
-                {% else %}
-                    <!-- new view block accordeon -->
-                    {% if lp_data.category.id == 0 %}
-                        {% if is_allowed_to_edit %}
-                            {% if lp_data.lp_list %}
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped">
-                                        <thead>
-                                        <tr>
-                                            <th>{{ "Title"|trans }}</th>
-                                            {% if is_allowed_to_edit %}
-                                                <th>{{ "Publication date"|trans }}</th>
-                                                <th>{{ "Expiration date"|trans }}</th>
-                                                <th>{{ "Progress"|trans }}</th>
-                                                <th>{{ "Authoring options"|trans }}</th>
-                                            {% else %}
-                                                {% if not is_invitee %}
-                                                    <th>{{ "Progress"|trans }}</th>
-                                                {% endif %}
-
-                                                <th>{{ "Actions"|trans }}</th>
-                                            {% endif %}
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for row in lp_data.lp_list %}
-                                            <tr>
-                                                <td>
-                                                    {{ row.learnpath_icon }}
-                                                    <a href="{{ row.url_start }}">
-                                                        {{ row.title }}
-                                                        {{ row.session_image }}
-                                                        {{ row.extra }}
-                                                    </a>
-                                                </td>
-                                                {% if is_allowed_to_edit %}
+                                                {% if allow_min_time %}
                                                     <td>
-                                                        {% if row.start_time %}
-                                                            <span class="small">{{ row.start_time }}</span>
+                                                        {% if row.info_time_prerequisite %}
+                                                            {{ row.info_time_prerequisite }}
                                                         {% endif %}
                                                     </td>
-                                                    <td>
-                                                        <span class="small">{{ row.end_time }}</span>
-                                                    </td>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if not is_invitee %}
                                                     <td>
                                                         {{ row.dsp_progress }}
                                                     </td>
+                                                {% endif %}
+                                                {% if allow_min_time %}
+                                                    <td>
+                                                        {% if row.info_time_prerequisite %}
+                                                            {{ row.info_time_prerequisite }}
+                                                        {% endif %}
+                                                    </td>
+                                                {% endif %}
+                                            {% endif %}
+                                            <td>
+                                                {{ row.action_build }}
+                                                {{ row.action_edit }}
+                                                {{ row.action_visible }}
+                                                {{ row.action_tracking }}
+                                                {{ row.action_publish }}
+                                                {{ row.action_subscribe_users }}
+                                                {{ row.action_serious_game }}
+                                                {{ row.action_reinit }}
+                                                {{ row.action_default_view }}
+                                                {{ row.action_debug }}
+                                                {{ row.action_export }}
+                                                {{ row.action_copy }}
+                                                {{ row.action_auto_launch }}
+                                                {{ row.action_pdf }}
+                                                {{ row.action_delete }}
+                                                {{ row.action_order }}
+                                                {{ row.action_update_scorm }}
+                                                {{ row.action_export_to_course_build }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
+                        <!--- end old view -->
+                    {% else %}
+                        <!-- new view block accordeon -->
+                        {% if lp_data.category.id == 0 %}
+                            {% if is_allowed_to_edit %}
+                                {% if lp_data.lp_list %}
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>{{ "Title"|trans }}</th>
+                                                {% if is_allowed_to_edit %}
+                                                    <th>{{ "Publication date"|trans }}</th>
+                                                    <th>{{ "Expiration date"|trans }}</th>
+                                                    <th>{{ "Progress"|trans }}</th>
+                                                    <th>{{ "Authoring options"|trans }}</th>
                                                 {% else %}
                                                     {% if not is_invitee %}
+                                                        <th>{{ "Progress"|trans }}</th>
+                                                    {% endif %}
+
+                                                    <th>{{ "Actions"|trans }}</th>
+                                                {% endif %}
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for row in lp_data.lp_list %}
+                                                <tr>
+                                                    <td>
+                                                        {{ row.learnpath_icon }}
+                                                        <a href="{{ row.url_start }}">
+                                                            {{ row.title }}
+                                                            {{ row.session_image }}
+                                                            {{ row.extra }}
+                                                        </a>
+                                                    </td>
+                                                    {% if is_allowed_to_edit %}
+                                                        <td>
+                                                            {% if row.start_time %}
+                                                                <span class="small">{{ row.start_time }}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <span class="small">{{ row.end_time }}</span>
+                                                        </td>
                                                         <td>
                                                             {{ row.dsp_progress }}
                                                         </td>
+                                                        {% if allow_min_time %}
+                                                            <td>
+                                                                {% if row.info_time_prerequisite %}
+                                                                    {{ row.info_time_prerequisite }}
+                                                                {% endif %}
+                                                            </td>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if not is_invitee %}
+                                                            <td>
+                                                                {{ row.dsp_progress }}
+                                                            </td>
+                                                        {% endif %}
+                                                        {% if allow_min_time %}
+                                                            <td>
+                                                                {% if row.info_time_prerequisite %}
+                                                                    {{ row.info_time_prerequisite }}
+                                                                {% endif %}
+                                                            </td>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                    <td>
+                                                        {{ row.action_build }}
+                                                        {{ row.action_edit }}
+                                                        {{ row.action_visible }}
+                                                        {{ row.action_tracking }}
+                                                        {{ row.action_publish }}
+                                                        {{ row.action_subscribe_users }}
+                                                        {{ row.action_serious_game }}
+                                                        {{ row.action_reinit }}
+                                                        {{ row.action_default_view }}
+                                                        {{ row.action_debug }}
+                                                        {{ row.action_export }}
+                                                        {{ row.action_copy }}
+                                                        {{ row.action_auto_launch }}
+                                                        {{ row.action_pdf }}
+                                                        {{ row.action_delete }}
+                                                        {{ row.action_order }}
+                                                        {{ row.action_update_scorm }}
+                                                        {{ row.action_export_to_course_build }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div id="not-category" class="panel panel-default">
+                                    <div class="panel-body">
+                                        {% for row in lp_data.lp_list %}
+                                            <div class="lp-item">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                                                        <a href="{{ row.url_start }}">
+                                                            {{ row.title }}
+                                                            {{ row.session_image }}
+                                                            {{ row.extra }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        {{ row.dsp_progress }}
+                                                    </div>
+                                                    {% if allow_min_time %}
+                                                        <div class="col-md-2">
+                                                            {% if row.info_time_prerequisite %}
+                                                                {{ row.info_time_prerequisite }}
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="col-md-1">
+                                                        {{ row.action_pdf }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if categories|length > 1 and lp_data.category.id %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading-{{ lp_data.category.iid }}">
+                                    {% if is_allowed_to_edit %}
+                                        <div class="tools-actions pull-right">
+                                            {% if lp_data.category.iid > 0 %}
+                                                {% if not session %}
+                                                    <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
+                                                       title="{{ "Edit"|trans }}">
+                                                        <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|trans }}">
+                                                    </a>
+
+                                                    {% if subscription_settings.allow_add_users_to_lp_category %}
+                                                        <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_users_to_category&id=' ~ lp_data.category.iid }}"
+                                                           title="{{ "AddUsers"|trans }}">
+                                                            <img src="{{ "user.png"|icon }}" alt="{{ "AddUsers"|trans }}">
+                                                        </a>
+                                                    {% endif %}
+
+                                                    {% if loop.index0 == 1 %}
+                                                        <a href="#">
+                                                            <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
+                                                           title="{{ "Move"|trans }}">
+                                                            <img src="{{ "up.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                        </a>
+                                                    {% endif %}
+
+                                                    {% if (data|length - 1) == loop.index0 %}
+                                                        <a href="#">
+                                                            <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
+                                                           title="{{ "Move"|trans }}">
+                                                            <img src="{{ "down.png"|icon }}" alt="{{ "Move"|trans }}">
+                                                        </a>
                                                     {% endif %}
                                                 {% endif %}
 
-                                                <td>
-                                                    {{ row.action_build }}
-                                                    {{ row.action_edit }}
-                                                    {{ row.action_visible }}
-                                                    {{ row.action_tracking }}
-                                                    {{ row.action_publish }}
-                                                    {{ row.action_subscribe_users }}
-                                                    {{ row.action_serious_game }}
-                                                    {{ row.action_reinit }}
-                                                    {{ row.action_default_view }}
-                                                    {{ row.action_debug }}
-                                                    {{ row.action_export }}
-                                                    {{ row.action_copy }}
-                                                    {{ row.action_auto_launch }}
-                                                    {{ row.action_pdf }}
-                                                    {{ row.action_delete }}
-                                                    {{ row.action_order }}
-                                                    {{ row.action_update_scorm }}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% endif %}
-                        {% else %}
-                            <div id="not-category" class="panel panel-default">
-                                <div class="panel-body">
-                                    {% for row in lp_data.lp_list %}
-                                        <div class="lp-item">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-                                                    <a href="{{ row.url_start }}">
-                                                        {{ row.title }}
-                                                        {{ row.session_image }}
-                                                        {{ row.extra }}
+                                                {% if lp_data.category_visibility == 0 %}
+                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                                       title="{{ 'Show'|trans }}">
+                                                        <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|trans }}">
                                                     </a>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    {{ row.dsp_progress }}
-                                                </div>
-                                                <div class="col-md-1">
-                                                    {{ row.action_pdf }}
-                                                </div>
-                                            </div>
+                                                {% else %}
+                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                                       title="{{ 'Hide'|trans }}">
+                                                        <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|trans }}">
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if lp_data.category_visibility == 1 %}
+                                                    {% if lp_data.category_is_published == 0 %}
+                                                        <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                                           title="{{ 'LearnpathPublish'|trans }}">
+                                                            <img src="{{ 'lp_publish_na.png'|icon }}"
+                                                                 alt="{{ 'LearnpathPublish'|trans }}">
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                                           title="{{ 'LearnpathDoNotPublish'|trans }}">
+                                                            <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|trans }}">
+                                                        </a>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <img src="{{ 'lp_publish_na.png'|icon }}"
+                                                         alt="{{ 'LearnpathPublish'|trans }}">
+                                                {% endif %}
+
+                                                {% if not session %}
+                                                    <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
+                                                       title="{{ "Delete"|trans }}">
+                                                        <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|trans }}">
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
                                         </div>
-                                    {% endfor %}
+                                    {% endif %}
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#lp-accordion"
+                                           href="#collapse-{{ lp_data.category.iid }}" aria-expanded="true"
+                                           aria-controls="collapse-{{ lp_data.category.iid }}">
+                                            {{ lp_data.category.getName() }}
+                                            {% if lp_data.category.sessionId %}
+                                                {{ session_star_icon }}
+                                            {% endif %}
+                                        </a>
+                                    </h4>
                                 </div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
+                                {% set number = number + 1 %}
+                                <div id="collapse-{{ lp_data.category.iid }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
+                                     role="tabpanel" aria-labelledby="heading-{{ lp_data.category.iid }}">
+                                    <div class="panel-body">
+                                        {% if lp_data.lp_list %}
 
-                    {% if categories|length > 1 and lp_data.category.id %}
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="heading-{{ lp_data.category.iid }}">
-                                {% if is_allowed_to_edit %}
-                                    <div class="tools-actions pull-right">
-                                        {% if lp_data.category.iid > 0 %}
-                                            {% if not session %}
-                                                <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
-                                                   title="{{ "Edit"|trans }}">
-                                                    <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|trans }}">
-                                                </a>
-
-                                                {% if subscription_settings.allow_add_users_to_lp_category %}
-                                                    <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_users_to_category&id=' ~ lp_data.category.iid }}"
-                                                       title="{{ "AddUsers"|trans }}">
-                                                        <img src="{{ "user.png"|icon }}" alt="{{ "AddUsers"|trans }}">
-                                                    </a>
-                                                {% endif %}
-
-                                                {% if loop.index0 == 1 %}
-                                                    <a href="#">
-                                                        <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|trans }}">
-                                                    </a>
-                                                {% else %}
-                                                    <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
-                                                       title="{{ "Move"|trans }}">
-                                                        <img src="{{ "up.png"|icon }}" alt="{{ "Move"|trans }}">
-                                                    </a>
-                                                {% endif %}
-
-                                                {% if (data|length - 1) == loop.index0 %}
-                                                    <a href="#">
-                                                        <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|trans }}">
-                                                    </a>
-                                                {% else %}
-                                                    <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
-                                                       title="{{ "Move"|trans }}">
-                                                        <img src="{{ "down.png"|icon }}" alt="{{ "Move"|trans }}">
-                                                    </a>
-                                                {% endif %}
-                                            {% endif %}
-
-                                            {% if lp_data.category_visibility == 0 %}
-                                                <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
-                                                   title="{{ 'Show'|trans }}">
-                                                    <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|trans }}">
-                                                </a>
-                                            {% else %}
-                                                <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                                                   title="{{ 'Hide'|trans }}">
-                                                    <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|trans }}">
-                                                </a>
-                                            {% endif %}
-
-                                            {% if lp_data.category_visibility == 1 %}
-                                                {% if lp_data.category_is_published == 0 %}
-                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
-                                                       title="{{ 'LearnpathPublish'|trans }}">
-                                                        <img src="{{ 'lp_publish_na.png'|icon }}"
-                                                             alt="{{ 'LearnpathPublish'|trans }}">
-                                                    </a>
-                                                {% else %}
-                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                                                       title="{{ 'LearnpathDoNotPublish'|trans }}">
-                                                        <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|trans }}">
-                                                    </a>
-                                                {% endif %}
-                                            {% else %}
-                                                <img src="{{ 'lp_publish_na.png'|icon }}"
-                                                     alt="{{ 'LearnpathPublish'|trans }}">
-                                            {% endif %}
-
-                                            {% if not session %}
-                                                <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
-                                                   title="{{ "Delete"|trans }}">
-                                                    <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|trans }}">
-                                                </a>
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                                <h4 class="panel-title">
-                                    <a role="button" data-toggle="collapse" data-parent="#lp-accordion"
-                                       href="#collapse-{{ lp_data.category.iid }}" aria-expanded="true"
-                                       aria-controls="collapse-{{ lp_data.category.iid }}">
-                                        {{ lp_data.category.getName() }}
-                                    </a>
-                                </h4>
-                            </div>
-
-                            <div id="collapse-{{ lp_data.category.iid }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
-                                 role="tabpanel" aria-labelledby="heading-{{ lp_data.category.iid }}">
-                                <div class="panel-body">
-                                    {% if lp_data.lp_list %}
-
-                                        {% if is_allowed_to_edit %}
-                                            <div class="table-responsive">
-                                                <table class="table table-hover table-striped">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>{{ "Title"|trans }}</th>
-                                                        {% if is_allowed_to_edit %}
-                                                            <th>{{ "Publication date"|trans }}</th>
-                                                            <th>{{ "Expiration date"|trans }}</th>
-                                                            <th>{{ "Progress"|trans }}</th>
-                                                            <th>{{ "Authoring options"|trans }}</th>
-                                                        {% else %}
-                                                            {% if not is_invitee %}
-                                                                <th>{{ "Progress"|trans }}</th>
-                                                            {% endif %}
-
-                                                            <th>{{ "Actions"|trans }}</th>
-                                                        {% endif %}
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for row in lp_data.lp_list %}
+                                            {% if is_allowed_to_edit %}
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped">
+                                                        <thead>
                                                         <tr>
-                                                            <td>
-                                                                {{ row.learnpath_icon }}
+                                                            <th>{{ "Title"|trans }}</th>
+                                                            {% if is_allowed_to_edit %}
+                                                                <th>{{ "Publication date"|trans }}</th>
+                                                                <th>{{ "Expiration date"|trans }}</th>
+                                                                <th>{{ "Progress"|trans }}</th>
+                                                                <th>{{ "Authoring options"|trans }}</th>
+                                                            {% else %}
+                                                                {% if not is_invitee %}
+                                                                    <th>{{ "Progress"|trans }}</th>
+                                                                {% endif %}
+
+                                                                <th>{{ "Actions"|trans }}</th>
+                                                            {% endif %}
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for row in lp_data.lp_list %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{ row.learnpath_icon }}
+                                                                    <a href="{{ row.url_start }}">
+                                                                        {{ row.title }}
+                                                                        {{ row.session_image }}
+                                                                        {{ row.extra }}
+                                                                    </a>
+                                                                </td>
+                                                                {% if is_allowed_to_edit %}
+                                                                    <td>
+                                                                        {% if row.start_time %}
+                                                                            <span class="small">{{ row.start_time }}</span>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="small">{{ row.end_time }}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ row.dsp_progress }}
+                                                                    </td>
+                                                                    {% if allow_min_time %}
+                                                                        <td>
+                                                                            {% if row.info_time_prerequisite %}
+                                                                                {{ row.info_time_prerequisite }}
+                                                                            {% endif %}
+                                                                        </td>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {% if not is_invitee %}
+                                                                        <td>
+                                                                            {{ row.dsp_progress }}
+                                                                        </td>
+                                                                    {% endif %}
+                                                                    {% if allow_min_time %}
+                                                                        <td>
+                                                                            {% if row.info_time_prerequisite %}
+                                                                                {{ row.info_time_prerequisite }}
+                                                                            {% endif %}
+
+                                                                        </td>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <td>
+                                                                    {{ row.action_build }}
+                                                                    {{ row.action_edit }}
+                                                                    {{ row.action_visible }}
+                                                                    {{ row.action_tracking }}
+                                                                    {{ row.action_publish }}
+                                                                    {{ row.action_subscribe_users }}
+                                                                    {{ row.action_serious_game }}
+                                                                    {{ row.action_reinit }}
+                                                                    {{ row.action_default_view }}
+                                                                    {{ row.action_debug }}
+                                                                    {{ row.action_export }}
+                                                                    {{ row.action_copy }}
+                                                                    {{ row.action_auto_launch }}
+                                                                    {{ row.action_pdf }}
+                                                                    {{ row.action_delete }}
+                                                                    {{ row.action_order }}
+                                                                    {{ row.action_update_scorm }}
+                                                                    {{ row.action_export_to_course_build }}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            {% else %}
+                                                {% for row in lp_data.lp_list %}
+                                                    <div class="lp-item">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
                                                                 <a href="{{ row.url_start }}">
                                                                     {{ row.title }}
                                                                     {{ row.session_image }}
                                                                     {{ row.extra }}
                                                                 </a>
-                                                            </td>
-                                                            {% if is_allowed_to_edit %}
-                                                                <td>
-                                                                    {% if row.start_time %}
-                                                                        <span class="small">{{ row.start_time }}</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                {{ row.dsp_progress }}
+                                                            </div>
+                                                            {% if allow_min_time %}
+                                                                <div class="col-md-2">
+                                                                    {% if row.info_time_prerequisite %}
+                                                                        {{ row.info_time_prerequisite }}
                                                                     {% endif %}
-                                                                </td>
-                                                                <td>
-                                                                    <span class="small">{{ row.end_time }}</span>
-                                                                </td>
-                                                                <td>
-                                                                    {{ row.dsp_progress }}
-                                                                </td>
-                                                            {% else %}
-                                                                {% if not is_invitee %}
-                                                                    <td>
-                                                                        {{ row.dsp_progress }}
-                                                                    </td>
-                                                                {% endif %}
+                                                                </div>
                                                             {% endif %}
-
-                                                            <td>
-                                                                {{ row.action_build }}
-                                                                {{ row.action_edit }}
-                                                                {{ row.action_visible }}
-                                                                {{ row.action_tracking }}
-                                                                {{ row.action_publish }}
-                                                                {{ row.action_subscribe_users }}
-                                                                {{ row.action_serious_game }}
-                                                                {{ row.action_reinit }}
-                                                                {{ row.action_default_view }}
-                                                                {{ row.action_debug }}
-                                                                {{ row.action_export }}
-                                                                {{ row.action_copy }}
-                                                                {{ row.action_auto_launch }}
+                                                            <div class="col-md-1">
                                                                 {{ row.action_pdf }}
-                                                                {{ row.action_delete }}
-                                                                {{ row.action_order }}
-                                                                {{ row.action_update_scorm }}
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        {% else %}
-                                            {% for row in lp_data.lp_list %}
-                                                <div class="lp-item">
-                                                    <div class="row">
-                                                        <div class="col-md-8">
-                                                            <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-                                                            <a href="{{ row.url_start }}">
-                                                                {{ row.title }}
-                                                                {{ row.session_image }}
-                                                                {{ row.extra }}
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            {{ row.dsp_progress }}
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            {{ row.action_pdf }}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            {% endfor %}
+                                                {% endfor %}
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
+                        <!-- end view block accordeon -->
                     {% endif %}
-                    <!-- end view block accordeon -->
                 {% endif %}
-            {% endif %}
-        {% endfor %}
-    </div>
-
-    {% if not is_invitee and lp_is_shown and allow_min_time %}
-        <div class="controls text-center">
-            {% if not is_ending %}
-                <button class="btn btn-primary" type="button" disabled>
-                    {{ 'I have finished the lessons, notify the teacher'|trans }}
-                </button>
-            {% else %}
-                <a href="{{ web_self ~ "?" ~ course_url_params ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
-                    {{ 'I have finished the lessons, notify the teacher'|trans }}
-                </a>
-            {% endif %}
+            {% endfor %}
         </div>
-    {% endif %}
 
-    {% if is_allowed_to_edit and not lp_is_shown %}
-        <div id="no-data-view" class="tool-view">
-            <h2>{{ "Learning paths"|trans }}</h2>
-            <img src="{{ "scorms.png"|icon(64) }}" width="64" height="64">
-            <div class="controls">
-                <a href="{{ url('legacy_main', {name: 'lp/lp_controller.php'}) ~ "?" ~ course_url_params ~ "&action=add_lp" }}" class="btn btn-default">
-                    {{ "Create new learning path"|trans }}
-                </a>
+        {% if not is_invitee and lp_is_shown and allow_min_time %}
+            <div class="controls text-center">
+                {% if not is_ending %}
+                    <button class="btn btn-primary" type="button" disabled>
+                        {{ 'I have finished the lessons, notify the teacher'|trans }}
+                    </button>
+                {% else %}
+                    <a href="{{ web_self ~ "?" ~ course_url_params ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
+                        {{ 'I have finished the lessons, notify the teacher'|trans }}
+                    </a>
+                {% endif %}
             </div>
-        </div>
-    {% endif %}
-{% endautoescape %}
+        {% endif %}
+
+        {% if not is_invitee and lp_is_shown and allow_min_time and is_ending %}
+            <div id="lp_download_file_after_finish" class="controls text-center">
+                {{ download_files_after_finish }}
+            </div>
+        {% endif %}
+        {% if is_allowed_to_edit and not lp_is_shown %}
+            <div id="no-data-view" class="tool-view">
+                <h2>{{ "Learning paths"|trans }}</h2>
+                <img src="{{ "scorms.png"|icon(64) }}" width="64" height="64">
+                <div class="controls">
+                    <a href="{{ url('legacy_main', {name: 'lp/lp_controller.php'}) ~ "?" ~ course_url_params ~ "&action=add_lp" }}" class="btn btn-default">
+                        {{ "Create new learning path"|trans }}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    {% endautoescape %}
 {% endblock %}

@@ -53,8 +53,8 @@
                         <div id="heading_item_{{item.id}}" class="panel-heading" role="tab">
                             {% if item.children|length %}
                                 <a class="item-header" role="button"
-                                   data-toggle="collapse" data-parent="#toc_{{ item.parent_id }}"
-                                   href="#toc_{{ item.id }}"
+                                   data-toggle="collapse" data-parent="#tocchildren_{{ item.parent_id }}"
+                                   href="#tocchildren_{{ item.id }}"
                                    aria-expanded="true" aria-controls="tocchildren_{{ item.id }}">
                                     {{ item.title }}
                                 </a>

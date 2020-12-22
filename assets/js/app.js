@@ -612,7 +612,8 @@ if (typeof CKEDITOR !== 'undefined') {
       editorName = ckeditorName;
     }
     CKEDITOR.editorConfig(CKEDITOR.config);
-    CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
+
+    /*CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
       var templatesConfig = CKEDITOR.getTemplates("default");
       var $templatesUL = $("<ul>");
       if (templatesConfig) {
@@ -643,7 +644,7 @@ if (typeof CKEDITOR !== 'undefined') {
         });
       }
       $templatesUL.appendTo("#frmModel");
-    });
+    });*/
   };
 }
 

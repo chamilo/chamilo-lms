@@ -2630,7 +2630,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int    $max       Optional. The maximum price filter
      * @param mixed  $appliesTo optional
      *
-     * @return array
+     * @return array|int
      */
     public function getCatalogServiceList($start, $end, $name = null, $min = 0, $max = 0, $appliesTo = '', $typeResult = 'all')
     {

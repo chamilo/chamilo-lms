@@ -160,6 +160,22 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this;
     }
 
+    public function findResourceByTitle(
+        $title,
+        ResourceNode $parentNode,
+        Course $course,
+        Session $session = null,
+        $group = null
+    ) {
+        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
+        $qb
+            ->andWhere('node.title = :title')
+            ->setParameter('title', $title)
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function getClassName()
     {
         $class = get_class($this);

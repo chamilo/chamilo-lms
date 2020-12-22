@@ -153,18 +153,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $query->getResult();
     }
 
-    public function findOneByTitle($title, $parentNode, $course, $session, $group = null)
-    {
-        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
-        $qb
-            ->andWhere('resource.title = :title')
-            ->setParameter('title', $title)
-            ->setMaxResults(1)
-        ;
-
-        return $qb->getQuery()->getOneOrNullResult();
-    }
-
     public function getResourceFormType(): string
     {
         return CDocumentType::class;

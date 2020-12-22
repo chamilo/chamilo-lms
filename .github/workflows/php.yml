@@ -44,11 +44,11 @@ jobs:
             - name: Cache composer dependencies
               uses: actions/cache@v2
               with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                # Use composer.json for key, if composer.lock is not committed.
-                # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: ${{ runner.os }}-composer-
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  # Use composer.json for key, if composer.lock is not committed.
+                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
               run: composer install --prefer-dist --no-progress --no-suggest
@@ -75,12 +75,12 @@ jobs:
             - name: Yarn install
               uses: borales/actions-yarn@v2.3.0
               with:
-                cmd: install # will run `yarn install` command
+                  cmd: install # will run `yarn install` command
 
             - name: Yarn run encore dev
               uses: borales/actions-yarn@v2.3.0
               with:
-                cmd: run encore dev
+                  cmd: run encore dev
 
             - name: Install database
               run: |

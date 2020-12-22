@@ -5,7 +5,6 @@ services:
         autoconfigure: true
 
     Vich\UploaderBundle\Storage\FlysystemStorage: ~
-#    Chamilo\CoreBundle\Repository\ResourceFactory: ~
     Chamilo\CoreBundle\Repository\ResourceNodeRepository: ~
 
     # Classic entity repositories
@@ -29,8 +28,8 @@ services:
     Chamilo\CoreBundle\Repository\Node\UserRepository:
         calls:
             - setEncoder: ['@security.user_password_encoder.generic']
-            - setAuthorizationChecker: [ '@security.authorization_checker' ]
-            - setRouter: [ '@router' ]
-            - setSlugify: [ '@cocur_slugify' ]
-            - setToolChain: [ '@Chamilo\CoreBundle\ToolChain' ]
-            - setResourceNodeRepository: [ '@Chamilo\CoreBundle\Repository\ResourceNodeRepository' ]
+            - setAuthorizationChecker: [ '@security.authorization_checker']
+            - setRouter: ['@router']
+            - setSlugify: ['@cocur_slugify']
+            - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
+            - setResourceNodeRepository: [ '@Chamilo\CoreBundle\Repository\ResourceNodeRepository']

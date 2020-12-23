@@ -7,7 +7,7 @@
  * Pay attention when changing these variables, some changes may cause Chamilo to stop working.
  * If you changed some settings and want to restore them, please have a look at
  * configuration.dist.php. That file is an exact copy of the config file at install time.
- * Besides the $_configuration, a $_settings array also exists, that
+ * Besides the $_configuration, a	 $_settings array also exists, that
  * contains variables that can be changed and will not break the platform.
  * These optional settings are defined in the database, now
  * (table settings_current).
@@ -131,7 +131,7 @@ $_configuration['deny_delete_users'] = false;
 // E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php
 //$_configuration['cron_notification_mails'] = array('email@example.com', 'email2@example.com');
 
-// Only shows the fields in this list
+// Help desk emails that will recieve email notifications in import_csv.php
 //$_configuration['cron_notification_help_desk'] = array('email@example.com', 'email2@example.com');
 
 // Only shows the fields in this list
@@ -258,8 +258,9 @@ $_configuration['tracking_columns'] = [
 ];
 */
 
-// ------ AGENDA CONFIGURATION SETTINGS
-// Shows a legend in the agenda tool
+// Hide session link of course_block on index/userportal
+//$_configuration['remove_session_url']= false ;
+// Allow foldable block for session list in session category on My courses tab
 //$_configuration['user_portal_foldable_session_category'] = false;
 //
 //
@@ -284,25 +285,7 @@ $_configuration['agenda_colors'] = [
 */
 // ------
 //
-// Save some tool titles with HTML editor. Require DB changes:
-/*
-ALTER TABLE course_category CHANGE name name LONGTEXT NOT NULL;
-ALTER TABLE c_course_description CHANGE title title LONGTEXT NOT NULL;
-ALTER TABLE c_thematic CHANGE title title LONGTEXT NOT NULL;
-ALTER TABLE c_quiz CHANGE title title LONGTEXT NOT NULL;
-ALTER TABLE c_lp_category CHANGE name name LONGTEXT NOT NULL;
-ALTER TABLE c_glossary CHANGE name name LONGTEXT NOT NULL;
-ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL;
--- Only with allow_portfolio_tool enabled
-ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL;
-ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
-
-New changes:
-
-ALTER TABLE c_lp CHANGE name name LONGTEXT NOT NULL;
-ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
---
-*/
+// Save some tool titles with HTML editor
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
@@ -312,6 +295,8 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['session_list_show_count_users'] = false;
 // Session admin access to all course content
 //$_configuration['session_admins_access_all_content'] = false;
+// Session admin allowed to edit all courses content
+//$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
 //$_configuration['system_announce_extra_roles'] = false;
 // Limits that a session admin has access to list users
@@ -399,11 +384,7 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 //
 // ------ Survey configuration settings
 // Add answered_at field in table survey_invitation
-// Requires DB change:
-// ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;
 //$_configuration['survey_answered_at_field'] = false;
-// Add support to mandatory surveys. The user will not be able to enter to the course until fill the mandatory surveys
-// Requires DB change:
 // Add support to mandatory surveys. The user will not be able to enter to the course until fill the mandatory surveys
 // Requires DB change:
 /*
@@ -412,19 +393,22 @@ VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
 */
 //$_configuration['allow_mandatory_survey'] = false;
 // Allow required survey questions. Applies to yesno/multiplechoice question type. Requires DB change:
-/*
-ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
-*/
 //$_configuration['allow_required_survey_questions'] = false;
 // Hide Survey Reporting button
 //$_configuration['hide_survey_reporting_button'] = false;
 // Hide survey edition tools for all or some surveys.
 //Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked
 //$_configuration['hide_survey_edition'] = ['codes' => []];
-// Allows to set the date and time of availability for surveys. Requires DB changes:
-// ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL, CHANGE avail_till avail_till DATETIME DEFAULT NULL;
+// Allows to set the date and time of availability for surveys.
 // Requires change the Doctrine type from date to datime in CSurvey::$availFrom and CSurvey::$availTill
 //$_configuration['allow_survey_availability_datetime'] = false;
+// Mark the "Required" field during question creation process when displaying the form.
+//$_configuration['survey_mark_question_as_required'] = false;
+// Allow add additional actions (as links) in survey list for teachers.
+// e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
+//$_configuration['survey_additional_teacher_modify_actions'] = [];
+// Allow show answers in anonymous surveys
+//$_configuration['survey_anonymous_show_answered'] = false;
 // ------
 
 // Allow career diagram, requires a DB change:
@@ -433,18 +417,11 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //ALTER TABLE extra_field_values modify column value longtext null;
 //$_configuration['allow_career_diagram'] = false;
 // Allow scheduled emails to session users.
-//CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 // sudo mkdir app/upload/scheduled_announcement
-// Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Uncomment and set the following setting to true before moving on
 //$_configuration['allow_scheduled_announcements'] = false;
-// Add the list of emails as a bcc when sending an email.
-//$_configuration['allow_career_diagram'] = false;
-// Allow scheduled emails to session users.
-//CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
-// sudo mkdir app/upload/scheduled_announcement
-// Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
-// Add "send_to_coaches" checkbox field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
-//$_configuration['allow_scheduled_announcements'] = false;
+// Add "attachment" file upload extra field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Add "send_to_coaches" checkbox options field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 // Add the list of emails as a bcc when sending an email.
 // Configure a cron task pointing at main/cron/scheduled_announcement.php
 /*
@@ -460,38 +437,43 @@ $_configuration['send_all_emails_to'] = [
         1 => [17] // project_id = 1, STUDENT_BOSS = 17
     ]
 ];*/
+// Allow additional data (exercise and learningpath) in the ticket
+// - Required DB change
+// ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL AFTER course_id;
+// ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C987 FOREIGN KEY (exercise_id) REFERENCES c_quiz (iid);
+// ALTER TABLE ticket_ticket ADD lp_id INT DEFAULT NULL AFTER exercise_id;
+// ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C231 FOREIGN KEY (lp_id) REFERENCES c_lp (iid);
+// $_configuration['ticket_lp_quiz_info_add'] = false;
 
 // Exercises configuration settings
 // Send only quiz answer notifications to course coaches and not general coach
 //$_configuration['block_quiz_mail_notification_general_coach'] = false;
-// Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
+// Show question feedback
 //$_configuration['allow_quiz_question_feedback'] = false;
 // Add option in exercise to show or hide the "previous" button.
-//ALTER TABLE c_quiz ADD show_previous_button TINYINT(1) DEFAULT 1;
 //$_configuration['allow_quiz_show_previous_button_setting'] = false;
 // Allow to teachers review exercises question with audio notes
 //$_configuration["allow_teacher_comment_audio"] = false;
-// Hide search form in session list
-//$_configuration['hide_search_form_in_session_list'] = false;
-// Allow exchange of messages from teachers/bosses about a user.
-//$_configuration['private_messages_about_user'] = false;
-// Allow the messages to be visible for the students
-//$_configuration['private_messages_about_user_visible_to_user'] = false;
-// Allow send email notification per exercise
-//ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;
-//$_configuration['allow_notification_setting_per_exercise'] = false;
-// Hide free/oral/annotation question result see BT#12613
-//$_configuration['hide_free_question_score'] = false;
-// Hide user information in the quiz result's page
-//$_configuration['hide_user_info_in_quiz_result'] = false;
-// Show the username field in exercise results report
-//$_configuration['exercise_attempts_report_show_username'] = false;
-
-// Score model
-// Allow to convert a score into a text/color label
-// using a model if score is inside those values. See BT#12898
+// Block copy/paste/save/print keys and right-clicks in exercises
+//$_configuration['quiz_prevent_copy_paste'] = false;
+// Always show the test description on the results page of the test
+//$_configuration['quiz_show_description_on_results_page'] = false;
+// Allow add additional actions (as links) in exercises list for teachers.
+// Callback get the $exerciseId and $iconSize as parameters.
+// e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
+//$_configuration['exercise_additional_teacher_modify_actions'] = []
+// Generate certificate when ending a quiz.
+// The quiz needs to be linked to a gradebook category and have set the pass percentage.
+//$_configuration['quiz_generate_certificate_ending'] = false;
+// Allow the teacher to rate the open, oral expression and annotation question types with a decimal score.
+//$_configuration['quiz_open_question_decimal_score'] = false;
+// Add answer-saving procedure check before starting the quiz
+//$_configuration['quiz_check_button_enable'] = false;
+// Add a checkbox to allow to user confirm the number of answers saved in quiz attempt
+// - Requires to edit the src/Chamilo/CoreBundle/Entity/TrackEExerciseConfirmation.php file adding the "@" in the ORM phpdoc block
+// - Requires DB changes:
+// CREATE TABLE track_e_exercise_confirmation (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, course_id INT NOT NULL, attempt_id INT NOT NULL, quiz_id INT NOT NULL, session_id INT NOT NULL, confirmed TINYINT(1) DEFAULT '0' NOT NULL, questions_count INT NOT NULL, saved_answers_count INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 //$_configuration['quiz_confirm_saved_answers'] = false;
-
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.
@@ -499,7 +481,6 @@ $_configuration['send_all_emails_to'] = [
 // Allow the messages to be visible for the students
 //$_configuration['private_messages_about_user_visible_to_user'] = false;
 // Allow send email notification per exercise
-//ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;
 //$_configuration['allow_notification_setting_per_exercise'] = false;
 // Hide free/oral/annotation question result see BT#12613
 //$_configuration['hide_free_question_score'] = false;
@@ -559,9 +540,10 @@ $_configuration['score_grade_model'] = [
 // SETTINGS FOR USER COURSE LIST
 // Manage the links to Session Index page
 // 1 = Default. Works as it is now (default is to link to the special session page)
-// 0 = No link (not clickable)
+// 0 = No link (hide session title)
 // 2 = Link to the course if there is only one course
 // 3 = Session link will make course list foldable
+// 4 = No link (only session title)
 //$_configuration['courses_list_session_title_link'] = 1;
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = true;
@@ -588,7 +570,6 @@ $_configuration['score_grade_model'] = [
 // ALTER TABLE gradebook_category ADD COLUMN gradebooks_to_validate_in_dependence INT DEFAULT NULL;
 // $_configuration['gradebook_dependency'] = false;
 // Courses id list to check in the gradebook sidebar see BT#13099
-// Courses id list to check in the gradebook sidebar see BT#13099
 /*$_configuration['gradebook_dependency_mandatory_courses'] = [
     'courses' => [1, 2]
 ];*/
@@ -598,6 +579,9 @@ $_configuration['gradebook_badge_sidebar'] = [
     'gradebooks' => [1, 2, 3]
 ];*/
 
+// Show language selector in main menu an update the language in the user's
+// profile.
+//$_configuration['show_language_selector_in_menu'] = false;
 // When using the my-courses list filter by category, set this option to true
 // to only show courses in the user's configured language
 // $_configuration['my_courses_show_courses_in_user_language_only'] = false;
@@ -608,10 +592,6 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Disable delete all announcements button
 //$_configuration['disable_delete_all_announcements'] = false;
 
-// Default glossary view "table" or "list"
-//$_configuration['default_glossary_view'] = 'table';
-
-// Allow or block user subscriptions to a lp/lp category
 // Default glossary view "table" or "list"
 //$_configuration['default_glossary_view'] = 'table';
 
@@ -825,7 +805,7 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;
 
-// My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
+// My courses session order. Possible field values: "start_date", "end_date", "name" Order values: "asc" or "desc"
 // $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
 
 // Allow set courses in session in read-only mode. Require DB changes:
@@ -850,8 +830,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Show pending survey link in user menu
 // $_configuration['show_pending_survey_in_menu'] = false;
 
-// Show multiple conditions to user during sign up process
-// Example with a GDPR condition
+// GDPR: European's General Data Protection Rules activation option
+// Set to true to disable the new personal data page inside the social network
 // menu
 // $_configuration['disable_gdpr'] = true;
 
@@ -882,6 +862,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
         ],
     ],
 ];*/
+// Make GDPR terms public (useful when using the platform for anonymous survey
+// invitations where users can leave personal info).
+// $_configuration['gdpr_terms_public'] = false;
 
 // Hide LP item prerequisite label in the LP view
 //$_configuration['hide_accessibility_label_on_lp_item'] = true;
@@ -897,27 +880,23 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
 //$_configuration['allow_teachers_to_classes'] = false;
 
-// GDPR: European's General Data Protection Rules activation option
-// Set to true to automatically enable a new personal data page inside the social network menu
-// $_configuration['enable_gdpr'] = false;
-
-// GDPR requires users to be informed of the Data Protection Officer name and contact point
-// These can only be defined here for now, but will be moved to web settings in the future.
+// Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
+// to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
 /*$_configuration['webservice_validation'] = [
     'options' => [
         'wsdl' => 'https://example.com/soap?wsdl',
         'check_login_function' => 'myWebServiceFunctionToLogin'
     ]
 ];*/
-// Name of the person or organization that is responsible for the treatment of personal info
-//$_configuration['data_protection_officer_name'] = '';
-// A description of the role of the DP Officer in this context
-//$_configuration['data_protection_officer_role'] = '';
-// An e-mail address where to contact the data protection officer for queries
-//$_configuration['data_protection_officer_email'] = '';
 
-// Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
-// to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
+// Hide the username when showing the complete name for a user.
+// Example: using api_get_user_info()['complete_name_with_username'] or $user->getCompleteNameWithUsername()
+//$_configuration['hide_username_with_complete_name'] = false;
+
+// Hide the username in course chat
+//$_configuration['hide_username_in_course_chat'] = false;
+
+// Allow multiple attempts in gradebook evaluations
 // CREATE TABLE gradebook_result_attempt (id INT AUTO_INCREMENT NOT NULL, result_id INT NOT NULL, score DOUBLE, comment LONGTEXT DEFAULT NULL, created_at DATETIME, updated_at DATETIME, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 //$_configuration['gradebook_multiple_evaluation_attempts'] = false;
 
@@ -1004,14 +983,17 @@ $_configuration['profile_fields_visibility'] = [
 // Improve speed when rendering gradebook student reports using Doctrine APCU cache
 // $_configuration['gradebook_use_apcu_cache'] = true;
 
-// Add a minimum time limit to be in the learning path
-// in order to get the last item completed
-// Add course checkbox extra field "new_tracking_system"
-// Add session checkbox extra field "new_tracking_system"
-// Only applied for courses/sessions with extra field "new_tracking_system" to "1"
-// Add course checkbox extra field "new_tracking_system"
-// Add session checkbox extra field "new_tracking_system"
-// Only applied for courses/sessions with extra field "new_tracking_system" to "1"
+/*
+ Add a minimum time limit to be in the learning path
+ in order to get the last item completed
+ Requires a DB change:
+    ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
+    CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL, tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL, ip_user varchar(255) NOT NULL, user_agent varchar(255) NOT NULL, session_id int(11) NOT NULL, c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL, login_as int(11) NOT NULL, info longtext NOT NULL, url text NOT NULL, PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
+    CREATE INDEX user_course_session ON track_e_access_complete (user_id, c_id, session_id);
+ Add course checkbox extra field "new_tracking_system"
+ Add session checkbox extra field "new_tracking_system"
+ Only applied for courses/sessions with extra field "new_tracking_system" to "1"
+*/
 //$_configuration['lp_minimum_time'] = false;
 
 // Track LP attempts using the new tracking system.
@@ -1137,6 +1119,8 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Add gradebook score style configuration in the flat view
 // See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc
 //$_configuration['gradebook_report_score_style'] = 1; //  Means the score will be (X / Y) "SCORE_DIV"
+// Allow show the score display custom (when it is enabled) in a standalone column in gradebook
+//$_configuration['gradebook_score_display_custom_standalone'] = false;
 
 // Blocks "my files" access to anon users
 //$_configuration['block_my_files_access'] = false;
@@ -1230,8 +1214,6 @@ requires extension "php-soap"  sudo apt-get install php-soap
 //$_configuration['hide_course_catalog_welcome'] = true;
 
 // Survey
-// ALTER TABLE c_survey_question ADD parent_id INT(11) DEFAULT 0 NOT NULL;
-// ALTER TABLE c_survey_question ADD parent_option_id INT(11) DEFAULT 0 NOT NULL;
 //$_configuration['survey_question_dependency'] = true;
 
 // Student publication: force to download document before upload an assignment.
@@ -1475,23 +1457,37 @@ $_configuration['auth_password_links'] = [
 //$_configuration['course_creation_donate_link'] = '<some donate button html>';
 
 // Allow my student publications page
+//$_configuration['allow_my_student_publication_page'] = false;
 
-// Disable all new exercise attempts in all the platform
-// $_configuration['exercises_disable_new_attempts'] = false;
+// Show handpicked "popular" courses on the home page instead of users-chosen
+// courses.
+// Create an extra field for courses called "popular_courses" (type CHECKBOX) OR
+// INSERT extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
+// VALUES (2, 13, 'popular_courses', 'Popular course', 1, 1, NOW());
+// $_configuration['popular_courses_handpicked'] = false;
 
-// Improve speed when rendering gradebook student reports using Doctrine APCU cache
-// $_configuration['gradebook_use_apcu_cache'] = true;
+// Default items per page in main/mySpace/users.php
+// $_configuration['my_space_users_items_per_page'] = 10;
 
-// Add collapsable option for user course categories
-// ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
-// $_configuration['allow_user_course_category_collapsable'] = false;
+// Add teachers column in course list.
+// $_configuration['add_teachers_in_course_list'] = false;
 
-// Add collapsable option when showing the course list inside a session in userportal.php
-// ALTER TABLE session_rel_user ADD collapsed TINYINT(1) DEFAULT NULL;
-// Create a new session extra field called "collapsed" (checkbox yes/no - option)
-// $_configuration['allow_user_session_collapsable'] = false;
+// Allow teachers and admins to see students as friends on social network
+// $_configuration['social_make_teachers_friend_all'] = false;
 
-// Disable Chamilo.org announcements at the top of the admin page
+// Prevent the use of images copy-paste as base64 in the editor to avoid
+// filling the database with images
+//$_configuration['ck_editor_block_image_copy_paste'] = false;
+
+// Shows a link to the "my lps" page in the /index.php and /user_portal.php page.
+// It also enables the main/lp/my_list.php page.
+//$_configuration['show_my_lps_page'] = false;
+
+// Disables access to the main/lp/my_list.php page
+//$_configuration['disable_my_lps_page'] = false;
+
+// When exercise is finished send results by email to users, depending the settings below:
+// Requires a new Exercise Extra field type called with variable = "notifications".
 /*$_configuration['exercise_finished_notification_settings'] = [
     'notification_teacher' => [ // Notification label
         'for teacher' => [ // for teacher
@@ -1643,9 +1639,26 @@ $_configuration['auth_password_links'] = [
         'ABC' => [88, 89], // Where ABC is the course code and 88 is the exercise id
     ]
 ];*/
-//$_configuration['admin_chamilo_announcements_disable'] = false;
 
-// ------ Custom DB changes (keep this at the end)
+// For a student: Shows only the list of teachers from my courses in the Chamilo inbox.
+// $_configuration['send_only_messages_to_teachers'] = true;
+
+// Survey duplicate: Order survey questions by student name
+// $_configuration['survey_duplicate_order_by_name'] = true;
+
+// Allow gradebook_comment
+/*
+CREATE TABLE gradebook_comment (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, gradebook_id INT DEFAULT NULL, comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_C3B70763A76ED395 (user_id), INDEX IDX_C3B70763AD3ED51C (gradebook_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gradebook_id) REFERENCES gradebook_category (id) ON DELETE CASCADE;
+*/
+// $_configuration['allow_gradebook_comments'] = true;
+
+// Allow anon users to send emails to the platform admin.
+// $_configuration['allow_email_editor_for_anonymous'] = true;
+
+// KEEP THIS AT THE END
+// -------- Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings

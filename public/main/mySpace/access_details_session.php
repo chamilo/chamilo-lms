@@ -356,7 +356,7 @@ if ($form->validate()) {
     $tpl = new Template('', false, false, false, true, false, false);
     $tpl->assign('title', get_lang('Certificate of achievement'));
     $tpl->assign('student', $userInfo['complete_name']);
-    $tpl->assign('table_progress', $totalTable.$totalCourseSessionTable.'<pagebreak>'.$courseSessionTable);
+    $tpl->assign('table_progress', $title.$first.$totalCourseSessionTable.'<pagebreak>'.$courseSessionTable);
 
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
@@ -424,72 +424,81 @@ if ($formByDay->validate()) {
 
     $list = Tracking::get_time_spent_on_the_platform($userId, 'wide', $from, $to, true);
     $newList = [];
-    foreach ($list as $item) {
-        $key = substr($item['login_date'], 0, 10);
+    if (!empty($list)) {
+        foreach ($list as $item) {
+            $key = substr($item['login_date'], 0, 10);
 
-        $dateLogout = substr($item['logout_date'], 0, 10);
-        if ($dateLogout > $key) {
-            $itemLogoutOriginal = $item['logout_date'];
-            $fromItemObject = DateTime::createFromFormat('Y-m-d H:i:s', $item['login_date'], new DateTimeZone('UTC'));
-            $toItemObject = DateTime::createFromFormat('Y-m-d H:i:s', $item['logout_date'], new DateTimeZone('UTC'));
-            $item['logout_date'] = api_get_utc_datetime($key.' 23:59:59');
+            $dateLogout = substr($item['logout_date'], 0, 10);
+            if ($dateLogout > $key) {
+                $itemLogoutOriginal = $item['logout_date'];
+                $fromItemObject = DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $item['login_date'],
+                    new DateTimeZone('UTC')
+                );
+                $toItemObject = DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $item['logout_date'],
+                    new DateTimeZone('UTC')
+                );
+                $item['logout_date'] = api_get_utc_datetime($key.' 23:59:59');
 
-            $period = new DatePeriod(
-                $fromItemObject,
-                new DateInterval('P1D'),
-                $toItemObject
-            );
+                $period = new DatePeriod(
+                    $fromItemObject,
+                    new DateInterval('P1D'),
+                    $toItemObject
+                );
 
-            $counter = 1;
-            $itemKey = null;
-            foreach ($period as $value) {
-                $dateToCheck = api_get_utc_datetime($value->format('Y-m-d').' 00:00:01');
-                $end = api_get_utc_datetime($value->format('Y-m-d').' 23:59:59');
-                if (1 === $counter) {
-                    $dateToCheck = $item['login_date'];
+                $counter = 1;
+                $itemKey = null;
+                foreach ($period as $value) {
+                    $dateToCheck = api_get_utc_datetime($value->format('Y-m-d').' 00:00:01');
+                    $end = api_get_utc_datetime($value->format('Y-m-d').' 23:59:59');
+                    if (1 === $counter) {
+                        $dateToCheck = $item['login_date'];
+                    }
+                    $itemKey = substr($value->format('Y-m-d'), 0, 10);
+
+                    if (isset($newList[$itemKey])) {
+                        if ($newList[$itemKey]['login_date']) {
+                            $dateToCheck = $newList[$itemKey]['login_date'];
+                        }
+                    }
+
+                    $newList[$itemKey] = [
+                        'login_date' => $dateToCheck,
+                        'logout_date' => $end,
+                        'diff' => 0,
+                    ];
+
+                    $counter++;
                 }
-                $itemKey = substr($value->format('Y-m-d'), 0, 10);
 
-                if (isset($newList[$itemKey])) {
-                    if ($newList[$itemKey]['login_date']) {
-                        $dateToCheck = $newList[$itemKey]['login_date'];
+                if (!empty($itemKey) && isset($newList[$itemKey])) {
+                    if (
+                        substr(api_get_local_time($newList[$itemKey]['login_date']), 0, 10) ===
+                        substr(api_get_local_time($itemLogoutOriginal), 0, 10)
+                    ) {
+                        $newList[$itemKey]['logout_date'] = $itemLogoutOriginal;
                     }
                 }
+            }
 
-                $newList[$itemKey] = [
-                    'login_date' => $dateToCheck,
-                    'logout_date' => $end,
+            if (!isset($newList[$key])) {
+                $newList[$key] = [
+                    'login_date' => $item['login_date'],
+                    'logout_date' => $item['logout_date'],
                     'diff' => 0,
                 ];
-
-                $counter++;
+            } else {
+                $newList[$key] = [
+                    'login_date' => $newList[$key]['login_date'],
+                    'logout_date' => $item['logout_date'],
+                    'diff' => 0,
+                ];
             }
-
-            if (!empty($itemKey) && isset($newList[$itemKey])) {
-                if (
-                    substr(api_get_local_time($newList[$itemKey]['login_date']), 0, 10) ===
-                    substr(api_get_local_time($itemLogoutOriginal), 0, 10)
-                ) {
-                    $newList[$itemKey]['logout_date'] = $itemLogoutOriginal;
-                }
-            }
-        }
-
-        if (!isset($newList[$key])) {
-            $newList[$key] = [
-                'login_date' => $item['login_date'],
-                'logout_date' => $item['logout_date'],
-                'diff' => 0,
-            ];
-        } else {
-            $newList[$key] = [
-                'login_date' => $newList[$key]['login_date'],
-                'logout_date' => $item['logout_date'],
-                'diff' => 0,
-            ];
         }
     }
-
     if (!empty($newList)) {
         foreach ($newList as &$item) {
             $item['diff'] = api_strtotime($item['logout_date']) - api_strtotime($item['login_date']);

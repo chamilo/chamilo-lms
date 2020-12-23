@@ -17,7 +17,7 @@ require_once '../work/work.lib.php';
 api_block_anonymous_users();
 
 //$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
-
+$htmlHeadXtra[] = null;
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 $origin = api_get_origin();
@@ -49,7 +49,8 @@ $allowedToTrackUser =
     api_is_drh() ||
     api_is_student_boss() ||
     api_is_course_admin() ||
-    api_is_teacher();
+    api_is_teacher()
+;
 
 if (false === $allowedToTrackUser && !empty($courseInfo)) {
     if (empty($sessionId)) {
@@ -427,7 +428,7 @@ switch ($action) {
                 true,
                 false
             );
-        } catch (MpdfException $e) {
+        } catch (\Mpdf\MpdfException $e) {
             error_log($e);
         }
         exit;
@@ -1915,7 +1916,7 @@ if (empty($details)) {
                 /*$hookContents = $hookQuizTracking
                     ? $hookQuizTracking->notifyTrackingContent($exercise_id, $studentId)
                     : [];*/
-                $hookContents = '';
+                $hookContents = [];
                 if (!isset($score_percentage) && $count_attempts > 0) {
                     $scores_lp = Tracking::get_avg_student_exercise_score(
                         $studentId,

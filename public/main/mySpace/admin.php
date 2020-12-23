@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,13 +11,12 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
-
 $nameTools = get_lang('Administrators');
 
 api_block_anonymous_users();
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
-Display :: display_header($nameTools);
-
+Display::display_header($nameTools);
+$data = [];
 api_display_tool_title($nameTools);
 
 // Database Table Definitions
@@ -39,12 +39,16 @@ $result_admins = Database::query($sql);
 
 if (api_is_western_name_order()) {
     echo '<table class="table table-hover table-striped data_table">
-            <tr><th>'.get_lang('First name').'</th>
-            <th>'.get_lang('Last name').'</th><th>'.get_lang('e-mail').'</th></tr>';
+        <tr>
+        <th>'.get_lang('FirstName').'</th>
+        <th>'.get_lang('LastName').'</th>
+        <th>'.get_lang('Email').'</th></tr>';
 } else {
     echo '<table class="table table-hover table-striped data_table">
-            <tr><th>'.get_lang('Last name').'</th>
-            <th>'.get_lang('First name').'</th><th>'.get_lang('e-mail').'</th></tr>';
+        <tr>
+            <th>'.get_lang('LastName').'</th>
+            <th>'.get_lang('FirstName').'</th>
+            <th>'.get_lang('Email').'</th></tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
@@ -100,7 +104,7 @@ if (Database::num_rows($result_admins) > 0) {
 echo '</table>';
 
 if (isset($_POST['export'])) {
-    export_csv($header, $data, 'administrators.csv');
+    Export::arrayToCsv($header + $data, 'administrators.csv');
 }
 
 echo "

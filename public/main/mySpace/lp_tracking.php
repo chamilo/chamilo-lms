@@ -90,7 +90,7 @@ switch ($action) {
         $itemViewId = isset($_REQUEST['extend_attempt_id']) ? $_REQUEST['extend_attempt_id'] : 0;
         $em = Database::getManager();
 
-        $repo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
+        $repo = $em->getRepository(CLpItemView::class);
         /** @var CLpItemView $itemView */
         $itemView = $repo->find($itemViewId);
 
@@ -98,8 +98,8 @@ switch ($action) {
             api_not_allowed();
         }
 
-        $view = $em->getRepository('ChamiloCourseBundle:CLpView')->find($itemView->getLpViewId());
-        $lp = $em->getRepository('ChamiloCourseBundle:CLp')->find($view->getLpId());
+        $view = $em->getRepository(\Chamilo\CourseBundle\Entity\CLpView::class)->find($itemView->getLpViewId());
+        $lp = $em->getRepository(\Chamilo\CourseBundle\Entity\CLp::class)->find($view->getLpId());
 
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
         $endTime = $itemView->getStartTime() + $itemView->getTotalTime();

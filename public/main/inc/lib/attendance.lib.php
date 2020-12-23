@@ -2226,6 +2226,210 @@ class Attendance
         $pdf->html_to_pdf_with_template($tableToString);
     }
 
+    /**
+     * Return all course for a student between dates and order by key date (Y-m-d).
+     *
+     * @param int       $studentId
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @param bool      $orderDesc
+     *
+     * @return array
+     */
+    public function getCoursesWithAttendance(
+        $studentId = 0,
+        DateTime $startDate = null,
+        DateTime $endDate = null,
+        $orderDesc = false
+    ) {
+        // Lang variables
+        $presentString = get_lang('Present');
+        //$absentString = get_lang('Absent');
+        $absentString = '-';
+        // Lang variables
+        $attendanceLib = new Attendance();
+        $data = [];
+        /*
+         $specialCourses = CourseManager::returnSpecialCourses(
+            $studentId, false, false
+        );
+         */
+        $courses = CourseManager::returnCourses(
+            $studentId,
+            false,
+            false
+        );
+        /* Get course with (in_category) and without (not_category) category */
+        foreach ($courses as $coursesKey => $courseData) {
+            /*
+             * $coursesKey can be in_category or not_category for courses
+             * */
+            $totalCoursesNoCategory = count($courseData);
+            for ($i = 0; $i < $totalCoursesNoCategory; $i++) {
+                $courseItem = $courseData[$i];
+                $courseId = $courseItem['course_id'];
+
+                /* Get all attendance by courses*/
+                $attenances = $attendanceLib->get_attendances_list($courseId);
+                $temp = [];
+                $sheetsProccessed = [];
+                $tempDate = [];
+                foreach ($attenances as $attendanceData) {
+                    $attendanceId = $attendanceData['id'];
+                    $sheets = $attendanceLib->get_users_attendance_sheet(
+                        $attendanceId,
+                        $studentId,
+                        0,
+                        $courseId,
+                        $startDate,
+                        $endDate
+                    );
+
+                    $sheetsProccessed[] = [];
+                    foreach ($sheets as $sheetData) {
+                        $totalb = count($sheetData);
+                        $tempDate = [];
+                        for ($ii = 0; $ii < $totalb; $ii++) {
+                            $attendancesProccess = $sheetData[$ii];
+                            if (!empty($attendancesProccess)) {
+                                $dateTemp = $attendancesProccess['0'];
+                                $attendancesProccess[0] = $attendancesProccess[1];
+                                $attendancesProccess[1] = $dateTemp;
+
+                                $attendancesProccess[2] = $courseItem['title'];
+                                $attendancesProccess['courseTitle'] = $courseItem['title'];
+
+                                $attendancesProccess[3] = $courseItem['real_id'];
+                                $attendancesProccess['courseId'] = $courseItem['real_id'];
+
+                                $attendancesProccess[4] = $attendanceData['name'];
+                                $attendancesProccess['attendanceName'] = $attendanceData['name'];
+                                $attendancesProccess['courseCode'] = $courseItem['course_code'];
+
+                                $attendancesProccess[5] = $attendanceData['id'];
+                                $attendancesProccess['attendanceId'] = $attendanceData['id'];
+                                if ($attendancesProccess['presence'] == 1) {
+                                    $attendancesProccess['presence'] = $presentString;
+                                    $attendancesProccess[0] = 1;
+                                } else {
+                                    $attendancesProccess['presence'] = $absentString;
+                                    $attendancesProccess[0] = 0;
+                                }
+                                $attendancesProccess['session'] = 0;
+                                $attendancesProccess['sessionName'] = '';
+                                $tempDate[] = $attendancesProccess;
+                                $dateKey = new DateTime($dateTemp);
+                                /*
+                                $attendancesProccess['teacher'] = '';
+                                if(isset($courseItem['teachers']) and isset($courseItem['teachers'][0])){
+                                    $attendancesProccess['teacher'] = $courseItem['teachers'][0]['fullname'];
+                                }
+                                */
+                                $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
+                            }
+                        }
+                    }
+                    $sheetsProccessed[] = $tempDate;
+                    $temp[] = $sheetsProccessed;
+                }
+                $courses['not_category'][$i]['attendanceSheet'] = $temp;
+            }
+        }
+
+        /* Sessions */
+        $studentId = (int) $studentId;
+        $sql = "
+            SELECT
+                session_id,
+                c_id
+            FROM
+                session_rel_course_rel_user
+            WHERE
+                user_id = $studentId";
+
+        $rs = Database::query($sql);
+        // get info from sessions
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $courseId = $row['c_id'];
+            $sessionId = $row['session_id'];
+            $courseItem = api_get_course_info_by_id($courseId);
+
+            $attenances = $attendanceLib->get_attendances_list(
+                $courseId,
+                $sessionId
+            );
+            $temp = [];
+            $sheetsProccessed = [];
+            $tempDate = [];
+            foreach ($attenances as $attendanceData) {
+                $attendanceId = $attendanceData['id'];
+                $sheets = $attendanceLib->get_users_attendance_sheet(
+                    $attendanceId,
+                    $studentId,
+                    0,
+                    $courseId,
+                    $startDate,
+                    $endDate
+                );
+
+                $sheetsProccessed[] = [];
+                foreach ($sheets as $sheetData) {
+                    $totalb = count($sheetData);
+                    $tempDate = [];
+                    for ($ii = 0; $ii < $totalb; $ii++) {
+                        $work = $sheetData[$ii];
+                        $attendancesProccess = $work;
+                        if (!empty($attendancesProccess)) {
+                            $dateTemp = $attendancesProccess['0'];
+                            $attendancesProccess[0] = $attendancesProccess[1];
+                            $attendancesProccess[1] = $dateTemp;
+                            $attendancesProccess[2] = $courseItem['title'];
+                            $attendancesProccess['courseTitle'] = $courseItem['title'];
+                            $attendancesProccess[3] = $courseItem['real_id'];
+                            $attendancesProccess['courseId'] = $courseItem['real_id'];
+                            $attendancesProccess[4] = $attendanceData['name'];
+                            $attendancesProccess['attendanceName'] = $attendanceData['name'];
+                            $attendancesProccess[5] = $attendanceData['id'];
+                            $attendancesProccess['attendanceId'] = $attendanceData['id'];
+                            $attendancesProccess['courseCode'] = $courseItem['official_code'];
+                            if ($attendancesProccess['presence'] == 1) {
+                                $attendancesProccess['presence'] = $presentString;
+                                $attendancesProccess[0] = 1;
+                            } else {
+                                $attendancesProccess['presence'] = $absentString;
+                                $attendancesProccess[0] = 0;
+                            }
+                            $attendancesProccess['session'] = $sessionId;
+                            $attendancesProccess['sessionName'] = api_get_session_name($sessionId);
+
+                            $tempDate[] = $attendancesProccess;
+                            $dateKey = new DateTime($dateTemp);
+                            /*
+                            $attendancesProccess['teacher'] = '';
+                            if(isset($courseItem['tutor_name']) ){
+                                $attendancesProccess['teacher'] = $courseItem['tutor_name'];
+                            }
+                            */
+                            $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
+                        }
+                    }
+                }
+                $sheetsProccessed[] = $tempDate;
+                $temp[] = $sheetsProccessed;
+            }
+            $courses['session'][$i]['attendanceSheet'] = $temp;
+        }
+
+        /* Order desc by date,  by default */
+        if ($orderDesc == true) {
+            ksort($data);
+        } else {
+            krsort($data);
+        }
+
+        return $data;
+    }
+
     public function setAttendanceForm(FormValidator $form, CAttendance $attendance = null)
     {
         $skillList = [];

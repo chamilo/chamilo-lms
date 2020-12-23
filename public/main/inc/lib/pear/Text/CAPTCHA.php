@@ -11,13 +11,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link     http://pear.php.net/package/Text_CAPTCHA
  */
-/**
- * Require Exception class for error handling.
- */
-//require_once 'Text/CAPTCHA/Exception.php';
-/**
- * Require Text_Password class for generating the phrase.
- */
 //require_once 'Text/Password.php';
 
 /**

@@ -128,12 +128,6 @@ $formDefaults['coach_username'] = $sessionInfo['id_coach'];
 $formDefaults['session_category'] = $sessionInfo['session_category_id'];
 $formDefaults['session_visibility'] = $sessionInfo['visibility'];
 
-if ($formSent) {
-    $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
-} else {
-    $formDefaults['name'] = Security::remove_XSS($sessionInfo['name']);
-}
-
 $form->setDefaults($formDefaults);
 
 if ($form->validate()) {

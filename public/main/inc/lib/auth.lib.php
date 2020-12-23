@@ -29,7 +29,6 @@ class Auth
     {
         $user_id = api_get_user_id();
 
-        // table definitions
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
@@ -103,7 +102,6 @@ class Auth
      */
     public function move_course($direction, $course2move, $category)
     {
-        // definition of tables
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $current_user_id = api_get_user_id();
@@ -313,6 +311,7 @@ class Auth
         $result = true;
 
         $courseInfo = api_get_course_info($course_code);
+        // Check if course can be unsubscribe
         if ('1' !== $courseInfo['unsubscribe']) {
             return false;
         }

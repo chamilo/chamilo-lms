@@ -2953,6 +2953,48 @@ class GroupManager
             </ul>';
     }
 
+    public static function groupOverview($group, $url)
+    {
+        $groupId = $group['id'];
+        $content = '<li>';
+        $content .= Display::tag(
+            'h3',
+            Display::url(
+                Security::remove_XSS($group['name']),
+                $url.'&gidReq='.$groupId
+            )
+        );
+        $users = self::getTutors($group);
+        if (!empty($users)) {
+            $content .= '<ul>';
+            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
+            foreach ($users as $user) {
+                $userInfo = api_get_user_info($user['user_id']);
+                $content .= '<li title="'.$userInfo['username'].'">'.
+                    $userInfo['complete_name_with_username'].
+                    '</li>';
+            }
+            $content .= '</ul>';
+            $content .= '</ul>';
+        }
+
+        $users = self::getStudents($group['id']);
+        if (!empty($users)) {
+            $content .= '<ul>';
+            $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
+            foreach ($users as $user) {
+                $userInfo = api_get_user_info($user['user_id']);
+                $content .= '<li title="'.$userInfo['username'].'">'.
+                    $userInfo['complete_name_with_username'].
+                    '</li>';
+            }
+            $content .= '</ul>';
+            $content .= '</ul>';
+        }
+        $content .= '</li>';
+
+        return $content;
+    }
     /**
      * @param int    $courseId
      * @param string $keyword
@@ -2963,9 +3005,10 @@ class GroupManager
     {
         $content = null;
         $categories = self::get_categories();
+        $url = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                if ('true' == api_get_setting('allow_group_categories')) {
+                if ('true' === api_get_setting('allow_group_categories')) {
                     $content .= '<h2>'.$category['title'].'</h2>';
                 }
                 if (!empty($keyword)) {
@@ -2978,50 +3021,29 @@ class GroupManager
                     $groups = self::get_group_list($category['id']);
                 }
 
-                if (empty($groups)) {
-                    $groups = self::get_group_list();
-                }
 
                 $content .= '<ul>';
                 if (!empty($groups)) {
                     foreach ($groups as $group) {
-                        $content .= '<li>';
-                        $content .= Display::tag(
-                            'h3',
-                            Security::remove_XSS($group['name'])
-                        );
-                        $users = self::getTutors($group);
-                        if (!empty($users)) {
-                            $content .= '<ul>';
-                            $content .= '<li>'.Display::tag('h4', get_lang('Coaches')).'</li><ul>';
-                            foreach ($users as $user) {
-                                $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.
-                                    $user_info['complete_name_with_username'].
-                                '</li>';
+                        $content .= self::groupOverview($group, $url);
+                    }
                             }
                             $content .= '</ul>';
-                            $content .= '</ul>';
+            }
                         }
 
-                        $users = self::getStudents($group['id']);
-                        if (!empty($users)) {
+        // Check groups with no categories.
+        $groups = self::get_group_list(null, api_get_course_info(), null, api_get_session_id(), false, true);
+        if (!empty($groups)) {
+            $content .= '<h2>'.get_lang('NoCategorySelected').'</h2>';
                             $content .= '<ul>';
-                            $content .= '<li>'.Display::tag('h4', get_lang('Learners')).'</li><ul>';
-                            foreach ($users as $user) {
-                                $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.
-                                    $user_info['complete_name_with_username'].
-                                    '</li>';
+            foreach ($groups as $group) {
+                if (!empty($group['category_id'])) {
+                    continue;
                             }
-                            $content .= '</ul>';
-                            $content .= '</ul>';
-                        }
-                        $content .= '</li>';
-                    }
+                $content .= self::groupOverview($group, $url);
                 }
                 $content .= '</ul>';
-            }
         }
 
         return $content;

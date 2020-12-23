@@ -476,7 +476,6 @@ switch ($action) {
         $surveyData = SurveyManager::get_survey($surveyId);
         if (!empty($surveyData)) {
             SurveyManager::multiplicateQuestions($surveyData);
-            Display::cleanFlashMessages();
             Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
         header('Location: '.$listUrl);

@@ -673,13 +673,13 @@ class SurveyManager
         self::delete_all_survey_questions($survey_id, $shared);
 
         // Update into item_property (delete)
-        api_item_property_update(
+        /*api_item_property_update(
             $course_info,
             TOOL_SURVEY,
             $survey_id,
             'SurveyDeleted',
             api_get_user_id()
-        );
+        );*/
 
         Skill::deleteSkillsFromItem($survey_id, ITEM_TYPE_SURVEY);
 

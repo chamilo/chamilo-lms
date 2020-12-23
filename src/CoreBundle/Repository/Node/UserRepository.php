@@ -1122,7 +1122,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         /** @var CSurveyAnswer $item */
         foreach ($result as $item) {
             $list = [
-                'Answer # '.$item->getAnswerId(),
+                'Answer # '.$item->getIid(),
                 'Value: '.$item->getValue(),
             ];
             $cSurveyAnswer[] = implode(', ', $list);

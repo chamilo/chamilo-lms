@@ -447,6 +447,7 @@ if ($is_survey_type_1) {
             ORDER BY name';
 
     $rs = Database::query($sql);
+    $grouplist = '';
     while ($row = Database::fetch_array($rs, 'ASSOC')) {
         $grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
         '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.

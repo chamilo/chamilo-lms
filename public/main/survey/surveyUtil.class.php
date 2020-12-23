@@ -1938,9 +1938,11 @@ class SurveyUtil
         );
 
         // this is to display the last user
-        foreach ($return as $elem) {
-            $list[$line][$column] = $elem;
-            $column++;
+        if (!empty($return)) {
+            foreach ($return as $elem) {
+                $list[$line][$column] = $elem;
+                $column++;
+            }
         }
 
         Export::arrayToXls($list, $filename);
@@ -1956,7 +1958,7 @@ class SurveyUtil
      * @param mixed User ID or user details as string - Used as a string in the result string
      * @param bool Whether to display user fields or not
      *
-     * @return string One line of the csv file
+     * @return array
      */
     public static function export_complete_report_row_xls(
         $survey_data,

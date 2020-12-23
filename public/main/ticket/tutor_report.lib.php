@@ -104,7 +104,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $line = '<tr>
         <th ></th>';
     $lineHeaderExport = [null, null];
-    $lineHeaderExport2 = [null, ull];
+    $lineHeaderExport2 = [null, null];
     while ($rowe = Database::fetch_assoc($resultHeader)) {
         $lineHeaderExport[] = utf8_decode('Work'.$rowe['week_id']);
         $lineHeaderExport[] = utf8_decode('Forum'.$rowe['week_id']);

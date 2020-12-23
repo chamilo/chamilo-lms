@@ -8,7 +8,6 @@ use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 
 class Attendance
 {
-    // constants
     public const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
     public const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
     public const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
@@ -2270,12 +2269,12 @@ class Attendance
                 $courseId = $courseItem['course_id'];
 
                 /* Get all attendance by courses*/
-                $attenances = $attendanceLib->get_attendances_list($courseId);
+                $attendanceList = $attendanceLib->get_attendances_list($courseId);
                 $temp = [];
-                $sheetsProccessed = [];
+                $sheetsProcessed = [];
                 $tempDate = [];
-                foreach ($attenances as $attendanceData) {
-                    $attendanceId = $attendanceData['id'];
+                foreach ($attendanceList as $attendanceData) {
+                    $attendanceId = $attendanceData->getIid();
                     $sheets = $attendanceLib->get_users_attendance_sheet(
                         $attendanceId,
                         $studentId,
@@ -2285,52 +2284,52 @@ class Attendance
                         $endDate
                     );
 
-                    $sheetsProccessed[] = [];
+                    $sheetsProcessed[] = [];
                     foreach ($sheets as $sheetData) {
                         $totalb = count($sheetData);
                         $tempDate = [];
                         for ($ii = 0; $ii < $totalb; $ii++) {
-                            $attendancesProccess = $sheetData[$ii];
-                            if (!empty($attendancesProccess)) {
-                                $dateTemp = $attendancesProccess['0'];
-                                $attendancesProccess[0] = $attendancesProccess[1];
-                                $attendancesProccess[1] = $dateTemp;
+                            $attendancesProcess = $sheetData[$ii];
+                            if (!empty($attendancesProcess)) {
+                                $dateTemp = $attendancesProcess['0'];
+                                $attendancesProcess[0] = $attendancesProcess[1];
+                                $attendancesProcess[1] = $dateTemp;
 
-                                $attendancesProccess[2] = $courseItem['title'];
-                                $attendancesProccess['courseTitle'] = $courseItem['title'];
+                                $attendancesProcess[2] = $courseItem['title'];
+                                $attendancesProcess['courseTitle'] = $courseItem['title'];
 
-                                $attendancesProccess[3] = $courseItem['real_id'];
-                                $attendancesProccess['courseId'] = $courseItem['real_id'];
+                                $attendancesProcess[3] = $courseItem['real_id'];
+                                $attendancesProcess['courseId'] = $courseItem['real_id'];
 
-                                $attendancesProccess[4] = $attendanceData['name'];
-                                $attendancesProccess['attendanceName'] = $attendanceData['name'];
-                                $attendancesProccess['courseCode'] = $courseItem['course_code'];
+                                $attendancesProcess[4] = $attendanceData->getName();
+                                $attendancesProcess['attendanceName'] = $attendanceData->getName();
+                                $attendancesProcess['courseCode'] = $courseItem['course_code'];
 
-                                $attendancesProccess[5] = $attendanceData['id'];
-                                $attendancesProccess['attendanceId'] = $attendanceData['id'];
-                                if ($attendancesProccess['presence'] == 1) {
-                                    $attendancesProccess['presence'] = $presentString;
-                                    $attendancesProccess[0] = 1;
+                                $attendancesProcess[5] = $attendanceId;
+                                $attendancesProcess['attendanceId'] = $attendanceId;
+                                if ($attendancesProcess['presence'] == 1) {
+                                    $attendancesProcess['presence'] = $presentString;
+                                    $attendancesProcess[0] = 1;
                                 } else {
-                                    $attendancesProccess['presence'] = $absentString;
-                                    $attendancesProccess[0] = 0;
+                                    $attendancesProcess['presence'] = $absentString;
+                                    $attendancesProcess[0] = 0;
                                 }
-                                $attendancesProccess['session'] = 0;
-                                $attendancesProccess['sessionName'] = '';
-                                $tempDate[] = $attendancesProccess;
+                                $attendancesProcess['session'] = 0;
+                                $attendancesProcess['sessionName'] = '';
+                                $tempDate[] = $attendancesProcess;
                                 $dateKey = new DateTime($dateTemp);
                                 /*
-                                $attendancesProccess['teacher'] = '';
+                                $attendancesProcess['teacher'] = '';
                                 if(isset($courseItem['teachers']) and isset($courseItem['teachers'][0])){
-                                    $attendancesProccess['teacher'] = $courseItem['teachers'][0]['fullname'];
+                                    $attendancesProcess['teacher'] = $courseItem['teachers'][0]['fullname'];
                                 }
                                 */
-                                $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
+                                $data[$dateKey->format('Y-m-d')][] = $attendancesProcess;
                             }
                         }
                     }
-                    $sheetsProccessed[] = $tempDate;
-                    $temp[] = $sheetsProccessed;
+                    $sheetsProcessed[] = $tempDate;
+                    $temp[] = $sheetsProcessed;
                 }
                 $courses['not_category'][$i]['attendanceSheet'] = $temp;
             }
@@ -2354,15 +2353,15 @@ class Attendance
             $sessionId = $row['session_id'];
             $courseItem = api_get_course_info_by_id($courseId);
 
-            $attenances = $attendanceLib->get_attendances_list(
+            $attendanceList = $attendanceLib->get_attendances_list(
                 $courseId,
                 $sessionId
             );
             $temp = [];
-            $sheetsProccessed = [];
+            $sheetsProcessed = [];
             $tempDate = [];
-            foreach ($attenances as $attendanceData) {
-                $attendanceId = $attendanceData['id'];
+            foreach ($attendanceList as $attendanceData) {
+                $attendanceId = $attendanceData->getIid();
                 $sheets = $attendanceLib->get_users_attendance_sheet(
                     $attendanceId,
                     $studentId,
@@ -2372,50 +2371,50 @@ class Attendance
                     $endDate
                 );
 
-                $sheetsProccessed[] = [];
+                $sheetsProcessed[] = [];
                 foreach ($sheets as $sheetData) {
                     $totalb = count($sheetData);
                     $tempDate = [];
                     for ($ii = 0; $ii < $totalb; $ii++) {
                         $work = $sheetData[$ii];
-                        $attendancesProccess = $work;
-                        if (!empty($attendancesProccess)) {
-                            $dateTemp = $attendancesProccess['0'];
-                            $attendancesProccess[0] = $attendancesProccess[1];
-                            $attendancesProccess[1] = $dateTemp;
-                            $attendancesProccess[2] = $courseItem['title'];
-                            $attendancesProccess['courseTitle'] = $courseItem['title'];
-                            $attendancesProccess[3] = $courseItem['real_id'];
-                            $attendancesProccess['courseId'] = $courseItem['real_id'];
-                            $attendancesProccess[4] = $attendanceData['name'];
-                            $attendancesProccess['attendanceName'] = $attendanceData['name'];
-                            $attendancesProccess[5] = $attendanceData['id'];
-                            $attendancesProccess['attendanceId'] = $attendanceData['id'];
-                            $attendancesProccess['courseCode'] = $courseItem['official_code'];
-                            if ($attendancesProccess['presence'] == 1) {
-                                $attendancesProccess['presence'] = $presentString;
-                                $attendancesProccess[0] = 1;
+                        $attendancesProcess = $work;
+                        if (!empty($attendancesProcess)) {
+                            $dateTemp = $attendancesProcess['0'];
+                            $attendancesProcess[0] = $attendancesProcess[1];
+                            $attendancesProcess[1] = $dateTemp;
+                            $attendancesProcess[2] = $courseItem['title'];
+                            $attendancesProcess['courseTitle'] = $courseItem['title'];
+                            $attendancesProcess[3] = $courseItem['real_id'];
+                            $attendancesProcess['courseId'] = $courseItem['real_id'];
+                            $attendancesProcess[4] = $attendanceData->getName();
+                            $attendancesProcess['attendanceName'] = $attendanceData->getName();
+                            $attendancesProcess[5] = $attendanceId;
+                            $attendancesProcess['attendanceId'] = $attendanceId;
+                            $attendancesProcess['courseCode'] = $courseItem['official_code'];
+                            if ($attendancesProcess['presence'] == 1) {
+                                $attendancesProcess['presence'] = $presentString;
+                                $attendancesProcess[0] = 1;
                             } else {
-                                $attendancesProccess['presence'] = $absentString;
-                                $attendancesProccess[0] = 0;
+                                $attendancesProcess['presence'] = $absentString;
+                                $attendancesProcess[0] = 0;
                             }
-                            $attendancesProccess['session'] = $sessionId;
-                            $attendancesProccess['sessionName'] = api_get_session_name($sessionId);
+                            $attendancesProcess['session'] = $sessionId;
+                            $attendancesProcess['sessionName'] = api_get_session_name($sessionId);
 
-                            $tempDate[] = $attendancesProccess;
+                            $tempDate[] = $attendancesProcess;
                             $dateKey = new DateTime($dateTemp);
                             /*
-                            $attendancesProccess['teacher'] = '';
+                            $attendancesProcess['teacher'] = '';
                             if(isset($courseItem['tutor_name']) ){
-                                $attendancesProccess['teacher'] = $courseItem['tutor_name'];
+                                $attendancesProcess['teacher'] = $courseItem['tutor_name'];
                             }
                             */
-                            $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
+                            $data[$dateKey->format('Y-m-d')][] = $attendancesProcess;
                         }
                     }
                 }
-                $sheetsProccessed[] = $tempDate;
-                $temp[] = $sheetsProccessed;
+                $sheetsProcessed[] = $tempDate;
+                $temp[] = $sheetsProcessed;
             }
             $courses['session'][$i]['attendanceSheet'] = $temp;
         }

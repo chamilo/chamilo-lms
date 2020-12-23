@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -16,7 +17,7 @@ if (empty($skillId)) {
 
 $entityManager = Database::getManager();
 /** @var \Chamilo\CoreBundle\Entity\Skill $skill */
-$skill = $entityManager->find('ChamiloCoreBundle:Skill', $_GET['id']);
+$skill = $entityManager->find(\Chamilo\CoreBundle\Entity\Skill::class, $_GET['id']);
 
 if ($skill) {
     $skillInfo = [

@@ -93,12 +93,12 @@ if (Security::check_token('post') && (
     );
 
     $courses = [];
-        foreach ($courseList as $courseItem) {
+    foreach ($courseList as $courseItem) {
         if ($courseItem['real_id'] == $course_info['real_id']) {
             continue;
         }
         $courses[$courseItem['code']] = $courseItem['title'].' ('.$courseItem['code'].')';
-        }
+    }
 
     if (empty($courses)) {
         echo Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal');
@@ -108,7 +108,7 @@ if (Security::check_token('post') && (
             'post',
             api_get_path(WEB_CODE_PATH).'coursecopy/copy_course.php?'.api_get_cidreq()
         );
-        $form->addElement('select', 'destination_course', get_lang('Select target course'), $options);
+        $form->addElement('select', 'destination_course', get_lang('Select target course'), $courses);
 
         $group = [];
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('Full copy'), 'full_copy');

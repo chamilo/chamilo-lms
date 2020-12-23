@@ -13,17 +13,17 @@ $session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : n
 $user_id = api_get_user_id();
 
 if (empty($course_code)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
-$course_info = CourseManager::get_course_information($course_code);
+$course_info = api_get_course_info($course_code);
 $course_legal = $course_info['legal'];
 
 $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 $pluginExtra = null;
 $pluginLegal = false;
 
-if ('true' == $enabled) {
+if ('true' === $enabled) {
     $pluginLegal = true;
     require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
     $plugin = CourseLegalPlugin::create();

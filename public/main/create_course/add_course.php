@@ -32,7 +32,7 @@ $this_section = SECTION_COURSES;
 
 $em = Database::getManager();
 /** @var CourseCategoryRepository $courseCategoriesRepo */
-$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
+$courseCategoriesRepo = $em->getRepository(CourseCategory::class);
 // Get all possible teachers.
 $accessUrlId = api_get_current_access_url_id();
 

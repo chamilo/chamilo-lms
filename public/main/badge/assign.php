@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
@@ -27,10 +28,10 @@ if (!$user) {
 
 $entityManager = Database::getManager();
 $skillManager = new SkillManager();
-$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
-$skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill');
-$skillLevelRepo = $entityManager->getRepository('ChamiloCoreBundle:Level');
-$skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
+$skillRepo = $entityManager->getRepository(Skill::class);
+$skillRelSkill = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelSkill::class);
+$skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
+$skillUserRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
 
 $skillLevels = api_get_configuration_value('skill_levels_names');
 

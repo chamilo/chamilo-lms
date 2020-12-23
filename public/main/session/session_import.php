@@ -457,15 +457,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 }
 
 Display::display_header($tool_name);
-if (!empty($insertedInCourse)) {
-    $msg = get_lang('Several courses were subscribed to the session because of a duplicate course code').': ';
-    foreach ($insertedInCourse as $code => $title) {
-        $msg .= ' '.$title.' ('.$code.'),';
-    }
-    $msg = substr($msg, 0, -1);
-    echo Display::return_message($msg, 'warning');
-}
-
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
     Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';

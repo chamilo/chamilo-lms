@@ -16,6 +16,7 @@ $current_course_tool = TOOL_COURSE_PROGRESS;
 
 // protect a course script
 api_protect_course_script(true);
+$courseId = api_get_course_int_id();
 
 // get actions
 $actions = [

@@ -753,7 +753,7 @@ class Thematic
 
         return true;
 
-        $_course = api_get_course_info();
+        /*$_course = api_get_course_info();
         $course_id = api_get_course_int_id();
 
         // definition database table
@@ -778,7 +778,7 @@ class Thematic
             );
         }
 
-        return $affected_rows;
+        return $affected_rows;*/
     }
 
     /**
@@ -786,8 +786,6 @@ class Thematic
      *
      * @param int Thematic id (optional), get data by thematic id
      * @param int Thematic plan description type (optional), get data by description type
-     *
-     * @deprecated
      *
      * @return array Thematic plan data
      */

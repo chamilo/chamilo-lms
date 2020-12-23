@@ -4,11 +4,6 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_DESCRIPTION;
-
-// defining constants
-define('ADD_BLOCK', 8);
-
-// current section
 $this_section = SECTION_COURSES;
 
 $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'listing';

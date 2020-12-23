@@ -38,13 +38,6 @@ class CSurveyAnswer
     /**
      * @var int
      *
-     * @ORM\Column(name="answer_id", type="integer")
-     */
-    protected $answerId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
     protected $surveyId;
@@ -77,12 +70,8 @@ class CSurveyAnswer
      */
     protected $user;
 
-    /**
-     * CSurveyAnswer constructor.
-     */
     public function __construct()
     {
-        $this->answerId = 0;
     }
 
     public function getIid(): int
@@ -215,30 +204,6 @@ class CSurveyAnswer
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * Set answerId.
-     *
-     * @param int $answerId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setAnswerId($answerId)
-    {
-        $this->answerId = $answerId;
-
-        return $this;
-    }
-
-    /**
-     * Get answerId.
-     *
-     * @return int
-     */
-    public function getAnswerId()
-    {
-        return $this->answerId;
     }
 
     /**

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,13 +36,6 @@ class CSurveyQuestionOption
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="question_option_id", type="integer")
-     */
-    protected $questionOptionId;
 
     /**
      * @var int
@@ -78,12 +72,8 @@ class CSurveyQuestionOption
      */
     protected $value;
 
-    /**
-     * CSurveyQuestionOption constructor.
-     */
     public function __construct()
     {
-        $this->questionOptionId = 0;
     }
 
     public function getIid(): int
@@ -216,30 +206,6 @@ class CSurveyQuestionOption
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * Set questionOptionId.
-     *
-     * @param int $questionOptionId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setQuestionOptionId($questionOptionId)
-    {
-        $this->questionOptionId = $questionOptionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionOptionId.
-     *
-     * @return int
-     */
-    public function getQuestionOptionId()
-    {
-        return $this->questionOptionId;
     }
 
     /**

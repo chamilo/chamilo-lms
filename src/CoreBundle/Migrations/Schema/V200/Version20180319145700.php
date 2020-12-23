@@ -27,6 +27,10 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_F246DB301BAD783F ON c_survey (resource_node_id);');
         }
 
+
+        $this->addSql('ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_survey CHANGE avail_till avail_till DATETIME DEFAULT NULL;');
+
         /*if (!$survey->hasIndex('idx_survey_code')) {
             $this->addSql('CREATE INDEX idx_survey_code ON c_survey (code)');
         }*/
@@ -45,13 +49,25 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_survey_question');
-        if (!$table->hasColumn('is_required')) {
+        if (false === $table->hasColumn('is_required')) {
             $table
                 ->addColumn('is_required', Types::BOOLEAN)
                 ->setDefault(false);
         }
         if (false === $table->hasIndex('idx_survey_q_qid')) {
             $this->addSql('CREATE INDEX idx_survey_q_qid ON c_survey_question (question_id)');
+        }
+
+        if (false === $table->hasColumn('parent_id')) {
+            $this->addSql('ALTER TABLE c_survey_question ADD parent_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_survey_question ADD CONSTRAINT FK_92F05EE7727ACA70 FOREIGN KEY (parent_id) REFERENCES c_survey_question (iid);');
+            $this->addSql('CREATE INDEX IDX_92F05EE7727ACA70 ON c_survey_question (parent_id);');
+        }
+
+        if (false === $table->hasColumn('parent_option_id')) {
+            $this->addSql('ALTER TABLE c_survey_question ADD parent_option_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_survey_question ADD CONSTRAINT FK_92F05EE7568F3281 FOREIGN KEY (parent_option_id) REFERENCES c_survey_question_option (iid)');
+            $this->addSql('CREATE INDEX IDX_92F05EE7568F3281 ON c_survey_question (parent_option_id);');
         }
 
         $table = $schema->getTable('c_survey_question_option');

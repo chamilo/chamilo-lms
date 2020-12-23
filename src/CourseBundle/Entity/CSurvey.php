@@ -41,13 +41,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_id", type="integer")
-     */
-    protected $surveyId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
@@ -85,14 +78,14 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="avail_from", type="date", nullable=true)
+     * @ORM\Column(name="avail_from", type="datetime", nullable=true)
      */
     protected $availFrom;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="avail_till", type="date", nullable=true)
+     * @ORM\Column(name="avail_till", type="datetime", nullable=true)
      */
     protected $availTill;
 
@@ -951,30 +944,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
     public function getVisibleResults()
     {
         return $this->visibleResults;
-    }
-
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurvey
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
     }
 
     /**

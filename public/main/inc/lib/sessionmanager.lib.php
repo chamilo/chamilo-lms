@@ -1014,7 +1014,7 @@ class SessionManager
                     ON
                       sqo.c_id = sa.c_id AND
                       sqo.question_id = sq.question_id AND
-                      sqo.question_option_id = sa.option_id AND
+                      sqo.iid = sa.option_id AND
                       sqo.survey_id = sq.survey_id
                     WHERE
                       sa.survey_id = %d AND

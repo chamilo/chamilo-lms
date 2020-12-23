@@ -8,7 +8,7 @@ class ch_percentage extends survey_question
 {
     /**
      * @param array $questionData
-     * @param array $answers
+     * @param string $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = '')
     {

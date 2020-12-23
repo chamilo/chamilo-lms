@@ -85,7 +85,7 @@ if (isset($_GET['show'])) {
     $counter = 0;
     $sql = "SELECT * FROM $table_survey_question
             WHERE
-              survey_question NOT LIKE '%{{%' AND 
+              survey_question NOT LIKE '%{{%' AND
               c_id = $course_id AND
               survey_id = $surveyId
             ORDER BY sort ASC";
@@ -94,17 +94,17 @@ if (isset($_GET['show'])) {
     if (Database::num_rows($result)) {
         while ($row = Database::fetch_array($result)) {
             if (1 == $survey_data['one_question_per_page']) {
-                if ('pagebreak' != $row['type']) {
-                    $paged_questions[$counter][] = $row['question_id'];
+                if ('pagebreak' !== $row['type']) {
+                    $paged_questions[$counter][] = $row['iid'];
                     $counter++;
                     continue;
                 }
             } else {
-                if ('pagebreak' == $row['type']) {
+                if ('pagebreak' === $row['type']) {
                     $counter++;
                     $pageBreakText[$counter] = $row['survey_question'];
                 } else {
-                    $paged_questions[$counter][] = $row['question_id'];
+                    $paged_questions[$counter][] = $row['iid'];
                 }
             }
         }
@@ -118,14 +118,14 @@ if (isset($_GET['show'])) {
             $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
         }
         $sql = "SELECT
-                    survey_question.question_id,
+                    survey_question.iid question_id,
                     survey_question.survey_id,
                     survey_question.survey_question,
                     survey_question.display,
                     survey_question.sort,
                     survey_question.type,
                     survey_question.max_value,
-                    survey_question_option.question_option_id,
+                    survey_question_option.iid as question_option_id,
                     survey_question_option.option_text,
                     $select
                     survey_question_option.sort as option_sort
@@ -133,19 +133,19 @@ if (isset($_GET['show'])) {
                 FROM $table_survey_question survey_question
                 LEFT JOIN $table_survey_question_option survey_question_option
                 ON
-                    survey_question.question_id = survey_question_option.question_id AND
+                    survey_question.iid = survey_question_option.question_id AND
                     survey_question_option.c_id = survey_question.c_id
                 WHERE
                     survey_question.survey_id = '".$surveyId."' AND
-                    survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
+                    survey_question.iid IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
                     survey_question.c_id = $course_id AND
-                    survey_question NOT LIKE '%{{%'                        
+                    survey_question NOT LIKE '%{{%'
                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // If the type is not a pagebreak we store it in the $questions array
-            if ('pagebreak' != $row['type']) {
+            if ('pagebreak' !== $row['type']) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];

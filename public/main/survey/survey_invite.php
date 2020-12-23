@@ -11,6 +11,9 @@
  * @todo check if the mailtext contains the **link** part, if not, add the link to the end
  * @todo add rules: title and text cannot be empty
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -180,7 +183,8 @@ if ($form->validate()) {
         }
     }
 
-    $survey = Database::getManager()->getRepository('ChamiloCourseBundle:CSurvey')->find($survey_data['survey_id']);
+    $repo = Container::getSurveyRepository();
+    $survey = $repo->find($survey_data['survey_id']);
 
     // Save the invitation mail
     SurveyUtil::saveInviteMail(

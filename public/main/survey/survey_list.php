@@ -136,20 +136,20 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 }
 
                 $sql = "SELECT
-			            survey_question.question_id,
+			            survey_question.iid question_id,
 			            survey_question.survey_id,
 			            survey_question.survey_question,
 			            survey_question.display,
 			            survey_question.max_value,
 			            survey_question.sort,
 			            survey_question.type,
-                        survey_question_option.question_option_id,
+                        survey_question_option.iid question_option_id,
                         survey_question_option.option_text,
                         survey_question_option.sort as option_sort
 					FROM $table_survey_question survey_question
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON
-					    survey_question.question_id = survey_question_option.question_id AND
+					    survey_question.iid = survey_question_option.question_id AND
 					    survey_question_option.c_id = $course_id
 					WHERE
 					    survey_question NOT LIKE '%{{%' AND

@@ -306,11 +306,11 @@ if (count($_POST) > 0) {
                 } else {
                     // All the other question types (open question, multiple choice, percentage, ...)
                     if (isset($types[$survey_question_id]) &&
-                        'percentage' == $types[$survey_question_id]) {
+                        'percentage' === $types[$survey_question_id]) {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
                                     c_id = $course_id AND
-                                    question_option_id='".intval($value)."'";
+                                    iid='".intval($value)."'";
                         $result = Database::query($sql);
                         $row = Database::fetch_array($result, 'ASSOC');
                         $option_value = $row['option_text'];
@@ -375,7 +375,7 @@ if (count($_POST) > 0) {
                 }
                 // We select the correct answer and the puntuacion
                 $sql = "SELECT value FROM $table_survey_question_option
-                        WHERE c_id = $course_id AND question_option_id='".intval($value)."'";
+                        WHERE c_id = $course_id AND iid='".intval($value)."'";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $option_value = $row['value'];
@@ -734,24 +734,24 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                             survey_question.survey_group_sec1,
                             survey_question.survey_group_sec2,
                             survey_question.survey_group_pri,
-                            survey_question.question_id,
+                            survey_question.iid question_id,
                             survey_question.survey_id,
                             survey_question.survey_question,
                             survey_question.display,
                             survey_question.sort,
                             survey_question.type,
                             survey_question.max_value,
-                            survey_question_option.question_option_id,
+                            survey_question_option.iid question_option_id,
                             survey_question_option.option_text,
                             $select
                             survey_question_option.sort as option_sort
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
-                        ON survey_question.question_id = survey_question_option.question_id AND
+                        ON survey_question.iid = survey_question_option.question_id AND
                         survey_question_option.c_id = $course_id
                         WHERE
                             survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' AND
-                            survey_question.question_id NOT IN (
+                            survey_question.iid NOT IN (
                                 SELECT sa.question_id
                                 FROM ".$table_survey_answer." sa
                                 WHERE
@@ -763,26 +763,26 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                             survey_question.survey_group_sec1,
                             survey_question.survey_group_sec2,
                             survey_question.survey_group_pri,
-                            survey_question.question_id,
+                            survey_question.iid question_id,
                             survey_question.survey_id,
                             survey_question.survey_question,
                             survey_question.display,
                             survey_question.sort,
                             survey_question.type,
                             survey_question.max_value,
-                            survey_question_option.question_option_id,
+                            survey_question_option.iid question_option_id,
                             survey_question_option.option_text,
                             $select
                             survey_question_option.sort as option_sort
                             ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
-                        ON survey_question.question_id = survey_question_option.question_id AND
+                        ON survey_question.iid = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                         WHERE
                             survey_question NOT LIKE '%{{%' AND
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
-                            survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
+                            survey_question.iid IN (".implode(',', $paged_questions[$_GET['show']]).") AND
                             survey_question.c_id =  $course_id
                         ORDER BY survey_question.sort, survey_question_option.sort ASC";
             }
@@ -836,7 +836,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                       SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
-                    ON (survey_question.question_id = survey_answer.question_id)
+                    ON (survey_question.iid = survey_answer.question_id)
                     WHERE
                         survey_answer.survey_id='".$my_survey_id."' AND
                         survey_answer.user='".$current_user."' AND
@@ -860,17 +860,17 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         SELECT
                             MAX(value) as value,
                             survey_group_pri,
-                            survey_question.question_id
+                            survey_question.iid question_id
                         FROM $table_survey_question as survey_question
                         INNER JOIN $table_survey_question_option as survey_question_option
-                        ON (survey_question.question_id = survey_question_option.question_id)
+                        ON (survey_question.iid = survey_question_option.question_id)
                         WHERE
                             survey_question.survey_id='".$my_survey_id."'  AND
                             survey_question.c_id = $course_id AND
                             survey_question_option.c_id = $course_id AND
                             survey_group_sec1='0' AND
                             survey_group_sec2='0'
-                        GROUP BY survey_group_pri, survey_question.question_id
+                        GROUP BY survey_group_pri, survey_question.iid
                     ) as temp
                     GROUP BY temp.survey_group_pri
                     ORDER BY temp.survey_group_pri";
@@ -1028,7 +1028,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                     survey_question.survey_group_sec1,
                                     survey_question.survey_group_sec2,
                                     survey_question.survey_group_pri,
-                                    survey_question.question_id,
+                                    survey_question.iid question_id,
                                     survey_question.survey_id,
                                     survey_question.survey_question,
                                     survey_question.display,
@@ -1040,13 +1040,13 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                     survey_question_option.sort as option_sort
                                 FROM $table_survey_question survey_question
                                 LEFT JOIN $table_survey_question_option survey_question_option
-                                ON survey_question.question_id = survey_question_option.question_id AND
+                                ON survey_question.iid = survey_question_option.question_id AND
                                 survey_question_option.c_id = $course_id
                                 WHERE
                                     survey_question NOT LIKE '%{{%' AND
                                     survey_question.survey_id = '".$my_survey_id."' AND
                                     survey_question.c_id = $course_id AND
-                                    survey_question.question_id IN (".implode(',', $paged_questions_sec[$val]).")
+                                    survey_question.iid IN (".implode(',', $paged_questions_sec[$val]).")
                                 ORDER  $shuffle ";
 
                         $result = Database::query($sql);
@@ -1139,7 +1139,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                 survey_question.survey_group_sec1,
                                 survey_question.survey_group_sec2,
                                 survey_question.survey_group_pri,
-                                survey_question.question_id,
+                                survey_question.iid question_id,
                                 survey_question.survey_id,
                                 survey_question.survey_question,
                                 survey_question.display,
@@ -1152,13 +1152,13 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                 ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                             FROM $table_survey_question survey_question
                             LEFT JOIN $table_survey_question_option survey_question_option
-                            ON survey_question.question_id = survey_question_option.question_id AND
+                            ON survey_question.iid = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                             WHERE
                                 survey_question NOT LIKE '%{{%' AND
                                 survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                                 survey_question.c_id = $course_id  AND
-                                survey_question.question_id IN (".$imploded.")
+                                survey_question.iid IN (".$imploded.")
                             ORDER $order_sql ";
                     $result = Database::query($sql);
                     $question_counter_max = Database :: num_rows($result);

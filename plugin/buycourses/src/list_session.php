@@ -64,8 +64,13 @@ foreach ($sessions as $session) {
 $totalItems = count($sessions);
 $pagesCount = ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?type='.BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(
+    api_get_self(),
+    $currentPage,
+    $pagesCount,
+    $totalItems,
+    ['type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION]
+);
 
 $tpl->assign('sessions', $sessions);
 $tpl->assign('session_pagination', $pagination);

@@ -29,18 +29,18 @@ class SurveyTree
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT
-                    survey.survey_id,
+                    survey.iid survey_id,
                     survey.parent_id,
                     survey_version,
                     survey.code as name
 				FROM $table_survey survey
 				LEFT JOIN $table_survey_question  survey_question
-				ON survey.survey_id = survey_question.survey_id , $table_user user
+				ON survey.iid = survey_question.survey_id , $table_user user
 				WHERE
 					survey.c_id =  $course_id AND
 					survey_question.c_id = $course_id AND
 					survey.author = user.id
-				GROUP BY survey.survey_id";
+				GROUP BY survey.iid";
 
         $res = Database::query($sql);
         $refs = [];
@@ -81,9 +81,9 @@ class SurveyTree
         $node = $this->plainsurveylist[$id];
         if (is_array($node) && !empty($node['parent_id'])) {
             return $node['parent_id'];
-        } else {
-            return -1;
         }
+
+        return -1;
     }
 
     /**

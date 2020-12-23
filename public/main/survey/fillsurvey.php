@@ -5,6 +5,7 @@
 use ChamiloSession as Session;
 
 $lastQuestion = 0;
+
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
@@ -92,7 +93,7 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET
 $invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
-if ('auto' == $invitationcode && isset($_GET['scode'])) {
+if ('auto' === $invitationcode && isset($_GET['scode'])) {
     $userid = api_get_user_id();
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
@@ -213,7 +214,7 @@ if (Database::num_rows($result) > 1) {
     }
 } else {
     $row = Database::fetch_array($result, 'ASSOC');
-    $survey_invitation['survey_id'] = $row['survey_id'];
+    $survey_invitation['survey_id'] = $row['iid'];
 }
 
 // Getting the survey information
@@ -252,8 +253,8 @@ if (count($_POST) > 0) {
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $types[$row['question_id']] = $row['type'];
-            $required[$row['question_id']] = $allowRequiredSurveyQuestions && $row['is_required'];
+            $types[$row['iid']] = $row['type'];
+            $required[$row['iid']] = $allowRequiredSurveyQuestions && $row['is_required'];
         }
 
         // Looping through all the post values
@@ -286,7 +287,7 @@ if (count($_POST) > 0) {
                     );
 
                     foreach ($value as $answer_key => &$answer_value) {
-                        if ('score' == $types[$survey_question_id]) {
+                        if ('score' === $types[$survey_question_id]) {
                             $option_id = $answer_key;
                             $option_value = $answer_value;
                         } else {
@@ -316,9 +317,7 @@ if (count($_POST) > 0) {
                         $option_value = $row['option_text'];
                     } else {
                         $option_value = 0;
-                        if (isset($types[$survey_question_id]) &&
-                            'open' == $types[$survey_question_id]
-                        ) {
+                        if (isset($types[$survey_question_id]) && 'open' === $types[$survey_question_id]) {
                             $option_value = $value;
                         }
                     }
@@ -358,7 +357,7 @@ if (count($_POST) > 0) {
         $result = Database::query($sql);
         // There is only one question type for conditional surveys
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $types[$row['question_id']] = $row['type'];
+            $types[$row['iid']] = $row['type'];
         }
 
         // Looping through all the post values
@@ -702,17 +701,17 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if (1 == $survey_data['one_question_per_page']) {
-                    if ('pagebreak' != $row['type']) {
-                        $paged_questions[$counter][] = $row['question_id'];
+                    if ('pagebreak' !== $row['type']) {
+                        $paged_questions[$counter][] = $row['iid'];
                         $counter++;
                         continue;
                     }
                 } else {
-                    if ('pagebreak' == $row['type']) {
+                    if ('pagebreak' === $row['type']) {
                         $counter++;
                         $pageBreakText[$counter] = $row['survey_question'];
                     } else {
-                        $paged_questions[$counter][] = $row['question_id'];
+                        $paged_questions[$counter][] = $row['iid'];
                     }
                 }
             }

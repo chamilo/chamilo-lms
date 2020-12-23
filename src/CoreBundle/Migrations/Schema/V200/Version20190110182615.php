@@ -4,7 +4,11 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CourseBundle\Repository\CLpRepository;
+use Chamilo\Kernel;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20190110182615 extends AbstractMigrationChamilo
@@ -16,6 +20,12 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $container = $this->getContainer();
+        /** @var Kernel $kernel */
+        $kernel = $container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
+        $doctrine = $container->get('doctrine');
+
         $this->addSql('ALTER TABLE c_lp CHANGE author author LONGTEXT NOT NULL');
 
         $table = $schema->getTable('c_lp');
@@ -49,6 +59,37 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql(
                 'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB12469DE2 FOREIGN KEY (category_id) REFERENCES c_lp_category (iid)'
             );
+        }
+
+        $em = $doctrine->getManager();
+        /** @var Connection $connection */
+        $connection = $em->getConnection();
+        $lpRepo = $container->get(CLpRepository::class);
+
+        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        /** @var Course $course */
+        foreach ($q->toIterable() as $course) {
+            $courseId = $course->getId();
+            $sql = "SELECT * FROM c_lp WHERE c_id = $courseId
+                    ORDER BY iid";
+            $result = $connection->executeQuery($sql);
+            $items = $result->fetchAllAssociative();
+            foreach ($items as $itemData) {
+                $id = $itemData['iid'];
+                $lp = $lpRepo->find($id);
+                if ($lp && !empty($lp->getPreviewImage())) {
+                    $path = $lp->getPreviewImage();
+                    $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/learning_path/images/'.$path;
+                    if (file_exists($rootPath)) {
+                        $this->addLegacyFileToResource($filePath, $lpRepo, $lp, $lp->getIid(), $path);
+                        $em->persist($lp);
+                        $em->flush();
+                    }
+                }
+            }
+
+            $em->flush();
+            $em->clear();
         }
 
         $table = $schema->getTable('c_lp_category');

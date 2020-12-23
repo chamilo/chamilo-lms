@@ -122,7 +122,12 @@ if (strlen($learnPath->get_preview_image()) > 0) {
 }
 $label = '' != $learnPath->get_preview_image() ? get_lang('Update Image') : get_lang('Add image');
 $form->addElement('file', 'lp_preview_image', [$label, get_lang('Trainer picture will resize if needed')]);
-$form->addRule('lp_preview_image', get_lang('Only PNG, JPG or GIF images allowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
+$form->addRule(
+    'lp_preview_image',
+    get_lang('Only PNG, JPG or GIF images allowed'),
+    'filetype',
+    ['jpg', 'jpeg', 'png', 'gif']
+);
 
 // Search terms (only if search is activated).
 if ('true' === api_get_setting('search_enabled')) {

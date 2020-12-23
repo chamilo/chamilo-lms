@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 
@@ -314,6 +315,7 @@ if (!empty($lpObject)) {
     }
 }
 
+$lpRepo = Database::getManager()->getRepository(CLp::class);
 $course_id = api_get_course_int_id();
 $lpItemId = $_REQUEST['id'] ?? 0;
 $lpItem = null;
@@ -1151,27 +1153,33 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
-            $author = $_REQUEST['lp_author'];
-            $_SESSION['oLP']->set_author($author);
-            // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
-            $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
-
-            if (isset($_REQUEST['lp_maker'])) {
-                $_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
-            }
-            if (isset($_REQUEST['lp_proximity'])) {
-                $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
-            }
-            $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
+            $em = Database::getManager();
+            $lpId = $oLP->get_id();
+            /** @var Clp $lp */
+            $lp = $lpRepo->find($lpId);
 
             $hide_toc_frame = null;
             if (isset($_REQUEST['hide_toc_frame']) && 1 == $_REQUEST['hide_toc_frame']) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
             }
-            $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
-            $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
-            $_SESSION['oLP']->setAccumulateWorkTime(isset($_REQUEST['accumulate_work_time']) ? $_REQUEST['accumulate_work_time'] : 0);
+
+            $lp
+                ->setName($_REQUEST['lp_name'])
+                ->setAuthor($_REQUEST['lp_author'])
+                ->setTheme($_REQUEST['lp_theme'])
+                ->setHideTocFrame($hide_toc_frame)
+                ->setPrerequisite($_POST['prerequisites'] ?? 0)
+                ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)
+                ->setContentMaker($_REQUEST['lp_maker'] ?? '')
+            ;
+
+            // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
+            $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
+
+            if (isset($_REQUEST['lp_proximity'])) {
+                $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
+            }
+
             $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
 
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
@@ -1206,6 +1214,9 @@ switch ($action) {
             if ($_FILES['lp_preview_image']['size'] > 0) {
                 $_SESSION['oLP']->upload_image($_FILES['lp_preview_image']);
             }
+
+            $em->persist($lp);
+            $em->flush();
 
             $form = new FormValidator('form1');
             $form->addSelect('skills', 'skills');

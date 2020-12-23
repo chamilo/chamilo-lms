@@ -802,8 +802,8 @@ class Thematic
         $sessionEntity = api_get_session_entity(api_get_session_id());
 
         $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
-
         $result = $qb->getQuery()->getResult();
+
         //var_dump(count($result));
 
         $data = [];
@@ -811,10 +811,10 @@ class Thematic
         //var_dump($thematic_id, $description_type);
         if (!empty($thematic_id)) {
             $qb->andWhere($qb->expr()->eq('resource.thematic', $thematic_id));
-
             //$thematic_id = intval($thematic_id);
             //$condition .= " AND thematic_id = $thematic_id ";
         }
+
         if (!empty($description_type)) {
             $qb->andWhere($qb->expr()->eq('resource.descriptionType', $description_type));
             //$condition .= " AND description_type = $description_type ";

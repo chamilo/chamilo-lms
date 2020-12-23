@@ -154,7 +154,6 @@ class LearnpathList
                 'seriousgame_mode' => $lp->getSeriousgameMode(),
                 'lp_scorm_debug' => $lp->getDebug(),
                 'lp_display_order' => $lp->getDisplayOrder(),
-                'lp_preview_image' => stripslashes($lp->getPreviewImage()),
                 'autolaunch' => $lp->getAutolaunch(),
                 'session_id' => $lp->getSessionId(),
                 'created_on' => $lp->getCreatedOn() ? $lp->getCreatedOn()->format('Y-m-d H:i:s') : null,

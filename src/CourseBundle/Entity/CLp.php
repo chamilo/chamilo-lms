@@ -152,13 +152,6 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="preview_image", type="string", length=255, nullable=false)
-     */
-    protected $previewImage;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="author", type="text", nullable=false)
      */
     protected $author;
@@ -309,7 +302,6 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->preventReinit = true;
         $this->path = '';
         $this->prerequisite = 0;
-        $this->previewImage = '';
         $this->publicatedOn = new \DateTime();
         $this->seriousgameMode = 0;
         $this->subscribeUsers = 0;
@@ -705,30 +697,6 @@ class CLp extends AbstractResource implements ResourceInterface
     public function getTheme()
     {
         return $this->theme;
-    }
-
-    /**
-     * Set previewImage.
-     *
-     * @param string $previewImage
-     *
-     * @return CLp
-     */
-    public function setPreviewImage($previewImage)
-    {
-        $this->previewImage = $previewImage;
-
-        return $this;
-    }
-
-    /**
-     * Get previewImage.
-     *
-     * @return string
-     */
-    public function getPreviewImage()
-    {
-        return $this->previewImage;
     }
 
     /**

@@ -72,7 +72,6 @@ class learnpath
     public $ordered_items = []; // List of the learnpath items in the order they are to be read.
     public $path = ''; // Path inside the scorm directory (if scorm).
     public $theme; // The current theme of the learning path.
-    public $preview_image; // The current image of the learning path.
     public $accumulateScormTime; // Flag to decide whether to accumulate SCORM time or not
     public $accumulateWorkTime; // The min time of learnpath
 
@@ -160,7 +159,6 @@ class learnpath
                 $this->scorm_debug = $entity->getDebug();
                 $this->js_lib = $entity->getJsLib();
                 $this->path = $entity->getPath();
-                $this->preview_image = $entity->getPreviewImage();
                 $this->author = $entity->getAuthor();
                 $this->hide_toc_frame = $entity->getHideTocFrame();
                 $this->lp_session_id = $entity->getSessionId();
@@ -2570,56 +2568,6 @@ class learnpath
         }
 
         return 0;
-    }
-
-    /**
-     * Gets the learnpath image.
-     *
-     * @return string Web URL of the LP image
-     */
-    public function get_preview_image()
-    {
-        if (!empty($this->preview_image)) {
-            return $this->preview_image;
-        }
-
-        return '';
-    }
-
-    /**
-     * @param string $size
-     * @param string $path_type
-     *
-     * @return bool|string
-     */
-    public function get_preview_image_path($size = null, $path_type = 'web')
-    {
-        $preview_image = $this->get_preview_image();
-        if (isset($preview_image) && !empty($preview_image)) {
-            $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
-            $image_path = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
-
-            if (isset($size)) {
-                $info = pathinfo($preview_image);
-                $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
-
-                if (file_exists($image_sys_path.$image_custom_size)) {
-                    if ('web' == $path_type) {
-                        return $image_path.$image_custom_size;
-                    } else {
-                        return $image_sys_path.$image_custom_size;
-                    }
-                }
-            } else {
-                if ('web' == $path_type) {
-                    return $image_path.$preview_image;
-                } else {
-                    return $image_sys_path.$preview_image;
-                }
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -5047,75 +4995,6 @@ class learnpath
     }
 
     /**
-     * Sets the name of the LP maker (publisher) (and save).
-     *
-     * @param string $name Optional string giving the new content_maker of this learnpath
-     *
-     * @return bool True
-     */
-    public function set_maker($name = '')
-    {
-        if (empty($name)) {
-            return false;
-        }
-        $this->maker = $name;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET
-                content_maker = '".Database::escape_string($this->maker)."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
-     * Sets the name of the current learnpath (and save).
-     *
-     * @param string $name Optional string giving the new name of this learnpath
-     *
-     * @return bool True/False
-     */
-    public function set_name($name = null)
-    {
-        if (empty($name)) {
-            return false;
-        }
-        $this->name = $name;
-
-        $lp_id = $this->get_id();
-
-        $repo = Container::getLpRepository();
-        /** @var CLp $lp */
-        $lp = $repo->find($lp_id);
-        $lp->setName($name);
-        $repo->updateNodeForResource($lp);
-
-        /*
-        $course_id = $this->course_info['real_id'];
-        $sql = "UPDATE $lp_table SET
-            name = '$name'
-            WHERE iid = $lp_id";
-        $result = Database::query($sql);
-        // If the lp is visible on the homepage, change his name there.
-        if (Database::affected_rows($result)) {
-        $session_id = api_get_session_id();
-        $session_condition = api_get_session_condition($session_id);
-        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-        $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
-        $sql = "UPDATE $tbl_tool SET name = '$name'
-        	    WHERE
-        	        c_id = $course_id AND
-        	        (link='$link' AND image='scormbuilder.gif' $session_condition)";
-        Database::query($sql);*/
-
-        //return true;
-        //}
-
-        return false;
-    }
-
-    /**
      * Set index specified prefix terms for all items in this path.
      *
      * @param string $terms_string Comma-separated list of terms
@@ -5189,108 +5068,6 @@ class learnpath
                 $di->getDb()->flush();
             }
         }
-
-        return true;
-    }
-
-    /**
-     * Sets the theme of the LP (local/remote) (and save).
-     *
-     * @param string $name Optional string giving the new theme of this learnpath
-     *
-     * @return bool Returns true if theme name is not empty
-     */
-    public function set_theme($name = '')
-    {
-        $this->theme = $name;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table
-                SET theme = '".Database::escape_string($this->theme)."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
-     * Sets the image of an LP (and save).
-     *
-     * @param string $name Optional string giving the new image of this learnpath
-     *
-     * @return bool Returns true if theme name is not empty
-     */
-    public function set_preview_image($name = '')
-    {
-        $this->preview_image = $name;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET
-                preview_image = '".Database::escape_string($this->preview_image)."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
-     * Sets the author of a LP (and save).
-     *
-     * @param string $name Optional string giving the new author of this learnpath
-     *
-     * @return bool Returns true if author's name is not empty
-     */
-    public function set_author($name = '')
-    {
-        $this->author = $name;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET author = '".Database::escape_string($name)."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
-     * Sets the hide_toc_frame parameter of a LP (and save).
-     *
-     * @param int $hide 1 if frame is hidden 0 then else
-     *
-     * @return bool Returns true if author's name is not empty
-     */
-    public function set_hide_toc_frame($hide)
-    {
-        if (intval($hide) == $hide) {
-            $this->hide_toc_frame = $hide;
-            $table = Database::get_course_table(TABLE_LP_MAIN);
-            $lp_id = $this->get_id();
-            $sql = "UPDATE $table SET
-                    hide_toc_frame = '".(int) $this->hide_toc_frame."'
-                    WHERE iid = $lp_id";
-            Database::query($sql);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Sets the prerequisite of a LP (and save).
-     *
-     * @param int $prerequisite integer giving the new prerequisite of this learnpath
-     *
-     * @return bool returns true if prerequisite is not empty
-     */
-    public function set_prerequisite($prerequisite)
-    {
-        $this->prerequisite = (int) $prerequisite;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET prerequisite = '".$this->prerequisite."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
 
         return true;
     }
@@ -9879,79 +9656,6 @@ EOD;
     }
 
     /**
-     * Delete the image relative to this learning path. No parameter. Only works on instanciated object.
-     *
-     * @return bool The results of the unlink function, or false if there was no image to start with
-     */
-    public function delete_lp_image()
-    {
-        $img = $this->get_preview_image();
-        if ('' != $img) {
-            $del_file = $this->get_preview_image_path(null, 'sys');
-            if (isset($del_file) && file_exists($del_file)) {
-                $del_file_2 = $this->get_preview_image_path(64, 'sys');
-                if (file_exists($del_file_2)) {
-                    unlink($del_file_2);
-                }
-                $this->set_preview_image('');
-
-                return @unlink($del_file);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Uploads an author image to the upload/learning_path/images directory.
-     *
-     * @param array    The image array, coming from the $_FILES superglobal
-     *
-     * @return bool True on success, false on error
-     */
-    public function upload_image($image_array)
-    {
-        if (!empty($image_array['name'])) {
-            $upload_ok = process_uploaded_file($image_array);
-            $has_attachment = true;
-        }
-
-        if ($upload_ok && $has_attachment) {
-            $courseDir = api_get_course_path().'/upload/learning_path/images';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path.$courseDir;
-            // Try to add an extension to the file if it hasn't one.
-            $new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);
-
-            if (filter_extension($new_file_name)) {
-                $file_extension = explode('.', $image_array['name']);
-                $file_extension = strtolower($file_extension[count($file_extension) - 1]);
-                $filename = uniqid('');
-                $new_file_name = $filename.'.'.$file_extension;
-                $new_path = $updir.'/'.$new_file_name;
-
-                // Resize the image.
-                $temp = new Image($image_array['tmp_name']);
-                $temp->resize(104);
-                $result = $temp->send_image($new_path);
-
-                // Storing the image filename.
-                if ($result) {
-                    $this->set_preview_image($new_file_name);
-
-                    //Resize to 64px to use on course homepage
-                    $temp->resize(64);
-                    $temp->send_image($updir.'/'.$filename.'.64.'.$file_extension);
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param int    $lp_id
      * @param string $status
      */
@@ -11579,29 +11283,6 @@ EOD;
         $row = Database::fetch_array($result);
 
         return (int) $row['total'];
-    }
-
-    /**
-     * Set whether this is a learning path with the accumulated work time or not.
-     *
-     * @param int $value (0 = false, 1 = true)
-     *
-     * @return bool
-     */
-    public function setAccumulateWorkTime($value)
-    {
-        if (!api_get_configuration_value('lp_minimum_time')) {
-            return false;
-        }
-
-        $this->accumulateWorkTime = (int) $value;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET accumulate_work_time = ".$this->accumulateWorkTime."
-                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
-        Database::query($sql);
-
-        return true;
     }
 
     /**

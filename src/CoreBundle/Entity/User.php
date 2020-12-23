@@ -750,7 +750,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
     public function __construct()
     {
         $this->uuid = Uuid::v4();
-        $this->apiToken = '';
+        $this->apiToken = null;
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;

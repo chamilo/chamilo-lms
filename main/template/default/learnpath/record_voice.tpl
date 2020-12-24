@@ -15,6 +15,48 @@
 
 <script>
     $(function() {
+        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        function startTimer() {
+            $("#timer").show();
+            var timerData = {
+                hour: parseInt($("#hour").text()),
+                minute: parseInt($("#minute").text()),
+                second: parseInt($("#second").text())
+            };
+
+            clearInterval(window.timerInterval);
+            window.timerInterval = setInterval(function(){
+                // Seconds
+                timerData.second++;
+                if (timerData.second >= 60) {
+                    timerData.second = 0;
+                    timerData.minute++;
+                }
+
+                // Minutes
+                if (timerData.minute >= 60) {
+                    timerData.minute = 0;
+                    timerData.hour++;
+                }
+
+                $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+                $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+                $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+            }, 1000);
+        }
+
+        function stopTimer() {
+            $("#hour").text('00');
+            $("#minute").text('00');
+            $("#second").text('00');
+            $("#timer").hide();
+        }
+
+        function pauseTimer() {
+            clearInterval(window.timerInterval);
+        }
+
         function useRecordRTC(){
             $('#record-audio-recordrtc').show();
 
@@ -24,20 +66,15 @@
                     btnStop = $('#btn-stop-record');
 
             btnStart.on('click', function () {
-                navigator.getUserMedia = navigator.getUserMedia ||
-                        navigator.mozGetUserMedia ||
-                        navigator.webkitGetUserMedia;
+                if ('' === audioTitle.val()) {
+                    alert('{{ 'TitleIsRequired'|get_lang | escape }} ');
 
-                if (navigator.getUserMedia) {
-                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-                } else if (navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia(mediaConstraints)
-                            .then(successCallback).error(errorCallback);
+                    return false;
                 }
 
                 function successCallback(stream) {
                     recordRTC = RecordRTC(stream, {
-                        numberOfAudioChannels: 1,
+                        recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
                         type: 'audio'
                     });
                     recordRTC.startRecording();
@@ -47,8 +84,19 @@
                 }
 
                 function errorCallback(error) {
-                    alert(error.message);
+                    stopTimer();
+                    alert(error);
                 }
+
+                if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
+                    return;
+                }
+
+                navigator.mediaDevices.getUserMedia(mediaConstraints)
+                    .then(successCallback)
+                    .catch(errorCallback);
             });
 
             btnStop.on('click', function () {

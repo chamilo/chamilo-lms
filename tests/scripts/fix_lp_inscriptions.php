@@ -34,7 +34,19 @@ while ($row = Database::fetch_array($result)) {
 
     while ($lpView = Database::fetch_array($lpResult)) {
         $lpId = $lpView['lp_id'];
+
+        if (empty($lpView['c_id'])) {
+            echo 'Course is empty '.PHP_EOL;
+            continue;
+        }
+
         $course = api_get_course_entity($lpView['c_id']);
+
+        if (null === $course) {
+            echo 'Course not found: #'.$lpView['c_id'].' '.PHP_EOL;
+            continue;
+        }
+
         $session = api_get_session_entity($lpView['session_id']);
         $itemRepo->subscribeUsersToItem(
             $currentUser,

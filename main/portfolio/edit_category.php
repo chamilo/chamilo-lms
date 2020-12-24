@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $form = new FormValidator('edit_category', 'post', $baseUrl."action=edit_category&id={$category->getId()}");

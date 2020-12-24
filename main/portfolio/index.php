@@ -1,7 +1,7 @@
 <?php
-/**
- * @license see /license.txt
- */
+
+/* For licensing terms, see /license.txt */
+
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;

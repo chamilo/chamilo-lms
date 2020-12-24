@@ -1,13 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 
 $categories = $em
     ->getRepository('ChamiloCoreBundle:PortfolioCategory')
-    ->findBy([
-        'user' => $user,
-    ]);
+    ->findBy(['user' => $user]);
 
 $form = new FormValidator('add_portfolio', 'post', $baseUrl.'action=add_item');
 if (api_get_configuration_value('save_titles_as_html')) {

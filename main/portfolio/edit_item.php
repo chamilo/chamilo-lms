@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $categories = $em
     ->getRepository('ChamiloCoreBundle:PortfolioCategory')
-    ->findBy([
-        'user' => $user,
-    ]);
+    ->findBy(['user' => $user]);
 
 $form = new FormValidator('edit_portfolio', 'post', $baseUrl."action=edit_item&id={$item->getId()}");
 if (api_get_configuration_value('save_titles_as_html')) {
@@ -17,11 +16,13 @@ if (api_get_configuration_value('save_titles_as_html')) {
 $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
 $form->addSelectFromCollection('category', get_lang('Category'), $categories, [], true, '__toString');
 $form->addButtonUpdate(get_lang('Update'));
-$form->setDefaults([
-    'title' => $item->getTitle(),
-    'content' => $item->getContent(),
-    'category' => $item->getCategory() ? $item->getCategory()->getId() : '',
-]);
+$form->setDefaults(
+    [
+        'title' => $item->getTitle(),
+        'content' => $item->getContent(),
+        'category' => $item->getCategory() ? $item->getCategory()->getId() : '',
+    ]
+);
 
 if ($form->validate()) {
     $values = $form->exportValues();

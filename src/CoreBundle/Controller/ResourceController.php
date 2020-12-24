@@ -542,8 +542,34 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException('Resource not found');
         }
 
-        $repo = $this->getRepositoryFromRequest($request);
+        /*$repo = $this->getRepositoryFromRequest($request);
+        if ($repo instanceof ResourceWithLinkInterface) {
+            $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
+            $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
 
+            return $this->redirect($url);
+        }*/
+
+        return $this->processFile($request, $resourceNode, 'show', $filter);
+    }
+
+    /**
+     * Redirect resource to link.
+     *
+     * @Route("/{tool}/{type}/{id}/link", methods={"GET"}, name="chamilo_core_resource_link")
+     */
+    public function linkAction(Request $request, RouterInterface $router): Response
+    {
+        $id = $request->get('id');
+        $em = $this->getDoctrine();
+        /** @var ResourceNode $resourceNode */
+        $resourceNode = $em->getRepository(ResourceNode::class)->find($id);
+
+        if (null === $resourceNode) {
+            throw new FileNotFoundException('Resource not found');
+        }
+
+        $repo = $this->getRepositoryFromRequest($request);
         if ($repo instanceof ResourceWithLinkInterface) {
             $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
             $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
@@ -551,7 +577,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->redirect($url);
         }
 
-        return $this->processFile($request, $resourceNode, 'show', $filter);
+        return $this->abort('No redirect');
     }
 
     /**

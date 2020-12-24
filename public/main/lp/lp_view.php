@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -39,9 +41,10 @@ $sessionEntity = api_get_session_entity($sessionId);
 
 /** @var learnpath $lp */
 $lp = Session::read('oLP');
-$repo = \Chamilo\CoreBundle\Framework\Container::getLpRepository();
+$repo = Container::getLpRepository();
+/** @var CLp $entity */
 $entity = $repo->find($lp_id);
-
+$lpRepo = Container::getLpRepository();
 if (empty($lp)) {
     api_not_allowed(true);
 }
@@ -432,8 +435,8 @@ switch ($returnLink) {
 }
 
 $lpPreviewImagePath = Display::returnIconPath('unknown.png', ICON_SIZE_BIG);
-if ($lp->get_preview_image()) {
-    $lpPreviewImagePath = $lp->get_preview_image_path();
+if ($entity->getResourceNode()->hasResourceFile()) {
+    $lpPreviewImagePath = $lpRepo->getResourceFileUrl($entity);
 }
 
 if ($lp->current == $lp->get_last()) {

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
@@ -11,10 +13,9 @@
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
  */
+
 $this_section = SECTION_COURSES;
 api_protect_course_script();
-
-/* Header and action code */
 $currentstyle = api_get_setting('stylesheets');
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -38,11 +39,10 @@ function activate_end_date() {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
-$learnpath_id = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
+$lpId = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
 
-/* MAIN CODE */
 if ((!$is_allowed_to_edit) || $isStudentView) {
-    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
+    header('location:lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq());
     exit;
 }
 
@@ -58,28 +58,8 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 
-Display::display_header(get_lang('Create new learning path'), 'Path');
 
-echo '<div class="actions">';
-echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    Display::return_icon(
-        'back.png',
-        get_lang('ReturnToLearning paths'),
-        '',
-        ICON_SIZE_MEDIUM
-    ).'</a>';
-echo '</div>';
-
-echo Display::return_message(get_lang('<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.'), 'normal', false);
-
-if ($_POST && empty($_REQUEST['lp_name'])) {
-    echo Display::return_message(
-        get_lang('The form contains incorrect or incomplete data. Please check your input.'),
-        'error',
-        false
-    );
-}
-
+$lpRepo = Container::getLpRepository();
 $form = new FormValidator(
     'lp_add',
     'post',
@@ -159,7 +139,7 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
         'checkbox',
         'subscribe_users',
         null,
-        get_lang('SubscribeUsersToLp')
+        get_lang('Subscribe users to learning path')
     );
 }
 
@@ -171,9 +151,8 @@ Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 $form->addElement('html', '</div>');
 
 $defaults['activate_start_date_check'] = 1;
-
 $defaults['accumulate_scorm_time'] = 0;
-if ('true' == api_get_setting('scorm_cumulative_session_time')) {
+if ('true' === api_get_setting('scorm_cumulative_session_time')) {
     $defaults['accumulate_scorm_time'] = 1;
 }
 
@@ -182,6 +161,93 @@ $defaults['expired_on'] = api_get_local_time(time() + 86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('Continue'));
+
+if ($form->validate()) {
+    $publicated_on = null;
+    if (isset($_REQUEST['activate_start_date_check']) &&
+        1 == $_REQUEST['activate_start_date_check']
+    ) {
+        $publicated_on = $_REQUEST['publicated_on'];
+    }
+
+    $expired_on = null;
+    if (isset($_REQUEST['activate_end_date_check']) &&
+        1 == $_REQUEST['activate_end_date_check']
+    ) {
+        $expired_on = $_REQUEST['expired_on'];
+    }
+
+    $lp = learnpath::add_lp(
+        api_get_course_id(),
+        $_REQUEST['lp_name'],
+        '',
+        'chamilo',
+        'manual',
+        '',
+        $publicated_on,
+        $expired_on,
+        $_REQUEST['category_id']
+    );
+    $lpId = $lp->getIid();
+    if ($lpId) {
+        // Create temp form validator to save skills
+        $form = new FormValidator('lp_add');
+        $form->addSelect('skills', 'skills');
+        Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
+
+        $extraFieldValue = new ExtraFieldValue('lp');
+        $_REQUEST['item_id'] = $lpId;
+        $extraFieldValue->saveFieldValues($_REQUEST);
+
+        // TODO: Maybe create a first directory directly to avoid bugging the user with useless queries
+        /*$_SESSION['oLP'] = new learnpath(
+            api_get_course_id(),
+            $lp,
+            api_get_user_id()
+        );*/
+
+        $lp->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0);
+        $lp->setAccumulateScormTime($_REQUEST['accumulate_scorm_time'] ?? 'true');
+        $lpRepo->update($lp);
+
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
+        header("Location: $url&isStudentView=false");
+        exit;
+    }
+
+    $url = api_get_self().'?action=list&'.api_get_cidreq();
+    header("Location: $url&isStudentView=false");
+    exit;
+}
+
+Display::display_header(get_lang('Create new learning path'), 'Path');
+
+echo '<div class="actions">';
+echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
+    Display::return_icon(
+        'back.png',
+        get_lang('ReturnToLearning paths'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).'</a>';
+echo '</div>';
+
+echo Display::return_message(
+    get_lang(
+        '<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.'
+    ),
+    'normal',
+    false
+);
+
+if ($_POST && empty($_REQUEST['lp_name'])) {
+    echo Display::return_message(
+        get_lang('The form contains incorrect or incomplete data. Please check your input.'),
+        'error',
+        false
+    );
+}
+
 $form->display();
 
 Display::display_footer();

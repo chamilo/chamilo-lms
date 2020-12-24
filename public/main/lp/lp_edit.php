@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -15,12 +16,20 @@ api_protect_course_script();
 
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
+$lpRepo = Container::getLpRepository();
+
+$lpId = $_REQUEST['lp_id'] ?? 0;
+if (empty($lpId)) {
+    api_not_allowed(true);
+}
+$lpId = (int) $lpId;
+
+/** @var \Chamilo\CourseBundle\Entity\CLp $lp */
+$lp = $lpRepo->find($lpId);
 
 $nameTools = get_lang('Document');
 $this_section = SECTION_COURSES;
 Event::event_access_tool(TOOL_LEARNPATH);
-
-$lpId = $learnPath->get_id();
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -63,8 +72,7 @@ $form = new FormValidator(
     'lp_controller.php?'.api_get_cidreq()
 );
 
-// Form title
-$form->addElement('header', get_lang('Edit'));
+$form->addHeader(get_lang('Edit'));
 
 // Title
 if (api_get_configuration_value('save_titles_as_html')) {
@@ -114,13 +122,14 @@ $form->addElement(
 $form->applyFilter('lp_author', 'html_filter');
 
 // LP image
-if (strlen($learnPath->get_preview_image()) > 0) {
-    $show_preview_image = '<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path()
-        .'/upload/learning_path/images/'.$learnPath->get_preview_image().'>';
-    $form->addElement('label', get_lang('Image preview'), $show_preview_image);
+$label = get_lang('Add image');
+if ($lp->getResourceNode()->hasResourceFile()) {
+    $label = get_lang('Update image');
+    $imageUrl = $lpRepo->getResourceFileUrl($lp);
+    $form->addElement('label', get_lang('Image preview'), '<img src="'.$imageUrl.'"/>');
     $form->addElement('checkbox', 'remove_picture', null, get_lang('Remove picture'));
 }
-$label = '' != $learnPath->get_preview_image() ? get_lang('Update Image') : get_lang('Add image');
+
 $form->addElement('file', 'lp_preview_image', [$label, get_lang('Trainer picture will resize if needed')]);
 $form->addRule(
     'lp_preview_image',
@@ -168,15 +177,23 @@ $items = $learnPath->display_lp_prerequisites_list();
 $form->addElement('html', '<label class="col-md-2">'.get_lang('Prerequisites').'</label>');
 $form->addElement('html', '<div class="col-md-8">');
 $form->addElement('html', $items);
-$form->addElement('html', '<div class="help-block">'.get_lang('Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)').'</div>');
+$form->addHtml(
+    '<div class="help-block">'.
+    get_lang(
+        'Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)'
+    ).
+    '</div>'
+);
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-2"></div>');
 $form->addElement('html', '</div>');
 // Time Control
 if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
-    $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
-    $form->addText('accumulate_work_time', [get_lang('Minimum time (minutes)'), get_lang('Minimum time (minutes)Description')]);
-    $defaults['accumulate_work_time'] = $accumulateTime;
+    $form->addText(
+        'accumulate_work_time',
+        [get_lang('Minimum time (minutes)'), get_lang('Minimum time (minutes)Description')]
+    );
+    $defaults['accumulate_work_time'] = $lp->getAccumulateWorkTime();
 }
 
 // Start date
@@ -235,7 +252,10 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
 $form->addElement(
     'checkbox',
     'accumulate_scorm_time',
-    [null, get_lang('When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.')],
+    [
+        null,
+        get_lang('When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.')
+    ],
     get_lang('Accumulate SCORM session time')
 );
 
@@ -281,7 +301,7 @@ $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 $form->addButtonSave(get_lang('Save course settings'));
 
 // Hidden fields
-$form->addElement('hidden', 'action', 'update_lp');
+$form->addElement('hidden', 'action', 'edit');
 $form->addElement('hidden', 'lp_id', $lpId);
 
 $htmlHeadXtra[] = '<script>
@@ -301,6 +321,103 @@ $defaults['expired_on'] = (!empty($expired_on))
 $defaults['subscribe_users'] = $learnPath->getSubscribeUsers();
 $defaults['skills'] = array_keys($skillList);
 $form->setDefaults($defaults);
+
+if ($form->validate()) {
+    $em = Database::getManager();
+    $hide_toc_frame = 0;
+    if (isset($_REQUEST['hide_toc_frame']) && 1 == $_REQUEST['hide_toc_frame']) {
+        $hide_toc_frame = 1;
+    }
+
+    $publicated_on = null;
+    if (isset($_REQUEST['activate_start_date_check']) && 1 == $_REQUEST['activate_start_date_check']) {
+        $publicated_on = $_REQUEST['publicated_on'];
+    }
+
+    $expired_on = null;
+    if (isset($_REQUEST['activate_end_date_check']) && 1 == $_REQUEST['activate_end_date_check']) {
+        $expired_on = $_REQUEST['expired_on'];
+    }
+
+    $lpCategoryRepo = Container::getLpCategoryRepository();
+    $category = null;
+    if (isset($_REQUEST['category_id'])) {
+        $category = $lpCategoryRepo->find($_REQUEST['category_id']);
+    }
+
+    $lp
+        ->setName($_REQUEST['lp_name'])
+        ->setAuthor($_REQUEST['lp_author'])
+        ->setTheme($_REQUEST['lp_theme'])
+        ->setHideTocFrame($hide_toc_frame)
+        ->setPrerequisite($_POST['prerequisites'] ?? 0)
+        ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)
+        ->setContentMaker($_REQUEST['lp_maker'] ?? '')
+        ->setContentLocal($_REQUEST['lp_proximity']?? '')
+        ->setUseMaxScore(isset($_POST['use_max_score']) ? 1 : 0)
+        ->setDefaultEncoding($_REQUEST['lp_encoding'])
+        ->setAccumulateScormTime(isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true')
+        ->setPublicatedOn(api_get_utc_datetime($publicated_on, true, true))
+        ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
+        ->setCategory($category)
+        ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)
+    ;
+
+    if (isset($_REQUEST['remove_picture']) && $_REQUEST['remove_picture']) {
+        $file = $lp->getResourceNode()->getResourceFile();
+        $em->remove($file);
+    }
+
+    $extraFieldValue = new ExtraFieldValue('lp');
+    $_REQUEST['item_id'] = $lpId;
+    $extraFieldValue->saveFieldValues($_REQUEST);
+
+    $request = Container::getRequest();
+    if ($request->files->has('lp_preview_image')) {
+        $file = $request->files->get('lp_preview_image');
+        $lpRepo->addFile($lp, $file);
+    }
+
+    $em->persist($lp);
+    $em->flush();
+
+    $form = new FormValidator('form1');
+    $form->addSelect('skills', 'skills');
+    Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
+
+    if ('true' === api_get_setting('search_enabled')) {
+        $specific_fields = get_specific_field_list();
+        foreach ($specific_fields as $specific_field) {
+            $learnPath->set_terms_by_prefix($_REQUEST[$specific_field['code']], $specific_field['code']);
+            $new_values = explode(',', trim($_REQUEST[$specific_field['code']]));
+            if (!empty($new_values)) {
+                array_walk($new_values, 'trim');
+                delete_all_specific_field_value(
+                    api_get_course_id(),
+                    $specific_field['id'],
+                    TOOL_LEARNPATH,
+                    $lpId
+                );
+
+                foreach ($new_values as $value) {
+                    if (!empty($value)) {
+                        add_specific_field_value(
+                            $specific_field['id'],
+                            api_get_course_id(),
+                            TOOL_LEARNPATH,
+                            $lpId,
+                            $value
+                        );
+                    }
+                }
+            }
+        }
+    }
+    Display::addFlash(Display::return_message(get_lang('Update successful')));
+    $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
+    header('Location: '.$url);
+    exit;
+}
 
 Display::display_header(get_lang('Course settings'), 'Path');
 

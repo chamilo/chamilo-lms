@@ -357,7 +357,7 @@ class learnpath
                                             'total_time' => 0,
                                             'score' => 0,
                                         ];
-                                        $insertId = Database::insert($itemViewTable, $params);
+                                        Database::insert($itemViewTable, $params);
 
                                         $this->items[$item_id]->set_lp_view(
                                             $this->lp_view_id,
@@ -387,8 +387,6 @@ class learnpath
                     error_log('lp_view_session_id '.$this->lp_view_session_id);
                     error_log('End of learnpath constructor for learnpath '.$this->get_id());
                 }
-            } else {
-                $this->error = 'Learnpath ID does not exist in database ('.$sql.')';
             }
         }
     }
@@ -669,7 +667,7 @@ class learnpath
      * @param int    $categoryId
      * @param int    $userId
      *
-     * @return int The new learnpath ID on success, 0 on failure
+     * @return CLp
      */
     public static function add_lp(
         $courseCode,
@@ -781,7 +779,6 @@ class learnpath
                     ->addCourseLink($courseEntity, $sessionEntity)
                 ;
 
-                $repo = Container::getLpRepository();
                 $em = Database::getManager();
                 $em->persist($lp);
                 $em->flush();
@@ -810,7 +807,7 @@ class learnpath
                 break;
         }
 
-        return $id;
+        return $lp;
     }
 
     /**
@@ -5073,30 +5070,6 @@ class learnpath
     }
 
     /**
-     * Sets the location/proximity of the LP (local/remote) (and save).
-     *
-     * @param string $name Optional string giving the new location of this learnpath
-     *
-     * @return bool True on success / False on error
-     */
-    public function set_proximity($name = '')
-    {
-        if (empty($name)) {
-            return false;
-        }
-
-        $this->proximity = $name;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET
-                    content_local = '".Database::escape_string($name)."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
      * Sets the previous item ID to a given ID. Generally, this should be set to the previous 'current' item.
      *
      * @param int $id DB ID of the item
@@ -5126,73 +5099,6 @@ class learnpath
                     use_max_score = '".$this->use_max_score."'
                 WHERE iid = $lp_id";
         Database::query($sql);
-
-        return true;
-    }
-
-    /**
-     * Sets and saves the expired_on date.
-     *
-     * @param string $expired_on Optional string giving the new author of this learnpath
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return bool Returns true if author's name is not empty
-     */
-    public function set_expired_on($expired_on)
-    {
-        $em = Database::getManager();
-        /** @var CLp $lp */
-        $lp = $em
-            ->getRepository('ChamiloCourseBundle:CLp')
-            ->findOneBy(
-                [
-                    'iid' => $this->get_id(),
-                ]
-            );
-
-        if (!$lp) {
-            return false;
-        }
-
-        $this->expired_on = !empty($expired_on) ? api_get_utc_datetime($expired_on, false, true) : null;
-
-        $lp->setExpiredOn($this->expired_on);
-        $em->persist($lp);
-        $em->flush();
-
-        return true;
-    }
-
-    /**
-     * Sets and saves the publicated_on date.
-     *
-     * @param string $publicated_on Optional string giving the new author of this learnpath
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return bool Returns true if author's name is not empty
-     */
-    public function set_publicated_on($publicated_on)
-    {
-        $em = Database::getManager();
-        /** @var CLp $lp */
-        $lp = $em
-            ->getRepository('ChamiloCourseBundle:CLp')
-            ->findOneBy(
-                [
-                    'iid' => $this->get_id(),
-                ]
-            );
-
-        if (!$lp) {
-            return false;
-        }
-
-        $this->publicated_on = !empty($publicated_on) ? api_get_utc_datetime($publicated_on, false, true) : null;
-        $lp->setPublicatedOn($this->publicated_on);
-        $em->persist($lp);
-        $em->flush();
 
         return true;
     }
@@ -10154,31 +10060,6 @@ EOD;
     }
 
     /**
-     * @param int $categoryId
-     *
-     * @return bool
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = (int) $categoryId;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        if (empty($categoryId)) {
-            $this->categoryId = null;
-            $sql = "UPDATE $table SET category_id = NULL WHERE iid = $lp_id";
-            Database::query($sql);
-
-            return true;
-        }
-
-        $sql = "UPDATE $table SET category_id = ".$this->categoryId."
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
      * Get whether this is a learning path with the possibility to subscribe
      * users or not.
      *
@@ -10187,26 +10068,6 @@ EOD;
     public function getSubscribeUsers()
     {
         return $this->subscribeUsers;
-    }
-
-    /**
-     * Set whether this is a learning path with the possibility to subscribe
-     * users or not.
-     *
-     * @param int $value (0 = false, 1 = true)
-     *
-     * @return bool
-     */
-    public function setSubscribeUsers($value)
-    {
-        $this->subscribeUsers = (int) $value;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET subscribe_users = ".$this->subscribeUsers."
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
     }
 
     /**
@@ -10693,26 +10554,6 @@ EOD;
     public function getAccumulateScormTime()
     {
         return $this->accumulateScormTime;
-    }
-
-    /**
-     * Set whether this is a learning path with the accumulated SCORM time or not.
-     *
-     * @param int $value (0 = false, 1 = true)
-     *
-     * @return bool Always returns true
-     */
-    public function setAccumulateScormTime($value)
-    {
-        $this->accumulateScormTime = (int) $value;
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table
-                SET accumulate_scorm_time = ".$this->accumulateScormTime."
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
     }
 
     /**

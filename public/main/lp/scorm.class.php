@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -43,10 +44,6 @@ class scorm extends learnpath
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
-        if ($this->debug > 0) {
-            error_log('New LP - scorm::scorm('.$course_code.','.$resource_id.','.$user_id.') - In scorm constructor');
-        }
-
         parent::__construct($course_code, $resource_id, $user_id);
     }
 
@@ -60,7 +57,6 @@ class scorm extends learnpath
         if ($this->debug > 0) {
             error_log('New LP - scorm::open() - In scorm::open method', 0);
         }
-        // redefine parent method
     }
 
     /**
@@ -688,7 +684,11 @@ class scorm extends learnpath
                 error_log('New LP - Not enough space to store package');
             }
             Display::addFlash(
-                Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'))
+                Display::return_message(
+                    get_lang(
+                        'The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'
+                    )
+                )
             );
 
             return false;
@@ -755,56 +755,6 @@ class scorm extends learnpath
         }
 
         return $courseSysDir.$newDir.$manifest;
-    }
-
-    /**
-     * Sets the proximity setting in the database.
-     *
-     * @param string    Proximity setting
-     * @param int $courseId
-     *
-     * @return bool
-     */
-    public function set_proximity($proxy = '', $courseId = null)
-    {
-        if ($this->debug > 0) {
-            error_log('In scorm::set_proximity('.$proxy.') method');
-        }
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_local = '$proxy'
-                    WHERE iid = $lp";
-            $res = Database::query($sql);
-
-            return $res;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Sets the content maker setting in the database.
-     *
-     * @param string    Proximity setting
-     *
-     * @return bool
-     */
-    public function set_maker($maker = '', $courseId = null)
-    {
-        if ($this->debug > 0) {
-            error_log('In scorm::set_maker method('.$maker.')', 0);
-        }
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE iid = $lp";
-            $res = Database::query($sql);
-
-            return $res;
-        } else {
-            return false;
-        }
     }
 
     /**

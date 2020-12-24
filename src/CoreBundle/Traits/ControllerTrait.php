@@ -16,6 +16,8 @@ use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
+use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
@@ -50,6 +52,9 @@ trait ControllerTrait
         $services[] = CQuizQuestionCategoryRepository::class;
         $services[] = CForumForumRepository::class;
         $services[] = CForumAttachmentRepository::class;
+
+        $services[] = CLpRepository::class;
+        $services[] = CLpCategoryRepository::class;
 
         $services[] = IllustrationRepository::class;
 

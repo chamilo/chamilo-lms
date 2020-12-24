@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
@@ -314,8 +315,6 @@ if (!empty($lpObject)) {
         }
     }
 }
-
-$lpRepo = Database::getManager()->getRepository(CLp::class);
 $course_id = api_get_course_int_id();
 $lpItemId = $_REQUEST['id'] ?? 0;
 $lpItem = null;
@@ -388,8 +387,13 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
     }
 }
 
+$lpRepo = Container::getLpRepository();
+$lp = null;
+if ($lp_found) {
+    /** @var CLp $lp */
+    $lp = $lpRepo->find($oLP->get_id());
+}
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
-
 if (isset($_SESSION['oLP'])) {
     // Reinitialises array used by javascript to update items in the TOC.
     $_SESSION['oLP']->update_queue = [];
@@ -725,72 +729,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        if (isset($_REQUEST['lp_name']) && !empty($_REQUEST['lp_name'])) {
-            $_REQUEST['lp_name'] = trim($_REQUEST['lp_name']);
-            Session::write('refresh', 1);
-
-            if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_REQUEST['post_time']) {
-                require 'lp_add.php';
-            } else {
-                Session::write('post_time', $_POST['post_time']);
-
-                $publicated_on = null;
-                if (isset($_REQUEST['activate_start_date_check']) &&
-                    1 == $_REQUEST['activate_start_date_check']
-                ) {
-                    $publicated_on = $_REQUEST['publicated_on'];
-                }
-
-                $expired_on = null;
-                if (isset($_REQUEST['activate_end_date_check']) &&
-                    1 == $_REQUEST['activate_end_date_check']
-                ) {
-                    $expired_on = $_REQUEST['expired_on'];
-                }
-
-                $new_lp_id = learnpath::add_lp(
-                    api_get_course_id(),
-                    $_REQUEST['lp_name'],
-                    '',
-                    'chamilo',
-                    'manual',
-                    '',
-                    $publicated_on,
-                    $expired_on,
-                    $_REQUEST['category_id']
-                );
-
-                if (is_numeric($new_lp_id)) {
-                    // Create temp form validator to save skills
-                    $form = new FormValidator('lp_add');
-                    $form->addSelect('skills', 'skills');
-                    Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $new_lp_id);
-
-                    $extraFieldValue = new ExtraFieldValue('lp');
-                    $_REQUEST['item_id'] = $new_lp_id;
-                    $extraFieldValue->saveFieldValues($_REQUEST);
-
-                    // TODO: Maybe create a first directory directly to avoid bugging the user with useless queries
-                    $_SESSION['oLP'] = new learnpath(
-                        api_get_course_id(),
-                        $new_lp_id,
-                        api_get_user_id()
-                    );
-
-                    $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
-                    $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
-
-                    $accumulateScormTime = $_REQUEST['accumulate_scorm_time'] ?? 'true';
-                    $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
-
-                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
-                    header("Location: $url&isStudentView=false");
-                    exit;
-                }
-            }
-        } else {
-            require 'lp_add.php';
-        }
+        require 'lp_add.php';
         break;
     case 'admin_view':
         if (!$is_allowed_to_edit) {
@@ -1143,118 +1082,6 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             require 'lp_edit.php';
-        }
-        break;
-    case 'update_lp':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            Session::write('refresh', 1);
-            $em = Database::getManager();
-            $lpId = $oLP->get_id();
-            /** @var Clp $lp */
-            $lp = $lpRepo->find($lpId);
-
-            $hide_toc_frame = null;
-            if (isset($_REQUEST['hide_toc_frame']) && 1 == $_REQUEST['hide_toc_frame']) {
-                $hide_toc_frame = $_REQUEST['hide_toc_frame'];
-            }
-
-            $lp
-                ->setName($_REQUEST['lp_name'])
-                ->setAuthor($_REQUEST['lp_author'])
-                ->setTheme($_REQUEST['lp_theme'])
-                ->setHideTocFrame($hide_toc_frame)
-                ->setPrerequisite($_POST['prerequisites'] ?? 0)
-                ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)
-                ->setContentMaker($_REQUEST['lp_maker'] ?? '')
-            ;
-
-            // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
-            $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
-
-            if (isset($_REQUEST['lp_proximity'])) {
-                $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
-            }
-
-            $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
-
-            $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
-            $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
-
-            $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
-            $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
-
-            $publicated_on = null;
-            if (isset($_REQUEST['activate_start_date_check']) && 1 == $_REQUEST['activate_start_date_check']) {
-                $publicated_on = $_REQUEST['publicated_on'];
-            }
-
-            $expired_on = null;
-            if (isset($_REQUEST['activate_end_date_check']) && 1 == $_REQUEST['activate_end_date_check']) {
-                $expired_on = $_REQUEST['expired_on'];
-            }
-
-            $_SESSION['oLP']->setCategoryId($_REQUEST['category_id']);
-            $_SESSION['oLP']->set_modified_on();
-            $_SESSION['oLP']->set_publicated_on($publicated_on);
-            $_SESSION['oLP']->set_expired_on($expired_on);
-
-            if (isset($_REQUEST['remove_picture']) && $_REQUEST['remove_picture']) {
-                $_SESSION['oLP']->delete_lp_image();
-            }
-
-            $extraFieldValue = new ExtraFieldValue('lp');
-            $_REQUEST['item_id'] = $_SESSION['oLP']->lp_id;
-            $extraFieldValue->saveFieldValues($_REQUEST);
-
-            if ($_FILES['lp_preview_image']['size'] > 0) {
-                $_SESSION['oLP']->upload_image($_FILES['lp_preview_image']);
-            }
-
-            $em->persist($lp);
-            $em->flush();
-
-            $form = new FormValidator('form1');
-            $form->addSelect('skills', 'skills');
-            Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $_SESSION['oLP']->get_id());
-
-            if ('true' === api_get_setting('search_enabled')) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-                $specific_fields = get_specific_field_list();
-                foreach ($specific_fields as $specific_field) {
-                    $_SESSION['oLP']->set_terms_by_prefix($_REQUEST[$specific_field['code']], $specific_field['code']);
-                    $new_values = explode(',', trim($_REQUEST[$specific_field['code']]));
-                    if (!empty($new_values)) {
-                        array_walk($new_values, 'trim');
-                        delete_all_specific_field_value(
-                            api_get_course_id(),
-                            $specific_field['id'],
-                            TOOL_LEARNPATH,
-                            $_SESSION['oLP']->lp_id
-                        );
-
-                        foreach ($new_values as $value) {
-                            if (!empty($value)) {
-                                add_specific_field_value(
-                                    $specific_field['id'],
-                                    api_get_course_id(),
-                                    TOOL_LEARNPATH,
-                                    $_SESSION['oLP']->lp_id,
-                                    $value
-                                );
-                            }
-                        }
-                    }
-                }
-            }
-            Display::addFlash(Display::return_message(get_lang('Update successful')));
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
-            header('Location: '.$url);
-            exit;
         }
         break;
     case 'add_sub_item':

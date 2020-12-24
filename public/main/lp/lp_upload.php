@@ -12,8 +12,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
-$course_dir = api_get_course_path().'/scorm';
-$course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
 if (empty($_POST['current_dir'])) {
     $current_dir = '';
 } else {
@@ -34,6 +32,8 @@ if (api_get_configuration_value('allow_htaccess_import_from_scorm') && isset($_P
 $user_file = isset($_GET['user_file']) ? $_GET['user_file'] : [];
 $user_file = $user_file ? $user_file : [];
 $is_error = isset($user_file['error']) ? $user_file['error'] : false;
+$em = Database::getManager();
+
 if (isset($_POST) && $is_error) {
     Display::addFlash(
         Display::return_message(get_lang('The file is too big to upload.'))
@@ -63,7 +63,7 @@ if (isset($_POST) && $is_error) {
 
     $maker = 'Scorm';
     if (!empty($_REQUEST['content_maker'])) {
-        $maker = Database::escape_string($_REQUEST['content_maker']);
+        $maker = $_REQUEST['content_maker'];
     }
 
     switch ($type) {
@@ -80,6 +80,7 @@ if (isset($_POST) && $is_error) {
             break;
         case 'scorm':
             $oScorm = new scorm();
+            $entity = $oScorm->getEntity();
             $manifest = $oScorm->import_package(
                 $_FILES['user_file'],
                 $current_dir,
@@ -93,21 +94,32 @@ if (isset($_POST) && $is_error) {
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
-            $oScorm->set_proximity($proximity);
-            $oScorm->set_maker($maker);
-            $oScorm->set_jslib('scorm_api.php');
+
+            $entity
+                ->setContentLocal($proximity)
+                ->setContentMaker($maker)
+                ->setJsLib('scorm_api.php')
+            ;
+            $em->persist($entity);
+            $em->flush();
+
             break;
         case 'aicc':
             $oAICC = new aicc();
+            $entity = $oAICC->getEntity();
             $config_dir = $oAICC->import_package($_FILES['user_file']);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
-            $oAICC->set_proximity($proximity);
-            $oAICC->set_maker($maker);
-            $oAICC->set_jslib('aicc_api.php');
+            $entity
+                ->setContentLocal($proximity)
+                ->setContentMaker($maker)
+                ->setJsLib('aicc_api.php')
+            ;
+            $em->persist($entity);
+            $em->flush();
             break;
         case 'oogie':
             require_once 'openoffice_presentation.class.php';
@@ -118,7 +130,7 @@ if (isset($_POST) && $is_error) {
             break;
         case 'woogie':
             require_once 'openoffice_text.class.php';
-            $split_steps = (empty($_POST['split_steps']) || 'per_page' == $_POST['split_steps']) ? 'per_page' : 'per_chapter';
+            $split_steps = empty($_POST['split_steps']) || 'per_page' === $_POST['split_steps'] ? 'per_page' : 'per_chapter';
             $o_doc = new OpenofficeText($split_steps);
             $first_item_id = $o_doc->convert_document($_FILES['user_file']);
             Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
@@ -130,7 +142,7 @@ if (isset($_POST) && $is_error) {
             return false;
             break;
     }
-} elseif ('POST' == $_SERVER['REQUEST_METHOD']) {
+} elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
     // end if is_uploaded_file
     // If file name given to get in /upload/, try importing this way.
     // A file upload has been detected, now deal with the file...
@@ -161,6 +173,7 @@ if (isset($_POST) && $is_error) {
     switch ($type) {
         case 'scorm':
             $oScorm = new scorm();
+            $entity = $oScorm->getEntity();
             $manifest = $oScorm->import_local_package($s, $current_dir);
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
@@ -176,12 +189,18 @@ if (isset($_POST) && $is_error) {
             if (!empty($_REQUEST['content_maker'])) {
                 $maker = Database::escape_string($_REQUEST['content_maker']);
             }
-            $oScorm->set_proximity($proximity);
-            $oScorm->set_maker($maker);
-            $oScorm->set_jslib('scorm_api.php');
+
+            $entity
+                ->setContentLocal($proximity)
+                ->setContentMaker($maker)
+                ->setJsLib('scorm_api.php')
+            ;
+            $em->persist($entity);
+            $em->flush();
             break;
         case 'aicc':
             $oAICC = new aicc();
+            $entity = $oAICC->getEntity();
             $config_dir = $oAICC->import_local_package($s, $current_dir);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
@@ -190,15 +209,20 @@ if (isset($_POST) && $is_error) {
             }
             $proximity = '';
             if (!empty($_REQUEST['content_proximity'])) {
-                $proximity = Database::escape_string($_REQUEST['content_proximity']);
+                $proximity = $_REQUEST['content_proximity'];
             }
             $maker = '';
             if (!empty($_REQUEST['content_maker'])) {
-                $maker = Database::escape_string($_REQUEST['content_maker']);
+                $maker = $_REQUEST['content_maker'];
             }
-            $oAICC->set_proximity($proximity);
-            $oAICC->set_maker($maker);
-            $oAICC->set_jslib('aicc_api.php');
+
+            $entity
+                ->setContentLocal($proximity)
+                ->setContentMaker($maker)
+                ->setJsLib('aicc_api.php')
+            ;
+            $em->persist($entity);
+            $em->flush();
             break;
         case '':
         default:

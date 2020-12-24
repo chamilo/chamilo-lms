@@ -67,8 +67,6 @@ switch ($action) {
             $title = $_REQUEST['title'] ?? '';
             $type = $_REQUEST['type'] ?? '';
             $id = $_REQUEST['id'] ?? 0;
-            error_log($id);
-            error_log($type);
             switch ($type) {
                 case TOOL_QUIZ:
                     $title = Exercise::format_title_variable($title);

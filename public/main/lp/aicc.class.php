@@ -54,9 +54,6 @@ class aicc extends learnpath
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
-        if ($this->debug > 0) {
-            error_log('In aicc::aicc()');
-        }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
         }
@@ -571,31 +568,6 @@ class aicc extends learnpath
         }
 
         return $course_sys_dir.$new_dir.$config_dir;
-    }
-
-    /**
-     * Sets the proximity setting in the database.
-     *
-     * @param string $proxy Proximity setting
-     *
-     * @return bool
-     */
-    public function set_proximity($proxy = '')
-    {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In aicc::set_proximity('.$proxy.') method', 0);
-        }
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$course_id." id = ".$lp;
-            Database::query($sql);
-
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**

@@ -1051,6 +1051,13 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->subscribeUsers;
     }
 
+    public function setSubscribeUsers($value): self
+    {
+        $this->subscribeUsers = $value;
+
+        return $this;
+    }
+
     public function getForum(): ?CForumForum
     {
         return $this->forum;

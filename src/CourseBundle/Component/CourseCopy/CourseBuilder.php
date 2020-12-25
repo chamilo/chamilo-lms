@@ -367,7 +367,7 @@ class CourseBuilder
 
             if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -382,7 +382,7 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -410,7 +410,7 @@ class CourseBuilder
         } else {
             if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -425,7 +425,7 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -769,18 +769,18 @@ class CourseBuilder
 
             // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
-                    WHERE 
-                      c_id = $courseId AND 
+                    WHERE
+                      c_id = $courseId AND
                       $idCondition
-                      active >=0 
+                      active >=0
                       $sessionCondition ";
         } else {
             // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
-                    WHERE 
-                      c_id = $courseId AND 
+                    WHERE
+                      c_id = $courseId AND
                       $idCondition
-                      active >=0 AND 
+                      active >=0 AND
                       (session_id = 0 OR session_id IS NULL)";
         }
 
@@ -1513,7 +1513,7 @@ class CourseBuilder
                     $obj->debug,
                     $visibility,
                     $obj->author,
-                    $obj->preview_image,
+                    //$obj->preview_image,
                     $obj->use_max_score,
                     $obj->autolaunch,
                     $obj->created_on,
@@ -1527,7 +1527,7 @@ class CourseBuilder
 
                 $this->course->add_resource($lp);
 
-                if (!empty($obj->preview_image)) {
+                /*if (!empty($obj->preview_image)) {
                     // Add LP teacher image
                     $asset = new Asset(
                         $obj->preview_image,
@@ -1535,7 +1535,7 @@ class CourseBuilder
                         '/upload/learning_path/images/'.$obj->preview_image
                     );
                     $this->course->add_resource($asset);
-                }
+                }*/
             }
         }
 
@@ -1850,8 +1850,8 @@ class CourseBuilder
 
         $sql = "SELECT * FROM $table_work
                 WHERE
-                    c_id = $courseId                    
-                    $sessionCondition AND                    
+                    c_id = $courseId
+                    $sessionCondition AND
                     filetype = 'folder' AND
                     parent_id = 0 AND
                     active = 1

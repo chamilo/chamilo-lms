@@ -36,4 +36,3 @@ services:
             - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
         exclude: '../../Repository/CCourseSettingRepository.php'
-

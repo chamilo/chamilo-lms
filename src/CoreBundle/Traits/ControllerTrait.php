@@ -32,7 +32,7 @@ trait ControllerTrait
     {
         $services = parent::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
-        $services['resource_factory'] = ResourceFactory::class;
+        //$services['resource_factory'] = ResourceFactory::class;
         $services['glide'] = Glide::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;

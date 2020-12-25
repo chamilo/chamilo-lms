@@ -2805,7 +2805,7 @@ class CourseRestorer
                     'js_lib' => self::DBUTF8($lp->js_lib),
                     'content_license' => self::DBUTF8($lp->content_license),
                     'author' => self::DBUTF8($lp->author),
-                    'preview_image' => self::DBUTF8($lp->preview_image),
+                    //'preview_image' => self::DBUTF8($lp->preview_image),
                     'use_max_score' => self::DBUTF8($lp->use_max_score),
                     'autolaunch' => self::DBUTF8(isset($lp->autolaunch) ? $lp->autolaunch : ''),
                     'created_on' => empty($lp->created_on) ? api_get_utc_datetime() : self::DBUTF8($lp->created_on),

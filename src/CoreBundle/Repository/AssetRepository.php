@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Asset;
-use Chamilo\CoreBundle\Entity\ResourceFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\FilesystemInterface;
@@ -58,10 +57,11 @@ class AssetRepository extends ServiceEntityRepository
         }
     }
 
-    public function getFolder(Asset $asset):? string
+    public function getFolder(Asset $asset): ? string
     {
         if ($asset->hasFile()) {
             $file = $asset->getTitle();
+
             return '/'.$asset->getCategory().'/'.$file.'/';
         }
 

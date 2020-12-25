@@ -1411,9 +1411,9 @@
     yargs-parser "^18.1.3"
 
 "@tinymce/tinymce-vue@^3.2.2":
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-vue/-/tinymce-vue-3.2.6.tgz#66bf3c1d338348e9ec9da16f98b980eecb698603"
-  integrity sha512-MOzYtjvzzjY2ziiK3a9Mbv/Yl4KptAqQD1l51OVjme4CF1RapEevSgnKHTzsu61F8iHfRjFogdCWy2QG6HATNg==
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-vue/-/tinymce-vue-3.2.7.tgz#543bf9a3839a77ea8fb378a3054f9976f3e72dbd"
+  integrity sha512-ahGIuGFDlBnnqY2Q7sNBj8//nPuLP2kg9LSEBEi5xll9/F9wlJ3YYEGoe+YM8e9iSGAnkzfbo853HyCnVEV1/w==
 
 "@types/accepts@*", "@types/accepts@^1.3.5":
   version "1.3.5"
@@ -1604,14 +1604,14 @@
     form-data "^3.0.0"
 
 "@types/node@*", "@types/node@>=6":
-  version "14.14.14"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.14.tgz#f7fd5f3cc8521301119f63910f0fb965c7d761ae"
-  integrity sha512-UHnOPWVWV1z+VV8k6L1HhG7UbGBgIdghqF3l9Ny9ApPghbjICXkUJSd/b9gOgQfjM1r+37cipdw/HJ3F6ICEnQ==
+  version "14.14.16"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.16.tgz#3cc351f8d48101deadfed4c9e4f116048d437b4b"
+  integrity sha512-naXYePhweTi+BMv11TgioE2/FXU4fSl29HAH1ffxVciNsH3rYXjNP2yM8wqmSm7jS20gM8TIklKiTen+1iVncw==
 
 "@types/node@^10.1.0":
-  version "10.17.49"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.49.tgz#ecf0b67bab4b84d0ec9b0709db4aac3824a51c4a"
-  integrity sha512-PGaJNs5IZz5XgzwJvL/1zRfZB7iaJ5BydZ8/Picm+lUNYoNO9iVTQkVy5eUh0dZDrx3rBOIs3GCbCRmMuYyqwg==
+  version "10.17.50"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.50.tgz#7a20902af591282aa9176baefc37d4372131c32d"
+  integrity sha512-vwX+/ija9xKc/z9VqMCdbf4WYcMTGsI0I/L/6shIF3qXURxZOhPQlPRHtjTpiNhAwn0paMJzlOQqw6mAGEQnTA==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -6225,9 +6225,9 @@ ejs@^2.6.1, ejs@^2.7.1:
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
 electron-to-chromium@^1.3.47, electron-to-chromium@^1.3.621:
-  version "1.3.632"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.632.tgz#3b1d89fe5065dd6a65a1dafc25bbe6f218ca9326"
-  integrity sha512-LkaEH9HHr9fodmm3txF4nFMyHN3Yr50HcpD/DBHpLCxzM9doV8AV0er6aBWva4IDs2aA9kGguces0rp+WKL7rg==
+  version "1.3.633"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.633.tgz#16dd5aec9de03894e8d14a1db4cda8a369b9b7fe"
+  integrity sha512-bsVCsONiVX1abkWdH7KtpuDAhsQ3N3bjPYhROSAXE78roJKet0Y5wznA14JE9pzbwSZmSMAW6KiKYf1RvbTJkA==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -8131,9 +8131,9 @@ hex-color-regex@^1.1.0:
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
 highlight.js@^10.0, highlight.js@^10.0.0:
-  version "10.4.1"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.4.1.tgz#d48fbcf4a9971c4361b3f95f302747afe19dbad0"
-  integrity sha512-yR5lWvNz7c85OhVAEAeFhVCc/GV4C30Fjzc/rCP0aCWzc1UUOPUk55dK/qdwTZHBvMZo+eZ2jpk62ndX/xMFlg==
+  version "10.5.0"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.5.0.tgz#3f09fede6a865757378f2d9ebdcbc15ba268f98f"
+  integrity sha512-xTmvd9HiIHR6L53TMC7TKolEj65zG1XU+Onr8oi86mYa+nLcIbxTTWkpW7CsEwv/vK7u1zb8alZIMLDqqN6KTw==
 
 hljs@^6.2:
   version "6.2.3"
@@ -14731,9 +14731,9 @@ vuelidate@^0.7.5:
   integrity sha512-suzIuet1jGcyZ4oUSW8J27R2tNrJ9cIfklAh63EbAkFjE380iv97BAiIeolRYoB9bF9usBXCu4BxftWN1Dkn3g==
 
 vuetify@^2.2.27:
-  version "2.3.23"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.3.23.tgz#1abd520c11e504bcae9a7299124727d83afef643"
-  integrity sha512-JZc9mFYfxacsXTEM4zCwU6PW1inMEYyHjZdkWkGnPlW1OQwmme4FXMIISB3nPI7BE+wcEDtGfBGBtSqFEJkHSw==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.0.tgz#6aa2616b0fecb0614cf85052b0ffbb5cad80bf92"
+  integrity sha512-FBFAtg1ZnNwDBhMzENCzgh0hBV+HMjXejrxeRQqTfKPojKQSQFswtdHatUPmlkArDulZC73GRs2F/IwdF48o5g==
 
 vuex-map-fields@^1.4.0:
   version "1.4.1"

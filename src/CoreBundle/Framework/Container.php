@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -52,8 +53,10 @@ use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
@@ -132,18 +135,12 @@ class Container
         return self::$container->get('security.role_hierarchy');
     }
 
-    /**
-     * @return string
-     */
-    public static function getLogDir()
+    public static function getLogDir(): string
     {
         return self::$container->get('kernel')->getLogDir();
     }
 
-    /**
-     * @return string
-     */
-    public static function getCacheDir()
+    public static function getCacheDir(): string
     {
         return self::$container->get('kernel')->getCacheDir().'/';
     }
@@ -260,9 +257,9 @@ class Container
         return false;
     }
 
-    public static function getMailer()
+    public static function getMailer(): Mailer
     {
-        return self::$container->get('Symfony\Component\Mailer\Mailer');
+        return self::$container->get(Mailer::class);
     }
 
     public static function getSettingsManager(): SettingsManager
@@ -283,7 +280,7 @@ class Container
         return \Database::getManager();
     }
 
-    public static function getUserManager()
+    public static function getUserManager(): UserRepository
     {
         return self::$container->get(UserRepository::class);
     }
@@ -508,10 +505,7 @@ class Container
         return self::$container->get(CWikiRepository::class);
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormFactory
-     */
-    public static function getFormFactory()
+    public static function getFormFactory(): FormFactory
     {
         return self::$container->get('form.factory');
     }
@@ -526,27 +520,22 @@ class Container
         $session->getFlashBag()->add($type, $message);
     }
 
-    /**
-     * @return Router
-     */
-    public static function getRouter()
+    public static function getRouter(): Router
     {
         return self::$container->get('router');
     }
 
-    /**
-     * @return ToolChain
-     */
-    public static function getToolChain()
+    public static function getToolChain(): ToolChain
     {
         return self::$container->get(ToolChain::class);
     }
 
-    /**
-     * @param ContainerInterface $container
-     * @param bool               $setSession
-     */
-    public static function setLegacyServices($container, $setSession = true)
+    public static function getAssetRepository(): AssetRepository
+    {
+        return self::$container->get(AssetRepository::class);
+    }
+
+    public static function setLegacyServices(ContainerInterface $container, bool $setSession = true)
     {
         \Database::setConnection($container->get('doctrine.dbal.default_connection'));
         $em = $container->get('doctrine.orm.entity_manager');

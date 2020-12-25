@@ -9,7 +9,17 @@ vich_uploader:
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             directory_namer:
                 service: Vich\UploaderBundle\Naming\SubdirDirectoryNamer
-                options: {chars_per_dir: 1, dirs: 3}
+                options: {chars_per_dir: 1, dirs: 3} # will create directory "a/b/c" for "abcdef.jpg"
+            inject_on_load: true
+            delete_on_update: true
+            delete_on_remove: true
+        assets:
+            uri_prefix: ''
+            upload_destination: assets_fs
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            directory_namer:
+                service: Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer
+                options: {property: 'category'}
             inject_on_load: true
             delete_on_update: true
             delete_on_remove: true

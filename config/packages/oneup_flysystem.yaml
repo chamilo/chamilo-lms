@@ -2,8 +2,10 @@ oneup_flysystem:
     cache:
         my_cache:
             memory: ~
-
     adapters:
+        asset_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/upload/assets'
         resource_adapter:
             local:
                 directory: '%kernel.project_dir%/var/upload/resource'
@@ -11,6 +13,9 @@ oneup_flysystem:
             local:
                 directory: '%kernel.project_dir%/var/cache/resource'
     filesystems:
+        assets:
+            adapter: asset_adapter
+            mount: assets_fs
         resources:
             adapter: resource_adapter
             mount: resources_fs

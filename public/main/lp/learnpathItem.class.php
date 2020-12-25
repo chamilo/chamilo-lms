@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -580,16 +581,14 @@ class learnpathItem
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 $lp_iv_id = $row[0];
-                $iva_table = Database::get_course_table(
-                    TABLE_LP_IV_INTERACTION
-                );
-                $sql = "SELECT count(id) as mycount
+                $iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
+                $sql = "SELECT count(iid) as count
                         FROM $iva_table
                         WHERE c_id = $courseId AND lp_iv_id = $lp_iv_id ";
                 $res_sql = Database::query($sql);
                 if (Database::num_rows($res_sql) > 0) {
                     $row = Database::fetch_array($res_sql);
-                    $return = $row['mycount'];
+                    $return = (int) $row['count'];
                 }
             }
         } else {

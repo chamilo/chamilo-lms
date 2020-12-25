@@ -990,7 +990,7 @@ class learnpath
 
         self::toggleVisibility($this->lp_id, 0);
 
-        if (2 == $this->type || 3 == $this->type) {
+        /*if (2 == $this->type || 3 == $this->type) {
             // This is a scorm learning path, delete the files as well.
             $sql = "SELECT path FROM $lp
                     WHERE iid = ".$this->lp_id;
@@ -998,7 +998,7 @@ class learnpath
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 $path = $row['path'];
-                $sql = "SELECT id FROM $lp
+                $sql = "SELECT iid FROM $lp
                         WHERE
                             c_id = $course_id AND
                             path = '$path' AND
@@ -1027,7 +1027,7 @@ class learnpath
                     }
                 }
             }
-        }
+        }*/
 
        if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
             $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
@@ -1894,7 +1894,8 @@ class learnpath
      * @param string $file_path the path to the file
      * @param string $file_name the original name of the file
      *
-     * @return string 'scorm','aicc','scorm2004','dokeos', 'error-empty-package' if the package is empty, or '' if the package cannot be recognized
+     * @return string 'scorm','aicc','scorm2004','dokeos', 'error-empty-package'
+     * if the package is empty, or '' if the package cannot be recognized
      */
     public static function getPackageType($file_path, $file_name)
     {
@@ -3428,7 +3429,6 @@ class learnpath
             $lp_item_type = $row['litype'];
             $lp_item_path = $row['lipath'];
             $lp_item_params = $row['liparams'];
-
             if (empty($lp_item_params) && false !== strpos($lp_item_path, '?')) {
                 [$lp_item_path, $lp_item_params] = explode('?', $lp_item_path);
             }
@@ -3447,13 +3447,13 @@ class learnpath
                 ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication']
             )
             ) {
-                $lp_type = 1;
+                $lp_type = CLp::LP_TYPE;
             }
 
             // Now go through the specific cases to get the end of the path
             // @todo Use constants instead of int values.
             switch ($lp_type) {
-                case 1:
+                case CLp::LP_TYPE:
                     $file = self::rl_get_resource_link_for_learnpath(
                         $course_id,
                         $this->get_id(),
@@ -3563,7 +3563,7 @@ class learnpath
                         $file = 'blank.php?error=document_deleted';
                     }
                     break;
-                case 2:
+                case CLp::SCORM_TYPE:
                     if ('dir' !== $lp_item_type) {
                         // Quite complex here:
                         // We want to make sure 'http://' (and similar) links can
@@ -3580,21 +3580,31 @@ class learnpath
                             $file = $lp_item_path;
                         } else {
                             if ($this->debug > 2) {
-                                error_log('In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path, 0);
+                                error_log('In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path);
                             }
                             // Prevent getting untranslatable urls.
                             $lp_item_path = preg_replace('/%2F/', '/', $lp_item_path);
                             $lp_item_path = preg_replace('/%3A/', ':', $lp_item_path);
+
+                            $asset = $this->getEntity()->getAsset();
+                            $folder = Container::getAssetRepository()->getFolder($asset);
+                            $hasFile = Container::getAssetRepository()->getFileSystem()->has($folder.$lp_item_path);
+                            $file = null;
+                            if ($hasFile) {
+                                $file = Container::getAssetRepository()->getAssetUrl($asset).'/'.$lp_item_path;
+                            }
+
+                            error_log($file);
+
                             // Prepare the path.
-                            $file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
+                            /*$file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
                             // TODO: Fix this for urls with protocol header.
                             $file = str_replace('//', '/', $file);
                             $file = str_replace(':/', '://', $file);
-                            if ('/' == substr($lp_path, -1)) {
+                            if ('/' === substr($lp_path, -1)) {
                                 $lp_path = substr($lp_path, 0, -1);
-                            }
-
-                            if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))) {
+                            }*/
+                            if (!$hasFile) {
                                 // if file not found.
                                 $decoded = html_entity_decode($lp_item_path);
                                 [$decoded] = explode('?', $decoded);
@@ -3631,7 +3641,7 @@ class learnpath
                         $file = 'lp_content.php?type=dir';
                     }
                     break;
-                case 3:
+                case CLp::AICC_TYPE:
                     // Formatting AICC HACP append URL.
                     $aicc_append = '?aicc_sid='.urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'lp/aicc_hacp.php').'&';
                     if (!empty($lp_item_params)) {
@@ -3682,7 +3692,6 @@ class learnpath
                     }
                     break;
                 case 4:
-                    break;
                 default:
                     break;
             }
@@ -10581,7 +10590,6 @@ EOD;
         $lpViewId
     ) {
         $session_id = api_get_session_id();
-        $course_info = api_get_course_info_by_id($course_id);
 
         $learningPathId = (int) $learningPathId;
         $id_in_path = (int) $id_in_path;
@@ -10614,7 +10622,6 @@ EOD;
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
-        //$main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
         $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
 

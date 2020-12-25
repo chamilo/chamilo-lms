@@ -24,6 +24,7 @@ class CLp extends AbstractResource implements ResourceInterface
 {
     public const LP_TYPE = 1;
     public const SCORM_TYPE = 2;
+    public const AICC_TYPE = 3;
 
     /**
      * @var int

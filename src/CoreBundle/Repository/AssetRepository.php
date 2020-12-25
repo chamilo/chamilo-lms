@@ -12,23 +12,19 @@ use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Vich\UploaderBundle\Storage\FlysystemStorage;
+use Symfony\Component\Routing\RouterInterface;
 
 class AssetRepository extends ServiceEntityRepository
 {
     protected $mountManager;
     protected $storage;
+    protected $router;
 
-    public function __construct(ManagerRegistry $registry, FlysystemStorage $storage, MountManager $mountManager)
+    public function __construct(ManagerRegistry $registry, RouterInterface $router, MountManager $mountManager)
     {
         parent::__construct($registry, Asset::class);
-        $this->storage = $storage;
+        $this->router = $router;
         $this->mountManager = $mountManager;
-    }
-
-    public function getFilename(ResourceFile $resourceFile)
-    {
-        return $this->storage->resolveUri($resourceFile);
     }
 
     /**
@@ -60,6 +56,24 @@ class AssetRepository extends ServiceEntityRepository
                 $fs->write($folder.'/'.$data['path'], $zipArchiveAdapter->read($data['path']));
             }
         }
+    }
+
+    public function getFolder(Asset $asset):? string
+    {
+        if ($asset->hasFile()) {
+            $file = $asset->getTitle();
+            return '/'.$asset->getCategory().'/'.$file.'/';
+        }
+
+        return null;
+    }
+
+    public function getAssetUrl(Asset $asset)
+    {
+        return $this->router->generate(
+            'chamilo_core_asset_showfile',
+            ['category' => $asset->getCategory(), 'path' => $asset->getTitle()]
+        );
     }
 
     public function getFileContent(Asset $asset): string

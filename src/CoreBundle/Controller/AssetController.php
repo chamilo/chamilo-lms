@@ -22,7 +22,7 @@ class AssetController
     use ControllerTrait;
 
     /**
-     *  @Route("/{category}/{path}", methods={"GET"}, requirements={"path"=".+"})
+     *  @Route("/{category}/{path}", methods={"GET"}, requirements={"path"=".+"}, name="chamilo_core_asset_showfile")
      */
     public function showFile($category, $path, AssetRepository $assetRepository)
     {

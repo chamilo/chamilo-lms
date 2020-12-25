@@ -22,10 +22,7 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
-
-if (isset($_REQUEST['origin']) && 'learnpath' === $_REQUEST['origin']) {
-    $_REQUEST['origin'] = '';
-}
+$origin = api_get_origin();
 
 // To prevent the template class
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
@@ -40,26 +37,21 @@ $courseEntity = api_get_course_entity($course_id);
 $sessionEntity = api_get_session_entity($sessionId);
 
 /** @var learnpath $lp */
-$lp = Session::read('oLP');
-$repo = Container::getLpRepository();
-/** @var CLp $entity */
-$entity = $repo->find($lp_id);
-$lpRepo = Container::getLpRepository();
-if (empty($lp)) {
-    api_not_allowed(true);
-}
+//$oLP = Session::read('oLP');
+/** @var CLp $lp */
+$lp = $lp;
 
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
     if (!api_is_allowed_to_edit(null, true, false, false) &&
-        !learnpath::is_lp_visible_for_student($lp->getEntity(), api_get_user_id())
+        !learnpath::is_lp_visible_for_student($lp, api_get_user_id())
     ) {
         api_not_allowed(true);
     }
 }
 
 // Checking visibility (eye icon)
-$visibility = $entity->isVisible($courseEntity, $sessionEntity);
+$visibility = $lp->isVisible($courseEntity, $sessionEntity);
 
 if (false === $visibility &&
     !api_is_allowed_to_edit(false, true, false, false)
@@ -67,15 +59,13 @@ if (false === $visibility &&
     api_not_allowed(true);
 }
 
-$lp_item_id = $lp->get_current_item_id();
-$lpType = $lp->get_type();
+$lp_item_id = $oLP->get_current_item_id();
+$lpType = $lp->getLpType();
 
 if (!$is_allowed_to_edit) {
-    $categoryId = $lp->getCategoryId();
+    $category= $lp->getCategory();
     $em = Database::getManager();
-    if (!empty($categoryId)) {
-        /** @var CLpCategory $category */
-        $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
+    if ($category) {
         $block = false;
         if ($category) {
             $user = UserManager::getRepository()->find($user_id);
@@ -185,15 +175,15 @@ if ($allowLpItemTip) {
 }
 
 // Impress js
-if ('impress' === $lp->mode) {
-    $lp_id = $lp->get_id();
+if ('impress' === $lp->getDefaultViewMod()) {
+    $lp_id = $lp->getIid();
     $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
     header("Location: $url");
     exit;
 }
 
 // Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
-Session::write('scorm_view_id', $lp->get_view_id());
+Session::write('scorm_view_id', $oLP->get_view_id());
 Session::write('scorm_item_id', $lp_item_id);
 
 // Reinit exercises variables to avoid spacename clashes (see exercise tool)
@@ -210,8 +200,8 @@ $htmlHeadXtra[] = '<script>
 chamilo_courseCode = "'.$course_code.'";
 </script>';
 
-$get_toc_list = $lp->get_toc();
-$get_teacher_buttons = $lp->get_teacher_toc_buttons();
+$get_toc_list = $oLP->get_toc();
+$get_teacher_buttons = $oLP->get_teacher_toc_buttons();
 
 $type_quiz = false;
 foreach ($get_toc_list as $toc) {
@@ -223,13 +213,13 @@ foreach ($get_toc_list as $toc) {
 if (!isset($src)) {
     $src = null;
     switch ($lpType) {
-        case 1:
-            $lp->stop_previous_item();
+        case CLp::LP_TYPE:
+            $oLP->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
-            $preReqCheck = $lp->prerequisites_match($lp_item_id);
+            $preReqCheck = $oLP->prerequisites_match($lp_item_id);
 
             if (true === $preReqCheck) {
-                $src = $lp->get_link(
+                $src = $oLP->get_link(
                     'http',
                     $lp_item_id,
                     $get_toc_list
@@ -242,52 +232,51 @@ if (!isset($src)) {
                 }
 
                 if (isset($file_info['extension']) &&
-                    'pdf' == api_strtolower(substr($file_info['extension'], 0, 3))
+                    'pdf' === api_strtolower(substr($file_info['extension'], 0, 3))
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
 
-                $src = $lp->fixBlockedLinks($src);
+                $src = $oLP->fixBlockedLinks($src);
 
                 if (WhispeakAuthPlugin::isLpItemMarked($lp_item_id)) {
                     ChamiloSession::write(
                         WhispeakAuthPlugin::SESSION_LP_ITEM,
-                        ['lp' => $lp->lp_id, 'lp_item' => $lp_item_id, 'src' => $src]
+                        ['lp' => $lp->getIid(), 'lp_item' => $lp_item_id, 'src' => $src]
                     );
 
                     $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
                     break;
                 }
 
-                $lp->start_current_item(); // starts time counter manually if asset
+                $oLP->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
             }
             break;
-        case 2:
+        case CLp::SCORM_TYPE:
             // save old if asset
-            $lp->stop_previous_item(); // save status manually if asset
+            $oLP->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
-            $preReqCheck = $lp->prerequisites_match($lp_item_id);
+            $preReqCheck = $oLP->prerequisites_match($lp_item_id);
             if (true === $preReqCheck) {
-                $src = $lp->get_link('http', $lp_item_id, $get_toc_list);
-                $lp->start_current_item(); // starts time counter manually if asset
+                $src = $oLP->get_link('http', $lp_item_id, $get_toc_list);
+                $oLP->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
             }
             break;
-        case 3:
-            // aicc
-            $lp->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="'.$lp->get_js_lib().'" type="text/javascript" language="javascript"></script>';
-            $preReqCheck = $lp->prerequisites_match($lp_item_id);
+        case CLp::AICC_TYPE:
+            $oLP->stop_previous_item(); // save status manually if asset
+            $htmlHeadXtra[] = '<script src="'.$oLP->get_js_lib().'" type="text/javascript" language="javascript"></script>';
+            $preReqCheck = $oLP->prerequisites_match($lp_item_id);
             if (true === $preReqCheck) {
-                $src = $lp->get_link(
+                $src = $oLP->get_link(
                     'http',
                     $lp_item_id,
                     $get_toc_list
                 );
-                $lp->start_current_item(); // starts time counter manually if asset
+                $oLP->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php';
             }
@@ -311,9 +300,7 @@ if (!empty($_REQUEST['exeId']) &&
     isset($lp_id) &&
     isset($_REQUEST['lp_item_id'])
 ) {
-    global $src;
-    $lp->items[$lp->current]->write_to_db();
-
+    $oLP->items[$oLP->current]->write_to_db();
     $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
@@ -335,16 +322,16 @@ if (!empty($_REQUEST['exeId']) &&
     $autostart = 'false';
 }
 
-$lp->set_previous_item($lp_item_id);
-$nameTools = Security::remove_XSS($lp->get_name());
+$oLP->set_previous_item($lp_item_id);
+$nameTools = Security::remove_XSS($oLP->get_name());
 
 $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header = true;
-$lp_theme_css = $lp->get_theme();
+$lp_theme_css = $oLP->get_theme();
 // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
-if ('fullscreen' == $lp->mode) {
+if ('fullscreen' === $oLP->mode) {
     $htmlHeadXtra[] = "<script>
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
@@ -355,9 +342,9 @@ $display_none = '';
 $margin_left = '340px';
 
 // Media player code
-$display_mode = $lp->mode;
+$display_mode = $lp->getDefaultViewMod();
 $scorm_css_header = true;
-$lp_theme_css = $lp->get_theme();
+$lp_theme_css = $lp->getTheme();
 
 // Setting up the CSS theme if exists.
 if (!empty($lp_theme_css) && !empty($mycourselptheme) && -1 != $mycourselptheme && 1 == $mycourselptheme) {
@@ -368,16 +355,16 @@ if (!empty($lp_theme_css) && !empty($mycourselptheme) && -1 != $mycourselptheme 
 
 $progress_bar = '';
 if (!api_is_invitee()) {
-    $progress_bar = $lp->getProgressBar();
+    $progress_bar = $oLP->getProgressBar();
 }
-$navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom');
-$mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
+$navigation_bar = $oLP->get_navigation_bar();
+$navigation_bar_bottom = $oLP->get_navigation_bar('control-bottom');
+$mediaplayer = $oLP->get_mediaplayer($oLP->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 // Getting all the information about the item.
 $sql = "SELECT audio FROM $tbl_lp_item
-        WHERE c_id = $course_id AND lp_id = ".$lp->lp_id;
+        WHERE c_id = $course_id AND lp_id = ".$lp->getIid();
 $res_media = Database::query($sql);
 
 $show_audioplayer = false;
@@ -399,8 +386,9 @@ if ($is_allowed_to_edit) {
         'name' => get_lang('Learning paths'),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_self()."?action=add_item&type=step&lp_id={$lp->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
-        'name' => $lp->getNameNoTags(),
+        'url' => api_get_self().
+            "?action=add_item&type=step&lp_id={$lp->getIid()}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
+        'name' => $oLP->getNameNoTags(),
     ];
 
     $interbreadcrumb[] = [
@@ -435,11 +423,11 @@ switch ($returnLink) {
 }
 
 $lpPreviewImagePath = Display::returnIconPath('unknown.png', ICON_SIZE_BIG);
-if ($entity->getResourceNode()->hasResourceFile()) {
-    $lpPreviewImagePath = $lpRepo->getResourceFileUrl($entity);
+if ($lp->getResourceNode()->hasResourceFile()) {
+    $lpPreviewImagePath = $lpRepo->getResourceFileUrl($lp);
 }
 
-if ($lp->current == $lp->get_last()) {
+if ($oLP->current == $oLP->get_last()) {
     $categories = Category::load(
         null,
         null,
@@ -456,7 +444,7 @@ if ($lp->current == $lp->get_last()) {
         if (0 === count($gradebookEvaluations) &&
             1 === count($gradebookLinks) &&
             LINK_LEARNPATH == $gradebookLinks[0]->get_type() &&
-            $gradebookLinks[0]->get_ref_id() == $lp->lp_id
+            $gradebookLinks[0]->get_ref_id() == $oLP->lp_id
         ) {
             $gradebookMinScore = $categories[0]->getCertificateMinScore();
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
@@ -481,7 +469,7 @@ $template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_l
 // If the global gamification mode is enabled...
 $gamificationMode = api_get_setting('gamification_mode');
 // ...AND this learning path is set in gamification mode, then change the display
-$gamificationMode = $gamificationMode && $lp->seriousgame_mode;
+$gamificationMode = $gamificationMode && $lp->getSeriousgameMode();
 
 $template->assign('gamification_mode', $gamificationMode);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
@@ -500,7 +488,7 @@ $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
-$template->assign('show_left_column', 0 == $lp->getHideTableOfContents());
+$template->assign('show_left_column', 0 == $lp->getHideTocFrame());
 
 $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
@@ -515,11 +503,11 @@ $template->assign('show_toolbar_by_default', $showMenu);
 $template->assign('navigation_in_the_middle', $navigationInTheMiddle);
 
 if (1 == $gamificationMode) {
-    $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));
-    $template->assign('gamification_points', $lp->getCalculateScore($sessionId));
+    $template->assign('gamification_stars', $oLP->getCalculateStars($sessionId));
+    $template->assign('gamification_points', $oLP->getCalculateScore($sessionId));
 }
 
-$template->assign('lp_author', $lp->get_author());
+$template->assign('lp_author', $oLP->get_author());
 
 $lpMinTime = '';
 if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
@@ -565,17 +553,17 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 }
 
 $template->assign('lp_accumulate_work_time', $lpMinTime);
-$template->assign('lp_mode', $lp->mode);
-$template->assign('lp_title_scorm', $lp->get_name());
+$template->assign('lp_mode', $lp->getDefaultViewMod());
+$template->assign('lp_title_scorm', $lp->getName());
 if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
-    $template->assign('data_panel', $lp->getTOCTree());
+    $template->assign('data_panel', $oLP->getTOCTree());
     $template->assign('data_list', null);
 } else {
     $template->assign('data_panel', null);
-    $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
+    $template->assign('data_list', $oLP->getListArrayToc($get_toc_list));
 }
-$template->assign('lp_id', $lp->lp_id);
-$template->assign('lp_current_item_id', $lp->get_current_item_id());
+$template->assign('lp_id', $lp->getIid());
+$template->assign('lp_current_item_id', $oLP->get_current_item_id());
 
 $menuLocation = 'left';
 if (!empty(api_get_configuration_value('lp_menu_location'))) {
@@ -587,21 +575,20 @@ $template->assign(
     'lp_preview_image',
     Display::img(
         $lpPreviewImagePath,
-        $lp->getNameNoTags(),
+        $oLP->getNameNoTags(),
         [],
         ICON_SIZE_BIG
     )
 );
 
 $frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
-
 $template->assign('frame_ready', $frameReady);
 $template->displayTemplate('@ChamiloCore/LearnPath/view.html.twig');
 
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;
 
-Session::write('oLP', $lp);
+//Session::write('oLP', $lp);
 
 if ($debug) {
     error_log(' ------- end lp_view.php ------');

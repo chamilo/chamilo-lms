@@ -26,6 +26,8 @@ api_protect_course_script(true);
 
 $current_course_tool = TOOL_LEARNPATH;
 $_course = api_get_course_info();
+$course_id = api_get_course_int_id();
+$lpRepo = Container::getLpRepository();
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
@@ -282,9 +284,8 @@ if (1 == $refresh) {
 
 $lp_controller_touched = 1;
 $lp_found = false;
-$lpObject = Session::read('lpobject');
+/*$lpObject = Session::read('lpobject');
 if (!empty($lpObject)) {
-    /** @var learnpath $oLP */
     $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
         if ($debug) {
@@ -314,89 +315,67 @@ if (!empty($lpObject)) {
             $lp_found = true;
         }
     }
-}
-$course_id = api_get_course_int_id();
+}*/
+
 $lpItemId = $_REQUEST['id'] ?? 0;
+$lpId = $_REQUEST['lp_id'] ?? 0;
 $lpItem = null;
+$lp = null;
 if (!empty($lpItemId)) {
     $lpItemRepo = Database::getManager()->getRepository(CLpItem::class);
     $lpItem = $lpItemRepo->find($lpItemId);
 }
 
-if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
+if ($lpId) {
+    /** @var CLp $lp */
+    $lp = $lpRepo->find($lpId);
     if ($debug > 0) {
         error_log(' oLP is not object, has changed or refresh been asked, getting new');
     }
     // Regenerate a new lp object? Not always as some pages don't need the object (like upload?)
-    if (!empty($_REQUEST['lp_id']) || !empty($myrefresh_id)) {
-        // Select the lp in the database and check which type it is (scorm/chamilo/aicc) to generate the
-        // right object.
-        if (!empty($_REQUEST['lp_id'])) {
-            $lp_id = $_REQUEST['lp_id'];
-        } else {
-            $lp_id = $myrefresh_id;
-        }
-        $lp_id = (int) $lp_id;
+    if ($lp) {
+        $logInfo = [
+            'tool' => TOOL_LEARNPATH,
+            'action' => 'lp_load',
+        ];
+        Event::registerLog($logInfo);
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        if (!empty($lp_id)) {
-            $sel = "SELECT iid, lp_type FROM $lp_table WHERE iid = $lp_id";
-            $res = Database::query($sel);
-            if (Database::num_rows($res)) {
-                $row = Database::fetch_array($res);
-                $lpIid = $row['iid'];
-                $type = $row['lp_type'];
-                $logInfo = [
-                    'tool' => TOOL_LEARNPATH,
-                    'action' => 'lp_load',
-                ];
-                Event::registerLog($logInfo);
+        $type = $lp->getLpType();
 
-                switch ($type) {
-                    case 1:
-                        $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
-                        if (false !== $oLP) {
-                            $lp_found = true;
-                        }
-                        break;
-                    case 2:
-                        $oLP = new scorm(api_get_course_id(), $lpIid, api_get_user_id());
-                        if (false !== $oLP) {
-                            $lp_found = true;
-                        }
-                        break;
-                    case 3:
-                        $oLP = new aicc(api_get_course_id(), $lpIid, api_get_user_id());
-                        if (false !== $oLP) {
-                            $lp_found = true;
-                        }
-                        break;
-                    default:
-                        $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
-                        if (false !== $oLP) {
-                            $lp_found = true;
-                        }
-                        break;
+        switch ($type) {
+            case CLp::LP_TYPE:
+                $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
+                if (false !== $oLP) {
+                    $lp_found = true;
                 }
-            }
+                break;
+            case CLp::SCORM_TYPE:
+                $oLP = new scorm(api_get_course_id(), $lpId, api_get_user_id());
+                if (false !== $oLP) {
+                    $lp_found = true;
+                }
+                break;
+            case CLp::AICC_TYPE:
+                $oLP = new aicc(api_get_course_id(), $lpId, api_get_user_id());
+                if (false !== $oLP) {
+                    $lp_found = true;
+                }
+                break;
+            default:
+                $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
+                if (false !== $oLP) {
+                    $lp_found = true;
+                }
+                break;
         }
     }
-
-    if ($lp_found) {
-        Session::write('oLP', $oLP);
-    }
 }
 
-$lpRepo = Container::getLpRepository();
-$lp = null;
-if ($lp_found) {
-    /** @var CLp $lp */
-    $lp = $lpRepo->find($oLP->get_id());
-}
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
-if (isset($_SESSION['oLP'])) {
+if (isset($oLP)) {
     // Reinitialises array used by javascript to update items in the TOC.
-    $_SESSION['oLP']->update_queue = [];
+    $oLP->update_queue = [];
 }
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -405,10 +384,10 @@ if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
 
-$eventLpId = $lp_id = !empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
-if (empty($lp_id)) {
-    if (isset($_SESSION['oLP'])) {
-        $eventLpId = $_SESSION['oLP']->get_id();
+$eventLpId = $lpId;
+if (empty($lpId)) {
+    if (isset($oLP)) {
+        $eventLpId = $oLP->get_id();
     }
 }
 
@@ -1451,7 +1430,7 @@ switch ($action) {
 }
 
 if (!empty($_SESSION['oLP'])) {
-    $_SESSION['lpobject'] = serialize($_SESSION['oLP']);
+    //$_SESSION['lpobject'] = serialize($_SESSION['oLP']);
     if ($debug > 0) {
         error_log('lpobject is serialized in session', 0);
     }

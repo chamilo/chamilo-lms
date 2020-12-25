@@ -41,7 +41,7 @@ if (isset($_POST) && $is_error) {
 
     return false;
     unset($_FILES['user_file']);
-} elseif ('POST' == $_SERVER['REQUEST_METHOD'] && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
+} elseif ('POST' === $_SERVER['REQUEST_METHOD'] && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
     // A file upload has been detected, now deal with the file...
     // Directory creation.
     $stopping_error = false;
@@ -58,7 +58,7 @@ if (isset($_POST) && $is_error) {
 
     $proximity = 'local';
     if (!empty($_REQUEST['content_proximity'])) {
-        $proximity = Database::escape_string($_REQUEST['content_proximity']);
+        $proximity = $_REQUEST['content_proximity'];
     }
 
     $maker = 'Scorm';
@@ -79,9 +79,8 @@ if (isset($_POST) && $is_error) {
             }
             break;
         case 'scorm':
-            $oScorm = new scorm();
-            $entity = $oScorm->getEntity();
-            $manifest = $oScorm->import_package(
+            $scorm = new scorm();
+            $scorm->import_package(
                 $_FILES['user_file'],
                 $current_dir,
                 [],
@@ -89,20 +88,19 @@ if (isset($_POST) && $is_error) {
                 null,
                 $allowHtaccess
             );
-            if (!empty($manifest)) {
-                $oScorm->parse_manifest($manifest);
-                $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
-                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
+            if (!empty($scorm->manifestToString)) {
+                $scorm->parse_manifest();
+                $lp = $scorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
+                if ($lp) {
+                    $lp
+                        ->setContentLocal($proximity)
+                        ->setContentMaker($maker)
+                    ;
+                    $em->persist($lp);
+                    $em->flush();
+                    Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
+                }
             }
-
-            $entity
-                ->setContentLocal($proximity)
-                ->setContentMaker($maker)
-                ->setJsLib('scorm_api.php')
-            ;
-            $em->persist($entity);
-            $em->flush();
-
             break;
         case 'aicc':
             $oAICC = new aicc();

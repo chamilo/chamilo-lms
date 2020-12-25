@@ -996,6 +996,17 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
     }
 }
 
+/*$em = Database::getManager();
+$asset = $em->getRepository(\Chamilo\CoreBundle\Entity\Asset::class)->find(1);
+$fs = Container::getAssetFileSystem();
+var_dump($fs->listContents());
+$data = $fs->get('/scorm/'.$asset->getTitle().'/'.$asset->getTitle());
+$data =
+var_dump($data->getType());
+exit;*/
+//$zipAdapter->getArchive()->extractTo();
+//$asset->getFile()
+
 $template = new Template($nameTools);
 $template->assign('first_session_category', $firstSessionCategoryId);
 $template->assign('session_star_icon', Display::return_icon('star.png', get_lang('Session')));

@@ -9,7 +9,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\ConfigurableInterface;
 use Vich\UploaderBundle\Naming\DirectoryNamerInterface;
-use Vich\UploaderBundle\Util\Transliterator;
 
 class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterface
 {
@@ -21,24 +20,13 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
     private $dirs = 1;
 
     /**
-     * @var bool
-     */
-    private $transliterate = false;
-
-    /**
      * @var PropertyAccessorInterface
      */
     protected $propertyAccessor;
 
-    /**
-     * @var Transliterator
-     */
-    private $transliterator;
-
-    public function __construct(?PropertyAccessorInterface $propertyAccessor, Transliterator $transliterator)
+    public function __construct(?PropertyAccessorInterface $propertyAccessor)
     {
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
-        $this->transliterator = $transliterator;
     }
 
     /**

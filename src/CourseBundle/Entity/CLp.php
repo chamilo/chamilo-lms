@@ -1093,6 +1093,11 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->asset;
     }
 
+    public function hasAsset(): bool
+    {
+        return null !== $this->asset;
+    }
+
     public function setAsset(?Asset $asset): self
     {
         $this->asset = $asset;

@@ -215,7 +215,7 @@ if (!isset($src)) {
     switch ($lpType) {
         case CLp::LP_TYPE:
             $oLP->stop_previous_item();
-            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
 
             if (true === $preReqCheck) {

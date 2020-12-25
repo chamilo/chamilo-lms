@@ -22,18 +22,13 @@ use ChamiloSession as Session;
 // of Maritime Navigation when trying to execute this row
 //    var result = api.LMSInitialize("");
 // get the error response : you are not authorized to call this function
-
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
-$file = Session::read('file');
 /** @var learnpath $oLP */
-$oLP = UnserializeApi::unserialize(
-    'lp',
-    Session::read('lpobject')
-);
+//$oLP = UnserializeApi::unserialize('lp', Session::read('lpobject'));
+$oLP = Session::read('oLP');
 if (!is_object($oLP)) {
     error_log('New LP - scorm_api - Could not load oLP object', 0);
     exit;
@@ -45,9 +40,10 @@ if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item', 0);
     exit;
 }
-$autocomplete_when_80pct = 0;
 $user = api_get_user_info();
 $userId = api_get_user_id();
+$itemId = $oItem->get_id();
+$lpId = $oLP->get_id();
 
 header('Content-type: text/javascript');
 
@@ -83,9 +79,6 @@ function APIobject() {
 // SCORM
 var API = new APIobject(); //for scorm 1.2
 var api = API;
-//var API_1484_11 = new APIobject();  //for scorm 1.3
-//var api_1484_11 = API_1484_11;
-
 // SCORM-specific Error codes
 var G_NoError = 0;
 var G_GeneralException = 101;
@@ -113,7 +106,6 @@ var G_InvalidSetValueMessage            = 'Invalid set value, element is a keywo
 var G_ElementIsReadOnlyMessage          = 'Element is read only';
 var G_ElementIsWriteOnlyMessage         = 'Element is write only';
 var G_IncorrectDataTypeMessage          = 'Incorrect Data Type';
-
 var olms = new Object();
 
 //the last recorded error message was:
@@ -146,14 +138,12 @@ olms.scorm_variables = new Array(
 
 // manage variables to save or not
 olms.variable_to_send = new Array();
-
 // temporary list of variables (gets set to true when set through LMSSetValue)
 olms.updatable_vars_list = new Array();
 // marker of whether the LMSFinish() function was called, which is important for SCORM behaviour
 olms.finishSignalReceived = 0;
 // marker to remember if the SCO has calles a "set" on lesson_status
 olms.statusSignalReceived = 0;
-
 // Strictly scorm variables
 olms.score=<?php echo $oItem->get_score(); ?>;
 olms.max='<?php echo $oItem->get_max(); ?>';
@@ -172,20 +162,14 @@ olms.info_lms_item = new Array();
 
 // Chamilo internal variables (not SCORM)
 // olms.saved_lesson_status = 'not attempted';
-olms.lms_lp_id = <?php echo $oLP->get_id(); ?>;
-olms.lms_item_id = <?php echo $oItem->get_id(); ?>;
+olms.lms_lp_id = <?php echo $lpId; ?>;
+olms.lms_item_id = <?php echo $itemId; ?>;
 olms.lms_initialized = 0;
 // switch_finished indicates if the switch process is finished (if it has gone
 // through LMSInitialize() for the new item. Until then, all LMSSetValue()
 // commands received are executed on the *previous/current* item
 // This flag is updated in LMSInitialize() and in switch_item()
 olms.switch_finished = 0;
-
-//olms.lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
-//olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count(); ?>;
-//olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode; ?>';
-//if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
-
 olms.lms_view_id = '<?php echo $oLP->get_view(null, $userId); ?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
 olms.lms_user_id = '<?php echo $userId; ?>';
@@ -239,8 +223,8 @@ $(function() {
     logit_scorm('Other SCORM calls are shown in orange.', 1);
     logit_lms('To add new messages to these logs, use logit_lms() or logit_scorm().');
 
-    olms.info_lms_item[0] = '<?php echo $oItem->get_id(); ?>';
-    olms.info_lms_item[1] = '<?php echo $oItem->get_id(); ?>';
+    olms.info_lms_item[0] = '<?php echo $itemId; ?>';
+    olms.info_lms_item[1] = '<?php echo $itemId; ?>';
 
     $("#content_id").on('load', function() {
         logit_lms('#content_id load event starts');
@@ -358,7 +342,7 @@ function LMSInitialize() {
         $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
         $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
         if ($showGlossary) {
-            if ('ismanual' == api_get_setting('show_glossary_in_documents')) {
+            if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
                 ?>
                 if (olms.lms_item_type == 'sco') {
                     attach_glossary_into_scorm('automatic');
@@ -366,15 +350,13 @@ function LMSInitialize() {
                     attach_glossary_into_scorm('manual');
                 }
                 <?php
-            } elseif ('isautomatic' == api_get_setting('show_glossary_in_documents')) {
+            } elseif ('isautomatic' === api_get_setting('show_glossary_in_documents')) {
                 ?>
                 attach_glossary_into_scorm('automatic');
             <?php
-            } ?>
-        <?php
-        } ?>
-
-        <?php if ($fixLinkSetting) {
+            }
+        }
+        if ($fixLinkSetting) {
             ?>
             attach_glossary_into_scorm('fix_links');
         <?php
@@ -407,7 +389,9 @@ function LMSGetValue(param) {
          }
          olms.G_LastError = G_NotInitialized;
          olms.G_LastErrorMessage = G_NotInitializedMessage;
-         logit_scorm('LMSGetValue('+param+') on item id '+olms.lms_item_id+':<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
+         logit_scorm(
+            'LMSGetValue('+param+') on item id '+olms.lms_item_id+':<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage
+         );
          return '';
     }
 
@@ -518,9 +502,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.objectives._children'){
     // ---- cmi.objectives._children
         result = 'id,score,status';
-    } else if(param == 'cmi.objectives._count'){
-    // ---- cmi.objectives._count
-        //result='<?php echo $oItem->get_view_count(); ?>';
+    } else if(param == 'cmi.objectives._count') {
         result = olms.item_objectives.length;
     } else if(param.substring(0,15)== 'cmi.objectives.'){
         var myres = '';
@@ -1684,8 +1666,7 @@ function switch_item(current_item, next_item)
     var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
                 '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
     var cont_f = $("#content_id");
-
-    <?php if ('fullscreen' == $oLP->mode) {
+    <?php if ('fullscreen' === $oLP->mode) {
         ?>
         cont_f = window.open('' + mysrc, 'content_id', 'toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
         cont_f.onload=function(){
@@ -1694,7 +1675,6 @@ function switch_item(current_item, next_item)
         cont_f.onunload=function(){
             olms.info_lms_item[0]=olms.info_lms_item[1];
         }
-
     <?php
     } else {
         ?>

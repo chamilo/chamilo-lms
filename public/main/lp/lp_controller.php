@@ -25,9 +25,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script(true);
 
 $current_course_tool = TOOL_LEARNPATH;
-$_course = api_get_course_info();
 $course_id = api_get_course_int_id();
 $lpRepo = Container::getLpRepository();
+$courseInfo = api_get_course_info();
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
@@ -284,7 +284,7 @@ if (1 == $refresh) {
 
 $lp_controller_touched = 1;
 $lp_found = false;
-/*$lpObject = Session::read('lpobject');
+$lpObject = Session::read('lpobject');
 if (!empty($lpObject)) {
     $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
@@ -304,7 +304,7 @@ if (!empty($lpObject)) {
                 error_log('api_get_course_id(): '.api_get_course_id());
             }
 
-            if (1 == $myrefresh) {
+            if (1 === $myrefresh) {
                 $myrefresh_id = $oLP->get_id();
             }
             $oLP = null;
@@ -315,7 +315,7 @@ if (!empty($lpObject)) {
             $lp_found = true;
         }
     }
-}*/
+}
 
 $lpItemId = $_REQUEST['id'] ?? 0;
 $lpId = $_REQUEST['lp_id'] ?? 0;
@@ -345,30 +345,32 @@ if ($lpId) {
 
         switch ($type) {
             case CLp::LP_TYPE:
-                $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
+                $oLP = new learnpath($lp, $courseInfo, api_get_user_id());
                 if (false !== $oLP) {
                     $lp_found = true;
                 }
                 break;
             case CLp::SCORM_TYPE:
-                $oLP = new scorm(api_get_course_id(), $lpId, api_get_user_id());
+                $oLP = new scorm($lp, $courseInfo, api_get_user_id());
                 if (false !== $oLP) {
                     $lp_found = true;
                 }
                 break;
             case CLp::AICC_TYPE:
-                $oLP = new aicc(api_get_course_id(), $lpId, api_get_user_id());
+                $oLP = new aicc($lp, $courseInfo, api_get_user_id());
                 if (false !== $oLP) {
                     $lp_found = true;
                 }
                 break;
             default:
-                $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
+                $oLP = new learnpath($lp, $lpId, api_get_user_id());
                 if (false !== $oLP) {
                     $lp_found = true;
                 }
                 break;
         }
+
+        Session::write('oLP', $oLP);
     }
 }
 
@@ -457,7 +459,6 @@ switch ($action) {
                 }
             }
         }
-        Session::write('oLP', $_SESSION['oLP']);
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -524,17 +525,12 @@ switch ($action) {
 
             if (isset($_POST['submit_button']) && !empty($post_title)) {
                 // If a title was submitted:
-
-                // Updating the lp.modified_on
-                $_SESSION['oLP']->set_modified_on();
-
                 if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
                     Session::write('post_time', $_POST['post_time']);
                     $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
-                    $courseInfo = api_get_course_info();
                     if (empty($directoryParentId)) {
                         $_SESSION['oLP']->generate_lp_folder($courseInfo);
                     }
@@ -553,7 +549,7 @@ switch ($action) {
                         } else {
                             if ($_POST['content_lp']) {
                                 $document_id = $_SESSION['oLP']->create_document(
-                                    $_course,
+                                    $courseInfo,
                                     $_POST['content_lp'],
                                     $_POST['title'],
                                     'html',
@@ -577,7 +573,7 @@ switch ($action) {
                         } else {
                             if ($_POST['content_lp']) {
                                 $document_id = $_SESSION['oLP']->createReadOutText(
-                                    $_course,
+                                    $courseInfo,
                                     $_POST['content_lp'],
                                     $_POST['title'],
                                     $directoryParentId
@@ -758,9 +754,6 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             if (isset($_POST['submit_button']) && !empty($post_title)) {
-                // Updating the lp.modified_on
-                $_SESSION['oLP']->set_modified_on();
-
                 // TODO: mp3 edit
                 $audio = [];
                 if (isset($_FILES['mp3'])) {
@@ -785,7 +778,7 @@ switch ($action) {
                 );
 
                 if (isset($_POST['content_lp'])) {
-                    $_SESSION['oLP']->edit_document($_course);
+                    $_SESSION['oLP']->edit_document($courseInfo);
                 }
                 $is_success = true;
 
@@ -931,7 +924,7 @@ switch ($action) {
 
         // Teachers can export to PDF
         if (!$is_allowed_to_edit) {
-            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->getEntity(), api_get_user_id(), $_course)) {
+            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->getEntity(), api_get_user_id(), $courseInfo)) {
                 api_not_allowed();
             }
         }
@@ -1247,7 +1240,7 @@ switch ($action) {
         } else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
-            $url = $_course['course_public_url'].'?sid='.api_get_session_id();
+            $url = $courseInfo['course_public_url'].'?sid='.api_get_session_id();
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
                 case 'lp_list':
@@ -1430,7 +1423,7 @@ switch ($action) {
 }
 
 if (!empty($_SESSION['oLP'])) {
-    //$_SESSION['lpobject'] = serialize($_SESSION['oLP']);
+    Session::write('lpobject', serialize($oLP));
     if ($debug > 0) {
         error_log('lpobject is serialized in session', 0);
     }

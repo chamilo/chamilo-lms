@@ -104,296 +104,275 @@ class learnpath
     public $modified_on = '';
     public $publicated_on = '';
     public $expired_on = '';
-    public $ref = null;
+    public $ref;
     public $course_int_id;
     public $course_info = [];
     public $categoryId;
-    public $entity;
+    public $scormUrl;
 
     /**
      * Constructor.
      * Needs a database handler, a course code and a learnpath id from the database.
      * Also builds the list of items into $this->items.
      *
-     * @param string $course  Course code
-     * @param int    $lp_id   c_lp.iid
-     * @param int    $user_id
      */
-    public function __construct($course, $lp_id, $user_id)
+    public function __construct(CLp $entity, $course_info, $user_id)
     {
         $debug = $this->debug;
         $this->encoding = api_get_system_encoding();
-        if (empty($course)) {
-            $course = api_get_course_id();
-        }
-        $course_info = api_get_course_info($course);
-        if (!empty($course_info)) {
-            $this->cc = $course_info['code'];
-            $this->course_info = $course_info;
-            $course_id = $course_info['real_id'];
-        } else {
-            $this->error = 'Course code does not exist in database.';
-        }
-
-        $lp_id = (int) $lp_id;
-        $course_id = (int) $course_id;
+        $lp_id = (int) $entity->getIid();
+        $course_id = (int) $course_info['real_id'];
         $this->set_course_int_id($course_id);
-        // Check learnpath ID.
         if (empty($lp_id) || empty($course_id)) {
             $this->error = "Parameter is empty: LpId:'$lp_id', courseId: '$lp_id'";
         } else {
-            $repo = Container::getLpRepository();
-            /** @var CLp $entity */
-            $entity = $repo->find($lp_id);
-            if ($entity) {
-                $this->entity = $entity;
-                $this->lp_id = $lp_id;
-                $this->type = $entity->getLpType();
-                $this->name = stripslashes($entity->getName());
-                $this->proximity = $entity->getContentLocal();
-                $this->theme = $entity->getTheme();
-                $this->maker = $entity->getContentLocal();
-                $this->prevent_reinit = $entity->getPreventReinit();
-                $this->seriousgame_mode = $entity->getSeriousgameMode();
-                $this->license = $entity->getContentLicense();
-                $this->scorm_debug = $entity->getDebug();
-                $this->js_lib = $entity->getJsLib();
-                $this->path = $entity->getPath();
-                $this->author = $entity->getAuthor();
-                $this->hide_toc_frame = $entity->getHideTocFrame();
-                $this->lp_session_id = $entity->getSessionId();
-                $this->use_max_score = $entity->getUseMaxScore();
-                $this->subscribeUsers = $entity->getSubscribeUsers();
-                $this->created_on = $entity->getCreatedOn()->format('Y-m-d H:i:s');
-                $this->modified_on = $entity->getModifiedOn()->format('Y-m-d H:i:s');
-                $this->ref = $entity->getRef();
-                $this->categoryId = 0;
-                if ($entity->getCategory()) {
-                    $this->categoryId = $entity->getCategory()->getIid();
-                }
+            $this->lp_id = $lp_id;
+            $this->type = $entity->getLpType();
+            $this->name = stripslashes($entity->getName());
+            $this->proximity = $entity->getContentLocal();
+            $this->theme = $entity->getTheme();
+            $this->maker = $entity->getContentLocal();
+            $this->prevent_reinit = $entity->getPreventReinit();
+            $this->seriousgame_mode = $entity->getSeriousgameMode();
+            $this->license = $entity->getContentLicense();
+            $this->scorm_debug = $entity->getDebug();
+            $this->js_lib = $entity->getJsLib();
+            $this->path = $entity->getPath();
+            $this->author = $entity->getAuthor();
+            $this->hide_toc_frame = $entity->getHideTocFrame();
+            $this->lp_session_id = $entity->getSessionId();
+            $this->use_max_score = $entity->getUseMaxScore();
+            $this->subscribeUsers = $entity->getSubscribeUsers();
+            $this->created_on = $entity->getCreatedOn()->format('Y-m-d H:i:s');
+            $this->modified_on = $entity->getModifiedOn()->format('Y-m-d H:i:s');
+            $this->ref = $entity->getRef();
+            $this->categoryId = 0;
+            if ($entity->getCategory()) {
+                $this->categoryId = $entity->getCategory()->getIid();
+            }
 
-                $this->accumulateScormTime = $entity->getAccumulateWorkTime();
+            if ($entity->hasAsset()) {
+                $asset = $entity->getAsset();
+                $this->scormUrl = Container::getAssetRepository()->getAssetUrl($asset).'/';
+            }
 
-                if (!empty($entity->getPublicatedOn())) {
-                    $this->publicated_on = $entity->getPublicatedOn()->format('Y-m-d H:i:s');
-                }
+            $this->accumulateScormTime = $entity->getAccumulateWorkTime();
 
-                if (!empty($entity->getExpiredOn())) {
-                    $this->expired_on = $entity->getExpiredOn()->format('Y-m-d H:i:s');
-                }
-                if (2 == $this->type) {
-                    if (1 == $entity->getForceCommit()) {
-                        $this->force_commit = true;
-                    }
-                }
-                $this->mode = $entity->getDefaultViewMod();
+            if (!empty($entity->getPublicatedOn())) {
+                $this->publicated_on = $entity->getPublicatedOn()->format('Y-m-d H:i:s');
+            }
 
-                // Check user ID.
-                if (empty($user_id)) {
-                    $this->error = 'User ID is empty';
-                } else {
-                    $userInfo = api_get_user_info($user_id);
-                    if (!empty($userInfo)) {
-                        $this->user_id = $userInfo['user_id'];
-                    } else {
-                        $this->error = 'User ID does not exist in database #'.$user_id;
-                    }
-                }
-
-                // End of variables checking.
-                $session_id = api_get_session_id();
-                //  Get the session condition for learning paths of the base + session.
-                $session = api_get_session_condition($session_id);
-                // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
-                $lp_table = Database::get_course_table(TABLE_LP_VIEW);
-
-                // Selecting by view_count descending allows to get the highest view_count first.
-                $sql = "SELECT * FROM $lp_table
-                        WHERE
-                            c_id = $course_id AND
-                            lp_id = $lp_id AND
-                            user_id = $user_id
-                            $session
-                        ORDER BY view_count DESC";
-                $res = Database::query($sql);
-
-                if (Database::num_rows($res) > 0) {
-                    $row = Database::fetch_array($res);
-                    $this->attempt = $row['view_count'];
-                    $this->lp_view_id = $row['iid'];
-                    $this->last_item_seen = $row['last_item'];
-                    $this->progress_db = $row['progress'];
-                    $this->lp_view_session_id = $row['session_id'];
-                } elseif (!api_is_invitee()) {
-                    $this->attempt = 1;
-                    $params = [
-                        'c_id' => $course_id,
-                        'lp_id' => $lp_id,
-                        'user_id' => $user_id,
-                        'view_count' => 1,
-                        'session_id' => $session_id,
-                        'last_item' => 0,
-                    ];
-                    $this->last_item_seen = 0;
-                    $this->lp_view_session_id = $session_id;
-                    $this->lp_view_id = Database::insert($lp_table, $params);
-                }
-
-                // Initialise items.
-                $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-                $sql = "SELECT * FROM $lp_item_table
-                        WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'
-                        ORDER BY parent_item_id, display_order";
-                $res = Database::query($sql);
-
-                $lp_item_id_list = [];
-                while ($row = Database::fetch_array($res)) {
-                    $lp_item_id_list[] = $row['iid'];
-                    switch ($this->type) {
-                        case 3: //aicc
-                            $oItem = new aiccItem('db', $row['iid'], $course_id);
-                            if (is_object($oItem)) {
-                                $my_item_id = $oItem->get_id();
-                                $oItem->set_lp_view($this->lp_view_id, $course_id);
-                                $oItem->set_prevent_reinit($this->prevent_reinit);
-                                // Don't use reference here as the next loop will make the pointed object change.
-                                $this->items[$my_item_id] = $oItem;
-                                $this->refs_list[$oItem->ref] = $my_item_id;
-                            }
-                            break;
-                        case 2:
-                            $oItem = new scormItem('db', $row['iid'], $course_id);
-                            if (is_object($oItem)) {
-                                $my_item_id = $oItem->get_id();
-                                $oItem->set_lp_view($this->lp_view_id, $course_id);
-                                $oItem->set_prevent_reinit($this->prevent_reinit);
-                                // Don't use reference here as the next loop will make the pointed object change.
-                                $this->items[$my_item_id] = $oItem;
-                                $this->refs_list[$oItem->ref] = $my_item_id;
-                            }
-                            break;
-                        case 1:
-                        default:
-                            $oItem = new learnpathItem($row['iid'], $user_id, $course_id, $row);
-                            if (is_object($oItem)) {
-                                $my_item_id = $oItem->get_id();
-                                // Moved down to when we are sure the item_view exists.
-                                //$oItem->set_lp_view($this->lp_view_id);
-                                $oItem->set_prevent_reinit($this->prevent_reinit);
-                                // Don't use reference here as the next loop will make the pointed object change.
-                                $this->items[$my_item_id] = $oItem;
-                                $this->refs_list[$my_item_id] = $my_item_id;
-                            }
-                            break;
-                    }
-
-                    // Setting the object level with variable $this->items[$i][parent]
-                    foreach ($this->items as $itemLPObject) {
-                        $level = self::get_level_for_item(
-                            $this->items,
-                            $itemLPObject->db_id
-                        );
-                        $itemLPObject->level = $level;
-                    }
-
-                    // Setting the view in the item object.
-                    if (is_object($this->items[$row['iid']])) {
-                        $this->items[$row['iid']]->set_lp_view($this->lp_view_id, $course_id);
-                        if (TOOL_HOTPOTATOES == $this->items[$row['iid']]->get_type()) {
-                            $this->items[$row['iid']]->current_start_time = 0;
-                            $this->items[$row['iid']]->current_stop_time = 0;
-                        }
-                    }
-                }
-
-                if (!empty($lp_item_id_list)) {
-                    $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
-                    if (!empty($lp_item_id_list_to_string)) {
-                        // Get last viewing vars.
-                        $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                        // This query should only return one or zero result.
-                        $sql = "SELECT lp_item_id, status
-                                FROM $itemViewTable
-                                WHERE
-                                    c_id = $course_id AND
-                                    lp_view_id = ".$this->get_view_id()." AND
-                                    lp_item_id IN ('".$lp_item_id_list_to_string."')
-                                ORDER BY view_count DESC ";
-                        $status_list = [];
-                        $res = Database::query($sql);
-                        while ($row = Database:: fetch_array($res)) {
-                            $status_list[$row['lp_item_id']] = $row['status'];
-                        }
-
-                        foreach ($lp_item_id_list as $item_id) {
-                            if (isset($status_list[$item_id])) {
-                                $status = $status_list[$item_id];
-                                if (is_object($this->items[$item_id])) {
-                                    $this->items[$item_id]->set_status($status);
-                                    if (empty($status)) {
-                                        $this->items[$item_id]->set_status(
-                                            $this->default_status
-                                        );
-                                    }
-                                }
-                            } else {
-                                if (!api_is_invitee()) {
-                                    if (is_object($this->items[$item_id])) {
-                                        $this->items[$item_id]->set_status(
-                                            $this->default_status
-                                        );
-                                    }
-
-                                    if (!empty($this->lp_view_id)) {
-                                        // Add that row to the lp_item_view table so that
-                                        // we have something to show in the stats page.
-                                        $params = [
-                                            'c_id' => $course_id,
-                                            'lp_item_id' => $item_id,
-                                            'lp_view_id' => $this->lp_view_id,
-                                            'view_count' => 1,
-                                            'status' => 'not attempted',
-                                            'start_time' => time(),
-                                            'total_time' => 0,
-                                            'score' => 0,
-                                        ];
-                                        Database::insert($itemViewTable, $params);
-
-                                        $this->items[$item_id]->set_lp_view(
-                                            $this->lp_view_id,
-                                            $course_id
-                                        );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                $this->ordered_items = self::get_flat_ordered_items_list(
-                    $this->get_id(),
-                    0,
-                    $course_id
-                );
-                $this->max_ordered_items = 0;
-                foreach ($this->ordered_items as $index => $dummy) {
-                    if ($index > $this->max_ordered_items && !empty($dummy)) {
-                        $this->max_ordered_items = $index;
-                    }
-                }
-                // TODO: Define the current item better.
-                $this->first();
-                if ($debug) {
-                    error_log('lp_view_session_id '.$this->lp_view_session_id);
-                    error_log('End of learnpath constructor for learnpath '.$this->get_id());
+            if (!empty($entity->getExpiredOn())) {
+                $this->expired_on = $entity->getExpiredOn()->format('Y-m-d H:i:s');
+            }
+            if (2 == $this->type) {
+                if (1 == $entity->getForceCommit()) {
+                    $this->force_commit = true;
                 }
             }
-        }
-    }
+            $this->mode = $entity->getDefaultViewMod();
 
-    public function getEntity(): CLp
-    {
-        return $this->entity;
+            // Check user ID.
+            if (empty($user_id)) {
+                $this->error = 'User ID is empty';
+            } else {
+                $userInfo = api_get_user_info($user_id);
+                if (!empty($userInfo)) {
+                    $this->user_id = $userInfo['user_id'];
+                } else {
+                    $this->error = 'User ID does not exist in database #'.$user_id;
+                }
+            }
+
+            // End of variables checking.
+            $session_id = api_get_session_id();
+            //  Get the session condition for learning paths of the base + session.
+            $session = api_get_session_condition($session_id);
+            // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
+            $lp_table = Database::get_course_table(TABLE_LP_VIEW);
+
+            // Selecting by view_count descending allows to get the highest view_count first.
+            $sql = "SELECT * FROM $lp_table
+                    WHERE
+                        c_id = $course_id AND
+                        lp_id = $lp_id AND
+                        user_id = $user_id
+                        $session
+                    ORDER BY view_count DESC";
+            $res = Database::query($sql);
+
+            if (Database::num_rows($res) > 0) {
+                $row = Database::fetch_array($res);
+                $this->attempt = $row['view_count'];
+                $this->lp_view_id = $row['iid'];
+                $this->last_item_seen = $row['last_item'];
+                $this->progress_db = $row['progress'];
+                $this->lp_view_session_id = $row['session_id'];
+            } elseif (!api_is_invitee()) {
+                $this->attempt = 1;
+                $params = [
+                    'c_id' => $course_id,
+                    'lp_id' => $lp_id,
+                    'user_id' => $user_id,
+                    'view_count' => 1,
+                    'session_id' => $session_id,
+                    'last_item' => 0,
+                ];
+                $this->last_item_seen = 0;
+                $this->lp_view_session_id = $session_id;
+                $this->lp_view_id = Database::insert($lp_table, $params);
+            }
+
+            // Initialise items.
+            $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+            $sql = "SELECT * FROM $lp_item_table
+                    WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'
+                    ORDER BY parent_item_id, display_order";
+            $res = Database::query($sql);
+
+            $lp_item_id_list = [];
+            while ($row = Database::fetch_array($res)) {
+                $lp_item_id_list[] = $row['iid'];
+                switch ($this->type) {
+                    case 3: //aicc
+                        $oItem = new aiccItem('db', $row['iid'], $course_id);
+                        if (is_object($oItem)) {
+                            $my_item_id = $oItem->get_id();
+                            $oItem->set_lp_view($this->lp_view_id, $course_id);
+                            $oItem->set_prevent_reinit($this->prevent_reinit);
+                            // Don't use reference here as the next loop will make the pointed object change.
+                            $this->items[$my_item_id] = $oItem;
+                            $this->refs_list[$oItem->ref] = $my_item_id;
+                        }
+                        break;
+                    case 2:
+                        $oItem = new scormItem('db', $row['iid'], $course_id);
+                        if (is_object($oItem)) {
+                            $my_item_id = $oItem->get_id();
+                            $oItem->set_lp_view($this->lp_view_id, $course_id);
+                            $oItem->set_prevent_reinit($this->prevent_reinit);
+                            // Don't use reference here as the next loop will make the pointed object change.
+                            $this->items[$my_item_id] = $oItem;
+                            $this->refs_list[$oItem->ref] = $my_item_id;
+                        }
+                        break;
+                    case 1:
+                    default:
+                        $oItem = new learnpathItem($row['iid'], $user_id, $course_id, $row);
+                        if (is_object($oItem)) {
+                            $my_item_id = $oItem->get_id();
+                            // Moved down to when we are sure the item_view exists.
+                            //$oItem->set_lp_view($this->lp_view_id);
+                            $oItem->set_prevent_reinit($this->prevent_reinit);
+                            // Don't use reference here as the next loop will make the pointed object change.
+                            $this->items[$my_item_id] = $oItem;
+                            $this->refs_list[$my_item_id] = $my_item_id;
+                        }
+                        break;
+                }
+
+                // Setting the object level with variable $this->items[$i][parent]
+                foreach ($this->items as $itemLPObject) {
+                    $level = self::get_level_for_item(
+                        $this->items,
+                        $itemLPObject->db_id
+                    );
+                    $itemLPObject->level = $level;
+                }
+
+                // Setting the view in the item object.
+                if (is_object($this->items[$row['iid']])) {
+                    $this->items[$row['iid']]->set_lp_view($this->lp_view_id, $course_id);
+                    if (TOOL_HOTPOTATOES == $this->items[$row['iid']]->get_type()) {
+                        $this->items[$row['iid']]->current_start_time = 0;
+                        $this->items[$row['iid']]->current_stop_time = 0;
+                    }
+                }
+            }
+
+            if (!empty($lp_item_id_list)) {
+                $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
+                if (!empty($lp_item_id_list_to_string)) {
+                    // Get last viewing vars.
+                    $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                    // This query should only return one or zero result.
+                    $sql = "SELECT lp_item_id, status
+                            FROM $itemViewTable
+                            WHERE
+                                c_id = $course_id AND
+                                lp_view_id = ".$this->get_view_id()." AND
+                                lp_item_id IN ('".$lp_item_id_list_to_string."')
+                            ORDER BY view_count DESC ";
+                    $status_list = [];
+                    $res = Database::query($sql);
+                    while ($row = Database:: fetch_array($res)) {
+                        $status_list[$row['lp_item_id']] = $row['status'];
+                    }
+
+                    foreach ($lp_item_id_list as $item_id) {
+                        if (isset($status_list[$item_id])) {
+                            $status = $status_list[$item_id];
+                            if (is_object($this->items[$item_id])) {
+                                $this->items[$item_id]->set_status($status);
+                                if (empty($status)) {
+                                    $this->items[$item_id]->set_status(
+                                        $this->default_status
+                                    );
+                                }
+                            }
+                        } else {
+                            if (!api_is_invitee()) {
+                                if (is_object($this->items[$item_id])) {
+                                    $this->items[$item_id]->set_status(
+                                        $this->default_status
+                                    );
+                                }
+
+                                if (!empty($this->lp_view_id)) {
+                                    // Add that row to the lp_item_view table so that
+                                    // we have something to show in the stats page.
+                                    $params = [
+                                        'c_id' => $course_id,
+                                        'lp_item_id' => $item_id,
+                                        'lp_view_id' => $this->lp_view_id,
+                                        'view_count' => 1,
+                                        'status' => 'not attempted',
+                                        'start_time' => time(),
+                                        'total_time' => 0,
+                                        'score' => 0,
+                                    ];
+                                    Database::insert($itemViewTable, $params);
+
+                                    $this->items[$item_id]->set_lp_view(
+                                        $this->lp_view_id,
+                                        $course_id
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $this->ordered_items = self::get_flat_ordered_items_list(
+                $this->get_id(),
+                0,
+                $course_id
+            );
+            $this->max_ordered_items = 0;
+            foreach ($this->ordered_items as $index => $dummy) {
+                if ($index > $this->max_ordered_items && !empty($dummy)) {
+                    $this->max_ordered_items = $index;
+                }
+            }
+            // TODO: Define the current item better.
+            $this->first();
+            if ($debug) {
+                error_log('lp_view_session_id '.$this->lp_view_session_id);
+                error_log('End of learnpath constructor for learnpath '.$this->get_id());
+            }
+        }
+
     }
 
     /**
@@ -3508,7 +3487,8 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ('http:' === $linkProtocol) {
                                         //this is the special intervention case
-                                        $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                                        $file = api_get_path(WEB_CODE_PATH).
+                                            'lp/embed.php?type=nonhttps&source='.urlencode($file);
                                     }
                                 }
                             }
@@ -3531,7 +3511,7 @@ class learnpath
 
                             $type_quiz = false;
                             foreach ($list as $toc) {
-                                if ($toc['id'] == $lp_item_id && 'quiz' == $toc['type']) {
+                                if ($toc['id'] == $lp_item_id && 'quiz' === $toc['type']) {
                                     $type_quiz = true;
                                 }
                             }
@@ -3586,15 +3566,14 @@ class learnpath
                             $lp_item_path = preg_replace('/%2F/', '/', $lp_item_path);
                             $lp_item_path = preg_replace('/%3A/', ':', $lp_item_path);
 
-                            $asset = $this->getEntity()->getAsset();
+                            /*$asset = $this->getEntity()->getAsset();
                             $folder = Container::getAssetRepository()->getFolder($asset);
                             $hasFile = Container::getAssetRepository()->getFileSystem()->has($folder.$lp_item_path);
                             $file = null;
                             if ($hasFile) {
                                 $file = Container::getAssetRepository()->getAssetUrl($asset).'/'.$lp_item_path;
-                            }
-
-                            error_log($file);
+                            }*/
+                            $file = $this->scormUrl.$lp_item_path;
 
                             // Prepare the path.
                             /*$file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
@@ -3604,7 +3583,7 @@ class learnpath
                             if ('/' === substr($lp_path, -1)) {
                                 $lp_path = substr($lp_path, 0, -1);
                             }*/
-                            if (!$hasFile) {
+                            /*if (!$hasFile) {
                                 // if file not found.
                                 $decoded = html_entity_decode($lp_item_path);
                                 [$decoded] = explode('?', $decoded);
@@ -3629,7 +3608,7 @@ class learnpath
                                 } else {
                                     $file = $course_path.'/scorm/'.$lp_path.'/'.$decoded;
                                 }
-                            }
+                            }*/
                         }
 
                         // We want to use parameters if they were defined in the imsmanifest
@@ -3643,7 +3622,8 @@ class learnpath
                     break;
                 case CLp::AICC_TYPE:
                     // Formatting AICC HACP append URL.
-                    $aicc_append = '?aicc_sid='.urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'lp/aicc_hacp.php').'&';
+                    $aicc_append = '?aicc_sid='.
+                        urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'lp/aicc_hacp.php').'&';
                     if (!empty($lp_item_params)) {
                         $aicc_append .= $lp_item_params.'&';
                     }

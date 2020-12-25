@@ -98,11 +98,7 @@ class UnserializeApi
                         scormOrganization::class,
                         scormResource::class,
                         Link::class,
-                        LpItem::class,
-                        \Chamilo\CourseBundle\Entity\CLp::class,
-                        \Chamilo\CoreBundle\Entity\Course::class,
-                        \Chamilo\CoreBundle\Entity\ResourceNode::class,
-                        \Chamilo\CoreBundle\Entity\ResourceType::class,
+                        LpItem::class
                     ]
                 );
                 break;

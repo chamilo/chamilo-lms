@@ -37,6 +37,14 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_F67ABBEB1BAD783F ON c_lp (resource_node_id);');
         }
 
+        if (false === $table->hasColumn('asset_id')) {
+            $this->addSql('ALTER TABLE c_lp ADD asset_id INT DEFAULT NULL;');
+            $this->addSql(
+                'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB5DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id);'
+            );
+            $this->addSql('CREATE INDEX IDX_F67ABBEB5DA1941 ON c_lp (asset_id);');
+        }
+
         if (false === $table->hasColumn('accumulate_work_time')) {
             $this->addSql('ALTER TABLE c_lp ADD accumulate_work_time INT DEFAULT 0 NOT NULL');
         }

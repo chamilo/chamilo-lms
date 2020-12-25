@@ -43,9 +43,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
     public function getFileSystem()
     {
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
-        $this->fs = $this->mountManager->getFilesystem('resources_fs');
-
-        return $this->fs;
+        return $this->mountManager->getFilesystem('resources_fs');
     }
 
     public function getResourceNodeFileContent(ResourceNode $resourceNode): string

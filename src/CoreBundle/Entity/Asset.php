@@ -137,6 +137,16 @@ class Asset
         return $this->id;
     }
 
+    public function getFolder()
+    {
+        return $this->category.'/'.$this->getOriginalName();
+    }
+
+    public function getFileUrl()
+    {
+        return $this->getFolder().'/'.$this->getOriginalName();
+    }
+
     public function __toString(): string
     {
         return $this->getOriginalName();
@@ -329,19 +339,11 @@ class Asset
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return Asset
-     */
     public function setTitle(string $title): Asset
     {
         $this->title = $title;
@@ -349,19 +351,11 @@ class Asset
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCategory(): string
     {
         return $this->category;
     }
 
-    /**
-     * @param string $category
-     *
-     * @return Asset
-     */
     public function setCategory(string $category): Asset
     {
         $this->category = $category;

@@ -41,7 +41,6 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
         $this->transliterator = $transliterator;
     }
 
-
     /**
      * @param array $options Options for this namer. The following options are accepted:
      *                       - chars_per_dir: how many chars use for each dir.

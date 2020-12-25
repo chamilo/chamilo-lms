@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +22,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CLp extends AbstractResource implements ResourceInterface
 {
+    public const LP_TYPE = 1;
+    public const SCORM_TYPE = 2;
+
     /**
      * @var int
      *
@@ -279,6 +283,14 @@ class CLp extends AbstractResource implements ResourceInterface
      */
     protected $forum;
 
+    /**
+     * @var Asset|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset")
+     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
+     */
+    protected $asset;
+
     public function __construct()
     {
         $this->accumulateScormTime = 1;
@@ -290,6 +302,7 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->contentLicense = '';
         $this->createdOn = new \DateTime();
         $this->modifiedOn = new \DateTime();
+        $this->publicatedOn = new \DateTime();
         $this->defaultEncoding = 'UTF-8';
         $this->defaultViewMod = 'embedded';
         $this->description = '';
@@ -302,7 +315,6 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->preventReinit = true;
         $this->path = '';
         $this->prerequisite = 0;
-        $this->publicatedOn = new \DateTime();
         $this->seriousgameMode = 0;
         $this->subscribeUsers = 0;
         $this->useMaxScore = 1;
@@ -1071,6 +1083,18 @@ class CLp extends AbstractResource implements ResourceInterface
     public function setForum(CForumForum $forum): self
     {
         $this->forum = $forum;
+
+        return $this;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
 
         return $this;
     }

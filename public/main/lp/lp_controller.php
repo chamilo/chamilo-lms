@@ -514,104 +514,97 @@ switch ($action) {
         exit;
         break;
     case 'add_item':
-        if (!$is_allowed_to_edit) {
+        if (!$is_allowed_to_edit || !$lp_found) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
-            // Check if the learnpath ID was defined, otherwise send back to list
-            require 'lp_list.php';
-        } else {
-            Session::write('refresh', 1);
 
-            if (isset($_POST['submit_button']) && !empty($post_title)) {
-                // If a title was submitted:
-                if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
-                    // Check post_time to ensure ??? (counter-hacking measure?)
-                    require 'lp_add_item.php';
-                } else {
-                    Session::write('post_time', $_POST['post_time']);
-                    $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
-                    if (empty($directoryParentId)) {
-                        $_SESSION['oLP']->generate_lp_folder($courseInfo);
-                    }
+        Session::write('refresh', 1);
 
-                    $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
-                    $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
-                    $type = isset($_POST['type']) ? $_POST['type'] : '';
-                    $path = isset($_POST['path']) ? $_POST['path'] : '';
-                    $description = isset($_POST['description']) ? $_POST['description'] : '';
-                    $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
-                    $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+        if (isset($_POST['submit_button']) && !empty($post_title)) {
+            Session::write('post_time', $_POST['post_time']);
+            $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
 
-                    if (TOOL_DOCUMENT === $_POST['type']) {
-                        if (isset($_POST['path']) && isset($_GET['id']) && !empty($_GET['id'])) {
-                            $document_id = $_POST['path'];
-                        } else {
-                            if ($_POST['content_lp']) {
-                                $document_id = $_SESSION['oLP']->create_document(
-                                    $courseInfo,
-                                    $_POST['content_lp'],
-                                    $_POST['title'],
-                                    'html',
-                                    $directoryParentId
-                                );
-                            }
-                        }
-
-                        $_SESSION['oLP']->add_item(
-                            $parent,
-                            $previous,
-                            $type,
-                            $document_id,
-                            $post_title,
-                            $description,
-                            $prerequisites
-                        );
-                    } elseif (TOOL_READOUT_TEXT == $_POST['type']) {
-                        if (isset($_POST['path']) && 'true' != $_GET['edit']) {
-                            $document_id = $_POST['path'];
-                        } else {
-                            if ($_POST['content_lp']) {
-                                $document_id = $_SESSION['oLP']->createReadOutText(
-                                    $courseInfo,
-                                    $_POST['content_lp'],
-                                    $_POST['title'],
-                                    $directoryParentId
-                                );
-                            }
-                        }
-
-                        $_SESSION['oLP']->add_item(
-                            $parent,
-                            $previous,
-                            TOOL_READOUT_TEXT,
-                            $document_id,
-                            $post_title,
-                            $description,
-                            $prerequisites
-                        );
-                    } else {
-                        // For all other item types than documents,
-                        // load the item using the item type and path rather than its ID.
-                        $_SESSION['oLP']->add_item(
-                            $parent,
-                            $previous,
-                            $type,
-                            $path,
-                            $post_title,
-                            $description,
-                            $prerequisites,
-                            $maxTimeAllowed
-                        );
-                    }
-                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
-                    header('Location: '.$url);
-                    exit;
-                }
-            } else {
-                require 'lp_add_item.php';
+            if (empty($directoryParentId) || '/' === $directoryParentId) {
+                $result = $oLP->generate_lp_folder($courseInfo);
+                $directoryParentId = $result['id'];
             }
+
+            $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
+            $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
+            $type = isset($_POST['type']) ? $_POST['type'] : '';
+            $path = isset($_POST['path']) ? $_POST['path'] : '';
+            $description = isset($_POST['description']) ? $_POST['description'] : '';
+            $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
+            $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+
+            if (TOOL_DOCUMENT === $_POST['type']) {
+                if (isset($_POST['path']) && isset($_GET['id']) && !empty($_GET['id'])) {
+                    $document_id = $_POST['path'];
+                } else {
+                    if ($_POST['content_lp']) {
+                        $document_id = $oLP->create_document(
+                            $courseInfo,
+                            $_POST['content_lp'],
+                            $_POST['title'],
+                            'html',
+                            $directoryParentId
+                        );
+                    }
+                }
+
+                $oLP->add_item(
+                    $parent,
+                    $previous,
+                    $type,
+                    $document_id,
+                    $post_title,
+                    $description,
+                    $prerequisites
+                );
+            } elseif (TOOL_READOUT_TEXT == $_POST['type']) {
+                if (isset($_POST['path']) && 'true' != $_GET['edit']) {
+                    $document_id = $_POST['path'];
+                } else {
+                    if ($_POST['content_lp']) {
+                        $document_id = $oLP->createReadOutText(
+                            $courseInfo,
+                            $_POST['content_lp'],
+                            $_POST['title'],
+                            $directoryParentId
+                        );
+                    }
+                }
+
+                $oLP->add_item(
+                    $parent,
+                    $previous,
+                    TOOL_READOUT_TEXT,
+                    $document_id,
+                    $post_title,
+                    $description,
+                    $prerequisites
+                );
+            } else {
+                // For all other item types than documents,
+                // load the item using the item type and path rather than its ID.
+                $oLP->add_item(
+                    $parent,
+                    $previous,
+                    $type,
+                    $path,
+                    $post_title,
+                    $description,
+                    $prerequisites,
+                    $maxTimeAllowed
+                );
+            }
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
+            header('Location: '.$url);
+            exit;
+        } else {
+            require 'lp_add_item.php';
         }
+
         break;
     case 'add_users_to_category':
         if (!$is_allowed_to_edit) {
@@ -746,55 +739,50 @@ switch ($action) {
         }
         break;
     case 'edit_item':
-        if (!$is_allowed_to_edit) {
+        if (!$is_allowed_to_edit || !$lp_found) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
-            require 'lp_list.php';
+
+        Session::write('refresh', 1);
+        if (isset($_POST['submit_button']) && !empty($post_title)) {
+            // TODO: mp3 edit
+            $audio = [];
+            if (isset($_FILES['mp3'])) {
+                $audio = $_FILES['mp3'];
+            }
+
+            $description = isset($_POST['description']) ? $_POST['description'] : '';
+            $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
+            $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+            $url = isset($_POST['url']) ? $_POST['url'] : '';
+
+            $oLP->edit_item(
+                $_REQUEST['id'],
+                $_POST['parent'],
+                $_POST['previous'],
+                $post_title,
+                $description,
+                $prerequisites,
+                $audio,
+                $maxTimeAllowed,
+                $url
+            );
+            if (isset($_POST['content_lp'])) {
+                $oLP->edit_document($courseInfo);
+            }
+            $is_success = true;
+            $extraFieldValues = new ExtraFieldValue('lp_item');
+            $extraFieldValues->saveFieldValues($_POST);
+
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+            header('Location: '.$url);
+            exit;
+        }
+        if (isset($_GET['view']) && 'build' === $_GET['view']) {
+            require 'lp_edit_item.php';
         } else {
-            Session::write('refresh', 1);
-            if (isset($_POST['submit_button']) && !empty($post_title)) {
-                // TODO: mp3 edit
-                $audio = [];
-                if (isset($_FILES['mp3'])) {
-                    $audio = $_FILES['mp3'];
-                }
-
-                $description = isset($_POST['description']) ? $_POST['description'] : '';
-                $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
-                $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
-                $url = isset($_POST['url']) ? $_POST['url'] : '';
-
-                $_SESSION['oLP']->edit_item(
-                    $_REQUEST['id'],
-                    $_POST['parent'],
-                    $_POST['previous'],
-                    $post_title,
-                    $description,
-                    $prerequisites,
-                    $audio,
-                    $maxTimeAllowed,
-                    $url
-                );
-
-                if (isset($_POST['content_lp'])) {
-                    $_SESSION['oLP']->edit_document($courseInfo);
-                }
-                $is_success = true;
-
-                $extraFieldValues = new ExtraFieldValue('lp_item');
-                $extraFieldValues->saveFieldValues($_POST);
-
-                Display::addFlash(Display::return_message(get_lang('Updated')));
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
-                header('Location: '.$url);
-                exit;
-            }
-            if (isset($_GET['view']) && 'build' === $_GET['view']) {
-                require 'lp_edit_item.php';
-            } else {
-                require 'lp_admin_view.php';
-            }
+            require 'lp_admin_view.php';
         }
         break;
     case 'edit_item_prereq':

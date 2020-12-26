@@ -476,11 +476,6 @@ class ResourceNode
         return false;
     }
 
-    public function isFileEditableText(): bool
-    {
-        return $this->hasEditableTextContent();
-    }
-
     public function isResourceFileAnImage(): bool
     {
         if ($this->hasResourceFile()) {

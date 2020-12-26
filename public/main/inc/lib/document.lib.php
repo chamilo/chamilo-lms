@@ -1155,6 +1155,8 @@ class DocumentManager
      *                              0 if requires context *out of* session, and null to use global context
      * @param bool   $ignoreDeleted
      *
+     * @deprecated  use $repo->find()
+     *
      * @return array document content
      */
     public static function get_document_data_by_id(
@@ -1174,20 +1176,20 @@ class DocumentManager
         $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $groupId = api_get_group_id();
 
-        $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
+        //$www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
-                WHERE c_id = $course_id $sessionCondition AND iid = $id";
+                WHERE iid = $id";
 
         if ($ignoreDeleted) {
             $sql .= " AND path NOT LIKE '%_DELETED_%' ";
         }
 
         $result = Database::query($sql);
-        $courseParam = '&cidReq='.$course_code.'&id='.$id.'&id_session='.$session_id.'&gidReq='.$groupId;
+        $courseParam = '&cidReq='.$course_code.'&id='.$id.'&sid='.$session_id.'&gidReq='.$groupId;
         if ($result && 1 == Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             //@todo need to clarify the name of the URLs not nice right now
@@ -1200,7 +1202,7 @@ class DocumentManager
             //$row['absolute_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
             $row['absolute_path_from_document'] = '/document'.$row['path'];
             //$row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'].'/';
-            $row['direct_url'] = $www.$path;
+            //$row['direct_url'] = $www.$path;
             $row['basename'] = basename($row['path']);
 
             if ('.' == dirname($row['path'])) {
@@ -4570,8 +4572,9 @@ class DocumentManager
             $attributes = ['onchange' => 'javascript: document.selector.submit();'];
         }
         $form->addElement('hidden', 'cidReq', api_get_course_id());
-        $form->addElement('hidden', 'id_session', api_get_session_id());
-        $form->addElement('hidden', 'gidReq', api_get_group_id());
+        $form->addElement('hidden', 'cid', api_get_course_int_id());
+        $form->addElement('hidden', 'sid', api_get_session_id());
+        $form->addElement('hidden', 'gid', api_get_group_id());
 
         $parent_select = $form->addSelect(
             $selectName,
@@ -6554,12 +6557,12 @@ This folder contains all sessions that have been opened in the chat. Although th
             $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&file='.$documentId.'&lp_id='.$lp_id;
         } else {
             // Direct document URL
-            $url = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
+            $url = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&sid='.$session_id.'&id='.$documentId;
         }
 
         if (!empty($overwrite_url)) {
             $overwrite_url = Security::remove_XSS($overwrite_url);
-            $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId;
+            $url = $overwrite_url.'&cidReq='.$course_info['code'].'&sid='.$session_id.'&document_id='.$documentId;
         }
 
         $img = Display::returnIconPath($icon);
@@ -6573,7 +6576,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             ['target' => $target, 'class' => 'moved']
         );
 
-        $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
+        $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&sid='.$session_id.'&id='.$documentId;
         $link .= '&nbsp;'.Display::url(
             Display::return_icon('preview_view.png', get_lang('Preview')),
             $directUrl,

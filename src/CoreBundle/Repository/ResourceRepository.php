@@ -281,8 +281,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function update(AbstractResource $resource, $andFlush = true): void
     {
+        $resource->getResourceNode()->setUpdatedAt(new \DateTime());
         $resource->getResourceNode()->setTitle($resource->getResourceName());
         $this->getEntityManager()->persist($resource);
+
         if ($andFlush) {
             $this->getEntityManager()->flush();
         }
@@ -731,6 +733,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         $resourceNode = $resource->getResourceNode();
         if ($resourceNode->hasResourceFile()) {
+            $resourceNode->setContent($content);
+            error_log('updated');
+            $resourceNode->getResourceFile()->setSize(strlen($content));
+            /*
             error_log('has file');
             $resourceFile = $resourceNode->getResourceFile();
             if ($resourceFile) {
@@ -745,7 +751,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 $resource->setUploadFile($file);
 
                 return true;
-            }
+            }*/
         }
         error_log('false');
 

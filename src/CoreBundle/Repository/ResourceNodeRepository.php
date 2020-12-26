@@ -37,6 +37,21 @@ class ResourceNodeRepository extends MaterializedPathRepository
         return $this->storage->resolveUri($resourceFile);
     }
 
+    /*public function create(ResourceNode $node): void
+    {
+        $this->getEntityManager()->persist($node);
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(ResourceNode $node, $andFlush = true): void
+    {
+        //$node->setUpdatedAt(new \DateTime());
+        $this->getEntityManager()->persist($node);
+        if ($andFlush) {
+            $this->getEntityManager()->flush();
+        }
+    }*/
+
     /**
      * @return FilesystemInterface
      */

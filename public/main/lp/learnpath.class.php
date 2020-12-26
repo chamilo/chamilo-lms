@@ -106,7 +106,7 @@ class learnpath
     public $expired_on = '';
     public $ref;
     public $course_int_id;
-    public $course_info = [];
+    public $course_info;
     public $categoryId;
     public $scormUrl;
 
@@ -123,6 +123,7 @@ class learnpath
         $lp_id = (int) $entity->getIid();
         $course_info = empty($course_info) ? api_get_course_info() : $course_info;
         $course_id = (int) $course_info['real_id'];
+        $this->course_info = $course_info;
         $this->set_course_int_id($course_id);
         if (empty($lp_id) || empty($course_id)) {
             $this->error = "Parameter is empty: LpId:'$lp_id', courseId: '$lp_id'";
@@ -6524,14 +6525,12 @@ class learnpath
             $documentId = DocumentManager::get_document_id($course, $dir, 0);
         }
 
-        $array = [
+        return [
             'dir' => $dir,
             'filepath' => $filepath,
             'folder' => $folder,
             'id' => $documentId,
         ];
-
-        return $array;
     }
 
     /**
@@ -6566,38 +6565,6 @@ class learnpath
         // Generates folder
         $result = $this->generate_lp_folder($courseInfo);
         $dir = $result['dir'];
-
-        if (empty($parentId) || '/' == $parentId) {
-            $postDir = isset($_POST['dir']) ? $_POST['dir'] : $dir;
-            $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
-
-            if ('/' === $parentId) {
-                $dir = '/';
-            }
-
-            // Please, do not modify this dirname formatting.
-            if (strstr($dir, '..')) {
-                $dir = '/';
-            }
-
-            if (!empty($dir[0]) && '.' == $dir[0]) {
-                $dir = substr($dir, 1);
-            }
-            if (!empty($dir[0]) && '/' != $dir[0]) {
-                $dir = '/'.$dir;
-            }
-            if (isset($dir[strlen($dir) - 1]) && '/' != $dir[strlen($dir) - 1]) {
-                $dir .= '/';
-            }
-        } else {
-            $parentInfo = DocumentManager::get_document_data_by_id(
-                $parentId,
-                $courseInfo['code']
-            );
-            if (!empty($parentInfo)) {
-                $dir = $parentInfo['path'].'/';
-            }
-        }
         // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
         $originalTitle = !empty($title) ? $title : $_POST['title'];
@@ -6704,11 +6671,13 @@ class learnpath
             $id = (int) $_REQUEST['document_id'];
             /** @var CDocument $document */
             $document = $repo->find($id);
-
             if ($document->getResourceNode()->hasEditableTextContent()) {
                 $repo->updateResourceFileContent($document, $_REQUEST['content_lp']);
+             /*   $nodeRepo = Container::getDocumentRepository()->getResourceNodeRepository();
+                $nodeRepo->update($document->getResourceNode());
+                var_dump($document->getResourceNode()->getContent());
+                exit;*/
             }
-
             $document->setTitle($_REQUEST['title']);
             $repo->update($document);
         }

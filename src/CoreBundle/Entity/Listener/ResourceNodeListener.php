@@ -55,9 +55,11 @@ class ResourceNodeListener
     {
         error_log('resource node preUpdate');
 
-        if ($resourceNode->hasResourceFile() && $resourceNode->isFileEditableText()) {
+        if ($resourceNode->hasResourceFile() && $resourceNode->hasEditableTextContent()) {
             $fileName = $this->resourceNodeRepository->getFilename($resourceNode->getResourceFile());
+            error_log("fileName: $fileName");
             if ($fileName) {
+                error_log('updated');
                 $content = $resourceNode->getContent();
                 $this->resourceNodeRepository->getFileSystem()->update($fileName, $content);
             }

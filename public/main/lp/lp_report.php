@@ -323,7 +323,7 @@ if (!empty($users)) {
             if (!empty($groupsByUser)) {
                 $groupUrl = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
                 foreach ($groupsByUser as $group) {
-                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gidReq='.$group['iid']).'&nbsp;';
+                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gid='.$group['iid']).'&nbsp;';
                 }
             }
         }

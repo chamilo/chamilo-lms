@@ -90,6 +90,14 @@ services:
 #        tags:
 #            - {name: kernel.event_listener, event: kernel.controller, method: onCoreController}
 
+    Chamilo\CoreBundle\Repository\AssetRepository:
+
+    Chamilo\CoreBundle\EventListener\AssetListener:
+        arguments:
+            - '@Chamilo\CoreBundle\Repository\AssetRepository'
+        tags:
+            - {name: kernel.event_listener, event: vich_uploader.post_remove}
+
     Chamilo\CoreBundle\Entity\Listener\ResourceListener:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}

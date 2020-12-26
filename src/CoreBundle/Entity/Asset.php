@@ -45,7 +45,13 @@ class Asset
     /**
      * @var string
      *
-     * @Assert\Choice({Asset::SCORM, Asset::WATERMARK, Asset::CSS}, message="Choose a valid category.")
+     * @Assert\Choice({
+     *     Asset::SCORM,
+     *     Asset::WATERMARK,
+     *     Asset::CSS
+     *     },
+     *     message="Choose a valid category."
+     * )
      *
      * @ORM\Column(type="string", length=255)
      */
@@ -339,12 +345,12 @@ class Asset
         return $this;
     }
 
-    public function getTitle(): string
+    public function getTitle()
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): Asset
+    public function setTitle($title): Asset
     {
         $this->title = $title;
 

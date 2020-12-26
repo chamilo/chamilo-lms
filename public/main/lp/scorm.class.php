@@ -47,12 +47,12 @@ class scorm extends learnpath
      * @param    int    Learnpath ID in DB
      * @param    int    User ID
      */
-    public function __construct($courseCode = null, $resource_id = null, $user_id = null)
+    public function __construct($entity,  $course_info = null, $user_id = null)
     {
         $this->items = [];
         $this->subdir = '';
         $this->manifestToString = '';
-        parent::__construct($courseCode, $resource_id, $user_id);
+        parent::__construct($entity, $course_info, $user_id);
     }
 
     /**

@@ -121,6 +121,7 @@ class learnpath
         $debug = $this->debug;
         $this->encoding = api_get_system_encoding();
         $lp_id = (int) $entity->getIid();
+        $course_info = empty($course_info) ? api_get_course_info() : $course_info;
         $course_id = (int) $course_info['real_id'];
         $this->set_course_int_id($course_id);
         if (empty($lp_id) || empty($course_id)) {
@@ -372,7 +373,6 @@ class learnpath
                 error_log('End of learnpath constructor for learnpath '.$this->get_id());
             }
         }
-
     }
 
     /**
@@ -946,7 +946,6 @@ class learnpath
             return false;
         }
 
-        $lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $lp_view = Database::get_course_table(TABLE_LP_VIEW);
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -967,7 +966,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
-        self::toggleVisibility($this->lp_id, 0);
+        //self::toggleVisibility($this->lp_id, 0);
 
         /*if (2 == $this->type || 3 == $this->type) {
             // This is a scorm learning path, delete the files as well.
@@ -1008,14 +1007,13 @@ class learnpath
             }
         }*/
 
-       if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
-            $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
-            $sql = "DELETE FROM $table
-                    WHERE
-                        lp_id = {$this->lp_id} AND
-                        c_id = $course_id ";
-            Database::query($sql);
-        }
+        $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+        $sql = "DELETE FROM $table
+                WHERE
+                    lp_id = {$this->lp_id} AND
+                    c_id = $course_id ";
+        Database::query($sql);
+
 
         /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
         $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
@@ -1024,9 +1022,6 @@ class learnpath
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);*/
 
-        /*$sql = "DELETE FROM $lp
-                WHERE iid = ".$this->lp_id;
-        Database::query($sql);*/
         $repo = Container::getLpRepository();
         $lp = $repo->find($this->lp_id);
         Database::getManager()->remove($lp);
@@ -1034,14 +1029,6 @@ class learnpath
 
         // Updates the display order of all lps.
         $this->update_display_order();
-
-        /*api_item_property_update(
-            api_get_course_info(),
-            TOOL_LEARNPATH,
-            $this->lp_id,
-            'delete',
-            api_get_user_id()
-        );*/
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_id(),
@@ -1054,7 +1041,7 @@ class learnpath
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
-        if ('true' == api_get_setting('search_enabled')) {
+        if ('true' === api_get_setting('search_enabled')) {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
         }

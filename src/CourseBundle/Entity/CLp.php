@@ -287,7 +287,7 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @var Asset|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
      */
     protected $asset;

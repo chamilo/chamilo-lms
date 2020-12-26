@@ -4,6 +4,7 @@
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
@@ -79,7 +80,7 @@ if (isset($_POST) && $is_error) {
             }
             break;
         case 'scorm':
-            $scorm = new scorm();
+            $scorm = new scorm(new CLp());
             $scorm->import_package(
                 $_FILES['user_file'],
                 $current_dir,

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -32,7 +33,6 @@ trait ControllerTrait
     {
         $services = parent::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
-        //$services['resource_factory'] = ResourceFactory::class;
         $services['glide'] = Glide::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
@@ -41,7 +41,8 @@ trait ControllerTrait
             The following classes are needed in order to load the resources files when using the /r/ path
             For example: http://my.chamilomaster.net/r/agenda/event_attachments/96/download?cid=1&sid=0&gid=0
         */
-
+        $services[] = ResourceFactory::class;
+        $services[] = ResourceNodeRepository::class;
         $services[] = CAnnouncementRepository::class;
         $services[] = CAnnouncementAttachmentRepository::class;
         $services[] = CAttendanceRepository::class;

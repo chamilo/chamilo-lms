@@ -495,7 +495,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $em = $this->getDoctrine();
 
         /** @var ResourceNode $resourceNode */
-        $resourceNode = $em->getRepository(ResourceNode::class)->find($id);
+        $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
@@ -536,7 +536,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $filter = $request->get('filter'); // See filters definitions in /config/services.yml
         $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
-        $resourceNode = $em->getRepository(ResourceNode::class)->find($id);
+        $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
@@ -563,7 +563,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $id = $request->get('id');
         $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
-        $resourceNode = $em->getRepository(ResourceNode::class)->find($id);
+        $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
@@ -591,7 +591,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
-        $resourceNode = $em->getRepository(ResourceNode::class)->find($id);
+        $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
@@ -701,7 +701,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised view access to resource')
         );
 
-        $repo = $this->getRepositoryFromRequest($request);
+        //$repo = $this->getRepositoryFromRequest($request);
         $resourceFile = $resourceNode->getResourceFile();
 
         if (!$resourceFile) {
@@ -710,6 +710,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $fileName = $resourceNode->getResourceFile()->getOriginalName();
         $mimeType = $resourceFile->getMimeType();
+        $resourceNodeRepo = $this->getResourceNodeRepository();
 
         switch ($mode) {
             case 'download':
@@ -737,7 +738,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $params['crop'] = $crop;
                     }
 
-                    $fileName = $repo->getResourceNodeRepository()->getFilename($resourceFile);
+                    $fileName = $resourceNodeRepo->getFilename($resourceFile);
 
                     return $server->getImageResponse($fileName, $params);
                 }
@@ -745,7 +746,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 break;
         }
 
-        $stream = $repo->getResourceNodeFileStream($resourceNode);
+        $stream = $resourceNodeRepo->getResourceNodeFileStream($resourceNode);
 
         $response = new StreamedResponse(
             function () use ($stream): void {

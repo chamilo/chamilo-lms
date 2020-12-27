@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +25,14 @@ trait ResourceControllerTrait
         return $this->getRepository($tool, $type);
     }
 
+    public function getResourceNodeRepository(): ResourceNodeRepository
+    {
+        return $this->container->get(ResourceNodeRepository::class);
+    }
+
     public function getResourceRepositoryFactory(): ResourceFactory
     {
-        return $this->container->get('resource_factory');
+        return $this->container->get(ResourceFactory::class);
     }
 
     public function getRepository($tool, $type): ResourceRepository

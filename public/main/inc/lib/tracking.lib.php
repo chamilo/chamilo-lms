@@ -363,7 +363,7 @@ class Tracking
                     iv.max_score as myviewmaxscore,
                     i.item_type as item_type,
                     iv.view_count as iv_view_count,
-                    iv.id as iv_id,
+                    iv.iid as iv_id,
                     path
                 FROM $TBL_LP_ITEM as i
                 INNER JOIN $TBL_LP_ITEM_VIEW as iv

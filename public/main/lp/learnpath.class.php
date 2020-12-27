@@ -7884,13 +7884,6 @@ class learnpath
             true
         );
 
-        $headers = [
-            get_lang('Files'),
-            get_lang('CreateTheDocument'),
-            get_lang('CreateReadOutText'),
-            get_lang('Upload'),
-        ];
-
         $form = new FormValidator(
             'form_upload',
             'POST',
@@ -7959,9 +7952,9 @@ class learnpath
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
         $form->addMultipleUpload($url);
 
-        $lpItem = new CLpItem();
+        /*$lpItem = new CLpItem();
         $lpItem->setItemType(TOOL_DOCUMENT);
-        $new = $this->displayDocumentForm('add', $lpItem);
+        $new = $this->displayDocumentForm('add', $lpItem);*/
 
         /*$lpItem = new CLpItem();
         $lpItem->setItemType(TOOL_READOUT_TEXT);
@@ -7970,13 +7963,13 @@ class learnpath
         $headers = [
             get_lang('Files'),
             get_lang('Create a new document'),
-            get_lang('Create read-out text'),
+            //get_lang('Create read-out text'),
             get_lang('Upload'),
         ];
 
         return Display::tabs(
             $headers,
-            [$documentTree, $new, $form->returnForm()],
+            [$documentTree, $form->returnForm()],
             'subtab'
         );
     }
@@ -9944,6 +9937,7 @@ EOD;
         $debug = 0;
         $learnPath = null;
         $lpObject = Session::read('lpobject');
+
         if (null !== $lpObject) {
             $learnPath = UnserializeApi::unserialize('lp', $lpObject);
             if ($debug) {
@@ -9956,7 +9950,9 @@ EOD;
         }
 
         if (!is_object($learnPath)) {
-            $learnPath = new learnpath($courseCode, $lpId, $user_id);
+            $repo = Container::getLpRepository();
+            $lp = $repo->find($lpId);
+            $learnPath = new learnpath($lp, api_get_course_info($courseCode), $user_id);
             if ($debug) {
                 error_log('------getLpFromSession------');
                 error_log('getLpFromSession: create new learnpath');
@@ -10280,6 +10276,8 @@ EOD;
     /**
      * Check if this LP has a created forum in the basis course.
      *
+     * @deprecated
+     *
      * @return bool
      */
     public function lpHasForum()
@@ -10559,7 +10557,7 @@ EOD;
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
         $link = '';
-        $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
+        $extraParams = api_get_cidreq(true, true, 'learnpath').'&sid='.$session_id;
 
         switch ($type) {
             case 'dir':
@@ -10584,13 +10582,13 @@ EOD;
                 $learnpathItemViewResult = $em
                     ->getRepository('ChamiloCourseBundle:CLpItemView')
                     ->findBy(
-                        ['cId' => $course_id, 'lpItemId' => $rowItem->getId(), 'lpViewId' => $lpViewId],
+                        ['cId' => $course_id, 'lpItemId' => $rowItem->getIid(), 'lpViewId' => $lpViewId],
                         ['viewCount' => 'DESC'],
                         1
                     );
                 /** @var CLpItemView $learnpathItemViewData */
                 $learnpathItemViewData = current($learnpathItemViewResult);
-                $learnpathItemViewId = $learnpathItemViewData ? $learnpathItemViewData->getId() : 0;
+                $learnpathItemViewId = $learnpathItemViewData ? $learnpathItemViewData->getIid() : 0;
 
                 return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
                     .http_build_query([
@@ -10636,7 +10634,11 @@ EOD;
             case TOOL_DOCUMENT:
                 $repo = Container::getDocumentRepository();
                 $document = $repo->find($rowItem->getPath());
-                $file = $repo->getResourceFileUrl($document, [], UrlGeneratorInterface::ABSOLUTE_URL);
+                $params = [
+                    'cid' => $course_id,
+                    'sid' => $session_id,
+                ];
+                $file = $repo->getResourceFileUrl($document, $params, UrlGeneratorInterface::ABSOLUTE_URL);
 
                 return $file;
 

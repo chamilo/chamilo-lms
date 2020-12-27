@@ -2829,6 +2829,9 @@ HTML;
             $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
+        $lpJs = api_get_path(WEB_PUBLIC_PATH).'build/lp.js';
+        //{type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
+        //{type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
@@ -2845,22 +2848,20 @@ HTML;
         },
         "'.$frameName.'",
         [
-            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
-            {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+            {type:"script", src:"'.$lpJs.'", deps: [
+
             {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-            {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
+
             {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js",
                 deps: [
                 {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/vrview/vrview.js"},
-                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
                 '.$videoPluginFiles.'
             ]},
             '.$translateHtml.'
             ]},
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
+
         ]);';
 
         return $frameReady;

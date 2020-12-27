@@ -2625,9 +2625,6 @@ class DocumentManager
     ) {
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
-        $course_dir = $course_info['path'].'/document';
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $base_work_dir = $sys_course_path.$course_dir;
 
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
@@ -2636,7 +2633,7 @@ class DocumentManager
                 $document = handle_uploaded_document(
                     $course_info,
                     $files[$fileKey],
-                    $base_work_dir,
+                    null,
                     $path,
                     api_get_user_id(),
                     api_get_group_id(),
@@ -2935,7 +2932,7 @@ class DocumentManager
                 }
 
                 $link .= '<a data_id="'.$node['id'].'" data_type="document" class="moved ui-sortable-handle link_with_id">';
-                $link .= $folder.'&nbsp;'.$node['slug'];
+                $link .= $folder.'&nbsp;'.addslashes($node['title']);
                 $link .= '</a>';
 
                 $link .= '</div>';
@@ -4430,13 +4427,13 @@ class DocumentManager
 
         // Check if pathname already exists inside document table
         $table = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "SELECT id, path FROM $table
+        $sql = "SELECT iid, title FROM $table
                 WHERE
                     filetype = 'file' AND
                     c_id = $courseId AND
                     (
-                        path = '".$fileNameEscape."' OR
-                        path = '$fileNameWithSuffix'
+                        title = '".$fileNameEscape."' OR
+                        title = '$fileNameWithSuffix'
                     ) AND
                     (session_id = 0 OR session_id = $sessionId)
         ";
@@ -4494,6 +4491,11 @@ class DocumentManager
         $counter = 1;
         $filePath = $path.$name;
         $uniqueName = $name;
+        $baseName = pathinfo($name, PATHINFO_FILENAME);
+        $extension = pathinfo($name, PATHINFO_EXTENSION);
+
+        return uniqid($baseName.'-', true).'.'.$extension;
+
         while ($documentExists = self::documentExists(
             $filePath,
             $courseInfo,

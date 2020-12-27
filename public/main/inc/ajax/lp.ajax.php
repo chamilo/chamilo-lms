@@ -171,6 +171,12 @@ switch ($action) {
 
         break;
     case 'get_forum_thread':
+        // @todo fix get forum thread
+        echo json_encode([
+            'error' => true,
+        ]);
+        break;
+
         $lpId = isset($_GET['lp']) ? intval($_GET['lp']) : 0;
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         $sessionId = api_get_session_id();
@@ -205,8 +211,9 @@ switch ($action) {
             ]);
             break;
         }
-
-        $forum = $learningPath->getForum($sessionId);
+        // @todo fix get forum
+        //$forum = $learningPath->getForum($sessionId);
+        $forum = false;;
 
         if (empty($forum)) {
             require_once '../../forum/forumfunction.inc.php';

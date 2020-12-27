@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -37,7 +38,7 @@ switch ($action) {
         $sessionId = api_get_session_id();
 
         if (!$is_allowed_to_edit && $sessionId &&
-            $_REQUEST['curdirpath'] == "/basic-course-documents__{$sessionId}__0"
+            $_REQUEST['curdirpath'] === "/basic-course-documents__{$sessionId}__0"
         ) {
             $session = SessionManager::fetch($sessionId);
 
@@ -66,18 +67,8 @@ switch ($action) {
             exit;
         }
 
-        $directoryParentId = isset($_REQUEST['directory_parent_id']) ? $_REQUEST['directory_parent_id'] : 0;
-        $currentDirectory = '';
-        if (empty($directoryParentId)) {
-            $currentDirectory = isset($_REQUEST['curdirpath']) ? $_REQUEST['curdirpath'] : '';
-        } else {
-            $documentData = DocumentManager::get_document_data_by_id($directoryParentId, api_get_course_id());
-            if ($documentData) {
-                $currentDirectory = $documentData['path'];
-            }
-        }
-
-        $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : '';
+        $directoryParentId = $_REQUEST['directory_parent_id'] ?? 0;
+        $ifExists = $_POST['if_exists'] ?? '';
         $unzip = isset($_POST['unzip']) ? 1 : 0;
 
         if (empty($ifExists)) {
@@ -107,7 +98,7 @@ switch ($action) {
                 $globalFile['files'] = $file;
                 $document = DocumentManager::upload_document(
                     $globalFile,
-                    $currentDirectory,
+                    null,
                     '',
                     '', // comment
                     $unzip,

@@ -275,7 +275,9 @@ function handle_uploaded_document(
     // Check if there is enough space to save the file
     if (!DocumentManager::enough_space($uploadedFile['size'], $maxSpace)) {
         if ($output) {
-            Display::addFlash(Display::return_message(get_lang('There is not enough space to upload this file.'), 'error'));
+            Display::addFlash(
+                Display::return_message(get_lang('There is not enough space to upload this file.'), 'error')
+            );
         }
 
         return false;
@@ -332,7 +334,7 @@ function handle_uploaded_document(
             return false;
         } else {
             // If the upload path differs from / (= root) it will need a slash at the end
-            if ('/' != $uploadPath) {
+            if ('/' !== $uploadPath) {
                 $uploadPath = $uploadPath.'/';
             }
 
@@ -340,26 +342,30 @@ function handle_uploaded_document(
             $whereToSave = $documentDir.$uploadPath;
 
             // Just upload the file "as is"
-            if ($onlyUploadFile) {
+            /*if ($onlyUploadFile) {
                 $errorResult = moveUploadedFile($uploadedFile, $whereToSave.$cleanName);
                 if ($errorResult) {
                     return $whereToSave.$cleanName;
                 }
 
                 return $errorResult;
-            }
+            }*/
 
             /*
                 Based in the clean name we generate a new filesystem name
                 Using the session_id and group_id if values are not empty
             */
-            $fileSystemName = DocumentManager::fixDocumentName(
+
+            // @todo fix clean name use hash instead of custom document name
+            /*$fileSystemName = DocumentManager::fixDocumentName(
                 $cleanName,
                 'file',
                 $courseInfo,
                 $sessionId,
                 $groupId
-            );
+            );*/
+
+            $fileSystemName = $cleanName;
 
             // Name of the document without the extension (for the title)
             $documentTitle = get_document_title($uploadedFile['name']);
@@ -368,16 +374,39 @@ function handle_uploaded_document(
             $fileSize = $uploadedFile['size'];
 
             // Example: /folder/picture.jpg
-            $filePath = $uploadPath.$fileSystemName;
-
+            /*$filePath = $uploadPath.$fileSystemName;
             $docId = DocumentManager::get_document_id(
                 $courseInfo,
                 $filePath,
                 $sessionId
-            );
+            );*/
 
+            $courseEntity = api_get_course_entity($courseInfo['real_id']);
+            if (empty($courseEntity)) {
+                return false;
+            }
+
+            $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
+            $session = api_get_session_entity($sessionId);
+            $group = api_get_group_entity($groupId);
             $documentRepo = Container::getDocumentRepository();
-            $document = $documentRepo->find($docId);
+
+            /** @var \Chamilo\CoreBundle\Entity\AbstractResource $parentResource */
+            $parentResource = $courseEntity;
+            if (!empty($parentId)) {
+                $parent = $documentRepo->find($parentId);
+                if ($parent) {
+                    $parentResource = $parent;
+                }
+            }
+
+            $document = $documentRepo->findResourceByTitle(
+                $documentTitle,
+                $parentResource->getResourceNode(),
+                $courseEntity,
+                $session,
+                $group
+            );
 
             if (!($content instanceof UploadedFile)) {
                 $request = Container::getRequest();
@@ -393,15 +422,15 @@ function handle_uploaded_document(
                 case 'overwrite':
                     if ($document) {
                         // Update file size
-                        update_existing_document(
+                        /*update_existing_document(
                             $courseInfo,
                             $document->getIid(),
                             $uploadedFile['size']
-                        );
+                        );*/
 
                         $document = DocumentManager::addFileToDocument(
                             $document,
-                            $filePath,
+                            null,
                             $content,
                             $defaultVisibility,
                             null,
@@ -425,7 +454,7 @@ function handle_uploaded_document(
                         // Put the document data in the database
                         $document = DocumentManager::addDocument(
                             $courseInfo,
-                            $filePath,
+                            null,
                             'file',
                             $fileSize,
                             $documentTitle,

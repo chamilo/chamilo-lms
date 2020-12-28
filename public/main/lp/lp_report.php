@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
@@ -36,9 +38,9 @@ if (!empty($groupFilterParts) && isset($groupFilterParts[1])) {
 $export = isset($_REQUEST['export']);
 $reset = isset($_REQUEST['reset']) ? $_REQUEST['reset'] : '';
 
-$lpRepo = \Chamilo\CoreBundle\Framework\Container::getLpRepository();
-/** @var \Chamilo\CourseBundle\Entity\CLp $entity */
-$entity = $lpRepo->find($lpId);
+$repo = Container::getLpRepository();
+/** @var CLp $entity */
+$entity = $repo->find($lpId);
 
 $lp = new learnpath($entity, $courseInfo, api_get_user_id());
 if (empty($lp)) {
@@ -109,7 +111,7 @@ if ('1' === $lp->getSubscribeUsers()) {
     $users = [];
     if (!empty($categoryId)) {
         /** @var CLpCategory $category */
-        $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
+        $category = $em->getRepository(CLpCategory::class)->find($categoryId);
         $subscribedUsersInCategory = $category->getUsers();
         if (!empty($subscribedUsersInCategory)) {
             foreach ($subscribedUsersInCategory as $item) {

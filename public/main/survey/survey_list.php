@@ -69,7 +69,7 @@ Session::erase('answer_count');
 Session::erase('answer_list');
 $tool_name = get_lang('Survey list');
 // Database table definitions
-if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
+if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
         'name' => get_lang('Survey list'),
@@ -555,24 +555,28 @@ Display::display_header($tool_name, 'Survey');
 Display::display_introduction_section('survey', 'left');
 
 // Action handling: searching
-if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
+if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     SurveyUtil::display_survey_search_form();
 }
 
 echo '<div class="actions">';
-if (!api_is_session_general_coach() || 'true' == $extend_rights_for_coachs) {
+if (!api_is_session_general_coach() || 'true' === $extend_rights_for_coachs) {
     // Action links
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
+    echo '<a
+        href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('Create survey'), '', ICON_SIZE_MEDIUM).'</a> ';
     $url = api_get_path(WEB_CODE_PATH).'survey/create_meeting.php?'.api_get_cidreq();
-    echo Display::url(Display::return_icon('add_doodle.png', get_lang('Create surveyDoodle'), '', ICON_SIZE_MEDIUM), $url);
+    echo Display::url(
+        Display::return_icon('add_doodle.png', get_lang('Create surveyDoodle'), '', ICON_SIZE_MEDIUM),
+        $url
+    );
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Load main content
-if (api_is_session_general_coach() && 'false' == $extend_rights_for_coachs) {
+if (api_is_session_general_coach() && 'false' === $extend_rights_for_coachs) {
     SurveyUtil::display_survey_list_for_coach();
 } else {
     SurveyUtil::display_survey_list();

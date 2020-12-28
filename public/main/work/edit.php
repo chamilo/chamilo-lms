@@ -81,7 +81,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 if (!empty($my_folder_data)) {
-    $homework = get_work_assignment_by_id($my_folder_data['id']);
+    $homework = get_work_assignment_by_id($my_folder_data['iid']);
 
     if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
         $time_now = time();

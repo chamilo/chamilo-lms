@@ -5,7 +5,9 @@
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Entity\CLp;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -29,8 +31,10 @@ if (empty($lpId)) {
 
 $allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
 $currentUser = api_get_user_entity(api_get_user_id());
-
-$oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
+$repo = Container::getLpRepository();
+/** @var CLp $entity */
+$entity = $repo->find($lpId);
+$oLP = new learnpath($entity, api_get_course_info(), api_get_user_id());
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
@@ -49,8 +53,7 @@ $sessionId = api_get_session_id();
 $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
 $lp = new learnpath($courseCode, $lpId, api_get_user_id());
 $em = Database::getManager();
-/** @var CourseRepository $courseRepo */
-$courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+$courseRepo = Container::getCourseRepository();
 
 /** @var Session $session */
 $session = null;

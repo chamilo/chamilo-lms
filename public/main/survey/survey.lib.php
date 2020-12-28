@@ -859,7 +859,7 @@ class SurveyManager
         Database::query($sql);
 
         $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
-		        WHERE c_id = '.$courseId.' AND survey_id='.$surveyId;
+		        WHERE c_id = '.$courseId.' AND iid ='.$surveyId;
         Database::query($sql);
 
         Event::addEvent(

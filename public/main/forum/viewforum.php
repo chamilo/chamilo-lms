@@ -420,7 +420,7 @@ if (is_array($threads)) {
                 ICON_SIZE_SMALL
             ).' '.$thread->getThreadReplies().' '.get_lang('Views').'<br>';
             $html .= '</div>';
-
+            $last_post = null;
             if ($thread->getThreadLastPost()) {
                 $post_date = api_convert_and_format_date($thread->getThreadLastPost()->getPostDate()->format('Y-m-d H:i:s'));
                 $last_post = $post_date.'<br>'.get_lang('By').' '.displayUserLink(

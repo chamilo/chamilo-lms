@@ -4373,9 +4373,9 @@ class learnpathItem
     public function dissociateForumThread($threadIid)
     {
         $threadIid = (int) $threadIid;
-        $em = Database::getManager();
 
-        $forumThread = $em->find('ChamiloCourseBundle:CForumThread', $threadIid);
+        $repo = Container::getForumThreadRepository();
+        $forumThread = $repo->find($threadIid);
 
         if (!$forumThread) {
             return false;
@@ -4383,9 +4383,7 @@ class learnpathItem
 
         $forumThread->setThreadTitle("{$this->get_title()} - {$this->db_id}");
         $forumThread->setLpItemId(0);
-
-        $em->persist($forumThread);
-        $em->flush();
+        $repo->update($forumThread);
 
         return true;
     }

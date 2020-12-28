@@ -775,7 +775,7 @@ class SurveyUtil
                         if ($absolute_number != 0) {
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
                                 .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='
-                                .$value['question_option_id'].'">'.$absolute_number.'</a>';
+                                .$value['iid'].'">'.$absolute_number.'</a>';
                         } else {
                             echo '0';
                         }
@@ -3410,6 +3410,7 @@ class SurveyUtil
             ORDER BY col$column $direction
             LIMIT $from,$number_of_items
         ";
+
         $res = Database::query($sql);
         $surveys = [];
         $array = [];

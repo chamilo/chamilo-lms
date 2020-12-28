@@ -207,7 +207,7 @@ if ($allowUserGroups) {
                         $sessionCondition
                     ";
             Database::query($sql);
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
         }
         header("Location: $url");

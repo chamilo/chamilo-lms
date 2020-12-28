@@ -126,9 +126,6 @@ class CLpItemView
         $this->coreExit = 'none';
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;

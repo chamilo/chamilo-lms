@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Gradebook link to a survey item.
  *
@@ -10,7 +12,8 @@
 class SurveyLink extends AbstractLink
 {
     private $survey_table;
-    private $survey_data = [];
+    /** @var \Chamilo\CourseBundle\Entity\CSurvey */
+    private $survey_data;
 
     /**
      * Constructor.
@@ -28,7 +31,7 @@ class SurveyLink extends AbstractLink
     {
         $this->get_survey_data();
 
-        return $this->survey_data['code'].': '.self::html_to_text($this->survey_data['title']);
+        return $this->survey_data->getCode().': '.self::html_to_text($this->survey_data->getTitle());
     }
 
     /**
@@ -38,7 +41,7 @@ class SurveyLink extends AbstractLink
     {
         $this->get_survey_data();
 
-        return $this->survey_data['subtitle'];
+        return $this->survey_data->getSubtitle();
     }
 
     /**
@@ -79,24 +82,28 @@ class SurveyLink extends AbstractLink
         if (empty($this->course_code)) {
             exit('Error in get_all_links() : course code not set');
         }
-        $tbl_survey = $this->get_survey_table();
         $sessionId = $this->get_session_id();
         $course_id = $this->getCourseId();
 
-        $sql = 'SELECT survey_id, title, code FROM '.$tbl_survey.'
-                WHERE c_id = '.$course_id.' AND session_id = '.$sessionId;
-        $result = Database::query($sql);
-        while ($data = Database::fetch_array($result)) {
+        $repo = Container::getSurveyRepository();
+        $course = api_get_course_entity($course_id);
+        $session = !empty($sessionId) ? api_get_session_entity($sessionId) : null;
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $surveys = $qb->getQuery()->getResult();
+        $links = [];
+        /** @var \Chamilo\CourseBundle\Entity\CSurvey $survey */
+        foreach ($surveys as $survey) {
             $links[] = [
-                $data['survey_id'],
+                $survey->getIid(),
                 api_trunc_str(
-                    $data['code'].': '.self::html_to_text($data['title']),
+                    $survey->getCode().': '.self::html_to_text($survey->getTitle()),
                     80
                 ),
             ];
         }
 
-        return isset($links) ? $links : [];
+        return $links;
     }
 
     /**
@@ -114,11 +121,12 @@ class SurveyLink extends AbstractLink
         $sql = "SELECT
                 COUNT(i.answered)
                 FROM $tbl_survey AS s
-                JOIN $tbl_survey_invitation AS i ON s.code = i.survey_code
+                INNER JOIN $tbl_survey_invitation AS i
+                ON s.code = i.survey_code
                 WHERE
                     s.c_id = $courseId AND
                     i.c_id = $courseId AND
-                    s.survey_id = $ref_id AND
+                    s.iid = $ref_id AND
                     i.session_id = $sessionId";
 
         $sql_result = Database::query($sql);
@@ -154,7 +162,7 @@ class SurveyLink extends AbstractLink
                 WHERE
                     s.c_id = $courseId AND
                     i.c_id = $courseId AND
-                    s.survey_id = $ref_id AND
+                    s.iid = $ref_id AND
                     i.session_id = $sessionId
                 ";
 
@@ -214,10 +222,10 @@ class SurveyLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
 
-        $sql = 'SELECT count(survey_id) FROM '.$this->get_survey_table().'
+        $sql = 'SELECT count(iid) FROM '.$this->get_survey_table().'
                  WHERE
                     c_id = '.$courseId.' AND
-                    survey_id = '.$this->get_ref_id().' AND
+                    iid = '.$this->get_ref_id().' AND
                     session_id = '.$sessionId;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
@@ -233,22 +241,14 @@ class SurveyLink extends AbstractLink
 
         if (api_is_allowed_to_edit()) {
             // Let students make access only through "Surveys" tool.
-            $tbl_name = $this->get_survey_table();
             $sessionId = $this->get_session_id();
             $courseId = $this->getCourseId();
+            $survey = $this->get_survey_data();
+            if ($survey) {
+                $survey_id = $survey->getIid();
 
-            if ('' != $tbl_name) {
-                $sql = 'SELECT survey_id
-                        FROM '.$this->get_survey_table().'
-                        WHERE
-                            c_id = '.$courseId.' AND
-                            survey_id = '.$this->get_ref_id().' AND
-                            session_id = '.$sessionId;
-                $result = Database::query($sql);
-                $row = Database::fetch_array($result, 'ASSOC');
-                $survey_id = $row['survey_id'];
-
-                return api_get_path(WEB_PATH).'main/survey/reporting.php?'.api_get_cidreq_params($this->getCourseId(), $sessionId).'&survey_id='.$survey_id;
+                return api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.
+                    api_get_cidreq_params($this->getCourseId(), $sessionId).'&survey_id='.$survey_id;
             }
         }
 
@@ -278,25 +278,16 @@ class SurveyLink extends AbstractLink
     /**
      * Get the survey data from the c_survey table with the current object id.
      *
-     * @return mixed
+     * @return \Chamilo\CourseBundle\Entity\CSurvey
      */
     private function get_survey_data()
     {
-        $tbl_name = $this->get_survey_table();
-
-        if ('' == $tbl_name) {
-            return false;
-        } elseif (empty($this->survey_data)) {
+        if (empty($this->survey_data)) {
             $courseId = $this->getCourseId();
             $sessionId = $this->get_session_id();
-
-            $sql = 'SELECT * FROM '.$tbl_name.'
-                    WHERE
-                        c_id = '.$courseId.' AND
-                        survey_id = '.$this->get_ref_id().' AND
-                        session_id = '.$sessionId;
-            $query = Database::query($sql);
-            $this->survey_data = Database::fetch_array($query);
+            $repo = Container::getSurveyRepository();
+            $survey = $repo->find($this->get_ref_id());
+            $this->survey_data = $survey;
         }
 
         return $this->survey_data;

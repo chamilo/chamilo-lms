@@ -13,7 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $cidReset = true;
 $from_myspace = false;
 $from_link = '';
-if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
+if (isset($_GET['from']) && 'myspace' === $_GET['from']) {
     $from_link = '&from=myspace';
     $this_section = SECTION_TRACKING;
 } else {
@@ -21,7 +21,7 @@ if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
 }
 
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : api_get_session_id();
-$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'];
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 $user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();
@@ -72,14 +72,13 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learner details in course'),
 ];
 $nameTools = get_lang('Learnpath details');
-$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).'
-        WHERE c_id = '.$courseInfo['real_id'].' AND id='.$lp_id;
-$rs = Database::query($sql);
-$lp_title = Database::result($rs, 0, 0);
 
+$lpRepo = \Chamilo\CoreBundle\Framework\Container::getLpRepository();
+/** @var \Chamilo\CourseBundle\Entity\CLp $lp */
+$lp = $lpRepo->find($lp_id);
+$lp_title = $lp->getName();
 $origin = 'tracking';
-
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 switch ($action) {
     case 'export_stats':
         if (!api_is_allowed_to_edit(false, false, true)) {

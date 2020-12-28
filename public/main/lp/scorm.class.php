@@ -319,7 +319,7 @@ class scorm extends learnpath
      * @param int    $userMaxScore
      * @param int    $sessionId
      *
-     * @return bool Returns -1 on error
+     * @return null|CLp
      */
     public function import_manifest($courseCode, $userMaxScore = 1, $sessionId = 0)
     {

@@ -922,11 +922,15 @@ if (is_numeric($avg_student_score)) {
     $score = $avg_student_score;
 }
 
-$userInfo['student_score'] = $score;
-$userInfo['student_progress'] = $avg_student_progress;
+$userInfo['student_score'] = (float) $score;
+$userInfo['student_progress'] = (float) $avg_student_progress;
 $userInfo['first_connection'] = $first_connection_date;
 $userInfo['last_connection'] = $last_connection_date;
-if ('true' === $details) {
+$userInfo['last_connection_in_course'] = api_format_date(
+    Tracking::getLastConnectionInAnyCourse($user_info['user_id']),
+    DATE_FORMAT_SHORT
+);
+if ($details === 'true') {
     $userInfo['time_spent_course'] = $time_spent_on_the_course;
 }
 
@@ -1055,6 +1059,7 @@ if (isset($_GET['action']) and 'all_attendance' == $_GET['action']) {
     <tbody>';
 
     foreach ($data as $attendanceData => $attendanceSheet) {
+        // $attendanceData  can be in_category or not_category for courses
         $totalAttendance = count($attendanceSheet);
         for ($i = 0; $i < $totalAttendance; $i++) {
             $attendanceWork = $attendanceSheet[$i];
@@ -1066,7 +1071,6 @@ if (isset($_GET['action']) and 'all_attendance' == $_GET['action']) {
                 // get session name
                 $printSession = "(".$attendanceWork['sessionName'].")";
             }
-            // $teacher = isset($attendanceWork['teacher'])?$attendanceWork['teacher']:'';
             echo '
         <tr>
             <td>'.$date.'</td>
@@ -1127,7 +1131,6 @@ if (!empty($courseInfo)) {
 } else {
     $details = false;
 }
-
 $tpl->assign('user', $userInfo);
 $tpl->assign('details', $details);
 $templateName = $tpl->get_template('my_space/user_details.tpl');
@@ -2112,7 +2115,7 @@ if (empty($details)) {
                 </thead>
                 <tbody>
     ';
-    $workingTime = api_get_configuration_value('considered_working_time');
+
     foreach ($userWorks as $work) {
         $work = $work['work'];
         $showOnce = true;

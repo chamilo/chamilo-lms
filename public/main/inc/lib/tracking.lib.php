@@ -2108,6 +2108,29 @@ class Tracking
         return false;
     }
 
+    public static function getLastConnectionInAnyCourse($studentId)
+    {
+        $studentId = (int) $studentId;
+
+        if (empty($studentId)) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT logout_course_date
+                FROM $table
+                WHERE user_id = $studentId
+                ORDER BY logout_course_date DESC
+                LIMIT 1";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+
+            return $row['logout_course_date'];
+        }
+
+        return false;
+    }
     /**
      * Get last course access by course/session.
      */

@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
@@ -37,7 +36,11 @@ if (!empty($groupFilterParts) && isset($groupFilterParts[1])) {
 $export = isset($_REQUEST['export']);
 $reset = isset($_REQUEST['reset']) ? $_REQUEST['reset'] : '';
 
-$lp = new learnpath($courseCode, $lpId, api_get_user_id());
+$lpRepo = \Chamilo\CoreBundle\Framework\Container::getLpRepository();
+/** @var \Chamilo\CourseBundle\Entity\CLp $entity */
+$entity = $lpRepo->find($lpId);
+
+$lp = new learnpath($entity, $courseInfo, api_get_user_id());
 if (empty($lp)) {
     api_not_allowed(true);
 }
@@ -342,7 +345,7 @@ if (!empty($users)) {
                 }
             }
         }
-        $trackingUrl = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true'.
+        $trackingUrl = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&'.
         api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
         $row = [];
         $row[] = Display::url($userInfo['firstname'], $trackingUrl);
@@ -454,8 +457,6 @@ $template->assign('export', (int) $export);
 $template->assign('group_form', $groupFilterForm);
 $template->assign('url', $url);
 $template->assign('url_base', $urlBase);
-
-$layout = $template->get_template('learnpath/report.tpl');
 $template->assign('header', $lpInfo['name']);
 $template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));
 $result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');

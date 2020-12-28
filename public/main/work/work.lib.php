@@ -142,15 +142,15 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         if (empty($studentPublication->getTitle())) {
             $work['title'] = basename($studentPublication->getUrl());
         }
-        $work['download_url'] = $router->generate(
-                'chamilo_core_resource_download',
-                [
-                    'id' => $studentPublication->getResourceNode()->getId(),
-                    'tool' => 'student_publication',
-                    'type' => 'student_publications',
-                ]
-            ).'?'.api_get_cidreq();
-
+        $url = $router->generate(
+            'chamilo_core_resource_download',
+            [
+                'id' => $studentPublication->getResourceNode()->getId(),
+                'tool' => 'student_publication',
+                'type' => 'student_publications',
+            ]
+        );
+        $work['download_url'] = $url.'?'.api_get_cidreq();
         $work['view_url'] = $webCodePath.'work/view.php?id='.$workId.'&'.api_get_cidreq();
         $showUrl = $work['show_url'] = $webCodePath.'work/show_file.php?id='.$workId.'&'.api_get_cidreq();
         $work['show_content'] = '';
@@ -697,7 +697,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $move_file = (int) $move_file;
     $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT title, url FROM $tbl_work
-            WHERE c_id = $course_id AND id ='".$move_file."'";
+            WHERE c_id = $course_id AND iid ='".$move_file."'";
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
     $title = empty($row['title']) ? basename($row['url']) : $row['title'];
@@ -3284,29 +3284,29 @@ function getWorkDescriptionToolbar()
 }
 
 /**
- * @param array $work
- *
  * @return array
  */
-function getWorkComments($work)
+function getWorkComments(CStudentPublication $work)
 {
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
-    $courseId = (int) $work['c_id'];
+    /*$courseId = (int) $work['c_id'];
     $workId = (int) $work['iid'];
 
     if (empty($courseId) || empty($workId)) {
         return [];
-    }
+    }*/
+
+    $workId = $work->getIid();
 
     $sql = "SELECT
-                c.id,
+                c.iid,
                 c.user_id
             FROM $commentTable c
             INNER JOIN $userTable u
             ON (u.id = c.user_id)
-            WHERE c_id = $courseId AND work_id = $workId
+            WHERE work_id = $workId
             ORDER BY sent_at
             ";
     $result = Database::query($sql);
@@ -3793,14 +3793,15 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 }
 
 /**
- * @param array $work
  * @param array $workParent
  *
  * @return string
  */
-function getWorkCommentForm($work, $workParent)
+function getWorkCommentForm(CStudentPublication $work, $workParent)
 {
-    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['iid'].'&action=send_comment&'.api_get_cidreq();
+    $id = $work->getIid();
+
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$id.'&action=send_comment&'.api_get_cidreq();
     $form = new FormValidator(
         'work_comment',
         'post',
@@ -3815,7 +3816,9 @@ function getWorkCommentForm($work, $workParent)
     $allowEdition = false;
     if ($isCourseManager) {
         $allowEdition = true;
-        if (!empty($work['qualification']) && api_get_configuration_value('block_student_publication_score_edition')) {
+        if (!empty($work->getQualification()) &&
+            api_get_configuration_value('block_student_publication_score_edition')
+        ) {
             $allowEdition = false;
         }
     }
@@ -3842,18 +3845,24 @@ function getWorkCommentForm($work, $workParent)
                     $form,
                     'qualification',
                     $qualification,
-                    $work['qualification']
+                    $work->getQualification()
                 );
             }
             $form->addFile('file', get_lang('Correction'));
-            $form->setDefaults(['qualification' => $work['qualification']]);
+            $form->setDefaults(['qualification' => $work->getQualification()]);
         }
     }
 
-    Skill::addSkillsToUserForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workParent['iid'], $work['user_id'], $work['iid']);
+    Skill::addSkillsToUserForm(
+        $form,
+        ITEM_TYPE_STUDENT_PUBLICATION,
+        $workParent['iid'],
+        $work->getUserId(),
+        $id
+    );
     $form->addHtmlEditor('comment', get_lang('Comment'), false);
     $form->addFile('attachment', get_lang('Attachment'));
-    $form->addElement('hidden', 'iid', $work['iid']);
+    $form->addElement('hidden', 'iid', $id);
 
     if (api_is_allowed_to_edit()) {
         $form->addCheckBox(

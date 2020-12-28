@@ -4,9 +4,6 @@
 
 namespace Chamilo\CoreBundle\Tool;
 
-/**
- * Class Announcement.
- */
 class Settings extends AbstractTool
 {
 }

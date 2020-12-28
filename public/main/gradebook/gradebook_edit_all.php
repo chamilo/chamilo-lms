@@ -39,7 +39,7 @@ $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $table_evaluated[LINK_EXERCISE] = [
     TABLE_QUIZ_TEST,
     'title',
-    'id',
+    'iid',
     get_lang('Test'),
 ];
 $table_evaluated[LINK_DROPBOX] = [
@@ -51,31 +51,31 @@ $table_evaluated[LINK_DROPBOX] = [
 $table_evaluated[LINK_STUDENTPUBLICATION] = [
     TABLE_STUDENT_PUBLICATION,
     'url',
-    'id',
+    'iid',
     get_lang('Assignments'),
 ];
 $table_evaluated[LINK_LEARNPATH] = [
     TABLE_LP_MAIN,
     'name',
-    'id',
+    'iid',
     get_lang('Courses'),
 ];
 $table_evaluated[LINK_FORUM_THREAD] = [
     TABLE_FORUM_THREAD,
     'thread_title_qualify',
-    'thread_id',
+    'iid',
     get_lang('Forum'),
 ];
 $table_evaluated[LINK_ATTENDANCE] = [
     TABLE_ATTENDANCE,
     'attendance_title_qualify',
-    'id',
+    'iid',
     get_lang('Attendance'),
 ];
 $table_evaluated[LINK_SURVEY] = [
     TABLE_SURVEY,
     'code',
-    'survey_id',
+    'iid',
     get_lang('Survey'),
 ];
 

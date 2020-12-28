@@ -311,7 +311,7 @@ class SurveyManager
                         $sql = 'SELECT survey_version FROM '.$table_survey.'
 						        WHERE
 						            c_id = '.$course_id.' AND
-						            survey_id = '.intval($values['parent_id']);
+						            iid = '.intval($values['parent_id']);
                         $rs = Database::query($sql);
                         $getversion = Database::fetch_array($rs, 'ASSOC');
                         if (empty($getversion['survey_version'])) {
@@ -590,9 +590,6 @@ class SurveyManager
                     '".$_course['id']."')";
             Database::query($sql);
             $return = Database::insert_id();
-
-            $sql = "UPDATE $table_survey SET survey_id = $return WHERE iid = $return";
-            Database::query($sql);
         } else {
             $sql = "UPDATE $table_survey SET
                         code 			= '".Database::escape_string($values['survey_code'])."',
@@ -2124,12 +2121,12 @@ class SurveyManager
         Database::query($sql);
 
         $sql = "DELETE FROM $surveyAnswerTable
-               WHERE survey_id = $surveyId AND c_id = $courseId ";
+                WHERE survey_id = $surveyId AND c_id = $courseId ";
         Database::query($sql);
 
         $sql = "UPDATE $surveyTable
                 SET invited = 0, answered = 0
-                WHERE survey_id = $surveyId AND c_id = $courseId AND session_id = $sessionId ";
+                WHERE iid = $surveyId AND c_id = $courseId AND session_id = $sessionId ";
         Database::query($sql);
 
         return true;
@@ -2176,10 +2173,6 @@ class SurveyManager
         $newSurveyId = Database::insert($surveyTable, $surveyData);
 
         if ($newSurveyId) {
-            $sql = "UPDATE $surveyTable SET survey_id = $newSurveyId
-                    WHERE iid = $newSurveyId";
-            Database::query($sql);
-
             $sql = "SELECT * FROM $surveyQuestionGroupTable
                     WHERE c_id = $originalCourseId AND survey_id = $surveyId";
             $res = Database::query($sql);

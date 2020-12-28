@@ -43,7 +43,7 @@ $router = Container::getRouter();
 $translator = Container::getTranslator();
 
 $show_delete_watermark_text_message = false;
-if ('true' == api_get_setting('pdf_export_watermark_by_course')) {
+if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
         PDF::delete_watermark($course_code);
         $show_delete_watermark_text_message = true;
@@ -67,13 +67,18 @@ function card_settings_open($id, $title, $open = false, $icon, $parent)
     $html = '<div class="card">';
     $html .= '<div class="card-header" id="card_'.$id.'">';
     $html .= '<h5 class="card-title">';
-    $html .= '<a role="button" class="'.(($open) ? 'collapse' : ' ').'"  data-toggle="collapse" data-target="#collapse_'.$id.'" aria-expanded="true" aria-controls="collapse_'.$id.'">';
+    $html .= '<a
+        role="button" class="'.(($open) ? 'collapse' : ' ').'"
+        data-toggle="collapse" data-target="#collapse_'.$id.'"
+        aria-expanded="true" aria-controls="collapse_'.$id.'">';
     if ($icon) {
         $html .= Display::return_icon($icon, null, null, ICON_SIZE_SMALL);
     }
     $html .= $title;
     $html .= '</a></h5></div>';
-    $html .= '<div id="collapse_'.$id.'" class="collapse show" aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">';
+    $html .= '<div
+        id="collapse_'.$id.'"
+        class="collapse show" aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">';
     $html .= '<div class="card-body">';
 
     return $html;
@@ -86,14 +91,17 @@ function card_settings_close()
     return $html;
 }
 
-$form->addHtml(card_settings_open('course_settings', get_lang('Course settings'), true, 'settings.png', 'accordionSettings'));
+$form->addHtml(
+    card_settings_open('course_settings', get_lang('Course settings'), true, 'settings.png', 'accordionSettings')
+);
 
 $image = '';
 $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
 
 if (!empty($illustrationUrl)) {
-    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
-                    <div class="col-md-8"><img class="img-thumbnail" src="'.$illustrationUrl.'" /></div></div>';
+    $image = '<div class="row">
+                <label class="col-md-2 control-label">'.get_lang('Image').'</label>
+                <div class="col-md-8"><img class="img-thumbnail" src="'.$illustrationUrl.'" /></div></div>';
 }
 
 $form->addText('title', get_lang('Title'), true);

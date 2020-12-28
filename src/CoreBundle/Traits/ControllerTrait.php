@@ -21,6 +21,7 @@ use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
+use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,19 +44,21 @@ trait ControllerTrait
         */
         $services[] = ResourceFactory::class;
         $services[] = ResourceNodeRepository::class;
+
         $services[] = CAnnouncementRepository::class;
         $services[] = CAnnouncementAttachmentRepository::class;
         $services[] = CAttendanceRepository::class;
         $services[] = CBlogRepository::class;
         $services[] = CCalendarEventAttachmentRepository::class;
         $services[] = CDocumentRepository::class;
-        $services[] = CQuizQuestionRepository::class;
-        $services[] = CQuizQuestionCategoryRepository::class;
         $services[] = CForumForumRepository::class;
         $services[] = CForumAttachmentRepository::class;
-
         $services[] = CLpRepository::class;
         $services[] = CLpCategoryRepository::class;
+        $services[] = CQuizQuestionRepository::class;
+        $services[] = CQuizQuestionCategoryRepository::class;
+        $services[] = CStudentPublicationRepository::class;
+
 
         $services[] = IllustrationRepository::class;
 

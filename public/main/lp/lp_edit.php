@@ -375,7 +375,9 @@ if ($form->validate()) {
     $request = Container::getRequest();
     if ($request->files->has('lp_preview_image')) {
         $file = $request->files->get('lp_preview_image');
-        $lpRepo->addFile($lp, $file);
+        if (!empty($file)) {
+            $lpRepo->addFile($lp, $file);
+        }
     }
 
     $em->persist($lp);

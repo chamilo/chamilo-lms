@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,9 +9,9 @@
  */
 class DataForm extends FormValidator
 {
-    const TYPE_IMPORT = 1;
-    const TYPE_EXPORT = 2;
-    const TYPE_EXPORT_PDF = 3;
+    public const TYPE_IMPORT = 1;
+    public const TYPE_EXPORT = 2;
+    public const TYPE_EXPORT_PDF = 3;
 
     /**
      * Builds a form containing form items based on a given parameter.

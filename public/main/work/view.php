@@ -2,25 +2,32 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 require_once 'work.lib.php';
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-$work = get_work_data_by_id($id);
+
+$repo = Container::getStudentPublicationRepository();
+/** @var CStudentPublication $work */
+$work = $repo->find($id);
 
 if (empty($work)) {
     api_not_allowed(true);
 }
 
-protectWork(api_get_course_info(), $work['parent_id']);
+$parentId = $work->getParentId();
+protectWork(api_get_course_info(), $parentId);
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
+$action = $_REQUEST['action'] ?? null;
+$page = $_REQUEST['page'] ?? null;
 
-$work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
-$work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
+/*$work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
+$work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';*/
 
 $htmlHeadXtra[] = '<script>'.ExerciseLib::getJsCode().'</script>';
 $interbreadcrumb[] = [
@@ -28,7 +35,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Assignments'),
 ];
 
-$folderData = get_work_data_by_id($work['parent_id']);
+$folderData = get_work_data_by_id($parentId);
 $courseInfo = api_get_course_info();
 $courseEntity = api_get_course_entity();
 $isCourseManager = api_is_platform_admin() || api_is_coach() || api_is_allowed_to_edit(false, false, true);
@@ -36,7 +43,9 @@ $isCourseManager = api_is_platform_admin() || api_is_coach() || api_is_allowed_t
 $allowEdition = false;
 if ($isCourseManager) {
     $allowEdition = true;
-    if (!empty($work['qualification']) && api_get_configuration_value('block_student_publication_score_edition')) {
+    if (!empty($work->getQualification()) &&
+        api_get_configuration_value('block_student_publication_score_edition')
+    ) {
         $allowEdition = false;
     }
 }
@@ -50,26 +59,28 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $work['session_id']));
+$isDrhOfSession = false;
+// @todo fix $isDrhOfSession check
+//$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $work['session_id']));
 
-if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) ||
+if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) ||
     (
         0 == $courseInfo['show_score'] &&
-        1 == $work['active'] &&
-        1 == $work['accepted']
+        1 == $work->getActive() &&
+        1 == $work->getAccepted()
     )
 ) {
     if ((api_is_allowed_to_edit() || api_is_coach()) || api_is_drh()) {
-        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$folderData['id'].'&'.api_get_cidreq();
+        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$folderData['iid'].'&'.api_get_cidreq();
     } else {
-        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list.php?id='.$folderData['id'].'&'.api_get_cidreq();
+        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list.php?id='.$folderData['iid'].'&'.api_get_cidreq();
     }
 
-    $userInfo = api_get_user_info($work['user_id']);
+    $userInfo = api_get_user_info($work->getUserId());
     $interbreadcrumb[] = ['url' => $url_dir, 'name' => $folderData['title']];
     $interbreadcrumb[] = ['url' => '#', 'name' => $userInfo['complete_name']];
-    $interbreadcrumb[] = ['url' => '#', 'name' => $work['title']];
-
+    $interbreadcrumb[] = ['url' => '#', 'name' => $work->getTitle()];
+    $workId = $work->getIid();
     if ((
         0 == $courseInfo['show_score'] &&
         1 == $work['active'] &&
@@ -78,9 +89,10 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
         $isCourseManager || user_is_author($id) || $isDrhOfCourse || $isDrhOfSession
     ) {
         if ('edit' === $page) {
-            $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
+            $url = api_get_path(WEB_CODE_PATH).
+                'work/edit.php?id='.$folderData['iid'].'&item_id='.$workId.'&'.api_get_cidreq();
         } else {
-            $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$workId.'&'.api_get_cidreq();
 
             $allowRedirect = api_get_configuration_value('allow_redirect_to_main_page_after_work_upload');
             $urlToRedirect = '';
@@ -172,7 +184,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
         $tpl->assign('comments', $comments);
         $actions = '';
 
-        if (isset($work['contains_file']) && !empty($work['contains_file'])) {
+        if ($work->getContainsFile()) {
             if (isset($work['download_url']) && !empty($work['download_url'])) {
                 $actions = Display::url(
                     Display::return_icon(

@@ -1176,7 +1176,6 @@ class DocumentManager
         $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $groupId = api_get_group_id();
 
-        //$www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
         $sessionCondition = api_get_session_condition($session_id, true, true);
@@ -1189,7 +1188,7 @@ class DocumentManager
         }
 
         $result = Database::query($sql);
-        $courseParam = '&cidReq='.$course_code.'&id='.$id.'&sid='.$session_id.'&gidReq='.$groupId;
+        $courseParam = '&cid='.$course_id.'&id='.$id.'&sid='.$session_id.'&gid='.$groupId;
         if ($result && 1 == Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             //@todo need to clarify the name of the URLs not nice right now

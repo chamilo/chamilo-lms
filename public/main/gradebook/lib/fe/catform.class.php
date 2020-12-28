@@ -342,7 +342,7 @@ class CatForm extends FormValidator
 
         if (isset($this->category_object) &&
             0 == $this->category_object->get_parent_id() &&
-            (api_is_platform_admin() || 'true' == api_get_setting('teachers_can_change_grade_model_settings'))
+            (api_is_platform_admin() || 'true' === api_get_setting('teachers_can_change_grade_model_settings'))
         ) {
             // Getting grade models
             $obj = new GradeModel();
@@ -370,7 +370,7 @@ class CatForm extends FormValidator
             }
 
             if (count($test_cats) > 1 || !empty($links)) {
-                if ('true' == api_get_setting('gradebook_enable_grade_model')) {
+                if ('true' === api_get_setting('gradebook_enable_grade_model')) {
                     $this->freeze('grade_model_id');
                 }
             }
@@ -404,23 +404,25 @@ class CatForm extends FormValidator
 
         $documentId = $this->category_object->getDocumentId();
         if (!empty($documentId)) {
-            $documentData = DocumentManager::get_document_data_by_id($documentId, api_get_course_id());
+            $repo = \Chamilo\CoreBundle\Framework\Container::getDocumentRepository();
+            /** @var \Chamilo\CourseBundle\Entity\CDocument $documentData */
+            $documentData = $repo->find($documentId);
 
             if (!empty($documentData)) {
-                $this->addLabel(get_lang('Certificate'), $documentData['title']);
+                $this->addLabel(get_lang('Certificate'), $documentData->getTitle());
             }
         }
 
         if (self::TYPE_ADD == $this->form_type) {
             $this->addButtonCreate(get_lang('Add category'));
         } else {
-            $this->addElement('hidden', 'editcat', intval($_GET['editcat']));
+            $this->addElement('hidden', 'editcat', (int) $_GET['editcat']);
             $this->addButtonUpdate(get_lang('Edit this category'));
         }
 
         $setting = api_get_setting('tool_visible_by_default_at_creation');
         $visibility_default = 1;
-        if (isset($setting['gradebook']) && 'false' == $setting['gradebook']) {
+        if (isset($setting['gradebook']) && 'false' === $setting['gradebook']) {
             $visibility_default = 0;
         }
 

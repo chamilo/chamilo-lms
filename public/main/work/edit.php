@@ -148,7 +148,7 @@ $form->addText('title', get_lang('Title'), true, ['id' => 'file_upload']);
 if ($is_allowed_to_edit && !empty($item_id)) {
     $sql = "SELECT contains_file, url
             FROM $work_table
-            WHERE c_id = $course_id AND id ='$item_id' ";
+            WHERE c_id = $course_id AND iid ='$item_id' ";
     $result = Database::query($sql);
     if (false !== $result && Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);

@@ -659,8 +659,8 @@ foreach ($posts as $post) {
         $repo = Container::getForumAttachmentRepository();
         /** @var \Chamilo\CourseBundle\Entity\CForumAttachment $attachment */
         foreach ($attachments as $attachment) {
-            $post['post_attachments'] .= Display::return_icon('attachment.png', get_lang('Attachment'));
-            $url = $repo->getResourceFileDownloadUrl($attachment);
+            $post['post_attachments'] .= Display::returnFontAwesomeIcon('paperclip');
+            $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
             $post['post_attachments'] .= Display::url($attachment->getFilename(), $url);
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
             if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId) ||

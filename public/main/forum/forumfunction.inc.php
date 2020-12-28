@@ -2386,7 +2386,7 @@ function saveThread(
         ->setThreadSticky($values['thread_sticky'] ?? 0)
         ->setThreadTitleQualify($values['calification_notebook_title'] ?? '')
         ->setThreadQualifyMax($values['numeric_calification'] ?? 0)
-        ->setThreadWeight(isset($values['weight_calification']) ? (int) $values['weight_calification'] : 0)
+        ->setThreadWeight($values['weight_calification'] ?? 0)
         ->setThreadPeerQualify(isset($values['thread_peer_qualify']) ? (bool) $values['thread_peer_qualify'] : false)
         ->setSessionId($sessionId)
         ->setLpItemId(isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0)
@@ -2498,12 +2498,12 @@ function saveThread(
 
     $repo = Container::getForumPostRepository();
     $repo->create($post);
-
-    $postId = $post->getIid();
-    $thread->setThreadLastPost($postId);
+    $thread->setThreadLastPost($post);
     $em = Database::getManager();
     $em->persist($thread);
     $em->flush();
+
+    $postId = $post->getIid();
 
     $logInfo = [
         'tool' => TOOL_FORUM,
@@ -4326,8 +4326,8 @@ function store_move_post($values)
             ->setCId($course_id)
             ->setThreadTitle($post->getPostTitle())
             ->setForum($post->getForum())
-            ->setThreadPosterId($post->getUser()->getId())
-            ->setThreadLastPost($post->getIid())
+            ->setUser($post->getUser())
+            ->setThreadLastPost($post)
             ->setThreadDate($post->getPostDate())
             ->setParent($post->getForum())
             ->addCourseLink(
@@ -4811,7 +4811,6 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
             return;
         }
 
-        $new_file_name = uniqid('');
         $safe_file_comment = Database::escape_string($file_comment);
 
         $user = api_get_user_entity(api_get_user_id());
@@ -4834,6 +4833,8 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
 
         $repo = Container::getForumAttachmentRepository();
         $repo->create($attachment);
+        $repo->addFile($attachment, $file);
+        $repo->update($attachment);
 
         /*$last_id_file = Database::insert(
             $agenda_forum_attachment,

@@ -423,7 +423,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
      */
     public function setThreadQualifyMax($threadQualifyMax): self
     {
-        $this->threadQualifyMax = $threadQualifyMax;
+        $this->threadQualifyMax = (float) $threadQualifyMax;
 
         return $this;
     }
@@ -471,7 +471,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
      */
     public function setThreadWeight($threadWeight): self
     {
-        $this->threadWeight = $threadWeight;
+        $this->threadWeight = (float) $threadWeight;
 
         return $this;
     }

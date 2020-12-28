@@ -465,7 +465,7 @@ if (isset($_GET['deletelink'])) {
             $sql = 'UPDATE '.$tbl_attendance.' SET
                         attendance_weight = 0,
                         attendance_qualify_title = ""
-				 	WHERE c_id = '.$course_id.' AND id = (
+				 	WHERE iid = (
 				 	    SELECT ref_id FROM '.$tbl_grade_links.'
 				 	    WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
                     )';

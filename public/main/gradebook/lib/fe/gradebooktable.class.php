@@ -495,11 +495,14 @@ class GradebookTable extends SortableTable
                     $best = isset($data['best']) ? $data['best'] : null;
                     $average = isset($data['average']) ? $data['average'] : null;
                     $ranking = isset($data['ranking']) ? $data['ranking'] : null;
+                    $totalResult = [];
 
-                    $totalResult = [
-                        $data['result_score'][0],
-                        $data['result_score'][1],
-                    ];
+                    if (isset($data['result_score'])) {
+                        $totalResult = [
+                            $data['result_score'][0],
+                            $data['result_score'][1],
+                        ];
+                    }
 
                     if (empty($model)) {
                         $totalBest = [

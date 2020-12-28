@@ -28,7 +28,7 @@ $form = new FormValidator('a');
 $form->addUserAvatar('user', get_lang('User'), 'medium');
 $form->setDefaults(['user' => $owner]);
 
-$criteria = ['user' => $owner];
+$criteria = [];
 
 if (!$allowEdit) {
     $criteria['isVisible'] = true;
@@ -41,6 +41,8 @@ $categories = $em
 if ($course) {
     $criteria['course'] = $course;
     $criteria['session'] = $session;
+} else {
+    $criteria['user'] = $owner;
 }
 
 $criteria['category'] = null;

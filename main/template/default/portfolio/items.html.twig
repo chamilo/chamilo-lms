@@ -1,4 +1,4 @@
-{% macro display(items, category_id, allow_edit, _c) %}
+{% macro display(items, category_id, allow_edit, _c, _u) %}
     {% set edit_img = 'edit.png'|img(22, 'Edit'|get_lang) %}
     {% set visible_img = 'visible.png'|img(22, 'Invisible'|get_lang) %}
     {% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
@@ -9,7 +9,7 @@
         {% for item in items %}
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="heading-item-{{ item.id }}">
-                    {% if allow_edit %}
+                    {% if _u.id == item.user.id %}
                         <div class="pull-right">
                             <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
                                 {{ edit_img }}

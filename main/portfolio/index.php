@@ -23,18 +23,15 @@ if (false === api_get_configuration_value('allow_portfolio_tool')) {
 $em = Database::getManager();
 
 $currentUserId = api_get_user_id();
-$userId = isset($_GET['user']) ? (int) $_GET['user'] : $currentUserId;
-/** @var User $user */
-$user = api_get_user_entity($userId);
-/** @var Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
-/** @var Session $session */
-$session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+$ownerId = isset($_GET['user']) ? (int) $_GET['user'] : $currentUserId;
+$owner = api_get_user_entity($ownerId);
+$course = api_get_course_entity(api_get_course_int_id());
+$session = api_get_session_entity(api_get_session_id());
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $cidreq = api_get_cidreq();
 $baseUrl = api_get_self().'?'.($cidreq ? $cidreq.'&' : '');
-$allowEdit = $currentUserId == $user->getId();
+$allowEdit = $currentUserId == $owner->getId();
 
 if (isset($_GET['preview'])) {
     $allowEdit = false;
@@ -51,7 +48,7 @@ $content = '';
  *
  * @return bool
  */
-$isValid = function ($item) use ($user, $course, $session) {
+$isValid = function ($item) use ($owner, $course, $session) {
     if (!$item) {
         return false;
     }
@@ -66,7 +63,7 @@ $isValid = function ($item) use ($user, $course, $session) {
         }
     }
 
-    if ($item->getUser()->getId() != $user->getId()) {
+    if ($item->getUser()->getId() != $owner->getId()) {
         return false;
     }
 

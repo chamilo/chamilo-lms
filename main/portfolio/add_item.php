@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 
 $categories = $em
     ->getRepository('ChamiloCoreBundle:PortfolioCategory')
-    ->findBy(['user' => $user]);
+    ->findBy(['user' => $owner]);
 
 $form = new FormValidator('add_portfolio', 'post', $baseUrl.'action=add_item');
 if (api_get_configuration_value('save_titles_as_html')) {
@@ -30,7 +30,7 @@ if ($form->validate()) {
     $portfolio
         ->setTitle($values['title'])
         ->setContent($values['content'])
-        ->setUser($user)
+        ->setUser($owner)
         ->setCourse($course)
         ->setSession($session)
         ->setCategory(

@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-if ($currentUserId == $user->getId()) {
+if ($currentUserId == $owner->getId()) {
     if ($allowEdit) {
         $actions[] = Display::url(
             Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
@@ -14,7 +14,7 @@ if ($currentUserId == $user->getId()) {
         );
         $actions[] = Display::url(
             Display::return_icon('shared_setting.png', get_lang('Preview'), [], ICON_SIZE_MEDIUM),
-            $baseUrl.'preview=&user='.$user->getId()
+            $baseUrl.'preview=&user='.$owner->getId()
         );
     } else {
         $actions[] = Display::url(
@@ -26,9 +26,9 @@ if ($currentUserId == $user->getId()) {
 
 $form = new FormValidator('a');
 $form->addUserAvatar('user', get_lang('User'), 'medium');
-$form->setDefaults(['user' => $user]);
+$form->setDefaults(['user' => $owner]);
 
-$criteria = ['user' => $user];
+$criteria = ['user' => $owner];
 
 if (!$allowEdit) {
     $criteria['isVisible'] = true;
@@ -50,7 +50,7 @@ $items = $em
     ->findBy($criteria);
 
 $template = new Template(null, false, false, false, false, false, false);
-$template->assign('user', $user);
+$template->assign('user', $owner);
 $template->assign('course', $course);
 $template->assign('session', $session);
 $template->assign('allow_edit', $allowEdit);

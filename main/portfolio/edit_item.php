@@ -4,7 +4,7 @@
 
 $categories = $em
     ->getRepository('ChamiloCoreBundle:PortfolioCategory')
-    ->findBy(['user' => $user]);
+    ->findBy(['user' => $owner]);
 
 $form = new FormValidator('edit_portfolio', 'post', $baseUrl."action=edit_item&id={$item->getId()}");
 if (api_get_configuration_value('save_titles_as_html')) {

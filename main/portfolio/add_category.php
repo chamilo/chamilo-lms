@@ -21,7 +21,7 @@ if ($form->validate()) {
     $category
         ->setTitle($values['title'])
         ->setDescription($values['description'])
-        ->setUser($user);
+        ->setUser($owner);
 
     $em->persist($category);
     $em->flush();

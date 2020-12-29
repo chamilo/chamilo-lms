@@ -8651,4 +8651,5 @@ $BackToAttemptList = "Retour à la liste des tentatives";
 $ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte.";
 $AddGradebookComment = "Commentaire";
 $LatestLoginInAnyCourse = "Dernier accès à un cours";
+$The = "Le";
 ?>

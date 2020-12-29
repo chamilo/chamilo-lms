@@ -9450,11 +9450,11 @@ class Exercise
                         )
                         ) {
                             if ($num > 0) {
-                                $row_track = Database:: fetch_array($qryres);
+                                $row_track = Database::fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
                                 $attempt_text .= ExerciseLib::show_score(
-                                    $row_track['exe_result'],
-                                    $row_track['exe_weighting']
+                                    $row_track['score'],
+                                    $row_track['max_score']
                                 );
                             } else {
                                 $attempt_text = get_lang('Not attempted');

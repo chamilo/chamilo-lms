@@ -489,7 +489,7 @@ class Agenda
 
         $sql = "SELECT title, content, start_date, end_date, all_day
                 FROM $t_agenda
-                WHERE c_id = $courseId AND id = $eventId";
+                WHERE iid = $eventId";
         $res = Database::query($sql);
 
         if (1 !== Database::num_rows($res)) {
@@ -526,8 +526,8 @@ class Agenda
         $type = Database::escape_string($type);
         $end = Database::escape_string($end);
         $endTimeStamp = api_strtotime($end, 'UTC');
-        $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
-                VALUES ($courseId, '$eventId', '$type', '$endTimeStamp')";
+        $sql = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end)
+                VALUES ('$eventId', '$type', '$endTimeStamp')";
         Database::query($sql);
 
         $generatedDates = $this->generateDatesByType($type, $row['start_date'], $row['end_date'], $end);

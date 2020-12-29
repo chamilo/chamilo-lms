@@ -898,9 +898,11 @@ class AnnouncementManager
 
             // Send to everyone
             if (isset($to[0]) && 'everyone' === $to[0]) {
+                $announcement->setParent($course);
                 $announcement->addCourseLink($course, $session, $group);
             }
         } else {
+            $announcement->setParent($course);
             $announcement->addCourseLink($course, $session);
         }
 

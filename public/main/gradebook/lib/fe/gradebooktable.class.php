@@ -790,8 +790,11 @@ class GradebookTable extends SortableTable
                 $global = null;
                 $average = null;
                 $myTotal = 0;
-                foreach ($this->dataForGraph['my_result_no_float'] as $result) {
-                    $myTotal += $result;
+
+                if (isset($this->dataForGraph['my_result_no_float'])) {
+                    foreach ($this->dataForGraph['my_result_no_float'] as $result) {
+                        $myTotal += $result;
+                    }
                 }
 
                 $totalResult[0] = $myTotal;

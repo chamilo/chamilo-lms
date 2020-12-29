@@ -16,6 +16,7 @@ $id = isset($_REQUEST['id']) ? (int) $_GET['id'] : 0; // exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $origin = api_get_origin();
+$is_courseTutor = api_is_course_tutor();
 
 if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $show_headers = false;

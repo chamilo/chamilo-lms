@@ -44,7 +44,7 @@ if ($form->validate()) {
 $form->addHeader($plugin->get_lang('SearchFilter'));
 
 $categoriesOptions = [
-    '0' => get_lang('None'),
+    '0' => get_lang('AllCategories'),
 ];
 $categoriesList = SessionManager::get_all_session_category();
 if ($categoriesList != false) {

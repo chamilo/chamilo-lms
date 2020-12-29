@@ -12,7 +12,7 @@ export default {
         //sortBy: [], vuetify
         //sortDesc: [], , vuetify
         page: 1,
-        itemsPerPage: 5
+        itemsPerPage: 20
       },
       filters: {}
     };
@@ -40,10 +40,36 @@ export default {
       this.options.totalItems = this.totalItems;
     }
   },
-
   methods: {
+    fetchNewItems({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
+      let params = {
+        ...this.filters
+      };
+
+      if (itemsPerPage > 0) {
+        params = { ...params, itemsPerPage, page };
+      }
+
+      if (this.$route.params.node) {
+        params[`resourceNode.parent`] = this.$route.params.node;
+      }
+
+      if (isString(sortBy) && isBoolean(sortDesc)) {
+        //params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
+        params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
+      }
+
+      //this.resetList = true;
+
+      this.getPage(params).then(() => {
+        this.options.sortBy = sortBy;
+        this.options.sortDesc = sortDesc;
+        this.options.itemsPerPage = itemsPerPage;
+        this.options.totalItems = totalItems;
+      });
+    },
     onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
-      console.log({ page, itemsPerPage, sortBy, sortDesc, totalItems });
+      //console.log({ page, itemsPerPage, sortBy, sortDesc, totalItems });
       let params = {
         ...this.filters
       };
@@ -62,7 +88,6 @@ export default {
       }
 
       this.resetList = true;
-    console.log(params);
 
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;

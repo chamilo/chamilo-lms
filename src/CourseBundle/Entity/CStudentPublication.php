@@ -59,20 +59,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="url_correction", type="string", length=500, nullable=true)
-     */
-    protected $urlCorrection;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title_correction", type="string", length=255, nullable=true)
-     */
-    protected $titleCorrection;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
@@ -722,42 +708,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return string
-     */
-    public function getUrlCorrection()
-    {
-        return $this->urlCorrection;
-    }
-
-    /**
-     * @param string $urlCorrection
-     */
-    public function setUrlCorrection($urlCorrection)
-    {
-        $this->urlCorrection = $urlCorrection;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitleCorrection()
-    {
-        return $this->titleCorrection;
-    }
-
-    /**
-     * @param string $titleCorrection
-     */
-    public function setTitleCorrection($titleCorrection)
-    {
-        $this->titleCorrection = $titleCorrection;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getDocumentId()
@@ -802,7 +752,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         if ($this->hasResourceNode()) {
             $children = $this->getResourceNode()->getChildren();
             foreach ($children as $child) {
-                if ($child instanceof CStudentPublicationCorrection) {
+                $name = $child->getResourceType()->getName();
+                if ('student_publications_corrections' === $name) {
                     return $child;
                 }
             }

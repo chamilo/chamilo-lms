@@ -27,13 +27,15 @@ class AssetListener
     {
         /** @var Asset $asset */
         $asset = $event->getObject();
-        $mapping = $event->getMapping();
-        $folder = $mapping->getFile($asset)->getFilename();
+        if ($asset instanceof Asset) {
+            $mapping = $event->getMapping();
+            $folder = $mapping->getFile($asset)->getFilename();
 
-        // Deletes scorm folder: example: assets/scorm/myABC .
-        if (Asset::SCORM === $asset->getCategory() && !empty($folder)) {
-            $folder = Asset::SCORM.'/'.$folder;
-            $this->assetRepository->getFileSystem()->deleteDir($folder);
+            // Deletes scorm folder: example: assets/scorm/myABC .
+            if (Asset::SCORM === $asset->getCategory() && !empty($folder)) {
+                $folder = Asset::SCORM.'/'.$folder;
+                $this->assetRepository->getFileSystem()->deleteDir($folder);
+            }
         }
     }
 }

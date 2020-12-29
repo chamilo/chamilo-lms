@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -83,10 +85,10 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
     $workId = $work->getIid();
     if ((
         0 == $courseInfo['show_score'] &&
-        1 == $work['active'] &&
-        1 == $work['accepted']
+        1 == $work->getActive() &&
+        1 == $work->getAccepted()
         ) ||
-        $isCourseManager || user_is_author($id) || $isDrhOfCourse || $isDrhOfSession
+        $isCourseManager || $isDrhOfCourse || $isDrhOfSession || user_is_author($id)
     ) {
         if ('edit' === $page) {
             $url = api_get_path(WEB_CODE_PATH).
@@ -117,22 +119,24 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
 
                 if ($allowEdition) {
                     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-                    $sql = "UPDATE $work_table
-                                SET
-                                    qualificator_id = '".api_get_user_id()."',
-                                    qualification = '".api_float_val($_POST['qualification'])."',
-                                    date_of_qualification = '".api_get_utc_datetime()."'
-                                WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
-                    Database::query($sql);
+
+                    if (isset($_POST['qualification'])) {
+                        $work->setQualificatorId(api_get_user_id());
+                        $work->setQualification(api_float_val($_POST['qualification']));
+                        $work->setDateOfQualification(api_get_utc_datetime(null, true, true));
+                        $repo->update($work);
+                    }
+
                     Display::addFlash(Display::return_message(get_lang('Updated')));
 
-                    $resultUpload = uploadWork(
+                    /*$resultUpload = uploadWork(
                         $folderData,
                         $courseEntity,
                         true,
                         $work
-                    );
-                    if ($resultUpload) {
+                    );*/
+
+                    /*if ($resultUpload) {
                         $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
                         if (isset($resultUpload['url']) && !empty($resultUpload['url'])) {
                             $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');
@@ -147,6 +151,26 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                                 Display::return_message(get_lang('The file has successfully been uploaded.'))
                             );
                         }
+                    }*/
+
+                    $request = Container::getRequest();
+                    $file = $request->files->get('file');
+                    if (is_array($file)) {
+                        /** @var UploadedFile $file */
+                        $file = $file[0];
+                    }
+
+                    if (null !== $file) {
+                        $em = Database::getManager();
+                        $correction = new CStudentPublicationCorrection();
+                        $correction
+                            ->setParent($work)
+                            ->setTitle($file->getClientOriginalName());
+                        // @todo improve file upload.
+                        $correctionRepo = Container::getStudentPublicationCorrectionRepository();
+                        $correctionRepo->create($correction);
+                        $correctionRepo->addFile($correction, $file);
+                        $correctionRepo->update($correction);
                     }
                 }
 
@@ -166,8 +190,8 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
 
                 break;
             case 'delete_correction':
-                if ($allowEdition && isset($work['url_correction']) && !empty($work['url_correction'])) {
-                    deleteCorrection($courseInfo, $work);
+                if ($allowEdition) {
+                    deleteCorrection($work);
                     Display::addFlash(Display::return_message(get_lang('Deleted')));
                 }
 
@@ -185,7 +209,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
         $actions = '';
 
         if ($work->getContainsFile()) {
-            if (isset($work['download_url']) && !empty($work['download_url'])) {
+            if ($work->getResourceNode()->hasResourceFile()) {
                 $actions = Display::url(
                     Display::return_icon(
                         'back.png',
@@ -196,23 +220,41 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                     api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq()
                 );
 
-                // Check if file can be downloaded
-                $file = getFileContents($work['id'], $courseInfo, api_get_session_id(), false);
-                if (!empty($file)) {
-                    $actions .= Display::url(
-                        Display::return_icon(
-                            'save.png',
-                            get_lang('Download'),
-                            null,
-                            ICON_SIZE_MEDIUM
-                        ),
-                        $work['download_url']
-                    );
-                }
+                $router = Container::getRouter();
+                $url = $router->generate(
+                    'chamilo_core_resource_download',
+                    [
+                        'id' => $work->getResourceNode()->getId(),
+                        'tool' => 'student_publication',
+                        'type' => 'student_publications',
+                    ]
+                );
+
+                $actions .= Display::url(
+                    Display::return_icon(
+                        'save.png',
+                        get_lang('Download'),
+                        null,
+                        ICON_SIZE_MEDIUM
+                    ),
+                    $url
+                );
             }
         }
 
-        if (isset($work['url_correction']) && !empty($work['url_correction']) && !empty($work['download_url'])) {
+        $correctionNode = $work->getCorrection();
+
+        if (null !== $correctionNode) {
+            $router = Container::getRouter();
+            $url = $router->generate(
+                'chamilo_core_resource_download',
+                [
+                    'id' => $correctionNode->getId(),
+                    'tool' => 'student_publication',
+                    'type' => 'student_publications_corrections',
+                ]
+            ).api_get_cidreq();
+
             $actions .= Display::url(
                 Display::return_icon(
                     'check-circle.png',
@@ -220,7 +262,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                     null,
                     ICON_SIZE_MEDIUM
                 ),
-                $work['download_url'].'&correction=1'
+                $url
             );
 
             if ($allowEdition) {
@@ -247,8 +289,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
             $tpl->assign('form', $commentForm);
         }
         $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
-        $template = $tpl->get_template('work/view.tpl');
-        $content = $tpl->fetch($template);
+        $content = $tpl->fetch('@ChamiloCore/Work/view.html.twig');
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     } else {

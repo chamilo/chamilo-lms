@@ -199,14 +199,26 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $count = get_count_work($workId);
     if ($count > 0) {
         $display_output .= '<a class="btn-toolbar" href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
-            Display::return_icon('save_pack.png', get_lang('Download assignments package'), null, ICON_SIZE_MEDIUM).' '.get_lang('Download assignments package').'</a>';
+            Display::return_icon(
+                'save_pack.png',
+                get_lang('Download assignments package'),
+                null,
+                ICON_SIZE_MEDIUM
+            ).' '.get_lang('Download assignments package').'</a>';
     }
     $actionsLeft .= $display_output;
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
-        Display::return_icon('upload_package.png', get_lang('Upload corrections package'), '', ICON_SIZE_MEDIUM).' '.get_lang('Upload corrections package').'</a>';
-    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
-    $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'remove', 'danger');
+        Display::return_icon(
+            'upload_package.png',
+            get_lang('Upload corrections package'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).' '.get_lang('Upload corrections package').'</a>';
+
+    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq(
+        ).'&id='.$workId.'&action=delete_correction';
+    $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'trash', 'danger');
 }
 
 echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);

@@ -243,7 +243,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
 
     public function getResourceName(): string
     {
-        return (string) substr($this->getComment(), 0, 80);
+        return (string) substr(str_replace('/', '-', strip_tags($this->getComment())), 0, 40);
     }
 
     public function setResourceName(string $name): self

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Controller\EditorController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -77,6 +78,7 @@ class CourseListener
         $courseId = (int) $request->get('cid');
         $checker = $container->get('security.authorization_checker');
 
+        //dump("cid value in request: $courseId");
         if (!empty($courseId)) {
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
@@ -84,7 +86,7 @@ class CourseListener
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
-                    //dump("Course loaded from Session $courseId");
+                    //dump("Course #$courseId loaded from Session ");
                 }
             }
             $course = null;
@@ -97,7 +99,7 @@ class CourseListener
                     throw new NotFoundHttpException($translator->trans('Course does not exist'));
                 }
 
-                //dump("Course loaded from DB $courseId");
+                //dump("Course loaded from DB #$courseId");
                 $courseInfo = api_get_course_info($course->getCode());
             }
 
@@ -247,9 +249,9 @@ class CourseListener
         // This controller implements ToolInterface? Then set the course/session
         if (is_array($controllerList) &&
             (
-                $controllerList[0] instanceof CourseControllerInterface
+                $controllerList[0] instanceof CourseControllerInterface ||
+                $controllerList[0] instanceof EditorController
                 //$controllerList[0] instanceof ResourceController
-
                 //|| $controllerList[0] instanceof LegacyController
             )
         ) {

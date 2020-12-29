@@ -21,6 +21,8 @@ use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
+use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
+use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
@@ -37,14 +39,19 @@ trait ControllerTrait
         $services['glide'] = Glide::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+        $services[] = ResourceFactory::class;
+        $services[] = ResourceNodeRepository::class;
 
         /*
             The following classes are needed in order to load the resources files when using the /r/ path
             For example: http://my.chamilomaster.net/r/agenda/event_attachments/96/download?cid=1&sid=0&gid=0
+            Then the repository CCalendarEventAttachmentRepository need to be added here,
+            because it was set in the tools.yml like this:
+            chamilo_core.tool.agenda:
+                (...)
+                event_attachments:
+                    repository: Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository
         */
-        $services[] = ResourceFactory::class;
-        $services[] = ResourceNodeRepository::class;
-
         $services[] = CAnnouncementRepository::class;
         $services[] = CAnnouncementAttachmentRepository::class;
         $services[] = CAttendanceRepository::class;
@@ -58,18 +65,10 @@ trait ControllerTrait
         $services[] = CQuizQuestionRepository::class;
         $services[] = CQuizQuestionCategoryRepository::class;
         $services[] = CStudentPublicationRepository::class;
-
+        $services[] = CStudentPublicationCommentRepository::class;
+        $services[] = CStudentPublicationCorrectionRepository::class;
 
         $services[] = IllustrationRepository::class;
-
-        /*$services[] = CAttendanceRepository::class;
-        $services[] = CDocumentRepository::class;
-        $services[] = CDocumentRepository::class;
-        $services[] = CDocumentRepository::class;
-        $services[] = CDocumentRepository::class;
-        $services[] = CDocumentRepository::class;
-        $services[] = CDocumentRepository::class;
-        $services[] = CDocumentRepository::class;*/
 
         return $services;
     }

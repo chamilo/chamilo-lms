@@ -1,0 +1,41 @@
+{% autoescape false %}
+<div class="page-header">
+    <h2>
+        {{ work.title }}
+    </h2>
+</div>
+
+{% if work.description %}
+<h3>
+    {{ 'Description' | get_lang }}
+</h3>
+<p>
+    {{ work.description }}
+</p>
+{% endif %}
+
+{{ form }}
+
+{% if work.getResourceNode and work.getResourceNode.hasResourceFile %}
+<h3>
+    {{ 'Content' | get_lang }}
+</h3>
+<p>
+    <a class="btn btn-success"
+       href="{{ url('chamilo_core_resource_view', {
+           'id': work.resourceNode.id,
+           'cid': course ? course.id : 0,
+           'sid': session ? session.id : 0,
+           'tool' : 'student_publication',
+           'type' : 'student_publications',
+           'mode' : 'download'
+       })
+       }}">
+        {{ 'Download' | trans}}
+    </a>
+</p>
+{% endif %}
+
+{% include '@ChamiloCore/Work/comments.html.twig' %}
+
+{% endautoescape %}

@@ -3678,12 +3678,12 @@ function deleteCommentFile($id, $courseInfo = [])
  * @param array $courseInfo
  * @param int   $userId
  * @param array $parentWork
- * @param array $work
+ * @param CStudentPublication  $work
  * @param array $data
  *
  * @return int
  */
-function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
+function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $studentPublication, $data)
 {
     $fileData = isset($data['attachment']) ? $data['attachment'] : null;
     // If no attachment and no comment then don't save comment
@@ -3693,13 +3693,10 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $courseId = $courseInfo['real_id'];
     $courseEntity = api_get_course_entity($courseId);
 
-    /** @var CStudentPublication $studentPublication */
-    $studentPublication = Container::getStudentPublicationRepository()->find($work['iid']);
-
     $request = Container::getRequest();
-    $fileObject = $request->files->get('attachment');
-    if (is_array($fileObject)) {
-        $fileObject = $fileObject[0];
+    $file = $request->files->get('attachment');
+    if (is_array($file)) {
+        $file = $file[0];
     }
 
     $em = Database::getManager();
@@ -3708,7 +3705,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         ->setCId($courseId)
         ->setComment($data['comment'])
         ->setUserId($userId)
-        ->setWorkId($work['iid'])
+        ->setWorkId($studentPublication->getIid())
         ->setParent($studentPublication)
         ->addCourseLink(
             $courseEntity,
@@ -3719,8 +3716,8 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $repo = Container::getStudentPublicationCommentRepository();
     $repo->create($comment);
 
-    if ($fileObject) {
-        $repo->addFile($comment, $fileObject);
+    if ($file) {
+        $repo->addFile($comment, $file);
         $em->flush();
     }
 
@@ -3728,7 +3725,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     if (api_is_allowed_to_edit()) {
         if (isset($data['send_email']) && $data['send_email']) {
             // Teacher sends a feedback
-            $userIdListToSend = [$work['user_id']];
+            $userIdListToSend = [$studentPublication->getUserId()];
         }
     } else {
         $sessionId = api_get_session_id();
@@ -3755,10 +3752,11 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
             $userIdListToSend = [];
         }
     }
-
-    $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$work['iid'];
+    $id = $studentPublication->getIid();
+    $title = $studentPublication->getTitle();
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$id;
     $subject = sprintf(get_lang('There\'s a new feedback in work: %s'), $parentWork['title']);
-    $content = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $work['title'], $url);
+    $content = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $title, $url);
 
     if (!empty($data['comment'])) {
         $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
@@ -4858,7 +4856,7 @@ function deleteWorkItem($item_id, $courseInfo)
         // We found the current user is the author
         $sql = "SELECT url, contains_file, user_id, session_id, parent_id
                 FROM $work_table
-                WHERE c_id = $course_id AND id = $item_id";
+                WHERE iid = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $count = Database::num_rows($result);
@@ -5949,29 +5947,14 @@ function protectWork($courseInfo, $workId)
     }
 }
 
-/**
- * @param array $courseInfo
- * @param array $work
- */
-function deleteCorrection($courseInfo, $work)
+function deleteCorrection(CStudentPublication $work)
 {
-    throw new Exception('deleteCorrection');
-    /*
-    if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {
-        $id = $work['iid'];
-        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $sql = "UPDATE $table SET
-                    url_correction = '',
-                    title_correction = ''
-                WHERE iid = $id";
-        Database::query($sql);
-        $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
-        if (file_exists($coursePath.$work['url_correction'])) {
-            if (Security::check_abs_path($coursePath.$work['url_correction'], $coursePath)) {
-                unlink($coursePath.$work['url_correction']);
-            }
-        }
-    }*/
+    $correctionNode = $work->getCorrection();
+    if (null !== $correctionNode) {
+        $em = Database::getManager();
+        $em->remove($correctionNode);
+        $em->flush();
+    }
 }
 
 /**

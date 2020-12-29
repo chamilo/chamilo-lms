@@ -841,12 +841,6 @@ class Display
         $filterPath = true
     ) {
         if (empty($image_path)) {
-            // For some reason, the call to img() happened without a proper
-            // image. Log the error and return an empty string to avoid
-            // breaking the HTML
-            $trace = debug_backtrace();
-            $caller = $trace[1];
-            //error_log('No image provided in Display::img(). Caller info: '.print_r($caller, 1));
             return '';
         }
         // Sanitizing the parameter $image_path
@@ -2830,8 +2824,9 @@ HTML;
         }
 
         $lpJs = api_get_path(WEB_PUBLIC_PATH).'build/lp.js';
-        //{type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
-        //{type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
+        // {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
+        // {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
+        // {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
@@ -2860,8 +2855,6 @@ HTML;
             '.$translateHtml.'
             ]},
             '.$videoPluginCssFiles.'
-            {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
-
         ]);';
 
         return $frameReady;

@@ -6371,7 +6371,7 @@ class learnpath
         }
 
         if ($allowExpand) {
-            $actionsLeft .= Display::url(
+            /*$actionsLeft .= Display::url(
                 Display::return_icon(
                     'expand.png',
                     get_lang('Expand'),
@@ -6386,7 +6386,7 @@ class learnpath
                 ),
                 '#',
                 ['role' => 'button', 'id' => 'hide_bar_template']
-            );
+            );*/
         }
 
         if ($showRequirementButtons) {

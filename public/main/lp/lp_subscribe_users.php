@@ -51,7 +51,6 @@ $courseCode = api_get_course_id();
 $sessionId = api_get_session_id();
 
 $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
-$lp = new learnpath($courseCode, $lpId, api_get_user_id());
 $em = Database::getManager();
 $courseRepo = Container::getCourseRepository();
 

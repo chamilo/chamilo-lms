@@ -533,22 +533,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function viewAction(Request $request, RouterInterface $router): Response
     {
         $id = $request->get('id');
-        $filter = $request->get('filter'); // See filters definitions in /config/services.yml
-        $em = $this->getDoctrine();
+        $filter = $request->get('filter'); // See filters definitions in /config/services.yml.
         /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
         }
-
-        /*$repo = $this->getRepositoryFromRequest($request);
-        if ($repo instanceof ResourceWithLinkInterface) {
-            $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
-            $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
-
-            return $this->redirect($url);
-        }*/
 
         return $this->processFile($request, $resourceNode, 'show', $filter);
     }
@@ -611,7 +602,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $zipName = $resourceNode->getSlug().'.zip';
-        $rootNodePath = $resourceNode->getPathForDisplay();
+        //$rootNodePath = $resourceNode->getPathForDisplay();
         $resourceNodeRepo = $repo->getResourceNodeRepository();
         $type = $repo->getResourceType();
 
@@ -704,7 +695,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised view access to resource')
         );
 
-        //$repo = $this->getRepositoryFromRequest($request);
         $resourceFile = $resourceNode->getResourceFile();
 
         if (!$resourceFile) {

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
 /**
@@ -24,7 +25,7 @@ if (empty($lpId)) {
 }
 $lpId = (int) $lpId;
 
-/** @var \Chamilo\CourseBundle\Entity\CLp $lp */
+/** @var CLp $lp */
 $lp = $lpRepo->find($lpId);
 
 $nameTools = get_lang('Document');
@@ -172,7 +173,7 @@ $expired_on = $learnPath->expired_on;
 $publicated_on = $learnPath->publicated_on;
 
 // Prerequisites
-$form->addElement('html', '<div class="form-group">');
+$form->addElement('html', '<div class="row form-group ">');
 $items = $learnPath->display_lp_prerequisites_list();
 $form->addElement('html', '<label class="col-md-2">'.get_lang('Prerequisites').'</label>');
 $form->addElement('html', '<div class="col-md-8">');

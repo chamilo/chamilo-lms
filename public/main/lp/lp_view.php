@@ -424,7 +424,7 @@ switch ($returnLink) {
 
 $lpPreviewImagePath = Display::returnIconPath('unknown.png', ICON_SIZE_BIG);
 if ($lp->getResourceNode()->hasResourceFile()) {
-    $lpPreviewImagePath = $lpRepo->getResourceFileUrl($lp);
+    $lpPreviewImagePath = $lpRepo->getResourceFileUrl($lp).'?'.api_get_cidreq();
 }
 
 if ($oLP->current == $oLP->get_last()) {
@@ -571,15 +571,7 @@ if (!empty(api_get_configuration_value('lp_menu_location'))) {
 }
 $template->assign('menu_location', $menuLocation);
 $template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));
-$template->assign(
-    'lp_preview_image',
-    Display::img(
-        $lpPreviewImagePath,
-        $oLP->getNameNoTags(),
-        [],
-        ICON_SIZE_BIG
-    )
-);
+$template->assign('lp_preview_image', '<img src="'.$lpPreviewImagePath.'" alt="'.$oLP->getNameNoTags().'" />');
 
 $frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
 $template->assign('frame_ready', $frameReady);

@@ -81,10 +81,21 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $threadViews;
 
     /**
+     * @var ArrayCollection|CForumPost[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CForumPost",
+     *     mappedBy="thread", cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $posts;
+
+    /**
      * @var CForumPost
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")
-     * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected $threadLastPost;
 
@@ -157,13 +168,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
      */
     protected $lpItemId;
-
-    /**
-     * @var ArrayCollection|CForumPost[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
-    protected $posts;
 
     public function __construct()
     {

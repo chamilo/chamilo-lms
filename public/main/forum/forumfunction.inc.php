@@ -3826,6 +3826,9 @@ function displayUserLink(User $user)
 function displayUserImage(User $user)
 {
     $url = Container::getIllustrationRepository()->getIllustrationUrl($user);
+    if (empty($url)) {
+        $url = Display::return_icon('unknown.png', null, null, ICON_SIZE_BIG, false, true);
+    }
 
     return '<div class="thumbnail"><img src="'.$url.'?w=100"/></div>';
 }

@@ -82,7 +82,7 @@ class EditorController extends BaseController
         $class = $repository->getRepository()->getClassName();
 
         if (!empty($parentId)) {
-            $parent = $repository->getResourceNodeRepository()->find($parentId);
+            $parent = $this->getResourceNodeRepository()->find($parentId);
         }
 
         $this->denyAccessUnlessGranted(

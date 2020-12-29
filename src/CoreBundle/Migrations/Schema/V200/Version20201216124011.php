@@ -56,7 +56,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);
 
-            // Assignments folders
+            // Assignments folders.
             $sql = "SELECT * FROM c_student_publication WHERE contains_file = 0 AND c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
@@ -89,9 +89,11 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $em->flush();
             $em->clear();
 
-            // Assignments files
+            // Assignments files.
             $sql = "SELECT * FROM c_student_publication
-                    WHERE contains_file = 1 AND c_id = $courseId
+                    WHERE
+                          contains_file = 1 AND
+                          c_id = $courseId AND
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -169,7 +171,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $em->flush();
             $em->clear();
 
-            // Comments
+            // Comments.
             $sql = "SELECT * FROM c_student_publication_comment WHERE c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);

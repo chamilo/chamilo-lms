@@ -107,7 +107,7 @@ class GroupVoter extends Voter
 
                 break;
         }
-        dump("You don't have access to this group!!");
+        //dump("You don't have access to this group!!");
 
         return false;
     }

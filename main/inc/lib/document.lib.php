@@ -2069,7 +2069,7 @@ class DocumentManager
         $last = substr($last, 0, 10);
 
         if ($first === $last) {
-            $startDateAndEndDate = get_lang('From').' '.$first;
+            $startDateAndEndDate = get_lang('The').' '.$first;
         } else {
             $startDateAndEndDate = sprintf(
                 get_lang('FromDateXToDateY'),

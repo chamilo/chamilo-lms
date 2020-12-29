@@ -1011,8 +1011,8 @@ class SocialManager extends UserManager
                 ';
             } else {
                 if ($settingExtendedProfileEnabled == true) {
-                $active = $show === 'portfolio' ? 'active' : null;
-                $links .= '
+                    $active = $show === 'portfolio' ? 'active' : null;
+                    $links .= '
                 <li class="portfolio-icon '.$active.'">
                       <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
                         '.$portfolio.' '.get_lang('Portfolio').'

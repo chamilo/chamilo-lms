@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Cocur\Slugify\Slugify;
 
 /**
  * CStudentPublicationComment.
@@ -233,9 +234,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this->sentAt;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
@@ -243,7 +241,11 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
 
     public function getResourceName(): string
     {
-        return (string) substr(str_replace('/', '-', strip_tags($this->getComment())), 0, 40);
+        $text = strip_tags($this->getComment());
+        $slugify = new Slugify();
+        $text = $slugify->slugify($text);
+
+        return (string) substr($text, 0, 40);
     }
 
     public function setResourceName(string $name): self

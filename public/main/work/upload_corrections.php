@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\Finder\Finder;
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -38,7 +36,7 @@ if (empty($workInfo)) {
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-$homework = get_work_assignment_by_id($workInfo['id']);
+$homework = get_work_assignment_by_id($workInfo['iid']);
 $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = [

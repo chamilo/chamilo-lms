@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -25,6 +28,7 @@ if (empty($my_folder_data)) {
 
 $work_data = get_work_assignment_by_id($workId);
 
+$studentPublicationRepo = Container::getStudentPublicationRepository();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     api_get_course_info()
@@ -113,8 +117,11 @@ switch ($action) {
         $result = get_work_user_list(null, null, null, null, $workId);
         if ($result) {
             foreach ($result as $item) {
-                $workToDelete = get_work_data_by_id($item['id']);
-                deleteCorrection($courseInfo, $workToDelete);
+                /** @var CStudentPublication $work */
+                $work = $studentPublicationRepo->find($item['id']);
+                if ($work) {
+                    deleteCorrection( $work);
+                }
             }
             Display::addFlash(
                 Display::return_message(get_lang('Deleted'), 'confirmation')
@@ -172,19 +179,22 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
     $blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
-
     if (!$blockAddDocuments) {
-        $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
+        $actionsLeft .= '<a
+            href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
         $actionsLeft .= Display::return_icon('new_document.png', get_lang('Add document'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
-    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
+    $actionsLeft .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('addworkuser.png', get_lang('Add a user'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
+    $actionsLeft .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
     $actionsLeft .= Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $display_output = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&amp;id='.$workId.'&amp;list=without">'.
+    $displayOutput = '<a
+        href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
     Display::return_icon('exercice_uncheck.png', get_lang('View missing assignments'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $editLink = '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
@@ -198,7 +208,19 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 
     $count = get_count_work($workId);
     if ($count > 0) {
-        $display_output .= '<a class="btn-toolbar" href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
+        $router = Container::getRouter();
+        /** @var CStudentPublication $studentPublication */
+        $studentPublication = $studentPublicationRepo->find($workId);
+        $downloadUrl = $router->generate(
+            'chamilo_core_resource_download',
+            [
+                'id' => $studentPublication->getResourceNode()->getId(),
+                'tool' => 'student_publication',
+                'type' => 'student_publications',
+            ]
+        );
+
+        $displayOutput .= '<a class="btn-toolbar" href="'.$downloadUrl.'?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'save_pack.png',
                 get_lang('Download assignments package'),
@@ -206,8 +228,10 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
                 ICON_SIZE_MEDIUM
             ).' '.get_lang('Download assignments package').'</a>';
     }
-    $actionsLeft .= $display_output;
-    $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
+    $actionsLeft .= $displayOutput;
+
+    // @todo fix upload corrections.
+    /*$url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
         Display::return_icon(
             'upload_package.png',
@@ -215,9 +239,9 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
             '',
             ICON_SIZE_MEDIUM
         ).' '.get_lang('Upload corrections package').'</a>';
-
-    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq(
-        ).'&id='.$workId.'&action=delete_correction';
+    */
+    $url = api_get_path(WEB_CODE_PATH).
+        'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
     $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'trash', 'danger');
 }
 

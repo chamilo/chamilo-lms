@@ -589,7 +589,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $id = (int) $request->get('id');
 
-        $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -614,10 +613,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $zipName = $resourceNode->getSlug().'.zip';
         $rootNodePath = $resourceNode->getPathForDisplay();
         $resourceNodeRepo = $repo->getResourceNodeRepository();
+        $type = $repo->getResourceType();
 
         $criteria = Criteria::create()
             ->where(Criteria::expr()->neq('resourceFile', null)) // must have a file
-            // ->andWhere(Criteria::expr()->eq('resourceType', $type))
+             ->andWhere(Criteria::expr()->eq('resourceType', $type)) // only download same type
         ;
 
         /** @var ArrayCollection|ResourceNode[] $children */
@@ -646,8 +646,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
                     $stream = $repo->getResourceNodeFileStream($node);
-                    $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
-                    $zip->addFileFromStream($fileToDisplay, $stream);
+                    $fileName = $node->getResourceFile()->getOriginalName();
+                    //$fileToDisplay = basename($node->getPathForDisplay());
+                    //$fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
+                    //error_log($fileToDisplay);
+                    $zip->addFileFromStream($fileName, $stream);
                 }
                 $zip->finish();
             }

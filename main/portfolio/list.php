@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Portfolio;
+use Chamilo\CoreBundle\Entity\PortfolioCategory;
+
 if ($currentUserId == $owner->getId()) {
     if ($allowEdit) {
         $actions[] = Display::url(
@@ -35,7 +38,7 @@ if (!$allowEdit) {
 }
 
 $categories = $em
-    ->getRepository('ChamiloCoreBundle:PortfolioCategory')
+    ->getRepository(PortfolioCategory::class)
     ->findBy($criteria);
 
 if ($course) {
@@ -48,8 +51,8 @@ if ($course) {
 $criteria['category'] = null;
 
 $items = $em
-    ->getRepository('ChamiloCoreBundle:Portfolio')
-    ->findBy($criteria);
+    ->getRepository(Portfolio::class)
+    ->findBy($criteria, ['creationDate' => 'DESC']);
 
 $template = new Template(null, false, false, false, false, false, false);
 $template->assign('user', $owner);

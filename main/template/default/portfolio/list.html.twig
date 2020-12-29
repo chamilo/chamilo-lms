@@ -10,7 +10,7 @@
     <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
 {% endif %}
 
-{{ items.display(uncategorized_items, 0, allow_edit, _c) }}
+{{ items.display(uncategorized_items, 0, allow_edit, _c, _u) }}
 
 {% for category in portfolio %}
     <div class="panel panel-info">
@@ -21,7 +21,7 @@
                     {{ category.title }}
                 </a>
 
-                {% if allow_edit %}
+                {% if user.id == category.user.id %}
                     <div class="pull-right">
                         <a href="{{ baseurl ~ {'action':'edit_category', 'id':category.id}|url_encode }}">
                             {{ edit_img }}
@@ -48,7 +48,7 @@
             </div>
 
             <div class="collapse" id="collapse-category-{{ category.id }}">
-                {{ items.display(category.items(course, session, not allow_edit), category.id, allow_edit, _c) }}
+                {{ items.display(category.items(course, session, not allow_edit), category.id, allow_edit, _c, _u) }}
             </div>
         </div>
     </div>

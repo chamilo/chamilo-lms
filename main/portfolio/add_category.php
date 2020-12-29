@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
@@ -20,7 +21,7 @@ if ($form->validate()) {
     $category
         ->setTitle($values['title'])
         ->setDescription($values['description'])
-        ->setUser($user);
+        ->setUser($owner);
 
     $em->persist($category);
     $em->flush();

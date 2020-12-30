@@ -45,13 +45,13 @@ class TestCategory
         $id = (int) $id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
-                WHERE id = $id AND c_id = ".$courseId;
+                WHERE iid = $id AND c_id = ".$courseId;
         $res = Database::query($sql);
 
         if (Database::num_rows($res)) {
             $row = Database::fetch_array($res);
 
-            $this->id = $row['id'];
+            $this->id = $row['iid'];
             $this->name = $row['title'];
             $this->description = $row['description'];
 

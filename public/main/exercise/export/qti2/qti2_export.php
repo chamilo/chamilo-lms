@@ -5,10 +5,7 @@
 /**
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- */
-require __DIR__.'/qti2_classes.php';
 
-/**
  * An IMS/QTI item. It corresponds to a single question.
  * This class allows export from Claroline to IMS/QTI2.0 XML format of a single question.
  * It is not usable as-is, but must be subclassed, to support different kinds of questions.

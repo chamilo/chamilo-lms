@@ -21,7 +21,7 @@ final class CQuizQuestionRepository extends ResourceRepository
     public function getHotSpotImageUrl(CQuizQuestion $resource): string
     {
         $params = [
-            'mode' => 'show',
+            'mode' => 'view',
             'filter' => 'hotspot_question',
         ];
 

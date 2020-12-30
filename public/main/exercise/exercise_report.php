@@ -600,7 +600,7 @@ $group_parameters = [
 ];
 
 foreach ($group_list as $group) {
-    $group_parameters[] = $group['id'].':'.$group['name'];
+    $group_parameters[] = $group['iid'].':'.$group['name'];
 }
 if (!empty($group_parameters)) {
     $group_parameters = implode(';', $group_parameters);

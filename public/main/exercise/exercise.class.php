@@ -8774,7 +8774,6 @@ class Exercise
         $myActions = null,
         $returnTable = false
     ) {
-
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
@@ -8853,9 +8852,9 @@ class Exercise
             }
         }
 
-        $keywordCondition = '';
         if (!empty($keyword)) {
-            $qb->andWhere($qb->expr()->eq('resource.title', $keyword));
+            $qb->andWhere($qb->expr()->eq('resource.title', ':keyword'));
+            $qb->setParameter('keyword', $keyword);
         }
 
         $qb->setFirstResult($from);
@@ -8997,19 +8996,22 @@ class Exercise
                         $visibility = $exerciseEntity->isVisible($course, $session);
                     }
 
+                    $style = '';
                     if (0 == $exerciseEntity->getActive() || false === $visibility) {
-                        $title = Display::tag('font', $cut_title, ['style' => 'color:grey']);
-                    } else {
-                        $title = $cut_title;
+                        $style = 'color:grey';
+                        //$title = Display::tag('font', $cut_title, ['style' => 'color:grey']);
                     }
 
-                    $move = null;
-                    $class_tip = '';
-                    $url = $move.'<a
-                        '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$exerciseId.'"
-                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'">
-                         '.Display::return_icon('quiz.png', $title).'
-                         '.$title.' </a>'.PHP_EOL;
+                    $title = $cut_title;
+
+                    $url = '<a
+                        '.$alt_title.'
+                        id="tooltip_'.$exerciseId.'"
+                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'"
+                        style = "'.$style.'"
+                        >
+                         '.Display::return_icon('quiz.png', $title).$title.
+                        '</a>';
 
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
                         $embeddableIcon = Display::return_icon(

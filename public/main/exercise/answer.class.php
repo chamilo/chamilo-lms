@@ -135,6 +135,8 @@ class Answer
         // while a record is found
         while ($object = Database::fetch_object($result)) {
             $this->id[$i] = $object->iid;
+            $this->autoId[$i] = $object->iid;
+            $this->iid[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -143,8 +145,6 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
-            $this->autoId[$i] = $object->iid;
-            $this->iid[$i] = $object->iid;
             $i++;
         }
         $this->nbrAnswers = $i - 1;

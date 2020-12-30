@@ -25,20 +25,25 @@ $exerciseId = isset($_GET['exe_id']) ? (int) $_GET['exe_id'] : 0;
 $questionRepo = Container::getQuestionRepository();
 /** @var CQuizQuestion $objQuestion */
 $objQuestion = $questionRepo->find($questionId);
+if (!$objQuestion) {
+    api_not_allowed();
+}
 
 $answer_type = $objQuestion->getType(); //very important
 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
+if (!$objQuestion->getResourceNode()->hasResourceFile()) {
+    api_not_allowed();
+}
 $resourceFile = $objQuestion->getResourceNode()->getResourceFile();
 $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
-$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
-
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion).'?'.api_get_cidreq();
 $course_id = api_get_course_int_id();
 
 // Query db for answers
 if (HOT_SPOT_DELINEATION == $answer_type) {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
+    $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
 	        WHERE
 	            c_id = $course_id AND
@@ -46,7 +51,7 @@ if (HOT_SPOT_DELINEATION == $answer_type) {
 	            hotspot_type = 'delineation'
             ORDER BY iid";
 } else {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
+    $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
 	        WHERE c_id = $course_id AND question_id = $questionId
 	        ORDER BY position";
@@ -67,28 +72,28 @@ $nmbrTries = 0;
 
 while ($hotspot = Database::fetch_assoc($result)) {
     $hotSpot = [];
-    $hotSpot['id'] = $hotspot['id'];
+    $hotSpot['id'] = $hotspot['iid'];
     $hotSpot['iid'] = $hotspot['iid'];
     $hotSpot['answer'] = $hotspot['answer'];
 
-    // Square or rectancle
-    if ('square' == $hotspot['hotspot_type']) {
+    // Square or rectangle
+    if ('square' === $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'square';
     }
-    // Circle or ovale
-    if ('circle' == $hotspot['hotspot_type']) {
+    // Circle or oval
+    if ('circle' === $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'circle';
     }
     // Polygon
-    if ('poly' == $hotspot['hotspot_type']) {
+    if ('poly' === $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'poly';
     }
     // Delineation
-    if ('delineation' == $hotspot['hotspot_type']) {
+    if ('delineation' === $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'delineation';
     }
     // No error
-    if ('noerror' == $hotspot['hotspot_type']) {
+    if ('noerror' === $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'noerror';
     }
 

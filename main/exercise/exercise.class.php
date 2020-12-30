@@ -6808,6 +6808,7 @@ class Exercise
                     $lpItemViewId
                 );
 
+                // BT#18165
                 $extraMessage .= $this->advanceCourseList();
                 if ($attemptCount >= $exerciseAttempts) {
                     $message = sprintf(
@@ -6815,6 +6816,7 @@ class Exercise
                         $this->name,
                         $exerciseAttempts
                     );
+                    // BT#18165
                     $message .= $this->remedialCourseList(api_get_user_id());
                     $isVisible = false;
                 } else {
@@ -6849,6 +6851,7 @@ class Exercise
                 }
             }
         }
+        // BT#18165
         $message .= $extraMessage;
         $rawMessage = '';
         if (!empty($message)) {
@@ -10919,87 +10922,52 @@ class Exercise
      */
     public function remedialCourseList($userId = 0, $review = false)
     {
+        $questionExcluded = [
+            FREE_ANSWER,
+            ORAL_EXPRESSION,
+            ANNOTATION
+        ];
         $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
         $extraMessage = null;
-        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
+        $bestAttempt = [];
+        $exercise_stat_info = Event::getExerciseResultsByUser(
             $userId,
-            $this->id,
+            $this->iId,
             $this->course_id,
             $this->sessionId
         );
-        if (!isset($bestAttempt['exe_result'])) {
-            // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
-            // for that this block is used
-            $exercise_stat_info = Event::getExerciseResultsByUser(
-                $userId,
-                $this->id,
-                $this->course_id,
-                $this->sessionId
-            );
-            $bestAttempt['exe_result'] = 0;
-            foreach ($exercise_stat_info as $attemp) {
-                if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
-                    $bestAttempt = $attemp;
-                }
+        $bestAttempt['exe_result'] = 0;
+        foreach ($exercise_stat_info as $attemp) {
+            if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
+                $bestAttempt = $attemp;
             }
-        }
-        $questionExcluded = [
-            5,
-        ];
-        $questionList = isset($bestAttempt['question_list']) ? $bestAttempt['question_list'] : null;
-        if (isset($bestAttempt['question_list'])) {
-            foreach ($bestAttempt['question_list'] as $questionId => $answer) {
-                $question = Question::read($questionId, api_get_course_info_by_id($bestAttempt['c_id']));
-                $type = $question->type;
-                if (in_array($type, $questionExcluded) && $review == false) {
-                    return '';
-                }
-            }
-        }
-        //https://github.com/chamilo/chamilo-lms/blob/1.11.x/main/inc/lib/exercise.lib.php#L2103
-        // CMAR
-        // Si viene por revision y no tiene preguntas abiertas por corregir
-        // if($review == true) {
-        $whereCondition = '';
-
-        $whereCondition .= " te.exe_user_id  = '$userId'";
-
-        /*
-                    if (!empty($whereCondition)) {
-                        $whereCondition = " AND $whereCondition";
+            // The action is blocked if there is still an open question to evaluate
+            if (isset($bestAttempt['question_list'])) {
+                foreach ($bestAttempt['question_list'] as $questionId => $answer) {
+                    $question = Question::read($questionId, api_get_course_info_by_id($bestAttempt['c_id']));
+                    $type = $question->type;
+                    if (in_array($type, $questionExcluded) && $review == false) {
+                        $reviewScore = [
+                            'score' => $bestAttempt['exe_result'],
+                            'comments' => Event::get_comments($this->id, $questionId),
+                        ];
+                        $check = $question->isQuestionWaitingReview($reviewScore);
+                        if (true === $check) {
+                            return '';
+                        }
                     }
-                    */
+                }
+            }
+        }
 
-        /*
-            $count = ExerciseLib::get_count_exam_results(
-                $this->id,
-                $whereCondition
-            );
-          */
-        // CMAR Aqui se debe validar los ejercicios corregidos
-        $count = ExerciseLib::get_exam_results_data(
-            null,
-            null,
-            null,
-            null,
-            $this->id,
-            $whereCondition,
-            false
-            // ,
-           // $courseCode,
-          //  $showSession
-        );
-        $a = $count;
-        // }
-        $resultado = $bestAttempt['exe_result'];
-        $total = $bestAttempt['exe_weighting'];
+        $total = ;
         $objExercise = new Exercise();
         $objExercise->read($bestAttempt['exe_id']);
         $percentSuccess = (float) $objExercise->selectPassPercentage();
         $pass = ExerciseLib::isPassPercentageAttemptPassed(
             $objExercise,
-            $resultado,
-            $total
+            $bestAttempt['exe_result'],
+            $bestAttempt['exe_weighting']
         );
         if ($percentSuccess == 0 && $pass == false) {
             return '';

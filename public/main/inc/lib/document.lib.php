@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -2913,7 +2914,7 @@ class DocumentManager
             'rootClose' => '</ul>',
             'childOpen' => '<li class="doc_resource lp_resource_element ">',
             'childClose' => '</li>',
-            'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
+            'nodeDecorator' => function ($node) use ($filterByExtension, $icon, $folderIcon) {
                 $link = '<div class="item_data">';
 
                 $file = $node['resourceFile'];
@@ -2946,10 +2947,10 @@ class DocumentManager
 
         $type = $repo->getResourceType();
         $em = Database::getManager();
-        $query = $em
+        $qb = $em
             ->createQueryBuilder()
             ->select('node')
-            ->from(\Chamilo\CoreBundle\Entity\ResourceNode::class, 'node')
+            ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
             ->leftJoin('node.resourceFile', 'file')
@@ -2959,18 +2960,17 @@ class DocumentManager
             ->setParameters(['type' => $type, 'course' => $course_info['entity']])
             ->orderBy('node.parent', 'ASC')
             ->addSelect('file')
-            ->getQuery()
         ;
 
-        /*$em->getConfiguration()->addCustomHydrationMode('tree', 'Gedmo\Tree\Hydrator\ORM\TreeObjectHydrator');
-        $tree = $query->getQuery()
-            ->setHint(\Doctrine\ORM\Query::HINT_INCLUDE_META_COLUMNS, true)
-            ->getResult('tree');
-        */
-
-        /*foreach ($tree as $a) {
-            var_dump(get_class($a));
-        }*/
+        if (!empty($filterByExtension)) {
+            $orX = $qb->expr()->orX();
+            foreach ($filterByExtension as $extension) {
+                $orX->add($qb->expr()->like('file.originalName', ':'.$extension));
+                $qb->setParameter($extension, '%'.$extension);
+            }
+            $qb->andWhere($orX);
+        }
+        $query = $qb->getQuery();
 
         return $nodeRepository->buildTree($query->getArrayResult(), $options);
 

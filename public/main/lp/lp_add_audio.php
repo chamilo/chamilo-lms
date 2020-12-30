@@ -153,7 +153,7 @@ if (!empty($lp_item->audio)) {
     $audioLabel = '<br />'.get_lang('FileName').': <b>'.$lp_item->audio.'<b/>';
 }
 
-$form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()).$audioLabel);
+$form->addLabel(null, sprintf(get_lang('Audio file for item %s'), $lp_item->get_title()).$audioLabel);
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.
@@ -175,7 +175,7 @@ if (!empty($file)) {
 
 $form->addElement('file', 'file');
 $form->addElement('hidden', 'id', $lp_item_id);
-$form->addButtonSave(get_lang('SaveRecordedAudio'));
+$form->addButtonSave(get_lang('Save recorded audio'));
 
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,

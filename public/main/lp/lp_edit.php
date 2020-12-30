@@ -70,7 +70,7 @@ $defaults = [];
 $form = new FormValidator(
     'form1',
     'post',
-    'lp_controller.php?'.api_get_cidreq()
+    'lp_controller.php?'.api_get_cidreq().'&lp_id='.$lpId
 );
 
 $form->addHeader(get_lang('Edit'));
@@ -302,8 +302,8 @@ $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 $form->addButtonSave(get_lang('Save course settings'));
 
 // Hidden fields
-$form->addElement('hidden', 'action', 'edit');
-$form->addElement('hidden', 'lp_id', $lpId);
+$form->addHidden('action', 'edit');
+$form->addHidden('lp_id', $lpId);
 
 $htmlHeadXtra[] = '<script>
 $(function() {
@@ -340,6 +340,12 @@ if ($form->validate()) {
         $expired_on = $_REQUEST['expired_on'];
     }
 
+    if (isset($_REQUEST['remove_picture']) && $_REQUEST['remove_picture']) {
+        if ($lp->getResourceNode()->hasResourceFile()) {
+            $lp->getResourceNode()->setResourceFile(null);
+        }
+    }
+
     $lpCategoryRepo = Container::getLpCategoryRepository();
     $category = null;
     if (isset($_REQUEST['category_id'])) {
@@ -364,10 +370,6 @@ if ($form->validate()) {
         ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)
     ;
 
-    if (isset($_REQUEST['remove_picture']) && $_REQUEST['remove_picture']) {
-        $file = $lp->getResourceNode()->getResourceFile();
-        $em->remove($file);
-    }
 
     $extraFieldValue = new ExtraFieldValue('lp');
     $_REQUEST['item_id'] = $lpId;
@@ -381,8 +383,7 @@ if ($form->validate()) {
         }
     }
 
-    $em->persist($lp);
-    $em->flush();
+    $lpRepo->update($lp);
 
     $form = new FormValidator('form1');
     $form->addSelect('skills', 'skills');

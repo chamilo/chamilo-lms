@@ -32,6 +32,7 @@ $courseInfo = api_get_course_info($courseCode);
 if (empty($courseInfo) || empty($lp_id)) {
     api_not_allowed('learnpath' !== api_get_origin());
 }
+$courseId = $courseInfo['real_id'];
 $userInfo = api_get_user_info($user_id);
 $name = $userInfo['complete_name'];
 $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $user_id);
@@ -52,12 +53,12 @@ if ('user_course' === $origin) {
         'name' => $courseInfo['name'],
     ];
     $interbreadcrumb[] = [
-        'url' => "../user/user.php?cidReq=$courseCode",
+        'url' => "../user/user.php?cid=$courseId",
         'name' => get_lang('Users'),
     ];
 } elseif ('tracking_course' === $origin) {
     $interbreadcrumb[] = [
-        'url' => "../tracking/courseLog.php?cidReq=$courseCode&id_session=$session_id",
+        'url' => "../tracking/courseLog.php?cid=$courseId&sid=$session_id",
         'name' => get_lang('Reporting'),
     ];
 } else {

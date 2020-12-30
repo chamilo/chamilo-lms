@@ -4158,8 +4158,10 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
     }
 
     if ($send) {
-        $folderUrl = api_get_path(WEB_CODE_PATH)."work/work_list_all.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workInfo['iid'];
-        $fileUrl = api_get_path(WEB_CODE_PATH)."work/view.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['iid'];
+        $folderUrl = api_get_path(WEB_CODE_PATH).
+            "work/work_list_all.php?cid=".$courseInfo['real_id']."&sid=".$sessionId."&id=".$workInfo['iid'];
+        $fileUrl = api_get_path(WEB_CODE_PATH).
+            "work/view.php?cid=".$courseInfo['real_id']."&sid=".$sessionId."&id=".$workData['iid'];
 
         foreach ($userList as $userData) {
             $userId = $userData['user_id'];

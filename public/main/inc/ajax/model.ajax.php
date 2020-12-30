@@ -2017,7 +2017,7 @@ switch ($action) {
 
             $item['name'] = Display::url(
                 $item['name'],
-                api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$courseInfo['code']
+                api_get_path(WEB_CODE_PATH).'gradebook/index.php?sid=0&cid='.$courseInfo['real_id']
             );
 
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {

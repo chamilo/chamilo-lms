@@ -226,8 +226,8 @@ $form_search = new FormValidator(
 );
 $form_search->addHidden('from', Security::remove_XSS($from));
 $form_search->addHidden('session_id', $sessionId);
-$form_search->addHidden('id_session', $sessionId);
-$form_search->addHidden('cidReq', $courseCode);
+$form_search->addHidden('sid', $sessionId);
+$form_search->addHidden('cid', $courseId);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('Search users'));
 echo Display::toolbarAction(
@@ -343,8 +343,8 @@ if ($nbStudents > 0) {
         'get',
         api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
     );
-    $formClass->addHidden('cidReq', $courseCode);
-    $formClass->addHidden('id_session', $sessionId);
+    $formClass->addHidden('cid', $courseId);
+    $formClass->addHidden('sid', $sessionId);
     $groupIdList = ['--'];
     $select = $formClass->addSelect('class_id', get_lang('Class').'/'.get_lang('Group'), $groupIdList);
     $groupIdList = [];
@@ -382,8 +382,8 @@ if ($nbStudents > 0) {
         'get',
         api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
     );
-    $formExtraField->addHidden('cidReq', $courseCode);
-    $formExtraField->addHidden('id_session', $sessionId);
+    $formExtraField->addHidden('cid', $courseId);
+    $formExtraField->addHidden('sid', $sessionId);
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $fieldId = Security::remove_XSS($fieldId);

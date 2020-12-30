@@ -248,7 +248,7 @@ if (0 === $session->getNbrCourses()) {
         );
         $courseItem .= Display::url(
             Display::return_icon('statistics.gif', get_lang('Reporting')),
-            $codePath."tracking/courseLog.php?id_session=$sessionId&cidReq={$course->getCode()}$orig_param&hide_course_breadcrumb=1"
+            $codePath."tracking/courseLog.php?sid=$sessionId&cid={$course->getId()}$orig_param&hide_course_breadcrumb=1"
         );
         $courseItem .= Display::url(
             Display::return_icon('teacher.png', get_lang('Edit coach')),

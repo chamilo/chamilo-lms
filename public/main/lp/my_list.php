@@ -66,7 +66,7 @@ if (!empty($courses)) {
             $sessionId = $lpSessionId;
         }
 
-        $params = '&cidReq='.$courseInfo['code'].'&id_session='.$sessionId;
+        $params = '&cid='.$courseInfo['real_id'].'&sid='.$sessionId;
         $link = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view'.$params.'&lp_id='.$id;
         $icon = Display::url(
             Display::return_icon(

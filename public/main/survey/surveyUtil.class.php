@@ -2863,7 +2863,7 @@ class SurveyUtil
         $form->addText('keyword_title', get_lang('Title'));
         $form->addText('keyword_code', get_lang('Course code'));
         $form->addSelectLanguage('keyword_language', get_lang('Language'));
-        $form->addHidden('cidReq', api_get_course_id());
+        $form->addHidden('cid', api_get_course_int_id());
         $form->addButtonSearch(get_lang('Search'), 'do_search');
         $form->display();
     }

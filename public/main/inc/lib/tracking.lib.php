@@ -601,7 +601,7 @@ class Tracking
                             }
 
                             $action = null;
-                            if ('classic' == $type) {
+                            if ('classic' === $type) {
                                 $action = '<td></td>';
                             }
                             $timeRow = '<td class="lp_time" colspan="2">'.$time.'</td>';
@@ -892,7 +892,7 @@ class Tracking
                     }
 
                     $action = null;
-                    if ('classic' == $type) {
+                    if ('classic' === $type) {
                         $action = '<td></td>';
                     }
 
@@ -978,7 +978,7 @@ class Tracking
                             }
 
                             $scoreItem = null;
-                            if ('quiz' == $row['item_type']) {
+                            if ('quiz' === $row['item_type']) {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                     $scoreItem .= Display::return_icon(
                                         'invisible.png',
@@ -1152,9 +1152,9 @@ class Tracking
                                             }
                                         }
                                         $my_lesson_status = $row_attempts['status'];
-                                        if ('' == $my_lesson_status) {
+                                        if ('' === $my_lesson_status) {
                                             $my_lesson_status = learnpathitem::humanize_status('completed');
-                                        } elseif ('incomplete' == $my_lesson_status) {
+                                        } elseif ('incomplete' === $my_lesson_status) {
                                             $my_lesson_status = learnpathitem::humanize_status('incomplete');
                                         }
                                         $timeRow = '<td class="lp_time" colspan="2">'.$time_attemp.'</td>';
@@ -1170,26 +1170,45 @@ class Tracking
                                         <td colspan="2">'.$view_score.'</td>
                                         '.$timeRow;
 
-                                        if ('classic' == $action) {
-                                            if ('tracking' != $origin) {
+                                        if ('classic' === $action) {
+                                            if ('tracking' !== $origin) {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                     $output .= '<td>
-                                                            <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('Show attempt').'" title="'.get_lang('Show attempt').'">
+                                                            <img
+                                                                src="'.Display::returnIconPath('quiz_na.gif').'"
+                                                                alt="'.get_lang('Show attempt').'"
+                                                                title="'.get_lang('Show attempt').'" />
                                                             </td>';
                                                 } else {
                                                     $output .= '<td>
-                                                            <a href="../exercise/exercise_show.php?origin='.$origin.'&id='.$my_exe_id.'&cidReq='.$courseCode.'" target="_parent">
-                                                            <img src="'.Display::returnIconPath('quiz.png').'" alt="'.get_lang('Show attempt').'" title="'.get_lang('Show attempt').'">
+                                                            <a
+                                                                href="../exercise/exercise_show.php?origin='.$origin.'&id='.$my_exe_id.'&cid='.$course_id.'"
+                                                                target="_parent">
+                                                            <img
+                                                                src="'.Display::returnIconPath('quiz.png').'"
+                                                                alt="'.get_lang('Show attempt').'"
+                                                                title="'.get_lang('Show attempt').'" />
                                                             </a></td>';
                                                 }
                                             } else {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                     $output .= '<td>
-                                                                <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('Show and grade attempt').'" title="'.get_lang('Show and grade attempt').'"></td>';
+                                                                <img
+                                                                    src="'.Display::returnIconPath('quiz_na.gif').'"
+                                                                    alt="'.get_lang('Show and grade attempt').'"
+                                                                    title="'.get_lang('Show and grade attempt').'" />
+                                                                </td>';
                                                 } else {
                                                     $output .= '<td>
-                                                                    <a href="../exercise/exercise_show.php?cidReq='.$courseCode.'&origin=correct_exercise_in_lp&id='.$my_exe_id.'" target="_parent">
-                                                                    <img src="'.Display::returnIconPath('quiz.gif').'" alt="'.get_lang('Show and grade attempt').'" title="'.get_lang('Show and grade attempt').'"></a></td>';
+                                                                    <a
+                                                                        href="../exercise/exercise_show.php?cid='.$course_id.'&origin=correct_exercise_in_lp&id='.$my_exe_id.'"
+                                                                        target="_parent">
+                                                                    <img
+                                                                        src="'.Display::returnIconPath('quiz.gif').'"
+                                                                        alt="'.get_lang('Show and grade attempt').'"
+                                                                        title="'.get_lang('Show and grade attempt').'">
+                                                                    </a>
+                                                                    </td>';
                                                 }
                                             }
                                         }
@@ -2084,7 +2103,7 @@ class Tracking
                             $icon = null;
                             if (api_is_allowed_to_edit()) {
                                 $url = api_get_path(WEB_CODE_PATH).
-                                    'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'];
+                                    'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
                                 $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
                                   '.Display::return_icon('messagebox_warning.gif').'
                                  </a>';
@@ -5585,7 +5604,8 @@ class Tracking
                     );
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."exercise/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+                    $url = api_get_path(WEB_CODE_PATH).
+                        "exercise/overview.php?cid={$course_info['real_id']}&sid=$session_id&exerciseId={$exercices['id']}";
 
                     if (true == $visible_return['value']) {
                         $exercices['title'] = Display::url(
@@ -5645,7 +5665,8 @@ class Tracking
                                 $weighting = $exercise_stat['max_score'];
                                 $exe_id = $exercise_stat['exe_id'];
 
-                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
+                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH).
+                                    'exercise/result.php?id='.$exe_id.'&cid='.$course_info['real_id'].'&show_headers=1&sid='.$session_id;
                                 $percentage_score_result = Display::url(
                                     ExerciseLib::show_score($score, $weighting),
                                     $latest_attempt_url
@@ -5831,7 +5852,8 @@ class Tracking
                         );
                     }
 
-                    $url = api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
+                    $url = api_get_path(WEB_CODE_PATH).
+                        "lp/lp_controller.php?cid={$course_info['real_id']}&sid=$session_id&lp_id=$lp_id&action=view";
                     $html .= '<tr class="row_even">';
 
                     if (in_array('lp', $columnHeadersKeys)) {
@@ -8441,8 +8463,8 @@ class TrackingCourseLog
             }
         }
 
-        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$courseCode.
-            '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
+        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cid='.$courseId.
+            '&course='.$course_code.'&origin=tracking_course&sid='.$session_id;
 
         $sortByFirstName = api_sort_by_first_name();
         Session::write('user_id_list', []);

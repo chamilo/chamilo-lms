@@ -4185,28 +4185,21 @@ EOT;
     {
         // check the default value of option
         $tabSelected = [$default => " selected='selected' "];
-        $res = "";
-        $res .= "<select name='$name' id='$name' onchange='".$onchange."' >";
-        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang(
-                'AllGroups'
-            )." --</option>";
-        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang(
-                'NotInAGroup'
-            )." -</option>";
-        $tabGroups = GroupManager::get_group_list();
+        $res = "<select name='$name' id='$name' onchange='".$onchange."' >";
+        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('AllGroups')." --</option>";
+        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('NotInAGroup')." -</option>";
+        $groups = GroupManager::get_group_list();
         $currentCatId = 0;
-        $countGroups = count($tabGroups);
+        $countGroups = count($groups);
         for ($i = 0; $i < $countGroups; $i++) {
-            $tabCategory = GroupManager::get_category_from_group(
-                $tabGroups[$i]['iid']
-            );
-            if ($tabCategory["id"] != $currentCatId) {
-                $res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
-                $currentCatId = $tabCategory["id"];
+            $category = GroupManager::get_category_from_group($groups[$i]['iid']);
+            if ($category['id'] != $currentCatId) {
+                $res .= "<option value='-1' disabled='disabled'>".$category['title']."</option>";
+                $currentCatId = $category['id'];
             }
-            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".
-                $tabGroups[$i]["id"]."'>".
-                $tabGroups[$i]["name"].
+            $res .= "<option ".$tabSelected[$groups[$i]['id']]."style='margin-left:40px' value='".
+                $groups[$i]["iid"]."'>".
+                $groups[$i]["name"].
                 "</option>";
         }
         $res .= "</select>";

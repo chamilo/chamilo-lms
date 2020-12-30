@@ -140,7 +140,7 @@ if (!api_is_anonymous()) {
     $all_groups = GroupManager::get_group_list();
     if (is_array($all_groups)) {
         foreach ($all_groups as $group) {
-            $all_groups[$group['id']] = $group;
+            $all_groups[$group['iid']] = $group;
         }
     }
 }

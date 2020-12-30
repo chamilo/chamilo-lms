@@ -8966,7 +8966,7 @@ class Exercise
                     $lp_blocked = null;
                     if (true == $exercise->exercise_was_added_in_lp) {
                         $lp_blocked = Display::div(
-                            get_lang('AddedToLPCannotBeAccessed'),
+                            get_lang('This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.'),
                             ['class' => 'lp_content_type_label']
                         );
                     }

@@ -155,7 +155,7 @@ if ('add' !== $action) {
     $groups = GroupManager::get_group_list();
     if (is_array($groups)) {
         foreach ($groups as $group) {
-            $groups[$group['id']] = $group;
+            $groups[$group['iid']] = $group;
         }
     }
 

@@ -329,7 +329,6 @@ $hideReports = api_get_configuration_value('hide_course_report_graph');
 $conditions = [];
 
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
-
 $class = new UserGroup();
 //$options['where'] = [' usergroup.course_id = ? ' => $courseId];
 //$classes = $class->getUserGroupInCourse($options);
@@ -355,8 +354,7 @@ if ($nbStudents > 0) {
     $select->addOptGroup($groupIdList, get_lang('Class'));
     $groupIdList = [];
     foreach ($groupList as $group) {
-        $groupIdList[] = ['text' => $group['name'], 'value' => 'group_'.$group['id']];
-        //$groupIdList['group_'.$group['id']] = $group['name'];
+        $groupIdList[] = ['text' => $group['name'], 'value' => 'group_'.$group['iid']];
     }
     $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));

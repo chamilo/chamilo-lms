@@ -239,19 +239,19 @@ if (!empty($groupId)) {
     $filterByUsers = $student_ids;
 }
 
-$count_number_of_forums_by_course = Tracking:: count_number_of_forums_by_course(
+$count_number_of_forums_by_course = Tracking::count_number_of_forums_by_course(
     $course_code,
     $session_id,
     $groupId
 );
 
-$count_number_of_threads_by_course = Tracking:: count_number_of_threads_by_course(
+$count_number_of_threads_by_course = Tracking::count_number_of_threads_by_course(
     $course_code,
     $session_id,
     $groupId
 );
 
-$count_number_of_posts_by_course = Tracking:: count_number_of_posts_by_course(
+$count_number_of_posts_by_course = Tracking::count_number_of_posts_by_course(
     $course_code,
     $session_id,
     $groupId

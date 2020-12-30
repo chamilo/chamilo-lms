@@ -22,9 +22,8 @@ if (isset($_POST['display']) && $display == null) {
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script
-type="text/javascript"
 src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
-<script type="text/javascript">
+<script>
 // show hide a student based on BT#17648
 function showHideStudent(el){
     if($("#"+el).hasClass("hidden")){

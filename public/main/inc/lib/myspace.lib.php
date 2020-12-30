@@ -217,7 +217,7 @@ class MySpace
                 FROM '.$table.'
                 WHERE
                     user_id = '.$userId.' AND
-                    c_id = '.$courseId.' 
+                    c_id = '.$courseId.'
                     '.$sessionCondition.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
@@ -343,7 +343,8 @@ class MySpace
                 'code' => $courseInfo['code'],
                 'real_id' => $courseInfo['real_id'],
                 'title' => $courseInfo['title'],
-                'category' => $courseInfo['categoryName'],
+                'category' => '',
+                //'category' => $courseInfo['categoryName'], // @todo show categories instead of 1 category
                 'image_small' => $courseInfo['course_image'],
                 'image_large' => $courseInfo['course_image_large'],
                 'time_spent' => api_time_to_hms(Tracking::get_time_spent_on_the_course($user_id, $courseId)),
@@ -2310,8 +2311,8 @@ class MySpace
 
         $sql = "SELECT score, max_score
                 FROM $table
-                WHERE 
-                    c_id = $courseId AND 
+                WHERE
+                    c_id = $courseId AND
                     exe_user_id = $user_id";
 
         $session_id = (int) $session_id;
@@ -3219,7 +3220,7 @@ class MySpace
             [
                 'placeholder' => get_lang('All'),
                 'url_function' => "
-                    function () {                    
+                    function () {
                         var params = $.param({
                             a: 'search_user_by_course',
                             session_id: $('#access_overview_session_id').val(),
@@ -3433,9 +3434,9 @@ class MySpace
             $start_date = Database::escape_string($start_date);
             $end_date = Database::escape_string($end_date);
             $sessionCondition = api_get_session_condition($sessionId);
-            $sql = "SELECT 
-                        login_course_date, 
-                        logout_course_date, 
+            $sql = "SELECT
+                        login_course_date,
+                        logout_course_date,
                         TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date) duration,
                         user_ip
                     FROM $table
@@ -3499,8 +3500,8 @@ class MySpace
                 FROM $table
                 WHERE
                     user_id = $user_id AND
-                    c_id = $courseId $stringStartDate $stringEndDate 
-                    $sessionCondition                    
+                    c_id = $courseId $stringStartDate $stringEndDate
+                    $sessionCondition
                 ORDER BY login_course_date ASC";
 
             $rs = Database::query($sql);

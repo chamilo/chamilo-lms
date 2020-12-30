@@ -386,7 +386,7 @@ function store_addcategory()
             ];
             $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_CATEGORY), $params);
             if ($id) {
-                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid 
+                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid
                         WHERE iid = $id";
                 Database::query($sql);
             }
@@ -685,14 +685,14 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     */
     $allowGroups = api_get_setting('dropbox_allow_group');
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
-        && 'true' == $allowGroups || 'true' == $allowStudentToStudent
+        && 'true' == $allowGroups || 'true' === $allowStudentToStudent
     ) {
         $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info);
 
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {
                 if ($current_group['number_of_members'] > 0) {
-                    $options['group_'.$current_group['id']] = 'G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users');
+                    $options['group_'.$current_group['iid']] = 'G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users');
                 }
             }
         }
@@ -1217,13 +1217,13 @@ function user_can_download_file($id, $user_id)
     $id = (int) $id;
     $user_id = (int) $user_id;
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
@@ -1239,13 +1239,13 @@ function check_if_file_exist($id)
 {
     $id = (int) $id;
     $course_id = api_get_course_int_id();
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
@@ -1449,7 +1449,7 @@ function get_total_number_feedback()
     $course_id = api_get_course_int_id();
     $sql = "SELECT COUNT(feedback_id) AS total, file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
-            WHERE c_id = $course_id 
+            WHERE c_id = $course_id
             GROUP BY file_id";
     $result = Database::query($sql);
     $return = [];

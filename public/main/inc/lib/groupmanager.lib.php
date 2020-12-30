@@ -1250,12 +1250,12 @@ class GroupManager
         $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
         $groupTable = Database::get_course_table(TABLE_GROUP);
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
 
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         } else {
-            $courseId = intval($courseId);
+            $courseId = (int) $courseId;
         }
 
         $select = ' SELECT u.id, firstname, lastname ';
@@ -1265,12 +1265,12 @@ class GroupManager
         $sql = "$select
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
-                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
                 INNER JOIN $user_table u
                 ON (u.id = gu.user_id)
                 WHERE
                     gu.c_id = $courseId AND
-                    g.id = $group_id";
+                    g.iid = $group_id";
 
         if (!empty($column) && !empty($direction)) {
             $column = Database::escape_string($column, null, false);
@@ -1386,7 +1386,7 @@ class GroupManager
             ->createQuery("
                 SELECT u.id FROM ChamiloCoreBundle:User u
                 INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
-                    WITH u.id = gu.user
+                WITH u.id = gu.user
                 INNER JOIN ChamiloCourseBundle:CGroup g
                 WITH gu.group = g.iid
                 WHERE g.iid = :group
@@ -2840,7 +2840,6 @@ class GroupManager
         }
 
         $groups = self::get_group_list();
-
         foreach ($groups as $groupInfo) {
             $groupId = $groupInfo['iid'];
             $categoryTitle = null;
@@ -3020,30 +3019,28 @@ class GroupManager
                 } else {
                     $groups = self::get_group_list($category['id']);
                 }
-
-
                 $content .= '<ul>';
                 if (!empty($groups)) {
                     foreach ($groups as $group) {
                         $content .= self::groupOverview($group, $url);
                     }
-                            }
-                            $content .= '</ul>';
+                }
+                $content .= '</ul>';
             }
-                        }
+        }
 
         // Check groups with no categories.
         $groups = self::get_group_list(null, api_get_course_info(), null, api_get_session_id(), false, true);
         if (!empty($groups)) {
             $content .= '<h2>'.get_lang('NoCategorySelected').'</h2>';
-                            $content .= '<ul>';
+            $content .= '<ul>';
             foreach ($groups as $group) {
                 if (!empty($group['category_id'])) {
                     continue;
-                            }
-                $content .= self::groupOverview($group, $url);
                 }
-                $content .= '</ul>';
+                $content .= self::groupOverview($group, $url);
+            }
+            $content .= '</ul>';
         }
 
         return $content;

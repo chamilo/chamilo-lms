@@ -53,7 +53,7 @@ class Tracking
             return null;
         }
         $courseInfo = api_get_course_info_by_id($course_id);
-        if ('count' == $type) {
+        if ('count' === $type) {
             return GroupManager::get_group_list(null, $courseInfo, null, $sessionId, true);
         }
 
@@ -61,7 +61,7 @@ class Tracking
         $parsedResult = [];
         if (!empty($groupList)) {
             foreach ($groupList as $group) {
-                $users = GroupManager::get_users($group['id'], true, null, null, false, $courseInfo['real_id']);
+                $users = GroupManager::get_users($group['iid'], true, null, null, false, $courseInfo['real_id']);
                 $time = 0;
                 $avg_student_score = 0;
                 $avg_student_progress = 0;

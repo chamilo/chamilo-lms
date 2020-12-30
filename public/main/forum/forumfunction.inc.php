@@ -418,7 +418,7 @@ function forumForm(CForumForum $forum = null, $lp_id)
     $groups = GroupManager::get_group_list();
     $groups_titles[0] = get_lang('Not a group forum');
     foreach ($groups as $key => $value) {
-        $groups_titles[$value['id']] = $value['name'];
+        $groups_titles[$value['iid']] = $value['name'];
     }
     $form->addElement('select', 'group_forum', get_lang('For Group'), $groups_titles);
 

@@ -548,7 +548,7 @@ switch ($action) {
             $groupList = GroupManager::get_group_list(null, null, 1);
             $groupIdList = ['--'];
             foreach ($groupList as $group) {
-                $groupIdList[$group['id']] = $group['name'];
+                $groupIdList[$group['iid']] = $group['name'];
             }
 
             // calendar add form
@@ -717,7 +717,7 @@ switch ($action) {
         $groupList = GroupManager::get_group_list();
         $groupIdList = ['--'];
         foreach ($groupList as $group) {
-            $groupIdList[$group['id']] = $group['name'];
+            $groupIdList[$group['iid']] = $group['name'];
         }
 
         $content .= Display::page_subheader(get_lang('Calendar list of attendances'));

@@ -492,7 +492,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function viewResourceAction(Request $request, RouterInterface $router): Response
     {
         $id = $request->get('id');
-        $em = $this->getDoctrine();
 
         /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
@@ -530,7 +529,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
-    public function viewAction(Request $request, RouterInterface $router): Response
+    public function viewAction(Request $request): Response
     {
         $id = $request->get('id');
         $filter = $request->get('filter'); // See filters definitions in /config/services.yml.

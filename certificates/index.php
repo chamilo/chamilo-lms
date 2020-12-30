@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Show specified user certificate.
- *
- * @package chamilo.certificate
  */
 require_once '../main/inc/global.inc.php';
 
@@ -72,6 +71,11 @@ switch ($action) {
             );
 
             $pdf = new PDF($pageFormat, $pdfParams['orientation'], $pdfParams);
+
+            if (api_get_configuration_value('add_certificate_pdf_footer')) {
+                $pdf->setCertificateFooter();
+            }
+
             $pdf->html_to_pdf(
                 $certificatePathList,
                 $pdfName,

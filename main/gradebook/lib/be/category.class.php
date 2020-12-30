@@ -2268,10 +2268,8 @@ class Category implements GradebookItem
      * @param int   $catId
      * @param array $userList
      */
-    public static function exportAllCertificates(
-        $catId,
-        $userList = []
-    ) {
+    public static function exportAllCertificates($catId, $userList = [])
+    {
         $orientation = api_get_configuration_value('certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
@@ -2285,7 +2283,9 @@ class Category implements GradebookItem
         $params['bottom'] = 0;
         $page_format = $params['orientation'] === 'landscape' ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
-
+        if (api_get_configuration_value('add_certificate_pdf_footer')) {
+            $pdf->setCertificateFooter();
+        }
         $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);
         $certificate_path_list = [];
 

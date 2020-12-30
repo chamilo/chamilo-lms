@@ -1810,6 +1810,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Allow anon users to send emails to the platform admin.
 // $_configuration['allow_email_editor_for_anonymous'] = true;
 
+// Add certificate footer. Add your template main/template/default/export/pdf_certificate_footer.tpl
+// $_configuration['add_certificate_pdf_footer'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

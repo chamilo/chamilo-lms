@@ -259,6 +259,7 @@ class AppPlugin
             'positioning',
             'questionoptionsevaluation',
             'redirection',
+            'remedial_course',
             'reports',
             'resubscription',
             'rss',

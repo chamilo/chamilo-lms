@@ -10959,8 +10959,6 @@ class Exercise
                 }
             }
         }
-
-        $total = ;
         $objExercise = new Exercise();
         $objExercise->read($bestAttempt['exe_id']);
         $percentSuccess = (float) $objExercise->selectPassPercentage();

@@ -93,6 +93,7 @@ class RemedialCoursePlugin extends Plugin
         $schedule = new ExtraField('exercise');
         $data = $this->getDataRemedialField();
         $data['default_value'] = 1;
+        $data['visible_to_self'] = 1;
         if (isset($data['id'])) {
             $schedule->update($data);
         } else {
@@ -109,6 +110,7 @@ class RemedialCoursePlugin extends Plugin
         $schedule = new ExtraField('exercise');
         $data = $this->getDataAdvanceRemedialField();
         $data['default_value'] = 1;
+        $data['visible_to_self'] = 1;
         if (isset($data['id'])) {
             $schedule->update($data);
         } else {
@@ -170,6 +172,7 @@ class RemedialCoursePlugin extends Plugin
         $schedule = new ExtraField('exercise');
         $data = $this->getDataRemedialField(false);
         $data['default_value'] = 0;
+        $data['visible_to_self'] = 0;
         if (isset($data['id'])) {
             $schedule->update($data);
         } else {
@@ -180,6 +183,7 @@ class RemedialCoursePlugin extends Plugin
         $schedule = new ExtraField('exercise');
         $data = $this->getDataAdvanceRemedialField(false);
         $data['default_value'] = 0;
+        $data['visible_to_self'] = 0;
         if (isset($data['id'])) {
             $schedule->update($data);
         } else {

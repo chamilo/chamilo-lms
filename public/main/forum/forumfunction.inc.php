@@ -3233,7 +3233,7 @@ function showQualify($option, $user_id, $thread_id)
             break;
         case 2:
             $sql = "SELECT thread_qualify_max FROM $table_threads
-                    WHERE c_id = $course_id AND thread_id=".$thread_id;
+                    WHERE c_id = $course_id AND iid=".$thread_id;
 
             break;
     }

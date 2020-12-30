@@ -2930,7 +2930,11 @@ class DocumentManager
                     $folder = '';
                 }
 
-                $link .= '<a data_id="'.$node['id'].'" data_type="document" class="moved ui-sortable-handle link_with_id">';
+                $link .= '<a
+                    data_id="'.$node['id'].'"
+                    data_type="document"
+                    class="moved ui-sortable-handle link_with_id"
+                    >';
                 $link .= $folder.'&nbsp;'.addslashes($node['title']);
                 $link .= '</a>';
 

@@ -80,8 +80,8 @@ switch ($action) {
                     break;
             }
 
-            $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
-            $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
+            $parentId = $_REQUEST['parent_id'] ?? '';
+            $previousId = $_REQUEST['previous_id'] ?? '';
 
             $itemId = $learningPath->add_item(
                 $parentId,
@@ -92,11 +92,7 @@ switch ($action) {
                 null
             );
 
-            /** @var learnpath $learningPath */
-            $learningPath = Session::read('oLP');
-            if ($learningPath) {
-                echo $learningPath->returnLpItemList(null);
-            }
+            echo $learningPath->returnLpItemList(null);
         }
         break;
     case 'update_lp_item_order':

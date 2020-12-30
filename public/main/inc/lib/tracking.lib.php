@@ -840,7 +840,7 @@ class Tracking
                                             question_id, marks, ponderation
                                         FROM $tbl_stats_attempts as at
                                         INNER JOIN $tbl_quiz_questions as q
-                                        ON (q.id = at.question_id AND q.c_id = $course_id)
+                                        ON (q.iid = at.question_id AND q.c_id = $course_id)
                                         WHERE exe_id ='$id_last_attempt'
                                     ) as t";
 
@@ -2878,7 +2878,7 @@ class Tracking
 
                         // Getting the most recent attempt
                         $sql = "SELECT
-                                    lp_iv.id as lp_item_view_id,
+                                    lp_iv.iid as lp_item_view_id,
                                     lp_iv.score as score,
                                     lp_i.max_score,
                                     lp_iv.max_score as max_score_item_view,
@@ -2909,13 +2909,13 @@ class Tracking
                     // For the currently analysed view, get the score and
                     // max_score of each item if it is a sco or a TOOL_QUIZ
                     $sql = "SELECT
-                                lp_iv.id as lp_item_view_id,
+                                lp_iv.iid as lp_item_view_id,
                                 lp_iv.score as score,
                                 lp_i.max_score,
                                 lp_iv.max_score as max_score_item_view,
                                 lp_i.path,
                                 lp_i.item_type,
-                                lp_i.id as iid
+                                lp_i.iid
                               FROM $lp_item_view_table as lp_iv
                               INNER JOIN $lp_item_table as lp_i
                               ON lp_i.iid = lp_iv.lp_item_id AND
@@ -3025,7 +3025,7 @@ class Tracking
                                                     ponderation
                                                 FROM $tbl_stats_attempts AS at
                                                 INNER JOIN $tbl_quiz_questions AS q
-                                                ON (q.id = at.question_id AND q.c_id = q.c_id)
+                                                ON (q.iid = at.question_id AND q.c_id = q.c_id)
                                                 WHERE
                                                     exe_id ='$id_last_attempt' AND
                                                     q.c_id = $course_id
@@ -4760,7 +4760,8 @@ class Tracking
         } else {
             $sql = "SELECT c.id, c.code, title
                     FROM $tbl_course_user u
-                    INNER JOIN $tbl_course c ON (c_id = c.id)
+                    INNER JOIN $tbl_course c
+                    ON (c_id = c.id)
                     WHERE
                         u.user_id= $user_id AND
                         relation_type <> ".COURSE_RELATION_TYPE_RRHH."
@@ -6451,7 +6452,7 @@ class Tracking
 
             if (!empty($exerciseId)) {
                 $exerciseId = intval($exerciseId);
-                $where .= ' AND q.id = %d ';
+                $where .= ' AND q.iid = %d ';
                 $whereParams[] = $exerciseId;
             }
 
@@ -6493,19 +6494,19 @@ class Tracking
                 ta.answer as answer_id,
                 ta.tms as time,
                 te.exe_exo_id as quiz_id,
-                CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
+                CONCAT ('c', q.c_id, '_e', q.iid) as exercise_id,
                 q.title as quiz_title,
                 qq.description as description
                 FROM $ttrack_exercises te
                 INNER JOIN $ttrack_attempt ta
                 ON ta.exe_id = te.exe_id
                 INNER JOIN $tquiz q
-                ON q.id = te.exe_exo_id
+                ON q.iid = te.exe_exo_id
                 INNER JOIN $tquiz_rel_question rq
-                ON rq.exercice_id = q.id AND rq.c_id = q.c_id
+                ON rq.exercice_id = q.iid AND rq.c_id = q.c_id
                 INNER JOIN $tquiz_question qq
                 ON
-                    qq.id = rq.question_id AND
+                    qq.iid = rq.question_id AND
                     qq.c_id = rq.c_id AND
                     qq.position = rq.question_order AND
                     ta.question_id = rq.question_id
@@ -6531,14 +6532,14 @@ class Tracking
                 }
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
-            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto,
-                            tqa.answer, tqa.correct, tq.position, tqa.id_auto as answer_id
+            $sqlQuestions = "SELECT tq.c_id, tq.iid as question_id, tq.question, tqa.iid,
+                            tqa.answer, tqa.correct, tq.position, tqa.iid as answer_id
                             FROM $tquiz_question tq, $tquiz_answer tqa
                             WHERE
-                                tqa.question_id = tq.id AND
+                                tqa.question_id = tq.iid AND
                                 tqa.c_id = tq.c_id AND
                                 tq.c_id = $courseIdx AND
-                                tq.id IN (".implode(',', $questionIds).")";
+                                tq.iid IN (".implode(',', $questionIds).")";
 
             $resQuestions = Database::query($sqlQuestions);
             $answer = [];

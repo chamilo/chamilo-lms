@@ -236,9 +236,7 @@ $htmlHeadXtra[] = '
                 var id = item.attr("data_id");
                 var type = item.attr("data_type");
                 var title = item.attr("title");
-
                 processReceive = true;
-
                 if (ui.item.parent()[0]) {
                     var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");
@@ -253,6 +251,7 @@ $htmlHeadXtra[] = '
                             "type": type,
                             "title" : title
                         };
+                        console.log(params);
 
                         $.ajax({
                             type: "GET",
@@ -631,7 +630,7 @@ switch ($action) {
                     Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 
                     $url = api_get_self().
-                        '?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
+                        '?action=add_audio&lp_id='.intval($oLP->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
                     header('Location: '.$url);
                     exit;
                 }
@@ -719,7 +718,7 @@ switch ($action) {
             if (!$lp_found) {
                 require 'lp_list.php';
             } else {
-                $_SESSION['oLP']->set_autolaunch($_GET['lp_id'], $_GET['status']);
+                $oLP->set_autolaunch($_GET['lp_id'], $_GET['status']);
                 require 'lp_list.php';
                 exit;
             }
@@ -733,7 +732,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }
@@ -775,7 +774,7 @@ switch ($action) {
             $extraFieldValues->saveFieldValues($_POST);
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }
@@ -794,12 +793,12 @@ switch ($action) {
         } else {
             if (isset($_POST['submit_button'])) {
                 // Updating the lp.modified_on
-                $_SESSION['oLP']->set_modified_on();
+                $oLP->set_modified_on();
                 Session::write('refresh', 1);
                 $min = isset($_POST['min_'.$_POST['prerequisites']]) ? $_POST['min_'.$_POST['prerequisites']] : '';
                 $max = isset($_POST['max_'.$_POST['prerequisites']]) ? $_POST['max_'.$_POST['prerequisites']] : '';
 
-                $editPrerequisite = $_SESSION['oLP']->edit_item_prereq(
+                $editPrerequisite = $oLP->edit_item_prereq(
                     $_GET['id'],
                     $_POST['prerequisites'],
                     $min,
@@ -807,7 +806,7 @@ switch ($action) {
                 );
 
                 Display::addFlash(Display::return_message(get_lang('Update successful')));
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             } else {
@@ -826,15 +825,15 @@ switch ($action) {
             Session::write('refresh', 1);
             if (isset($_POST['submit_button'])) {
                 //Updating the lp.modified_on
-                $_SESSION['oLP']->set_modified_on();
-                $_SESSION['oLP']->edit_item(
+                $oLP->set_modified_on();
+                $oLP->edit_item(
                     $_GET['id'],
                     $_POST['parent'],
                     $_POST['previous'],
                     $post_title,
                     $_POST['description']
                 );
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             }
@@ -844,7 +843,7 @@ switch ($action) {
                 // Avoids weird behaviours see CT#967.
                 $check = Security::check_token('get');
                 if ($check) {
-                    $_SESSION['oLP']->move_item($_GET['id'], $_GET['direction']);
+                    $oLP->move_item($_GET['id'], $_GET['direction']);
                 }
                 Security::clear_token();
                 require 'lp_admin_view.php';
@@ -885,7 +884,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->copy();
+            $oLP->copy();
         }
         require 'lp_list.php';
         break;
@@ -900,7 +899,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->scormExport();
+            $oLP->scormExport();
             exit();
         }
         break;
@@ -912,7 +911,7 @@ switch ($action) {
 
         // Teachers can export to PDF
         if (!$is_allowed_to_edit) {
-            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->getEntity(), api_get_user_id(), $courseInfo)) {
+            if (!learnpath::is_lp_visible_for_student($oLP->getEntity(), api_get_user_id(), $courseInfo)) {
                 api_not_allowed();
             }
         }
@@ -920,7 +919,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);
+            $result = $oLP->scorm_export_to_pdf($_GET['lp_id']);
             if (!$result) {
                 require 'lp_list.php';
             }
@@ -933,7 +932,7 @@ switch ($action) {
             if (!$lp_found) {
                 require 'lp_list.php';
             } else {
-                $result = $_SESSION['oLP']->exportToCourseBuildFormat($_GET['lp_id']);
+                $result = $oLP->exportToCourseBuildFormat($_GET['lp_id']);
                 if (!$result) {
                     require 'lp_list.php';
                 }
@@ -950,7 +949,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $_SESSION['oLP']->delete(null, $_GET['lp_id'], 'remove');
+            $oLP->delete(null, $_GET['lp_id'], 'remove');
             Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
@@ -1071,7 +1070,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             if (!empty($_REQUEST['id'])) {
-                $_SESSION['oLP']->delete_item($_REQUEST['id']);
+                $oLP->delete_item($_REQUEST['id']);
             }
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).'&'.api_get_cidreq();
             header('Location: '.$url);
@@ -1082,7 +1081,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->restart();
+            $oLP->restart();
             require 'lp_view.php';
         }
         break;
@@ -1090,7 +1089,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->last();
+            $oLP->last();
             require 'lp_view.php';
         }
         break;
@@ -1098,7 +1097,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->first();
+            $oLP->first();
             require 'lp_view.php';
         }
         break;
@@ -1106,7 +1105,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->next();
+            $oLP->next();
             require 'lp_view.php';
         }
         break;
@@ -1114,7 +1113,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->previous();
+            $oLP->previous();
             require 'lp_view.php';
         }
         break;
@@ -1122,9 +1121,9 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->save_last();
-            $_SESSION['oLP']->set_current_item($_GET['item_id']);
-            $_SESSION['oLP']->start_current_item();
+            $oLP->save_last();
+            $oLP->set_current_item($_GET['item_id']);
+            $oLP->start_current_item();
             require 'lp_content.php';
         }
         break;
@@ -1133,7 +1132,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             if (!empty($_REQUEST['item_id'])) {
-                $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
+                $oLP->set_current_item($_REQUEST['item_id']);
             }
             require 'lp_view.php';
         }
@@ -1142,7 +1141,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->save_item();
+            $oLP->save_item();
             require 'lp_save.php';
         }
         break;
@@ -1150,8 +1149,8 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->save_current();
-            $_SESSION['oLP']->save_last();
+            $oLP->save_current();
+            $oLP->save_last();
 
             Display::display_reduced_header();
             $output = require 'lp_stats.php';
@@ -1162,7 +1161,7 @@ switch ($action) {
     case 'list':
         if ($lp_found) {
             Session::write('refresh', 1);
-            $_SESSION['oLP']->save_last();
+            $oLP->save_last();
         }
         require 'lp_list.php';
         break;
@@ -1170,13 +1169,13 @@ switch ($action) {
         // Switch between fullscreen and embedded mode.
         $mode = $_REQUEST['mode'];
         if ('fullscreen' === $mode) {
-            $_SESSION['oLP']->mode = 'fullscreen';
+            $oLP->mode = 'fullscreen';
         } elseif ('embedded' === $mode) {
-            $_SESSION['oLP']->mode = 'embedded';
+            $oLP->mode = 'embedded';
         } elseif ('embedframe' === $mode) {
-            $_SESSION['oLP']->mode = 'embedframe';
+            $oLP->mode = 'embedframe';
         } elseif ('impress' === $mode) {
-            $_SESSION['oLP']->mode = 'impress';
+            $oLP->mode = 'impress';
         }
         require 'lp_view.php';
         break;
@@ -1184,7 +1183,7 @@ switch ($action) {
         if ($lp_found) {
             if (Security::check_token('get')) {
                 Session::write('refresh', 1);
-                $_SESSION['oLP']->update_default_view_mode();
+                $oLP->update_default_view_mode();
             }
         }
 
@@ -1195,7 +1194,7 @@ switch ($action) {
     case 'switch_force_commit':
         if ($lp_found) {
             Session::write('refresh', 1);
-            $_SESSION['oLP']->update_default_scorm_commit();
+            $oLP->update_default_scorm_commit();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
         header('Location: '.$listUrl);
@@ -1205,7 +1204,7 @@ switch ($action) {
     case 'switch_attempt_mode':
         if ($lp_found) {
             Session::write('refresh', 1);
-            $_SESSION['oLP']->switch_attempt_mode();
+            $oLP->switch_attempt_mode();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
         header('Location: '.$listUrl);
@@ -1215,7 +1214,7 @@ switch ($action) {
     case 'switch_scorm_debug':
         if ($lp_found) {
             Session::write('refresh', 1);
-            $_SESSION['oLP']->update_scorm_debug();
+            $oLP->update_scorm_debug();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
         header('Location: '.$listUrl);
@@ -1226,8 +1225,8 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $_SESSION['oLP']->save_current();
-            $_SESSION['oLP']->save_last();
+            $oLP->save_current();
+            $oLP->save_last();
             $url = $courseInfo['course_public_url'].'?sid='.api_get_session_id();
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
@@ -1256,21 +1255,21 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             if (!empty($_REQUEST['item_id'])) {
-                $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
+                $oLP->set_current_item($_REQUEST['item_id']);
             }
             require 'lp_impress.php';
         }
         break;
     case 'set_previous_step_as_prerequisite':
-        $_SESSION['oLP']->set_previous_step_as_prerequisite_for_all_items();
-        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
+        $oLP->set_previous_step_as_prerequisite_for_all_items();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
         header('Location: '.$url);
         exit;
         break;
     case 'clear_prerequisites':
-        $_SESSION['oLP']->clear_prerequisites();
-        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
+        $oLP->clear_prerequisites();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
         header('Location: '.$url);
         exit;
@@ -1286,7 +1285,7 @@ switch ($action) {
         }
 
         Session::write('refresh', 1);
-        $_SESSION['oLP']->set_seriousgame_mode();
+        $oLP->set_seriousgame_mode();
         require 'lp_list.php';
         break;
     case 'create_forum':
@@ -1381,7 +1380,7 @@ switch ($action) {
         header('Location:'.api_get_self().'?'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',
-            'lp_id' => $_SESSION['oLP']->lp_id,
+            'lp_id' => $oLP->lp_id,
         ]));
         exit;
         break;
@@ -1398,7 +1397,7 @@ switch ($action) {
             break;
         }
 
-        $_SESSION['oLP']->getFinalItemForm();
+        $oLP->getFinalItemForm();
         $redirectTo = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',
@@ -1410,7 +1409,7 @@ switch ($action) {
         break;
 }
 
-if (!empty($_SESSION['oLP'])) {
+if (!empty($oLP)) {
     Session::write('lpobject', serialize($oLP));
     if ($debug > 0) {
         error_log('lpobject is serialized in session', 0);

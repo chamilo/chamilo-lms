@@ -423,7 +423,7 @@ class learnpath
     public function add_item(
         $parent,
         $previous,
-        $type = 'dir',
+        $type,
         $id,
         $title,
         $description,
@@ -431,6 +431,7 @@ class learnpath
         $max_time_allowed = 0,
         $userId = 0
     ) {
+        $type = empty($type) ? 'dir' : $type;
         $course_id = $this->course_info['real_id'];
         if (empty($course_id)) {
             // Sometimes Oogie doesn't catch the course info but sets $this->cc
@@ -448,11 +449,12 @@ class learnpath
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
+        $lpId = $this->get_id();
         $sql = "SELECT COUNT(iid) AS num
                 FROM $tbl_lp_item
                 WHERE
                     c_id = $course_id AND
-                    lp_id = ".$this->get_id()." AND
+                    lp_id = $lpId AND
                     parent_item_id = $parent ";
 
         $res_count = Database::query($sql);
@@ -468,7 +470,7 @@ class learnpath
                         FROM $tbl_lp_item
                         WHERE
                             c_id = $course_id AND
-                            lp_id = ".$this->get_id()." AND
+                            lp_id = $lpId AND
                             parent_item_id = $parent AND
                             previous_item_id = 0 OR
                             previous_item_id = $parent ";
@@ -483,7 +485,7 @@ class learnpath
 						FROM $tbl_lp_item
                         WHERE
                             c_id = $course_id AND
-                            lp_id = ".$this->get_id()." AND
+                            lp_id = $lpId AND
                             iid = $previous";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
@@ -496,18 +498,17 @@ class learnpath
         }
 
         $id = (int) $id;
-        $typeCleaned = Database::escape_string($type);
         $max_score = 100;
         if ('quiz' === $type && $id) {
             $sql = 'SELECT SUM(ponderation)
-                    FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
+                    FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as q
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON
-                        quiz_question.id = quiz_rel_question.question_id AND
-                        quiz_question.c_id = quiz_rel_question.c_id
+                        q.iid = quiz_rel_question.question_id AND
+                        q.c_id = quiz_rel_question.c_id
                     WHERE
                         quiz_rel_question.exercice_id = '.$id." AND
-                        quiz_question.c_id = $course_id AND
+                        q.c_id = $course_id AND
                         quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database::result($rsQuiz, 0, 0);
@@ -517,12 +518,13 @@ class learnpath
             $exercise->read($id);
             $exercise->disable();
             $exercise->save();
+            $title = $exercise->get_formated_title();
         }
 
         $params = [
             'c_id' => $course_id,
-            'lp_id' => $this->get_id(),
-            'item_type' => $typeCleaned,
+            'lp_id' => $lpId,
+            'item_type' => $type,
             'ref' => '',
             'title' => $title,
             'description' => $description,
@@ -564,7 +566,7 @@ class learnpath
                         SET display_order = display_order + 1
                     WHERE
                         c_id = $course_id AND
-                        lp_id = ".$this->get_id()." AND
+                        lp_id = $lpId AND
                         iid <> $new_item_id AND
                         parent_item_id = $parent AND
                         display_order > $display_order";
@@ -578,7 +580,7 @@ class learnpath
 
             $sql = "UPDATE $tbl_lp_item
                     SET previous_item_id = ".$this->getLastInFirstLevel()."
-                    WHERE c_id = $course_id AND lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
+                    WHERE c_id = $course_id AND lp_id = $lpId AND item_type = '".TOOL_LP_FINAL_ITEM."'";
             Database::query($sql);
 
             // Upload audio.
@@ -8056,7 +8058,8 @@ class learnpath
         $return .= '<ul class="lp_resource">';
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_exercice.png');
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
+        $return .= '<a
+            href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
             get_lang('New test').'</a>';
         $return .= '</li>';
 
@@ -8078,19 +8081,12 @@ class learnpath
             $title = strip_tags(api_html_entity_decode($row_quiz['title']));
 
             $visibility = $exercise->isVisible($courseEntity, $sessionEntity);
-            /*$visibility = api_get_item_visibility(
-                ['real_id' => $course_id],
-                TOOL_QUIZ,
-                $row_quiz['iid'],
-                $session_id
-            );*/
-
             $link = Display::url(
                 $previewIcon,
                 $exerciseUrl.'&exerciseId='.$exerciseId,
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" data_id="'.$exerciseId.'" data_type="quiz" title="'.$title.'" >';
+            $return .= '<li class="lp_resource_element" title="'.$title.'">';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = api_get_session_image(
@@ -8099,9 +8095,12 @@ class learnpath
             );
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
-                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$exerciseId.'&lp_id='.$this->lp_id,
+                api_get_self().'?'.
+                    api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$exerciseId.'&lp_id='.$this->lp_id,
                 [
-                    'class' => false === $visibility ? 'moved text-muted' : 'moved',
+                    'class' => false === $visibility ? 'moved text-muted ' : 'moved link_with_id',
+                    'data_type' => 'quiz',
+                    'data_id' => $exerciseId
                 ]
             );
             $return .= '</li>';
@@ -8189,11 +8188,13 @@ class learnpath
         <ul class="lp_resource">
             <li class="lp_resource_element">
                 '.Display::return_icon('linksnew.gif').'
-                <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('Add a link').'">'.
+                <a
+                href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
+                title="'.get_lang('Add a link').'">'.
                 get_lang('Add a link').'
                 </a>
             </li>';
-
+        $linkIcon = Display::return_icon('links.png', '', [], ICON_SIZE_TINY);
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
             /** @var CLink $link */
@@ -8209,17 +8210,24 @@ class learnpath
                 if ($link->isVisible($course, $session)) {
                     //$sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
                     $sessionStar = '';
+                    $url = $selfUrl.'?'.$courseIdReq.'&action=add_item&type='.TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id;
+                    $link = Display::url(
+                        Security::remove_XSS($title).$sessionStar.$linkUrl,
+                        $url,
+                        [
+                            'class' => 'moved link_with_id',
+                            'data_id' => $key,
+                            'data_type' => TOOL_LINK,
+                            'title' => $title,
+                        ]
+                    );
                     $linkNodes .=
-                        '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
-                        <a class="moved" href="#">'.
+                        '<li class="lp_resource_element">
+                         <a class="moved" href="#">'.
                             $moveEverywhereIcon.
                         '</a>
-                        '.Display::return_icon('links.png', '', [], ICON_SIZE_TINY).'
-                        <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
-                        TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).$sessionStar.$linkUrl.
-                        '</a>
-                    </li>';
+                        '.$linkIcon.$link.'
+                        </li>';
                 }
             }
             $linksHtmlCode .=
@@ -8255,6 +8263,7 @@ class learnpath
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
+            $icon = Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
             foreach ($works as $work) {
                 $link = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
@@ -8262,7 +8271,7 @@ class learnpath
                     ['target' => '_blank']
                 );
 
-                $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="'.TOOL_STUDENTPUBLICATION.'" title="'.Security::remove_XSS(cut(strip_tags($work['title']), 80)).'">';
+                $return .= '<li class="lp_resource_element">';
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon(
                     'move_everywhere.png',
@@ -8272,10 +8281,17 @@ class learnpath
                 );
                 $return .= '</a> ';
 
-                $return .= Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
-                $return .= ' <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id.'">'.
-                    Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
-                </a>';
+                $return .= $icon;
+                $return .= Display::url(
+                    Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link,
+                    api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id,
+                    [
+                        'class' => 'moved link_with_id',
+                        'data_id' => $work['iid'],
+                        'data_type' => TOOL_STUDENTPUBLICATION,
+                        'title' => Security::remove_XSS(cut(strip_tags($work['title']), 80)),
+                    ]
+                );
 
                 $return .= '</li>';
             }
@@ -8354,7 +8370,7 @@ class learnpath
                 }
             }
         </script>';
-
+        $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
         foreach ($a_forums as $forum) {
             $forumId = $forum->getIid();
             $title = Security::remove_XSS($forum->getForumTitle());
@@ -8364,17 +8380,31 @@ class learnpath
                 ['target' => '_blank']
             );
 
-            $return .= '<li class="lp_resource_element" data_id="'.$forumId.'" data_type="'.TOOL_FORUM.'" title="'.$title.'" >';
+            $return .= '<li class="lp_resource_element">';
             $return .= '<a class="moved" href="#">';
-            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
+            $return .= $moveIcon;
             $return .= ' </a>';
             $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
-            $return .= '<a onclick="javascript:toggle_forum('.$forumId.');" style="cursor:hand; vertical-align:middle">
-                            <img src="'.Display::returnIconPath('add.png').'" id="forum_'.$forumId.'_opener" align="absbottom" />
-                        </a>
-                        <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forumId.'&lp_id='.$this->lp_id.'" style="vertical-align:middle">'.
-                $title.' '.$link.'</a>';
 
+            $moveLink = Display::url(
+                $title.' '.$link,
+                api_get_self().'?'.
+                api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forumId.'&lp_id='.$this->lp_id,
+                [
+                    'class' => 'moved link_with_id',
+                    'data_id' => $forumId,
+                    'data_type' => TOOL_FORUM,
+                    'title' => $title,
+                    'style' => 'vertical-align:middle',
+                ]
+            );
+            $return .= '<a onclick="javascript:toggle_forum('.$forumId.');" style="cursor:hand; vertical-align:middle">
+                            <img
+                                src="'.Display::returnIconPath('add.png').'"
+                                id="forum_'.$forumId.'_opener" align="absbottom"
+                             />
+                        </a>
+                        '.$moveLink;
             $return .= '</li>';
 
             $return .= '<div style="display:none" id="forum_'.$forumId.'_content">';
@@ -8384,16 +8414,23 @@ class learnpath
                     $threadId = $thread->getIid();
                     $link = Display::url(
                         Display::return_icon('preview_view.png', get_lang('Preview')),
-                        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
+                        api_get_path(WEB_CODE_PATH).
+                        'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
                         ['target' => '_blank']
                     );
 
-                    $return .= '<li class="lp_resource_element" data_id="'.$thread->getIid().'" data_type="'.TOOL_THREAD.'" title="'.$thread->getThreadTitle().'" >';
+                    $return .= '<li class="lp_resource_element">';
                     $return .= '&nbsp;<a class="moved" href="#">';
-                    $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
+                    $return .= $moveIcon;
                     $return .= ' </a>';
                     $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
-                    $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$threadId.'&lp_id='.$this->lp_id.'">'.
+                    $return .= '<a
+                        class="moved link_with_id"
+                        data_id="'.$thread->getIid().'"
+                        data_type="'.TOOL_THREAD.'"
+                        title="'.$thread->getThreadTitle().'"
+                        href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$threadId.'&lp_id='.$this->lp_id.'"
+                        >'.
                         Security::remove_XSS($thread->getThreadTitle()).' '.$link.'</a>';
                     $return .= '</li>';
                 }
@@ -10615,7 +10652,7 @@ EOD;
                 if (empty($id)) {
                     return '';
                 }
-                $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
+                $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND iid=$id";
                 $result = Database::query($sql);
                 $myrow = Database::fetch_array($result);
 

@@ -455,10 +455,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     var vis = div.append("svg")
     //.attr("class", "Blues")
     .attr("width", '100%')
-    .attr("min-width", '200px')
-    // .attr("height", '100%')
-        .attr("min-height", "200px")
-        .attr("height", $(window).height())
+    .attr("height", $(window).height())
     .attr('viewBox', '0 0 ' + (w + padding * 2) + ' ' + (h + padding * 2))
     .append("g")
     .attr("transform", "translate(" + (r + padding) + "," + (r/reduce_top + padding) + ")");

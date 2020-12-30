@@ -183,7 +183,6 @@ if ('liststd' === $my_action &&
         ];
         $table_list .= Display::tabsOnlyLink($tabs, $active);
 
-        $icon_qualify = 'quiz.png';
         $table_list .= '<center><br /><table class="data_table" style="width:50%">';
         // The column headers (TODO: Make this sortable).
         $table_list .= '<tr >';
@@ -197,21 +196,19 @@ if ('liststd' === $my_action &&
         }
         $table_list .= '</tr>';
         $max_qualify = showQualify('2', $userId, $_GET['id']);
-        $counter_stdlist = 0;
-
+        $counter = 0;
+        $icon = Display::return_icon('quiz.png', get_lang('Grade activity'));
         if (Database::num_rows($student_list) > 0) {
             while ($row_student_list = Database::fetch_array($student_list)) {
                 $userInfo = api_get_user_info($row_student_list['id']);
-                if (0 == $counter_stdlist % 2) {
+                $class_stdlist = 'row_even';
+                if (0 == $counter % 2) {
                     $class_stdlist = 'row_odd';
-                } else {
-                    $class_stdlist = 'row_even';
                 }
                 $table_list .= '<tr class="'.$class_stdlist.'"><td>';
                 $table_list .= UserManager::getUserProfileLink($userInfo);
-
                 $table_list .= '</td>';
-                if ('qualify' == $listType) {
+                if ('qualify' === $listType) {
                     $table_list .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
                 }
                 if (api_is_allowed_to_edit(null, true)) {
@@ -222,13 +219,14 @@ if ('liststd' === $my_action &&
                     );
                     $table_list .= '<td>
                         <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq()
-                        .'&forum='.(int) $forumId.'&thread='
+                        .'&forum='.$forumId.'&thread='
                         .(int) ($_GET['id']).'&user='.$row_student_list['id']
                         .'&user_id='.$row_student_list['id'].'&idtextqualify='
                         .$current_qualify_thread.'">'
-                        .Display::return_icon($icon_qualify, get_lang('Grade activity')).'</a></td></tr>';
+                        .$icon.'</a>
+                        </td></tr>';
                 }
-                $counter_stdlist++;
+                $counter++;
             }
         } else {
             if ('qualify' === $listType) {
@@ -245,7 +243,7 @@ if ('liststd' === $my_action &&
     }
 }
 
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 

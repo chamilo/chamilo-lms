@@ -2626,7 +2626,7 @@ class GroupManager
                 } else {
                     if (!empty($groupCategories) && isset($groupCategories[0])) {
                         $defaultGroupCategory = $groupCategories[0];
-                        $categoryId = $defaultGroupCategory['id'];
+                        $categoryId = $defaultGroupCategory['iid'];
                     }
                 }
 
@@ -2759,8 +2759,8 @@ class GroupManager
             // Check categories
             $categories = self::get_categories();
             foreach ($categories as $category) {
-                if (!in_array($category['id'], $elementsFound['categories'])) {
-                    self::delete_category($category['id']);
+                if (!in_array($category['iid'], $elementsFound['categories'])) {
+                    self::delete_category($category['iid']);
                     $category['category'] = $category['title'];
                     $result['deleted']['category'][] = $category;
                 }
@@ -3013,11 +3013,11 @@ class GroupManager
                 if (!empty($keyword)) {
                     $groups = self::getGroupListFilterByName(
                         $keyword,
-                        $category['id'],
+                        $category['iid'],
                         $courseId
                     );
                 } else {
-                    $groups = self::get_group_list($category['id']);
+                    $groups = self::get_group_list($category['iid']);
                 }
                 $content .= '<ul>';
                 if (!empty($groups)) {

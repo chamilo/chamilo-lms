@@ -117,13 +117,13 @@ if (!empty($details)) {
             ];
         }
         $interbreadcrumb[] = [
-            'url' => '../user/user.php?cidReq='.$courseCode,
+            'url' => '../user/user.php?cid='.$courseId,
             'name' => get_lang('Users'),
         ];
     } else {
         if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
-                'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
+                'url' => '../tracking/courseLog.php?cid='.$courseId.'&sid='.api_get_session_id(),
                 'name' => get_lang('Reporting'),
             ];
         } else {
@@ -894,8 +894,8 @@ if (!empty($courseCode)) {
                 'student' => $studentId,
                 'course' => $courseCode,
                 'origin' => $origin,
-                'cidReq' => $courseCode,
-                'id_session' => $sessionId,
+                'cid' => $courseId,
+                'sid' => $sessionId,
             ]
         ),
         ['class' => 'btn btn-default']
@@ -1007,8 +1007,7 @@ if (isset($_GET['action']) and 'all_attendance' == $_GET['action']) {
     $form = new FormValidator(
         'all_attendance_list',
         'GET',
-        'myStudents.php?action=all_attendance&student='.$studentId.'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&&'.api_get_cidreq(
-        ),
+        'myStudents.php?action=all_attendance&student='.$studentId.'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&'.api_get_cidreq(),
         ''
     );
     $form->addElement('html', '<input type="hidden" name="student" value="'.$studentId.'" >');
@@ -1052,7 +1051,6 @@ if (isset($_GET['action']) and 'all_attendance' == $_GET['action']) {
             <tr>
                 <th>'.get_lang('DateExo').'</th>
                 <th>'.get_lang('Training').'</th>
-
                 <th>'.get_lang('Present').'</th>
             </tr>
         </thead>
@@ -1072,18 +1070,18 @@ if (isset($_GET['action']) and 'all_attendance' == $_GET['action']) {
                 $printSession = "(".$attendanceWork['sessionName'].")";
             }
             echo '
-        <tr>
-            <td>'.$date.'</td>
-            <td>'
-                .'<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH)
-                .'attendance/index.php?cidReq='.$attendanceWork['courseCode'].'&id_session='.$sId.'&student_id='
-                .$studentId.'">'
-                .$attendanceWork['courseTitle']." $printSession ".'</a>
-            </td>
-
-            <td>'.$attendanceWork['presence'].'</td>
-        </tr>';
-            //<td>'.$teacher.'</td>
+            <tr>
+                <td>'.$date.'</td>
+                <td>'
+                    .'<a
+                    title="'.get_lang('GoAttendance').'"
+                    href="'.api_get_path(WEB_CODE_PATH).
+                    'attendance/index.php?cid='.$attendanceWork['courseId'].'&sid='.$sId.'&student_id='.$studentId.'">'
+                    .$attendanceWork['courseTitle']." $printSession ".'
+                    </a>
+                </td>
+                <td>'.$attendanceWork['presence'].'</td>
+            </tr>';
         }
     }
     echo '</tbody>
@@ -1981,8 +1979,9 @@ if (empty($details)) {
                         if ($allowToQualify) {
                             $qualifyLink = '&action=qualify';
                         }
-                        $attemptLink = '../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$courseCode
-                            .'&id_session='.$sessionId.'&session_id='.$sessionId.'&student='.$studentId.'&origin='
+                        $attemptLink =
+                            '../exercise/exercise_show.php?id='.$id_last_attempt.'&cid='.$courseInfo['real_id']
+                            .'&sid='.$sessionId.'&student='.$studentId.'&origin='
                             .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
                         echo Display::url(
                             Display::return_icon('quiz.png', get_lang('Test')),
@@ -1995,7 +1994,7 @@ if (empty($details)) {
                 echo '<td>';
                 if ($count_attempts > 0) {
                     $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
-                        ."cidReq=$courseCode&filter_by_user=$studentId&id_session=$sessionId";
+                        ."cid=".$courseInfo['real_id']."&filter_by_user=$studentId&sid=$sessionId";
                     echo Display::url(
                         Display::return_icon(
                             'test_results.png',

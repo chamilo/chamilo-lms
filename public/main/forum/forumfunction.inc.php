@@ -3218,7 +3218,7 @@ function showQualify($option, $user_id, $thread_id)
     $thread_id = (int) $thread_id;
 
     if (empty($user_id) || empty($thread_id)) {
-        return false;
+        return 0;
     }
 
     $sql = '';
@@ -3241,11 +3241,12 @@ function showQualify($option, $user_id, $thread_id)
     if (!empty($sql)) {
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
-
-        return $row[0];
+        if ($row) {
+            return $row[0];
+        }
     }
 
-    return [];
+    return 0;
 }
 
 /**
@@ -3379,7 +3380,11 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
     $res = Database::query($sql);
     $row = Database::fetch_array($res, 'ASSOC');
 
-    return $row['qualify'];
+    if ($row) {
+        return $row['qualify'];
+    }
+
+    return 0;
 }
 
 /**

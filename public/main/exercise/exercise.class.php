@@ -9493,9 +9493,10 @@ class Exercise
                     ];
 
                     if ($isDrhOfCourse) {
-                        $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq(
-                            ).'&exerciseId='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                        $currentRow[] = '<a
+                            href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
+                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).
+                            '</a>';
                     }
                     if ($returnData) {
                         $currentRow['id'] = $exercise->id;

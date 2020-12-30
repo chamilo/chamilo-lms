@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExercises;
@@ -54,8 +55,6 @@ foreach ($result as $track) {
     }
 }
 
-$url = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'
-    .api_get_cidreq()
-    ."&exerciseId=$exerciseId";
-
+$url = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq()."&exerciseId=$exerciseId";
 header("Location: $url");
+exit;

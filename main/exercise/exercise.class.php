@@ -10817,7 +10817,8 @@ class Exercise
      * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
      * represent the next level BT#18165.
      *
-     * @return string|null
+     * @param int $userId
+     *
      */
     public function advanceCourseList($userId = 0)
     {
@@ -10918,14 +10919,16 @@ class Exercise
      * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
      * courses BT#18165.
      *
-     * @return string|null
+     * @param int $userId
+     * @param bool $review
+     *
      */
     public function remedialCourseList($userId = 0, $review = false)
     {
         $questionExcluded = [
             FREE_ANSWER,
             ORAL_EXPRESSION,
-            ANNOTATION
+            ANNOTATION,
         ];
         $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
         $extraMessage = null;

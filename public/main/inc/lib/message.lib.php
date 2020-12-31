@@ -335,18 +335,13 @@ class MessageManager
         return false;
     }
 
-    /**
-     * @param array $aboutUserInfo
-     *
-     * @return array
-     */
-    public static function getMessagesAboutUser($aboutUserInfo)
+    public static function getMessagesAboutUser(User $user): array
     {
-        if (!empty($aboutUserInfo)) {
+        if (!empty($user)) {
             $table = Database::get_main_table(TABLE_MESSAGE);
             $sql = 'SELECT id FROM '.$table.'
                     WHERE
-                      user_receiver_id = '.$aboutUserInfo['id'].' AND
+                      user_receiver_id = '.$user->getId().' AND
                       msg_status = '.MESSAGE_STATUS_CONVERSATION.'
                     ';
             $result = Database::query($sql);
@@ -363,14 +358,9 @@ class MessageManager
         return [];
     }
 
-    /**
-     * @param array $userInfo
-     *
-     * @return string
-     */
-    public static function getMessagesAboutUserToString($userInfo)
+    public static function getMessagesAboutUserToString(User $user): string
     {
-        $messages = self::getMessagesAboutUser($userInfo);
+        $messages = self::getMessagesAboutUser($user);
         $html = '';
         if (!empty($messages)) {
             /** @var Message $message */

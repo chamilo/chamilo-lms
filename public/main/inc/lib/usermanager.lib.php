@@ -2011,7 +2011,6 @@ class UserManager
      *                            USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool   $addRandomId
      * @param array  $userInfo    to avoid query the DB
-     *
      * @todo use resources to get the user picture
      *
      * @return string

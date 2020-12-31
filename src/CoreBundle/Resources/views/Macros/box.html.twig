@@ -441,14 +441,14 @@
             {% endif %}
 
             <dt>{{ 'OfficialCode'|trans }}</dt>
-            {% if user.official_code is defined %}
-                <dd>{{ user.official_code }}</dd>
+            {% if user.officialCode is defined %}
+                <dd>{{ user.officialCode }}</dd>
             {% else %}
                 <dd>{{ 'NoOfficialCode'|trans }}</dd>
             {% endif %}
             <dt>{{ 'OnLine'|trans }}</dt>
             <dd>
-                {{ user.user_is_online }}
+{#                {{ user.user_is_online }}#}
 {#                {{ user.online }}#}
             </dd>
             <dt>{{ 'Tel'|trans }}</dt>
@@ -479,14 +479,14 @@
     {% import _self as display %}
     <div class="user">
         <div class="avatar">
-            <img width="128px" src="{{ user.avatar }}" class="img-responsive">
+            <img width="128px" src="{{ user.getResourceNode | user_avatar }}" class="img-responsive">
         </div>
         <div class="name">
             <h3>
                 {% if user.complete_name_link is defined %}
                     {{ user.complete_name_link }}
                 {% else %}
-                    {{ user.complete_name }}
+                    {{ user | format_user_full_name }}
                 {% endif %}
             </h3>
             <p class="email">{{ user.email }}</p>

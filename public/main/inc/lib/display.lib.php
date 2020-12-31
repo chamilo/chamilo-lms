@@ -2633,7 +2633,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return string|null
+     * @return string
      *
      * @todo rework function to easy use
      */
@@ -2669,7 +2669,7 @@ HTML;
                 $params['id'] = $id;
             }
             $params['class'] = 'card';
-            $html = null;
+            $html = '';
             if (!empty($title)) {
                 $html .= '<div class="card-header">'.$title.'</div>'.PHP_EOL;
             }

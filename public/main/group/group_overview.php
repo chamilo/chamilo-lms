@@ -80,7 +80,7 @@ if (isset($_GET['action'])) {
 
             break;
         case 'export_pdf':
-            $content = GroupManager::getOverview($courseId, $keyword);
+            $content = GroupManager::getOverview($courseInfo, $keyword);
             $pdf = new PDF();
             $extra = '<div style="text-align:center"><h2>'.get_lang('Groups list').'</h2></div>';
             $extra .= '<strong>'.get_lang('Course').': </strong>'.$courseInfo['title'].' ('.$courseInfo['code'].')';
@@ -157,8 +157,8 @@ Display::return_icon('user.png', get_lang('Go to').' '.get_lang('Users'), '', IC
 
 // Action links
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
-echo GroupManager::getOverview($courseId, $keyword);
+echo GroupManager::getOverview($courseInfo, $keyword);
 
-if ('learnpath' != $origin) {
+if ('learnpath' !== $origin) {
     Display::display_footer();
 }

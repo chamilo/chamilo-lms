@@ -11,6 +11,7 @@ use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CoreBundle\Entity\Course;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -1669,7 +1670,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 AND post.c_id = $course_id AND
                 thread_properties.c_id = $course_id AND
                 forum_properties.c_id = $course_id
-            ORDER BY post.post_id DESC";
+            ORDER BY post.iid DESC";
     $result = Database::query($sql);
 
     if ($show_invisibles) {
@@ -5518,36 +5519,35 @@ function get_statistical_information($thread_id, $user_id, $course_id)
 /**
  * This function return the posts inside a thread from a given user.
  *
- * @param string $course_code
- * @param int    $thread_id
- * @param int    $user_id
+ * @param \Chamilo\CoreBundle\Entity\Course $course
+ * @param int                               $thread_id
+ * @param int                               $user_id
  *
  * @return array posts inside a thread
  *
- * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
+ * @author  Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
  *
  * @version oct 2008, dokeos 1.8
  */
-function get_thread_user_post($course_code, $thread_id, $user_id)
+function get_thread_user_post(Course $course, $thread_id, $user_id)
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $thread_id = (int) $thread_id;
     $user_id = (int) $user_id;
-    $course_info = api_get_user_info($course_code);
-    $course_id = $course_info['real_id'];
+    $course_id = $course->getId();
 
     if (empty($course_id)) {
         $course_id = api_get_course_int_id();
     }
-    $sql = "SELECT * FROM $table_posts posts
-            LEFT JOIN  $table_users users
-                ON posts.poster_id=users.id
+    $sql = "SELECT *, user.id as user_id FROM $table_posts posts
+            LEFT JOIN $table_users user
+            ON posts.poster_id = user.id
             WHERE
                 posts.c_id = $course_id AND
-                posts.thread_id='$thread_id'
-                AND posts.poster_id='$user_id'
-            ORDER BY posts.post_id ASC";
+                posts.thread_id='$thread_id' AND
+                posts.poster_id='$user_id'
+            ORDER BY posts.iid ASC";
 
     $result = Database::query($sql);
     $post_list = [];
@@ -5560,8 +5560,8 @@ function get_thread_user_post($course_code, $thread_id, $user_id)
                 WHERE
                     posts.c_id = $course_id AND
                     posts.thread_id='$thread_id'
-                    AND posts.post_parent_id='".$row['post_id']."'
-                ORDER BY posts.post_id ASC";
+                    AND posts.post_parent_id='".$row['iid']."'
+                ORDER BY posts.iid ASC";
         $result2 = Database::query($sql);
         while ($row2 = Database::fetch_array($result2)) {
             $row2['status'] = '0';

@@ -197,11 +197,7 @@ if (!empty($message)) {
 
 // show qualifications history
 $type = isset($_GET['type']) ? $_GET['type'] : '';
-$historyList = getThreadScoreHistory(
-    $userIdToQualify,
-    $threadId,
-    $type
-);
+$historyList = getThreadScoreHistory($userIdToQualify, $threadId, $type);
 
 $counter = count($historyList);
 
@@ -238,16 +234,14 @@ $form->addText(
     $qualify
 );
 
-$course = api_get_course_info();
-
-$rows = get_thread_user_post($course['code'], $threadId, $_GET['user']);
+$rows = get_thread_user_post($course, $threadId, $_GET['user']);
 if (isset($rows)) {
     $counter = 1;
     foreach ($rows as $row) {
+        $style = '';
         if ('0' == $row['status']) {
             $style = " id = 'post".$post_en."' class=\"hide-me\" style=\"border:1px solid red; display:none; background-color:#F7F7F7; width:95%; margin: 0px 0px 4px 40px; \" ";
         } else {
-            $style = '';
             $post_en = $row['post_parent_id'];
         }
 
@@ -287,7 +281,7 @@ if (isset($rows)) {
         echo '</tr>';
 
         // The check if there is an attachment
-        $attachment_list = get_attachment($row['post_id']);
+        $attachment_list = get_attachment($row['iid']);
         if (!empty($attachment_list)) {
             echo '<tr ><td height="50%">';
             $realname = $attachment_list['path'];

@@ -24,8 +24,8 @@ use ChamiloSession as Session;
  * @copyright Patrick Cool
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
 require_once 'forumfunction.inc.php';
+
 api_protect_course_script(true);
 
 $current_course_tool = TOOL_FORUM;
@@ -43,11 +43,11 @@ function hidecontent(content){
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('Forums');
-$_course = api_get_course_info();
-$courseEntity = $_course['entity'];
+$courseEntity = api_get_course_entity();
 $sessionId = api_get_session_id();
 $sessionEntity = api_get_session_entity($sessionId);
 $_user = api_get_user_info();
+$courseId = $courseEntity->getId();
 
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = 1 == $hideNotifications;
@@ -132,7 +132,7 @@ $user_id = api_get_user_id();
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
 
 // The groups of the user.
-$groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
+$groups_of_user = GroupManager::get_group_ids($courseId, $user_id);
 
 // All groups in the course (and sorting them as the
 // id of the group = the key of the array).
@@ -278,12 +278,12 @@ if (is_array($forumCategories)) {
         $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
         $visibility = $forumCategory->isVisible($courseEntity, $sessionEntity);
 
-        if (!empty($idCategory)) {
+        if (!empty($categoryId)) {
             if (api_is_allowed_to_edit(false, true) &&
                 !(0 == $categorySessionId && 0 != $sessionId)
             ) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                    .'&action=edit&content=forumcategory&id='.$categoryId
+                    .'&action=edit_category&content=forumcategory&id='.$categoryId
                     .'">'.Display::return_icon(
                         'edit.png',
                         get_lang('Edit'),
@@ -329,7 +329,7 @@ if (is_array($forumCategories)) {
         $forumCategoryInfo['forums'] = [];
         // The forums in this category.
         $forumInfo = [];
-        $forumsInCategory = get_forums_in_category($categoryId, $_course['real_id']);
+        $forumsInCategory = get_forums_in_category($categoryId, $courseId);
 
         if (!empty($forumsInCategory)) {
             $forumsDetailsList = [];

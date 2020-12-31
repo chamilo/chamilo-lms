@@ -393,7 +393,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var ResourceLink $link */
         if ($this->hasCourse()) {
-            $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
+            $link = $resource->getFirstResourceLinkFromCourseSession($this->getCourse(), $this->getSession());
         } else {
             $link = $resource->getFirstResourceLink();
         }

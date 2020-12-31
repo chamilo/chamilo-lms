@@ -175,11 +175,21 @@ class ResourceLink
         return $this;
     }
 
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
     public function setCourse(Course $course = null): self
     {
         $this->course = $course;
 
         return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
     }
 
     public function setSession(Session $session = null): self
@@ -229,22 +239,6 @@ class ResourceLink
     public function hasUser(): bool
     {
         return null !== $this->user;
-    }
-
-    /**
-     * Get course.
-     */
-    public function getCourse(): ?Course
-    {
-        return $this->course;
-    }
-
-    /**
-     * Get session.
-     */
-    public function getSession(): ?Session
-    {
-        return $this->session;
     }
 
     public function setResourceNode(ResourceNode $resourceNode): self

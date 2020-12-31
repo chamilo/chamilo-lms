@@ -470,12 +470,13 @@ if ($nbStudents > 0) {
             $trackingDirection,
             $conditions
         );
+        $userRepo = \Chamilo\CoreBundle\Framework\Container::getUserRepository();
         foreach ($usersTracking as $userTracking) {
-            $userInfo = api_get_user_info_from_username($userTracking[3]);
-            if (empty($userInfo)) {
+            $user = $userRepo->findOneBy(['username' => $userTracking[3]]);
+            if (empty($user)) {
                 continue;
             }
-            $userId = $userInfo['user_id'];
+            $userId = $user->getId();
             if ('100%' === $userTracking[5]) {
                 $numberStudentsCompletedLP++;
             }
@@ -502,10 +503,10 @@ if ($nbStudents > 0) {
 
             $listStudent = [
                 'id' => $userId,
-                'fullname' => $userInfo['complete_name'],
+                'user' => $user,
+                'fullname' => UserManager::formatUserFullName($user),
                 'score' => floor($scoreStudent / 2),
                 'total_time' => $minutes,
-                'avatar' => $userInfo['avatar'],
                 'certicate' => $certificate,
             ];
             $listStudentIds[] = $userId;

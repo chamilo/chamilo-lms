@@ -39,7 +39,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('remove_xss', 'Security::remove_XSS'),
             new TwigFilter('format_user_full_name', 'UserManager::formatUserFullName'),
             new TwigFilter('illustration', [$this, 'getIllustration']),
-            new TwigFilter('user_illustration', [$this, 'getUserIllustration']),
+            new TwigFilter('user_avatar', [$this, 'getUserAvatar']),
         ];
     }
 
@@ -53,7 +53,7 @@ class ChamiloExtension extends AbstractExtension
         return $this->illustrationRepository->getIllustrationUrlFromNode($node);
     }
 
-    public function getUserIllustration(ResourceNode $node): string
+    public function getUserAvatar(ResourceNode $node): string
     {
         $url = $this->getIllustration($node);
 

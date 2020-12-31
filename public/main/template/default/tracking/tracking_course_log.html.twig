@@ -8,9 +8,9 @@ window.onload = function() {
     var times = [];
 
    Object.keys(jsonfile).forEach(function(key) {
-       //Names
+       // Names
        labels.push(jsonfile[key].fullname);
-       //Time plataform total
+       // Time platform total
        times.push(jsonfile[key].total_time);
    });
 
@@ -191,7 +191,7 @@ window.onload = function() {
                                         <img
                                             title="{{ student.fullname }}"
                                             alt="{{ student.fullname }}"
-                                            src="{{ student.avatar }}"
+                                            src="{{ student.user.getResourceNode | user_avatar }}"
                                             width="40px">
                                     </span>
                                 </div>

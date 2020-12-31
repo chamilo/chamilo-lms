@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
@@ -1379,7 +1380,7 @@ class CourseRestorer
                             c_id = ".$this->destination_course_id." AND
                             category_id='".$cat_id."'";
                 $result = Database::query($sql);
-                list($max_order) = Database::fetch_array($result);
+                [$max_order] = Database::fetch_array($result);
 
                 $params = [];
                 if (!empty($session_id)) {
@@ -1449,7 +1450,7 @@ class CourseRestorer
             $sql = "SELECT MAX(display_order) FROM  $link_cat_table
                     WHERE c_id = ".$this->destination_course_id;
             $result = Database::query($sql);
-            list($orderMax) = Database::fetch_array($result, 'NUM');
+            [$orderMax] = Database::fetch_array($result, 'NUM');
             $display_order = $orderMax + 1;
 
             $params['c_id'] = $this->destination_course_id;
@@ -2869,6 +2870,18 @@ class CourseRestorer
                         if ($insertId) {
                             $sql = "UPDATE $table_tool SET id = iid WHERE iid = $insertId";
                             Database::query($sql);
+                        }
+                    }
+
+                    if (isset($lp->extraFields) && !empty($lp->extraFields)) {
+                        $extraFieldValue = new \ExtraFieldValue('lp');
+                        foreach ($lp->extraFields as $extraField) {
+                            $params = [
+                                'item_id' => $new_lp_id,
+                                'value' => $extraField['value'],
+                                'variable' => $extraField['variable']
+                            ];
+                            $extraFieldValue->save($params);
                         }
                     }
 

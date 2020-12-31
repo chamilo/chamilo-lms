@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Category;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
@@ -1421,7 +1422,7 @@ class CourseBuilder
         $id_list = [],
         $addScormFolder = true
     ) {
-        $table_main = Database::get_course_table(TABLE_LP_MAIN);
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
         $table_item = Database::get_course_table(TABLE_LP_ITEM);
         $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
@@ -1441,10 +1442,10 @@ class CourseBuilder
                     true
                 );
             }
-            $sql = 'SELECT * FROM '.$table_main.'
+            $sql = 'SELECT * FROM '.$lpTable.'
                     WHERE c_id = '.$courseId.'  '.$sessionCondition;
         } else {
-            $sql = 'SELECT * FROM '.$table_main.'
+            $sql = 'SELECT * FROM '.$lpTable.'
                     WHERE c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
         }
 
@@ -1522,6 +1523,9 @@ class CourseBuilder
                     $obj->category_id,
                     $items
                 );
+
+                $extraFieldValue = new \ExtraFieldValue('lp');
+                $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);
 
                 $this->course->add_resource($lp);
 

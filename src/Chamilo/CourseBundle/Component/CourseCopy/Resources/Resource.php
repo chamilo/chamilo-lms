@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -10,8 +11,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Documents,...) should be derived.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>s
- *
- * @package  chamilo.backup
  *
  * @todo Use the globally defined constants voor tools and remove the RESOURCE_*
  * constants
@@ -42,8 +41,8 @@ class Resource
      * The properties of this resource.
      */
     public $item_properties;
-
-    public $obj = null;
+    public $obj;
+    public $extraFields;
 
     /**
      * Create a new Resource.
@@ -58,6 +57,7 @@ class Resource
         $this->destination_id = -1;
         $this->linked_resources = [];
         $this->item_properties = [];
+        $this->extraFields = [];
     }
 
     /**

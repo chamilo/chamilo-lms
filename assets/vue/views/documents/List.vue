@@ -134,7 +134,7 @@
           </template>
 
           <template
-              v-if="isAuthenticated && isCurrentTeacher"
+              v-if="isAuthenticated && (isCurrentTeacher || isAdmin)"
             v-slot:cell(action)="row"
           >
             <ActionCell

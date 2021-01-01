@@ -65,10 +65,10 @@ if ($form->validate()) {
     $rs_attendance = Database::query($sql);
     if (Database::num_rows($rs_attendance) > 0) {
         $row_attendance = Database::fetch_array($rs_attendance);
-        $attendance_id = $row_attendance['ref_id'];
+        $attendance_id = (int) $row_attendance['ref_id'];
         $sql = 'UPDATE '.$tbl_attendance.' SET
                     attendance_weight ='.api_float_val($final_weight).'
-                WHERE c_id = '.$course_id.' AND id = '.intval($attendance_id);
+                WHERE iid = '.$attendance_id;
         Database::query($sql);
     }
 

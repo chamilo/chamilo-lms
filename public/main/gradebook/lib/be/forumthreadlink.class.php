@@ -10,7 +10,6 @@
 class ForumThreadLink extends AbstractLink
 {
     private $forum_thread_table;
-    private $itemprop_table;
 
     /**
      * Constructor.
@@ -104,8 +103,7 @@ class ForumThreadLink extends AbstractLink
      */
     public function calc_score($studentId = null, $type = null)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-        $threadInfo = get_thread_information('', $this->get_ref_id());
+        $threadInfo = $this->getThreadData();
         $thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
         $sessionId = $this->get_session_id();
         $sessionCondition = api_get_session_condition(
@@ -235,7 +233,7 @@ class ForumThreadLink extends AbstractLink
      */
     public function get_name()
     {
-        $this->get_exercise_data();
+        $this->getThreadData();
         $thread_title = isset($this->exercise_data['thread_title']) ? $this->exercise_data['thread_title'] : '';
         $thread_title_qualify = isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
         if (isset($thread_title_qualify) && '' != $thread_title_qualify) {
@@ -259,7 +257,7 @@ class ForumThreadLink extends AbstractLink
     public function is_valid_link()
     {
         $sessionId = $this->get_session_id();
-        $sql = 'SELECT count(id) from '.$this->get_forum_thread_table().'
+        $sql = 'SELECT count(iid) FROM '.$this->get_forum_thread_table().'
                 WHERE
                     c_id = '.$this->course_id.' AND
                     iid = '.$this->get_ref_id().' AND
@@ -273,19 +271,22 @@ class ForumThreadLink extends AbstractLink
     public function get_link()
     {
         $sessionId = $this->get_session_id();
-        //it was extracts the forum id
         $sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
                 WHERE
-                    c_id = '.$this->course_id.' AND
+                    c_id = {$this->course_id} AND
                     iid = '".$this->get_ref_id()."' AND
                     session_id = $sessionId ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
-        $forum_id = $row['forum_id'];
 
-        $url = api_get_path(WEB_PATH).'main/forum/viewthread.php?'.api_get_cidreq_params($this->getCourseId(), $sessionId).'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
+        if ($row) {
+            $forum_id = $row['forum_id'];
+            return api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
+                api_get_cidreq_params($this->getCourseId(), $sessionId).
+                '&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
+        }
 
-        return $url;
+        return '';
     }
 
     public function get_icon_name()
@@ -328,7 +329,7 @@ class ForumThreadLink extends AbstractLink
         return $this->forum_thread_table = Database::get_course_table(TABLE_FORUM_THREAD);
     }
 
-    private function get_exercise_data()
+    private function getThreadData()
     {
         $sessionId = $this->get_session_id();
         if ($sessionId) {

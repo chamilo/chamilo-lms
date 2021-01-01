@@ -49,7 +49,7 @@ var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
 $(function () {
-  var webCidReq = '&cidReq=' + $('body').attr('data-course-code');
+  var webCidReq = '&cid=' + $('body').attr('data-course-id') + '&sid=' + $('body').attr('data-session-id');
   window.webCidReq = webCidReq;
 
   $("#menu_courses").click(function(){

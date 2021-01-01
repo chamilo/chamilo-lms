@@ -1,10 +1,10 @@
+// webCidReq is defined in the <body tag>
 window.HotspotQuestion = (function () {
     return function (settings) {
         var HotspotModel = function (attributes) {
             this.attributes = attributes;
             this.id = 0;
             this.name = '';
-
             this.changeEvent = null;
         };
         HotspotModel.prototype.set = function (key, value) {

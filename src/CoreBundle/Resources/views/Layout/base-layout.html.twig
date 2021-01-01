@@ -16,6 +16,7 @@
 <body
     class="{{ section_name }}"
     data-in-course="{{ course ? 'true' : 'false' }}"
+    data-course-id="{{ course ? course.id : '' }}"
     data-course-code="{{ course ? course.code : '' }}"
     data-session-id="{{ session ? session.id : '' }}"
 >

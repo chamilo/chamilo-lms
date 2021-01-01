@@ -53,6 +53,9 @@ if (!api_is_allowed_to_edit(null, true)) {
 $questionRepo = Container::getQuestionRepository();
 /** @var CQuizQuestion $objQuestion */
 $objQuestion = $questionRepo->find($questionId);
+if (empty($objQuestion)) {
+    exit;
+}
 
 $answer_type = $objQuestion->getType(); //very important
 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -60,11 +63,11 @@ $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $resourceFile = $objQuestion->getResourceNode()->getResourceFile();
 $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
-$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion).'?'.api_get_cidreq();
 
 $objExercise->read($exerciseId);
 
-if (empty($objQuestion) || empty($objExercise)) {
+if (empty($objExercise)) {
     exit;
 }
 
@@ -143,11 +146,11 @@ if (in_array(
 $hotSpotWithAnswer = [];
 $data['answers'] = [];
 $rs = $em
-    ->getRepository('ChamiloCoreBundle:TrackEHotspot')
+    ->getRepository(TrackEHotspot::class)
     ->findBy(
         [
             'hotspotQuestionId' => $questionId,
-            'cId' => $courseId,
+            'course' => $courseId,
             'hotspotExeId' => $exeId,
         ],
         ['hotspotAnswerId' => 'ASC']

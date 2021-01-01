@@ -2305,7 +2305,7 @@ function updateThread($values)
             'thread_weight' => api_float_val($values['weight_calification']),
             'thread_peer_qualify' => $values['thread_peer_qualify'],
         ];
-        $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
+        $where = ['c_id = ? AND iid = ?' => [$courseId, $values['thread_id']]];
         Database::update($threadTable, $params, $where);
 
         if (!$linkInfo) {
@@ -4128,19 +4128,19 @@ function handle_mail_cue($content, $id)
         $sql = "DELETE FROM $table_mailcue
                 WHERE c_id = $course_id AND thread_id = $id";
         Database::query($sql);
-    } elseif ('forum' == $content) {
-        $sql = "SELECT thread_id FROM $table_threads
+    } elseif ('forum' === $content) {
+        $sql = "SELECT iid FROM $table_threads
                 WHERE c_id = $course_id AND forum_id = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            handle_mail_cue('thread', $row['thread_id']);
+            handle_mail_cue('thread', $row['iid']);
         }
     } elseif ('forum_category' === $content) {
-        $sql = "SELECT forum_id FROM $table_forums
+        $sql = "SELECT iid FROM $table_forums
                 WHERE c_id = $course_id AND forum_category = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            handle_mail_cue('forum', $row['forum_id']);
+            handle_mail_cue('forum', $row['iid']);
         }
     } else {
         return get_lang('Error');

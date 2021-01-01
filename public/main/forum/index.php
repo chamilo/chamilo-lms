@@ -411,7 +411,7 @@ if (is_array($forumCategories)) {
                         }
 
                         $groupId = $forum->getForumOfGroup();
-                        $forumInfo['visibility'] = $forum->isVisible($courseEntity, $sessionEntity);
+                        $forumInfo['visibility'] = $forumVisibility = $forum->isVisible($courseEntity, $sessionEntity);
                         /*$forumInfo['number_threads'] = isset($forum['number_of_threads'])
                             ? (int) $forum['number_of_threads']
                             : 0;*/
@@ -497,7 +497,7 @@ if (is_array($forumCategories)) {
                             && !(0 == $forum->getSessionId() && 0 != $sessionId)
                         ) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                                .'&action=edit&content=forum&id='.$forumId.'">'
+                                .'&action=edit_forum&content=forum&id='.$forumId.'">'
                                 .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
                                 .'</a>';
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
@@ -512,7 +512,7 @@ if (is_array($forumCategories)) {
                             $toolActions .= return_visible_invisible_icon(
                                 'forum',
                                 $forumId,
-                                $visibility
+                                $forumVisibility
                             );
 
                             $toolActions .= return_lock_unlock_icon(
@@ -544,8 +544,8 @@ if (is_array($forumCategories)) {
                                 .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
                                 .Display::return_icon($iconnotify, get_lang('Notify me'), null, ICON_SIZE_SMALL)
                                 .'</a>';
-                        }
-                        $forumInfo['tools'] = $toolActions;*/
+                        };*/
+                        $forumInfo['tools'] = $toolActions;
                         $forumsDetailsList[] = $forumInfo;
                     }
                 }

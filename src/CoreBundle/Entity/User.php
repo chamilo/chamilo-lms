@@ -2311,7 +2311,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
     {
         $status = $this->getStatus();
         $hasCertificates = $this->getGradeBookCertificates()->count() > 0;
-        $urlImg = '/';
+        $urlImg = '/img/';
         $iconStatus = '';
         switch ($status) {
             case STUDENT:

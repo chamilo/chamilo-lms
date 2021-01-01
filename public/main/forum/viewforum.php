@@ -17,7 +17,7 @@ $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 
 $viewForumUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
 $message = handleForum($viewForumUrl);
-
+$table_list = '';
 $userId = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
@@ -380,7 +380,7 @@ if (is_array($threads)) {
                     'class' => 'title',
                 ]
             );
-            $html .= '<p>'.get_lang('By').' '.$iconStatus.' '.$authorName.'</p>';
+            $html .= '<p>'.get_lang('By').' <img src="'.$iconStatus.'" /> '.$authorName.'</p>';
 
             if ($thread->getThreadLastPost()) {
                 $html .= '<p>'.Security::remove_XSS(cut($thread->getThreadLastPost()->getPostText(), 140)).'</p>';
@@ -520,6 +520,6 @@ if (is_array($threads)) {
 }
 
 echo '</div>';
-echo isset($table_list) ? $table_list : '';
+echo $table_list;
 
 Display::display_footer();

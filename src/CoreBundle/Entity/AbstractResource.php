@@ -396,6 +396,7 @@ abstract class AbstractResource
         if ($resourceNode && $resourceNode->getResourceLinks()->count() > 0) {
             $links = $resourceNode->getResourceLinks();
             $found = false;
+            $link = null;
             foreach ($links as $link) {
                 if ($link->getCourse() === $course && $link->getSession() === $session) {
                     $found = true;
@@ -403,7 +404,6 @@ abstract class AbstractResource
                 }
             }
             //$result = $links->matching($criteria)->count();
-            //var_dump($result);
             //var_dump($result);
             if ($found) {
                 return $link;

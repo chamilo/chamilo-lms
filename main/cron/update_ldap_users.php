@@ -50,7 +50,7 @@ while ($user = Database::fetch_array($result, 'ASSOC')) {
             Database::update($table, $params, ['id = ?' => $userId]);
 
             $extraFields = [
-                'department' => $ldapUser['company'][0],
+                'company' => $ldapUser['company'][0],
             ];
             foreach ($extraFields as $variable => $value) {
                 $params = [

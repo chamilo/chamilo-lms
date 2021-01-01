@@ -624,32 +624,32 @@ switch ($action) {
             if (isset($_REQUEST['id'])) {
                 $lp_item_obj = new learnpathItem($_REQUEST['id']);
 
+                $url = api_get_self().
+                    '?action=add_audio&lp_id='.$oLP->lp_id.'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
+
                 // Remove audio
                 if (isset($_GET['delete_file']) && 1 == $_GET['delete_file']) {
                     $lp_item_obj->removeAudio();
                     Display::addFlash(Display::return_message(get_lang('FileDeleted')));
-
-                    $url = api_get_self().
-                        '?action=add_audio&lp_id='.intval($oLP->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
-                    header('Location: '.$url);
-                    exit;
+                    api_location($url);
                 }
 
-                // Upload audio
+                // Upload audio.
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
                     // Updating the lp.modified_on
                     $oLP->set_modified_on();
                     $lp_item_obj->addAudio();
                     Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                    api_location($url);
                 }
 
-                //Add audio file from documents
+                // Add audio file from documents.
                 if (isset($_REQUEST['document_id']) && !empty($_REQUEST['document_id'])) {
                     $oLP->set_modified_on();
                     $lp_item_obj->add_audio_from_documents($_REQUEST['document_id']);
                     Display::addFlash(Display::return_message(get_lang('Updated')));
+                    api_location($url);
                 }
-
                 require 'lp_add_audio.php';
             } else {
                 require 'lp_add_audio.php';
@@ -1326,7 +1326,7 @@ switch ($action) {
                 }
 
                 if ($forumCategory) {
-                    $forum = $oLP->getEntity()->getForum();
+                    $forum = $lp->getForum();
                     if ($forum) {
                         $selectedItem->createForumThread($forum);
                     } else {

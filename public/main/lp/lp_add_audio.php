@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -100,12 +101,12 @@ $audioFolderId = $document->getIid();
 
 if (isset($_REQUEST['folder_id'])) {
     $folderIdFromRequest = isset($_REQUEST['folder_id']) ? (int) $_REQUEST['folder_id'] : 0;
-    $documentData = DocumentManager::get_document_data_by_id($folderIdFromRequest, $courseInfo['code']);
+    $documentRepo = Container::getDocumentRepository();
+    /** @var \Chamilo\CourseBundle\Entity\CDocument $documentData */
+    $documentData = $documentRepo->find($folderIdFromRequest);
     if ($documentData) {
-        $audioFolderId = $folderIdFromRequest;
-        $currentDir = $documentData['path'];
+        $audioFolderId = $documentData->getIid();
     } else {
-        $currentDir = '/';
         $audioFolderId = false;
     }
 }
@@ -197,7 +198,9 @@ $page .= $recordVoiceForm;
 $page .= '<br>';
 $page .= $form->returnForm();
 $page .= '<h3 class="page-header">
-            <small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
+            <small>'.get_lang('Or').'</small> '.
+            get_lang('Select an audio file from documents').
+         '</h3>';
 
 $folders = DocumentManager::get_all_document_folders(
     $courseInfo,

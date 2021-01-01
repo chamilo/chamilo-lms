@@ -141,7 +141,8 @@ class learnpathItem
         $this->oldTotalTime = 0;
         $this->view_max_score = 0;
         $this->seriousgame_mode = 0;
-        $this->audio = self::fixAudio($row['audio']);
+        //$this->audio = self::fixAudio($row['audio']);
+        $this->audio = $row['audio'];
         $this->launch_data = $row['launch_data'];
         $this->save_on_close = true;
         $this->db_id = $id;
@@ -4020,13 +4021,28 @@ class learnpathItem
     /**
      * Adds an audio file attached to the current item (store on disk and in db).
      *
-     * @return bool|string|null
+     * @return bool
      */
     public function addAudio()
     {
         $course_info = api_get_course_info();
-        $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/';
+        $userId = api_get_user_id();
 
+        $folderDocument = create_unexisting_directory(
+            $course_info,
+            $userId,
+            0,
+            0,
+            0,
+            null,
+            '/audio',
+            get_lang('Audio'),
+            0,
+            false,
+            false
+        );
+
+        /*$filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/';
         if (!is_dir($filepath.'audio')) {
             mkdir(
                 $filepath.'audio',
@@ -4039,36 +4055,40 @@ class learnpathItem
                 0,
                 'audio'
             );
-        }
+        }*/
 
         $key = 'file';
         if (!isset($_FILES[$key]['name']) || !isset($_FILES[$key]['tmp_name'])) {
             return false;
         }
-        $result = DocumentManager::upload_document(
+
+        $document = DocumentManager::upload_document(
             $_FILES,
-            '/audio',
+            null,
             null,
             null,
             0,
             'rename',
             false,
-            false
+            true,
+            'file',
+            false,
+            $folderDocument->getIid(),
         );
-        $file_path = null;
 
-        if ($result) {
-            $file_path = basename($result['path']);
-
+        if ($document) {
+            $name = '/audio/'.$document->getResourceNode()->getResourceFile()->getOriginalName();
             // Store the mp3 file in the lp_item table.
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "UPDATE $tbl_lp_item SET
-                        audio = '".Database::escape_string($file_path)."'
+            $table = Database::get_course_table(TABLE_LP_ITEM);
+            $sql = "UPDATE $table SET
+                        audio = '".Database::escape_string($name)."'
                     WHERE iid = ".intval($this->db_id);
             Database::query($sql);
+
+            return true;
         }
 
-        return $file_path;
+        return false;
     }
 
     /**

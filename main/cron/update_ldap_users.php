@@ -42,15 +42,15 @@ while ($user = Database::fetch_array($result, 'ASSOC')) {
             $ldapUser = $users[$key];
             //print_r($ldapUser).PHP_EOL;
             $params = [
-                'firstname' => $ldapUser['givenName'],
-                'lastname' => $ldapUser['sn'],
-                'email' => $ldapUser['mail'],
+                'firstname' => $ldapUser['givenname'][0],
+                'lastname' => $ldapUser['sn'][0],
+                'email' => $ldapUser['mail'][0],
             ];
             print_r($params).PHP_EOL;
             Database::update($table, $params, ['id = ?' => $userId]);
 
             $extraFields = [
-                'department' => $ldapUser['extra']['company'],
+                'department' => $ldapUser['company'][0],
             ];
             foreach ($extraFields as $variable => $value) {
                 $params = [

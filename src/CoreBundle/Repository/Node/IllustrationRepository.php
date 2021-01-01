@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -144,9 +145,18 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     /**
      * @param string $filter See: services.yaml parameter "glide_media_filters" to see the list of filters.
      */
-    public function getIllustrationUrl(ResourceInterface $resource, string $filter = ''): string
-    {
-        return $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
+    public function getIllustrationUrl(
+        ResourceIllustrationInterface $resource,
+        string $filter = '',
+        $size = null
+    ): string {
+        $illustration = $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
+
+        if (empty($illustration)) {
+            $illustration = $resource->getDefaultIllustration($size);
+        }
+
+        return $illustration;
     }
 
     public function getIllustrationUrlFromNode(ResourceNode $node, string $filter = ''): string

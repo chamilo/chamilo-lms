@@ -48,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
-class Course extends AbstractResource implements ResourceInterface, ResourceWithUrlInterface, ResourceToRootInterface
+class Course extends AbstractResource implements ResourceInterface, ResourceWithUrlInterface, ResourceToRootInterface, ResourceIllustrationInterface
 {
     public const CLOSED = 0;
     public const REGISTERED = 1;
@@ -1365,9 +1365,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getDefaultIllustration($size): string
+    {
+        return '/img/icons/32/course.png';
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getId();

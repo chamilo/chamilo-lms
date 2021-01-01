@@ -53,7 +53,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @UniqueEntity("username")
  * @ORM\Entity
  */
-class User implements UserInterface, EquatableInterface, ResourceInterface
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface
 {
     use TimestampableEntity;
 
@@ -2466,6 +2466,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface
 
     public function setParent(AbstractResource $parent)
     {
+    }
+
+    public function getDefaultIllustration($size): string
+    {
+        $size = empty($size) ? 32 : (int) $size;
+
+        return "/img/icons/$size/unknown.png";
     }
 
     /**

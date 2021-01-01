@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -53,12 +54,12 @@ class ChamiloExtension extends AbstractExtension
         return $this->illustrationRepository->getIllustrationUrlFromNode($node);
     }
 
-    public function getUserAvatar(ResourceNode $node): string
+    public function getUserAvatar(User $user): string
     {
-        $url = $this->getIllustration($node);
+        $url = $this->getIllustration($user->getResourceNode());
 
         if (empty($url)) {
-            return '/img/icons/32/unknown.png';
+            return $user->getDefaultIllustration(null);
         }
 
         return $url;

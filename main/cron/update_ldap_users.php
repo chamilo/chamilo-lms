@@ -25,7 +25,7 @@ $table = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT * FROM $table WHERE auth_source = 'ldap' ";
 $result = Database::query($sql);
 while ($user = Database::fetch_array($result, 'ASSOC')) {
-    echo "Loading user #".$user['id'].PHP_EOL;
+    $userId = $user['id'];
     $username = $user['username'];
     $ldapbind = @ldap_bind($ds, $extldap_config['admin_dn'], $extldap_config['admin_password']);
     $user_search = extldap_get_user_search_string($username);
@@ -35,8 +35,33 @@ while ($user = Database::fetch_array($result, 'ASSOC')) {
         continue;
     }
     $users = ldap_get_entries($ds, $sr);
-    for ($key = 0; $key < $users['count']; $key++) {
-        $ldapUser = $users[$key];
-        print_r($ldapUser).PHP_EOL;
+    $extraFieldUser = new ExtraFieldValue('user');
+    if (!empty($users)) {
+        echo "Updating user #".$userId.PHP_EOL;
+        for ($key = 0; $key < $users['count']; $key++) {
+            $ldapUser = $users[$key];
+            //print_r($ldapUser).PHP_EOL;
+            $params = [
+                'firstname' => $ldapUser['givenName'],
+                'lastname' => $ldapUser['sn'],
+                'email' => $ldapUser['mail'],
+            ];
+            print_r($params).PHP_EOL;
+            Database::update($table, $params, ['id = ?' => $userId]);
+
+            $extraFields = [
+                'department' => $ldapUser['extra']['company'],
+            ];
+            foreach ($extraFields as $variable => $value) {
+                $params = [
+                    'item_id' => $userId,
+                    'variable' => $variable,
+                    'value' => $value,
+                ];
+                print_r($params).PHP_EOL;
+                $extraFieldUser->save($params);
+            }
+            exit;
+        }
     }
 }

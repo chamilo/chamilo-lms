@@ -123,8 +123,8 @@ class GroupManager
         $repo = Container::getGroupRepository();
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($sessionId);
-        $group = api_get_group_entity(api_get_group_id());
-
+        //$group = api_get_group_entity(api_get_group_id());
+        $group = null;
         $qb = $repo->getResourcesByCourse($course, $session, $group);
 
         if (null === $categoryId) {
@@ -464,14 +464,13 @@ class GroupManager
      * @author Hugues Peeters <hugues.peeters@claroline.net>
      * @author Bart Mollet
      *
-     * @param array  $groupInfo   iid
      * @param string $course_code Default is current course
      *
      * @return int - number of groups deleted
      */
-    public static function deleteGroup($groupInfo, $course_code = null)
+    public static function deleteGroup(CGroup $group, $course_code = null)
     {
-        if (empty($groupInfo['iid'])) {
+        if (empty($group)) {
             return false;
         }
         $course_info = api_get_course_info($course_code);
@@ -481,65 +480,62 @@ class GroupManager
 
         $course_id = $course_info['real_id'];
         $em = Database::getManager();
-        $groupInfo = self::get_group_properties($groupInfo['iid'], true);
-        if ($groupInfo) {
-            $groupIid = $groupInfo['iid'];
-            // Unsubscribe all users
-            self::unsubscribe_all_users($groupInfo);
-            self::unsubscribe_all_tutors($groupInfo);
+        $groupIid = $group->getIid();
 
-            if (!empty($groupInfo['secret_directory'])) {
-                /*
-                $directory = $groupInfo['secret_directory'];
-                // move group-documents to garbage
-                $source_directory = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory;
-                // File to renamed
-                $destination_dir = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory.'_DELETED_'.$groupInfo['id'];
-                //Deleting from document tool
-                DocumentManager::delete_document(
-                    $course_info,
-                    $directory,
-                    $source_directory
-                );
+        // Unsubscribe all users
+        self::unsubscribe_all_users($groupInfo);
+        self::unsubscribe_all_tutors($groupInfo);
 
-                if (file_exists($source_directory)) {
-                    if ('true' === api_get_setting('permanently_remove_deleted_files')) {
-                        // Delete
-                        my_delete($source_directory);
-                    } else {
-                        // Rename
-                        rename($source_directory, $destination_dir);
-                    }
-                }*/
-            }
+        if (!empty($groupInfo['secret_directory'])) {
+            /*
+            $directory = $groupInfo['secret_directory'];
+            // move group-documents to garbage
+            $source_directory = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory;
+            // File to renamed
+            $destination_dir = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory.'_DELETED_'.$groupInfo['id'];
+            //Deleting from document tool
+            DocumentManager::delete_document(
+                $course_info,
+                $directory,
+                $source_directory
+            );
 
-            $em
-                ->createQuery(
-                    'DELETE FROM ChamiloCourseBundle:CForumForum f WHERE f.forumOfGroup = :group'
-                )
-                ->execute(['group' => $groupIid]);
-
-            // Delete item properties of this group.
-            // to_group_id is related to c_group_info.iid
-            /*$em
-                ->createQuery(
-                    'DELETE FROM ChamiloCourseBundle:CItemProperty ci WHERE ci.course = :course AND ci.group = :group'
-                )
-                ->execute(['course' => $course_id, 'group' => $groupId]);
-            */
-            // delete the groups
-            $repo = Container::getGroupRepository();
-            $group = $repo->find($groupIid);
-            if ($group) {
-                $em->remove($group);
-                $em->flush();
-            }
-            /*$em
-                ->createQuery(
-                    'DELETE FROM ChamiloCourseBundle:CGroup g WHERE g.course = :course AND g.iid = :id'
-                )
-                ->execute(['course' => $course_id, 'id' => $groupIid]);*/
+            if (file_exists($source_directory)) {
+                if ('true' === api_get_setting('permanently_remove_deleted_files')) {
+                    // Delete
+                    my_delete($source_directory);
+                } else {
+                    // Rename
+                    rename($source_directory, $destination_dir);
+                }
+            }*/
         }
+
+        $em
+            ->createQuery(
+                'DELETE FROM ChamiloCourseBundle:CForumForum f WHERE f.forumOfGroup = :group'
+            )
+            ->execute(['group' => $groupIid]);
+
+        // Delete item properties of this group.
+        // to_group_id is related to c_group_info.iid
+        /*$em
+            ->createQuery(
+                'DELETE FROM ChamiloCourseBundle:CItemProperty ci WHERE ci.course = :course AND ci.group = :group'
+            )
+            ->execute(['course' => $course_id, 'group' => $groupId]);
+        */
+        // delete the groups
+        $repo = Container::getGroupRepository();
+        $em->remove($group);
+        $em->flush();
+
+        /*$em
+            ->createQuery(
+                'DELETE FROM ChamiloCourseBundle:CGroup g WHERE g.course = :course AND g.iid = :id'
+            )
+            ->execute(['course' => $course_id, 'id' => $groupIid]);*/
+
 
         return true;
     }
@@ -808,7 +804,8 @@ class GroupManager
         }
 
         $session = api_get_session_entity(api_get_session_id());
-        $group = api_get_group_entity(api_get_group_id());
+        //$group = api_get_group_entity(api_get_group_id());
+        $group = null;
 
         $qb = $repo->getResourcesByCourse($course, $session, $group);
 
@@ -1354,7 +1351,6 @@ class GroupManager
     public static function getStudents($groupId, $filterOnlyActive = false)
     {
         $groupId = (int) $groupId;
-
         $activeCondition = $filterOnlyActive ? 'AND u.active = 1' : '';
 
         $em = Database::getManager();
@@ -1379,6 +1375,28 @@ class GroupManager
         }
 
         return $users;
+    }
+
+    public static function getStudentsCount($groupId, $filterOnlyActive = false)
+    {
+        $groupId = (int) $groupId;
+        $activeCondition = $filterOnlyActive ? 'AND u.active = 1' : '';
+
+        $em = Database::getManager();
+        return $em
+            ->createQuery("
+                SELECT COUNT(u.id) FROM ChamiloCoreBundle:User u
+                INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
+                WITH u.id = gu.user
+                INNER JOIN ChamiloCourseBundle:CGroup g
+                WITH gu.group = g.iid
+                WHERE g.iid = :group
+                    $activeCondition
+            ")
+            ->setParameters([
+                'group' => $groupId,
+            ])
+            ->getSingleScalarResult();
     }
 
     /**
@@ -1425,8 +1443,6 @@ class GroupManager
      * ywarnier:> Now the course_id has been removed (25/1/2005)
      * The databases are als very inconsistent in this.
      *
-     * @param array $groupInfo
-     *
      * @author Chrisptophe Gesche <christophe.geshe@claroline.net>,
      *         Hugues Peeters     <hugues.peeters@claroline.net> - original version
      * @author Roan Embrechts - virtual course support, code cleaning
@@ -1434,10 +1450,10 @@ class GroupManager
      *
      * @return bool
      */
-    public static function fillGroupWithUsers($groupInfo)
+    public static function fillGroupWithUsers(CGroup $group)
     {
         $_course = api_get_course_info();
-        if (empty($_course) || empty($groupInfo)) {
+        if (empty($_course) || empty($group)) {
             return false;
         }
         $session_id = api_get_session_id();
@@ -1445,7 +1461,7 @@ class GroupManager
             $_course['code'],
             $session_id
         );
-        $groupIid = $groupInfo['iid'];
+        $groupIid = $group->getIid();
         $category = self::get_category_from_group($groupIid);
 
         // Getting max numbers of user from group
@@ -1907,20 +1923,19 @@ class GroupManager
     /**
      * Unsubscribe all users from one or more groups.
      *
-     * @param array $groupInfo
+     * @param int $groupId
      *
      * @return bool TRUE if successful
      */
-    public static function unsubscribe_all_users($groupInfo)
+    public static function unsubscribe_all_users($groupId)
     {
-        $course_id = api_get_course_int_id();
-        $groupId = (int) $groupInfo['iid'];
-        if (empty($course_id) || empty($groupId)) {
+        $groupId = (int) $groupId;
+        if (empty($groupId)) {
             return false;
         }
 
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
-        $sql = "DELETE FROM $table_group_user
+        $table = Database::get_course_table(TABLE_GROUP_USER);
+        $sql = "DELETE FROM $table
                 WHERE
                     group_id = $groupId ";
 
@@ -2344,8 +2359,9 @@ class GroupManager
 
                 $group_name2 = '';
                 if (api_get_configuration_value('extra')) {
-                    $group_name2 = '<a href="group_space_tracking.php?cid='.api_get_course_int_id().'&gid='
-                        .$groupId.'">'.get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';
+                    $group_name2 = '<a
+                        href="group_space_tracking.php?cid='.api_get_course_int_id().'&gid='.$groupId.'">'.
+                        get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';
                 }
 
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
@@ -2414,16 +2430,22 @@ class GroupManager
 
             // Max number of members in group
             $max_members = self::MEMBER_PER_GROUP_NO_LIMIT == $this_group['maxStudent'] ? ' ' : ' / '.$this_group['maxStudent'];
-
+            $registeredUsers = self::getStudentsCount($groupId);
             // Number of members in group
-            $row[] = $this_group['maxStudent'].$max_members;
-
+            $row[] = $registeredUsers.$max_members;
+            $confirmMessage = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset));
             // Self-registration / unregistration
             if (!api_is_allowed_to_edit(false, true)) {
                 if (self::is_self_registration_allowed($user_id, $this_group)) {
-                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_reg&group_id='.$groupId.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('register').'</a>';
+                    $row[] = '<a
+                        class = "btn btn-default"
+                        href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_reg&group_id='.$groupId.'"
+                        onclick="javascript:if(!confirm('."'".$confirmMessage."'".')) return false;">'.get_lang('register').'</a>';
                 } elseif (self::is_self_unregistration_allowed($user_id, $this_group)) {
-                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_unreg&group_id='.$groupId.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('unregister').'</a>';
+                    $row[] = '<a
+                        class = "btn btn-default"
+                        href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_unreg&group_id='.$groupId.'"
+                        onclick="javascript:if(!confirm('."'".$confirmMessage."'".')) return false;">'.get_lang('unregister').'</a>';
                 } else {
                     $row[] = '-';
                 }
@@ -2433,35 +2455,48 @@ class GroupManager
             if (api_is_allowed_to_edit(false, true) &&
                 !(api_is_session_general_coach() && intval($this_group['session_id']) != $session_id)
             ) {
-                $edit_actions = '<a href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"  title="'.get_lang('Edit').'">'.
-                    Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                $edit_actions = '<a
+                    href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"
+                    title="'.get_lang('Edit').'">'.
+                    Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).
+                    '</a>&nbsp;';
 
                 if (1 == $this_group['status']) {
-                    $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_invisible&id='.$groupId.'" title="'.get_lang('Hide').'">'.
+                    $edit_actions .= '<a
+                        href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_invisible&group_id='.$groupId.'"
+                        title="'.get_lang('Hide').'">'.
                         Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
                 } else {
-                    $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_visible&id='.$groupId.'" title="'.get_lang('Show').'">'.
+                    $edit_actions .= '<a
+                        href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_visible&group_id='.$groupId.'"
+                        title="'.get_lang('Show').'">'.
                         Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
                 }
 
-                $edit_actions .= '<a href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"  title="'.get_lang('Group members').'">'.
+                $edit_actions .= '<a
+                    href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"
+                    title="'.get_lang('Group members').'">'.
                     Display::return_icon('user.png', get_lang('Group members'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$groupId.'"  title="'.get_lang('Export users list').'">'.
+                $edit_actions .= '<a
+                    href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$groupId.'"
+                    title="'.get_lang('Export users list').'">'.
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
-                            Display::return_icon('survey.png', get_lang('ExportSurveyResults'), '', ICON_SIZE_SMALL),
-                            $url.'group_overview.php?action=export_surveys&'.api_get_cidreq(true, false).'&id='.$groupId
-                        ).'&nbsp;';
+                        Display::return_icon('survey.png', get_lang('ExportSurveyResults'), '', ICON_SIZE_SMALL),
+                        $url.'group_overview.php?action=export_surveys&'.api_get_cidreq(true, false).'&id='.$groupId
+                    ).'&nbsp;';
                 }
-                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&id='.$groupId.'"
-                    onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.
+                $edit_actions .= '<a
+                    href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&group_id='.$groupId.'"
+                    onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('FillGroup').'">'.
                     Display::return_icon('fill.png', get_lang('FillGroup'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&id='.$groupId.'"
-                    onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
+                $edit_actions .= '<a
+                    href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&group_id='.$groupId.'"
+                    onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('Delete').'">'.
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 $row[] = $edit_actions;
@@ -2470,7 +2505,7 @@ class GroupManager
                 $totalRegistered = $totalRegistered + $this_group['nbMember'];
             }
             $group_data[] = $row;
-        } // end loop
+        }
 
         // If no groups then don't show the table (only for students)
         if (!api_is_allowed_to_edit(true, false)) {
@@ -2898,7 +2933,7 @@ class GroupManager
             case 'settings':
                 $activeSettings = 'active';
                 break;
-            case'tutor':
+            case 'tutor':
                 $activeTutor = 'active';
                 break;
             case 'member':
@@ -2909,18 +2944,18 @@ class GroupManager
         $url = api_get_path(WEB_CODE_PATH).'group/%s?'.api_get_cidreq();
 
         echo '
-            <ul class="toolbar-groups nav nav-tabs">
-                <li class="'.$activeSettings.'">
-                    <a id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link '.$activeSettings.'" id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'
                     </a>
                 </li>
-                <li class="'.$activeMember.'">
-                    <a id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                <li class="nav-item">
+                    <a class="nav-link '.$activeMember.'" id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
                     '.Display::return_icon('user.png').' '.get_lang('Group members').'</a>
                 </li>
-                <li class="'.$activeTutor.'">
-                    <a id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
+                <li class="nav-item">
+                    <a class="nav-link  '.$activeTutor.'" id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
                     '.Display::return_icon('teacher.png').' '.get_lang('Group tutors').'
                     </a>
                 </li>
@@ -3036,42 +3071,22 @@ class GroupManager
         return $form->toHtml();
     }
 
-    /**
-     * @param int $groupId
-     * @param int $status
-     */
-    public static function setStatus($groupId, $status)
+    public static function setStatus(CGroup $group, $status)
     {
-        $groupInfo = self::get_group_properties($groupId);
-
-        $courseId = api_get_course_int_id();
-        if (!empty($groupInfo)) {
-            $table = Database::get_course_table(TABLE_GROUP);
-            $params = [
-                'status' => intval($status),
-            ];
-            Database::update(
-                $table,
-                $params,
-                ['c_id = ? AND id = ?' => [$courseId, $groupId]]
-            );
-        }
+        $group->setStatus($status);
+        $em = Database::getManager();
+        $em->persist($group);
+        $em->flush();
     }
 
-    /**
-     * @param int $groupId
-     */
-    public static function setVisible($groupId)
+    public static function setVisible(CGroup $group)
     {
-        self::setStatus($groupId, 1);
+        self::setStatus($group, true);
     }
 
-    /**
-     * @param int $groupId
-     */
-    public static function setInvisible($groupId)
+    public static function setInvisible(CGroup $group)
     {
-        self::setStatus($groupId, 0);
+        self::setStatus($group, false);
     }
 
     /**

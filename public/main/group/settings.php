@@ -43,7 +43,7 @@ $form->addElement('html', '<div class="col-md-6">');
 // Group name
 $form->addElement('text', 'name', get_lang('Group name'));
 
-if ('true' == api_get_setting('allow_group_categories')) {
+if ('true' === api_get_setting('allow_group_categories')) {
     $groupCategories = GroupManager::get_categories();
     $categoryList = [];
     foreach ($groupCategories as $category) {

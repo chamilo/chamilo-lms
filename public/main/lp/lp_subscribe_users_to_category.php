@@ -78,7 +78,7 @@ $links = $category->getResourceNode()->getResourceLinks();
 $selectedGroupChoices = [];
 foreach ($links as $link) {
     if (null !== $link->getGroup()) {
-        $selectedGroupChoices[] = $link->getGroup()->getId();
+        $selectedGroupChoices[] = $link->getGroup()->getIid();
     }
 }
 

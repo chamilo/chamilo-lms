@@ -116,7 +116,7 @@ if (isset($_POST['number_of_groups'])) {
             disabled = element.disabled;
             $(id).prop('disabled', disabled);
             $(id).prop('value', ref.value);
-            $(id).selectpicker('refresh');
+            //$(id).selectpicker('refresh');
         }
         if (disabled) {
             ref.addEventListener("change", copy, false);

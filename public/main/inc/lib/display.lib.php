@@ -2555,9 +2555,8 @@ class Display
             });
         }
 
-        $html = '<div id="'.$id.'" class="actions">';
-        $html .= '<div class="row">';
-
+        $html = '<ul id="'.$id.'" class="nav nav-tabs actions">';
+        //$html .= '<div class="row">';
         for ($i = 0; $i < $col; $i++) {
             $class = 'col-sm-'.$colsWidth[$i];
 
@@ -2569,11 +2568,11 @@ class Display
                 }
             }
 
-            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+            $html .= '<li class="nav-item '.$class.'">'.$content[$i].'</li>';
         }
 
-        $html .= '</div>';
-        $html .= '</div>';
+        //$html .= '</div>';
+        $html .= '</ul>';
 
         return $html;
     }

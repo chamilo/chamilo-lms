@@ -2,10 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
-use Chamilo\UserBundle\Entity\User;
 
 // Make sure we void the course context if we are in the social network section
 if (empty($_GET['cidReq'])) {
@@ -19,208 +17,95 @@ if (false === api_get_configuration_value('allow_portfolio_tool')) {
     api_not_allowed(true);
 }
 
+$controller = new \PortfolioController();
+
 $em = Database::getManager();
 
-$currentUserId = api_get_user_id();
-$ownerId = isset($_GET['user']) ? (int) $_GET['user'] : $currentUserId;
-$owner = api_get_user_entity($ownerId);
-$course = api_get_course_entity(api_get_course_int_id());
-$session = api_get_session_entity(api_get_session_id());
-
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
-$cidreq = api_get_cidreq();
-$baseUrl = api_get_self().'?'.($cidreq ? $cidreq.'&' : '');
-$allowEdit = $currentUserId == $owner->getId();
-
-if (isset($_GET['preview'])) {
-    $allowEdit = false;
-}
-
-$toolName = get_lang('Portfolio');
-$actions = [];
-$content = '';
-
-/**
- * Check if the portfolio item or category is valid for the current user.
- *
- * @param $item
- *
- * @return bool
- */
-$isValid = function ($item) use ($owner, $course, $session) {
-    if (!$item) {
-        return false;
-    }
-
-    if (get_class($item) == Portfolio::class) {
-        if ($session && $item->getSession()->getId() != $session->getId()) {
-            return false;
-        }
-
-        if ($course && $item->getCourse()->getId() != $course->getId()) {
-            return false;
-        }
-    }
-
-    if ($item->getUser()->getId() != $owner->getId()) {
-        return false;
-    }
-
-    return true;
-};
 
 switch ($action) {
     case 'add_category':
-        require 'add_category.php';
-        break;
+        $controller->addCategory();
+
+        return;
     case 'edit_category':
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-        if (!$id) {
-            break;
-        }
 
         /** @var PortfolioCategory $category */
         $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
 
-        if (!$isValid($category)) {
-            api_not_allowed(true);
+        if (empty($category)) {
+            break;
         }
 
-        require 'edit_category.php';
-        break;
+        $controller->editCategory($category);
+        return;
     case 'hide_category':
     case 'show_category':
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-        if (!$id) {
+        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+
+        if (empty($category)) {
             break;
         }
 
-        /** @var PortfolioCategory $category */
-        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
-
-        if (!$isValid($category)) {
-            api_not_allowed(true);
-        }
-
-        $category->setIsVisible(!$category->isVisible());
-
-        $em->persist($category);
-        $em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('VisibilityChanged'), 'success')
-        );
-
-        header("Location: $baseUrl");
-        exit;
+        $controller->showHideCategory($category);
+        return;
     case 'delete_category':
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-        if (!$id) {
-            break;
-        }
-
         /** @var PortfolioCategory $category */
         $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
 
-        if (!$isValid($category)) {
-            api_not_allowed(true);
-        }
-
-        $em->remove($category);
-        $em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('CategoryDeleted'), 'success')
-        );
-
-        header("Location: $baseUrl");
-        exit;
-    case 'add_item':
-        require 'add_item.php';
-        break;
-    case 'edit_item':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-        if (!$id) {
+        if (empty($category)) {
             break;
         }
 
-        /** @var CPortfolio $item */
+        $controller->deleteCategory($category);
+        return;
+    case 'add_item':
+        $controller->addItem();
+        return;
+    case 'edit_item':
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+        /** @var Portfolio $item */
         $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
 
-        if (!$isValid($item)) {
-            api_not_allowed(true);
+        if (empty($item)) {
+            break;
         }
 
-        require 'edit_item.php';
-        break;
+        $controller->editItem($item);
+        return;
     case 'hide_item':
     case 'show_item':
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-        if (!$id) {
-            break;
-        }
-
         /** @var Portfolio $item */
         $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
 
-        if (!$isValid($item)) {
-            api_not_allowed(true);
+        if (empty($item)) {
+            break;
         }
 
-        $item->setIsVisible(!$item->isVisible());
-
-        $em->persist($item);
-        $em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('VisibilityChanged'), 'success')
-        );
-
-        header("Location: $baseUrl");
-        exit;
+        $controller->showHideItem($item);
+        return;
     case 'delete_item':
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-        if (!$id) {
-            break;
-        }
-
         /** @var Portfolio $item */
         $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
 
-        if (!$isValid($item)) {
-            api_not_allowed(true);
+        if (empty($item)) {
+            break;
         }
 
-        $em->remove($item);
-        $em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('ItemDeleted'), 'success')
-        );
-
-        header("Location: $baseUrl");
-        exit;
+        $controller->deleteItem($item);
+        return;
     case 'list':
     default:
-        require 'list.php';
+        $controller->index();
+        return;
 }
-
-/*
- * View
- */
-$this_section = $course ? SECTION_COURSES : SECTION_SOCIAL;
-
-$actions = implode(PHP_EOL, $actions);
-
-Display::display_header($toolName);
-Display::display_introduction_section(TOOL_PORTFOLIO);
-echo $actions ? Display::toolbarAction('portfolio-toolbar', [$actions]) : '';
-echo Display::page_header($toolName);
-echo $content;
-Display::display_footer();

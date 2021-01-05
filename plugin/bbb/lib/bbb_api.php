@@ -222,14 +222,6 @@ class BigBlueButtonBN
 			$params .= '&createTime='.urlencode($joinParams['createTime']);
 		}
 
-		if (isset($joinParams['interface']) && (int) $joinParams['interface'] === BBBPlugin::INTERFACE_HTML5) {
-			$bbbHost = api_remove_trailing_slash(CONFIG_SERVER_URL_WITH_PROTOCOL);
-			if (preg_match('#/bigbluebutton$#', $bbbHost)) {
-			    $bbbHost = preg_replace('#/bigbluebutton$#', '', $bbbHost);
-            }
-            $params .= '&redirectClient=true&clientURL='.$bbbHost.'/html5client/join';
-        }
-
 		// Return the URL:
 		$url = $joinUrl.$params.'&checksum='.sha1('join'.$params.$this->_securitySalt);
 

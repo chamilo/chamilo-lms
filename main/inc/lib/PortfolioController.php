@@ -70,6 +70,10 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioCategoryFieldHelp'), 'info')
+        );
+
         $form = new FormValidator('add_category', 'post', "{$this->baseUrl}&action=add_category");
 
         if (api_get_configuration_value('save_titles_as_html')) {
@@ -131,6 +135,10 @@ class PortfolioController
         if (!$this->categoryBelongToOwner($category)) {
             api_not_allowed(true);
         }
+
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioCategoryFieldHelp'), 'info')
+        );
 
         $form = new FormValidator('edit_category', 'post', $this->baseUrl."action=edit_category&id={$category->getId()}");
 
@@ -253,7 +261,13 @@ class PortfolioController
         }
 
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
-        $form->addSelectFromCollection('category', get_lang('Category'), $categories, [], true);
+        $form->addSelectFromCollection(
+            'category',
+            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')],
+            $categories,
+            [],
+            true
+        );
         $form->addButtonCreate(get_lang('Create'));
 
         if ($form->validate()) {
@@ -332,7 +346,13 @@ class PortfolioController
         }
 
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
-        $form->addSelectFromCollection('category', get_lang('Category'), $categories, [], true, '__toString');
+        $form->addSelectFromCollection(
+            'category',
+            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')],
+            $categories,
+            [],
+            true
+        );
         $form->addButtonUpdate(get_lang('Update'));
         $form->setDefaults(
             [
@@ -468,22 +488,42 @@ class PortfolioController
             $criteria['isVisible'] = true;
         }
 
-        $categories = $this->em
-            ->getRepository(PortfolioCategory::class)
-            ->findBy($criteria);
+        $categories = [];
+
+        if (!$this->course) {
+            $criteria['user'] = $this->owner;
+
+            $categories = $this->em
+                ->getRepository(PortfolioCategory::class)
+                ->findBy($criteria);
+        }
 
         if ($this->course) {
+            unset($criteria['user']);
+
             $criteria['course'] = $this->course;
             $criteria['session'] = $this->session;
         } else {
             $criteria['user'] = $this->owner;
+            $criteria['category'] = null;
         }
-
-        $criteria['category'] = null;
 
         $items = $this->em
             ->getRepository(Portfolio::class)
             ->findBy($criteria, ['creationDate' => 'DESC']);
+
+        $items = array_filter(
+            $items,
+            function (Portfolio $item) {
+                if ($this->currentUserId != $item->getUser()->getId()
+                    && !$item->isVisible()
+                ) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
 
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('user', $this->owner);

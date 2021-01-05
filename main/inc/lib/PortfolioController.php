@@ -549,7 +549,11 @@ class PortfolioController
         $view = new Template($toolName);
         $view->assign('header', $toolName);
 
-        $actionsStr = Display::return_introduction_section(TOOL_PORTFOLIO);
+        $actionsStr = '';
+
+        if ($this->course) {
+            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
+        }
 
         if ($actions) {
             $actions = implode(PHP_EOL, $actions);

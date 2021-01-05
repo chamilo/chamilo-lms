@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
+use Chamilo\CoreBundle\Entity\PortfolioComment;
 
 /**
  * Class PortfolioController.
@@ -126,15 +127,19 @@ class PortfolioController
      * @param string $content
      * @param string $toolName
      * @param array  $actions
+     * @param bool   $showHeader
      */
-    private function renderView(string $content, string $toolName, array $actions = [])
+    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
     {
         global $this_section;
 
         $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
 
         $view = new Template($toolName);
-        $view->assign('header', $toolName);
+
+        if ($showHeader) {
+            $view->assign('header', $toolName);
+        }
 
         $actionsStr = '';
 
@@ -611,5 +616,146 @@ class PortfolioController
         $content = $template->fetch($layout);
 
         $this->renderView($content, get_lang('Portfolio'), $actions);
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function view(Portfolio $item)
+    {
+        global $interbreadcrumb;
+
+        $form = $this->createCommentForm($item);
+
+        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+
+        $query = $commentsRepo->createQueryBuilder('comment')
+            ->where('comment.item = :item')
+            ->orderBy('comment.root, comment.lft', 'ASC')
+            ->setParameter('item', $item)
+            ->getQuery();
+
+        $clockIcon = Display::returnFontAwesomeIcon('clock-o', '', true);
+
+        $commentsHtml = $commentsRepo->buildTree(
+            $query->getArrayResult(),
+            [
+                'decorate' => true,
+                'rootOpen' => '<ul class="media-list">',
+                'rootClose' => '</ul>',
+                'childOpen' => function ($node) use ($commentsRepo) {
+                    /** @var PortfolioComment $comment */
+                    $comment = $commentsRepo->find($node['id']);
+                    $author = $comment->getAuthor();
+
+                    $userPicture = UserManager::getUserPicture(
+                        $comment->getAuthor()->getId(),
+                        USER_IMAGE_SIZE_SMALL,
+                        null,
+                        [
+                            'picture_uri' => $author->getPictureUri(),
+                            'email' => $author->getEmail(),
+                        ]
+                    );
+
+                    return '<li class="media">
+                        <div class="media-left">
+                            <img class="media-object thumbnail" src="'.$userPicture.'" alt="'.$author->getCompleteName().'">
+                        </div>
+                        <div class="media-body">';
+                },
+                'childClose' => '</div></li>',
+                'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon) {
+                    /** @var PortfolioComment $comment */
+                    $comment = $commentsRepo->find($node['id']);
+
+                    $commentActions = Display::toolbarButton(
+                        get_lang('ReplyToThisComment'),
+                        '#',
+                        'reply',
+                        'default',
+                        [
+                            'data-comment' => htmlspecialchars(
+                                json_encode(['id' => $comment->getId()])
+                            ),
+                            'role' => 'button',
+                            'class' => 'btn-reply-to'
+                        ],
+                        false
+                    );
+
+                    return '<p class="h4 media-heading">'.$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'
+                        .$clockIcon.PHP_EOL.Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'
+                        .'</p><div class="pull-right">'.$commentActions.'</div>'.$comment->getContent().PHP_EOL;
+                },
+            ]
+        );
+
+        $template = new Template(null, false, false, false, false, false, false);
+        $template->assign('item', $item);
+        $template->assign('comments', $commentsHtml);
+        $template->assign('form', $form);
+
+        $layout = $template->get_template('portfolio/view.html.twig');
+        $content = $template->fetch($layout);
+
+        $interbreadcrumb[] = ['name' => get_lang('Portfolio'), 'url' => $this->baseUrl];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl
+        );
+
+        $this->renderView($content, $item->getTitle(), $actions, false);
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return string
+     */
+    private function createCommentForm(Portfolio $item): string
+    {
+        $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
+
+        $form = new FormValidator('frm_comment', 'post', $formAction);
+        $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
+        $form->addHidden('item', $item->getId());
+        $form->addHidden('parent', 0);
+        $form->applyFilter('content', 'trim');
+        $form->addButtonSave(get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);
+
+            $comment = new PortfolioComment();
+            $comment
+                ->setAuthor($this->owner)
+                ->setParent($parentComment)
+                ->setContent($values['content'])
+                ->setDate(api_get_utc_datetime(null, false, true))
+                ->setItem($item);
+
+            $this->em->persist($comment);
+            $this->em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('CommentAdded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit;
+        }
+
+        return $form->returnForm();
     }
 }

@@ -4,6 +4,8 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -101,11 +103,19 @@ class Portfolio
     protected $category;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", mappedBy="item")
+     */
+    private $comments;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
     {
         $this->category = new PortfolioCategory();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -320,5 +330,13 @@ class Portfolio
         $this->category = $category;
 
         return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
     }
 }

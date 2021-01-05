@@ -104,6 +104,18 @@ switch ($action) {
 
         $controller->deleteItem($item);
         return;
+    case 'view':
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+        /** @var Portfolio $item */
+        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->view($item);
+        return;
     case 'list':
     default:
         $controller->index();

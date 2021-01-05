@@ -7336,23 +7336,23 @@ class learnpath
             case 'asset':
             case 'sco':
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_item_form(
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->display_item_form(
                         $row['item_type'],
                         get_lang('EditCurrentChapter').' :',
                         'edit',
                         $item_id,
                         $row
                     );
-                } else {
-                    $return .= $this->display_item_form(
+            } else {
+                $return .= $this->display_item_form(
                         $row['item_type'],
                         get_lang('EditCurrentChapter').' :',
                         'edit_item',
                         $item_id,
                         $row
                     );
-                }
+            }
                 break;
             case TOOL_DOCUMENT:
             case TOOL_READOUT_TEXT:
@@ -14178,9 +14178,11 @@ EOD;
      * editing an item of an LP. Returns the form with the authors' setting. It must be set before the setDefault.
      *
      * @param FormValidator $form
+     *
      * @return FormValidator
      */
-    private function getAutorLpItem($form ){
+    private function getAutorLpItem($form)
+    {
         /** @var FormValidator $form */
         if ($form->hasElement('extra_authorlpitem')) {
             /** @var HTML_QuickForm_select $author */
@@ -14205,6 +14207,7 @@ EOD;
             }
             $author->setOptions($options);
         }
+
         return $form;
     }
 }

@@ -25,6 +25,11 @@
                                         {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}
                                     </li>
                                 {% endif %}
+                            {% else %}
+                                <li>
+                                    <span class="fa-li fa fa-user" aria-hidden="true"></span>
+                                    {{ item.user.completeName }}
+                                </li>
                             {% endif %}
 
                             <li>

@@ -123,6 +123,38 @@ class PortfolioController
     }
 
     /**
+     * @param string $content
+     * @param string $toolName
+     * @param array  $actions
+     */
+    private function renderView(string $content, string $toolName, array $actions = [])
+    {
+        global $this_section;
+
+        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
+
+        $view = new Template($toolName);
+        $view->assign('header', $toolName);
+
+        $actionsStr = '';
+
+        if ($this->course) {
+            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
+        }
+
+        if ($actions) {
+            $actions = implode(PHP_EOL, $actions);
+
+            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
+        }
+
+        $view->assign('actions', $actionsStr);
+
+        $view->assign('content', $content);
+        $view->display_one_col_template();
+    }
+
+    /**
      * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
      *
      * @throws \Doctrine\ORM\ORMException
@@ -140,7 +172,11 @@ class PortfolioController
             Display::return_message(get_lang('PortfolioCategoryFieldHelp'), 'info')
         );
 
-        $form = new FormValidator('edit_category', 'post', $this->baseUrl."action=edit_category&id={$category->getId()}");
+        $form = new FormValidator(
+            'edit_category',
+            'post',
+            $this->baseUrl."action=edit_category&id={$category->getId()}"
+        );
 
         if (api_get_configuration_value('save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
@@ -151,10 +187,12 @@ class PortfolioController
 
         $form->addHtmlEditor('description', get_lang('Description'), false, false, ['ToolbarSet' => 'Minimal']);
         $form->addButtonUpdate(get_lang('Update'));
-        $form->setDefaults([
-            'title' => $category->getTitle(),
-            'description' => $category->getDescription(),
-        ]);
+        $form->setDefaults(
+            [
+                'title' => $category->getTitle(),
+                'description' => $category->getDescription(),
+            ]
+        );
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -188,6 +226,20 @@ class PortfolioController
         $content = $form->returnForm();
 
         return $this->renderView($content, get_lang('EditCategory'), $actions);
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
+     *
+     * @return bool
+     */
+    private function categoryBelongToOwner(PortfolioCategory $category): bool
+    {
+        if ($category->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -402,6 +454,28 @@ class PortfolioController
     /**
      * @param \Chamilo\CoreBundle\Entity\Portfolio $item
      *
+     * @return bool
+     */
+    private function itemBelongToOwner(Portfolio $item): bool
+    {
+        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
+            return false;
+        }
+
+        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
+            return false;
+        }
+
+        if ($item->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -537,73 +611,5 @@ class PortfolioController
         $content = $template->fetch($layout);
 
         $this->renderView($content, get_lang('Portfolio'), $actions);
-    }
-
-    /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
-     *
-     * @return bool
-     */
-    private function categoryBelongToOwner(PortfolioCategory $category): bool
-    {
-        if ($category->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
-     * @return bool
-     */
-    private function itemBelongToOwner(Portfolio $item): bool
-    {
-        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
-            return false;
-        }
-
-        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
-            return false;
-        }
-
-        if ($item->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $content
-     * @param string $toolName
-     * @param array  $actions
-     */
-    private function renderView(string $content, string $toolName, array $actions = [])
-    {
-        global $this_section;
-
-        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
-
-        $view = new Template($toolName);
-        $view->assign('header', $toolName);
-
-        $actionsStr = '';
-
-        if ($this->course) {
-            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
-        }
-
-        if ($actions) {
-            $actions = implode(PHP_EOL, $actions);
-
-            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
-        }
-
-        $view->assign('actions', $actionsStr);
-
-        $view->assign('content', $content);
-        $view->display_one_col_template();
     }
 }

@@ -196,7 +196,7 @@ class PortfolioController
 
         $category->setIsVisible(!$category->isVisible());
 
-        $this->em->remove($category);
+        $this->em->persist($category);
         $this->em->flush();
 
         Display::addFlash(

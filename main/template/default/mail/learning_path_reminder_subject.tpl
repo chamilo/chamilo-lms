@@ -1,0 +1,1 @@
+{{ 'NewLearningPath' | get_lang }}

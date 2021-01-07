@@ -6856,7 +6856,7 @@ class Exercise
         if (
             ($remedialField != false && isset($remedialField['default_value']) && $remedialField['default_value'] == 1 // if the plugin is activated
             ) || (
-                $advancedCourseField != false &&  isset($advancedCourseField['default_value']) && $advancedCourseField['default_value'] == 1 // if the plugin is activated
+                $advancedCourseField != false && isset($advancedCourseField['default_value']) && $advancedCourseField['default_value'] == 1 // if the plugin is activated
             )
         ) {
             $exerciseAttempts = $this->selectAttempts();
@@ -6868,7 +6868,7 @@ class Exercise
                     $lpItemId,
                     $lpItemViewId
                 );
-                $message .=  $this->advanceCourseList(api_get_user_id());
+                $message .= $this->advanceCourseList(api_get_user_id());
                 if ($attemptCount >= $exerciseAttempts) {
                     $message .= $this->remedialCourseList(api_get_user_id());
                 }
@@ -10840,7 +10840,6 @@ class Exercise
      * represent the next level BT#18165.
      *
      * @param int $userId
-     *
      */
     public function advanceCourseList($userId = 0)
     {
@@ -10937,9 +10936,8 @@ class Exercise
      * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
      * courses BT#18165.
      *
-     * @param int $userId
+     * @param int  $userId
      * @param bool $review
-     *
      */
     public function remedialCourseList($userId = 0, $review = false)
     {

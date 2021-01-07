@@ -1,1 +1,1 @@
-{{ 'NewLearningPath' | get_lang }}
+{{ 'NewLearningPathSubject' | get_lang }}

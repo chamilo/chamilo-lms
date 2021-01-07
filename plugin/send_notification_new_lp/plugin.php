@@ -14,9 +14,7 @@
 /**
  * Plugin details (must be present).
  */
-$plugin_info['title'] = 'Remedial and Advance Courses';
-$plugin_info['comment'] = 'It adds the possibility of enrolling the user in a remedial course when the last '.
-    'attempt of an exercise fails or an advanced course when they pass an exercise. The success rate of '.
-    'the exercise must be established';
+$plugin_info['title'] = 'Mailing new LPs to students and their HR Managers';
+$plugin_info['comment'] = 'Add the ability to send emails to students and hr when a lp is published. It will be sent in each execution of the respective cron "main/cron/learning_path_reminder.php"';
 $plugin_info['version'] = '1.0'; // o la versión que corresponda
 $plugin_info['author'] = 'Carlos Alvarado';

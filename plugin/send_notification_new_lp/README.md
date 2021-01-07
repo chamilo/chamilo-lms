@@ -1,17 +1,11 @@
-Create a field to remedial course
+Mailing new LPs to students and their HR Managers
 ======
 
-The purpose of this plugin is the possibility of adding remedial courses or advanced courses so that, when a course is 
-approved or failed, you can opt for a set of remedial courses or advanced courses.
+This plugin allows you to enable the sending of emails to students and their human resources managers at the moment an
+LP is published.
 
-* For remedial courses:
-  When activating the plugin, in the test settings, a remedialCourseList field is enabled, where the course (s) to be 
-  taken is established if the user fails all the course attempts.
-  For this to work, the number of attempts must be activated and also, have an exam success rate enabled.
-  After the user fails the last attempt, they automatically enroll in the selected courses.
+For its operation, it is necessary that there is an extra field notify_student_and_hrm_when_available with default_value
+equal to 1, which will enable the possibility of executing the main/cron/learning_path_reminder.php cron to send
+the emails to the users registered in the lp and to their hr.
 
-* For advanced courses:
-  When activating the plugin, in the test settings, the advanceCourseList field is enabled, which allows you to select 
-  one or more courses that will be added to the user when they have passed an exam.
-  This function is independent of the number of attempts, but the passing percentage must be established from the test 
-  configuration.
+It is recommended that it be run once a day since it evaluates all lp's in the range from 0:00 to 23:59.

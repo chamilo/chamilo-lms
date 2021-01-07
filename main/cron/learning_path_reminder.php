@@ -15,11 +15,81 @@ require_once __DIR__.'/../inc/global.inc.php';
 if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
 };
-// $isActive = api_get_setting('cron_remind_course_expiration_activate') === 'true';
-$isActive = true;
-if (!$isActive) {
+
+$field = new ExtraField('lp');
+$activeMessageNewlp = $field->get_handler_field_info_by_field_variable('notify_student_and_hrm_when_available');
+
+if ($activeMessageNewlp == false) {
+    // field doesnt exist
+    exit();
+}
+if (!isset($remedialField['default_value'])) {
+    // field dont have default value
+    exit();
+}
+if ($remedialField['default_value'] == 0) {
+    // plugin is inactive
     exit;
 }
+
+function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminName, $adminEmail)
+{
+
+    $subjectTemplate = new Template(
+        null,
+        false,
+        false,
+        false,
+        false,
+        false);
+
+
+    $subjectLayout = $subjectTemplate->get_template(
+        'mail/learning_path_reminder_subject.tpl'
+    );
+
+    $bodyTemplate = new Template(
+        null,
+        false,
+        false,
+        false,
+        false,
+        false);
+    $bodyTemplate->assign('courseName', $courseName);
+    $bodyTemplate->assign('lpName', $lpName);
+    $bodyTemplate->assign('link', $link);
+
+
+    $bodyLayout = $bodyTemplate->get_template(
+        'mail/learning_path_reminder_body.tpl'
+    );
+
+    api_mail_html(
+        $userName,
+        $userEmail,
+        $subjectTemplate->fetch($subjectLayout),
+        $bodyTemplate->fetch($bodyLayout),
+        $adminName,
+        $adminEmail
+    );
+
+
+    return null;
+}
+
+function getHrUserOfUser($userId = 0)
+{
+    if ($userId == 0) return [];
+    $relationStudenHRTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+    $sql = "Select * from $relationStudenHRTable where user_id = $userId and relation_type = ".USER_RELATION_TYPE_RRHH;
+    $Hr = [];
+    $result = Database::query($sql);
+    while ($row = Database::fetch_array($result)) {
+        $Hr[] = api_get_user_info($row['friend_user_id']);
+    }
+    return $Hr;
+}
+
 function Learingpaths()
 {
     $administrator = [
@@ -31,22 +101,24 @@ function Learingpaths()
         ),
         'email' => api_get_setting("emailAdministrator"),
     ];
+    $adminName = $administrator['completeName'];
+    $adminEmail = $administrator['email'];
 
-    $gradebookTable = Database::get_course_table(TABLE_LP_MAIN);
+    $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
     $date = new DateTime();
     $date = $date->format('Y-m-d');
 
     $sql = "
 SELECT
-    $gradebookTable.id AS l_id,
-    $gradebookTable.c_id AS c_id,
-    $gradebookTable.session_id AS session_id,
-    $gradebookTable.name AS name,
+    $lpTable.id AS l_id,
+    $lpTable.c_id AS c_id,
+    $lpTable.session_id AS session_id,
+    $lpTable.name AS name,
     $courseTable.title AS course_name,
     $courseTable.code AS code
 FROM
-    $gradebookTable
+    $lpTable
 INNER JOIN $courseTable ON c_lp.c_id = course.id
 WHERE
       publicated_on >= '$date 00:00:00' AND
@@ -66,6 +138,7 @@ WHERE
         );
         foreach($userlist as $user){
             $userInfo = api_get_user_info($user['id']);
+            $HrUsers = getHrUserOfUser($user['id']);
             $userName = $userInfo['complete_name'];
             $email = $user['email'];
             $href = api_get_path(WEB_CODE_PATH).
@@ -73,41 +146,31 @@ WHERE
                 "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
 
             $link = "<a href='$href'>$href</a>";
-            $subjectTemplate = new Template(
-                null,
-                false,
-                false,
-                false,
-                false,
-                false);
-            $subjectLayout = $subjectTemplate->get_template(
-                'mail/learning_path_reminder_subject.tpl'
-            );
 
-            $bodyTemplate = new Template(
-                null,
-                false,
-                false,
-                false,
-                false,
-                false);
-            $bodyTemplate->assign('courseName', $courseName);
-            $bodyTemplate->assign('lpName', $lpName);
-            $bodyTemplate->assign('link', $link);
-
-
-            $bodyLayout = $bodyTemplate->get_template(
-                'mail/learning_path_reminder_body.tpl'
-            );
-
-            api_mail_html(
+            SendMessage(
+                $courseName,
+                $lpName,
+                $link,
                 $userName,
                 $email,
-                $subjectTemplate->fetch($subjectLayout),
-                $bodyTemplate->fetch($bodyLayout),
-                $administrator['completeName'],
-                $administrator['email']
+                $adminName,
+                $adminEmail
             );
+            if (count($HrUsers) != 0) {
+                foreach ($HrUsers as $userHr) {
+                    SendMessage(
+                        $courseName,
+                        $lpName,
+                        $link,
+                        $userHr['complete_name'],
+                        $userHr['email'],
+                        $adminName,
+                        $adminEmail
+                    );
+
+                }
+            }
+
         }
 
     };

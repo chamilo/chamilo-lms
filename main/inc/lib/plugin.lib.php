@@ -263,6 +263,7 @@ class AppPlugin
             'resubscription',
             'rss',
             'search_course',
+            'send_notification_new_lp',
             'sepe',
             'share_buttons',
             'show_regions',

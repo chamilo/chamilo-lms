@@ -203,6 +203,8 @@ if (!empty($exercise_stat_info)) {
 }
 
 $max_score = $objExercise->get_max_score();
+// See BT#18165
+$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id());
 
 if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();
@@ -210,6 +212,12 @@ if ('embeddable' === $origin) {
     Display::addFlash(
         Display::return_message(get_lang('Saved'), 'normal', false)
     );
+
+    if($advanceCourseMessage != null){
+        Display::addFlash(
+            Display::return_message($advanceCourseMessage, 'info', false)
+        );
+    }
 }
 $saveResults = true;
 $feedbackType = $objExercise->getFeedbackType();
@@ -277,8 +285,6 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_item_id
 );
 
-// See BT#18165
-$objExercise->advanceCourseList();
 
 ExerciseLib::delete_chat_exercise_session($exeId);
 

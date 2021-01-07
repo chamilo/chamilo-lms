@@ -10850,7 +10850,7 @@ class Exercise
             $userId,
             $this->id,
             $this->course_id,
-            $this->sessionId
+            api_get_session_id()
         );
         if (!isset($bestAttempt['exe_result'])) {
             // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
@@ -10859,7 +10859,7 @@ class Exercise
                 $userId,
                 $this->id,
                 $this->course_id,
-                $this->sessionId
+                api_get_session_id()
             );
             $bestAttempt['exe_result'] = 0;
             foreach ($exercise_stat_info as $attemp) {
@@ -10910,7 +10910,7 @@ class Exercise
                     $userId,
                     $courseData['code'],
                     $isInASession,
-                    $this->sessionId
+                    api_get_session_id()
                 );
 
                 if (!$isSubscribed) {
@@ -10918,7 +10918,7 @@ class Exercise
                         $userId,
                         $courseData['code'],
                         STUDENT,
-                        $this->sessionId
+                        api_get_session_id()
                     );
                 }
                 $courses[] = $courseData['title'];
@@ -10953,7 +10953,7 @@ class Exercise
             $userId,
             $this->iId,
             $this->course_id,
-            $this->sessionId
+            api_get_session_id()
         );
         $bestAttempt['exe_result'] = 0;
         foreach ($exercise_stat_info as $attemp) {
@@ -11012,7 +11012,7 @@ class Exercise
                     $userId,
                     $courseData['code'],
                     $isInASession,
-                    $this->sessionId
+                    api_get_session_id()
                 );
 
                 if (!$isSubscribed) {
@@ -11020,7 +11020,7 @@ class Exercise
                         $userId,
                         $courseData['code'],
                         STUDENT,
-                        $this->sessionId
+                        api_get_session_id()
                     );
 
                     $courses[] = $courseData['title'];

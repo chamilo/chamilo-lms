@@ -195,7 +195,18 @@ if ($visible_return['value'] == false) {
         $message = $visible_return['message'];
         $exercise_url_button = null;
     }
+}else{
+    $text = $objExercise->advanceCourseList(api_get_user_id());
+    if(!empty($text)){
+        $message = Display::return_message(
+            $text,
+            'info',
+            false
+        );
+    }
+
 }
+
 
 if (!api_is_allowed_to_session_edit()) {
     $exercise_url_button = null;

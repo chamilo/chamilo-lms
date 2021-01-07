@@ -6795,7 +6795,6 @@ class Exercise
         }
 
         // 4. We check if the student have attempts
-        $extraMessage = ''; // extra mensaje
         if ($isVisible) {
             $exerciseAttempts = $this->selectAttempts();
 
@@ -6808,16 +6807,12 @@ class Exercise
                     $lpItemViewId
                 );
 
-                // BT#18165
-                $extraMessage .= $this->advanceCourseList();
                 if ($attemptCount >= $exerciseAttempts) {
                     $message = sprintf(
                         get_lang('ReachedMaxAttempts'),
                         $this->name,
                         $exerciseAttempts
                     );
-                    // BT#18165
-                    $message .= $this->remedialCourseList(api_get_user_id());
                     $isVisible = false;
                 } else {
                     // Check blocking exercise.
@@ -6852,7 +6847,34 @@ class Exercise
             }
         }
         // BT#18165
-        $message .= $extraMessage;
+        $field = new ExtraField('exercise');
+        $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
+
+        $field = new ExtraField('exercise');
+        $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
+
+        if (
+            ($remedialField != false && isset($remedialField['default_value']) && $remedialField['default_value'] == 1 // if the plugin is activated
+            ) || (
+                $advancedCourseField != false &&  isset($advancedCourseField['default_value']) && $advancedCourseField['default_value'] == 1 // if the plugin is activated
+            )
+        ) {
+            $exerciseAttempts = $this->selectAttempts();
+            if ($exerciseAttempts > 0) {
+                $attemptCount = Event::get_attempt_count_not_finished(
+                    api_get_user_id(),
+                    $this->id,
+                    $lpId,
+                    $lpItemId,
+                    $lpItemViewId
+                );
+                $message .=  $this->advanceCourseList(api_get_user_id());
+                if ($attemptCount >= $exerciseAttempts) {
+                    $message .= $this->remedialCourseList(api_get_user_id());
+                }
+            }
+        }
+
         $rawMessage = '';
         if (!empty($message)) {
             $rawMessage = $message;
@@ -10853,21 +10875,17 @@ class Exercise
             || !isset($bestAttempt['exe_weighting'])
         ) {
             // Sin intentos, sin id de ejercicio y sin total definido
-            return '';
+            return null;
         }
 
-        $resultado = $bestAttempt['exe_result'];
-        $total = $bestAttempt['exe_weighting'];
-        $objExercise = new Exercise();
-        $objExercise->read($bestAttempt['exe_id']);
-        $percentSuccess = (float) $objExercise->selectPassPercentage();
+        $percentSuccess = (float) $this->selectPassPercentage();
         $pass = ExerciseLib::isPassPercentageAttemptPassed(
-            $objExercise,
-            $resultado,
-            $total
+            $this,
+            $bestAttempt['exe_result'],
+            $bestAttempt['exe_weighting']
         );
         if ($percentSuccess == 0 && $pass == false) {
-            return '';
+            return null;
         }
         $canRemedial = ($pass == false) ? true : false;
         //Examen de siguiente nivel
@@ -10962,11 +10980,9 @@ class Exercise
                 }
             }
         }
-        $objExercise = new Exercise();
-        $objExercise->read($bestAttempt['exe_id']);
-        $percentSuccess = (float) $objExercise->selectPassPercentage();
+        $percentSuccess = (float) $this->selectPassPercentage();
         $pass = ExerciseLib::isPassPercentageAttemptPassed(
-            $objExercise,
+            $this,
             $bestAttempt['exe_result'],
             $bestAttempt['exe_weighting']
         );

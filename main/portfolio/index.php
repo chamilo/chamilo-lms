@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 // Make sure we void the course context if we are in the social network section
 if (empty($_GET['cidReq'])) {
@@ -20,8 +21,9 @@ if (false === api_get_configuration_value('allow_portfolio_tool')) {
 $controller = new \PortfolioController();
 
 $em = Database::getManager();
+$httpRequest = HttpRequest::createFromGlobals();
 
-$action = isset($_GET['action']) ? $_GET['action'] : 'list';
+$action = $httpRequest->query->getAlpha('action', 'list');
 
 switch ($action) {
     case 'add_category':
@@ -29,7 +31,7 @@ switch ($action) {
 
         return;
     case 'edit_category':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
         /** @var PortfolioCategory $category */
         $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
@@ -42,7 +44,7 @@ switch ($action) {
         return;
     case 'hide_category':
     case 'show_category':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
         $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
 
@@ -53,7 +55,7 @@ switch ($action) {
         $controller->showHideCategory($category);
         return;
     case 'delete_category':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
         /** @var PortfolioCategory $category */
         $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
@@ -68,7 +70,7 @@ switch ($action) {
         $controller->addItem();
         return;
     case 'edit_item':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
         /** @var Portfolio $item */
         $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
@@ -81,7 +83,7 @@ switch ($action) {
         return;
     case 'hide_item':
     case 'show_item':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
         /** @var Portfolio $item */
         $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
@@ -93,7 +95,7 @@ switch ($action) {
         $controller->showHideItem($item);
         return;
     case 'delete_item':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
         /** @var Portfolio $item */
         $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
@@ -105,7 +107,7 @@ switch ($action) {
         $controller->deleteItem($item);
         return;
     case 'view':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
         /** @var Portfolio $item */
         $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
@@ -116,6 +118,9 @@ switch ($action) {
 
         $controller->view($item);
         return;
+    case 'copy':
+        $controller->copyComment();
+        break;
     case 'list':
     default:
         $controller->index();

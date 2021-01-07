@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Course expiration reminder.
+ * New lp reminder.
  *
  * @package chamilo.cron
  *
- * @author Imanol Losada <imanol.losada@beeznest.com>
+ * @author Imanol Losada <carlos.alvarado@beeznest.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -14,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  */
 if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
-};
+}
 
 $field = new ExtraField('lp');
 $activeMessageNewlp = $field->get_handler_field_info_by_field_variable('notify_student_and_hrm_when_available');
@@ -34,7 +34,6 @@ if ($remedialField['default_value'] == 0) {
 
 function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminName, $adminEmail)
 {
-
     $subjectTemplate = new Template(
         null,
         false,
@@ -42,7 +41,6 @@ function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminN
         false,
         false,
         false);
-
 
     $subjectLayout = $subjectTemplate->get_template(
         'mail/learning_path_reminder_subject.tpl'
@@ -59,7 +57,6 @@ function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminN
     $bodyTemplate->assign('lpName', $lpName);
     $bodyTemplate->assign('link', $link);
 
-
     $bodyLayout = $bodyTemplate->get_template(
         'mail/learning_path_reminder_body.tpl'
     );
@@ -73,13 +70,14 @@ function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminN
         $adminEmail
     );
 
-
     return null;
 }
 
 function getHrUserOfUser($userId = 0)
 {
-    if ($userId == 0) return [];
+    if ($userId == 0) {
+        return [];
+    }
     $relationStudenHRTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
     $sql = "Select * from $relationStudenHRTable where user_id = $userId and relation_type = ".USER_RELATION_TYPE_RRHH;
     $Hr = [];
@@ -87,6 +85,7 @@ function getHrUserOfUser($userId = 0)
     while ($row = Database::fetch_array($result)) {
         $Hr[] = api_get_user_info($row['friend_user_id']);
     }
+
     return $Hr;
 }
 
@@ -136,7 +135,7 @@ WHERE
             $courseCode,
             $sessionId
         );
-        foreach($userlist as $user){
+        foreach ($userlist as $user) {
             $userInfo = api_get_user_info($user['id']);
             $HrUsers = getHrUserOfUser($user['id']);
             $userName = $userInfo['complete_name'];
@@ -167,14 +166,10 @@ WHERE
                         $adminName,
                         $adminEmail
                     );
-
                 }
             }
-
         }
-
-    };
-
+    }
 }
 Learingpaths();
 

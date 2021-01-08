@@ -86,6 +86,7 @@ function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
         [],
         true
     );
+
     return null;
 }
 

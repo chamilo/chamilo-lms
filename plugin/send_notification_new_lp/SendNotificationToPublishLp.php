@@ -93,11 +93,11 @@ class SendNotificationToPublishLp extends Plugin
     {
         $data = $this->notifyStudentField;
 
-        $data['field_type'] =  ExtraField::FIELD_TYPE_RADIO;
+        $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : $data['field_order']; // at
         $data['variable'] = isset($data['variable']) ? $data['variable'] : 'notify_student_and_hrm_when_available';
         $data['display_text'] = isset($data['display_text']) ? $data['display_text'] : 'NotifyStudentAndHrmWhenAvailable';
-        $data['default_value'] = (int)$install;
+        $data['default_value'] = (int) $install;
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : 0;
         $data['visible_to_self'] = isset($data['visible_to_self']) ? $data['visible_to_self'] : 0;
         $data['visible_to_others'] = isset($data['visible_to_others']) ? $data['visible_to_others'] : 0;
@@ -106,7 +106,6 @@ class SendNotificationToPublishLp extends Plugin
 
         return $data;
     }
-
 
     /**
      * Set default_value to 0.
@@ -124,9 +123,7 @@ class SendNotificationToPublishLp extends Plugin
         } else {
             $schedule->save($data);
         }
-
     }
-
 
     /**
      * Insert the option fields for notify with the generic values yes or not.
@@ -137,7 +134,7 @@ class SendNotificationToPublishLp extends Plugin
             0 => 'No',
             1 => 'Yes',
         ];
-        $notifyId = (int)$this->notifyStudentField['id'];
+        $notifyId = (int) $this->notifyStudentField['id'];
         if ($notifyId != 0) {
             for ($i = 0; $i < count($options); $i++) {
                 $order = $i + 1;
@@ -149,9 +146,8 @@ class SendNotificationToPublishLp extends Plugin
                                     option_value = $i AND
                                     field_id = $notifyId";
 
-
                     $extraFieldOption = Database::fetch_assoc(Database::query($query));
-                    $extraFieldId = isset($extraFieldOption['id'])?(int)($extraFieldOption['id']):0;
+                    $extraFieldId = isset($extraFieldOption['id']) ? (int) ($extraFieldOption['id']) : 0;
 
                     if (
                         $extraFieldId != 0

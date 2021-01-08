@@ -153,6 +153,7 @@ class PortfolioController
             $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
         }
 
+        $view->assign('baseurl', $this->baseUrl);
         $view->assign('actions', $actionsStr);
 
         $view->assign('content', $content);
@@ -672,19 +673,27 @@ class PortfolioController
                     /** @var PortfolioComment $comment */
                     $comment = $commentsRepo->find($node['id']);
 
-                    $commentActions = Display::toolbarButton(
-                        get_lang('ReplyToThisComment'),
+                    $commentActions = Display::url(
+                        Display::return_icon('discuss.png', get_lang('ReplyToThisComment')),
                         '#',
-                        'reply',
-                        'default',
                         [
                             'data-comment' => htmlspecialchars(
                                 json_encode(['id' => $comment->getId()])
                             ),
                             'role' => 'button',
                             'class' => 'btn-reply-to'
-                        ],
-                        false
+                        ]
+                    );
+                    $commentActions .= PHP_EOL;
+                    $commentActions .= Display::url(
+                        Display::return_icon('copy.png', get_lang('CopyToMyPortfolio')),
+                        $this->baseUrl.http_build_query(
+                            [
+                                'action' => 'copy',
+                                'copy' => 'comment',
+                                'id' => $comment->getId(),
+                            ]
+                        )
                     );
 
                     return '<p class="h4 media-heading">'.$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'
@@ -694,8 +703,20 @@ class PortfolioController
             ]
         );
 
+        $origin = null;
+
+        if ($item->getOrigin() !== null) {
+            if ($item->getOriginType() === Portfolio::TYPE_ITEM) {
+                $origin = $this->em->find(Portfolio::class, $item->getOrigin());
+            } elseif ($item->getOriginType() === Portfolio::TYPE_COMMENT) {
+                $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
+            }
+        }
+
         $template = new Template(null, false, false, false, false, false, false);
+        $template->assign('baseurl', $this->baseUrl);
         $template->assign('item', $item);
+        $template->assign('origin', $origin);
         $template->assign('comments', $commentsHtml);
         $template->assign('form', $form);
 
@@ -757,5 +778,75 @@ class PortfolioController
         }
 
         return $form->returnForm();
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\Portfolio $originItem
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function copyItem(Portfolio $originItem)
+    {
+        $currentTime = api_get_utc_datetime(null, false, true);
+
+        $portfolio = new Portfolio();
+        $portfolio
+            ->setTitle(
+                sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
+            )
+            ->setContent($originItem->getContent())
+            ->setUser($this->owner)
+            ->setOrigin($originItem->getId())
+            ->setOriginType(Portfolio::TYPE_ITEM)
+            ->setCourse($this->course)
+            ->setSession($this->session)
+            ->setCreationDate($currentTime)
+            ->setUpdateDate($currentTime);
+
+        $this->em->persist($portfolio);
+        $this->em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        );
+
+        header("Location: $this->baseUrl");
+        exit;
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\PortfolioComment $originComment
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function copyComment(PortfolioComment $originComment)
+    {
+        $currentTime = api_get_utc_datetime(null, false, true);
+
+        $portfolio = new Portfolio();
+        $portfolio
+            ->setTitle(
+                sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
+            )
+            ->setContent('<blockquote>'.$originComment->getContent().'</blockquote>')
+            ->setUser($this->owner)
+            ->setOrigin($originComment->getId())
+            ->setOriginType(Portfolio::TYPE_COMMENT)
+            ->setCourse($this->course)
+            ->setSession($this->session)
+            ->setCreationDate($currentTime)
+            ->setUpdateDate($currentTime);
+
+        $this->em->persist($portfolio);
+        $this->em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        );
+
+        header("Location: $this->baseUrl");
+        exit;
     }
 }

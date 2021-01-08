@@ -1,10 +1,12 @@
 <article class="thumbnail portfolio-item">
     <div class="caption">
-        {% if _u.id == item.user.id %}
-            <div class="portfolio-actions pull-right">
-                <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
-                    {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
-                </a>
+        <div class="portfolio-actions pull-right">
+            {% if _u.id == item.user.id %}
+                {% if item.origin is null %}
+                    <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
+                        {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
+                    </a>
+                {% endif %}
                 {% if item.isVisible %}
                     <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
                         {{ 'visible.png'|img(22, 'Invisible'|get_lang) }}
@@ -17,8 +19,14 @@
                 <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
                     {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
                 </a>
-            </div>
-        {% endif %}
+            {% endif %}
+
+            {% if item.origin is null %}
+                <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
+                    {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
+                </a>
+            {% endif %}
+        </div>
 
         <h4 class="h3">{{ item.title }}</h4>
 
@@ -63,6 +71,20 @@
         <hr>
 
         {{ item.content }}
+
+        {% if item.origin %}
+            <hr>
+
+            <p class="text-muted">
+                <em>
+                {% if item.originType == 1 %}
+                    {{ 'OriginallyPublishedAsXTitleByYUser'|get_lang|format(origin.title, origin.user.completeName) }}
+                {% elseif item.originType == 2 %}
+                    {{ 'OriginallyPublishedByXUserInYItem'|get_lang|format(origin.author.completeName, origin.item.title) }}
+                {% endif %}
+                </em>
+            </p>
+        {% endif %}
     </div>
 </article>
 

@@ -9486,7 +9486,7 @@ ul.dropdown-menu.inner > li > a {
     grid-column: span 2;
 }
 
-.portfolio-items.row .thumbnail .caption .h3,
+.portfolio-items.row .thumbnail .caption h3,
 .portfolio-item.thumbnail .caption .h3 {
     margin-top: 0;
 }

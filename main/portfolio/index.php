@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
+use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 // Make sure we void the course context if we are in the social network section
@@ -119,7 +120,27 @@ switch ($action) {
         $controller->view($item);
         return;
     case 'copy':
-        $controller->copyComment();
+        $type = $httpRequest->query->getAlpha('copy');
+        $id = $httpRequest->query->getInt('id');
+
+        if ('item' === $type) {
+            $item = $em->find(Portfolio::class, $id);
+
+            if (empty($item)) {
+                break;
+            }
+
+            $controller->copyItem($item);
+        } elseif ('comment' === $type) {
+            $comment = $em->find(PortfolioComment::class, $id);
+
+            if (empty($comment)) {
+                break;
+            }
+
+            $controller->copyComment($comment);
+        }
+
         break;
     case 'list':
     default:

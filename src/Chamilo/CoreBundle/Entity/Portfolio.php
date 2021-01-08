@@ -27,6 +27,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Portfolio
 {
+    public const TYPE_ITEM = 1;
+    public const TYPE_COMMENT = 2;
+
     /**
      * @var int
      *
@@ -110,11 +113,24 @@ class Portfolio
     private $comments;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin", type="integer", nullable=true)
+     */
+    private $origin;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin_type", type="integer", nullable=true)
+     */
+    private $originType;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
     {
-        $this->category = new PortfolioCategory();
+        $this->category = null;
         $this->comments = new ArrayCollection();
     }
 
@@ -338,5 +354,45 @@ class Portfolio
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOrigin(): ?int
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @param int|null $origin
+     *
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOrigin(?int $origin): Portfolio
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOriginType(): ?int
+    {
+        return $this->originType;
+    }
+
+    /**
+     * @param int|null $originType
+     *
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOriginType(?int $originType): Portfolio
+    {
+        $this->originType = $originType;
+
+        return $this;
     }
 }

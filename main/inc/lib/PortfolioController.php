@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
+use Chamilo\CoreBundle\Entity\PortfolioComment;
 
 /**
  * Class PortfolioController.
@@ -70,6 +71,10 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioCategoryFieldHelp'), 'info')
+        );
+
         $form = new FormValidator('add_category', 'post', "{$this->baseUrl}&action=add_category");
 
         if (api_get_configuration_value('save_titles_as_html')) {
@@ -119,6 +124,43 @@ class PortfolioController
     }
 
     /**
+     * @param string $content
+     * @param string $toolName
+     * @param array  $actions
+     * @param bool   $showHeader
+     */
+    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
+    {
+        global $this_section;
+
+        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
+
+        $view = new Template($toolName);
+
+        if ($showHeader) {
+            $view->assign('header', $toolName);
+        }
+
+        $actionsStr = '';
+
+        if ($this->course) {
+            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
+        }
+
+        if ($actions) {
+            $actions = implode(PHP_EOL, $actions);
+
+            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
+        }
+
+        $view->assign('baseurl', $this->baseUrl);
+        $view->assign('actions', $actionsStr);
+
+        $view->assign('content', $content);
+        $view->display_one_col_template();
+    }
+
+    /**
      * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
      *
      * @throws \Doctrine\ORM\ORMException
@@ -132,7 +174,15 @@ class PortfolioController
             api_not_allowed(true);
         }
 
-        $form = new FormValidator('edit_category', 'post', $this->baseUrl."action=edit_category&id={$category->getId()}");
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioCategoryFieldHelp'), 'info')
+        );
+
+        $form = new FormValidator(
+            'edit_category',
+            'post',
+            $this->baseUrl."action=edit_category&id={$category->getId()}"
+        );
 
         if (api_get_configuration_value('save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
@@ -143,10 +193,12 @@ class PortfolioController
 
         $form->addHtmlEditor('description', get_lang('Description'), false, false, ['ToolbarSet' => 'Minimal']);
         $form->addButtonUpdate(get_lang('Update'));
-        $form->setDefaults([
-            'title' => $category->getTitle(),
-            'description' => $category->getDescription(),
-        ]);
+        $form->setDefaults(
+            [
+                'title' => $category->getTitle(),
+                'description' => $category->getDescription(),
+            ]
+        );
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -180,6 +232,20 @@ class PortfolioController
         $content = $form->returnForm();
 
         return $this->renderView($content, get_lang('EditCategory'), $actions);
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
+     *
+     * @return bool
+     */
+    private function categoryBelongToOwner(PortfolioCategory $category): bool
+    {
+        if ($category->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -253,7 +319,13 @@ class PortfolioController
         }
 
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
-        $form->addSelectFromCollection('category', get_lang('Category'), $categories, [], true);
+        $form->addSelectFromCollection(
+            'category',
+            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')],
+            $categories,
+            [],
+            true
+        );
         $form->addButtonCreate(get_lang('Create'));
 
         if ($form->validate()) {
@@ -332,7 +404,13 @@ class PortfolioController
         }
 
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
-        $form->addSelectFromCollection('category', get_lang('Category'), $categories, [], true, '__toString');
+        $form->addSelectFromCollection(
+            'category',
+            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')],
+            $categories,
+            [],
+            true
+        );
         $form->addButtonUpdate(get_lang('Update'));
         $form->setDefaults(
             [
@@ -377,6 +455,28 @@ class PortfolioController
         $content = $form->returnForm();
 
         $this->renderView($content, get_lang('EditPortfolioItem'), $actions);
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
+     *
+     * @return bool
+     */
+    private function itemBelongToOwner(Portfolio $item): bool
+    {
+        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
+            return false;
+        }
+
+        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
+            return false;
+        }
+
+        if ($item->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -468,22 +568,42 @@ class PortfolioController
             $criteria['isVisible'] = true;
         }
 
-        $categories = $this->em
-            ->getRepository(PortfolioCategory::class)
-            ->findBy($criteria);
+        $categories = [];
+
+        if (!$this->course) {
+            $criteria['user'] = $this->owner;
+
+            $categories = $this->em
+                ->getRepository(PortfolioCategory::class)
+                ->findBy($criteria);
+        }
 
         if ($this->course) {
+            unset($criteria['user']);
+
             $criteria['course'] = $this->course;
             $criteria['session'] = $this->session;
         } else {
             $criteria['user'] = $this->owner;
+            $criteria['category'] = null;
         }
-
-        $criteria['category'] = null;
 
         $items = $this->em
             ->getRepository(Portfolio::class)
             ->findBy($criteria, ['creationDate' => 'DESC']);
+
+        $items = array_filter(
+            $items,
+            function (Portfolio $item) {
+                if ($this->currentUserId != $item->getUser()->getId()
+                    && !$item->isVisible()
+                ) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
 
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('user', $this->owner);
@@ -500,70 +620,233 @@ class PortfolioController
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
+     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
      *
-     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function categoryBelongToOwner(PortfolioCategory $category): bool
+    public function view(Portfolio $item)
     {
-        if ($category->getUser()->getId() != $this->owner->getId()) {
-            return false;
+        global $interbreadcrumb;
+
+        $form = $this->createCommentForm($item);
+
+        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+
+        $query = $commentsRepo->createQueryBuilder('comment')
+            ->where('comment.item = :item')
+            ->orderBy('comment.root, comment.lft', 'ASC')
+            ->setParameter('item', $item)
+            ->getQuery();
+
+        $clockIcon = Display::returnFontAwesomeIcon('clock-o', '', true);
+
+        $commentsHtml = $commentsRepo->buildTree(
+            $query->getArrayResult(),
+            [
+                'decorate' => true,
+                'rootOpen' => '<ul class="media-list">',
+                'rootClose' => '</ul>',
+                'childOpen' => function ($node) use ($commentsRepo) {
+                    /** @var PortfolioComment $comment */
+                    $comment = $commentsRepo->find($node['id']);
+                    $author = $comment->getAuthor();
+
+                    $userPicture = UserManager::getUserPicture(
+                        $comment->getAuthor()->getId(),
+                        USER_IMAGE_SIZE_SMALL,
+                        null,
+                        [
+                            'picture_uri' => $author->getPictureUri(),
+                            'email' => $author->getEmail(),
+                        ]
+                    );
+
+                    return '<li class="media">
+                        <div class="media-left">
+                            <img class="media-object thumbnail" src="'.$userPicture.'" alt="'.$author->getCompleteName().'">
+                        </div>
+                        <div class="media-body">';
+                },
+                'childClose' => '</div></li>',
+                'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon) {
+                    /** @var PortfolioComment $comment */
+                    $comment = $commentsRepo->find($node['id']);
+
+                    $commentActions = Display::url(
+                        Display::return_icon('discuss.png', get_lang('ReplyToThisComment')),
+                        '#',
+                        [
+                            'data-comment' => htmlspecialchars(
+                                json_encode(['id' => $comment->getId()])
+                            ),
+                            'role' => 'button',
+                            'class' => 'btn-reply-to'
+                        ]
+                    );
+                    $commentActions .= PHP_EOL;
+                    $commentActions .= Display::url(
+                        Display::return_icon('copy.png', get_lang('CopyToMyPortfolio')),
+                        $this->baseUrl.http_build_query(
+                            [
+                                'action' => 'copy',
+                                'copy' => 'comment',
+                                'id' => $comment->getId(),
+                            ]
+                        )
+                    );
+
+                    return '<p class="h4 media-heading">'.$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'
+                        .$clockIcon.PHP_EOL.Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'
+                        .'</p><div class="pull-right">'.$commentActions.'</div>'.$comment->getContent().PHP_EOL;
+                },
+            ]
+        );
+
+        $origin = null;
+
+        if ($item->getOrigin() !== null) {
+            if ($item->getOriginType() === Portfolio::TYPE_ITEM) {
+                $origin = $this->em->find(Portfolio::class, $item->getOrigin());
+            } elseif ($item->getOriginType() === Portfolio::TYPE_COMMENT) {
+                $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
+            }
         }
 
-        return true;
+        $template = new Template(null, false, false, false, false, false, false);
+        $template->assign('baseurl', $this->baseUrl);
+        $template->assign('item', $item);
+        $template->assign('origin', $origin);
+        $template->assign('comments', $commentsHtml);
+        $template->assign('form', $form);
+
+        $layout = $template->get_template('portfolio/view.html.twig');
+        $content = $template->fetch($layout);
+
+        $interbreadcrumb[] = ['name' => get_lang('Portfolio'), 'url' => $this->baseUrl];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl
+        );
+
+        $this->renderView($content, $item->getTitle(), $actions, false);
     }
 
     /**
      * @param \Chamilo\CoreBundle\Entity\Portfolio $item
      *
-     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return string
      */
-    private function itemBelongToOwner(Portfolio $item): bool
+    private function createCommentForm(Portfolio $item): string
     {
-        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
-            return false;
+        $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
+
+        $form = new FormValidator('frm_comment', 'post', $formAction);
+        $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
+        $form->addHidden('item', $item->getId());
+        $form->addHidden('parent', 0);
+        $form->applyFilter('content', 'trim');
+        $form->addButtonSave(get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);
+
+            $comment = new PortfolioComment();
+            $comment
+                ->setAuthor($this->owner)
+                ->setParent($parentComment)
+                ->setContent($values['content'])
+                ->setDate(api_get_utc_datetime(null, false, true))
+                ->setItem($item);
+
+            $this->em->persist($comment);
+            $this->em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('CommentAdded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit;
         }
 
-        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
-            return false;
-        }
-
-        if ($item->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
+        return $form->returnForm();
     }
 
     /**
-     * @param string $content
-     * @param string $toolName
-     * @param array  $actions
+     * @param \Chamilo\CoreBundle\Entity\Portfolio $originItem
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function renderView(string $content, string $toolName, array $actions = [])
+    public function copyItem(Portfolio $originItem)
     {
-        global $this_section;
+        $currentTime = api_get_utc_datetime(null, false, true);
 
-        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
+        $portfolio = new Portfolio();
+        $portfolio
+            ->setTitle(
+                sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
+            )
+            ->setContent($originItem->getContent())
+            ->setUser($this->owner)
+            ->setOrigin($originItem->getId())
+            ->setOriginType(Portfolio::TYPE_ITEM)
+            ->setCourse($this->course)
+            ->setSession($this->session)
+            ->setCreationDate($currentTime)
+            ->setUpdateDate($currentTime);
 
-        $view = new Template($toolName);
-        $view->assign('header', $toolName);
+        $this->em->persist($portfolio);
+        $this->em->flush();
 
-        $actionsStr = '';
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        );
 
-        if ($this->course) {
-            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
-        }
+        header("Location: $this->baseUrl");
+        exit;
+    }
 
-        if ($actions) {
-            $actions = implode(PHP_EOL, $actions);
+    /**
+     * @param \Chamilo\CoreBundle\Entity\PortfolioComment $originComment
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function copyComment(PortfolioComment $originComment)
+    {
+        $currentTime = api_get_utc_datetime(null, false, true);
 
-            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
-        }
+        $portfolio = new Portfolio();
+        $portfolio
+            ->setTitle(
+                sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
+            )
+            ->setContent('<blockquote>'.$originComment->getContent().'</blockquote>')
+            ->setUser($this->owner)
+            ->setOrigin($originComment->getId())
+            ->setOriginType(Portfolio::TYPE_COMMENT)
+            ->setCourse($this->course)
+            ->setSession($this->session)
+            ->setCreationDate($currentTime)
+            ->setUpdateDate($currentTime);
 
-        $view->assign('actions', $actionsStr);
+        $this->em->persist($portfolio);
+        $this->em->flush();
 
-        $view->assign('content', $content);
-        $view->display_one_col_template();
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        );
+
+        header("Location: $this->baseUrl");
+        exit;
     }
 }

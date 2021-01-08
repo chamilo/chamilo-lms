@@ -9485,6 +9485,25 @@ ul.dropdown-menu.inner > li > a {
     border-color: red;
     grid-column: span 2;
 }
+
+.portfolio-items.row .thumbnail .caption h3,
+.portfolio-item.thumbnail .caption .h3 {
+    margin-top: 0;
+}
+
+.portfolio-items .thumbnail .portfolio-actions a > img,
+.portfolio-item.thumbnail .portfolio-actions a > img {
+    display: inline;
+}
+
+.fa-ul.list-inline {
+    margin-left: -15px;
+}
+.fa-ul.list-inline li {
+    margin-left: 45px;
+    padding: 0;
+}
+
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {
@@ -10186,6 +10205,7 @@ ul.dropdown-menu.inner > li > a {
         clear: none;
     }
 
+    .portfolio-items.row .col-md-6:nth-child(2n+1),
     .col-md-3.course-tool:nth-child(4n+1) {
         clear: left;
     }

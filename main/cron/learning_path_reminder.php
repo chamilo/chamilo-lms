@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * New lp reminder.
  *
@@ -23,16 +24,13 @@ if ($activeMessageNewlp == false) {
     // field doesnt exist
     exit();
 }
-if (!isset($remedialField['default_value'])) {
+if (!isset($activeMessageNewlp['default_value'])) {
     // field dont have default value
     exit();
 }
-if ($remedialField['default_value'] == 0) {
-    // plugin is inactive
-    exit;
-}
 
-function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminName, $adminEmail)
+// function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminName, $adminEmail)
+function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
 {
     $subjectTemplate = new Template(
         null,
@@ -60,16 +58,34 @@ function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminN
     $bodyLayout = $bodyTemplate->get_template(
         'mail/learning_path_reminder_body.tpl'
     );
-
-    api_mail_html(
-        $userName,
-        $userEmail,
-        $subjectTemplate->fetch($subjectLayout),
-        $bodyTemplate->fetch($bodyLayout),
-        $adminName,
-        $adminEmail
+    $tittle = $subjectTemplate->fetch($subjectLayout);
+    $content = $bodyTemplate->fetch($bodyLayout);
+    $now = api_get_utc_datetime();
+    $params = [
+        'user_sender_id' => $toUser['id'],
+        'user_receiver_id' => $toUser['id'],
+        'msg_status' => MESSAGE_STATUS_CONVERSATION,
+        'send_date' => $now,
+        'title' => $tittle,
+        'content' => $content,
+        'group_id' => 0,
+        'parent_id' => 0,
+        'update_date' => $now,
+    ];
+    $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+    $messageId = Database::insert($tbl_message, $params);
+    $notification = new Notification();
+    $notification->saveNotification(
+        $messageId,
+        20,
+        [$toUser['id']],
+        $tittle,
+        $content,
+        $toUser,
+        [],
+        [],
+        true
     );
-
     return null;
 }
 
@@ -89,22 +105,14 @@ function getHrUserOfUser($userId = 0)
     return $Hr;
 }
 
-function Learingpaths()
+function LearningPaths()
 {
-    $administrator = [
-        'completeName' => api_get_person_name(
-            api_get_setting("administratorName"),
-            api_get_setting("administratorSurname"),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        ),
-        'email' => api_get_setting("emailAdministrator"),
-    ];
-    $adminName = $administrator['completeName'];
-    $adminEmail = $administrator['email'];
+    $admin = [];
 
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+    $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+    $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
     $date = new DateTime();
     $date = $date->format('Y-m-d');
 
@@ -117,14 +125,25 @@ SELECT
     $courseTable.title AS course_name,
     $courseTable.code AS code
 FROM
-    $lpTable
+	$lpTable
 INNER JOIN $courseTable ON c_lp.c_id = course.id
 WHERE
-      publicated_on >= '$date 00:00:00' AND
-      publicated_on <= '$date 23:59:59'
-      ";
+	iid IN (
+	SELECT
+		item_id
+	FROM
+		$extraFieldValuesTable
+	WHERE
+		item_id IN ( SELECT iid FROM $lpTable )
+		AND field_id IN ( SELECT id FROM $extraFieldTable WHERE variable = 'notify_student_and_hrm_when_available' )
+	) AND
+        publicated_on >= '$date 00:00:00' AND
+        publicated_on <= '$date 23:59:59'
+";
     $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
+    $data = Database::store_result($result);
+    Database::free_result($result);
+    foreach ($data as $row) {
         $lpId = $row['l_id'];
         $sessionId = $row['session_id'];
         $courseCode = $row['code'];
@@ -138,8 +157,6 @@ WHERE
         foreach ($userlist as $user) {
             $userInfo = api_get_user_info($user['id']);
             $HrUsers = getHrUserOfUser($user['id']);
-            $userName = $userInfo['complete_name'];
-            $email = $user['email'];
             $href = api_get_path(WEB_CODE_PATH).
                 "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
                 "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
@@ -147,30 +164,26 @@ WHERE
             $link = "<a href='$href'>$href</a>";
 
             SendMessage(
+                $userInfo,
+                $admin,
                 $courseName,
                 $lpName,
-                $link,
-                $userName,
-                $email,
-                $adminName,
-                $adminEmail
+                $link
             );
             if (count($HrUsers) != 0) {
                 foreach ($HrUsers as $userHr) {
                     SendMessage(
+                        $userHr,
+                        $admin,
                         $courseName,
                         $lpName,
-                        $link,
-                        $userHr['complete_name'],
-                        $userHr['email'],
-                        $adminName,
-                        $adminEmail
+                        $link
                     );
                 }
             }
         }
     }
 }
-Learingpaths();
+LearningPaths();
 
 exit();

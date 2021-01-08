@@ -17,6 +17,7 @@ class SendNotificationToPublishLp extends Plugin
      */
     public function __construct()
     {
+        $this->tblExtraFieldOption = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         parent::__construct(
             '1.0',
             'Carlos Alvarado'
@@ -26,14 +27,14 @@ class SendNotificationToPublishLp extends Plugin
 
         if (empty($notifyStudentField)) {
             $notifyStudentField = [
-                'field_type' => ExtraField::FIELD_TYPE_INTEGER,
+                'field_type' => ExtraField::FIELD_TYPE_RADIO,
                 'variable' => 'notify_student_and_hrm_when_available',
                 'display_text' => 'NotifyStudentAndHrmWhenAvailable',
-                'default_value' => 1,
+                'default_value' => 0,
                 'field_order' => 0,
-                'visible_to_self' => 0,
-                'visible_to_others' => 0,
-                'changeable' => 0,
+                'visible_to_self' => 1,
+                'visible_to_others' => 1,
+                'changeable' => 1,
                 'filter' => 0,
             ];
         }
@@ -57,24 +58,30 @@ class SendNotificationToPublishLp extends Plugin
      */
     public function install()
     {
-        $this->SaveRemedialField();
+        $this->SaveNotificationField();
+        $this->setNotifyExtrafieldData();
     }
 
     /**
      * Save the arrangement for notify_student_and_hrm_when_available, it is adjusted internally so that the values
      * match the necessary ones.
      */
-    public function SaveRemedialField()
+    public function SaveNotificationField()
     {
         $schedule = new ExtraField('lp');
-        $data = $this->getDataRemedialField();
-        $data['default_value'] = 1;
-        $data['visible_to_self'] = 0;
+        $data = $this->getDataNotificationField();
+        $data['default_value'] = 0;
+        $data['visible_to_self'] = 1;
+        $data['visible_to_others'] = 1;
+        $data['changeable'] = 1;
         if (isset($data['id'])) {
             $schedule->update($data);
         } else {
             $schedule->save($data);
         }
+        $field = new ExtraField('lp');
+        $notifyStudentField = $field->get_handler_field_info_by_field_variable('notify_student_and_hrm_when_available');
+        $this->notifyStudentField = $notifyStudentField;
     }
 
     /**
@@ -82,15 +89,15 @@ class SendNotificationToPublishLp extends Plugin
      *
      * @return array|bool
      */
-    public function getDataRemedialField($install = true)
+    public function getDataNotificationField($install = true)
     {
         $data = $this->notifyStudentField;
 
-        $data['field_type'] = isset($data['field_type']) ? $data['field_type'] : ExtraField::FIELD_TYPE_INTEGER;
+        $data['field_type'] =  ExtraField::FIELD_TYPE_RADIO;
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : $data['field_order']; // at
         $data['variable'] = isset($data['variable']) ? $data['variable'] : 'notify_student_and_hrm_when_available';
         $data['display_text'] = isset($data['display_text']) ? $data['display_text'] : 'NotifyStudentAndHrmWhenAvailable';
-        $data['default_value'] = (int) $install;
+        $data['default_value'] = (int)$install;
         $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : 0;
         $data['visible_to_self'] = isset($data['visible_to_self']) ? $data['visible_to_self'] : 0;
         $data['visible_to_others'] = isset($data['visible_to_others']) ? $data['visible_to_others'] : 0;
@@ -107,14 +114,67 @@ class SendNotificationToPublishLp extends Plugin
     public function uninstall()
     {
         $schedule = new ExtraField('lp');
-        $data = $this->getDataRemedialField(false);
+        $data = $this->getDataNotificationField(false);
         $data['default_value'] = 0;
         $data['visible_to_self'] = 0;
+        $data['visible_to_others'] = 0;
+        $data['changeable'] = 0;
         if (isset($data['id'])) {
             $schedule->update($data);
         } else {
             $schedule->save($data);
         }
 
+    }
+
+
+    /**
+     * Insert the option fields for notify with the generic values yes or not.
+     */
+    public function setNotifyExtrafieldData()
+    {
+        $options = [
+            0 => 'No',
+            1 => 'Yes',
+        ];
+        $notifyId = (int)$this->notifyStudentField['id'];
+        if ($notifyId != 0) {
+            for ($i = 0; $i < count($options); $i++) {
+                $order = $i + 1;
+                $extraFieldOptionValue = $options[$i];
+                if ($notifyId != null) {
+                    $query = "SELECT *
+                              FROM ".$this->tblExtraFieldOption."
+                              WHERE
+                                    option_value = $i AND
+                                    field_id = $notifyId";
+
+
+                    $extraFieldOption = Database::fetch_assoc(Database::query($query));
+                    $extraFieldId = isset($extraFieldOption['id'])?(int)($extraFieldOption['id']):0;
+
+                    if (
+                        $extraFieldId != 0
+                        && $extraFieldOption['field_id'] == $notifyId) {
+                        // Update?
+                        $query = "UPDATE `".$this->tblExtraFieldOption."`
+                        SET
+                            `option_value` = $i,
+                            `option_order` = $order,
+                            `display_text` = '$extraFieldOptionValue'
+                        WHERE
+                            `field_id` = $notifyId
+                            AND `id` = $extraFieldId";
+                    } else {
+                        $query = "
+                        INSERT INTO ".$this->tblExtraFieldOption."
+                            (`field_id`, `option_value`, `display_text`, `priority`, `priority_message`, `option_order`) VALUES
+                            ( '$notifyId', $i, '$extraFieldOptionValue', NULL, NULL, '$order');
+                        ";
+                    }
+                    Database::query($query);
+                }
+            }
+        }
     }
 }

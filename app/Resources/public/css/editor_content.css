@@ -170,3 +170,10 @@ figure.image figcaption {
     padding-top: 0;
     text-align: left;
 }
+
+.embed-responsive-9by16 {
+    padding-bottom: 177.77%;
+}
+.embed-responsive-3by4 {
+    padding-bottom: 133.33%;
+}

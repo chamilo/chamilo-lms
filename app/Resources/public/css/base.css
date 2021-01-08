@@ -9504,6 +9504,13 @@ ul.dropdown-menu.inner > li > a {
     padding: 0;
 }
 
+.embed-responsive-9by16 {
+    padding-bottom: 177.77%;
+}
+.embed-responsive-4by3 {
+    padding-bottom: 133.33%;
+}
+
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

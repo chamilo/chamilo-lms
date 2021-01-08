@@ -532,7 +532,13 @@ class ExerciseLib
                         }
 
                         if ($answerType != UNIQUE_ANSWER_IMAGE) {
-                            $answer = Security::remove_XSS($answer, STUDENT);
+                            $userStatus = STUDENT;
+                            // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                            // see BT#18242
+                            if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                                $userStatus = COURSEMANAGER;
+                            }
+                            $answer = Security::remove_XSS($answer, $userStatus);
                         }
                         $s .= Display::input(
                             'hidden',
@@ -578,7 +584,13 @@ class ExerciseLib
                     case GLOBAL_MULTIPLE_ANSWER:
                     case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        $userStatus = STUDENT;
+                        // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                        // see BT#18242
+                        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                            $userStatus = COURSEMANAGER;
+                        }
+                        $answer = Security::remove_XSS($answer, $userStatus);
 
                         if (in_array($numAnswer, $userChoiceList)) {
                             $attributes = [
@@ -775,7 +787,13 @@ class ExerciseLib
                             }
                         }
 
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        $userStatus = STUDENT;
+                        // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                        // see BT#18242
+                        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                            $userStatus = COURSEMANAGER;
+                        }
+                        $answer = Security::remove_XSS($answer, $userStatus);
                         $answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                         $answer_input .= '<label class="checkbox">';
                         $answer_input .= Display::input(
@@ -811,7 +829,13 @@ class ExerciseLib
                                 }
                             }
                         }
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        $userStatus = STUDENT;
+                        // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                        // see BT#18242
+                        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                            $userStatus = COURSEMANAGER;
+                        }
+                        $answer = Security::remove_XSS($answer, $userStatus);
                         $s .= '<tr>';
                         $s .= Display::tag('td', $answer);
                         foreach ($objQuestionTmp->options as $key => $item) {

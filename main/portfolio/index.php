@@ -128,6 +128,7 @@ switch ($action) {
 
         return;
     case 'copy':
+    case 'teacher_copy':
         $type = $httpRequest->query->getAlpha('copy');
         $id = $httpRequest->query->getInt('id');
 
@@ -138,7 +139,11 @@ switch ($action) {
                 break;
             }
 
-            $controller->copyItem($item);
+            if ('copy' === $action) {
+                $controller->copyItem($item);
+            } elseif ('teacher_copy' === $action) {
+                   $controller->teacherCopyItem($item);
+            }
         } elseif ('comment' === $type) {
             $comment = $em->find(PortfolioComment::class, $id);
 
@@ -146,7 +151,11 @@ switch ($action) {
                 break;
             }
 
-            $controller->copyComment($comment);
+            if ('copy' === $action) {
+                $controller->copyComment($comment);
+            } elseif ('teacher_copy' === $action) {
+                $controller->teacherCopyComment($comment);
+            }
         }
 
         break;

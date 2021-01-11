@@ -2942,6 +2942,9 @@ class CourseRestorer
                             }
                         }
 
+                        $prerequisiteMinScore = $item['prerequisite_min_score'] ?? null;
+                        $prerequisiteMaxScore = $item['prerequisite_max_score'] ?? null;
+
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'lp_id' => self::DBUTF8($new_lp_id),
@@ -2953,6 +2956,8 @@ class CourseRestorer
                             'min_score' => self::DBUTF8($item['min_score']),
                             'max_score' => self::DBUTF8($item['max_score']),
                             'mastery_score' => self::DBUTF8($masteryScore),
+                            'prerequisite_min_score' => $prerequisiteMinScore,
+                            'prerequisite_max_score' => $prerequisiteMaxScore,
                             'parent_item_id' => self::DBUTF8($item['parent_item_id']),
                             'previous_item_id' => self::DBUTF8($item['previous_item_id']),
                             'next_item_id' => self::DBUTF8($item['next_item_id']),

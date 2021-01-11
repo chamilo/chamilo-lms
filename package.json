@@ -13,7 +13,7 @@
     "@tinymce/tinymce-vue": "^3.2.2",
     "@vue/cli": "^4.4.5",
     "apollo-boost": "^0.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21",
     "babel": "^6.23.0",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
     "babel-polyfill": "^6.26.0",

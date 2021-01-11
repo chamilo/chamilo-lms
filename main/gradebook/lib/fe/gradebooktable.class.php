@@ -1050,8 +1050,8 @@ class GradebookTable extends SortableTable
             $dataSet->addPoints($data['average'], get_lang('Average'));
             $dataSet->addPoints($data['categories'], 'categories');
             $dataSet->setAbscissa('categories');
-            $xSize = 600;
-            $ySize = 400;
+            $xSize = 700;
+            $ySize = 500;
             $pChart = new pImage($xSize, $ySize, $dataSet);
             /* Turn of Antialiasing */
             $pChart->Antialias = false;
@@ -1075,7 +1075,7 @@ class GradebookTable extends SortableTable
                 [
                     'FontName' => api_get_path(SYS_FONTS_PATH).'Harmattan/Harmattan-Regular.ttf',
                     /*'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',*/
-                    'FontSize' => 12,
+                    'FontSize' => 10,
                 ]
             );
 

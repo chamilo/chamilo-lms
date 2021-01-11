@@ -24,7 +24,7 @@ $controller = new \PortfolioController();
 $em = Database::getManager();
 $httpRequest = HttpRequest::createFromGlobals();
 
-$action = $httpRequest->query->getAlpha('action', 'list');
+$action = $httpRequest->query->get('action', 'list');
 
 switch ($action) {
     case 'add_category':

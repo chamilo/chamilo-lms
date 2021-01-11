@@ -42,6 +42,7 @@ switch ($action) {
         }
 
         $controller->editCategory($category);
+
         return;
     case 'hide_category':
     case 'show_category':
@@ -54,6 +55,7 @@ switch ($action) {
         }
 
         $controller->showHideCategory($category);
+
         return;
     case 'delete_category':
         $id = $httpRequest->query->getInt('id');
@@ -66,9 +68,11 @@ switch ($action) {
         }
 
         $controller->deleteCategory($category);
+
         return;
     case 'add_item':
         $controller->addItem();
+
         return;
     case 'edit_item':
         $id = $httpRequest->query->getInt('id');
@@ -81,6 +85,7 @@ switch ($action) {
         }
 
         $controller->editItem($item);
+
         return;
     case 'hide_item':
     case 'show_item':
@@ -94,6 +99,7 @@ switch ($action) {
         }
 
         $controller->showHideItem($item);
+
         return;
     case 'delete_item':
         $id = $httpRequest->query->getInt('id');
@@ -106,6 +112,7 @@ switch ($action) {
         }
 
         $controller->deleteItem($item);
+
         return;
     case 'view':
         $id = $httpRequest->query->getInt('id');
@@ -118,6 +125,7 @@ switch ($action) {
         }
 
         $controller->view($item);
+
         return;
     case 'copy':
         $type = $httpRequest->query->getAlpha('copy');
@@ -145,5 +153,6 @@ switch ($action) {
     case 'list':
     default:
         $controller->index();
+
         return;
 }

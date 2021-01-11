@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
@@ -2879,7 +2878,7 @@ class CourseRestorer
                             $params = [
                                 'item_id' => $new_lp_id,
                                 'value' => $extraField['value'],
-                                'variable' => $extraField['variable']
+                                'variable' => $extraField['variable'],
                             ];
                             $extraFieldValue->save($params);
                         }

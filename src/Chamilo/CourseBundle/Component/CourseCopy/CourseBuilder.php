@@ -4,7 +4,6 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Category;
-use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;

@@ -123,49 +123,6 @@ class PortfolioController
         $this->renderView($content, get_lang('AddCategory'), $actions);
     }
 
-    /**
-     * @param string $content
-     * @param string $toolName
-     * @param array  $actions
-     * @param bool   $showHeader
-     */
-    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
-    {
-        global $this_section;
-
-        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
-
-        $view = new Template($toolName);
-
-        if ($showHeader) {
-            $view->assign('header', $toolName);
-        }
-
-        $actionsStr = '';
-
-        if ($this->course) {
-            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
-        }
-
-        if ($actions) {
-            $actions = implode(PHP_EOL, $actions);
-
-            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
-        }
-
-        $view->assign('baseurl', $this->baseUrl);
-        $view->assign('actions', $actionsStr);
-
-        $view->assign('content', $content);
-        $view->display_one_col_template();
-    }
-
-    /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function editCategory(PortfolioCategory $category)
     {
         global $interbreadcrumb;
@@ -234,26 +191,6 @@ class PortfolioController
         return $this->renderView($content, get_lang('EditCategory'), $actions);
     }
 
-    /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
-     *
-     * @return bool
-     */
-    private function categoryBelongToOwner(PortfolioCategory $category): bool
-    {
-        if ($category->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function showHideCategory(PortfolioCategory $category)
     {
         if (!$this->categoryBelongToOwner($category)) {
@@ -273,12 +210,6 @@ class PortfolioController
         exit;
     }
 
-    /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioCategory $category
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function deleteCategory(PortfolioCategory $category)
     {
         if (!$this->categoryBelongToOwner($category)) {
@@ -376,8 +307,6 @@ class PortfolioController
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -458,30 +387,6 @@ class PortfolioController
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
-     * @return bool
-     */
-    private function itemBelongToOwner(Portfolio $item): bool
-    {
-        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
-            return false;
-        }
-
-        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
-            return false;
-        }
-
-        if ($item->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -507,8 +412,6 @@ class PortfolioController
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -620,8 +523,6 @@ class PortfolioController
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -681,7 +582,7 @@ class PortfolioController
                                 json_encode(['id' => $comment->getId()])
                             ),
                             'role' => 'button',
-                            'class' => 'btn-reply-to'
+                            'class' => 'btn-reply-to',
                         ]
                     );
                     $commentActions .= PHP_EOL;
@@ -735,12 +636,134 @@ class PortfolioController
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return string
+     */
+    public function copyItem(Portfolio $originItem)
+    {
+        $currentTime = api_get_utc_datetime(null, false, true);
+
+        $portfolio = new Portfolio();
+        $portfolio
+            ->setTitle(
+                sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
+            )
+            ->setContent($originItem->getContent())
+            ->setUser($this->owner)
+            ->setOrigin($originItem->getId())
+            ->setOriginType(Portfolio::TYPE_ITEM)
+            ->setCourse($this->course)
+            ->setSession($this->session)
+            ->setCreationDate($currentTime)
+            ->setUpdateDate($currentTime);
+
+        $this->em->persist($portfolio);
+        $this->em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        );
+
+        header("Location: $this->baseUrl");
+        exit;
+    }
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function copyComment(PortfolioComment $originComment)
+    {
+        $currentTime = api_get_utc_datetime(null, false, true);
+
+        $portfolio = new Portfolio();
+        $portfolio
+            ->setTitle(
+                sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
+            )
+            ->setContent('<blockquote>'.$originComment->getContent().'</blockquote>')
+            ->setUser($this->owner)
+            ->setOrigin($originComment->getId())
+            ->setOriginType(Portfolio::TYPE_COMMENT)
+            ->setCourse($this->course)
+            ->setSession($this->session)
+            ->setCreationDate($currentTime)
+            ->setUpdateDate($currentTime);
+
+        $this->em->persist($portfolio);
+        $this->em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        );
+
+        header("Location: $this->baseUrl");
+        exit;
+    }
+
+    /**
+     * @param bool $showHeader
+     */
+    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
+    {
+        global $this_section;
+
+        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
+
+        $view = new Template($toolName);
+
+        if ($showHeader) {
+            $view->assign('header', $toolName);
+        }
+
+        $actionsStr = '';
+
+        if ($this->course) {
+            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
+        }
+
+        if ($actions) {
+            $actions = implode(PHP_EOL, $actions);
+
+            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
+        }
+
+        $view->assign('baseurl', $this->baseUrl);
+        $view->assign('actions', $actionsStr);
+
+        $view->assign('content', $content);
+        $view->display_one_col_template();
+    }
+
+    private function categoryBelongToOwner(PortfolioCategory $category): bool
+    {
+        if ($category->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function itemBelongToOwner(Portfolio $item): bool
+    {
+        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
+            return false;
+        }
+
+        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
+            return false;
+        }
+
+        if ($item->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function createCommentForm(Portfolio $item): string
     {
@@ -778,75 +801,5 @@ class PortfolioController
         }
 
         return $form->returnForm();
-    }
-
-    /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $originItem
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function copyItem(Portfolio $originItem)
-    {
-        $currentTime = api_get_utc_datetime(null, false, true);
-
-        $portfolio = new Portfolio();
-        $portfolio
-            ->setTitle(
-                sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
-            )
-            ->setContent($originItem->getContent())
-            ->setUser($this->owner)
-            ->setOrigin($originItem->getId())
-            ->setOriginType(Portfolio::TYPE_ITEM)
-            ->setCourse($this->course)
-            ->setSession($this->session)
-            ->setCreationDate($currentTime)
-            ->setUpdateDate($currentTime);
-
-        $this->em->persist($portfolio);
-        $this->em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
-        );
-
-        header("Location: $this->baseUrl");
-        exit;
-    }
-
-    /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioComment $originComment
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function copyComment(PortfolioComment $originComment)
-    {
-        $currentTime = api_get_utc_datetime(null, false, true);
-
-        $portfolio = new Portfolio();
-        $portfolio
-            ->setTitle(
-                sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
-            )
-            ->setContent('<blockquote>'.$originComment->getContent().'</blockquote>')
-            ->setUser($this->owner)
-            ->setOrigin($originComment->getId())
-            ->setOriginType(Portfolio::TYPE_COMMENT)
-            ->setCourse($this->course)
-            ->setSession($this->session)
-            ->setCreationDate($currentTime)
-            ->setUpdateDate($currentTime);
-
-        $this->em->persist($portfolio);
-        $this->em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('PortfolioItemAdded'), 'success')
-        );
-
-        header("Location: $this->baseUrl");
-        exit;
     }
 }

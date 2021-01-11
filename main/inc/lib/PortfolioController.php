@@ -332,6 +332,24 @@ class PortfolioController
             $form->applyFilter('title', 'trim');
         }
 
+        if ($item->getOrigin()) {
+            if (Portfolio::TYPE_ITEM === $item->getOriginType()) {
+                $origin = $this->em->find(Portfolio::class, $item->getOrigin());
+
+                $form->addLabel(
+                    sprintf(get_lang('PortfolioItemFromXUser'), $origin->getUser()->getCompleteName()),
+                    Display::panel($origin->getContent())
+                );
+            } elseif (Portfolio::TYPE_COMMENT === $item->getOriginType()) {
+                $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
+
+                $form->addLabel(
+                    sprintf(get_lang('PortfolioCommentFromXUser'), $origin->getAuthor()->getCompleteName()),
+                    Display::panel($origin->getContent())
+                );
+            }
+        }
+
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
         $form->addSelectFromCollection(
             'category',
@@ -645,10 +663,11 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
+            ->setIsVisible(false)
             ->setTitle(
                 sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
             )
-            ->setContent($originItem->getContent())
+            ->setContent('')
             ->setUser($this->owner)
             ->setOrigin($originItem->getId())
             ->setOriginType(Portfolio::TYPE_ITEM)
@@ -664,7 +683,7 @@ class PortfolioController
             Display::return_message(get_lang('PortfolioItemAdded'), 'success')
         );
 
-        header("Location: $this->baseUrl");
+        header("Location: $this->baseUrl".http_build_query(['action' => 'edit_item', 'id' => $portfolio->getId()]));
         exit;
     }
 
@@ -678,10 +697,11 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
+            ->setIsVisible(false)
             ->setTitle(
                 sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
             )
-            ->setContent('<blockquote>'.$originComment->getContent().'</blockquote>')
+            ->setContent('')
             ->setUser($this->owner)
             ->setOrigin($originComment->getId())
             ->setOriginType(Portfolio::TYPE_COMMENT)
@@ -697,7 +717,7 @@ class PortfolioController
             Display::return_message(get_lang('PortfolioItemAdded'), 'success')
         );
 
-        header("Location: $this->baseUrl");
+        header("Location: $this->baseUrl".http_build_query(['action' => 'edit_item', 'id' => $portfolio->getId()]));
         exit;
     }
 

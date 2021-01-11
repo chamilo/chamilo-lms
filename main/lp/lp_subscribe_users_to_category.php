@@ -201,7 +201,7 @@ if ($allowUserGroups) {
                 }
             }
 
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         } else {
@@ -217,7 +217,7 @@ if ($allowUserGroups) {
                         $sessionCondition
                     ";
             Database::query($sql);
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
         }
         header("Location: $url");
@@ -307,7 +307,7 @@ if ($formUsers->validate()) {
             }
         }
 
-        $em->merge($category);
+        $em->persist($category);
         $em->flush();
         Display::addFlash(Display::return_message(get_lang('Updated')));
     }

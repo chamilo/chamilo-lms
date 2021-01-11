@@ -12244,7 +12244,7 @@ EOD;
 
         if ($item) {
             $item->setName($params['name']);
-            $em->merge($item);
+            $em->persist($item);
             $em->flush();
         }
     }
@@ -14176,7 +14176,6 @@ EOD;
     /**
      * Gets the form to evaluate if it exists contains the extra field extra_authorlpitem
      * to establish authors when editing an item of an LP.
-     *
      */
     private function setAuthorLpItem(FormValidator $form)
     {

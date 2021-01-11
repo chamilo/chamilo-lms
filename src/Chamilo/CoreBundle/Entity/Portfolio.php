@@ -382,4 +382,13 @@ class Portfolio
 
         return $this;
     }
+
+    public function getExcerpt(int $count = 380): string
+    {
+        $excerpt = strip_tags($this->content);
+        $excerpt = substr($excerpt, 0, $count);
+        $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+
+        return $excerpt;
+    }
 }

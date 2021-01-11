@@ -19,11 +19,9 @@
                 </a>
             {% endif %}
 
-            {% if item.origin is null %}
-                <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
-                    {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
-                </a>
-            {% endif %}
+            <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
+                {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
+            </a>
         </div>
 
         <h4 class="h3">{{ item.title }}</h4>

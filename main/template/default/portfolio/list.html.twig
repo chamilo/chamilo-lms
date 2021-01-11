@@ -10,7 +10,7 @@
     <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
 {% endif %}
 
-{{ items.display(uncategorized_items, 0, allow_edit, _c, _u) }}
+{{ items.display(uncategorized_items, 0, allow_edit, _c, _u, _p) }}
 
 {% for category in portfolio %}
     <div class="panel panel-info">
@@ -48,7 +48,7 @@
             </div>
 
             <div class="collapse" id="collapse-category-{{ category.id }}">
-                {{ items.display(category.items(course, session, not allow_edit), category.id, allow_edit, _c, _u) }}
+                {{ items.display(category.items(course, session, not allow_edit), category.id, allow_edit, _c, _u, _p) }}
             </div>
         </div>
     </div>

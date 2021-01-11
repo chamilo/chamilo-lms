@@ -63,6 +63,18 @@ CKEDITOR.dialog.add( 'video', function ( editor )
         video[id] = this.getValue();
     }
 
+    function onChangeSrc( event )
+    {
+        var dialog = this.getDialog(),
+            videoEl = document.createElement('video');
+
+        videoEl.onloadedmetadata = function () {
+            dialog.setValueOf( 'info', 'width', videoEl.videoWidth );
+            dialog.setValueOf( 'info', 'height', videoEl.videoHeight );
+        };
+        videoEl.src = location.origin + event.data.value;
+    }
+
     function loadValue( videoNode )
     {
         if ( videoNode ) {
@@ -217,7 +229,9 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                     responsiveParent = newFakeImage.getParent();
                     responsiveParent.removeClass('embed-responsive');
                     responsiveParent.removeClass('embed-responsive-16by9');
+                    responsiveParent.removeClass('embed-responsive-9by16');
                     responsiveParent.removeClass('embed-responsive-4by3');
+                    responsiveParent.removeClass('embed-responsive-3by4');
                 }
             }
             else
@@ -238,8 +252,14 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                     case '16by9':
                         responsiveParent.addClass('embed-responsive-16by9');
                         break;
+                    case '9by16':
+                        responsiveParent.addClass('embed-responsive-9by16');
+                        break;
                     case '4by3':
                         responsiveParent.addClass('embed-responsive-4by3');
+                        break;
+                    case '3by4':
+                        responsiveParent.addClass('embed-responsive-3by4');
                         break;
                 }
             }
@@ -271,6 +291,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                         type : 'text',
                                         id : 'src0',
                                         label : lang.sourceVideo,
+                                        onChange: onChangeSrc,
                                         commit : commitSrc,
                                         setup : loadSrc
                                     },
@@ -297,6 +318,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                                 [ 'MP4', 'video/mp4' ],
                                                 [ 'WebM', 'video/webm' ]
                                             ],
+                                        onChange: onChangeSrc,
                                         commit : commitSrc,
                                         setup : loadSrc
                                     }]
@@ -417,7 +439,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                 type: 'radio',
                                 id: 'responsive',
                                 label: lang.responsive,
-                                items: [ [ lang.ratio16by9, '16by9' ], [ lang.ratio4by3, '4by3' ] ],
+                                items: [ [ lang.ratio16by9, '16by9' ],  [ lang.ratio9by16, '9by16' ], [ lang.ratio4by3, '4by3' ], [ lang.ratio3by4, '3by4' ] ],
                                 commit : commitValue,
                                 setup : loadValue,
                                 onChange: function () {

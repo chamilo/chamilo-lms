@@ -37,7 +37,7 @@ class ActivitiesController extends BaseController
                     'state_id = ? AND activity_id = ? AND MD5(agent) = ?' => [
                         Database::escape_string($stateId),
                         Database::escape_string($activityId),
-                        md5($requestedAgent)
+                        md5($requestedAgent),
                     ],
                 ],
             ],
@@ -91,7 +91,7 @@ class ActivitiesController extends BaseController
                     'state_id = ? AND activity_id = ? AND MD5(agent) = ?' => [
                         Database::escape_string($stateId),
                         Database::escape_string($activityId),
-                        md5($agent)
+                        md5($agent),
                     ],
                 ],
             ],
@@ -117,6 +117,4 @@ class ActivitiesController extends BaseController
 
         return Response::create('', Response::HTTP_NO_CONTENT);
     }
-
-
 }

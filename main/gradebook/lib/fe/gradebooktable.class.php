@@ -851,18 +851,14 @@ class GradebookTable extends SortableTable
                         }
 
                         $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
-                        if ($useExerciseScoreInTotal) {
-                            $totalRanking = ExerciseLib::show_score($totalRanking[0], $totalRanking[1], false);
-                        } else {
-                            $totalRanking = $scoredisplay->display_score(
-                                $totalRanking,
-                                SCORE_DIV,
-                                SCORE_BOTH,
-                                true,
-                                true,
-                                true
-                            );
-                        }
+                        $totalRanking = $scoredisplay->display_score(
+                            $totalRanking,
+                            SCORE_DIV,
+                            SCORE_BOTH,
+                            true,
+                            true,
+                            true
+                        );
 
                         if ($invalidateRanking) {
                             $totalRanking = null;

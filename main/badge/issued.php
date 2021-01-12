@@ -89,7 +89,7 @@ if ($skillIssue->getAcquiredLevel()) {
 
 $author = api_get_user_info($skillIssue->getArgumentationAuthorId());
 $tempDate = DateTime::createFromFormat('Y-m-d H:i:s', $skillIssueDate);
-$linkedinOrganizationId =api_get_configuration_value('settings_meta_linkedin_organization_id');
+$linkedinOrganizationId = api_get_configuration_value('settings_meta_linkedin_organization_id');
 if (($linkedinOrganizationId === false)) {
     $linkedinOrganizationId = null;
 }

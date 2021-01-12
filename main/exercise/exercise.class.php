@@ -10959,7 +10959,7 @@ class Exercise
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $userId = ((int)$userId == 0) ? $userId : api_get_user_id();
+        $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
         $extraMessage = null;
         $bestAttempt = [];
         $exercise_stat_info = Event::getExerciseResultsByUser(

@@ -265,14 +265,14 @@ if ($exerciseAttempts > 0) {
     if ($attempt_count >= $exerciseAttempts) {
         $remedialMessage .= $objExercise->remedialCourseList(api_get_user_id());
     }
-    if($remedialMessage != null){
+    if ($remedialMessage != null) {
         Display::addFlash(
             Display::return_message($remedialMessage, 'warning', false)
         );
     }
 }
 
-if($advanceCourseMessage != null){
+if ($advanceCourseMessage != null) {
     Display::addFlash(
         Display::return_message($advanceCourseMessage, 'info', false)
     );
@@ -298,7 +298,6 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_id,
     $learnpath_item_id
 );
-
 
 ExerciseLib::delete_chat_exercise_session($exeId);
 

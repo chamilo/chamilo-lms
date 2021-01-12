@@ -588,7 +588,7 @@ class PortfolioController
                         <div class="media-body">';
                 },
                 'childClose' => '</div></li>',
-                'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon) {
+                'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon, $item) {
                     /** @var PortfolioComment $comment */
                     $comment = $commentsRepo->find($node['id']);
 
@@ -615,7 +615,9 @@ class PortfolioController
                         )
                     );
 
-                    if (api_is_allowed_to_edit()) {
+                    $isAllowedToEdit = api_is_allowed_to_edit();
+
+                    if ($isAllowedToEdit) {
                         $commentActions .= Display::url(
                             Display::return_icon('copy.png', get_lang('CopyToStudentPortfolio')),
                             $this->baseUrl.http_build_query(
@@ -626,11 +628,47 @@ class PortfolioController
                                 ]
                             )
                         );
+
+                        if ($comment->isImportant()) {
+                            $commentActions .= Display::url(
+                                Display::return_icon('drawing-pin.png', get_lang('UnmarkCommentAsImportant')),
+                                $this->baseUrl.http_build_query(
+                                    [
+                                        'action' => 'mark_important',
+                                        'item' => $item->getId(),
+                                        'id' => $comment->getId(),
+                                    ]
+                                )
+                            );
+                        } else {
+                            $commentActions .= Display::url(
+                                Display::return_icon('drawing-pin.png', get_lang('MarkCommentAsImportant')),
+                                $this->baseUrl.http_build_query(
+                                    [
+                                        'action' => 'mark_important',
+                                        'item' => $item->getId(),
+                                        'id' => $comment->getId(),
+                                    ]
+                                )
+                            );
+                        }
                     }
 
-                    return '<p class="h4 media-heading">'.$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'
-                        .$clockIcon.PHP_EOL.Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'
-                        .'</p><div class="pull-right">'.$commentActions.'</div>'.$comment->getContent().PHP_EOL;
+                    $nodeHtml = '<p class="media-heading h4">'.PHP_EOL
+                        .$comment->getAuthor()->getCompleteName().'</>'.PHP_EOL.'<small>'.$clockIcon.PHP_EOL
+                        .Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'.PHP_EOL;
+
+                    if ($comment->isImportant() &&
+                        ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
+                    ) {
+                        $nodeHtml .= '<span class="label label-warning origin-style">'.get_lang('CommentMarkedAsImportant')
+                            .'</span>'.PHP_EOL;
+                    }
+
+                    $nodeHtml .= '</p>'.PHP_EOL
+                        .'<div class="pull-right">'.$commentActions.'</div>'.$comment->getContent().PHP_EOL;
+
+                    return $nodeHtml;
                 },
             ]
         );
@@ -891,6 +929,34 @@ class PortfolioController
     }
 
     /**
+     * @param \Chamilo\CoreBundle\Entity\Portfolio        $item
+     * @param \Chamilo\CoreBundle\Entity\PortfolioComment $comment
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function markImportantCommentInItem(Portfolio $item, PortfolioComment $comment)
+    {
+        if ($comment->getItem()->getId() !== $item->getId()) {
+            api_not_allowed(true);
+        }
+
+        $comment->setIsImportant(
+            !$comment->isImportant()
+        );
+
+        $this->em->persist($comment);
+        $this->em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('CommentMarkedAsImportant'), 'success')
+        );
+
+        header("Location: $this->baseUrl".http_build_query(['action' => 'view', 'id' => $item->getId()]));
+        exit;
+    }
+
+    /**
      * @param bool $showHeader
      */
     private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
@@ -935,14 +1001,6 @@ class PortfolioController
 
     private function itemBelongToOwner(Portfolio $item): bool
     {
-        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
-            return false;
-        }
-
-        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
-            return false;
-        }
-
         if ($item->getUser()->getId() != $this->owner->getId()) {
             return false;
         }

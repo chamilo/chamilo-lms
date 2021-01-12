@@ -6847,31 +6847,18 @@ class Exercise
             }
         }
         // BT#18165
-        $field = new ExtraField('exercise');
-        $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
-
-        $field = new ExtraField('exercise');
-        $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
-
-        if (
-            ($remedialField != false && isset($remedialField['default_value']) && $remedialField['default_value'] == 1 // if the plugin is activated
-            ) || (
-                $advancedCourseField != false && isset($advancedCourseField['default_value']) && $advancedCourseField['default_value'] == 1 // if the plugin is activated
-            )
-        ) {
-            $exerciseAttempts = $this->selectAttempts();
-            if ($exerciseAttempts > 0) {
-                $attemptCount = Event::get_attempt_count_not_finished(
-                    api_get_user_id(),
-                    $this->id,
-                    $lpId,
-                    $lpItemId,
-                    $lpItemViewId
-                );
-                $message .= $this->advanceCourseList(api_get_user_id());
-                if ($attemptCount >= $exerciseAttempts) {
-                    $message .= $this->remedialCourseList(api_get_user_id());
-                }
+        $exerciseAttempts = $this->selectAttempts();
+        if ($exerciseAttempts > 0) {
+            $attemptCount = Event::get_attempt_count_not_finished(
+                api_get_user_id(),
+                $this->id,
+                $lpId,
+                $lpItemId,
+                $lpItemViewId
+            );
+            $message .= $this->advanceCourseList(api_get_user_id());
+            if ($attemptCount >= $exerciseAttempts) {
+                $message .= $this->remedialCourseList(api_get_user_id());
             }
         }
 
@@ -10843,6 +10830,19 @@ class Exercise
      */
     public function advanceCourseList($userId = 0)
     {
+        $field = new ExtraField('exercise');
+        $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
+        $active = 0;
+        if (
+            $advancedCourseField != false &&
+            isset($advancedCourseField['default_value']) &&
+            $advancedCourseField['default_value'] == 1 // if the plugin is activated
+        ) {
+            $active = 1;
+        }
+        if ($active == 0) {
+            return null;
+        }
         $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
         $extraMessage = null;
 
@@ -10941,12 +10941,25 @@ class Exercise
      */
     public function remedialCourseList($userId = 0, $review = false)
     {
+        $field = new ExtraField('exercise');
+        $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
+        $active = 0;
+        if (
+            $remedialField != false &&
+            isset($remedialField['default_value']) &&
+            $remedialField['default_value'] == 1 // if the plugin is activated
+        ) {
+            $active = 1;
+        }
+        if ($active == 0) {
+            return null;
+        }
         $questionExcluded = [
             FREE_ANSWER,
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
+        $userId = ((int)$userId == 0) ? $userId : api_get_user_id();
         $extraMessage = null;
         $bestAttempt = [];
         $exercise_stat_info = Event::getExerciseResultsByUser(

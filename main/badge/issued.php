@@ -88,10 +88,19 @@ if ($skillIssue->getAcquiredLevel()) {
 }
 
 $author = api_get_user_info($skillIssue->getArgumentationAuthorId());
+$tempDate = DateTime::createFromFormat('Y-m-d H:i:s',$skillIssueDate);
+$linkedinOrganizationId= '';
+if(api_get_configuration_value('settings_meta_linkedin_organization_id')){
+    $linkedinOrganizationId = '&organizationId='.api_get_configuration_value('settings_meta_linkedin_organization_id');
+}
+
 
 $skillIssueInfo = [
     'id' => $skillIssue->getId(),
     'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
+    'year'=> $tempDate->format('Y'),
+    'month'=> $tempDate->format('m'),
+    'linkedin_organization_id'=> $linkedinOrganizationId,
     'acquired_level' => $currentSkillLevel,
     'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
     'argumentation_author_name' => $author['complete_name'],

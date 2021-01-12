@@ -47,6 +47,9 @@
                 <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(issue_info.skill_name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}" target="_new">
                     <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                 </a>
+                <a href="https://www.linkedin.com/profile/add?certId={{ issue_info.id }}&certUrl={{ _p.web }}badge/{{ issue_info.id }}&isFromA2p=true&issueMonth={{issue_info.month}}&issueYear={{issue_info.year}}&name={{issue_info.skill_name}}{{issue_info.linkedin_organization_id}}" target="_new">
+                    <em class='fa fa-linkedin-square fa-3x' aria-hidden='true'></em>
+                </a>
             </div>
         {% endif %}
     </div>

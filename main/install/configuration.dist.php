@@ -989,6 +989,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Set to true to disable the new personal data page inside the social network
 // menu
 // $_configuration['disable_gdpr'] = true;
+// Set the LinkedIn organization id BT#17468
+//$_configuration['settings_meta_linkedin_organization_id'] = false;
 
 // GDPR requires users to be informed of the Data Protection Officer name and
 // contact point. These can only be defined here for now, but will be moved to

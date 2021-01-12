@@ -44,7 +44,7 @@ if ($form->validate()) {
 $form->addHeader($plugin->get_lang('SearchFilter'));
 
 $categoriesOptions = [
-    '0' => get_lang('None'),
+    '0' => get_lang('AllCategories'),
 ];
 $categoriesList = SessionManager::get_all_session_category();
 if ($categoriesList != false) {
@@ -104,6 +104,8 @@ if (api_is_platform_admin()) {
 }
 
 $templateName = $plugin->get_lang('CourseListOnSale');
+
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
 
 $template = new Template($templateName);
 $template->assign('search_filter_form', $form->returnForm());

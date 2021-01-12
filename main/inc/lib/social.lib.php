@@ -969,6 +969,8 @@ class SocialManager extends UserManager
         $messageSocialIcon = Display::return_icon('promoted_message.png', get_lang('PromotedMessages'));
         $portfolio = Display::return_icon('portfolio.png', get_lang('Portfolio '));
 
+        $allowPortfolioTool = api_get_configuration_value('allow_portfolio_tool');
+
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
         if (!empty($forumCourseId)) {
@@ -999,14 +1001,24 @@ class SocialManager extends UserManager
                         '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                     </a>
                 </li>';
-            if ($settingExtendedProfileEnabled == true) {
-                $active = $show === 'portfolio' ? 'active' : null;
+            if ($allowPortfolioTool) {
                 $links .= '
+                    <li class="portoflio-icon '.($show === 'portfolio' ? 'active' : '').'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
+                            '.$portfolioIcon.' '.get_lang('Portfolio').'
+                        </a>
+                    </li>
+                ';
+            } else {
+                if ($settingExtendedProfileEnabled == true) {
+                    $active = $show === 'portfolio' ? 'active' : null;
+                    $links .= '
                 <li class="portfolio-icon '.$active.'">
                       <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
                         '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
                 </li>';
+                }
             }
 
             // Invitations
@@ -1064,15 +1076,6 @@ class SocialManager extends UserManager
                 $myFiles = '';
             }
             $links .= $myFiles;
-            if (api_get_configuration_value('allow_portfolio_tool')) {
-                $links .= '
-                    <li class="portoflio-icon '.($show === 'portfolio' ? 'active' : '').'">
-                        <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
-                            '.$portfolioIcon.' '.get_lang('Portfolio').'
-                        </a>
-                    </li>
-                ';
-            }
 
             if (!api_get_configuration_value('disable_gdpr')) {
                 $active = $show === 'personal-data' ? 'active' : null;
@@ -1129,14 +1132,24 @@ class SocialManager extends UserManager
                             '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                         </a>
                     </li>';
-                if ($settingExtendedProfileEnabled == true) {
-                    $active = $show === 'portfolio' ? 'active' : null;
+                if ($allowPortfolioTool) {
                     $links .= '
+                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                            <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
+                                '.$portfolioIcon.' '.get_lang('Portfolio').'
+                            </a>
+                        </li>
+                    ';
+                } else {
+                    if ($settingExtendedProfileEnabled == true) {
+                        $active = $show === 'portfolio' ? 'active' : null;
+                        $links .= '
                 <li class="portfolio-icon '.$active.'">
                       <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
                       '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
                 </li>';
+                    }
                 }
                 $active = $show === 'invitations' ? 'active' : null;
                 $links .= '
@@ -1185,16 +1198,6 @@ class SocialManager extends UserManager
                 }
                 $links .= $myFiles;
 
-                if (api_get_configuration_value('allow_portfolio_tool')) {
-                    $links .= '
-                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
-                            <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
-                                '.$portfolioIcon.' '.get_lang('Portfolio').'
-                            </a>
-                        </li>
-                    ';
-                }
-
                 if (!api_get_configuration_value('disable_gdpr')) {
                     $active = $show == 'personal-data' ? 'active' : null;
                     $personalData = '
@@ -1230,17 +1233,7 @@ class SocialManager extends UserManager
                         'data-title' => $sendMessageText,
                     ]
                 );
-                if ($settingExtendedProfileEnabled == true) {
-                    $active = $show === 'portfolio' ? 'active' : null;
-                    $links .= '
-                <li class="portfolio-icon '.$active.'">
-                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
-                        '.$portfolio.' '.get_lang('Portfolio').'
-                    </a>
-                </li>';
-                }
-
-                if (api_get_configuration_value('allow_portfolio_tool')) {
+                if ($allowPortfolioTool) {
                     $links .= '
                         <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
                             <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php?user='.$user_id.'">
@@ -1248,6 +1241,16 @@ class SocialManager extends UserManager
                             </a>
                         </li>
                     ';
+                } else {
+                    if ($settingExtendedProfileEnabled == true) {
+                        $active = $show === 'portfolio' ? 'active' : null;
+                        $links .= '
+                <li class="portfolio-icon '.$active.'">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                        '.$portfolio.' '.get_lang('Portfolio').'
+                    </a>
+                </li>';
+                    }
                 }
             }
 

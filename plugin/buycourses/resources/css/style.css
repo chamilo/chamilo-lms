@@ -387,12 +387,9 @@ tr.sale-columns th{
     height: 14.22222px;
 }
 
-div.items-course-info h4.title{
+div.items-course-info h4.title {
     font-weight: bold;
     height: 2.8em;
-    width: 100%;
-    text-overflow: ellipsis;
-    overflow: hidden;
 }
 
 @media (min-width: 991px) {

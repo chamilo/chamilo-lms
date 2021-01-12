@@ -1379,7 +1379,7 @@ class CourseRestorer
                             c_id = ".$this->destination_course_id." AND
                             category_id='".$cat_id."'";
                 $result = Database::query($sql);
-                list($max_order) = Database::fetch_array($result);
+                [$max_order] = Database::fetch_array($result);
 
                 $params = [];
                 if (!empty($session_id)) {
@@ -1449,7 +1449,7 @@ class CourseRestorer
             $sql = "SELECT MAX(display_order) FROM  $link_cat_table
                     WHERE c_id = ".$this->destination_course_id;
             $result = Database::query($sql);
-            list($orderMax) = Database::fetch_array($result, 'NUM');
+            [$orderMax] = Database::fetch_array($result, 'NUM');
             $display_order = $orderMax + 1;
 
             $params['c_id'] = $this->destination_course_id;
@@ -2872,6 +2872,18 @@ class CourseRestorer
                         }
                     }
 
+                    if (isset($lp->extraFields) && !empty($lp->extraFields)) {
+                        $extraFieldValue = new \ExtraFieldValue('lp');
+                        foreach ($lp->extraFields as $extraField) {
+                            $params = [
+                                'item_id' => $new_lp_id,
+                                'value' => $extraField['value'],
+                                'variable' => $extraField['variable'],
+                            ];
+                            $extraFieldValue->save($params);
+                        }
+                    }
+
                     api_item_property_update(
                         $this->destination_course_info,
                         TOOL_LEARNPATH,
@@ -2930,6 +2942,9 @@ class CourseRestorer
                             }
                         }
 
+                        $prerequisiteMinScore = $item['prerequisite_min_score'] ?? null;
+                        $prerequisiteMaxScore = $item['prerequisite_max_score'] ?? null;
+
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'lp_id' => self::DBUTF8($new_lp_id),
@@ -2941,6 +2956,8 @@ class CourseRestorer
                             'min_score' => self::DBUTF8($item['min_score']),
                             'max_score' => self::DBUTF8($item['max_score']),
                             'mastery_score' => self::DBUTF8($masteryScore),
+                            'prerequisite_min_score' => $prerequisiteMinScore,
+                            'prerequisite_max_score' => $prerequisiteMaxScore,
                             'parent_item_id' => self::DBUTF8($item['parent_item_id']),
                             'previous_item_id' => self::DBUTF8($item['previous_item_id']),
                             'next_item_id' => self::DBUTF8($item['next_item_id']),

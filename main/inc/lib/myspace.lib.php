@@ -1401,7 +1401,8 @@ class MySpace
                     FROM $tblExtraFieldValue
                     WHERE
                         field_id IN ( $queryExtraFieldPrice ) AND
-                        item_id in ($cLpItems)";
+                        item_id in ($cLpItems)
+                        AND value != 0";
             $queryResult = Database::query($sql);
             $lpItemPrice = [];
             while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
@@ -4067,18 +4068,9 @@ class MySpace
             FROM
                 $tblItemProperty
             WHERE
-                c_id IN (
-                    SELECT
-                        c_id
-                    FROM
-                        ".TABLE_MAIN_COURSE_USER."
-                    WHERE
-                        STATUS = 5
-                )
-                AND lastedit_type = 'LearnpathSubscription'
+                lastedit_type = 'LearnpathSubscription'
 
                 ";
-            // -- AND $selectToCompany IS NOT NULL
             if (strlen($whereCondition) > 2) {
                 $query .= $whereCondition;
             }

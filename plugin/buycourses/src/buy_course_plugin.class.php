@@ -957,6 +957,7 @@ class BuyCoursesPlugin extends Plugin
             'nbrCourses' => $session->getNbrCourses(),
             'nbrUsers' => $session->getNbrUsers(),
             'item' => $item,
+            'duration' => $session->getDuration(),
         ];
 
         $fieldValue = new ExtraFieldValue('session');

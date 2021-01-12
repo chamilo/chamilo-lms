@@ -4,6 +4,8 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +27,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Portfolio
 {
+    public const TYPE_ITEM = 1;
+    public const TYPE_COMMENT = 2;
+
     /**
      * @var int
      *
@@ -101,11 +106,32 @@ class Portfolio
     protected $category;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", mappedBy="item")
+     */
+    private $comments;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin", type="integer", nullable=true)
+     */
+    private $origin;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin_type", type="integer", nullable=true)
+     */
+    private $originType;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
     {
-        $this->category = new PortfolioCategory();
+        $this->category = null;
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -320,5 +346,49 @@ class Portfolio
         $this->category = $category;
 
         return $this;
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function getOrigin(): ?int
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOrigin(?int $origin): Portfolio
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    public function getOriginType(): ?int
+    {
+        return $this->originType;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOriginType(?int $originType): Portfolio
+    {
+        $this->originType = $originType;
+
+        return $this;
+    }
+
+    public function getExcerpt(int $count = 380): string
+    {
+        $excerpt = strip_tags($this->content);
+        $excerpt = substr($excerpt, 0, $count);
+        $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+
+        return $excerpt;
     }
 }

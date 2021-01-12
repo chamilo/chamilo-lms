@@ -120,6 +120,7 @@ $templateName = $plugin->get_lang('PaymentMethods');
 $interbreadcrumb[] = ['url' => 'course_catalog.php', 'name' => $plugin->get_lang('CourseListOnSale')];
 
 $tpl = new Template($templateName);
+$tpl->assign('item_type', (int) $_GET['t']);
 $tpl->assign('buying_course', $buyingCourse);
 $tpl->assign('buying_session', $buyingSession);
 $tpl->assign('user', api_get_user_info());

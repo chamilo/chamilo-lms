@@ -1003,7 +1003,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $addparams,
                     $exportToPdf,
                     null,
-                    null,
+                    api_get_user_id(),
                     [],
                     $loadStats
                 );

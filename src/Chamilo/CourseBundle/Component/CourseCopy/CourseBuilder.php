@@ -1421,7 +1421,7 @@ class CourseBuilder
         $id_list = [],
         $addScormFolder = true
     ) {
-        $table_main = Database::get_course_table(TABLE_LP_MAIN);
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
         $table_item = Database::get_course_table(TABLE_LP_ITEM);
         $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
@@ -1441,10 +1441,10 @@ class CourseBuilder
                     true
                 );
             }
-            $sql = 'SELECT * FROM '.$table_main.'
+            $sql = 'SELECT * FROM '.$lpTable.'
                     WHERE c_id = '.$courseId.'  '.$sessionCondition;
         } else {
-            $sql = 'SELECT * FROM '.$table_main.'
+            $sql = 'SELECT * FROM '.$lpTable.'
                     WHERE c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
         }
 
@@ -1475,6 +1475,8 @@ class CourseBuilder
                     $item['next_item_id'] = $obj_item->next_item_id;
                     $item['display_order'] = $obj_item->display_order;
                     $item['prerequisite'] = $obj_item->prerequisite;
+                    $item['prerequisite_min_score'] = $obj_item->prerequisite_min_score;
+                    $item['prerequisite_max_score'] = $obj_item->prerequisite_max_score;
                     $item['parameters'] = $obj_item->parameters;
                     $item['launch_data'] = $obj_item->launch_data;
                     $item['audio'] = $obj_item->audio;
@@ -1522,6 +1524,9 @@ class CourseBuilder
                     $obj->category_id,
                     $items
                 );
+
+                $extraFieldValue = new \ExtraFieldValue('lp');
+                $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);
 
                 $this->course->add_resource($lp);
 

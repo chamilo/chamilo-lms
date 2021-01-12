@@ -97,7 +97,14 @@
                                             {% if 'show_session_coach'|api_get_setting == 'true' %}
                                                 <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
                                             {% endif %}
-                                            <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
+                                            <p>
+                                                <em class="fa fa-calendar fa-fw"></em>
+                                                {% if session.duration %}
+                                                    {{ 'SessionDurationXDaysTotal'|get_lang|format(session.duration) }}
+                                                {% else %}
+                                                    {{ session.dates.display }}
+                                                {% endif %}
+                                            </p>
                                             <p class="text-right">
                                                 <span class="label label-primary">
                                                     {{ session.item.total_price_formatted }}

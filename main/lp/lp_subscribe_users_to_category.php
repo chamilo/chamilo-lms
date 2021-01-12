@@ -103,7 +103,7 @@ $form->addButtonSave(get_lang('Save'));
 
 // UserGroup
 if ($allowUserGroups) {
-    $formUserGroup = new FormValidator('lp_edit', 'post', $url);
+    $formUserGroup = new FormValidator('lp_edit_usergroup', 'post', $url);
     $formUserGroup->addHidden('usergroup_form', 1);
 
     $userGroup = new UserGroup();
@@ -201,7 +201,7 @@ if ($allowUserGroups) {
                 }
             }
 
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         } else {
@@ -217,7 +217,7 @@ if ($allowUserGroups) {
                         $sessionCondition
                     ";
             Database::query($sql);
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
         }
         header("Location: $url");
@@ -259,7 +259,7 @@ foreach ($subscribedUsersInCategory as $item) {
 }
 
 // Building the form for Users
-$formUsers = new FormValidator('lp_edit', 'post', $url);
+$formUsers = new FormValidator('lp_edit_users', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 $formUsers->addLabel('', $message);
 
@@ -307,7 +307,7 @@ if ($formUsers->validate()) {
             }
         }
 
-        $em->merge($category);
+        $em->persist($category);
         $em->flush();
         Display::addFlash(Display::return_message(get_lang('Updated')));
     }

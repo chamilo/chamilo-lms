@@ -575,7 +575,6 @@ if (
     // The first thing we do is delete the session
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
-    Session::erase('auto_invitation_code_'.$survey_data['code']);
 
     $paged_questions_sec = [];
     if (!empty($survey_data['survey_introduction'])) {
@@ -632,14 +631,12 @@ if ($survey_data['form_fields'] &&
         // We unset the sessions
         Session::erase('paged_questions');
         Session::erase('page_questions_sec');
-        Session::erase('auto_invitation_code_'.$survey_data['code']);
         $paged_questions_sec = [];
     } else {
         echo '<div id="survey_content" class="survey_content">'.get_lang('UpdateInformation').'</div>';
         // We unset the sessions
         Session::erase('paged_questions');
         Session::erase('page_questions_sec');
-        Session::erase('auto_invitation_code_'.$survey_data['code']);
         $paged_questions_sec = [];
         $form->display();
     }

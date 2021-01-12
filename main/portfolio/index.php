@@ -142,7 +142,7 @@ switch ($action) {
             if ('copy' === $action) {
                 $controller->copyItem($item);
             } elseif ('teacher_copy' === $action) {
-                   $controller->teacherCopyItem($item);
+                $controller->teacherCopyItem($item);
             }
         } elseif ('comment' === $type) {
             $comment = $em->find(PortfolioComment::class, $id);

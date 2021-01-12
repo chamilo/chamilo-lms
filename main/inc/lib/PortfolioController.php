@@ -734,108 +734,6 @@ class PortfolioController
         exit;
     }
 
-    /**
-     * @param bool $showHeader
-     */
-    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
-    {
-        global $this_section;
-
-        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
-
-        $view = new Template($toolName);
-
-        if ($showHeader) {
-            $view->assign('header', $toolName);
-        }
-
-        $actionsStr = '';
-
-        if ($this->course) {
-            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
-        }
-
-        if ($actions) {
-            $actions = implode(PHP_EOL, $actions);
-
-            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
-        }
-
-        $view->assign('baseurl', $this->baseUrl);
-        $view->assign('actions', $actionsStr);
-
-        $view->assign('content', $content);
-        $view->display_one_col_template();
-    }
-
-    private function categoryBelongToOwner(PortfolioCategory $category): bool
-    {
-        if ($category->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function itemBelongToOwner(Portfolio $item): bool
-    {
-        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
-            return false;
-        }
-
-        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
-            return false;
-        }
-
-        if ($item->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    private function createCommentForm(Portfolio $item): string
-    {
-        $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
-
-        $form = new FormValidator('frm_comment', 'post', $formAction);
-        $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
-        $form->addHidden('item', $item->getId());
-        $form->addHidden('parent', 0);
-        $form->applyFilter('content', 'trim');
-        $form->addButtonSave(get_lang('Save'));
-
-        if ($form->validate()) {
-            $values = $form->exportValues();
-
-            $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);
-
-            $comment = new PortfolioComment();
-            $comment
-                ->setAuthor($this->owner)
-                ->setParent($parentComment)
-                ->setContent($values['content'])
-                ->setDate(api_get_utc_datetime(null, false, true))
-                ->setItem($item);
-
-            $this->em->persist($comment);
-            $this->em->flush();
-
-            Display::addFlash(
-                Display::return_message(get_lang('CommentAdded'), 'success')
-            );
-
-            header("Location: $formAction");
-            exit;
-        }
-
-        return $form->returnForm();
-    }
-
     public function teacherCopyItem(Portfolio $originItem)
     {
         $actionParams = http_build_query(['action' => 'teacher_copy', 'copy' => 'item', 'id' => $originItem->getId()]);
@@ -990,5 +888,107 @@ class PortfolioController
         }
 
         $this->renderView($content, $toolName);
+    }
+
+    /**
+     * @param bool $showHeader
+     */
+    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
+    {
+        global $this_section;
+
+        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
+
+        $view = new Template($toolName);
+
+        if ($showHeader) {
+            $view->assign('header', $toolName);
+        }
+
+        $actionsStr = '';
+
+        if ($this->course) {
+            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
+        }
+
+        if ($actions) {
+            $actions = implode(PHP_EOL, $actions);
+
+            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
+        }
+
+        $view->assign('baseurl', $this->baseUrl);
+        $view->assign('actions', $actionsStr);
+
+        $view->assign('content', $content);
+        $view->display_one_col_template();
+    }
+
+    private function categoryBelongToOwner(PortfolioCategory $category): bool
+    {
+        if ($category->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function itemBelongToOwner(Portfolio $item): bool
+    {
+        if ($this->session && $item->getSession()->getId() != $this->session->getId()) {
+            return false;
+        }
+
+        if ($this->course && $item->getCourse()->getId() != $this->course->getId()) {
+            return false;
+        }
+
+        if ($item->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function createCommentForm(Portfolio $item): string
+    {
+        $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
+
+        $form = new FormValidator('frm_comment', 'post', $formAction);
+        $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
+        $form->addHidden('item', $item->getId());
+        $form->addHidden('parent', 0);
+        $form->applyFilter('content', 'trim');
+        $form->addButtonSave(get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);
+
+            $comment = new PortfolioComment();
+            $comment
+                ->setAuthor($this->owner)
+                ->setParent($parentComment)
+                ->setContent($values['content'])
+                ->setDate(api_get_utc_datetime(null, false, true))
+                ->setItem($item);
+
+            $this->em->persist($comment);
+            $this->em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('CommentAdded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit;
+        }
+
+        return $form->returnForm();
     }
 }

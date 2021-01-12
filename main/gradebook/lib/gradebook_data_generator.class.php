@@ -209,7 +209,7 @@ class GradebookDataGenerator
                         $row['average'] = $average['display'];
                         $row['average_score'] = $average['score'];
 
-                        // Ranking
+                        // Ranking.
                         if ($allowStats) {
                             // Ranking
                             if (isset($defaultData[$item->get_id()]) &&
@@ -246,69 +246,87 @@ class GradebookDataGenerator
                                 if ('C' === $item->get_item_type()) {
                                     $evals = $item->get_evaluations(null);
                                     $links = $item->get_links(null);
-                                }
-                                foreach ($studentList as $user) {
-                                    $ressum = 0;
-                                    $weightsum = 0;
-                                    $bestResult = 0;
 
-                                    if (!empty($evals)) {
-                                        foreach ($evals as $eval) {
-                                            $evalres = $eval->calc_score($user['user_id'], null);
-                                            $eval->setStudentList($studentList);
+                                    foreach ($studentList as $user) {
+                                        $ressum = 0;
+                                        $weightsum = 0;
+                                        $bestResult = 0;
+                                        if (!empty($evals)) {
+                                            foreach ($evals as $eval) {
+                                                $evalres = $eval->calc_score($user['user_id'], null);
+                                                $eval->setStudentList($studentList);
 
-                                            if (isset($evalres) && 0 != $eval->get_weight()) {
-                                                $evalweight = $eval->get_weight();
-                                                $weightsum += $evalweight;
-                                                if (!empty($evalres[1])) {
-                                                    $ressum += $evalres[0] / $evalres[1] * $evalweight;
-                                                }
-
-                                                if ($ressum > $bestResult) {
-                                                    $bestResult = $ressum;
-                                                }
-                                            } else {
-                                                if (0 != $eval->get_weight()) {
+                                                if (isset($evalres) && 0 != $eval->get_weight()) {
                                                     $evalweight = $eval->get_weight();
                                                     $weightsum += $evalweight;
+                                                    if (!empty($evalres[1])) {
+                                                        $ressum += $evalres[0] / $evalres[1] * $evalweight;
+                                                    }
+
+                                                    if ($ressum > $bestResult) {
+                                                        $bestResult = $ressum;
+                                                    }
+                                                } else {
+                                                    if (0 != $eval->get_weight()) {
+                                                        $evalweight = $eval->get_weight();
+                                                        $weightsum += $evalweight;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-
-                                    if (!empty($links)) {
-                                        foreach ($links as $link) {
-                                            $link->setStudentList($studentList);
-                                            if ($session_id) {
-                                                $link->set_session_id($session_id);
-                                            }
-                                            $linkres = $link->calc_score($user['user_id'], null);
-                                            if (!empty($linkres) && 0 != $link->get_weight()) {
-                                                $linkweight = $link->get_weight();
-                                                $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
-
-                                                $weightsum += $linkweight;
-                                                $ressum += $linkres[0] / $link_res_denom * $linkweight;
-                                                if ($ressum > $bestResult) {
-                                                    $bestResult = $ressum;
+                                        if (!empty($links)) {
+                                            foreach ($links as $link) {
+                                                $link->setStudentList($studentList);
+                                                if ($session_id) {
+                                                    $link->set_session_id($session_id);
                                                 }
-                                            } else {
-                                                // Adding if result does not exists
-                                                if (0 != $link->get_weight()) {
+                                                $linkres = $link->calc_score($user['user_id'], null);
+                                                if (!empty($linkres) && 0 != $link->get_weight()) {
                                                     $linkweight = $link->get_weight();
+                                                    $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
+
                                                     $weightsum += $linkweight;
+                                                    $ressum += $linkres[0] / $link_res_denom * $linkweight;
+                                                    if ($ressum > $bestResult) {
+                                                        $bestResult = $ressum;
+                                                    }
+                                                } else {
+                                                    // Adding if result does not exists
+                                                    if (0 != $link->get_weight()) {
+                                                        $linkweight = $link->get_weight();
+                                                        $weightsum += $linkweight;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
 
-                                    if (!empty($ressum)) {
-                                        $invalidateResults = false;
+                                        if (!empty($ressum)) {
+                                            $invalidateResults = false;
+                                        }
+                                        $rankingStudentList[$user['user_id']] = $ressum;
                                     }
+                                }
 
-                                    $rankingStudentList[$user['user_id']] = $ressum;
+                                if (empty($rankingStudentList)) {
+                                    foreach ($studentList as $user) {
+                                        $score = $this->build_result_column(
+                                            $user['user_id'],
+                                            $item,
+                                            $ignore_score_color,
+                                            true
+                                        );
+                                        if (!empty($score['score'][0])) {
+                                            $invalidateResults = false;
+                                        }
+
+                                        $rankingStudentList[$user['user_id']] = 0;
+                                        if ($score['score']) {
+                                            $rankingStudentList[$user['user_id']] = $score['score'][0];
+                                        }
+                                    }
                                 }
                             }
+
                             $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
                         }
 

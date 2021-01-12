@@ -150,7 +150,7 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plug
 
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = BuyCoursesPlugin::getSalesReportScript($sales,$invoicingEnable);
+$htmlHeadXtra[] = BuyCoursesPlugin::getSalesReportScript($sales, $invoicingEnable);
 
 $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);

@@ -2,11 +2,9 @@
     <div class="caption">
         <div class="portfolio-actions pull-right">
             {% if _u.id == item.user.id %}
-                {% if item.origin is null %}
-                    <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
-                        {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
-                    </a>
-                {% endif %}
+                <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
+                    {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
+                </a>
                 {% if item.isVisible %}
                     <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
                         {{ 'visible.png'|img(22, 'Invisible'|get_lang) }}
@@ -21,9 +19,13 @@
                 </a>
             {% endif %}
 
-            {% if item.origin is null %}
-                <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
-                    {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
+            <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
+                {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
+            </a>
+
+            {% if false|api_is_allowed_to_edit %}
+                <a href="{{ baseurl ~ {'action':'teacher_copy', 'copy':'item', 'id':item.id}|url_encode }}">
+                    {{ 'copy.png'|img(22, 'CopyToStudentPortfolio'|get_lang) }}
                 </a>
             {% endif %}
         </div>
@@ -68,23 +70,24 @@
             </li>
         </ul>
 
-        <hr>
-
-        {{ item.content }}
-
         {% if item.origin %}
             <hr>
 
-            <p class="text-muted">
-                <em>
+            <blockquote>
+                {{ origin.content }}
                 {% if item.originType == 1 %}
-                    {{ 'OriginallyPublishedAsXTitleByYUser'|get_lang|format(origin.title, origin.user.completeName) }}
+                    <footer>{{ 'OriginallyPublishedAsXTitleByYUser'|get_lang|format(origin.title, origin.user.completeName) }}</footer>
                 {% elseif item.originType == 2 %}
-                    {{ 'OriginallyPublishedByXUserInYItem'|get_lang|format(origin.author.completeName, origin.item.title) }}
+                    <footer>{{ 'OriginallyCommentedByXUserInYItem'|get_lang|format(origin.author.completeName, origin.item.title) }}</footer>
                 {% endif %}
-                </em>
-            </p>
+            </blockquote>
         {% endif %}
+
+        <hr>
+
+        <div class="clearfix">
+            {{ item.content }}
+        </div>
     </div>
 </article>
 

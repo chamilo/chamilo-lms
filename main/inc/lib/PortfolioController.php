@@ -332,6 +332,24 @@ class PortfolioController
             $form->applyFilter('title', 'trim');
         }
 
+        if ($item->getOrigin()) {
+            if (Portfolio::TYPE_ITEM === $item->getOriginType()) {
+                $origin = $this->em->find(Portfolio::class, $item->getOrigin());
+
+                $form->addLabel(
+                    sprintf(get_lang('PortfolioItemFromXUser'), $origin->getUser()->getCompleteName()),
+                    Display::panel($origin->getContent())
+                );
+            } elseif (Portfolio::TYPE_COMMENT === $item->getOriginType()) {
+                $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
+
+                $form->addLabel(
+                    sprintf(get_lang('PortfolioCommentFromXUser'), $origin->getAuthor()->getCompleteName()),
+                    Display::panel($origin->getContent())
+                );
+            }
+        }
+
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
         $form->addSelectFromCollection(
             'category',
@@ -597,6 +615,19 @@ class PortfolioController
                         )
                     );
 
+                    if (api_is_allowed_to_edit()) {
+                        $commentActions .= Display::url(
+                            Display::return_icon('copy.png', get_lang('CopyToStudentPortfolio')),
+                            $this->baseUrl.http_build_query(
+                                [
+                                    'action' => 'teacher_copy',
+                                    'copy' => 'comment',
+                                    'id' => $comment->getId(),
+                                ]
+                            )
+                        );
+                    }
+
                     return '<p class="h4 media-heading">'.$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'
                         .$clockIcon.PHP_EOL.Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'
                         .'</p><div class="pull-right">'.$commentActions.'</div>'.$comment->getContent().PHP_EOL;
@@ -645,10 +676,11 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
+            ->setIsVisible(false)
             ->setTitle(
                 sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
             )
-            ->setContent($originItem->getContent())
+            ->setContent('')
             ->setUser($this->owner)
             ->setOrigin($originItem->getId())
             ->setOriginType(Portfolio::TYPE_ITEM)
@@ -664,7 +696,7 @@ class PortfolioController
             Display::return_message(get_lang('PortfolioItemAdded'), 'success')
         );
 
-        header("Location: $this->baseUrl");
+        header("Location: $this->baseUrl".http_build_query(['action' => 'edit_item', 'id' => $portfolio->getId()]));
         exit;
     }
 
@@ -678,10 +710,11 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
+            ->setIsVisible(false)
             ->setTitle(
                 sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
             )
-            ->setContent('<blockquote>'.$originComment->getContent().'</blockquote>')
+            ->setContent('')
             ->setUser($this->owner)
             ->setOrigin($originComment->getId())
             ->setOriginType(Portfolio::TYPE_COMMENT)
@@ -697,7 +730,7 @@ class PortfolioController
             Display::return_message(get_lang('PortfolioItemAdded'), 'success')
         );
 
-        header("Location: $this->baseUrl");
+        header("Location: $this->baseUrl".http_build_query(['action' => 'edit_item', 'id' => $portfolio->getId()]));
         exit;
     }
 
@@ -801,5 +834,161 @@ class PortfolioController
         }
 
         return $form->returnForm();
+    }
+
+    public function teacherCopyItem(Portfolio $originItem)
+    {
+        $actionParams = http_build_query(['action' => 'teacher_copy', 'copy' => 'item', 'id' => $originItem->getId()]);
+
+        $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
+
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
+        } else {
+            $form->addText('title', get_lang('Title'));
+            $form->applyFilter('title', 'trim');
+        }
+
+        $form->addLabel(
+            sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName()),
+            Display::panel($originItem->getContent())
+        );
+        $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
+
+        $urlParams = http_build_query(
+            [
+                'a' => 'search_user_by_course',
+                'course_id' => $this->course->getId(),
+                'session_id' => $this->session ? $this->session->getId() : 0,
+            ]
+        );
+        $form->addSelectAjax(
+            'students',
+            get_lang('Students'),
+            [],
+            [
+                'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
+                'multiple' => true,
+            ]
+        );
+        $form->addRule('students', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addButtonCreate(get_lang('Save'));
+
+        $toolName = get_lang('CopyToStudentPortfolio');
+        $content = $form->returnForm();
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $currentTime = api_get_utc_datetime(null, false, true);
+
+            foreach ($values['students'] as $studentId) {
+                $owner = api_get_user_entity($studentId);
+
+                $portfolio = new Portfolio();
+                $portfolio
+                    ->setIsVisible(false)
+                    ->setTitle($values['title'])
+                    ->setContent($values['content'])
+                    ->setUser($owner)
+                    ->setOrigin($originItem->getId())
+                    ->setOriginType(Portfolio::TYPE_ITEM)
+                    ->setCourse($this->course)
+                    ->setSession($this->session)
+                    ->setCreationDate($currentTime)
+                    ->setUpdateDate($currentTime);
+
+                $this->em->persist($portfolio);
+            }
+
+            $this->em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('PortfolioItemAddedToStudents'), 'success')
+            );
+
+            header("Location: $this->baseUrl");
+            exit;
+        }
+
+        $this->renderView($content, $toolName);
+    }
+
+    public function teacherCopyComment(PortfolioComment $originComment)
+    {
+        $actionParams = http_build_query(['action' => 'teacher_copy', 'copy' => 'comment', 'id' => $originComment->getId()]);
+
+        $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
+
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
+        } else {
+            $form->addText('title', get_lang('Title'));
+            $form->applyFilter('title', 'trim');
+        }
+
+        $form->addLabel(
+            sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName()),
+            Display::panel($originComment->getContent())
+        );
+        $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
+
+        $urlParams = http_build_query(
+            [
+                'a' => 'search_user_by_course',
+                'course_id' => $this->course->getId(),
+                'session_id' => $this->session ? $this->session->getId() : 0,
+            ]
+        );
+        $form->addSelectAjax(
+            'students',
+            get_lang('Students'),
+            [],
+            [
+                'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
+                'multiple' => true,
+            ]
+        );
+        $form->addRule('students', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addButtonCreate(get_lang('Save'));
+
+        $toolName = get_lang('CopyToStudentPortfolio');
+        $content = $form->returnForm();
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $currentTime = api_get_utc_datetime(null, false, true);
+
+            foreach ($values['students'] as $studentId) {
+                $owner = api_get_user_entity($studentId);
+
+                $portfolio = new Portfolio();
+                $portfolio
+                    ->setIsVisible(false)
+                    ->setTitle($values['title'])
+                    ->setContent($values['content'])
+                    ->setUser($owner)
+                    ->setOrigin($originComment->getId())
+                    ->setOriginType(Portfolio::TYPE_COMMENT)
+                    ->setCourse($this->course)
+                    ->setSession($this->session)
+                    ->setCreationDate($currentTime)
+                    ->setUpdateDate($currentTime);
+
+                $this->em->persist($portfolio);
+            }
+
+            $this->em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('PortfolioItemAddedToStudents'), 'success')
+            );
+
+            header("Location: $this->baseUrl");
+            exit;
+        }
+
+        $this->renderView($content, $toolName);
     }
 }

@@ -751,21 +751,25 @@ class CourseHome
         }
 
         switch ($course_tool_category) {
+            case TOOL_ADMIN:
             case TOOL_AUTHORING:
-                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
+                $sql_links = "
+                    SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id
                     WHERE
                         tl.c_id = $course_id AND
                         tip.c_id = $course_id AND
-                        tl.on_homepage='1' $condition_session";
+                        tl.on_homepage='1' $condition_session
+                    ORDER BY tip.visibility";
                 break;
             case TOOL_INTERACTION:
                 $sql_links = null;
                 break;
             case TOOL_STUDENT_VIEW:
-                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
+                $sql_links = "
+                    SELECT DISTINCT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tip.ref=tl.id
@@ -775,17 +779,7 @@ class CourseHome
                         tl.on_homepage	='1'
                         $condition_session
                         $filterVisibility
-                        ";
-                break;
-            case TOOL_ADMIN:
-                $sql_links = "SELECT DISTINCT tl.*, tip.visibility
-                    FROM $course_link_table tl
-                    LEFT JOIN $course_item_property_table tip
-                    ON tip.tool='link' AND tip.ref=tl.id
-                    WHERE
-                        tl.c_id = $course_id AND
-                        tip.c_id = $course_id AND
-                        tl.on_homepage='1' $condition_session";
+                    ORDER BY tip.visibility";
                 break;
             default:
                 $sql_links = null;
@@ -797,7 +791,11 @@ class CourseHome
             $result_links = Database::query($sql_links);
             if (Database::num_rows($result_links) > 0) {
                 $linkUrl = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink';
+                $added = [];
                 while ($links_row = Database::fetch_array($result_links, 'ASSOC')) {
+                    if (in_array($links_row['iid'], $added)) {
+                        continue;
+                    }
                     $properties = [];
                     $properties['id'] = $links_row['id'];
                     $properties['iid'] = $links_row['iid'];
@@ -809,6 +807,7 @@ class CourseHome
                     $properties['adminlink'] = $linkUrl.'&id='.$links_row['id'].'&cidReq='.$courseInfo['code'];
                     $properties['target'] = $links_row['target'];
                     $tmp_all_tools_list[] = $properties;
+                    $added[] = $links_row['iid'];
                 }
             }
         }

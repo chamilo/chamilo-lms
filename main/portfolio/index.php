@@ -159,9 +159,25 @@ switch ($action) {
         }
 
         break;
+    case 'mark_important':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+            break;
+        }
+
+        $item = $em->find(Portfolio::class, $httpRequest->query->getInt('item'));
+        $comment = $em->find(PortfolioComment::class, $httpRequest->query->getInt('id'));
+
+        if (empty($item) || empty($comment)) {
+            break;
+        }
+
+        $controller->markImportantCommentInItem($item, $comment);
+
+        return;
     case 'list':
     default:
-        $controller->index();
+        $controller->index($httpRequest);
 
         return;
 }

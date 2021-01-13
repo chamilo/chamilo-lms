@@ -6,13 +6,19 @@
 
 {% import 'portfolio/items.html.twig'|get_template as items %}
 
-{% if not allow_edit %}
-    <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
-{% endif %}
-
 <div class="row">
-    <div class="col-md-9 col-md-offset-3">
-        {{ items.display(uncategorized_items, 0, allow_edit, _c, _u, _p) }}
+    {% if course %}
+        <div class="col-md-3">
+            {{ frm_student_list }}
+        </div>
+    {% endif %}
+
+    <div class="{{ course ? 'col-md-9' : 'col-xs-12'  }}">
+        {% if _u.id != user.id %}
+            <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
+        {% endif %}
+
+        {{ items.display(uncategorized_items, 0, _c, _u, _p) }}
 
         {% for category in portfolio %}
             <div class="panel panel-info">
@@ -23,7 +29,7 @@
                             {{ category.title }}
                         </a>
 
-                        {% if user.id == category.user.id %}
+                        {% if _u.id == category.user.id %}
                             <div class="pull-right">
                                 <a href="{{ baseurl ~ {'action':'edit_category', 'id':category.id}|url_encode }}">
                                     {{ edit_img }}
@@ -50,7 +56,15 @@
                     </div>
 
                     <div class="collapse" id="collapse-category-{{ category.id }}">
-                        {{ items.display(category.items(course, session, not allow_edit), category.id, allow_edit, _c, _u, _p) }}
+                        {{
+                            items.display(
+                                category.items(course, session, _u.id != category.user.id),
+                                category.id,
+                                _c,
+                                _u,
+                                _p
+                            )
+                        }}
                     </div>
                 </div>
             </div>
@@ -65,5 +79,19 @@
                 e.preventDefault();
             }
         });
+
+        {% if course %}
+            $('form#frm_student_list select[name="user"]').on('change', function (e) {
+                var newLocation = '{{ _p.web_self ~ '?' ~ _p.web_cid_query }}';
+
+                if (this.value) {
+                    newLocation += '&user=' + this.value;
+                }
+
+                location.href = newLocation;
+
+                this.disabled = true;
+            });
+        {% endif %}
     });
 </script>

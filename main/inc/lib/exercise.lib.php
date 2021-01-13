@@ -536,7 +536,7 @@ class ExerciseLib
                             // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
                             // see BT#18242
                             if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
-                                $userStatus = COURSEMANAGER;
+                                $userStatus = COURSEMANAGERLOWSECURITY;
                             }
                             $answer = Security::remove_XSS($answer, $userStatus);
                         }
@@ -588,7 +588,7 @@ class ExerciseLib
                         // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
                         // see BT#18242
                         if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
-                            $userStatus = COURSEMANAGER;
+                            $userStatus = COURSEMANAGERLOWSECURITY;
                         }
                         $answer = Security::remove_XSS($answer, $userStatus);
 
@@ -791,7 +791,7 @@ class ExerciseLib
                         // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
                         // see BT#18242
                         if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
-                            $userStatus = COURSEMANAGER;
+                            $userStatus = COURSEMANAGERLOWSECURITY;
                         }
                         $answer = Security::remove_XSS($answer, $userStatus);
                         $answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
@@ -833,7 +833,7 @@ class ExerciseLib
                         // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
                         // see BT#18242
                         if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
-                            $userStatus = COURSEMANAGER;
+                            $userStatus = COURSEMANAGERLOWSECURITY;
                         }
                         $answer = Security::remove_XSS($answer, $userStatus);
                         $s .= '<tr>';

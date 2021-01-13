@@ -10843,7 +10843,10 @@ class Exercise
         if ($active == 0) {
             return null;
         }
-        $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
+        $userId = (int) $userId ;
+        if($userId == 0){
+            $userId = api_get_user_id();
+        }
         $extraMessage = null;
 
         $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
@@ -10873,7 +10876,7 @@ class Exercise
             || !isset($bestAttempt['exe_id'])
             || !isset($bestAttempt['exe_weighting'])
         ) {
-            // Sin intentos, sin id de ejercicio y sin total definido
+            // No try, No exercise id, no defined total
             return null;
         }
 
@@ -10887,25 +10890,13 @@ class Exercise
             return null;
         }
         $canRemedial = ($pass == false) ? true : false;
-        //Examen de siguiente nivel
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'advancedcourselist'
-        );
-        $field = new ExtraField('exercise');
-        $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
-        if (!empty($advanceCourseExcerciseField)
-            && isset($advancedCourseField['default_value'])
-            && $advancedCourseField['default_value'] == 1 // if the plugin is activated
-            && $canRemedial == false
-        ) {
+        // Advance Course
+        if ($canRemedial == false ) {
             $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
             $courses = [];
             foreach ($coursesIds as $course) {
                 $courseData = api_get_course_info_by_id($course);
-                //aqui se inscribe en el curso
-                $isInASession = !empty($this->sessionId);
+                $isInASession = !empty(api_get_session_id());
                 $isSubscribed = CourseManager::is_user_subscribed_in_course(
                     $userId,
                     $courseData['code'],
@@ -10959,7 +10950,10 @@ class Exercise
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $userId = ((int) $userId == 0) ? $userId : api_get_user_id();
+        $userId = (int) $userId;
+        if($userId == 0){
+            $userId = api_get_user_id();
+        }
         $extraMessage = null;
         $bestAttempt = [];
         $exercise_stat_info = Event::getExerciseResultsByUser(
@@ -10977,15 +10971,15 @@ class Exercise
             if (isset($bestAttempt['question_list'])) {
                 foreach ($bestAttempt['question_list'] as $questionId => $answer) {
                     $question = Question::read($questionId, api_get_course_info_by_id($bestAttempt['c_id']));
-                    $type = $question->type;
-                    if (in_array($type, $questionExcluded) && $review == false) {
-                        $reviewScore = [
-                            'score' => $bestAttempt['exe_result'],
-                            'comments' => Event::get_comments($this->id, $questionId),
-                        ];
-                        $check = $question->isQuestionWaitingReview($reviewScore);
-                        if (true === $check) {
-                            return '';
+                    if (in_array($question->type, $questionExcluded, true) >= 0 && $review == false) {
+                        $score = $bestAttempt['exe_result'];
+                        $comments = Event::get_comments($this->id, $questionId);
+                        $waitingForReview = false;
+                        if (empty($comments) || $score == 0) {
+                            $waitingForReview = true;
+                        }
+                        if (true === $waitingForReview) {
+                            return null;
                         }
                     }
                 }
@@ -11006,21 +11000,14 @@ class Exercise
             $this->iId,
             'remedialcourselist'
         );
-        $field = new ExtraField('exercise');
-        $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
 
-        // examen de recuperacion
-        if (!empty($remedialExcerciseField)
-            && isset($remedialField['default_value'])
-            && $remedialField['default_value'] == 1 // if the plugin is activated
-            && $canRemedial
-        ) {
+        // Remedial course
+        if ($canRemedial ) {
             $coursesIds = explode(';', $remedialExcerciseField['value']);
             $courses = [];
             foreach ($coursesIds as $course) {
                 $courseData = api_get_course_info_by_id($course);
-                //aqui se inscribe en el curso
-                $isInASession = !empty($this->sessionId);
+                $isInASession = !empty(api_get_session_id());
                 $isSubscribed = CourseManager::is_user_subscribed_in_course(
                     $userId,
                     $courseData['code'],

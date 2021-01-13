@@ -173,10 +173,11 @@ switch ($action) {
         }
 
         $controller->markImportantCommentInItem($item, $comment);
+
         return;
     case 'list':
     default:
-        $controller->index();
+        $controller->index($httpRequest);
 
         return;
 }

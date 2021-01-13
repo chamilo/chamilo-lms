@@ -51,6 +51,14 @@ yarn encore dev
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies.
 
+### Quick re-install
+
+If you have it installed in a dev environment and feel like you should clean it up completely (might be necessary after changes to the database), you can do so by:
+
+* Removing the `.env.local`
+* Load the {url}/main/install/index.php script again
+
+The database should be automatically destroyed, table by table. In some extreme cases (a previous version created a table that is not necessary anymore and creates issues), you might want to clean it completely by just dropping it, but this shouldn't be necessary most of the time.
 
 ## Installation guide (Dev environment, stable environment not yet available)
 

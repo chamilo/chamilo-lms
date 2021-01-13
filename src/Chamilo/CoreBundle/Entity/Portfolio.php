@@ -348,25 +348,17 @@ class Portfolio
         return $this;
     }
 
-    /**
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    /**
-     * @return int|null
-     */
     public function getOrigin(): ?int
     {
         return $this->origin;
     }
 
     /**
-     * @param int|null $origin
-     *
      * @return \Chamilo\CoreBundle\Entity\Portfolio
      */
     public function setOrigin(?int $origin): Portfolio
@@ -376,17 +368,12 @@ class Portfolio
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getOriginType(): ?int
     {
         return $this->originType;
     }
 
     /**
-     * @param int|null $originType
-     *
      * @return \Chamilo\CoreBundle\Entity\Portfolio
      */
     public function setOriginType(?int $originType): Portfolio
@@ -394,5 +381,14 @@ class Portfolio
         $this->originType = $originType;
 
         return $this;
+    }
+
+    public function getExcerpt(int $count = 380): string
+    {
+        $excerpt = strip_tags($this->content);
+        $excerpt = substr($excerpt, 0, $count);
+        $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+
+        return $excerpt;
     }
 }

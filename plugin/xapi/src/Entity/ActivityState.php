@@ -49,19 +49,11 @@ class ActivityState
      */
     private $documentData;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return ActivityState
-     */
     public function setId(int $id): ActivityState
     {
         $this->id = $id;
@@ -69,19 +61,11 @@ class ActivityState
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStateId(): string
     {
         return $this->stateId;
     }
 
-    /**
-     * @param string $stateId
-     *
-     * @return ActivityState
-     */
     public function setStateId(string $stateId): ActivityState
     {
         $this->stateId = $stateId;
@@ -89,19 +73,11 @@ class ActivityState
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getActivityId(): string
     {
         return $this->activityId;
     }
 
-    /**
-     * @param string $activityId
-     *
-     * @return ActivityState
-     */
     public function setActivityId(string $activityId): ActivityState
     {
         $this->activityId = $activityId;
@@ -109,19 +85,11 @@ class ActivityState
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getAgent(): array
     {
         return $this->agent;
     }
 
-    /**
-     * @param array $agent
-     *
-     * @return ActivityState
-     */
     public function setAgent(array $agent): ActivityState
     {
         $this->agent = $agent;
@@ -129,19 +97,11 @@ class ActivityState
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDocumentData(): array
     {
         return $this->documentData;
     }
 
-    /**
-     * @param array $documentData
-     *
-     * @return ActivityState
-     */
     public function setDocumentData(array $documentData): ActivityState
     {
         $this->documentData = $documentData;

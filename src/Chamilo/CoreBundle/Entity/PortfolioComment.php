@@ -57,6 +57,12 @@ class PortfolioComment
      */
     private $date;
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_important", type="boolean", options={"default":false})
+     */
+    private $isImportant;
+    /**
      * @var int
      *
      * @Gedmo\TreeLeft()
@@ -106,30 +112,20 @@ class PortfolioComment
      */
     public function __construct()
     {
+        $this->isImportant = false;
         $this->children = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return \Chamilo\UserBundle\Entity\User
-     */
     public function getAuthor(): User
     {
         return $this->author;
     }
 
-    /**
-     * @param \Chamilo\UserBundle\Entity\User $author
-     *
-     * @return PortfolioComment
-     */
     public function setAuthor(User $author): PortfolioComment
     {
         $this->author = $author;
@@ -147,8 +143,6 @@ class PortfolioComment
 
     /**
      * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     *
-     * @return PortfolioComment
      */
     public function setItem(Portfolio $item): PortfolioComment
     {
@@ -157,19 +151,11 @@ class PortfolioComment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return PortfolioComment
-     */
     public function setContent(string $content): PortfolioComment
     {
         $this->content = $content;
@@ -177,19 +163,11 @@ class PortfolioComment
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getDate(): DateTime
     {
         return $this->date;
     }
 
-    /**
-     * @param \DateTime $date
-     *
-     * @return PortfolioComment
-     */
     public function setDate(DateTime $date): PortfolioComment
     {
         $this->date = $date;
@@ -207,8 +185,6 @@ class PortfolioComment
 
     /**
      * @param \Chamilo\CoreBundle\Entity\PortfolioComment|null $parent
-     *
-     * @return PortfolioComment
      */
     public function setParent(?PortfolioComment $parent): PortfolioComment
     {
@@ -217,23 +193,25 @@ class PortfolioComment
         return $this;
     }
 
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
     public function getChildren(): ArrayCollection
     {
         return $this->children;
     }
 
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $children
-     *
-     * @return PortfolioComment
-     */
     public function setChildren(ArrayCollection $children): PortfolioComment
     {
         $this->children = $children;
 
         return $this;
+    }
+
+    public function isImportant(): bool
+    {
+        return $this->isImportant;
+    }
+
+    public function setIsImportant(bool $isImportant): void
+    {
+        $this->isImportant = $isImportant;
     }
 }

@@ -3266,6 +3266,10 @@ form .formw .freeze {
     font-weight: normal;
     font-size: 90%;
 }
+.label.origin-style {
+    font-weight: bold;
+    font-size: 75%;
+}
 
 .requirements td {
     padding: 5px;
@@ -9502,6 +9506,13 @@ ul.dropdown-menu.inner > li > a {
 .fa-ul.list-inline li {
     margin-left: 45px;
     padding: 0;
+}
+
+.embed-responsive-9by16 {
+    padding-bottom: 177.77%;
+}
+.embed-responsive-4by3 {
+    padding-bottom: 133.33%;
 }
 
 /* CSS Responsive */

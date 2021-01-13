@@ -4,7 +4,6 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Category;
-use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
@@ -1476,6 +1475,8 @@ class CourseBuilder
                     $item['next_item_id'] = $obj_item->next_item_id;
                     $item['display_order'] = $obj_item->display_order;
                     $item['prerequisite'] = $obj_item->prerequisite;
+                    $item['prerequisite_min_score'] = $obj_item->prerequisite_min_score;
+                    $item['prerequisite_max_score'] = $obj_item->prerequisite_max_score;
                     $item['parameters'] = $obj_item->parameters;
                     $item['launch_data'] = $obj_item->launch_data;
                     $item['audio'] = $obj_item->audio;

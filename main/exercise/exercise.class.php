@@ -10843,8 +10843,8 @@ class Exercise
         if ($active == 0) {
             return null;
         }
-        $userId = (int) $userId ;
-        if($userId == 0){
+        $userId = (int) $userId;
+        if ($userId == 0) {
             $userId = api_get_user_id();
         }
         $extraMessage = null;
@@ -10891,7 +10891,7 @@ class Exercise
         }
         $canRemedial = ($pass == false) ? true : false;
         // Advance Course
-        if ($canRemedial == false ) {
+        if ($canRemedial == false) {
             $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
             $courses = [];
             foreach ($coursesIds as $course) {
@@ -10951,7 +10951,7 @@ class Exercise
             ANNOTATION,
         ];
         $userId = (int) $userId;
-        if($userId == 0){
+        if ($userId == 0) {
             $userId = api_get_user_id();
         }
         $extraMessage = null;
@@ -11002,7 +11002,7 @@ class Exercise
         );
 
         // Remedial course
-        if ($canRemedial ) {
+        if ($canRemedial) {
             $coursesIds = explode(';', $remedialExcerciseField['value']);
             $courses = [];
             foreach ($coursesIds as $course) {

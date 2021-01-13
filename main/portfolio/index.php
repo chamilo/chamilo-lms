@@ -173,6 +173,7 @@ switch ($action) {
         }
 
         $controller->markImportantCommentInItem($item, $comment);
+
         return;
     case 'list':
     default:

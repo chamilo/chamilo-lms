@@ -439,9 +439,6 @@ class PortfolioController
         exit;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $httpRequest
-     */
     public function index(HttpRequest $httpRequest)
     {
         $listByUser = false;
@@ -942,9 +939,6 @@ class PortfolioController
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio        $item
-     * @param \Chamilo\CoreBundle\Entity\PortfolioComment $comment
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */

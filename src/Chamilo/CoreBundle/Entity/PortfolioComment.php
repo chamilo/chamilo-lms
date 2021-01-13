@@ -205,17 +205,11 @@ class PortfolioComment
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isImportant(): bool
     {
         return $this->isImportant;
     }
 
-    /**
-     * @param bool $isImportant
-     */
     public function setIsImportant(bool $isImportant): void
     {
         $this->isImportant = $isImportant;

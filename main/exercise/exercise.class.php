@@ -10891,7 +10891,13 @@ class Exercise
         }
         $canRemedial = ($pass == false) ? true : false;
         // Advance Course
-        if ($canRemedial == false) {
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'advancedcourselist'
+        );
+
+        if ($canRemedial == false && isset($advanceCourseExcerciseField['value'])) {
             $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
             $courses = [];
             foreach ($coursesIds as $course) {

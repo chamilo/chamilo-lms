@@ -176,7 +176,7 @@ switch ($action) {
         return;
     case 'list':
     default:
-        $controller->index();
+        $controller->index($httpRequest);
 
         return;
 }

@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class PortfolioController.
@@ -35,10 +36,6 @@ class PortfolioController
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
-    /**
-     * @var bool
-     */
-    private $allowEdit;
 
     /**
      * PortfolioController constructor.
@@ -47,20 +44,12 @@ class PortfolioController
     {
         $this->em = Database::getManager();
 
-        $this->currentUserId = api_get_user_id();
-        $ownerId = isset($_GET['user']) ? (int) $_GET['user'] : $this->currentUserId;
-        $this->owner = api_get_user_entity($ownerId);
+        $this->owner = api_get_user_entity(api_get_user_id());
         $this->course = api_get_course_entity(api_get_course_int_id());
         $this->session = api_get_session_entity(api_get_session_id());
 
         $cidreq = api_get_cidreq();
         $this->baseUrl = api_get_self().'?'.($cidreq ? $cidreq.'&' : '');
-
-        $this->allowEdit = $this->currentUserId == $this->owner->getId();
-
-        if (isset($_GET['preview'])) {
-            $this->allowEdit = false;
-        }
     }
 
     /**
@@ -451,88 +440,112 @@ class PortfolioController
     }
 
     /**
-     * @throws \Exception
+     * @param \Symfony\Component\HttpFoundation\Request $httpRequest
      */
-    public function index()
+    public function index(HttpRequest $httpRequest)
     {
+        $listByUser = false;
+
+        if ($httpRequest->query->has('user')) {
+            $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
+
+            if (empty($this->owner)) {
+                api_not_allowed(true);
+            }
+
+            $listByUser = true;
+        }
+
+        $currentUserId = api_get_user_id();
+
         $actions = [];
 
-        if ($this->currentUserId == $this->owner->getId()) {
-            if ($this->allowEdit) {
-                $actions[] = Display::url(
-                    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
-                    $this->baseUrl.'action=add_item'
-                );
-                $actions[] = Display::url(
-                    Display::return_icon('folder.png', get_lang('AddCategory'), [], ICON_SIZE_MEDIUM),
-                    $this->baseUrl.'action=add_category'
-                );
-                $actions[] = Display::url(
-                    Display::return_icon('shared_setting.png', get_lang('Preview'), [], ICON_SIZE_MEDIUM),
-                    $this->baseUrl.'preview=&user='.$this->owner->getId()
-                );
-            } else {
-                $actions[] = Display::url(
-                    Display::return_icon('shared_setting_na.png', get_lang('Preview'), [], ICON_SIZE_MEDIUM),
-                    $this->baseUrl
-                );
-            }
+        if ($currentUserId == $this->owner->getId()) {
+            $actions[] = Display::url(
+                Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.'action=add_item'
+            );
+            $actions[] = Display::url(
+                Display::return_icon('folder.png', get_lang('AddCategory'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.'action=add_category'
+            );
         }
 
-        $form = new FormValidator('a');
-        $form->addUserAvatar('user', get_lang('User'), 'medium');
-        $form->setDefaults(['user' => $this->owner]);
-
-        $criteria = [];
-
-        if (!$this->allowEdit) {
-            $criteria['isVisible'] = true;
-        }
+        $frmStudentList = null;
 
         $categories = [];
 
-        if (!$this->course) {
-            $criteria['user'] = $this->owner;
+        if ($this->course) {
+            $itemsCriteria = [];
+            $itemsCriteria['course'] = $this->course;
+            $itemsCriteria['session'] = $this->session;
+
+            if ($listByUser) {
+                $itemsCriteria['user'] = $this->owner;
+
+                if ($currentUserId !== $this->owner->getId()) {
+                    $itemsCriteria['isVisible'] = true;
+                }
+            }
+
+            $frmStudentList = new FormValidator(
+                'frm_student_list',
+                'get',
+                $this->baseUrl,
+                '',
+                [],
+                FormValidator::LAYOUT_INLINE
+            );
+
+            $urlParams = http_build_query(
+                [
+                    'a' => 'search_user_by_course',
+                    'course_id' => $this->course->getId(),
+                    'session_id' => $this->session ? $this->session->getId() : 0,
+                ]
+            );
+            $slctStudentOptions = [];
+
+            if ($listByUser) {
+                $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
+            }
+
+            $frmStudentList->addSelectAjax(
+                'user',
+                get_lang('Student'),
+                $slctStudentOptions,
+                ['url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams"]
+            );
+        } else {
+            $categoriesCriteria = [];
+            $categoriesCriteria['user'] = $this->owner;
+
+            $itemsCriteria = [];
+            $itemsCriteria['category'] = null;
+            $itemsCriteria['user'] = $this->owner;
+
+            if ($currentUserId !== $this->owner->getId()) {
+                $categoriesCriteria['isVisible'] = true;
+                $itemsCriteria['isVisible'] = true;
+            }
 
             $categories = $this->em
                 ->getRepository(PortfolioCategory::class)
-                ->findBy($criteria);
-        }
-
-        if ($this->course) {
-            unset($criteria['user']);
-
-            $criteria['course'] = $this->course;
-            $criteria['session'] = $this->session;
-        } else {
-            $criteria['user'] = $this->owner;
-            $criteria['category'] = null;
+                ->findBy($categoriesCriteria);
         }
 
         $items = $this->em
             ->getRepository(Portfolio::class)
-            ->findBy($criteria, ['creationDate' => 'DESC']);
-
-        $items = array_filter(
-            $items,
-            function (Portfolio $item) {
-                if ($this->currentUserId != $item->getUser()->getId()
-                    && !$item->isVisible()
-                ) {
-                    return false;
-                }
-
-                return true;
-            }
-        );
+            ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
 
         $template = new Template(null, false, false, false, false, false, false);
+        $template->assign('list_by_user', $listByUser);
         $template->assign('user', $this->owner);
         $template->assign('course', $this->course);
         $template->assign('session', $this->session);
-        $template->assign('allow_edit', $this->allowEdit);
         $template->assign('portfolio', $categories);
         $template->assign('uncategorized_items', $items);
+        $template->assign('frm_student_list', $frmStudentList ? $frmStudentList->returnForm() : '');
 
         $layout = $template->get_template('portfolio/list.html.twig');
         $content = $template->fetch($layout);

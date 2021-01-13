@@ -926,6 +926,7 @@ ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2126F525E FOREIGN KEY (it
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2A977936C FOREIGN KEY (tree_root) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio ADD origin INT DEFAULT NULL, ADD origin_type INT DEFAULT NULL;
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, visible_to_others, changeable, created_at) VALUES (19, 10, 'tags', 'tags', 1, 1, 1, NOW());
 */
 // In 1.11.8, before enabling this feature, you also need to:
 // - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php

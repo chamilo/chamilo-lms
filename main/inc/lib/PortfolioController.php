@@ -246,6 +246,10 @@ class PortfolioController
             [],
             true
         );
+
+        $extraField = new ExtraField('portfolio');
+        $extra = $extraField->addElements($form);
+
         $form->addButtonCreate(get_lang('Create'));
 
         if ($form->validate()) {
@@ -271,6 +275,11 @@ class PortfolioController
             $this->em->persist($portfolio);
             $this->em->flush();
 
+            $values['item_id'] = $portfolio->getId();
+
+            $extraFieldValue = new ExtraFieldValue('portfolio');
+            $extraFieldValue->saveFieldValues($values);
+
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioItemAdded'), 'success')
             );
@@ -292,7 +301,11 @@ class PortfolioController
 
         $content = $form->returnForm();
 
-        $this->renderView($content, get_lang('AddPortfolioItem'), $actions);
+        $this->renderView(
+            $content."<script> $(function() { {$extra['jquery_ready_content']} }); </script>",
+            get_lang('AddPortfolioItem'),
+            $actions
+        );
     }
 
     /**
@@ -347,6 +360,10 @@ class PortfolioController
             [],
             true
         );
+
+        $extraField = new ExtraField('portfolio');
+        $extra = $extraField->addElements($form, $item->getId());
+
         $form->addButtonUpdate(get_lang('Update'));
         $form->setDefaults(
             [
@@ -367,6 +384,11 @@ class PortfolioController
                 ->setCategory(
                     $this->em->find('ChamiloCoreBundle:PortfolioCategory', $values['category'])
                 );
+
+            $values['item_id'] = $item->getId();
+
+            $extraFieldValue = new ExtraFieldValue('portfolio');
+            $extraFieldValue->saveFieldValues($values);
 
             $this->em->persist($item);
             $this->em->flush();
@@ -390,7 +412,11 @@ class PortfolioController
         );
         $content = $form->returnForm();
 
-        $this->renderView($content, get_lang('EditPortfolioItem'), $actions);
+        $this->renderView(
+            $content."<script> $(function() { {$extra['jquery_ready_content']} }); </script>",
+            get_lang('EditPortfolioItem'),
+            $actions
+        );
     }
 
     /**

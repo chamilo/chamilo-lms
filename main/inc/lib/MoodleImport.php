@@ -967,7 +967,6 @@ class MoodleImport
         );
     }
 
-
     /**
      * Process Chamilo True False.
      *

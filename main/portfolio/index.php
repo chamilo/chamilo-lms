@@ -24,7 +24,7 @@ $controller = new \PortfolioController();
 $em = Database::getManager();
 $httpRequest = HttpRequest::createFromGlobals();
 
-$action = $httpRequest->query->getAlpha('action', 'list');
+$action = $httpRequest->query->get('action', 'list');
 
 switch ($action) {
     case 'add_category':
@@ -128,6 +128,7 @@ switch ($action) {
 
         return;
     case 'copy':
+    case 'teacher_copy':
         $type = $httpRequest->query->getAlpha('copy');
         $id = $httpRequest->query->getInt('id');
 
@@ -138,7 +139,11 @@ switch ($action) {
                 break;
             }
 
-            $controller->copyItem($item);
+            if ('copy' === $action) {
+                $controller->copyItem($item);
+            } elseif ('teacher_copy' === $action) {
+                $controller->teacherCopyItem($item);
+            }
         } elseif ('comment' === $type) {
             $comment = $em->find(PortfolioComment::class, $id);
 
@@ -146,13 +151,33 @@ switch ($action) {
                 break;
             }
 
-            $controller->copyComment($comment);
+            if ('copy' === $action) {
+                $controller->copyComment($comment);
+            } elseif ('teacher_copy' === $action) {
+                $controller->teacherCopyComment($comment);
+            }
         }
 
         break;
+    case 'mark_important':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+            break;
+        }
+
+        $item = $em->find(Portfolio::class, $httpRequest->query->getInt('item'));
+        $comment = $em->find(PortfolioComment::class, $httpRequest->query->getInt('id'));
+
+        if (empty($item) || empty($comment)) {
+            break;
+        }
+
+        $controller->markImportantCommentInItem($item, $comment);
+
+        return;
     case 'list':
     default:
-        $controller->index();
+        $controller->index($httpRequest);
 
         return;
 }

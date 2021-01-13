@@ -282,9 +282,7 @@ class MoodleImport
                             error_log('question: '.$question['questionid']);
                         }
 
-                        $questionInstance->updateTitle(
-                            $moduleValues['question_instances'][$index]['name']
-                        );
+                        $questionInstance->updateTitle($moduleValues['question_instances'][$index]['name']);
                         $questionText = $moduleValues['question_instances'][$index]['questiontext'];
 
                         // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
@@ -699,7 +697,7 @@ class MoodleImport
     {
         switch ($moodleQuestionType) {
             case 'multichoice':
-                return UNIQUE_ANSWER;
+                return MULTIPLE_ANSWER;
             case 'multianswer':
             case 'shortanswer':
             case 'match':
@@ -759,7 +757,7 @@ class MoodleImport
                 $objAnswer = new Answer($questionInstance->id);
                 $questionWeighting = 0;
                 foreach ($questionList as $slot => $answer) {
-                    $this->processUniqueAnswer(
+                    $this->processMultipleAnswer(
                         $objAnswer,
                         $answer,
                         $slot + 1,
@@ -924,6 +922,36 @@ class MoodleImport
             $questionWeighting += $weighting;
         }
         $goodAnswer = $correct ? true : false;
+
+        $this->fixPathInText($importedFiles, $answer);
+
+        $objAnswer->createAnswer(
+            $answer,
+            $goodAnswer,
+            $comment,
+            $weighting,
+            $position,
+            null,
+            null,
+            ''
+        );
+    }
+
+    public function processMultipleAnswer(
+        Answer $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
+        $answer = $answerValues['answertext'];
+        $comment = $answerValues['feedback'];
+        $weighting = $answerValues['fraction'];
+        //$weighting = abs($weighting);
+        if ($weighting > 0) {
+            $questionWeighting += $weighting;
+        }
+        $goodAnswer = $weighting > 0;
 
         $this->fixPathInText($importedFiles, $answer);
 

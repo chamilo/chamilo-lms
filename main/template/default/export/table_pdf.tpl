@@ -98,7 +98,7 @@
 <br />
 
 {% if show_grade_generated_date == true %}
-<h5 align="right">
+<h5 align="right" class="generated_date">
     {{ 'GradeGeneratedOnX' | get_lang | format("now"| date("d/m/Y")) }}
 </h5>
 {% endif %}

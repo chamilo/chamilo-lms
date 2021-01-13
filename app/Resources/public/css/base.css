@@ -3266,6 +3266,10 @@ form .formw .freeze {
     font-weight: normal;
     font-size: 90%;
 }
+.label.origin-style {
+    font-weight: bold;
+    font-size: 75%;
+}
 
 .requirements td {
     padding: 5px;

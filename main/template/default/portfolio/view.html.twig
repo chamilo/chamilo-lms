@@ -19,9 +19,11 @@
                 </a>
             {% endif %}
 
-            <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
-                {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
-            </a>
+            {% if _u.id != item.user.id %}
+                <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
+                    {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
+                </a>
+            {% endif %}
 
             {% if false|api_is_allowed_to_edit %}
                 <a href="{{ baseurl ~ {'action':'teacher_copy', 'copy':'item', 'id':item.id}|url_encode }}">

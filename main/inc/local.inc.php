@@ -285,11 +285,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             ||
             array_key_exists('forceCASAuthentication', $_POST)
             ||
+            array_key_exists('checkLoginCas', $_GET)
+            ||
             array_key_exists('ticket', $_GET)
         ) {
             phpCAS::forceAuthentication();
         }
-
         // check whether we are authenticated
         if (phpCAS::isAuthenticated()) {
             // the user was successfully authenticated by the CAS server, read its CAS user identification

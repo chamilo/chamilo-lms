@@ -159,6 +159,9 @@ class ExtraField extends Model
             case 'track_exercise':
                 $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
                 break;
+            case 'portfolio':
+                $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -193,6 +196,10 @@ class ExtraField extends Model
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
+        }
+
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $result[] = 'portfolio';
         }
         sort($result);
 

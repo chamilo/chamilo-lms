@@ -1591,7 +1591,7 @@ class GradebookUtils
             $studentList,
             $loadStats
         );
-
+        $gradebooktable->hideNavigation = true;
         $gradebooktable->userId = $userId;
 
         if (api_is_allowed_to_edit(null, true)) {

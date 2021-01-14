@@ -57,6 +57,12 @@ class PortfolioComment
      */
     private $date;
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_important", type="boolean", options={"default":false})
+     */
+    private $isImportant;
+    /**
      * @var int
      *
      * @Gedmo\TreeLeft()
@@ -106,6 +112,7 @@ class PortfolioComment
      */
     public function __construct()
     {
+        $this->isImportant = false;
         $this->children = new ArrayCollection();
     }
 
@@ -196,5 +203,15 @@ class PortfolioComment
         $this->children = $children;
 
         return $this;
+    }
+
+    public function isImportant(): bool
+    {
+        return $this->isImportant;
+    }
+
+    public function setIsImportant(bool $isImportant): void
+    {
+        $this->isImportant = $isImportant;
     }
 }

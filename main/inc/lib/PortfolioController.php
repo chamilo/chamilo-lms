@@ -527,34 +527,7 @@ class PortfolioController
                 }
             }
 
-            $frmStudentList = new FormValidator(
-                'frm_student_list',
-                'get',
-                $this->baseUrl,
-                '',
-                [],
-                FormValidator::LAYOUT_INLINE
-            );
-
-            $urlParams = http_build_query(
-                [
-                    'a' => 'search_user_by_course',
-                    'course_id' => $this->course->getId(),
-                    'session_id' => $this->session ? $this->session->getId() : 0,
-                ]
-            );
-            $slctStudentOptions = [];
-
-            if ($listByUser) {
-                $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
-            }
-
-            $frmStudentList->addSelectAjax(
-                'user',
-                get_lang('Student'),
-                $slctStudentOptions,
-                ['url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams"]
-            );
+            $frmStudentList = $this->createFormStudentFilter($listByUser);
 
             $frmTagList = $this->createFormTagFilter();
 
@@ -1119,6 +1092,40 @@ class PortfolioController
         }
 
         return $form->returnForm();
+    }
+
+    private function createFormStudentFilter(bool $listByUser = false): FormValidator
+    {
+        $frmStudentList = new FormValidator(
+            'frm_student_list',
+            'get',
+            $this->baseUrl,
+            '',
+            [],
+            FormValidator::LAYOUT_INLINE
+        );
+        $slctStudentOptions = [];
+
+        if ($listByUser) {
+            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
+        }
+
+        $urlParams = http_build_query(
+            [
+                'a' => 'search_user_by_course',
+                'course_id' => $this->course->getId(),
+                'session_id' => $this->session ? $this->session->getId() : 0,
+            ]
+        );
+
+        $frmStudentList->addSelectAjax(
+            'user',
+            get_lang('Student'),
+            $slctStudentOptions,
+            ['url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams"]
+        );
+
+        return $frmStudentList;
     }
 
     private function createFormTagFilter(): FormValidator

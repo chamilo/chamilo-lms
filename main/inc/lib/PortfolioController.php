@@ -2,9 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
@@ -495,19 +498,32 @@ class PortfolioController
         }
 
         $frmStudentList = null;
+        $frmTagList = null;
 
         $categories = [];
 
         if ($this->course) {
-            $itemsCriteria = [];
-            $itemsCriteria['course'] = $this->course;
-            $itemsCriteria['session'] = $this->session;
+            $queryBuilder = $this->em->createQueryBuilder();
+            $queryBuilder
+                ->select('pi')
+                ->from(Portfolio::class, 'pi')
+                ->where('pi.course = :course');
+
+            $queryBuilder->setParameter('course', $this->course);
+
+            if ($this->session) {
+                $queryBuilder->andWhere('pi.session = :session');
+                $queryBuilder->setParameter('session', $this->session);
+            } else {
+                $queryBuilder->andWhere('pi.session IS NULL');
+            }
 
             if ($listByUser) {
-                $itemsCriteria['user'] = $this->owner;
+                $queryBuilder->andWhere('pi.user = :user');
+                $queryBuilder->setParameter('user', $this->owner);
 
                 if ($currentUserId !== $this->owner->getId()) {
-                    $itemsCriteria['isVisible'] = true;
+                    $queryBuilder->andWhere('pi.isVisible = TRUE');
                 }
             }
 
@@ -539,6 +555,27 @@ class PortfolioController
                 $slctStudentOptions,
                 ['url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams"]
             );
+
+            $frmTagList = $this->createFormTagFilter();
+
+            if ($frmTagList->validate()) {
+                $values = $frmTagList->exportValues();
+
+                if (!empty($values['tags'])) {
+                    $queryBuilder
+                        ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = pi.id')
+                        ->innerJoin(ExtraFieldEntity::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
+                        ->andWhere('ef.extraFieldType = :efType')
+                        ->andWhere('ef.variable = :variable')
+                        ->andWhere('efrt.tagId IN (:tags)');
+
+                    $queryBuilder->setParameter('efType', ExtraFieldEntity::PORTFOLIO_TYPE);
+                    $queryBuilder->setParameter('variable', 'tags');
+                    $queryBuilder->setParameter('tags', $values['tags']);
+                }
+            }
+
+            $items = $queryBuilder->getQuery()->getResult();
         } else {
             $categoriesCriteria = [];
             $categoriesCriteria['user'] = $this->owner;
@@ -555,11 +592,11 @@ class PortfolioController
             $categories = $this->em
                 ->getRepository(PortfolioCategory::class)
                 ->findBy($categoriesCriteria);
-        }
 
-        $items = $this->em
-            ->getRepository(Portfolio::class)
-            ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
+            $items = $this->em
+                ->getRepository(Portfolio::class)
+                ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
+        }
 
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('list_by_user', $listByUser);
@@ -569,6 +606,7 @@ class PortfolioController
         $template->assign('portfolio', $categories);
         $template->assign('uncategorized_items', $items);
         $template->assign('frm_student_list', $frmStudentList ? $frmStudentList->returnForm() : '');
+        $template->assign('frm_tag_list', $frmTagList ? $frmTagList->returnForm(): '');
 
         $layout = $template->get_template('portfolio/list.html.twig');
         $content = $template->fetch($layout);
@@ -1081,5 +1119,38 @@ class PortfolioController
         }
 
         return $form->returnForm();
+    }
+
+    private function createFormTagFilter(): FormValidator
+    {
+        $extraField = new ExtraField('portfolio');
+        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
+
+        $chbxTagOptions = array_map(
+            function (array $tagOption) {
+                return $tagOption['tag'];
+            },
+            $tagFieldInfo['options']
+        );
+
+        $frmTagList = new FormValidator('frm_tag_list',
+            'get',
+            $this->baseUrl,
+            '',
+            [],
+            FormValidator::LAYOUT_INLINE
+        );
+        $frmTagList->addCheckBoxGroup('tags', $tagFieldInfo['display_text'], $chbxTagOptions);
+        $frmTagList->addButtonFilter(get_lang('Filter'));
+
+        if ($this->course) {
+            $frmTagList->addHidden('cidReq', $this->course->getCode());
+            $frmTagList->addHidden('id_session', $this->session ? $this->session->getId() : 0);
+            $frmTagList->addHidden('gidReq', 0);
+            $frmTagList->addHidden('gradebook', 0);
+            $frmTagList->addHidden('origin', '');
+        }
+
+        return $frmTagList;
     }
 }

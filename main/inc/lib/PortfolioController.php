@@ -546,6 +546,17 @@ class PortfolioController
                     $queryBuilder->setParameter('variable', 'tags');
                     $queryBuilder->setParameter('tags', $values['tags']);
                 }
+
+                if (!empty($values['text'])) {
+                    $queryBuilder->andWhere(
+                        $queryBuilder->expr()->orX(
+                            $queryBuilder->expr()->like('pi.title', ':text'),
+                            $queryBuilder->expr()->like('pi.content', ':text')
+                        )
+                    );
+
+                    $queryBuilder->setParameter('text', '%'.$values['text'].'%');
+                }
             }
 
             $items = $queryBuilder->getQuery()->getResult();
@@ -1145,9 +1156,12 @@ class PortfolioController
             $this->baseUrl,
             '',
             [],
-            FormValidator::LAYOUT_INLINE
+            FormValidator::LAYOUT_BOX
         );
         $frmTagList->addCheckBoxGroup('tags', $tagFieldInfo['display_text'], $chbxTagOptions);
+        $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');
+        $frmTagList->applyFilter('text', 'trim');
+        $frmTagList->addHtml('<br>');
         $frmTagList->addButtonFilter(get_lang('Filter'));
 
         if ($this->course) {

@@ -1068,14 +1068,12 @@ class IndexManager
         }
 
         // Sort courses
-        if (api_get_configuration_value('view_grid_courses') != true) {
-            $items[] = [
-                'class' => 'order-course',
-                'icon' => Display::return_icon('order-course.png', get_lang('SortMyCourses')),
-                'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
-                'title' => get_lang('SortMyCourses'),
-            ];
-        }
+        $items[] = [
+            'class' => 'order-course',
+            'icon' => Display::return_icon('order-course.png', get_lang('SortMyCourses')),
+            'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
+            'title' => get_lang('SortMyCourses'),
+        ];
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {

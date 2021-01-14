@@ -198,7 +198,7 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 $logging_in = false;
 
 /*  MAIN CODE  */
-if (array_key_exists('forceCASAuthentication', $_REQUEST)) {
+if (array_key_exists('forceCASAuthentication', $_POST)) {
     unset($_SESSION['_user']);
     unset($_user);
     if (api_is_anonymous()) {
@@ -283,13 +283,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         if (
             is_array($cas) && array_key_exists('force_redirect', $cas) && $cas['force_redirect']
             ||
-            array_key_exists('forceCASAuthentication', $_REQUEST)
+            array_key_exists('forceCASAuthentication', $_POST)
+            ||
+            array_key_exists('checkLoginCas', $_GET)
             ||
             array_key_exists('ticket', $_GET)
         ) {
             phpCAS::forceAuthentication();
         }
-
         // check whether we are authenticated
         if (phpCAS::isAuthenticated()) {
             // the user was successfully authenticated by the CAS server, read its CAS user identification

@@ -606,7 +606,7 @@ class PortfolioController
         $template->assign('portfolio', $categories);
         $template->assign('uncategorized_items', $items);
         $template->assign('frm_student_list', $frmStudentList ? $frmStudentList->returnForm() : '');
-        $template->assign('frm_tag_list', $frmTagList ? $frmTagList->returnForm(): '');
+        $template->assign('frm_tag_list', $frmTagList ? $frmTagList->returnForm() : '');
 
         $layout = $template->get_template('portfolio/list.html.twig');
         $content = $template->fetch($layout);

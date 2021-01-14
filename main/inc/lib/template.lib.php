@@ -1107,7 +1107,6 @@ class Template
 
     public static function displayCASLoginButton($label = null)
     {
-        $course = api_get_course_id();
         $form = new FormValidator(
             'form-cas-login',
             'POST',

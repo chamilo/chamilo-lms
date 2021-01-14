@@ -917,6 +917,14 @@ class IndexManager
             ];
         }
 
+        if (api_get_configuration_value('show_my_lps_page')) {
+            $items[] = [
+                'icon' => Display::return_icon('learnpath.png', get_lang('MyLps')),
+                'link' => api_get_path(WEB_CODE_PATH).'lp/my_list.php',
+                'title' => get_lang('MyLps'),
+            ];
+        }
+
         if (bbb::showGlobalConferenceLink($userInfo)) {
             $bbb = new bbb('', '', true, api_get_user_id());
             $url = $bbb->getListingUrl();
@@ -931,8 +939,19 @@ class IndexManager
             ];
         }
 
-        if (true === api_get_configuration_value('whispeak_auth_enabled')) {
-            $itemTitle = WhispeakAuthPlugin::create()->get_title();
+        if ('true' === api_get_plugin_setting('zoom', 'tool_enable')) {
+            $zoomPlugin = new ZoomPlugin();
+            $blocks = $zoomPlugin->getProfileBlockItems();
+            foreach ($blocks as $item) {
+                $items[] = $item;
+            }
+        }
+
+        if (
+            true === api_get_configuration_value('whispeak_auth_enabled') &&
+            !WhispeakAuthPlugin::checkUserIsEnrolled($userId)
+        ) {
+            $itemTitle = get_plugin_lang('EnrollmentTitle', WhispeakAuthPlugin::class);
 
             $items[] = [
                 'class' => 'whispeak-enrollment',
@@ -1026,14 +1045,12 @@ class IndexManager
         }
 
         // Sort courses
-        if (true != api_get_configuration_value('view_grid_courses')) {
-            $items[] = [
-                'class' => 'order-course',
-                'icon' => Display::return_icon('order-course.png', get_lang('Sort courses')),
-                'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
-                'title' => get_lang('Sort courses'),
-            ];
-        }
+        $items[] = [
+            'class' => 'order-course',
+            'icon' => Display::return_icon('order-course.png', get_lang('Sort courses')),
+            'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
+            'title' => get_lang('Sort courses'),
+        ];
 
         // Session history
         if (isset($_GET['history']) && 1 == intval($_GET['history'])) {

@@ -602,6 +602,7 @@ class FlatViewDataGenerator
                     $row[] = $displayScore;
                 }
             }
+
             if ($customDisplayIsStandalone) {
                 if ($export_to_pdf) {
                     $row['display_custom'] = $scoreDisplay->display_custom($total_score);
@@ -609,6 +610,7 @@ class FlatViewDataGenerator
                     $row[] = $scoreDisplay->display_custom($total_score);
                 }
             }
+
             unset($score);
             $data[] = $row;
         }

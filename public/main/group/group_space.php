@@ -21,7 +21,6 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
-
 $current_group = GroupManager::get_group_properties($group_id);
 $group_id = $current_group['iid'];
 if (empty($current_group)) {

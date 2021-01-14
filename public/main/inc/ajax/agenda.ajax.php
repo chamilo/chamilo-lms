@@ -35,6 +35,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
+	if (false === Security::check_token('get')) {
+            exit;
+        }
         $add_as_announcement = $_REQUEST['add_as_annonuncement'] ?? null;
         $title = $_REQUEST['title'] ?? null;
         $content = $_REQUEST['content'] ?? null;
@@ -59,6 +62,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
+        if (false === Security::check_token('get')) {
+            exit;
+        }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
         $agenda->editEvent(
@@ -74,6 +80,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
+        if (false === Security::check_token('get')) {
+            exit;
+        }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
         $deleteAllEventsFromSerie = isset($_REQUEST['delete_all_events']) ? true : false;
@@ -83,6 +92,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
+        if (false === Security::check_token('get')) {
+            exit;
+        }
         $minute_delta = $_REQUEST['minute_delta'];
         $id = explode('_', $_REQUEST['id']);
         $id = $id[1];
@@ -91,6 +103,9 @@ switch ($action) {
     case 'move_event':
         if (!$agenda->getIsAllowedToEdit()) {
             break;
+        }
+        if (false === Security::check_token('get')) {
+            exit;
         }
         $minute_delta = $_REQUEST['minute_delta'];
         $allDay = $_REQUEST['all_day'];
@@ -124,7 +139,7 @@ switch ($action) {
         echo $events;
         break;
     case 'get_user_agenda':
-        //Used in the admin user list
+        // Used in the admin user list.
         api_protect_admin_script();
 
         if (api_is_allowed_to_edit(null, true)) {

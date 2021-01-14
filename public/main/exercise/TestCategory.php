@@ -30,7 +30,6 @@ class TestCategory
         $this->description = '';
     }
 
-
     /**
      * return the TestCategory object with id=in_id.
      *

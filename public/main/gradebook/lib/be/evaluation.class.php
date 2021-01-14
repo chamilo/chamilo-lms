@@ -122,6 +122,7 @@ class Evaluation implements GradebookItem
     {
         $this->setSessionId($sessionId);
     }
+
     public function get_date()
     {
         return $this->created_at;
@@ -526,6 +527,7 @@ class Evaluation implements GradebookItem
     public function calc_score($studentId = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
         if ($allowStats) {
             $evaluation = $this->entity;
             if (!empty($evaluation)) {
@@ -597,7 +599,7 @@ class Evaluation implements GradebookItem
                 /** @var Result $res */
                 foreach ($results as $res) {
                     $score = $res->get_score();
-                    }
+                }
             }
 
             return [$score, $this->get_max()];

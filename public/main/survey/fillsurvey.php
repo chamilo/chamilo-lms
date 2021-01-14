@@ -145,6 +145,7 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
         }
         // From here we use the new invitationcode auto-userid-surveycode string
         $_GET['invitationcode'] = $autoInvitationcode;
+        Session::write('auto_invitation_code_'.$surveyCode, $autoInvitationcode);
         $invitationcode = $autoInvitationcode;
     }
 }

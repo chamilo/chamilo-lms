@@ -337,9 +337,9 @@ class UserDataGenerator
         } else {
             $avgscore = $item->calc_score('', 'average');
         }
-
         $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_AVERAGE;
+
         return $scoredisplay->display_score($avgscore, $displaytype);
     }
 

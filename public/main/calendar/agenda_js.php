@@ -7,14 +7,13 @@ $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
+$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
 if ('personal' === $type || 'admin' === $type) {
     $cidReset = true; // fixes #5162
 }
-
 require_once __DIR__.'/../inc/global.inc.php';
-
-$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
+api_block_inactive_user();
 
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
@@ -230,6 +229,8 @@ if ('course' === $type && !empty($courseId)) {
 if (isset($_GET['session_id'])) {
     $agenda_ajax_url .= '&session_id='.intval($_GET['session_id']);
 }
+
+$agenda_ajax_url .= '&sec_token='.Security::get_token();
 
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 

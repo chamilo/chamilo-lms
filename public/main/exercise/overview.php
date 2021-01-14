@@ -8,8 +8,6 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
-// Clear the exercise session just in case
 $current_course_tool = TOOL_QUIZ;
 Exercise::cleanSessionVariables();
 $this_section = SECTION_COURSES;
@@ -77,7 +75,6 @@ if ($time_control) {
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     SessionManager::addFlashSessionReadOnly();
-
     Display::display_header();
 } else {
     $htmlHeadXtra[] = '
@@ -127,7 +124,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
     );
 }
 
-// Exercise description
+// Exercise description.
 if (!empty($objExercise->description)) {
     $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
 }
@@ -155,7 +152,8 @@ if (isset($exercise_stat_info['exe_id'])) {
 
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
+    api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
@@ -164,7 +162,6 @@ $exercise_url_button = Display::url(
 
 $btnCheck = '';
 $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
-
 if ($quizCheckButtonEnabled) {
     $btnCheck = Display::button(
             'quiz_check_request_button',
@@ -180,7 +177,7 @@ if ($quizCheckButtonEnabled) {
         ).PHP_EOL.'<strong id="quiz-check-request-text"></strong>';
 }
 
-//3. Checking visibility of the exercise (overwrites the exercise button)
+// 3. Checking visibility of the exercise (overwrites the exercise button).
 $visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
@@ -212,7 +209,6 @@ $attempts = Event::getExerciseResultsByUser(
     'desc'
 );
 $counter = count($attempts);
-
 $my_attempt_array = [];
 $table_content = '';
 
@@ -226,7 +222,7 @@ if (in_array(
     $objExercise->results_disabled,
     [
         RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
+        //RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
         RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
     ])
 ) {
@@ -273,10 +269,7 @@ if (!empty($attempts)) {
         }
         $row = [
             'count' => $i,
-            'date' => api_convert_and_format_date(
-                $attempt_result['start_date'],
-                DATE_TIME_FORMAT_LONG
-            ),
+            'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG),
             'userIp' => $attempt_result['user_ip'],
         ];
         $attempt_link .= PHP_EOL.$teacher_revised;
@@ -341,8 +334,7 @@ if (!empty($attempts)) {
 
     $header_names = [];
     $table = new HTML_Table(['class' => 'table table-striped table-hover']);
-
-    // Hiding score and answer
+    // Hiding score and answer.
     switch ($objExercise->results_disabled) {
         case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
             if ($blockShowAnswers) {
@@ -427,7 +419,6 @@ if (!empty($attempts)) {
 $selectAttempts = $objExercise->selectAttempts();
 if ($selectAttempts) {
     $attempt_message = get_lang('Attempts').' '.$counter.' / '.$selectAttempts;
-
     if ($counter == $selectAttempts) {
         $attempt_message = Display::return_message($attempt_message, 'error');
     } else {
@@ -445,7 +436,6 @@ if ($time_control) {
 $html .= $message;
 
 $disable = api_get_configuration_value('exercises_disable_new_attempts');
-
 if ($disable && empty($exercise_stat_info)) {
     $exercise_url_button = Display::return_message(get_lang('The portal do not allowed to start new test for the moment, please come back later.'));
 }

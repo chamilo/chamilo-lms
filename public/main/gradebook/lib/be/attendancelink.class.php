@@ -138,6 +138,7 @@ class AttendanceLink extends AbstractLink
             $sum = 0;
             $sumResult = 0;
             $bestResult = 0;
+
             while ($data = Database::fetch_array($scores)) {
                 if (!(array_key_exists($data['user_id'], $students))) {
                     if (0 != $attendance['attendance_qualify_max']) {

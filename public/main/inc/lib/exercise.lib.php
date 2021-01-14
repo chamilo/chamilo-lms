@@ -150,9 +150,9 @@ class ExerciseLib
                                <table class="table table-hover table-striped data_table">';
                     }
 
-                    // Iterate through answers
+                    // Iterate through answers.
                     $x = 1;
-                    //mark letters for each answer
+                    // Mark letters for each answer.
                     $letter = 'A';
                     $answer_matching = [];
                     $cpt1 = [];
@@ -2673,6 +2673,7 @@ HOTSPOT;
         if (is_null($score) && is_null($weight)) {
             return '-';
         }
+
         $decimalSeparator = empty($decimalSeparator) ? '.' : $decimalSeparator;
         $thousandSeparator = empty($thousandSeparator) ? ',' : $thousandSeparator;
 
@@ -2722,7 +2723,7 @@ HOTSPOT;
         }
 
         if ($show_percentage) {
-            $percentageSign = '%';
+            $percentageSign = ' %';
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
@@ -2745,7 +2746,7 @@ HOTSPOT;
             $html = $scoreBasedInModel;
         }
 
-        // Ignore other formats and use the configuratio['exercise_score_format'] value
+        // Ignore other formats and use the configuration['exercise_score_format'] value
         // But also keep the round values settings.
         $format = api_get_configuration_value('exercise_score_format');
         if (!empty($format)) {
@@ -4361,6 +4362,7 @@ EOT;
                 if ($save_user_result) {
                     $numberAttempts++;
                 }
+
                 $showTotalScore = false;
                 if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
                     $showTotalScore = true;
@@ -4372,6 +4374,7 @@ EOT;
                     $show_only_score = false;
                     $showTotalScoreAndUserChoicesInLastAttempt = true;
                 }
+
                 if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
                     $showTotalScore = true;
                     $show_results = true;
@@ -4379,6 +4382,22 @@ EOT;
                     $showTotalScoreAndUserChoicesInLastAttempt = false;
                     if ($numberAttempts >= $objExercise->attempts) {
                         $showTotalScoreAndUserChoicesInLastAttempt = true;
+                    }
+
+                    // Check if the current attempt is the last.
+                    if (false === $save_user_result && !empty($attempts)) {
+                        $showTotalScoreAndUserChoicesInLastAttempt = false;
+                        $position = 1;
+                        foreach ($attempts as $attempt) {
+                            if ($exeId == $attempt['exe_id']) {
+                                break;
+                            }
+                            $position++;
+                        }
+
+                        if ($position == $objExercise->attempts) {
+                            $showTotalScoreAndUserChoicesInLastAttempt = true;
+                        }
                     }
                 }
             }
@@ -4398,6 +4417,7 @@ EOT;
             }
         }
 
+        // When exporting to PDF hide feedback/comment/score show warning in hotspot.
         if ($allowExportPdf && $isExport) {
             $showTotalScore = false;
             $showQuestionScore = false;
@@ -4408,11 +4428,12 @@ EOT;
             $objExercise->hideExpectedAnswer = true;
             $show_results = true;
         }
+
         if ('embeddable' !== $origin &&
             !empty($exercise_stat_info['exe_user_id']) &&
             !empty($studentInfo)
         ) {
-            // Shows exercise header
+            // Shows exercise header.
             echo $objExercise->showExerciseResultHeader(
                 $studentInfo,
                 $exercise_stat_info,
@@ -4438,7 +4459,6 @@ EOT;
         $exerciseResult = null;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
-
         if (true === $save_user_result && in_array(
             $objExercise->getFeedbackType(),
             [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
@@ -4521,6 +4541,7 @@ EOT;
                     if (!isset($category_list[$objQuestionTmp->category]['no_answer'])) {
                         $category_list[$objQuestionTmp->category]['no_answer'] = 0;
                     }
+
                     $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
                     $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
                     if ($scorePassed) {
@@ -4539,7 +4560,6 @@ EOT;
                     $category_list[$objQuestionTmp->category]['total_questions']++;
                     $category_was_added_for_this_test = true;
                 }
-
                 if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
                     foreach ($objQuestionTmp->category_list as $category_id) {
                         $category_list[$category_id]['score'] += $my_total_score;
@@ -4599,11 +4619,11 @@ EOT;
                     'comments' => $comnt,
                     'user_answered' => $result['user_answered'],
                 ];
+
                 $score = [];
                 if ($show_results) {
                     $score = $calculatedScore;
                 }
-
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                     $reviewScore = [
                         'score' => $my_total_score,
@@ -4635,8 +4655,10 @@ EOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
+
                 $calculatedScore['question_content'] = $question_content;
                 $attemptResult[] = $calculatedScore;
+
                 if ($objExercise->showExpectedChoice()) {
                     $exercise_content .= Display::div(
                         Display::panel($question_content),
@@ -4652,7 +4674,7 @@ EOT;
                         );
                     }
                 }
-            } // end foreach() block that loops over all questions
+            }
         }
 
         $totalScoreText = null;
@@ -4810,6 +4832,7 @@ EOT;
         if (!empty($remainingMessage)) {
             echo Display::return_message($remainingMessage, 'normal', false);
         }
+
         $failedAnswersCount = 0;
         $wrongQuestionHtml = '';
         $all = '';
@@ -5022,6 +5045,7 @@ EOT;
 
         return self::isSuccessExerciseResult($score, $weight, $passPercentage);
     }
+
     /**
      * @param float $score
      * @param float $weight

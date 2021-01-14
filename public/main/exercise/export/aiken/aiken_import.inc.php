@@ -1,6 +1,7 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
  * Library for the import of Aiken format.
  *

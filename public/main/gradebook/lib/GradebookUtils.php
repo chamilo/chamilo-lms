@@ -1563,6 +1563,7 @@ class GradebookUtils
     ) {
         $userInfo = api_get_user_info($userId);
         $model = ExerciseLib::getCourseScoreModel();
+        /** @var Category $cat */
         $cat = $cats[0];
         $allcat = $cats[0]->get_subcategories(
             $userId,
@@ -1593,7 +1594,7 @@ class GradebookUtils
             $studentList,
             $loadStats
         );
-
+        $gradebooktable->hideNavigation = true;
         $gradebooktable->userId = $userId;
 
         if (api_is_allowed_to_edit(null, true)) {
@@ -1642,6 +1643,7 @@ class GradebookUtils
                 ];
             }
         }
+
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
 
         $settings = api_get_configuration_value('gradebook_pdf_export_settings');
@@ -1654,7 +1656,6 @@ class GradebookUtils
         if ($showFeedBack) {
             $feedback = '<br />'.get_lang('Feedback').'<br />
             <textarea class="form-control" rows="5" cols="100">&nbsp;</textarea>';
-
         }
         $content = $table.$graph.$feedback;
         $result = $pdf->html_to_pdf_with_template(

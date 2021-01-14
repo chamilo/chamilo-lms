@@ -309,6 +309,7 @@ class ScoreDisplay
 
         return $hasEmptyDecimals;
     }
+
     /**
      * Display a score according to the current settings.
      *
@@ -334,7 +335,6 @@ class ScoreDisplay
         $removeEmptyDecimals = false
     ) {
         $my_score = $score == 0 ? [] : $score;
-
         switch ($type) {
             case SCORE_BAR:
                 $percentage = $my_score[0] / $my_score[1] * 100;
@@ -342,7 +342,6 @@ class ScoreDisplay
                 return Display::bar_progress($percentage);
                 break;
             case SCORE_NUMERIC:
-
                 $percentage = $my_score[0] / $my_score[1] * 100;
 
                 return round($percentage);
@@ -351,6 +350,7 @@ class ScoreDisplay
                 if (!isset($my_score[0])) {
                     $my_score[0] = 0;
                 }
+
                 return $this->format_score($my_score[0], $ignoreDecimals);
                 break;
         }
@@ -459,7 +459,6 @@ class ScoreDisplay
                 if (!empty($custom)) {
                     $custom = ' - '.$custom;
                 }
-
                 $div = $this->display_as_div($score, false, $removeEmptyDecimals);
                 /*return
                     $div.
@@ -565,7 +564,7 @@ class ScoreDisplay
             $removeEmptyDecimals
         ) : 0;
 
-        return  $score[0].' / '.$score[1];
+        return $score[0].' / '.$score[1];
     }
 
     /**
@@ -655,7 +654,8 @@ class ScoreDisplay
 
             return $converted2;
         }
-            return null;
+
+        return null;
     }
 
     /**

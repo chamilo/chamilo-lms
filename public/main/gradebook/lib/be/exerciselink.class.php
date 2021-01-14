@@ -127,7 +127,6 @@ class ExerciseLink extends AbstractLink
     public function calc_score($studentId = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
-
         if ($allowStats) {
             $link = $this->entity;
             if (!empty($link)) {
@@ -138,15 +137,18 @@ class ExerciseLink extends AbstractLink
                         $bestResult = $link->getBestScore();
 
                         return [$bestResult, $weight];
+
                         break;
                     case 'average':
                         $count = count($link->getUserScoreList());
+                        //$count = count($this->getStudentList());
                         if (empty($count)) {
                             return [0, $weight];
                         }
                         $sumResult = array_sum($link->getUserScoreList());
 
                         return [$sumResult / $count, $weight];
+
                         break;
                     case 'ranking':
                         return [null, null];
@@ -227,10 +229,10 @@ class ExerciseLink extends AbstractLink
                                 $lpList[] = $lpData['lp_id'];
                             }
                         } else {
-                        if ((int) $lpData['session_id'] == $sessionId) {
-                            $lpList[] = $lpData['lp_id'];
+                            if ((int) $lpData['session_id'] == $sessionId) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
                         }
-                    }
                     }
 
                     if (empty($lpList) && !empty($sessionId)) {

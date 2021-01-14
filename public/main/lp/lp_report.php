@@ -50,12 +50,13 @@ if (empty($lp)) {
 $urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
 $url = $urlBase.'&group_filter='.$groupFilter;
 $allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
+
+$course = api_get_course_entity($courseId);
+$session = api_get_session_entity($sessionId);
+
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
-    $course = api_get_course_entity($courseId);
-    $session = api_get_session_entity($sessionId);
-
     /** @var ItemPropertyRepository $itemRepo */
     $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
     $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(

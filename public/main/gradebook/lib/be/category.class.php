@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -916,7 +917,6 @@ class Category implements GradebookItem
             $count = 0;
             $ressum = 0;
             $weightsum = 0;
-
             if (!empty($cats)) {
                 /** @var Category $cat */
                 foreach ($cats as $cat) {
@@ -2181,6 +2181,7 @@ class Category implements GradebookItem
         if ($skipGenerationIfExists && !empty($my_certificate)) {
             return false;
         }
+
         if (empty($my_certificate)) {
             GradebookUtils::registerUserInfoAboutCertificate(
                 $category_id,
@@ -2274,10 +2275,8 @@ class Category implements GradebookItem
      * @param int   $catId
      * @param array $userList
      */
-    public static function exportAllCertificates(
-        $catId,
-        $userList = []
-    ) {
+    public static function exportAllCertificates($catId, $userList = [])
+    {
         $orientation = api_get_configuration_value('certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
@@ -2291,7 +2290,9 @@ class Category implements GradebookItem
         $params['bottom'] = 0;
         $page_format = 'landscape' == $params['orientation'] ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
-
+        if (api_get_configuration_value('add_certificate_pdf_footer')) {
+            $pdf->setCertificateFooter();
+        }
         $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);
         $certificate_path_list = [];
 
@@ -2810,12 +2811,16 @@ class Category implements GradebookItem
         if (empty($category)) {
             return 0;
         }
+
         $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
+
         $categoryScore = 0;
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
+            /** @var AbstractLink $item */
             $item = $evaluationsAndLinks[$i];
+            // Set session id from category
             $item->set_session_id($category->get_session_id());
             $score = $item->calc_score($userId);
             $itemValue = 0;

@@ -186,12 +186,15 @@ class PDF
      *                                1 => array('title'=>'Bye','path'=>'file2.html')
      *                                );
      * @param string $pdf_name        pdf name
-     * @param string $course_code     (if you are using html that are located
+     * @param null   $course_code     (if you are using html that are located
      *                                in the document tool you must provide this)
      * @param bool   $print_title     add title
      * @param bool   $complete_style  show header and footer if true
      * @param bool   $addStyle
      * @param string $mainTitle
+     * @param bool   $generateToFile  Optional. When it is TRUE, then the output file is move to app/cache
+     *
+     * @throws \MpdfException
      *
      * @return false|null
      */
@@ -202,7 +205,8 @@ class PDF
         $print_title = false,
         $complete_style = true,
         $addStyle = true,
-        $mainTitle = ''
+        $mainTitle = '',
+        $generateToFile = false
     ) {
         if (empty($html_file_array)) {
             return false;
@@ -365,7 +369,12 @@ class PDF
             $output_file = $pdf_name.'.pdf';
         }
         // F to save the pdf in a file
-        @$this->pdf->Output($output_file, 'D');
+        @$this->pdf->Output($output_file, $generateToFile ? 'F' : 'D');
+
+        if ($generateToFile) {
+            rename(getcwd()."/$output_file", api_get_path(SYS_ARCHIVE_PATH).$output_file);
+        }
+
         exit;
     }
 

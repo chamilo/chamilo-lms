@@ -626,7 +626,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $response = new StreamedResponse(
-            function () use ($rootNodePath, $zipName, $children, $repo) {
+            function () use ($zipName, $children, $repo) {
                 // Define suitable options for ZipStream Archive.
                 $options = new Archive();
                 $options->setContentType('application/octet-stream');

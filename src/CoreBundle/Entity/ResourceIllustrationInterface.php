@@ -7,5 +7,6 @@ namespace Chamilo\CoreBundle\Entity;
 interface ResourceIllustrationInterface
 {
     public function getResourceNode(): ResourceNode;
+
     public function getDefaultIllustration($size): string;
 }

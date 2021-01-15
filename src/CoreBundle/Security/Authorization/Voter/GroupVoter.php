@@ -79,14 +79,9 @@ class GroupVoter extends Voter
         }
         /** @var CGroup $group */
         $group = $subject;
-        $groupInfo = [
-            'iid' => $group->getIid(),
-            'session_id' => 0,
-            'status' => $group->getStatus(),
-        ];
 
         // Legacy
-        return \GroupManager::userHasAccessToBrowse($user->getId(), $groupInfo);
+        return \GroupManager::userHasAccessToBrowse($user->getId(), $group);
 
         switch ($attribute) {
             case self::VIEW:

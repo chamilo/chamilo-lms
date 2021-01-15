@@ -49,10 +49,10 @@ switch ($action) {
 
         // This needs cleaning!
         if (api_get_group_id()) {
-            $groupInfo = GroupManager::get_group_properties(api_get_group_id());
+            $group = api_get_group_entity(api_get_group_id());
             // Only course admin or group members allowed
-            if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)) {
-                if (!GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $groupInfo)) {
+            if ($is_allowed_to_edit || GroupManager::isUserInGroup(api_get_user_id(), $group)) {
+                if (!GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $group)) {
                     exit;
                 }
             } else {

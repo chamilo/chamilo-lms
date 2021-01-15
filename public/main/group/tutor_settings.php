@@ -2,15 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * This script displays an area where teachers can edit the group properties and member list.
- * Groups are also often called "teams" in the Dokeos code.
- *
- * @author various contributors
- * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
- *
- * @todo course admin functionality to create groups based on who is in which course (or class).
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -19,13 +10,16 @@ $current_course_tool = TOOL_GROUP;
 api_protect_course_script(true);
 
 $group_id = api_get_group_id();
+$groupRepo = \Chamilo\CoreBundle\Framework\Container::getGroupRepository();
+/** @var \Chamilo\CourseBundle\Entity\CGroup $groupEntity */
+$groupEntity = $groupRepo->find($group_id);
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getName()];
 
-$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
+$is_group_member = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -92,11 +86,11 @@ $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidre
 $form->addElement('hidden', 'action');
 
 // Group tutors
-$group_tutor_list = GroupManager::get_subscribed_tutors($current_group);
+$group_tutor_list = $groupEntity->getTutors();
 
 $selected_tutors = [];
-foreach ($group_tutor_list as $index => $user) {
-    $selected_tutors[] = $user['user_id'];
+foreach ($group_tutor_list as $user) {
+    $selected_tutors[] = $user->getUser()->getId();
 }
 
 $complete_user_list = CourseManager::get_user_list_from_course_code(
@@ -164,9 +158,9 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the tutors (we first remove all the tutors and then add only those who were selected)
-    GroupManager :: unsubscribe_all_tutors($current_group['iid']);
+    GroupManager::unsubscribe_all_tutors($current_group['iid']);
     if (isset($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
-        GroupManager::subscribe_tutors($values['group_tutors'], $current_group);
+        GroupManager::subscribeTutors($values['group_tutors'], $groupEntity);
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)

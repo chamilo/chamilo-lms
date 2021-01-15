@@ -22,8 +22,8 @@ $userId = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
-$groupInfo = GroupManager::get_group_properties($groupId);
-$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
+//$groupInfo = GroupManager::get_group_properties($groupId);
+//$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
 $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
 $repo = Container::getForumRepository();
 
@@ -46,11 +46,10 @@ $category = $forumEntity->getForumCategory();
 $is_group_tutor = false;
 
 if (!empty($groupId)) {
-    //Group info & group category info
-    $group_properties = GroupManager::get_group_properties($groupId);
-    $is_group_tutor = GroupManager::is_tutor_of_group(
+    $groupEntity = api_get_group_entity($groupId);
+    $is_group_tutor = GroupManager::isTutorOfGroup(
         api_get_user_id(),
-        $group_properties
+        $groupEntity
     );
 
     // Course
@@ -102,7 +101,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
     $interbreadcrumb[] = [
         'url' => '#',

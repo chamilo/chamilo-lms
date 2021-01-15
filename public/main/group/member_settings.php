@@ -2,15 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * This script displays an area where teachers can edit the group properties and member list.
- * Groups are also often called "teams" in the Dokeos code.
- *
- * @author various contributors
- * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
- *
- * @todo course admin functionality to create groups based on who is in which course (or class).
- */
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -20,12 +13,13 @@ api_protect_course_script(true);
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
+$groupEntity = api_get_group_entity($group_id);
 
 $nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php', 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getName()];
 
-$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
+$is_group_member = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -112,7 +106,7 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 $form->addElement('hidden', 'action');
-$form->addElement('hidden', 'max_student', $current_group['max_student']);
+$form->addElement('hidden', 'max_student', $groupEntity->getMaxStudent());
 
 $complete_user_list = CourseManager::get_user_list_from_course_code(
     api_get_course_id(),
@@ -182,11 +176,11 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the users (we first remove all users and then add only those who were selected)
-    GroupManager::unsubscribe_all_users($current_group);
+    GroupManager::unsubscribeAllUsers($groupEntity->getIid());
     if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
-        GroupManager::subscribe_users(
+        GroupManager::subscribeUsers(
             $values['group_members'],
-            $current_group
+            $groupEntity
         );
     }
 
@@ -215,7 +209,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) {
     case 'empty':
         if (api_is_allowed_to_edit(false, true)) {
-            GroupManager:: unsubscribe_all_users($current_group);
+            GroupManager::unsubscribeAllUsers($group_id);
             echo Display::return_message(get_lang('The group is now empty'), 'confirm');
         }
 

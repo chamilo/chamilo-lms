@@ -1691,7 +1691,7 @@ class AnnouncementManager
             ICON_SIZE_SMALL
         );
 
-        $isTutor = false;
+        /*$isTutor = false;
         if (!empty($group_id)) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());
             //User has access in the group?
@@ -1699,7 +1699,7 @@ class AnnouncementManager
                 api_get_user_id(),
                 $groupInfo
             );
-        }
+        }*/
 
         $results = [];
         /** @var CAnnouncement $announcement */

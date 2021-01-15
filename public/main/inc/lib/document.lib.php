@@ -6347,7 +6347,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         $courseId = $courseInfo['real_id'];
-        $group_properties = GroupManager::get_group_properties($groupId);
+        $group = api_get_group_entity($groupId);
 
         $sortable_data = [];
         foreach ($documentAndFolders as $key => $document_data) {
@@ -6462,7 +6462,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
                 $userId,
                 $courseId,
-                $group_properties,
+                $group,
                 $document_data
             );
 

@@ -18,15 +18,18 @@ api_protect_course_script(true);
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
+$groupRepo = \Chamilo\CoreBundle\Framework\Container::getGroupRepository();
+/** @var \Chamilo\CourseBundle\Entity\CGroup $groupEntity */
+$groupEntity = $groupRepo->find($group_id);
 
-if (empty($current_group)) {
+if (empty($groupEntity)) {
     api_not_allowed(true);
 }
 
 $nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
-$groupMember = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getName()];
+$groupMember = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 
 if (!$groupMember && !api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);

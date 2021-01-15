@@ -40,18 +40,12 @@ api_protect_course_group(GroupManager::GROUP_TOOL_CALENDAR);
 
 $agenda = new Agenda($type);
 
-$is_group_tutor = false;
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 $courseId = api_get_course_int_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
-    $is_group_tutor = GroupManager::is_tutor_of_group(
-        api_get_user_id(),
-        $group_properties,
-        $courseId
-    );
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
@@ -108,7 +102,7 @@ switch ($type) {
 $tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
-if ('en' == $region_value) {
+if ('en' === $region_value) {
     $region_value = 'en-GB';
 }
 $tpl->assign('region_value', $region_value);

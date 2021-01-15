@@ -81,8 +81,8 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
 
             break;
         case 'self_reg':
-            if (GroupManager::is_self_registration_allowed($userId, $groupInfo)) {
-                GroupManager::subscribe_users($userId, $groupInfo);
+            if (GroupManager::is_self_registration_allowed($userId, $groupEntity)) {
+                GroupManager::subscribeUsers($userId, $groupEntity);
                 Display::addFlash(Display::return_message(get_lang('You are now a member of this group.')));
                 header("Location: $currentUrl");
                 exit;
@@ -94,8 +94,8 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
 
             break;
         case 'self_unreg':
-            if (GroupManager::is_self_unregistration_allowed($userId, $groupInfo)) {
-                GroupManager::unsubscribe_users($userId, $groupInfo);
+            if (GroupManager::is_self_unregistration_allowed($userId, $groupEntity)) {
+                GroupManager::subscribeUsers($userId, $groupEntity);
                 Display::addFlash(Display::return_message(get_lang('You\'re now unsubscribed.')));
                 header("Location: $currentUrl");
                 exit;
@@ -128,7 +128,7 @@ if (api_is_allowed_to_edit(false, true)) {
             case 'empty_selected':
                 if (is_array($_POST['group'])) {
                     foreach ($_POST['group'] as $myGroupId) {
-                        GroupManager::unsubscribe_all_users($myGroupId);
+                        GroupManager::unsubscribeAllUsers($myGroupId);
                     }
 
                     Display::addFlash(Display::return_message(get_lang('All selected groups are now empty')));
@@ -241,18 +241,24 @@ if ('true' === api_get_setting('allow_group_categories')) {
 
     foreach ($categories as $index => $category) {
         $categoryId = $category['iid'];
-        $group_list = GroupManager::get_group_list($categoryId);
-        $groupToShow = GroupManager::process_groups($group_list, $categoryId);
+        $groupList = GroupManager::get_group_list($categoryId, [],
+             null,
+            null,
+             false,
+            null,
+            true
+        );
+        $groupToShow = GroupManager::processGroups($groupList, $categoryId);
 
         if (empty($groupToShow)) {
             continue;
         }
 
-        if (empty($categoryId) && empty($group_list)) {
+        if (empty($categoryId) && empty($groupList)) {
             continue;
         }
 
-        $label = Display::label(count($group_list).' '.get_lang('Groups'), 'info');
+        $label = Display::label(count($groupList).' '.get_lang('Groups'), 'info');
         $actions = null;
         if (api_is_allowed_to_edit(false, true) && !empty($categoryId) && empty($sessionId)) {
             // Edit
@@ -292,7 +298,17 @@ if ('true' === api_get_setting('allow_group_categories')) {
         echo $groupToShow;
     }
 } else {
-    echo GroupManager::process_groups(GroupManager::get_group_list());
+    echo GroupManager::processGroups(
+        GroupManager::get_group_list(
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            true
+        )
+    );
 }
 
 if (!isset($_GET['origin']) || 'learnpath' !== $_GET['origin']) {

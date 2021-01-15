@@ -1,4 +1,5 @@
 <?php
+
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -273,7 +274,6 @@ class PDF
             }
 
             if (!file_exists($file)) {
-                // the file doesn't exist, skip
                 continue;
             }
 
@@ -326,7 +326,6 @@ class PDF
                 $title = api_get_title_html($documentHtml, 'UTF-8', 'UTF-8');
                 // $_GET[] too, as it is done with file name.
                 // At the moment the title is retrieved from the html document itself.
-                //echo $documentHtml;exit;
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }
@@ -644,6 +643,20 @@ class PDF
         $this->pdf->SetHTMLFooter($footerHTML, 'O'); //Odd pages
     }
 
+    public function setCertificateFooter()
+    {
+        $this->pdf->defaultfooterfontsize = 12; // in pts
+        $this->pdf->defaultfooterfontstyle = 'B'; // blank, B, I, or BI
+        $this->pdf->defaultfooterline = 1; // 1 to include line below header/above footer
+
+        $view = new Template('', false, false, false, true, false, false);
+        $template = $view->get_template('export/pdf_certificate_footer.tpl');
+        $footerHTML = $view->fetch($template);
+
+        $this->pdf->SetHTMLFooter($footerHTML, 'E'); //Even pages
+        $this->pdf->SetHTMLFooter($footerHTML, 'O'); //Odd pages
+    }
+
     /**
      * Sets the PDF header.
      *
@@ -678,7 +691,6 @@ class PDF
                 $visualTheme = api_get_visual_theme();
                 $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                 if (file_exists($img)) {
-                    //$img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                     $organization = "<img src='$img'>";
                 }
             }

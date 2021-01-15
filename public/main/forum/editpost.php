@@ -90,9 +90,11 @@ if (api_is_in_gradebook()) {
         'name' => get_lang('Assessments'),
     ];
 }
+$group_id = api_get_group_id();
+$groupEntity = null;
+if ('group' === $origin && $group_id) {
+    $groupEntity = api_get_group_entity($group_id);
 
-$group_properties = GroupManager::get_group_properties(api_get_group_id());
-if ('group' === $origin) {
     $_clean['toolgroup'] = api_get_group_id();
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -100,7 +102,7 @@ if ('group' === $origin) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
@@ -181,7 +183,7 @@ $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
     0 == $forum->getAllowEdit() &&
-    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)
+    !GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)
 ) {
     api_not_allowed(true);
 }

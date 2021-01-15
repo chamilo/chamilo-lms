@@ -62,7 +62,11 @@ if (api_is_in_gradebook()) {
 }
 
 $groupId = api_get_group_id();
-$group_properties = GroupManager::get_group_properties($groupId);
+$groupEntity = null;
+if (!empty($groupId)) {
+    $groupEntity = api_get_group_entity($groupId);
+}
+
 $sessionId = api_get_session_id();
 
 $ajaxURL = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=change_post_status';
@@ -109,7 +113,7 @@ switch ($my_action) {
             isset($_GET['content']) &&
             isset($_GET['id']) &&
             (api_is_allowed_to_edit(false, true) ||
-                (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
+                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
@@ -123,7 +127,7 @@ switch ($my_action) {
     case 'visible':
         if (isset($_GET['id']) &&
             (api_is_allowed_to_edit(false, true) ||
-                (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
+                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
@@ -179,7 +183,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($my_search)),
@@ -312,14 +316,18 @@ $group_id = api_get_group_id();
 $locked = api_resource_is_locked_by_gradebook($threadId, LINK_FORUM_THREAD);
 $sessionId = api_get_session_id();
 $userId = api_get_user_id();
-$groupInfo = GroupManager::get_group_properties($group_id);
 $postCount = 1;
 $allowUserImageForum = api_get_course_setting('allow_user_image_forum');
+$tutorGroup = false;
+$groupEntity = null;
+if (!empty($group_id)) {
+    $groupEntity = api_get_group_entity($group_id);
+    // The user who posted it can edit his thread only if the course admin allowed this in the properties
+    // of the forum
+    // The course admin him/herself can do this off course always
+    $tutorGroup = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
+}
 
-// The user who posted it can edit his thread only if the course admin allowed this in the properties
-// of the forum
-// The course admin him/herself can do this off course always
-$tutorGroup = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo);
 
 $postList = [];
 foreach ($posts as $post) {
@@ -393,7 +401,7 @@ foreach ($posts as $post) {
     $editButton = '';
     $askForRevision = '';
 
-    if ((isset($groupInfo['iid']) && $tutorGroup) ||
+    if (($groupEntity && $tutorGroup) ||
         (1 == $forumEntity->getAllowEdit() && $posterId == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
         !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
@@ -414,7 +422,7 @@ foreach ($posts as $post) {
         }
     }
 
-    if ((isset($groupInfo['iid']) && $tutorGroup) ||
+    if (($groupEntity && $tutorGroup) ||
         api_is_allowed_to_edit(false, true) &&
         !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId)
     ) {

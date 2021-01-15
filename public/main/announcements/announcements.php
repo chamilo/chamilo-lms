@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
@@ -49,6 +50,7 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $isTutor = false;
 if (!empty($group_id)) {
+    $groupEntity = api_get_group_entity($group_id);
     $groupProperties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -61,7 +63,7 @@ if (!empty($group_id)) {
 
     if (false === $allowToEdit) {
         // Check if user is tutor group
-        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
+        $isTutor = $groupEntity->userIsTutor(api_get_user_entity());
         if ($isTutor) {
             $allowToEdit = true;
         }

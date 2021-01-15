@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -1883,7 +1884,6 @@ function getPosts(
     ;
 
     $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
     $filterModerated = true;
 
     if (empty($groupId)) {
@@ -1891,7 +1891,8 @@ function getPosts(
             $filterModerated = false;
         }
     } else {
-        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo) ||
+        $groupEntity = api_get_group_entity($groupId);
+        if (GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity) ||
             api_is_allowed_to_edit(false, true)
         ) {
             $filterModerated = false;
@@ -3831,12 +3832,10 @@ function displayUserLink(User $user)
 
 function displayUserImage(User $user)
 {
-    $url = Container::getIllustrationRepository()->getIllustrationUrl($user, null, ICON_SIZE_BIG);
+    $url = Container::getIllustrationRepository()->getIllustrationUrl($user, '', ICON_SIZE_BIG);
 
     return '<div class="thumbnail"><img src="'.$url.'?w=100"/></div>';
 }
-
-
 
 /**
  * The thread view counter gets increased every time someone looks at the thread.
@@ -5059,16 +5058,11 @@ function delete_attachment($postId, $attachmentId)
  *
  * @todo this is basically the same code as the get_forums function. Consider merging the two.
  */
-function get_forums_of_group($groupInfo)
+function get_forums_of_group(CGroup $group)
 {
-    $groupId = (int) $groupInfo['id'];
-
-    $group = api_get_group_entity($groupId);
     $course = api_get_course_entity();
     $session = api_get_session_entity();
-
     $repo = Container::getForumRepository();
-
     $qb = $repo->getResourcesByCourse($course, $session, $group);
 
     return $qb->getQuery()->getResult();

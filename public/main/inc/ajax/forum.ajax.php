@@ -133,10 +133,10 @@ if (!empty($action)) {
                     break;
                 }
                 $group_id = api_get_group_id();
-                $groupInfo = GroupManager::get_group_properties($group_id);
+                $groupEntity = api_get_group_entity();
                 if (!api_is_allowed_to_edit(null, true) &&
                     0 == $current_forum['allow_edit'] &&
-                    ($group_id && !GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
+                    ($group_id && !GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity))
                 ) {
                     $json['errorMessage'] = '4. if editing of replies is not allowed';
                     break;

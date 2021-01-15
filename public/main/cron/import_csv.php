@@ -1805,7 +1805,7 @@ class ImportCsv
                         ) {
                             foreach ($groupBackup['tutor'][$teacherId][$courseInfo['code']] as $data) {
                                 $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                GroupManager::subscribe_tutors(
+                                GroupManager::subscribeTutors(
                                     [$teacherId],
                                     $groupInfo,
                                     $data['c_id']
@@ -1818,10 +1818,9 @@ class ImportCsv
                             !empty($groupBackup['user'][$teacherId][$courseInfo['code']])
                         ) {
                             foreach ($groupBackup['user'][$teacherId][$courseInfo['code']] as $data) {
-                                $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                GroupManager::subscribe_users(
+                                GroupManager::subscribeUsers(
                                     [$teacherId],
-                                    $groupInfo,
+                                    api_get_group_entity($data['group_id']),
                                     $data['c_id']
                                 );
                             }

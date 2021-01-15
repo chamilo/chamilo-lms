@@ -968,8 +968,7 @@ class ZoomPlugin extends Plugin
 
                     if ($isSubscribed) {
                         if ($meeting->isCourseGroupMeeting()) {
-                            $groupInfo = GroupManager::get_group_properties($meeting->getGroup()->getIid(), true);
-                            $isInGroup = GroupManager::is_user_in_group($userId, $groupInfo);
+                            $isInGroup = GroupManager::isUserInGroup($userId, $meeting->getGroup());
                             if (false === $isInGroup) {
                                 throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
                             }

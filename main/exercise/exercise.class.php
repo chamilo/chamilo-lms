@@ -10973,22 +10973,21 @@ class Exercise
             if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
                 $bestAttempt = $attemp;
             }
-            // The action is blocked if there is still an open question to evaluate
             if (isset($attemp['question_list'])) {
                 foreach ($attemp['question_list'] as $questionId => $answer) {
                     $question = Question::read($questionId, api_get_course_info_by_id($attemp['c_id']));
                     $questionOpen = 0;
                     // in_array($question->type, $questionExcluded, true) dont work here
-                    for($i=0;$i<count($questionExcluded);$i++){
-                        if($question->type == (int)$questionExcluded[$i]){
+                    for ($i = 0; $i < count($questionExcluded); $i++) {
+                        if ($question->type == (int)$questionExcluded[$i]) {
                             $questionOpen = 1;
                             break;
                         }
                     }
-                    if ($questionOpen == 1 ) {
+                    if ($questionOpen == 1) {
                         $score = $attemp['exe_result'];
                         $comments = Event::get_comments($this->id, $questionId);
-                        if (empty($comments) || $score == 0)
+                        if (empty($comments) || $score == 0) {
                             return null;
                         }
                     }

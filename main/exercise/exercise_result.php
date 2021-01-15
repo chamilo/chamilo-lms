@@ -227,6 +227,7 @@ ob_end_clean();
 
 $oldResultDisabled = $objExercise->results_disabled;
 $objExercise->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+$objExercise->forceShowExpectedChoiceColumn = true;
 ob_start();
 $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
@@ -240,6 +241,7 @@ $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
 ob_end_clean();
 
 $objExercise->results_disabled = $oldResultDisabled;
+$objExercise->forceShowExpectedChoiceColumn = false;
 
 // Save here LP status
 if (!empty($learnpath_id) && $saveResults) {

@@ -283,6 +283,7 @@ if (isset($_REQUEST['comments']) &&
         // Show all for teachers.
         $oldResultDisabled = $objExerciseTmp->results_disabled;
         $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+        $objExerciseTmp->forceShowExpectedChoiceColumn = true;
         ob_start();
         $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
             $objExerciseTmp,
@@ -294,7 +295,7 @@ if (isset($_REQUEST['comments']) &&
             false
         );
         ob_end_clean();
-
+        $objExerciseTmp->forceShowExpectedChoiceColumn = false;
         $objExerciseTmp->results_disabled = $oldResultDisabled;
 
         $attemptCount = Event::getAttemptPosition(

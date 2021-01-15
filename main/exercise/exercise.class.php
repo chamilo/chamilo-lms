@@ -95,6 +95,7 @@ class Exercise
     public $hideComment;
     public $hideNoAnswer;
     public $hideExpectedAnswer;
+    public $forceShowExpectedChoiceColumn;
 
     /**
      * Constructor of the class.
@@ -8418,6 +8419,10 @@ class Exercise
      */
     public function showExpectedChoiceColumn()
     {
+        if (true === $this->forceShowExpectedChoiceColumn) {
+            return true;
+        }
+
         if ($this->hideExpectedAnswer) {
             return false;
         }

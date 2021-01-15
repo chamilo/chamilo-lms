@@ -400,11 +400,17 @@ if (false === $bbb->isGlobalConference() &&
 
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {
-            $itemGroupId = $groupData['iid'];
-            if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
-                $groupData['name'] .= ' ('.get_lang('Active').')';
+            if ($groupData instanceof \Chamilo\CourseBundle\Entity\CGroup) {
+                $itemGroupId = $groupData->getIid();
+                $name = $groupData->getName();
+            } else {
+                $itemGroupId = $groupData['iid'];
+                $name = $groupData['name'];
             }
-            $groupList[$itemGroupId] = $groupData['name'];
+            if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
+                $name .= ' ('.get_lang('Active').')';
+            }
+            $groupList[$itemGroupId] = $name;
         }
 
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);

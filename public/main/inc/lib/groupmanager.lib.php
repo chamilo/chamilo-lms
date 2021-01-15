@@ -70,7 +70,7 @@ class GroupManager
     /**
      * @param int $courseId
      *
-     * @return array
+     * @return CGroup[]
      */
     public static function get_groups($courseId = 0)
     {
@@ -79,7 +79,7 @@ class GroupManager
 
         $qb = $repo->getResourcesByCourse($course);
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getResult();
 
         $table_group = Database::get_course_table(TABLE_GROUP);
         $courseId = !empty($courseId) ? (int) $courseId : api_get_course_int_id();
@@ -478,13 +478,12 @@ class GroupManager
             return false;
         }
 
-        $course_id = $course_info['real_id'];
         $em = Database::getManager();
         $groupIid = $group->getIid();
 
         // Unsubscribe all users
-        self::unsubscribe_all_users($groupInfo);
-        self::unsubscribe_all_tutors($groupInfo);
+        self::unsubscribe_all_users($groupIid);
+        self::unsubscribe_all_tutors($groupIid);
 
         if (!empty($groupInfo['secret_directory'])) {
             /*
@@ -1465,13 +1464,13 @@ class GroupManager
         $category = self::get_category_from_group($groupIid);
 
         // Getting max numbers of user from group
-        $maxNumberStudents = empty($groupInfo['maximum_number_of_students']) ? self::INFINITE : $groupInfo['maximum_number_of_students'];
+        $maxNumberStudents = empty($group->getMaxStudent()) ? self::INFINITE : $group->getMaxStudent();
         $groupsPerUser = self::INFINITE;
         $categoryId = 0;
         if ($category) {
             $groupsPerUser = empty($category['groups_per_user']) ? self::INFINITE : $category['groups_per_user'];
             $maxNumberStudentsCategory = empty($category['max_student']) ? self::INFINITE : $category['max_student'];
-            $categoryId = $category['id'];
+            $categoryId = $category['iid'];
             if ($maxNumberStudentsCategory < $maxNumberStudents) {
                 $maxNumberStudents = $maxNumberStudentsCategory;
             }
@@ -2778,9 +2777,8 @@ class GroupManager
 
             $groups = self::get_groups();
             foreach ($groups as $group) {
-                if (!in_array($group['iid'], $elementsFound['groups'])) {
+                if (!in_array($group->getIid(), $elementsFound['groups'])) {
                     self::deleteGroup($group);
-                    $group['group'] = $group['name'];
                     $result['deleted']['group'][] = $group;
                 }
             }

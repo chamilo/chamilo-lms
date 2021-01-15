@@ -502,22 +502,6 @@ abstract class Question
     }
 
     /**
-     * Exports a picture to another question.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @param int   $questionId - ID of the target question
-     * @param array $courseInfo destination course info
-     *
-     * @return bool - true if copied, otherwise false
-     */
-    public function exportPicture($questionId, $courseInfo)
-    {
-        // @todo Create a resource node duplication function.
-        throw new Exception('exportPicture not available yet');
-    }
-
-    /**
      * Set title.
      *
      * @param string $title
@@ -1062,16 +1046,10 @@ abstract class Question
         if (empty($courseInfo)) {
             return false;
         }
-        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUESTION_OPTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
-        $question = $this->question;
+        $questionText = $this->question;
         $description = $this->description;
-        $weighting = $this->weighting;
-        $position = $this->position;
-        $type = $this->type;
-        $level = (int) $this->level;
-        $extra = $this->extra;
 
         // Using the same method used in the course copy to transform URLs
         if ($this->course['id'] != $courseInfo['id']) {
@@ -1080,8 +1058,8 @@ abstract class Question
                 $this->course['code'],
                 $courseInfo['id']
             );
-            $question = DocumentManager::replaceUrlWithNewCourseCode(
-                $question,
+            $questionText = DocumentManager::replaceUrlWithNewCourseCode(
+                $questionText,
                 $this->course['code'],
                 $courseInfo['id']
             );
@@ -1092,21 +1070,31 @@ abstract class Question
         // Read the source options
         $options = self::readQuestionOption($this->id, $this->course['real_id']);
 
-        // Inserting in the new course db / or the same course db
-        $params = [
-            'c_id' => $course_id,
-            'question' => $question,
-            'description' => $description,
-            'ponderation' => $weighting,
-            'position' => $position,
-            'type' => $type,
-            'level' => $level,
-            'extra' => $extra,
-        ];
-        $newQuestionId = Database::insert($questionTable, $params);
+        $em = Database::getManager();
+        $courseEntity = api_get_course_entity($course_id);
+
+        $question = new CQuizQuestion();
+        $question
+            ->setCId($course_id)
+            ->setQuestion($questionText)
+            ->setDescription($description)
+            ->setPonderation($this->weighting)
+            ->setPosition($this->position)
+            ->setType($this->type)
+            ->setExtra($this->extra)
+            ->setLevel($this->level)
+            ->setFeedback($this->feedback)
+            ->setParent($courseEntity)
+            ->addCourseLink(
+                $courseEntity
+            )
+        ;
+
+        $em->persist($question);
+        $em->flush();
+        $newQuestionId = $question->getIid();
 
         if ($newQuestionId) {
-
             // Add extra fields.
             $extraField = new ExtraFieldValue('question');
             $extraField->copy($this->iid, $newQuestionId);
@@ -1123,7 +1111,10 @@ abstract class Question
             }
 
             // Duplicates the picture of the hotspot
-            $this->exportPicture($newQuestionId, $courseInfo);
+            // @todo implement copy of hotspot question
+            if ($this->type == HOT_SPOT) {
+                throw new Exception('implement copy of hotspot question');
+            }
         }
 
         return $newQuestionId;

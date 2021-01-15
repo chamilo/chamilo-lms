@@ -244,6 +244,8 @@ class GradebookDataGenerator
                                 $evals = [];
                                 $links = [];
                                 if ('C' === $item->get_item_type()) {
+
+                                    /** @var Category $item */
                                     $evals = $item->get_evaluations(null);
                                     $links = $item->get_links(null);
 

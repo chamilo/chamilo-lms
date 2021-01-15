@@ -152,8 +152,6 @@ class PDF
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
-        //echo $html;exit;
-
         if ($returnHtml) {
             return $html;
         }

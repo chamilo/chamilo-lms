@@ -29,7 +29,7 @@ $trackedExercise = ExerciseLib::recalculateResult(
     $_REQUEST['exercise']
 );
 
-$totalScore = $trackedExercise->getExeResult();
-$totalWeight = $trackedExercise->getExeWeighting();
+$totalScore = $trackedExercise->getScore();
+$totalWeight = $trackedExercise->getMaxScore();
 
 echo $totalScore.'/'.$totalWeight;

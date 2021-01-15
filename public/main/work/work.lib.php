@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use ChamiloSession as Session;
@@ -3223,12 +3224,15 @@ function allowOnlySubscribedUser($userId, $workId, $courseId, $forceAccessForCou
 function getDocumentTemplateFromWork($workId, $courseInfo, $documentId)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+
+    $docRepo = Container::getDocumentRepository();
     if (!empty($documents)) {
         foreach ($documents as $doc) {
             if ($documentId != $doc['document_id']) {
                 continue;
             }
-            $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
+            /** @var CDocument $docData */
+            $docData = $docRepo->find($doc['document_id']);
             $fileInfo = pathinfo($docData['path']);
             if ('html' == $fileInfo['extension']) {
                 if (file_exists($docData['absolute_path']) && is_file($docData['absolute_path'])) {
@@ -5566,8 +5570,9 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
         ($doc_visible_for_all && $work_is_visible)
     ) {
         $title = $studentPublication->getTitle();
-        if ($correction) {
-            $title = $studentPublication->getTitleCorrection();
+        $titleCorrection = '';
+        if ($correction && $studentPublication->getCorrection()) {
+            $title = $titleCorrection = $studentPublication->getCorrection()->getTitle();
         }
         if ($hasFile) {
             $title = $studentPublication->getResourceNode()->getResourceFile()->getName();
@@ -5587,7 +5592,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
         return [
             //'path' => $full_file_name,
             'title' => $title,
-            'title_correction' => $studentPublication->getTitleCorrection(),
+            'title_correction' => $titleCorrection,
             'entity' => $studentPublication,
         ];
     }

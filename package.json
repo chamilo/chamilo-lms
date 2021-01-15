@@ -11,7 +11,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/vue-fontawesome": "fortawesome/vue-fontawesome",
     "@tinymce/tinymce-vue": "^3.2.2",
-    "@vue/cli": "^4.4.5",
+    "@vue/cli": "^4.5",
     "apollo-boost": "^0.4",
     "axios": "^0.21",
     "babel": "^6.23.0",

@@ -2020,7 +2020,7 @@
     vue-cli-plugin-apollo "^0.21.3"
     watch "^1.0.2"
 
-"@vue/cli@^4.4.5":
+"@vue/cli@^4.5":
   version "4.5.10"
   resolved "https://registry.yarnpkg.com/@vue/cli/-/cli-4.5.10.tgz#3aef56cd48e44eaf831526eb3f40ee37826c5cdc"
   integrity sha512-+D54DdYcirXtV7f6G7WkDSt1nnzmgA17rRu3qhgOlwIaZ5xaJSroDzLgdgizvg4gJ2yJNCmoKrK1FXnjqTdIyQ==

@@ -2064,9 +2064,10 @@ class DocumentManager
         $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions, ':', false, true);
 
         $first = Tracking::get_first_connection_date_on_the_course($user_id, $course_info['real_id'], $sessionId, false);
-        $first = substr($first, 0, 10);
+        $first = api_convert_and_format_date($first, DATE_FORMAT_NUMBER);
+
         $last = Tracking::get_last_connection_date_on_the_course($user_id, $course_info, $sessionId, false);
-        $last = substr($last, 0, 10);
+        $last = api_convert_and_format_date($last, DATE_FORMAT_NUMBER);
 
         if ($first === $last) {
             $startDateAndEndDate = get_lang('The').' '.$first;

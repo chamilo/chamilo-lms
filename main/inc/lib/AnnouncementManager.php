@@ -74,8 +74,10 @@ class AnnouncementManager
     ) {
         $readerInfo = api_get_user_info($userId, false, false, true, true, false, true);
         $courseInfo = api_get_course_info($courseCode);
-        $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
-
+        $teacherList = '';
+        if ($courseInfo) {
+            $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
+        }
         $generalCoachName = '';
         $generalCoachEmail = '';
         $coaches = '';
@@ -105,7 +107,7 @@ class AnnouncementManager
             $data['user_official_code'] = $readerInfo['official_code'];
         }
 
-        $data['course_title'] = $courseInfo['name'];
+        $data['course_title'] = $courseInfo['name'] ?? '';
         $courseLink = api_get_course_url($courseCode, $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;

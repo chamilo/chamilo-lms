@@ -103,7 +103,7 @@ $form->addButtonSave(get_lang('Save'));
 
 // UserGroup
 if ($allowUserGroups) {
-    $formUserGroup = new FormValidator('lp_edit', 'post', $url);
+    $formUserGroup = new FormValidator('lp_edit_usergroup', 'post', $url);
     $formUserGroup->addHidden('usergroup_form', 1);
 
     $userGroup = new UserGroup();
@@ -201,7 +201,7 @@ if ($allowUserGroups) {
                 }
             }
 
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         } else {
@@ -217,9 +217,10 @@ if ($allowUserGroups) {
                         $sessionCondition
                     ";
             Database::query($sql);
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
         }
+
         header("Location: $url");
         exit;
     }
@@ -259,7 +260,7 @@ foreach ($subscribedUsersInCategory as $item) {
 }
 
 // Building the form for Users
-$formUsers = new FormValidator('lp_edit', 'post', $url);
+$formUsers = new FormValidator('lp_edit_users', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 $formUsers->addLabel('', $message);
 
@@ -307,11 +308,17 @@ if ($formUsers->validate()) {
             }
         }
 
-        $em->merge($category);
+        $em->persist($category);
         $em->flush();
         Display::addFlash(Display::return_message(get_lang('Updated')));
     }
 
+    header("Location: $url");
+    exit;
+}
+
+if ($form->validate()) {
+    $values = $form->getSubmitValues();
     // Subscribing groups
     $groups = isset($values['groups']) ? $values['groups'] : [];
     $groupForm = isset($values['group_form']) ? $values['group_form'] : [];
@@ -330,18 +337,18 @@ if ($formUsers->validate()) {
 
     header("Location: $url");
     exit;
-} else {
-    $headers = [
-        get_lang('SubscribeUsersToLpCategory'),
-        get_lang('SubscribeGroupsToLpCategory'),
-    ];
-    $items = [$formUsers->toHtml(), $form->toHtml()];
-
-    if ($allowUserGroups) {
-        $headers[] = get_lang('SubscribeClassesToLpCategory');
-        $items[] = $formUserGroup->toHtml();
-    }
-    $tabs = Display::tabs($headers, $items);
-    $tpl->assign('content', $tabs);
-    $tpl->display_one_col_template();
 }
+
+$headers = [
+    get_lang('SubscribeUsersToLpCategory'),
+    get_lang('SubscribeGroupsToLpCategory'),
+];
+$items = [$formUsers->toHtml(), $form->toHtml()];
+
+if ($allowUserGroups) {
+    $headers[] = get_lang('SubscribeClassesToLpCategory');
+    $items[] = $formUserGroup->toHtml();
+}
+$tabs = Display::tabs($headers, $items);
+$tpl->assign('content', $tabs);
+$tpl->display_one_col_template();

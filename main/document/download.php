@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This file is responsible for passing requested documents to the browser.
  * Many functions updated and moved to lib/document.lib.php.
@@ -49,6 +51,9 @@ if (substr($refer_script, 0, 15) === '/fillsurvey.php') {
     $course = isset($queryParts['course']) ? $queryParts['course'] : '';
     $invitation = isset($queryParts['invitationcode']) ? $queryParts['invitationcode'] : '';
     include '../survey/survey.download.inc.php';
+    if ('auto' === $invitation && $queryParts['scode']) {
+        $invitation = Session::read('auto_invitation_code_'.$queryParts['scode']);
+    }
     $_course = check_download_survey($course, $invitation, $doc_url);
     $_course['path'] = $_course['directory'];
 } else {

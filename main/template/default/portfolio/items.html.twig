@@ -1,16 +1,38 @@
-{% macro display(items, category_id, allow_edit, _c, _u, _p) %}
+{% macro display(items, category_id, _c, _u, _p) %}
     {% set edit_img = 'edit.png'|img(22, 'Edit'|get_lang) %}
     {% set visible_img = 'visible.png'|img(22, 'Invisible'|get_lang) %}
     {% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
     {% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
     {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
 
-    <div class="row">
+    <div class="row portfolio-items">
         {% for item in items %}
-            <div class="col-sm-6 col-md-4" id="portfolio-item-{{ item.id }}">
+            <div class="col-md-12" id="portfolio-item-{{ item.id }}">
                 <div class="thumbnail">
                     <div class="caption">
-                        <h3>{{ item.title }}</h3>
+                        {% if _u.id == item.user.id %}
+                            <div class="portfolio-actions pull-right">
+                                <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
+                                    {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
+                                </a>
+                                {% if item.isVisible %}
+                                    <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
+                                        {{ 'visible.png'|img(22, 'Invisible'|get_lang) }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ baseurl ~ {'action':'show_item', 'id':item.id}|url_encode }}">
+                                        {{ 'invisible.png'|img(22, 'Visible'|get_lang) }}
+                                    </a>
+                                {% endif %}
+                                <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
+                                    {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <h3>
+                            <a href="{{ baseurl ~ {'action':'view', 'id':item.id}|url_encode }}">{{ item.title }}</a>
+                        </h3>
 
                         <ul class="fa-ul">
                             {% if _c is empty %}
@@ -25,6 +47,11 @@
                                         {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}
                                     </li>
                                 {% endif %}
+                            {% else %}
+                                <li>
+                                    <span class="fa-li fa fa-user" aria-hidden="true"></span>
+                                    {{ item.user.completeName }}
+                                </li>
                             {% endif %}
 
                             <li>
@@ -38,37 +65,16 @@
                                     {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
                                 </li>
                             {% endif %}
+
+                            <li>
+                                <span class="fa-li fa fa-comment-o" aria-hidden="true"></span>
+                                {{ 'XComments'|get_lang|format(item.comments.count) }}
+                            </li>
                         </ul>
 
                         <hr>
 
-                        {{ item.content }}
-
-                        {% if _u.id == item.user.id %}
-                            <hr>
-
-                            <p>
-                                <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}" class="btn btn-primary btn-sm">
-                                    <span class="fa fa-edit fa-fw" aria-hidden="true"></span>
-                                    {{ 'Edit'|get_lang }}
-                                </a>
-                                {% if item.isVisible %}
-                                    <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}" class="btn btn-info btn-sm">
-                                        <span class="fa fa-eye-slash fa-fw" aria-hidden="true"></span>
-                                        {{ 'Invisible'|get_lang }}
-                                    </a>
-                                {% else %}
-                                    <a href="{{ baseurl ~ {'action':'show_item', 'id':item.id}|url_encode }}" class="btn btn-info btn-sm">
-                                        <span class="fa fa-eye fa-fw" aria-hidden="true"></span>
-                                        {{ 'Visible'|get_lang }}
-                                    </a>
-                                {% endif %}
-                                <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn btn-danger btn-sm btn-delete">
-                                    <span class="fa fa-remove fa-fw" aria-hidden="true"></span>
-                                    {{ 'Delete'|get_lang }}
-                                </a>
-                            </p>
-                        {% endif %}
+                        {{ item.excerpt }}
                     </div>
                 </div>
             </div>

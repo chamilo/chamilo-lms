@@ -5993,12 +5993,14 @@ EOT;
             [
                 '((exercise_error_count))',
                 '((all_answers_html))',
+                '((all_answers_teacher_html))',
                 '((exercise_title))',
                 '((exercise_attempt_date))',
             ],
             [
                 $wrongAnswersCount,
                 $stats['all_answers_html'],
+                $stats['all_answers_teacher_html'],
                 $exercise->get_formated_title(),
                 $attemptDate,
             ],
@@ -6023,7 +6025,8 @@ EOT;
         $exercise_stat_info,
         $courseInfo,
         $attemptCountToSend,
-        $stats
+        $stats,
+        $statsTeacher
     ) {
         $notifications = api_get_configuration_value('exercise_finished_notification_settings');
         if (empty($notifications)) {
@@ -6035,6 +6038,7 @@ EOT;
         $wrongAnswersCount = $stats['failed_answers_count'];
         $exercisePassed = $stats['exercise_passed'];
         $countPendingQuestions = $stats['count_pending_questions'];
+        $stats['all_answers_teacher_html'] = $statsTeacher['all_answers_html'];
 
         // If there are no pending questions (Open questions).
         if (0 === $countPendingQuestions) {

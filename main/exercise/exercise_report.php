@@ -280,6 +280,23 @@ if (isset($_REQUEST['comments']) &&
         );
         ob_end_clean();
 
+        // Show all for teachers.
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+        ob_start();
+        $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
+            $objExerciseTmp,
+            $track_exercise_info['exe_id'],
+            false,
+            false,
+            false,
+            api_get_configuration_value('quiz_results_answers_report'),
+            false
+        );
+        ob_end_clean();
+
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
+
         $attemptCount = Event::getAttemptPosition(
             $track_exercise_info['exe_id'],
             $student_id,
@@ -295,7 +312,8 @@ if (isset($_REQUEST['comments']) &&
             $track_exercise_info,
             api_get_course_info(),
             $attemptCount,
-            $stats
+            $stats,
+            $statsTeacher
         );
     }
 

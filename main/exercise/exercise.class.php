@@ -10974,17 +10974,21 @@ class Exercise
                 $bestAttempt = $attemp;
             }
             // The action is blocked if there is still an open question to evaluate
-            if (isset($bestAttempt['question_list'])) {
-                foreach ($bestAttempt['question_list'] as $questionId => $answer) {
-                    $question = Question::read($questionId, api_get_course_info_by_id($bestAttempt['c_id']));
-                    if (in_array($question->type, $questionExcluded, true) >= 0 && $review == false) {
-                        $score = $bestAttempt['exe_result'];
-                        $comments = Event::get_comments($this->id, $questionId);
-                        $waitingForReview = false;
-                        if (empty($comments) || $score == 0) {
-                            $waitingForReview = true;
+            if (isset($attemp['question_list'])) {
+                foreach ($attemp['question_list'] as $questionId => $answer) {
+                    $question = Question::read($questionId, api_get_course_info_by_id($attemp['c_id']));
+                    $questionOpen = 0;
+                    // in_array($question->type, $questionExcluded, true) dont work here
+                    for($i=0;$i<count($questionExcluded);$i++){
+                        if($question->type == (int)$questionExcluded[$i]){
+                            $questionOpen = 1;
+                            break;
                         }
-                        if (true === $waitingForReview) {
+                    }
+                    if ($questionOpen == 1 ) {
+                        $score = $attemp['exe_result'];
+                        $comments = Event::get_comments($this->id, $questionId);
+                        if (empty($comments) || $score == 0)
                             return null;
                         }
                     }

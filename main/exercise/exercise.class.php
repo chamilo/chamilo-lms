@@ -10979,7 +10979,7 @@ class Exercise
                     $questionOpen = 0;
                     // in_array($question->type, $questionExcluded, true) dont work here
                     for ($i = 0; $i < count($questionExcluded); $i++) {
-                        if ($question->type == (int)$questionExcluded[$i]) {
+                        if ($question->type == (int) $questionExcluded[$i]) {
                             $questionOpen = 1;
                             break;
                         }

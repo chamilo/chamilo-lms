@@ -1704,4 +1704,64 @@ class GradebookUtils
             Database::update($table, $params, ['id = ?' => $commentInfo['id']]);
         }
     }
+
+    public static function returnJsExportAllCertificates(
+        $buttonSelector,
+        $categoryId,
+        $courseCode,
+        $sessionId = 0,
+        $filterOfficialCodeGet = null
+    ) {
+        $params = [
+            'a' => 'export_all_certificates',
+            'cat_id' => $categoryId,
+            'cidReq' => $courseCode,
+            'id_session' => $sessionId,
+            'filter' => $filterOfficialCodeGet,
+        ];
+        $urlExportAll = 'gradebook.ajax.php?'.http_build_query($params);
+
+        $params['a'] = 'verify_export_all_certificates';
+        $urlVerifyExportAll = 'gradebook.ajax.php?'.http_build_query($params);
+
+        $imgSrcLoading = api_get_path(WEB_LIBRARY_JS_PATH).'loading.gif';
+        $imgSrcPdf = Display::return_icon('pdf.png', '', [], ICON_SIZE_MEDIUM, false, true);
+
+        return "<script>
+            $(function () {
+                var \$btnExport = $('$buttonSelector'),
+                    interval = 0;
+
+                function verifyExportSuccess (response) {
+                    if (response.length > 0) {
+                        \$btnExport.find('img').prop('src', '$imgSrcPdf');
+                        window.clearInterval(interval);
+                        window.removeEventListener('beforeunload', onbeforeunloadListener);
+                        window.location.href = response;
+                    }
+                }
+
+                function exportAllSuccess () {
+                    interval = window.setInterval(
+                        function () {
+                            $.ajax(_p.web_ajax + '$urlVerifyExportAll').then(verifyExportSuccess);
+                        },
+                        15000
+                    );
+                }
+
+                function onbeforeunloadListener (e) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+
+                \$btnExport.on('click', function (e) {
+                    e.preventDefault();
+                    \$btnExport.find('img').prop({src: '$imgSrcLoading', width: 40, height: 40});
+                    window.addEventListener('beforeunload', onbeforeunloadListener);
+                    $.ajax(_p.web_ajax + '$urlExportAll').then(exportAllSuccess);
+                });
+            });
+            </script>";
+    }
 }

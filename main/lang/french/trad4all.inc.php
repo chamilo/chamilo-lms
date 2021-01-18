@@ -342,7 +342,7 @@ ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à
 SCORE: 20";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
-$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci:
+$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 
 A. Réponse 1";
 $ExerciseAikenErrorNoCorrectAnswerDefined = "Le fichier importé comporte au moins une question sans réponse correcte définie. Assurez-vous que toutes les questions comprennent la réponse: [Lettre] ligne.";
 $SearchCourseBySession = "Recherche de cours par session";
@@ -2637,7 +2637,7 @@ $MailCronCourseExpirationReminderBody = "Cher/Chère %s,
 
 Nous avons remarqué que vous n'avez pas terminé le cours %s alors que sa date de fin a été établie au %s, vous laissant %s jour(s) pour le terminer. Nous vous rappelons que vous ne disposez de la possibilité de suivre ce cours qu'une fois par an. Nous vous invitons donc avec insistance à le compléter dans le délai qu'il vous reste. Vous pouvez retrouver le cours en vous connectant à la plate-forme à cette adresse: %s
 
---
+-- 
 
 Cordialement,
 
@@ -6662,7 +6662,7 @@ $NewExercises = "Nouveaux exercices";
 $MyAverage = "Ma moyenne";
 $AllAttempts = "Toutes les tentatives";
 $QuestionsToReview = "Questions à revoir";
-$QuestionWithNoAnswer = "Questions sans réponses";
+$QuestionWithNoAnswer = "Questions sans réponses surlignées en rouge ci-dessous";
 $ValidateAnswers = "Finaliser l'exercice";
 $ReviewQuestions = "Revoir les questions sélectionnées";
 $YouTriedToResolveThisExerciseEarlier = "Vous avez essayé de résoudre cet exercice plus tôt";
@@ -6929,7 +6929,7 @@ $DatabaseXWillBeCreated = "La base de donnée %s va être créée";
 $ADatabaseWithTheSameNameAlreadyExists = "Une base de donnée du même nom existe déjà. Si vous utilisez cette base, son contenu actuel sera écrasé.";
 $UserXCantHaveAccessInTheDatabaseX = "L'utilisateur %s n'a pas accès à la base de donnée %s";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "La base de donnée %s ne peut pas être crée, l'utilisateur %s n'a pas suffisamment de permissions.";
-$CopyOnlySessionItems = "Copier seulement les élémenents de la session";
+$CopyOnlySessionItems = "Copier seulement les éléments de la session";
 $FirstLetterCourseTitle = "Première lettre (title)";
 $NumberOfPublishedExercises = "# d'exerices publiés";
 $NumberOfPublishedLps = "# de parcours publiés";
@@ -8652,4 +8652,7 @@ $ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Montrer le score, le c
 $AddGradebookComment = "Commentaire";
 $LatestLoginInAnyCourse = "Dernier accès à un cours";
 $The = "Le";
+$MultiplicateQuestionsByClass = "Multiplier les questions par classe";
+$MultiplicateQuestionsByUser = "Multiplier les questions par utilisateurs";
+$QuestionForNextUser = "Questions concernant l'apprenant suivant";
 ?>

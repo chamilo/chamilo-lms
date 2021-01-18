@@ -6675,7 +6675,7 @@ $NewExercises = "New exercises";
 $MyAverage = "My average";
 $AllAttempts = "All attempts";
 $QuestionsToReview = "Questions to be reviewed";
-$QuestionWithNoAnswer = "Questions without answer";
+$QuestionWithNoAnswer = "Questions without answer will be highlighted in Red below";
 $ValidateAnswers = "Validate answers";
 $ReviewQuestions = "Review selected questions";
 $YouTriedToResolveThisExerciseEarlier = "You have tried to resolve this exercise earlier";
@@ -8720,4 +8720,7 @@ $ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Show the result to the
 $AddGradebookComment = "Comment";
 $LatestLoginInAnyCourse = "Latest login in a course";
 $The = "The";
+$MultiplicateQuestionsByClass = "Multiplicate questions by class";
+$MultiplicateQuestionsByUser = "Multiplicate questions by user";
+$QuestionForNextUser = "Questions about next user";
 ?>

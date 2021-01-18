@@ -87,58 +87,38 @@ function getHrUserOfUser($userId = 0)
     return $Hr;
 }
 
-function isUserSubscribeToLp($userid = 0, $courseId = 0, $lpItemId = 0)
-{
-    if ($userid == 0 || $courseId == 0 || $lpItemId == 0) {
-        return 0;
-    }
-    $sql = " select
-        *
- from c_item_property as a
- where
-       a.to_user_id = $userid
-   and c_id = $courseId
-   and a.ref = $lpItemId
-   and lastedit_type  ='LearnpathSubscription'";
-
-    $result = Database::query($sql);
-    $data = Database::fetch_array($result);
-    Database::free_result($result);
-    if ($data == false || count($data) == 0 || !isset($data['insert_user_id'])) {
-        return 0;
-    }
-
-    return $data['insert_user_id'];
-}
-
 function LearningPaths()
 {
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
     $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+    $tblItempProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $date = new DateTime();
     $date = $date->format('Y-m-d');
 
     $sql = "
 SELECT
-	a.id AS l_id,
-	a.c_id AS c_id,
-	a.session_id AS session_id,
-	a.`name` AS `name`,
-	d.title AS course_name,
-	d.`code` AS `code`,
-	d.id AS course_id
+    z.session_id as session_id,
+    z.to_user_id as user_id,
+    z.insert_user_id as from_user_id,
+    a.id AS l_id,
+    a.c_id AS c_id,
+    a.session_id AS session_id,
+    a.`name` AS `name`,
+    d.title AS course_name,
+    d.`code` AS `code`,
+    d.id AS course_id
 FROM
-	$lpTable AS a
-
+	$tblItempProperty as z
+	INNER JOIN $lpTable as a ON a.iid = z.ref
 	INNER JOIN $courseTable as d ON a.c_id = d.id
 	INNER JOIN $extraFieldValuesTable AS b ON ( b.item_id = a.iid )
 	INNER JOIN $extraFieldTable AS c ON ( b.field_id = c.id AND c.variable = 'notify_student_and_hrm_when_available' )
-
 WHERE
-        publicated_on >= '$date 00:00:00' AND
-        publicated_on <= '$date 23:59:59'
+        z.lastedit_type  ='LearnpathSubscription'
+    AND publicated_on >= '$date 00:00:00'
+    AND publicated_on <= '$date 23:59:59'
 
 ";
     $result = Database::query($sql);
@@ -149,44 +129,38 @@ WHERE
         $sessionId = $row['session_id'];
         $courseCode = $row['code'];
         $courseName = $row['course_name'];
+        $toUser = $row['user_id'];
+        $fromUser = $row['from_user_id'];
         $lpName = $row['name'];
         $courseId = $row['course_id'];
-        $userlist = CourseManager::get_user_list_from_course_code(
-            $courseCode,
-            $sessionId
+        $userInfo = api_get_user_info($toUser);
+        $HrUsers = getHrUserOfUser($toUser);
+        $href = api_get_path(WEB_CODE_PATH).
+            "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
+            "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+        $link = "<a href='$href'>$href</a>";
+        SendMessage(
+            $userInfo,
+            $fromUser,
+            $courseName,
+            $lpName,
+            $link
         );
-        foreach ($userlist as $user) {
-            $fromUser = isUserSubscribeToLp($user['id'], $courseId, $lpId);
-            if ($fromUser != 0) {
-                $userInfo = api_get_user_info($user['id']);
-                $HrUsers = getHrUserOfUser($user['id']);
-                $href = api_get_path(WEB_CODE_PATH).
-                    "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
-                    "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
-                $link = "<a href='$href'>$href</a>";
+
+        if (count($HrUsers) != 0) {
+            foreach ($HrUsers as $userHr) {
                 SendMessage(
-                    $userInfo,
+                    $userHr,
                     $fromUser,
                     $courseName,
                     $lpName,
                     $link
                 );
-
-                if (count($HrUsers) != 0) {
-                    foreach ($HrUsers as $userHr) {
-                        SendMessage(
-                            $userHr,
-                            $fromUser,
-                            $courseName,
-                            $lpName,
-                            $link
-                        );
-                    }
-                }
             }
         }
     }
 }
+
 LearningPaths();
 
 exit();

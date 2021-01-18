@@ -82,6 +82,7 @@ function getHrUserOfUser($userId = 0)
     while ($row = Database::fetch_array($result)) {
         $Hr[] = api_get_user_info($row['friend_user_id']);
     }
+
     return $Hr;
 }
 
@@ -105,6 +106,7 @@ function isUserSubscribeToLp($userid = 0, $courseId = 0, $lpItemId = 0)
     if ($data == false || count($data) == 0 || !isset($data['insert_user_id'])) {
         return 0;
     }
+
     return $data['insert_user_id'];
 }
 

@@ -490,6 +490,45 @@ if ($debug > 0) {
     error_log('action "'.$action.'" triggered');
 }
 
+function SendReminderLp($toUser, $fromUser, $courseName, $lpName, $link)
+{
+    $toUserId = $toUser['user_id'];
+    $subjectTemplate = new Template(
+        null,
+        false,
+        false,
+        false,
+        false,
+        false);
+    $subjectLayout = $subjectTemplate->get_template(
+        'mail/learning_path_reminder_subject.tpl'
+    );
+    $bodyTemplate = new Template(
+        null,
+        false,
+        false,
+        false,
+        false,
+        false);
+    $bodyTemplate->assign('courseName', $courseName);
+    $bodyTemplate->assign('lpName', $lpName);
+    $bodyTemplate->assign('link', $link);
+    $bodyLayout = $bodyTemplate->get_template(
+        'mail/learning_path_reminder_body.tpl'
+    );
+    $tittle = $subjectTemplate->fetch($subjectLayout);
+    $content = $bodyTemplate->fetch($bodyLayout);
+    MessageManager::send_message_simple(
+        $toUserId,
+        $tittle,
+        $content,
+        $fromUser,
+        true
+    );
+
+    return null;
+}
+
 $lpListUrl = api_get_self().'?action=list&'.api_get_cidreq();
 
 switch ($action) {
@@ -1645,6 +1684,48 @@ switch ($action) {
             'lp_id' => intval($_SESSION['oLP']->lp_id),
         ]);
         break;
+
+    case 'remind_lp_users':
+        $date = new DateTime();
+        $date = $date->format('Y-m-d H:i:s');
+        $extraWhere = " AND publicated_on <= '$date'";
+        $dataReminder = learnpath::getStudentsByLearnpathSubscription($lp_id,$session_id,$extraWhere,true);
+        foreach ($dataReminder as $row) {
+            $lpId = $row['l_id'];
+            $sessionId = $row['session_id'];
+            $courseCode = $row['code'];
+            $courseName = $row['course_name'];
+            $toUser = $row['user_id'];
+            $fromUser = $row['from_user_id'];
+            $lpName = $row['name'];
+            $HrUsers = $row['HRM'];
+            $userInfo = api_get_user_info($toUser);
+            $href = api_get_path(WEB_CODE_PATH).
+                "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
+                "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+            $link = "<a href='$href'>$href</a>";
+            SendReminderLp(
+                $userInfo,
+                $fromUser,
+                $courseName,
+                $lpName,
+                $link
+            );
+            if (count($HrUsers) != 0) {
+                foreach ($HrUsers as $userHr) {
+                    SendReminderLp(
+                        $userHr,
+                        $fromUser,
+                        $courseName,
+                        $lpName,
+                        $link
+                    );
+                }
+            }
+        }
+        require 'lp_list.php';
+        break;
+
     default:
         require 'lp_list.php';
         break;

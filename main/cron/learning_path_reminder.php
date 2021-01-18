@@ -29,7 +29,6 @@ if (!isset($activeMessageNewlp['default_value'])) {
     exit();
 }
 
-// function SendMessage($courseName, $lpName, $link, $userName, $userEmail, $adminName, $adminEmail)
 function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
 {
     $subjectTemplate = new Template(
@@ -60,30 +59,11 @@ function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
     );
     $tittle = $subjectTemplate->fetch($subjectLayout);
     $content = $bodyTemplate->fetch($bodyLayout);
-    $now = api_get_utc_datetime();
-    $params = [
-        'user_sender_id' => $toUser['id'],
-        'user_receiver_id' => $toUser['id'],
-        'msg_status' => MESSAGE_STATUS_CONVERSATION,
-        'send_date' => $now,
-        'title' => $tittle,
-        'content' => $content,
-        'group_id' => 0,
-        'parent_id' => 0,
-        'update_date' => $now,
-    ];
-    $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-    $messageId = Database::insert($tbl_message, $params);
-    $notification = new Notification();
-    $notification->saveNotification(
-        $messageId,
-        20,
-        [$toUser['id']],
+    MessageManager::send_message_simple(
+        $toUser,
         $tittle,
         $content,
-        $toUser,
-        [],
-        [],
+        $fromUser,
         true
     );
 
@@ -102,14 +82,34 @@ function getHrUserOfUser($userId = 0)
     while ($row = Database::fetch_array($result)) {
         $Hr[] = api_get_user_info($row['friend_user_id']);
     }
-
     return $Hr;
+}
+
+function isUserSubscribeToLp($userid = 0, $courseId = 0, $lpItemId = 0)
+{
+    if ($userid == 0 || $courseId == 0 || $lpItemId == 0) {
+        return 0;
+    }
+    $sql = " select
+        *
+ from c_item_property as a
+ where
+       a.to_user_id = $userid
+   and c_id = $courseId
+   and a.ref = $lpItemId
+   and lastedit_type  ='LearnpathSubscription'";
+
+    $result = Database::query($sql);
+    $data = Database::fetch_array($result);
+    Database::free_result($result);
+    if ($data == false || count($data) == 0 || !isset($data['insert_user_id'])) {
+        return 0;
+    }
+    return $data['insert_user_id'];
 }
 
 function LearningPaths()
 {
-    $admin = [];
-
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
     $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -119,27 +119,24 @@ function LearningPaths()
 
     $sql = "
 SELECT
-    $lpTable.id AS l_id,
-    $lpTable.c_id AS c_id,
-    $lpTable.session_id AS session_id,
-    $lpTable.name AS name,
-    $courseTable.title AS course_name,
-    $courseTable.code AS code
+	a.id AS l_id,
+	a.c_id AS c_id,
+	a.session_id AS session_id,
+	a.`name` AS `name`,
+	d.title AS course_name,
+	d.`code` AS `code`,
+	d.id AS course_id
 FROM
-	$lpTable
-INNER JOIN $courseTable ON c_lp.c_id = course.id
+	$lpTable AS a
+
+	INNER JOIN $courseTable as d ON a.c_id = d.id
+	INNER JOIN $extraFieldValuesTable AS b ON ( b.item_id = a.iid )
+	INNER JOIN $extraFieldTable AS c ON ( b.field_id = c.id AND c.variable = 'notify_student_and_hrm_when_available' )
+
 WHERE
-	iid IN (
-	SELECT
-		item_id
-	FROM
-		$extraFieldValuesTable
-	WHERE
-		item_id IN ( SELECT iid FROM $lpTable )
-		AND field_id IN ( SELECT id FROM $extraFieldTable WHERE variable = 'notify_student_and_hrm_when_available' )
-	) AND
         publicated_on >= '$date 00:00:00' AND
         publicated_on <= '$date 23:59:59'
+
 ";
     $result = Database::query($sql);
     $data = Database::store_result($result);
@@ -150,37 +147,40 @@ WHERE
         $courseCode = $row['code'];
         $courseName = $row['course_name'];
         $lpName = $row['name'];
-
+        $courseId = $row['course_id'];
         $userlist = CourseManager::get_user_list_from_course_code(
             $courseCode,
             $sessionId
         );
         foreach ($userlist as $user) {
-            $userInfo = api_get_user_info($user['id']);
-            $HrUsers = getHrUserOfUser($user['id']);
-            $href = api_get_path(WEB_CODE_PATH).
-                "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
-                "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
-
-            $link = "<a href='$href'>$href</a>";
-
-            SendMessage(
-                $userInfo,
-                $admin,
-                $courseName,
-                $lpName,
-                $link
-            );
-            if (count($HrUsers) != 0) {
-                foreach ($HrUsers as $userHr) {
-                    SendMessage(
-                        $userHr,
-                        $admin,
-                        $courseName,
-                        $lpName,
-                        $link
-                    );
+            $fromUser = isUserSubscribeToLp($user['id'], $courseId, $lpId);
+            if ($fromUser != 0) {
+                $userInfo = api_get_user_info($user['id']);
+                // $HrUsers = getHrUserOfUser($user['id']);
+                $href = api_get_path(WEB_CODE_PATH).
+                    "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
+                    "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+                $link = "<a href='$href'>$href</a>";
+                SendMessage(
+                    $userInfo,
+                    $fromUser,
+                    $courseName,
+                    $lpName,
+                    $link
+                );
+                /*
+                if (count($HrUsers) != 0) {
+                    foreach ($HrUsers as $userHr) {
+                        SendMessage(
+                            $userHr,
+                            $admin,
+                            $courseName,
+                            $lpName,
+                            $link
+                        );
+                    }
                 }
+                */
             }
         }
     }

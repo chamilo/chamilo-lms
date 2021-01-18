@@ -2593,7 +2593,7 @@ class SurveyManager
                 }
 
                 if ($addClassNewPage && $classCounter < count($itemList)) {
-                    self::addGeneratedNewPage($courseId, $surveyId, $surveyData);
+                    self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextClass'));
                 }
             }
         }
@@ -2640,7 +2640,7 @@ class SurveyManager
                 );
             }
 
-            foreach ($newQuestionList as $question) {
+            /*foreach ($newQuestionList as $question) {
                 $text = $question['question'];
                 if (false === strpos($text, $studentTag)) {
                     $values = [
@@ -2659,9 +2659,9 @@ class SurveyManager
                 } else {
                     break;
                 }
-            }
+            }*/
 
-            self::addGeneratedNewPage($courseId, $surveyId, $surveyData);
+            self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextUser'));
 
             $counter = 0;
             foreach ($userInfoList as $userInfo) {
@@ -2694,7 +2694,7 @@ class SurveyManager
                 }
                 $counter++;
                 if ($counter < count($userInfoList)) {
-                    self::addGeneratedNewPage($courseId, $surveyId, $surveyData);
+                    self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextUser'));
                 }
             }
         }
@@ -2702,7 +2702,7 @@ class SurveyManager
         return true;
     }
 
-    public static function addGeneratedNewPage($courseId, $surveyId, $surveyData)
+    public static function addGeneratedNewPage($courseId, $surveyId, $surveyData, $label)
     {
         // Add end page
         $values = [
@@ -2710,7 +2710,7 @@ class SurveyManager
             'question_comment' => 'generated',
             'type' => 'pagebreak',
             'display' => 'horizontal',
-            'question' => get_lang('QuestionForNextClass'),
+            'question' => $label,
             'survey_id' => $surveyId,
             'question_id' => 0,
             'shared_question_id' => 0,

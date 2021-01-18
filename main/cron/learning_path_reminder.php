@@ -31,6 +31,7 @@ if (!isset($activeMessageNewlp['default_value'])) {
 
 function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
 {
+    $toUserId = $toUser['user_id'];
     $subjectTemplate = new Template(
         null,
         false,
@@ -60,7 +61,7 @@ function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
     $tittle = $subjectTemplate->fetch($subjectLayout);
     $content = $bodyTemplate->fetch($bodyLayout);
     MessageManager::send_message_simple(
-        $toUser,
+        $toUserId,
         $tittle,
         $content,
         $fromUser,
@@ -158,7 +159,7 @@ WHERE
             $fromUser = isUserSubscribeToLp($user['id'], $courseId, $lpId);
             if ($fromUser != 0) {
                 $userInfo = api_get_user_info($user['id']);
-                // $HrUsers = getHrUserOfUser($user['id']);
+                $HrUsers = getHrUserOfUser($user['id']);
                 $href = api_get_path(WEB_CODE_PATH).
                     "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
                     "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
@@ -170,19 +171,19 @@ WHERE
                     $lpName,
                     $link
                 );
-                /*
+
                 if (count($HrUsers) != 0) {
                     foreach ($HrUsers as $userHr) {
                         SendMessage(
                             $userHr,
-                            $admin,
+                            $fromUser,
                             $courseName,
                             $lpName,
                             $link
                         );
                     }
                 }
-                */
+
             }
         }
     }

@@ -1689,7 +1689,7 @@ switch ($action) {
         $date = new DateTime();
         $date = $date->format('Y-m-d H:i:s');
         $extraWhere = " AND publicated_on <= '$date'";
-        $dataReminder = learnpath::getStudentsByLearnpathSubscription($lp_id,$session_id,$extraWhere,true);
+        $dataReminder = learnpath::getStudentsByLearnpathSubscription($lp_id, $session_id, $extraWhere, true);
         foreach ($dataReminder as $row) {
             $lpId = $row['l_id'];
             $sessionId = $row['session_id'];

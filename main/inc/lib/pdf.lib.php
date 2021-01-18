@@ -369,10 +369,13 @@ class PDF
             $output_file = $pdf_name.'.pdf';
         }
         // F to save the pdf in a file
-        @$this->pdf->Output($output_file, $generateToFile ? 'F' : 'D');
-
         if ($generateToFile) {
-            rename(getcwd()."/$output_file", api_get_path(SYS_ARCHIVE_PATH).$output_file);
+            @$this->pdf->Output(
+                api_get_path(SYS_ARCHIVE_PATH).$output_file,
+                'F'
+            );
+        } else {
+            @$this->pdf->Output($output_file, 'D');
         }
 
         exit;

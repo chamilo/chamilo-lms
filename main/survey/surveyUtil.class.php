@@ -2983,10 +2983,39 @@ class SurveyUtil
             'export_all' => get_lang('ExportResults'),
             'export_by_class' => get_lang('ExportByClass'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
-            'multiplicate' => get_lang('MultiplicateQuestions'),
+            'multiplicate_by_class' => get_lang('MultiplicateQuestionsByClass'),
+            'multiplicate_by_user' => get_lang('MultiplicateQuestionsByUser'),
             'delete' => get_lang('DeleteSurvey'),
         ];
         $table->set_form_actions($actions);
+
+        $form = new FormValidator(
+            'survey',
+            'post',
+            null,
+            null,
+            ['class' => 'form-vertical']
+        );
+        $form->addElement(
+            'radio',
+            'type',
+            null,
+            get_lang('MultiplicateQuestionsByClass'),
+            'by_class',
+            ['id' => 'by_class']
+        );
+        $form->addElement(
+            'radio',
+            'type',
+            null,
+            get_lang('MultiplicateQuestionsByUser'),
+            'by_user',
+            ['id' => 'by_user']
+        );
+        $form->setDefaults(['type' => 'by_class']);
+        $formToString = $form->returnForm();
+
+        echo '<div id="dialog-confirm">'.$formToString.'</div>';
         $table->display();
     }
 
@@ -3147,7 +3176,8 @@ class SurveyUtil
                 $actions[] = Display::url(
                     Display::return_icon('multiplicate_survey.png', get_lang('MultiplicateQuestions')),
                     $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
+                    .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id]),
+                    ['survey_id' => $survey_id, 'class' => 'multiplicate_popup']
                 );
 
                 $actions[] = Display::url(
@@ -3197,7 +3227,6 @@ class SurveyUtil
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
             $actions[] = self::getAdditionalTeacherActions($survey_id);
-
             $warning = addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('delete.png', get_lang('Delete')),

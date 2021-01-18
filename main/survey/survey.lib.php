@@ -2661,7 +2661,7 @@ class SurveyManager
                 }
             }*/
 
-            self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextUser'));
+            //self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextUser'));
 
             $counter = 0;
             foreach ($userInfoList as $userInfo) {

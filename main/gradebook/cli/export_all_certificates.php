@@ -7,11 +7,10 @@
  *
  * <code>php main/gradebook/cli/export_all_certificated.php COURSE_CODE SESSION_ID CATEGORY_ID [USER_IDS]</code>
  */
-
 require_once __DIR__.'/../../inc/global.inc.php';
 
 if (PHP_SAPI !== 'cli') {
-    die(get_lang('NotAllowed'));
+    exit(get_lang('NotAllowed'));
 }
 
 $courseCode = $argv[1];

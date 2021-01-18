@@ -349,14 +349,14 @@ if (!empty($_REQUEST['exeId']) &&
     if (!empty($safe_id) && !empty($safe_item_id)) {
         Exercise::saveExerciseInLp($safe_item_id, $safe_exe_id);
     }
-    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
+    /*if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
         $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');
-    } else {
+    } else {*/
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
         if ($debug) {
             error_log('Calling URL: '.$src);
         }
-    }
+    //}
     $autostart = 'false';
 }
 

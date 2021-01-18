@@ -2474,7 +2474,7 @@ class GroupManager
         );
         $table->set_additional_parameters(['category' => $category_id]);
         $column = 0;
-        if (api_is_allowed_to_edit(false, true) and count($group_list) > 1) {
+        if (api_is_allowed_to_edit(false, true) && count($group_list) > 1) {
             $table->set_header($column++, '', false);
         }
         $table->set_header($column++, get_lang('Groups'));

@@ -127,7 +127,8 @@ window.RecordAudio = (function () {
                 startTimer();
                 recordRTC = RecordRTC(stream, {
                     recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
-                    type: 'audio'
+                    type: 'audio',
+                    mimeType: 'audio/wav',
                 });
                 recordRTC.startRecording();
 

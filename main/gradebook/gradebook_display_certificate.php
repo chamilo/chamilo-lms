@@ -125,31 +125,6 @@ switch ($action) {
         );
         $content = $form->returnForm();
         break;
-    case 'export_all_certificates':
-        if ($allowCustomCertificate) {
-            $params = 'course_code='.api_get_course_id().
-                '&session_id='.api_get_session_id().
-                '&'.api_get_cidreq().
-                '&cat_id='.$categoryId;
-            $url = api_get_path(WEB_PLUGIN_PATH).
-                'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
-        } else {
-            if (api_is_student_boss()) {
-                $userGroup = new UserGroup();
-                $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
-            } else {
-                $userList = [];
-                if (!empty($filterOfficialCodeGet)) {
-                    $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
-                }
-            }
-
-            Category::exportAllCertificates($categoryId, $userList);
-        }
-
-        header('Location: '.$url);
-        exit;
-        break;
     case 'export_all_certificates_zip':
         if ($allowCustomCertificate) {
             $params = 'course_code='.api_get_course_id().
@@ -280,10 +255,27 @@ $actions .= Display::url(
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 
 if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
-    $actions .= Display::url(
-        Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
-        $url.'&action=export_all_certificates'
-    );
+    if ($allowCustomCertificate) {
+        $actions = Display::url(
+            Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_PLUGIN_PATH)
+                .'customcertificate/src/print_certificate.php?'.api_get_cidreq().'&'
+                .http_build_query(
+                    [
+                        'export_all_in_one' => 1,
+                        'course_code' => api_get_course_id(),
+                        'session_id' => api_get_session_id(),
+                        'cat_id' => $categoryId,
+                    ]
+                )
+        );
+    } else {
+        $actions .= Display::url(
+            Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
+            '#',
+            ['id' => 'btn-export-all']
+        );
+    }
 
     if ($allowCustomCertificate) {
         $actions .= Display::url(
@@ -350,5 +342,13 @@ if (count($certificate_list) == 0) {
     }
     echo '</tbody>';
     echo '</table>';
+
+    echo GradebookUtils::returnJsExportAllCertificates(
+        '#btn-export-all',
+        $categoryId,
+        api_get_course_id(),
+        api_get_session_id(),
+        $filterOfficialCodeGet
+    );
 }
 Display::display_footer();

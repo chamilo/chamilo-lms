@@ -34,7 +34,7 @@
                             <a href="{{ baseurl ~ {'action':'view', 'id':item.id}|url_encode }}">{{ item.title }}</a>
                         </h3>
 
-                        <ul class="fa-ul">
+                        <ul class="fa-ul list-inline">
                             {% if _c is empty %}
                                 {% if item.session %}
                                     <li>
@@ -59,7 +59,7 @@
                                 {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
                             </li>
 
-                            {% if item.creationDate != item.updateDate %}
+                            {% if _u.id == item.user.id and item.creationDate != item.updateDate %}
                                 <li>
                                     <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
                                     {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}

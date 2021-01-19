@@ -7,6 +7,8 @@
 
     <div class="row portfolio-items">
         {% for item in items %}
+            {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
+
             <div class="col-md-12" id="portfolio-item-{{ item.id }}">
                 <div class="thumbnail">
                     <div class="caption">
@@ -31,7 +33,7 @@
                         {% endif %}
 
                         <h3>
-                            <a href="{{ baseurl ~ {'action':'view', 'id':item.id}|url_encode }}">{{ item.title }}</a>
+                            <a href="{{ item_url }}">{{ item.title }}</a>
                         </h3>
 
                         <ul class="fa-ul list-inline">
@@ -67,8 +69,10 @@
                             {% endif %}
 
                             <li>
-                                <span class="fa-li fa fa-comment-o" aria-hidden="true"></span>
-                                {{ 'XComments'|get_lang|format(item.comments.count) }}
+                                <a href="{{ item_url }}#portfolio-item-comments">
+                                    <span class="fa-li fa fa-comment-o" aria-hidden="true"></span>
+                                    {{ 'XComments'|get_lang|format(item.comments.count) }}
+                                </a>
                             </li>
                         </ul>
 

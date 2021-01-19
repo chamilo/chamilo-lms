@@ -1150,7 +1150,7 @@ class PortfolioController
 
         $frmStudentList->addSelectAjax(
             'user',
-            get_lang('Student'),
+            get_lang('Learner'),
             $slctStudentOptions,
             ['url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams"]
         );

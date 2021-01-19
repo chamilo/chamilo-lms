@@ -95,11 +95,13 @@
 
 <hr>
 
-<h5 class="h4">{{ 'XComments'|get_lang|format(item.comments.count) }}</h5>
+<div id="portfolio-item-comments">
+    <h5 class="h4">{{ 'XComments'|get_lang|format(item.comments.count) }}</h5>
 
-{{ comments }}
+    {{ comments }}
 
-{{ form }}
+    {{ form }}
+</div>
 
 <script>
     $(function () {

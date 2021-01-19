@@ -468,6 +468,96 @@ class PortfolioController
         exit;
     }
 
+    private function getItemsForIndex(
+        int $currentUserId,
+        bool $listByUser = false,
+        FormValidator $frmFilterList = null
+    ) {
+        if ($this->course) {
+            $queryBuilder = $this->em->createQueryBuilder();
+            $queryBuilder
+                ->select('pi')
+                ->from(Portfolio::class, 'pi')
+                ->where('pi.course = :course');
+
+            $queryBuilder->setParameter('course', $this->course);
+
+            if ($this->session) {
+                $queryBuilder->andWhere('pi.session = :session');
+                $queryBuilder->setParameter('session', $this->session);
+            } else {
+                $queryBuilder->andWhere('pi.session IS NULL');
+            }
+
+            if ($listByUser) {
+                $queryBuilder->andWhere('pi.user = :user');
+                $queryBuilder->setParameter('user', $this->owner);
+
+                if ($currentUserId !== $this->owner->getId()) {
+                    $queryBuilder->andWhere('pi.isVisible = TRUE');
+                }
+            }
+
+            if ($frmFilterList && $frmFilterList->validate()) {
+                $values = $frmFilterList->exportValues();
+
+                if (!empty($values['tags'])) {
+                    $queryBuilder
+                        ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = pi.id')
+                        ->innerJoin(ExtraFieldEntity::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
+                        ->andWhere('ef.extraFieldType = :efType')
+                        ->andWhere('ef.variable = :variable')
+                        ->andWhere('efrt.tagId IN (:tags)');
+
+                    $queryBuilder->setParameter('efType', ExtraFieldEntity::PORTFOLIO_TYPE);
+                    $queryBuilder->setParameter('variable', 'tags');
+                    $queryBuilder->setParameter('tags', $values['tags']);
+                }
+
+                if (!empty($values['text'])) {
+                    $queryBuilder->andWhere(
+                        $queryBuilder->expr()->orX(
+                            $queryBuilder->expr()->like('pi.title', ':text'),
+                            $queryBuilder->expr()->like('pi.content', ':text')
+                        )
+                    );
+
+                    $queryBuilder->setParameter('text', '%'.$values['text'].'%');
+                }
+            }
+
+            $items = $queryBuilder->getQuery()->getResult();
+        } else {
+            $itemsCriteria = [];
+            $itemsCriteria['category'] = null;
+            $itemsCriteria['user'] = $this->owner;
+
+            if ($currentUserId !== $this->owner->getId()) {
+                $itemsCriteria['isVisible'] = true;
+            }
+
+            $items = $this->em
+                ->getRepository(Portfolio::class)
+                ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
+        }
+
+        return $items;
+    }
+
+    private function getCategoriesForIndex(int $currentUserId): array
+    {
+        $categoriesCriteria = [];
+        $categoriesCriteria['user'] = $this->owner;
+
+        if ($currentUserId !== $this->owner->getId()) {
+            $categoriesCriteria['isVisible'] = true;
+        }
+
+        return $this->em
+            ->getRepository(PortfolioCategory::class)
+            ->findBy($categoriesCriteria);
+    }
+
     public function index(HttpRequest $httpRequest)
     {
         $listByUser = false;
@@ -503,84 +593,13 @@ class PortfolioController
         $categories = [];
 
         if ($this->course) {
-            $queryBuilder = $this->em->createQueryBuilder();
-            $queryBuilder
-                ->select('pi')
-                ->from(Portfolio::class, 'pi')
-                ->where('pi.course = :course');
-
-            $queryBuilder->setParameter('course', $this->course);
-
-            if ($this->session) {
-                $queryBuilder->andWhere('pi.session = :session');
-                $queryBuilder->setParameter('session', $this->session);
-            } else {
-                $queryBuilder->andWhere('pi.session IS NULL');
-            }
-
-            if ($listByUser) {
-                $queryBuilder->andWhere('pi.user = :user');
-                $queryBuilder->setParameter('user', $this->owner);
-
-                if ($currentUserId !== $this->owner->getId()) {
-                    $queryBuilder->andWhere('pi.isVisible = TRUE');
-                }
-            }
-
-            $frmStudentList = $this->createFormStudentFilter($listByUser);
-
             $frmTagList = $this->createFormTagFilter();
-
-            if ($frmTagList->validate()) {
-                $values = $frmTagList->exportValues();
-
-                if (!empty($values['tags'])) {
-                    $queryBuilder
-                        ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = pi.id')
-                        ->innerJoin(ExtraFieldEntity::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
-                        ->andWhere('ef.extraFieldType = :efType')
-                        ->andWhere('ef.variable = :variable')
-                        ->andWhere('efrt.tagId IN (:tags)');
-
-                    $queryBuilder->setParameter('efType', ExtraFieldEntity::PORTFOLIO_TYPE);
-                    $queryBuilder->setParameter('variable', 'tags');
-                    $queryBuilder->setParameter('tags', $values['tags']);
-                }
-
-                if (!empty($values['text'])) {
-                    $queryBuilder->andWhere(
-                        $queryBuilder->expr()->orX(
-                            $queryBuilder->expr()->like('pi.title', ':text'),
-                            $queryBuilder->expr()->like('pi.content', ':text')
-                        )
-                    );
-
-                    $queryBuilder->setParameter('text', '%'.$values['text'].'%');
-                }
-            }
-
-            $items = $queryBuilder->getQuery()->getResult();
+            $frmStudentList = $this->createFormStudentFilter($listByUser);
         } else {
-            $categoriesCriteria = [];
-            $categoriesCriteria['user'] = $this->owner;
-
-            $itemsCriteria = [];
-            $itemsCriteria['category'] = null;
-            $itemsCriteria['user'] = $this->owner;
-
-            if ($currentUserId !== $this->owner->getId()) {
-                $categoriesCriteria['isVisible'] = true;
-                $itemsCriteria['isVisible'] = true;
-            }
-
-            $categories = $this->em
-                ->getRepository(PortfolioCategory::class)
-                ->findBy($categoriesCriteria);
-
-            $items = $this->em
-                ->getRepository(Portfolio::class)
-                ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
+            $categories = $this->getCategoriesForIndex($currentUserId);
         }
+
+        $items = $this->getItemsForIndex($currentUserId, $listByUser, $frmTagList);
 
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('list_by_user', $listByUser);
@@ -589,8 +608,8 @@ class PortfolioController
         $template->assign('session', $this->session);
         $template->assign('portfolio', $categories);
         $template->assign('uncategorized_items', $items);
-        $template->assign('frm_student_list', $frmStudentList ? $frmStudentList->returnForm() : '');
-        $template->assign('frm_tag_list', $frmTagList ? $frmTagList->returnForm() : '');
+        $template->assign('frm_student_list', $this->course ? $frmStudentList->returnForm() : '');
+        $template->assign('frm_tag_list', $this->course ? $frmTagList->returnForm() : '');
 
         $layout = $template->get_template('portfolio/list.html.twig');
         $content = $template->fetch($layout);

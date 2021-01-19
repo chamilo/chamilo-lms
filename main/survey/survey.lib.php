@@ -2392,7 +2392,7 @@ class SurveyManager
 
     /**
      * @param array  $surveyData
-     * @param string $type by_class or by_user
+     * @param string $type       by_class or by_user
      *
      * @return bool
      */

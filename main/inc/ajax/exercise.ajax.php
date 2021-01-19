@@ -160,7 +160,6 @@ switch ($action) {
         }
 
         // 1. Setting variables needed by jqgrid
-        $action = $_GET['a'];
         $exercise_id = (int) $_GET['exercise_id'];
         $page = (int) $_REQUEST['page']; //page
         $limit = (int) $_REQUEST['rows']; //quantity of rows

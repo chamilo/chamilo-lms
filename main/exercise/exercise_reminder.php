@@ -82,7 +82,6 @@ $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_l
 $hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
 
 if (!$hideHeaderAndFooter) {
-    //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
 } else {
     Display::display_reduced_header();

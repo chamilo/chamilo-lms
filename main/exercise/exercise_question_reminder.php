@@ -38,7 +38,7 @@ if (empty($objExercise) || empty($questionCategoryId) || empty($exeId) || empty(
     api_not_allowed(true);
 }
 
-$categoryId = $categoryObj->id;
+$categoryId = (int) $categoryObj->id;
 $params = "exe_id=$exeId&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$params;
 $validateUrl = api_get_self().'?'.$params.'&category_id='.$categoryId.'&validate=1';
@@ -103,7 +103,7 @@ if (!$hideHeaderAndFooter) {
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && !$hideHeaderAndFooter) {
+if (!$hideHeaderAndFooter && api_is_course_admin()) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
@@ -115,9 +115,11 @@ echo Display::page_header($categoryObj->name);
 echo '<p>'.Security::remove_XSS($categoryObj->description).'</p>';
 echo '<p>'.get_lang('BlockCategoryExplanation').'</p>';
 
+$categoryList = Session::read('categoryList');
+$disableAllQuestions = '';
 if ($objExercise->review_answers) {
+    $disableAllQuestions = 'changeOptionStatus(0);';
     $questionList = [];
-    $categoryList = Session::read('categoryList');
     if (isset($categoryList[$categoryId])) {
         $questionList = $categoryList[$categoryId];
     }
@@ -142,6 +144,7 @@ echo '<script>
     }
 
     function continueExercise() {
+        '.$disableAllQuestions.'
         window.location = "'.$validateUrl.'&num='.$currentQuestion.'&" + lp_data;
     }
 
@@ -164,17 +167,43 @@ if (!in_array($categoryId, $blockedCategories)) {
         ['onclick' => 'goBack();', 'class' => 'btn btn-default']
     );
 }
-$exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('ContinueTest'),
-    'javascript://',
-    ['onclick' => 'continueExercise();', 'class' => 'btn btn-primary']
-);
-/*
-$exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('EndTest'),
-    'javascript://',
-    ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
-);*/
+
+if ($objExercise->review_answers) {
+    $exerciseActions .= Display::url(
+        get_lang('ReviewQuestions'),
+        'javascript://',
+        ['onclick' => 'reviewQuestions();', 'class' => 'btn btn-primary']
+    );
+
+    $exerciseActions .= '&nbsp;'.Display::url(
+        get_lang('SelectAll'),
+        'javascript://',
+        ['onclick' => 'selectAll();', 'class' => 'btn btn-default']
+    );
+
+    $exerciseActions .= '&nbsp;'.Display::url(
+        get_lang('UnSelectAll'),
+        'javascript://',
+        ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn-default']
+    );
+}
+
+end($categoryList);
+
+// This is the last category
+if (key($categoryList) === $categoryId) {
+    $exerciseActions .= '&nbsp;'.Display::url(
+        get_lang('EndTest'),
+        'javascript://',
+        ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
+    );
+} else {
+    $exerciseActions .= '&nbsp;'.Display::url(
+            get_lang('ContinueTest'),
+            'javascript://',
+            ['onclick' => 'continueExercise();', 'class' => 'btn btn-primary']
+        );
+}
 
 echo Display::div('', ['class' => 'clear']);
 echo Display::div($exerciseActions, ['class' => 'form-actions']);

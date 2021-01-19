@@ -5633,7 +5633,7 @@ class DocumentManager
             $parent_id
         );
 
-        if (!$is_read_only /* or ($session_id!=api_get_session_id()) */) {
+        if (!$is_read_only) {
             // Add action to covert to PDF, will create a new document whit same filename but .pdf extension
             // @TODO: add prompt to select a format target
             if (!in_array($path, self::get_system_folders())) {

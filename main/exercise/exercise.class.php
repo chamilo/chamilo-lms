@@ -10453,7 +10453,7 @@ class Exercise
             });
         }
 
-        function review_questions() {
+        function reviewQuestions() {
             var isChecked = 1;
             $("input[type=checkbox]").each(function () {
                 if ($(this).prop("checked")) {

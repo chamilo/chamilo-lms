@@ -122,7 +122,7 @@ echo $objExercise->getReminderTable($question_list, $exercise_stat_info);
 $exerciseActions = Display::url(
     get_lang('ReviewQuestions'),
     'javascript://',
-    ['onclick' => 'review_questions();', 'class' => 'btn btn-primary']
+    ['onclick' => 'reviewQuestions();', 'class' => 'btn btn-primary']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(

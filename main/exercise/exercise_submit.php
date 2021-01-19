@@ -127,10 +127,8 @@ $exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
-$questionCategoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 $current_question = $currentQuestionFromUrl = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
-
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
@@ -176,7 +174,7 @@ if (empty($exerciseInSession) || (!empty($exerciseInSession) && $exerciseInSessi
 } else {
     Session::write('firstTime', false);
 }
-//2. Checking if $objExercise is set.
+// 2. Checking if $objExercise is set.
 /** @var |Exercise $objExercise */
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
@@ -598,7 +596,6 @@ if ($time_control) {
     //Sends the exercise form when the expired time is finished.
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
-
 // in LP's is enabled the "remember question" feature?
 if (!isset($_SESSION['questionList'])) {
     // selects the list of question ID
@@ -1128,7 +1125,7 @@ if ($showQuestionClock) {
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div id="highlight-plugin" class="glossary-content">';
 }
-if ($reminder == 2) {
+if (2 === $reminder) {
     $data_tracking = $exercise_stat_info['data_tracking'];
     $data_tracking = explode(',', $data_tracking);
     $current_question = 1; //set by default the 1st question
@@ -1280,25 +1277,12 @@ echo '<script>
             }
         });
 
-        $(".main_question").mouseover(function() {
-            //$(this).find(".exercise_save_now_button").show();
-            //$(this).addClass("question_highlight");
-        });
-
         $(".main_question").mouseout(function() {
             //$(this).find(".exercise_save_now_button").hide();
             $(this).removeClass("question_highlight");
         });
 
         $(".no_remind_highlight").hide();
-
-        // if the users validates the form using return key,
-        // prevent form action and simulates click on validation button
-        /*$("#exercise_form").submit(function(){
-            $(".question-validate-btn").first().trigger("click");
-            return false;
-        });*/
-
         $("form#exercise_form").prepend($("#exercise-description"));
 
         $(\'button[name="previous_question_and_save"]\').on("touchstart click", function (e) {

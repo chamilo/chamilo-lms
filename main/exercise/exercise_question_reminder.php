@@ -14,7 +14,6 @@ if (false === api_get_configuration_value('block_category_questions')) {
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 $origin = api_get_origin();
-
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
@@ -41,7 +40,8 @@ if (empty($objExercise) || empty($questionCategoryId) || empty($exeId) || empty(
 $categoryId = (int) $categoryObj->id;
 $params = "exe_id=$exeId&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$params;
-$validateUrl = api_get_self().'?'.$params.'&category_id='.$categoryId.'&validate=1';
+$validateUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_question_reminder.php?'.
+    $params.'&category_id='.$categoryId.'&validate=1';
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key(
@@ -88,7 +88,6 @@ if ($validateCategory) {
 
     // Cleaning old remind list.
     $objExercise->removeAllQuestionToRemind($exeId);
-
     api_location($url.'&num='.$currentQuestion);
 }
 
@@ -133,19 +132,13 @@ if ($time_control) {
 echo Display::div('', ['id' => 'message']);
 $previousQuestion = $currentQuestion - 1;
 echo '<script>
-    var lp_data = $.param({
-        "learnpath_id": '.$learnpath_id.',
-        "learnpath_item_id" : '.$learnpath_item_id.',
-        "learnpath_item_view_id": '.$learnpath_item_view_id.'
-    });
-
     function goBack() {
-        window.location = "'.$url.'&num='.$previousQuestion.'&" + lp_data;
+        window.location = "'.$url.'&num='.$previousQuestion.'";
     }
 
     function continueExercise() {
         '.$disableAllQuestions.'
-        window.location = "'.$validateUrl.'&num='.$currentQuestion.'&" + lp_data;
+        window.location = "'.$validateUrl.'&num='.$currentQuestion.'";
     }
 
     function final_submit() {
@@ -199,10 +192,10 @@ if (key($categoryList) === $categoryId) {
     );
 } else {
     $exerciseActions .= '&nbsp;'.Display::url(
-            get_lang('ContinueTest'),
-            'javascript://',
-            ['onclick' => 'continueExercise();', 'class' => 'btn btn-primary']
-        );
+        get_lang('ContinueTest'),
+        'javascript://',
+        ['onclick' => 'continueExercise();', 'class' => 'btn btn-primary']
+    );
 }
 
 echo Display::div('', ['class' => 'clear']);

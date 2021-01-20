@@ -595,6 +595,7 @@ class PortfolioController
         if ($this->course) {
             $frmTagList = $this->createFormTagFilter();
             $frmStudentList = $this->createFormStudentFilter($listByUser);
+            $frmStudentList->setDefaults(['user' => $this->owner->getId()]);
         } else {
             $categories = $this->getCategoriesForIndex($currentUserId);
         }
@@ -1132,7 +1133,7 @@ class PortfolioController
             $this->baseUrl,
             '',
             [],
-            FormValidator::LAYOUT_INLINE
+            FormValidator::LAYOUT_BOX
         );
         $slctStudentOptions = [];
 
@@ -1150,9 +1151,19 @@ class PortfolioController
 
         $frmStudentList->addSelectAjax(
             'user',
-            get_lang('Learner'),
+            get_lang('SelectLearnerPortfolio'),
             $slctStudentOptions,
-            ['url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams"]
+            [
+                'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
+                'placeholder' => get_lang('SearchStudent')
+            ]
+        );
+        $frmStudentList->addHtml('<hr>');
+        $frmStudentList->addHtml(
+            Display::url(
+                get_lang('SeeMyPortfolio'),
+                $this->baseUrl.http_build_query(['user' => api_get_user_id()])
+            )
         );
 
         return $frmStudentList;

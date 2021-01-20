@@ -432,6 +432,7 @@ if (empty($exercise_stat_info)) {
     $exe_id = $exercise_stat_info['exe_id'];
     // Remember last question id position.
     $isFirstTime = Session::read('firstTime');
+    //$isFirstTime = true;
     if ($isFirstTime && ONE_PER_PAGE == $objExercise->type) {
         $resolvedQuestions = Event::getAllExerciseEventByExeId($exe_id);
         if (!empty($resolvedQuestions) &&
@@ -445,18 +446,22 @@ if (empty($exercise_stat_info)) {
                     break;
                 }
                 $count++;
-            }*/
+            }
+            $current_question = $count;
+            */
             // Get current question based in data_tracking question list, instead of track_e_attempt order BT#17789.
             $resolvedQuestionsQuestionIds = array_keys($resolvedQuestions);
             $count = 0;
             $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
-            foreach ($attemptQuestionList as $question) {
+            //var_dump($attemptQuestionList, $resolvedQuestionsQuestionIds);
+            foreach ($attemptQuestionList as $index => $question) {
                 if (in_array($question, $resolvedQuestionsQuestionIds)) {
-                    ++$count;
+                    $count = $index;
                     continue;
                 }
             }
             $current_question = $count;
+            //var_dump($current_question, $index);exit;
         }
     }
 }
@@ -665,7 +670,7 @@ if ($allowBlockCategory &&
         }
         $count++;
     }
-
+    //var_dump($questionCheck);exit;
     // Use reminder list to get the current question.
     /*if (2 === $reminder && !empty($myRemindList)) {
         $remindQuestionId = current($myRemindList);
@@ -680,17 +685,19 @@ if ($allowBlockCategory &&
     if ($objExercise->review_answers && isset($_GET['category_id'])) {
         $categoryId = $_GET['category_id'] ?? 0;
     }
-    //var_dump($categoryId);
+    //var_dump($categoryId, $categoryList);
     if (!empty($categoryId)) {
         $categoryInfo = $categoryList[$categoryId];
         $count = 1;
         $total = count($categoryList[$categoryId]);
+        //var_dump($questionCheck);
         foreach ($categoryList[$categoryId] as $checkQuestionId) {
             if ((int) $checkQuestionId === (int) $questionCheck->iid) {
                 break;
             }
             $count++;
         }
+
         //var_dump($count , $total);
         if ($count === $total) {
             $isLastQuestionInCategory = $categoryId;
@@ -712,6 +719,7 @@ if ($allowBlockCategory &&
         }
     }
     //var_dump($categoryId, $blockedCategories, $isLastQuestionInCategory);
+
     // Blocked if category was already answered.
     if ($categoryId && in_array($categoryId, $blockedCategories)) {
         // Redirect to category intro.
@@ -720,6 +728,7 @@ if ($allowBlockCategory &&
         api_location($url);
     }
 }
+//exit;
 //var_dump($isLastQuestionInCategory);
 if ($debug) {
     error_log('8. Question list loaded '.print_r($questionList, 1));
@@ -730,7 +739,7 @@ $question_count = 0;
 if (!empty($questionList)) {
     $question_count = count($questionList);
 }
-
+//var_dump($current_question);
 if ($current_question > $question_count) {
     // If time control then don't change the current question, otherwise there will be a loop.
     // @todo
@@ -1460,7 +1469,7 @@ echo '<script>
 
                     // If last question in category send to exercise_question_reminder.php
                     if ('.$isLastQuestionInCategory.' > 0 ) {
-                        url = "exercise_question_reminder.php?'.$params.'&num='.$current_question.'&category_id='.$isLastQuestionInCategory.'";
+                        url = "exercise_question_reminder.php?'.$params.'&num='.($current_question-1).'&category_id='.$isLastQuestionInCategory.'";
                     }
 
                     if (url_extra) {

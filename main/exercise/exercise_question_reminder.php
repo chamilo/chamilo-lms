@@ -104,9 +104,9 @@ if (!$hideHeaderAndFooter) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (!$hideHeaderAndFooter && api_is_course_admin()) {
     echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iId.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iId.'">'.
         Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
     echo '</div>';
 }
@@ -116,12 +116,12 @@ echo '<p>'.get_lang('BlockCategoryExplanation').'</p>';
 
 $categoryList = Session::read('categoryList');
 $disableAllQuestions = '';
+$questionList = [];
+if (isset($categoryList[$categoryId])) {
+    $questionList = $categoryList[$categoryId];
+}
 if ($objExercise->review_answers) {
     $disableAllQuestions = 'changeOptionStatus(0);';
-    $questionList = [];
-    if (isset($categoryList[$categoryId])) {
-        $questionList = $categoryList[$categoryId];
-    }
     echo $objExercise->getReminderTable($questionList, $trackInfo);
 }
 
@@ -131,6 +131,20 @@ if ($time_control) {
 
 echo Display::div('', ['id' => 'message']);
 $previousQuestion = $currentQuestion - 1;
+
+$nextQuestion = $currentQuestion + 1;
+if (!empty($questionList)) {
+    $firstQuestionOfCategory = end($questionList);
+    $dataTracking = explode(',', $trackInfo['data_tracking']);
+    $index = 0;
+    foreach ($dataTracking as $index => $question) {
+        if ($firstQuestionOfCategory == $question) {
+            break;
+        }
+    }
+    $nextQuestion = $index + 1;
+}
+
 echo '<script>
     function goBack() {
         window.location = "'.$url.'&num='.$previousQuestion.'";
@@ -138,7 +152,7 @@ echo '<script>
 
     function continueExercise() {
         '.$disableAllQuestions.'
-        window.location = "'.$validateUrl.'&num='.$currentQuestion.'";
+        window.location = "'.$validateUrl.'&num='.$nextQuestion.'";
     }
 
     function final_submit() {

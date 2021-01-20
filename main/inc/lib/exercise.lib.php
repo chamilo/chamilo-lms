@@ -6109,7 +6109,7 @@ EOT;
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
                 if (false === $exercisePassed) {
                     if (0 !== $wrongAnswersCount) {
-                        $content .= $statsTeacher['failed_answers_html'];
+                        $content .= $stats['failed_answers_html'];
                     }
                 }
 

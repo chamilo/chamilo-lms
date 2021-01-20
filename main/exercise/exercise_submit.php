@@ -1244,7 +1244,6 @@ if ($allowBlockCategory &&
     }
 }
 
-
 $saveIcon = Display::return_icon(
     'save.png',
     get_lang('Saved'),

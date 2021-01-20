@@ -3842,7 +3842,6 @@ class Exercise
                             $option = isset($values[1]) ? $values[1] : '';
                             $choice[$my_answer_id] = $option;
                         }
-
                         $userAnsweredQuestion = !empty($choice);
                     }
 

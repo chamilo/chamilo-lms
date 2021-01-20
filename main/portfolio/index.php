@@ -175,6 +175,9 @@ switch ($action) {
         $controller->markImportantCommentInItem($item, $comment);
 
         return;
+    case 'details':
+        $controller->details($httpRequest);
+        return;
     case 'list':
     default:
         $controller->index($httpRequest);

@@ -214,4 +214,13 @@ class PortfolioComment
     {
         $this->isImportant = $isImportant;
     }
+
+    public function getExcerpt(int $count = 190): string
+    {
+        $excerpt = strip_tags($this->content);
+        $excerpt = substr($excerpt, 0, $count);
+        $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+
+        return $excerpt;
+    }
 }

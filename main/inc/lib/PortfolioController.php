@@ -2,11 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -20,7 +22,7 @@ class PortfolioController
      */
     public $baseUrl;
     /**
-     * @var \Chamilo\CoreBundle\Entity\Course|null
+     * @var CourseEntity|null
      */
     private $course;
     /**
@@ -585,6 +587,15 @@ class PortfolioController
                 Display::return_icon('folder.png', get_lang('AddCategory'), [], ICON_SIZE_MEDIUM),
                 $this->baseUrl.'action=add_category'
             );
+            $actions[] = Display::url(
+                Display::return_icon('waiting_list.png', get_lang('PortfolioDetails'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.'action=details'
+            );
+        } else {
+            $actions[] = Display::url(
+                Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl
+            );
         }
 
         $frmStudentList = null;
@@ -659,7 +670,7 @@ class PortfolioController
                         ]
                     );
 
-                    return '<li class="media">
+                    return '<li class="media" id="comment-'.$node['id'].'">
                         <div class="media-left">
                             <img class="media-object thumbnail" src="'.$userPicture.'" alt="'.$author->getCompleteName().'">
                         </div>
@@ -1203,5 +1214,217 @@ class PortfolioController
         }
 
         return $frmTagList;
+    }
+
+    public function details(HttpRequest $httpRequest)
+    {
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl
+        );
+
+        $itemsRepo = $this->em->getRepository(Portfolio::class);
+        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+
+        $getItemsTotalNumber = function () use ($itemsRepo) {
+            $qb = $itemsRepo->createQueryBuilder('i');
+            $qb
+                ->select('COUNT(i)')
+                ->where('i.user = :user')
+                ->setParameter('user', $this->owner);
+
+            if ($this->course) {
+                $qb
+                    ->andWhere('i.course = :course')
+                    ->setParameter('course', $this->course);
+
+                if ($this->session) {
+                    $qb
+                        ->andWhere('i.session = :session')
+                        ->setParameter('session', $this->session);
+                } else {
+                    $qb->andWhere('i.session IS NULL');
+                }
+            }
+
+            return $qb->getQuery()->getSingleScalarResult();
+        };
+        $getItemsData = function ($from, $limit, $columnNo, $orderDirection) use ($itemsRepo){
+            $qb = $itemsRepo->createQueryBuilder('item')
+                ->where('item.user = :user')
+                ->leftJoin('item.category', 'category')
+                ->leftJoin('item.course', 'course')
+                ->leftJoin('item.session', 'session')
+                ->setParameter('user', $this->owner);
+
+            if ($this->course) {
+                $qb
+                    ->andWhere('item.course = :course_id')
+                    ->setParameter('course_id', $this->course);
+
+                if ($this->session) {
+                    $qb
+                        ->andWhere('item.session = :session')
+                        ->setParameter('session', $this->session);
+                } else {
+                    $qb->andWhere('item.session IS NULL');
+                }
+            }
+
+            if (0 == $columnNo) {
+                $qb->orderBy('item.title', $orderDirection);
+            } elseif (1 == $columnNo) {
+                $qb->orderBy('item.creationDate', $orderDirection);
+            } elseif (2 == $columnNo) {
+                $qb->orderBy('item.updateDate', $orderDirection);
+            } elseif (3 == $columnNo) {
+                $qb->orderBy('category.title', $orderDirection);
+            } elseif (5 == $columnNo) {
+                $qb->orderBy('course.title', $orderDirection);
+            } elseif (6 == $columnNo) {
+                $qb->orderBy('session.name', $orderDirection);
+            }
+
+            $qb->setFirstResult($from)->setMaxResults($limit);
+
+            return array_map(
+                function (Portfolio $item) {
+                    $category = $item->getCategory();
+
+                    $row = [];
+                    $row[] = $item;
+                    $row[] = $item->getCreationDate();
+                    $row[] = $item->getUpdateDate();
+                    $row[] = $category ? $item->getCategory()->getTitle() : null;
+                    $row[] = $item->getComments()->count();
+
+                    if (!$this->course) {
+                        $row[] = $item->getCourse();
+                        $row[] = $item->getSession();
+                    }
+
+                    return $row;
+                },
+                $qb->getQuery()->getResult()
+            );
+        };
+
+        $portfolioItemColumnFilter = function (Portfolio $item) {
+            return Display::url(
+                $item->getTitle(),
+                $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
+            );
+        };
+        $convertFormatDateColumnFilter = function (DateTime $date) {
+            return api_convert_and_format_date($date);
+        };
+
+        $tblItems = new SortableTable('tbl_items', $getItemsTotalNumber, $getItemsData, 0);
+        $tblItems->set_additional_parameters(['action' => 'details']);
+        $tblItems->set_header(0, get_lang('Title'));
+        $tblItems->set_column_filter(0, $portfolioItemColumnFilter);
+        $tblItems->set_header(1, get_lang('CreationDate'), true, [], ['class' => 'text-center']);
+        $tblItems->set_column_filter(1, $convertFormatDateColumnFilter);
+        $tblItems->set_header(2, get_lang('LastUpdate'), true, [], ['class' => 'text-center']);
+        $tblItems->set_column_filter(2, $convertFormatDateColumnFilter);
+        $tblItems->set_header(3, get_lang('Category'));
+        $tblItems->set_header(4, get_lang('Comments'), false, [], ['class' => 'text-right']);
+
+        if (!$this->course) {
+            $tblItems->set_header(5, get_lang('Course'));
+            $tblItems->set_header(6, get_lang('Session'));
+        }
+
+        $getCommentsTotalNumber = function () use ($commentsRepo) {
+            $qb = $commentsRepo->createQueryBuilder('c');
+            $qb
+                ->select('COUNT(c)')
+                ->where('c.author = :author')
+                ->setParameter('author', $this->owner);
+
+            if ($this->course) {
+                $qb
+                    ->innerJoin('c.item', 'i')
+                    ->andWhere('i.course = :course')
+                    ->setParameter('course', $this->course);
+
+                if ($this->session) {
+                    $qb
+                        ->andWhere('i.session = :session')
+                        ->setParameter('session', $this->session);
+                } else {
+                    $qb->andWhere('i.session IS NULL');
+                }
+            }
+
+            return $qb->getQuery()->getSingleScalarResult();
+        };
+        $getCommentsData = function ($from, $limit, $columnNo, $orderDirection) use ($commentsRepo) {
+            $qb = $commentsRepo->createQueryBuilder('comment');
+            $qb
+                ->where('comment.author = :user')
+                ->innerJoin('comment.item', 'item')
+                ->setParameter('user', $this->owner);
+
+            if ($this->course) {
+                $qb
+                    ->innerJoin('comment.item', 'i')
+                    ->andWhere('item.course = :course')
+                    ->setParameter('course', $this->course);
+
+                if ($this->session) {
+                    $qb
+                        ->andWhere('item.session = :session')
+                        ->setParameter('session', $this->session);
+                } else {
+                    $qb->andWhere('item.session IS NULL');
+                }
+            }
+
+            if (0 == $columnNo) {
+                $qb->orderBy('comment.content', $orderDirection);
+            } elseif (1 == $columnNo) {
+                $qb->orderBy('comment.date', $orderDirection);
+            } elseif (2 == $columnNo) {
+                $qb->orderBy('item.title', $orderDirection);
+            }
+
+            $qb->setFirstResult($from)->setMaxResults($limit);
+
+
+            return array_map(
+                function (PortfolioComment $comment) {
+                    return [
+                        $comment,
+                        $comment->getDate(),
+                        $comment->getItem(),
+                    ];
+                },
+                $qb->getQuery()->getResult()
+            );
+        };
+
+        $tblComments = new SortableTable('tbl_comments', $getCommentsTotalNumber, $getCommentsData, 0);
+        $tblComments->set_additional_parameters(['action' => 'details']);
+        $tblComments->set_header(0, get_lang('Resume'));
+        $tblComments->set_column_filter(0, function (PortfolioComment $comment) {
+            return Display::url(
+                $comment->getContent(),
+                $this->baseUrl.http_build_query(['action' => 'view', 'id' => $comment->getItem()->getId()])
+                .'#comment-'.$comment->getId()
+            );
+        });
+        $tblComments->set_header(1, get_lang('Date'), true, [], ['class' => 'text-center']);
+        $tblComments->set_column_filter(1, $convertFormatDateColumnFilter);
+        $tblComments->set_header(2, get_lang('PortfolioItemTitle'));
+        $tblComments->set_column_filter(2, $portfolioItemColumnFilter);
+
+        $content = Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL
+            .$tblItems->return_table().PHP_EOL
+            .Display::page_subheader2(get_lang('Comments')).PHP_EOL
+            .$tblComments->return_table().PHP_EOL;
+
+        $this->renderView($content, get_lang('PortfolioDetails'), $actions);
     }
 }

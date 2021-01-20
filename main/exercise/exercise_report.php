@@ -268,6 +268,9 @@ if (isset($_REQUEST['comments']) &&
 
     $notifications = api_get_configuration_value('exercise_finished_notification_settings');
     if ($notifications) {
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+
         ob_start();
         $stats = ExerciseLib::displayQuestionListByAttempt(
             $objExerciseTmp,
@@ -278,6 +281,8 @@ if (isset($_REQUEST['comments']) &&
             api_get_configuration_value('quiz_results_answers_report'),
             false
         );
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
+
         ob_end_clean();
 
         // Show all for teachers.

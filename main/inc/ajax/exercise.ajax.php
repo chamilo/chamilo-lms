@@ -160,7 +160,6 @@ switch ($action) {
         }
 
         // 1. Setting variables needed by jqgrid
-        $action = $_GET['a'];
         $exercise_id = (int) $_GET['exercise_id'];
         $page = (int) $_REQUEST['page']; //page
         $limit = (int) $_REQUEST['rows']; //quantity of rows
@@ -563,7 +562,7 @@ switch ($action) {
                 }
 
                 // Getting free choice data.
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && $type === 'all') {
+                if ('all' === $type && in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
                         ? $_REQUEST['free_choice'][$my_question_id]
                         : null;
@@ -617,7 +616,7 @@ switch ($action) {
                     }
                 }
 
-                // Deleting old attempt
+                // Deleting old attempt.
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
                         error_log("delete_attempt exe_id : $exeId, my_question_id: $my_question_id");

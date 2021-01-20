@@ -127,10 +127,8 @@ $exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
-$questionCategoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 $current_question = $currentQuestionFromUrl = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
-
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
@@ -176,7 +174,7 @@ if (empty($exerciseInSession) || (!empty($exerciseInSession) && $exerciseInSessi
 } else {
     Session::write('firstTime', false);
 }
-//2. Checking if $objExercise is set.
+// 2. Checking if $objExercise is set.
 /** @var |Exercise $objExercise */
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
@@ -434,12 +432,13 @@ if (empty($exercise_stat_info)) {
     $exe_id = $exercise_stat_info['exe_id'];
     // Remember last question id position.
     $isFirstTime = Session::read('firstTime');
+    //$isFirstTime = true;
     if ($isFirstTime && ONE_PER_PAGE == $objExercise->type) {
         $resolvedQuestions = Event::getAllExerciseEventByExeId($exe_id);
         if (!empty($resolvedQuestions) &&
             !empty($exercise_stat_info['data_tracking'])
         ) {
-            $last = current(end($resolvedQuestions));
+            /*$last = current(end($resolvedQuestions));
             $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
             $count = 1;
             foreach ($attemptQuestionList as $question) {
@@ -449,9 +448,24 @@ if (empty($exercise_stat_info)) {
                 $count++;
             }
             $current_question = $count;
+            */
+            // Get current question based in data_tracking question list, instead of track_e_attempt order BT#17789.
+            $resolvedQuestionsQuestionIds = array_keys($resolvedQuestions);
+            $count = 0;
+            $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
+            //var_dump($attemptQuestionList, $resolvedQuestionsQuestionIds);
+            foreach ($attemptQuestionList as $index => $question) {
+                if (in_array($question, $resolvedQuestionsQuestionIds)) {
+                    $count = $index;
+                    continue;
+                }
+            }
+            $current_question = $count;
+            //var_dump($current_question, $index);exit;
         }
     }
 }
+
 Session::write('exe_id', $exe_id);
 $saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_duration&exe_id='.$exe_id.'&'.api_get_cidreq();
 $questionListInSession = Session::read('questionList');
@@ -508,7 +522,7 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 }
 
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq().'&reminder='.$reminder;
-if (2 == $reminder && empty($myRemindList)) {
+if (2 === $reminder && empty($myRemindList)) {
     if ($debug) {
         error_log('6.2 calling the exercise_reminder.php');
     }
@@ -598,7 +612,6 @@ if ($time_control) {
     //Sends the exercise form when the expired time is finished.
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
-
 // in LP's is enabled the "remember question" feature?
 if (!isset($_SESSION['questionList'])) {
     // selects the list of question ID
@@ -657,35 +670,43 @@ if ($allowBlockCategory &&
         }
         $count++;
     }
-
+    //var_dump($questionCheck);exit;
     // Use reminder list to get the current question.
-    if (2 === $reminder && !empty($myRemindList)) {
+    /*if (2 === $reminder && !empty($myRemindList)) {
         $remindQuestionId = current($myRemindList);
         $questionCheck = Question::read($remindQuestionId);
-    }
+    }*/
 
     $categoryId = 0;
     if (null !== $questionCheck) {
         $categoryId = $questionCheck->category;
     }
 
+    if ($objExercise->review_answers && isset($_GET['category_id'])) {
+        $categoryId = $_GET['category_id'] ?? 0;
+    }
+    //var_dump($categoryId, $categoryList);
     if (!empty($categoryId)) {
         $categoryInfo = $categoryList[$categoryId];
         $count = 1;
         $total = count($categoryList[$categoryId]);
+        //var_dump($questionCheck);
         foreach ($categoryList[$categoryId] as $checkQuestionId) {
-            if ((int) $checkQuestionId === $questionCheck->iid) {
+            if ((int) $checkQuestionId === (int) $questionCheck->iid) {
                 break;
             }
             $count++;
         }
 
+        //var_dump($count , $total);
         if ($count === $total) {
             $isLastQuestionInCategory = $categoryId;
             if ($isLastQuestionInCategory) {
                 // This is the last question
                 if ((int) $current_question + 1 === count($questionList)) {
-                    $isLastQuestionInCategory = 0;
+                    if (false === $objExercise->review_answers) {
+                        $isLastQuestionInCategory = 0;
+                    }
                 }
             }
         }
@@ -693,7 +714,11 @@ if ($allowBlockCategory &&
         if (0 === $isLastQuestionInCategory) {
             $showPreviousButton = false;
         }
+        if (0 === $isLastQuestionInCategory && 2 === $reminder) {
+            //    $isLastQuestionInCategory = $categoryId;
+        }
     }
+    //var_dump($categoryId, $blockedCategories, $isLastQuestionInCategory);
 
     // Blocked if category was already answered.
     if ($categoryId && in_array($categoryId, $blockedCategories)) {
@@ -703,7 +728,8 @@ if ($allowBlockCategory &&
         api_location($url);
     }
 }
-
+//exit;
+//var_dump($isLastQuestionInCategory);
 if ($debug) {
     error_log('8. Question list loaded '.print_r($questionList, 1));
 }
@@ -713,7 +739,7 @@ $question_count = 0;
 if (!empty($questionList)) {
     $question_count = count($questionList);
 }
-
+//var_dump($current_question);
 if ($current_question > $question_count) {
     // If time control then don't change the current question, otherwise there will be a loop.
     // @todo
@@ -757,7 +783,7 @@ if ($formSent && isset($_POST)) {
             $exerciseResult = $choice;
         } else {
             // gets the question ID from $choice. It is the key of the array
-            list($key) = array_keys($choice);
+            [$key] = array_keys($choice);
             // if the user didn't already answer this question
             if (!isset($exerciseResult[$key])) {
                 // stores the user answer into the array
@@ -964,7 +990,6 @@ if ($allowTimePerQuestion && $objExercise->type == ONE_PER_PAGE) {
             $previousQuestion = $objQuestionTmp;
         }
     }
-
     $extraFieldValue = new ExtraFieldValue('question');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
     if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
@@ -1128,10 +1153,10 @@ if ($showQuestionClock) {
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div id="highlight-plugin" class="glossary-content">';
 }
-if ($reminder == 2) {
+if (2 === $reminder) {
     $data_tracking = $exercise_stat_info['data_tracking'];
     $data_tracking = explode(',', $data_tracking);
-    $current_question = 1; //set by default the 1st question
+    $current_question = 1; // Set by default the 1st question
 
     if (!empty($myRemindList)) {
         // Checking which questions we are going to call from the remind list
@@ -1221,6 +1246,24 @@ if (!empty($questionList)) {
     }
 }
 
+if ($allowBlockCategory &&
+    ONE_PER_PAGE == $objExercise->type &&
+    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $selectionType
+) {
+    if (0 === $isLastQuestionInCategory && 2 === $reminder) {
+        $endReminderValue = false;
+        if (!empty($myRemindList)) {
+            $endValue = end($myRemindList);
+            if ($endValue == $questionId) {
+                $endReminderValue = true;
+            }
+        }
+        if ($endReminderValue) {
+            $isLastQuestionInCategory = $categoryId;
+        }
+    }
+}
+
 $saveIcon = Display::return_icon(
     'save.png',
     get_lang('Saved'),
@@ -1280,25 +1323,11 @@ echo '<script>
             }
         });
 
-        $(".main_question").mouseover(function() {
-            //$(this).find(".exercise_save_now_button").show();
-            //$(this).addClass("question_highlight");
-        });
-
         $(".main_question").mouseout(function() {
-            //$(this).find(".exercise_save_now_button").hide();
             $(this).removeClass("question_highlight");
         });
 
         $(".no_remind_highlight").hide();
-
-        // if the users validates the form using return key,
-        // prevent form action and simulates click on validation button
-        /*$("#exercise_form").submit(function(){
-            $(".question-validate-btn").first().trigger("click");
-            return false;
-        });*/
-
         $("form#exercise_form").prepend($("#exercise-description"));
 
         $(\'button[name="previous_question_and_save"]\').on("touchstart click", function (e) {
@@ -1440,8 +1469,7 @@ echo '<script>
 
                     // If last question in category send to exercise_question_reminder.php
                     if ('.$isLastQuestionInCategory.' > 0 ) {
-                        url = "exercise_question_reminder.php?'.$params.'&num='.$current_question.
-                            '&category_id='.$isLastQuestionInCategory.'";
+                        url = "exercise_question_reminder.php?'.$params.'&num='.($current_question-1).'&category_id='.$isLastQuestionInCategory.'";
                     }
 
                     if (url_extra) {

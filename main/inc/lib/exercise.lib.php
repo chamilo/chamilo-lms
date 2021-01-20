@@ -6107,10 +6107,9 @@ EOT;
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $content = $extraFieldData['value'];
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
-                if (false === $exercisePassed) {
-                    if (0 !== $wrongAnswersCount) {
-                        $content .= $stats['failed_answers_html'];
-                    }
+                //if (false === $exercisePassed) {
+                if (0 !== $wrongAnswersCount) {
+                    $content .= $stats['failed_answers_html'];
                 }
 
                 $sendMessage = true;

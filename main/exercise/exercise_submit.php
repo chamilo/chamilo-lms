@@ -437,7 +437,7 @@ if (empty($exercise_stat_info)) {
         if (!empty($resolvedQuestions) &&
             !empty($exercise_stat_info['data_tracking'])
         ) {
-            $last = current(end($resolvedQuestions));
+            /*$last = current(end($resolvedQuestions));
             $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
             $count = 1;
             foreach ($attemptQuestionList as $question) {
@@ -445,11 +445,22 @@ if (empty($exercise_stat_info)) {
                     break;
                 }
                 $count++;
+            }*/
+            // Get current question based in data_tracking question list, instead of track_e_attempt order BT#17789.
+            $resolvedQuestionsQuestionIds = array_keys($resolvedQuestions);
+            $count = 0;
+            $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
+            foreach ($attemptQuestionList as $question) {
+                if (in_array($question, $resolvedQuestionsQuestionIds)) {
+                    ++$count;
+                    continue;
+                }
             }
             $current_question = $count;
         }
     }
 }
+
 Session::write('exe_id', $exe_id);
 $saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_duration&exe_id='.$exe_id.'&'.api_get_cidreq();
 $questionListInSession = Session::read('questionList');

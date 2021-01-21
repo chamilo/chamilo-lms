@@ -1224,6 +1224,45 @@ class PortfolioController
             $this->baseUrl
         );
 
+        $frmStudent = null;
+
+        if ($this->course && api_is_allowed_to_edit()) {
+            if ($httpRequest->query->has('user')) {
+                $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
+
+                if (empty($this->owner)) {
+                    api_not_allowed(true);
+                }
+            }
+
+            $frmStudent = new FormValidator('frm_student_list', 'get');
+            $slctStudentOptions = [];
+            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
+
+            $urlParams = http_build_query(
+                [
+                    'a' => 'search_user_by_course',
+                    'course_id' => $this->course->getId(),
+                    'session_id' => $this->session ? $this->session->getId() : 0,
+                ]
+            );
+
+            $frmStudent->addSelectAjax(
+                'user',
+                get_lang('SelectLearnerPortfolio'),
+                $slctStudentOptions,
+                [
+                    'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
+                    'placeholder' => get_lang('SearchStudent')
+                ]
+            );
+            $frmStudent->setDefaults(['user' => $this->owner->getId()]);
+            $frmStudent->addHidden('action', 'details');
+            $frmStudent->addHidden('cidReq', $this->course->getCode());
+            $frmStudent->addHidden('id_session', $this->session ? $this->session->getId() : 0);
+            $frmStudent->addButtonFilter(get_lang('Filter'));
+        }
+
         $itemsRepo = $this->em->getRepository(Portfolio::class);
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
 
@@ -1321,7 +1360,7 @@ class PortfolioController
         };
 
         $tblItems = new SortableTable('tbl_items', $getItemsTotalNumber, $getItemsData, 0);
-        $tblItems->set_additional_parameters(['action' => 'details']);
+        $tblItems->set_additional_parameters(['action' => 'details', 'user' => $this->owner->getId()]);
         $tblItems->set_header(0, get_lang('Title'));
         $tblItems->set_column_filter(0, $portfolioItemColumnFilter);
         $tblItems->set_header(1, get_lang('CreationDate'), true, [], ['class' => 'text-center']);
@@ -1406,7 +1445,7 @@ class PortfolioController
         };
 
         $tblComments = new SortableTable('tbl_comments', $getCommentsTotalNumber, $getCommentsData, 0);
-        $tblComments->set_additional_parameters(['action' => 'details']);
+        $tblComments->set_additional_parameters(['action' => 'details', 'user' => $this->owner->getId()]);
         $tblComments->set_header(0, get_lang('Resume'));
         $tblComments->set_column_filter(0, function (PortfolioComment $comment) {
             return Display::url(
@@ -1420,7 +1459,13 @@ class PortfolioController
         $tblComments->set_header(2, get_lang('PortfolioItemTitle'));
         $tblComments->set_column_filter(2, $portfolioItemColumnFilter);
 
-        $content = Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL
+        $content = '';
+
+        if ($frmStudent) {
+            $content .= $frmStudent->returnForm();
+        }
+
+        $content .= Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL
             .$tblItems->return_table().PHP_EOL
             .Display::page_subheader2(get_lang('Comments')).PHP_EOL
             .$tblComments->return_table().PHP_EOL;

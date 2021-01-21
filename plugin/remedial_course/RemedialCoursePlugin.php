@@ -9,19 +9,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 class RemedialCoursePlugin extends Plugin
 {
     const SETTING_ENABLED = 'enabled';
-    /**
-     * @var array
-     */
-    protected $remedialField;
-    /**
-     * @var array
-     */
-    protected $remedialAdvanceField;
-    //advancedCourseList
 
-    /**
-     * RemedialCoursePlugin constructor.
-     */
     public function __construct()
     {
         $settings = [
@@ -33,41 +21,6 @@ class RemedialCoursePlugin extends Plugin
             $settings
         );
         $this->setSettings();
-        $field = new ExtraField('exercise');
-        $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
-
-        if (empty($remedialField)) {
-            $remedialField = [
-                'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                'variable' => 'remedialcourselist',
-                'display_text' => 'remedialCourseList',
-                'default_value' => 1,
-                'field_order' => 0,
-                'visible_to_self' => 1,
-                'visible_to_others' => 0,
-                'changeable' => 1,
-                'filter' => 0,
-            ];
-        }
-        $this->remedialField = $remedialField;
-        //Advance
-        $field = new ExtraField('exercise');
-        $remedialAdvanceField = $field->get_handler_field_info_by_field_variable('advancedCourseList');
-
-        if (empty($remedialAdvanceField)) {
-            $remedialAdvanceField = [
-                'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                'variable' => 'advancedcourselist',
-                'display_text' => 'advancedCourseList',
-                'default_value' => 1,
-                'field_order' => 0,
-                'visible_to_self' => 1,
-                'visible_to_others' => 0,
-                'changeable' => 1,
-                'filter' => 0,
-            ];
-        }
-        $this->remedialAdvanceField = $remedialAdvanceField;
     }
 
     /**
@@ -97,14 +50,20 @@ class RemedialCoursePlugin extends Plugin
      */
     public function SaveRemedialField()
     {
-        $schedule = new ExtraField('exercise');
-        $data = $this->getDataRemedialField();
-        $data['default_value'] = 1;
-        $data['visible_to_self'] = 1;
-        if (isset($data['id'])) {
-            $schedule->update($data);
-        } else {
-            $schedule->save($data);
+        $extraField = new ExtraField('exercise');
+        $remedialcourselist = $extraField->get_handler_field_info_by_field_variable('remedialcourselist');
+        if (false === $remedialcourselist) {
+            $extraField->save([
+                'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+                'variable' => 'remedialcourselist',
+                'display_text' => 'remedialCourseList',
+                'default_value' => 1,
+                'field_order' => 0,
+                'visible_to_self' => 1,
+                'visible_to_others' => 0,
+                'changeable' => 1,
+                'filter' => 0,
+            ]);
         }
     }
 
@@ -114,61 +73,21 @@ class RemedialCoursePlugin extends Plugin
      */
     public function SaveAdvanceRemedialField()
     {
-        $schedule = new ExtraField('exercise');
-        $data = $this->getDataAdvanceRemedialField();
-        $data['default_value'] = 1;
-        $data['visible_to_self'] = 1;
-        if (isset($data['id'])) {
-            $schedule->update($data);
-        } else {
-            $schedule->save($data);
+        $extraField = new ExtraField('exercise');
+        $advancedcourselist = $extraField->get_handler_field_info_by_field_variable('advancedcourselist');
+        if (false === $advancedcourselist) {
+            $extraField->save([
+                'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+                'variable' => 'advancedcourselist',
+                'display_text' => 'advancedCourseList',
+                'default_value' => 1,
+                'field_order' => 0,
+                'visible_to_self' => 1,
+                'visible_to_others' => 0,
+                'changeable' => 1,
+                'filter' => 0,
+            ]);
         }
-    }
-
-    /**
-     * Make a array clean of remedialcourselist.
-     *
-     * @return array|bool
-     */
-    public function getDataRemedialField($install = true)
-    {
-        $data = $this->remedialField;
-
-        $data['field_type'] = isset($data['field_type']) ? $data['field_type'] : ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
-        $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : $data['field_order']; // at
-        $data['variable'] = isset($data['variable']) ? $data['variable'] : 'remedialcourselist';
-        $data['display_text'] = isset($data['display_text']) ? $data['display_text'] : 'remedialCourseList';
-        $data['default_value'] = (int) $install;
-        $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : 0;
-        $data['visible_to_self'] = isset($data['visible_to_self']) ? $data['visible_to_self'] : 1;
-        $data['visible_to_others'] = isset($data['visible_to_others']) ? $data['visible_to_others'] : 0;
-        $data['changeable'] = isset($data['changeable']) ? $data['changeable'] : 1;
-        $data['filter'] = isset($data['filter']) ? $data['filter'] : 0;
-
-        return $data;
-    }
-
-    /**
-     * Make a array clean of advancedcourselist.
-     *
-     * @return array|bool
-     */
-    public function getDataAdvanceRemedialField($install = true)
-    {
-        $data = $this->remedialAdvanceField;
-
-        $data['field_type'] = isset($data['field_type']) ? $data['field_type'] : ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
-        $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : $data['field_order']; // at
-        $data['variable'] = isset($data['variable']) ? $data['variable'] : 'advancedcourselist';
-        $data['display_text'] = isset($data['display_text']) ? $data['display_text'] : 'advancedCourseList';
-        $data['default_value'] = (int) $install;
-        $data['field_order'] = isset($data['field_order']) ? $data['field_order'] : 0;
-        $data['visible_to_self'] = isset($data['visible_to_self']) ? $data['visible_to_self'] : 1;
-        $data['visible_to_others'] = isset($data['visible_to_others']) ? $data['visible_to_others'] : 0;
-        $data['changeable'] = isset($data['changeable']) ? $data['changeable'] : 1;
-        $data['filter'] = isset($data['filter']) ? $data['filter'] : 0;
-
-        return $data;
     }
 
     /**

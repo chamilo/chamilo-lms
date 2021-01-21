@@ -2508,9 +2508,10 @@ class Exercise
             $extraFieldExerciceValue = new ExtraFieldValue('exercise');
             $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
             if ($pluginRemedial) {
+                $sessionId = api_get_session_id();
+                $userId = api_get_user_id();
                 foreach ($remedialList as $item => $label) {
                     $remedialField = $extraFieldExercice->get_handler_field_info_by_field_variable($item);
-                    $sessionId = api_get_session_id();
                     $optionRemedial = [];
                     $defaults[$item] = [];
                     $remedialExtraValue = $extraFieldExerciceValue->get_values_by_handler_and_field_id($this->iId, $remedialField['id']);
@@ -2526,7 +2527,7 @@ class Exercise
                         }
                     } else {
                         $courseList = CourseManager::get_courses_list_by_user_id(
-                            api_get_user_id(),
+                            $userId,
                             false,
                             false,
                             true,
@@ -6845,16 +6846,17 @@ class Exercise
         // BT#18165
         $exerciseAttempts = $this->selectAttempts();
         if ($exerciseAttempts > 0) {
+            $userId = api_get_user_id();
             $attemptCount = Event::get_attempt_count_not_finished(
-                api_get_user_id(),
+                $userId,
                 $this->id,
                 $lpId,
                 $lpItemId,
                 $lpItemViewId
             );
-            $message .= $this->advanceCourseList(api_get_user_id(),api_get_session_id());
+            $message .= $this->advanceCourseList($userId,api_get_session_id());
             if ($attemptCount >= $exerciseAttempts) {
-                $message .= $this->remedialCourseList(api_get_user_id(), false , api_get_session_id());
+                $message .= $this->remedialCourseList($userId, false , api_get_session_id());
             }
         }
 
@@ -10879,7 +10881,7 @@ class Exercise
         if (0 == $percentSuccess && false == $pass) {
             return null;
         }
-        $canRemedial = (false === $pass) ? true : false;
+        $canRemedial = false === $pass;
         // Advance Course
         $extraFieldValue = new ExtraFieldValue('exercise');
         $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -10988,7 +10990,7 @@ class Exercise
         if (0 == $percentSuccess && false == $pass) {
             return '';
         }
-        $canRemedial = (false == $pass) ? true : false;
+        $canRemedial = false === $pass;
         $extraFieldValue = new ExtraFieldValue('exercise');
         $remedialExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
             $this->iId,

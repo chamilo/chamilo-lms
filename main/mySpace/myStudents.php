@@ -930,24 +930,6 @@ $content = $tpl->fetch($templateName);
 
 echo $content;
 
-$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
-if ($allowAll) {
-    // Show all skills
-    echo Tracking::displayUserSkills(
-        $student_id,
-        0,
-        0,
-        true
-    );
-} else {
-    // Default behaviour - Show all skills depending the course and session id
-    echo Tracking::displayUserSkills(
-        $student_id,
-        $courseInfo ? $courseInfo['real_id'] : 0,
-        $sessionId
-    );
-}
-
 // Careers.
 if (api_get_configuration_value('allow_career_users')) {
     $careers = UserManager::getUserCareers($student_id);
@@ -967,6 +949,24 @@ if (api_get_configuration_value('allow_career_users')) {
         }
         echo $table->toHtml();
     }
+}
+
+$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
+if ($allowAll) {
+    // Show all skills
+    echo Tracking::displayUserSkills(
+        $student_id,
+        0,
+        0,
+        true
+    );
+} else {
+    // Default behaviour - Show all skills depending the course and session id
+    echo Tracking::displayUserSkills(
+        $student_id,
+        $courseInfo ? $courseInfo['real_id'] : 0,
+        $sessionId
+    );
 }
 
 echo '<br /><br />';

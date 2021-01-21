@@ -196,7 +196,7 @@ if ($visible_return['value'] == false) {
         $exercise_url_button = null;
     }
 } else {
-    $text = $objExercise->advanceCourseList(api_get_user_id(),api_get_session_id());
+    $text = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id());
     if (!empty($text)) {
         $message = Display::return_message(
             $text,

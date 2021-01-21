@@ -4,7 +4,7 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 /**
- * Class RemedialCoursePlugin
+ * Class RemedialCoursePlugin.
  */
 class RemedialCoursePlugin extends Plugin
 {

@@ -259,7 +259,7 @@ if (!empty($learnpath_id) && $saveResults) {
 $exerciseAttempts = $objExercise->selectAttempts();
 $remedialMessage = null;
 // See BT#18165
-$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(),api_get_session_id());
+$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id());
 
 if ($exerciseAttempts > 0) {
     if ($attempt_count >= $exerciseAttempts) {

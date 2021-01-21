@@ -267,7 +267,7 @@ if (isset($_REQUEST['comments']) &&
 
     // See BT#18165
     $objExerciseTmp->remedialCourseList($student_id, true, api_get_session_id());
-    $objExerciseTmp->advanceCourseList($student_id,api_get_session_id());
+    $objExerciseTmp->advanceCourseList($student_id, api_get_session_id());
 
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else

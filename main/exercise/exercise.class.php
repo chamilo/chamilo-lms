@@ -6854,9 +6854,9 @@ class Exercise
                 $lpItemId,
                 $lpItemViewId
             );
-            $message .= $this->advanceCourseList($userId,api_get_session_id());
+            $message .= $this->advanceCourseList($userId, api_get_session_id());
             if ($attemptCount >= $exerciseAttempts) {
-                $message .= $this->remedialCourseList($userId, false , api_get_session_id());
+                $message .= $this->remedialCourseList($userId, false, api_get_session_id());
             }
         }
 
@@ -10830,7 +10830,7 @@ class Exercise
     public function advanceCourseList($userId = 0, $sessionId = 0)
     {
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
-        if(!$pluginRemedial){
+        if (!$pluginRemedial) {
             return null;
         }
         $field = new ExtraField('exercise');
@@ -10927,12 +10927,12 @@ class Exercise
      *
      * @param int  $userId
      * @param bool $review
-     * @param int $sessionId
+     * @param int  $sessionId
      */
     public function remedialCourseList($userId = 0, $review = false, $sessionId = 0)
     {
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
-        if(!$pluginRemedial){
+        if (!$pluginRemedial) {
             return null;
         }
         $field = new ExtraField('exercise');

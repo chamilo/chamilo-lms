@@ -1,8 +1,6 @@
 /* For licensing terms, see /license.txt */
 
 window.RecordAudio = (function () {
-    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
     function startTimer() {
         $("#timer").show();
         var timerData = {
@@ -126,9 +124,10 @@ window.RecordAudio = (function () {
                 stopTimer();
                 startTimer();
                 recordRTC = RecordRTC(stream, {
-                    recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
+                    recorderType: RecordRTC.StereoAudioRecorder,
                     type: 'audio',
                     mimeType: 'audio/wav',
+                    numberOfAudioChannels: 2
                 });
                 recordRTC.startRecording();
 
@@ -187,6 +186,7 @@ window.RecordAudio = (function () {
                 return;
             }
 
+            console.log('stop');
             stopTimer();
             recordRTC.stopRecording(function (audioURL) {
                 btnStart.prop('disabled', false).removeClass('hidden');

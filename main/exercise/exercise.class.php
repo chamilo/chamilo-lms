@@ -2504,17 +2504,16 @@ class Exercise
                 'remedialcourselist' => 'remedialCourseList',
                 'advancedcourselist' => 'advancedCoursList',
             ];
-            $extraFieldExercice = new ExtraFieldValue('exercise');
-            foreach ($remedialList as $item => $label) {
-                $remedialField = $extraFieldExercice->get_handler_field_info_by_field_variable($item);
-                $sessionId = api_get_session_id();
-                if (
-                    isset($remedialField['default_value']) &&
-                    1 == $remedialField['default_value'] // if the plugin is activated
-                ) {
+            $extraFieldExercice = new ExtraField('exercise');
+            $extraFieldExerciceValue = new ExtraFieldValue('exercise');
+            $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
+            if ($pluginRemedial) {
+                foreach ($remedialList as $item => $label) {
+                    $remedialField = $extraFieldExercice->get_handler_field_info_by_field_variable($item);
+                    $sessionId = api_get_session_id();
                     $optionRemedial = [];
                     $defaults[$item] = [];
-                    $remedialExtraValue = $extraFieldExercice->get_values_by_handler_and_field_id($this->iId, $remedialField['id']);
+                    $remedialExtraValue = $extraFieldExerciceValue->get_values_by_handler_and_field_id($this->iId, $remedialField['id']);
                     $defaults[$item] = isset($remedialExtraValue['value']) ? explode(';', $remedialExtraValue['value']) : [];
                     if ($sessionId != 0) {
                         $courseList = SessionManager::getCoursesInSession($sessionId);
@@ -2537,7 +2536,7 @@ class Exercise
                         foreach ($courseList as $course) {
                             $courseId = $course['real_id'];
                             if (api_get_course_int_id() != $courseId) {
-                                $optionRemedial[$courseId] =  $course['title'];
+                                $optionRemedial[$courseId] = $course['title'];
                             }
                         }
                     }
@@ -10824,20 +10823,18 @@ class Exercise
      * represent the next level BT#18165.
      *
      * @param int $userId
+     * @param int $sessionId
      */
     public function advanceCourseList($userId = 0, $sessionId = 0)
     {
+        $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
+        if(!$pluginRemedial){
+            return null;
+        }
         $field = new ExtraField('exercise');
         $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
-        $active = 0;
-        if (
-            false != $advancedCourseField &&
-            isset($advancedCourseField['default_value']) &&
-            1 == $advancedCourseField['default_value'] // if the plugin is activated
-        ) {
-            $active = 1;
-        }
-        if (0 == $active) {
+
+        if (false === $advancedCourseField) {
             return null;
         }
         $userId = empty($userId) ? api_get_user_id() : (int) $userId;
@@ -10928,20 +10925,18 @@ class Exercise
      *
      * @param int  $userId
      * @param bool $review
+     * @param int $sessionId
      */
     public function remedialCourseList($userId = 0, $review = false, $sessionId = 0)
     {
+        $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
+        if(!$pluginRemedial){
+            return null;
+        }
         $field = new ExtraField('exercise');
         $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
-        $active = 0;
-        if (
-            false != $remedialField &&
-            isset($remedialField['default_value']) &&
-            1 == $remedialField['default_value'] // if the plugin is activated
-        ) {
-            $active = 1;
-        }
-        if (0 == $active) {
+
+        if (false === $remedialField) {
             return null;
         }
         $questionExcluded = [

@@ -1,12 +1,14 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 /**
- * Class RemedialCoursePlugin.
+ * Class RemedialCoursePlugin
  */
 class RemedialCoursePlugin extends Plugin
 {
+    const SETTING_ENABLED = 'enabled';
     /**
      * @var array
      */
@@ -22,10 +24,15 @@ class RemedialCoursePlugin extends Plugin
      */
     public function __construct()
     {
+        $settings = [
+            self::SETTING_ENABLED => 'boolean',
+        ];
         parent::__construct(
             '1.0',
-            'Carlos Alvarado'
+            'Carlos Alvarado',
+            $settings
         );
+        $this->setSettings();
         $field = new ExtraField('exercise');
         $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
 
@@ -169,25 +176,15 @@ class RemedialCoursePlugin extends Plugin
      */
     public function uninstall()
     {
-        $schedule = new ExtraField('exercise');
-        $data = $this->getDataRemedialField(false);
-        $data['default_value'] = 0;
-        $data['visible_to_self'] = 0;
-        if (isset($data['id'])) {
-            $schedule->update($data);
-        } else {
-            $schedule->save($data);
-        }
+    }
 
-        //advance
-        $schedule = new ExtraField('exercise');
-        $data = $this->getDataAdvanceRemedialField(false);
-        $data['default_value'] = 0;
-        $data['visible_to_self'] = 0;
-        if (isset($data['id'])) {
-            $schedule->update($data);
-        } else {
-            $schedule->save($data);
+    /**
+     * Set the  settings.
+     */
+    private function setSettings()
+    {
+        if ('true' !== $this->get(self::SETTING_ENABLED)) {
+            return;
         }
     }
 }

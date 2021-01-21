@@ -265,14 +265,14 @@ if ($exerciseAttempts > 0) {
     if ($attempt_count >= $exerciseAttempts) {
         $remedialMessage .= $objExercise->remedialCourseList(api_get_user_id(), false, api_get_session_id());
     }
-    if ($remedialMessage != null) {
+    if (null != $remedialMessage) {
         Display::addFlash(
             Display::return_message($remedialMessage, 'warning', false)
         );
     }
 }
 
-if ($advanceCourseMessage != null) {
+if (null != $advanceCourseMessage) {
     Display::addFlash(
         Display::return_message($advanceCourseMessage, 'info', false)
     );

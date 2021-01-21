@@ -40,15 +40,15 @@ class RemedialCoursePlugin extends Plugin
      */
     public function install()
     {
-        $this->SaveRemedialField();
-        $this->SaveAdvanceRemedialField();
+        $this->saveRemedialField();
+        $this->saveAdvanceRemedialField();
     }
 
     /**
      * Save the arrangement for remedialcourselist, it is adjusted internally so that the values
      * match the necessary ones.
      */
-    public function SaveRemedialField()
+    public function saveRemedialField()
     {
         $extraField = new ExtraField('exercise');
         $remedialcourselist = $extraField->get_handler_field_info_by_field_variable('remedialcourselist');
@@ -71,7 +71,7 @@ class RemedialCoursePlugin extends Plugin
      * Save the arrangement for remedialadvancecourselist, it is adjusted internally so that the values
      * match the necessary ones.
      */
-    public function SaveAdvanceRemedialField()
+    public function saveAdvanceRemedialField()
     {
         $extraField = new ExtraField('exercise');
         $advancedcourselist = $extraField->get_handler_field_info_by_field_variable('advancedcourselist');

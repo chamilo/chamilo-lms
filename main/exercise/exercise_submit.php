@@ -1469,7 +1469,7 @@ echo '<script>
 
                     // If last question in category send to exercise_question_reminder.php
                     if ('.$isLastQuestionInCategory.' > 0 ) {
-                        url = "exercise_question_reminder.php?'.$params.'&num='.($current_question-1).'&category_id='.$isLastQuestionInCategory.'";
+                        url = "exercise_question_reminder.php?'.$params.'&num='.($current_question - 1).'&category_id='.$isLastQuestionInCategory.'";
                     }
 
                     if (url_extra) {

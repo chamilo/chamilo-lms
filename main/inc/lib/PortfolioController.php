@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
-use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -468,96 +467,6 @@ class PortfolioController
 
         header("Location: $this->baseUrl");
         exit;
-    }
-
-    private function getItemsForIndex(
-        int $currentUserId,
-        bool $listByUser = false,
-        FormValidator $frmFilterList = null
-    ) {
-        if ($this->course) {
-            $queryBuilder = $this->em->createQueryBuilder();
-            $queryBuilder
-                ->select('pi')
-                ->from(Portfolio::class, 'pi')
-                ->where('pi.course = :course');
-
-            $queryBuilder->setParameter('course', $this->course);
-
-            if ($this->session) {
-                $queryBuilder->andWhere('pi.session = :session');
-                $queryBuilder->setParameter('session', $this->session);
-            } else {
-                $queryBuilder->andWhere('pi.session IS NULL');
-            }
-
-            if ($listByUser) {
-                $queryBuilder->andWhere('pi.user = :user');
-                $queryBuilder->setParameter('user', $this->owner);
-
-                if ($currentUserId !== $this->owner->getId()) {
-                    $queryBuilder->andWhere('pi.isVisible = TRUE');
-                }
-            }
-
-            if ($frmFilterList && $frmFilterList->validate()) {
-                $values = $frmFilterList->exportValues();
-
-                if (!empty($values['tags'])) {
-                    $queryBuilder
-                        ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = pi.id')
-                        ->innerJoin(ExtraFieldEntity::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
-                        ->andWhere('ef.extraFieldType = :efType')
-                        ->andWhere('ef.variable = :variable')
-                        ->andWhere('efrt.tagId IN (:tags)');
-
-                    $queryBuilder->setParameter('efType', ExtraFieldEntity::PORTFOLIO_TYPE);
-                    $queryBuilder->setParameter('variable', 'tags');
-                    $queryBuilder->setParameter('tags', $values['tags']);
-                }
-
-                if (!empty($values['text'])) {
-                    $queryBuilder->andWhere(
-                        $queryBuilder->expr()->orX(
-                            $queryBuilder->expr()->like('pi.title', ':text'),
-                            $queryBuilder->expr()->like('pi.content', ':text')
-                        )
-                    );
-
-                    $queryBuilder->setParameter('text', '%'.$values['text'].'%');
-                }
-            }
-
-            $items = $queryBuilder->getQuery()->getResult();
-        } else {
-            $itemsCriteria = [];
-            $itemsCriteria['category'] = null;
-            $itemsCriteria['user'] = $this->owner;
-
-            if ($currentUserId !== $this->owner->getId()) {
-                $itemsCriteria['isVisible'] = true;
-            }
-
-            $items = $this->em
-                ->getRepository(Portfolio::class)
-                ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
-        }
-
-        return $items;
-    }
-
-    private function getCategoriesForIndex(int $currentUserId): array
-    {
-        $categoriesCriteria = [];
-        $categoriesCriteria['user'] = $this->owner;
-
-        if ($currentUserId !== $this->owner->getId()) {
-            $categoriesCriteria['isVisible'] = true;
-        }
-
-        return $this->em
-            ->getRepository(PortfolioCategory::class)
-            ->findBy($categoriesCriteria);
     }
 
     public function index(HttpRequest $httpRequest)
@@ -1042,180 +951,6 @@ class PortfolioController
         exit;
     }
 
-    /**
-     * @param bool $showHeader
-     */
-    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
-    {
-        global $this_section;
-
-        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
-
-        $view = new Template($toolName);
-
-        if ($showHeader) {
-            $view->assign('header', $toolName);
-        }
-
-        $actionsStr = '';
-
-        if ($this->course) {
-            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
-        }
-
-        if ($actions) {
-            $actions = implode(PHP_EOL, $actions);
-
-            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
-        }
-
-        $view->assign('baseurl', $this->baseUrl);
-        $view->assign('actions', $actionsStr);
-
-        $view->assign('content', $content);
-        $view->display_one_col_template();
-    }
-
-    private function categoryBelongToOwner(PortfolioCategory $category): bool
-    {
-        if ($category->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function itemBelongToOwner(Portfolio $item): bool
-    {
-        if ($item->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    private function createCommentForm(Portfolio $item): string
-    {
-        $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
-
-        $form = new FormValidator('frm_comment', 'post', $formAction);
-        $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
-        $form->addHidden('item', $item->getId());
-        $form->addHidden('parent', 0);
-        $form->applyFilter('content', 'trim');
-        $form->addButtonSave(get_lang('Save'));
-
-        if ($form->validate()) {
-            $values = $form->exportValues();
-
-            $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);
-
-            $comment = new PortfolioComment();
-            $comment
-                ->setAuthor($this->owner)
-                ->setParent($parentComment)
-                ->setContent($values['content'])
-                ->setDate(api_get_utc_datetime(null, false, true))
-                ->setItem($item);
-
-            $this->em->persist($comment);
-            $this->em->flush();
-
-            Display::addFlash(
-                Display::return_message(get_lang('CommentAdded'), 'success')
-            );
-
-            header("Location: $formAction");
-            exit;
-        }
-
-        return $form->returnForm();
-    }
-
-    private function createFormStudentFilter(bool $listByUser = false): FormValidator
-    {
-        $frmStudentList = new FormValidator(
-            'frm_student_list',
-            'get',
-            $this->baseUrl,
-            '',
-            [],
-            FormValidator::LAYOUT_BOX
-        );
-        $slctStudentOptions = [];
-
-        if ($listByUser) {
-            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
-        }
-
-        $urlParams = http_build_query(
-            [
-                'a' => 'search_user_by_course',
-                'course_id' => $this->course->getId(),
-                'session_id' => $this->session ? $this->session->getId() : 0,
-            ]
-        );
-
-        $frmStudentList->addSelectAjax(
-            'user',
-            get_lang('SelectLearnerPortfolio'),
-            $slctStudentOptions,
-            [
-                'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
-                'placeholder' => get_lang('SearchStudent')
-            ]
-        );
-        $frmStudentList->addHtml('<hr>');
-        $frmStudentList->addHtml(
-            Display::url(
-                get_lang('SeeMyPortfolio'),
-                $this->baseUrl.http_build_query(['user' => api_get_user_id()])
-            )
-        );
-
-        return $frmStudentList;
-    }
-
-    private function createFormTagFilter(): FormValidator
-    {
-        $extraField = new ExtraField('portfolio');
-        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
-
-        $chbxTagOptions = array_map(
-            function (array $tagOption) {
-                return $tagOption['tag'];
-            },
-            $tagFieldInfo['options']
-        );
-
-        $frmTagList = new FormValidator('frm_tag_list',
-            'get',
-            $this->baseUrl,
-            '',
-            [],
-            FormValidator::LAYOUT_BOX
-        );
-        $frmTagList->addCheckBoxGroup('tags', $tagFieldInfo['display_text'], $chbxTagOptions);
-        $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');
-        $frmTagList->applyFilter('text', 'trim');
-        $frmTagList->addHtml('<br>');
-        $frmTagList->addButtonFilter(get_lang('Filter'));
-
-        if ($this->course) {
-            $frmTagList->addHidden('cidReq', $this->course->getCode());
-            $frmTagList->addHidden('id_session', $this->session ? $this->session->getId() : 0);
-            $frmTagList->addHidden('gidReq', 0);
-            $frmTagList->addHidden('gradebook', 0);
-            $frmTagList->addHidden('origin', '');
-        }
-
-        return $frmTagList;
-    }
-
     public function details(HttpRequest $httpRequest)
     {
         $actions = [];
@@ -1253,7 +988,7 @@ class PortfolioController
                 $slctStudentOptions,
                 [
                     'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
-                    'placeholder' => get_lang('SearchStudent')
+                    'placeholder' => get_lang('SearchStudent'),
                 ]
             );
             $frmStudent->setDefaults(['user' => $this->owner->getId()]);
@@ -1289,7 +1024,7 @@ class PortfolioController
 
             return $qb->getQuery()->getSingleScalarResult();
         };
-        $getItemsData = function ($from, $limit, $columnNo, $orderDirection) use ($itemsRepo){
+        $getItemsData = function ($from, $limit, $columnNo, $orderDirection) use ($itemsRepo) {
             $qb = $itemsRepo->createQueryBuilder('item')
                 ->where('item.user = :user')
                 ->leftJoin('item.category', 'category')
@@ -1431,7 +1166,6 @@ class PortfolioController
 
             $qb->setFirstResult($from)->setMaxResults($limit);
 
-
             return array_map(
                 function (PortfolioComment $comment) {
                     return [
@@ -1471,5 +1205,269 @@ class PortfolioController
             .$tblComments->return_table().PHP_EOL;
 
         $this->renderView($content, get_lang('PortfolioDetails'), $actions);
+    }
+
+    private function getItemsForIndex(
+        int $currentUserId,
+        bool $listByUser = false,
+        FormValidator $frmFilterList = null
+    ) {
+        if ($this->course) {
+            $queryBuilder = $this->em->createQueryBuilder();
+            $queryBuilder
+                ->select('pi')
+                ->from(Portfolio::class, 'pi')
+                ->where('pi.course = :course');
+
+            $queryBuilder->setParameter('course', $this->course);
+
+            if ($this->session) {
+                $queryBuilder->andWhere('pi.session = :session');
+                $queryBuilder->setParameter('session', $this->session);
+            } else {
+                $queryBuilder->andWhere('pi.session IS NULL');
+            }
+
+            if ($listByUser) {
+                $queryBuilder->andWhere('pi.user = :user');
+                $queryBuilder->setParameter('user', $this->owner);
+
+                if ($currentUserId !== $this->owner->getId()) {
+                    $queryBuilder->andWhere('pi.isVisible = TRUE');
+                }
+            }
+
+            if ($frmFilterList && $frmFilterList->validate()) {
+                $values = $frmFilterList->exportValues();
+
+                if (!empty($values['tags'])) {
+                    $queryBuilder
+                        ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = pi.id')
+                        ->innerJoin(ExtraFieldEntity::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
+                        ->andWhere('ef.extraFieldType = :efType')
+                        ->andWhere('ef.variable = :variable')
+                        ->andWhere('efrt.tagId IN (:tags)');
+
+                    $queryBuilder->setParameter('efType', ExtraFieldEntity::PORTFOLIO_TYPE);
+                    $queryBuilder->setParameter('variable', 'tags');
+                    $queryBuilder->setParameter('tags', $values['tags']);
+                }
+
+                if (!empty($values['text'])) {
+                    $queryBuilder->andWhere(
+                        $queryBuilder->expr()->orX(
+                            $queryBuilder->expr()->like('pi.title', ':text'),
+                            $queryBuilder->expr()->like('pi.content', ':text')
+                        )
+                    );
+
+                    $queryBuilder->setParameter('text', '%'.$values['text'].'%');
+                }
+            }
+
+            $items = $queryBuilder->getQuery()->getResult();
+        } else {
+            $itemsCriteria = [];
+            $itemsCriteria['category'] = null;
+            $itemsCriteria['user'] = $this->owner;
+
+            if ($currentUserId !== $this->owner->getId()) {
+                $itemsCriteria['isVisible'] = true;
+            }
+
+            $items = $this->em
+                ->getRepository(Portfolio::class)
+                ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
+        }
+
+        return $items;
+    }
+
+    private function getCategoriesForIndex(int $currentUserId): array
+    {
+        $categoriesCriteria = [];
+        $categoriesCriteria['user'] = $this->owner;
+
+        if ($currentUserId !== $this->owner->getId()) {
+            $categoriesCriteria['isVisible'] = true;
+        }
+
+        return $this->em
+            ->getRepository(PortfolioCategory::class)
+            ->findBy($categoriesCriteria);
+    }
+
+    /**
+     * @param bool $showHeader
+     */
+    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
+    {
+        global $this_section;
+
+        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
+
+        $view = new Template($toolName);
+
+        if ($showHeader) {
+            $view->assign('header', $toolName);
+        }
+
+        $actionsStr = '';
+
+        if ($this->course) {
+            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
+        }
+
+        if ($actions) {
+            $actions = implode(PHP_EOL, $actions);
+
+            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
+        }
+
+        $view->assign('baseurl', $this->baseUrl);
+        $view->assign('actions', $actionsStr);
+
+        $view->assign('content', $content);
+        $view->display_one_col_template();
+    }
+
+    private function categoryBelongToOwner(PortfolioCategory $category): bool
+    {
+        if ($category->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function itemBelongToOwner(Portfolio $item): bool
+    {
+        if ($item->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function createCommentForm(Portfolio $item): string
+    {
+        $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
+
+        $form = new FormValidator('frm_comment', 'post', $formAction);
+        $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
+        $form->addHidden('item', $item->getId());
+        $form->addHidden('parent', 0);
+        $form->applyFilter('content', 'trim');
+        $form->addButtonSave(get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);
+
+            $comment = new PortfolioComment();
+            $comment
+                ->setAuthor($this->owner)
+                ->setParent($parentComment)
+                ->setContent($values['content'])
+                ->setDate(api_get_utc_datetime(null, false, true))
+                ->setItem($item);
+
+            $this->em->persist($comment);
+            $this->em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('CommentAdded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit;
+        }
+
+        return $form->returnForm();
+    }
+
+    private function createFormStudentFilter(bool $listByUser = false): FormValidator
+    {
+        $frmStudentList = new FormValidator(
+            'frm_student_list',
+            'get',
+            $this->baseUrl,
+            '',
+            [],
+            FormValidator::LAYOUT_BOX
+        );
+        $slctStudentOptions = [];
+
+        if ($listByUser) {
+            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
+        }
+
+        $urlParams = http_build_query(
+            [
+                'a' => 'search_user_by_course',
+                'course_id' => $this->course->getId(),
+                'session_id' => $this->session ? $this->session->getId() : 0,
+            ]
+        );
+
+        $frmStudentList->addSelectAjax(
+            'user',
+            get_lang('SelectLearnerPortfolio'),
+            $slctStudentOptions,
+            [
+                'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
+                'placeholder' => get_lang('SearchStudent'),
+            ]
+        );
+        $frmStudentList->addHtml('<hr>');
+        $frmStudentList->addHtml(
+            Display::url(
+                get_lang('SeeMyPortfolio'),
+                $this->baseUrl.http_build_query(['user' => api_get_user_id()])
+            )
+        );
+
+        return $frmStudentList;
+    }
+
+    private function createFormTagFilter(): FormValidator
+    {
+        $extraField = new ExtraField('portfolio');
+        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
+
+        $chbxTagOptions = array_map(
+            function (array $tagOption) {
+                return $tagOption['tag'];
+            },
+            $tagFieldInfo['options']
+        );
+
+        $frmTagList = new FormValidator('frm_tag_list',
+            'get',
+            $this->baseUrl,
+            '',
+            [],
+            FormValidator::LAYOUT_BOX
+        );
+        $frmTagList->addCheckBoxGroup('tags', $tagFieldInfo['display_text'], $chbxTagOptions);
+        $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');
+        $frmTagList->applyFilter('text', 'trim');
+        $frmTagList->addHtml('<br>');
+        $frmTagList->addButtonFilter(get_lang('Filter'));
+
+        if ($this->course) {
+            $frmTagList->addHidden('cidReq', $this->course->getCode());
+            $frmTagList->addHidden('id_session', $this->session ? $this->session->getId() : 0);
+            $frmTagList->addHidden('gidReq', 0);
+            $frmTagList->addHidden('gradebook', 0);
+            $frmTagList->addHidden('origin', '');
+        }
+
+        return $frmTagList;
     }
 }

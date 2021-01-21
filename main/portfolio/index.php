@@ -177,6 +177,7 @@ switch ($action) {
         return;
     case 'details':
         $controller->details($httpRequest);
+
         return;
     case 'list':
     default:

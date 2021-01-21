@@ -177,22 +177,25 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
 
-    $allUserInfo = DocumentManager::get_all_info_to_certificate(
-        $studentId,
-        $courseCode,
-        $sessionId,
-        false
-    );
-
     $myContentHtml = $infoCertificate['content_course'];
     $myContentHtml = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $myContentHtml);
-    $infoToBeReplacedInContentHtml = $allUserInfo[0];
-    $infoToReplaceInContentHtml = $allUserInfo[1];
-    $myContentHtml = str_replace(
-        $infoToBeReplacedInContentHtml,
-        $infoToReplaceInContentHtml,
-        $myContentHtml
-    );
+
+    if (!empty($courseCode)) {
+        $allUserInfo = DocumentManager::get_all_info_to_certificate(
+            $studentId,
+            $courseCode,
+            $sessionId,
+            false
+        );
+
+        $infoToBeReplacedInContentHtml = $allUserInfo[0];
+        $infoToReplaceInContentHtml = $allUserInfo[1];
+        $myContentHtml = str_replace(
+            $infoToBeReplacedInContentHtml,
+            $infoToReplaceInContentHtml,
+            $myContentHtml
+        );
+    }
 
     $startDate = '';
     $endDate = '';

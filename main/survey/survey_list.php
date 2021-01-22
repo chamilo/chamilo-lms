@@ -188,7 +188,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $result = Database::query($sql);
                 $questionsOptions = [];
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    if ($row['type'] != 'pagebreak') {
+                    if ($row['type'] !== 'pagebreak') {
                         $questionsOptions[$row['sort']]['question_id'] = $row['question_id'];
                         $questionsOptions[$row['sort']]['survey_id'] = $row['survey_id'];
                         $questionsOptions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -278,6 +278,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     2,
                     $class['name']
                 );
+
                 foreach ($surveyList as $survey) {
                     $questions = $survey['questions'];
                     $questionsOriginal = $survey['questions'];
@@ -296,7 +297,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
                             $firstCoordinate = $coordinate;
                             $questionId = $question['question_id'];
-                            //$column++;
                             $rowStudent = 3;
                             foreach ($users as $user) {
                                 $userId = $user['id'];
@@ -487,6 +487,51 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 }
                 $counter++;
             }
+
+            foreach ($surveyList as $survey) {
+                $questions = $survey['questions'];
+                $questionsOriginal = $survey['questions'];
+                $usersWithAnswers = $survey['user_with_answers'];
+                $goodQuestionList = [];
+                foreach ($questions as $question) {
+                    if (false === strpos($question['question'], '{{')) {
+                        $questionTitle = strip_tags($question['question']);
+                        $questionId = $question['question_id'];
+                        $page = @$spreadsheet->createSheet($counter);
+
+                        @$page->setTitle(cut(str_replace('/', '-', $questionTitle), 25));
+                        $firstColumn = 3;
+                        $column = 3;
+                        $columnQuestion = 3;
+                        $row = 1;
+                        foreach ($classes as $class) {
+                            $users = $userList = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
+                            foreach ($users as $user) {
+                                $myUserId = $user['id'];
+                                $columnUser = 0;
+                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
+                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
+
+                                $data = '';
+                                if (isset($survey['user_answers'][$myUserId]) &&
+                                    isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
+                                ) {
+                                    $data = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
+                                }
+                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $data);
+                                $row++;
+                            }
+                        }
+
+                        $counter++;
+
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+
             $spreadsheet->setActiveSheetIndex(0);
             $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('report', true);
             @$writer = new PHPExcel_Writer_Excel2007($spreadsheet);

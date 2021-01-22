@@ -615,7 +615,7 @@ $Stats = "Statistics";
 $UplPage = "Upload page and link to Home Page";
 $LinkSite = "Add link to page on Home Page";
 $HasDel = "has been deleted";
-$ByDel = "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?";
+$ByDel = "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses).";
 $Y = "YES";
 $N = "NO";
 $DepartmentUrl = "Department URL";
@@ -8723,4 +8723,5 @@ $The = "The";
 $MultiplicateQuestionsByClass = "Multiplicate questions by class";
 $MultiplicateQuestionsByUser = "Multiplicate questions by user";
 $QuestionForNextUser = "Questions about next user";
+$CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "Course code to be entered in capital letters to confirm the deletion: %s";
 ?>

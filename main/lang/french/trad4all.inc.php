@@ -607,7 +607,7 @@ $Stats = "Suivi";
 $UplPage = "Déposer page et lier à l'accueil";
 $LinkSite = "Ajouter un lien sur la page d'accueil";
 $HasDel = "a été supprimé";
-$ByDel = "En supprimant ce cours, vous supprimerez tous les documents qu'il contient et désinscrirez tous les membres qui y sont inscrits. <p>Voulez-vous réellement supprimer ce cours ?";
+$ByDel = "En supprimant ce cours, vous supprimerez tous les documents qu'il contient et désinscrirez tous les membres qui y sont inscrits.";
 $Y = "OUI";
 $N = "NON";
 $DepartmentUrl = "URL du département";
@@ -8653,6 +8653,7 @@ $AddGradebookComment = "Commentaire";
 $LatestLoginInAnyCourse = "Dernier accès à un cours";
 $The = "Le";
 $MultiplicateQuestionsByClass = "Multiplier les questions par classe";
-$MultiplicateQuestionsByUser = "Multiplier les questions par utilisateurs";
+$MultiplicateQuestionsByUser = "Multiplier les questions par utilisateur";
 $QuestionForNextUser = "Questions concernant l'apprenant suivant";
+$CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "Code du cours à saisir en majuscules pour confirmer la suppression : %s";
 ?>

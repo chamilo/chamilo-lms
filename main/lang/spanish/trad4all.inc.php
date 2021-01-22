@@ -619,7 +619,7 @@ $Stats = "Estadísticas";
 $UplPage = "Enviar una página y enlazarla a la principal";
 $LinkSite = "Añadir un enlace web en la página principal";
 $HasDel = "ha sido suprimido";
-$ByDel = "Si suprime el sitio web de este curso, suprimirá todos los documentos que contiene y todos sus miembros dejarán de estar inscritos en el mismo. <p>¿ Está seguro de querer suprimir este curso ?";
+$ByDel = "Si suprime el sitio web de este curso, suprimirá todos los documentos que contiene y todos sus miembros dejarán de estar inscritos en el mismo.";
 $Y = "SI";
 $N = "NO";
 $DepartmentUrl = "URL del departamento";
@@ -8751,4 +8751,5 @@ $The = "El";
 $MultiplicateQuestionsByClass = "Multiplicar las preguntas por clase";
 $MultiplicateQuestionsByUser = "Multiplicar las preguntas por usuario";
 $QuestionForNextUser = "Preguntas sobre el usuario siguiente";
+$CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "El código del curso que debe ingresar en mayúsculas para confirmar la eliminación: %s";
 ?>

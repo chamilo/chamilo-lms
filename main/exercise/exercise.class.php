@@ -3328,11 +3328,13 @@ class Exercise
                 $endReminderValue = true;
             }
         }
+        $endTest = false;
         if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
                 $label = get_lang('ReviewQuestions');
                 $class = 'btn btn-success';
             } else {
+                $endTest = true;
                 $label = get_lang('EndTest');
                 $class = 'btn btn-warning';
             }
@@ -3395,10 +3397,15 @@ class Exercise
                     ]
                 );
             } else {
+                $attributes = ['type' => 'button', 'class' => $class, 'data-question' => $question_id];
+                $name = 'save_now';
+                if ($endTest && api_get_configuration_value('quiz_check_all_answers_before_end_test')) {
+                    $name = 'check_answers';
+                }
                 $buttonList[] = Display::button(
-                    'save_now',
+                    $name,
                     $label,
-                    ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
+                    $attributes
                 );
             }
             $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>';
@@ -4922,7 +4929,7 @@ class Exercise
                         $coords = array_filter($coords);
                         $user_array = '';
                         foreach ($coords as $coord) {
-                            list($x, $y) = explode(';', $coord);
+                            [$x, $y] = explode(';', $coord);
                             $user_array .= round($x).';'.round($y).'/';
                         }
                         $user_array = substr($user_array, 0, -1) ?: '';
@@ -10363,7 +10370,7 @@ class Exercise
         return $lpList;
     }
 
-    public function getReminderTable($questionList, $exercise_stat_info)
+    public function getReminderTable($questionList, $exercise_stat_info, $disableCheckBoxes = false)
     {
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
@@ -10376,7 +10383,6 @@ class Exercise
 
         $remindList = $exercise_stat_info['questions_to_check'];
         $remindList = explode(',', $remindList);
-
         $exeId = $exercise_stat_info['exe_id'];
         $exerciseId = $exercise_stat_info['exe_exo_id'];
         $exercise_result = $this->getUserAnswersSavedInExercise($exeId);
@@ -10414,10 +10420,11 @@ class Exercise
             if (!in_array($questionId, $exercise_result)) {
                 $questionTitle = Display::label($questionTitle, 'danger');
             }
-
             $label_attributes = [];
             $label_attributes['for'] = $check_id;
-            $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            if (false === $disableCheckBoxes) {
+                $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            }
             $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
         }
 

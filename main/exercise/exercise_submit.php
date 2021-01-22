@@ -467,6 +467,7 @@ if (empty($exercise_stat_info)) {
 }
 
 Session::write('exe_id', $exe_id);
+$checkAnswersUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=check_answers&exe_id='.$exe_id.'&'.api_get_cidreq();
 $saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_duration&exe_id='.$exe_id.'&'.api_get_cidreq();
 $questionListInSession = Session::read('questionList');
 $selectionType = $objExercise->getQuestionSelectionType();
@@ -1272,6 +1273,7 @@ $saveIcon = Display::return_icon(
     false,
     true
 );
+$loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
 
 echo '<script>
     function addExerciseEvent(elm, evType, fn, useCapture) {
@@ -1350,10 +1352,52 @@ echo '<script>
             save_question_list(questionList);
         });
 
+        $(\'button[name="check_answers"]\').on(\'touchstart click\', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var $this = $(this);
+            var urlExtra = $this.data(\'url\') || null;
+            var questionId = parseInt($this.data(\'question\')) || 0;
+
+            save_now(questionId, "check_answers");
+
+            var checkUrl = "'.$checkAnswersUrl.'";
+
+            $("#global-modal").attr("data-keyboard", "false");
+            $("#global-modal").attr("data-backdrop", "static");
+            $("#global-modal").find(".close").hide();
+
+            $("#global-modal .modal-body").load(checkUrl, function() {
+                $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
+                var continueTest = $("<a>",{
+                    text: "'.addslashes(get_lang('ContinueTest')).'",
+                    title: "'.addslashes(get_lang('ContinueTest')).'",
+                    href: "javascript:void(0);",
+                    click: function(){
+                        $(this).attr("disabled", "disabled");
+                        $("#global-modal").modal("hide");
+                        $("#global-modal .modal-body").html("");
+                    }
+                }).addClass("btn btn-default").appendTo("#global-modal .modal-body .btn-group");
+
+                 $("<a>",{
+                    text: "'.addslashes(get_lang('EndTest')).'",
+                    title: "'.addslashes(get_lang('EndTest')).'",
+                    href: "javascript:void(0);",
+                    click: function() {
+                        $(this).attr("disabled", "disabled");
+                        continueTest.attr("disabled", "disabled");
+                        save_now(questionId, urlExtra);
+                        $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
+                    }
+                }).addClass("btn btn-primary").appendTo("#global-modal .modal-body .btn-group");
+            });
+            $("#global-modal").modal("show");
+        });
+
         $(\'button[name="save_now"]\').on(\'touchstart click\', function (e) {
             e.preventDefault();
             e.stopPropagation();
-
             var
                 $this = $(this),
                 questionId = parseInt($this.data(\'question\')) || 0,
@@ -1442,8 +1486,7 @@ echo '<script>
         dataparam += remind_list ? ("&" + remind_list) : "";
         dataparam += my_choiceDc ? ("&" + my_choiceDc) : "";
 
-        $("#save_for_now_"+question_id).html(\''.
-            Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
+        $("#save_for_now_"+question_id).html(\''.$loading.'\');
         $.ajax({
             type:"post",
             url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
@@ -1478,6 +1521,10 @@ echo '<script>
 
                     $("#save_for_now_"+question_id).html(\''.
                         Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+
+                    if ("check_answers" === url_extra) {
+                        return true;
+                    }
                     // window.quizTimeEnding will be reset in exercise.class.php
                     if (window.quizTimeEnding) {
                         redirectExerciseToResult();
@@ -1517,7 +1564,7 @@ echo '<script>
         });
 
         free_answers = $.param(free_answers);
-        $("#save_all_response").html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
+        $("#save_all_response").html(\''.$loading.'\');
 
         var requestData = "'.$params.'&type=all";
         requestData += "&" + my_choice;

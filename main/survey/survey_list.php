@@ -298,6 +298,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $firstCoordinate = $coordinate;
                             $questionId = $question['question_id'];
                             $rowStudent = 3;
+
                             foreach ($users as $user) {
                                 $userId = $user['id'];
                                 $completeName = $user['firstname'].' '.$user['lastname'];
@@ -347,25 +348,23 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $myUserId = $userData['id'];
                         $userColumn = 3;
                         foreach ($goodQuestionList as $questionId) {
-                                $answerData = '';
-                                if (isset($survey['user_answers'][$myUserId]) &&
-                                    isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
-                                ) {
-                                    $answerData = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
-                                }
-                                @$page->setCellValueByColumnAndRow(
-                                    $userColumn,
-                                    $rowStudent,
-                                    $answerData,
-                                    //"$answerData : [$userColumn $rowStudent] $questionId",
-                                    true
-                                );
-                                $userColumn++;
-                            //}
+                            $answerData = '';
+                            if (isset($survey['user_answers'][$myUserId]) &&
+                                isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
+                            ) {
+                                $answerData = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
+                            }
+                            @$page->setCellValueByColumnAndRow(
+                                $userColumn,
+                                $rowStudent,
+                                $answerData,
+                                //"$answerData : [$userColumn $rowStudent] $questionId",
+                                true
+                            );
+                            $userColumn++;
                         }
                         $rowStudent++;
                     }
-                    //exit;
 
                     /*foreach ($questionsOriginal as $questionData) {
                         if (strpos($questionData['question'], '{{') === false) {
@@ -392,9 +391,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             }
                         }
                     }*/
-
-
-                    if (false)
+                    /*
                     foreach ($usersWithAnswers as $userAnswer) {
                         $userId = $userAnswer['user_id'];
                         $cell = @$page->setCellValueByColumnAndRow(
@@ -462,7 +459,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $page->mergeCells($firstCoordinate.':'.$lastCoordinate);
                         }
                     }
-
+                    */
                     /*$questionPerUser = [];
                     foreach ($questions as $question) {
                         if (strpos($question['question'], '{{')) {
@@ -498,7 +495,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $questionTitle = strip_tags($question['question']);
                         $questionId = $question['question_id'];
                         $page = @$spreadsheet->createSheet($counter);
-
                         @$page->setTitle(cut(str_replace('/', '-', $questionTitle), 25));
                         $firstColumn = 3;
                         $column = 3;
@@ -522,15 +518,12 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $row++;
                             }
                         }
-
                         $counter++;
-
                     } else {
                         break;
                     }
                 }
             }
-
 
             $spreadsheet->setActiveSheetIndex(0);
             $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('report', true);

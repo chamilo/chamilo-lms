@@ -235,7 +235,6 @@ foreach ($categories as $item) {
                 continue;
             }
         }
-
         if ($allowCategory && !empty($sessionId)) {
             // Check base course
             if (0 === $item->getSessionId()) {

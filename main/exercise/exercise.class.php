@@ -2520,7 +2520,7 @@ class Exercise
                         $courseList = SessionManager::getCoursesInSession($sessionId);
                         foreach ($courseList as $course) {
                             $courseSession = api_get_course_info_by_id($course);
-                            if(isset($courseSession['real_id'])) {
+                            if (isset($courseSession['real_id'])) {
                                 $courseId = $courseSession['real_id'];
                                 if (api_get_course_int_id() != $courseId) {
                                     $optionRemedial[$courseId] = $courseSession['title'];
@@ -2537,7 +2537,7 @@ class Exercise
                             false
                         );
                         foreach ($courseList as $course) {
-                            if(isset($course['real_id'])) {
+                            if (isset($course['real_id'])) {
                                 $courseId = $course['real_id'];
                                 if (api_get_course_int_id() != $courseId) {
                                     $optionRemedial[$courseId] = $course['title'];

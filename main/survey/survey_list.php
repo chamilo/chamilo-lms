@@ -579,6 +579,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             get_lang('SurveysWordInASCII').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
         );
         unlink($tempZipFile);
+        exit;
     }
 
     header('Location: '.$listUrl);

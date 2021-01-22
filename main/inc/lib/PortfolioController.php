@@ -1561,10 +1561,21 @@ class PortfolioController
             $content .= $frmStudent->returnForm();
         }
 
-        $content .= Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL
-            .$tblItems->return_table().PHP_EOL
-            .Display::page_subheader2(get_lang('Comments')).PHP_EOL
-            .$tblComments->return_table().PHP_EOL;
+        $content .= Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL;
+
+        if ($tblItems->get_total_number_of_items() > 0) {
+            $content .= $tblItems->return_table().PHP_EOL;
+        } else {
+            $content .= Display::return_message(get_lang('NoItemsInYourPortfolio'), 'warning');
+        }
+
+        $content .= Display::page_subheader2(get_lang('PortfolioCommentsMade')).PHP_EOL;
+
+        if ($tblComments->get_total_number_of_items() > 0) {
+            $content .= $tblComments->return_table().PHP_EOL;
+        } else {
+            $content .= Display::return_message(get_lang('YouHaveNotCommented'), 'warning');
+        }
 
         $this->renderView($content, get_lang('PortfolioDetails'), $actions);
     }
@@ -1574,20 +1585,37 @@ class PortfolioController
      */
     public function exportPdf()
     {
-        $pdfContent = '';
+        $pdfContent = Display::page_header($this->owner->getCompleteName());
 
-        $itemsHtml = $this->getItemsInHtmlFormatted();
+        if ($this->course) {
+            $pdfContent .= '<p>'.get_lang('Course').': ';
 
-        if (count($itemsHtml) > 0) {
-            $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
-            $pdfContent .= implode(PHP_EOL, $itemsHtml);
+            if ($this->session) {
+                $pdfContent .= $this->session->getName().' ('.$this->course->getTitle().')';
+            } else {
+                $pdfContent .= $this->course->getTitle();
+            }
+
+            $pdfContent .= '</p>';
         }
 
+        $itemsHtml = $this->getItemsInHtmlFormatted();
         $commentsHtml = $this->getCommentsInHtmlFormatted();
 
+        $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
+
+        if (count($itemsHtml) > 0) {
+            $pdfContent .= implode(PHP_EOL, $itemsHtml);
+        } else {
+            $pdfContent .= Display::return_message(get_lang('NoItemsInYourPortfolio'), 'warning');
+        }
+
+        $pdfContent .= Display::page_subheader2(get_lang('PortfolioCommentsMade'));
+
         if (count($commentsHtml) > 0) {
-            $pdfContent .= Display::page_subheader2(get_lang('PortfolioComments'));
             $pdfContent .= implode(PHP_EOL, $commentsHtml);
+        } else {
+            $pdfContent .= Display::return_message(get_lang('YouHaveNotCommented'), 'warning');
         }
 
         $pdfName = $this->owner->getCompleteName()
@@ -1630,6 +1658,14 @@ class PortfolioController
             $updateDate = api_convert_and_format_date($item->getUpdateDate());
 
             $metadata = '<ul class="list-unstyled text-muted">';
+
+            if ($item->getSession()) {
+                $metadata .= '<li>'.get_lang('Course').': '.$item->getSession()->getName().' ('
+                    .$item->getCourse()->getTitle().') </li>';
+            } elseif (!$item->getSession() && $item->getCourse()) {
+                $metadata .= '<li>'.get_lang('Course').': '.$item->getCourse()->getTitle().'</li>';
+            }
+
             $metadata .= '<li>'.sprintf(get_lang('CreationDateXDate'), $creationDate).'</li>';
             $metadata .= '<li>'.sprintf(get_lang('UpdateDateXDate'), $updateDate).'</li>';
 

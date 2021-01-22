@@ -1295,21 +1295,33 @@ class PortfolioController
      */
     public function details(HttpRequest $httpRequest)
     {
+        $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
+
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl
         );
+        $actions[] = Display::url(
+            Display::return_icon('pdf.png', get_lang('ExportMyPortfolioDataPdf'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'export_pdf'])
+        );
 
         $frmStudent = null;
 
-        if ($this->course && api_is_allowed_to_edit()) {
+        if ($isAllowedToFilterStudent) {
             if ($httpRequest->query->has('user')) {
                 $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
 
                 if (empty($this->owner)) {
                     api_not_allowed(true);
                 }
+
+                $actions[0] = Display::url(
+                    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.'action=details'
+                );
+                unset($actions[1], $actions[2]);
             }
 
             $frmStudent = new FormValidator('frm_student_list', 'get');
@@ -1550,5 +1562,132 @@ class PortfolioController
             .$tblComments->return_table().PHP_EOL;
 
         $this->renderView($content, get_lang('PortfolioDetails'), $actions);
+    }
+
+    /**
+     * @throws \MpdfException
+     */
+    public function exportPdf()
+    {
+        $itemsRepo = $this->em->getRepository(Portfolio::class);
+        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+
+        $qbComments = $commentsRepo->createQueryBuilder('comment');
+        $qbComments
+            ->where('comment.author = :owner')
+            ->setParameter('owner', $this->owner);
+
+        $itemsCriteria = ['user' => $this->owner];
+
+        if ($this->course) {
+            $itemsCriteria['course'] = $this->course;
+
+            $qbComments
+                ->join('comment.item', 'item')
+                ->andWhere('item.course = :course')
+                ->setParameter('course', $this->course);
+
+            if ($this->session) {
+                $qbComments
+                    ->andWhere('item.session = :session')
+                    ->setParameter('session', $this->session);
+            } else {
+                $qbComments->andWhere('item.session IS NULL');
+            }
+        }
+
+        $items = $itemsRepo->findBy($itemsCriteria);
+        $comments = $qbComments->getQuery()->getResult();
+
+        $pdfContent = '';
+
+        if (count($items) > 0) {
+            $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
+
+            /** @var Portfolio $item */
+            foreach ($items as $item) {
+                $creationDate = api_convert_and_format_date($item->getCreationDate());
+                $updateDate = api_convert_and_format_date($item->getUpdateDate());
+
+                $metadata = '<ul class="list-unstyled text-muted">';
+                $metadata .= '<li>'.sprintf(get_lang('CreationDateXDate'), $creationDate).'</li>';
+                $metadata .= '<li>'.sprintf(get_lang('UpdateDateXDate'), $updateDate).'</li>';
+
+                if ($item->getCategory()) {
+                    $metadata .= '<li>'.sprintf(get_lang('CategoryXName'), $item->getCategory()->getTitle()).'</li>';
+                }
+
+                $metadata .= '</ul>';
+
+                $content = '';
+
+                if ($item->getOrigin()) {
+                    $content .= '<blockquote>';
+
+                    switch ($item->getOriginType()) {
+                        case Portfolio::TYPE_ITEM:
+                            $origin = $itemsRepo->find($item->getOrigin());
+
+                            $content .= $origin->getContent();
+                            $content .= '<footer>';
+                            $content .= sprintf(
+                                get_lang('OriginallyPublishedAsXTitleByYUser'),
+                                $origin->getTitle(),
+                                $origin->getUser()->getCompleteName()
+                            );
+                            $content .= '</footer>';
+                            break;
+                        case Portfolio::TYPE_COMMENT:
+                            $origin = $commentsRepo->find($item->getOrigin());
+
+                            $content .= $origin->getContent();
+                            $content .= '<footer>';
+                            $content .= sprintf(
+                                get_lang('OriginallyCommentedByXUserInYItem'),
+                                $origin->getAuthor()->getCompleteName(),
+                                $origin->getItem()->getTitle()
+                            );
+                            $content .= '</footer>';
+                            break;
+                    }
+
+                    $content .= '</blockquote>';
+                }
+
+                $content .= '<div class="clearfix">'.$item->getContent().'</div>';
+
+                $pdfContent .= Display::panel($content, $item->getTitle(), '', 'info', $metadata);
+            }
+        }
+
+        if (count($comments) > 0) {
+            $pdfContent .= Display::page_subheader2(get_lang('PortfolioComments'));
+
+            /** @var PortfolioComment $comment */
+            foreach ($comments as $comment) {
+                $item = $comment->getItem();
+                $date = api_convert_and_format_date($comment->getDate());
+
+                $metadata = '<ul class="list-unstyled text-muted">';
+                $metadata .= '<li>'.sprintf(get_lang('DateXDate'), $date).'</li>';
+                $metadata .= '<li>'.sprintf(get_lang('PortfolioItemTitleXName'), $item->getTitle()).'</li>';
+                $metadata .= '</ul>';
+
+                $pdfContent .= Display::panel($comment->getContent(), '', '', 'default', $metadata);
+            }
+        }
+
+        $pdf = new PDF();
+        $pdf->content_to_pdf(
+            $pdfContent,
+            null,
+            $this->owner->getCompleteName().'_'.get_lang('Portfolio'),
+            $this->course ? $this->course->getCode() : null,
+            'D',
+            false,
+            null,
+            false,
+            true
+        );
     }
 }

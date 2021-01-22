@@ -1569,7 +1569,116 @@ class PortfolioController
      */
     public function exportPdf()
     {
+        $pdfContent = '';
+
+        $itemsHtml = $this->getItemsInHtmlFormatted();
+
+        if (count($itemsHtml) > 0) {
+            $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
+            $pdfContent .= implode(PHP_EOL, $itemsHtml);
+        }
+
+        $commentsHtml = $this->getCommentsInHtmlFormatted();
+
+        if (count($commentsHtml) > 0) {
+            $pdfContent .= Display::page_subheader2(get_lang('PortfolioComments'));
+            $pdfContent .= implode(PHP_EOL, $commentsHtml);
+        }
+
+        $pdfName = $this->owner->getCompleteName()
+            .($this->course ? '_'.$this->course->getCode() : '')
+            .'_'.get_lang('Portfolio');
+
+        $pdf = new PDF();
+        $pdf->content_to_pdf(
+            $pdfContent,
+            null,
+            $pdfName,
+            $this->course ? $this->course->getCode() : null,
+            'D',
+            false,
+            null,
+            false,
+            true
+        );
+    }
+
+    private function getItemsInHtmlFormatted(): array
+    {
         $itemsRepo = $this->em->getRepository(Portfolio::class);
+        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+
+        $itemsCriteria = ['user' => $this->owner];
+
+        if ($this->course) {
+            $itemsCriteria['course'] = $this->course;
+            $itemsCriteria['session'] = $this->session ?: null;
+        }
+
+        $items = $itemsRepo->findBy($itemsCriteria);
+
+        $itemsHtml = [];
+
+        /** @var Portfolio $item */
+        foreach ($items as $item) {
+            $creationDate = api_convert_and_format_date($item->getCreationDate());
+            $updateDate = api_convert_and_format_date($item->getUpdateDate());
+
+            $metadata = '<ul class="list-unstyled text-muted">';
+            $metadata .= '<li>'.sprintf(get_lang('CreationDateXDate'), $creationDate).'</li>';
+            $metadata .= '<li>'.sprintf(get_lang('UpdateDateXDate'), $updateDate).'</li>';
+
+            if ($item->getCategory()) {
+                $metadata .= '<li>'.sprintf(get_lang('CategoryXName'), $item->getCategory()->getTitle()).'</li>';
+            }
+
+            $metadata .= '</ul>';
+
+            $content = '';
+
+            if ($item->getOrigin()) {
+                $content .= '<blockquote>';
+
+                switch ($item->getOriginType()) {
+                    case Portfolio::TYPE_ITEM:
+                        $origin = $itemsRepo->find($item->getOrigin());
+
+                        $content .= $origin->getContent();
+                        $content .= '<footer>';
+                        $content .= sprintf(
+                            get_lang('OriginallyPublishedAsXTitleByYUser'),
+                            $origin->getTitle(),
+                            $origin->getUser()->getCompleteName()
+                        );
+                        $content .= '</footer>';
+                        break;
+                    case Portfolio::TYPE_COMMENT:
+                        $origin = $commentsRepo->find($item->getOrigin());
+
+                        $content .= $origin->getContent();
+                        $content .= '<footer>';
+                        $content .= sprintf(
+                            get_lang('OriginallyCommentedByXUserInYItem'),
+                            $origin->getAuthor()->getCompleteName(),
+                            $origin->getItem()->getTitle()
+                        );
+                        $content .= '</footer>';
+                        break;
+                }
+
+                $content .= '</blockquote>';
+            }
+
+            $content .= '<div class="clearfix">'.$item->getContent().'</div>';
+
+            $itemsHtml[] = Display::panel($content, $item->getTitle(), '', 'info', $metadata);
+        }
+
+        return $itemsHtml;
+    }
+
+    private function getCommentsInHtmlFormatted(): array
+    {
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
 
         $qbComments = $commentsRepo->createQueryBuilder('comment');
@@ -1577,11 +1686,7 @@ class PortfolioController
             ->where('comment.author = :owner')
             ->setParameter('owner', $this->owner);
 
-        $itemsCriteria = ['user' => $this->owner];
-
         if ($this->course) {
-            $itemsCriteria['course'] = $this->course;
-
             $qbComments
                 ->join('comment.item', 'item')
                 ->andWhere('item.course = :course')
@@ -1596,98 +1701,23 @@ class PortfolioController
             }
         }
 
-        $items = $itemsRepo->findBy($itemsCriteria);
         $comments = $qbComments->getQuery()->getResult();
 
-        $pdfContent = '';
+        $commentsHtml = [];
 
-        if (count($items) > 0) {
-            $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
+        /** @var PortfolioComment $comment */
+        foreach ($comments as $comment) {
+            $item = $comment->getItem();
+            $date = api_convert_and_format_date($comment->getDate());
 
-            /** @var Portfolio $item */
-            foreach ($items as $item) {
-                $creationDate = api_convert_and_format_date($item->getCreationDate());
-                $updateDate = api_convert_and_format_date($item->getUpdateDate());
+            $metadata = '<ul class="list-unstyled text-muted">';
+            $metadata .= '<li>'.sprintf(get_lang('DateXDate'), $date).'</li>';
+            $metadata .= '<li>'.sprintf(get_lang('PortfolioItemTitleXName'), $item->getTitle()).'</li>';
+            $metadata .= '</ul>';
 
-                $metadata = '<ul class="list-unstyled text-muted">';
-                $metadata .= '<li>'.sprintf(get_lang('CreationDateXDate'), $creationDate).'</li>';
-                $metadata .= '<li>'.sprintf(get_lang('UpdateDateXDate'), $updateDate).'</li>';
-
-                if ($item->getCategory()) {
-                    $metadata .= '<li>'.sprintf(get_lang('CategoryXName'), $item->getCategory()->getTitle()).'</li>';
-                }
-
-                $metadata .= '</ul>';
-
-                $content = '';
-
-                if ($item->getOrigin()) {
-                    $content .= '<blockquote>';
-
-                    switch ($item->getOriginType()) {
-                        case Portfolio::TYPE_ITEM:
-                            $origin = $itemsRepo->find($item->getOrigin());
-
-                            $content .= $origin->getContent();
-                            $content .= '<footer>';
-                            $content .= sprintf(
-                                get_lang('OriginallyPublishedAsXTitleByYUser'),
-                                $origin->getTitle(),
-                                $origin->getUser()->getCompleteName()
-                            );
-                            $content .= '</footer>';
-                            break;
-                        case Portfolio::TYPE_COMMENT:
-                            $origin = $commentsRepo->find($item->getOrigin());
-
-                            $content .= $origin->getContent();
-                            $content .= '<footer>';
-                            $content .= sprintf(
-                                get_lang('OriginallyCommentedByXUserInYItem'),
-                                $origin->getAuthor()->getCompleteName(),
-                                $origin->getItem()->getTitle()
-                            );
-                            $content .= '</footer>';
-                            break;
-                    }
-
-                    $content .= '</blockquote>';
-                }
-
-                $content .= '<div class="clearfix">'.$item->getContent().'</div>';
-
-                $pdfContent .= Display::panel($content, $item->getTitle(), '', 'info', $metadata);
-            }
+            $commentsHtml[] = Display::panel($comment->getContent(), '', '', 'default', $metadata);
         }
 
-        if (count($comments) > 0) {
-            $pdfContent .= Display::page_subheader2(get_lang('PortfolioComments'));
-
-            /** @var PortfolioComment $comment */
-            foreach ($comments as $comment) {
-                $item = $comment->getItem();
-                $date = api_convert_and_format_date($comment->getDate());
-
-                $metadata = '<ul class="list-unstyled text-muted">';
-                $metadata .= '<li>'.sprintf(get_lang('DateXDate'), $date).'</li>';
-                $metadata .= '<li>'.sprintf(get_lang('PortfolioItemTitleXName'), $item->getTitle()).'</li>';
-                $metadata .= '</ul>';
-
-                $pdfContent .= Display::panel($comment->getContent(), '', '', 'default', $metadata);
-            }
-        }
-
-        $pdf = new PDF();
-        $pdf->content_to_pdf(
-            $pdfContent,
-            null,
-            $this->owner->getCompleteName().'_'.get_lang('Portfolio'),
-            $this->course ? $this->course->getCode() : null,
-            'D',
-            false,
-            null,
-            false,
-            true
-        );
+        return $commentsHtml;
     }
 }

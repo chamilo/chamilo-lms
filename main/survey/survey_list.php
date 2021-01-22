@@ -493,6 +493,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             @$writer->save($file);
 
             DocumentManager::file_send_for_download($file, true, get_lang('Report').'.xlsx');
+            exit;
             break;
     }
 

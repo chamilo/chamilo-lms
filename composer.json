@@ -34,7 +34,7 @@
         ]
     },
     "require": {
-        "php": "^7.2.9 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",

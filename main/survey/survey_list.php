@@ -290,7 +290,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $cell = @$page->setCellValueByColumnAndRow(
                                 $column,
                                 1,
-                                str_replace('{{student_full_name}}', '', $question['question'])
+                                strip_tags(str_replace('{{student_full_name}}', '', $question['question']))
                             );
 
                             $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
@@ -317,7 +317,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $cell = @$page->setCellValueByColumnAndRow(
                                     $column,
                                     2,
-                                    "$questionTitle ".$goodQuestionId,
+                                    strip_tags($questionTitle),
                                     true
                                 );
                                 $cell->getStyle()->getAlignment()->setTextRotation(90);

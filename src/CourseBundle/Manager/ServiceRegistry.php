@@ -2,7 +2,7 @@
 
 namespace Chamilo\CourseBundle\Manager;
 
-use Sylius\Component\Registry\ServiceRegistry as SyliusServiceRegistry;
+use Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry as SyliusServiceRegistry;
 
 class ServiceRegistry extends SyliusServiceRegistry
 {

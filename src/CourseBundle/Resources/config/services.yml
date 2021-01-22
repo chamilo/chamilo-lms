@@ -4,7 +4,7 @@ services:
         public: true
 
     chamilo_course.registry.settings_schema:
-        class: Sylius\Component\Registry\ServiceRegistry
+        class: Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry
         arguments:
             - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
             - 'CourseSettings'

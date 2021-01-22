@@ -73,7 +73,6 @@
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "graphp/algorithms": "~0.8",
         "graphp/graphviz": "~0.2",
-        "gregwar/captcha-bundle": "^2.0",
         "jbroadway/urlify": "~1.1",
         "jeroendesloovere/vcard": "~1.7",
         "jimmiw/php-time-ago": "~3.0",

@@ -91,10 +91,10 @@ sylius_settings:
 chamilo_course:
     driver: doctrine/orm
 
-gregwar_captcha:
-    width: 200
-    height: 50
-    length: 6
+# gregwar_captcha:
+    #     width: 200
+    #     height: 50
+    #   length: 6
 
 cocur_slugify:
     lowercase: true

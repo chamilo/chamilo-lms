@@ -21,7 +21,7 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
-$courseCode = $courseInfo['official_code'];
+$courseCode = $courseInfo['code'];
 $courseName = $courseInfo['name'];
 
 if (!api_is_allowed_to_edit()) {
@@ -34,7 +34,7 @@ $message = '';
 
 if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && $_GET['course_code'] && !empty($_GET['course_code'])) {
     if ($courseCode === $_GET['course_code']) {
-        CourseManager::delete_course($courseInfo['sysCode']);
+        CourseManager::delete_course($courseInfo['code']);
         // DELETE CONFIRMATION MESSAGE
         Session::erase('_cid');
         Session::erase('_real_cid');

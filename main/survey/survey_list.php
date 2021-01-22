@@ -330,36 +330,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $userRow = 3;
                                 $rowStudent = 3;
                                 $userColumn++;
-                                /*foreach ($questionsOriginal as $questionData) {
-                                    if (strpos($questionData['question'], '{{') === false) {
-                                        if ($questionTitle === $questionData['question'] &&
-                                            isset($survey['user_answers'][$userId])
-                                        ) {
-
-                                            //var_dump($questionData['question']);
-                                            foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
-                                                if ($questionData['question_id'] == $questionId) {
-                                                    if (is_array($answerData)) {
-                                                        $answerData = implode(', ', $answerData);
-                                                    }
-                                                    @$page->setCellValueByColumnAndRow(
-                                                        $questionPosition,
-                                                        $rowStudent,
-                                                        $answerData,
-                                                        true
-                                                    );
-                                                    break;
-                                                }
-                                            }
-                                            break;
-                                        }
-                                    }*/
-
-
                                 $questionPosition++;
                             }
 
-                            //$rowStudent++;
                             $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
                             $lastCoordinate = $coordinate;
 
@@ -367,17 +340,13 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $page->mergeCells($firstCoordinate.':'.$lastCoordinate);
                             }
                         }
-                }
-
+                    }
 
                     $rowStudent = 3;
                     foreach ($userList as $userData) {
                         $myUserId = $userData['id'];
                         $userColumn = 3;
                         foreach ($goodQuestionList as $questionId) {
-                            //$questionId = $questionData['question_id'];
-                            //var_dump($questionId);
-                            //if (strpos($questionData['question'], '{{') === false) {
                                 $answerData = '';
                                 if (isset($survey['user_answers'][$myUserId]) &&
                                     isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
@@ -397,6 +366,32 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $rowStudent++;
                     }
                     //exit;
+
+                    /*foreach ($questionsOriginal as $questionData) {
+                        if (strpos($questionData['question'], '{{') === false) {
+                            if ($questionTitle === $questionData['question'] &&
+                                isset($survey['user_answers'][$userId])
+                            ) {
+
+                                //var_dump($questionData['question']);
+                                foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
+                                    if ($questionData['question_id'] == $questionId) {
+                                        if (is_array($answerData)) {
+                                            $answerData = implode(', ', $answerData);
+                                        }
+                                        @$page->setCellValueByColumnAndRow(
+                                            $questionPosition,
+                                            $rowStudent,
+                                            $answerData,
+                                            true
+                                        );
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }*/
 
 
                     if (false)

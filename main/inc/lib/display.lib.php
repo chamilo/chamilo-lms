@@ -2529,6 +2529,11 @@ class Display
         }
 
         $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+
+        if (empty($title) && !empty($extra)) {
+            $title = '<div class="panel-heading" '.$headerStyle.' >'.$extra.'</div>';
+        }
+
         $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;

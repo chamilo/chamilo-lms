@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
@@ -1306,6 +1307,10 @@ class PortfolioController
             Display::return_icon('pdf.png', get_lang('ExportMyPortfolioDataPdf'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl.http_build_query(['action' => 'export_pdf'])
         );
+        $actions[] = Display::url(
+            Display::return_icon('save_pack.png', get_lang('ExportMyPortfolioDataPdf'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'export_zip'])
+        );
 
         $frmStudent = null;
 
@@ -1719,5 +1724,56 @@ class PortfolioController
         }
 
         return $commentsHtml;
+    }
+
+    public function exportZip()
+    {
+        $itemsHtml = $this->getItemsInHtmlFormatted();
+        $commentsHtml = $this->getCommentsInHtmlFormatted();
+
+        $view = new Template('', false, false, false, false, false, false);
+        $template = $view->get_template('layout/blank.tpl');
+
+        $sysArchivePath = api_get_path(SYS_ARCHIVE_PATH);
+        $tempPortfolioDirectory = $sysArchivePath."portfolio/{$this->owner->getId()}/";
+
+        $filenames = [];
+
+        $fs = new Filesystem();
+
+        foreach ($itemsHtml as $i => $itemHtml) {
+            $view->assign('content', $itemHtml);
+            $itemFileContent = $view->fetch($template);
+            $itemFilename = $tempPortfolioDirectory.'items/item-'.($i + 1).'.html';
+
+            $filenames[] = $itemFilename;
+
+            $fs->dumpFile($itemFilename, $itemFileContent);
+        }
+
+        foreach ($commentsHtml as $i => $commentHtml) {
+            $view->assign('content', $commentHtml);
+            $commentFileContent = $view->fetch($template);
+            $commentFilename = $tempPortfolioDirectory.'comments/comment-'.($i + 1).'.html';
+
+            $filenames[] = $commentFilename;
+
+            $fs->dumpFile($commentFilename, $commentFileContent);
+        }
+
+        $zipName = $this->owner->getCompleteName()
+            .($this->course ? '_'.$this->course->getCode() : '')
+            .'_'.get_lang('Portfolio');
+        $tempZipFile = $sysArchivePath."portfolio/$zipName.zip";
+        $zip = new PclZip($tempZipFile);
+
+        foreach ($filenames as $filename) {
+            $zip->add($filename, PCLZIP_OPT_REMOVE_PATH, $tempPortfolioDirectory);
+        }
+
+        DocumentManager::file_send_for_download($tempZipFile, true, "$zipName.zip");
+
+        $fs->remove($tempPortfolioDirectory);
+        $fs->remove($tempZipFile);
     }
 }

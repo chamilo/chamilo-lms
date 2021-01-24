@@ -79,7 +79,7 @@
         "kigkonsult/icalcreator": "~2.29",
         "knplabs/doctrine-behaviors": "~2.0",
         "knplabs/gaufrette": "~0.9",
-        "knplabs/knp-components": "~2.0",
+        "knplabs/knp-components": "~3.0",
         "knplabs/knp-menu-bundle": "~3.0",
         "knpuniversity/oauth2-client-bundle": "~2.0",
         "laminas/laminas-config": "~3.2",

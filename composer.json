@@ -121,7 +121,6 @@
         "symfony/mime": "^5.0",
         "symfony/monolog-bundle": "^3.1",
         "symfony/notifier": "^5.0",
-        "symfony/polyfill-apcu": "^1.9",
         "symfony/requirements-checker": "^1.1",
         "symfony/security-acl": "^3.0",
         "symfony/security-bundle": "^5.0",
@@ -167,6 +166,7 @@
         "weirdan/doctrine-psalm-plugin": "^0.11.3"
     },
     "replace": {
+        "symfony/polyfill-apcu": "*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
         "symfony/polyfill-mbstring": "*",

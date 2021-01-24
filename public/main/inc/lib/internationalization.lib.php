@@ -1070,7 +1070,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  */
 function api_ord($character, $encoding = 'UTF-8')
 {
-    return Utf8::ord(api_utf8_encode($character, $encoding));
+    return ord(api_utf8_encode($character, $encoding));
 }
 
 /**
@@ -1107,7 +1107,7 @@ function api_ord($character, $encoding = 'UTF-8')
  */
 function api_str_ireplace($search, $replace, $subject, &$count = null, $encoding = null)
 {
-    return Utf8::str_ireplace($search, $replace, $subject, $count);
+    return str_ireplace($search, $replace, $subject, $count);
 }
 
 /**
@@ -1130,7 +1130,7 @@ function api_str_ireplace($search, $replace, $subject, &$count = null, $encoding
  */
 function api_str_split($string, $split_length = 1, $encoding = null)
 {
-    return Utf8::str_split($string, $split_length);
+    return str_split($string, $split_length);
 }
 
 /**
@@ -1153,7 +1153,7 @@ function api_str_split($string, $split_length = 1, $encoding = null)
  */
 function api_stripos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::stripos($haystack, $needle, $offset);
+    return stripos($haystack, $needle, $offset);
 }
 
 /**
@@ -1181,7 +1181,7 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_stristr($haystack, $needle, $before_needle = false, $encoding = null)
 {
-    return Utf8::stristr($haystack, $needle, $before_needle);
+    return stristr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -1203,7 +1203,7 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
  */
 function api_strlen($string, $encoding = null)
 {
-    return Utf8::strlen($string);
+    return strlen($string);
 }
 
 /**
@@ -1223,7 +1223,7 @@ function api_strlen($string, $encoding = null)
  */
 function api_strpos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::strpos($haystack, $needle, $offset);
+    return strpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1246,7 +1246,7 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_strrchr($haystack, $needle, $before_needle = false, $encoding = null)
 {
-    return Utf8::strrchr($haystack, $needle);
+    return strrchr($haystack, $needle);
 }
 
 /**
@@ -1262,7 +1262,7 @@ function api_strrchr($haystack, $needle, $before_needle = false, $encoding = nul
  */
 function api_strrev($string, $encoding = null)
 {
-    return Utf8::strrev($string);
+    return strrev($string);
 }
 
 /**
@@ -1282,7 +1282,7 @@ function api_strrev($string, $encoding = null)
  */
 function api_strripos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::strripos($haystack, $needle, $offset);
+    return strripos($haystack, $needle, $offset);
 }
 
 /**
@@ -1302,7 +1302,7 @@ function api_strripos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_strrpos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::strrpos($haystack, $needle, $offset);
+    return strrpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1325,7 +1325,7 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_strstr($haystack, $needle, $before_needle = false, $encoding = null)
 {
-    return Utf8::strstr($haystack, $needle, $before_needle);
+    return strstr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -1342,7 +1342,7 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
  */
 function api_strtolower($string, $encoding = null)
 {
-    return Utf8::strtolower($string);
+    return strtolower($string);
 }
 
 /**
@@ -1359,7 +1359,7 @@ function api_strtolower($string, $encoding = null)
  */
 function api_strtoupper($string, $encoding = null)
 {
-    return Utf8::strtoupper($string);
+    return strtoupper($string);
 }
 
 /**
@@ -1384,7 +1384,7 @@ function api_substr($string, $start, $length = null, $encoding = null)
         $length = api_strlen($string, $encoding);
     }
 
-    return Utf8::substr($string, $start, $length);
+    return substr($string, $start, $length);
 }
 
 /**
@@ -1401,7 +1401,7 @@ function api_substr($string, $start, $length = null, $encoding = null)
  */
 function api_substr_count($haystack, $needle, $encoding = null)
 {
-    return Utf8::substr_count($haystack, $needle);
+    return substr_count($haystack, $needle);
 }
 
 /**
@@ -1433,7 +1433,7 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
         $length = api_strlen($string);
     }
 
-    return UTf8::substr_replace($string, $replacement, $start, $length);
+    return substr_replace($string, $replacement, $start, $length);
 }
 
 /**
@@ -1450,7 +1450,7 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
  */
 function api_ucfirst($string, $encoding = null)
 {
-    return Utf8::ucfirst($string);
+    return ucfirst($string);
 }
 
 /**
@@ -1467,7 +1467,7 @@ function api_ucfirst($string, $encoding = null)
  */
 function api_ucwords($string, $encoding = null)
 {
-    return Utf8::ucwords($string);
+    return ucwords($string);
 }
 
 /**
@@ -1839,7 +1839,7 @@ function api_detect_encoding($string, $language = null)
  */
 function api_is_valid_utf8($string)
 {
-    return Utf8::isUtf8($string);
+    return mb_check_encoding($string, 'UTF-8');
 }
 
 /**

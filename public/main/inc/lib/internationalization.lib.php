@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use Patchwork\Utf8;
 use Westsworld\TimeAgo;
 
 /**

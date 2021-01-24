@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Patchwork\Utf8\Bootup;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,8 +96,6 @@ try {
     // src/CoreBundle/EventListener/LegacyListener.php
     // This is called when when doing the $kernel->handle
     $charset = 'UTF-8';
-    // Enables the portability layer and configures PHP for UTF-8
-    Bootup::initAll();
     ini_set('log_errors', '1');
     $this_section = SECTION_GLOBAL;
     //Default quota for the course documents folder

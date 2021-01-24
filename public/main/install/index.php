@@ -130,9 +130,6 @@ $session_lifetime = 360000;
 $installLanguage = '';
 $installationGuideLink = '../../documentation/installation_guide.html';
 
-// Enables the portability layer and configures PHP for UTF-8
-\Patchwork\Utf8\Bootup::initAll();
-
 // Setting the error reporting levels.
 error_reporting(E_ALL);
 

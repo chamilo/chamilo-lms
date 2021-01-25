@@ -59,7 +59,7 @@
                 {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
             </li>
 
-            {% if item.creationDate != item.updateDate %}
+            {% if _u.id == item.user.id and item.creationDate != item.updateDate %}
                 <li>
                     <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
                     {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
@@ -95,11 +95,13 @@
 
 <hr>
 
-<h5 class="h4">{{ 'XComments'|get_lang|format(item.comments.count) }}</h5>
+<div id="portfolio-item-comments">
+    <h5 class="h4">{{ 'XComments'|get_lang|format(item.comments.count) }}</h5>
 
-{{ comments }}
+    {{ comments }}
 
-{{ form }}
+    {{ form }}
+</div>
 
 <script>
     $(function () {

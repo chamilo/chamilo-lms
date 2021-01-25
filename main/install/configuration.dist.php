@@ -302,6 +302,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
 // in order to accept all embed type videos (like vimeo, wistia, etc)
 // $_configuration['course_introduction_html_strict_filtering'] = true;
+// Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+// $_configuration['question_exercise_html_strict_filtering'] = true;
 // Prevents the duplicate upload in assignments
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
 //Show student progress in My courses page
@@ -990,6 +992,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Set to true to disable the new personal data page inside the social network
 // menu
 // $_configuration['disable_gdpr'] = true;
+// Set the LinkedIn organization id BT#17468
+//$_configuration['linkedin_organization_id'] = false;
 
 // GDPR requires users to be informed of the Data Protection Officer name and
 // contact point. These can only be defined here for now, but will be moved to

@@ -38,10 +38,12 @@ $(document).on('ready', function () {
     <h2 class="page-header">{{ "GradebookListOfStudentsCertificates" | get_lang }}</h2>
     {% if not export_all_link is null %}
         <div class="actions">
-            <a href="{{ export_all_link }}" class="btn btn-info">
-                <em class="fa fa-check"></em> {{ 'ExportAllCertificatesToPDF' | get_lang }}
+            <a href="#" id="btn-export-all">
+                {{ 'pdf.png'|img(32, 'ExportAllCertificatesToPDF'|get_lang) }}
             </a>
         </div>
+
+        {{ export_all_link }}
     {% endif %}
 
     <table class="table table-striped">

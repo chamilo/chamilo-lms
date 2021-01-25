@@ -224,6 +224,25 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
 );
 $pageContent .= ob_get_contents();
 ob_end_clean();
+
+$oldResultDisabled = $objExercise->results_disabled;
+$objExercise->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+$objExercise->forceShowExpectedChoiceColumn = true;
+ob_start();
+$statsTeacher = ExerciseLib::displayQuestionListByAttempt(
+    $objExercise,
+    $exeId,
+    $saveResults,
+    $remainingMessage,
+    $allowSignature,
+    api_get_configuration_value('quiz_results_answers_report'),
+    false
+);
+ob_end_clean();
+
+$objExercise->results_disabled = $oldResultDisabled;
+$objExercise->forceShowExpectedChoiceColumn = false;
+
 // Save here LP status
 if (!empty($learnpath_id) && $saveResults) {
     // Save attempt in lp
@@ -236,7 +255,8 @@ ExerciseLib::sendNotification(
     $exercise_stat_info,
     $courseInfo,
     $attempt_count++,
-    $stats
+    $stats,
+    $statsTeacher
 );
 
 $hookQuizEnd = HookQuizEnd::create();

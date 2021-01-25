@@ -95,6 +95,7 @@ class Exercise
     public $hideComment;
     public $hideNoAnswer;
     public $hideExpectedAnswer;
+    public $forceShowExpectedChoiceColumn;
 
     /**
      * Constructor of the class.
@@ -3320,8 +3321,6 @@ class Exercise
         }
 
         $isReviewingAnswers = isset($_REQUEST['reminder']) && 2 === (int) $_REQUEST['reminder'];
-
-        // User
         $endReminderValue = false;
         if (!empty($myRemindList) && $isReviewingAnswers) {
             $endValue = end($myRemindList);
@@ -3843,7 +3842,6 @@ class Exercise
                             $option = isset($values[1]) ? $values[1] : '';
                             $choice[$my_answer_id] = $option;
                         }
-
                         $userAnsweredQuestion = !empty($choice);
                     }
 
@@ -7749,7 +7747,7 @@ class Exercise
                 }
             }
 
-            $attributes = ['id' => 'remind_list['.$questionId.']'];
+            $attributes = ['id' => 'remind_list['.$questionId.']', 'data-question-id' => $questionId];
 
             // Showing the question
             $exercise_actions = null;
@@ -8418,6 +8416,10 @@ class Exercise
      */
     public function showExpectedChoiceColumn()
     {
+        if (true === $this->forceShowExpectedChoiceColumn) {
+            return true;
+        }
+
         if ($this->hideExpectedAnswer) {
             return false;
         }
@@ -10381,6 +10383,7 @@ class Exercise
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
         $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+        $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 
         if (empty($exercise_stat_info)) {
             return '';
@@ -10401,7 +10404,11 @@ class Exercise
         foreach ($questionList as $questionId) {
             $objQuestionTmp = Question::read($questionId);
             $check_id = 'remind_list['.$questionId.']';
-            $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
+            $attributes = [
+                'id' => $check_id,
+                'onclick' => "save_remind_item(this, '$questionId');",
+                'data-question-id' => $questionId,
+            ];
             if (in_array($questionId, $remindList)) {
                 $attributes['checked'] = 1;
             }
@@ -10444,26 +10451,39 @@ class Exercise
             window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&" + lp_data;
         }
 
+        function selectAll() {
+            $("input[type=checkbox]").each(function () {
+                $(this).prop("checked", 1);
+                var question_id = $(this).data("question-id");
+                var action = "add";
+                $.ajax({
+                    url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+                    data: "question_id="+question_id+"&exe_id='.$exeId.'&action="+action,
+                    success: function(returnValue) {
+                    }
+                });
+            });
+        }
+
         function changeOptionStatus(status)
         {
             $("input[type=checkbox]").each(function () {
                 $(this).prop("checked", status);
             });
-
             var action = "";
-            var extraOption = "remove_all";
+            var option = "remove_all";
             if (status == 1) {
-                extraOption = "add_all";
+                option = "add_all";
             }
             $.ajax({
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
-                data: "option="+extraOption+"&exe_id='.$exeId.'&action="+action,
+                data: "option="+option+"&exe_id='.$exeId.'&action="+action,
                 success: function(returnValue) {
                 }
             });
         }
 
-        function review_questions() {
+        function reviewQuestions() {
             var isChecked = 1;
             $("input[type=checkbox]").each(function () {
                 if ($(this).prop("checked")) {
@@ -10476,7 +10496,7 @@ class Exercise
                 $("#message").addClass("warning-message");
                 $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
             } else {
-                window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
+                window.location = "exercise_submit.php?'.api_get_cidreq().'&category_id='.$categoryId.'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
             }
         }
 

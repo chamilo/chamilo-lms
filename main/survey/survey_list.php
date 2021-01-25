@@ -547,7 +547,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             );
 
                             $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
-                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(100);
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(60);
 
                             //$cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname'], true);
                             /*$page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);

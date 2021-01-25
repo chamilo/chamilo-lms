@@ -405,6 +405,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     foreach ($page->getColumnIterator('C') as $col) {
                         $index = $col->getColumnIndex();
                         $cell = $page->getCellByColumnAndRow($counter, 1);
+                        $cell->getStyle()->getAlignment()->setHorizontal(
+                            PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+                        );
                         $coordinate = $page->getCellByColumnAndRow($counter, 1)->getCoordinate();
                         $value = $cell->getValue();
                         if (!empty($value)) {
@@ -420,6 +423,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                     if (!empty($data)) {
                         foreach ($data as $colInfo) {
+
                             $page->mergeCells($colInfo['start'].':'.$colInfo['end']);
                         }
                     }

@@ -296,14 +296,13 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 ),
                                 true
                             );
-                            $cell->getStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                            $cell->getStyle()->getAlignment()->setHorizontal(
+                                PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+                            );
 
                             $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
                             $firstCoordinate = $coordinate;
                             $questionId = $question['question_id'];
-                            $rowStudent = 3;
-
-                            //foreach ($users as $user) {
                             foreach ($usersWithAnswers as $userAnswer) {
                                 $userId = $userAnswer['user_id'];
                                 $cell = @$page->setCellValueByColumnAndRow(
@@ -312,40 +311,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     $survey['group_title'].' - '.$userAnswer['complete_name'],
                                     true
                                 );
-
-                                //$userId = $user['id'];
-                                //$completeName = $user['firstname'].' '.$user['lastname'];
-                                //$completeName = $user['firstname'].' '.$user['lastname'];
-                                /*$questionTitle = str_replace(
-                                    '{{student_full_name}}',
-                                    $completeName,
-                                    $question['question']
-                                );*/
-                                /*$goodQuestionId = null;
-                                foreach ($questions as $questionData) {
-                                    if ($questionData['question'] === $questionTitle) {
-                                        $goodQuestionId = $questionData['question_id'];
-                                        $goodQuestionList[] = $questionData['question_id'];
-                                        break;
-                                    }
-                                }*/
-                                /*$cell = @$page->setCellValueByColumnAndRow(
-                                    $column,
-                                    2,
-                                    strip_tags($questionTitle),
-                                    true
-                                );*/
                                 $cell->getStyle()->getAlignment()->setTextRotation(90);
                                 $spreadsheet->getActiveSheet()->getRowDimension(2)->setRowHeight(250);
                                 $lastColumn = $column;
-                                $userColumn = $column;
-                                $questionCounter = 0;
-                                $questionPosition = $column + $questionCounter;
                                 $column++;
-                                $userRow = 3;
-                                $rowStudent = 3;
-                                $userColumn++;
-                                $questionPosition++;
                             }
 
                             $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
@@ -358,19 +327,18 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     }
 
                     $rowStudent = 3;
+                    $usersToShow = [];
+                    $columnsWithData = ['A', 'B', 'C'];
                     foreach ($users as $userData) {
                         $userId = $userData['id'];
                         $completeName = $userData['firstname'].' '.$userData['lastname'];
                         $userColumn = 3;
-                        //foreach ($goodQuestionList as $questionId) {
                         foreach ($questions as $question) {
                             $questionTitle = str_replace(
                                 '{{student_full_name}}',
                                 $completeName,
                                 $question['question']
                             );
-
-                            //$questionTitle = $question['question'];
                             if (strpos($question['question'], '{{')) {
                                 foreach ($usersWithAnswers as $userAnswer) {
                                     $userWithAnswerId = $userAnswer['user_id'];
@@ -384,13 +352,23 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                             if (is_array($answerData)) {
                                                                 $answerData = implode(', ', $answerData);
                                                             }
-                                                            @$page->setCellValueByColumnAndRow(
+                                                            if (!empty($answerData) && !in_array($userId, $usersToShow)) {
+                                                                $usersToShow[] = $userId;
+                                                            }
+
+                                                            $cell = @$page->setCellValueByColumnAndRow(
                                                                 $userColumn,
                                                                 $rowStudent,
                                                                 $answerData,
                                                                 //"$answerData -$userColumn- $rowStudent",
                                                                 true
                                                             );
+
+                                                            $colCode = $cell->getColumn();
+                                                            if (!empty($answerData) && !in_array($colCode, $columnsWithData)) {
+                                                                $columnsWithData[] = $colCode;
+                                                            }
+
                                                             $userColumn++;
                                                         }
                                                     }
@@ -400,52 +378,20 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     }
                                 }
                             }
-
-                            /*foreach ($questions as $questionData) {
-                                if (strpos($questionData['question'], '{{') === false) {
-                                    if ($questionTitle === $questionData['question']) {
-                                        var_dump($questionTitle, $questionData['question']);
-                                        if (isset($survey['user_answers'][$userId][$survey['survey_id']])) {
-                                            foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
-                                                if ($questionData['question_id'] == $questionId) {
-                                                    if (is_array($answerData)) {
-                                                        $answerData = implode(', ', $answerData);
-                                                    }
-                                                    @$page->setCellValueByColumnAndRow(
-                                                        $userColumn,
-                                                        $rowStudent,
-                                                        "$answerData -$userColumn- $rowStudent",
-                                                        true
-                                                    );
-                                                    $userColumn++;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-                            }*/
-                            /*$answerData = '';
-                            if (isset($survey['user_answers'][$myUserId]) &&
-                                isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
-                            ) {
-                                $answerData = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
-                            }
-                            @$page->setCellValueByColumnAndRow(
-                                $userColumn,
-                                $rowStudent,
-                                $answerData,
-                                //"$answerData : [$userColumn $rowStudent] $questionId",
-                                true
-                            );*/
-                            //$userColumn++;
                         }
+
+                        //if (in_array($userId, $usersToShow)) {
                         $rowStudent++;
-                        //exit;
+                        //}
                     }
-                    //$rowStudent++;
-                    //exit;
+
+                    // Remove cols with no data.
+                    foreach ($page->getColumnIterator('A') as $col) {
+                        $index = $col->getColumnIndex();
+                        if (!in_array($col->getColumnIndex(), $columnsWithData)) {
+                            $page->removeColumn($index);
+                        }
+                    }
 
                     /*foreach ($questionsOriginal as $questionData) {
                         if (strpos($questionData['question'], '{{') === false) {
@@ -558,6 +504,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 $row = 3;
                 foreach ($users as $user) {
+                    /*if (!in_array($user['id'], $usersToShow)) {
+                        continue;
+                    }*/
                     $columnUser = 0;
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
@@ -576,31 +525,45 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $questionTitle = strip_tags($question['question']);
                         $questionId = $question['question_id'];
                         $page = @$spreadsheet->createSheet($counter);
-                        @$page->setTitle(cut(str_replace('/', '-', api_html_entity_decode(strip_tags($questionTitle))), 25));
+                        @$page->setTitle(
+                            cut(str_replace('/', '-', api_html_entity_decode(strip_tags($questionTitle))), 25)
+                        );
                         $firstColumn = 3;
                         $column = 3;
                         $columnQuestion = 3;
                         $row = 1;
-                        foreach ($classes as $class) {
+                        /*foreach ($classes as $class) {
                             $users = $userList = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
-                            foreach ($users as $user) {
-                                $myUserId = $user['id'];
-                                $columnUser = 0;
-                                $cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname'], true);
+                            foreach ($users as $user) {*/
+                        foreach ($usersWithAnswers as $userAnswer) {
+                            $userWithAnswerId = $userAnswer['user_id'];
+                            $myUserId = $userAnswer['id'];
+                            $columnUser = 0;
+                            $cell = @$page->setCellValueByColumnAndRow(
+                                $columnUser++,
+                                $row,
+                                $survey['group_title'].' - '.$userAnswer['complete_name'],
+                                true
+                            );
 
-                                $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(false);
-                                $page->getColumnDimensionByColumn($cell->getColumn())->setWidth('200');
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(100);
 
-                                $data = '';
-                                if (isset($survey['user_answers'][$myUserId]) &&
-                                    isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
-                                ) {
-                                    $data = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
-                                }
-                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $data);
-                                $row++;
+                            //$cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname'], true);
+                            /*$page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(50);*/
+
+                            $data = '';
+                            if (isset($survey['user_answers'][$myUserId]) &&
+                                isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
+                            ) {
+                                $data = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
                             }
+                            @$page->setCellValueByColumnAndRow($columnUser++, $row, $data);
+                            $row++;
+                            //}
                         }
+
                         $counter++;
                     } else {
                         break;

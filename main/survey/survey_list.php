@@ -283,8 +283,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $questions = $survey['questions'];
                     $questionsOriginal = $survey['questions'];
                     $usersWithAnswers = $survey['user_with_answers'];
-
-
                     $rowStudent = 3;
                     $usersToShow = [];
                     $columnsWithData = ['A', 'B', 'C'];
@@ -310,6 +308,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                             if (is_array($answerData)) {
                                                                 $answerData = implode(', ', $answerData);
                                                             }
+                                                            $answerData = trim($answerData);
                                                             if (!empty($answerData) && !in_array($userId, $usersToShow)) {
                                                                 $usersToShow[] = $userId;
                                                             }
@@ -423,7 +422,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                     if (!empty($data)) {
                         foreach ($data as $colInfo) {
-
                             $page->mergeCells($colInfo['start'].':'.$colInfo['end']);
                         }
                     }

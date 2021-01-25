@@ -283,48 +283,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $questions = $survey['questions'];
                     $questionsOriginal = $survey['questions'];
                     $usersWithAnswers = $survey['user_with_answers'];
-                    $goodQuestionList = [];
-                    foreach ($questions as $question) {
-                        $questionTitle = $question['question'];
-                        if (strpos($question['question'], '{{')) {
-                            $firstColumn = $column;
-                            $cell = @$page->setCellValueByColumnAndRow(
-                                $column,
-                                1,
-                                api_html_entity_decode(
-                                    trim(strip_tags(str_replace('{{student_full_name}}', '', $question['question'])))
-                                ),
-                                true
-                            );
-                            $cell->getStyle()->getAlignment()->setHorizontal(
-                                PHPExcel_Style_Alignment::HORIZONTAL_CENTER
-                            );
 
-                            $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
-                            $firstCoordinate = $coordinate;
-                            $questionId = $question['question_id'];
-                            foreach ($usersWithAnswers as $userAnswer) {
-                                $userId = $userAnswer['user_id'];
-                                $cell = @$page->setCellValueByColumnAndRow(
-                                    $column,
-                                    2,
-                                    $survey['group_title'].' - '.$userAnswer['complete_name'],
-                                    true
-                                );
-                                $cell->getStyle()->getAlignment()->setTextRotation(90);
-                                $spreadsheet->getActiveSheet()->getRowDimension(2)->setRowHeight(250);
-                                $lastColumn = $column;
-                                $column++;
-                            }
-
-                            $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
-                            $lastCoordinate = $coordinate;
-
-                            if (!empty($lastCoordinate)) {
-                                $page->mergeCells($firstCoordinate.':'.$lastCoordinate);
-                            }
-                        }
-                    }
 
                     $rowStudent = 3;
                     $usersToShow = [];
@@ -345,7 +304,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     foreach ($questions as $questionData) {
                                         if (strpos($questionData['question'], '{{') === false) {
                                             if ($questionTitle === $questionData['question']) {
-                                                //var_dump($questionTitle, $questionData['question']);
                                                 if (isset($survey['user_answers'][$userWithAnswerId][$survey['survey_id']])) {
                                                     foreach ($survey['user_answers'][$userWithAnswerId][$survey['survey_id']] as $questionId => $answerData) {
                                                         if ($questionData['question_id'] == $questionId) {
@@ -360,15 +318,12 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                                 $userColumn,
                                                                 $rowStudent,
                                                                 $answerData,
-                                                                //"$answerData -$userColumn- $rowStudent",
                                                                 true
                                                             );
-
                                                             $colCode = $cell->getColumn();
                                                             if (!empty($answerData) && !in_array($colCode, $columnsWithData)) {
                                                                 $columnsWithData[] = $colCode;
                                                             }
-
                                                             $userColumn++;
                                                         }
                                                     }
@@ -385,6 +340,56 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         //}
                     }
 
+                    foreach ($questions as $question) {
+                        $questionTitle = $question['question'];
+                        if (strpos($question['question'], '{{')) {
+                            $firstColumn = $column;
+                            $questionTitle = api_html_entity_decode(
+                                trim(strip_tags(str_replace('{{student_full_name}}', '', $question['question'])))
+                            );
+                            // Add question title.
+                            $cell = @$page->setCellValueByColumnAndRow(
+                                $column,
+                                1,
+                                $questionTitle,
+                                true
+                            );
+                            $cell->getStyle()->getAlignment()->setHorizontal(
+                                PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+                            );
+                            $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
+                            $firstCoordinate = $coordinate;
+                            $questionId = $question['question_id'];
+                            foreach ($usersWithAnswers as $userAnswer) {
+                                // Add question title.
+                                $cell = @$page->setCellValueByColumnAndRow(
+                                    $column,
+                                    1,
+                                    $questionTitle,
+                                    true
+                                );
+                                $userId = $userAnswer['user_id'];
+                                $cell = @$page->setCellValueByColumnAndRow(
+                                    $column,
+                                    2,
+                                    $survey['group_title'].' - '.$userAnswer['complete_name'],
+                                    true
+                                );
+
+                                $cell->getStyle()->getAlignment()->setTextRotation(90);
+                                $spreadsheet->getActiveSheet()->getRowDimension(2)->setRowHeight(250);
+                                $lastColumn = $column;
+                                $column++;
+                            }
+
+                            $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
+                            $lastCoordinate = $coordinate;
+                            if (!empty($lastCoordinate)) {
+                                //$page->mergeCells($firstCoordinate.':'.$lastCoordinate);
+                            }
+                        }
+                    }
+
                     // Remove cols with no data.
                     foreach ($page->getColumnIterator('A') as $col) {
                         $index = $col->getColumnIndex();
@@ -393,6 +398,32 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         }
                     }
 
+                    // Merge similar cols.
+                    $counter = 3;
+                    $oldValue = '';
+                    $data = [];
+                    foreach ($page->getColumnIterator('C') as $col) {
+                        $index = $col->getColumnIndex();
+                        $cell = $page->getCellByColumnAndRow($counter, 1);
+                        $coordinate = $page->getCellByColumnAndRow($counter, 1)->getCoordinate();
+                        $value = $cell->getValue();
+                        if (!empty($value)) {
+                            if (!isset($data[$value])) {
+                                $data[$value]['start'] = $coordinate;
+                                $data[$value]['end'] = $coordinate;
+                            } else {
+                                $data[$value]['end'] = $coordinate;
+                            }
+                        }
+                        $counter++;
+                    }
+
+                    if (!empty($data)) {
+                        foreach ($data as $colInfo) {
+                            $page->mergeCells($colInfo['start'].':'.$colInfo['end']);
+                        }
+                    }
+                    //exit;
                     /*foreach ($questionsOriginal as $questionData) {
                         if (strpos($questionData['question'], '{{') === false) {
                             if ($questionTitle === $questionData['question'] &&

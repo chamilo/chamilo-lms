@@ -237,11 +237,10 @@ if ($debug) {
 
 $get_toc_list = $lp->get_toc();
 $get_teacher_buttons = $lp->get_teacher_toc_buttons();
-
-$type_quiz = false;
+$itemType = '';
 foreach ($get_toc_list as $toc) {
-    if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
-        $type_quiz = true;
+    if ($toc['id'] == $lp_item_id) {
+        $itemType = $toc['type'];
     }
 }
 
@@ -326,7 +325,6 @@ $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
 if ($debug) {
-    error_log('$type_quiz: '.$type_quiz);
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
     error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id']));
@@ -616,9 +614,9 @@ $template->assign(
     )
 );
 
-$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
-
+$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank', $itemType);
 $template->assign('frame_ready', $frameReady);
+
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);
 

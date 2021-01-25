@@ -411,6 +411,19 @@ if ($is_allowedToEdit) {
                             'confirmation'
                         ));
                         break;
+                    case 'send_reminder':
+                        api_set_more_memory_and_time_limits();
+                        $objExerciseTmp->notifyUsersOfTheExercise(
+                            $exerciseId,
+                            $courseId,
+                            $sessionId
+                        );
+
+                        Display::addFlash(Display::return_message(
+                            get_lang('AnnounceSentByEmail'),
+                            'confirmation'
+                        ));
+                        break;
                 }
                 header('Location: '.$currentUrl);
                 exit;

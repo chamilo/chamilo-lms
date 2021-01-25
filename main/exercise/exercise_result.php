@@ -82,7 +82,7 @@ if (!empty($objExercise->getResultAccess())) {
 
 $showHeader = false;
 $showFooter = false;
-$showLearnPath = false;
+$showLearnPath = true;
 $pageActions = '';
 $pageTop = '';
 $pageBottom = '';
@@ -91,7 +91,7 @@ $courseInfo = api_get_course_info();
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // So we are not in learnpath tool
     $showHeader = true;
-    $showLearnPath = true;
+    $showLearnPath = false;
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
@@ -204,7 +204,7 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-if ($origin === 'embeddable') {
+if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();
 } else {
     Display::addFlash(

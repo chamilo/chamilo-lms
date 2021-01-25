@@ -850,18 +850,6 @@ foreach ($categories as $item) {
                         );
                     }
                 }
-                $session_id = (int) api_get_session_id();
-                $date = new DateTime();
-                $date = $date->format('Y-m-d H:i:s');
-                $extraWhere = " AND publicated_on <= '$date'";
-                $dataReminder = learnpath::getStudentsByLearnpathSubscription($id, $session_id, $extraWhere, true);
-
-                if (count($dataReminder) != 0) {
-                    $dsp_order .= Display::url(
-                        Display::return_icon('announce.png', get_lang('EmailNotifySubscription')),
-                        "lp_controller.php?$cidReq&action=remind_lp_users&lp_id=$id&category_id=$categoryId"
-                    );
-                }
 
                 if ($details['lp_type'] == 2) {
                     $url = api_get_path(WEB_CODE_PATH).'lp/lp_update_scorm.php?'.$cidReq."&lp_id=$id";

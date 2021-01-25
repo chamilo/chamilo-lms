@@ -29,55 +29,59 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $tool_name = get_lang('DelCourse');
-$content = Display::page_subheader(get_lang('CourseTitle').': '.$courseName);
+$content = Display::page_subheader(get_lang('CourseTitle').' : '.$courseName);
 $message = '';
 
-if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && $_GET['course_code'] && !empty($_GET['course_code'])) {
-    if ($courseCode === $_GET['course_code']) {
-        CourseManager::delete_course($courseInfo['code']);
-        // DELETE CONFIRMATION MESSAGE
-        Session::erase('_cid');
-        Session::erase('_real_cid');
-        $message .= Display::return_message($courseCode.' '.get_lang('HasDel'), 'error', false);
-    } else {
-        /* message if code course is incorrect */
-        $message .= Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'warning');
-        $message .= '<p><a class="btn btn-primary" href="'
-            .api_get_path(WEB_CODE_PATH).'course_info/delete_course.php?'.api_get_cidreq().'">'.
-            get_lang('BackToPreviousPage').'</a>';
+$message .= Display::return_message(
+    '<strong>'.get_lang('ByDel').'<strong>',
+    'error',
+    false
+);
+
+$form = new FormValidator('delete', 'get');
+$form->addLabel(null, sprintf(get_lang('CourseCodeToEnteredCapitalLettersToConfirmDeletionX'), $courseCode));
+$form->addText('course_code', get_lang('CourseCode'));
+$form->addLabel(null, get_lang('AreYouSureToDeleteJS'));
+
+$buttonGroup[] = $form->addButton('yes', get_lang('Yes'), '', 'danger', '', '', [], true);
+$buttonGroup[] = $form->addButton('no', get_lang('No'), '', 'primary', '', '', ['id' => 'no_delete'], true);
+$form->addGroup($buttonGroup);
+$returnUrl = api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq();
+if ($form->validate()) {
+    $values = $form->getSubmitValues();
+    $courseCodeFromGet = $values['course_code'];
+
+    if (isset($values['no'])) {
+        api_location($returnUrl);
     }
-} else {
-    $message .= Display::return_message(
-        '<strong>'.get_lang('ByDel').'<strong>',
-        'error',
-        false
-    );
-    $message .= sprintf(get_lang('CourseCodeToEnteredCapitalLettersToConfirmDeletionX'), $courseCode);
-    $message .= '<p><span class="form_required">*</span>'
-        .get_lang('CourseCode')
-        .'&nbsp;<input type="text" name="course_code" id="course_code"></p>';
 
-    $message .= get_lang('AreYouSureToDeleteJS');
-    $message .= '<p>';
-    $message .= '<button class="btn btn-danger delete-course">'.get_lang('Yes').'</button>&nbsp;';
-    $message .= '<a class="btn btn-primary" href="'
-                .api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'
-                .get_lang('No')
-                .'</a>';
-    $message .= '</p>';
-
-    $interbreadcrumb[] = [
-        'url' => 'maintenance.php',
-        'name' => get_lang('Maintenance'),
-    ];
+    if (isset($values['yes'])) {
+        if ($courseCode === $courseCodeFromGet) {
+            CourseManager::delete_course($courseInfo['code']);
+            // DELETE CONFIRMATION MESSAGE
+            Session::erase('_cid');
+            Session::erase('_real_cid');
+            Display::addFlash(Display::return_message($courseCode.' '.get_lang('HasDel'), 'error', false));
+            api_location(api_get_path(WEB_PATH));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'warning'));
+        }
+    }
 }
+
+$message .= $form->returnForm();
+$interbreadcrumb[] = [
+    'url' => 'maintenance.php',
+    'name' => get_lang('Maintenance'),
+];
 
 $htmlHeadXtra[] = '<script>
 $(function(){
 	/* Asking by course code to confirm recycling*/
-	$(".delete-course").on("click",function(){
-		window.location = "'.api_get_self().'?delete=yes&'.api_get_cidreq().'&course_code=" + $("#course_code").val();
-	})
+	$("#no_delete").on("click", function(e) {
+        e.preventDefault();
+		window.location = "'.$returnUrl.'";
+	});
 })
 </script>';
 

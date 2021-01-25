@@ -13324,9 +13324,7 @@ EOD;
                     $file = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                     if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
                         if (Link::isPdfLink($file)) {
-                            $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
-
-                            return $pdfUrl;
+                            return api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html?zoom=page-width#'.$file;
                         }
                     }
 

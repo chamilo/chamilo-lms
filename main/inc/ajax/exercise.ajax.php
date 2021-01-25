@@ -809,7 +809,6 @@ switch ($action) {
             error_log('Finished questions loop in save_exercise_by_now');
         }
 
-
         if ($type === 'all') {
             if ($debug) {
                 error_log("result: ok - all");

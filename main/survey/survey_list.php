@@ -285,7 +285,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $usersWithAnswers = $survey['user_with_answers'];
                     $rowStudent = 3;
                     $usersToShow = [];
-                    $columnsWithData = ['A', 'B', 'C'];
+                    $columnsWithData = [0, 1, 2];
                     foreach ($users as $userData) {
                         $userId = $userData['id'];
                         $completeName = $userData['firstname'].' '.$userData['lastname'];
@@ -320,8 +320,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                                 true
                                                             );
                                                             $colCode = $cell->getColumn();
-                                                            if (!empty($answerData) && !in_array($colCode, $columnsWithData)) {
-                                                                $columnsWithData[] = $colCode;
+                                                            error_log("$userColumn - $rowStudent - $answerData");
+                                                            if (!empty($answerData) && !in_array($userColumn, $columnsWithData)) {
+                                                                $columnsWithData[] = $userColumn;
                                                             }
                                                             $userColumn++;
                                                         }
@@ -390,11 +391,17 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     }
 
                     // Remove cols with no data.
+                    $originalColumns = [];
+                    $counter = 0;
+                    $less = 0;
+                    $index = 0;
                     foreach ($page->getColumnIterator('A') as $col) {
-                        $index = $col->getColumnIndex();
-                        if (!in_array($col->getColumnIndex(), $columnsWithData)) {
-                            $page->removeColumn($index);
+                        if (!in_array($index, $columnsWithData)) {
+                            $page->removeColumnByIndex($index - $less);
+                            //$page->removeColumn($index - $less);
+                            $less++;
                         }
+                        $index++;
                     }
 
                     // Merge similar cols.

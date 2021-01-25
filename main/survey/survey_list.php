@@ -293,8 +293,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 1,
                                 api_html_entity_decode(
                                     trim(strip_tags(str_replace('{{student_full_name}}', '', $question['question'])))
-                                )
+                                ),
+                                true
                             );
+                            $cell->getStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
                             $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
                             $firstCoordinate = $coordinate;
@@ -584,8 +586,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             foreach ($users as $user) {
                                 $myUserId = $user['id'];
                                 $columnUser = 0;
-                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
-                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
+                                $cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname'], true);
+
+                                $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(false);
+                                $page->getColumnDimensionByColumn($cell->getColumn())->setWidth('200');
 
                                 $data = '';
                                 if (isset($survey['user_answers'][$myUserId]) &&

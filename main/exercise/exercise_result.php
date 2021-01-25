@@ -82,6 +82,7 @@ if (!empty($objExercise->getResultAccess())) {
 
 $showHeader = false;
 $showFooter = false;
+$showLearnPath = false;
 $pageActions = '';
 $pageTop = '';
 $pageBottom = '';
@@ -90,6 +91,7 @@ $courseInfo = api_get_course_info();
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // So we are not in learnpath tool
     $showHeader = true;
+    $showLearnPath = true;
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
@@ -309,7 +311,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $showFooter = false;
 }
 
-$template = new Template($nameTools, $showHeader, $showFooter);
+$template = new Template($nameTools, $showHeader, $showFooter, $showLearnPath);
 $template->assign('page_top', $pageTop);
 $template->assign('page_content', $pageContent);
 $template->assign('page_bottom', $pageBottom);

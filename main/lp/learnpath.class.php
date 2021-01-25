@@ -13259,10 +13259,10 @@ EOD;
                 return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
                     .http_build_query([
                         'lp_init' => 1,
-                        'learnpath_item_view_id' => $learnpathItemViewId,
-                        'learnpath_id' => $learningPathId,
-                        'learnpath_item_id' => $id_in_path,
-                        'exerciseId' => $id,
+                        'learnpath_item_view_id' => (int) $learnpathItemViewId,
+                        'learnpath_id' => (int) $learningPathId,
+                        'learnpath_item_id' => (int) $id_in_path,
+                        'exerciseId' => (int) $id,
                     ]);
             case TOOL_HOTPOTATOES: //lowercase because of strtolower above
                 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);

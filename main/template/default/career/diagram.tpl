@@ -102,14 +102,11 @@
             var svg1 = document.getElementsByTagName("svg")[0];
             var data = svg1.getBBox();
             var widthValue = data.width + 100;
-            var heightValue = data.height + 50;
+            var heightValue = data.height + 100;
 
             var att = document.createAttributeNS(null, "viewBox");
-            att.value = '0 0 ' + widthValue + ' '+heightValue;
+            att.value = '0 0 ' + widthValue + ' ' + heightValue;
             svg1.setAttributeNode(att);
-
-            //$('[data-toggle="popover"]').popover({container: 'body'});
-            //$('.popup').popover({trigger: 'hover'});
 
             $(".popup").qtip({
                 content: {
@@ -123,16 +120,17 @@
                         var score = $(this).attr("data-score");
                         var value = $(this).attr("data-score-value");
                         var info = $(this).attr("data-info");
+
                         var teacherLabel = '';
                         if (teacher != '') {
                             teacherLabel = teacherText + ': ' + teacher + '<br />';
                         }
 
-                        var textToShow = desc
-                            + '<br />'+ period + '<br />'
-                            + teacherLabel +
-                            + score +': '+ value + '<br />'
-                            + '<br />'+ info + '<br />'
+                        var textToShow = desc + '<br />' +
+                            period + '<br />' +
+                            teacherLabel +
+                            score + ': ' + value + '<br /><br />'+
+                            info + '<br />'
                         ;
 
                         return textToShow;
@@ -161,7 +159,6 @@
                     }
                 }
             });
-
         });
     </script>
     {{ content }}

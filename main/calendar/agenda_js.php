@@ -231,6 +231,8 @@ if (isset($_GET['session_id'])) {
     $agenda_ajax_url .= '&session_id='.intval($_GET['session_id']);
 }
 
+$agenda_ajax_url .= '&sec_token='.Security::get_token();
+
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 
 $form = new FormValidator(

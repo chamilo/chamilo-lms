@@ -532,7 +532,13 @@ class ExerciseLib
                         }
 
                         if ($answerType != UNIQUE_ANSWER_IMAGE) {
-                            $answer = Security::remove_XSS($answer, STUDENT);
+                            $userStatus = STUDENT;
+                            // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                            // see BT#18242
+                            if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                                $userStatus = COURSEMANAGERLOWSECURITY;
+                            }
+                            $answer = Security::remove_XSS($answer, $userStatus);
                         }
                         $s .= Display::input(
                             'hidden',
@@ -578,7 +584,13 @@ class ExerciseLib
                     case GLOBAL_MULTIPLE_ANSWER:
                     case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        $userStatus = STUDENT;
+                        // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                        // see BT#18242
+                        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                            $userStatus = COURSEMANAGERLOWSECURITY;
+                        }
+                        $answer = Security::remove_XSS($answer, $userStatus);
 
                         if (in_array($numAnswer, $userChoiceList)) {
                             $attributes = [
@@ -775,7 +787,13 @@ class ExerciseLib
                             }
                         }
 
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        $userStatus = STUDENT;
+                        // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                        // see BT#18242
+                        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                            $userStatus = COURSEMANAGERLOWSECURITY;
+                        }
+                        $answer = Security::remove_XSS($answer, $userStatus);
                         $answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                         $answer_input .= '<label class="checkbox">';
                         $answer_input .= Display::input(
@@ -811,7 +829,13 @@ class ExerciseLib
                                 }
                             }
                         }
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        $userStatus = STUDENT;
+                        // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+                        // see BT#18242
+                        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                            $userStatus = COURSEMANAGERLOWSECURITY;
+                        }
+                        $answer = Security::remove_XSS($answer, $userStatus);
                         $s .= '<tr>';
                         $s .= Display::tag('td', $answer);
                         foreach ($objQuestionTmp->options as $key => $item) {
@@ -5969,12 +5993,14 @@ EOT;
             [
                 '((exercise_error_count))',
                 '((all_answers_html))',
+                '((all_answers_teacher_html))',
                 '((exercise_title))',
                 '((exercise_attempt_date))',
             ],
             [
                 $wrongAnswersCount,
                 $stats['all_answers_html'],
+                $stats['all_answers_teacher_html'],
                 $exercise->get_formated_title(),
                 $attemptDate,
             ],
@@ -5999,7 +6025,8 @@ EOT;
         $exercise_stat_info,
         $courseInfo,
         $attemptCountToSend,
-        $stats
+        $stats,
+        $statsTeacher
     ) {
         $notifications = api_get_configuration_value('exercise_finished_notification_settings');
         if (empty($notifications)) {
@@ -6011,6 +6038,7 @@ EOT;
         $wrongAnswersCount = $stats['failed_answers_count'];
         $exercisePassed = $stats['exercise_passed'];
         $countPendingQuestions = $stats['count_pending_questions'];
+        $stats['all_answers_teacher_html'] = $statsTeacher['all_answers_html'];
 
         // If there are no pending questions (Open questions).
         if (0 === $countPendingQuestions) {
@@ -6079,10 +6107,9 @@ EOT;
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $content = $extraFieldData['value'];
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
-                if (false === $exercisePassed) {
-                    if (0 !== $wrongAnswersCount) {
-                        $content .= $stats['failed_answers_html'];
-                    }
+                //if (false === $exercisePassed) {
+                if (0 !== $wrongAnswersCount) {
+                    $content .= $stats['failed_answers_html'];
                 }
 
                 $sendMessage = true;

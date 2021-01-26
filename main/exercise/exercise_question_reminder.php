@@ -14,7 +14,6 @@ if (false === api_get_configuration_value('block_category_questions')) {
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 $origin = api_get_origin();
-
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
@@ -38,10 +37,11 @@ if (empty($objExercise) || empty($questionCategoryId) || empty($exeId) || empty(
     api_not_allowed(true);
 }
 
-$categoryId = $categoryObj->id;
+$categoryId = (int) $categoryObj->id;
 $params = "exe_id=$exeId&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$params;
-$validateUrl = api_get_self().'?'.$params.'&category_id='.$categoryId.'&validate=1';
+$validateUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_question_reminder.php?'.
+    $params.'&category_id='.$categoryId.'&validate=1';
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key(
@@ -88,7 +88,6 @@ if ($validateCategory) {
 
     // Cleaning old remind list.
     $objExercise->removeAllQuestionToRemind($exeId);
-
     api_location($url.'&num='.$currentQuestion);
 }
 
@@ -103,11 +102,11 @@ if (!$hideHeaderAndFooter) {
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && !$hideHeaderAndFooter) {
+if (!$hideHeaderAndFooter && api_is_course_admin()) {
     echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iId.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iId.'">'.
         Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
     echo '</div>';
 }
@@ -115,12 +114,14 @@ echo Display::page_header($categoryObj->name);
 echo '<p>'.Security::remove_XSS($categoryObj->description).'</p>';
 echo '<p>'.get_lang('BlockCategoryExplanation').'</p>';
 
+$categoryList = Session::read('categoryList');
+$disableAllQuestions = '';
+$questionList = [];
+if (isset($categoryList[$categoryId])) {
+    $questionList = $categoryList[$categoryId];
+}
 if ($objExercise->review_answers) {
-    $questionList = [];
-    $categoryList = Session::read('categoryList');
-    if (isset($categoryList[$categoryId])) {
-        $questionList = $categoryList[$categoryId];
-    }
+    $disableAllQuestions = 'changeOptionStatus(0);';
     echo $objExercise->getReminderTable($questionList, $trackInfo);
 }
 
@@ -130,19 +131,28 @@ if ($time_control) {
 
 echo Display::div('', ['id' => 'message']);
 $previousQuestion = $currentQuestion - 1;
-echo '<script>
-    var lp_data = $.param({
-        "learnpath_id": '.$learnpath_id.',
-        "learnpath_item_id" : '.$learnpath_item_id.',
-        "learnpath_item_view_id": '.$learnpath_item_view_id.'
-    });
 
+$nextQuestion = $currentQuestion + 1;
+if (!empty($questionList)) {
+    $firstQuestionOfCategory = end($questionList);
+    $dataTracking = explode(',', $trackInfo['data_tracking']);
+    $index = 0;
+    foreach ($dataTracking as $index => $question) {
+        if ($firstQuestionOfCategory == $question) {
+            break;
+        }
+    }
+    $nextQuestion = $index + 1;
+}
+
+echo '<script>
     function goBack() {
-        window.location = "'.$url.'&num='.$previousQuestion.'&" + lp_data;
+        window.location = "'.$url.'&num='.$previousQuestion.'";
     }
 
     function continueExercise() {
-        window.location = "'.$validateUrl.'&num='.$currentQuestion.'&" + lp_data;
+        '.$disableAllQuestions.'
+        window.location = "'.$validateUrl.'&num='.$nextQuestion.'";
     }
 
     function final_submit() {
@@ -164,17 +174,43 @@ if (!in_array($categoryId, $blockedCategories)) {
         ['onclick' => 'goBack();', 'class' => 'btn btn-default']
     );
 }
-$exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('ContinueTest'),
-    'javascript://',
-    ['onclick' => 'continueExercise();', 'class' => 'btn btn-primary']
-);
-/*
-$exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('EndTest'),
-    'javascript://',
-    ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
-);*/
+
+if ($objExercise->review_answers) {
+    $exerciseActions .= Display::url(
+        get_lang('ReviewQuestions'),
+        'javascript://',
+        ['onclick' => 'reviewQuestions();', 'class' => 'btn btn-primary']
+    );
+
+    $exerciseActions .= '&nbsp;'.Display::url(
+        get_lang('SelectAll'),
+        'javascript://',
+        ['onclick' => 'selectAll();', 'class' => 'btn btn-default']
+    );
+
+    $exerciseActions .= '&nbsp;'.Display::url(
+        get_lang('UnSelectAll'),
+        'javascript://',
+        ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn-default']
+    );
+}
+
+end($categoryList);
+
+// This is the last category
+if (key($categoryList) === $categoryId) {
+    $exerciseActions .= '&nbsp;'.Display::url(
+        get_lang('EndTest'),
+        'javascript://',
+        ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
+    );
+} else {
+    $exerciseActions .= '&nbsp;'.Display::url(
+        get_lang('ContinueTest'),
+        'javascript://',
+        ['onclick' => 'continueExercise();', 'class' => 'btn btn-primary']
+    );
+}
 
 echo Display::div('', ['class' => 'clear']);
 echo Display::div($exerciseActions, ['class' => 'form-actions']);

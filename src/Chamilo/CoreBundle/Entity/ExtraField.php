@@ -37,6 +37,7 @@ class ExtraField extends BaseAttribute
     public const FORUM_POST_TYPE = 16;
     public const EXERCISE_FIELD_TYPE = 17;
     public const TRACK_EXERCISE_FIELD_TYPE = 18;
+    public const PORTFOLIO_TYPE = 19;
 
     /**
      * @var int

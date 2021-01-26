@@ -151,9 +151,11 @@ class CourseManager
      * @param int    $orderby            The column we want to order it by. Optional, defaults to first column.
      * @param string $orderdirection     The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param int    $visibility         the visibility of the course, or all by default
-     * @param string $startwith          If defined, only return results for which the course *title* begins with this string
+     * @param string $startwith          If defined, only return results for which the course *title* begins with this
+     *                                   string
      * @param string $urlId              The Access URL ID, if using multiple URLs
-     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes (not *only* titles)
+     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes
+     *                                   (not *only* titles)
      * @param array  $conditionsLike
      * @param array  $onlyThisCourseList
      *
@@ -530,6 +532,34 @@ class CourseManager
                 );
             }
         }
+
+        $subscriptionSettings = learnpath::getSubscriptionSettings();
+        if ($subscriptionSettings['allow_add_users_to_lp_category']) {
+            $em = Database::getManager();
+            $criteria = ['cId' => $course_id];
+            if (api_get_configuration_value('allow_session_lp_category')) {
+                $criteria = ['cId' => $course_id, 'sessionId' => $session_id];
+            }
+            $categories = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy($criteria);
+            /** @var \Chamilo\CourseBundle\Entity\CLpCategory $category */
+            foreach ($categories as $category) {
+                if ($category->getUsers()->count() > 0) {
+                    foreach ($userList as $uid) {
+                        $user = api_get_user_entity($uid);
+                        $criteria = Criteria::create()->where(
+                            Criteria::expr()->eq('user', $user)
+                        );
+                        $userCategory = $category->getUsers()->matching($criteria)->first();
+                        if ($userCategory) {
+                            $category->removeUsers($userCategory);
+                        }
+                    }
+                    $em->persist($category);
+                    $em->flush();
+                }
+            }
+        }
+
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             // Also unlink the course from the users' currently accessible sessions
             /** @var Course $course */
@@ -1432,8 +1462,8 @@ class CourseManager
      * @param int       $sessionId
      * @param string    $limit
      * @param string    $order_by         the field to order the users by.
-     *                                    Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
-     *                                    that starts with ORDER BY ...
+     *                                    Valid values are 'lastname', 'firstname', 'username', 'email',
+     *                                    'official_code' OR a part of a SQL statement that starts with ORDER BY ...
      * @param int|null  $filter_by_status if using the session_id: 0 or 2 (student, coach),
      *                                    if using session_id = 0 STUDENT or COURSEMANAGER
      * @param bool|null $return_count
@@ -3073,7 +3103,8 @@ class CourseManager
      * @param int   $user_id
      * @param bool  $include_sessions                   Whether to include courses from session or not
      * @param bool  $adminGetsAllCourses                If the user is platform admin,
-     *                                                  whether he gets all the courses or just his. Note: This does *not* include all sessions
+     *                                                  whether he gets all the courses or just his. Note: This does
+     *                                                  *not* include all sessions
      * @param bool  $loadSpecialCourses
      * @param array $skipCourseList                     List of course ids to skip
      * @param bool  $useUserLanguageFilterIfAvailable
@@ -4758,8 +4789,8 @@ class CourseManager
      * Creates a new course code based in a given code.
      *
      * @param string    wanted code
-     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3</code>
-     * if the course code doest not exist in the DB the same course code will be returned
+     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return:
+     * course3</code> if the course code doest not exist in the DB the same course code will be returned
      *
      * @return string wanted unused code
      */

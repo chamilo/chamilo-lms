@@ -3786,7 +3786,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
         // Getting the permissions of the task.
         if ($task_id != 0) {
             $task_permissions = get_permissions('task', $task_id);
-            /* !!! */$_SESSION['total_permissions'][$_course['code']] = $task_permissions;
+            $_SESSION['total_permissions'][$_course['code']] = $task_permissions;
         }
         //print_r($_SESSION['total_permissions']);
 

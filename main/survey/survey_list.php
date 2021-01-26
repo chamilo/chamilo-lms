@@ -24,7 +24,7 @@ $currentUserId = api_get_user_id();
 
 api_protect_course_script(true);
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
-
+$type = $_REQUEST['type'] ?? 'by_class';
 Event::event_access_tool(TOOL_SURVEY);
 
 $logInfo = [
@@ -43,7 +43,37 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = '<script>
+    '.api_get_language_translate_html().'
+
+    $(function() {
+       $("#dialog:ui-dialog").dialog("destroy");
+        $("#dialog-confirm").dialog({
+                autoOpen: false,
+                show: "blind",
+                resizable: false,
+                height:300,
+                modal: true
+         });
+
+        $(".multiplicate_popup").click(function() {
+            var targetUrl = $(this).attr("href");
+            $( "#dialog-confirm" ).dialog({
+                width:400,
+                height:300,
+                buttons: {
+                    "'.addslashes(get_lang('MultiplicateQuestions')).'": function() {
+                        var type = $("input[name=type]:checked").val();
+                        location.href = targetUrl+"&type="+type;
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog("open");
+            return false;
+        });
+    });
+</script>';
 
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('SurveyList'));
@@ -401,8 +431,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     );
                 }
                 break;
-            case 'multiplicate':
-                $result = SurveyManager::multiplicateQuestions($surveyData);
+            case 'multiplicate_by_class':
+            case 'multiplicate_by_user':
+                $type = 'multiplicate_by_class' === $action ? 'by_class' : 'by_user';
+                $result = SurveyManager::multiplicateQuestions($surveyData, $type);
                 $title = $surveyData['title'];
                 if ($result) {
                     Display::addFlash(
@@ -474,7 +506,7 @@ switch ($action) {
         }
         $surveyData = SurveyManager::get_survey($surveyId);
         if (!empty($surveyData)) {
-            SurveyManager::multiplicateQuestions($surveyData);
+            SurveyManager::multiplicateQuestions($surveyData, $type);
             Display::cleanFlashMessages();
             Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
@@ -555,12 +587,12 @@ Display::display_header($tool_name, 'Survey');
 Display::display_introduction_section('survey', 'left');
 
 // Action handling: searching
-if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
+if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     SurveyUtil::display_survey_search_form();
 }
 
 echo '<div class="actions">';
-if (!api_is_session_general_coach() || 'true' == $extend_rights_for_coachs) {
+if (!api_is_session_general_coach() || 'true' === $extend_rights_for_coachs) {
     // Action links
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';
@@ -574,7 +606,7 @@ echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-if (api_is_session_general_coach() && 'false' == $extend_rights_for_coachs) {
+if (api_is_session_general_coach() && 'false' === $extend_rights_for_coachs) {
     SurveyUtil::display_survey_list_for_coach();
 } else {
     SurveyUtil::display_survey_list();

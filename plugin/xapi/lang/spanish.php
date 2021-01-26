@@ -18,6 +18,7 @@ $strings['lrs_lp_item_viewed_active'] = 'Visualización de contenido de lección
 $strings['lrs_lp_end_active'] = 'Finalización de lección';
 $strings['lrs_quiz_active'] = 'Finalización de ejercicio';
 $strings['lrs_quiz_question_active'] = 'Resolución de pregunta en ejercicio';
+$strings['lrs_portfolio_active'] = 'Eventos en portafolio';
 
 $strings['NoActivities'] = 'No hay actividades aún';
 $strings['ActivityTitle'] = 'Actividad';

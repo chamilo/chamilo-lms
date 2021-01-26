@@ -18,6 +18,7 @@ $strings['lrs_lp_item_viewed_active'] = 'Élément de parcours visionné';
 $strings['lrs_lp_end_active'] = 'Parcours terminé';
 $strings['lrs_quiz_active'] = 'Exercice terminé';
 $strings['lrs_quiz_question_active'] = 'Question d\'exercice répondue';
+$strings['lrs_portfolio_active'] = 'Événements de portfolio';
 
 $strings['NoActivities'] = 'Aucune activité ajoutée pour l\'instant';
 $strings['ActivityTitle'] = 'Activité';

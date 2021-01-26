@@ -18,6 +18,7 @@ $strings['lrs_lp_item_viewed_active'] = 'Learning path item viewed';
 $strings['lrs_lp_end_active'] = 'Learning path ended';
 $strings['lrs_quiz_active'] = 'Quiz ended';
 $strings['lrs_quiz_question_active'] = 'Quiz question answered';
+$strings['lrs_portfolio_active'] = 'Portfolio events';
 
 $strings['NoActivities'] = 'No activities added yet';
 $strings['ActivityTitle'] = 'Activity';

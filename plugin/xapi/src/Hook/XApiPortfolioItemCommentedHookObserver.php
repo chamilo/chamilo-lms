@@ -90,7 +90,13 @@ class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
             $item = $this->comment->getItem();
 
             $id = $this->plugin->generateIri($item->getId(), 'portfolio-item');
-            $languageIso = api_get_language_isocode($this->course->getCourseLanguage());
+
+            if ($this->course) {
+                $languageIso = api_get_language_isocode($this->course->getCourseLanguage());
+            } else {
+                $languageIso = api_get_language_isocode($this->user->getLanguage());
+            }
+
             $titleMap = [$languageIso => $item->getTitle()];
         }
 

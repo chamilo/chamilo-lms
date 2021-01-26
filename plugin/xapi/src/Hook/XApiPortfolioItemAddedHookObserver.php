@@ -81,7 +81,11 @@ class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
      */
     protected function getActivity()
     {
-        $languageIso = api_get_language_isocode($this->course->getCourseLanguage());
+        if ($this->course) {
+            $languageIso = api_get_language_isocode($this->course->getCourseLanguage());
+        } else {
+            $languageIso = api_get_language_isocode($this->user->getLanguage());
+        }
 
         $id = $this->plugin->generateIri($this->item->getId(), 'portfolio-item');
 

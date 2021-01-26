@@ -338,6 +338,10 @@ class PortfolioController
             $extraFieldValue = new ExtraFieldValue('portfolio');
             $extraFieldValue->saveFieldValues($values);
 
+            $hook = HookPortfolioItemAdded::create();
+            $hook->setEventData(['portfolio' => $portfolio]);
+            $hook->notifyItemAdded();
+
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioItemAdded'), 'success')
             );
@@ -982,6 +986,10 @@ class PortfolioController
 
             $this->em->persist($comment);
             $this->em->flush();
+
+            $hook = HookPortfolioItemCommented::create();
+            $hook->setEventData(['comment' => $comment]);
+            $hook->notifyItemCommented();
 
             Display::addFlash(
                 Display::return_message(get_lang('CommentAdded'), 'success')

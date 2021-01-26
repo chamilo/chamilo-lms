@@ -195,12 +195,6 @@ $(function() {
         });
     };
 
-    $(".black-shadow").mouseenter(function() {
-        $(this).addClass('hovered-course');
-    }).mouseleave(function() {
-         $(this).removeClass('hovered-course');
-    });
-
     $("[data-toggle=popover]").each(function(i, obj) {
         $(this).popover({
             html: true,

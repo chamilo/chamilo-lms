@@ -55,8 +55,8 @@
                 'issueYear': issue_info.year,
                 'name':issue_info.skill_name,
                 'organizationId':issue_info.linkedin_organization_id
-                }|url_encode }}" target="_new" class="txt-linkedin">
-                    <em class='fa fa-linkedin-square fa-3x' aria-hidden='true'></em>
+                }|url_encode }}" target="_new">
+                    <em class='fa fa-linkedin-square fa-3x txt-linkedin' aria-hidden='true'></em>
                 </a>
             </div>
         {% endif %}

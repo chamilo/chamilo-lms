@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -800,7 +801,7 @@ class CourseHome
 
                     // For students, check if link is visible in the session.
                     if ($sessionId && !($is_platform_admin || api_is_course_admin())) {
-                        $visibility = api_get_item_visibility($courseInfo, TOOL_LINK,$links_row['iid'], $sessionId);
+                        $visibility = api_get_item_visibility($courseInfo, TOOL_LINK, $links_row['iid'], $sessionId);
                         if (1 !== $visibility) {
                             continue;
                         }
@@ -909,9 +910,39 @@ class CourseHome
                 $item = [];
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
+
+                if ($tool['image'] === 'lp_category.gif') {
+                    if ($session_id && api_is_coach()) {
+                        $lpCategory = self::getPublishedLpCategoryFromLink($tool['link']);
+                        $itemInfo = api_get_item_property_info(
+                            $courseId,
+                            TOOL_LEARNPATH_CATEGORY,
+                            $lpCategory->getId(),
+                            $session_id
+                        );
+
+                        if ($itemInfo && 0 === (int) $itemInfo['visibility']) {
+                            $tool['image'] = 'lp_category_na.gif';
+                        }
+                    }
+                }
+
                 if ($tool['image'] === 'scormbuilder.gif') {
                     // Check if the published learnpath is visible for student
                     $lpId = self::getPublishedLpIdFromLink($tool['link']);
+                    if ($session_id && api_is_coach()) {
+                        $itemInfo = api_get_item_property_info(
+                            $courseId,
+                            TOOL_LEARNPATH,
+                            $lpId,
+                            $session_id
+                        );
+
+                        if ($itemInfo && 0 === (int) $itemInfo['visibility']) {
+                            $tool['image'] = 'scormbuilder_na.gif';
+                        }
+                    }
+
                     if (api_is_allowed_to_edit(null, true)) {
                         $studentview = true;
                     }
@@ -1007,10 +1038,7 @@ class CourseHome
                             Display::return_icon('edit.gif', get_lang('Edit')).
                         '</a>';
                     }
-                } else {
-
                 }
-
 
                 // Both checks are necessary as is_platform_admin doesn't take student view into account
                 if ($is_platform_admin && $is_allowed_to_edit) {
@@ -1131,18 +1159,6 @@ class CourseHome
                     false
                 );
 
-                /*if (!empty($tool['custom_icon'])) {
-                    $image = self::getCustomWebIconPath().$tool['custom_icon'];
-                    $icon = Display::img(
-                        $image,
-                        $tool['description'],
-                        array(
-                            'class' => 'tool-icon',
-                            'id' => 'toolimage_'.$tool['id']
-                        )
-                    );
-                }*/
-
                 // Validation when belongs to a session
                 $session_img = api_get_session_image(
                     $tool['session_id'],
@@ -1173,7 +1189,6 @@ class CourseHome
             $originalImage = self::getToolIcon($item, ICON_SIZE_BIG);
             $item['tool']['only_icon_medium'] = self::getToolIcon($item, ICON_SIZE_MEDIUM, false);
             $item['tool']['only_icon_small'] = self::getToolIcon($item, ICON_SIZE_SMALL, false);
-
             if ($theme === 'activity_big') {
                 $item['tool']['image'] = Display::url(
                     $originalImage,

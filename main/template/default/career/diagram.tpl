@@ -116,7 +116,6 @@
                     text: function(event, api) {
                         var item = $(this);
                         var itemId = $(this).attr("id");
-
                         var desc = $(this).attr("data-description");
                         var period = $(this).attr("data-period");
                         var teacherText = $(this).attr("data-teacher-text");
@@ -124,10 +123,14 @@
                         var score = $(this).attr("data-score");
                         var value = $(this).attr("data-score-value");
                         var info = $(this).attr("data-info");
+                        var teacherLabel = '';
+                        if (teacher != '') {
+                            teacherLabel = teacherText + ': ' + teacher + '<br />';
+                        }
 
                         var textToShow = desc
                             + '<br />'+ period + '<br />'
-                            + teacherText +': '+ teacher + '<br />'
+                            + teacherLabel +
                             + score +': '+ value + '<br />'
                             + '<br />'+ info + '<br />'
                         ;
@@ -141,10 +144,6 @@
                         var bg = popup.attr("data-background-color");
                         var color = popup.attr("data-color");
                         var borderColor = popup.attr("data-border-color");
-
-                        console.log(bg);
-                        console.log(color);
-                        console.log(borderColor);
                         // Grab the tooltip element from the API
                         //var tooltip = api.elements.tooltip;
 
@@ -157,8 +156,8 @@
                     my: 'bottom left',  // Position my top left...
                     at: 'top right', // at the bottom right of...
                     adjust: {
-                        x: -55,
-                        y: -55
+                        x: 0,
+                        y: 0
                     }
                 }
             });

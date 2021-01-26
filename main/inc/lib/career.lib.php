@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Fhaculty\Graph\Graph;
@@ -649,6 +650,10 @@ class Career extends Model
              .panel-title {
                 font-size: 11px;
                 height: 40px;
+             }
+
+             .panel-body{
+                min-height: 55px;
              }
              </style>';
 

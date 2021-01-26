@@ -701,6 +701,11 @@ class CourseHome
                             $courseInfo,
                             $sessionId
                         );
+                        // Check if LP is visible.
+                        $visibility = api_get_item_visibility($courseInfo, TOOL_LEARNPATH, $lpId, $sessionId);
+                        if (1 !== $visibility) {
+                            $add = false;
+                        }
                     }
                     if ($path) {
                         $temp_row['custom_image'] = $path;

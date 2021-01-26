@@ -5984,10 +5984,15 @@ EOT;
         return $total;
     }
 
-    public static function parseContent($content, $stats, $exercise, $trackInfo, $currentUserId = 0)
+    public static function parseContent($content, $stats, Exercise $exercise, $trackInfo, $currentUserId = 0)
     {
         $wrongAnswersCount = $stats['failed_answers_count'];
         $attemptDate = substr($trackInfo['exe_date'], 0, 10);
+        $exerciseId = $exercise->iId;
+        $resultsStudentUrl = api_get_path(WEB_CODE_PATH).
+            'exercise/result.php?id='.$exerciseId.'&'.api_get_cidreq();
+        $resultsTeacherUrl = api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_show.php?action=edit&id='.$exerciseId.'&'.api_get_cidreq();
 
         $content = str_replace(
             [
@@ -5996,6 +6001,8 @@ EOT;
                 '((all_answers_teacher_html))',
                 '((exercise_title))',
                 '((exercise_attempt_date))',
+                '((link_to_test_result_page_student))',
+                '((link_to_test_result_page_teacher))',
             ],
             [
                 $wrongAnswersCount,
@@ -6003,6 +6010,8 @@ EOT;
                 $stats['all_answers_teacher_html'],
                 $exercise->get_formated_title(),
                 $attemptDate,
+                $resultsStudentUrl,
+                $resultsTeacherUrl,
             ],
             $content
         );

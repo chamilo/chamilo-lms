@@ -6647,6 +6647,12 @@ class DocumentManager
      */
     public static function getFileHostingWhiteList()
     {
+        $links = api_get_configuration_value('documents_custom_cloud_link_list');
+
+        if (!empty($links) && isset($links['links'])) {
+            return $links['links'];
+        }
+
         return [
             'asuswebstorage.com',
             'box.com',

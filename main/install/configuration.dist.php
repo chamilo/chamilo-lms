@@ -1827,6 +1827,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Shows a popup with the list of answered/unanswered questions before sending a test.
 // $_configuration['quiz_check_all_answers_before_end_test'] = true;
 
+// Custom cloud link URLS, this requires enable_add_file_link = true
+// $_configuration['documents_custom_cloud_link_list'] = ['links' => ['example.com', 'example2.com']];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

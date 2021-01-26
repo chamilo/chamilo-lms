@@ -15,7 +15,6 @@
 
 <script>
     $(function() {
-        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
         function startTimer() {
             $("#timer").show();
@@ -73,9 +72,13 @@
                 }
 
                 function successCallback(stream) {
+                    stopTimer();
+                    startTimer();
                     recordRTC = RecordRTC(stream, {
-                        recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
-                        type: 'audio'
+                        recorderType: RecordRTC.StereoAudioRecorder,
+                        type: 'audio',
+                        mimeType: 'audio/wav',
+                        numberOfAudioChannels: 2
                     });
                     recordRTC.startRecording();
 
@@ -104,6 +107,7 @@
                     return;
                 }
 
+                stopTimer();
                 recordRTC.stopRecording(function (audioURL) {
                     var recordedBlob = recordRTC.getBlob(),
                             fileName = Math.round(Math.random() * 99999999) + 99999999,

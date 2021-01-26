@@ -2343,7 +2343,6 @@ class learnpath
         $now = time();
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs, 'ASSOC');
-
             if (!empty($row['category_id'])) {
                 $category = self::getCategory($row['category_id']);
                 if (self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id)) === false) {
@@ -4415,11 +4414,6 @@ class learnpath
      *
      * @param int $id
      * @param int $visibility
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return bool
      */

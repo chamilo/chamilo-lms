@@ -10529,7 +10529,7 @@ ul.dropdown-menu.inner > li > a {
 #registration input.register-profile[value='5']:after,
 #registration input.register-profile[value='1']:after
 {
-    top:-5px;
+    top: -5px;
     left: -2px;
 }
 
@@ -10542,4 +10542,3 @@ ul.dropdown-menu.inner > li > a {
 .form-inline .bootstrap-select.form-control:not([class*="col-"]) {
     width: 100%;
 }
-

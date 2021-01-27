@@ -9,7 +9,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
-
+$_course = api_get_course_info();
 $is_allowedToTrack = Tracking::isAllowToTrack(api_get_session_id());
 
 if (!$is_allowedToTrack) {
@@ -20,7 +20,8 @@ $export_to_csv = false;
 if (isset($_GET['export'])) {
     $export_to_csv = true;
 }
-
+$filter_score = null;
+$exercise_id = null;
 $global = false;
 if (api_is_platform_admin()) {
     $global = true;
@@ -170,7 +171,7 @@ if (!empty($user_list)) {
 }
 $export_array = [];
 if (!empty($main_result)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result = '<table  class="data_table">';
     $html_result .= '<tr><th>'.get_lang('Course').'</th>';
     $html_result .= '<th>'.get_lang('Learning paths').'</th>';
     $html_result .= '<th>'.get_lang('Test').'</th>';

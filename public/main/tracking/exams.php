@@ -11,7 +11,7 @@ $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $this_section = SECTION_TRACKING;
-$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin(true) || $is_session_general_coach;
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin(true) || api_is_session_general_coach();
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);

@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $id_session = (int) $_GET['id_session'];
 SessionManager::protect_teacher_session_edit($id_session);
-
+$url = null;
 $tool_name = get_lang('Session overview');
 
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');

@@ -179,13 +179,14 @@ if (isset($_GET['additional_profile_field'])) {
         $user_array[] = $key;
     }
 
+    $extraField = new ExtraField('user');
     foreach ($_GET['additional_profile_field'] as $fieldId) {
         // Fetching only the user that are loaded NOT ALL user in the portal.
         $userProfileInfo[$fieldId] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
             $fieldId,
             $user_array
         );
-        $extra_info[$fieldId] = UserManager::get_extra_field_information($fieldId);
+        $extra_info[$fieldId] = $extraField->getFieldInfoByFieldId($fieldId);
     }
 }
 

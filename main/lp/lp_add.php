@@ -36,6 +36,7 @@ function activate_end_date() {
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
 $learnpath_id = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
+$sessionId = api_get_session_id();
 
 if (!$is_allowed_to_edit || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());

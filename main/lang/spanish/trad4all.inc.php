@@ -8752,4 +8752,5 @@ $MultiplicateQuestionsByClass = "Multiplicar las preguntas por clase";
 $MultiplicateQuestionsByUser = "Multiplicar las preguntas por usuario";
 $QuestionForNextUser = "Preguntas sobre el usuario siguiente";
 $CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "El código del curso que debe ingresar en mayúsculas para confirmar la eliminación: %s";
+$BadgeXTitle = "Insignia: %s";
 ?>

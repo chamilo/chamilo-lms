@@ -8724,4 +8724,5 @@ $MultiplicateQuestionsByClass = "Multiplicate questions by class";
 $MultiplicateQuestionsByUser = "Multiplicate questions by user";
 $QuestionForNextUser = "Questions about next user";
 $CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "Course code to be entered in capital letters to confirm the deletion: %s";
+$BadgeXTitle = "Badge: %s";
 ?>

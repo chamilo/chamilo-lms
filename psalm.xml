@@ -20,8 +20,11 @@
         <directory name="public/main/blog"/>
         <directory name="public/main/calendar"/>
 <!--        <directory name="public/main/chat"/>-->
-<!--        <directory name="public/main/course_description"/>-->
+        <directory name="public/main/course_description"/>
 <!--        <directory name="public/main/course_info"/>-->
+<!--        <directory name="public/main/course_progress"/>-->
+<!--        <directory name="public/main/coursecopy"/>-->
+        <directory name="public/main/create_course"/>
         <directory name="public/main/dashboard"/>
 <!--        <directory name="public/main/dropbox"/>-->
 <!--        <directory name="public/main/exercise"/>-->
@@ -33,10 +36,23 @@
         <directory name="public/main/gradebook"/>
         <directory name="public/main/group"/>
         <directory name="public/main/forum"/>
+<!--        <directory name="public/main/gamification"/>-->
+        <directory name="public/main/glossary"/>
+        <directory name="public/main/group"/>
         <directory name="public/main/link" />
 <!--        <directory name="public/main/lp"/>-->
-<!--        <directory name="public/main/session" />-->
+        <directory name="public/main/messages" />
+<!--        <directory name="public/main/mySpace" />-->
+        <directory name="public/main/notebook" />
+        <directory name="public/main/session" />
+<!--        <directory name="public/main/social" />-->
+<!--        <directory name="public/main/survey" />-->
         <!--        <directory name="public/main/inc/ajax" />-->
+<!--        <directory name="public/main/ticket" />-->
+<!--        <directory name="public/main/tracking" />-->
+        <directory name="public/main/user" />
+<!--        <directory name="public/main/webservices" />-->
+<!--        <directory name="public/main/wiki" />-->
 
         <directory name="public/main/work" />
 
@@ -52,6 +68,8 @@
         <file name="public/main/inc/lib/array.lib.php"/>
         <file name="public/main/inc/lib/attendance.lib.php"/>
         <file name="public/main/inc/lib/auth.lib.php"/>
+<!--        <file name="public/main/inc/lib/baker.lib.php"/>-->
+
 <!--        <file name="public/main/inc/lib/blog.lib.php"/>-->
         <file name="public/main/inc/lib/career.lib.php"/>
 <!--        <file name="public/main/inc/lib/certificate.lib.php"/>-->
@@ -79,7 +97,6 @@
 <!--        <file name="public/main/inc/lib/glossary.lib.php"/>-->
         <file name="public/main/inc/lib/grade_model.lib.php"/>
         <file name="public/main/inc/lib/gradebook.lib.php"/>
-
         <file name="public/main/inc/lib/groupmanager.lib.php"/>
 <!--        <file name="public/main/inc/lib/image.lib.php"/>-->
         <file name="public/main/inc/lib/import.lib.php"/>
@@ -139,8 +156,11 @@
             <directory name="src/GraphQlBundle"/>
             <directory name="src/LtiBundle"/>
 
+            <file name="public/main/lp/openoffice_presentation.class.php"/>
+            <file name="public/main/lp/openoffice_document.class.php"/>
+            <file name="public/main/lp/openoffice_text.class.php"/>
+            <file name="public/main/lp/openoffice_text_document.class.php"/>
 
-            <file name="public/main/forum/forumfunction.inc.php"/>
             <file name="public/main/admin/index.php"/>
             <file name="public/main/admin/db.php"/>
             <file name="public/main/admin/settings.php"/>

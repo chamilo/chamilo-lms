@@ -8,13 +8,18 @@ api_platform:
     swagger:
         versions: [3]
     formats:
-        jsonld: ['application/ld+json']
-        json: ['application/json']
-        html: ['text/html']
-        graphql: ['application/graphql']
+        jsonld:
+            mime_types: ['application/ld+json']
+        json:
+            mime_types: ['application/json']
+        html:
+            mime_types: ['text/html' ]
+        graphql:
+            mime_types: ['application/graphql']
     collection:
         pagination:
             client_items_per_page: true # Disabled by default
             items_per_page_parameter_name: itemsPerPage # Default value
+
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'

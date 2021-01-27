@@ -53,7 +53,7 @@
                 'isFromA2p':'true',
                 'issueMonth':issue_info.month,
                 'issueYear': issue_info.year,
-                'name':issue_info.skill_name,
+                'name':'BadgeXTitle'|get_lang|format(issue_info.skill_name),
                 'organizationId':issue_info.linkedin_organization_id
                 }|url_encode }}" target="_new">
                     <em class='fa fa-linkedin-square fa-3x txt-linkedin' aria-hidden='true'></em>

@@ -1665,7 +1665,7 @@ class Tracking
      * @param string    $end_date         end date date('Y-m-d H:i:s')
      * @param bool      $returnAllRecords
      *
-     * @return int
+     * @return int|array
      */
     public static function get_time_spent_on_the_platform(
         $userId,

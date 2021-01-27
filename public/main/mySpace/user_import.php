@@ -33,7 +33,7 @@ if ('true' === api_get_setting('add_users_by_coach')) {
             $sql = 'SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
                     WHERE id='.$id_session;
             $rs = Database::query($sql);
-            if (Database::result($rs, 0, 0) != $_user['user_id']) {
+            if (Database::result($rs, 0, 0) != api_get_user_id()) {
                 api_not_allowed(true);
             }
         } else {
@@ -49,7 +49,7 @@ $errors = [];
 if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
     $id_session = intval($_POST['id_session']);
-    if ('csv' == $file_type) {
+    if ('csv' === $file_type) {
         $users = MySpace::parse_csv_data($_FILES['import_file']['tmp_name']);
     } else {
         $users = MySpace::parse_xml_data($_FILES['import_file']['tmp_name']);

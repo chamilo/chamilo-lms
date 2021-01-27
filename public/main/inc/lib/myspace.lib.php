@@ -3084,7 +3084,7 @@ class MySpace
      *
      * @return array All userinformation read from the file
      */
-    public function parse_csv_data($file)
+    public static function parse_csv_data($file)
     {
         $users = Import::csvToArray($file);
         foreach ($users as $index => $user) {

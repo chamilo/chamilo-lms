@@ -12,7 +12,7 @@ $this_section = SECTION_TRACKING;
 if (!api_is_allowed_to_create_course() && !api_is_drh()) {
     api_not_allowed(true);
 }
-
+$token = null;
 $allowCustomCertificate = 'true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate');
 $plugin = CustomCertificatePlugin::create();
 
@@ -39,6 +39,7 @@ if (api_is_drh()) {
     $whereCondictionMultiUrl = " AND session_rel_user.user_id = ".api_get_user_id();
 }
 
+// Select of sessions.
 $sql = "SELECT s.id, name FROM $tblSession s
         $innerJoinSessionRelUser
         $whereCondictionDRH
@@ -150,7 +151,10 @@ if ($form->validate()) {
         }
 
         $selectCat = (int) $cats[0]->get_id();
-        $certificateListAux = GradebookUtils::get_list_users_certificates($selectCat);
+        $certificateListAux = [];
+        if (!empty($selectCat)) {
+            $certificateListAux = GradebookUtils::get_list_users_certificates($selectCat);
+        }
 
         foreach ($certificateListAux as $value) {
             $createdAt = strtotime(api_get_local_time($value['created_at']));
@@ -222,7 +226,6 @@ if ($form->validate()) {
         'date_begin' => Security::remove_XSS($_REQUEST['date_begin']),
         'date_end' => Security::remove_XSS($_REQUEST['date_end']),
     ];
-    //select of sessions
     foreach ($filterCheckList as $field) {
         $params['extra_'.$field['variable']] = Security::remove_XSS($_REQUEST['extra_'.$field['variable']]);
     }

@@ -225,8 +225,8 @@ $table = new SortableTable(
 
 $params = [
     'keyword' => $keyword,
-    'active' => $active,
-    'sleeping_days' => $sleepingDays,
+    /*'active' => $active,
+    'sleeping_days' => $sleepingDays,*/
 ];
 $table->set_additional_parameters($params);
 

@@ -32,11 +32,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
     const SETTING_LRS_QUIZ_ACTIVE = 'lrs_quiz_active';
     const SETTING_LRS_QUIZ_QUESTION_ACTIVE = 'lrs_quiz_question_active';
+    const SETTING_LRS_PORTFOLIO_ACTIVE = 'lrs_portfolio_active';
 
     const VERB_TERMINATED = 'http://adlnet.gov/expapi/verbs/terminated';
     const VERB_COMPLETED = 'http://adlnet.gov/expapi/verbs/completed';
     const VERB_ANSWERED = 'http://adlnet.gov/expapi/verbs/answered';
     const VERB_VIEWED = 'http://id.tincanapi.com/verb/viewed';
+    const VERB_SHARED = 'http://adlnet.gov/expapi/verbs/shared';
+    const VERB_COMMENTED = 'http://adlnet.gov/expapi/verbs/commented';
 
     const IRI_QUIZ = 'http://adlnet.gov/expapi/activities/assessment';
     const IRI_QUIZ_QUESTION = 'http://adlnet.gov/expapi/activities/question';
@@ -48,6 +51,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     const DATA_TYPE_EXERCISE = 'e_exercise';
     const DATA_TYPE_LP_ITEM_VIEW = 'lp_item_view';
     const DATA_TYPE_LP_VIEW = 'lp_view';
+    const DATA_TYPE_PORTFOLIO_ITEM = 'portfolio_item';
+    const DATA_TYPE_PORTFOLIO_COMMENT = 'portfolio_comment';
 
     const TYPE_QUIZ = 'quiz';
     const TYPE_QUIZ_QUESTION = 'quiz_question';
@@ -77,6 +82,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             self::SETTING_LRS_LP_ACTIVE => 'boolean',
             self::SETTING_LRS_QUIZ_ACTIVE => 'boolean',
             self::SETTING_LRS_QUIZ_QUESTION_ACTIVE => 'boolean',
+            self::SETTING_LRS_PORTFOLIO_ACTIVE => 'boolean',
         ];
 
         parent::__construct(
@@ -151,12 +157,16 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
         $quizEndHook = XApiQuizEndHookObserver::create();
         $createCourseHook = XApiCreateCourseHookObserver::create();
+        $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
+        $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
 
         HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
         HookQuizQuestionAnswered::create()->detach($quizQuestionAnsweredHook);
         HookQuizEnd::create()->detach($quizEndHook);
         HookCreateCourse::create()->detach($createCourseHook);
+        HookPortfolioItemAdded::create()->detach($portfolioItemAddedHook);
+        HookPortfolioItemCommented::create()->detach($portfolioItemCommentedHook);
 
         return 1;
     }
@@ -224,11 +234,15 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $learningPathEndHook = XApiLearningPathEndHookObserver::create();
         $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
         $quizEndHook = XApiQuizEndHookObserver::create();
+        $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
+        $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
 
         $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
         $learningPathEndEvent = HookLearningPathEnd::create();
         $quizQuestionAnsweredEvent = HookQuizQuestionAnswered::create();
         $quizEndEvent = HookQuizEnd::create();
+        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
+        $portfolioItemCommentedEvent = HookPortfolioItemCommented::create();
 
         if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
             $learningPathItemViewedEvent->attach($learningPathItemViewedHook);
@@ -252,6 +266,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $quizEndEvent->attach($quizEndHook);
         } else {
             $quizEndEvent->detach($quizEndHook);
+        }
+
+        if ('true' === $this->get(self::SETTING_LRS_PORTFOLIO_ACTIVE)) {
+            $portfolioItemAddedEvent->attach($portfolioItemAddedHook);
+            $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
+        } else {
+            $portfolioItemAddedEvent->detach($portfolioItemAddedHook);
+            $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
         }
 
         return $this;

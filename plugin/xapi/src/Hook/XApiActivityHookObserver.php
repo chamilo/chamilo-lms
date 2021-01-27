@@ -19,7 +19,7 @@ abstract class XApiActivityHookObserver extends HookObserver
     use XApiStatementTrait;
 
     /**
-     * @var \Chamilo\CoreBundle\Entity\Course
+     * @var \Chamilo\CoreBundle\Entity\Course|null
      */
     protected $course;
     /**
@@ -135,10 +135,12 @@ abstract class XApiActivityHookObserver extends HookObserver
     {
         $platform = api_get_setting('Institution').' - '.api_get_setting('siteName');
 
-        $groupingActivities = [
-            $this->generateActivityFromSite(),
-            $this->generateActivityFromCourse($this->course, $this->session),
-        ];
+        $groupingActivities = [];
+        $groupingActivities[] = $this->generateActivityFromSite();
+
+        if ($this->course) {
+            $groupingActivities[] = $this->generateActivityFromCourse($this->course, $this->session);
+        }
 
         $context = new Context();
 

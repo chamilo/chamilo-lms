@@ -31,7 +31,7 @@ foreach ($pending as $i => $item) {
     $course = api_get_course_entity($survey->getCId());
     $session = api_get_session_entity($survey->getSessionId());
 
-    $course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
+    //$course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
     $session = $session ? ['id' => $session->getId(), 'name' => $session->getName()] : null;
     $courseInfo = api_get_course_info_by_id($course->getId());
     $surveysData[$survey->getIid()] = [

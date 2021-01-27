@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
@@ -76,14 +77,14 @@ if ($formSent) {
 
     $questionCount = count($questions);
 
-    $paginator = new Paginator();
+    $paginator = new Paginator(Container::$container->get('event_dispatcher'));
     $pagination = $paginator->paginate($questions, $page, $length);
     $pagination->setItemNumberPerPage($length);
     $pagination->setCurrentPageNumber($page);
     $pagination->renderer = function ($data) use ($url) {
         $render = '<ul class="pagination">';
         for ($i = 1; $i <= $data['pageCount']; $i++) {
-            $page = (int) $i;
+            $page = $i;
             $pageContent = '<li><a href="'.$url.'&page='.$page.'">'.$page.'</a></li>';
             if ($data['current'] == $page) {
                 $pageContent = '<li class="active"><a href="#" >'.$page.'</a></li>';

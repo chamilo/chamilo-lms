@@ -65,7 +65,7 @@ class CourseRelUser
     /**
      * @var int
      *
-     * @Groups({"user:read", "course:read"})
+     * @Groups({"course:read", "user:read"})
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     protected $relationType;
@@ -114,10 +114,7 @@ class CourseRelUser
         $this->userCourseCat = 0;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getCourse()->getCode();
     }
@@ -137,12 +134,7 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Get Course.
-     *
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }

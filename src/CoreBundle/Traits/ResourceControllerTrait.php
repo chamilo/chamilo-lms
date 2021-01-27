@@ -92,7 +92,7 @@ trait ResourceControllerTrait
             if ($this->hasCourse()) {
                 $parentResourceNode = $this->getCourse()->getResourceNode();
             } else {
-                if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                     /** @var User $user */
                     $parentResourceNode = $this->getUser()->getResourceNode();
                 }
@@ -107,6 +107,24 @@ trait ResourceControllerTrait
         }
 
         return $parentResourceNode;
+    }
+
+    protected function getUser()
+    {
+        if (!$this->container->has('security.token_storage')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
+        }
+
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return null;
+        }
+
+        if (!\is_object($user = $token->getUser())) {
+            // e.g. anonymous authentication
+            return null;
+        }
+
+        return $user;
     }
 
     private function setBreadCrumb(Request $request, ResourceNode $resourceNode)

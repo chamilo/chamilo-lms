@@ -4621,7 +4621,7 @@ function forum_search()
  */
 function display_forum_search_results($search_term)
 {
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+    /*$table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_id = api_get_session_id();
@@ -4679,13 +4679,13 @@ function display_forum_search_results($search_term)
         $forumData = get_forums($forumId);
         $category = isset($forum_categories_list[$forumData['forum_category']]) ? $forum_categories_list[$forumData['forum_category']] : null;
         $display_result = false;
-        /*
-          We only show it when
-          1. forum category is visible
-          2. forum is visible
-          3. thread is visible (to do)
-          4. post is visible
-         */
+
+//          We only show it when
+//          1. forum category is visible
+//          2. forum is visible
+//          3. thread is visible (to do)
+//          4. post is visible
+
         if (!api_is_allowed_to_edit(null, true)) {
             if (!empty($category)) {
                 if ('1' == $category['visibility'] && '1' == $forumData['visibility']) {
@@ -4723,7 +4723,7 @@ function display_forum_search_results($search_term)
     if ($search_results) {
         echo implode($search_results);
     }
-    echo '</ol>';
+    echo '</ol>';*/
 }
 
 /**
@@ -4868,6 +4868,8 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
  */
 function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
 {
+    throw new Exception('edit_forum_attachment_file');
+    /*
     $_course = api_get_course_info();
     $table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
@@ -4934,16 +4936,16 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
                             size ='".$attachment['size']."'
                         WHERE c_id = $course_id AND id = '$safe_id_attach'";
                 Database::query($sql);
-                /*api_item_property_update(
+                api_item_property_update(
                     $_course,
                     TOOL_FORUM_ATTACH,
                     $safe_id_attach,
                     'ForumAttachmentUpdated',
                     api_get_user_id()
-                );*/
+                );
             }
         }
-    }
+    }*/
 }
 
 /**

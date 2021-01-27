@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
 
@@ -266,7 +267,7 @@ switch ($action) {
         break;
     case 'list':
     default:
-        $paginator = new Paginator();
+        $paginator = new Paginator(Container::$container->get('event_dispatcher'));
         $pagination = $paginator->paginate(
             $gradeBookList,
             $page,

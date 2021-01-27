@@ -321,7 +321,7 @@ class SurveyManager
                         }
                     } else {
                         $row = Database::fetch_array($rs, 'ASSOC');
-                        $pos = api_strpos($row['survey_version']);
+                        $pos = api_strpos($row['survey_version'], '.');
                         if (false === $pos) {
                             $row['survey_version'] = $row['survey_version'] + 1;
                             $versionValue = $row['survey_version'];
@@ -1347,7 +1347,7 @@ class SurveyManager
      *
      * @todo editing of a shared question
      */
-    public function save_shared_question($form_content, $survey_data)
+    public static function save_shared_question($form_content, $survey_data)
     {
         $_course = api_get_course_info();
 
@@ -1719,7 +1719,7 @@ class SurveyManager
      *
      * @todo writing the update statement when editing a question
      */
-    public function save_shared_question_options($form_content, $survey_data)
+    public static function save_shared_question_options($form_content, $survey_data)
     {
         if (is_array($form_content) && is_array($form_content['answers'])) {
             // Table definition

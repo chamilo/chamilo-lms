@@ -10979,55 +10979,59 @@ class Exercise
             // Courses
             if (false === $count) {
                 $countSelect = "
-    cq.title as quiz_title,
-    cq.iid as quiz_id,
-    cru.c_id as course_id,
-    cru.user_id as user_id,
-    c.title as title,
-    c.`code` as 'code',
-    cq.active as active,
-    cq.session_id as session_id
-	";
+                cq.title as quiz_title,
+                cq.iid as quiz_id,
+                cru.c_id as course_id,
+                cru.user_id as user_id,
+                c.title as title,
+                c.`code` as 'code',
+                cq.active as active,
+                cq.session_id as session_id
+                ";
             }
 
-            $sql = "SELECT
-	$countSelect
-FROM
-	$tblCourseRelUser as cru
-	INNER JOIN $tblCourse as c ON ( cru.c_id = c.id )
-	INNER JOIN $tblQuiz as cq ON ( cq.c_id = c.id )
-WHERE
-    cru.is_tutor = 0
-    AND ( cq.session_id = 0 or cq.session_id is null)
-    AND cq.active > 0
-    AND cq.c_id = $courseId
-    AND cq.iid = $exerciseId
-ORDER BY cq.c_id";
+            $sql = "
+            SELECT
+                $countSelect
+            FROM
+                $tblCourseRelUser as cru
+                INNER JOIN $tblCourse as c ON ( cru.c_id = c.id )
+                INNER JOIN $tblQuiz as cq ON ( cq.c_id = c.id )
+            WHERE
+                cru.is_tutor = 0
+                AND ( cq.session_id = 0 or cq.session_id is null)
+                AND cq.active > 0
+                AND cq.c_id = $courseId
+                AND cq.iid = $exerciseId
+            ORDER BY cq.c_id";
         } else {
             //Sessions
             if (false === $count) {
                 $countSelect = "
-    cq.title as quiz_title,
-    cq.iid as quiz_id,
-    sru.user_id as user_id,
-    cq.c_id as course_id,
-    cq.session_id as session_id,
-    c.title as title,
-    c.`code` as 'code',
-    cq.active as active
-	";
+                cq.title as quiz_title,
+                cq.iid as quiz_id,
+                sru.user_id as user_id,
+                cq.c_id as course_id,
+                cq.session_id as session_id,
+                c.title as title,
+                c.`code` as 'code',
+                cq.active as active
+                ";
             }
-            $sql = "SELECT $countSelect FROM
-	$tblSessionRelUser AS sru
-	INNER JOIN $tblQuiz AS cq ON ( sru.session_id = sru.session_id )
-	INNER JOIN $tblCourse AS c ON ( c.id = cq.c_id )
-WHERE
-      cq.active > 0
-  AND cq.c_id = $courseId
-  AND sru.session_id = $sessionId
-  AND cq.iid = $exerciseId
-ORDER BY
-         cq.c_id";
+            $sql = "
+            SELECT
+                   $countSelect
+            FROM
+                $tblSessionRelUser AS sru
+                INNER JOIN $tblQuiz AS cq ON ( sru.session_id = sru.session_id )
+                INNER JOIN $tblCourse AS c ON ( c.id = cq.c_id )
+            WHERE
+                  cq.active > 0
+              AND cq.c_id = $courseId
+              AND sru.session_id = $sessionId
+              AND cq.iid = $exerciseId
+            ORDER BY
+              cq.c_id";
         }
 
         $result = Database::query($sql);
@@ -11078,7 +11082,7 @@ ORDER BY
         $link = "<a href=\"$url\">$url</a>";
 
         foreach ($usersArray as $userId => $userData) {
-            $tittle = get_lang('QuizRemindSubject');
+            $title = get_lang('QuizRemindSubject');
             $content = sprintf(
                 get_lang('QuizRemindBody'),
                 $courseTitle,
@@ -11087,7 +11091,7 @@ ORDER BY
             );
             MessageManager::send_message_simple(
                 $userId,
-                $tittle,
+                $title,
                 $content,
                 0,
                 true

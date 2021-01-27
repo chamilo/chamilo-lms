@@ -2299,12 +2299,12 @@ function get_work_user_list(
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file']) {
                     $downloadUrl = $router->generate('chamilo_core_resource_download',
-                            [
-                                'id' => $studentPublication->getResourceNode()->getId(),
-                                'tool' => 'student_publication',
-                                'type' => 'student_publications',
-                            ]
-                        ).'?'.api_get_cidreq();
+                        [
+                            'id' => $studentPublication->getResourceNode()->getId(),
+                            'tool' => 'student_publication',
+                            'type' => 'student_publications',
+                        ]
+                    ).'?'.api_get_cidreq();
                     $linkToDownload = '<a href="'.$downloadUrl.'">'.$saveIcon.'</a> ';
                 }
 
@@ -3219,32 +3219,35 @@ function allowOnlySubscribedUser($userId, $workId, $courseId, $forceAccessForCou
  * @param array $courseInfo
  * @param int   $documentId
  *
- * @return array
+ * @return CDocument
  */
 function getDocumentTemplateFromWork($workId, $courseInfo, $documentId)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
-
     $docRepo = Container::getDocumentRepository();
     if (!empty($documents)) {
         foreach ($documents as $doc) {
-            if ($documentId != $doc['document_id']) {
+            if ($documentId !== $doc['document_id']) {
                 continue;
             }
+
             /** @var CDocument $docData */
             $docData = $docRepo->find($doc['document_id']);
-            $fileInfo = pathinfo($docData['path']);
+
+            return $docData;
+
+            /*$fileInfo = pathinfo($docData['path']);
             if ('html' == $fileInfo['extension']) {
                 if (file_exists($docData['absolute_path']) && is_file($docData['absolute_path'])) {
                     $docData['file_content'] = file_get_contents($docData['absolute_path']);
 
                     return $docData;
                 }
-            }
+            }*/
         }
     }
 
-    return [];
+    return null;
 }
 
 /**
@@ -3256,14 +3259,21 @@ function getDocumentTemplateFromWork($workId, $courseInfo, $documentId)
 function getAllDocumentsFromWorkToString($workId, $courseInfo)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+    $docRepo = Container::getDocumentRepository();
     $content = null;
     if (!empty($documents)) {
         $content .= '<ul class="nav nav-list well">';
         $content .= '<li class="nav-header">'.get_lang('Documents').'</li>';
         foreach ($documents as $doc) {
-            $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
+            /** @var CDocument $docData */
+            $docData = $docRepo->find($doc['document_id']);
+            $url = $docRepo->getResourceFileUrl($docData);
             if ($docData) {
-                $content .= '<li><a class="link_to_download" target="_blank" href="'.$docData['url'].'">'.$docData['title'].'</a></li>';
+                $content .= '<li>
+                                <a class="link_to_download" target="_blank" href="'.$url.'">'.
+                                    $docData->getTitle().'
+                                </a>
+                            </li>';
             }
         }
         $content .= '</ul><br />';
@@ -3294,14 +3304,6 @@ function getWorkComments(CStudentPublication $work)
 {
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
-    /*$courseId = (int) $work['c_id'];
-    $workId = (int) $work['iid'];
-
-    if (empty($courseId) || empty($workId)) {
-        return [];
-    }*/
-
     $workId = $work->getIid();
 
     $sql = "SELECT
@@ -5671,12 +5673,9 @@ function exportAllStudentWorkFromPublication(
     }
 
     $assignment = get_work_assignment_by_id($workId);
-
     $courseCode = $courseInfo['code'];
     $header = get_lang('Course').': '.$courseInfo['title'];
-    $teachers = CourseManager::getTeacherListFromCourseCodeToString(
-        $courseCode
-    );
+    $teachers = CourseManager::getTeacherListFromCourseCodeToString($courseCode);
 
     if (!empty($sessionId)) {
         $sessionInfo = api_get_session_info($sessionId);
@@ -5696,9 +5695,10 @@ function exportAllStudentWorkFromPublication(
 
     $content = null;
     $expiresOn = null;
-
     if (!empty($assignment) && isset($assignment['expires_on'])) {
-        $content .= '<br /><strong>'.get_lang('Posted deadline for sending the work (Visible to the learner)').'</strong>: '.api_get_local_time($assignment['expires_on']);
+        $content .= '<br /><strong>'.
+            get_lang('Posted deadline for sending the work (Visible to the learner)').'</strong>: '.
+            api_get_local_time($assignment['expires_on']);
         $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 
@@ -5729,13 +5729,12 @@ function exportAllStudentWorkFromPublication(
                 }
 
                 $row = 1;
-
                 //$pdf->set_custom_header($header);
+                /** @var array $work */
                 foreach ($workList as $work) {
                     $content .= '<hr />';
                     // getWorkComments need c_id
                     $work['c_id'] = $courseInfo['real_id'];
-
                     //$content .= get_lang('Date').': '.api_get_local_time($work['sent_date_from_db']).'<br />';
                     $score = null;
                     if (!empty($work['qualification_only'])) {
@@ -5743,13 +5742,11 @@ function exportAllStudentWorkFromPublication(
                     }
 
                     $comments = getWorkComments($work);
-
                     $feedback = null;
                     if (!empty($comments)) {
                         $content .= '<h4>'.get_lang('Feedback').': </h4>';
                         foreach ($comments as $comment) {
-                            $feedback .= get_lang('User').': '.$comment['complete_name'].
-                                '<br />';
+                            $feedback .= get_lang('User').': '.$comment['complete_name'].'<br />';
                             $feedback .= $comment['comment'].'<br />';
                         }
                     }
@@ -5760,12 +5757,10 @@ function exportAllStudentWorkFromPublication(
                     $table->setCellContents($row, 4, strip_tags($work['title']));
                     $table->setCellContents($row, 5, $score);
                     $table->setCellContents($row, 6, $feedback);
-
                     $row++;
                 }
 
                 $content = $table->toHtml();
-
                 if (!empty($content)) {
                     $params = [
                         'filename' => $workData['title'].'_'.api_get_local_time(),

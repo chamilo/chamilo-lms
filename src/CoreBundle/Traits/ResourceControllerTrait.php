@@ -12,11 +12,15 @@ use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\EntityNotFoundException;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 trait ResourceControllerTrait
 {
+    /** @var ContainerInterface */
+    protected $container;
+
     public function getRepositoryFromRequest(Request $request): ResourceRepository
     {
         $tool = $request->get('tool');
@@ -94,7 +98,7 @@ trait ResourceControllerTrait
                 }
             }
         } else {
-            $repo = $this->getDoctrine()->getRepository(ResourceNode::class);
+            $repo = $this->container->get('doctrine')->getRepository(ResourceNode::class);
             $parentResourceNode = $repo->find($parentNodeId);
         }
 

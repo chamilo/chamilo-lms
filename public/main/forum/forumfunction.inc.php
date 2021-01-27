@@ -807,6 +807,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             ->setForumOrder(isset($new_max) ? $new_max : null)
         ;
     } else {
+        /** @var CForumForum $forum */
         $forum = $repo->find($values['forum_id']);
     }
 
@@ -4603,7 +4604,7 @@ function forum_search()
         $form->setDefaults($values);
         $form->display();
         // Display the search results.
-        display_forum_search_results(stripslashes($values['search_term']));
+        display_forum_search_results($values['search_term']);
     } else {
         $form->display();
     }
@@ -4933,13 +4934,13 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
                             size ='".$attachment['size']."'
                         WHERE c_id = $course_id AND id = '$safe_id_attach'";
                 Database::query($sql);
-                api_item_property_update(
+                /*api_item_property_update(
                     $_course,
                     TOOL_FORUM_ATTACH,
                     $safe_id_attach,
                     'ForumAttachmentUpdated',
                     api_get_user_id()
-                );
+                );*/
             }
         }
     }

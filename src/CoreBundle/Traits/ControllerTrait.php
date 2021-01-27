@@ -26,15 +26,18 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait ControllerTrait
 {
+    protected $container;
+
     public static function getSubscribedServices(): array
     {
-        $services = parent::getSubscribedServices();
+        $services = AbstractController::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
         $services['glide'] = Glide::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
@@ -132,11 +135,11 @@ trait ControllerTrait
      */
     protected function getSettingsManager()
     {
-        return $this->get('chamilo.settings.manager');
+        return $this->container->get('chamilo.settings.manager');
     }
 
     protected function getSettingsFormFactory()
     {
-        return $this->get('chamilo_settings.form_factory.settings');
+        return $this->container->get('chamilo_settings.form_factory.settings');
     }
 }

@@ -16,6 +16,7 @@ trait CourseControllerTrait
 {
     protected $course;
     protected $session;
+    protected $container;
 
     /**
      * Gets the current Chamilo course based in the "_real_cid" session variable.
@@ -67,7 +68,7 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find(Session::class, $sessionId);
+        return $this->container->get('doctrine')->getManager()->find(Session::class, $sessionId);
     }
 
     public function getGroup()
@@ -82,7 +83,7 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find(CGroup::class, $groupId);
+        return $this->container->get('doctrine')->getManager()->find(CGroup::class, $groupId);
     }
 
     public function getCourseUrlQuery(): string

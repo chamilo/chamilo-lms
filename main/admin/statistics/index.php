@@ -396,8 +396,8 @@ switch ($report) {
         ];
         $courses = CourseManager::get_course_list();
         $coursesTotal = count($courses);
-        if ($coursesTotal > 0) {
-            $start = isset($_GET['start']) ? (int)($_GET['start']) : 0;
+        if (0 < $coursesTotal) {
+            $start = isset($_GET['start']) ? (int) ($_GET['start']) : 0;
         }
 
         $start = abs($start);
@@ -455,7 +455,7 @@ switch ($report) {
                     $sessions,
                     $item['total']['count'],
                 ];
-                if ($nextElement == 0) {
+                if (0 == $nextElement) {
                     $nextElement = $indexCourseList;
                 }
                 $op[] = $coursesList[$indexCourseList];
@@ -466,10 +466,9 @@ switch ($report) {
                 break;
             }
 
-            if (count($coursesList) % $pagged == 1) {
+            if (1 == count($coursesList) % $pagged) {
                 $currentPage++;
             }
-
         }
         $headerName = [
             [get_lang('Course'), false],
@@ -491,7 +490,7 @@ switch ($report) {
         $nextCourseIndex = ($start + $pagged);
         $previousCourseIndex = ($start - 10) < 0 ? 0 : ($start - 10);
 
-        $pag = (int)($coursesTotal / $pagged);
+        $pag = (int) ($coursesTotal / $pagged);
         if ($pag < ($coursesTotal / $pagged)) {
             $pag++;
         }

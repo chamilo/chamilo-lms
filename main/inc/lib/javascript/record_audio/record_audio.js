@@ -1,6 +1,5 @@
 /* For licensing terms, see /license.txt */
 window.RecordAudio = (function () {
-    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     function startTimer() {
         $("#timer").show();
@@ -69,11 +68,15 @@ window.RecordAudio = (function () {
             formData.append('audio_blob', recordedBlob, fileName + fileExtension);
             formData.append('audio_dir', rtcInfo.directory);
 
+            var courseParams = "";
+            if (rtcInfo.cidReq) {
+                courseParams = "&"+rtcInfo.cidReq;
+            }
             $.ajax({
                 url: _p.web_ajax + 'record_audio_rtc.ajax.php?' + $.param({
                     type: rtcInfo.type,
                     tool: (!!txtName.length ? 'document' : 'exercise')
-                }),
+                }) + courseParams,
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -117,9 +120,13 @@ window.RecordAudio = (function () {
             }
 
             function successCallback(stream) {
+                stopTimer();
+                startTimer();
                 recordRTC = RecordRTC(stream, {
-                    recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
-                    type: 'audio'
+                    recorderType: RecordRTC.StereoAudioRecorder,
+                    type: 'audio',
+                    mimeType: 'audio/wav',
+                    numberOfAudioChannels: 2
                 });
                 recordRTC.startRecording();
 
@@ -153,6 +160,7 @@ window.RecordAudio = (function () {
             if (!recordRTC) {
                 return;
             }
+            pauseTimer();
 
             btnPause.prop('disabled', true).addClass('hidden');
             btnPlay.prop('disabled', false).removeClass('hidden');
@@ -169,6 +177,7 @@ window.RecordAudio = (function () {
             btnPause.prop('disabled', false).removeClass('hidden');
             btnStop.prop('disabled', false).removeClass('hidden');
             recordRTC.resumeRecording();
+            startTimer();
         });
 
         btnStop.on('click', function () {
@@ -176,6 +185,7 @@ window.RecordAudio = (function () {
                 return;
             }
 
+            stopTimer();
             recordRTC.stopRecording(function (audioURL) {
                 btnStart.prop('disabled', false).removeClass('hidden');
                 btnPause.prop('disabled', true).addClass('hidden');

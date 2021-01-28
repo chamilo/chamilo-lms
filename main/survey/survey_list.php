@@ -396,7 +396,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $lastColumn = $column;
                                 $column++;
                             }
-
                             $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
                             $lastCoordinate = $coordinate;
                         }
@@ -415,8 +414,45 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 }
 
                 // Merge similar cols.
+                $counterColumn = 2;
+                $categories = [];
+                $letterList = [];
+                foreach ($page->getColumnIterator('C') as $col) {
+                    $index = $col->getColumnIndex();
+                    $cell = $page->getCellByColumnAndRow($counterColumn, 1);
+                    //$coordinate = $page->getCellByColumnAndRow($counterColumn, 1)->getCoordinate();
+                    $value = $cell->getValue();
+                    if (!empty($value)) {
+                        $categories[$value][] = [
+                            'col' => $index,
+                            'row' => $page->getHighestRow($index),
+                        ];
+                    }
+                    $letterList[] = $index;
+                    $counterColumn++;
+                }
+
+                if (!empty($categories)) {
+                    $maxColumn = $counterColumn;
+                    $newCounter = 2;
+                    $newOrder = [];
+                    foreach ($categories as $category => $categoryList) {
+                        foreach ($categoryList as $categoryData) {
+                            $col = $categoryData['col'];// D
+                            $row = $categoryData['row'];// 15
+                            $data = $page->rangeToArray($col.'1:'.$col.$row);
+                            $newOrder[] = ['data' => $data, 'col' => $col];
+                        }
+                    }
+
+                    foreach ($newOrder as $index => $order) {
+                        $data = $order['data'];
+                        $col = $order['col'];
+                        $page->fromArray($data, null, $letterList[$index].'1');
+                    }
+                }
+
                 $counterColumn = 3;
-                $oldValue = '';
                 $data = [];
                 foreach ($page->getColumnIterator('C') as $col) {
                     $index = $col->getColumnIndex();
@@ -445,9 +481,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 $row = 3;
                 foreach ($users as $user) {
-                    /*if (!in_array($user['id'], $usersToShow)) {
-                        continue;
-                    }*/
                     $columnUser = 0;
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
@@ -475,9 +508,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $column = 3;
                         $columnQuestion = 3;
                         $row = 1;
-                        /*foreach ($classes as $class) {
-                            $users = $userList = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
-                            foreach ($users as $user) {*/
                         foreach ($usersWithAnswers as $userAnswer) {
                             $userWithAnswerId = $userAnswer['user_id'];
                             $myUserId = $userAnswer['id'];
@@ -491,11 +521,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                             $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
                             $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(60);
-
-                            //$cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname'], true);
-                            /*$page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
-                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(50);*/
-
                             $data = '';
                             if (isset($survey['user_answers'][$myUserId]) &&
                                 isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
@@ -504,9 +529,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             }
                             @$page->setCellValueByColumnAndRow($columnUser++, $row, $data);
                             $row++;
-                            //}
                         }
-
                         $counter++;
                     } else {
                         break;

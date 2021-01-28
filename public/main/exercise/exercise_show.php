@@ -28,7 +28,6 @@ if (empty($id)) {
 // Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
-//No track info
 if (empty($track_exercise_info)) {
     api_not_allowed($printHeaders);
 }
@@ -1124,7 +1123,6 @@ if ('learnpath' != $origin) {
     }
 }
 
-// Destroying the session
 Session::erase('questionList');
 unset($questionList);
 

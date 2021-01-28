@@ -382,7 +382,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getUser()
     {

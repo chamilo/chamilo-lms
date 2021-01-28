@@ -441,7 +441,14 @@ foreach ($posts as $post) {
                 $deleteUrl,
                 [
                     'onclick' => "javascript:if(!confirm('"
-                        .addslashes(api_htmlentities(get_lang('Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted'), ENT_QUOTES))
+                        .addslashes(
+                            api_htmlentities(
+                                get_lang(
+                                    'Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted'
+                                ),
+                                ENT_QUOTES
+                            )
+                        )
                         ."')) return false;",
                     'id' => "delete-post-{$post['post_id']}",
                 ]
@@ -524,10 +531,11 @@ foreach ($posts as $post) {
                 $posterId,
                 $threadId
             );
+            $userId = $postEntity->getUser()->getId();
             if (false == $locked) {
                 $iconEdit .= '<a href="forumqualify.php?'.api_get_cidreq()
                     ."&forum=$forumId&thread=$threadId&action=list&post={$post['post_id']}"
-                    ."&user={$post['user_id']}&user_id={$post['user_id']}"
+                    ."&user={$userId}&user_id={$userId}"
                     ."&idtextqualify=$current_qualify_thread"
                     .'" >'.Display::return_icon('quiz.png', get_lang('Grade activity')).'</a>';
             }

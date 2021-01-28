@@ -20,7 +20,7 @@ $this_section = SECTION_COURSES;
 $url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
-        $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course'.'&'.api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
     } else {
         $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?';
     }

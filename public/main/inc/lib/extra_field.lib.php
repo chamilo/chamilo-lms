@@ -161,6 +161,9 @@ class ExtraField extends Model
             case 'track_exercise':
                 $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
                 break;
+            case 'portfolio':
+                $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -195,6 +198,9 @@ class ExtraField extends Model
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
+        }
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $result[] = 'portfolio';
         }
         sort($result);
 
@@ -1158,7 +1164,6 @@ class ExtraField extends Model
                                 'checkbox',
                                 'extra_'.$field_details['variable'],
                                 null,
-                                //$field_details['display_text'].'<br />',
                                 get_lang('Yes'),
                                 $checkboxAttributes
                             );
@@ -1181,8 +1186,10 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('Please select an option');
                         }
-                        foreach ($field_details['options'] as $optionDetails) {
-                            $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                        if (isset($field_details['options']) && !empty($field_details['options'])) {
+                            foreach ($field_details['options'] as $optionDetails) {
+                                $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                            }
                         }
                         $form->addElement(
                             'select',

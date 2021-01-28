@@ -287,6 +287,8 @@ if (isset($_REQUEST['comments']) &&
 
     $notifications = api_get_configuration_value('exercise_finished_notification_settings');
     if ($notifications) {
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
         ob_start();
         $stats = ExerciseLib::displayQuestionListByAttempt(
             $objExerciseTmp,
@@ -297,7 +299,25 @@ if (isset($_REQUEST['comments']) &&
             api_get_configuration_value('quiz_results_answers_report'),
             false
         );
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
         ob_end_clean();
+        // Show all for teachers.
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+        $objExerciseTmp->forceShowExpectedChoiceColumn = true;
+        ob_start();
+        $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
+            $objExerciseTmp,
+            $track_exercise_info['exe_id'],
+            false,
+            false,
+            false,
+            api_get_configuration_value('quiz_results_answers_report'),
+            false
+        );
+        ob_end_clean();
+        $objExerciseTmp->forceShowExpectedChoiceColumn = false;
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
 
         $attemptCount = Event::getAttemptPosition(
             $track_exercise_info['exe_id'],
@@ -314,7 +334,8 @@ if (isset($_REQUEST['comments']) &&
             $track_exercise_info,
             api_get_course_info(),
             $attemptCount,
-            $stats
+            $stats,
+            $statsTeacher
         );
     }
     // Updating LP score here

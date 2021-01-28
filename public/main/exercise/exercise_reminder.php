@@ -85,7 +85,6 @@ $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_l
 $hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
 
 if (!$hideHeaderAndFooter) {
-    //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Test'));
 } else {
     Display::display_reduced_header();
@@ -94,7 +93,7 @@ if (!$hideHeaderAndFooter) {
 /* DISPLAY AND MAIN PROCESS */
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && !$hideHeaderAndFooter) {
+if (!$hideHeaderAndFooter && api_is_course_admin()) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
         Display::return_icon('back.png', get_lang('Go back to the questions list'), [], 32).'</a>';

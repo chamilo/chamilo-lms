@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class HookPortfolioItemAdded
+ * Class HookPortfolioItemAdded.
  */
 class HookPortfolioItemAdded extends HookEvent implements HookPortfolioItemAddedEventInterface
 {
@@ -18,7 +18,7 @@ class HookPortfolioItemAdded extends HookEvent implements HookPortfolioItemAdded
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function notifyItemAdded()
     {

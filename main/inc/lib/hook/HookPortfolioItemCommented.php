@@ -15,7 +15,7 @@ class HookPortfolioItemCommented extends HookEvent implements HookPortfolioItemC
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function notifyItemCommented()
     {

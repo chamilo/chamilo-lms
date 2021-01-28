@@ -12,8 +12,7 @@ use Xabbuh\XApi\Model\Verb;
 /**
  * Class XApiPortfolioItemCommentedHookObserver.
  */
-class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
-    implements HookPortfolioItemCommentedObserverInterface
+class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver implements HookPortfolioItemCommentedObserverInterface
 {
     /**
      * @var \Chamilo\CoreBundle\Entity\PortfolioComment
@@ -21,7 +20,7 @@ class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
     private $comment;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hookItemCommented(HookPortfolioItemCommentedEventInterface $hookEvent)
     {
@@ -43,7 +42,7 @@ class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getId()
     {
@@ -54,7 +53,7 @@ class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getActor()
     {
@@ -64,7 +63,7 @@ class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getVerb()
     {
@@ -77,7 +76,7 @@ class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getActivity()
     {
@@ -109,7 +108,7 @@ class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getActivityResult()
     {

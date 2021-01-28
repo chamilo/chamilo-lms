@@ -12,8 +12,7 @@ use Xabbuh\XApi\Model\Verb;
 /**
  * Class XApiPortfolioItemAddedHookObserver.
  */
-class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
-    implements HookPortfolioItemAddedObserverInterface
+class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver implements HookPortfolioItemAddedObserverInterface
 {
     /**
      * @var \Chamilo\CoreBundle\Entity\Portfolio
@@ -21,7 +20,7 @@ class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
     private $item;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hookItemAdded(HookPortfolioItemAddedEventInterface $hookEvent)
     {
@@ -43,7 +42,7 @@ class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getId()
     {
@@ -54,7 +53,7 @@ class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getActor()
     {
@@ -64,7 +63,7 @@ class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getVerb()
     {
@@ -77,7 +76,7 @@ class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getActivity()
     {
@@ -98,7 +97,7 @@ class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getActivityResult()
     {

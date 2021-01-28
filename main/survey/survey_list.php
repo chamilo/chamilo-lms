@@ -164,6 +164,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $usersWithAnswers[$row['user']] = $userInfo;
                 }
 
+                if (empty($usersWithAnswers)) {
+                    continue;
+                }
+
                 $sql = "SELECT
 			            survey_question.question_id,
 			            survey_question.survey_id,
@@ -267,7 +271,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             @$spreadsheet = new PHPExcel();
             $counter = 0;
             foreach ($classes as $class) {
-                $users = $userList = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
+                $users = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
                 $page = @$spreadsheet->createSheet($counter);
                 @$page->setTitle($class['name']);
                 $firstColumn = 3;
@@ -279,17 +283,26 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $class['name']
                 );
 
+                $columnsWithData = [0, 1, 2];
+                $previousSurveyQuestionsCount = 0;
                 foreach ($surveyList as $survey) {
                     $questions = $survey['questions'];
                     $questionsOriginal = $survey['questions'];
                     $usersWithAnswers = $survey['user_with_answers'];
                     $rowStudent = 3;
                     $usersToShow = [];
-                    $columnsWithData = [0, 1, 2];
+                    // User in classes.
+                    $questionsInSurvey = 0;
                     foreach ($users as $userData) {
                         $userId = $userData['id'];
                         $completeName = $userData['firstname'].' '.$userData['lastname'];
-                        $userColumn = 3;
+                        if (empty($previousSurveyQuestionsCount)) {
+                            $userColumn = 3;
+                        } else {
+                            $userColumn = $previousSurveyQuestionsCount;
+                        }
+
+                        $questionsInSurvey = 0;
                         foreach ($questions as $question) {
                             $questionTitle = str_replace(
                                 '{{student_full_name}}',
@@ -297,6 +310,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $question['question']
                             );
                             if (strpos($question['question'], '{{')) {
+                                $questionsInSurvey++;
                                 foreach ($usersWithAnswers as $userAnswer) {
                                     $userWithAnswerId = $userAnswer['user_id'];
                                     foreach ($questions as $questionData) {
@@ -309,7 +323,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                                 $answerData = implode(', ', $answerData);
                                                             }
                                                             $answerData = trim($answerData);
-                                                            if (!empty($answerData) && !in_array($userId, $usersToShow)) {
+                                                            if ($answerData != '' && !in_array($userId, $usersToShow)) {
                                                                 $usersToShow[] = $userId;
                                                             }
 
@@ -320,25 +334,26 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                                 true
                                                             );
                                                             $colCode = $cell->getColumn();
-                                                            error_log("$userColumn - $rowStudent - $answerData");
-                                                            if (!empty($answerData) && !in_array($userColumn, $columnsWithData)) {
+                                                            if ($answerData != '' && !in_array($userColumn, $columnsWithData)) {
                                                                 $columnsWithData[] = $userColumn;
                                                             }
-                                                            $userColumn++;
                                                         }
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                    $userColumn++;
                                 }
                             }
                         }
-
-                        //if (in_array($userId, $usersToShow)) {
                         $rowStudent++;
-                        //}
                     }
+
+                    if (empty($previousSurveyQuestionsCount)) {
+                        $previousSurveyQuestionsCount = 3;
+                    }
+                    $previousSurveyQuestionsCount += $questionsInSurvey;
 
                     foreach ($questions as $question) {
                         $questionTitle = $question['question'];
@@ -347,7 +362,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $questionTitle = api_html_entity_decode(
                                 trim(strip_tags(str_replace('{{student_full_name}}', '', $question['question'])))
                             );
-                            // Add question title.
+                            // Add question general title.
                             $cell = @$page->setCellValueByColumnAndRow(
                                 $column,
                                 1,
@@ -384,162 +399,48 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                             $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
                             $lastCoordinate = $coordinate;
-                            if (!empty($lastCoordinate)) {
-                                //$page->mergeCells($firstCoordinate.':'.$lastCoordinate);
-                            }
                         }
                     }
+                }
 
-                    // Remove cols with no data.
-                    $originalColumns = [];
-                    $counter = 0;
-                    $less = 0;
-                    $index = 0;
-                    foreach ($page->getColumnIterator('A') as $col) {
-                        if (!in_array($index, $columnsWithData)) {
-                            $page->removeColumnByIndex($index - $less);
-                            //$page->removeColumn($index - $less);
-                            $less++;
-                        }
-                        $index++;
+                // Remove cols with no data.
+                $less = 0;
+                $index = 0;
+                foreach ($page->getColumnIterator() as $col) {
+                    if (!in_array($index, $columnsWithData)) {
+                        $page->removeColumnByIndex($index - $less);
+                        $less++;
                     }
+                    $index++;
+                }
 
-                    // Merge similar cols.
-                    $counter = 3;
-                    $oldValue = '';
-                    $data = [];
-                    foreach ($page->getColumnIterator('C') as $col) {
-                        $index = $col->getColumnIndex();
-                        $cell = $page->getCellByColumnAndRow($counter, 1);
-                        $cell->getStyle()->getAlignment()->setHorizontal(
-                            PHPExcel_Style_Alignment::HORIZONTAL_CENTER
-                        );
-                        $coordinate = $page->getCellByColumnAndRow($counter, 1)->getCoordinate();
-                        $value = $cell->getValue();
-                        if (!empty($value)) {
-                            if (!isset($data[$value])) {
-                                $data[$value]['start'] = $coordinate;
-                                $data[$value]['end'] = $coordinate;
-                            } else {
-                                $data[$value]['end'] = $coordinate;
-                            }
-                        }
-                        $counter++;
-                    }
-
-                    if (!empty($data)) {
-                        foreach ($data as $colInfo) {
-                            $page->mergeCells($colInfo['start'].':'.$colInfo['end']);
-                        }
-                    }
-                    //exit;
-                    /*foreach ($questionsOriginal as $questionData) {
-                        if (strpos($questionData['question'], '{{') === false) {
-                            if ($questionTitle === $questionData['question'] &&
-                                isset($survey['user_answers'][$userId])
-                            ) {
-
-                                //var_dump($questionData['question']);
-                                foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
-                                    if ($questionData['question_id'] == $questionId) {
-                                        if (is_array($answerData)) {
-                                            $answerData = implode(', ', $answerData);
-                                        }
-                                        @$page->setCellValueByColumnAndRow(
-                                            $questionPosition,
-                                            $rowStudent,
-                                            $answerData,
-                                            true
-                                        );
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }*/
-                    /*
-                    foreach ($usersWithAnswers as $userAnswer) {
-                        $userId = $userAnswer['user_id'];
-                        $cell = @$page->setCellValueByColumnAndRow(
-                            $column,
-                            1,
-                            $survey['group_title'].' - '.$userAnswer['complete_name']
-                        );
-                        $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
-                        $questionCounter = 0;
-                        $firstCoordinate = $coordinate;
-                        $lastCoordinate = '';
-                        foreach ($questions as $question) {
-                            $questionTitle = $question['question'];
-                            if (strpos($question['question'], '{{')) {
-                                $questionPosition = $column + $questionCounter;
-                                $cell = @$page->setCellValueByColumnAndRow(
-                                    $questionPosition,
-                                    2,
-                                    strip_tags($questionTitle),
-                                    true
-                                );
-
-                                $coordinate = $page->getCellByColumnAndRow($questionPosition, 1)->getCoordinate();
-                                $lastCoordinate = $coordinate;
-                                $rowStudent = 3;
-                                foreach ($users as $user) {
-                                    $completeName = $user['firstname'].' '.$user['lastname'];
-                                    $questionTitle = str_replace(
-                                        '{{student_full_name}}',
-                                        $completeName,
-                                        $question['question']
-                                    );
-
-                                    foreach ($questions as $questionData) {
-                                        if (strpos($questionData['question'], '{{') === false) {
-                                            if ($questionTitle === $questionData['question']) {
-                                                foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
-                                                    if ($questionData['question_id'] == $questionId) {
-                                                        if (is_array($answerData)) {
-                                                            $answerData = implode(', ', $answerData);
-                                                        }
-                                                        @$page->setCellValueByColumnAndRow(
-                                                            $questionPosition,
-                                                            $rowStudent,
-                                                            $answerData,
-                                                            true
-                                                        );
-                                                        break;
-                                                    }
-                                                }
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    $rowStudent++;
-                                }
-                                $questionCounter++;
-                                $columnQuestion++;
-                            }
-                        }
-                        $column += $questionCounter;
-                        $columnQuestion = $column;
-
-                        if (!empty($lastCoordinate)) {
-                            $page->mergeCells($firstCoordinate.':'.$lastCoordinate);
-                        }
-                    }
-                    */
-                    /*$questionPerUser = [];
-                    foreach ($questions as $question) {
-                        if (strpos($question['question'], '{{')) {
+                // Merge similar cols.
+                $counterColumn = 3;
+                $oldValue = '';
+                $data = [];
+                foreach ($page->getColumnIterator('C') as $col) {
+                    $index = $col->getColumnIndex();
+                    $cell = $page->getCellByColumnAndRow($counterColumn, 1);
+                    $cell->getStyle()->getAlignment()->setHorizontal(
+                        PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+                    );
+                    $coordinate = $page->getCellByColumnAndRow($counterColumn, 1)->getCoordinate();
+                    $value = $cell->getValue();
+                    if (!empty($value)) {
+                        if (!isset($data[$value])) {
+                            $data[$value]['start'] = $coordinate;
+                            $data[$value]['end'] = $coordinate;
                         } else {
-                            foreach ($users as $user) {
-                                $completeName = $user['firstname'].' '.$user['lastname'];
-                                if (strpos($question['question'], $completeName)) {
-                                    break;
-                                }
-                                $questionPerUser[$user['id']][] = $question['question_id'];
-                            }
+                            $data[$value]['end'] = $coordinate;
                         }
-                    }*/
+                    }
+                    $counterColumn++;
+                }
+
+                if (!empty($data)) {
+                    foreach ($data as $colInfo) {
+                        $page->mergeCells($colInfo['start'].':'.$colInfo['end']);
+                    }
                 }
 
                 $row = 3;
@@ -552,6 +453,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
                     $row++;
                 }
+
+                // Count pages.
                 $counter++;
             }
 

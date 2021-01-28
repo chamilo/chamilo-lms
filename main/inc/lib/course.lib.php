@@ -7241,4 +7241,85 @@ class CourseManager
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
     }
+
+    /**
+     * Returns access to courses based on course id, user, and a start and end date range.
+     * If withSession is 0, only the courses will be taken.
+     * If withSession is 1, only the sessions will be taken.
+     * If withSession is different from 0 and 1, the whole set will be take
+     *
+     * @param int $courseId
+     * @param int $withSession
+     * @param int $userId
+     * @param null $startDate
+     * @param null $endDate
+     *
+     */
+    public static function getAccessCourse(
+        $courseId = 0,
+        $withSession = 0,
+        $userId = 0,
+        $startDate = null,
+        $endDate = null
+    )
+    {
+        $where = null;
+        $courseId = (int)$courseId;
+        $userId = (int)$userId;
+        $tblTrackECourse = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $wheres = [];
+        if ($courseId != 0) {
+            $wheres[] = " course_access.c_id = $courseId ";
+        }
+        if ($userId != 0) {
+            $wheres[] = " course_access.user_id = $userId ";
+        }
+        if (!empty($startDate)) {
+            $startDate = api_get_utc_datetime($startDate,false,true);
+            $wheres[] = " course_access.login_course_date >= '".$startDate->format('Y-m-d')."' ";
+        }
+        if (!empty($endDate)) {
+            $endDate = api_get_utc_datetime($endDate,false,true);
+            $wheres[] = " course_access.login_course_date <= '".$endDate->format('Y-m-d')."' ";
+        }
+        if($withSession == 0 ){
+            $wheres[] = " course_access.session_id = 0 ";
+        }elseif($withSession == 1 ) {
+            $wheres[] = " course_access.session_id != 0 ";
+        }
+
+        $totalWhere = count($wheres);
+        for ($i = 0; $i <= $totalWhere; $i++) {
+            if (isset($wheres[$i])) {
+                if (empty($where)) {
+                    $where = ' WHERE ';
+                }
+                $where .= $wheres[$i];
+                if (isset($wheres[$i + 1])) {
+                    $where .= ' AND ';
+                }
+            }
+        }
+
+        $sql = "
+        SELECT DISTINCT
+            CAST( course_access.login_course_date AS DATE ) AS login_course_date,
+            user_id,
+            c_id
+        FROM
+            $tblTrackECourse as course_access
+            $where
+        GROUP BY
+            c_id,
+            session_id,
+            CAST( course_access.login_course_date AS DATE ),
+            user_id
+        ORDER BY
+            c_id
+        ";
+        $res = Database::query($sql);
+        $data = Database::store_result($res);
+        Database::free_result($res);
+        return $data;
+    }
 }

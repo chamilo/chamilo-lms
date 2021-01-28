@@ -378,7 +378,7 @@ switch ($report) {
         $nextElement = 0;
         $currentPage = 0;
         $start = 0;
-        $paginacion = 10;
+        $pagged = 10;
         $coursesList = [];
         $op = [];
         $today = new DateTime();
@@ -397,12 +397,12 @@ switch ($report) {
         $courses = CourseManager::get_course_list();
         $coursesTotal = count($courses);
         if ($coursesTotal > 0) {
-            $start = isset($_GET['start']) ? (int)($_GET['start']) : 1;
+            $start = isset($_GET['start']) ? (int)($_GET['start']) : 0;
         }
 
         $start = abs($start);
 
-        $termina = ($start + $paginacion) < $paginacion ? $paginacion : $start + $paginacion;
+        $termina = ($start + $pagged) < $pagged ? $pagged : $start + $pagged;
         foreach ($courses as $course) {
             $courseId = $course['id'];
             $sessions = 0;
@@ -466,7 +466,7 @@ switch ($report) {
                 break;
             }
 
-            if (count($coursesList) % $paginacion == 1) {
+            if (count($coursesList) % $pagged == 1) {
                 $currentPage++;
             }
 
@@ -487,12 +487,12 @@ switch ($report) {
         $query_vars['start'] = $nextElement;
         $query_vars['report'] = 'courses_usage';
         $paging_options = [];
-        $paging_options['per_page'] = $paginacion;
-        $nextCourseIndex = ($start + $paginacion);
+        $paging_options['per_page'] = $pagged;
+        $nextCourseIndex = ($start + $pagged);
         $previousCourseIndex = ($start - 10) < 0 ? 0 : ($start - 10);
 
-        $pag = (int)($coursesTotal / $paginacion);
-        if ($pag < ($coursesTotal / $paginacion)) {
+        $pag = (int)($coursesTotal / $pagged);
+        if ($pag < ($coursesTotal / $pagged)) {
             $pag++;
         }
 

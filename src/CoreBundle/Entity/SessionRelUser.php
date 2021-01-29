@@ -22,7 +22,7 @@ class SessionRelUser
 {
     use UserTrait;
 
-    public $relationTypeList = [
+    public array $relationTypeList = [
         0 => 'student',
         1 => 'drh',
     ];
@@ -37,32 +37,26 @@ class SessionRelUser
     protected $id;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected $session;
+    protected Session $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
-    protected $relationType;
+    protected int $relationType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
-    protected $duration;
+    protected int $duration;
 
     /**
      * @var int
@@ -92,11 +86,9 @@ class SessionRelUser
      */
     protected $registeredAt;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;
         $this->movedAt = null;

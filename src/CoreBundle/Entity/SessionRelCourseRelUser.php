@@ -31,58 +31,47 @@ class SessionRelCourseRelUser
 
     public const STATUS_STUDENT = 0;
     public const STATUS_COURSE_COACH = 2;
-
-    public $statusList = [
+    public array $statusList = [
         0 => 'student',
         2 => 'course_coach',
     ];
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var Session
      * @Groups({"session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
-    protected $session;
+    protected Session $session;
 
     /**
-     * @var Course
      * @Groups({"session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
-    protected $visibility;
+    protected int $visibility;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
      */
-    protected $status;
+    protected int $status;
 
     /**
      * @var int
@@ -91,48 +80,31 @@ class SessionRelCourseRelUser
      */
     protected $legalAgreement;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->visibility = 1;
+        $this->legalAgreement = 0;
+        $this->status = self::STATUS_STUDENT;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return $this
-     */
-    public function setSession($session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return $this
-     */
-    public function setCourse($course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -149,14 +121,7 @@ class SessionRelCourseRelUser
         return $this->id;
     }
 
-    /**
-     * Set visibility.
-     *
-     * @param int $visibility
-     *
-     * @return SessionRelCourseRelUser
-     */
-    public function setVisibility($visibility)
+    public function setVisibility(int $visibility): self
     {
         $this->visibility = $visibility;
 
@@ -165,22 +130,16 @@ class SessionRelCourseRelUser
 
     /**
      * Get visibility.
-     *
-     * @return int
      */
-    public function getVisibility()
+    public function getVisibility(): int
     {
         return $this->visibility;
     }
 
     /**
      * Set status.
-     *
-     * @param int $status
-     *
-     * @return SessionRelCourseRelUser
      */
-    public function setStatus($status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -189,10 +148,8 @@ class SessionRelCourseRelUser
 
     /**
      * Get status.
-     *
-     * @return int
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }

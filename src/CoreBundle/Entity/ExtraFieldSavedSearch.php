@@ -29,12 +29,10 @@ class ExtraFieldSavedSearch
     protected $id;
 
     /**
-     * @var ExtraField
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
-    protected $field;
+    protected ExtraField $field;
 
     /**
      * @var User

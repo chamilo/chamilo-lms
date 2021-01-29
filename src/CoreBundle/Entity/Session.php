@@ -63,7 +63,6 @@ class Session
     public const COACH = 2;
 
     /**
-     * @var int
      * @Groups({"session:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id

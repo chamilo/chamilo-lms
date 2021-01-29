@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -83,20 +84,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $apiToken;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
      * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
      */
-    protected $firstname;
+    protected string $firstname;
 
     /**
-     * @var string
      * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
      */
-    protected $lastname;
+    protected string $lastname;
 
     /**
      * @var string
@@ -113,19 +112,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $biography;
 
     /**
-     * @var string
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="locale", type="string", length=8, nullable=true, unique=false)
      */
-    protected $locale;
+    protected string $locale;
 
     /**
-     * @var string
      * @Groups({"user:read", "user:write", "course:read", "resource_node:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
-    protected $username;
+    protected string $username;
 
     /**
      * @var string|null
@@ -159,15 +156,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $emailCanonical;
 
     /**
-     * @var string
-     * @var string
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank()
      * @Assert\Email()
      *
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
-    protected $email;
+    protected string $email;
 
     /**
      * @var bool
@@ -753,6 +748,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $this->uuid = Uuid::v4();
         $this->apiToken = null;
+        $this->locale = 'en';
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
@@ -838,7 +834,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function __toString(): string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     public function getUuid()
@@ -1561,10 +1557,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
-    public function setUsername($username): self
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
@@ -1573,10 +1569,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @param string $slug
-     *
-     * @return User
      */
-    public function setSlug($slug)
+    public function setSlug($slug): self
     {
         return $this->setUsername($slug);
     }
@@ -2063,7 +2057,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param int $lastId Optional. The ID of the last received message
      */
-    public function getUnreadReceivedMessages($lastId = 0): ArrayCollection
+    public function getUnreadReceivedMessages(int $lastId = 0): ArrayCollection
     {
         $criteria = Criteria::create();
         $criteria->where(
@@ -2072,7 +2066,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
         if ($lastId > 0) {
             $criteria->andWhere(
-                Criteria::expr()->gt('id', (int) $lastId)
+                Criteria::expr()->gt('id', $lastId)
             );
         }
 
@@ -2222,20 +2216,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return User
-     */
-    public function setLocale($locale)
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 

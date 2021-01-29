@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SettingsCurrent.
@@ -41,11 +42,10 @@ class SettingsCurrent
     protected $url;
 
     /**
-     * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="variable", type="string", length=190, nullable=true)
      */
-    protected $variable;
+    protected string $variable;
 
     /**
      * @var string

@@ -162,6 +162,7 @@
             <file name="public/main/lp/openoffice_text_document.class.php"/>
 
             <file name="public/main/admin/index.php"/>
+
             <file name="public/main/admin/db.php"/>
             <file name="public/main/admin/settings.php"/>
             <file name="public/main/admin/periodic_export.php"/>
@@ -169,7 +170,9 @@
             <file name="public/main/admin/settings.lib.php"/>
             <file name="public/main/admin/user_update_import.php"/>
             <file name="public/main/admin/teachers_time_by_session_report.php"/>
+            <file name="public/main/admin/specific_fields.php"/>
             <file name="public/main/admin/sub_language*"/>
+
             <file name="public/main/admin/ldap_*"/>
             <file name="public/main/admin/special_exports.php"/>
 

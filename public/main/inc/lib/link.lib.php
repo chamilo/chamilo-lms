@@ -155,9 +155,7 @@ class Link extends Model
                 $link_id && extension_loaded('xapian')
             ) {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
-                $course_int_id = $_course['real_id'];
-                $courseCode = $_course['code'];
+                $courseCode = $course_info['code'];
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
 
@@ -194,7 +192,7 @@ class Link extends Model
                     SE_COURSE_ID => $courseCode,
                     SE_TOOL_ID => TOOL_LINK,
                     SE_DATA => [
-                        'link_id' => (int) $link_id,
+                        'link_id' => $link_id,
                     ],
                     SE_USER => (int) api_get_user_id(),
                 ];
@@ -211,8 +209,8 @@ class Link extends Model
                     $sql_cat = sprintf(
                         $sql_cat,
                         $table_link_category,
-                        (int) $categoryId,
-                        $course_int_id
+                        $categoryId,
+                        $course_id
                     );
                     $result = Database:: query($sql_cat);
                     if (1 == Database:: num_rows($result)) {
@@ -243,7 +241,7 @@ class Link extends Model
                     $sql = sprintf(
                         $sql,
                         $tbl_se_ref,
-                        $course_int_id,
+                        $course_id,
                         $courseCode,
                         TOOL_LINK,
                         $link_id,

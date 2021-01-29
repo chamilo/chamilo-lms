@@ -3025,7 +3025,7 @@ class GroupManager
         // Check group document access
         $allow = api_get_configuration_value('group_document_access');
         if ($allow) {
-            $documentAccess = (int) $group->getDocumentAccess();
+            $documentAccess = $group->getDocumentAccess();
         }
 
         // Check access for students

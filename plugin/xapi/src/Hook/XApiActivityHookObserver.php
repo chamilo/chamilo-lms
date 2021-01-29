@@ -31,6 +31,10 @@ abstract class XApiActivityHookObserver extends HookObserver
     }
 
     /**
+     * @param \Xabbuh\XApi\Model\Statement $statement
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @return \Chamilo\PluginBundle\Entity\XApi\SharedStatement|null
      */
     protected function saveSharedStatement(Statement $statement)

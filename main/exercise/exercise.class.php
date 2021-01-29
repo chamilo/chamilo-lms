@@ -10945,12 +10945,18 @@ class Exercise
         if (false === $remedialField) {
             return null;
         }
+        // Check blocking exercise.
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $blockExercise = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'blocking_percentage'
+        );
         $questionExcluded = [
             FREE_ANSWER,
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
+        $userId = empty($userId) ? api_get_user_id() : (int)$userId;
         $extraMessage = null;
         $bestAttempt = [];
         $exercise_stat_info = Event::getExerciseResultsByUser(
@@ -10982,6 +10988,14 @@ class Exercise
                             return null;
                         }
                     }
+                }
+            }
+            // Check blocking exercise.
+            if ($blockExercise && isset($blockExercise['value']) && !empty($blockExercise['value'])) {
+                $blockPercentage = (int)$blockExercise['value'];
+                if ($attemp['total_percentage'] <= $blockPercentage) {
+                    return null;
+
                 }
             }
         }

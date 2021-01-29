@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\EventListener;
+namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Manager\SettingsManager;
@@ -12,26 +12,20 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Class LocaleListener
  * Checks the portal listener depending of different settings:
  * platform, user, course.
  */
-class LocaleListener implements EventSubscriberInterface
+class LocaleSubscriber implements EventSubscriberInterface
 {
-    protected $settingsManager;
     protected $defaultLocale;
-    protected $paremeterBag;
+    protected $parameterBag;
+    protected $settingsManager;
 
-    /**
-     * LocaleListener constructor.
-     *
-     * @param string $defaultLocale
-     */
-    public function __construct($defaultLocale, SettingsManager $settingsManager, ParameterBagInterface $paremeterBag)
+    public function __construct(string $defaultLocale, SettingsManager $settingsManager, ParameterBagInterface $parameterBag)
     {
         $this->defaultLocale = $defaultLocale;
         $this->settingsManager = $settingsManager;
-        $this->paremeterBag = $paremeterBag;
+        $this->parameterBag = $parameterBag;
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -40,9 +34,13 @@ class LocaleListener implements EventSubscriberInterface
         if (!$request->hasPreviousSession()) {
             return;
         }
-        $installed = 1 === (int) $this->paremeterBag->get('installed');
+        $installed = 1 === (int) $this->parameterBag->get('installed');
 
         if (!$installed) {
+            return;
+        }
+
+        if (false === $request->hasSession()) {
             return;
         }
 
@@ -142,14 +140,11 @@ class LocaleListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @return array
-     */
     public static function getSubscribedEvents()
     {
         return [
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => [['onKernelRequest', 15]],
+            KernelEvents::REQUEST => [['onKernelRequest', 20]],
         ];
     }
 }

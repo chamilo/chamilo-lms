@@ -2,28 +2,24 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\EventListener;
+namespace Chamilo\CoreBundle\EventSubscriber;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 /**
- * Class UserLocaleListener.
- *
  * Stores the locale of the user in the session after the
- * login. This can be used by the LocaleListener afterwards.
+ * login. This can be used by the LocaleSubscriber afterwards.
  *
  * Priority order: platform -> user
  * Priority order: platform -> user -> course
  */
-class UserLocaleListener
+class UserLocaleSubscriber implements EventSubscriberInterface
 {
-    /** @var SessionInterface */
     private $session;
 
-    /**
-     * UserLocaleListener constructor.
-     */
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
@@ -35,9 +31,17 @@ class UserLocaleListener
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
+
         if (null !== $user->getLocale()) {
             $this->session->set('_locale', $user->getLocale());
             $this->session->set('_locale_user', $user->getLocale());
         }
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
+        ];
     }
 }

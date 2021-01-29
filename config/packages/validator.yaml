@@ -2,7 +2,3 @@ framework:
     validation:
         email_validation_mode: html5
 
-        # Enables validator auto-mapping support.
-#framework:
-#  validation:
-#    email_validation_mode: html5

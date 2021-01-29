@@ -13,7 +13,7 @@ api_platform:
         json:
             mime_types: ['application/json']
         html:
-            mime_types: ['text/html' ]
+            mime_types: ['text/html']
         graphql:
             mime_types: ['application/graphql']
     collection:

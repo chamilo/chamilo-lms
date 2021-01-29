@@ -28,8 +28,8 @@ services:
     Chamilo\CoreBundle\Repository\Node\UserRepository:
         calls:
             - setEncoder: ['@security.user_password_encoder.generic']
-            - setAuthorizationChecker: [ '@security.authorization_checker']
+            - setAuthorizationChecker: ['@security.authorization_checker']
             - setRouter: ['@router']
             - setSlugify: ['@cocur_slugify']
             - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
-            - setResourceNodeRepository: [ '@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
+            - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']

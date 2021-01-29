@@ -22,6 +22,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     normalizationContext={"groups"={"session:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"session:write"}},
+ *     collectionOperations={
+ *         "get" = {
+ *              "denormalization_context"={
+ *                  "groups"={"session:read"},
+ *              },
+ *         },
+ *         "post"={}
+ *      },
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *     }
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
@@ -57,7 +69,7 @@ class Session
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var ArrayCollection|SkillRelCourse[]
@@ -128,20 +140,18 @@ class Session
     protected $currentUrl;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read"})
      * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
      * @Groups({"session:read", "session:write"})
      *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var bool
@@ -302,6 +312,7 @@ class Session
         $this->items = new ArrayCollection();
         $this->urls = new ArrayCollection();
 
+        $this->description = '';
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
         $this->sendSubscriptionNotification = false;
@@ -630,12 +641,8 @@ class Session
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return $this
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -644,10 +651,8 @@ class Session
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }

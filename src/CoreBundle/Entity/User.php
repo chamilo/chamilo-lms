@@ -32,11 +32,13 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *      iri="http://schema.org/Person",
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={"get"},
+ *      collectionOperations={
+ *         "get"={},
+ *         "post"={}
+ *      },
  *      itemOperations={
  *          "get"={},
  *          "put"={},
- *          "delete"={},
  *     }
  * )
  *
@@ -266,7 +268,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var CourseRelUser[]|ArrayCollection
      *
-     * @ApiSubresource()
+     * @ApiSubresource
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
     protected $courses;

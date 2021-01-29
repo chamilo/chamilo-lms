@@ -57,17 +57,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public const HIDDEN = 4;
 
     /**
-     * @var int
-     *
      * @Groups({"course:read", "course_rel_user:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string The course title
+     * The course title.
      *
      * @Assert\NotBlank(message="A Course requires a title")
      *
@@ -75,10 +73,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
+     * The course code.
+     *
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/courseCode")
      * @Groups({"course:read", "course:write", "course_rel_user:read"})
@@ -91,7 +90,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * )
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
-    protected $code;
+    protected string $code;
 
     /**
      * @var CourseRelUser[]|ArrayCollection
@@ -118,7 +117,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var ArrayCollection|AccessUrlRelCourse[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourse", mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourse",
+     *     mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $urls;
 
@@ -221,11 +223,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $courseLanguage;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var ArrayCollection
@@ -393,7 +393,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->creationDate = new \DateTime();
         $this->lastVisit = new \DateTime();
         $this->lastEdit = new \DateTime();
-
+        $this->description = '';
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->tools = new ArrayCollection();

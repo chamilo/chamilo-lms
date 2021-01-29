@@ -2857,7 +2857,6 @@ class UserGroup extends Model
         }
 
         $from = (int) $from;
-        $number_of_items = (int) $number_of_items;
         $sql .= " LIMIT $from, $number_of_items";
 
         $res = Database::query($sql);

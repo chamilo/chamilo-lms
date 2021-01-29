@@ -302,10 +302,8 @@ class CSurveyQuestion
      * Set sharedQuestionId.
      *
      * @param int $sharedQuestionId
-     *
-     * @return CSurveyQuestion
      */
-    public function setSharedQuestionId($sharedQuestionId)
+    public function setSharedQuestionId($sharedQuestionId): self
     {
         $this->sharedQuestionId = (int) $sharedQuestionId;
 

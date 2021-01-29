@@ -32,11 +32,10 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="category_title", type="string", length=255, nullable=false)
      */
-    protected $categoryTitle;
+    protected string $categoryTitle;
 
     /**
      * @var string
@@ -91,12 +90,10 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
 
     /**
      * Get categoryTitle.
-     *
-     * @return string
      */
-    public function getCategoryTitle()
+    public function getCategoryTitle(): string
     {
-        return (string) $this->categoryTitle;
+        return $this->categoryTitle;
     }
 
     /**

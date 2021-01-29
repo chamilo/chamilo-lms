@@ -277,7 +277,7 @@ class UserManager
         $language = strtolower($language);
 
         // Default to english
-        if (!in_array($language, $languages, true)) {
+        if (!in_array($language, array_keys($languages), true)) {
             $language = 'en';
         }
 
@@ -328,7 +328,7 @@ class UserManager
         }
 
         $em = Database::getManager();
-        $repo = Container::$container->get('Chamilo\CoreBundle\Repository\Node\UserRepository');
+        $repo = Container::$container->get(UserRepository::class);
         $repo->updateUser($user, false);
 
         // Add user as a node
@@ -359,7 +359,7 @@ class UserManager
         ];
 
         if (isset($statusToGroup[$status])) {
-            $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
+            $group = Container::$container->get(GroupRepository::class)->findOneBy(['code' => $statusToGroup[$status]]);
             if ($group) {
                 $user->addGroup($group);
                 $repo->updateUser($user);

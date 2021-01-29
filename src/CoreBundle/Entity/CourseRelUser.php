@@ -10,17 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * CourseRelUser.
+ * User subscriptions to a course.
  *
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_USER')"},
- *      shortName="CourseSubscription",
  *      normalizationContext={"groups"={"course_rel_user:read", "user:read"}},
  *      collectionOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user"},
  *         "post"={"security"="is_granted('ROLE_ADMIN') or object.user == user"}
  *     },
- *      itemOperations={
+ *     itemOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user"},
  *     }
  * )
@@ -39,65 +38,52 @@ class CourseRelUser
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Groups({"course:read"})
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @Groups({"course:read", "user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var int
-     *
      * @Groups({"course:read", "user:read"})
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
-    protected $relationType;
+    protected int $relationType;
 
     /**
-     * @var int
-     *
      * @Groups({"user:read"})
      * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
      */
-    protected $status;
+    protected int $status;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_tutor", type="boolean", nullable=true, unique=false)
      */
-    protected $tutor;
+    protected bool $tutor;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sort", type="integer", nullable=true, unique=false)
      */
-    protected $sort;
+    protected int $sort;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_course_cat", type="integer", nullable=true, unique=false)
      */
-    protected $userCourseCat;
+    protected int $userCourseCat;
 
     /**
      * @var int
@@ -106,12 +92,12 @@ class CourseRelUser
      */
     protected $legalAgreement;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->userCourseCat = 0;
+        $this->sort = 0;
+        $this->tutor = false;
+        $this->status = User::STUDENT;
     }
 
     public function __toString(): string
@@ -119,10 +105,7 @@ class CourseRelUser
         return (string) $this->getCourse()->getCode();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

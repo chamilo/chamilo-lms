@@ -397,7 +397,7 @@ class CourseSelectForm
                             }
                         }
 
-                        if ($type == RESOURCE_QUIZ) {
+                        if (RESOURCE_QUIZ == $type) {
                             echo Display::return_message(
                                 get_lang(
                                     'IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments'

@@ -300,14 +300,14 @@ class CourseRestorer
         $originalFolderNameList = [];
         foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
             $my_session_id = empty($document->item_properties[0]['session_id']) ? 0 : $session_id;
-        //$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
+            //$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
             if (false === $respect_base_content && $session_id) {
                 if (empty($my_session_id)) {
                     $my_session_id = $session_id;
                 }
             }
 
-            if ($document->file_type == FOLDER) {
+            if (FOLDER == $document->file_type) {
                 $visibility = isset($document->item_properties[0]['visibility']) ? $document->item_properties[0]['visibility'] : '';
                 $new = substr($document->path, 8);
 
@@ -326,6 +326,7 @@ class CourseRestorer
                     }
 
                     $title = $document->title;
+                    $originalFolderNameList[basename($document->path)] = $document->title;
                     if (empty($title)) {
                         $title = basename($sysFolderPath);
                     }
@@ -1407,8 +1408,8 @@ class CourseRestorer
     /**
      * Restore a link-category.
      *
-     * @param int
-     * @param int
+     * @param int $id
+     * @param int $sessionId
      *
      * @return bool
      */
@@ -1420,7 +1421,7 @@ class CourseRestorer
             $params['session_id'] = $sessionId;
         }
 
-        if ($id == 0) {
+        if (0 == $id) {
             return 0;
         }
         $link_cat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
@@ -2853,6 +2854,17 @@ class CourseRestorer
                         }
                     }
 
+                    if (isset($lp->extraFields) && !empty($lp->extraFields)) {
+                        $extraFieldValue = new \ExtraFieldValue('lp');
+                        foreach ($lp->extraFields as $extraField) {
+                            $params = [
+                                'item_id' => $new_lp_id,
+                                'value' => $extraField['value'],
+                                'variable' => $extraField['variable'],
+                            ];
+                            $extraFieldValue->save($params);
+                        }
+                    }
                     api_item_property_update(
                         $this->destination_course_info,
                         TOOL_LEARNPATH,
@@ -2911,6 +2923,8 @@ class CourseRestorer
                             }
                         }
 
+                        $prerequisiteMinScore = $item['prerequisite_min_score'] ?? null;
+                        $prerequisiteMaxScore = $item['prerequisite_max_score'] ?? null;
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'lp_id' => self::DBUTF8($new_lp_id),
@@ -2922,6 +2936,8 @@ class CourseRestorer
                             'min_score' => self::DBUTF8($item['min_score']),
                             'max_score' => self::DBUTF8($item['max_score']),
                             'mastery_score' => self::DBUTF8($masteryScore),
+                            'prerequisite_min_score' => $prerequisiteMinScore,
+                            'prerequisite_max_score' => $prerequisiteMaxScore,
                             'parent_item_id' => self::DBUTF8($item['parent_item_id']),
                             'previous_item_id' => self::DBUTF8($item['previous_item_id']),
                             'next_item_id' => self::DBUTF8($item['next_item_id']),

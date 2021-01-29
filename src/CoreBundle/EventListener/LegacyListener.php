@@ -15,7 +15,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
 /**
- * Class LegacyListener
  * Works as old global.inc.php
  * Setting old php requirements so pages inside main/* could work correctly.
  */

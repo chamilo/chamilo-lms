@@ -6394,7 +6394,7 @@ function giveRevisionButton($postId, $threadInfo)
             [
                 'forum' => $threadInfo['forum_id'],
                 'thread' => $threadInfo['thread_id'],
-                'post' => $postId = (int) $postId,
+                'post' => $postId,
                 'action' => 'replymessage',
                 'give_revision' => 1,
             ]

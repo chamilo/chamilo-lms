@@ -1132,7 +1132,7 @@ switch ($report) {
                         if ($validDate) {
                             $date1 = new DateTime($row['value']);
                             $interval = $now->diff($date1);
-                            $years = (int) $interval->y;
+                            $years = $interval->y;
 
                             if ($years >= 16 && $years <= 17) {
                                 $all['16-17']++;

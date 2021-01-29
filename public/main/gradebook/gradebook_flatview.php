@@ -51,6 +51,7 @@ if ($showlink) {
     $alllinks = $cat[0]->get_links($userId, true);
 }
 
+global $file_type;
 if (isset($export_flatview_form) && 'pdf' === !$file_type) {
     Display::addFlash(
         Display::return_message(

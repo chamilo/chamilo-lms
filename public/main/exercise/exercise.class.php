@@ -6020,6 +6020,7 @@ class Exercise
                 );
             } elseif (ORAL_EXPRESSION == $answerType) {
                 $answer = $choice;
+                /** @var OralExpression $objQuestionTmp */
                 Event::saveQuestionAttempt(
                     $questionScore,
                     $answer,

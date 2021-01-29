@@ -36,20 +36,19 @@ class SessionCategory
      * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategories", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
      */
-    protected $session;
+    protected Session $session;
 
     /**
-     * @var string
      * @Assert\NotBlank
      * @Groups({"session_category:read", "session_category:write"})
      * @ORM\Column(name="name", type="string", length=100, nullable=true, unique=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var \DateTime
@@ -65,10 +64,7 @@ class SessionCategory
      */
     protected $dateEnd;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->name;
     }

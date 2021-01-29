@@ -35,27 +35,21 @@ class Message
     protected $id;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
-    protected $userSender;
+    protected User $userSender;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedMessages")
      * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
      */
-    protected $userReceiver;
+    protected User $userReceiver;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="msg_status", type="smallint", nullable=false)
      */
-    protected $msgStatus;
+    protected int $msgStatus;
 
     /**
      * @var \DateTime
@@ -176,12 +170,8 @@ class Message
 
     /**
      * Set msgStatus.
-     *
-     * @param bool $msgStatus
-     *
-     * @return Message
      */
-    public function setMsgStatus($msgStatus)
+    public function setMsgStatus(int $msgStatus): self
     {
         $this->msgStatus = $msgStatus;
 
@@ -190,10 +180,8 @@ class Message
 
     /**
      * Get msgStatus.
-     *
-     * @return bool
      */
-    public function getMsgStatus()
+    public function getMsgStatus(): int
     {
         return $this->msgStatus;
     }

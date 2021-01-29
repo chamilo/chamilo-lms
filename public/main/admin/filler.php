@@ -29,11 +29,11 @@ $output = [];
 if (!empty($_GET['fill'])) {
     switch ($_GET['fill']) {
         case 'users':
-            require api_get_path(SYS_TEST_PATH).'datafiller/fill_users.php';
+            require __DIR__.'/../../../tests/datafiller/fill_users.php';
             $output = fill_users();
             break;
         case 'courses':
-            require api_get_path(SYS_TEST_PATH).'datafiller/fill_courses.php';
+            require __DIR__.'/../../../tests/datafiller/fill_courses.php';
             $output = fill_courses();
             break;
         default:

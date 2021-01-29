@@ -210,12 +210,7 @@ class PortfolioCategory
         return $this->items->matching($criteria);
     }
 
-    /**
-     * Set items.
-     *
-     * @return PortfolioCategory
-     */
-    public function setItems(Collection $items)
+    public function setItems(ArrayCollection $items): self
     {
         $this->items = $items;
 

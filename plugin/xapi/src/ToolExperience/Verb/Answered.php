@@ -1,0 +1,27 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\PluginBundle\XApi\ToolExperience\Verb;
+
+use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Model\LanguageMap;
+use Xabbuh\XApi\Model\Verb;
+
+/**
+ * Class Answered.
+ *
+ * @package Chamilo\PluginBundle\XApi\ToolExperience\Verb
+ */
+class Answered extends BaseVerb
+{
+    public function generate(): Verb
+    {
+        $langIso = api_get_language_isocode();
+
+        return new Verb(
+            IRI::fromString('http://adlnet.gov/expapi/verbs/answered'),
+            LanguageMap::create([$langIso => get_lang('Answered')])
+        );
+    }
+}

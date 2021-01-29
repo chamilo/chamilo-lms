@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Interface HookPortfolioItemAddedObserverInterface
+ * Interface HookPortfolioItemAddedObserverInterface.
  */
 interface HookPortfolioItemAddedObserverInterface extends HookObserverInterface
 {

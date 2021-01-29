@@ -15,13 +15,11 @@ use Xabbuh\XApi\Model\Verb;
  */
 class Commented extends BaseVerb
 {
-    public function generate(): Verb
+    public function __construct()
     {
-        $langIso = api_get_language_isocode();
-
-        return new Verb(
-            IRI::fromString('http://adlnet.gov/expapi/verbs/commented'),
-            LanguageMap::create([$langIso => get_lang('Commented')])
+        parent::__construct(
+            'http://adlnet.gov/expapi/verbs/commented',
+            'Commented'
         );
     }
 }

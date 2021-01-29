@@ -15,13 +15,11 @@ use Xabbuh\XApi\Model\Verb;
  */
 class Answered extends BaseVerb
 {
-    public function generate(): Verb
+    public function __construct()
     {
-        $langIso = api_get_language_isocode();
-
-        return new Verb(
-            IRI::fromString('http://adlnet.gov/expapi/verbs/answered'),
-            LanguageMap::create([$langIso => get_lang('Answered')])
+        parent::__construct(
+            'http://adlnet.gov/expapi/verbs/answered',
+            'Answered'
         );
     }
 }

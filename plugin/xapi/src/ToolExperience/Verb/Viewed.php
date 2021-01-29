@@ -15,13 +15,11 @@ use Xabbuh\XApi\Model\Verb;
  */
 class Viewed extends BaseVerb
 {
-    public function generate(): Verb
+    public function __construct()
     {
-        $langIso = api_get_language_isocode();
-
-        return new Verb(
-            IRI::fromString('http://id.tincanapi.com/verb/viewed'),
-            LanguageMap::create([$langIso => get_lang('Viewed')])
+        parent::__construct(
+            'http://id.tincanapi.com/verb/viewed',
+            'Viewed'
         );
     }
 }

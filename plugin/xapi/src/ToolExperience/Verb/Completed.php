@@ -15,13 +15,11 @@ use Xabbuh\XApi\Model\Verb;
  */
 class Completed extends BaseVerb
 {
-    public function generate(): Verb
+    public function __construct()
     {
-        $langIso = api_get_language_isocode();
-
-        return new Verb(
-            IRI::fromString('http://activitystrea.ms/schema/1.0/complete'),
-            LanguageMap::create([$langIso => get_lang('Completed')])
+        parent::__construct(
+            'http://activitystrea.ms/schema/1.0/complete',
+            'Completed'
         );
     }
 }

@@ -15,13 +15,11 @@ use Xabbuh\XApi\Model\Verb;
  */
 class Shared extends BaseVerb
 {
-    public function generate(): Verb
+    public function __construct()
     {
-        $langIso = api_get_language_isocode();
-
-        return new Verb(
-            IRI::fromString('http://adlnet.gov/expapi/verbs/shared'),
-            LanguageMap::create([$langIso => get_lang('Shared')])
+        parent::__construct(
+            'http://adlnet.gov/expapi/verbs/shared',
+            'Shared'
         );
     }
 }

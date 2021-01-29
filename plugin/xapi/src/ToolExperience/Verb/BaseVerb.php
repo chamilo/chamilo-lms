@@ -4,6 +4,8 @@
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Verb;
 
+use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Model\LanguageMap;
 use Xabbuh\XApi\Model\Verb;
 
 /**
@@ -13,5 +15,32 @@ use Xabbuh\XApi\Model\Verb;
  */
 abstract class BaseVerb
 {
-    public abstract function generate(): Verb;
+    /**
+     * @var string
+     */
+    protected $iri;
+    /**
+     * @var string
+     */
+    protected $display;
+
+    public function __construct(string $iri, string $display)
+    {
+        $this->iri = $iri;
+        $this->display = $display;
+    }
+
+    public function generate(): Verb
+    {
+        $langIso = api_get_language_isocode();
+
+        return new Verb(
+            IRI::fromString($this->iri),
+            LanguageMap::create(
+                [
+                    $langIso => get_lang($this->display)
+                ]
+            )
+        );
+    }
 }

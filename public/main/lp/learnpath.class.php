@@ -507,7 +507,7 @@ class learnpath
                         q.iid = quiz_rel_question.question_id AND
                         q.c_id = quiz_rel_question.c_id
                     WHERE
-                        quiz_rel_question.exercice_id = '.$id." AND
+                        quiz_rel_question.quiz_id = '.$id." AND
                         q.c_id = $course_id AND
                         quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);

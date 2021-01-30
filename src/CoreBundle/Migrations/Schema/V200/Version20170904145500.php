@@ -155,19 +155,32 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_quiz_rel_question');
-        $this->addSql(
-            'ALTER TABLE c_quiz_rel_question CHANGE question_id question_id INT DEFAULT NULL, CHANGE exercice_id exercice_id INT DEFAULT NULL'
-        );
+
+        if ($table->hasIndex('exercise')) {
+            $this->addSql('ALTER TABLE c_quiz_rel_question DROP KEY exercise');
+        }
+
+        $this->addSql('ALTER TABLE c_quiz_rel_question CHANGE question_id question_id INT DEFAULT NULL');
+
+        if ($table->hasColumn('question_id')) {
+            $this->addSql(' ALTER TABLE c_quiz_rel_question CHANGE exercice_id quiz_id INT DEFAULT NULL;');
+            $this->addSql(
+                'ALTER TABLE c_quiz_rel_question ADD CONSTRAINT FK_485736AC853CD175 FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid);'
+            );
+            $this->addSql('CREATE INDEX exercise ON c_quiz_rel_question (quiz_id);');
+        }
+
         if (false === $table->hasForeignKey('FK_485736AC1E27F6BF')) {
             $this->addSql(
                 'ALTER TABLE c_quiz_rel_question ADD CONSTRAINT FK_485736AC1E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid)'
             );
         }
-        if (false === $table->hasForeignKey('FK_485736AC89D40298')) {
+
+        /*if (false === $table->hasForeignKey('FK_485736AC89D40298')) {
             $this->addSql(
-                'ALTER TABLE c_quiz_rel_question ADD CONSTRAINT FK_485736AC89D40298 FOREIGN KEY (exercice_id) REFERENCES c_quiz (iid)'
+                'ALTER TABLE c_quiz_rel_question ADD CONSTRAINT FK_485736AC89D40298 FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid)'
             );
-        }
+        }*/
 
         $table = $schema->getTable('c_quiz_question_category');
         if (false === $table->hasColumn('resource_node_id')) {

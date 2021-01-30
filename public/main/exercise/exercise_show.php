@@ -340,7 +340,7 @@ $sql = "SELECT attempts.question_id, answer
         ON stats_exercises.exe_id = attempts.exe_id
         INNER JOIN $TBL_EXERCISE_QUESTION AS quizz_rel_questions
         ON
-            quizz_rel_questions.exercice_id=stats_exercises.exe_exo_id AND
+            quizz_rel_questions.quiz_id=stats_exercises.exe_exo_id AND
             quizz_rel_questions.question_id = attempts.question_id AND
             quizz_rel_questions.c_id=".api_get_course_int_id()."
         INNER JOIN $TBL_QUESTIONS AS questions

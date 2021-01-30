@@ -1926,7 +1926,7 @@ class CourseRestorer
                         $sql = "INSERT IGNORE INTO $table_rel SET
                                 c_id = ".$this->destination_course_id.",
                                 question_id = $qid ,
-                                exercice_id = $new_id ,
+                                quiz_id = $new_id ,
                                 question_order = ".$question_order;
                         Database::query($sql);
                     }

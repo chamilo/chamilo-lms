@@ -799,7 +799,7 @@ class CourseBuilder
 
             $quiz = new Quiz($obj);
             $sql = 'SELECT * FROM '.$table_rel.'
-                    WHERE c_id = '.$courseId.' AND exercice_id = '.$obj->id;
+                    WHERE c_id = '.$courseId.' AND quiz_id = '.$obj->id;
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $quiz->add_question($obj2->question_id, $obj2->question_order);
@@ -905,7 +905,7 @@ class CourseBuilder
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
                         INNER JOIN $table_qui ex
-                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        ON (ex.id = r.quiz_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = $courseId AND ex.active = '-1'
                     )
                     UNION
@@ -920,7 +920,7 @@ class CourseBuilder
                         SELECT question_id, q.* FROM $table_que q
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        WHERE r.c_id = $courseId AND (r.exercice_id = '-1' OR r.exercice_id = '0')
+                        WHERE r.c_id = $courseId AND (r.quiz_id = '-1' OR r.quiz_id = '0')
                      )
                  ";
 
@@ -1008,12 +1008,12 @@ class CourseBuilder
                 LEFT JOIN '.$table_rel.' as quizz_questions
                 ON questions.id=quizz_questions.question_id
                 LEFT JOIN '.$table_qui.' as exercises
-                ON quizz_questions.exercice_id = exercises.id
+                ON quizz_questions.quiz_id = exercises.id
                 WHERE
                     questions.c_id = quizz_questions.c_id AND
                     questions.c_id = exercises.c_id AND
                     exercises.c_id = '.$courseId.' AND
-                    (quizz_questions.exercice_id IS NULL OR
+                    (quizz_questions.quiz_id IS NULL OR
                     exercises.active = -1)';
 
         $db_result = Database::query($sql);

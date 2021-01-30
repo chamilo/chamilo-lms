@@ -6525,7 +6525,7 @@ class Tracking
                 INNER JOIN $tquiz q
                 ON q.iid = te.exe_exo_id
                 INNER JOIN $tquiz_rel_question rq
-                ON rq.exercice_id = q.iid AND rq.c_id = q.c_id
+                ON rq.quiz_id = q.iid AND rq.c_id = q.c_id
                 INNER JOIN $tquiz_question qq
                 ON
                     qq.iid = rq.question_id AND

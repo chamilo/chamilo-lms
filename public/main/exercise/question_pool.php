@@ -628,7 +628,7 @@ function getQuestions(
         $currentExerciseCondition = "
             AND qu.iid NOT IN (
                 SELECT question_id FROM $TBL_EXERCISE_QUESTION
-                WHERE exercice_id = $fromExercise AND c_id = $currentCourseId
+                WHERE quiz_id = $fromExercise AND c_id = $currentCourseId
             )";
     }
 
@@ -665,7 +665,7 @@ function getQuestions(
                     question,
                     type,
                     level,
-                    qt.exercice_id exerciseId';
+                    qt.quiz_id exerciseId';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -677,7 +677,7 @@ function getQuestions(
                     $from
                     {$efConditions['from']}
                 WHERE
-                    qt.exercice_id = $exerciseId AND
+                    qt.quiz_id = $exerciseId AND
                     qt.c_id = $selected_course  AND
                     qu.c_id = $selected_course
                     $where
@@ -713,7 +713,7 @@ function getQuestions(
             $answer_where .= " AND q.description LIKE '%$description%'";
         }
 
-        $select = ' qu.*, r.exercice_id exerciseId  ';
+        $select = ' qu.*, r.quiz_id exerciseId  ';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -725,7 +725,7 @@ function getQuestions(
                     INNER JOIN $TBL_EXERCISE_QUESTION r
                     ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
                     INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                    ON (ex.iid = r.quiz_id AND ex.c_id = r.c_id)
                     $from
                     {$efConditions['from']}
                     WHERE
@@ -760,7 +760,7 @@ function getQuestions(
                         {$efConditions['from']}
                         WHERE
                             r.c_id = '$selected_course' AND
-                            (r.exercice_id = '-1' OR r.exercice_id = '0')
+                            (r.quiz_id = '-1' OR r.quiz_id = '0')
                             $level_where
                             $answer_where
                             {$efConditions['where']}
@@ -802,7 +802,7 @@ function getQuestions(
         }
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
 
-        $select = 'qu.iid, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
+        $select = 'qu.iid, question, qu.type, level, q.session_id, qt.quiz_id exerciseId  ';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -815,7 +815,7 @@ function getQuestions(
                 INNER JOIN $TBL_EXERCISE_QUESTION as qt
                 ON (qu.iid = qt.question_id AND qu.c_id = qt.c_id)
                 INNER JOIN $TBL_EXERCISES as q
-                ON (q.c_id = qu.c_id AND q.iid = qt.exercice_id)
+                ON (q.c_id = qu.c_id AND q.iid = qt.quiz_id)
                 {$efConditions['from']}
                 $from
                 WHERE
@@ -1306,7 +1306,7 @@ function isQuestionInActiveQuiz($questionId)
             "SELECT COUNT(qq.question_id) count
                     FROM $tblQuizRelQuestion qq
                     INNER JOIN $tblQuiz q
-                    ON qq.exercice_id = q.iid
+                    ON qq.quiz_id = q.iid
                     WHERE
                         q.active = 1 AND
                         qq.question_id = $questionId"

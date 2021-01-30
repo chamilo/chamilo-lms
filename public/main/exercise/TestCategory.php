@@ -527,7 +527,7 @@ class TestCategory
                 INNER JOIN $tableQuestion q
                 ON (q.id = qrc.question_id AND q.c_id = eq.c_id)
                 WHERE
-                    exercice_id = $exerciseId AND
+                    quiz_id = $exerciseId AND
                     qrc.c_id = $courseId
                     $mandatoryCondition
                 ";

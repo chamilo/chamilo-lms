@@ -349,7 +349,7 @@ switch ($action) {
                     $TBL_QUESTIONS,
                     ['question_order' => $counter],
                     [
-                        'question_id = ? AND c_id = ? AND exercice_id = ? ' => [
+                        'question_id = ? AND c_id = ? AND quiz_id = ? ' => [
                             (int) $new_order_id,
                             $course_id,
                             $exercise_id,

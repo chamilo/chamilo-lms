@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CQuizRelQuestion.
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="question", columns={"question_id"}),
- *      @ORM\Index(name="exercise", columns={"exercice_id"})
+ *      @ORM\Index(name="exercise", columns={"quiz_id"})
  *  }
  * )
  * @ORM\Entity
@@ -22,13 +23,11 @@ use Doctrine\ORM\Mapping as ORM;
 class CQuizRelQuestion
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @var int
@@ -45,20 +44,18 @@ class CQuizRelQuestion
     protected $questionOrder;
 
     /**
-     * @var CQuizQuestion
-     *
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="relQuizzes", cascade={"persist"})
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
-    protected $question;
+    protected CQuizQuestion $question;
 
     /**
-     * @var CQuiz
-     *
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="questions", cascade={"persist"})
-     * @ORM\JoinColumn(name="exercice_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="quiz_id", referencedColumnName="iid")
      */
-    protected $quiz;
+    protected CQuiz $quiz;
 
     /**
      * Set questionOrder.
@@ -108,12 +105,12 @@ class CQuizRelQuestion
         return $this->cId;
     }
 
-    public function getQuiz()
+    public function getQuiz(): CQuiz
     {
         return $this->quiz;
     }
 
-    public function getQuestion()
+    public function getQuestion(): CQuizQuestion
     {
         return $this->question;
     }

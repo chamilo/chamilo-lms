@@ -50,11 +50,10 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $lpType;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
@@ -368,12 +367,10 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     /**

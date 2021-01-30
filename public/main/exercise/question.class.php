@@ -192,10 +192,10 @@ abstract class Question
 
                 if ($getExerciseList) {
                     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-                    $sql = "SELECT DISTINCT q.exercice_id
+                    $sql = "SELECT DISTINCT q.quiz_id
                             FROM $TBL_EXERCISE_QUESTION q
                             INNER JOIN $tblQuiz e
-                            ON e.c_id = q.c_id AND e.iid = q.exercice_id
+                            ON e.c_id = q.c_id AND e.iid = q.quiz_id
                             WHERE
                                 q.c_id = $course_id AND
                                 q.question_id = $id AND
@@ -206,7 +206,7 @@ abstract class Question
                     // fills the array with the exercises which this question is in
                     if ($result) {
                         while ($obj = Database::fetch_object($result)) {
-                            $objQuestion->exerciseList[] = $obj->exercice_id;
+                            $objQuestion->exerciseList[] = $obj->quiz_id;
                         }
                     }
                 }
@@ -585,7 +585,7 @@ abstract class Question
                     $TBL_EXERCISE_QUESTION as test_question
                     WHERE
                         question.iid = test_question.question_id AND
-                        test_question.exercice_id = ".$exerciseId." AND
+                        test_question.quiz_id = ".$exerciseId." AND
                         question.c_id = $c_id AND
                         test_question.c_id = $c_id ";
             $result = Database::query($sql);
@@ -848,7 +848,7 @@ abstract class Question
             $newExercise->read($exerciseId, false);
             $count = $newExercise->getQuestionCount();
             $count++;
-            $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
+            $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, quiz_id, question_order)
                     VALUES ({$this->course['real_id']}, ".$id.', '.$exerciseId.", '$count')";
             Database::query($sql);
 
@@ -891,7 +891,7 @@ abstract class Question
                     WHERE
                         c_id = $courseId AND
                         question_id = $id AND
-                        exercice_id = $exerciseId";
+                        quiz_id = $exerciseId";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
@@ -900,7 +900,7 @@ abstract class Question
                             SET question_order = question_order-1
                             WHERE
                                 c_id = $courseId AND
-                                exercice_id = $exerciseId AND
+                                quiz_id = $exerciseId AND
                                 question_order > ".$row['question_order'];
                     Database::query($sql);
                 }
@@ -910,7 +910,7 @@ abstract class Question
                     WHERE
                         c_id = $courseId AND
                         question_id = $id AND
-                        exercice_id = $exerciseId";
+                        quiz_id = $exerciseId";
             Database::query($sql);
 
             return true;
@@ -950,7 +950,7 @@ abstract class Question
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
-            $sql = "SELECT exercice_id, question_order
+            $sql = "SELECT quiz_id, question_order
                     FROM $TBL_EXERCISE_QUESTION
                     WHERE c_id = $courseId AND question_id = ".$id;
 
@@ -962,7 +962,7 @@ abstract class Question
                                 SET question_order = question_order-1
                                 WHERE
                                     c_id = $courseId AND
-                                    exercice_id = ".(int) ($row['exercice_id']).' AND
+                                    quiz_id = ".(int) ($row['quiz_id']).' AND
                                     question_order > '.$row['question_order'];
                         Database::query($sql);
                     }
@@ -1855,7 +1855,7 @@ abstract class Question
                 INNER JOIN $tbl_quiz_rel_question r
                 ON
                     q.id = r.question_id AND
-                    exercice_id = $quiz_id AND
+                    quiz_id = $quiz_id AND
                     q.c_id = $course_id AND
                     r.c_id = $course_id";
         $rs_max = Database::query($sql);
@@ -1877,12 +1877,12 @@ abstract class Question
             // Get the max question_order
             $sql = "SELECT max(question_order) as max_order
                     FROM $tbl_quiz_rel_question
-                    WHERE c_id = $course_id AND exercice_id = $quiz_id ";
+                    WHERE c_id = $course_id AND quiz_id = $quiz_id ";
             $rs_max_order = Database::query($sql);
             $row_max_order = Database::fetch_object($rs_max_order);
             $max_order = $row_max_order->max_order + 1;
             // Attach questions to quiz
-            $sql = "INSERT INTO $tbl_quiz_rel_question (c_id, question_id, exercice_id, question_order)
+            $sql = "INSERT INTO $tbl_quiz_rel_question (c_id, question_id, quiz_id, question_order)
                     VALUES($course_id, $question_id, $quiz_id, $max_order)";
             Database::query($sql);
         }

@@ -1662,7 +1662,7 @@ HOTSPOT;
                     session s
                 WHERE qz.c_id = c.id AND
                     (qz.session_id = s.id OR qz.session_id = 0) AND
-                    qq.exercice_id = qz.iid AND ";
+                    qq.quiz_id = qz.iid AND ";
         if (!empty($excludeTestId)) {
             $excludeTestId = (int) $excludeTestId;
             $sql .= " qz.iid != $excludeTestId AND ";

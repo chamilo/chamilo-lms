@@ -42,13 +42,11 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="question", type="text", nullable=false)
      */
-    protected $question;
+    protected string $question;
 
     /**
      * @var string
@@ -206,12 +204,10 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * Get question.
-     *
-     * @return string
      */
-    public function getQuestion()
+    public function getQuestion(): string
     {
-        return (string) $this->question;
+        return $this->question;
     }
 
     /**

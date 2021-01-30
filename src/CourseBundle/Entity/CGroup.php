@@ -41,12 +41,11 @@ class CGroup extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
      * @Groups({"group:read", "group:write"})
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var bool

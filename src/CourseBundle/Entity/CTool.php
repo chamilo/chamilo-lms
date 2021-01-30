@@ -43,7 +43,7 @@ class CTool extends AbstractResource implements ResourceInterface
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var bool
@@ -53,40 +53,32 @@ class CTool extends AbstractResource implements ResourceInterface
     protected $visibility;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected $session;
+    protected Session $session;
 
     /**
-     * @var Tool
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false)
      */
-    protected $tool;
+    protected Tool $tool;
 
     /**
      * @Gedmo\SortablePosition
      * @ORM\Column(name="position", type="integer")
      */
-    private $position;
+    protected int $position;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->position = 0;
     }
 
     public function __toString(): string
@@ -96,7 +88,7 @@ class CTool extends AbstractResource implements ResourceInterface
 
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     public function setName(string $name): self
@@ -114,22 +106,7 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CTool
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -141,17 +118,11 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->course;
     }
 
-    /**
-     * @return Session
-     */
     public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @param Session $session
-     */
     public function setSession(Session $session = null): self
     {
         $this->session = $session;
@@ -206,7 +177,7 @@ class CTool extends AbstractResource implements ResourceInterface
         $em->flush();*/
     }
 
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -221,9 +192,6 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->iid;

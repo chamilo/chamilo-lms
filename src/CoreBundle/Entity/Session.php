@@ -392,14 +392,6 @@ class Session
     }
 
     /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function getUsers()

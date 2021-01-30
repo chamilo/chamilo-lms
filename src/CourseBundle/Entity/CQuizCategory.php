@@ -62,18 +62,6 @@ class CQuizCategory
     }
 
     /**
-     * @param int $iid
-     *
-     * @return CQuizCategory
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getCId()

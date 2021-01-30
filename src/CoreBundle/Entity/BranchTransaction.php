@@ -103,20 +103,6 @@ class BranchTransaction
     protected $branch;
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return BranchTransaction
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Get id.
      *
      * @return int

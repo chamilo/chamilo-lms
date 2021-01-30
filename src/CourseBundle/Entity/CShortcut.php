@@ -30,13 +30,13 @@ class CShortcut extends AbstractResource implements ResourceInterface
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode")
      * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id")
      */
-    protected $shortCutNode;
+    protected ResourceNode $shortCutNode;
 
     public function __toString(): string
     {

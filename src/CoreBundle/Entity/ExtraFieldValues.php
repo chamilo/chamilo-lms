@@ -38,13 +38,13 @@ class ExtraFieldValues // extends BaseAttributeValue
      * @var string
      * @ORM\Column(name="value", type="text", nullable=true, unique=false)
      */
-    protected $value;
+    protected string $value;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
-    protected $field;
+    protected ExtraField $field;
 
     /**
      * @var string
@@ -53,17 +53,13 @@ class ExtraFieldValues // extends BaseAttributeValue
     protected $itemId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true, unique=false)
      */
-    protected $comment;
+    protected string $comment;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->comment = '';
     }
 
     /**

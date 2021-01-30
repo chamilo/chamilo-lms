@@ -28,20 +28,16 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected string $content;
 
     /**
      * @var \DateTime
@@ -76,6 +72,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->content = '';
         $this->attachments = new ArrayCollection();
     }
 
@@ -101,10 +98,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
 
     /**
      * Set title.
-     *
-     * @param string $title
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -113,8 +108,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
 
     /**
      * Get title.
-     *
-     * @return string
      */
     public function getTitle()
     {
@@ -123,10 +116,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
 
     /**
      * Set content.
-     *
-     * @param string $content
      */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -214,9 +205,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

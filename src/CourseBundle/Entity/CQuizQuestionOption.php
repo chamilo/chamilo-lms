@@ -158,16 +158,4 @@ class CQuizQuestionOption
     {
         return $this->iid;
     }
-
-    /**
-     * @param int $iid
-     *
-     * @return CQuizQuestionOption
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
 }

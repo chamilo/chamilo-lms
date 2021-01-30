@@ -381,16 +381,4 @@ class CDropboxFile
     {
         return $this->iid;
     }
-
-    /**
-     * @param int $iid
-     *
-     * @return CDropboxFile
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
 }

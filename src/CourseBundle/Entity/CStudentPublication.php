@@ -36,11 +36,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @var int
@@ -57,11 +56,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $url;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var string
@@ -198,6 +195,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->description = '';
         $this->documentId = 0;
         $this->hasProperties = 0;
         $this->containsFile = 0;

@@ -27,25 +27,21 @@ class CLink extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="url", type="text", nullable=false)
      */
-    protected $url;
+    protected string $url;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=150, nullable=true)
      */
-    protected $title;
+    protected string  $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var CLinkCategory|null
@@ -79,6 +75,7 @@ class CLink extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->displayOrder = 0;
+        $this->description = '';
     }
 
     public function __toString(): string
@@ -86,14 +83,7 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    /**
-     * Set url.
-     *
-     * @param string $url
-     *
-     * @return CLink
-     */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
@@ -102,22 +92,16 @@ class CLink extends AbstractResource implements ResourceInterface
 
     /**
      * Get url.
-     *
-     * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
     /**
      * Set title.
-     *
-     * @param string $title
-     *
-     * @return CLink
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -126,12 +110,10 @@ class CLink extends AbstractResource implements ResourceInterface
 
     /**
      * Get title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
@@ -247,9 +229,6 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->iid;

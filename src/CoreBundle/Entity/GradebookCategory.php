@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="gradebook_category",
@@ -29,18 +30,16 @@ class GradebookCategory
     protected $id;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var User
@@ -166,11 +165,9 @@ class GradebookCategory
      */
     protected $comments;
 
-    /**
-     * GradebookCategory constructor.
-     */
     public function __construct()
     {
+        $this->description = '';
         $this->comments = new ArrayCollection();
         $this->locked = 0;
         $this->generateCertificates = false;

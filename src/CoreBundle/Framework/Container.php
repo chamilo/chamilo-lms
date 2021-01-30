@@ -58,6 +58,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -234,7 +235,7 @@ class Container
     }
 
     /**
-     * @return object|\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage
+     * @return TokenStorage
      */
     public static function getTokenStorage()
     {
@@ -269,7 +270,7 @@ class Container
 
     public static function getCourseSettingsManager(): \Chamilo\CourseBundle\Manager\SettingsManager
     {
-        return self::$container->get('Chamilo\CourseBundle\Manager\SettingsManager');
+        return self::$container->get(\Chamilo\CourseBundle\Manager\SettingsManager::class);
     }
 
     /**

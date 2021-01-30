@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * TrackEAttempt.
@@ -39,22 +40,22 @@ class TrackEAttempt
     protected $id;
 
     /**
-     * @var int
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="exe_id", type="integer", nullable=true)
      */
-    protected $exeId;
+    protected int $exeId;
 
     /**
-     * @var User
+     * @Assert\NotBlank()
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
@@ -113,14 +114,12 @@ class TrackEAttempt
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="seconds_spent", type="integer")
      */
-    protected $secondsSpent;
+    protected int $secondsSpent;
 
     public function __construct()
     {

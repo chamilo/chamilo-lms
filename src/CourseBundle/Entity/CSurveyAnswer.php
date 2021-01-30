@@ -79,13 +79,6 @@ class CSurveyAnswer
         return $this->iid;
     }
 
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
     /**
      * Set surveyId.
      *

@@ -48,18 +48,15 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected $code;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    protected $subtitle;
+    protected string $subtitle;
 
     /**
      * @var string
@@ -243,15 +240,13 @@ class CSurvey extends AbstractResource implements ResourceInterface
      */
     protected $isMandatory = false;
 
-    /**
-     * CSurvey constructor.
-     */
     public function __construct()
     {
         $this->creationDate = new \DateTime();
         $this->invited = 0;
         $this->answered = 0;
         $this->surveyId = 0;
+        $this->subtitle = '';
         $this->inviteMail = '';
         $this->reminderMail = '';
         $this->mailSubject = '';
@@ -267,21 +262,10 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
     /**
      * Set code.
-     *
-     * @param string $code
-     *
-     * @return CSurvey
      */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 

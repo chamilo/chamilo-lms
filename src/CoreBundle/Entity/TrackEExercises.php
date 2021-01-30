@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * TrackEExercises.
@@ -37,6 +38,8 @@ class TrackEExercises
     /**
      * @var \DateTime
      *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
     protected $exeDate;
@@ -49,11 +52,10 @@ class TrackEExercises
     protected $cId;
 
     /**
-     * @var int
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="exe_exo_id", type="integer", nullable=false)
      */
-    protected $exeExoId;
+    protected int $exeExoId;
 
     /**
      * @var float
@@ -256,7 +258,7 @@ class TrackEExercises
      *
      * @return int
      */
-    public function getExeExoId()
+    public function getExeExoId(): int
     {
         return $this->exeExoId;
     }

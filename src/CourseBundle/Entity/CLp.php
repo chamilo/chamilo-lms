@@ -44,7 +44,7 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="lp_type", type="integer", nullable=false)
      */
     protected $lpType;
@@ -63,11 +63,9 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $ref;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var string

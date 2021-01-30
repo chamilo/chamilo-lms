@@ -47,13 +47,6 @@ class PersonalFile extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
     public function getName(): string
     {
         return (string) $this->name;

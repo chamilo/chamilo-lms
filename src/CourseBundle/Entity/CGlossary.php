@@ -40,18 +40,17 @@ class CGlossary extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var int
@@ -74,12 +73,8 @@ class CGlossary extends AbstractResource implements ResourceInterface
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return CGlossary
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -88,22 +83,16 @@ class CGlossary extends AbstractResource implements ResourceInterface
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return (string) $this->name;
     }
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CGlossary
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -183,16 +172,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Get glossaryId.
-     *
-     * @return int
-     */
-    public function getGlossaryId()
-    {
-        return $this->glossaryId;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -221,9 +200,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

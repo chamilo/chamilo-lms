@@ -1540,14 +1540,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @param int $userId
-     */
-    public function setId($userId)
-    {
-        $this->id = $userId;
-    }
-
-    /**
      * @return string
      */
     public function getSlug()

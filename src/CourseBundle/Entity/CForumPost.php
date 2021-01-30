@@ -48,18 +48,14 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="post_title", type="string", length=250, nullable=true)
      */
-    protected $postTitle;
+    protected string $postTitle;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="post_text", type="text", nullable=true)
      */
-    protected $postText;
+    protected string $postText;
 
     /**
      * @var CForumThread|null
@@ -67,7 +63,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $thread;
+    protected CForumThread $thread;
 
     /**
      * @var CForumForum|null

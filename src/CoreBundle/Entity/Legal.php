@@ -74,18 +74,6 @@ class Legal
     }
 
     /**
-     * @param int $id
-     *
-     * @return Legal
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Set date.
      *
      * @param int $date

@@ -41,20 +41,16 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank
      *
      * @ORM\Column(name="forum_title", type="string", length=255, nullable=false)
      */
-    protected $forumTitle;
+    protected string $forumTitle;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="forum_comment", type="text", nullable=true)
      */
-    protected $forumComment;
+    protected string $forumComment;
 
     /**
      * @var int
@@ -222,6 +218,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         $this->threads = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->locked = 0;
+        $this->forumComment = '';
         $this->forumImage = '';
         $this->forumOfGroup = 0;
         $this->forumPosts = 0;
@@ -235,12 +232,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
 
     /**
      * Set forumTitle.
-     *
-     * @param string $forumTitle
-     *
-     * @return CForumForum
      */
-    public function setForumTitle($forumTitle)
+    public function setForumTitle(string $forumTitle): self
     {
         $this->forumTitle = $forumTitle;
 
@@ -249,20 +242,16 @@ class CForumForum extends AbstractResource implements ResourceInterface
 
     /**
      * Get forumTitle.
-     *
-     * @return string
      */
-    public function getForumTitle()
+    public function getForumTitle(): string
     {
         return $this->forumTitle;
     }
 
     /**
      * Set forumComment.
-     *
-     * @param string $forumComment
      */
-    public function setForumComment($forumComment): self
+    public function setForumComment(string $forumComment): self
     {
         $this->forumComment = $forumComment;
 
@@ -271,10 +260,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
 
     /**
      * Get forumComment.
-     *
-     * @return string
      */
-    public function getForumComment()
+    public function getForumComment(): string
     {
         return $this->forumComment;
     }

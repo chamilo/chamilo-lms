@@ -34,15 +34,11 @@ class Illustration extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
-     * @var string
      * @Groups({"illustration:read"})
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
-    /**
-     * Illustration constructor.
-     */
     public function __construct()
     {
         $this->name = 'illustration';
@@ -56,13 +52,6 @@ class Illustration extends AbstractResource implements ResourceInterface
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getName(): string

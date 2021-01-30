@@ -79,7 +79,6 @@ class PDF
         if (!empty($value)) {
             $params['img_dpi'] = (int) $value;
         }
-
         $this->pdf = new Mpdf($params);
     }
 
@@ -497,7 +496,7 @@ class PDF
             $output_file = $pdf_name.'.pdf';
         }
 
-        if ('F' == $outputMode) {
+        if ('F' === $outputMode) {
             $output_file = api_get_path(SYS_ARCHIVE_PATH).$output_file;
         }
 
@@ -512,10 +511,10 @@ class PDF
             $this->pdf->Output(
                 $output_file,
                 $outputMode
-            ); // F to save the pdf in a file
+            );
         }
 
-        if ('F' != $outputMode) {
+        if ('F' !== $outputMode) {
             exit;
         }
 

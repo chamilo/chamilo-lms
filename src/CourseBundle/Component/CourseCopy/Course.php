@@ -19,6 +19,7 @@ class Course
     public $destination_path;
     public $destination_db;
     public $encoding;
+    public $type;
 
     /**
      * Create a new Course-object.

@@ -387,7 +387,6 @@ class TestCategory
         return $result;
     }
 
-
     /**
      * @return array
      */
@@ -489,7 +488,6 @@ class TestCategory
         return $result;
     }
 
-
     /**
      * Returns an array of question ids for each category
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
@@ -546,7 +544,6 @@ class TestCategory
             ) {
                 $categories[$data['category_id']] = [];
             }
-
             $categories[$data['category_id']][] = $data['question_id'];
         }
 
@@ -602,13 +599,13 @@ class TestCategory
 
         if (!empty($countMandatory)) {
             if ($countMandatory >= $numberElements) {
-        if ($shuffle) {
+                if ($shuffle) {
                     shuffle($mandatoryElements);
-        }
+                }
                 $elements = array_slice($mandatoryElements, 0, $numberElements);
 
                 return $elements;
-        }
+            }
 
             $diffCount = $numberElements - $countMandatory;
             $diffElements = array_diff($elements, $mandatoryElements);
@@ -817,7 +814,7 @@ class TestCategory
                         $resultsArray[] = $tempResult[$categoryId];
                     } else {
                         $resultsArray[] = 0;
-            }
+                    }
                 }
                 $radar = $exercise->getRadar($labels, [$resultsArray]);
             }
@@ -898,7 +895,6 @@ class TestCategory
         header('Location:'.api_get_self().'?'.api_get_cidreq());
         exit;
     }
-
 
     /**
      * @param Exercise $exercise
@@ -1206,8 +1202,6 @@ class TestCategory
         return $resources->getQuery()->getResult();
     }
 
-
-
     /**
      * @param int $courseId
      * @param int $sessionId
@@ -1252,7 +1246,6 @@ class TestCategory
 
         return $html;
     }
-
 
     /**
      * To allowed " in javascript dialog box without bad surprises

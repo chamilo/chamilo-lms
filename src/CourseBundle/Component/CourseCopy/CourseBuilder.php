@@ -1084,8 +1084,7 @@ class CourseBuilder
         $category = new TestCategory();
         $categories = $category->getCategories();
         foreach ($categories as $category) {
-            $this->findAndSetDocumentsInText($category->description);
-
+            $this->findAndSetDocumentsInText($category->getDescription());
             /** @var TestCategory $category */
             $courseCopyTestCategory = new CourseCopyTestCategory(
                 $category->id,

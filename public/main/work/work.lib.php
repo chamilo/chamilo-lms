@@ -2135,9 +2135,7 @@ function get_work_user_list(
                         u.username,
                         parent_id,
                         accepted,
-                        qualificator_id,
-                        url_correction,
-                        title_correction
+                        qualificator_id
                         ';
         if ($getCount) {
             $select = 'SELECT DISTINCT count(u.id) as count ';
@@ -2322,7 +2320,8 @@ function get_work_user_list(
 
                 $correction = '';
                 $hasCorrection = '';
-                if (!empty($work['url_correction'])) {
+                $correctionEntity = $studentPublication->getCorrection();
+                if (!empty($correctionEntity)) {
                     $downloadUrl = $router->generate('chamilo_core_resource_download',
                             [
                                 'id' => $studentPublication->getResourceNode()->getId(),
@@ -2361,7 +2360,8 @@ function get_work_user_list(
                     if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
                         $rateLink = '';
                     } else {
-                        $rateLink = '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                        $rateLink = '<a
+                            href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                             $rateIcon.'</a> ';
                     }
                     $action .= $rateLink;
@@ -2374,8 +2374,9 @@ function get_work_user_list(
                     }
 
                     $alreadyUploaded = '';
-                    if (!empty($work['url_correction'])) {
-                        $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIconSmall;
+                    if ($correctionEntity) {
+                        $alreadyUploaded = '<br />'.
+                            $studentPublication->getResourceNode()->getTitle().' '.$correctionIconSmall;
                     }
 
                     $correction = '

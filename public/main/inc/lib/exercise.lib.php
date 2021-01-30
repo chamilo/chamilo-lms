@@ -174,7 +174,7 @@ class ExerciseLib
                     $select_items[0]['letter'] = '--';
                     $select_items[0]['answer'] = '';
                     foreach ($answer_matching as $id => $value) {
-                        $select_items[$i]['id'] = $value['id_auto'];
+                        $select_items[$i]['id'] = $value['iid'];
                         $select_items[$i]['letter'] = $cpt1[$id];
                         $select_items[$i]['answer'] = $value['answer'];
                         $i++;
@@ -1116,6 +1116,7 @@ class ExerciseLib
                             $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
                                 <select
+                                    class="form-control"
                                     id="choice_id_'.$current_item.'_'.$lines_count.'"
                                     name="choice['.$questionId.']['.$numAnswer.']">';
 

@@ -4383,13 +4383,14 @@ class Exercise
                         $result = Database::query($sql);
                         $data = Database::fetch_array($result);
                         $choice = '';
+                        $questionScore = 0;
                         if ($data) {
                             $choice = $data['answer'];
+                            $questionScore = $data['marks'];
                         }
 
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
-                        $questionScore = $data['marks'];
 
                         if (-1 == $questionScore) {
                             $totalScore += 0;

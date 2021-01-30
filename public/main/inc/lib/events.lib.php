@@ -850,55 +850,6 @@ class Event
     }
 
     /**
-     * Get every email stored in the database.
-     *
-     * @deprecated
-     *
-     * @return array
-     * @assert () !== false
-     */
-    public static function get_all_event_types()
-    {
-        global $event_config;
-
-        $sql = 'SELECT etm.id, event_type_name, activated, language_id, message, subject, dokeos_folder
-                FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' etm
-                INNER JOIN '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
-                ON etm.language_id = l.id';
-
-        $events_types = Database::store_result(Database::query($sql), 'ASSOC');
-
-        $to_return = [];
-        foreach ($events_types as $et) {
-            $et['nameLangVar'] = $event_config[$et["event_type_name"]]["name_lang_var"];
-            $et['descLangVar'] = $event_config[$et["event_type_name"]]["desc_lang_var"];
-            $to_return[] = $et;
-        }
-
-        return $to_return;
-    }
-
-    /**
-     * Get the users related to one event.
-     *
-     * @param string $event_name
-     *
-     * @return string
-     */
-    public static function get_event_users($event_name)
-    {
-        $event_name = Database::escape_string($event_name);
-        $sql = 'SELECT user.user_id,  user.firstname, user.lastname
-                FROM '.Database::get_main_table(TABLE_MAIN_USER).' user
-                JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser
-                ON relUser.user_id = user.user_id
-                WHERE user.status <> '.ANONYMOUS.' AND relUser.event_type_name = "'.$event_name.'"';
-        $user_list = Database::store_result(Database::query($sql), 'ASSOC');
-
-        return json_encode($user_list);
-    }
-
-    /**
      * @param int    $user_id
      * @param string $event_type
      *

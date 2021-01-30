@@ -5,7 +5,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (false === api_get_configuration_value('allow_exercise_categories')) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 api_protect_course_script();

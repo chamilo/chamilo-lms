@@ -174,6 +174,41 @@ class ExerciseCategoryManager extends Model
     }
 
     /**
+     * @param $token
+     *
+     * @return string
+     */
+    public function getJqgridActionLinks($token)
+    {
+        //With this function we can add actions to the jgrid (edit, delete, etc)
+        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
+        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $confirmMessage = addslashes(
+            api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
+        );
+
+        $courseParams = api_get_cidreq();
+
+        $editButton = <<<JAVASCRIPT
+            <a href="?action=edit&{$courseParams}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
+                $editIcon\
+            </a>
+JAVASCRIPT;
+        $deleteButton = <<<JAVASCRIPT
+            <a \
+                onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
+                href="?sec_token=$token&{$courseParams}&id=' + options.rowId + '&action=delete" \
+                class="btn btn-link btn-xs">\
+                $deleteIcon\
+            </a>
+JAVASCRIPT;
+
+        return "function action_formatter(cellvalue, options, rowObject) {
+            return '$editButton $deleteButton';
+        }";
+    }
+
+    /**
      * @param string $url
      * @param string $action
      *
@@ -245,107 +280,7 @@ class ExerciseCategoryManager extends Model
         $content .= '</a>';
         $content .= '</div>';
 
-        // 1. Set entity
-        $source = new Entity('ChamiloCourseBundle:CExerciseCategory');
-        $repo = Container::getExerciseCategoryRepository();
-        // 2. Get query builder from repo.
-        $qb = $repo->getResourcesByCourse($course, $session);
-
-        // 3. Set QueryBuilder to the source.
-        $source->initQueryBuilder($qb);
-
-        // 4. Get the grid builder.
-        $builder = Container::$container->get('apy_grid.factory');
-
-        // 5. Set parameters and properties.
-        $grid = $builder->createBuilder(
-            'grid',
-            $source,
-            [
-                'persistence' => false,
-                'route' => 'home',
-                'filterable' => true,
-                'sortable' => true,
-                'max_per_page' => 10,
-            ]
-        )->add(
-            'id',
-            'number',
-            [
-                'title' => '#',
-                'primary' => true,
-                'visible' => false,
-            ]
-        )->add(
-            'name',
-            'text',
-            [
-                'title' => get_lang('Name'),
-            ]
-        );
-        $grid = $grid->getGrid();
-
-        if (Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
-            // Add row actions
-            $myRowAction = new RowAction(
-                get_lang('Edit'),
-                'legacy_main',
-                false,
-                '_self',
-                ['class' => 'btn btn-secondary']
-            );
-            $myRowAction->setRouteParameters(
-                ['id', 'name' => 'exercise/category.php', 'cidReq' => api_get_course_id(), 'action' => 'edit']
-            );
-
-            $myRowAction->addManipulateRender(
-                function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($action, $row, $session);
-                }
-            );
-
-            $grid->addRowAction($myRowAction);
-
-            $myRowAction = new RowAction(
-                get_lang('Delete'),
-                'legacy_main',
-                true,
-                '_self',
-                ['class' => 'btn btn-danger', 'form_delete' => true]
-            );
-            $myRowAction->setRouteParameters(
-                ['id', 'name' => 'exercise/category.php', 'cidReq' => api_get_course_id(), 'action' => 'delete']
-            );
-            $myRowAction->addManipulateRender(
-                function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($action, $row, $session);
-                }
-            );
-
-            $grid->addRowAction($myRowAction);
-
-            if (empty($session)) {
-                // Add mass actions
-                $deleteMassAction = new MassAction(
-                    'Delete',
-                    ['ExerciseCategoryManager', 'deleteResource'],
-                    true,
-                    []
-                );
-                $grid->addMassAction($deleteMassAction);
-            }
-        }
-
-        // 8. Set route and request
-        $grid
-            ->setRouteUrl(api_get_self().'?'.api_get_cidreq())
-            ->handleRequest(Container::getRequest())
-        ;
-
-        $content .= Container::$container->get('twig')->render(
-            '@ChamiloCore/Resource/grid.html.twig',
-            ['grid' => $grid]
-        );
+        $content .= Display::grid_html('categories');
 
         return $content;
     }

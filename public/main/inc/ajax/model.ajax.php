@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -284,9 +285,11 @@ if (!$sidx) {
 
 switch ($action) {
     case 'get_exercise_categories':
-        $manager = new ExerciseCategoryManager();
         $courseId = isset($_REQUEST['c_id']) ? $_REQUEST['c_id'] : 0;
-        $count = $manager->getCourseCount($courseId);
+        $repo = Container::getExerciseCategoryRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $count = $qb->select('COUNT(resource)')->getQuery()->getSingleScalarResult();
+
         break;
     case 'get_calendar_users':
         $calendarPlugin = LearningCalendarPlugin::create();
@@ -933,13 +936,21 @@ switch ($action) {
         }
 
         $columns = ['name', 'actions'];
-        $manager = new ExerciseCategoryManager();
-
-        $result = $manager->get_all([
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $items = $qb->getQuery()->getResult();
+        /** @var \Chamilo\CourseBundle\Entity\CExerciseCategory $item */
+        $result = [];
+        foreach ($items as $item) {
+            $result[] = [
+                'id' => $item->getId(),
+                'name' => $item->getName()
+            ];
+        }
+        /*$result = $manager->get_all([
             'where' => ['c_id = ? ' => $courseId],
             'order' => "$sidx $sord",
             'LIMIT' => "$start , $limit",
-        ]);
+        ]);*/
         break;
     case 'get_calendar_users':
         $columns = ['firstname', 'lastname', 'exam'];

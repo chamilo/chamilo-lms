@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -881,7 +882,7 @@ class SocialManager extends UserManager
             $show,
             ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
         )) {
-            $links = '<ul class="nav nav-pills nav-stacked">';
+            $links = '<ul class="nav-bar">';
             $active = 'home' === $show ? 'active' : null;
             $links .= '
                 <li class="home-icon '.$active.'">
@@ -1003,7 +1004,7 @@ class SocialManager extends UserManager
         }
 
         if ('shared_profile' === $show) {
-            $links = '<ul class="nav nav-pills nav-stacked">';
+            $links = '<ul class="nav-bar">';
             // My own profile
             if ($show_full_profile && $user_id == api_get_user_id()) {
                 $links .= '
@@ -1187,7 +1188,7 @@ class SocialManager extends UserManager
 
         if ($show_delete_account_button) {
             $html .= '<div class="panel panel-default"><div class="panel-body">';
-            $html .= '<ul class="nav nav-pills nav-stacked"><li>';
+            $html .= '<ul class="nav-bar"><li>';
             $url = api_get_path(WEB_CODE_PATH).'auth/unsubscribe_account.php';
             $html .= Display::url(
                 Display::return_icon(
@@ -1768,7 +1769,7 @@ class SocialManager extends UserManager
                 </div>
                 <div class="col-sm-3 pull-right">
                 <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="btn btn-default btn-post">
-                    <em class="fa fa-pencil"></em> '.get_lang('Post').'
+                    <em class="fas fa-pencil-alt"></em> '.get_lang('Post').'
                 </a>
                 </div>
                 </form>';

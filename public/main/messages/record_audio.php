@@ -16,6 +16,7 @@ $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 $tpl = new Template(get_lang('Compose message'), false, false, false, true);
 $record = $tpl->get_template('message/record_audio.tpl');
 
+$tpl->assign('directory', '');
 $tpl->assign('user_id', api_get_user_id());
 $tpl->assign('audio_title', api_get_unique_id());
 $tpl->assign('reload_page', 0);

@@ -82,7 +82,6 @@ if ('' != $query || ('1' == $query_vars['search_type'] && count($query_vars) > 2
 
     $results = '<div id="whoisonline">';
     if (is_array($users) && count($users) > 0) {
-        $results .= '<div class="row">';
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
             $user_info = api_get_user_info($user['id'], true);
@@ -134,7 +133,6 @@ if ('' != $query || ('1' == $query_vars['search_type'] && count($query_vars) > 2
                 $invitations
             );
         }
-        $results .= '</div>';
     }
     $results .= '</div>';
 
@@ -200,7 +198,7 @@ if ('' != $query || ('1' == $query_vars['search_type'] && count($query_vars) > 2
                         </div>
                         <div class="user-info">
                             '.$item_1.'
-                            <p>'.$members.'</p>    
+                            <p>'.$members.'</p>
                             <p>'.$group['description'].'</p>
                             <p>'.$tags.'</p>
                             <p>'.$url_open.get_lang('See more').$url_close.'</p>

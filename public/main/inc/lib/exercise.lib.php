@@ -1612,7 +1612,7 @@ HOTSPOT;
                                                 <input
                                                     type="radio" value="0"
                                                     name="'.$questionId.'-options" autocomplete="off" checked>
-                                                <span class="fa fa-pencil" aria-hidden="true"></span>
+                                                <span class="fas fa-pencil-alt" aria-hidden="true"></span>
                                             </label>
                                             <label class="btn btn-default"
                                                 aria-label="'.get_lang('Add annotation text').'">

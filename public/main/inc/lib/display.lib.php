@@ -2725,7 +2725,7 @@ HTML;
         }
 
         return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">
-                    <img src="'.$userInfo['avatar'].'" class="rounded">
+                    <img src="'.$userInfo['avatar'].'" class="rounded" />
                     <h3 class="card-title">'.$userInfo['complete_name'].'</h3>
                     <div class="card-body">
                        <div class="card-title">

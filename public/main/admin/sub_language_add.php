@@ -22,7 +22,7 @@ $interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('Chamilo Port
 
 /**
  * Add sub-language.
- *
+ * @deprecated
  * @param   string  Original language name (Occitan, Wallon, Vlaams)
  * @param   string  English language name (occitan, wallon, flanders)
  * @param   string  ISO code (fr_FR, ...)
@@ -70,9 +70,9 @@ function add_sub_language($original_name, $english_name, $isocode, $sublanguage_
 function check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available)
 {
     $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql_original_name = 'SELECT count(*) AS count_original_name FROM '.$tbl_admin_languages.' 
+    $sql_original_name = 'SELECT count(*) AS count_original_name FROM '.$tbl_admin_languages.'
                           WHERE original_name="'.Database::escape_string($original_name).'" ';
-    $sql_english_name = 'SELECT count(*) AS count_english_name FROM '.$tbl_admin_languages.' 
+    $sql_english_name = 'SELECT count(*) AS count_english_name FROM '.$tbl_admin_languages.'
                          WHERE english_name="'.Database::escape_string($english_name).'" ';
     $rs_original_name = Database::query($sql_original_name);
     $rs_english_name = Database::query($sql_english_name);

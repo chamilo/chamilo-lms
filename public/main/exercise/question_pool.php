@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Knp\Component\Pager\Paginator;
 
@@ -294,27 +295,6 @@ if (isset($_REQUEST['action'])) {
     }
 }
 
-Display::display_header($nameTools, 'Exercise');
-
-// Menu
-echo '<div class="actions">';
-if (isset($fromExercise) && $fromExercise > 0) {
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
-            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
-    $titleAdd = get_lang('Add question to test');
-} else {
-    echo '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo "<a href='admin.php?exerciseId=0'>".
-        Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
-    $titleAdd = get_lang('Manage all questions');
-}
-echo '</div>';
-
-if ('' != $displayMessage) {
-    echo Display::return_message($displayMessage, 'confirm');
-}
-
 // Form
 $sessionList = SessionManager::get_sessions_by_user(api_get_user_id(), api_is_platform_admin());
 $session_select_list = ['-1' => get_lang('Select')];
@@ -449,7 +429,6 @@ if (!empty($_course)) {
 
 // Answer type list
 $form = new FormValidator('question_pool', 'GET', $url);
-$form->addHeader($nameTools.' - '.$titleAdd);
 $form->addHidden('fromExercise', $fromExercise);
 $form
     ->addSelect(
@@ -514,14 +493,13 @@ $jsForExtraFields = $extraField->addElements($form, 0, [], true);
 
 $form->addButtonFilter(get_lang('Filter'), 'name');
 
-echo $form->display();
+if (isset($fromExercise) && $fromExercise > 0) {
+    $titleAdd = get_lang('Add question to test');
+} else {
+    $titleAdd = get_lang('Manage all questions');
+}
 
-echo '<script>$(function () {
-        '.$jsForExtraFields['jquery_ready_content'].'
-    })</script>';
-?>
-<div class="clear"></div>
-<?php
+$form->addHeader($nameTools.' - '.$titleAdd);
 
 /**
  * @return array
@@ -880,12 +858,28 @@ if (empty($length)) {
 
 $start = ($page - 1) * $length;
 
-$paginator = new Paginator();
-$pagination = $paginator->paginate([]);
+$mainQuestionList = getQuestions(
+    false,
+    $start,
+    $length,
+    $exerciseId,
+    $courseCategoryId,
+    $selected_course,
+    $session_id,
+    $exerciseLevel,
+    $answerType,
+    $questionId,
+    $description,
+    $fromExercise,
+    $formValues
+);
+
+$paginator = new Paginator(Container::$container->get('event_dispatcher'));
+$pagination = $paginator->paginate($mainQuestionList, $page, $length);
+
 $pagination->setTotalItemCount($nbrQuestions);
 $pagination->setItemNumberPerPage($length);
 $pagination->setCurrentPageNumber($page);
-
 $pagination->renderer = function ($data) use ($url) {
     $render = '';
     if ($data['pageCount'] > 1) {
@@ -902,22 +896,6 @@ $pagination->renderer = function ($data) use ($url) {
 
     return $render;
 };
-
-$mainQuestionList = getQuestions(
-    false,
-    $start,
-    $length,
-    $exerciseId,
-    $courseCategoryId,
-    $selected_course,
-    $session_id,
-    $exerciseLevel,
-    $answerType,
-    $questionId,
-    $description,
-    $fromExercise,
-    $formValues
-);
 
 // build the line of the array to display questions
 // Actions are different if you launch the question_pool page
@@ -1045,8 +1023,35 @@ $headers = [
     $actionLabel,
 ];
 
-echo $pagination;
+Display::display_header($nameTools, 'Exercise');
 
+// Menu
+echo '<div class="actions">';
+if (isset($fromExercise) && $fromExercise > 0) {
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
+        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+} else {
+    echo '<a href="exercise.php?'.api_get_cidreq().'">'.
+        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo "<a href='admin.php?exerciseId=0'>".
+        Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
+}
+echo '</div>';
+
+if ('' != $displayMessage) {
+    echo Display::return_message($displayMessage, 'confirm');
+}
+
+echo $form->display();
+
+echo '<script>$(function () {
+        '.$jsForExtraFields['jquery_ready_content'].'
+    })</script>';
+?>
+    <div class="clear"></div>
+<?php
+
+echo $pagination;
 $tableId = 'question_pool_id';
 echo '<form id="'.$tableId.'" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
@@ -1077,9 +1082,7 @@ foreach ($data as $rows) {
     }
     $row++;
 }
-
 $table->display();
-
 echo '</form>';
 
 $html = '<div class="btn-toolbar">';
@@ -1108,7 +1111,7 @@ if ($selected_course == api_get_course_int_id()) {
     $actions = ['reuse' => get_lang('Re-use in current testQuestion')];
 }
 
-foreach ($actions as $action => &$label) {
+foreach ($actions as $action => $label) {
     $html .= '<li>
             <a
                 data-action ="'.$action.'"

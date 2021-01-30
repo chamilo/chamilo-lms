@@ -2856,7 +2856,6 @@ class UserGroup extends Model
             $direction = 'ASC';
         }
 
-        $from = (int) $from;
         $sql .= " LIMIT $from, $number_of_items";
 
         $res = Database::query($sql);

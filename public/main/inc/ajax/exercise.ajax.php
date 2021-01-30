@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
 $current_course_tool = TOOL_QUIZ;
-$debug = false;
+$debug = true;
 api_protect_course_script(true);
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
@@ -39,7 +39,6 @@ switch ($action) {
         echo json_encode($data);
         break;
     case 'update_duration':
-
         if (Session::read('login_as')) {
             if ($debug) {
                 error_log("User is 'login as' don't update duration time.");
@@ -68,8 +67,8 @@ switch ($action) {
         $onlyUpdateValue = 10;
 
         $em = Database::getManager();
-        /** @var \Chamilo\CoreBundle\Entity\TrackEExercises $attempt */
-        $attempt = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+        /** @var TrackEExercises $attempt */
+        $attempt = $em->getRepository(TrackEExercises::class)->find($exeId);
 
         if (empty($attempt)) {
             if ($debug) {
@@ -90,14 +89,14 @@ switch ($action) {
             exit;
         }
 
-        if ($exerciseInSession->id != $exerciseId) {
+        if ($exerciseInSession->iId !== $exerciseId) {
             if ($debug) {
-                error_log("Cannot update, exercise are different.");
+                error_log('Cannot update, exercise are different.');
             }
             exit;
         }
 
-        if ('incomplete' != $attempt->getStatus()) {
+        if ('incomplete' !== $attempt->getStatus()) {
             if ($debug) {
                 error_log('Cannot update exercise is already completed.');
             }
@@ -125,20 +124,22 @@ switch ($action) {
                 $duration = (int) $duration;
                 if (!empty($duration)) {
                     if ($debug) {
-                        error_log("Exe_id: #".$exeId);
+                        error_log('Exe_id: #'.$exeId);
                         error_log("Key: $key");
                         error_log("Exercise to update: #$exerciseId of user: #$userId");
                         error_log("Duration time found in DB before update: $durationFromObject");
                         error_log("Current spent time $sessionTime before an update");
                         error_log("Accumulate duration to save in DB: $duration");
-                        error_log("End date (UTC) before update: ".$attempt->getExeDate()->format('Y-m-d H:i:s'));
-                        error_log("End date (UTC) to be save in DB: ".$nowObject->format('Y-m-d H:i:s'));
+                        error_log('End date (UTC) before update: '.$attempt->getExeDate()->format('Y-m-d H:i:s'));
+                        error_log('End date (UTC) to be save in DB: '.$nowObject->format('Y-m-d H:i:s'));
                     }
                     $attempt
                         ->setExeDuration($duration)
                         ->setExeDate($nowObject);
                     $em->persist($attempt);
                     $em->flush();
+
+                    echo 1;
                 }
             } else {
                 if ($debug) {
@@ -288,7 +289,7 @@ switch ($action) {
                     $timeInfo = api_convert_and_format_date(
                             $row['start_date'],
                             DATE_TIME_FORMAT_LONG
-                        ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
+                        ).' ['.($h > 0 ? $h.':' : '').sprintf('%02d', $m).':'.sprintf('%02d', $s).']';
                 } else {
                     $timeInfo = api_convert_and_format_date(
                         $row['start_date'],
@@ -303,7 +304,7 @@ switch ($action) {
                     round($row['score'] * 100).'%',
                 ];
                 $response->rows[$i]['cell'] = $array;
-                $i++;
+                ++$i;
             }
         }
         echo json_encode($response);
@@ -327,7 +328,7 @@ switch ($action) {
                         'c_id' => $course_id,
                     ]
                 );
-                $counter++;
+                ++$counter;
             }
             echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
@@ -357,7 +358,7 @@ switch ($action) {
                     ]
                 )
                 ;
-                $counter++;
+                ++$counter;
             }
             echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
@@ -420,10 +421,10 @@ switch ($action) {
             if ($debug) {
                 error_log("exe_id = $exeId");
                 error_log("type = $type");
-                error_log("choice = ".print_r($choice, 1)." ");
-                error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
-                error_log("remind_list = ".print_r($remind_list, 1));
-                error_log("--------------------------------");
+                error_log('choice = '.print_r($choice, 1).' ');
+                error_log('hot_spot_coordinates = '.print_r($hot_spot_coordinates, 1));
+                error_log('remind_list = '.print_r($remind_list, 1));
+                error_log('--------------------------------');
             }
 
             // Exercise information.
@@ -439,10 +440,10 @@ switch ($action) {
                 echo 'error';
                 if ($debug) {
                     if (empty($question_list)) {
-                        error_log("question_list is empty");
+                        error_log('question_list is empty');
                     }
                     if (empty($objExercise)) {
-                        error_log("objExercise is empty");
+                        error_log('objExercise is empty');
                     }
                 }
                 exit;
@@ -554,7 +555,6 @@ switch ($action) {
                 }
 
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
-
 
                 // Creates a temporary Question object
                 $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
@@ -774,7 +774,7 @@ switch ($action) {
                 // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
-                    error_log("---------- end question ------------");
+                    error_log('---------- end question ------------');
                 }
             }
             if ($debug) {
@@ -800,15 +800,15 @@ switch ($action) {
 
         if (ONE_PER_PAGE == $objExercise->type) {
             if ($debug) {
-                error_log("result: one_per_page");
-                error_log(" ------ end ajax call ------- ");
+                error_log('result: one_per_page');
+                error_log(' ------ end ajax call ------- ');
             }
             echo 'one_per_page';
             exit;
         }
         if ($debug) {
-            error_log("result: ok");
-            error_log(" ------ end ajax call ------- ");
+            error_log('result: ok');
+            error_log(' ------ end ajax call ------- ');
         }
         echo 'ok';
         break;

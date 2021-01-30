@@ -183,7 +183,7 @@ class Exercise
 
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
-            $this->id = $this->iId = $object->iid;
+            $this->id = $this->iId = (int) $object->iid;
             $this->exercise = $object->title;
             $this->name = $object->title;
             $this->title = $object->title;

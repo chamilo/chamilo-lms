@@ -77,30 +77,24 @@ class ResourceFile
     protected $id;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $mimeType;
+    protected string $mimeType;
 
     /**
-     * @var string
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $originalName;
+    protected string $originalName;
 
     /**
      * @var string
@@ -142,11 +136,9 @@ class ResourceFile
     protected $crop;
 
     /**
-     * @var ResourceNode
-     *
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceFile")
      */
-    protected $resourceNode;
+    protected ResourceNode $resourceNode;
 
     /**
      * @var array

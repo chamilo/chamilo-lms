@@ -59,19 +59,17 @@ class Message
     protected $sendDate;
 
     /**
-     * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
      * @Assert\NotBlank
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    protected $content;
+    protected string $content;
 
     /**
      * @var int
@@ -120,16 +118,15 @@ class Message
      */
     public function __construct()
     {
+        $this->content = '';
         $this->attachments = new ArrayCollection();
         $this->likes = new ArrayCollection();
     }
 
     /**
      * Set userSender.
-     *
-     * @return Message
      */
-    public function setUserSender(User $userSender)
+    public function setUserSender(User $userSender): self
     {
         $this->userSender = $userSender;
 
@@ -138,20 +135,16 @@ class Message
 
     /**
      * Get userSender.
-     *
-     * @return User
      */
-    public function getUserSender()
+    public function getUserSender(): User
     {
         return $this->userSender;
     }
 
     /**
      * Set userReceiver.
-     *
-     * @return Message
      */
-    public function setUserReceiver(User $userReceiver)
+    public function setUserReceiver(User $userReceiver): self
     {
         $this->userReceiver = $userReceiver;
 

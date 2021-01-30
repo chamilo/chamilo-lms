@@ -36,13 +36,11 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @var string
@@ -65,11 +63,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
      */
     protected $progress;
 
-    /**
-     * CCourseDescription constructor.
-     */
     public function __construct()
     {
+        $this->content = '';
         $this->progress = 0;
         $this->descriptionType = 1;
     }

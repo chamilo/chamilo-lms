@@ -161,32 +161,27 @@ class Session
     protected $showDescription;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
-    protected $duration;
+    protected int $duration;
 
     /**
-     * @var int
      * @Groups({"session:read"})
      * @ORM\Column(name="nbr_courses", type="smallint", nullable=true, unique=false)
      */
-    protected $nbrCourses;
+    protected int $nbrCourses;
 
     /**
-     * @var int
      * @Groups({"session:read"})
      * @ORM\Column(name="nbr_users", type="integer", nullable=true, unique=false)
      */
-    protected $nbrUsers;
+    protected int $nbrUsers;
 
     /**
-     * @var int
      * @Groups({"session:read"})
      * @ORM\Column(name="nbr_classes", type="integer", nullable=true, unique=false)
      */
-    protected $nbrClasses;
+    protected int $nbrClasses;
 
     /**
      * @var User
@@ -314,6 +309,7 @@ class Session
         $this->description = '';
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
+        $this->nbrCourses = 0;
         $this->sendSubscriptionNotification = false;
         $this->displayStartDate = new \DateTime();
         $this->displayEndDate = new \DateTime();
@@ -333,38 +329,24 @@ class Session
         $this->studentPublications = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getName();
     }
 
-    /**
-     * @return int
-     */
-    public function getDuration()
+    public function getDuration(): int
     {
         return $this->duration;
     }
 
-    /**
-     * @param int $duration
-     *
-     * @return $this
-     */
-    public function setDuration($duration)
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getShowDescription()
+    public function getShowDescription(): bool
     {
         return $this->showDescription;
     }

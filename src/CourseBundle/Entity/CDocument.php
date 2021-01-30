@@ -136,27 +136,25 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank
      * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @var string
      * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var string File type, it can be 'folder' or 'file'
      * @Groups({"document:read", "document:write"})
      * @Assert\Choice({"folder", "file"}, message="Choose a valid filetype.")
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
-    protected $filetype;
+    protected string $filetype;
 
     /**
      * @var bool
@@ -175,6 +173,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
+        $this->comment = '';
         $this->filetype = 'folder';
         $this->readonly = false;
         $this->template = false;

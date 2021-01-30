@@ -63,7 +63,7 @@ class ResourceNode
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @Assert\NotBlank()
@@ -71,15 +71,13 @@ class ResourceNode
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="slug", type="string", length=255, nullable=false)
      */
-    protected $slug;
+    protected string $slug;
 
     /**
-     * @var ResourceType
-     *
      * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
-    protected $resourceType;
+    protected ResourceType $resourceType;
 
     /**
      * @ApiSubresource()
@@ -91,14 +89,14 @@ class ResourceNode
     protected $resourceLinks;
 
     /**
-     * @var ResourceFile available file for this node
+     * ResourceFile available file for this node
      *
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $resourceFile;
+    protected ResourceFile $resourceFile;
 
     /**
      * @var User the creator of this node
@@ -107,7 +105,7 @@ class ResourceNode
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected $creator;
+    protected User $creator;
 
     /**
      * @ApiSubresource()

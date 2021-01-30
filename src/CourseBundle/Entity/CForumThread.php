@@ -42,13 +42,11 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
      */
-    protected $threadTitle;
+    protected string $threadTitle;
 
     /**
      * @var CForumForum|null
@@ -71,7 +69,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="thread_poster_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @var int

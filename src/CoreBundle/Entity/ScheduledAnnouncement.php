@@ -24,18 +24,14 @@ class ScheduledAnnouncement
     protected $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subject", type="string", length=255, nullable=false, unique=false)
      */
-    protected $subject;
+    protected string $subject;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="message", type="text", unique=false)
      */
-    protected $message;
+    protected string $message;
 
     /**
      * @var \DateTime
@@ -65,9 +61,6 @@ class ScheduledAnnouncement
      */
     protected $cId;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }

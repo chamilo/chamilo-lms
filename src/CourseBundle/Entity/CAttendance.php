@@ -32,18 +32,15 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var int
@@ -82,6 +79,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->description = '';
         $this->active = 1;
         $this->attendanceQualifyMax = 0;
         $this->locked = 0;
@@ -94,12 +92,8 @@ class CAttendance extends AbstractResource implements ResourceInterface
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return CAttendance
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -120,10 +114,8 @@ class CAttendance extends AbstractResource implements ResourceInterface
      * Set description.
      *
      * @param string $description
-     *
-     * @return CAttendance
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 

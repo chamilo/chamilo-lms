@@ -41,20 +41,18 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)
      */
-    protected $catTitle;
+    protected string $catTitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cat_comment", type="text", nullable=true)
      */
-    protected $catComment;
+    protected string $catComment;
 
     /**
      * @var int
@@ -93,6 +91,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->catComment = '';
         $this->locked = 0;
         $this->catId = 0;
         $this->forums = new ArrayCollection();

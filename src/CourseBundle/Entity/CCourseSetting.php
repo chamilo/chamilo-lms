@@ -37,13 +37,11 @@ class CCourseSetting
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="variable", type="string", length=255, nullable=false)
      */
-    protected $variable;
+    protected string $variable;
 
     /**
      * @var string

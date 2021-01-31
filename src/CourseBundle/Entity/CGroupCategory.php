@@ -172,7 +172,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
      */
     public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**

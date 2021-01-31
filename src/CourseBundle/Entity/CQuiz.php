@@ -297,12 +297,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Set title.
-     *
-     * @param string $title
-     *
-     * @return CQuiz
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 

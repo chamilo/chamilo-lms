@@ -311,7 +311,7 @@ class ResourceFile
 
     public function getOriginalName(): string
     {
-        return (string) $this->originalName;
+        return $this->originalName;
     }
 
     /**

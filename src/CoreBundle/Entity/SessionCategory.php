@@ -66,7 +66,7 @@ class SessionCategory
 
     public function __toString(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     /**
@@ -96,10 +96,8 @@ class SessionCategory
 
     /**
      * Set name.
-     *
-     * @param string $name
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -108,10 +106,8 @@ class SessionCategory
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

@@ -27,7 +27,7 @@ class PaginationSubscriber implements EventSubscriberInterface
     public function pagination(PaginationEvent $event)
     {
         if (is_array($event->target)) {
-            $event->setPagination(new SlidingPagination);
+            $event->setPagination(new SlidingPagination());
         }
 
         $event->stopPropagation();
@@ -37,7 +37,7 @@ class PaginationSubscriber implements EventSubscriberInterface
     {
         return [
             'knp_pager.items' => ['items', 1/*increased priority to override any internal*/],
-            'knp_pager.pagination' => ['pagination', 0]
+            'knp_pager.pagination' => ['pagination', 0],
         ];
     }
 }

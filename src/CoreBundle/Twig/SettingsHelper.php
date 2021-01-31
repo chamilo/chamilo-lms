@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Twig;
 
-use Chamilo\CoreBundle\Manager\SettingsManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Templating\Helper\SettingsHelperInterface;
 use Symfony\Component\Templating\Helper\Helper;
@@ -15,7 +14,7 @@ use Symfony\Component\Templating\Helper\Helper;
 class SettingsHelper extends Helper implements SettingsHelperInterface
 {
     /**
-     * @var SettingsManager
+     * @var SettingsManagerInterface
      */
     private $settingsManager;
 

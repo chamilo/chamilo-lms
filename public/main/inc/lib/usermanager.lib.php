@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use ChamiloSession as Session;
 
@@ -1173,7 +1174,7 @@ class UserManager
             INVITEE => 'INVITEE',
         ];
 
-        $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
+        $group = Container::$container->get(GroupRepository::class)->findOneBy(['code' => $statusToGroup[$status]]);
         if ($group) {
             $user->addGroup($group);
         }

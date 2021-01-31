@@ -247,7 +247,7 @@ class Container
      */
     public static function getTranslator()
     {
-        if (isset(self::$translator)) {
+        if (self::$translator) {
             return self::$translator;
         }
 

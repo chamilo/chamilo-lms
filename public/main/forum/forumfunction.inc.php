@@ -17,7 +17,7 @@ use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/*
+/**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
  * are added:
@@ -35,62 +35,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @todo convert into a class
  */
-define('FORUM_NEW_POST', 0);
-getNotificationsPerUser();
-
-$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
-$htmlHeadXtra[] = '<script>
-
-function check_unzip() {
-    if (document.upload.unzip.checked){
-        document.upload.if_exists[0].disabled=true;
-        document.upload.if_exists[1].checked=true;
-        document.upload.if_exists[2].disabled=true;
-    } else {
-        document.upload.if_exists[0].checked=true;
-        document.upload.if_exists[0].disabled=false;
-        document.upload.if_exists[2].disabled=false;
-    }
-}
-function setFocus() {
-    $("#title_file").focus();
-}
-</script>';
-// The next javascript script is to manage ajax upload file
-$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
-
-// Recover Thread ID, will be used to generate delete attachment URL to do ajax
-$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
-$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
-
-$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
-// The next javascript script is to delete file by ajax
-$htmlHeadXtra[] = '<script>
-$(function () {
-    $(document).on("click", ".deleteLink", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var l = $(this);
-        var id = l.closest("tr").attr("id");
-        var filename = l.closest("tr").find(".attachFilename").html();
-        if (confirm("'.get_lang('Are you sure to delete').'", filename)) {
-            $.ajax({
-                type: "POST",
-                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
-                dataType: "json",
-                success: function(data) {
-                    if (data.error == false) {
-                        l.closest("tr").remove();
-                        if ($(".files td").length < 1) {
-                            $(".files").closest(".control-group").hide();
-                        }
-                    }
-                }
-            })
-        }
-    });
-});
-</script>';
+/*define('FORUM_NEW_POST', 0);
+getNotificationsPerUser();*/
 
 function handleForum($url)
 {
@@ -2855,7 +2801,7 @@ function show_add_post_form(CForumForum $forum, CForumThread $thread, CForumPost
 
         // Delete from $_SESSION forum attachment from other posts
         // and keep only attachments for new post
-        clearAttachedFiles(FORUM_NEW_POST);
+        //clearAttachedFiles(FORUM_NEW_POST);
         // Get forum attachment ajax table to add it to form
         $attachmentAjaxTable = getAttachmentsAjaxTable(0, $forum->getIid());
         $ajaxHtml = $attachmentAjaxTable;
@@ -3100,7 +3046,7 @@ function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
 
         // Delete from $_SESSION forum attachment from other posts
         // and keep only attachments for new post
-        clearAttachedFiles(FORUM_NEW_POST);
+        //clearAttachedFiles(FORUM_NEW_POST);
         // Get forum attachment ajax table to add it to form
         $attachmentAjaxTable = getAttachmentsAjaxTable(0, $forum->getIid());
         $ajaxHtml = $attachmentAjaxTable;

@@ -105,18 +105,6 @@ class TicketCategory
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()

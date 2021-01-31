@@ -2056,8 +2056,7 @@ class CourseRestorer
                         ->setPonderation($answer['ponderation'])
                         ->setPosition($answer['position'])
                         ->setHotspotCoordinates($answer['hotspot_coordinates'])
-                        ->setHotspotType($answer['hotspot_type'])
-                        ->setIdAuto(0);
+                        ->setHotspotType($answer['hotspot_type']);
 
                     $em->persist($quizAnswer);
                     $em->flush();
@@ -2065,12 +2064,6 @@ class CourseRestorer
                     $answerId = $quizAnswer->getIid();
 
                     if ($answerId) {
-                        $quizAnswer
-                            ->setId($answerId)
-                            ->setIdAuto($answerId);
-                        $em->merge($quizAnswer);
-                        $em->flush();
-
                         $correctAnswers[$answerId] = $answer['correct'];
                         $onlyAnswers[$answerId] = $answer['answer'];
                     }

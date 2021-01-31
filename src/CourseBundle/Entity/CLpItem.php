@@ -191,6 +191,7 @@ class CLpItem
 
     public function __construct()
     {
+        $this->description = '';
         $this->maxScore = 100.0;
     }
 

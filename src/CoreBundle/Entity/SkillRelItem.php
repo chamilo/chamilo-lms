@@ -127,18 +127,6 @@ class SkillRelItem
     }
 
     /**
-     * @param int $id
-     *
-     * @return SkillRelItem
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return Skill
      */
     public function getSkill()

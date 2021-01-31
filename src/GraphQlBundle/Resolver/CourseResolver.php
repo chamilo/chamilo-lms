@@ -416,7 +416,6 @@ class CourseResolver implements ContainerAwareInterface
 
         $none = new CLpCategory();
         $none
-            ->setId(0)
             ->setCId($course->getId())
             ->setName($this->translator->trans('Without category.'))
             ->setPosition(0);

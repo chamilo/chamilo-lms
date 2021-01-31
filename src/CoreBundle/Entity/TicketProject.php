@@ -96,18 +96,6 @@ class TicketProject
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketProject
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()

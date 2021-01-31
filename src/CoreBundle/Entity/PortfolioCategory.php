@@ -96,18 +96,6 @@ class PortfolioCategory
     }
 
     /**
-     * @param int $id
-     *
-     * @return PortfolioCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Get title.
      *
      * @return string

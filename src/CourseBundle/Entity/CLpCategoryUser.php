@@ -58,18 +58,6 @@ class CLpCategoryUser
     }
 
     /**
-     * @param int $id
-     *
-     * @return CLpCategoryUser
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return CLpCategory
      */
     public function getCategory()

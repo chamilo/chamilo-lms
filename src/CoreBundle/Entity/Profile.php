@@ -58,18 +58,6 @@ class Profile
     }
 
     /**
-     * @param int $id
-     *
-     * @return Profile
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()

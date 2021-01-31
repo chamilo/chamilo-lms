@@ -10,8 +10,7 @@
         <directory name="src"/>
 
         <file name="public/legacy.php"/>
-        <file name="public/main/inc/lib/api.lib.php"/>
-
+        <file name="public/main/work/work.lib.php"/>
         <directory name="public/main/admin" />
         <directory name="public/main/announcements"/>
         <directory name="public/main/attendance"/>

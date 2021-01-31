@@ -1,7 +1,8 @@
 dist: bionic
 language: php
 php:
-  7.4
+  - 7.4
+  - 8.0
 
 addons:
   apt:
@@ -57,7 +58,7 @@ before_install:
   - java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
 
   # Use default config
-  #- sudo apt-get update
+  - sudo apt-get update
   #- sudo apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
   - sudo a2enmod rewrite actions alias setenvif
 

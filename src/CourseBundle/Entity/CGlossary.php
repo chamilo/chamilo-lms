@@ -46,11 +46,9 @@ class CGlossary extends AbstractResource implements ResourceInterface
     protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @var int
@@ -86,7 +84,7 @@ class CGlossary extends AbstractResource implements ResourceInterface
      */
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     /**

@@ -47,11 +47,10 @@ class CBlog extends AbstractResource implements ResourceInterface
     protected $blogId;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="blog_name", type="string", length=250, nullable=false)
      */
-    protected $blogName;
+    protected string $blogName;
 
     /**
      * @var string

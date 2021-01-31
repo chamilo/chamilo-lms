@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Illustration.
@@ -34,6 +35,7 @@ class Illustration extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
+     * @Assert\NotBlank()
      * @Groups({"illustration:read"})
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */

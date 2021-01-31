@@ -45,11 +45,9 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @Gedmo\SortablePosition

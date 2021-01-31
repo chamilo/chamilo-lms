@@ -56,7 +56,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    protected string $subtitle;
+    protected ?string $subtitle;
 
     /**
      * @var string
@@ -150,11 +150,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected $reminderMail;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mail_subject", type="string", length=255, nullable=false)
      */
-    protected $mailSubject;
+    protected string $mailSubject;
 
     /**
      * @var string
@@ -308,12 +306,8 @@ class CSurvey extends AbstractResource implements ResourceInterface
 
     /**
      * Set subtitle.
-     *
-     * @param string $subtitle
-     *
-     * @return CSurvey
      */
-    public function setSubtitle($subtitle)
+    public function setSubtitle(string $subtitle): self
     {
         $this->subtitle = $subtitle;
 
@@ -322,10 +316,8 @@ class CSurvey extends AbstractResource implements ResourceInterface
 
     /**
      * Get subtitle.
-     *
-     * @return string
      */
-    public function getSubtitle()
+    public function getSubtitle(): ?string
     {
         return $this->subtitle;
     }
@@ -334,10 +326,8 @@ class CSurvey extends AbstractResource implements ResourceInterface
      * Set author.
      *
      * @param string $author
-     *
-     * @return CSurvey
      */
-    public function setAuthor($author)
+    public function setAuthor($author): self
     {
         $this->author = $author;
 

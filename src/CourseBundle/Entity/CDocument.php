@@ -143,11 +143,10 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected string $title;
 
     /**
-     * @var string
      * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected string $comment;
+    protected ?string $comment;
 
     /**
      * @Groups({"document:read", "document:write"})
@@ -230,7 +229,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**

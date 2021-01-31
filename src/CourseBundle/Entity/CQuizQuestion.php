@@ -49,11 +49,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected string $question;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var float

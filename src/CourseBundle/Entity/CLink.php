@@ -41,7 +41,7 @@ class CLink extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @var CLinkCategory|null
@@ -119,11 +119,9 @@ class CLink extends AbstractResource implements ResourceInterface
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return CLink
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -132,10 +130,8 @@ class CLink extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

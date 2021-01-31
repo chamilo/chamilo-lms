@@ -41,20 +41,16 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content;
 
     /**
      * @var int
@@ -132,10 +128,8 @@ class CThematic extends AbstractResource implements ResourceInterface
 
     /**
      * Set content.
-     *
-     * @param string $content
      */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -144,10 +138,8 @@ class CThematic extends AbstractResource implements ResourceInterface
 
     /**
      * Get content.
-     *
-     * @return string
      */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }

@@ -37,7 +37,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected string $content;
+    protected ?string $content;
 
     /**
      * @var \DateTime
@@ -109,9 +109,9 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     /**
      * Get title.
      */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
@@ -126,10 +126,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
 
     /**
      * Get content.
-     *
-     * @return string
      */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }

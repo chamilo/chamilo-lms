@@ -50,7 +50,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="forum_comment", type="text", nullable=true)
      */
-    protected string $forumComment;
+    protected ?string $forumComment;
 
     /**
      * @var int

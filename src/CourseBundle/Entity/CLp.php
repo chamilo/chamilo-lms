@@ -65,7 +65,7 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @var string
@@ -397,12 +397,8 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CLp
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -411,10 +407,8 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

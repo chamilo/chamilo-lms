@@ -27,6 +27,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CQuiz extends AbstractResource implements ResourceInterface
 {
+    public const ALL_ON_ONE_PAGE = 1;
+    public const ONE_PER_PAGE = 2;
+
     use ShowCourseResourcesInSessionTrait;
 
     /**
@@ -46,18 +49,15 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var string
@@ -67,11 +67,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $sound;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    protected $type;
+    protected int $type;
 
     /**
      * @var int
@@ -221,12 +219,10 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $hideQuestionTitle;
 
     /**
-     * @var CExerciseCategory
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="exercise_category_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $exerciseCategory;
+    protected ?CExerciseCategory $exerciseCategory;
 
     /**
      * @var bool
@@ -259,17 +255,14 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @var CQuizRelQuestion[]|ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
+     * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
      */
     protected $questions;
 
-    /**
-     * CQuiz constructor.
-     */
     public function __construct()
     {
         $this->hideQuestionTitle = false;
-        $this->type = ONE_PER_PAGE;
+        $this->type = self::ONE_PER_PAGE;
         $this->showPreviousButton = true;
         $this->notifications = '';
         $this->autoLaunch = 0;
@@ -318,22 +311,16 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Get title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CQuiz
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

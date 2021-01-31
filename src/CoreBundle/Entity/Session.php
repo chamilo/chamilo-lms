@@ -150,7 +150,7 @@ class Session
      *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @var bool
@@ -625,7 +625,7 @@ class Session
     /**
      * Get description.
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

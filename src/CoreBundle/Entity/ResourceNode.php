@@ -89,14 +89,14 @@ class ResourceNode
     protected $resourceLinks;
 
     /**
-     * ResourceFile available file for this node
+     * ResourceFile available file for this node.
      *
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ResourceFile $resourceFile;
+    protected ?ResourceFile $resourceFile = null;
 
     /**
      * @var User the creator of this node

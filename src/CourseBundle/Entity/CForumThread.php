@@ -49,12 +49,10 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected string $threadTitle;
 
     /**
-     * @var CForumForum|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="threads")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $forum;
+    protected ?CForumForum $forum = null;
 
     /**
      * @var int
@@ -64,8 +62,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $threadReplies;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="thread_poster_id", referencedColumnName="id")
      */

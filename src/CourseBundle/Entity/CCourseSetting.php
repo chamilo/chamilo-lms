@@ -44,62 +44,44 @@ class CCourseSetting
     protected string $variable;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subkey", type="string", length=255, nullable=true)
      */
-    protected $subkey;
+    protected ?string $subkey;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    protected $type;
+    protected ?string $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
-    protected $category;
+    protected ? string $category;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="value", type="text", nullable=true)
      */
-    protected $value;
+    protected ?string $value;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected ?string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
-    protected $subkeytext;
+    protected ?string $subkeytext;
 
     /**
      * Set variable.
-     *
-     * @param string $variable
-     *
-     * @return CCourseSetting
      */
-    public function setVariable($variable)
+    public function setVariable(string $variable): self
     {
         $this->variable = $variable;
 

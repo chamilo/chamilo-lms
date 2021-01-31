@@ -255,8 +255,6 @@ class TrackEExercises
 
     /**
      * Get exeExoId.
-     *
-     * @return int
      */
     public function getExeExoId(): int
     {

@@ -33,18 +33,14 @@ class GradebookEvaluation
     protected $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var User

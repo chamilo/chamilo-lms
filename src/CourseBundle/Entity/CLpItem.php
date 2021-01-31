@@ -39,30 +39,24 @@ class CLpItem
     protected $cId;
 
     /**
-     * @var CLp
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items")
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
-    protected $lp;
+    protected CLp $lp;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="string", length=511, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="item_type", type="string", length=32, nullable=false)
      */
-    protected $itemType;
+    protected string $itemType;
 
     /**
      * @var string
@@ -72,11 +66,9 @@ class CLpItem
     protected $ref;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="string", length=511, nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var string
@@ -197,9 +189,6 @@ class CLpItem
      */
     protected $prerequisiteMaxScore;
 
-    /**
-     * CLpItem constructor.
-     */
     public function __construct()
     {
         $this->maxScore = 100.0;

@@ -67,12 +67,12 @@ class ExtraField // extends BaseAttribute
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
      */
-    protected string $displayText;
+    protected ?string $displayText;
 
     /**
      * @var string
@@ -359,7 +359,7 @@ class ExtraField // extends BaseAttribute
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

@@ -26,11 +26,9 @@ class Tool
     protected $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", mappedBy="tool", cascade={"persist", "remove"})

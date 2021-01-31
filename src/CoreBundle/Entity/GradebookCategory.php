@@ -39,7 +39,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @var User
@@ -210,12 +210,8 @@ class GradebookCategory
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return GradebookCategory
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -224,22 +220,16 @@ class GradebookCategory
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
      * Set course.
-     *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     *
-     * @return \Chamilo\CoreBundle\Entity\GradebookCategory
      */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -249,7 +239,7 @@ class GradebookCategory
     /**
      * Get course.
      *
-     * @return \Chamilo\CoreBundle\Entity\Course
+     * @return Course
      */
     public function getCourse()
     {

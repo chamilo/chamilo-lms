@@ -42,11 +42,9 @@ class PersonalAgenda
     protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="text", type="text", nullable=true)
      */
-    protected $text;
+    protected ?string $text;
 
     /**
      * @var \DateTime

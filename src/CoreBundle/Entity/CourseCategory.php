@@ -54,20 +54,18 @@ class CourseCategory
     protected $children;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
-    protected $code;
+    protected string $code;
 
     /**
      * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")

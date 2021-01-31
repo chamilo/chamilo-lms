@@ -48,18 +48,14 @@ class SettingsCurrent
     protected string $variable;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subkey", type="string", length=190, nullable=true)
      */
-    protected $subkey;
+    protected ?string $subkey;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    protected $type;
+    protected ?string $type;
 
     /**
      * @var string

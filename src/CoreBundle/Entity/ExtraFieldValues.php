@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class ExtraFieldValues.
@@ -35,10 +36,9 @@ class ExtraFieldValues // extends BaseAttributeValue
     protected $id;
 
     /**
-     * @var string
      * @ORM\Column(name="value", type="text", nullable=true, unique=false)
      */
-    protected string $value;
+    protected ?string $value;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
@@ -47,15 +47,15 @@ class ExtraFieldValues // extends BaseAttributeValue
     protected ExtraField $field;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      * @ORM\Column(name="item_id", type="integer", nullable=false, unique=false)
      */
-    protected $itemId;
+    protected int $itemId;
 
     /**
      * @ORM\Column(name="comment", type="text", nullable=true, unique=false)
      */
-    protected string $comment;
+    protected ?string $comment;
 
     public function __construct()
     {
@@ -116,10 +116,8 @@ class ExtraFieldValues // extends BaseAttributeValue
 
     /**
      * Get comment.
-     *
-     * @return string
      */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }

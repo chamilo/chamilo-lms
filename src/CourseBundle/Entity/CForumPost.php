@@ -55,15 +55,13 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="post_text", type="text", nullable=true)
      */
-    protected string $postText;
+    protected ?string $postText;
 
     /**
-     * @var CForumThread|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected CForumThread $thread;
+    protected ?CForumThread $thread = null;
 
     /**
      * @var CForumForum|null
@@ -158,12 +156,8 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     /**
      * Set postText.
-     *
-     * @param string $postText
-     *
-     * @return CForumPost
      */
-    public function setPostText($postText)
+    public function setPostText(string $postText): self
     {
         $this->postText = $postText;
 
@@ -172,20 +166,16 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     /**
      * Get postText.
-     *
-     * @return string
      */
-    public function getPostText()
+    public function getPostText(): ?string
     {
         return $this->postText;
     }
 
     /**
      * Set thread.
-     *
-     * @return CForumPost
      */
-    public function setThread(CForumThread $thread = null)
+    public function setThread(CForumThread $thread = null): self
     {
         $this->thread = $thread;
 

@@ -112,21 +112,17 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected $root;
 
     /**
-     * @var string
      * @Assert\NotBlank()
-     *
      * @Groups({"access_url:read", "access_url:write"})
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=false)
      */
-    protected $url;
+    protected string $url;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", unique=false)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var int

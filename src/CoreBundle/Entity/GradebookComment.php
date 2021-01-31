@@ -44,7 +44,7 @@ class GradebookComment
     /**
      * @ORM\Column(name="comment", type="text")
      */
-    protected string $comment;
+    protected ?string $comment;
 
     public function __construct()
     {

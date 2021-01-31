@@ -63,11 +63,9 @@ class CGroup extends AbstractResource implements ResourceInterface
     protected $category;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var int
@@ -206,7 +204,7 @@ class CGroup extends AbstractResource implements ResourceInterface
      */
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     /**
@@ -233,10 +231,8 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -245,10 +241,8 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

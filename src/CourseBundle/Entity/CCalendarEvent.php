@@ -33,18 +33,15 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content;
 
     /**
      * @var \DateTime
@@ -131,10 +128,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
 
     /**
      * Set title.
-     *
-     * @param string $title
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -153,10 +148,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
 
     /**
      * Set content.
-     *
-     * @param string $content
      */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -165,10 +158,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
 
     /**
      * Get content.
-     *
-     * @return string
      */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -385,9 +376,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

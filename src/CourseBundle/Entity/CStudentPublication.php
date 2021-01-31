@@ -58,7 +58,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @var string
@@ -260,12 +260,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CStudentPublication
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -274,10 +270,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

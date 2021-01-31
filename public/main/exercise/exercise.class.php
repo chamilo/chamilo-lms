@@ -3630,7 +3630,7 @@ class Exercise
         if (ORAL_EXPRESSION == $answerType) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
-
+            /** @var OralExpression $objQuestionTmp */
             $objQuestionTmp->initFile(
                 api_get_session_id(),
                 isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
@@ -5058,13 +5058,13 @@ class Exercise
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif (HOT_SPOT_ORDER == $answerType) {
-                            ExerciseShowFunctions::display_hotspot_order_answer(
+                            /*ExerciseShowFunctions::display_hotspot_order_answer(
                                 $feedback_type,
                                 $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment
-                            );
+                            );*/
                         } elseif (HOT_SPOT_DELINEATION == $answerType) {
                             $user_answer = $_SESSION['exerciseResultCoordinates'][$questionId];
 
@@ -5422,6 +5422,7 @@ class Exercise
 
                             break;
                         case ORAL_EXPRESSION:
+                            /** @var OralExpression $objQuestionTmp */
                             echo '<tr>
                                 <td valign="top">'.
                                 ExerciseShowFunctions::display_oral_expression_answer(
@@ -5588,13 +5589,13 @@ class Exercise
 
                             break;
                         case HOT_SPOT_ORDER:
-                            ExerciseShowFunctions::display_hotspot_order_answer(
+                            /*ExerciseShowFunctions::display_hotspot_order_answer(
                                 $feedback_type,
                                 $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment
-                            );
+                            );*/
 
                             break;
                         case DRAGGABLE:
@@ -5755,8 +5756,7 @@ class Exercise
                         echo $message;
 
                         $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][0] = $message;
-                        $_SESSION['hotspot_delineation_result'][$this->selgetIdectId(
-                        )][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
+                        $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
                     } else {
                         echo $hotspot_delineation_result[0];
                     }
@@ -9504,7 +9504,7 @@ class Exercise
                         $currentRow['id'] = $exercise->id;
                         $currentRow['url'] = $webPath.'exercise/overview.php?'
                             .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
-                            ."$mylpid$mylpitemid&exerciseId={$row['id']}";
+                            ."$mylpid$mylpitemid&exerciseId={$exercise->id}";
                         $currentRow['name'] = $currentRow[0];
                     }
                 }

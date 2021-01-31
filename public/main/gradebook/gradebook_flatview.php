@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
+require_once __DIR__.'/lib/fe/exportgradebook.php';
 
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -51,7 +51,7 @@ if ($showlink) {
     $alllinks = $cat[0]->get_links($userId, true);
 }
 
-global $file_type;
+/*global $file_type;
 if (isset($export_flatview_form) && 'pdf' === !$file_type) {
     Display::addFlash(
         Display::return_message(
@@ -60,7 +60,7 @@ if (isset($export_flatview_form) && 'pdf' === !$file_type) {
             false
         )
     );
-}
+}*/
 $category_id = 0;
 if (isset($_GET['selectcat'])) {
     $category_id = (int) $_GET['selectcat'];

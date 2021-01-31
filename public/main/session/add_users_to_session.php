@@ -65,8 +65,7 @@ if (is_array($extra_field_list)) {
 
 function search_users($needle, $type)
 {
-    global $id_session;
-
+    $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
@@ -101,7 +100,6 @@ function search_users($needle, $type)
         // Only for single & multiple
         if (in_array($type, ['single', 'multiple'])) {
             if (!empty($id_session)) {
-                $id_session = (int) $id_session;
                 // check id_user from session_rel_user table
                 $sql = "
                     SELECT user_id FROM $tbl_session_rel_user

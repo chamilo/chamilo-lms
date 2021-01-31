@@ -7182,6 +7182,7 @@ class learnpath
         $item_type = 'dir';
 
         $lpItem = new CLpItem();
+        $lpItem->setTitle('dir');
         $lpItem->setItemType('dir');
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;

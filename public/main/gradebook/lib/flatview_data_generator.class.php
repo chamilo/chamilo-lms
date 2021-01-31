@@ -344,7 +344,7 @@ class FlatViewDataGenerator
             $mainCategoryId = $mainCourseCategory->get_id();
         }
 
-        if (isset($this->category) && !empty($this->category)) {
+        if (!empty($this->category)) {
             $categories = Category::load(
                 null,
                 null,

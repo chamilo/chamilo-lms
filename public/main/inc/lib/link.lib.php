@@ -628,7 +628,7 @@ class Link extends Model
                     SE_COURSE_ID => $course_id,
                     SE_TOOL_ID => TOOL_LINK,
                     SE_DATA => [
-                        'link_id' => (int) $id,
+                        'link_id' => $id,
                     ],
                     SE_USER => (int) api_get_user_id(),
                 ];

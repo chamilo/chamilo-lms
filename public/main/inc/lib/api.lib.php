@@ -1889,7 +1889,7 @@ function api_get_user_info_from_entity(
         $result['user_is_online'] = true == $result['user_is_online'] ? 1 : 0;
     }
     if (isset($result['user_is_online_in_chat'])) {
-        $result['user_is_online_in_chat'] = (int) $result['user_is_online_in_chat'];
+        $result['user_is_online_in_chat'] = $result['user_is_online_in_chat'];
     }
 
     $result['password'] = '';

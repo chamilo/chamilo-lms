@@ -17,4 +17,3 @@ require_once __DIR__.'/main/inc/lib/fileDisplay.lib.php';
 require_once __DIR__.'/main/inc/lib/specific_fields_manager.lib.php';
 require_once __DIR__.'/main/forum/forumfunction.inc.php';
 require_once __DIR__.'/main/work/work.lib.php';
-

@@ -393,7 +393,7 @@ class Evaluation implements GradebookItem
             $sql .= 'null';
         }
         $sql .= ', category_id = ';
-        if (isset($this->category)) {
+        if (!empty($this->category)) {
             $sql .= intval($this->get_category_id());
         } else {
             $sql .= 'null';

@@ -153,7 +153,7 @@ class CatForm extends FormValidator
         $category_name = $this->category_object->get_name();
 
         // The main course category:
-        if (isset($this->category_object) && 0 == $this->category_object->get_parent_id()) {
+        if (!empty($this->category_object) && 0 == $this->category_object->get_parent_id()) {
             if (empty($category_name)) {
                 $category_name = $course_code;
             }
@@ -219,9 +219,7 @@ class CatForm extends FormValidator
         );
         $this->addRule('name', get_lang('Required field'), 'required');
 
-        if (isset($this->category_object) &&
-            0 == $this->category_object->get_parent_id()
-        ) {
+        if (!empty($this->category_object) && 0 == $this->category_object->get_parent_id()) {
             // we can't change the root category
             $this->freeze('name');
         }

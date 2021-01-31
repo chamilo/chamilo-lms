@@ -2428,13 +2428,13 @@ class SessionManager
                 }
             }
 
-            if (!empty($forums)) {
+            /*if (!empty($forums)) {
                 $userInfo = api_get_user_info($enreg_user);
                 foreach ($forums as $forum) {
                     $forumId = $forum['iid'];
                     //set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }
-            }
+            }*/
 
             // Checking if user exists in session - user table.
             $sql = "SELECT count(user_id) as count

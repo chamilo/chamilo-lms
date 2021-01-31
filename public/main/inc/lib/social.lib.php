@@ -2934,6 +2934,7 @@ class SocialManager extends UserManager
      */
     public static function getThreadList($userId)
     {
+        return [];
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
 
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
@@ -2941,16 +2942,15 @@ class SocialManager extends UserManager
         $threads = [];
         if (!empty($forumCourseId)) {
             $courseInfo = api_get_course_info_by_id($forumCourseId);
-            getNotificationsPerUser($userId, true, $forumCourseId);
+            /*getNotificationsPerUser($userId, true, $forumCourseId);
             $notification = Session::read('forum_notification');
-            Session::erase('forum_notification');
+            Session::erase('forum_notification');*/
 
             $threadUrlBase = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
                 'cid' => $courseInfo['real_id'],
             ]).'&';
             if (isset($notification['thread']) && !empty($notification['thread'])) {
                 $threadList = array_filter(array_unique($notification['thread']));
-                $em = Database::getManager();
                 $repo = Container::getForumThreadRepository();
                 foreach ($threadList as $threadId) {
                     /** @var CForumThread $thread */

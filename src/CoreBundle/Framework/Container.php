@@ -151,7 +151,7 @@ class Container
      */
     public static function getProjectDir()
     {
-        if (isset(self::$container)) {
+        if (self::$container) {
             return self::$container->get('kernel')->getProjectDir().'/';
         }
 

@@ -594,7 +594,7 @@ class Career extends Model
                                     '',
                                     $value
                                 );
-                                $simpleSecondConnection = 'g'.(int) $groupValueId;
+                                $simpleSecondConnection = 'g'.$groupValueId;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0]) && isset($explode[1])) {

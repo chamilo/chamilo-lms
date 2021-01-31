@@ -289,7 +289,7 @@ class CourseManager
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
             $sql .= 'ASC';
         } else {
-            $sql .= ('ASC' == $orderdirection ? 'ASC' : 'DESC');
+            $sql .= ('ASC' === $orderdirection ? 'ASC' : 'DESC');
         }
 
         if (!empty($howmany) && is_int($howmany) and $howmany > 0) {
@@ -299,7 +299,7 @@ class CourseManager
         }
         if (!empty($from)) {
             $from = (int) $from;
-            $sql .= ' OFFSET '.(int) $from;
+            $sql .= ' OFFSET '.$from;
         } else {
             $sql .= ' OFFSET 0';
         }
@@ -476,7 +476,6 @@ class CourseManager
 
         // Erase user student publications (works) in the course - by André Boivin
         if (!empty($userList)) {
-            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
             foreach ($userList as $userId) {
                 // Getting all work from user
                 $workList = getWorkPerUser($userId);
@@ -891,7 +890,7 @@ class CourseManager
                 'status' => $status,
                 'sort' => $maxSort + 1,
                 'relation_type' => 0,
-                'user_course_cat' => (int) $userCourseCategoryId,
+                'user_course_cat' => $userCourseCategoryId,
             ];
             $insertId = Database::insert($courseUserTable, $params);
 
@@ -924,11 +923,9 @@ class CourseManager
 
                 $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
                 if (1 === $subscribe) {
-                    require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
                     $forums = get_forums(0, $courseCode, true, $sessionId);
                     foreach ($forums as $forum) {
-                        $forumId = $forum['iid'];
-                        set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                        set_notification('forum', $forum->getIid(), false, $userInfo, $courseInfo);
                     }
                 }
 
@@ -2926,8 +2923,9 @@ class CourseManager
 
         // Restriction by user id
         $currentUserRestriction = '';
+
+        $byUserId = (int) $byUserId;
         if ($byUserId > 0) {
-            $byUserId = (int) $byUserId;
             $currentUserRestriction = " AND tcruc.user_id = $byUserId ";
         }
 

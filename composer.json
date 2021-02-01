@@ -6,7 +6,6 @@
     "license": "GPL-3.0-or-later",
     "support": {
         "forum": "https://chamilo.org/forum",
-        "irc": "irc://irc.freenode.org/chamilo",
         "source": "https://github.com/chamilo/chamilo-lms",
         "docs": "https://github.com/chamilo/docs",
         "issues": "https://github.com/chamilo/chamilo-lms/issues"
@@ -35,7 +34,6 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "ext-apcu": "*",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
@@ -121,6 +119,12 @@
         "symfony/mime": "^5.0",
         "symfony/monolog-bundle": "^3.1",
         "symfony/notifier": "^5.0",
+        "symfony/polyfill-apcu": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-intl-icu": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php80": "*",
         "symfony/requirements-checker": "^1.1",
         "symfony/security-acl": "^3.0",
         "symfony/security-bundle": "^5.0",
@@ -164,15 +168,6 @@
         "symplify/easy-coding-standard": "^9.0",
         "vimeo/psalm": "^4.0",
         "weirdan/doctrine-psalm-plugin": "^1.0"
-    },
-    "replace": {
-        "symfony/polyfill-apcu": "*",
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-mbstring": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*"
     },
     "scripts": {
         "analyse": [

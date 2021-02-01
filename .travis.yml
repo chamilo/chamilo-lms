@@ -9,6 +9,7 @@ addons:
     packages:
       - apache2
       - php
+      - php-apcu
       - php-mysql
       - php-xml
       - php-gd

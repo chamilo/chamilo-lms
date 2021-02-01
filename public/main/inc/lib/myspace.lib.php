@@ -100,6 +100,7 @@ class MySpace
                     'content' => get_lang('LearningPathItemByAuthor'),
                 ];
         }
+
         return Display::actions($actions, null);
     }
 
@@ -908,7 +909,7 @@ class MySpace
                 'value' => $endDate,
             ]);
         $form->addButtonSearch(get_lang('Search'));
-        if (count($companys) != 0) {
+        if (0 != count($companys)) {
             //$form->addButtonSave(get_lang('Ok'), 'export');
             $form
                 ->addButton(
@@ -1009,7 +1010,7 @@ class MySpace
                 }
             }
         }
-        if ($csv == false) {
+        if (false == $csv) {
             $table = "<div class='table-responsive'>".
                 "<table class='table table-hover table-striped table-bordered data_table'>".
                 "<thead>".
@@ -1100,7 +1101,7 @@ class MySpace
                     'value' => $endDate,
                 ]);
             $form->addButtonSearch(get_lang('Search'));
-            if (count($data) != 0) {
+            if (0 != count($data)) {
                 //$form->addButtonSave(get_lang('Ok'), 'export');
                 $form
                     ->addButton(
@@ -1182,7 +1183,7 @@ class MySpace
         while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
             $cLpItems[] = (int) $row['lp_item_id'];
         }
-        if (count($cLpItems) == 0) {
+        if (0 == count($cLpItems)) {
             $tableContent = "<div class='table-responsive'>".
                 "<table class='table table-hover table-striped table-bordered data_table'>".
                 "<thead>".
@@ -1253,7 +1254,7 @@ class MySpace
                 $cLpItemData = isset($cLpItemsData[$cLpItem]) ? $cLpItemsData[$cLpItem] : [];
                 $authorData = $row['users_id'];
                 if (!empty($authorData)) {
-                    if (strpos($authorData, ";") === false) {
+                    if (false === strpos($authorData, ";")) {
                         $printData[(int) $authorData][$cLpItem] = $cLpItemData;
                     } else {
                         foreach (explode(';', $authorData) as $item) {
@@ -1264,7 +1265,7 @@ class MySpace
             }
             $index = 0;
         }
-        if ($csv == false) {
+        if (false == $csv) {
             if (empty($tableHtml)) {
                 $table .= "<div class='table-responsive'>".
                     "<table class='table table-hover table-striped table-bordered data_table'>".
@@ -1317,7 +1318,7 @@ class MySpace
                         $table .= "<td>$facturar</td>";
                         $total += $facturar;
                         $totalSudent += $studenRegister;
-                        if ($studenRegister != 0) {
+                        if (0 != $studenRegister) {
                             $table .= "<td>".
                                 "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
                                 "<div class='icon_add'>$iconAdd</div>".
@@ -1379,7 +1380,7 @@ class MySpace
                 ]);
             $form->addButtonSearch(get_lang('Search'));
 
-            if (count($printData) != 0) {
+            if (0 != count($printData)) {
                 //$form->addButtonSave(get_lang('Ok'), 'export');
                 $form
                     ->addButton(
@@ -1426,7 +1427,7 @@ class MySpace
                     $facturar = ($studenRegister * $price);
                     $csv_row[] = $facturar;
                     $totalSudent += $studenRegister;
-                    if ($studenRegister != 0) {
+                    if (0 != $studenRegister) {
                         $studentsName = '';
                         for ($i = 0; $i < $studenRegister; $i++) {
                             $tempStudent = api_get_user_info($registeredUsers[$i]['id']);
@@ -3249,7 +3250,6 @@ class MySpace
 
         $table = null;
         if (!empty($dates)) {
-
             $table = new SortableTable(
                 'tracking_access_overview',
                 ['MySpace', 'getNumberOfTrackAccessOverview'],
@@ -3394,7 +3394,6 @@ class MySpace
                 gmdate('H:i:s', strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
             ];
         }
-
 
         return $return;
     }
@@ -3808,7 +3807,7 @@ class MySpace
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date <= '$endDate' ";
         }
-        if ($lpId != 0) {
+        if (0 != $lpId) {
             $whereCondition .= "
             AND c_item_property.ref = $lpId ";
         }
@@ -3867,12 +3866,12 @@ class MySpace
                 // $courseId = (int)$row['c_id'];
                 $studentId = (int) $row['to_user_id'];
                 $company = isset($row['company']) ? $row['company'] : '';
-                if ($company == '') {
+                if ('' == $company) {
                     $company = get_lang('NoEntity');
                 }
                 // $lpId = $row['ref'];
-                if ($lpId != 0 && $studentId != 0) {
-                    if ($whitCompany == true) {
+                if (0 != $lpId && 0 != $studentId) {
+                    if (true == $whitCompany) {
                         $companys[] = [
                             'id' => $studentId,
                             'company' => $company,

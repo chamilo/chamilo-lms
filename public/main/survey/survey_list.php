@@ -159,7 +159,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $result = Database::query($sql);
                 $questionsOptions = [];
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    if ($row['type'] != 'pagebreak') {
+                    if ('pagebreak' != $row['type']) {
                         $questionsOptions[$row['sort']]['question_id'] = $row['question_id'];
                         $questionsOptions[$row['sort']]['survey_id'] = $row['survey_id'];
                         $questionsOptions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -300,7 +300,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     );
 
                                     foreach ($questions as $questionData) {
-                                        if (strpos($questionData['question'], '{{') === false) {
+                                        if (false === strpos($questionData['question'], '{{')) {
                                             if ($questionTitle === $questionData['question']) {
                                                 foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
                                                     if ($questionData['question_id'] == $questionId) {

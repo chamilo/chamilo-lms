@@ -19,12 +19,12 @@ if (isset($params['webcamname']) && isset($params['webcamdir']) && isset($params
     $webcamuserid = $params['webcamuserid'];
 } else {
     api_not_allowed();
-    die();
+    exit();
 }
 
 if ($webcamuserid != api_get_user_id() || 0 == api_get_user_id() || 0 == $webcamuserid) {
     api_not_allowed();
-    die();
+    exit();
 }
 
 //clean
@@ -40,7 +40,7 @@ $ext = explode('.', $webcamname);
 $ext = strtolower($ext[sizeof($ext) - 1]);
 
 if ('jpg' != $ext) {
-    die();
+    exit();
 }
 
 //Do not use here check Fileinfo method because return: text/plain                //CHECK THIS BEFORE COMMIT

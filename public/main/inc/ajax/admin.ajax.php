@@ -43,7 +43,7 @@ switch ($action) {
         $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
         if (empty($blockName)) {
-            die;
+            exit;
         }
 
         /** @var Filesystem $fileSystem */

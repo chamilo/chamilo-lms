@@ -270,7 +270,6 @@ $formUsers->setDefaults($defaults);
 // Building the form for Groups
 $tpl = new Template();
 
-
 if ($formUsers->validate()) {
     $values = $formUsers->getSubmitValues();
 

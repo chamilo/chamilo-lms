@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
+use Chamilo\CoreBundle\Entity\TrackEExercises;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -303,7 +303,7 @@ switch ($action) {
                     round($row['score'] * 100).'%',
                 ];
                 $response->rows[$i]['cell'] = $array;
-                ++$i;
+                $i++;
             }
         }
         echo json_encode($response);
@@ -327,7 +327,7 @@ switch ($action) {
                         'c_id' => $course_id,
                     ]
                 );
-                ++$counter;
+                $counter++;
             }
             echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
@@ -357,7 +357,7 @@ switch ($action) {
                     ]
                 )
                 ;
-                ++$counter;
+                $counter++;
             }
             echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
@@ -619,7 +619,7 @@ switch ($action) {
             }
 
             if ('simple' === $type) {
-            // Getting old attempt in order to decrease the total score.
+                // Getting old attempt in order to decrease the total score.
                 $old_result = $objExercise->manage_answer(
                     $exeId,
                     $my_question_id,
@@ -810,7 +810,7 @@ switch ($action) {
         if ($debug) {
             error_log('Finished questions loop in save_exercise_by_now');
         }
-        if ($type === 'all') {
+        if ('all' === $type) {
             if ($debug) {
                 error_log("result: ok - all");
                 error_log(" ------ end ajax call ------- ");

@@ -150,12 +150,10 @@ class GlossaryManager
 
             return false;
         } else {
-
             // @todo
             $repo = Container::getGlossaryRepository();
             $glossary = new CGlossary();
             throw new Exception('implement resources');
-
             $params = [
                 'glossary_id' => 0,
                 'c_id' => api_get_course_int_id(),
@@ -165,7 +163,6 @@ class GlossaryManager
                 'session_id' => $session_id,
             ];
             $id = Database::insert($table, $params);
-
 
             if ($id) {
                 $sql = "UPDATE $table SET glossary_id = $id WHERE iid = $id";

@@ -141,7 +141,7 @@ function updateUsers(
             //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
             //$sendEmail = false;
             // see BT#17893
-            if ($resetPassword && $sendEmail == false) {
+            if ($resetPassword && false == $sendEmail) {
                 $sendEmail = true;
             }
 
@@ -251,7 +251,7 @@ function parse_xml_data($file)
     foreach ($crawler as $domElement) {
         $row = [];
         foreach ($domElement->childNodes as $node) {
-            if ($node->nodeName != '#text') {
+            if ('#text' != $node->nodeName) {
                 $row[$node->nodeName] = $node->nodeValue;
             }
         }
@@ -301,7 +301,7 @@ if ($form->validate()) {
 
         $uploadInfo = pathinfo($_FILES['import_file']['name']);
 
-        if ($uploadInfo['extension'] !== 'csv') {
+        if ('csv' !== $uploadInfo['extension']) {
             Display::addFlash(
                 Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error')
             );

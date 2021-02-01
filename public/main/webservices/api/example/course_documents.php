@@ -41,7 +41,7 @@ function authenticate()
         ],
     ]);
 
-    if ($response->getStatusCode() !== 200) {
+    if (200 !== $response->getStatusCode()) {
         throw new Exception('Entry denied with code : '.$response->getStatusCode());
     }
 
@@ -83,7 +83,7 @@ function getCourseDocuments($apiKey, $courseId)
         ]
     );
 
-    if ($response->getStatusCode() !== 200) {
+    if (200 !== $response->getStatusCode()) {
         throw new Exception('Entry denied with code : '.$response->getStatusCode());
     }
 

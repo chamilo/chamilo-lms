@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -11,7 +12,6 @@ use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -30,8 +30,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * - sticky messages
  * - new view option: nested view
  * - quoting a message.
- *
- * @package chamilo.forum
  *
  * @todo convert into a class
  */
@@ -5459,9 +5457,8 @@ function get_statistical_information($thread_id, $user_id, $course_id)
 /**
  * This function return the posts inside a thread from a given user.
  *
- * @param \Chamilo\CoreBundle\Entity\Course $course
- * @param int                               $thread_id
- * @param int                               $user_id
+ * @param int $thread_id
+ * @param int $user_id
  *
  * @return array posts inside a thread
  *

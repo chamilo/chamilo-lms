@@ -2075,7 +2075,7 @@ class Category implements GradebookItem
     /**
      * Generates a certificate for this user if everything matches.
      *
-     * @param int  $category_id      gradebook id
+     * @param int  $category_id            gradebook id
      * @param int  $user_id
      * @param bool $sendNotification
      * @param bool $skipGenerationIfExists
@@ -2357,7 +2357,7 @@ class Category implements GradebookItem
      */
     public static function userFinishedCourse(
         $userId,
-        \Category $category,
+        Category $category,
         $recalculateScore = false
     ) {
         if (empty($category)) {

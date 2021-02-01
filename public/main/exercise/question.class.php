@@ -356,6 +356,7 @@ abstract class Question
     {
         $this->mandatory = (int) $value;
     }
+
     /**
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry.
@@ -1112,7 +1113,7 @@ abstract class Question
 
             // Duplicates the picture of the hotspot
             // @todo implement copy of hotspot question
-            if ($this->type == HOT_SPOT) {
+            if (HOT_SPOT == $this->type) {
                 throw new Exception('implement copy of hotspot question');
             }
         }
@@ -1806,13 +1807,13 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if ($exercise->hideComment && $this->type == HOT_SPOT) {
+        if ($exercise->hideComment && HOT_SPOT == $this->type) {
             $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
 
             return $header;
         }
 
-        if (isset($score['pass']) && $score['pass'] === false) {
+        if (isset($score['pass']) && false === $score['pass']) {
             if ($this->showFeedback($exercise)) {
                 $header .= $this->returnFormatFeedback();
             }
@@ -2086,6 +2087,7 @@ abstract class Question
         if (false === $exercise->hideComment) {
             return false;
         }
+
         return
             in_array($this->type, $this->questionTypeWithFeedback) &&
             EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType();

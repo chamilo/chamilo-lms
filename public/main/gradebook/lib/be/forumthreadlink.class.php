@@ -281,6 +281,7 @@ class ForumThreadLink extends AbstractLink
 
         if ($row) {
             $forum_id = $row['forum_id'];
+
             return api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
                 api_get_cidreq_params($this->getCourseId(), $sessionId).
                 '&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;

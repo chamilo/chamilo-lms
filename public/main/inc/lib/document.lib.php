@@ -2914,7 +2914,7 @@ class DocumentManager
             'rootClose' => '</ul>',
             'childOpen' => '<li class="doc_resource lp_resource_element ">',
             'childClose' => '</li>',
-            'nodeDecorator' => function ($node) use ($filterByExtension, $icon, $folderIcon) {
+            'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
                 $link = '<div class="item_data">';
 
                 $file = $node['resourceFile'];

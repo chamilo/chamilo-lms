@@ -224,7 +224,7 @@ class Virtual
             );
         } catch (Exception $e) {
             echo 'Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ';
-            die();
+            exit();
         }
 
         return $connection;

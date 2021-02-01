@@ -1117,7 +1117,7 @@ class ExtraFieldValue extends Model
         foreach ($allFields as $field) {
             $variable = $field['variable'];
             $sourceValues = $extraFieldValue->get_values_by_handler_and_field_variable($sourceId, $variable);
-            if (!empty($sourceValues) && isset($sourceValues['value']) && $sourceValues['value'] != '') {
+            if (!empty($sourceValues) && isset($sourceValues['value']) && '' != $sourceValues['value']) {
                 $params = [
                     'extra_'.$variable => $sourceValues['value'],
                     'item_id' => $destinationId,

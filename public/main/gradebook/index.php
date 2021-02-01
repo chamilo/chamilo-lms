@@ -481,7 +481,7 @@ if (isset($_GET['deletelink'])) {
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     GradebookUtils::block_students();
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
-        die('Error: movecat or moveeval not defined');
+        exit('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId

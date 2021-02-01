@@ -68,7 +68,7 @@ if (false === $allowedToTrackUser && !empty($courseInfo)) {
                 $courseInfo['real_id']
             );
 
-            if ($userCourseStatus == 1) {
+            if (1 == $userCourseStatus) {
                 $allowedToTrackUser = true;
             }
         }
@@ -927,7 +927,7 @@ $userInfoExtra['last_connection_in_course'] = api_format_date(
     Tracking::getLastConnectionInAnyCourse($studentId),
     DATE_FORMAT_SHORT
 );
-if ($details === 'true') {
+if ('true' === $details) {
     $userInfoExtra['time_spent_course'] = $time_spent_on_the_course;
 }
 
@@ -1748,17 +1748,17 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
-/*                if ($hookLpTracking) {
-                    $hookContents = $hookLpTracking->notifyTrackingContent($lp_id, $studentId);
+                /*                if ($hookLpTracking) {
+                                    $hookContents = $hookLpTracking->notifyTrackingContent($lp_id, $studentId);
 
-                    foreach ($hookContents as $hookContent) {
-                        if (isset($hookContent['value'])) {
-                            $contentToExport[] = strip_tags($hookContent['value']);
+                                    foreach ($hookContents as $hookContent) {
+                                        if (isset($hookContent['value'])) {
+                                            $contentToExport[] = strip_tags($hookContent['value']);
 
-                            echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
-                        }
-                    }
-                }*/
+                                            echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
+                                        }
+                                    }
+                                }*/
 
                 $csv_content[] = $contentToExport;
 

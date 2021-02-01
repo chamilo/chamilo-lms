@@ -274,15 +274,14 @@ if (isset($_GET['exportpdf'])) {
 $studentView = api_is_student_view_active();
 
 if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
-
-DisplayGradebook::display_header_reduce_flatview(
+    DisplayGradebook::display_header_reduce_flatview(
     $cat[0],
     $showeval,
     $showlink,
     $simple_search_form
 );
-$flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && ($studentView === 'teacherview')) {
+    $flatViewTable->display();
+} elseif (isset($_GET['selectcat']) && ('teacherview' === $studentView)) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

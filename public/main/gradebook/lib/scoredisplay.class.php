@@ -313,13 +313,13 @@ class ScoreDisplay
     /**
      * Display a score according to the current settings.
      *
-     * @param array $score          data structure, as returned by the calc_score functions
-     * @param int   $type           one of the following constants:
-     *                              SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
-     *                              (ignored for student's view if custom score display is enabled)
-     * @param int   $what           one of the following constants:
-     *                              SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
-     *                              (only taken into account if custom score display is enabled and for course/platform admin)
+     * @param array $score               data structure, as returned by the calc_score functions
+     * @param int   $type                one of the following constants:
+     *                                   SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
+     *                                   (ignored for student's view if custom score display is enabled)
+     * @param int   $what                one of the following constants:
+     *                                   SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
+     *                                   (only taken into account if custom score display is enabled and for course/platform admin)
      * @param bool  $disableColor
      * @param bool  $ignoreDecimals
      * @param bool  $removeEmptyDecimals Replaces 100.00 to 100
@@ -334,7 +334,7 @@ class ScoreDisplay
         $ignoreDecimals = false,
         $removeEmptyDecimals = false
     ) {
-        $my_score = $score == 0 ? [] : $score;
+        $my_score = 0 == $score ? [] : $score;
         switch ($type) {
             case SCORE_BAR:
                 $percentage = $my_score[0] / $my_score[1] * 100;
@@ -361,7 +361,7 @@ class ScoreDisplay
             // if no custom display set, use default display
             $display = $this->displayDefault($my_score, $type, $ignoreDecimals, $removeEmptyDecimals);
         }
-        if ($this->coloring_enabled && $disableColor == false) {
+        if ($this->coloring_enabled && false == $disableColor) {
             $denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
             $scoreCleaned = isset($score[0]) ? $score[0] : 0;
             if (($scoreCleaned / $denom) < ($this->color_split_value / 100)) {
@@ -389,7 +389,7 @@ class ScoreDisplay
             return null;
         }
 
-        $denom = $score[1] == 0 ? 1 : $score[1];
+        $denom = 0 == $score[1] ? 1 : $score[1];
         $scaledscore = $score[0] / $denom;
 
         if ($this->upperlimit_included) {
@@ -401,7 +401,7 @@ class ScoreDisplay
         } else {
             if (!empty($this->custom_display_conv)) {
                 foreach ($this->custom_display_conv as $displayitem) {
-                    if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
+                    if ($scaledscore < $displayitem['score'] || 1 == $displayitem['score']) {
                         return $displayitem['display'];
                     }
                 }
@@ -435,8 +435,8 @@ class ScoreDisplay
 
     /**
      * @param array $score
-     * @param int  $type
-     * @param bool $ignoreDecimals
+     * @param int   $type
+     * @param bool  $ignoreDecimals
      * @param bool  $removeEmptyDecimals
      *
      * @return string
@@ -531,7 +531,7 @@ class ScoreDisplay
         if (empty($score)) {
             return null;
         }
-        $scoreDenom = $score[1] == 0 ? 1 : $score[1];
+        $scoreDenom = 0 == $score[1] ? 1 : $score[1];
 
         return $this->format_score($score[0] / $scoreDenom * 100).' %';
     }
@@ -547,7 +547,7 @@ class ScoreDisplay
      */
     private function display_as_div($score, $ignoreDecimals = false, $removeEmptyDecimals = false)
     {
-        if ($score == 1) {
+        if (1 == $score) {
             return '0 / 0';
         }
 

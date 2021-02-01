@@ -37,6 +37,11 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
     {
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->getTitle();
+    }
+
     /**
      * Set title.
      *
@@ -59,11 +64,6 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
     public function getTitle()
     {
         return $this->title;
-    }
-
-    public function __toString(): string
-    {
-        return (string) $this->getTitle();
     }
 
     public function getId(): int

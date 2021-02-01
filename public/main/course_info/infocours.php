@@ -328,15 +328,15 @@ if ('true' == api_get_setting('documents_default_visibility_defined_in_course'))
     $globalGroup[get_lang('Default visibility of new documents')] = $group;
 }
 
-if (api_get_setting('show_default_folders') == 'true') {
-$group = [
+if ('true' == api_get_setting('show_default_folders')) {
+    $group = [
     $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
 ];
 
-$globalGroup[get_lang('Show system folders.')] = $group;
+    $globalGroup[get_lang('Show system folders.')] = $group;
 
-$myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+    $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 }
 
 $group = [];
@@ -968,12 +968,11 @@ if ($form->validate() && $isEditable) {
             $file->setCrop($updateValues['picture_crop_result_for_resource']);
             $em->persist($file);
             $em->flush();
-             Event::addEvent(
+            Event::addEvent(
                 LOG_COURSE_SETTINGS_CHANGED,
                 'course_picture',
                 $picture['name']
             );
-
         }
     }
 

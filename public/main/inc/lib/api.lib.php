@@ -1109,6 +1109,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     }
 
     api_block_inactive_user();
+
     return true;
 }
 
@@ -1148,13 +1149,13 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 function api_block_inactive_user()
 {
     $data = true;
-    if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
+    if (1 != api_get_configuration_value('security_block_inactive_users_immediately')) {
         return $data;
     }
 
     $userId = api_get_user_id();
     $homeUrl = api_get_path(WEB_PATH);
-    if ($userId == 0) {
+    if (0 == $userId) {
         return $data;
     }
 
@@ -1166,7 +1167,7 @@ function api_block_inactive_user()
         $result_array = Database::fetch_array($result);
         $data = (bool) $result_array['active'];
     }
-    if ($data == false) {
+    if (false == $data) {
         $tpl = new Template(null, true, true, false, true, false, true, 0);
         $tpl->assign('hide_login_link', 1);
 
@@ -3833,7 +3834,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
         // Getting the permissions of the task.
         if (0 != $task_id) {
             $task_permissions = get_permissions('task', $task_id);
-            /* !!! */$_SESSION['total_permissions'][$_course['code']] = $task_permissions;
+            /* !!! */ $_SESSION['total_permissions'][$_course['code']] = $task_permissions;
         }
     }
 
@@ -8608,7 +8609,7 @@ function api_get_language_translate_html()
  */
 function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
 {
-    if (api_get_configuration_value('translate_html') != true) {
+    if (true != api_get_configuration_value('translate_html')) {
         return $htmlString;
     }
     $userInfo = api_get_user_info();

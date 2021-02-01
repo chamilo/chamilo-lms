@@ -38,8 +38,6 @@ $nameTools = get_lang('Forums');
 // Unset the formElements in session before the includes function works
 unset($_SESSION['formelements']);
 
-
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
 

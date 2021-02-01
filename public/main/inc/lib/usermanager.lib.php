@@ -2012,6 +2012,7 @@ class UserManager
      *                            USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool   $addRandomId
      * @param array  $userInfo    to avoid query the DB
+     *
      * @todo use resources to get the user picture
      *
      * @return string
@@ -3057,16 +3058,16 @@ class UserManager
         $sessionData = [];
         // First fill $sessionData with student sessions
         if (!empty($sessionDataStudent)) {
-        foreach ($sessionDataStudent as $row) {
-            $sessionData[$row['id']] = $row;
-        }
+            foreach ($sessionDataStudent as $row) {
+                $sessionData[$row['id']] = $row;
+            }
         }
         // Overwrite session data of the user as a student with session data
         // of the user as a coach.
         // There shouldn't be such duplicate rows, but just in case...
         if (!empty($sessionDataCoach)) {
-        foreach ($sessionDataCoach as $row) {
-            $sessionData[$row['id']] = $row;
+            foreach ($sessionDataCoach as $row) {
+                $sessionData[$row['id']] = $row;
             }
         }
 

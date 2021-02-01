@@ -100,7 +100,7 @@ class CourseDescription
         }
 
         $sql = "SELECT * FROM $table
-		        ORDER BY iid ";
+                ORDER BY iid ";
         $rs = Database::query($sql);
         $data = [];
         while ($description = Database::fetch_array($rs)) {

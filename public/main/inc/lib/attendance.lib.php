@@ -2307,7 +2307,7 @@ class Attendance
 
                                 $attendancesProcess[5] = $attendanceId;
                                 $attendancesProcess['attendanceId'] = $attendanceId;
-                                if ($attendancesProcess['presence'] == 1) {
+                                if (1 == $attendancesProcess['presence']) {
                                     $attendancesProcess['presence'] = $presentString;
                                     $attendancesProcess[0] = 1;
                                 } else {
@@ -2391,7 +2391,7 @@ class Attendance
                             $attendancesProcess[5] = $attendanceId;
                             $attendancesProcess['attendanceId'] = $attendanceId;
                             $attendancesProcess['courseCode'] = $courseItem['official_code'];
-                            if ($attendancesProcess['presence'] == 1) {
+                            if (1 == $attendancesProcess['presence']) {
                                 $attendancesProcess['presence'] = $presentString;
                                 $attendancesProcess[0] = 1;
                             } else {
@@ -2420,7 +2420,7 @@ class Attendance
         }
 
         /* Order desc by date,  by default */
-        if ($orderDesc == true) {
+        if (true == $orderDesc) {
             ksort($data);
         } else {
             krsort($data);

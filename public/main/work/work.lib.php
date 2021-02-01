@@ -3682,11 +3682,11 @@ function deleteCommentFile($id, $courseInfo = [])
 /**
  * Adds a comments to the work document.
  *
- * @param array $courseInfo
- * @param int   $userId
- * @param array $parentWork
- * @param CStudentPublication  $work
- * @param array $data
+ * @param array               $courseInfo
+ * @param int                 $userId
+ * @param array               $parentWork
+ * @param CStudentPublication $work
+ * @param array               $data
  *
  * @return int
  */

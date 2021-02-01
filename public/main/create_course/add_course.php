@@ -443,7 +443,7 @@ if ($form->validate()) {
     if (!$course_validation_feature) {
         $message = Display::return_message(get_lang('Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.'));
         // If the donation feature is enabled, show a message with a donate button
-        if (api_get_configuration_value('course_creation_donate_message_show') == true) {
+        if (true == api_get_configuration_value('course_creation_donate_message_show')) {
             $button = api_get_configuration_value('course_creation_donate_link');
             if (!empty($button)) {
                 $message .= Display::return_message(get_lang('DonateToTheProject').'<br /><br /><div style="display:block; margin-left:42%;">'.$button.'</div>', 'warning', false);

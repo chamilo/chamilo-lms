@@ -11,7 +11,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
 

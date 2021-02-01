@@ -161,12 +161,12 @@ class Exercise
     /**
      * Reads exercise information from the data base.
      *
-     * @param int  $id - exercise Id
+     * @param int  $id                - exercise Id
      * @param bool $parseQuestionList
      *
      * @return bool - true if exercise exists, otherwise false
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function read($id, $parseQuestionList = true)
     {
@@ -297,8 +297,8 @@ class Exercise
      * @param bool $unformattedText Optional. Get the title without HTML tags
      *
      * @return string - exercise title
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function selectTitle($unformattedText = false)
     {
@@ -344,8 +344,8 @@ class Exercise
      * returns the exercise description.
      *
      * @return string - exercise description
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function selectDescription()
     {
@@ -356,8 +356,8 @@ class Exercise
      * returns the exercise sound file.
      *
      * @return string - exercise description
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function selectSound()
     {
@@ -368,8 +368,8 @@ class Exercise
      * returns the exercise type.
      *
      * @return int - exercise type
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function selectType()
     {
@@ -394,8 +394,8 @@ class Exercise
 
     /**
      * @return int : do we display the question category name for students
-     * @author hubert borderiou 30-11-11
      *
+     * @author hubert borderiou 30-11-11
      */
     public function selectDisplayCategoryName()
     {
@@ -416,7 +416,6 @@ class Exercise
      * @param int $value is an integer 0 or 1
      *
      * @author hubert borderiou 30-11-11
-     *
      */
     public function updateDisplayCategoryName($value)
     {
@@ -425,8 +424,8 @@ class Exercise
 
     /**
      * @return string html text : the text to display ay the end of the test
-     * @author hubert borderiou 28-11-11
      *
+     * @author hubert borderiou 28-11-11
      */
     public function getTextWhenFinished()
     {
@@ -447,8 +446,8 @@ class Exercise
      * return 1 or 2 if randomByCat.
      *
      * @return int - quiz random by category
-     * @author hubert borderiou
      *
+     * @author hubert borderiou
      */
     public function getRandomByCategory()
     {
@@ -461,8 +460,8 @@ class Exercise
      * return 2 if random by cat, categories sorted by alphabetic order.
      *
      * @return int - quiz random by category
-     * @author hubert borderiou
      *
+     * @author hubert borderiou
      */
     public function isRandomByCat()
     {
@@ -503,8 +502,8 @@ class Exercise
      * Tells if questions are selected randomly, and if so returns the draws.
      *
      * @return int - results disabled exercise
-     * @author Carlos Vargas
      *
+     * @author Carlos Vargas
      */
     public function selectResultsDisabled()
     {
@@ -515,8 +514,8 @@ class Exercise
      * tells if questions are selected randomly, and if so returns the draws.
      *
      * @return bool
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function isRandom()
     {
@@ -553,8 +552,8 @@ class Exercise
      * returns the exercise status (1 = enabled ; 0 = disabled).
      *
      * @return int - 1 if enabled, otherwise 0
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function selectStatus()
     {
@@ -1058,8 +1057,8 @@ class Exercise
      *                           just a list limited by the max number of random questions
      *
      * @return array - question ID list
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function selectQuestionList($fromDatabase = false, $adminView = false)
     {
@@ -1103,8 +1102,8 @@ class Exercise
      * returns the number of questions in this exercise.
      *
      * @return int - number of questions
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function selectNbrQuestions()
     {
@@ -1135,9 +1134,9 @@ class Exercise
      *
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *               without randomizing, otherwise, returns the list with questions selected randomly
+     *
      * @author Olivier Brouckaert
      * @author Hubert Borderiou 15 nov 2011
-     *
      */
     public function getRandomList($adminView = false)
     {
@@ -1182,8 +1181,8 @@ class Exercise
      * @param int $questionId - question ID
      *
      * @return bool - true if in the list, otherwise false
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function isInList($questionId)
     {
@@ -1242,7 +1241,6 @@ class Exercise
         return Database::num_rows($result) > 0;
     }
 
-
     public function hasQuestionWithTypeNotInList(array $questionTypeList)
     {
         if (empty($questionTypeList)) {
@@ -1273,7 +1271,6 @@ class Exercise
      * @param string $title - exercise title
      *
      * @author Olivier Brouckaert
-     *
      */
     public function updateTitle($title)
     {
@@ -1306,7 +1303,6 @@ class Exercise
      * @param string $description - exercise description
      *
      * @author Olivier Brouckaert
-     *
      */
     public function updateDescription($description)
     {
@@ -1319,7 +1315,6 @@ class Exercise
      * @param int $expired_time The expired time of the quiz
      *
      * @author Isaac flores
-     *
      */
     public function updateExpiredTime($expired_time)
     {
@@ -1448,7 +1443,6 @@ class Exercise
      * @param string $delete - ask to delete the file
      *
      * @author Olivier Brouckaert
-     *
      */
     public function updateSound($sound, $delete)
     {
@@ -1488,7 +1482,6 @@ class Exercise
      * @param int $type - exercise type
      *
      * @author Olivier Brouckaert
-     *
      */
     public function updateType($type)
     {
@@ -1502,7 +1495,6 @@ class Exercise
      * @param int $random - 0 if not random, otherwise the draws
      *
      * @author Olivier Brouckaert
-     *
      */
     public function setRandom($random)
     {
@@ -1516,7 +1508,6 @@ class Exercise
      * @param int $random_answers - random answers
      *
      * @author Juan Carlos Rana
-     *
      */
     public function updateRandomAnswers($random_answers)
     {
@@ -1746,8 +1737,8 @@ class Exercise
      * @param int $questionId - question ID
      *
      * @return bool - true if the question has been added, otherwise false
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function addToList($questionId)
     {
@@ -1775,8 +1766,8 @@ class Exercise
      * @param int $questionId - question ID
      *
      * @return bool - true if the question has been removed, otherwise false
-     * @author Olivier Brouckaert
      *
+     * @author Olivier Brouckaert
      */
     public function removeFromList($questionId)
     {
@@ -2612,7 +2603,6 @@ class Exercise
                 ),
             ]
         );
-
     }
 
     /**
@@ -3111,7 +3101,7 @@ class Exercise
     /**
      * Saves a test attempt.
      *
-     * @param int   $clock_expired_time clock_expired_time
+     * @param int $clock_expired_time clock_expired_time
      * @param int  int lp id
      * @param int  int lp item id
      * @param int  int lp item_view id
@@ -3507,8 +3497,8 @@ class Exercise
      * @param int    $questionDuration                          seconds
      *
      * @return string html code
-     * @todo    reduce parameters of this function
      *
+     * @todo    reduce parameters of this function
      */
     public function manage_answer(
         $exeId,
@@ -3659,8 +3649,8 @@ class Exercise
 
         // Get first answer needed for global question, no matter the answer shuffle option;
         $firstAnswer = [];
-        if ($answerType == MULTIPLE_ANSWER_COMBINATION ||
-            $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
+        if (MULTIPLE_ANSWER_COMBINATION == $answerType ||
+            MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE == $answerType
         ) {
             $sql = "SELECT *
                     FROM $table_ans
@@ -3720,7 +3710,6 @@ class Exercise
                 case UNIQUE_ANSWER_IMAGE:
                 case UNIQUE_ANSWER_NO_OPTION:
                 case READING_COMPREHENSION:
-
                     if ($from_database) {
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
@@ -4189,7 +4178,7 @@ class Exercise
                                 $studentAnswerToShow = $studentAnswer;
 
                                 if (empty($studentAnswer)) {
-                                    continue;
+                                    break;
                                 }
 
                                 if ($debug) {
@@ -4435,7 +4424,7 @@ class Exercise
                             $questionScore = $row['marks'];
                         }
 
-                        if ($questionScore == -1) {
+                        if (-1 == $questionScore) {
                             $totalScore += 0;
                         } else {
                             $totalScore += $questionScore;
@@ -5712,7 +5701,6 @@ class Exercise
                             $missing = (int) $final_missing;
                         }
 
-
                         $table_resume = '<table class="table table-hover table-striped data_table">
                                 <tr class="row_odd" >
                                     <td></td>
@@ -5738,7 +5726,7 @@ class Exercise
                                     .$missing.'</td>
                                 </tr>
                             </table>';
-                        if ($next == 0) {
+                        if (0 == $next) {
                         } else {
                             $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
                             $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
@@ -6050,7 +6038,7 @@ class Exercise
                     false,
                     $questionDuration
                 );
-            } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
+            } elseif (HOT_SPOT == $answerType || ANNOTATION == $answerType) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     if ($debug) {
@@ -6136,13 +6124,12 @@ class Exercise
             'correct_answer_id' => $correctAnswerId,
             'answer_destination' => $answerDestination,
         ];
-
     }
 
     /**
      * Sends a notification when a user ends an examn.
      *
-     * @param string $type 'start' or 'end' of an exercise
+     * @param string $type                  'start' or 'end' of an exercise
      * @param array  $question_list_answers
      * @param string $origin
      * @param int    $exe_id
@@ -6801,6 +6788,7 @@ class Exercise
      * Returns an array with this form.
      *
      * @return array
+     *
      * @example
      * <code>
      * array (size=3)
@@ -6819,7 +6807,6 @@ class Exercise
      * </code>
      * The array inside the key 999 means the question list that belongs to the media id = 999,
      * this case is special because 999 means "no media".
-     *
      */
     public function getMediaList()
     {
@@ -6865,6 +6852,7 @@ class Exercise
      * Question list with medias compressed like this.
      *
      * @return array
+     *
      * @example
      *      <code>
      *      array(
@@ -6874,7 +6862,6 @@ class Exercise
      *      question_id_3,
      *      )
      *      </code>
-     *
      */
     public function getQuestionListWithMediasCompressed()
     {
@@ -6885,6 +6872,7 @@ class Exercise
      * Question list with medias uncompressed like this.
      *
      * @return array
+     *
      * @example
      *      <code>
      *      array(
@@ -6895,7 +6883,6 @@ class Exercise
      *      question_id,
      *      )
      *      </code>
-     *
      */
     public function getQuestionListWithMediasUncompressed()
     {
@@ -7008,7 +6995,7 @@ class Exercise
              * between brackets at the beginning of the category title
             */
             // If test option is Grouped By Categories
-            if ($isRandomByCategory == 2) {
+            if (2 == $isRandomByCategory) {
                 $categoryQuestions = TestCategory::sortTabByBracketLabel($categoryQuestions);
             }
             foreach ($categoryQuestions as $question) {
@@ -7185,7 +7172,7 @@ class Exercise
             } else {
                 $remind_list = explode(',', $exercise_info['questions_to_check']);
                 $remind_list_string = '';
-                if ($action === 'add') {
+                if ('add' === $action) {
                     if (!in_array($questionId, $remind_list)) {
                         $newRemindList = [];
                         $remind_list[] = $questionId;
@@ -7566,7 +7553,7 @@ class Exercise
     /**
      * Renders a question list.
      *
-     * @param array $questionList (with media questions compressed)
+     * @param array $questionList    (with media questions compressed)
      * @param int   $currentQuestion
      * @param array $exerciseResult
      * @param array $attemptList
@@ -7689,7 +7676,7 @@ class Exercise
     }
 
     /**
-     * Not implemented in 1.11.x
+     * Not implemented in 1.11.x.
      *
      * @param int   $questionId
      * @param array $attemptList
@@ -7712,7 +7699,6 @@ class Exercise
         $realQuestionList,
         $generateJS = true
     ) {
-
         // With this option on the question is loaded via AJAX
         //$generateJS = true;
         //$this->loadQuestionAJAX = true;
@@ -8603,9 +8589,9 @@ class Exercise
      * @param array $courseInfo
      * @param int   $sessionId
      *
-     * @return bool
      * @throws \Doctrine\ORM\OptimisticLockException
      *
+     * @return bool
      */
     public function generateStats($exerciseId, $courseInfo, $sessionId)
     {
@@ -9757,7 +9743,6 @@ class Exercise
             }
             $message .= '<p>'.$comment.'</p>';
             echo $message;*/
-
 
             // Showing the score
             /*$queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT

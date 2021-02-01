@@ -1550,7 +1550,7 @@ class GroupManager
     /**
      * Is sef-registration allowed?
      *
-     * @param int   $user_id
+     * @param int $user_id
      *
      * @return bool TRUE if self-registration is allowed in the given group
      */
@@ -1574,7 +1574,7 @@ class GroupManager
     /**
      * Is sef-unregistration allowed?
      *
-     * @param int   $user_id
+     * @param int $user_id
      *
      * @return bool TRUE if self-unregistration is allowed in the given group
      */
@@ -1593,7 +1593,7 @@ class GroupManager
     /**
      * Is user subscribed in group?
      *
-     * @param int    $user_id
+     * @param int $user_id
      *
      * @return bool TRUE if given user is subscribed in given group
      */
@@ -1620,8 +1620,8 @@ class GroupManager
     /**
      * Can a user subscribe to a specified group in a course.
      *
-     * @param int   $user_id
-     * @param bool  $checkMaxNumberStudents
+     * @param int  $user_id
+     * @param bool $checkMaxNumberStudents
      *
      * @return bool true if success
      */
@@ -1630,7 +1630,7 @@ class GroupManager
         CGroup $group,
         $checkMaxNumberStudents = true
     ) {
-        $groupIid =  $group->getIid();
+        $groupIid = $group->getIid();
         if ($checkMaxNumberStudents) {
             $category = self::get_category_from_group($group->getIid());
             if ($category) {
@@ -1727,9 +1727,9 @@ class GroupManager
     /**
      * Subscribe user(s) to a specified group in current course (as a student).
      *
-     * @param mixed $userList  Can be an array with user-id's or a single user-id
+     * @param mixed  $userList  Can be an array with user-id's or a single user-id
      * @param CGroup $group
-     * @param int   $course_id
+     * @param int    $course_id
      *
      * @return bool
      */
@@ -1790,7 +1790,7 @@ class GroupManager
     /**
      * Unsubscribe user(s) from a specified group in current course.
      *
-     * @param mixed $userList  Can be an array with user-id's or a single user-id
+     * @param mixed $userList Can be an array with user-id's or a single user-id
      *
      * @return bool
      */
@@ -1865,6 +1865,7 @@ class GroupManager
 
     /**
      * Is the user a tutor of this group?
+     *
      * @todo replace this function with $group->isUserTutor
      */
     public static function isTutorOfGroup($userId, CGroup $group = null)
@@ -2046,9 +2047,8 @@ class GroupManager
     }
 
     /**
-     * @param int    $userId
-     * @param CGroup $group
-     * @param int    $sessionId
+     * @param int $userId
+     * @param int $sessionId
      *
      * @return bool
      */
@@ -2177,7 +2177,7 @@ class GroupManager
 
     /**
      * @param CGroup[] $groupList
-     * @param int   $category_id
+     * @param int      $category_id
      *
      * @return string
      */
@@ -2968,7 +2968,6 @@ class GroupManager
     /**
      * @param int   $userId
      * @param int   $courseId
-     * @param CGroup  $group
      * @param array $documentInfoToBeCheck
      * @param bool  $blockPage
      *

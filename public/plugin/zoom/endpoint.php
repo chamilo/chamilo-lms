@@ -17,7 +17,6 @@ if ('POST' !== $_SERVER['REQUEST_METHOD']) {
 // @todo handle non-apache installations
 $authorizationHeaderValue = apache_request_headers()['Authorization'];
 
-
 if (api_get_plugin_setting('zoom', 'verificationToken') !== $authorizationHeaderValue) {
     error_log('verificationToken not valid, please check your zoom configuration');
     http_response_code(Response::HTTP_UNAUTHORIZED);

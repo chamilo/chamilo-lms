@@ -1471,7 +1471,6 @@ class MessageManager
                         get_lang('Me').'</b>';
                     break;
                 case self::MESSAGE_TYPE_OUTBOX:
-
                     $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
                         $receiverUserInfo['complete_name_with_username'].'</b>';
                     break;

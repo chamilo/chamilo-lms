@@ -144,7 +144,6 @@ class SurveyUtil
 
         $insertId = $answer->getIid();
         if ($insertId) {
-
             return true;
         }
 
@@ -674,7 +673,7 @@ class SurveyUtil
             if ('score' == $question['type']) {
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
-            } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
+            } elseif ('open' === $question['type'] || 'comment' === $question['type']) {
                 echo '<div class="open-question">';
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
@@ -736,7 +735,6 @@ class SurveyUtil
                 echo self::drawChart($chartData, false, $chartContainerId, false);
                 echo '</div>';
 
-
                 // displaying the table: headers
                 echo '<table class="display-survey table" id="table_'.$chartContainerId.'">';
                 echo '';
@@ -772,7 +770,7 @@ class SurveyUtil
                         echo '	<tr>';
                         echo '<td>'.$value['option_text'].'</td>';
                         echo '<td>';
-                        if ($absolute_number != 0) {
+                        if (0 != $absolute_number) {
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
                                 .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='
                                 .$value['iid'].'">'.$absolute_number.'</a>';
@@ -816,8 +814,8 @@ class SurveyUtil
                         </tr>
                         </table>';
             }
-                echo '</div>';
-            }
+            echo '</div>';
+        }
         echo '</div>';
 
         // Survey information, needed for the PDF export.

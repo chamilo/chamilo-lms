@@ -122,7 +122,7 @@ if (false === $user_already_registered_show_terms &&
     }
 
     $LastnameLabel = get_lang('LastName');
-    if (api_get_configuration_value('registration_add_helptext_for_2_names') == true) {
+    if (true == api_get_configuration_value('registration_add_helptext_for_2_names')) {
         $LastnameLabel = [$LastnameLabel, get_lang('InsertTwoNames')];
     }
     if (api_is_western_name_order()) {
@@ -800,7 +800,7 @@ if ($form->validate()) {
 
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
-            if (api_get_setting('allow_registration') === 'approval') {
+            if ('approval' === api_get_setting('allow_registration')) {
                 // 1. Send mail to all platform admin
                 $chamiloUser = api_get_user_entity($user_id);
                 MessageManager::sendNotificationOfNewRegisteredUserApproval($chamiloUser);

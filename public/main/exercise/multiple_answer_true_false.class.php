@@ -150,7 +150,7 @@ class MultipleAnswerTrueFalse extends Question
             }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
-               $txtComment = $form->addElement(
+                $txtComment = $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
                     null,

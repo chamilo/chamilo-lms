@@ -694,7 +694,7 @@ class ExtraFieldOption extends Model
      */
     public function getPriorityOptions()
     {
-        return  [
+        return [
             '' => get_lang('Please select an option'),
             1 => get_lang('Success'),
             2 => get_lang('Information'),

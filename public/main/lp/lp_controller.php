@@ -442,7 +442,7 @@ switch ($action) {
         $field = new ExtraField('user');
         $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
         $idExtraField = isset($authorLp['id']) ? (int) $authorLp['id'] : 0;
-        if ($idExtraField != 0) {
+        if (0 != $idExtraField) {
             $extraFieldValueUser = new ExtraFieldValue('user');
             $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
                 'authorlp',

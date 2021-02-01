@@ -115,12 +115,10 @@ if (api_get_configuration_value('block_category_questions') &&
     $extraFieldValue = new ExtraFieldValue('exercise');
     $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'block_category');
     if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {
-
         $categoryList = Session::read('categoryList');
         $question_list = end($categoryList);
     }
-
-    }
+}
 
 echo $objExercise->getReminderTable($question_list, $exercise_stat_info);
 

@@ -540,6 +540,7 @@ class CourseCategory
 
             return $table->toHtml();
         }
+
         return Display::return_message(get_lang('NoCategories'), 'warning');
     }
 
@@ -611,7 +612,7 @@ class CourseCategory
     }
 
     public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $conditions = [], $getCount = false)
-{
+    {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $keyword = Database::escape_string($keyword);
@@ -632,7 +633,7 @@ class CourseCategory
             $sqlInjectWhere = $conditions['inject_where'];
         }
         $categoryFilter = '';
-        if ($categoryCode === 'ALL' || empty($categoryCode)) {
+        if ('ALL' === $categoryCode || empty($categoryCode)) {
             // Nothing to do
         } elseif ('NONE' === $categoryCode) {
             $categoryFilter = ' AND course.category_id IS NULL ';

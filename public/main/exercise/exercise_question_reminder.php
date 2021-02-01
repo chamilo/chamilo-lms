@@ -51,7 +51,7 @@ $clock_expired_time = ExerciseLib::get_session_time_control_key(
     $learnpath_item_id
 );
 
-if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
+if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
@@ -181,7 +181,7 @@ if ($objExercise->review_answers) {
         'javascript://',
         ['onclick' => 'reviewQuestions();', 'class' => 'btn btn-primary']
     );
-$exerciseActions .= '&nbsp;'.Display::url(
+    $exerciseActions .= '&nbsp;'.Display::url(
         get_lang('SelectAll'),
     'javascript://',
         ['onclick' => 'selectAll();', 'class' => 'btn btn-default']
@@ -197,7 +197,7 @@ end($categoryList);
 
 // This is the last category
 if (key($categoryList) === $categoryId) {
-$exerciseActions .= '&nbsp;'.Display::url(
+    $exerciseActions .= '&nbsp;'.Display::url(
     get_lang('EndTest'),
     'javascript://',
     ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']

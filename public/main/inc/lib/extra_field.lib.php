@@ -2491,8 +2491,8 @@ JAVASCRIPT;
         // Parse params.
         $fields = [];
         foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) !== 'extra_' &&
-                substr($key, 0, 7) !== '_extra_'
+            if ('extra_' !== substr($key, 0, 6) &&
+                '_extra_' !== substr($key, 0, 7)
             ) {
                 continue;
             }
@@ -2753,7 +2753,7 @@ JAVASCRIPT;
                         case self::FIELD_TYPE_DOUBLE_SELECT:
                             $inject_extra_fields .= " fvo$counter.display_text as {$extra['field']}, ";
                             break;
-                        case  self::FIELD_TYPE_TAG:
+                        case self::FIELD_TYPE_TAG:
                             //$inject_extra_fields .= " tag$counter.tag as {$extra['field']}, ";
                             // If using AND
                             $newCounter = 1;
@@ -2830,7 +2830,7 @@ JAVASCRIPT;
                                  )
                                 ";
                             break;
-                        case  self::FIELD_TYPE_TAG:
+                        case self::FIELD_TYPE_TAG:
                             $newCounter = 1;
                             if (isset($extra_info['data']) && !empty($extra_info['data'])) {
                                 $whereTag = [];

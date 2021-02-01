@@ -28,8 +28,6 @@ $nameTools = get_lang('Forum Categories');
 $origin = api_get_origin();
 $_user = api_get_user_info();
 
-
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
 

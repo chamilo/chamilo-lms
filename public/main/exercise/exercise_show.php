@@ -296,7 +296,7 @@ if (!empty($track_exercise_info)) {
 
             if ($is_allowedToEdit &&
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $result_disabled
-            ){
+            ) {
                 $showTotalScoreAndUserChoicesInLastAttempt = true;
             }
             break;

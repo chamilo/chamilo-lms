@@ -77,7 +77,7 @@ class Diagnoser
         $data = call_user_func([$this, 'get_'.$currentSection.'_data']);
         echo $html;
 
-        if ($currentSection === 'paths') {
+        if ('paths' === $currentSection) {
             echo '<br />';
             echo Display::return_message($sections[$currentSection]['info'], 'normal');
 
@@ -105,7 +105,7 @@ class Diagnoser
                 $row++;
             }
             $table->display();
-        } elseif ($currentSection == 'courses_space') {
+        } elseif ('courses_space' == $currentSection) {
             echo '<br />';
             echo Display::return_message($sections[$currentSection]['info'], 'normal');
 

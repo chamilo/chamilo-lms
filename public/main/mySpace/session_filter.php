@@ -48,7 +48,7 @@ $sql = "SELECT s.id, name FROM $tblSession s
 if (api_is_multiple_url_enabled()) {
     $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $accessUrlId = api_get_current_access_url_id();
-    if ($accessUrlId != -1) {
+    if (-1 != $accessUrlId) {
         $sql = "SELECT s.id, name FROM $tblSession s
                 INNER JOIN $tblSessionRelAccessUrl as session_rel_url
                 ON (s.id = session_rel_url.session_id)
@@ -201,7 +201,7 @@ if ($form->validate()) {
                     case ExtraField::FIELD_TYPE_TEXT:
                     case ExtraField::FIELD_TYPE_ALPHANUMERIC:
                         $pos = stripos($extraFieldValueData['value'], $_REQUEST['extra_'.$field['variable']]);
-                        if ($pos === false) {
+                        if (false === $pos) {
                             unset($certificateList[$key]);
                         }
                         break;
@@ -324,7 +324,6 @@ $htmlHeadXtra[] = "<script>
         });
     });
 </script>";
-
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 Display::display_header(get_lang('CertificatesSessions'));

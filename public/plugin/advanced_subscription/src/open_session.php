@@ -11,7 +11,7 @@ require_once __DIR__.'/../config.php';
 $plugin = AdvancedSubscriptionPlugin::create();
 
 if (!isset($_GET['session_id'], $_GET['user_id'], $_GET['profile_completed'])) {
-    die;
+    exit;
 }
 
 $sessionInfo = api_get_session_info($_GET['session_id']);

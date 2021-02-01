@@ -21,8 +21,6 @@ $cidreq = api_get_cidreq();
 $nameTools = get_lang('Forums');
 $_user = api_get_user_info();
 
-
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
 

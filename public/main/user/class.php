@@ -83,7 +83,7 @@ if (api_is_allowed_to_edit()) {
     switch ($action) {
         case 'add_class_to_course':
             $id = $_GET['id'];
-            if (!empty($id) && $sessionId == 0) {
+            if (!empty($id) && 0 == $sessionId) {
                 $usergroup->subscribe_courses_to_usergroup(
                     $id,
                     [api_get_course_int_id()],
@@ -92,7 +92,7 @@ if (api_is_allowed_to_edit()) {
                 Display::addFlash(Display::return_message(get_lang('Added')));
                 header('Location: class.php?'.api_get_cidreq().'&type=registered');
                 exit;
-            } elseif ($sessionId != 0) {
+            } elseif (0 != $sessionId) {
                 /* To suscribe session*/
                 $usergroup->subscribe_sessions_to_usergroup($id, [$sessionId]);
                 Display::addFlash(Display::return_message(get_lang('Added')));

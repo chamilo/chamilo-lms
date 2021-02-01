@@ -470,11 +470,11 @@ if (empty($exercise_stat_info)) {
                 if (in_array($question, $resolvedQuestionsQuestionIds)) {
                     $count = $index;
                     continue;
-        }
-    }
+                }
+            }
             $current_question = $count;
             //var_dump($current_question, $index);exit;
-}
+        }
     }
 }
 Session::write('exe_id', $exe_id);
@@ -491,7 +491,6 @@ if (api_get_configuration_value('block_category_questions')) {
         $allowBlockCategory = true;
     }
 }
-
 
 if (!isset($questionListInSession)) {
     // Selects the list of question ID
@@ -528,7 +527,6 @@ if (!isset($questionListInSession)) {
 }
 // Array to check in order to block the chat
 ExerciseLib::create_chat_exercise_session($exe_id);
-
 
 if (!empty($exercise_stat_info['questions_to_check'])) {
     $myRemindList = $exercise_stat_info['questions_to_check'];
@@ -723,10 +721,10 @@ if ($allowBlockCategory &&
                 // This is the last question
                 if ((int) $current_question + 1 === count($questionList)) {
                     if (false === $objExercise->review_answers) {
-                    $isLastQuestionInCategory = 0;
+                        $isLastQuestionInCategory = 0;
+                    }
                 }
             }
-        }
         }
 
         if (0 === $isLastQuestionInCategory) {
@@ -734,7 +732,7 @@ if ($allowBlockCategory &&
         }
         if (0 === $isLastQuestionInCategory && 2 === $reminder) {
             //    $isLastQuestionInCategory = $categoryId;
-    }
+        }
     }
     //var_dump($categoryId, $blockedCategories, $isLastQuestionInCategory);
 
@@ -997,7 +995,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 // Time per question.
 $questionTimeCondition = '';
 $showQuestionClock = false;
-if ($allowTimePerQuestion && $objExercise->type == ONE_PER_PAGE) {
+if ($allowTimePerQuestion && ONE_PER_PAGE == $objExercise->type) {
     $objQuestionTmp = null;
     $previousQuestion = null;
     if (!empty($questionList)) {
@@ -1255,7 +1253,7 @@ if ($objExercise->review_answers) {
         foreach ($questionList as $questionId) {
             $i++;
             $objQuestionTmp = Question::read($questionId);
-        $selectType = $objQuestionTmp->selectType();
+            $selectType = $objQuestionTmp->selectType();
             // for sequential exercises
 
             if (ONE_PER_PAGE == $objExercise->type) {

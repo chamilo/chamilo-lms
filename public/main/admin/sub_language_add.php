@@ -22,7 +22,9 @@ $interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('Chamilo Port
 
 /**
  * Add sub-language.
+ *
  * @deprecated
+ *
  * @param   string  Original language name (Occitan, Wallon, Vlaams)
  * @param   string  English language name (occitan, wallon, flanders)
  * @param   string  ISO code (fr_FR, ...)

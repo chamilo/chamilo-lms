@@ -246,7 +246,7 @@ if ($conferenceManager) {
 
                 if (!empty($roomData)) {
                     $roomId = $roomData['id'];
-                        if (!empty($roomId)) {
+                    if (!empty($roomId)) {
                         Database::update(
                             $roomTable,
                             ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
@@ -304,7 +304,7 @@ if ($conferenceManager) {
             foreach ($roomData as $item) {
                 $roomId = $item['id'];
                 if (!empty($roomId)) {
-                    if ($i == 0) {
+                    if (0 == $i) {
                         Database::update(
                             $roomTable,
                                 ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
@@ -313,7 +313,7 @@ if ($conferenceManager) {
                     } else {
                         Database::update($roomTable, ['close' => BBBPlugin::ROOM_CLOSE], ['id = ? ' => $roomId]);
                     }
-                $i++;
+                    $i++;
                 }
             }
 

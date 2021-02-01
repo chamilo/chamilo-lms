@@ -83,7 +83,6 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq()
     ).
     '</a>';
 
-
 $confirmationMessage = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));
 
 // Register to group.

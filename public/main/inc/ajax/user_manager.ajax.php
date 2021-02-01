@@ -59,7 +59,7 @@ switch ($action) {
 
         echo '<div class="col-sm-7">';
 
-        if ($isAnonymous || api_get_setting('show_email_addresses') == 'false') {
+        if ($isAnonymous || 'false' == api_get_setting('show_email_addresses')) {
             $user_info['mail'] = ' ';
         }
 
@@ -72,7 +72,7 @@ switch ($action) {
         if ($isAnonymous) {
             // Only allow anonymous users to see user popup if the popup user
             // is a teacher (which might be necessary to illustrate a course)
-            if ((int) $user_info['status'] === COURSEMANAGER) {
+            if (COURSEMANAGER === (int) $user_info['status']) {
                 echo $userData;
             }
         } else {

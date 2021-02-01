@@ -255,7 +255,7 @@ $form->addElement(
     'accumulate_scorm_time',
     [
         null,
-        get_lang('When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.')
+        get_lang('When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.'),
     ],
     get_lang('Accumulate SCORM session time')
 );
@@ -360,7 +360,7 @@ if ($form->validate()) {
         ->setPrerequisite($_POST['prerequisites'] ?? 0)
         ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)
         ->setContentMaker($_REQUEST['lp_maker'] ?? '')
-        ->setContentLocal($_REQUEST['lp_proximity']?? '')
+        ->setContentLocal($_REQUEST['lp_proximity'] ?? '')
         ->setUseMaxScore(isset($_POST['use_max_score']) ? 1 : 0)
         ->setDefaultEncoding($_REQUEST['lp_encoding'])
         ->setAccumulateScormTime(isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true')
@@ -369,7 +369,6 @@ if ($form->validate()) {
         ->setCategory($category)
         ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)
     ;
-
 
     $extraFieldValue = new ExtraFieldValue('lp');
     $_REQUEST['item_id'] = $lpId;

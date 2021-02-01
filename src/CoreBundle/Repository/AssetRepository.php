@@ -57,7 +57,7 @@ class AssetRepository extends ServiceEntityRepository
         }
     }
 
-    public function getFolder(Asset $asset): ? string
+    public function getFolder(Asset $asset): ?string
     {
         if ($asset->hasFile()) {
             $file = $asset->getTitle();

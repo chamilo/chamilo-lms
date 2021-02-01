@@ -726,7 +726,7 @@ if ($nbStudents > 0) {
     $table->set_header($headerCounter++, get_lang('LatestLoginInCourse'), false);
     $headers['latest_login'] = get_lang('LatestLoginInCourse');
     $counter = $headerCounter;
-    if (api_get_setting('show_email_addresses') === 'true') {
+    if ('true' === api_get_setting('show_email_addresses')) {
         $table->set_header($counter, get_lang('Email'), false);
         $headers['email'] = get_lang('Email');
         $counter++;

@@ -117,10 +117,10 @@ class SurveyManager
     /**
      * Retrieves all the survey information.
      *
-     * @param int  $survey_id the id of the survey
-     * @param int  $shared    this parameter determines if
-     *                        we have to get the information of a survey from the central (shared) database or from the
-     *                        course database
+     * @param int $survey_id the id of the survey
+     * @param int $shared    this parameter determines if
+     *                       we have to get the information of a survey from the central (shared) database or from the
+     *                       course database
      * @param string course code optional
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -868,6 +868,7 @@ class SurveyManager
             api_get_course_int_id(),
             api_get_session_id()
         );
+
         return true;
     }
 
@@ -2483,7 +2484,6 @@ class SurveyManager
                 }
 
                 foreach ($userInfoList as $userInfo) {
-
                     if (false !== strpos($text, $studentTag)) {
                         $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
                         $values = [

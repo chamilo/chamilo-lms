@@ -521,7 +521,7 @@ switch ($action) {
                         if (!$courseClosed && $course_unsubscribe_allowed &&
                             false === $userRegisteredInCourseAsTeacher
                         ) {
-                                $course['unregister_formatted'] = CoursesAndSessionsCatalog::return_unregister_button(
+                            $course['unregister_formatted'] = CoursesAndSessionsCatalog::return_unregister_button(
                                     $course,
                                     $stok,
                                     $searchTerm,

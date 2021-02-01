@@ -85,7 +85,7 @@ if (empty($annee) && empty($course)) {
     echo '<br />';
     echo '<h3>'.Display::return_icon('group.gif', get_lang('Select learners')).' '.get_lang('Select learners').'</h3>';
     //echo "Connection ...";
-    $ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAP Connection Error'));
+    $ds = ldap_connect($ldap_host, $ldap_port) or exit(get_lang('LDAP Connection Error'));
     ldap_set_version($ds);
 
     if ($ds) {

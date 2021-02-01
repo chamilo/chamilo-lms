@@ -353,7 +353,7 @@ if ($inATest) {
     }
 
     $alert = '';
-    if ($showPagination === false) {
+    if (false === $showPagination) {
         $originalSelectionType = $objExercise->questionSelectionType;
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
 
@@ -382,7 +382,7 @@ if ($inATest) {
             $maxScoreAllQuestions
         );
     }
-    if ($showPagination === false) {
+    if (false === $showPagination) {
         if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $alert .= sprintf(
                 '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),

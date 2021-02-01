@@ -533,7 +533,7 @@ class ExerciseLib
                             }
                         }
 
-                        if ($answerType != UNIQUE_ANSWER_IMAGE) {
+                        if (UNIQUE_ANSWER_IMAGE != $answerType) {
                             $userStatus = STUDENT;
                             // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
                             // see BT#18242
@@ -1482,9 +1482,9 @@ HTML;
                     </div>
                 ';
             }
-                if ($freeze) {
-                    $relPath = api_get_path(WEB_CODE_PATH);
-                    echo "
+            if ($freeze) {
+                $relPath = api_get_path(WEB_CODE_PATH);
+                echo "
                         <div class=\"row\">
                             <div class=\"col-sm-9\">
                                 <div id=\"hotspot-preview-$questionId\"></div>
@@ -1505,8 +1505,8 @@ HTML;
                         </script>
                     ";
 
-                    return;
-                }
+                return;
+            }
 
             if (!$only_questions) {
                 if ($show_title) {
@@ -1676,7 +1676,7 @@ HOTSPOT;
 
         $sqlResult = Database::query($sql);
 
-        if (Database::num_rows($sqlResult) != 0) {
+        if (0 != Database::num_rows($sqlResult)) {
             while ($row = Database::fetch_array($sqlResult, 'ASSOC')) {
                 $tmp = [];
                 $tmp[0] = $row['course_title'];
@@ -1685,7 +1685,7 @@ HOTSPOT;
                 // Send do other test with r=1 to reset current test session variables
                 $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'].'&r=1';
                 $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::return_icon('quiz.png', get_lang('Edit')).'</a>';
-                if ((int) $row['session_id'] == 0) {
+                if (0 == (int) $row['session_id']) {
                     $tmp[1] = '-';
                 }
 
@@ -2653,7 +2653,7 @@ HOTSPOT;
         $maxNote = api_get_setting('exercise_max_score');
         $minNote = api_get_setting('exercise_min_score');
 
-        if ($maxNote != '' && $minNote != '') {
+        if ('' != $maxNote && '' != $minNote) {
             if (!empty($weight) && (float) $weight !== (float) 0) {
                 $score = $minNote + ($maxNote - $minNote) * $score / $weight;
             } else {
@@ -4389,7 +4389,7 @@ EOT;
                 }
 
                 $showTotalScore = false;
-                if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+                if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT == $objExercise->results_disabled) {
                     $showTotalScore = true;
                 }
                 $showTotalScoreAndUserChoicesInLastAttempt = false;
@@ -4400,7 +4400,7 @@ EOT;
                     $showTotalScoreAndUserChoicesInLastAttempt = true;
                 }
 
-                if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
+                if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $objExercise->results_disabled) {
                     $showTotalScore = true;
                     $show_results = true;
                     $show_only_score = false;
@@ -4899,9 +4899,9 @@ EOT;
      * Display the ranking of results in a exercise.
      *
      * @param Exercise $exercise
-     * @param int $currentUserId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int      $currentUserId
+     * @param int      $courseId
+     * @param int      $sessionId
      *
      * @return string
      */
@@ -5843,8 +5843,8 @@ EOT;
                 $content = $extraFieldData['value'];
                 $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
                 //if (false === $exercisePassed) {
-                    if (0 !== $wrongAnswersCount) {
-                        $content .= $stats['failed_answers_html'];
+                if (0 !== $wrongAnswersCount) {
+                    $content .= $stats['failed_answers_html'];
                 }
 
                 $sendMessage = true;

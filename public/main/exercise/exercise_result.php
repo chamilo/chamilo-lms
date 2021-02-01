@@ -25,7 +25,6 @@ $this_section = SECTION_COURSES;
 /* 	ACCESS RIGHTS  */
 api_protect_course_script(true);
 
-
 $origin = api_get_origin();
 
 /** @var Exercise $objExercise */
@@ -131,7 +130,7 @@ if ($allowSignature) {
     $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
 }
 
-if ($origin === 'learnpath') {
+if ('learnpath' === $origin) {
     $pageTop .= '
         <form method="GET" action="exercise.php?'.api_get_cidreq().'">
             <input type="hidden" name="origin" value='.$origin.'/>

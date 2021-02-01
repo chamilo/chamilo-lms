@@ -12,8 +12,6 @@ api_protect_course_script(true);
 $nameTools = get_lang('Forums');
 $origin = api_get_origin();
 
-
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
 

@@ -146,7 +146,7 @@ if (api_is_platform_admin()) {
     // Only admins can edit this items
     $excludeExtraFields = [];
 }
-if (isset($is_success) && $is_success === true) {
+if (isset($is_success) && true === $is_success) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been edited.';
     $msg .= '</div>';

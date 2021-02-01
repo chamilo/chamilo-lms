@@ -2,9 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
 /**
@@ -63,7 +61,7 @@ $lp_item_id = $oLP->get_current_item_id();
 $lpType = $lp->getLpType();
 
 if (!$is_allowed_to_edit) {
-    $category= $lp->getCategory();
+    $category = $lp->getCategory();
     $em = Database::getManager();
     if ($category) {
         $block = false;

@@ -8,6 +8,7 @@ use ChamiloSession as Session;
 
 /**
  * This file generates the ActionScript variables code used by the HotSpot .swf.
+ *
  * @author Toon Keppens
  */
 session_cache_limiter('none');

@@ -177,7 +177,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $txtAnswer->setValue(Security::remove_XSS($_POST['answer'][$i]));
             }
             // show comment when feedback is enable
-            if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
                 $txtComment = $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -319,8 +319,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .'</th>'
         ;
         if (false === $exercise->hideComment) {
-            if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $header .= '<th>'.get_lang('Comment').'</th>';
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType()) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
             }
         }
         $header .= '</tr>';

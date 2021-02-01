@@ -120,7 +120,7 @@ switch ($action) {
                 /** @var CStudentPublication $work */
                 $work = $studentPublicationRepo->find($item['id']);
                 if ($work) {
-                    deleteCorrection( $work);
+                    deleteCorrection($work);
                 }
             }
             Display::addFlash(

@@ -6,8 +6,8 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
-use Symfony\Component\DomCrawler\Crawler;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
@@ -47,7 +47,7 @@ class scorm extends learnpath
      * @param    int    Learnpath ID in DB
      * @param    int    User ID
      */
-    public function __construct($entity,  $course_info = null, $user_id = null)
+    public function __construct($entity, $course_info = null, $user_id = null)
     {
         $this->items = [];
         $this->subdir = '';
@@ -319,7 +319,7 @@ class scorm extends learnpath
      * @param int    $userMaxScore
      * @param int    $sessionId
      *
-     * @return null|CLp
+     * @return CLp|null
      */
     public function import_manifest($courseCode, $userMaxScore = 1, $sessionId = 0)
     {
@@ -687,7 +687,6 @@ class scorm extends learnpath
             $newDir = substr($newDir, 0, -1);
         }*/
 
-
         /* Uncompressing phase */
         /*
             We need to process each individual file in the zip archive to
@@ -695,7 +694,6 @@ class scorm extends learnpath
             - parse & change relative html links
             - make sure the filenames are secure (filter funny characters or php extensions)
         */
-
 
         // 1. Upload zip file
         $request = Container::getRequest();

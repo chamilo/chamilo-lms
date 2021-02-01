@@ -816,7 +816,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result))) {
-        die(get_lang('An error has occured. Please contact your system administrator.').' (code 901)');
+        exit(get_lang('An error has occured. Please contact your system administrator.').' (code 901)');
     }
     if (0 == $owner) {
         return $res['uploader_id'];
@@ -824,7 +824,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     if ($res['uploader_id'] == $owner) {
         return true;
     }
-    die(get_lang('An error has occured. Please contact your system administrator.').' (code '.$or_die.')');
+    exit(get_lang('An error has occured. Please contact your system administrator.').' (code '.$or_die.')');
 }
 
 /**

@@ -209,7 +209,7 @@ switch ($action) {
         }
         // @todo fix get forum
         //$forum = $learningPath->getForum($sessionId);
-        $forum = false;;
+        $forum = false;
 
         if (empty($forum)) {
             require_once '../../forum/forumfunction.inc.php';

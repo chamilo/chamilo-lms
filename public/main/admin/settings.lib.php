@@ -249,7 +249,7 @@ function handlePlugins()
     echo '<div class="form-actions bottom_actions">';
     echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
     echo '<i class="fa fa-check" aria-hidden="true"></i> ';
-    echo  get_lang('Enable the selected plugins').'</button>';
+    echo get_lang('Enable the selected plugins').'</button>';
     echo '</div>';
     echo '</form>';
 }

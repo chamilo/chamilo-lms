@@ -429,7 +429,7 @@ class LegalManager
      */
     public static function getTreatmentTypeList()
     {
-        return  [
+        return [
             'privacy_terms_collection' => 'collection',
             'privacy_terms_recording' => 'recording',
             'privacy_terms_organization' => 'organization',

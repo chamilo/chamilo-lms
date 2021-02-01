@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CLp;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -14,7 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
-if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
+if (false == $subscriptionSettings['allow_add_users_to_lp']) {
     api_not_allowed(true);
 }
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);

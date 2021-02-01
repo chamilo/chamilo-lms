@@ -35,9 +35,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
-	if (false === Security::check_token('get')) {
-            exit;
-        }
+    if (false === Security::check_token('get')) {
+        exit;
+    }
         $add_as_announcement = $_REQUEST['add_as_annonuncement'] ?? null;
         $title = $_REQUEST['title'] ?? null;
         $content = $_REQUEST['content'] ?? null;

@@ -220,6 +220,11 @@ class CWiki extends AbstractResource implements ResourceInterface
      */
     protected $sessionId;
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     public function getIid(): int
     {
         return $this->iid;
@@ -847,11 +852,6 @@ class CWiki extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getTitle();
     }
 
     public function getResourceIdentifier(): int

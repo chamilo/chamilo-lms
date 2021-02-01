@@ -488,7 +488,7 @@ function save_item(
     if (true === $scoreAsProgressSetting) {
         $scoreAsProgress = $myLP->getUseScoreAsProgress();
         if ($scoreAsProgress) {
-            if (isset($score) && $score != -1) {
+            if (isset($score) && -1 != $score) {
                 $score = $myLPI->get_score();
                 $maxScore = $myLPI->get_max();
                 $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";

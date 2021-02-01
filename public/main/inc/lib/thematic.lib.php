@@ -945,7 +945,7 @@ class Thematic
             ;
             $em->persist($plan);
             $em->flush();
-            //$repo->update($plan);
+        //$repo->update($plan);
 
         // update
             /*$params = [

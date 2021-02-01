@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Framework\Container;
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
  */
-
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 $currentstyle = api_get_setting('stylesheets');
@@ -57,7 +56,6 @@ $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('Learning paths'),
 ];
-
 
 $lpRepo = Container::getLpRepository();
 $form = new FormValidator(

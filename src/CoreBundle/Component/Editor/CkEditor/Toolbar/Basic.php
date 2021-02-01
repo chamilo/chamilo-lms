@@ -216,7 +216,7 @@ class Basic extends Toolbar
      */
     public function getNewPageBlock()
     {
-        return  ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
+        return ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
     }
 
     /**

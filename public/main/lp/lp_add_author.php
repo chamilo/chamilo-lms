@@ -79,7 +79,7 @@ switch ($type) {
         break;
 }
 
-if ($action === 'add_item' && $type === 'document') {
+if ('add_item' === $action && 'document' === $type) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
 }
 
@@ -172,11 +172,11 @@ foreach ($_SESSION['oLP']->items as $item) {
     $priceItem = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, 'price');
     $authorName = [];
     if (!empty($extraFieldValues)) {
-        if ($extraFieldValues != false) {
+        if (false != $extraFieldValues) {
             $authors = explode(';', $extraFieldValues['value']);
             if (!empty($authors)) {
                 foreach ($authors as $author) {
-                    if ($author != 0) {
+                    if (0 != $author) {
                         $defaultAuthor[$author] = $author;
                         $teacher = api_get_user_info($author);
                         $authorName[] = $teacher['complete_name'];
@@ -185,7 +185,7 @@ foreach ($_SESSION['oLP']->items as $item) {
             }
         }
     }
-    if (count($authorName) != 0) {
+    if (0 != count($authorName)) {
         $authorName = " (".implode(', ', $authorName).")";
     } else {
         $authorName = '';
@@ -208,7 +208,7 @@ $teachers = [];
 $field = new ExtraField('user');
 $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
 $extraFieldId = isset($authorLp['id']) ? (int) $authorLp['id'] : 0;
-if ($extraFieldId != 0) {
+if (0 != $extraFieldId) {
     $extraFieldValueUser = new ExtraFieldValue('user');
     $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
         'authorlp',
@@ -241,7 +241,7 @@ $form->addButtonCreate(get_lang('Send'));
 $form->setDefaults($default);
 
 if ($form->validate()) {
-    if (isset($_GET['sub_action']) && ($_GET['sub_action'] === 'author_view')) {
+    if (isset($_GET['sub_action']) && ('author_view' === $_GET['sub_action'])) {
         $authors = isset($_POST['authorItemSelect']) ? $_POST['authorItemSelect'] : [];
         $items = isset($_POST['itemSelected']) ? $_POST['itemSelected'] : [];
         $price = api_float_val($_POST['price']);
@@ -254,7 +254,7 @@ if ($form->validate()) {
             $itemId = $item->iId;
             if (isset($items[$itemId])) {
                 foreach ($authors as $author) {
-                    if ($author == 0 || $removeExist == 1) {
+                    if (0 == $author || 1 == $removeExist) {
                         $saveExtraFieldItem[$itemId][0] = 0;
                         $removeExist = 1;
                     } else {
@@ -329,7 +329,7 @@ echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, false);
 // Show the template list.
-if (($type === 'document' || $type === 'step') && !isset($_GET['file'])) {
+if (('document' === $type || 'step' === $type) && !isset($_GET['file'])) {
     // Show the template list.
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
     echo '</div>';

@@ -33,8 +33,6 @@ $_user = api_get_user_info();
 
 $nameTools = get_lang('Forums');
 
-
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
 

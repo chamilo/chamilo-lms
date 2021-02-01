@@ -69,15 +69,15 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, User::class);
-    }
-
     /**
      * @var UserPasswordEncoderInterface
      */
     protected $encoder;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, User::class);
+    }
 
     public function setEncoder(UserPasswordEncoderInterface $encoder)
     {

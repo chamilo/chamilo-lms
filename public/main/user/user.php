@@ -36,7 +36,7 @@ $_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
-$canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' || api_is_platform_admin();
+$canEditUsers = 'true' === api_get_setting('allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
 $canEdit = api_is_allowed_to_edit(null, true);
 $canRead = api_is_allowed_to_edit(null, true) || api_is_coach();
 
@@ -75,7 +75,6 @@ if (api_is_allowed_to_edit(null, true)) {
 $extraField = new ExtraField('user');
 $extraFields = $extraField->get_all(['filter = ?' => 1]);
 $user_image_pdf_size = 80;
-
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {

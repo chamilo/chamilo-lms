@@ -118,8 +118,8 @@ if (in_array(
 }
 
 $hideExpectedAnswer = false;
-if ($objExercise->getFeedbackType() == 0 &&
-    $resultDisable == RESULT_DISABLE_SHOW_SCORE_ONLY
+if (0 == $objExercise->getFeedbackType() &&
+    RESULT_DISABLE_SHOW_SCORE_ONLY == $resultDisable
 ) {
     $hideExpectedAnswer = true;
 }

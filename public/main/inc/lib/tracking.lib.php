@@ -2150,6 +2150,7 @@ class Tracking
 
         return false;
     }
+
     /**
      * Get last course access by course/session.
      */
@@ -7494,24 +7495,23 @@ class Tracking
                             Database::query($sql_add_publication);
                             $id = (int) Database::insert_id();
                             if ($id) {
-
-                            $sql_update = "UPDATE $TBL_STUDENT_PUBLICATION
+                                $sql_update = "UPDATE $TBL_STUDENT_PUBLICATION
                                            SET  has_properties = '".$id."',
                                                 view_properties = '1'
                                            WHERE iid = ".$new_parent_id;
-                            if ($debug) {
-                                echo $sql_update;
+                                if ($debug) {
+                                    echo $sql_update;
+                                }
+                                Database::query($sql_update);
+                                if ($debug) {
+                                    var_dump($sql_update);
+                                }
+                                if (!isset($result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT])) {
+                                    $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT] = 0;
+                                }
+                                $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT]++;
                             }
-                            Database::query($sql_update);
-                            if ($debug) {
-                                var_dump($sql_update);
-                            }
-                            if (!isset($result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT])) {
-                                $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT] = 0;
-                            }
-                            $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT]++;
                         }
-                    }
                     }
 
                     $doc_url = $data['url'];
@@ -7521,7 +7521,7 @@ class Tracking
                         // Creating a new work
                         $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
 
-                        $data['post_group_id']  = (int) $data['post_group_id'] ;
+                        $data['post_group_id'] = (int) $data['post_group_id'];
                         $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
                         $publication
                             ->setUrl($new_url)
@@ -7572,11 +7572,11 @@ class Tracking
                             if ($result) {
                                 unlink($full_file_name);
                                 if (isset($data['id'])) {
-                                $sql = "DELETE FROM $TBL_STUDENT_PUBLICATION WHERE id= ".$data['id'];
-                                if ($debug) {
-                                    var_dump($sql);
-                                }
-                                Database::query($sql);
+                                    $sql = "DELETE FROM $TBL_STUDENT_PUBLICATION WHERE id= ".$data['id'];
+                                    if ($debug) {
+                                        var_dump($sql);
+                                    }
+                                    Database::query($sql);
                                 }
                                 api_item_property_update(
                                     $course_info,
@@ -7668,7 +7668,7 @@ class Tracking
             echo '<tr>';
             echo '<td width="50%" valign="top">';
 
-            if ($origin_session_id == 0) {
+            if (0 == $origin_session_id) {
                 echo '<h5>'.get_lang('OriginCourse').'</h5>';
             } else {
                 echo '<h5>'.get_lang('OriginSession').' #'.$origin_session_id.'</h5>';
@@ -7676,7 +7676,7 @@ class Tracking
             self::compareUserData($result_message);
             echo '</td>';
             echo '<td width="50%" valign="top">';
-            if ($new_session_id == 0) {
+            if (0 == $new_session_id) {
                 echo '<h5>'.get_lang('DestinyCourse').'</h5>';
             } else {
                 echo '<h5>'.get_lang('DestinySession').' #'.$new_session_id.'</h5>';
@@ -7692,18 +7692,18 @@ class Tracking
     {
         foreach ($result_message as $table => $data) {
             $title = $table;
-            if ($table === 'TRACK_E_EXERCISES') {
+            if ('TRACK_E_EXERCISES' === $table) {
                 $title = get_lang('Exercises');
-            } elseif ($table === 'TRACK_E_EXERCISES_IN_LP') {
+            } elseif ('TRACK_E_EXERCISES_IN_LP' === $table) {
                 $title = get_lang('ExercisesInLp');
-            } elseif ($table === 'LP_VIEW') {
+            } elseif ('LP_VIEW' === $table) {
                 $title = get_lang('LearningPaths');
             }
             echo '<br / ><h3>'.get_lang($title).' </h3><hr />';
 
             if (is_array($data)) {
                 foreach ($data as $id => $item) {
-                    if ($table === 'TRACK_E_EXERCISES' || $table === 'TRACK_E_EXERCISES_IN_LP') {
+                    if ('TRACK_E_EXERCISES' === $table || 'TRACK_E_EXERCISES_IN_LP' === $table) {
                         echo "<br /><h3>".get_lang('Attempt')." #$id</h3>";
                         echo '<h3>';
                         echo get_lang('Exercise').' #'.$item['exe_exo_id'];

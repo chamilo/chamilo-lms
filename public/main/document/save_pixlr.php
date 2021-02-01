@@ -86,7 +86,7 @@ if (false === $contents) {
 
 // Extension security
 if ('jpg' != $extension && 'png' != $extension && 'pxd' != $extension) {
-    die();
+    exit();
 }
 if ('pxd' == $extension) {
     echo "pxd file type does not supported";

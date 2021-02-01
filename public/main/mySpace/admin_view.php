@@ -8,15 +8,15 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
-if (isset($_GET['export_csv']) && $exportCSV == false) {
+$exportCSV = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+if (isset($_GET['export_csv']) && false == $exportCSV) {
     // to export learningPath and company
     $exportCSV = true;
 }
 $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
 $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
-if (isset($_POST['display']) && $display == null) {
+if (isset($_POST['display']) && null == $display) {
     $display = Security::remove_XSS($_POST['display']);
 }
 
@@ -111,24 +111,24 @@ switch ($display) {
         break;
     case 'accessoverview':
         $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
-        if ($courseId == 0 && $_POST['course_id']) {
+        if (0 == $courseId && $_POST['course_id']) {
             $courseId = (int) $_POST['course_id'];
             $_GET['course_id'] = $courseId;
         }
         $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
-        if ($sessionId == 0 && $_POST['session_id']) {
+        if (0 == $sessionId && $_POST['session_id']) {
             $sessionId = (int) $_POST['session_id'];
             $_GET['session_id'] = $sessionId;
         }
         $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
-        if ($studentId == 0 && $_POST['student_id']) {
+        if (0 == $studentId && $_POST['student_id']) {
             $studentId = (int) $_POST['student_id'];
             $_GET['student_id'] = $studentId;
         }
         $perPage = isset($_GET['tracking_access_overview_per_page']) ? $_GET['tracking_access_overview_per_page'] : 20;
 
         $dates = isset($_GET['date']) ? $_GET['date'] : null;
-        if ($dates == null && $_POST['date']) {
+        if (null == $dates && $_POST['date']) {
             $dates = $_POST['date'];
             $_GET['date'] = $dates;
         }

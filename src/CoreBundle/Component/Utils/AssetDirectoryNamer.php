@@ -13,16 +13,15 @@ use Vich\UploaderBundle\Naming\DirectoryNamerInterface;
 class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterface
 {
     /**
+     * @var PropertyAccessorInterface
+     */
+    protected $propertyAccessor;
+    /**
      * @var string
      */
     private $propertyPath;
     private $charsPerDir = 2;
     private $dirs = 1;
-
-    /**
-     * @var PropertyAccessorInterface
-     */
-    protected $propertyAccessor;
 
     public function __construct(?PropertyAccessorInterface $propertyAccessor)
     {

@@ -98,7 +98,7 @@ class UnserializeApi
                         scormOrganization::class,
                         scormResource::class,
                         Link::class,
-                        LpItem::class
+                        LpItem::class,
                     ]
                 );
                 break;

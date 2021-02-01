@@ -73,5 +73,5 @@ interface HookEventInterface
     /**
      * Get the entity manager used.
      */
-    public function getEntityManager(): ? EntityManager;
+    public function getEntityManager(): ?EntityManager;
 }

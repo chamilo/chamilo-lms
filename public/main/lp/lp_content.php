@@ -55,8 +55,7 @@ if ($dir) {
         case 1:
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
-            if ($prerequisiteCheck === true) {
-
+            if (true === $prerequisiteCheck) {
                 if (WhispeakAuthPlugin::isLpItemMarked($lpItemId)) {
                     ChamiloSession::write(
                         WhispeakAuthPlugin::SESSION_LP_ITEM,
@@ -69,8 +68,8 @@ if ($dir) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 if (empty($src)) {
                     $src = 'blank.php?'.api_get_cidreq().'&error=document_protected';
-                break;
-            }
+                    break;
+                }
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
                 break;

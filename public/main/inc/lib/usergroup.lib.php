@@ -498,9 +498,9 @@ class UserGroup extends Model
         }
 
         if (
-            $withClasses == true &&
+            true == $withClasses &&
             isset($options['session_id']) &&
-            (int) $options['session_id'] != 0
+            0 != (int) $options['session_id']
         ) {
             $sessionId = (int) $options['session_id'];
             $courseId = (int) $options['course_id'];
@@ -511,8 +511,8 @@ class UserGroup extends Model
         }
 
         if ($this->getUseMultipleUrl()) {
-            if ($withClasses != true) {
-            $sql = "SELECT $select
+            if (true != $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u
                     ON (u.id = usergroup.usergroup_id)
@@ -521,7 +521,7 @@ class UserGroup extends Model
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (a.usergroup_id = u.id)
                    ";
-        } else {
+            } else {
                 $sqlClasses = "SELECT".
                     " $select ".
                     " FROM".
@@ -533,8 +533,8 @@ class UserGroup extends Model
                     " $whereClasess ";
             }
         } else {
-            if ($withClasses != true) {
-            $sql = "SELECT $select
+            if (true != $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u
                     ON (u.id = usergroup.usergroup_id)
@@ -550,8 +550,7 @@ class UserGroup extends Model
                     " INNER JOIN `{$this->session_table}` s ON  s.id = ur.session_id".
                     " INNER JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
                     " $whereClasess ";
-        }
-
+            }
         }
         if (-1 != $type) {
             $type = (int) $type;
@@ -563,18 +562,18 @@ class UserGroup extends Model
         }
 
         $conditions = Database::parse_conditions($options);
-        if ($withClasses == true) {
+        if (true == $withClasses) {
             $resultClasess = Database::query($sqlClasses);
         } else {
-        $sql .= $conditions;
+            $sql .= $conditions;
 
-        $result = Database::query($sql);
+            $result = Database::query($sql);
         }
 
         if ($getCount) {
             if (!empty($result)) {
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
+                if (Database::num_rows($result)) {
+                    $row = Database::fetch_array($result);
                     $counts += $row['count'];
                 }
             }
@@ -639,9 +638,9 @@ class UserGroup extends Model
         }
 
         if (
-            $withClasses == true &&
+            true == $withClasses &&
             isset($options['session_id']) &&
-            (int) $options['session_id'] != 0
+            0 != (int) $options['session_id']
         ) {
             $sessionId = (int) $options['session_id'];
             unset($options['session_id']);
@@ -651,15 +650,15 @@ class UserGroup extends Model
         }
 
         if ($this->getUseMultipleUrl()) {
-            if ($withClasses == false) {
-            $sql = "SELECT $select
+            if (false == $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->table} u
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (a.usergroup_id = u.id)
                     LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                     ON (u.id = urc.usergroup_id AND course_id = $course_id)
             ";
-        } else {
+            } else {
                 $sqlClasses = " SELECT".
                     " $select".
                     " FROM".
@@ -671,8 +670,8 @@ class UserGroup extends Model
                     " $whereClasess ";
             }
         } else {
-            if ($withClasses == false) {
-            $sql = "SELECT $select
+            if (false == $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->table} u
                     LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                     ON (u.id = urc.usergroup_id AND course_id = $course_id)
@@ -707,20 +706,20 @@ class UserGroup extends Model
 
         $conditions = Database::parse_conditions($options);
 
-        if ($withClasses == true) {
+        if (true == $withClasses) {
             $resultClasess = Database::query($sqlClasses);
         } else {
-        $sql .= $conditions;
+            $sql .= $conditions;
             $result = Database::query($sql);
         }
 
         if ($getCount) {
             if (!empty($result)) {
-            $result = Database::query($sql);
-            $array = Database::fetch_array($result, 'ASSOC');
+                $result = Database::query($sql);
+                $array = Database::fetch_array($result, 'ASSOC');
 
-            return $array['count'];
-        }
+                return $array['count'];
+            }
             if (!empty($sqlClasses)) {
                 if (Database::num_rows($resultClasess)) {
                     $row = Database::fetch_array($resultClasess);
@@ -809,10 +808,10 @@ class UserGroup extends Model
             ['where' => ['session_id = ? AND usergroup_id = ?' => [$Session, $usergroup_id]]]
         );
 
-        if (empty($results) && $Session == 0) {
+        if (empty($results) && 0 == $Session) {
             return false;
         }
-        if ((empty($resultSession)) && $Session != 0) {
+        if ((empty($resultSession)) && 0 != $Session) {
             return false;
         }
 
@@ -1166,7 +1165,7 @@ class UserGroup extends Model
                         ]
                     );
                 }
-                if ($sessionId != 0 && $groupId != 0) {
+                if (0 != $sessionId && 0 != $groupId) {
                     $this->subscribe_sessions_to_usergroup($groupId, [0]);
                 } else {
                     $s = $sessionId;
@@ -1812,7 +1811,7 @@ class UserGroup extends Model
     /**
      * Get user list by usergroup.
      *
-     * @param int $id
+     * @param int    $id
      * @param string $orderBy
      *
      * @return array

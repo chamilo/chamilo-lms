@@ -1366,7 +1366,7 @@ class Blog
             $result = Database::query($sql);
             // Add rating
             $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq();
-            if (Database::num_rows($result) == 0) {
+            if (0 == Database::num_rows($result)) {
                 $html .= '<form
                     class="form-horizontal"
                     method="get"
@@ -1416,7 +1416,7 @@ class Blog
                     AND user_id = ".$_user['user_id'];
             $result = Database::query($sql);
             $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq();
-            if (Database::num_rows($result) == 0) {
+            if (0 == Database::num_rows($result)) {
                 $html .= '<form
                     class="form-horizontal"
                     method="get"
@@ -2816,8 +2816,8 @@ class Blog
         $startdayofweek = 0 != $dayone['wday'] ? ($dayone['wday'] - 1) : 6;
         $blogId = isset($_GET['blog_id']) ? intval($_GET['blog_id']) : null;
         $filter = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
-        $backwardsURL = $url."&blog_id=".$blogId."&filter=".$filter."&month=".($month == 1 ? 12 : $month - 1)."&year=".($month == 1 ? $year - 1 : $year);
-        $forewardsURL = $url."&blog_id=".$blogId."&filter=".$filter."&month=".($month == 12 ? 1 : $month + 1)."&year=".($month == 12 ? $year + 1 : $year);
+        $backwardsURL = $url."&blog_id=".$blogId."&filter=".$filter."&month=".(1 == $month ? 12 : $month - 1)."&year=".(1 == $month ? $year - 1 : $year);
+        $forewardsURL = $url."&blog_id=".$blogId."&filter=".$filter."&month=".(12 == $month ? 1 : $month + 1)."&year=".(12 == $month ? $year + 1 : $year);
 
         // Get posts for this month
         $sql = "SELECT post.*, DAYOFMONTH(date_creation) as post_day, user.lastname, user.firstname

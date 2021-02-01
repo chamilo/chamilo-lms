@@ -307,7 +307,6 @@ switch ($action) {
 
         break;
     case 'thematic_import_select':
-
         $actionLeft = '<a href="index.php?'.api_get_cidreq().'">';
         $actionLeft .= Display::return_icon(
             'back.png',

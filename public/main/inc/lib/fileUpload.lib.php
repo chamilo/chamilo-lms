@@ -1404,10 +1404,10 @@ function search_img_from_html($html_file)
         $buffer = fread($fp, $size_file);
         if (strlen($buffer) >= 0 && false !== $buffer) {
         } else {
-            die('<center>Can not read file.</center>');
+            exit('<center>Can not read file.</center>');
         }
     } else {
-        die('<center>Can not read file.</center>');
+        exit('<center>Can not read file.</center>');
     }
     $matches = [];
     if (preg_match_all('~<[[:space:]]*img[^>]*>~i', $buffer, $matches)) {

@@ -114,7 +114,6 @@ class learnpath
      * Constructor.
      * Needs a database handler, a course code and a learnpath id from the database.
      * Also builds the list of items into $this->items.
-     *
      */
     public function __construct(CLp $entity, $course_info, $user_id)
     {
@@ -1017,7 +1016,6 @@ class learnpath
                     c_id = $course_id ";
         Database::query($sql);
 
-
         /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
         $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
         // Delete tools
@@ -1864,7 +1862,7 @@ class learnpath
      * @param string $file_name the original name of the file
      *
      * @return string 'scorm','aicc','scorm2004','dokeos', 'error-empty-package'
-     * if the package is empty, or '' if the package cannot be recognized
+     *                if the package is empty, or '' if the package cannot be recognized
      */
     public static function getPackageType($file_path, $file_name)
     {
@@ -6675,10 +6673,10 @@ class learnpath
             $document = $repo->find($id);
             if ($document->getResourceNode()->hasEditableTextContent()) {
                 $repo->updateResourceFileContent($document, $_REQUEST['content_lp']);
-             /*   $nodeRepo = Container::getDocumentRepository()->getResourceNodeRepository();
-                $nodeRepo->update($document->getResourceNode());
-                var_dump($document->getResourceNode()->getContent());
-                exit;*/
+                /*   $nodeRepo = Container::getDocumentRepository()->getResourceNodeRepository();
+                   $nodeRepo->update($document->getResourceNode());
+                   var_dump($document->getResourceNode()->getContent());
+                   exit;*/
             }
             $document->setTitle($_REQUEST['title']);
             $repo->update($document);
@@ -8101,7 +8099,7 @@ class learnpath
                 [
                     'class' => false === $visibility ? 'moved text-muted ' : 'moved link_with_id',
                     'data_type' => 'quiz',
-                    'data_id' => $exerciseId
+                    'data_id' => $exerciseId,
                 ]
             );
             $return .= '</li>';
@@ -11493,7 +11491,7 @@ EOD;
         $document = $repo->find($finalItem->path);
 
         if ($document && $document->getResourceNode()->hasResourceFile()) {
-            return  $repo->getResourceFileContent($document);
+            return $repo->getResourceFileContent($document);
         }
 
         return '';

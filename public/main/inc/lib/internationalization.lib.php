@@ -2127,6 +2127,7 @@ function getLegacyToIso()
 
 /**
  * Returns returns person name convention for a given language.
+ *
  * @param string $iso
  * @param string $type The type of the requested convention.
  *                     It may be 'format' for name order convention or 'sort_by' for name sorting convention.

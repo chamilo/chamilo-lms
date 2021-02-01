@@ -309,7 +309,6 @@ class CourseDescriptionController
             $tpl->assign('session_id', $session_id);
             $tpl->assign('content', $form->returnForm());
             $tpl->display_one_col_template();
-
         }
     }
 

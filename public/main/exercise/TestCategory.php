@@ -134,7 +134,6 @@ class TestCategory
         return false;
     }
 
-
     /**
      * Modify category name or description of category with id=in_id.
      *
@@ -165,7 +164,6 @@ class TestCategory
 
         return false;
     }
-
 
     /**
      * Gets the number of question of category id=in_id.
@@ -223,7 +221,6 @@ class TestCategory
         return $categories;
     }
 
-
     /**
      * Return the TestCategory id for question with question_id = $questionId
      * In this version, a question has only 1 TestCategory.
@@ -269,7 +266,6 @@ class TestCategory
 
         return [];
     }
-
 
     /**
      * Return the category name for question with question_id = $questionId
@@ -354,7 +350,6 @@ class TestCategory
 
         return $categories_in_exercise;
     }
-
 
     /**
      * Return the list of different categories NAME for a test.
@@ -728,9 +723,9 @@ class TestCategory
      * Returns a category summary report.
      *
      * @param Exercise $exercise
-     * @param array $category_list
-     *                             pre filled array with the category_id, score, and weight
-     *                             example: array(1 => array('score' => '10', 'total' => 20));
+     * @param array    $category_list
+     *                                pre filled array with the category_id, score, and weight
+     *                                example: array(1 => array('score' => '10', 'total' => 20));
      *
      * @return string
      */
@@ -1161,7 +1156,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         // if question doesn't have a category
         // @todo change for 1.10 when a question can have several categories
-        if (self::getCategoryForQuestion($questionId, $courseId) == 0 &&
+        if (0 == self::getCategoryForQuestion($questionId, $courseId) &&
             $questionId > 0 &&
             $courseId > 0
         ) {

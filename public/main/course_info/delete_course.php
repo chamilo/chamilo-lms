@@ -25,7 +25,7 @@ if (!api_is_allowed_to_edit()) {
 
 $tool_name = get_lang('DelCourse');
 $type_info_message = 'warning';
-if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && $_GET['course_code'] && !empty($_GET['course_code'])) {
+if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] && !empty($_GET['course_code'])) {
     if ($current_course_code == $_GET['course_code']) {
         CourseManager::delete_course($_course['sysCode']);
         // DELETE CONFIRMATION MESSAGE

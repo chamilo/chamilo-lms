@@ -72,14 +72,14 @@ if ($form->validate()) {
     Security::clear_token();
     if ($check) {
         Security::clear_token();
-    $values = $form->getSubmitValues();
+        $values = $form->getSubmitValues();
         $text = nl2br($values['email_text']).'<br /><br /><br />'.get_lang('EmailSentFromLMS').' '.api_get_path(
                 WEB_PATH
             );
         $email_administrator = $values['dest'];
         $title = $values['email_title'];
-    if (!empty($_user['mail'])) {
-        api_mail_html(
+        if (!empty($_user['mail'])) {
+            api_mail_html(
             '',
             $email_administrator,
             $title,
@@ -93,21 +93,21 @@ if ($form->validate()) {
                 ],
             ]
         );
-    } else {
-        api_mail_html(
+        } else {
+            api_mail_html(
             '',
             $email_administrator,
             $title,
             $text,
             get_lang('Anonymous')
         );
-    }
+        }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));
-    $orig = Session::read('origin_url');
-    Session::erase('origin_url');
-    header('Location:'.$orig);
-    exit;
-}
+        $orig = Session::read('origin_url');
+        Session::erase('origin_url');
+        header('Location:'.$orig);
+        exit;
+    }
 }
 
 $form->addHidden('sec_token', Security::get_token());

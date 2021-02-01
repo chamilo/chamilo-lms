@@ -1565,7 +1565,8 @@ class Rest extends WebService
                 'message' => get_lang('Updated'),
             ];
         }
-            return [
+
+        return [
                 'status' => $result,
                 'message' => get_lang('ErrorOccurred'),
             ];

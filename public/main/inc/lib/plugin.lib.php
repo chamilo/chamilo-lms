@@ -276,6 +276,7 @@ class AppPlugin
 
         return $officialPlugins;
     }
+
     /**
      * @param string $pluginName
      * @param int    $urlId
@@ -758,33 +759,33 @@ class AppPlugin
                             $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
                             if (!empty($defaultValue)) {
                                 if ('true' === $defaultValue) {
+                                    $element->setChecked(true);
+                                }
+                            }
+                        }
+
+                        if (isset($setting['init_value']) && 1 == $setting['init_value']) {
                             $element->setChecked(true);
+                        }
+                        $form->addElement($element);
+
+                        if (isset($setting['group'])) {
+                            $groups[$setting['group']][] = $element;
                         }
                     }
                 }
-
-                if (isset($setting['init_value']) && $setting['init_value'] == 1) {
-                    $element->setChecked(true);
+                foreach ($groups as $k => $v) {
+                    $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
                 }
-                $form->addElement($element);
-
-                if (isset($setting['group'])) {
-                    $groups[$setting['group']][] = $element;
-                }
-            }
-        }
-        foreach ($groups as $k => $v) {
-            $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
-        }
-        $form->addButtonSave(get_lang('Save settings'));
-        $form->addHtml(
+                $form->addButtonSave(get_lang('Save settings'));
+                $form->addHtml(
             '
                         </div>
                     </div>
                 '
         );
-        $form->addHtml('</div>');
-    }
+                $form->addHtml('</div>');
+            }
         }
     }
 

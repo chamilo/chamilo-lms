@@ -11,7 +11,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = '<script>
 
@@ -381,7 +380,6 @@ if (!empty($group_id)) {
     // The course admin him/herself can do this off course always
     $tutorGroup = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 }
-
 
 $postList = [];
 foreach ($posts as $post) {

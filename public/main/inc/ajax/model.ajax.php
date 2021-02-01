@@ -943,7 +943,7 @@ switch ($action) {
         foreach ($items as $item) {
             $result[] = [
                 'id' => $item->getId(),
-                'name' => $item->getName()
+                'name' => $item->getName(),
             ];
         }
         /*$result = $manager->get_all([

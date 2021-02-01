@@ -1091,8 +1091,6 @@ function display_license_agreement()
     $license = api_htmlentities(@file_get_contents(api_get_path(SYMFONY_SYS_PATH).'public/documentation/license.txt'));
     echo '</div>';
 
-
-
     echo '<div class="form-group">
         <pre style="overflow: auto; height: 200px; margin-top: 5px;">
             '.$license.'

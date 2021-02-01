@@ -225,7 +225,7 @@ class ExerciseLink extends AbstractLink
                     $lpList = [];
                     foreach ($exercise->lpList as $lpData) {
                         if ($this->checkBaseExercises) {
-                            if ((int) $lpData['session_id'] == 0) {
+                            if (0 == (int) $lpData['session_id']) {
                                 $lpList[] = $lpData['lp_id'];
                             }
                         } else {
@@ -238,7 +238,7 @@ class ExerciseLink extends AbstractLink
                     if (empty($lpList) && !empty($sessionId)) {
                         // Check also if an LP was added in the base course.
                         foreach ($exercise->lpList as $lpData) {
-                            if ((int) $lpData['session_id'] == 0) {
+                            if (0 == (int) $lpData['session_id']) {
                                 $lpList[] = $lpData['lp_id'];
                             }
                         }

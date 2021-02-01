@@ -18,9 +18,9 @@ class Event
      *
      * @return bool
      * @desc   Record information for login event when an user identifies himself with username & password
+     *
      * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
      * @author Julio Montoya
-     *
      */
     public static function eventLogin($userId)
     {
@@ -77,13 +77,13 @@ class Event
     {
         if (!empty($sessionId)) {
             $visibility = api_get_session_visibility($sessionId);
-            if (!empty($visibility) && $visibility != SESSION_AVAILABLE) {
+            if (!empty($visibility) && SESSION_AVAILABLE != $visibility) {
                 $extraFieldValue = new ExtraFieldValue('session');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $sessionId,
                     'disable_log_after_session_ends'
                 );
-                if (!empty($value) && isset($value['value']) && (int) $value['value'] == 1) {
+                if (!empty($value) && isset($value['value']) && 1 == (int) $value['value']) {
                     return false;
                 }
             }
@@ -594,7 +594,7 @@ class Event
         $attemptData = [];
         if (Database::num_rows($result)) {
             $attemptData = Database::fetch_array($result, 'ASSOC');
-            if ($updateResults == false) {
+            if (false == $updateResults) {
                 //The attempt already exist do not update use  update_event_exercise() instead
                 return false;
             }
@@ -675,10 +675,10 @@ class Event
      * Record an hotspot spot for this attempt at answering an hotspot question.
      *
      * @param int    $exeId
-     * @param int    $questionId Question ID
-     * @param int    $answerId   Answer ID
+     * @param int    $questionId    Question ID
+     * @param int    $answerId      Answer ID
      * @param int    $correct
-     * @param string $coords     Coordinates of this point (e.g. 123;324)
+     * @param string $coords        Coordinates of this point (e.g. 123;324)
      * @param bool   $updateResults
      * @param int    $exerciseId
      *
@@ -801,7 +801,7 @@ class Event
         }
 
         //Clean the user_info
-        if ($event_value_type == LOG_USER_OBJECT) {
+        if (LOG_USER_OBJECT == $event_value_type) {
             if (is_array($event_value)) {
                 unset($event_value['complete_name']);
                 unset($event_value['complete_name_with_username']);
@@ -1831,6 +1831,7 @@ class Event
 
         return $attempt;
     }
+
     /**
      * Delete one record from the track_e_attempt table (recorded quiz answer)
      * and register the deletion event (LOG_QUESTION_RESULT_DELETE) in
@@ -2367,11 +2368,11 @@ class Event
             return false;
         }
 
-        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+        if (false === self::isSessionLogNeedToBeSave($sessionId)) {
             return false;
         }
 
-        $loginAs = (int) Session::read('login_as') === true;
+        $loginAs = true === (int) Session::read('login_as');
 
         $logInfo['user_id'] = isset($logInfo['user_id']) ? $logInfo['user_id'] : api_get_user_id();
         $logInfo['date_reg'] = isset($logInfo['date_reg']) ? $logInfo['date_reg'] : api_get_utc_datetime();

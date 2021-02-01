@@ -82,7 +82,7 @@ if (!empty($choiceValue)) {
 
 $header = '';
 $exeId = 0;
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
+if (EXERCISE_FEEDBACK_TYPE_POPUP === $objExercise->getFeedbackType()) {
     $exeId = Session::read('exe_id');
     $header = '
         <div class="modal-header">
@@ -106,7 +106,6 @@ function SendEx(num) {
     return false;
 }
 </script>';
-
 
 echo '<div id="delineation-container">';
 // Getting the options by js
@@ -197,7 +196,7 @@ $choice[$questionId] = isset($choiceValue) ? $choiceValue : null;
 if (!is_array($exerciseResult)) {
     $exerciseResult = [];
 }
-$saveResults = (int) $objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_POPUP;
+$saveResults = EXERCISE_FEEDBACK_TYPE_POPUP == (int) $objExercise->getFeedbackType();
 
 // if the user has answered at least one question
 if (is_array($choice)) {

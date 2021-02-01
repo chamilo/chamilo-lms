@@ -417,6 +417,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $counterColumn = 2;
                 $categories = [];
                 $letterList = [];
+                $highestRow = $page->getHighestRow(0); // Name list
                 foreach ($page->getColumnIterator('C') as $col) {
                     $index = $col->getColumnIndex();
                     $cell = $page->getCellByColumnAndRow($counterColumn, 1);
@@ -425,16 +426,14 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     if (!empty($value)) {
                         $categories[$value][] = [
                             'col' => $index,
-                            'row' => $page->getHighestRow($index),
+                            'row' => $highestRow,
                         ];
+                        $letterList[] = $index;
                     }
-                    $letterList[] = $index;
                     $counterColumn++;
                 }
 
                 if (!empty($categories)) {
-                    $maxColumn = $counterColumn;
-                    $newCounter = 2;
                     $newOrder = [];
                     foreach ($categories as $category => $categoryList) {
                         foreach ($categoryList as $categoryData) {
@@ -448,7 +447,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     foreach ($newOrder as $index => $order) {
                         $data = $order['data'];
                         $col = $order['col'];
-                        $page->fromArray($data, null, $letterList[$index].'1');
+                        $page->fromArray($data, '@', $letterList[$index].'1', true);
                     }
                 }
 

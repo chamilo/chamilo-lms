@@ -97,7 +97,7 @@ class SortableTableFromArrayConfig extends SortableTable
      */
     public function get_total_number_of_items()
     {
-        if (!empty($this->total_number_of_items) && $this->total_number_of_items !== -1) {
+        if (!empty($this->total_number_of_items) && -1 !== $this->total_number_of_items) {
             return $this->total_number_of_items;
         } else {
             if (!empty($this->table_data)) {

@@ -1914,7 +1914,7 @@ HOTSPOT;
      */
     public static function get_count_exam_results($exerciseId, $conditions, $courseCode = '', $showSession = false)
     {
-        $count = self::get_exam_results_data(
+        return self::get_exam_results_data(
             null,
             null,
             null,
@@ -1925,8 +1925,6 @@ HOTSPOT;
             $courseCode,
             $showSession
         );
-
-        return $count;
     }
 
     /**
@@ -2072,7 +2070,7 @@ HOTSPOT;
     }
 
     /**
-     * Gets the exam'data results.
+     * Gets exercise results.
      *
      * @todo this function should be moved in a library  + no global calls
      *
@@ -2119,7 +2117,6 @@ HOTSPOT;
         }
 
         $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-
         $course_id = $courseInfo['real_id'];
         $sessionId = api_get_session_id();
         $exercise_id = (int) $exercise_id;
@@ -2145,9 +2142,16 @@ HOTSPOT;
             $sessionCondition = " AND ttte.session_id = $sessionId";
         }
 
+        if (empty($sessionId) &&
+            api_get_configuration_value('show_exercise_session_attempts_in_base_course')
+        ) {
+            $session_id_and = '';
+            $sessionCondition = '';
+        }
+
         $exercise_where = '';
         if (!empty($exercise_id)) {
-            $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
+            $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.' ';
         }
 
         $hotpotatoe_where = '';
@@ -2407,20 +2411,19 @@ HOTSPOT;
             if (is_array($results)) {
                 $users_array_id = [];
                 $from_gradebook = false;
-                if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
+                if (isset($_GET['gradebook']) && $_GET['gradebook'] === 'view') {
                     $from_gradebook = true;
                 }
                 $sizeof = count($results);
-                $locked = api_resource_is_locked_by_gradebook(
-                    $exercise_id,
-                    LINK_EXERCISE
-                );
-
+                $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
                 $timeNow = strtotime(api_get_utc_datetime());
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
                     $revised = $results[$i]['revised'];
-                    if ($results[$i]['completion_status'] == 'incomplete') {
+                    $attemptSessionId = (int) $results[$i]['session_id'];
+                    $cidReq = api_get_cidreq(false).'&id_session='.$attemptSessionId;
+
+                    if ('incomplete' === $results[$i]['completion_status']) {
                         // If the exercise was incomplete, we need to determine
                         // if it is still into the time allowed, or if its
                         // allowed time has expired and it can be closed
@@ -2454,17 +2457,20 @@ HOTSPOT;
                         $users_array_id[] = $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'];
                     }
 
-                    $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
+                    $lp_obj = isset($results[$i]['orig_lp_id']) &&
+                        isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
                     if (empty($lp_obj)) {
                         // Try to get the old id (id instead of iid)
-                        $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
+                        $lpNewId = isset($results[$i]['orig_lp_id']) &&
+                        isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
                         if ($lpNewId) {
                             $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
                         }
                     }
                     $lp_name = null;
                     if ($lp_obj) {
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                        $url = api_get_path(WEB_CODE_PATH).
+                            'lp/lp_controller.php?'.$cidReq.'&action=view&lp_id='.$results[$i]['orig_lp_id'];
                         $lp_name = Display::url(
                             $lp_obj['lp_name'],
                             $url,
@@ -2532,7 +2538,7 @@ HOTSPOT;
                             $revisedLabel = '';
                             switch ($revised) {
                                 case 0:
-                                    $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
+                                    $actions .= "<a href='exercise_show.php?".$cidReq."&action=qualify&id=$id'>".
                                         Display:: return_icon(
                                             'quiz.png',
                                             get_lang('Qualify')
@@ -2544,7 +2550,7 @@ HOTSPOT;
                                     );
                                     break;
                                 case 1:
-                                    $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
+                                    $actions .= "<a href='exercise_show.php?".$cidReq."&action=edit&id=$id'>".
                                         Display:: return_icon(
                                             'edit.png',
                                             get_lang('Edit'),
@@ -2559,11 +2565,9 @@ HOTSPOT;
                                     break;
                                 case 2: //finished but not marked as such
                                     $actions .= '<a href="exercise_report.php?'
-                                        .api_get_cidreq()
-                                        .'&exerciseId='
-                                        .$exercise_id
-                                        .'&a=close&id='
-                                        .$id
+                                        .$cidReq
+                                        .'&exerciseId='.$exercise_id
+                                        .'&a=close&id='.$id
                                         .'">'.
                                         Display:: return_icon(
                                             'lock.png',
@@ -2593,7 +2597,7 @@ HOTSPOT;
                             }
 
                             if ($filter == 2) {
-                                $actions .= ' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id='.$id.'">'.
+                                $actions .= ' <a href="exercise_history.php?'.$cidReq.'&exe_id='.$id.'">'.
                                     Display:: return_icon(
                                         'history.png',
                                         get_lang('ViewHistoryChange')
@@ -2612,7 +2616,7 @@ HOTSPOT;
                                     .'</a>';
 
                                 $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
-                                    api_get_cidreq().'&'.
+                                    $cidReq.'&'.
                                     http_build_query([
                                         'id' => $id,
                                         'exercise' => $exercise_id,
@@ -2630,8 +2634,9 @@ HOTSPOT;
                                 );
 
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
-                                $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
-                                onclick="javascript:if(!confirm(\''.sprintf(
+                                $delete_link = '<a
+                                    href="exercise_report.php?'.$cidReq.'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
+                                    onclick="javascript:if(!confirm(\''.sprintf(
                                         addslashes(get_lang('DeleteAttempt')),
                                         $results[$i]['username'],
                                         $dt
@@ -2653,7 +2658,7 @@ HOTSPOT;
                                 $actions .= $delete_link;
                             }
                         } else {
-                            $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.$sessionId;
+                            $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.$cidReq.'&id='.$results[$i]['exe_id'];
                             $attempt_link = Display::url(
                                 get_lang('Show'),
                                 $attempt_url,
@@ -2685,8 +2690,8 @@ HOTSPOT;
                         if ($is_allowedToEdit) {
                             $sessionName = '';
                             $sessionStartAccessDate = '';
-                            if (!empty($results[$i]['session_id'])) {
-                                $sessionInfo = api_get_session_info($results[$i]['session_id']);
+                            if (!empty($attemptSessionId)) {
+                                $sessionInfo = api_get_session_info($attemptSessionId);
                                 if (!empty($sessionInfo)) {
                                     $sessionName = $sessionInfo['name'];
                                     $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
@@ -2702,7 +2707,8 @@ HOTSPOT;
                                     if (!empty($question_list)) {
                                         foreach ($question_list as $questionId) {
                                             $objQuestionTmp = Question::read($questionId, $objExercise->course);
-                                            // We're inside *one* question. Go through each possible answer for this question
+                                            // We're inside *one* question.
+                                            // Go through each possible answer for this question.
                                             $result = $objExercise->manage_answer(
                                                 $exeId,
                                                 $questionId,
@@ -2779,8 +2785,8 @@ HOTSPOT;
                                     $result['total'],
                                     true,
                                     true,
-                                    true, // $show_only_percentage = false
-                                    true, // hide % sign
+                                    true,
+                                    true,
                                     $decimalSeparator,
                                     $thousandSeparator,
                                     $roundValues

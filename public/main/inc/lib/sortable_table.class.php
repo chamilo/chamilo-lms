@@ -415,7 +415,8 @@ class SortableTable extends HTML_Table
 
         if (!empty($this->additional_parameters)) {
             foreach ($this->additional_parameters as $key => $value) {
-                $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';
+                $html .= '<input type="hidden" name="'.Security::remove_XSS($key).'" value ="'
+                    .Security::remove_XSS($value).'" />';
             }
         }
         $html .= '<input type="hidden" name="action">';
@@ -472,7 +473,6 @@ class SortableTable extends HTML_Table
         if (count($this->form_actions) > 0) {
             $html .= '</form>';
         }
-
 
         return $html;
     }

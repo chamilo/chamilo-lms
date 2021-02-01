@@ -351,7 +351,7 @@ function api_get_local_time(
     if (is_numeric($time)) {
         $time = (int) $time;
         if ($returnNullIfInvalidDate) {
-            if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
+            if (strtotime(date('d-m-Y H:i:s', $time)) !== $time) {
                 return null;
             }
         }
@@ -596,7 +596,18 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
     date_default_timezone_set($getOldTimezone);
 
     if ($returnDateDifference) {
-        $value = $timeAgo->dateDifference($date);
+        //$value = $timeAgo->dateDifference($date);
+        $now = new DateTime('now', $date->getTimezone());
+        $value = $date->diff($now);
+
+        return [
+            'years' => $value->y,
+            'months' => $value->m,
+            'days' => $value->d,
+            'hours' => $value->h,
+            'minutes' => $value->i,
+            'seconds' => $value->s,
+        ];
     }
 
     return $value;
@@ -1545,11 +1556,12 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
  *                                  If it is omitted, the platform character set will be used by default.
  *
  * @return array|string|null returns an array if the subject parameter is an array, or a string otherwise.
- *                           If matches are found, the new subject will be returned, otherwise subject will be returned unchanged or NULL if an error occurred.
+ *                           If matches are found, the new subject will be returned, otherwise subject will be returned
+ *                            unchanged or NULL if an error occurred.
  *
  * @see http://php.net/preg_replace
  */
-function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0, $encoding = null)
+function api_preg_replace($pattern, $replacement, $subject, $limit = -1, $count = 0, $encoding = null)
 {
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();

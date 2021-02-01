@@ -437,8 +437,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $newOrder = [];
                     foreach ($categories as $category => $categoryList) {
                         foreach ($categoryList as $categoryData) {
-                            $col = $categoryData['col'];// D
-                            $row = $categoryData['row'];// 15
+                            $col = $categoryData['col']; // D
+                            $row = $categoryData['row']; // 15
                             $data = $page->rangeToArray($col.'1:'.$col.$row);
                             $newOrder[] = ['data' => $data, 'col' => $col];
                         }
@@ -509,21 +509,30 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $userWithAnswerId = $userAnswer['user_id'];
                             $myUserId = $userAnswer['id'];
                             $columnUser = 0;
+                            // Question title.
+                            $cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $questionTitle, true);
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(50);
+
+                            // User name.
                             $cell = @$page->setCellValueByColumnAndRow(
                                 $columnUser++,
                                 $row,
                                 $survey['group_title'].' - '.$userAnswer['complete_name'],
                                 true
                             );
-                            $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
-                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(60);
+                            /*$page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(50);*/
                             $data = '';
                             if (isset($survey['user_answers'][$myUserId]) &&
                                 isset($survey['user_answers'][$myUserId][$survey['survey_id']][$questionId])
                             ) {
                                 $data = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
                             }
-                            @$page->setCellValueByColumnAndRow($columnUser++, $row, $data);
+                            // Question answer.
+                            $cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $data, true);
+                            /*$page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
+                            $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(80);*/
                             $row++;
                         }
                     } else {

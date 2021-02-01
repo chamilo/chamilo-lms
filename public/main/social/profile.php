@@ -106,6 +106,7 @@ if (isset($_GET['u'])) {
 
 api_block_anonymous_users();
 $countPost = SocialManager::getCountWallMessagesByUser($friendId);
+$htmlHeadXtra = [];
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 $link_shared = '';
 if (isset($_GET['shared'])) {
@@ -237,7 +238,7 @@ if ($show_full_profile) {
 
     if (!empty($user_info['competences']) || !empty($user_info['diplomas'])
         || !empty($user_info['openarea']) || !empty($user_info['teach'])) {
-        $more_info .= '<div><h3>'.get_lang('More information').'</h3></div>';
+        $more_info = '<div><h3>'.get_lang('More information').'</h3></div>';
         if (!empty($user_info['competences'])) {
             $more_info .= '<br />';
             $more_info .= '<div class="social-actions-message"><strong>'.get_lang('My competences').'</strong></div>';

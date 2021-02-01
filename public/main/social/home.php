@@ -39,6 +39,7 @@ if (!empty($threadList)) {
 $posts = SocialManager::getMyWallMessages($user_id, 0, 10, $threadIdList);
 $countPost = $posts['count'];
 $posts = $posts['posts'];
+$htmlHeadXtra = [];
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 
 // Block Menu

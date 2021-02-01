@@ -153,14 +153,14 @@ switch ($action) {
                 //TODO change this function to search not only courses STARTING with $_GET['q']
                 if (api_is_platform_admin()) {
                     $courseList = CourseManager::get_courses_list(
-                        0, //offset
-                        0, //howMany
-                        1, //$orderby = 1
+                        0,
+                        0,
+                        1,
                         'ASC',
-                        -1, //visibility
+                        -1,
                         $_GET['q'],
-                        null, //$urlId
-                        true //AlsoSearchCode
+                        null,
+                        true
                     );
                 } elseif (api_is_teacher()) {
                     $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
@@ -257,12 +257,18 @@ switch ($action) {
         }
         break;
     case 'search_user_by_course':
-        if (api_is_platform_admin()) {
-            $user = Database::get_main_table(TABLE_MAIN_USER);
-            $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $sessionId = $_GET['session_id'];
-            $course = api_get_course_info_by_id($_GET['course_id']);
+        $sessionId = $_GET['session_id'];
+        $course = api_get_course_info_by_id($_GET['course_id']);
 
+        $isPlatformAdmin = api_is_platform_admin();
+        $userIsSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
+            api_get_user_id(),
+            $course['code'],
+            !empty($sessionId),
+            $sessionId
+        );
+
+        if ($isPlatformAdmin || $userIsSubscribedInCourse) {
             $json = [
                 'items' => [],
             ];

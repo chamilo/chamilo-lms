@@ -984,11 +984,8 @@ if ($form->validate() && $isEditable) {
         $illustrationRepo->deleteIllustration($courseEntity);
     }
 
-    global $_configuration;
-    if (isset($_configuration[$urlId]) &&
-        isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
-        $_configuration[$urlId]['hosting_limit_active_courses'] > 0
-    ) {
+    $limitCourses = api_get_configuration_value('hosting_limit_active_courses');
+    if ($limitCourses > 0) {
         $courseInfo = api_get_course_info_by_id($courseId);
 
         // Check if
@@ -996,7 +993,7 @@ if ($form->validate() && $isEditable) {
             $visibility != $courseInfo['visibility']
         ) {
             $num = CourseManager::countActiveCourses($urlId);
-            if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
+            if ($num >= $limitCourses) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 
                 Display::addFlash(

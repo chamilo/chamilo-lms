@@ -30,7 +30,7 @@ if (in_array($extension, ['xml', 'csv']) &&
     (api_is_platform_admin(true) || api_is_drh())
 ) {
     $content_type = 'application/force-download';
-} elseif ('zip' === $extension && $_cid && (api_is_platform_admin(true) || api_is_course_admin())) {
+} elseif ('zip' === $extension && api_get_course_id() && (api_is_platform_admin(true) || api_is_course_admin())) {
     $content_type = 'application/force-download';
 }
 

@@ -559,10 +559,10 @@ class PDF
      *
      * @return bool
      */
-    public function delete_watermark($courseCode = null)
+    public static function delete_watermark($courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && 'true' == api_get_setting('pdf_export_watermark_by_course')) {
+        if (!empty($courseCode) && 'true' === api_get_setting('pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
@@ -588,10 +588,10 @@ class PDF
      *
      * @return mixed web path of the file if sucess, false otherwise
      */
-    public function upload_watermark($filename, $source_file, $courseCode = null)
+    public static function upload_watermark($filename, $source_file, $courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && 'true' == api_get_setting('pdf_export_watermark_by_course')) {
+        if (!empty($courseCode) && 'true' === api_get_setting('pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
             $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';

@@ -53,6 +53,7 @@ class ch_personality extends survey_question
         // Values of question options
         if (is_array($formData['values'])) { // Check if data is correct
             foreach ($formData['values'] as $key => &$value) {
+                $value = Security::remove_XSS($value);
                 $question_values[] = '<input size="3" type="text" id="values['.$key.']" name="values['.$key.']" value="'.$value.'" />';
             }
         }
@@ -62,14 +63,9 @@ class ch_personality extends survey_question
                 $this->html .= '<tr>';
                 $this->html .= '<td align="right"><label for="answers['.$key.']">'.($key + 1).'</label></td>';
                 $this->html .= '<td width="550">';
-                $this->html .= api_return_html_area(
-                    'answers['.$key.']',
-                    api_html_entity_decode(stripslashes($formData['answers'][$key])),
-                    '',
-                    '',
-                    null,
-                    ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120']
-                );
+                $dataValue = api_html_entity_decode(stripslashes($formData['answers'][$key]));
+                $dataValue = Security::remove_XSS($dataValue);
+                $this->html .= '<textarea name="answers['.$key.']" >'.$dataValue.'</textarea>';
                 $this->html .= '</td>';
                 $this->html .= '<td>';
 

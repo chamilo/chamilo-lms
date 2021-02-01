@@ -5,7 +5,6 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
 
-// Add security from Chamilo
 api_block_anonymous_users();
 
 $courseInfo = api_get_course_info();

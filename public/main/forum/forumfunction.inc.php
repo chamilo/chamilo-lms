@@ -765,7 +765,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     //'forum_image' => $new_file_name,
     $forum
         ->setForumTitle($values['forum_title'])
-        ->setForumComment($values['forum_comment'] ?? null)
+        ->setForumComment($values['forum_comment'] ?? '')
         ->setForumCategory($forumCategory)
         ->setAllowAnonymous($values['allow_anonymous_group']['allow_anonymous'] ?? null)
         ->setAllowEdit($values['students_can_edit_group']['students_can_edit'] ?? null)

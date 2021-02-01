@@ -51,9 +51,7 @@ if (isset($_REQUEST['action']) && 'delete' == $_REQUEST['action']) {
 }
 
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id
-);
+$friend_html = SocialManager::listMyFriendsBlock(api_get_user_id());
 $content = null;
 $social_right_content = '';
 

@@ -490,6 +490,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $counter++;
             }
 
+            $page = @$spreadsheet->createSheet($counter);
+            @$page->setTitle(get_lang('Questions'));
+
+            $row = 1;
             foreach ($surveyList as $survey) {
                 $questions = $survey['questions'];
                 $questionsOriginal = $survey['questions'];
@@ -499,14 +503,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     if (false === strpos($question['question'], '{{')) {
                         $questionTitle = strip_tags($question['question']);
                         $questionId = $question['question_id'];
-                        $page = @$spreadsheet->createSheet($counter);
-                        @$page->setTitle(
-                            cut(str_replace('/', '-', api_html_entity_decode(strip_tags($questionTitle))), 25)
-                        );
                         $firstColumn = 3;
                         $column = 3;
-                        $columnQuestion = 3;
-                        $row = 1;
                         foreach ($usersWithAnswers as $userAnswer) {
                             $userWithAnswerId = $userAnswer['user_id'];
                             $myUserId = $userAnswer['id'];
@@ -517,7 +515,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $survey['group_title'].' - '.$userAnswer['complete_name'],
                                 true
                             );
-
                             $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
                             $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(60);
                             $data = '';
@@ -529,7 +526,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             @$page->setCellValueByColumnAndRow($columnUser++, $row, $data);
                             $row++;
                         }
-                        $counter++;
                     } else {
                         break;
                     }

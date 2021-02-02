@@ -272,6 +272,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             $counter = 0;
             foreach ($classes as $class) {
                 $users = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
+                if (empty($users)) {
+                    continue;
+                }
+
                 $page = @$spreadsheet->createSheet($counter);
                 @$page->setTitle($class['name']);
                 $firstColumn = 3;
@@ -289,10 +293,14 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $questions = $survey['questions'];
                     $questionsOriginal = $survey['questions'];
                     $usersWithAnswers = $survey['user_with_answers'];
+                    if (empty($usersWithAnswers)) {
+                        continue;
+                    }
                     $rowStudent = 3;
                     $usersToShow = [];
                     // User in classes.
                     $questionsInSurvey = 0;
+                    $skipThisClass = true;
                     foreach ($users as $userData) {
                         $userId = $userData['id'];
                         $completeName = $userData['firstname'].' '.$userData['lastname'];
@@ -336,6 +344,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                             $colCode = $cell->getColumn();
                                                             if ($answerData != '' && !in_array($userColumn, $columnsWithData)) {
                                                                 $columnsWithData[] = $userColumn;
+                                                                $skipThisClass = false;
                                                             }
                                                         }
                                                     }
@@ -348,6 +357,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             }
                         }
                         $rowStudent++;
+                    }
+
+                    if ($skipThisClass) {
+                        continue;
                     }
 
                     if (empty($previousSurveyQuestionsCount)) {
@@ -377,12 +390,12 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $questionId = $question['question_id'];
                             foreach ($usersWithAnswers as $userAnswer) {
                                 // Add question title.
-                                $cell = @$page->setCellValueByColumnAndRow(
+                                /*$cell = @$page->setCellValueByColumnAndRow(
                                     $column,
                                     1,
                                     $questionTitle,
                                     true
-                                );
+                                );*/
                                 $userId = $userAnswer['user_id'];
                                 $cell = @$page->setCellValueByColumnAndRow(
                                     $column,

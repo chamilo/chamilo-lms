@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 
@@ -27,6 +28,25 @@ class GlossaryManager
     public static function get_glossary_terms()
     {
         $glossary_data = [];
+        $repo = Container::getGlossaryRepository();
+
+        $findArray = [
+            'cId' => api_get_course_int_id(),
+            'sessionId' => api_get_session_id(),
+        ];
+
+        $glossaries = $repo->findBy($findArray);
+        /** @var CGlossary $item */
+        foreach ($glossaries as $item) {
+            $glossary_data[] = [
+                'id' => $item->getIid(),
+                'name' => $item->getName(),
+                'description' => $item->getDescription(),
+            ];
+        }
+        return $glossary_data;
+
+        /*
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $sql_filter = api_get_session_condition($session_id);
@@ -41,6 +61,7 @@ class GlossaryManager
         }
 
         return $glossary_data;
+        */
     }
 
     /**
@@ -54,6 +75,16 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_id($glossary_id)
     {
+        $repo = Container::getGlossaryRepository();
+        /** @var CGlossary $glossary */
+        $glossary = $repo->find($glossary_id);
+        $description = '';
+        if (null !== $glossary) {
+            $description = $glossary->getDescription();
+        }
+        return $description;
+
+        /*
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
         $glossary_id = (int) $glossary_id;
@@ -69,6 +100,7 @@ class GlossaryManager
         }
 
         return '';
+        */
     }
 
     /**
@@ -82,6 +114,7 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_name($name)
     {
+        // @todo Filter by like on ORM
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
@@ -130,14 +163,8 @@ class GlossaryManager
             return false;
         }
 
-        // Database table definition
-        $table = Database::get_course_table(TABLE_GLOSSARY);
-
         // get the maximum display order of all the glossary items
         $max_glossary_item = self::get_max_glossary_item();
-
-        // session_id
-        $session_id = api_get_session_id();
 
         // check if the glossary term already exists
         if (self::glossary_exists($values['name'])) {
@@ -150,10 +177,32 @@ class GlossaryManager
 
             return false;
         } else {
-            // @todo
-            $repo = Container::getGlossaryRepository();
             $glossary = new CGlossary();
+
+            $courseId = api_get_course_int_id();
+            $sessionId = api_get_session_id();
+
+            $glossary
+                ->setName($values['name'])
+                ->setDescription($values['description'])
+                ->setDisplayOrder($max_glossary_item + 1)
+                ->setSessionId($sessionId)
+                ->setCId($courseId);
+
+
+            $course = api_get_course_entity($courseId);
+            $session = api_get_session_entity($sessionId);
+            $glossary->setParent($course);
+            $glossary->addCourseLink($course, $session);
+
+            $repo = Container::getGlossaryRepository();
+            $repo->create($glossary);
+            /*
             throw new Exception('implement resources');
+
+
+            // Database table definition
+            $table = Database::get_course_table(TABLE_GLOSSARY);
             $params = [
                 'glossary_id' => 0,
                 'c_id' => api_get_course_int_id(),
@@ -177,6 +226,7 @@ class GlossaryManager
                     api_get_user_id()
                 );
             }
+            */
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
@@ -184,7 +234,7 @@ class GlossaryManager
                 );
             }
 
-            return $id;
+            return $glossary->getIid();
         }
     }
 
@@ -197,10 +247,12 @@ class GlossaryManager
      */
     public static function update_glossary($values, $showMessage = true)
     {
+        /*
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
 
+        */
         // check if the glossary term already exists
         if (self::glossary_exists($values['name'], $values['glossary_id'])) {
             // display the feedback message
@@ -212,6 +264,23 @@ class GlossaryManager
 
             return false;
         } else {
+            $repo = Container::getGlossaryRepository();
+
+            $findArray = [
+                'cId' => api_get_course_int_id(),
+                'sessionId' => api_get_session_id(),
+                'iid' => (int) $values['glossary_id'],
+            ];
+            /** @var CGlossary $glossary */
+            $glossary = $repo->findOneBy($findArray);
+            if (null !== $glossary) {
+                $glossary
+                    ->setName($values['name'])
+                    ->setDescription($values['description']);
+                $repo->update($glossary);
+            }
+            /*
+
             $sql = "UPDATE $table SET
                         name = '".Database::escape_string($values['name'])."',
                         description	= '".Database::escape_string($values['description'])."'
@@ -232,6 +301,7 @@ class GlossaryManager
                 api_get_user_id()
             );
 
+            */
             if ($showMessage) {
                 // display the feedback message
                 Display::addFlash(
@@ -250,6 +320,17 @@ class GlossaryManager
      */
     public static function get_max_glossary_item()
     {
+        // @todo get max by orm
+        /*
+        $repo = Container::getGlossaryRepository();
+
+        $findArray  = [
+            'cId' => api_get_course_int_id(),
+            'sessionId' => api_get_session_id(),
+            'name'=>$term,
+        ];
+        $glossary = $repo->findBy($findArray);
+        */
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
@@ -277,6 +358,25 @@ class GlossaryManager
      */
     public static function glossary_exists($term, $not_id = '')
     {
+        $repo = Container::getGlossaryRepository();
+
+        $findArray = [
+            'cId' => api_get_course_int_id(),
+            'sessionId' => api_get_session_id(),
+            'name' => $term,
+        ];
+        $glossaries = $repo->findBy($findArray);
+        if (0 == count($glossaries)) return false;
+
+        /** @var CGlossary $item */
+        foreach ($glossaries as $item) {
+            if ($not_id != $item->getIid()) {
+                return true;
+            }
+        }
+        return false;
+        /*
+
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
@@ -295,6 +395,7 @@ class GlossaryManager
         } else {
             return false;
         }
+        */
     }
 
     /**
@@ -306,6 +407,33 @@ class GlossaryManager
      */
     public static function get_glossary_information($glossary_id)
     {
+        $repo = Container::getGlossaryRepository();
+
+        $findArray = [
+            'cId' => api_get_course_int_id(),
+            'sessionId' => api_get_session_id(),
+            'iid' => $glossary_id,
+        ];
+
+        /** @var CGlossary $glossary */
+        $glossary = $repo->findOneBy($findArray);
+        $data = [];
+        if (null !== $glossary) {
+            $resourceNode = $glossary->getResourceNode();
+            $data = [
+                'glossary_id' => $glossary_id,
+                'name' => $glossary->getName(),
+                'description' => $glossary->getDescription(),
+                'glossary_display_order' => $glossary->getDisplayOrder(),
+                'insert_date' => $resourceNode->getCreatedAt(),
+                'lastedit_date' => $resourceNode->getUpdatedAt(),
+                'session_id' => $glossary->getSessionId(),
+            ];
+
+        }
+
+        return $data;
+        /*
         // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
         $t_item_propery = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -335,6 +463,7 @@ class GlossaryManager
         }
 
         return Database::fetch_array($result);
+        */
     }
 
     /**
@@ -347,6 +476,17 @@ class GlossaryManager
      */
     public static function delete_glossary($glossary_id, $showMessage = true)
     {
+        $glossaryInfo = self::get_glossary_information($glossary_id);
+
+        $glossary = new CGlossary();
+        $sessionId = api_get_session_id();
+        $glossary
+            ->setSessionId($sessionId);
+        $delete = false;
+        if (!empty($glossary_id)) {
+            $delete = $glossary->delete($glossary_id);
+        }
+        /*
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
@@ -363,10 +503,11 @@ class GlossaryManager
                     c_id = $course_id AND
                     glossary_id='".$glossary_id."'";
         $result = Database::query($sql);
-        if (false === $result || Database::affected_rows($result) < 1) {
+        */
+        if (false === $delete) {
             return false;
         }
-
+        /*
         // update item_property (delete)
         api_item_property_update(
             api_get_course_info(),
@@ -375,7 +516,7 @@ class GlossaryManager
             'delete',
             api_get_user_id()
         );
-
+        */
         // reorder the remaining terms
         self::reorder_glossary();
 
@@ -481,7 +622,7 @@ class GlossaryManager
             [],
             FormValidator::LAYOUT_INLINE
         );
-        $form->addText('keyword', '', false, ['class' => 'col-md-2']);
+        $form->addText('keyword', '', false, ['class' => '']);
         $form->addElement('hidden', 'cidReq', api_get_course_id());
         $form->addElement('hidden', 'id_session', api_get_session_id());
         $form->addButtonSearch(get_lang('Search'));
@@ -494,7 +635,9 @@ class GlossaryManager
 
         $content = $toolbar;
 
-        if (!$view || 'table' === $view) {
+        $items = self::get_number_glossary_terms();
+        if ($items != 0 && (!$view || 'table' === $view)) {
+            // @todo Table haven't paggination
             $table = new SortableTable(
                 'glossary',
                 ['GlossaryManager', 'get_number_glossary_terms'],
@@ -546,6 +689,29 @@ class GlossaryManager
      */
     public static function get_number_glossary_terms($session_id = 0)
     {
+        // @todo Filter by keywork dont work
+        $repo = Container::getGlossaryRepository();
+
+        $course_id = api_get_course_int_id();
+        $session_id = !empty($session_id) ? $session_id : api_get_session_id();
+
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        /*
+        $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
+        if(!empty($keyword)){
+            $qb
+                ->where('name LIKE :keyword')
+                ->orWhere('description LIKE :keyword')
+                ->setParameter('keyword', '%'.$keyword.'%');
+        }
+        */
+
+        return count($qb->getQuery()->getResult());
+        /*
+
         // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
@@ -569,6 +735,7 @@ class GlossaryManager
         $obj = Database::fetch_object($res);
 
         return $obj->total;
+        */
     }
 
     /**
@@ -586,7 +753,45 @@ class GlossaryManager
         $number_of_items,
         $column,
         $direction
-    ) {
+    )
+    {
+        // @todo Table haven't paggination
+        // @todo Filter by keywork dont work
+        $repo = Container::getGlossaryRepository();
+        $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+
+        $return = [];
+        $array = [];
+        $_user = api_get_user_info();
+        $view = self::getGlossaryView();
+        $glossaries = $qb->getQuery()->getResult();
+
+        foreach ($glossaries as $glossary) {
+            /** @var CGlossary $glossary */
+            $session_img = api_get_session_image($glossary->getSessionId(), $_user['status']);
+            $array[0] = $glossary->getName().$session_img;
+            if (!$view || 'table' === $view) {
+                $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $glossary->getDescription());
+            } else {
+                $array[1] = $glossary->getDescription();
+            }
+
+            if (isset($_GET['action']) && 'export' === $_GET['action']) {
+                $array[1] = api_html_entity_decode($glossary->getDescription());
+            }
+            if (api_is_allowed_to_edit(null, true)) {
+                $array[2] = $glossary->getIid();
+            }
+            $return[] = $array;
+        }
+        return $return;
+        /*
         $_user = api_get_user_info();
         $view = self::getGlossaryView();
 
@@ -664,6 +869,7 @@ class GlossaryManager
         }
 
         return $return;
+        */
     }
 
     /**
@@ -717,6 +923,22 @@ class GlossaryManager
      */
     public static function reorder_glossary()
     {
+        $repo = Container::getGlossaryRepository();
+
+        $findArray = [
+            'cId' => api_get_course_int_id(),
+            'sessionId' => api_get_session_id(),
+        ];
+        $glossaries = $repo->findBy($findArray);
+        $i = 1;
+        /** @var CGlossary $item */
+        foreach ($glossaries as $item) {
+            $item->setDisplayOrder($i);
+            $repo->update($item);
+            $i++;
+
+        }
+        /*
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
@@ -732,6 +954,7 @@ class GlossaryManager
             Database::query($sql);
             $i++;
         }
+        */
     }
 
     /**

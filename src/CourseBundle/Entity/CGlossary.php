@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -211,5 +212,23 @@ class CGlossary extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setName($name);
+    }
+
+    /**
+     * Delete a term, first you must set session_id
+     * properties with the object CGlossary.
+     *
+     */
+    public function delete($id)
+    {
+        $repo = Container::getGlossaryRepository();
+        /** @var CGlossary $glossary */
+        $glossary = $repo->find($id);
+        if ($glossary) {
+            $repo->delete($glossary);
+            return true;
+        }
+
+        return false;
     }
 }

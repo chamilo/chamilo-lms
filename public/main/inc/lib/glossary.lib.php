@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 
@@ -44,6 +43,7 @@ class GlossaryManager
                 'description' => $item->getDescription(),
             ];
         }
+
         return $glossary_data;
 
         /*
@@ -53,8 +53,8 @@ class GlossaryManager
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT glossary_id as id, name, description
-		        FROM $table
-		        WHERE c_id = $course_id $sql_filter";
+                FROM $table
+                WHERE c_id = $course_id $sql_filter";
         $rs = Database::query($sql);
         while ($row = Database::fetch_array($rs)) {
             $glossary_data[] = $row;
@@ -82,6 +82,7 @@ class GlossaryManager
         if (null !== $glossary) {
             $description = $glossary->getDescription();
         }
+
         return $description;
 
         /*
@@ -189,7 +190,6 @@ class GlossaryManager
                 ->setSessionId($sessionId)
                 ->setCId($courseId);
 
-
             $course = api_get_course_entity($courseId);
             $session = api_get_session_entity($sessionId);
             $glossary->setParent($course);
@@ -284,9 +284,9 @@ class GlossaryManager
             $sql = "UPDATE $table SET
                         name = '".Database::escape_string($values['name'])."',
                         description	= '".Database::escape_string($values['description'])."'
-					WHERE
-					    c_id = $course_id AND
-					    glossary_id = ".intval($values['glossary_id']);
+                    WHERE
+                        c_id = $course_id AND
+                        glossary_id = ".intval($values['glossary_id']);
             $result = Database::query($sql);
             if (false === $result) {
                 return false;
@@ -366,7 +366,9 @@ class GlossaryManager
             'name' => $term,
         ];
         $glossaries = $repo->findBy($findArray);
-        if (0 == count($glossaries)) return false;
+        if (0 == count($glossaries)) {
+            return false;
+        }
 
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
@@ -374,6 +376,7 @@ class GlossaryManager
                 return true;
             }
         }
+
         return false;
         /*
 
@@ -429,7 +432,6 @@ class GlossaryManager
                 'lastedit_date' => $resourceNode->getUpdatedAt(),
                 'session_id' => $glossary->getSessionId(),
             ];
-
         }
 
         return $data;
@@ -636,7 +638,7 @@ class GlossaryManager
         $content = $toolbar;
 
         $items = self::get_number_glossary_terms();
-        if ($items != 0 && (!$view || 'table' === $view)) {
+        if (0 != $items && (!$view || 'table' === $view)) {
             // @todo Table haven't paggination
             $table = new SortableTable(
                 'glossary',
@@ -753,8 +755,7 @@ class GlossaryManager
         $number_of_items,
         $column,
         $direction
-    )
-    {
+    ) {
         // @todo Table haven't paggination
         // @todo Filter by keywork dont work
         $repo = Container::getGlossaryRepository();
@@ -790,6 +791,7 @@ class GlossaryManager
             }
             $return[] = $array;
         }
+
         return $return;
         /*
         $_user = api_get_user_info();
@@ -829,20 +831,20 @@ class GlossaryManager
         }
         $sql = "SELECT
                     glossary.name as col0,
-					glossary.description as col1,
-					$col2
-					glossary.session_id
-				FROM $t_glossary glossary
-				INNER JOIN $t_item_propery ip
-				ON (glossary.glossary_id = ip.ref AND glossary.c_id = ip.c_id)
-				WHERE
-					tool = '".TOOL_GLOSSARY."'
-					$condition_session AND
-					glossary.c_id = ".api_get_course_int_id()." AND
-					ip.c_id = ".api_get_course_int_id()."
-					$keywordCondition
-		        ORDER BY col$column $direction
-		        LIMIT $from, $number_of_items";
+                    glossary.description as col1,
+                    $col2
+                    glossary.session_id
+                FROM $t_glossary glossary
+                INNER JOIN $t_item_propery ip
+                ON (glossary.glossary_id = ip.ref AND glossary.c_id = ip.c_id)
+                WHERE
+                    tool = '".TOOL_GLOSSARY."'
+                    $condition_session AND
+                    glossary.c_id = ".api_get_course_int_id()." AND
+                    ip.c_id = ".api_get_course_int_id()."
+                    $keywordCondition
+                ORDER BY col$column $direction
+                LIMIT $from, $number_of_items";
         $res = Database::query($sql);
 
         $return = [];
@@ -936,7 +938,6 @@ class GlossaryManager
             $item->setDisplayOrder($i);
             $repo->update($item);
             $i++;
-
         }
         /*
         // Database table definition

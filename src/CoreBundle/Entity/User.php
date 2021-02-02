@@ -62,7 +62,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public const ROLE_DEFAULT = 'ROLE_USER';
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
-
     public const COURSE_MANAGER = 1;
     public const TEACHER = 1;
     public const SESSION_ADMIN = 3;
@@ -98,18 +97,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected string $lastname;
 
     /**
-     * @var string
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
-    protected $website;
+    protected ?string $website;
 
     /**
-     * @var string
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="biography", type="text", nullable=true)
      */
-    protected $biography;
+    protected ?string $biography;
 
     /**
      * @Groups({"user:read", "user:write"})
@@ -748,6 +745,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $this->uuid = Uuid::v4();
         $this->apiToken = null;
+        $this->biography = '';
+        $this->website = '';
         $this->locale = 'en';
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));

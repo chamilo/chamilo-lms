@@ -572,20 +572,20 @@ define('SKILL_TYPE_ACQUIRED', 'acquired');
 define('SKILL_TYPE_BOTH', 'both');
 
 // Message
-define('MESSAGE_STATUS_NEW', '0');
-define('MESSAGE_STATUS_UNREAD', '1');
+define('MESSAGE_STATUS_NEW', 0);
+define('MESSAGE_STATUS_UNREAD', 1);
 //2 ??
-define('MESSAGE_STATUS_DELETED', '3');
-define('MESSAGE_STATUS_OUTBOX', '4');
-define('MESSAGE_STATUS_INVITATION_PENDING', '5');
-define('MESSAGE_STATUS_INVITATION_ACCEPTED', '6');
-define('MESSAGE_STATUS_INVITATION_DENIED', '7');
-define('MESSAGE_STATUS_WALL', '8');
-define('MESSAGE_STATUS_WALL_DELETE', '9');
-define('MESSAGE_STATUS_WALL_POST', '10');
-define('MESSAGE_STATUS_CONVERSATION', '11');
-define('MESSAGE_STATUS_FORUM', '12');
-define('MESSAGE_STATUS_PROMOTED', '13');
+define('MESSAGE_STATUS_DELETED', 3);
+define('MESSAGE_STATUS_OUTBOX', 4);
+define('MESSAGE_STATUS_INVITATION_PENDING', 5);
+define('MESSAGE_STATUS_INVITATION_ACCEPTED', 6);
+define('MESSAGE_STATUS_INVITATION_DENIED', 7);
+define('MESSAGE_STATUS_WALL', 8);
+define('MESSAGE_STATUS_WALL_DELETE', 9);
+define('MESSAGE_STATUS_WALL_POST', 10);
+define('MESSAGE_STATUS_CONVERSATION', 11);
+define('MESSAGE_STATUS_FORUM', 12);
+define('MESSAGE_STATUS_PROMOTED', 13);
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -1219,15 +1219,25 @@ function api_protect_teacher_script()
 /**
  * Function used to prevent anonymous users from accessing a script.
  *
- * @param bool|true $printHeaders
- *
- * @author Roan Embrechts
+ * @param bool $printHeaders
  *
  * @return bool
  */
 function api_block_anonymous_users($printHeaders = true)
 {
-    $user = api_get_user_info();
+    $isAuth = Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
+
+    if (false === $isAuth) {
+        api_not_allowed($printHeaders);
+
+        return false;
+    }
+
+    api_block_inactive_user();
+
+    return true;
+
+    /*$user = api_get_user_info();
     if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
         api_not_allowed($printHeaders);
 
@@ -1235,7 +1245,7 @@ function api_block_anonymous_users($printHeaders = true)
     }
     api_block_inactive_user();
 
-    return true;
+    return true;*/
 }
 
 /**

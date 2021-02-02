@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
@@ -96,9 +97,6 @@ class Container
     public static $roles;
     /** @var string */
     public static $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
-    //private static $settingsManager;
-    //private static $userManager;
-    //private static $siteManager;
 
     /**
      * @param ContainerInterface $container
@@ -171,15 +169,7 @@ class Container
      */
     public static function getTwig()
     {
-        return self::$container->get('twig');
-    }
-
-    /**
-     * @return Environment
-     */
-    public static function getTemplating()
-    {
-        return self::$container->get('twig');
+        return self::$twig;
     }
 
     /**
@@ -419,6 +409,11 @@ class Container
     public static function getLpCategoryRepository(): CLpCategoryRepository
     {
         return self::$container->get(CLpCategoryRepository::class);
+    }
+
+    public static function getMessageAttachmentRepository(): MessageAttachmentRepository
+    {
+        return self::$container->get(MessageAttachmentRepository::class);
     }
 
     public static function getNotebookRepository(): CNotebookRepository

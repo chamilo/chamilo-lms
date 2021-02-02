@@ -45,7 +45,6 @@ if (MessageManager::MESSAGE_TYPE_OUTBOX === $type) {
     $show_menu = 'messages_outbox';
 }
 
-$message = '';
 $logInfo = [
     'tool' => 'Messages',
     'tool_id' => $messageId,
@@ -59,8 +58,8 @@ if ('true' === api_get_setting('allow_social_tool')) {
     // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu($show_menu);
 }
-// MAIN CONTENT
-$message .= MessageManager::showMessageBox($messageId, $type);
+
+$message = MessageManager::showMessageBox($messageId, $type);
 
 if (!empty($message)) {
     $social_right_content .= $message;

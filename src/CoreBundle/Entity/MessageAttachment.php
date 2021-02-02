@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="message_attachment")
  * @ORM\Entity
  */
-class MessageAttachment
+class MessageAttachment extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -31,26 +31,20 @@ class MessageAttachment
     protected $path;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
-    protected $size;
+    protected int $size;
 
     /**
-     * @var Message
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="attachments")
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
      */
-    protected $message;
+    protected Message $message;
 
     /**
      * @var string
@@ -58,6 +52,11 @@ class MessageAttachment
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
     protected $filename;
+
+    public function __toString(): string
+    {
+        return $this->getFilename();
+    }
 
     /**
      * Set path.
@@ -174,7 +173,7 @@ class MessageAttachment
      */
     public function getFilename()
     {
-        return $this->filename;
+        return (string) $this->filename;
     }
 
     /**
@@ -185,5 +184,20 @@ class MessageAttachment
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getFilename();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setFilename($name);
     }
 }

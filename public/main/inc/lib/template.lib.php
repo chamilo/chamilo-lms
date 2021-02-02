@@ -696,7 +696,7 @@ class Template
     public function returnResponse($params, $template)
     {
         $response = new Response();
-        $content = Container::getTemplating()->render($template, $params);
+        $content = Container::getTwig()->render($template, $params);
         $response->setContent($content);
         $response->send();
     }

@@ -141,7 +141,7 @@ class Display
         $params['legacy_breadcrumb'] = $interbreadcrumb;
 
         Template::setVueParams($params);
-        $content = Container::getTemplating()->render($tpl, $params);
+        $content = Container::getTwig()->render($tpl, $params);
         $response->setContent($content);
         $response->send();
         exit;
@@ -166,7 +166,7 @@ class Display
         $params['legacy_javascript'] = $htmlHeadXtra;
         $params['legacy_breadcrumb'] = $interbreadcrumb;
 
-        $content = Container::getTemplating()->render($tpl, $params);
+        $content = Container::getTwig()->render($tpl, $params);
         $response->setContent($content);
         $response->send();
         exit;

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -1444,7 +1445,7 @@ class SocialManager extends UserManager
      * @param int    $messageId      id parent
      * @param string $messageStatus  status type of message
      *
-     * @return int
+     * @return Message
      *
      * @author Yannick Warnier
      */
@@ -1455,7 +1456,6 @@ class SocialManager extends UserManager
         $messageId = 0,
         $messageStatus = ''
     ) {
-        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $userId = (int) $userId;
         $friendId = (int) $friendId;
         $messageId = (int) $messageId;
@@ -1466,43 +1466,42 @@ class SocialManager extends UserManager
 
         // Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(["\n", "\n\r"], '<br />', $messageContent);
-        $now = api_get_utc_datetime();
+        $em = Database::getManager();
+        $message = new Message();
+        $message
+            ->setUserSender(api_get_user_entity($userId))
+            ->setUserReceiver(api_get_user_entity($friendId))
+            ->setMsgStatus($messageStatus)
+            ->setTitle('')
+            ->setContent($messageContent)
+            ->setGroupId(0)
+            ->setParentId($messageId)
+        ;
+        $em->persist($message);
+        $em->flush();
 
-        $attributes = [
-            'user_sender_id' => $userId,
-            'user_receiver_id' => $friendId,
-            'msg_status' => $messageStatus,
-            'send_date' => $now,
-            'title' => '',
-            'content' => $messageContent,
-            'parent_id' => $messageId,
-            'group_id' => 0,
-            'update_date' => $now,
-        ];
-
-        return Database::insert($tblMessage, $attributes);
+        return $message;
     }
 
     /**
      * Send File attachment (jpg,png).
      *
-     * @author Anibal Copitan
-     *
      * @param int    $userId      id user
      * @param array  $fileAttach
-     * @param int    $messageId   id message (relation with main message)
+     * @param Message $message
      * @param string $fileComment description attachment file
      *
      * @return bool|int
+     * @author Anibal Copitan
+     *
      */
     public static function sendWallMessageAttachmentFile(
         $userId,
         $fileAttach,
-        $messageId,
+        $message,
         $fileComment = ''
     ) {
         $safeFileName = Database::escape_string($fileAttach['name']);
-
         $extension = strtolower(substr(strrchr($safeFileName, '.'), 1));
         $allowedTypes = api_get_supported_image_extensions();
 
@@ -1511,7 +1510,7 @@ class SocialManager extends UserManager
         $allowedTypes[] = 'ogg';
 
         if (in_array($extension, $allowedTypes)) {
-            return MessageManager::saveMessageAttachmentFile($fileAttach, $fileComment, $messageId, $userId);
+            return MessageManager::saveMessageAttachmentFile($fileAttach, $fileComment, $message, $userId);
         }
 
         return false;
@@ -1695,7 +1694,7 @@ class SocialManager extends UserManager
                     $row['post_title'] = '';
                     $row['forum_title'] = '';
                     $row['thread_url'] = '';
-                    if (MESSAGE_STATUS_FORUM == $row['msg_status']) {
+                    if (MESSAGE_STATUS_FORUM === (int) $row['msg_status']) {
                         /** @var CForumPost $post */
                         $post = $repo->find($row['id']);
                         /** @var CForumThread $thread */
@@ -1991,7 +1990,7 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Soft delete a message and his chidren.
+     * Soft delete a message and his children.
      *
      * @param int $id id message to delete
      *
@@ -1999,7 +1998,27 @@ class SocialManager extends UserManager
      */
     public static function deleteMessage($id)
     {
-        $id = (int) $id;
+        $em = Database::getManager();
+        $repo = $em->getRepository(Message::class);
+
+        /** @var Message $message */
+        $message = $repo->find($id);
+
+        if (null === $message) {
+            return false;
+        }
+
+        $children = $message->getChildren();
+        if ($children->count()) {
+            foreach ($children as $child) {
+                self::deleteMessage($child->getId());
+            }
+        }
+
+        $message->setMsgStatus(MESSAGE_STATUS_WALL_DELETE);
+        MessageManager::softDeleteAttachments($message);
+
+        /*$id = (int) $id;
         $messageInfo = MessageManager::get_message_by_id($id);
         if (!empty($messageInfo)) {
             // Delete comments too
@@ -2022,7 +2041,7 @@ class SocialManager extends UserManager
             return true;
         }
 
-        return false;
+        return false;*/
     }
 
     /**
@@ -2391,7 +2410,7 @@ class SocialManager extends UserManager
     public static function wrapPost($message, $content)
     {
         $class = '';
-        if (MESSAGE_STATUS_PROMOTED === $message['msg_status']) {
+        if (MESSAGE_STATUS_PROMOTED === (int) $message['msg_status']) {
             $class = 'promoted_post';
         }
 
@@ -2758,7 +2777,7 @@ class SocialManager extends UserManager
                 $messageContent = $_POST['social_wall_new_msg_main'].'<br /><br />'.$_POST['url_content'];
             }
 
-            $messageId = self::sendWallMessage(
+            $message = self::sendWallMessage(
                 api_get_user_id(),
                 $friendId,
                 $messageContent,
@@ -2766,11 +2785,11 @@ class SocialManager extends UserManager
                 MESSAGE_STATUS_WALL_POST
             );
 
-            if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
+            if ($message && !empty($_FILES['picture']['tmp_name'])) {
                 self::sendWallMessageAttachmentFile(
                     api_get_user_id(),
                     $_FILES['picture'],
-                    $messageId
+                    $message
                 );
             }
 

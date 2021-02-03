@@ -473,37 +473,15 @@ class GlossaryManager
      */
     public static function delete_glossary($glossary_id, $showMessage = true)
     {
-        $glossaryInfo = self::get_glossary_information($glossary_id);
-
-        $glossary = new CGlossary();
-        $sessionId = api_get_session_id();
-        $glossary
-            ->setSessionId($sessionId);
-        $delete = false;
-        if (!empty($glossary_id)) {
-            $delete = $glossary->delete($glossary_id);
-        }
-        /*
-        // Database table definition
-        $table = Database::get_course_table(TABLE_GLOSSARY);
-        $course_id = api_get_course_int_id();
-        $glossaryInfo = self::get_glossary_information($glossary_id);
-
-        if (empty($glossaryInfo)) {
-            return false;
+        $repo = Container::getGlossaryRepository();
+        /** @var CGlossary $glossary */
+        $glossary = $repo->find($glossary_id);
+        if(null !== $glossary) {
+            $repo->delete($glossary);
+        }else{
+            $showMessage = false;
         }
 
-        $glossary_id = (int) $glossary_id;
-
-        $sql = "DELETE FROM $table
-                WHERE
-                    c_id = $course_id AND
-                    glossary_id='".$glossary_id."'";
-        $result = Database::query($sql);
-        */
-        if (false === $delete) {
-            return false;
-        }
         /*
         // update item_property (delete)
         api_item_property_update(
@@ -520,7 +498,7 @@ class GlossaryManager
         if ($showMessage) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('Term removed').': '.Security::remove_XSS($glossaryInfo['name']),
+                    get_lang('Term removed').': '.Security::remove_XSS($glossary->getName()),
                     'normal',
                     false
                 )

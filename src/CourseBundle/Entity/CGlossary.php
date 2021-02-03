@@ -213,22 +213,4 @@ class CGlossary extends AbstractResource implements ResourceInterface
     {
         return $this->setName($name);
     }
-
-    /**
-     * Delete a term, first you must set session_id
-     * properties with the object CGlossary.
-     *
-     */
-    public function delete($id)
-    {
-        $repo = Container::getGlossaryRepository();
-        /** @var CGlossary $glossary */
-        $glossary = $repo->find($id);
-        if ($glossary) {
-            $repo->delete($glossary);
-            return true;
-        }
-
-        return false;
-    }
 }

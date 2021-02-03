@@ -703,20 +703,10 @@ class PortfolioController
             ]
         );
 
-        $origin = null;
-
-        if ($item->getOrigin() !== null) {
-            if ($item->getOriginType() === Portfolio::TYPE_ITEM) {
-                $origin = $this->em->find(Portfolio::class, $item->getOrigin());
-            } elseif ($item->getOriginType() === Portfolio::TYPE_COMMENT) {
-                $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
-            }
-        }
-
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('baseurl', $this->baseUrl);
         $template->assign('item', $item);
-        $template->assign('origin', $origin);
+        $template->assign('item_content', $this->generateItemContent($item));
         $template->assign('comments', $commentsHtml);
         $template->assign('form', $form);
 
@@ -1674,6 +1664,49 @@ class PortfolioController
         return $form->returnForm();
     }
 
+    private function generateItemContent(Portfolio $item): string
+    {
+        $originId = $item->getOrigin();
+
+        if (empty($originId)) {
+            return $item->getContent();
+        }
+
+        $em = Database::getManager();
+
+        $originContent = '';
+        $originContentFooter = '';
+
+        if (Portfolio::TYPE_ITEM === $item->getOriginType()) {
+            $origin = $em->find(Portfolio::class, $item->getOrigin());
+
+            if ($origin) {
+                $originContent = $origin->getContent();
+                $originContentFooter = vsprintf(
+                    get_lang('OriginallyPublishedAsXTitleByYUser'),
+                    [$origin->getTitle(), $origin->getUser()->getCompleteName()]
+                );
+            }
+        } elseif (Portfolio::TYPE_COMMENT === $item->getOriginType()) {
+            $origin = $em->find(PortfolioComment::class, $item->getOrigin());
+
+            if ($origin) {
+                $originContent = $origin->getContent();
+                $originContentFooter = vsprintf(
+                    get_lang('OriginallyCommentedByXUserInYItem'),
+                    [$origin->getAuthor()->getCompleteName(), $origin->getItem()->getTitle()]
+                );
+            }
+        }
+
+        if ($originContent) {
+            return "<blockquote>$originContent<footer>$originContentFooter</footer></blockquote>"
+                .'<div class="clearfix">'.$item->getContent().'</div>';
+        }
+
+        return $item->getContent();
+    }
+
     private function getItemsInHtmlFormatted(): array
     {
         $itemsRepo = $this->em->getRepository(Portfolio::class);
@@ -1713,44 +1746,9 @@ class PortfolioController
 
             $metadata .= '</ul>';
 
-            $content = '';
+            $itemContent = $this->generateItemContent($item);
 
-            if ($item->getOrigin()) {
-                $content .= '<blockquote>';
-
-                switch ($item->getOriginType()) {
-                    case Portfolio::TYPE_ITEM:
-                        $origin = $itemsRepo->find($item->getOrigin());
-
-                        $content .= $origin->getContent();
-                        $content .= '<footer>';
-                        $content .= sprintf(
-                            get_lang('OriginallyPublishedAsXTitleByYUser'),
-                            $origin->getTitle(),
-                            $origin->getUser()->getCompleteName()
-                        );
-                        $content .= '</footer>';
-                        break;
-                    case Portfolio::TYPE_COMMENT:
-                        $origin = $commentsRepo->find($item->getOrigin());
-
-                        $content .= $origin->getContent();
-                        $content .= '<footer>';
-                        $content .= sprintf(
-                            get_lang('OriginallyCommentedByXUserInYItem'),
-                            $origin->getAuthor()->getCompleteName(),
-                            $origin->getItem()->getTitle()
-                        );
-                        $content .= '</footer>';
-                        break;
-                }
-
-                $content .= '</blockquote>';
-            }
-
-            $content .= '<div class="clearfix">'.$item->getContent().'</div>';
-
-            $itemsHtml[] = Display::panel($content, $item->getTitle(), '', 'info', $metadata);
+            $itemsHtml[] = Display::panel($itemContent, $item->getTitle(), '', 'info', $metadata);
         }
 
         return $itemsHtml;
@@ -1812,42 +1810,9 @@ class PortfolioController
         $form->addUserAvatar('user', get_lang('Author'));
         $form->addLabel(get_lang('Title'), $item->getTitle());
 
-        $originContent = '';
+        $itemContent = $this->generateItemContent($item);
 
-        if ($item->getOrigin()) {
-            $originContent .= '<blockquote>';
-
-            switch ($item->getOriginType()) {
-                case Portfolio::TYPE_ITEM:
-                    $origin = $em->find(Portfolio::class, $item->getOrigin());
-
-                    $originContent .= $origin->getContent();
-                    $originContent .= '<footer>';
-                    $originContent .= sprintf(
-                        get_lang('OriginallyPublishedAsXTitleByYUser'),
-                        $origin->getTitle(),
-                        $origin->getUser()->getCompleteName()
-                    );
-                    $originContent .= '</footer>';
-                    break;
-                case Portfolio::TYPE_COMMENT:
-                    $origin = $em->find(PortfolioComment::class, $item->getOrigin());
-
-                    $originContent .= $origin->getContent();
-                    $originContent .= '<footer>';
-                    $originContent .= sprintf(
-                        get_lang('OriginallyCommentedByXUserInYItem'),
-                        $origin->getAuthor()->getCompleteName(),
-                        $origin->getItem()->getTitle()
-                    );
-                    $originContent .= '</footer>';
-                    break;
-            }
-
-            $originContent .= '</blockquote>';
-        }
-
-        $form->addLabel(get_lang('Content'), $originContent.$item->getContent());
+        $form->addLabel(get_lang('Content'), $itemContent);
         $form->addNumeric('score', get_lang('QualifyNumeric'));
         $form->addButtonSave(get_lang('QualifyThisPortfolioItem'));
 

@@ -78,24 +78,9 @@
             </li>
         </ul>
 
-        {% if item.origin %}
-            <hr>
-
-            <blockquote>
-                {{ origin.content }}
-                {% if item.originType == 1 %}
-                    <footer>{{ 'OriginallyPublishedAsXTitleByYUser'|get_lang|format(origin.title, origin.user.completeName) }}</footer>
-                {% elseif item.originType == 2 %}
-                    <footer>{{ 'OriginallyCommentedByXUserInYItem'|get_lang|format(origin.author.completeName, origin.item.title) }}</footer>
-                {% endif %}
-            </blockquote>
-        {% endif %}
-
         <hr>
 
-        <div class="clearfix">
-            {{ item.content }}
-        </div>
+        {{ item_content }}
     </div>
 </article>
 

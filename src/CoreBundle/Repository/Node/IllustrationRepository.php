@@ -131,7 +131,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function deleteIllustration(AbstractResource $resource)
+    public function deleteIllustration(AbstractResource $resource): void
     {
         $node = $this->getIllustrationNodeFromParent($resource->getResourceNode());
 
@@ -158,7 +158,12 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         return $illustration;
     }
 
-    public function getIllustrationUrlFromNode(ResourceNode $node, string $filter = ''): string
+    public function getResourceFormType(): string
+    {
+        return IllustrationType::class;
+    }
+
+    private function getIllustrationUrlFromNode(ResourceNode $node, string $filter = ''): string
     {
         $node = $this->getIllustrationNodeFromParent($node);
 
@@ -177,10 +182,5 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         }
 
         return '';
-    }
-
-    public function getResourceFormType(): string
-    {
-        return IllustrationType::class;
     }
 }

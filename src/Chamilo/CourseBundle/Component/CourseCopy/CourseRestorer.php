@@ -2835,11 +2835,11 @@ class CourseRestorer
                     'theme' => '',
                     'session_id' => $session_id,
                     'prerequisite' => 0,
-                    'hide_toc_frame' => 0,
+                    'hide_toc_frame' => self::DBUTF8(isset($lp->hideTableOfContents) ? $lp->hideTableOfContents : 0),
+                    'subscribe_users' => self::DBUTF8(isset($lp->subscribeUsers) ? $lp->subscribeUsers : 0),
                     'seriousgame_mode' => 0,
                     'category_id' => $categoryId,
                     'max_attempts' => 0,
-                    'subscribe_users' => 0,
                 ];
 
                 if (!empty($condition_session)) {

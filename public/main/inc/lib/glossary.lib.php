@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * Class GlossaryManager
@@ -29,12 +31,13 @@ class GlossaryManager
         $glossary_data = [];
         $repo = Container::getGlossaryRepository();
 
-        $findArray = [
-            'cId' => api_get_course_int_id(),
-            'sessionId' => api_get_session_id(),
-        ];
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
 
-        $glossaries = $repo->findBy($findArray);
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
+        $glossaries = $repo->getResourcesByCourse($course, $session);
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
             $glossary_data[] = [
@@ -117,9 +120,9 @@ class GlossaryManager
     {
         // @todo Filter by like on ORM
         $table = Database::get_course_table(TABLE_GLOSSARY);
-        $session_id = api_get_session_id();
+        $sessionId = api_get_session_id();
         $course_id = api_get_course_int_id();
-        $sessionCondition = api_get_session_condition($session_id);
+        $sessionCondition = api_get_session_condition($sessionId);
 
         $glossaryName = Security::remove_XSS($name);
         $glossaryName = api_convert_encoding($glossaryName, 'UTF-8', 'UTF-8');
@@ -234,7 +237,7 @@ class GlossaryManager
                 );
             }
 
-            return $glossary->getIid();
+            return $glossary;
         }
     }
 
@@ -266,13 +269,8 @@ class GlossaryManager
         } else {
             $repo = Container::getGlossaryRepository();
 
-            $findArray = [
-                'cId' => api_get_course_int_id(),
-                'sessionId' => api_get_session_id(),
-                'iid' => (int) $values['glossary_id'],
-            ];
             /** @var CGlossary $glossary */
-            $glossary = $repo->findOneBy($findArray);
+            $glossary = $repo->find($values['glossary_id']);
             if (null !== $glossary) {
                 $glossary
                     ->setName($values['name'])
@@ -360,19 +358,22 @@ class GlossaryManager
     {
         $repo = Container::getGlossaryRepository();
 
-        $findArray = [
-            'cId' => api_get_course_int_id(),
-            'sessionId' => api_get_session_id(),
-            'name' => $term,
-        ];
-        $glossaries = $repo->findBy($findArray);
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $glossaries = $qb->getQuery()->getResult();
+
         if (0 == count($glossaries)) {
             return false;
         }
 
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
-            if ($not_id != $item->getIid()) {
+            if ($term == $item->getName() && $not_id != $item->getIid()) {
                 return true;
             }
         }
@@ -410,16 +411,10 @@ class GlossaryManager
      */
     public static function get_glossary_information($glossary_id)
     {
+        throw new Exception('Use repo find');
         $repo = Container::getGlossaryRepository();
-
-        $findArray = [
-            'cId' => api_get_course_int_id(),
-            'sessionId' => api_get_session_id(),
-            'iid' => $glossary_id,
-        ];
-
         /** @var CGlossary $glossary */
-        $glossary = $repo->findOneBy($findArray);
+        $glossary = $repo->find($glossary_id);
         $data = [];
         if (null !== $glossary) {
             $resourceNode = $glossary->getResourceNode();
@@ -548,9 +543,9 @@ class GlossaryManager
             }
 
             return $defaultView;
-        } else {
-            return $view;
         }
+
+        return $view;
     }
 
     /**
@@ -689,29 +684,36 @@ class GlossaryManager
      *
      * @return int Count of glossary terms
      */
-    public static function get_number_glossary_terms($session_id = 0)
+    public static function get_number_glossary_terms($sessionId = 0)
     {
         // @todo Filter by keywork dont work
         $repo = Container::getGlossaryRepository();
 
-        $course_id = api_get_course_int_id();
-        $session_id = !empty($session_id) ? $session_id : api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $sessionId = !empty($sessionId) ? $sessionId : api_get_session_id();
 
-        $course = api_get_course_entity($course_id);
-        $session = api_get_session_entity($session_id);
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
 
         $qb = $repo->getResourcesByCourse($course, $session);
         /*
         $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
         if(!empty($keyword)){
-            $qb
-                ->where('name LIKE :keyword')
-                ->orWhere('description LIKE :keyword')
-                ->setParameter('keyword', '%'.$keyword.'%');
+            $qb->andWhere(
+                $qb->expr()->like('resource.name',':keyword')
+            )->andWhere(
+                $qb->expr()->like('resource.description',':keyword')
+            )->setParameter('keyword', '%'.$keyword.'%');
         }
         */
 
-        return count($qb->getQuery()->getResult());
+        try {
+            $count = $qb->select('COUNT(resource)')->getQuery()->getSingleScalarResult();
+        } catch (NoResultException $e) {
+            $count = 0;
+        }
+
+        return $count;
         /*
 
         // Database table definition
@@ -759,13 +761,26 @@ class GlossaryManager
         // @todo Table haven't paggination
         // @todo Filter by keywork dont work
         $repo = Container::getGlossaryRepository();
-        $course_id = api_get_course_int_id();
-        $session_id = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
 
-        $course = api_get_course_entity($course_id);
-        $session = api_get_session_entity($session_id);
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
 
         $qb = $repo->getResourcesByCourse($course, $session);
+
+        /*
+        $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
+        if(!empty($keyword)){
+            $qb->andWhere(
+                $qb->expr()->like('resource.name',':keyword')
+
+            )->andWhere(
+                $qb->expr()->like('resource.description',':keyword')
+
+            )->setParameter('keyword', '%'.$keyword.'%');
+        }
+        */
 
         $return = [];
         $array = [];
@@ -888,10 +903,12 @@ class GlossaryManager
         $glossary_id = $row[2];
         $return = '<a href="'.api_get_self().'?action=edit_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
             Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
-        $glossary_data = self::get_glossary_information($glossary_id);
-        $glossary_term = Security::remove_XSS(strip_tags($glossary_data['name']));
+        $repo = Container::getGlossaryRepository();
+        /** @var CGlossary $glossary_data */
+        $glossary_data = $repo->find($glossary_id);
+        $glossary_term = Security::remove_XSS(strip_tags($glossary_data->getName()));
         if (api_is_allowed_to_edit(null, true)) {
-            if ($glossary_data['session_id'] == api_get_session_id()) {
+            if ($glossary_data->getSessionId() == api_get_session_id()) {
                 $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
                     Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a>';
             } else {
@@ -927,11 +944,13 @@ class GlossaryManager
     {
         $repo = Container::getGlossaryRepository();
 
-        $findArray = [
-            'cId' => api_get_course_int_id(),
-            'sessionId' => api_get_session_id(),
-        ];
-        $glossaries = $repo->findBy($findArray);
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
+        $glossaries = $repo->getResourcesByCourse($course, $session);
         $i = 1;
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {

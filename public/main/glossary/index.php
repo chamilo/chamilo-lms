@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 
 /**
@@ -169,6 +171,10 @@ switch ($action) {
                 ['ToolbarSet' => 'Glossary', 'Height' => '300']
             );
 
+            $repo = Container::getGlossaryRepository();
+            /** @var CGlossary $glossary_data */
+            $glossary_data = $repo->find($glossaryId);
+            /*
             // setting the defaults
             $glossary_data = GlossaryManager::get_glossary_information($glossaryId);
 
@@ -188,8 +194,14 @@ switch ($action) {
             $form->addLabel(get_lang('Creation date'), $glossary_data['insert_date']);
             $form->addLabel(get_lang('Updated'), $glossary_data['update_date']);
 
+            */
             $form->addButtonUpdate(get_lang('Update term'), 'SubmitGlossary');
-            $form->setDefaults($glossary_data);
+            $default = [
+                'glossary_id'=>$glossary_data->getIid(),
+                'name'=>$glossary_data->getName(),
+                'description'=>$glossary_data->getDescription(),
+            ];
+            $form->setDefaults($default);
 
             // setting the rules
             $form->addRule('name', get_lang('Required field'), 'required');

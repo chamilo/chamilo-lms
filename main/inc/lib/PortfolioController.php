@@ -1112,8 +1112,10 @@ class PortfolioController
             } elseif (3 == $columnNo) {
                 $qb->orderBy('category.title', $orderDirection);
             } elseif (5 == $columnNo) {
-                $qb->orderBy('course.title', $orderDirection);
+                $qb->orderBy('item.score', $orderDirection);
             } elseif (6 == $columnNo) {
+                $qb->orderBy('course.title', $orderDirection);
+            } elseif (7 == $columnNo) {
                 $qb->orderBy('session.name', $orderDirection);
             }
 
@@ -1129,6 +1131,7 @@ class PortfolioController
                     $row[] = $item->getUpdateDate();
                     $row[] = $category ? $item->getCategory()->getTitle() : null;
                     $row[] = $item->getComments()->count();
+                    $row[] = $item->getScore();
 
                     if (!$this->course) {
                         $row[] = $item->getCourse();
@@ -1161,10 +1164,11 @@ class PortfolioController
         $tblItems->set_column_filter(2, $convertFormatDateColumnFilter);
         $tblItems->set_header(3, get_lang('Category'));
         $tblItems->set_header(4, get_lang('Comments'), false, [], ['class' => 'text-right']);
+        $tblItems->set_header(5, get_lang('Score'), true, [], ['class' => 'text-right']);
 
         if (!$this->course) {
-            $tblItems->set_header(5, get_lang('Course'));
-            $tblItems->set_header(6, get_lang('Session'));
+            $tblItems->set_header(6, get_lang('Course'));
+            $tblItems->set_header(7, get_lang('Session'));
         }
 
         $getCommentsTotalNumber = function () use ($commentsRepo) {
@@ -1219,6 +1223,8 @@ class PortfolioController
                 $qb->orderBy('comment.date', $orderDirection);
             } elseif (2 == $columnNo) {
                 $qb->orderBy('item.title', $orderDirection);
+            } elseif (3 == $columnNo) {
+                $qb->orderBy('comment.score', $orderDirection);
             }
 
             $qb->setFirstResult($from)->setMaxResults($limit);
@@ -1229,6 +1235,7 @@ class PortfolioController
                         $comment,
                         $comment->getDate(),
                         $comment->getItem(),
+                        $comment->getScore(),
                     ];
                 },
                 $qb->getQuery()->getResult()
@@ -1252,6 +1259,7 @@ class PortfolioController
         $tblComments->set_column_filter(1, $convertFormatDateColumnFilter);
         $tblComments->set_header(2, get_lang('PortfolioItemTitle'));
         $tblComments->set_column_filter(2, $portfolioItemColumnFilter);
+        $tblComments->set_header(3, get_lang('Score'), true, [], ['class' => 'text-right']);
 
         $content = '';
 

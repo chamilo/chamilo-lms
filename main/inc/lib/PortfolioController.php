@@ -1599,6 +1599,8 @@ class PortfolioController
                 }
             }
 
+            $queryBuilder->orderBy('pi.creationDate', 'DESC');
+
             $items = $queryBuilder->getQuery()->getResult();
         } else {
             $itemsCriteria = [];

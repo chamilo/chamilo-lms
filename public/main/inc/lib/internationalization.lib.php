@@ -1557,7 +1557,7 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
  *
  * @return array|string|null returns an array if the subject parameter is an array, or a string otherwise.
  *                           If matches are found, the new subject will be returned, otherwise subject will be returned
- *                            unchanged or NULL if an error occurred.
+ *                           unchanged or NULL if an error occurred.
  *
  * @see http://php.net/preg_replace
  */

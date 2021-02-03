@@ -1491,14 +1491,14 @@ class SocialManager extends UserManager
     /**
      * Send File attachment (jpg,png).
      *
-     * @param int    $userId      id user
-     * @param array  $fileAttach
+     * @param int     $userId      id user
+     * @param array   $fileAttach
      * @param Message $message
-     * @param string $fileComment description attachment file
+     * @param string  $fileComment description attachment file
      *
      * @return bool|int
-     * @author Anibal Copitan
      *
+     * @author Anibal Copitan
      */
     public static function sendWallMessageAttachmentFile(
         $userId,

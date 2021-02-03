@@ -110,8 +110,17 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                         </div>';
 
         switch ($layout) {
-            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_INLINE:
+                //                    <div class="form-group {error_class}">
+                $template = '
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    {element}
+                ';
+                break;
+            case FormValidator::LAYOUT_GRID:
                 $template = '
                 <div class="form-group {error_class}">
                     <label {label-for} >

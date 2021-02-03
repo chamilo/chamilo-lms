@@ -223,6 +223,7 @@ class Rest extends WebService
         }
 
         $picture = $illustrationRepo->getIllustrationUrl($message->getUserSender());
+
         return [
             'id' => $message->getId(),
             'title' => $message->getTitle(),

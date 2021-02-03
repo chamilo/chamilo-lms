@@ -2541,10 +2541,8 @@ class Display
      * @param string $id
      * @param array  $content
      * @param array  $colsWidth Optional. Columns width
-     *
-     * @return string
      */
-    public static function toolbarAction($id, $content, $colsWidth = [])
+    public static function toolbarAction($id, $content, $colsWidth = []): string
     {
         $col = count($content);
 
@@ -2556,7 +2554,6 @@ class Display
         }
 
         $html = '<ul id="'.$id.'" class="nav nav-tabs actions">';
-        //$html .= '<div class="row">';
         for ($i = 0; $i < $col; $i++) {
             $class = 'col-sm-'.$colsWidth[$i];
 
@@ -2571,7 +2568,6 @@ class Display
             $html .= '<li class="nav-item '.$class.'">'.$content[$i].'</li>';
         }
 
-        //$html .= '</div>';
         $html .= '</ul>';
 
         return $html;

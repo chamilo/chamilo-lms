@@ -77,10 +77,10 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
-        if (isset($attributes['class']) && 'form-inline' == $attributes['class']) {
+        if (isset($attributes['class']) && 'form-inline' === $attributes['class']) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
-        } elseif (isset($attributes['class']) && 'form-search' == $attributes['class']) {
+        } elseif (isset($attributes['class']) && 'form-search' === $attributes['class']) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
         } else {

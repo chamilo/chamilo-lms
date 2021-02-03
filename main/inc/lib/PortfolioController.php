@@ -669,6 +669,18 @@ class PortfolioController
                                 )
                             );
                         }
+
+                        if ($this->course) {
+                            $commentActions .= Display::url(
+                                Display::return_icon('evaluation.png', get_lang('Qualify')),
+                                $this->baseUrl.http_build_query(
+                                    [
+                                        'action' => 'qualify',
+                                        'comment' => $comment->getId(),
+                                    ]
+                                )
+                            );
+                        }
                     }
 
                     $nodeHtml = '<p class="media-heading h4">'.PHP_EOL
@@ -1786,5 +1798,163 @@ class PortfolioController
         }
 
         return $commentsHtml;
+    }
+
+    public function qualifyItem(Portfolio $item)
+    {
+        global $interbreadcrumb;
+
+        $em = Database::getManager();
+
+        $formAction = $this->baseUrl.http_build_query(['action' => 'qualify', 'item' => $item->getId()]);
+
+        $form = new FormValidator('frm_qualify', 'post', $formAction);
+        $form->addUserAvatar('user', get_lang('Author'));
+        $form->addLabel(get_lang('Title'), $item->getTitle());
+
+        $originContent = '';
+
+        if ($item->getOrigin()) {
+            $originContent .= '<blockquote>';
+
+            switch ($item->getOriginType()) {
+                case Portfolio::TYPE_ITEM:
+                    $origin = $em->find(Portfolio::class, $item->getOrigin());
+
+                    $originContent .= $origin->getContent();
+                    $originContent .= '<footer>';
+                    $originContent .= sprintf(
+                        get_lang('OriginallyPublishedAsXTitleByYUser'),
+                        $origin->getTitle(),
+                        $origin->getUser()->getCompleteName()
+                    );
+                    $originContent .= '</footer>';
+                    break;
+                case Portfolio::TYPE_COMMENT:
+                    $origin = $em->find(PortfolioComment::class, $item->getOrigin());
+
+                    $originContent .= $origin->getContent();
+                    $originContent .= '<footer>';
+                    $originContent .= sprintf(
+                        get_lang('OriginallyCommentedByXUserInYItem'),
+                        $origin->getAuthor()->getCompleteName(),
+                        $origin->getItem()->getTitle()
+                    );
+                    $originContent .= '</footer>';
+                    break;
+            }
+
+            $originContent .= '</blockquote>';
+        }
+
+        $form->addLabel(get_lang('Content'), $originContent.$item->getContent());
+        $form->addNumeric('score', get_lang('QualifyNumeric'));
+        $form->addButtonSave(get_lang('QualifyThisPortfolioItem'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $item->setScore($values['score']);
+
+            $em->persist($item);
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('PortfolioItemGraded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit();
+        }
+
+        $form->setDefaults(
+            [
+                'user' => $item->getUser(),
+                'score' => (float) $item->getScore(),
+            ]
+        );
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        $interbreadcrumb[] = [
+            'name' => $item->getTitle(),
+            'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
+        ];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
+        );
+
+        return $this->renderView($form->returnForm(), get_lang('Qualify'), $actions);
+    }
+
+    public function qualifyComment(PortfolioComment $comment)
+    {
+        global $interbreadcrumb;
+
+        $em = Database::getManager();
+
+        $item = $comment->getItem();
+        $commentPath = $em->getRepository(PortfolioComment::class)->getPath($comment);
+
+        $template = new Template('', false, false, false, true, false, false);
+        $template->assign('item', $item);
+        $template->assign('comments_path', $commentPath);
+        $commentContext = $template->fetch(
+            $template->get_template('portfolio/comment_context.html.twig')
+        );
+
+        $formAction = $this->baseUrl.http_build_query(['action' => 'qualify', 'comment' => $comment->getId()]);
+
+        $form = new FormValidator('frm_qualify', 'post', $formAction);
+        $form->addHtml($commentContext);
+        $form->addUserAvatar('user', get_lang('Author'));
+        $form->addLabel(get_lang('Comment'), $comment->getContent());
+        $form->addNumeric('score', get_lang('QualifyNumeric'));
+        $form->addButtonSave(get_lang('QualifyThisPortfolioComment'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $comment->setScore($values['score']);
+
+            $em->persist($comment);
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('PortfolioCommentGraded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit();
+        }
+
+        $form->setDefaults(
+            [
+                'user' => $comment->getAuthor(),
+                'score' => (float) $comment->getScore(),
+            ]
+        );
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        $interbreadcrumb[] = [
+            'name' => $item->getTitle(),
+            'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
+        ];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
+        );
+
+        return $this->renderView($form->returnForm(), get_lang('Qualify'), $actions);
     }
 }

@@ -29,6 +29,12 @@
                 <a href="{{ baseurl ~ {'action':'teacher_copy', 'copy':'item', 'id':item.id}|url_encode }}">
                     {{ 'copy.png'|img(22, 'CopyToStudentPortfolio'|get_lang) }}
                 </a>
+
+                {% if item.course %}
+                    <a href="{{ baseurl ~ {'action':'qualify', 'item':item.id}|url_encode }}">
+                        {{ 'new_portfolio_evaluation.png'|img(22, 'Qualify'|get_lang) }}
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
 

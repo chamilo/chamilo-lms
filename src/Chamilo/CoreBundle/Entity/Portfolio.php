@@ -126,6 +126,13 @@ class Portfolio
     private $originType;
 
     /**
+     * @var float|null
+     *
+     * @ORM\Column(name="score", type="float", nullable=true)
+     */
+    private $score;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
@@ -390,5 +397,21 @@ class Portfolio
         $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
 
         return $excerpt;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param float|null $score
+     */
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
     }
 }

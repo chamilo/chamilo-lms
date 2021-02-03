@@ -185,6 +185,39 @@ switch ($action) {
     case 'export_zip':
         $controller->exportZip();
         break;
+    case 'qualify':
+        api_protect_course_script(true);
+
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+        }
+
+        if ($httpRequest->query->has('item')) {
+            /** @var Portfolio $item */
+            $item = $em->find(
+                Portfolio::class,
+                $httpRequest->query->getInt('item')
+            );
+
+            if (empty($item)) {
+                break;
+            }
+
+            $controller->qualifyItem($item);
+        } elseif ($httpRequest->query->has('comment')) {
+            /** @var Portfolio $item */
+            $comment = $em->find(
+                PortfolioComment::class,
+                $httpRequest->query->getInt('comment')
+            );
+
+            if (empty($comment)) {
+                break;
+            }
+
+            $controller->qualifyComment($comment);
+        }
+        break;
     case 'list':
     default:
         $controller->index($httpRequest);

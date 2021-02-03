@@ -108,6 +108,13 @@ class PortfolioComment
     private $children;
 
     /**
+     * @var float|null
+     *
+     * @ORM\Column(name="score", type="float", nullable=true)
+     */
+    private $score;
+
+    /**
      * PortfolioComment constructor.
      */
     public function __construct()
@@ -222,5 +229,37 @@ class PortfolioComment
         $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
 
         return $excerpt;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param float|null $score
+     */
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\PortfolioComment
+     */
+    public function getRoot(): PortfolioComment
+    {
+        return $this->root;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLvl(): int
+    {
+        return $this->lvl;
     }
 }

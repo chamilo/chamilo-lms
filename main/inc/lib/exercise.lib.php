@@ -3910,7 +3910,7 @@ EOT;
      *
      * @param int    $question_id
      * @param int    $exercise_id
-     * @param string $course_code
+     * @param int    $courseId
      * @param int    $session_id
      * @param bool   $onlyStudent Filter only enrolled students
      *
@@ -3919,7 +3919,7 @@ EOT;
     public static function get_student_stats_by_question(
         $question_id,
         $exercise_id,
-        $course_code,
+        $courseId,
         $session_id,
         $onlyStudent = false
     ) {
@@ -3929,24 +3929,21 @@ EOT;
 
         $question_id = (int) $question_id;
         $exercise_id = (int) $exercise_id;
-        $course_code = Database::escape_string($course_code);
         $session_id = (int) $session_id;
-        $courseId = api_get_course_int_id($course_code);
+        $courseId = (int) $courseId;
 
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
-    		FROM $track_exercises e
-    		";
-        if (true == $onlyStudent) {
-            $courseCondition = '';
+                FROM $track_exercises e ";
+        if ($onlyStudent) {
             if (empty($session_id)) {
                 $courseCondition = "
-            INNER JOIN $courseUser c
-            ON (
+                    INNER JOIN $courseUser c
+                    ON (
                         e.exe_user_id = c.user_id AND
                         e.c_id = c.c_id AND
                         c.status = ".STUDENT."
                         AND relation_type <> 2
-                )";
+                    )";
             } else {
                 $sessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                 $courseCondition = "
@@ -3960,6 +3957,7 @@ EOT;
             }
             $sql .= $courseCondition;
         }
+
         $sql .= "
             INNER JOIN $track_attempt a
     		ON (
@@ -4195,7 +4193,7 @@ EOT;
      * @param int    $answer_id
      * @param int    $question_id
      * @param int    $exercise_id
-     * @param string $course_code
+     * @param int    $courseId
      * @param int    $session_id
      * @param string $question_type
      * @param string $correct_answer
@@ -4207,7 +4205,7 @@ EOT;
         $answer_id,
         $question_id,
         $exercise_id,
-        $course_code,
+        $courseId,
         $session_id,
         $question_type = null,
         $correct_answer = null,
@@ -4222,7 +4220,7 @@ EOT;
         $question_id = (int) $question_id;
         $answer_id = (int) $answer_id;
         $exercise_id = (int) $exercise_id;
-        $courseId = api_get_course_int_id($course_code);
+        $courseId = (int) $courseId;
         $session_id = (int) $session_id;
 
         switch ($question_type) {

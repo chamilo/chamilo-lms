@@ -718,7 +718,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $sentMessages;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Message[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\Message",

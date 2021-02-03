@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -1463,10 +1464,14 @@ class SocialManager extends UserManager
         if (empty($userId) || empty($friendId)) {
             return 0;
         }
+        $em = Database::getManager();
+
+        $repo = $em->getRepository(Message::class);
+        $parent = $repo->find($messageId);
 
         // Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(["\n", "\n\r"], '<br />', $messageContent);
-        $em = Database::getManager();
+
         $message = new Message();
         $message
             ->setUserSender(api_get_user_entity($userId))
@@ -1475,7 +1480,7 @@ class SocialManager extends UserManager
             ->setTitle('')
             ->setContent($messageContent)
             ->setGroupId(0)
-            ->setParentId($messageId)
+            ->setParent($parent)
         ;
         $em->persist($message);
         $em->flush();
@@ -1852,29 +1857,25 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param array $message
-     *
      * @return array
      */
-    public static function getAttachmentPreviewList($message)
+    public static function getAttachmentPreviewList(Message $message)
     {
-        $messageId = $message['id'];
-
         $list = [];
-
-        if (empty($message['group_id'])) {
-            $files = MessageManager::getAttachmentList($messageId);
-            if ($files) {
-                $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
-                foreach ($files as $row_file) {
-                    $url = $downloadUrl.'&attachment_id='.$row_file['id'];
-                    $display = Display::fileHtmlGuesser($row_file['filename'], $url);
-                    $list[] = $display;
-                }
+        //if (empty($message['group_id'])) {
+        $files = $message->getAttachments();
+        if ($files) {
+            $repo = Container::getMessageAttachmentRepository();
+            /** @var MessageAttachment $file */
+            foreach ($files as $file) {
+                $url = $repo->getResourceFileUrl($file);
+                $display = Display::fileHtmlGuesser($file->getFilename(), $url);
+                $list[] = $display;
             }
-        } else {
-            $list = MessageManager::getAttachmentLinkList($messageId, 0);
         }
+        /*} else {
+            $list = MessageManager::getAttachmentLinkList($messageId, 0);
+        }*/
 
         return $list;
     }

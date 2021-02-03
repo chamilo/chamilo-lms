@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class MessageManager.
@@ -630,6 +631,8 @@ class MessageManager
                 Database::query($query);
                 $messageId = $editMessageId;
             } else {
+                $repo = $em->getRepository(Message::class);
+                $parent = $repo->find($parent_id);
                 $message = new Message();
                 $message
                     ->setUserSender($userSender)
@@ -638,28 +641,24 @@ class MessageManager
                     ->setTitle($subject)
                     ->setContent($content)
                     ->setGroupId($group_id)
-                    ->setParentId($parent_id)
+                    ->setParent($parent)
                 ;
                 $em->persist($message);
                 $em->flush();
                 $messageId = $message->getId();
             }
 
-            // Forward also message attachments
+            // Forward also message attachments.
+            $forwardAttachments = [];
             if (!empty($forwardId)) {
-                $attachments = self::getAttachmentList($forwardId);
-                foreach ($attachments as $attachment) {
-                    if (!empty($attachment['file_source'])) {
-                        $file = [
-                            'name' => $attachment['filename'],
-                            'tmp_name' => $attachment['file_source'],
-                            'size' => $attachment['size'],
-                            'error' => 0,
-                            'comment' => $attachment['comment'],
-                        ];
-                        // Inject this array so files can be added when sending and email with the mailer
-                        $attachmentList[] = $file;
+                $forwardMessage = $repo->find($forwardId);
+                if (null !== $forwardMessage) {
+                    $forwardAttachments = $forwardMessage->getAttachments();
+                    foreach ($forwardAttachments as $forwardAttachment) {
+                        $message->addAttachment($forwardAttachment);
                     }
+                    $em->persist($message);
+                    $em->flush();
                 }
             }
 
@@ -965,14 +964,8 @@ class MessageManager
      * @param string  $comment a comment about the uploaded file
      * @param Message $message
      */
-    public static function saveMessageAttachmentFile(
-        $file,
-        $comment,
-        Message $message,
-        $receiver_user_id = 0,
-        $sender_user_id = 0,
-        $group_id = 0
-    ) {
+    public static function saveMessageAttachmentFile($file, $comment, Message $message)
+    {
         // Try to add an extension to the file if it hasn't one
         $type = $file['type'] ?? '';
         if (empty($type)) {
@@ -2001,52 +1994,11 @@ class MessageManager
     }
 
     /**
-     * @param int $messageId
-     *
-     * @return array
-     */
-    public static function getAttachmentList($messageId)
-    {
-        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-        $messageId = (int) $messageId;
-
-        if (empty($messageId)) {
-            return [];
-        }
-
-        $messageInfo = self::get_message_by_id($messageId);
-
-        if (empty($messageInfo)) {
-            return [];
-        }
-
-        $attachmentDir = UserManager::getUserPathById($messageInfo['user_receiver_id'], 'system');
-        $attachmentDir .= 'message_attachments/';
-
-        $sql = "SELECT * FROM $table
-                WHERE message_id = '$messageId'";
-        $result = Database::query($sql);
-        $files = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $row['file_source'] = '';
-            if (file_exists($attachmentDir.$row['path'])) {
-                $row['file_source'] = $attachmentDir.$row['path'];
-            }
-            $files[] = $row;
-        }
-
-        return $files;
-    }
-
-    /**
      * Get array of links (download) for message attachment files.
      *
-     * @param Message $message
-     * @param int     $type
-     *
      * @return array
      */
-    public static function getAttachmentLinkList(Message $message, $type)
+    public static function getAttachmentLinkList(Message $message)
     {
         //$files = self::getAttachmentList($message);
         $files = $message->getAttachments();
@@ -2054,7 +2006,6 @@ class MessageManager
         $list = [];
         if ($files) {
             $attachIcon = Display::returnFontAwesomeIcon('paperclip');
-            $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
             $repo = Container::getMessageAttachmentRepository();
             foreach ($files as $file) {
                 $size = format_file_size($file->getSize());
@@ -2417,7 +2368,7 @@ class MessageManager
      * @param int $userId The user id
      * @param int $lastId The id of the last received message
      *
-     * @return array
+     * @return Message[]
      */
     public static function getMessagesFromLastReceivedMessage($userId, $lastId = 0)
     {
@@ -2428,7 +2379,17 @@ class MessageManager
             return [];
         }
 
-        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $user = api_get_user_entity($userId);
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->gt('id', $lastId)
+            )->andWhere(
+                Criteria::expr()->in('msgStatus', [MESSAGE_STATUS_UNREAD])
+            )->orderBy(['sendDate' => Criteria::DESC]);
+
+        return $user->getSentMessages()->matching($criteria);
+
+        /*$messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname
@@ -2450,7 +2411,7 @@ class MessageManager
             }
         }
 
-        return $messages;
+        return $messages;*/
     }
 
     /**
@@ -2459,17 +2420,28 @@ class MessageManager
      * @param int $userId The user id
      * @param int $lastId The id of the last received message
      *
-     * @return array
+     * @return Message[]
      */
     public static function getReceivedMessages($userId, $lastId = 0)
     {
-        $userId = intval($userId);
-        $lastId = intval($lastId);
+        $userId = (int) $userId;
+        $lastId = (int) $lastId;
 
         if (empty($userId)) {
             return [];
         }
-        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+
+        $user = api_get_user_entity($userId);
+        $criteria = Criteria::create()
+            ->where(
+            Criteria::expr()->gt('id', $lastId)
+            )->andWhere(
+            Criteria::expr()->in('msgStatus', [MESSAGE_STATUS_NEW, MESSAGE_STATUS_UNREAD])
+            )->orderBy(['sendDate' => Criteria::DESC]);
+
+        return $user->getReceivedMessages()->matching($criteria);
+
+        /*$messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri
                 FROM $messagesTable as m
@@ -2480,19 +2452,15 @@ class MessageManager
                     m.msg_status IN (".MESSAGE_STATUS_NEW.", ".MESSAGE_STATUS_UNREAD.")
                     AND m.id > $lastId
                 ORDER BY m.send_date DESC";
-
         $result = Database::query($sql);
-
         $messages = [];
         if (false !== $result) {
             while ($row = Database::fetch_assoc($result)) {
-                $pictureInfo = UserManager::get_user_picture_path_by_id($row['user_id'], 'web');
-                $row['pictureUri'] = $pictureInfo['dir'].$pictureInfo['file'];
                 $messages[] = $row;
             }
         }
 
-        return $messages;
+        return $messages;*/
     }
 
     /**
@@ -2505,13 +2473,24 @@ class MessageManager
      */
     public static function getSentMessages($userId, $lastId = 0)
     {
-        $userId = intval($userId);
-        $lastId = intval($lastId);
+        $userId = (int) $userId;
+        $lastId = (int) $lastId;
 
         if (empty($userId)) {
             return [];
         }
 
+        $user = api_get_user_entity($userId);
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->gt('id', $lastId)
+            )->andWhere(
+                Criteria::expr()->in('msgStatus', [MESSAGE_STATUS_OUTBOX])
+            )->orderBy(['sendDate' => Criteria::DESC]);
+
+        return $user->getSentMessages()->matching($criteria);
+
+        /*
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -2536,7 +2515,7 @@ class MessageManager
             }
         }
 
-        return $messages;
+        return $messages;*/
     }
 
     /**

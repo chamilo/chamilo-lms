@@ -210,10 +210,8 @@ class Message
      * Set title.
      *
      * @param string $title
-     *
-     * @return Message
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -234,10 +232,8 @@ class Message
      * Set content.
      *
      * @param string $content
-     *
-     * @return Message
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -316,10 +312,8 @@ class Message
      * Set votes.
      *
      * @param int $votes
-     *
-     * @return Message
      */
-    public function setVotes($votes)
+    public function setVotes($votes): self
     {
         $this->votes = $votes;
 
@@ -346,6 +340,13 @@ class Message
         return $this->attachments;
     }
 
+    public function addAttachment(MessageAttachment $attachment): self
+    {
+        $this->attachments->add($attachment);
+        $attachment->setMessage($this);
+
+        return $this;
+    }
 
     public function getParent(): self
     {

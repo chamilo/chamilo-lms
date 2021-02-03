@@ -3622,12 +3622,14 @@ EOT;
                         AND relation_type <> 2
                 )";
             } else {
+                $sessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                 $courseCondition = "
-            INNER JOIN $courseUser c
+            INNER JOIN $sessionRelCourse sc
             ON (
-                        e.exe_user_id = c.user_id AND
-                        e.c_id = c.c_id AND
-                        c.status = 0
+                        e.exe_user_id = sc.user_id AND
+                        e.c_id = sc.c_id AND
+                        e.session_id = sc.session_id AND
+                        sc.status = 0
                 )";
             }
             $sql .= $courseCondition;

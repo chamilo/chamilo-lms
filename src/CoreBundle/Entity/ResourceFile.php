@@ -94,7 +94,7 @@ class ResourceFile
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected string $originalName;
+    protected $originalName;
 
     /**
      * @var string

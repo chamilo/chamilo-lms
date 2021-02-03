@@ -924,7 +924,7 @@ class MessageManager
         }
         $em = Database::getManager();
         $repo = $em->getRepository(Message::class);
-        $criteria = ['id' => $id, 'userSenderId' => $user_sender_id];
+        $criteria = ['id' => $id, 'userSender' => $user_sender_id];
         $message = $repo->findOneBy($criteria);
 
         /*$table = Database::get_main_table(TABLE_MESSAGE);

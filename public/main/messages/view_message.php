@@ -60,12 +60,12 @@ if ('true' === api_get_setting('allow_social_tool')) {
 }
 
 $message = MessageManager::showMessageBox($messageId, $type);
-
-if (!empty($message)) {
-    $social_right_content .= $message;
-} else {
+if (empty($message)) {
     api_not_allowed(true);
 }
+
+$social_right_content .= $message;
+
 $tpl = new Template(get_lang('View'));
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);

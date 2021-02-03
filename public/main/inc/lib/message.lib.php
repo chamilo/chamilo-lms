@@ -8,8 +8,8 @@ use Chamilo\CoreBundle\Entity\MessageFeedback;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class MessageManager.
@@ -863,7 +863,6 @@ class MessageManager
      */
     public static function delete_message_by_user_receiver($user_receiver_id, $id)
     {
-        $table = Database::get_main_table(TABLE_MESSAGE);
         $id = (int) $id;
         $user_receiver_id = (int) $user_receiver_id;
 
@@ -876,7 +875,7 @@ class MessageManager
         $criteria = ['id' => $id, 'userReceiver' => $user_receiver_id];
         $message = $repo->findOneBy($criteria);
 
-        if (null === $message || ($message && MESSAGE_STATUS_OUTBOX !== $message->getMsgStatus())) {
+        if (null === $message || ($message && MESSAGE_STATUS_OUTBOX === $message->getMsgStatus())) {
             return false;
         }
 
@@ -960,9 +959,8 @@ class MessageManager
     /**
      * Saves a message attachment files.
      *
-     * @param array   $file    $_FILES['name']
-     * @param string  $comment a comment about the uploaded file
-     * @param Message $message
+     * @param array  $file    $_FILES['name']
+     * @param string $comment a comment about the uploaded file
      */
     public static function saveMessageAttachmentFile($file, $comment, Message $message)
     {
@@ -1294,35 +1292,26 @@ class MessageManager
         $status = null;
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
-                $status = MESSAGE_STATUS_OUTBOX;
                 $userCondition = " user_sender_id = $currentUserId AND ";
                 $criteria['userSender'] = $currentUserId;
+                $criteria['msgStatus'] = MESSAGE_STATUS_OUTBOX;
                 break;
             case self::MESSAGE_TYPE_INBOX:
-                $status = MESSAGE_STATUS_NEW;
                 $userCondition = " user_receiver_id = $currentUserId AND ";
                 $criteria['userReceiver'] = $currentUserId;
-
                 /*$query = "UPDATE $table SET
                           msg_status = '".MESSAGE_STATUS_NEW."'
                           WHERE id = $messageId ";
                 Database::query($query);*/
                 break;
             case self::MESSAGE_TYPE_PROMOTED:
-                $status = MESSAGE_STATUS_PROMOTED;
                 $userCondition = " user_receiver_id = $currentUserId AND ";
                 $criteria['userReceiver'] = $currentUserId;
+                $criteria['msgStatus'] = MESSAGE_STATUS_PROMOTED;
                 break;
         }
 
-        $criteria['msgStatus'] = $status;
         $criteria['id'] = $messageId;
-
-        if (empty($userCondition)) {
-            return '';
-        }
-
-        $table = Database::get_main_table(TABLE_MESSAGE);
         $em = Database::getManager();
         $repo = $em->getRepository(Message::class);
         $message = $repo->findOneBy($criteria);
@@ -1331,6 +1320,13 @@ class MessageManager
             return '';
         }
 
+        /*if (self::MESSAGE_TYPE_INBOX === $type) {
+            $message->setMsgStatus(MESSAGE_STATUS_NEW);
+            $em->persist($message);
+            $em->flush();
+        }*/
+
+        $table = Database::get_main_table(TABLE_MESSAGE);
         /* Get previous message */
         $query = "SELECT id FROM $table
                   WHERE
@@ -1389,13 +1385,12 @@ class MessageManager
 
             switch ($type) {
                 case self::MESSAGE_TYPE_INBOX:
-                    $messageContent .= '&nbsp;'.api_strtolower(get_lang('To')).'&nbsp;'.get_lang('Me');
+                    $messageContent .= '&nbsp;'.get_lang('To').'&nbsp;'.get_lang('Me');
                     break;
                 case self::MESSAGE_TYPE_OUTBOX:
                     if (null !== $message->getUserReceiver()) {
-                        $messageContent .= '&nbsp;'.api_strtolower(
-                                get_lang('To')
-                            ).'&nbsp;<b>'.UserManager::formatUserFullName($message->getUserReceiver()).'</b></li>';
+                        $messageContent .= '&nbsp;'.get_lang('To')
+                            .'&nbsp;<b>'.UserManager::formatUserFullName($message->getUserReceiver()).'</b></li>';
                     }
                     break;
                 case self::MESSAGE_TYPE_PROMOTED:
@@ -1409,11 +1404,11 @@ class MessageManager
         } else {
             switch ($type) {
                 case self::MESSAGE_TYPE_INBOX:
-                    $messageContent .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
+                    $messageContent .= get_lang('From').':&nbsp;'.$name.'</b> '.get_lang('To').' <b>'.
                         get_lang('Me').'</b>';
                     break;
                 case self::MESSAGE_TYPE_OUTBOX:
-                    $messageContent .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
+                    $messageContent .= get_lang('From').':&nbsp;'.$name.'</b> '.get_lang('To').' <b>'.
                         UserManager::formatUserFullName($message->getUserReceiver()).'</b>';
                     break;
             }

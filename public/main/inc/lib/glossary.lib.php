@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 
 /**
@@ -476,9 +475,9 @@ class GlossaryManager
         $repo = Container::getGlossaryRepository();
         /** @var CGlossary $glossary */
         $glossary = $repo->find($glossary_id);
-        if(null !== $glossary) {
+        if (null !== $glossary) {
             $repo->delete($glossary);
-        }else{
+        } else {
             $showMessage = false;
         }
 

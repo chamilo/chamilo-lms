@@ -369,7 +369,7 @@ class Message
         return $this;
     }
 
-    public function setParent(self $parent): self
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
 
@@ -380,10 +380,8 @@ class Message
      * Get an excerpt from the content.
      *
      * @param int $length Optional. Length of the excerpt.
-     *
-     * @return string
      */
-    public function getExcerpt($length = 50)
+    public function getExcerpt(int $length = 50): string
     {
         $striped = strip_tags($this->content);
         $replaced = str_replace(["\r\n", "\n"], ' ', $striped);

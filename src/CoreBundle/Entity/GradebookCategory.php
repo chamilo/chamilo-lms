@@ -30,7 +30,7 @@ class GradebookCategory
     protected $id;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */

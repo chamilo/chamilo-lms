@@ -34,6 +34,7 @@ class CQuizQuestionOption
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
+
     /**
      * @var int
      *

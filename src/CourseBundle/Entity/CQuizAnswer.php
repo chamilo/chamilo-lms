@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CQuizAnswer.
@@ -44,11 +45,10 @@ class CQuizAnswer
     protected $questionId;
 
     /**
-     * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
-    protected $answer;
+    protected string $answer;
 
     /**
      * @var int

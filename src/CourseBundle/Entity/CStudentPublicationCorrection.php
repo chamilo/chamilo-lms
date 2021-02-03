@@ -27,11 +27,10 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
     protected $id;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     public function __construct()
     {

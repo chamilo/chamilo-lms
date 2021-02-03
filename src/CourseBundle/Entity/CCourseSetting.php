@@ -56,7 +56,7 @@ class CCourseSetting
     /**
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
-    protected ? string $category;
+    protected ?string $category;
 
     /**
      * @ORM\Column(name="value", type="text", nullable=true)

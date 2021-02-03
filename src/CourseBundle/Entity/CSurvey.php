@@ -101,18 +101,14 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected $template;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    protected $intro;
+    protected ?string $intro;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    protected $surveyThanks;
+    protected ?string $surveyThanks;
 
     /**
      * @var \DateTime

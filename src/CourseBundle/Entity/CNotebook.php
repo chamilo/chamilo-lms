@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CNotebook.
@@ -57,11 +58,13 @@ class CNotebook extends AbstractResource implements ResourceInterface
     protected $sessionId;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     protected string $description;

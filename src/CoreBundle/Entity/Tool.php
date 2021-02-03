@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Tool.
@@ -26,6 +27,7 @@ class Tool
     protected $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      */
     protected string $name;

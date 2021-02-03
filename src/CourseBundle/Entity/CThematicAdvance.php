@@ -40,27 +40,21 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var CThematic
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic")
      * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
-    protected $thematic;
+    protected CThematic $thematic;
 
     /**
-     * @var CAttendance
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
      * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
      */
-    protected $attendance;
+    protected CAttendance $attendance;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content;
 
     /**
      * @var \DateTime

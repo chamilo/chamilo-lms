@@ -193,6 +193,10 @@ switch ($action) {
         }
 
         if ($httpRequest->query->has('item')) {
+            if ('1' !== api_get_course_setting('qualify_portfolio_item')) {
+                api_not_allowed(true);
+            }
+
             /** @var Portfolio $item */
             $item = $em->find(
                 Portfolio::class,
@@ -205,6 +209,10 @@ switch ($action) {
 
             $controller->qualifyItem($item);
         } elseif ($httpRequest->query->has('comment')) {
+            if ('1' !== api_get_course_setting('qualify_portfolio_comment')) {
+                api_not_allowed(true);
+            }
+
             /** @var Portfolio $item */
             $comment = $em->find(
                 PortfolioComment::class,

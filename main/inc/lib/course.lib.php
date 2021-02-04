@@ -5882,6 +5882,12 @@ class CourseManager
             $courseSettings[] = 'lp_return_link';
         }
 
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $courseSettings[] = 'qualify_portfolio_item';
+            $courseSettings[] = 'qualify_portfolio_comment';
+            $courseSettings[] = 'portfolio_max_score';
+        }
+
         if (!empty($pluginCourseSettings)) {
             $courseSettings = array_merge(
                 $courseSettings,

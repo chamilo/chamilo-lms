@@ -670,9 +670,9 @@ class PortfolioController
                             );
                         }
 
-                        if ($this->course) {
+                        if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
                             $commentActions .= Display::url(
-                                Display::return_icon('evaluation.png', get_lang('Qualify')),
+                                Display::return_icon('evaluation.png', get_lang('QualifyThisPortfolioComment')),
                                 $this->baseUrl.http_build_query(
                                     [
                                         'action' => 'qualify',
@@ -1823,7 +1823,10 @@ class PortfolioController
         $itemContent = $this->generateItemContent($item);
 
         $form->addLabel(get_lang('Content'), $itemContent);
-        $form->addNumeric('score', get_lang('QualifyNumeric'));
+        $form->addNumeric(
+            'score',
+            [get_lang('QualifyNumeric'), null, ' / '.api_get_course_setting('portfolio_max_score')]
+        );
         $form->addButtonSave(get_lang('QualifyThisPortfolioItem'));
 
         if ($form->validate()) {
@@ -1889,7 +1892,10 @@ class PortfolioController
         $form->addHtml($commentContext);
         $form->addUserAvatar('user', get_lang('Author'));
         $form->addLabel(get_lang('Comment'), $comment->getContent());
-        $form->addNumeric('score', get_lang('QualifyNumeric'));
+        $form->addNumeric(
+            'score',
+            [get_lang('QualifyNumeric'), null, '/ '.api_get_course_setting('portfolio_max_score')]
+        );
         $form->addButtonSave(get_lang('QualifyThisPortfolioComment'));
 
         if ($form->validate()) {

@@ -609,7 +609,7 @@ class PortfolioController
                     /** @var PortfolioComment $comment */
                     $comment = $commentsRepo->find($node['id']);
 
-                    $commentActions = Display::url(
+                    $commentActions[] = Display::url(
                         Display::return_icon('discuss.png', get_lang('ReplyToThisComment')),
                         '#',
                         [
@@ -620,8 +620,7 @@ class PortfolioController
                             'class' => 'btn-reply-to',
                         ]
                     );
-                    $commentActions .= PHP_EOL;
-                    $commentActions .= Display::url(
+                    $commentActions[] = Display::url(
                         Display::return_icon('copy.png', get_lang('CopyToMyPortfolio')),
                         $this->baseUrl.http_build_query(
                             [
@@ -635,7 +634,7 @@ class PortfolioController
                     $isAllowedToEdit = api_is_allowed_to_edit();
 
                     if ($isAllowedToEdit) {
-                        $commentActions .= Display::url(
+                        $commentActions[] = Display::url(
                             Display::return_icon('copy.png', get_lang('CopyToStudentPortfolio')),
                             $this->baseUrl.http_build_query(
                                 [
@@ -647,7 +646,7 @@ class PortfolioController
                         );
 
                         if ($comment->isImportant()) {
-                            $commentActions .= Display::url(
+                            $commentActions[] = Display::url(
                                 Display::return_icon('drawing-pin.png', get_lang('UnmarkCommentAsImportant')),
                                 $this->baseUrl.http_build_query(
                                     [
@@ -658,7 +657,7 @@ class PortfolioController
                                 )
                             );
                         } else {
-                            $commentActions .= Display::url(
+                            $commentActions[] = Display::url(
                                 Display::return_icon('drawing-pin.png', get_lang('MarkCommentAsImportant')),
                                 $this->baseUrl.http_build_query(
                                     [
@@ -671,8 +670,8 @@ class PortfolioController
                         }
 
                         if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
-                            $commentActions .= Display::url(
-                                Display::return_icon('evaluation.png', get_lang('QualifyThisPortfolioComment')),
+                            $commentActions[] = Display::url(
+                                Display::return_icon('quiz.png', get_lang('QualifyThisPortfolioComment')),
                                 $this->baseUrl.http_build_query(
                                     [
                                         'action' => 'qualify',
@@ -696,7 +695,8 @@ class PortfolioController
                     }
 
                     $nodeHtml .= '</p>'.PHP_EOL
-                        .'<div class="pull-right">'.$commentActions.'</div>'.$comment->getContent().PHP_EOL;
+                        .'<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'
+                        .$comment->getContent().PHP_EOL;
 
                     return $nodeHtml;
                 },

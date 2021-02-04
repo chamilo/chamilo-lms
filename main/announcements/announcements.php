@@ -345,12 +345,18 @@ switch ($action) {
         exit;
         break;
     case 'showhide':
-        if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] != 'false') {
+        if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] !== 'false') {
             if (isset($_GET['id']) && $_GET['id']) {
                 if ($sessionId != 0 &&
                     api_is_allowed_to_session_edit(false, true) == false
                 ) {
-                    api_not_allowed();
+                    $block = true;
+                    if (api_get_configuration_value('allow_coach_to_edit_announcements') && api_is_coach()) {
+                        $block = false;
+                    }
+                    if ($block) {
+                        api_not_allowed();
+                    }
                 }
 
                 if (!$allowToEdit) {
@@ -373,13 +379,14 @@ switch ($action) {
         break;
     case 'add':
     case 'modify':
-        if ($sessionId != 0 &&
-            (
-                api_is_allowed_to_session_edit(false, true) === false &&
-                api_is_coach() === false
-            )
-        ) {
-            api_not_allowed(true);
+        if ($sessionId != 0 && api_is_allowed_to_session_edit(false, true) === false) {
+            $block = true;
+            if (api_get_configuration_value('allow_coach_to_edit_announcements') && api_is_coach()) {
+                $block = false;
+            }
+            if ($block) {
+                api_not_allowed();
+            }
         }
 
         if ($allowStudentInGroupToSend === false) {

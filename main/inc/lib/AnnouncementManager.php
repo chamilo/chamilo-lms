@@ -2005,7 +2005,6 @@ class AnnouncementManager
                         $modify_icons .= Display::return_icon('up_na.gif', get_lang('Up'));
                     }
 
-
                     if ($iterator < $bottomAnnouncement) {
                         $modify_icons .= "<a href=\"".$actionUrl."&action=move&down=".$row["id"]."&sec_token=".$stok."\">".
                             Display::return_icon('down.gif', get_lang('Down'))."</a>";

@@ -7,11 +7,10 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemCommented;
 /**
  * Class XApiPortfolioItemCommentedHookObserver.
  */
-class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver
-    implements HookPortfolioItemCommentedObserverInterface
+class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver implements HookPortfolioItemCommentedObserverInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hookItemCommented(HookPortfolioItemCommentedEventInterface $hookEvent)
     {

@@ -14,7 +14,7 @@ use Xabbuh\XApi\Model\Uuid;
 use XApiPlugin;
 
 /**
- * Class BaseStatement
+ * Class BaseStatement.
  *
  * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */

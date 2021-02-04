@@ -26,7 +26,7 @@ abstract class BaseActivity
      */
     protected $session;
 
-    public abstract function generate(): Activity;
+    abstract public function generate(): Activity;
 
     protected function generateIri(string $path, string $resource, array $params = []): string
     {

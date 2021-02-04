@@ -7,11 +7,10 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemShared;
 /**
  * Class XApiPortfolioItemAddedHookObserver.
  */
-class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver
-    implements HookPortfolioItemAddedObserverInterface
+class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver implements HookPortfolioItemAddedObserverInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hookItemAdded(HookPortfolioItemAddedEventInterface $hookEvent)
     {

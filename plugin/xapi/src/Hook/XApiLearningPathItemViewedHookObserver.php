@@ -7,8 +7,7 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Statement\LearningPathItemViewed;
 /**
  * Class XApiLearningPathItemViewedHookObserver.
  */
-class XApiLearningPathItemViewedHookObserver extends XApiActivityHookObserver
-    implements HookLearningPathItemViewedObserverInterface
+class XApiLearningPathItemViewedHookObserver extends XApiActivityHookObserver implements HookLearningPathItemViewedObserverInterface
 {
     /**
      * {@inheritdoc}

@@ -399,17 +399,11 @@ class Portfolio
         return $excerpt;
     }
 
-    /**
-     * @return float|null
-     */
     public function getScore(): ?float
     {
         return $this->score;
     }
 
-    /**
-     * @param float|null $score
-     */
     public function setScore(?float $score): void
     {
         $this->score = $score;

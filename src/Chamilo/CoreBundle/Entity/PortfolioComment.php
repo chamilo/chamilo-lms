@@ -231,17 +231,11 @@ class PortfolioComment
         return $excerpt;
     }
 
-    /**
-     * @return float|null
-     */
     public function getScore(): ?float
     {
         return $this->score;
     }
 
-    /**
-     * @param float|null $score
-     */
     public function setScore(?float $score): void
     {
         $this->score = $score;
@@ -255,9 +249,6 @@ class PortfolioComment
         return $this->root;
     }
 
-    /**
-     * @return int
-     */
     public function getLvl(): int
     {
         return $this->lvl;

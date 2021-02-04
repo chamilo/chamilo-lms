@@ -17,7 +17,7 @@ use Xabbuh\XApi\Model\Result;
 use Xabbuh\XApi\Model\Statement;
 
 /**
- * Class LearningPathItemViewed
+ * Class LearningPathItemViewed.
  *
  * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */

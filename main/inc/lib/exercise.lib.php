@@ -3908,11 +3908,11 @@ EOT;
     /**
      * Get student results (only in completed exercises) stats by question.
      *
-     * @param int    $question_id
-     * @param int    $exercise_id
-     * @param int    $courseId
-     * @param int    $session_id
-     * @param bool   $onlyStudent Filter only enrolled students
+     * @param int  $question_id
+     * @param int  $exercise_id
+     * @param int  $courseId
+     * @param int  $session_id
+     * @param bool $onlyStudent Filter only enrolled students
      *
      * @return array
      */

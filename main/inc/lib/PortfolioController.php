@@ -1454,7 +1454,7 @@ class PortfolioController
             function (array $tagOption) {
                 return $tagOption['tag'];
             },
-            $tagFieldInfo['options']
+            $tagFieldInfo['options'] ?? []
         );
 
         $frmTagList = new FormValidator(

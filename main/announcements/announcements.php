@@ -23,17 +23,18 @@ $token = Security::get_existing_token();
 $courseId = api_get_course_int_id();
 $_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
 
 $allowToEdit = (
     api_is_allowed_to_edit(false, true) ||
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
+    ($sessionId && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
 );
 $allowStudentInGroupToSend = false;
 
-$sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
@@ -373,7 +374,10 @@ switch ($action) {
     case 'add':
     case 'modify':
         if ($sessionId != 0 &&
-            api_is_allowed_to_session_edit(false, true) == false
+            (
+                api_is_allowed_to_session_edit(false, true) === false &&
+                api_is_coach() === false
+            )
         ) {
             api_not_allowed(true);
         }

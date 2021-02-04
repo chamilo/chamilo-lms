@@ -1834,6 +1834,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Shows exercise session attempts in the base course.
 // $_configuration['show_exercise_session_attempts_in_base_course'] = false;
 
+// Allow coach users to always edit announcements inside active/past sessions.
+// $_configuration['allow_coach_to_edit_announcements'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

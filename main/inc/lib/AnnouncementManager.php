@@ -1977,7 +1977,8 @@ class AnnouncementManager
                 if (api_is_allowed_to_edit(false, true) ||
                     (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $row['id'])) ||
                     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
-                    ($row['to_group_id'] == $group_id && $isTutor)
+                    ($row['to_group_id'] == $group_id && $isTutor) ||
+                    ($session_id && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
                 ) {
                     if ($disableEdit === true) {
                         $modify_icons = "<a href='#'>".$editIconDisable."</a>";
@@ -2003,6 +2004,8 @@ class AnnouncementManager
                     } else {
                         $modify_icons .= Display::return_icon('up_na.gif', get_lang('Up'));
                     }
+
+
                     if ($iterator < $bottomAnnouncement) {
                         $modify_icons .= "<a href=\"".$actionUrl."&action=move&down=".$row["id"]."&sec_token=".$stok."\">".
                             Display::return_icon('down.gif', get_lang('Down'))."</a>";

@@ -3032,7 +3032,6 @@ function getAllWork(
     }
 
     return $works;
-
 }
 
 /**

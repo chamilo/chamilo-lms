@@ -207,7 +207,7 @@ if (isset($_REQUEST['comments']) &&
                     LOG_QUESTION_SCORE_UPDATE,
                     LOG_EXERCISE_ATTEMPT_QUESTION_ID,
                     [
-                        'exeId' => $id,
+                        'exe_id' => $id,
                         'question_id' => $questionId,
                         'old_marks' => $marksFromDatabase,
                         'new_marks' => $marks,

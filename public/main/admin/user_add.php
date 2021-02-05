@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
@@ -370,13 +372,13 @@ if ($form->validate()) {
         }
 
         $active = (int) $user['active'];
-        if ('true' == api_get_setting('login_is_email')) {
+        if ('true' === api_get_setting('login_is_email')) {
             $username = $email;
         }
 
         $extra = [];
         foreach ($user as $key => $value) {
-            if ('extra_' == substr($key, 0, 6)) {
+            if ('extra_' === substr($key, 0, 6)) {
                 // An extra field
                 $extra[substr($key, 6)] = $value;
             }
@@ -414,10 +416,11 @@ if ($form->validate()) {
         $tok = Security::get_token();
         if (!empty($user_id)) {
             if (!empty($picture['name'])) {
-                $picture_uri = UserManager::update_user_picture(
+                $request = Container::getRequest();
+                $file = $request->files->get('picture');
+                UserManager::update_user_picture(
                     $user_id,
-                    $_FILES['picture']['name'],
-                    $_FILES['picture']['tmp_name'],
+                    $file,
                     $user['picture_crop_result']
                 );
                 UserManager::update_user(
@@ -431,7 +434,7 @@ if ($form->validate()) {
                     $status,
                     $official_code,
                     $phone,
-                    $picture_uri,
+                    null,
                     $expiration_date,
                     $active,
                     null,

@@ -598,7 +598,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
-    protected $pictureUri;
+    protected ?string $pictureUri;
 
     /**
      * @var int
@@ -2335,6 +2335,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->status = $status;
 
         return $this;
+    }
+
+    public function getPictureUri(): ?string
+    {
+        return $this->pictureUri;
     }
 
     /**

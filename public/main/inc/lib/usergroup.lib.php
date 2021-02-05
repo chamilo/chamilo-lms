@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Class UserGroup.
  *
@@ -1621,91 +1623,6 @@ class UserGroup extends Model
     }
 
     /**
-     * Creates new group pictures in various sizes of a user, or deletes user pfotos.
-     * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
-     *
-     * @param    int    The group id
-     * @param string $file The common file name for the newly created photos.
-     *                     It will be checked and modified for compatibility with the file system.
-     *                     If full name is provided, path component is ignored.
-     *                     If an empty name is provided, then old user photos are deleted only,
-     *
-     * @see UserManager::delete_user_picture() as the prefered way for deletion.
-     *
-     * @param string $source_file    the full system name of the image from which user photos will be created
-     * @param string $cropParameters
-     *
-     * @return mixed Returns the resulting common file name of created images which usually should be stored in database.
-     *               When an image is removed the function returns an empty string.
-     *               In case of internal error or negative validation it returns FALSE.
-     */
-    public function update_group_picture($group_id, $file = null, $source_file = null, $cropParameters = null)
-    {
-        $group_id = (int) $group_id;
-
-        if (empty($group_id)) {
-            return false;
-        }
-        $delete = empty($file);
-        if (empty($source_file)) {
-            $source_file = $file;
-        }
-
-        // User-reserved directory where photos have to be placed.
-        $path_info = $this->get_group_picture_path_by_id($group_id, 'system', true);
-
-        $path = $path_info['dir'];
-
-        // If this directory does not exist - we create it.
-        if (!is_dir($path)) {
-            $res = @mkdir($path, api_get_permissions_for_new_directories(), true);
-            if (false === $res) {
-                // There was an issue creating the directory $path, probably
-                // permissions-related
-                return false;
-            }
-        }
-
-        // Exit if only deletion has been requested. Return an empty picture name.
-        if ($delete) {
-            return '';
-        }
-
-        // Validation 2.
-        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-        $file = str_replace('\\', '/', $file);
-        $filename = (false !== ($pos = strrpos($file, '/'))) ? substr($file, $pos + 1) : $file;
-        $extension = strtolower(substr(strrchr($filename, '.'), 1));
-        if (!in_array($extension, $allowed_types)) {
-            return false;
-        }
-        $avatar = 'group_avatar.jpg';
-        $filename = $group_id.'_'.$filename;
-        $groupImageBig = $path.'big_'.$filename;
-        $groupImage = $path.'medium_'.$filename;
-
-        if (file_exists($groupImageBig)) {
-            unlink($groupImageBig);
-        }
-        if (file_exists($groupImage)) {
-            unlink($groupImage);
-        }
-
-        $image = new Image($source_file);
-        $image->crop($cropParameters);
-
-        //Resize the images in two formats
-        $medium = new Image($source_file);
-        $medium->resize(128);
-        $medium->send_image($groupImage, -1, 'jpg');
-        $normal = new Image($source_file);
-        $normal->resize(450);
-        $normal->send_image($groupImageBig, -1, 'jpg');
-
-        return $filename;
-    }
-
-    /**
      * @return mixed
      */
     public function getGroupType()
@@ -1922,7 +1839,7 @@ class UserGroup extends Model
      * @param int $size_picture picture size it can be small_,  medium_  or  big_
      * @param string style css
      *
-     * @return array with the file and the style of an image i.e $array['file'] $array['style']
+     * @return string
      */
     public function get_picture_group(
         $id,
@@ -1931,6 +1848,14 @@ class UserGroup extends Model
         $size_picture = GROUP_IMAGE_SIZE_MEDIUM,
         $style = ''
     ) {
+        $repoIllustration = Container::getIllustrationRepository();
+        $repoUserGroup = Container::getUsergroupRepository();
+
+        $userGroup = $repoUserGroup->find($id);
+
+        return $repoIllustration->getIllustrationUrl($userGroup);
+
+        /*
         $picture = [];
         //$picture['style'] = $style;
         if ('unknown.jpg' === $picture_file) {
@@ -1976,72 +1901,7 @@ class UserGroup extends Model
             }
         }
 
-        return $picture;
-    }
-
-    /**
-     * Gets the group picture URL or path from group ID (returns an array).
-     * The return format is a complete path, enabling recovery of the directory
-     * with dirname() or the file with basename(). This also works for the
-     * functions dealing with the user's productions, as they are located in
-     * the same directory.
-     *
-     * @param    int    User ID
-     * @param    string    Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param    bool    Whether we want to have the directory name returned 'as if'
-     * there was a file or not (in the case we want to know which directory to create -
-     * otherwise no file means no split subdir)
-     * @param    bool    If we want that the function returns the /main/img/unknown.jpg image set it at true
-     *
-     * @return array Array of 2 elements: 'dir' and 'file' which contain the dir
-     *               and file as the name implies if image does not exist it will return the unknown
-     *               image if anonymous parameter is true if not it returns an empty er's
-     */
-    public function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
-    {
-        switch ($type) {
-            case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_UPLOAD_PATH);
-                break;
-            case 'rel': // Base: semi-absolute web path (no server base).
-                $base = api_get_path(REL_CODE_PATH);
-                break;
-            case 'web': // Base: absolute web path.
-                $base = api_get_path(WEB_UPLOAD_PATH);
-                break;
-            case 'none':
-            default: // Base: empty, the result path below will be relative.
-                $base = '';
-        }
-        $id = (int) $id;
-
-        if (empty($id) || empty($type)) {
-            return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
-        }
-
-        $group_table = Database::get_main_table(TABLE_USERGROUP);
-        $sql = "SELECT picture FROM $group_table WHERE id = ".$id;
-        $res = Database::query($sql);
-
-        if (!Database::num_rows($res)) {
-            return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
-        }
-        $user = Database::fetch_array($res);
-        $picture_filename = trim($user['picture']);
-
-        if ('true' === api_get_setting('split_users_upload_directory')) {
-            if (!empty($picture_filename)) {
-                $dir = $base.'groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
-            } elseif ($preview) {
-                $dir = $base.'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
-            } else {
-                $dir = $base.'groups/'.$id.'/';
-            }
-        } else {
-            $dir = $base.'groups/'.$id.'/';
-        }
-
-        return ['dir' => $dir, 'file' => $picture_filename];
+        return $picture;*/
     }
 
     /**

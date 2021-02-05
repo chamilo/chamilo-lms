@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use ChamiloSession as Session;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class UserManager.
@@ -56,7 +57,7 @@ class UserManager
      */
     public static function getRepository()
     {
-        return Container::$container->get('Chamilo\CoreBundle\Repository\Node\UserRepository');
+        return Container::$container->get(UserRepository::class);
     }
 
     /**
@@ -329,7 +330,7 @@ class UserManager
         }
 
         $em = Database::getManager();
-        $repo = Container::$container->get(UserRepository::class);
+        $repo = Container::getUserRepository();
         $repo->updateUser($user, false);
 
         // Add user as a node
@@ -1815,214 +1816,30 @@ class UserManager
     }
 
     /**
-     * Get user picture URL or path from user ID (returns an array).
-     * The return format is a complete path, enabling recovery of the directory
-     * with dirname() or the file with basename(). This also works for the
-     * functions dealing with the user's productions, as they are located in
-     * the same directory.
-     *
-     * @deprecated use Resources.
-     *
-     * @param int    $id       User ID
-     * @param string $type     Type of path to return (can be 'system', 'web')
-     * @param array  $userInfo user information to avoid query the DB
-     *                         returns the /main/img/unknown.jpg image set it at true
-     *
-     * @return array Array of 2 elements: 'dir' and 'file' which contain
-     *               the dir and file as the name implies if image does not exist it will
-     *               return the unknow image if anonymous parameter is true if not it returns an empty array
-     */
-    public static function get_user_picture_path_by_id(
-        $id,
-        $type = 'web',
-        $userInfo = []
-    ) {
-        switch ($type) {
-            case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_CODE_PATH);
-                break;
-            case 'web': // Base: absolute web path.
-            default:
-                $base = api_get_path(WEB_CODE_PATH);
-                break;
-        }
-
-        $anonymousPath = [
-            'dir' => $base.'img/',
-            'file' => 'unknown.jpg',
-            'email' => '',
-        ];
-
-        if (empty($id) || empty($type)) {
-            return $anonymousPath;
-        }
-
-        $id = (int) $id;
-        if (empty($userInfo)) {
-            $user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT email, picture_uri FROM $user_table
-                    WHERE id = ".$id;
-            $res = Database::query($sql);
-
-            if (!Database::num_rows($res)) {
-                return $anonymousPath;
-            }
-            $user = Database::fetch_array($res);
-            if (empty($user['picture_uri'])) {
-                return $anonymousPath;
-            }
-        } else {
-            $user = $userInfo;
-        }
-
-        $pictureFilename = trim($user['picture_uri']);
-
-        $dir = self::getUserPathById($id, $type);
-
-        return [
-            'dir' => $dir,
-            'file' => $pictureFilename,
-            'email' => $user['email'],
-        ];
-    }
-
-    /**
-     * *** READ BEFORE REVIEW THIS FUNCTION ***
-     * This function is a exact copy from get_user_picture_path_by_id() and it was create it to avoid
-     * a recursive calls for get_user_picture_path_by_id() in another functions when you update a user picture
-     * in same script, so you can find this function usage in update_user_picture() function.
-     *
-     * @param int    $id       User ID
-     * @param string $type     Type of path to return (can be 'system', 'web')
-     * @param array  $userInfo user information to avoid query the DB
-     *                         returns the /main/img/unknown.jpg image set it at true
-     *
-     * @return array Array of 2 elements: 'dir' and 'file' which contain
-     *               the dir and file as the name implies if image does not exist it will
-     *               return the unknown image if anonymous parameter is true if not it returns an empty array
-     */
-    public static function getUserPicturePathById($id, $type = 'web', $userInfo = [])
-    {
-        switch ($type) {
-            case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_CODE_PATH);
-                break;
-            case 'web': // Base: absolute web path.
-            default:
-                $base = api_get_path(WEB_CODE_PATH);
-                break;
-        }
-
-        $anonymousPath = [
-            'dir' => $base.'img/',
-            'file' => 'unknown.jpg',
-            'email' => '',
-        ];
-
-        if (empty($id) || empty($type)) {
-            return $anonymousPath;
-        }
-
-        $id = (int) $id;
-        if (empty($userInfo)) {
-            $user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT email, picture_uri FROM $user_table WHERE id = $id";
-            $res = Database::query($sql);
-
-            if (!Database::num_rows($res)) {
-                return $anonymousPath;
-            }
-            $user = Database::fetch_array($res);
-
-            if (empty($user['picture_uri'])) {
-                return $anonymousPath;
-            }
-        } else {
-            $user = $userInfo;
-        }
-
-        $pictureFilename = trim($user['picture_uri']);
-        $dir = self::getUserPathById($id, $type);
-
-        return [
-            'dir' => $dir,
-            'file' => $pictureFilename,
-            'email' => $user['email'],
-        ];
-    }
-
-    /**
-     * Get user path from user ID (returns an array).
-     * The return format is a complete path to a folder ending with "/"
-     * In case the first level of subdirectory of users/ does not exist, the
-     * function will attempt to create it. Probably not the right place to do it
-     * but at least it avoids headaches in many other places.
-     *
-     * @deprecated use Resources
-     *
-     * @param int    $id   User ID
-     * @param string $type Type of path to return (can be 'system', 'web', 'last')
-     *
-     * @return string User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
-     */
-    public static function getUserPathById($id, $type)
-    {
-        return null;
-        $id = (int) $id;
-        if (!$id) {
-            return null;
-        }
-
-        $userPath = "users/$id/";
-        if ('true' === api_get_setting('split_users_upload_directory')) {
-            $userPath = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
-            // In exceptional cases, on some portals, the intermediate base user
-            // directory might not have been created. Make sure it is before
-            // going further.
-
-            $rootPath = api_get_path(SYS_UPLOAD_PATH).'users/'.substr((string) $id, 0, 1);
-            if (!is_dir($rootPath)) {
-                $perm = api_get_permissions_for_new_directories();
-                try {
-                    mkdir($rootPath, $perm);
-                } catch (Exception $e) {
-                    error_log($e->getMessage());
-                }
-            }
-        }
-        switch ($type) {
-            case 'system': // Base: absolute system path.
-                $userPath = api_get_path(SYS_UPLOAD_PATH).$userPath;
-                break;
-            case 'web': // Base: absolute web path.
-                $userPath = api_get_path(WEB_UPLOAD_PATH).$userPath;
-                break;
-            case 'last': // Only the last part starting with users/
-                break;
-        }
-
-        return $userPath;
-    }
-
-    /**
      * Gets the current user image.
      *
-     * @param string $user_id
+     * @param string $userId
      * @param int    $size        it can be USER_IMAGE_SIZE_SMALL,
      *                            USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool   $addRandomId
      * @param array  $userInfo    to avoid query the DB
-     *
-     * @todo use resources to get the user picture
+     * @todo add gravatar support
+     * @todo replace $userId with User entity
      *
      * @return string
      */
     public static function getUserPicture(
-        $user_id,
+        $userId,
         $size = USER_IMAGE_SIZE_MEDIUM,
         $addRandomId = true,
         $userInfo = []
     ) {
+        $user = api_get_user_entity($userId);
+        $illustrationRepo = Container::getIllustrationRepository();
+
+        return $illustrationRepo->getIllustrationUrl($user);
+
+        /*
         // Make sure userInfo is defined. Otherwise, define it!
         if (empty($userInfo) || !is_array($userInfo) || 0 == count($userInfo)) {
             if (empty($user_id)) {
@@ -2087,27 +1904,11 @@ class UserManager
             return $anonymousPath;
         }
 
-        $pictureSysPath = self::get_user_picture_path_by_id($user_id, 'system');
-        $file = $pictureSysPath['dir'].$realSizeName.$pictureWebFile;
-        $picture = '';
-        if (file_exists($file)) {
-            $picture = $pictureWebDir.$realSizeName.$pictureWebFile;
-        } else {
-            $file = $pictureSysPath['dir'].$pictureWebFile;
-            if (file_exists($file) && !is_dir($file)) {
-                $picture = $pictureWebFile['dir'].$pictureWebFile;
-            }
-        }
-
-        if (empty($picture)) {
-            return $anonymousPath;
-        }
-
         if ($addRandomId) {
             $picture .= '?rand='.uniqid();
         }
 
-        return $picture;
+        return $picture;*/
     }
 
     /**
@@ -2129,160 +1930,23 @@ class UserManager
      *              When deletion is requested returns empty string.
      *              In case of internal error or negative validation returns FALSE.
      */
-    public static function update_user_picture(
-        $user_id,
-        $file = null,
-        $source_file = null,
-        $cropParameters = ''
-    ) {
-        if (empty($user_id)) {
-            return false;
-        }
-        $delete = empty($file);
-        if (empty($source_file)) {
-            $source_file = $file;
-        }
-
-        // User-reserved directory where photos have to be placed.
-        $path_info = self::getUserPicturePathById($user_id, 'system');
-        $path = $path_info['dir'];
-
-        // If this directory does not exist - we create it.
-        if (!file_exists($path)) {
-            mkdir($path, api_get_permissions_for_new_directories(), true);
-        }
-
-        // The old photos (if any).
-        $old_file = $path_info['file'];
-
-        // Let us delete them.
-        if ('unknown.jpg' != $old_file) {
-            if ('true' == api_get_setting('platform.keep_old_images_after_delete')) {
-                $prefix = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_';
-                @rename($path.'small_'.$old_file, $path.$prefix.'small_'.$old_file);
-                @rename($path.'medium_'.$old_file, $path.$prefix.'medium_'.$old_file);
-                @rename($path.'big_'.$old_file, $path.$prefix.'big_'.$old_file);
-                @rename($path.$old_file, $path.$prefix.$old_file);
-            } else {
-                @unlink($path.'small_'.$old_file);
-                @unlink($path.'medium_'.$old_file);
-                @unlink($path.'big_'.$old_file);
-                @unlink($path.$old_file);
-            }
-        }
-
-        // Exit if only deletion has been requested. Return an empty picture name.
-        if ($delete) {
-            return '';
-        }
-
-        // Validation 2.
-        $allowed_types = api_get_supported_image_extensions();
-        $file = str_replace('\\', '/', $file);
-        $filename = (false !== ($pos = strrpos($file, '/'))) ? substr($file, $pos + 1) : $file;
-        $extension = strtolower(substr(strrchr($filename, '.'), 1));
-        if (!in_array($extension, $allowed_types)) {
+    public static function update_user_picture($userId, UploadedFile $file, $crop = '')
+    {
+        if (empty($userId) || empty($file)) {
             return false;
         }
 
-        // This is the common name for the new photos.
-        if ('unknown.jpg' != $old_file) {
-            $old_extension = strtolower(substr(strrchr($old_file, '.'), 1));
-            $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
-            $filename = ('.' == substr($filename, -1)) ? $filename.$extension : $filename.'.'.$extension;
-        } else {
-            $filename = api_replace_dangerous_char($filename);
-            $filename = uniqid('').'_'.$filename;
-            // We always prefix user photos with user ids, so on setting
-            // api_get_setting('split_users_upload_directory') === 'true'
-            // the correspondent directories to be found successfully.
-            $filename = $user_id.'_'.$filename;
+        $repo = Container::getUserRepository();
+        $user = $repo->find($userId);
+        if ($user) {
+            $repoIllustration = Container::getIllustrationRepository();
+            $repoIllustration->addIllustration($user, $user, $file, $crop);
         }
 
-        //Crop the image to adjust 1:1 ratio
-        $image = new Image($source_file);
-        $image->crop($cropParameters);
-
-        // Storing the new photos in 4 versions with various sizes.
-        $userPath = self::getUserPathById($user_id, 'system');
-
-        // If this path does not exist - we create it.
-        if (!file_exists($userPath)) {
-            mkdir($userPath, api_get_permissions_for_new_directories(), true);
-        }
-        $small = new Image($source_file);
-        $small->resize(32);
-        $small->send_image($userPath.'small_'.$filename);
-        $medium = new Image($source_file);
-        $medium->resize(85);
-        $medium->send_image($userPath.'medium_'.$filename);
-        $normal = new Image($source_file);
-        $normal->resize(200);
-        $normal->send_image($userPath.$filename);
-
-        $big = new Image($source_file); // This is the original picture.
-        $big->send_image($userPath.'big_'.$filename);
-
-        $result = $small && $medium && $normal && $big;
-
-        return $result ? $filename : false;
-    }
-
-    /**
-     * Update User extra field file type into {user_folder}/{$extra_field}.
-     *
-     * @param int    $user_id     The user internal identification number
-     * @param string $extra_field The $extra_field The extra field name
-     * @param null   $file        The filename
-     * @param null   $source_file The temporal filename
-     *
-     * @return bool|null return filename if success, but false
-     */
-    public static function update_user_extra_file(
-        $user_id,
-        $extra_field = '',
-        $file = null,
-        $source_file = null
-    ) {
-        // Add Filter
-        $source_file = Security::filter_filename($source_file);
-        $file = Security::filter_filename($file);
-
-        if (empty($user_id)) {
-            return false;
-        }
-
-        if (empty($source_file)) {
-            $source_file = $file;
-        }
-
-        // User-reserved directory where extra file have to be placed.
-        $path_info = self::get_user_picture_path_by_id($user_id, 'system');
-        $path = $path_info['dir'];
-        if (!empty($extra_field)) {
-            $path .= $extra_field.'/';
-        }
-        // If this directory does not exist - we create it.
-        if (!file_exists($path)) {
-            @mkdir($path, api_get_permissions_for_new_directories(), true);
-        }
-
-        if (filter_extension($file)) {
-            if (@move_uploaded_file($source_file, $path.$file)) {
-                if ($extra_field) {
-                    return $extra_field.'/'.$file;
-                } else {
-                    return $file;
-                }
-            }
-        }
-
-        return false; // this should be returned if anything went wrong with the upload
     }
 
     /**
      * Deletes user photos.
-     * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
      *
      * @param int $userId the user internal identification number
      *
@@ -2290,7 +1954,12 @@ class UserManager
      */
     public static function deleteUserPicture($userId)
     {
-        return self::update_user_picture($userId);
+        $repo = Container::getUserRepository();
+        $user = $repo->find($userId);
+        if ($user) {
+            $illustrationRepo = Container::getIllustrationRepository();
+            $illustrationRepo->deleteIllustration($user);
+        }
     }
 
     /**
@@ -2397,7 +2066,8 @@ class UserManager
      */
     public static function remove_user_production($user_id, $production)
     {
-        $production_path = self::get_user_picture_path_by_id($user_id, 'system');
+        throw new Exception('remove_user_production');
+        /*$production_path = self::get_user_picture_path_by_id($user_id, 'system');
         $production_file = $production_path['dir'].$production;
         if (is_file($production_file)) {
             unlink($production_file);
@@ -2405,7 +2075,7 @@ class UserManager
             return true;
         }
 
-        return false;
+        return false;*/
     }
 
     /**
@@ -2514,48 +2184,6 @@ class UserManager
         }
 
         return $fields;
-    }
-
-    /**
-     * Get valid filenames in $user_folder/{$extra_field}/.
-     *
-     * @param $user_id
-     * @param $extra_field
-     * @param bool $full_path
-     *
-     * @return array
-     */
-    public static function get_user_extra_files($user_id, $extra_field, $full_path = false)
-    {
-        if (!$full_path) {
-            // Nothing to do
-        } else {
-            $path_info = self::get_user_picture_path_by_id($user_id, 'system');
-            $path = $path_info['dir'];
-        }
-        $extra_data = self::get_extra_user_data_by_field($user_id, $extra_field);
-        $extra_files = $extra_data[$extra_field];
-
-        $files = [];
-        if (is_array($extra_files)) {
-            foreach ($extra_files as $key => $value) {
-                if (!$full_path) {
-                    // Relative path from user folder
-                    $files[] = $value;
-                } else {
-                    $files[] = $path.$value;
-                }
-            }
-        } elseif (!empty($extra_files)) {
-            if (!$full_path) {
-                // Relative path from user folder
-                $files[] = $extra_files;
-            } else {
-                $files[] = $path.$extra_files;
-            }
-        }
-
-        return $files; // can be an empty array
     }
 
     /**

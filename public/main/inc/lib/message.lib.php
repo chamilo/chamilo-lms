@@ -2483,7 +2483,11 @@ class MessageManager
                 Criteria::expr()->in('msgStatus', [MESSAGE_STATUS_OUTBOX])
             )->orderBy(['sendDate' => Criteria::DESC]);
 
-        return $user->getSentMessages()->matching($criteria);
+        if ($user->getSentMessages()->count()) {
+            return $user->getSentMessages()->matching($criteria);
+        }
+
+        return [];
 
         /*
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);

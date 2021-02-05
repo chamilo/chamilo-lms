@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -67,7 +68,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             //->setTitle($title) // already added in $form->getData()
     }
 
-    public function addIllustration(AbstractResource $resource, User $user, UploadedFile $uploadFile = null): ?ResourceFile
+    public function addIllustration(ResourceInterface $resource, User $user, UploadedFile $uploadFile = null, $crop = ''): ?ResourceFile
     {
         if (null === $uploadFile) {
             return null;
@@ -78,34 +79,18 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
         if (null === $illustrationNode) {
             $illustration = new Illustration();
+            $illustration->setParentResourceNode($user->getResourceNode());
             $em->persist($illustration);
             $this->addResourceNode($illustration, $user, $resource);
         } else {
             $illustration = $this->findOneBy(['resourceNode' => $illustrationNode]);
         }
 
-        //$this->addResourceToEveryone($illustrationNode);
-        return $this->addFile($illustration, $uploadFile);
-    }
-
-    public function addIllustrationToUser(User $user, $uploadFile): ?ResourceFile
-    {
-        if (null === $uploadFile) {
-            return null;
-        }
-
-        $illustrationNode = $this->getIllustrationNodeFromParent($user->getResourceNode());
-        $em = $this->getEntityManager();
-
-        if (null === $illustrationNode) {
-            $illustration = new Illustration();
-            $illustration->setParentResourceNode($user->getResourceNode()->getId());
-            $em->persist($illustration);
-        } else {
-            $illustration = $this->findOneBy(['resourceNode' => $illustrationNode]);
-        }
-
         $file = $this->addFile($illustration, $uploadFile);
+        if (!empty($crop)) {
+            $file->setCrop($crop);
+        }
+
         $em->persist($file);
         $em->flush();
 
@@ -131,7 +116,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function deleteIllustration(AbstractResource $resource): void
+    public function deleteIllustration(ResourceInterface $resource): void
     {
         $node = $this->getIllustrationNodeFromParent($resource->getResourceNode());
 

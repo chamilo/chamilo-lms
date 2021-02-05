@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 $cidReset = true;
@@ -139,7 +140,12 @@ if ('true' == api_get_setting('registration', 'email')) {
 }
 
 if ('true' == api_get_setting('login_is_email')) {
-    $form->addRule('email', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'email',
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
 
@@ -165,10 +171,15 @@ if (strlen($user_data['picture_uri']) > 0) {
 }
 
 // Username
-if ('true' != api_get_setting('login_is_email')) {
+if ('true' !== api_get_setting('login_is_email')) {
     $form->addElement('text', 'username', get_lang('Login'), ['maxlength' => USERNAME_MAX_LENGTH]);
     $form->addRule('username', get_lang('Required field'), 'required');
-    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'username',
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
     $form->addRule('username', get_lang('Only letters and numbers allowed'), 'username');
     $form->addRule('username', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
@@ -262,7 +273,12 @@ $form->addGroup($group, 'mail', get_lang('Send mail to new user'), null, false);
 
 // Registration User and Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
-$date = sprintf(get_lang('Create by <a href="%s">%s</a> on %s'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
+$date = sprintf(
+    get_lang('Create by <a href="%s">%s</a> on %s'),
+    'user_information.php?user_id='.$user_data['creator_id'],
+    $creatorInfo['username'],
+    $user_data['registration_date']
+);
 $form->addElement('label', get_lang('Registration date'), $date);
 
 if (!$user_data['platform_admin']) {
@@ -364,7 +380,7 @@ $error_drh = false;
 // Validate form
 if ($form->validate()) {
     $user = $form->getSubmitValues(1);
-    $reset_password = intval($user['reset_password']);
+    $reset_password = (int) $user['reset_password'];
     if (2 == $reset_password && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('The password is too short')));
         header('Location: '.api_get_self().'?user_id='.$user_id);
@@ -383,10 +399,11 @@ if ($form->validate()) {
         if (isset($user['delete_picture']) && $user['delete_picture']) {
             $picture_uri = UserManager::deleteUserPicture($user_id);
         } elseif (!empty($picture['name'])) {
+            $request = Container::getRequest();
+            $file = $request->files->get('picture');
             $picture_uri = UserManager::update_user_picture(
                 $user_id,
-                $_FILES['picture']['name'],
-                $_FILES['picture']['tmp_name'],
+                $file,
                 $user['picture_crop_result']
             );
         }

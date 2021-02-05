@@ -14,7 +14,7 @@ use Twig\TwigFilter;
  */
 class ChamiloExtension extends AbstractExtension
 {
-    private $illustrationRepository;
+    private IllustrationRepository $illustrationRepository;
 
     public function __construct(IllustrationRepository $illustrationRepository)
     {

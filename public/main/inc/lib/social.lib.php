@@ -236,7 +236,7 @@ class SocialManager extends UserManager
     {
         return [];
         // @todo
-        $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
+        /*$list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
         $list = [];
         foreach ($list_ids as $values_ids) {
             $list[] = UserManager::get_user_picture_path_by_id(
@@ -245,7 +245,7 @@ class SocialManager extends UserManager
             );
         }
 
-        return $list;
+        return $list;*/
     }
 
     /**
@@ -1360,7 +1360,7 @@ class SocialManager extends UserManager
     {
         return;
 
-        $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
+        /*$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
         $sysdir = UserManager::getUserPathById($user_id, 'system');
         $webdir = UserManager::getUserPathById($user_id, 'web');
 
@@ -1389,7 +1389,7 @@ class SocialManager extends UserManager
                 }
             }
             echo '</ul></dd>';
-        }
+        }*/
     }
 
     /**

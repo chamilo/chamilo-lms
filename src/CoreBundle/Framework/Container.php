@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
+use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
@@ -424,6 +425,11 @@ class Container
     public static function getUserRepository(): UserRepository
     {
         return self::$container->get(UserRepository::class);
+    }
+
+    public static function getUsergroupRepository(): UsergroupRepository
+    {
+        return self::$container->get(UsergroupRepository::class);
     }
 
     public static function getIllustrationRepository(): IllustrationRepository

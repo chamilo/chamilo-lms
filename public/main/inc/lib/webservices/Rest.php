@@ -776,10 +776,11 @@ class Rest extends WebService
      */
     public function getUserProfile()
     {
-        $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
+        $illustrationRepo = Container::getIllustrationRepository();
+        $url = $illustrationRepo->getIllustrationUrl($this->user);
 
         $result = [
-            'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
+            'pictureUri' => $url,
             'id' => $this->user->getId(),
             'status' => $this->user->getStatus(),
             'fullName' => UserManager::formatUserFullName($this->user),

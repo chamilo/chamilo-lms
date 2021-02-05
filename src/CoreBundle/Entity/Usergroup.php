@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="usergroup")
  * @ORM\Entity
  */
-class Usergroup
+class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface
 {
     use TimestampableEntity;
 
@@ -40,11 +40,9 @@ class Usergroup
     protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var int
@@ -58,14 +56,12 @@ class Usergroup
      *
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
-    protected $picture;
+    protected ?string $picture;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
-    protected $url;
+    protected ?string $url;
 
     /**
      * @var string
@@ -89,28 +85,23 @@ class Usergroup
     protected $allowMembersToLeaveGroup;
 
     /**
+     * @var UsergroupRelUser[]
      * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
      */
     protected $users;
 
-    /**
-     * Usergroup constructor.
-     */
     public function __construct()
     {
-        //$this->users = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     /**
-     * @return ArrayCollection
+     * @return UsergroupRelUser[]
      */
     public function getUsers()
     {
@@ -159,12 +150,8 @@ class Usergroup
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Usergroup
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -185,10 +172,8 @@ class Usergroup
      * Set description.
      *
      * @param string $description
-     *
-     * @return Usergroup
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -223,5 +208,32 @@ class Usergroup
         $this->groupType = $groupType;
 
         return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function getDefaultIllustration($size): string
+    {
+        $size = empty($size) ? 32 : (int) $size;
+
+        return "/img/icons/$size/group_na.png";
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

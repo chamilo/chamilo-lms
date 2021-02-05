@@ -1135,7 +1135,7 @@ $table = new SortableTable(
     20,
     'ASC',
     null,
-    ['style' => 'font-size: 1.4rem;', 'class' => 'table table-hover table-striped table-bordered table-condensed']
+    ['class' => 'table table-hover table-striped table-bordered table-condensed']
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');

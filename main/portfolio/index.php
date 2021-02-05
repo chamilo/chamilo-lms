@@ -226,6 +226,12 @@ switch ($action) {
             $controller->qualifyComment($comment);
         }
         break;
+    case 'download_attachment':
+        $controller->downloadAttachment($httpRequest);
+        break;
+    case 'delete_attachment':
+        $controller->deleteAttachment($httpRequest);
+        break;
     case 'list':
     default:
         $controller->index($httpRequest);

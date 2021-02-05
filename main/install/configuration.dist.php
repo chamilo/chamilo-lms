@@ -930,6 +930,7 @@ ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (pa
 ALTER TABLE portfolio ADD origin INT DEFAULT NULL, ADD origin_type INT DEFAULT NULL;
 ALTER TABLE portfolio ADD score DOUBLE PRECISION DEFAULT NULL;
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, visible_to_others, changeable, created_at) VALUES (19, 10, 'tags', 'tags', 1, 1, 1, NOW());
+CREATE TABLE portfolio_attachment (id INT AUTO_INCREMENT NOT NULL, path VARCHAR(255) NOT NULL, comment LONGTEXT DEFAULT NULL, size INT NOT NULL, filename VARCHAR(255) NOT NULL, origin_id INT NOT NULL, origin_type INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 */
 // In 1.11.8, before enabling this feature, you also need to:
 // - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php

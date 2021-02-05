@@ -157,7 +157,6 @@ if (isset($_REQUEST['comments']) &&
     // Filtered by post-condition
     $id = (int) $_GET['exeid'];
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
-
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
@@ -171,7 +170,7 @@ if (isset($_REQUEST['comments']) &&
 
     $attemptData = Event::get_exercise_results_by_attempt($id);
     $questionListData = [];
-    if ($attemptData &&  $attemptData[$id] && $attemptData[$id]['question_list']) {
+    if ($attemptData && $attemptData[$id] && $attemptData[$id]['question_list']) {
         $questionListData = $attemptData[$id]['question_list'];
     }
 
@@ -205,12 +204,26 @@ if (isset($_REQUEST['comments']) &&
             continue;
         }
 
+        // From the database.
+        $marksFromDatabase = $questionListData[$questionId]['marks'];
+
         if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
             // From the form.
             $params['marks'] = $marks;
+            if ($marksFromDatabase != $marks) {
+                Event::addEvent(
+                    LOG_QUESTION_SCORE_UPDATE,
+                    LOG_EXERCISE_ATTEMPT_QUESTION_ID,
+                    [
+                        'exeId' => $id,
+                        'question_id' => $questionId,
+                        'old_mark' => $marksFromDatabase,
+                        'new_marks' => $marks
+                    ]
+                );
+            }
         } else {
-            // From the database.
-            $marks = $questionListData[$questionId]['marks'];
+            $marks = $marksFromDatabase;
         }
 
         Database::update(

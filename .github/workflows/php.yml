@@ -98,7 +98,6 @@ jobs:
                 sudo chmod +x /usr/bin/chromedriver
                 chromedriver --version
                 sudo apt-get install xvfb
-                sh -e /etc/init.d/xvfb start
                 export DISPLAY=:99.0
 
 #            - run: |

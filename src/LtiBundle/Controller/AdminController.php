@@ -20,7 +20,7 @@ class AdminController extends BaseController
     /**
      * @Route("/", name="chamilo_lti_admin")
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function adminAction(): Response
     {
@@ -33,7 +33,7 @@ class AdminController extends BaseController
     /**
      * @Route("/add", name="chamilo_lti_admin_add")
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function adminAddAction(Request $request): Response
     {
@@ -73,7 +73,7 @@ class AdminController extends BaseController
     /**
      * @Route("/edit/{toolId}", name="chamilo_lti_admin_edit", requirements={"toolId"="\d+"})
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @param int $toolId
      *
@@ -127,7 +127,7 @@ class AdminController extends BaseController
     /**
      * @Route("/delete/{toolId}", name="chamilo_lti_admin_delete", requirements={"toolId"="\d+"})
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @param int $toolId
      *

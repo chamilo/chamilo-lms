@@ -32,7 +32,7 @@ class IndexController extends BaseController
      *
      * @Route("/toggle_student_view", methods={"GET"})
      *
-     * @Security("has_role('ROLE_TEACHER')")
+     * @Security("is_granted('ROLE_TEACHER')")
      */
     public function toggleStudentViewAction(Request $request): Response
     {

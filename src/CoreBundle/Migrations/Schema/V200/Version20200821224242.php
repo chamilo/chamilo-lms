@@ -7,15 +7,23 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Messages.
- */
 final class Version20200821224242 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Messages';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('message');
         $this->addSql('ALTER TABLE message CHANGE parent_id parent_id BIGINT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_B6BD307F727ACA70')) {
+            $this->addSql(
+                'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F727ACA70 FOREIGN KEY (parent_id) REFERENCES message (id)'
+            );
+        }
 
         if ($table->hasIndex('idx_message_parent')) {
             $this->addSql('DROP INDEX idx_message_parent ON message');

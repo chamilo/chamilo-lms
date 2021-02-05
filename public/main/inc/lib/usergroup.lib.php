@@ -1526,11 +1526,11 @@ class UserGroup extends Model
         $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
-        $groupExists = $this->usergroup_exists(trim($params['name']));
-        if (false === $groupExists) {
-            $group = new UserGroupEntity();
+        $userGroupExists = $this->usergroup_exists(trim($params['name']));
+        if (false === $userGroupExists) {
+            $userGroup = new UserGroupEntity();
             $repo = Container::getUsergroupRepository();
-            $group
+            $userGroup
                 ->setName(trim($params['name']))
                 ->setDescription($params['description'])
                 ->setUrl($params['url'])
@@ -1539,12 +1539,12 @@ class UserGroup extends Model
                 ->setAllowMembersToLeaveGroup($params['allow_members_leave_group'])
             ;
             if ($this->allowTeachers()) {
-                $group->setAuthorId(api_get_user_id());
+                $userGroup->setAuthorId(api_get_user_id());
             }
 
-            $repo->create($group);
+            $repo->create($userGroup);
 
-            $id = $group->getId();
+            $id = $userGroup->getId();
             if ($id) {
                 if ($this->getUseMultipleUrl()) {
                     $this->subscribeToUrl($id, api_get_current_access_url_id());
@@ -1559,7 +1559,7 @@ class UserGroup extends Model
                 }
                 $request = Container::getRequest();
                 $file = $request->files->get('picture');
-                $this->manageFileUpload($group, $file);
+                $this->manageFileUpload($userGroup, $file);
             }
 
             return $id;
@@ -1570,21 +1570,28 @@ class UserGroup extends Model
 
     public function update($params, $showQuery = false)
     {
-        $params['updated_on'] = api_get_utc_datetime();
-        $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
-        $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
-        $params['crop_image'] = isset($params['picture_crop_result']) ? $params['picture_crop_result'] : null;
-
-        if (isset($params['id'])) {
-            $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
-            if (!empty($picture)) {
-                $request = Container::getRequest();
-                $file = $request->files->get('picture');
-                $this->manageFileUpload($params['id'], $file, $params['crop_image']);
-            }
+        $repo = Container::getUsergroupRepository();
+        /** @var UserGroupEntity $userGroup */
+        $userGroup = $repo->find($params['id']);
+        if (null === $userGroup) {
+            return false;
         }
 
-        parent::update($params, $showQuery);
+        //$params['updated_on'] = api_get_utc_datetime();
+        $userGroup
+            ->setGroupType(isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS)
+            ->setAllowMembersToLeaveGroup(isset($params['allow_members_leave_group']) ? 1 : 0)
+        ;
+        $cropImage = isset($params['picture_crop_result']) ? $params['picture_crop_result'] : null;
+        $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
+        if (!empty($picture)) {
+            $request = Container::getRequest();
+            $file = $request->files->get('picture');
+            $this->manageFileUpload($userGroup, $file, $cropImage);
+        }
+
+        //parent::update($params, $showQuery);
+        $repo->update($userGroup);
 
         if (isset($params['delete_picture'])) {
             $this->delete_group_picture($params['id']);
@@ -1760,9 +1767,8 @@ class UserGroup extends Model
     /**
      * @param FormValidator $form
      * @param string        $type
-     * @param array         $data
      */
-    public function setForm($form, $type = 'add', $data = [])
+    public function setForm($form, $type = 'add', UserGroupEntity $userGroup = null)
     {
         $header = '';
         switch ($type) {
@@ -1818,8 +1824,9 @@ class UserGroup extends Model
             ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
         );
 
-        if (isset($data['picture']) && strlen($data['picture']) > 0) {
-            $picture = $this->get_picture_group($data['id'], $data['picture'], 80);
+        $repo = Container::getIllustrationRepository();
+        if ($repo->hasIllustration($userGroup)) {
+            $picture = $repo->getIllustrationUrl($userGroup);
             $img = '<img src="'.$picture.'" />';
             $form->addElement('label', null, $img);
             $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
@@ -1857,7 +1864,6 @@ class UserGroup extends Model
     ) {
         $repoIllustration = Container::getIllustrationRepository();
         $repoUserGroup = Container::getUsergroupRepository();
-
         $userGroup = $repoUserGroup->find($id);
 
         return $repoIllustration->getIllustrationUrl($userGroup);

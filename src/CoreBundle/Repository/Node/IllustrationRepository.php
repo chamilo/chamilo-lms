@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -124,6 +123,13 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             $this->getEntityManager()->remove($node);
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function hasIllustration(ResourceIllustrationInterface $resource): bool
+    {
+        $illustration = $this->getIllustrationUrlFromNode($resource->getResourceNode());
+
+        return null !== $illustration;
     }
 
     /**

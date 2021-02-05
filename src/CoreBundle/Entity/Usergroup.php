@@ -210,6 +210,66 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getVisibility(): string
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * @param string $visibility
+     *
+     * @return Usergroup
+     */
+    public function setVisibility(string $visibility): Usergroup
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string|null $url
+     *
+     * @return Usergroup
+     */
+    public function setUrl(?string $url): Usergroup
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorId(): string
+    {
+        return $this->authorId;
+    }
+
+    /**
+     * @param string $authorId
+     *
+     * @return Usergroup
+     */
+    public function setAuthorId(string $authorId): Usergroup
+    {
+        $this->authorId = $authorId;
+
+        return $this;
+    }
+
     public function getPicture(): ?string
     {
         return $this->picture;

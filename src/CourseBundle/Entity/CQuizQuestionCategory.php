@@ -113,12 +113,10 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * Get title.
-     *
-     * @return string
      */
     public function getTitle()
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     public function setDescription(string $description): self

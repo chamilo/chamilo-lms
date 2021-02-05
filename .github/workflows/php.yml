@@ -21,7 +21,7 @@ jobs:
                     MYSQL_ROOT_PASSWORD: chamilo
                     MYSQL_DATABASE: chamilo
                 ports:
-                    - 3306:3306
+                    - 3306/tcp
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         steps:
             - name: Checkout
@@ -48,7 +48,7 @@ jobs:
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
-              run: composer install --prefer-dist --no-progress --no-suggest
+              run: composer install --prefer-dist --no-progress
 
             - name: Install assets
               run: php bin/console assets:install

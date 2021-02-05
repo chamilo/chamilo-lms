@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="usergroup")
  * @ORM\Entity
  */
-class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface
+class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceToRootInterface
 {
     use TimestampableEntity;
 
@@ -210,19 +210,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getVisibility(): string
     {
         return $this->visibility;
     }
 
-    /**
-     * @param string $visibility
-     *
-     * @return Usergroup
-     */
     public function setVisibility(string $visibility): Usergroup
     {
         $this->visibility = $visibility;
@@ -230,19 +222,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * @param string|null $url
-     *
-     * @return Usergroup
-     */
     public function setUrl(?string $url): Usergroup
     {
         $this->url = $url;
@@ -250,19 +234,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAuthorId(): string
     {
         return $this->authorId;
     }
 
-    /**
-     * @param string $authorId
-     *
-     * @return Usergroup
-     */
     public function setAuthorId(string $authorId): Usergroup
     {
         $this->authorId = $authorId;

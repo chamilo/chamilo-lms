@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\Usergroup as UserGroupEntity;
 
 /**
  * Class UserGroup.
@@ -1527,10 +1528,21 @@ class UserGroup extends Model
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
         if (false == $groupExists) {
+            $group = new UserGroupEntity();
+            $repo = Container::getUsergroupRepository();
+            $group
+                ->setName(trim($params['name']))
+                ->setDescription($params['description'])
+                ->setUrl($params['url'])
+                ->setVisibility($params['visibility'])
+            ;
             if ($this->allowTeachers()) {
-                $params['author_id'] = api_get_user_id();
+                $group->setAuthorId(api_get_user_id());
             }
-            $id = parent::save($params, $showQuery);
+
+            $repo->create($group);
+
+            $id = $group->getId();
             if ($id) {
                 if ($this->getUseMultipleUrl()) {
                     $this->subscribeToUrl($id, api_get_current_access_url_id());
@@ -1543,16 +1555,9 @@ class UserGroup extends Model
                         $params['group_type']
                     );
                 }
-                $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
-                $picture = $this->manageFileUpload($id, $picture);
-                if ($picture) {
-                    $params = [
-                        'id' => $id,
-                        'picture' => $picture,
-                        'group_type' => $params['group_type'],
-                    ];
-                    $this->update($params);
-                }
+                $request = Container::getRequest();
+                $file = $request->files->get('picture');
+                $this->manageFileUpload($group, $file);
             }
 
             return $id;
@@ -1571,14 +1576,9 @@ class UserGroup extends Model
         if (isset($params['id'])) {
             $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
             if (!empty($picture)) {
-                $picture = $this->manageFileUpload($params['id'], $picture, $params['crop_image']);
-                if ($picture) {
-                    $params['picture'] = $picture;
-                }
-            }
-
-            if (isset($params['delete_picture'])) {
-                $params['picture'] = null;
+                $request = Container::getRequest();
+                $file = $request->files->get('picture');
+                $this->manageFileUpload($params['id'], $file, $params['crop_image']);
             }
         }
 
@@ -1592,21 +1592,18 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int    $groupId
+     * @param UserGroupEntity    $groupId
      * @param string $picture
      * @param string $cropParameters
      *
-     * @return bool|string
+     * @return bool
      */
-    public function manageFileUpload($groupId, $picture, $cropParameters = '')
+    public function manageFileUpload($userGroup, $picture, $cropParameters = '')
     {
-        if (!empty($picture['name'])) {
-            return $this->update_group_picture(
-                $groupId,
-                $picture['name'],
-                $picture['tmp_name'],
-                $cropParameters
-            );
+        if ($userGroup) {
+            $illustrationRepo = Container::getIllustrationRepository();
+            $illustrationRepo->addIllustration($userGroup, api_get_user_entity(), $picture, $cropParameters);
+            return true;
         }
 
         return false;
@@ -1619,7 +1616,12 @@ class UserGroup extends Model
      */
     public function delete_group_picture($groupId)
     {
-        return $this->update_group_picture($groupId);
+        $repo = Container::getUsergroupRepository();
+        $userGroup = $repo->find($groupId);
+        if ($userGroup) {
+            $illustrationRepo = Container::getIllustrationRepository();
+            $illustrationRepo->deleteIllustration($userGroup);
+        }
     }
 
     /**
@@ -1654,7 +1656,10 @@ class UserGroup extends Model
                 WHERE usergroup_id = $id";
         Database::query($sql);
 
-        parent::delete($id);
+        //parent::delete($id);
+        $repo = Container::getUsergroupRepository();
+        $userGroup = $repo->find($id);
+        $repo->delete($userGroup);
     }
 
     /**

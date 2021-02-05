@@ -1990,6 +1990,8 @@ class UserManager
             return false;
         }
 
+        return false;
+
         $production_dir = self::getUserPathById($user_id, 'web');
         $del_image = Display::returnIconPath('delete.png');
         $add_image = Display::returnIconPath('archive.png');
@@ -2030,6 +2032,8 @@ class UserManager
      */
     public static function get_user_productions($user_id)
     {
+        return [];
+
         $production_repository = self::getUserPathById($user_id, 'system');
         $productions = [];
 

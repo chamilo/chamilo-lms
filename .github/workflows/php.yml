@@ -21,7 +21,7 @@ jobs:
                     MYSQL_ROOT_PASSWORD: chamilo
                     MYSQL_DATABASE: chamilo
                 ports:
-                    - 3306/tcp
+                    - 3306:3306
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         steps:
             - name: Checkout
@@ -32,10 +32,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php-versions }}
                   tools: behat, symfony
-                  extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
-
-            - name: Start mysql service
-              run: sudo /etc/init.d/mysql start
+                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, intl, zip, bcmath
 
             - name: Get composer cache directory
               id: composer-cache
@@ -81,6 +78,19 @@ jobs:
               uses: borales/actions-yarn@v2.3.0
               with:
                   cmd: run encore dev
+
+            - name: Start chromedriver
+              uses: nanasess/setup-chromedriver@master
+              with:
+                  # Optional: do not specify to match Chrome's version
+                  chromedriver-version: '88.0.4324.96'
+              run: |
+                export DISPLAY=:99
+                chromedriver --url-base=/wd/hub &
+                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+
+            - name: Start mysql service
+              run: sudo /etc/init.d/mysql start
 
             - name: Install database
               run: |

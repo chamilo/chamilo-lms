@@ -79,6 +79,12 @@ jobs:
               with:
                   cmd: run encore dev
 
+
+            - name: Start chrome
+              run: |
+                sudo apt install google-chrome-stable
+                google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+
             # https://github.com/marketplace/actions/setup-chromedriver
             - name: Start chromedriver
               uses: nanasess/setup-chromedriver@master
@@ -91,8 +97,6 @@ jobs:
                 chromedriver --url-base=/wd/hub &
                 sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
                 chromedriver --version
-                sudo apt install google-chrome-stable
-                google-chrome --version
 
             - name: Set up JDK 1.8
               uses: actions/setup-java@v1
@@ -122,8 +126,9 @@ jobs:
             - name: Apache
               run: |
                   sudo apt install apache2
-                  sudo a2enmod rewrite actions alias
+                  sudo a2enmod rewrite actions
                   sudo service apache2 restart
+                  sudo systemctl restart apache2
 
             - name: Install chamilo
               run: |

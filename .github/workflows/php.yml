@@ -97,7 +97,7 @@ jobs:
                 java-version: 1.8
 
             - name: Selenium
-            - run: |
+              run: |
                 wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
                 java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
 
@@ -117,10 +117,20 @@ jobs:
 #                APP_INSTALLED: 1
 
             - name: Apache
-            - run: |
+              run: |
                   sudo apt install apache2
                   sudo a2enmod rewrite actions alias
                   sudo service apache2 restart
+
+            - name: Install chamilo
+              run: |
+                  cd tests/behat
+                  ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
+                  cd ..
+                  cd ..
+                  sudo chmod -R 777 var public
+                  php bin/console cache:clear
+                  sudo chmod -R 777 var public
 
             - name: Composer analyse
               run: composer analyse

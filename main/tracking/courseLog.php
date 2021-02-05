@@ -1031,7 +1031,7 @@ if ($export_csv) {
     }
     ob_end_clean();
 
-    $csvContentInSession = Session::read('csv_content');
+    $csvContentInSession = Session::read('csv_content', []);
 
     // Adding headers before the content.
     array_unshift($csvContentInSession, $csv_headers);

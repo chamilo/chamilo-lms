@@ -172,8 +172,8 @@ switch ($action) {
             );
 
             $repo = Container::getGlossaryRepository();
-            /** @var CGlossary $glossary_data */
-            $glossary_data = $repo->find($glossaryId);
+            /** @var CGlossary $glossaryData */
+            $glossaryData = $repo->find($glossaryId);
             /*
             // setting the defaults
             $glossary_data = GlossaryManager::get_glossary_information($glossaryId);
@@ -197,9 +197,9 @@ switch ($action) {
             */
             $form->addButtonUpdate(get_lang('Update term'), 'SubmitGlossary');
             $default = [
-                'glossary_id' => $glossary_data->getIid(),
-                'name' => $glossary_data->getName(),
-                'description' => $glossary_data->getDescription(),
+                'glossary_id' => $glossaryData->getIid(),
+                'name' => $glossaryData->getName(),
+                'description' => $glossaryData->getDescription(),
             ];
             $form->setDefaults($default);
 

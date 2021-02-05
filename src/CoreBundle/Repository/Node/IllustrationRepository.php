@@ -127,9 +127,9 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
     public function hasIllustration(ResourceIllustrationInterface $resource): bool
     {
-        $illustration = $this->getIllustrationUrlFromNode($resource->getResourceNode());
+        $node = $this->getIllustrationNodeFromParent($resource->getResourceNode());
 
-        return null !== $illustration;
+        return null !== $node;
     }
 
     /**

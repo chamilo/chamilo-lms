@@ -1825,7 +1825,7 @@ class UserGroup extends Model
         );
 
         $repo = Container::getIllustrationRepository();
-        if ($repo->hasIllustration($userGroup)) {
+        if ($userGroup && $repo->hasIllustration($userGroup)) {
             $picture = $repo->getIllustrationUrl($userGroup);
             $img = '<img src="'.$picture.'" />';
             $form->addElement('label', null, $img);

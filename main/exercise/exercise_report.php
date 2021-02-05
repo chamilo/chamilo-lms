@@ -185,19 +185,12 @@ if (isset($_REQUEST['comments']) &&
             $questionListInPost[] = $my_post_info[1];
         }
     }
-    /*$loop_in_track = $comments_exist === true ? (count($_POST) / 2) : count($_POST);
-    if ($comments_exist === true) {
-        $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
-    } else {
-        $array_content_id_exe = $post_content_id;
-    }*/
-    //var_dump($_POST);    var_dump($array_content_id_exe, $post_content_id);exit;
-    //for ($i = 0; $i < $loop_in_track; $i++) {
+
     foreach ($questionListInPost as $questionId) {
         $marks = $_POST['marks_'.$questionId] ?? 0;
         $my_comments = $_POST['comments_'.$questionId] ?? '';
         $params = [
-            'teacher_comment' => $my_comments
+            'teacher_comment' => $my_comments,
         ];
         $question = Question::read($questionId);
         if (false === $question) {
@@ -206,7 +199,6 @@ if (isset($_REQUEST['comments']) &&
 
         // From the database.
         $marksFromDatabase = $questionListData[$questionId]['marks'];
-
         if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
             // From the form.
             $params['marks'] = $marks;
@@ -217,8 +209,8 @@ if (isset($_REQUEST['comments']) &&
                     [
                         'exeId' => $id,
                         'question_id' => $questionId,
-                        'old_mark' => $marksFromDatabase,
-                        'new_marks' => $marks
+                        'old_marks' => $marksFromDatabase,
+                        'new_marks' => $marks,
                     ]
                 );
             }
@@ -277,14 +269,12 @@ if (isset($_REQUEST['comments']) &&
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
         $message = isset($_POST['notification_content']) ? $_POST['notification_content'] : '';
-
         MessageManager::send_message_simple(
             $student_id,
             $subject,
             $message,
             api_get_user_id()
         );
-
         if ($allowCoachFeedbackExercises) {
             Display::addFlash(
                 Display::return_message(get_lang('MessageSent'))

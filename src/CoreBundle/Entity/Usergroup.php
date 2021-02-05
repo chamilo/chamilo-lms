@@ -246,6 +246,18 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
+    public function getAllowMembersToLeaveGroup(): int
+    {
+        return $this->allowMembersToLeaveGroup;
+    }
+
+    public function setAllowMembersToLeaveGroup(int $allowMembersToLeaveGroup): self
+    {
+        $this->allowMembersToLeaveGroup = $allowMembersToLeaveGroup;
+
+        return $this;
+    }
+
     public function getPicture(): ?string
     {
         return $this->picture;

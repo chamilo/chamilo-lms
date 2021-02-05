@@ -13,8 +13,8 @@ use Chamilo\CoreBundle\Entity\Usergroup as UserGroupEntity;
  */
 class UserGroup extends Model
 {
-    const SOCIAL_CLASS = 1;
-    const NORMAL_CLASS = 0;
+    public const SOCIAL_CLASS = 1;
+    public const NORMAL_CLASS = 0;
     public $columns = [
         'id',
         'name',
@@ -1527,7 +1527,7 @@ class UserGroup extends Model
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
-        if (false == $groupExists) {
+        if (false === $groupExists) {
             $group = new UserGroupEntity();
             $repo = Container::getUsergroupRepository();
             $group
@@ -1535,6 +1535,8 @@ class UserGroup extends Model
                 ->setDescription($params['description'])
                 ->setUrl($params['url'])
                 ->setVisibility($params['visibility'])
+                ->setGroupType($params['group_type'])
+                ->setAllowMembersToLeaveGroup($params['allow_members_leave_group'])
             ;
             if ($this->allowTeachers()) {
                 $group->setAuthorId(api_get_user_id());

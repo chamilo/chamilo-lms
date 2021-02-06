@@ -118,8 +118,8 @@ jobs:
               run: |
                 java -version
                 export DISPLAY=:99.0
-                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
-                java -jar selenium-server-standalone-3.141.59.jar -Dwebdriver.chrome.bin="/usr/bin/google-chrome-stable" -Dwebdriver.chrome.driver="/usr/bin/chromedriver"  > /dev/null &
+                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+                java -jar -Dwebdriver.chrome.bin="/usr/bin/google-chrome-stable" -Dwebdriver.chrome.driver="/usr/bin/chromedriver" selenium-server-standalone-3.141.59.jar  > /dev/null &
 
             - name: Start mysql service
               run: sudo /etc/init.d/mysql start
@@ -140,7 +140,7 @@ jobs:
               run: |
                   sudo apt install apache2
                   sudo a2enmod rewrite actions
-                  sudo cp -f tests/gh/apache /etc/apache2/sites-available/000-default.conf
+                  sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
                   sudo chmod 777 -R $HOME
                   cat /etc/apache2/sites-available/000-default.conf
 

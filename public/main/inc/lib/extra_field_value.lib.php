@@ -2,11 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class ExtraFieldValue
@@ -125,7 +128,7 @@ class ExtraFieldValue extends Model
                     //only admins should be able to add those values
                     if (!api_is_platform_admin(true, true)) {
                         // although if not admin but sent through a CLI script, we should accept it as well
-                        if (PHP_SAPI != 'cli') {
+                        if (PHP_SAPI !== 'cli') {
                             continue; //not a CLI script, so don't write the value to DB
                         }
                     }
@@ -133,8 +136,8 @@ class ExtraFieldValue extends Model
             }
 
             $field_variable = $fieldDetails['variable'];
-
-            if ($onlySubmittedFields && !isset($params['extra_'.$field_variable])) {
+            $fieldVariableWithExtra = 'extra_'.$field_variable;
+            if ($onlySubmittedFields && !isset($params[$fieldVariableWithExtra])) {
                 continue;
             }
 
@@ -151,8 +154,8 @@ class ExtraFieldValue extends Model
             }
 
             $value = '';
-            if (isset($params['extra_'.$field_variable])) {
-                $value = $params['extra_'.$field_variable];
+            if (isset($params[$fieldVariableWithExtra])) {
+                $value = $params[$fieldVariableWithExtra];
             }
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
@@ -196,7 +199,6 @@ class ExtraFieldValue extends Model
                     }
 
                     $em = Database::getManager();
-
                     $currentTags = $em
                         ->getRepository(ExtraFieldRelTag::class)
                         ->findBy([
@@ -210,7 +212,6 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];
-
                     foreach ($tagValues as $tagValue) {
                         if (empty($tagValue)) {
                             continue;
@@ -258,7 +259,8 @@ class ExtraFieldValue extends Model
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
                     $fileDir = $fileDirStored = '';
-                    switch ($this->type) {
+
+                    /*switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
                             $fileDirStored = "courses/";
@@ -275,31 +277,40 @@ class ExtraFieldValue extends Model
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
                             $fileDirStored = 'work/';
                             break;
-                    }
-
+                    }*/
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
-
-                    if (!file_exists($fileDir)) {
-                        mkdir($fileDir, $dirPermissions, true);
-                    }
-
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
-                        // Crop the image to adjust 16:9 ratio
-                        if (isset($params['extra_'.$field_variable.'_crop_result'])) {
-                            $crop = new Image($value['tmp_name']);
-                            $crop->crop($params['extra_'.$field_variable.'_crop_result']);
+                        $file = new UploadedFile($value['tmp_name'], $fileName, null, null, true);
+                        $em = Database::getManager();
+                        $asset = new Asset();
+                        $asset
+                            ->setCategory(Asset::EXTRA_FIELD)
+                            ->setTitle($fileName)
+                            ->setFile($file)
+                            ->setCompressed(true)
+                        ;
+                        $cropVariable = 'extra_'.$field_variable.'_crop_result';
+                        if (isset($params[$cropVariable])) {
+                            $asset->setCrop($params[$cropVariable]);
                         }
+                        $em->persist($asset);
+                        $em->flush();
+                        $assetId = $asset->getId();
+                        //$repo = Container::getAssetRepository();
 
-                        $imageExtraField = new Image($value['tmp_name']);
-                        $imageExtraField->resize(400);
-                        $imageExtraField->send_image($fileDir.$fileName, -1, 'png');
-                        $newParams = [
-                            'item_id' => $params['item_id'],
-                            'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored.$fileName,
-                            'comment' => $comment,
-                        ];
-                        $this->save($newParams);
+                        if ($assetId) {
+                            // Crop the image to adjust 16:9 ratio
+                            /*$imageExtraField = new Image($value['tmp_name']);
+                            $imageExtraField->resize(400);
+                            $imageExtraField->send_image($fileDir.$fileName, -1, 'png');*/
+                            $newParams = [
+                                'item_id' => $params['item_id'],
+                                'field_id' => $extraFieldInfo['id'],
+                                'value' => $assetId,
+                                'comment' => $comment,
+                            ];
+                            $this->save($newParams);
+                        }
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:

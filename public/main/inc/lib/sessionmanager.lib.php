@@ -298,8 +298,6 @@ class SessionManager
                 $em = Database::getManager();
                 $em->persist($session);
                 $em->flush();
-
-                //$session_id = Database::insert($tbl_session, $values);
                 $session_id = $session->getId();
 
                 $duration = (int) $duration;
@@ -326,7 +324,6 @@ class SessionManager
                     $extraFields['item_id'] = $session_id;
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
-
                     /*
                       Sends a message to the user_id = 1
 

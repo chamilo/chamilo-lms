@@ -25,6 +25,7 @@ class Asset
     public const SCORM = 'scorm';
     public const WATERMARK = 'watermark';
     public const CSS = 'css';
+    public const EXTRA_FIELD = 'extra_field';
 
     /**
      * @ORM\Id
@@ -108,11 +109,9 @@ class Asset
     protected $size;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
-    protected $crop;
+    protected ?string $crop;
 
     /**
      * @var array
@@ -188,8 +187,6 @@ class Asset
 
     /**
      * @param string $crop
-     *
-     * @return $this
      */
     public function setCrop($crop): self
     {

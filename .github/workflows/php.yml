@@ -84,6 +84,7 @@ jobs:
                 sudo apt install google-chrome-stable
                 google-chrome-stable --version
                 google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+                whereis google-chrome-stable
 
             # https://github.com/marketplace/actions/setup-chromedriver
             - name: Start chromedriver
@@ -116,9 +117,9 @@ jobs:
             - name: Run Selenium
               run: |
                 java -version
-                nohup sudo Xvfb :10 -ac
-                export DISPLAY=:10
-                java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
+                export DISPLAY=:99.0
+                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+                java -jar selenium-server-standalone-3.141.59.jar -Dwebdriver.chrome.bin="/usr/bin/google-chrome-stable" -Dwebdriver.chrome.driver="/usr/bin/chromedriver"  > /dev/null &
 
             - name: Start mysql service
               run: sudo /etc/init.d/mysql start

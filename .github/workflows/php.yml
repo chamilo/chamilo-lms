@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-20.04
 
         strategy:
             fail-fast: false
@@ -94,12 +94,10 @@ jobs:
 #                  chromedriver-version: '88.0.4324.96'
 
               run: |
-                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip --quiet
                 sudo mv chromedriver /usr/bin
                 sudo chmod +x /usr/bin/chromedriver
                 chromedriver --version
-                export DISPLAY=:99.0
-                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
 #            - run: |
 #                export DISPLAY=:99
@@ -114,13 +112,14 @@ jobs:
 
             - name: Get Selenium
               run: |
-                wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+                wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar --quiet
 
             - name: Run Selenium
               run: |
                 java -version
+                export DISPLAY=:99.0
+                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
                 java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
-                sleep 10
 
 #            - name: Start mysql service
 #              run: sudo /etc/init.d/mysql start
@@ -146,6 +145,7 @@ jobs:
 
             - name: Install chamilo
               run: |
+                  curl http://localhost/check.php
                   cd tests/behat
                   ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
                   cd ..

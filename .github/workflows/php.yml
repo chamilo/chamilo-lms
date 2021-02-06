@@ -118,7 +118,6 @@ jobs:
               run: |
                 java -version
                 java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
-# nohup bash -c "webdriver-manager start 2>&1 &"
                 sleep 10
 
 #            - name: Start mysql service

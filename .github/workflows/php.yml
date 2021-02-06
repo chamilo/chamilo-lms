@@ -87,18 +87,16 @@ jobs:
 
             # https://github.com/marketplace/actions/setup-chromedriver
             - name: Start chromedriver
-#              uses: nanasess/setup-chromedriver@master
-#              with:
-#                  # Optional: do not specify to match Chrome's version
-#                  chromedriver-version: '88.0.4324.96'
+              uses: nanasess/setup-chromedriver@master
+              with:
+                  # Optional: do not specify to match Chrome's version
+                  chromedriver-version: '88.0.4324.96'
 
-              run: |
-                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
-                sudo mv chromedriver /usr/bin
-                sudo chmod +x /usr/bin/chromedriver
-                chromedriver --version
-                sudo apt-get install xvfb
-                export DISPLAY=:99.0
+#              run: |
+#                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+#                sudo mv chromedriver /usr/bin
+#                sudo chmod +x /usr/bin/chromedriver
+#                chromedriver --version
 
 #            - run: |
 #                export DISPLAY=:99
@@ -111,11 +109,16 @@ jobs:
               with:
                 java-version: 1.8
 
-            - name: Selenium
+            - name: Get Selenium
               run: |
+                export DISPLAY=:99.0
                 wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+
+            - name: Run Selenium
+              run: |
+                java -version
                 java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
-                nohup bash -c "webdriver-manager start 2>&1 &"
+# nohup bash -c "webdriver-manager start 2>&1 &"
                 sleep 10
 
 #            - name: Start mysql service

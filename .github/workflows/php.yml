@@ -140,6 +140,11 @@ jobs:
               run: |
                   sudo apt install apache2
                   sudo a2enmod rewrite actions
+                  sudo cp -f tests/gh/apache /etc/apache2/sites-available/000-default.conf
+                  sudo chmod 777 -R $HOME
+                  cat /etc/apache2/sites-available/000-default.conf
+
+                  # Starting Apache
                   sudo service apache2 restart
                   sudo systemctl restart apache2
 

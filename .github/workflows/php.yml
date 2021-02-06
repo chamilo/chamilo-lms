@@ -138,7 +138,7 @@ jobs:
 
             - name: Apache
               run: |
-                  sudo apt install apache2 libapache2-mod-php
+                  sudo apt install apache2 libapache2-mod-php${{ matrix.php-versions }}
                   sudo a2enmod rewrite actions
                   sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
                   sudo chmod 777 -R $HOME
@@ -150,6 +150,7 @@ jobs:
 
             - name: Install chamilo
               run: |
+                  sudo chmod 777 -R ${{ github.workspace }}
                   curl http://localhost/check.php
                   cd tests/behat
                   ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv

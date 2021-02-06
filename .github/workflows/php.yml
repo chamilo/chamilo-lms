@@ -13,16 +13,16 @@ jobs:
                 operating-system: [ubuntu-latest]
                 php-versions: ['7.4', '8.0']
 
-        services:
-            mysql:
-                image: mysql:5.7
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: false
-                    MYSQL_ROOT_PASSWORD: chamilo
-                    MYSQL_DATABASE: chamilo
-                ports:
-                    - 3306/tcp
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+#        services:
+#            mysql:
+#                image: mysql:5.7
+#                env:
+#                    MYSQL_ALLOW_EMPTY_PASSWORD: false
+#                    MYSQL_ROOT_PASSWORD: chamilo
+#                    MYSQL_DATABASE: chamilo
+#                ports:
+#                    - 3306/tcp
+#                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -79,7 +79,6 @@ jobs:
               with:
                   cmd: run encore dev
 
-
             - name: Start chrome
               run: |
                 sudo apt install google-chrome-stable
@@ -94,7 +93,7 @@ jobs:
 #                  chromedriver-version: '88.0.4324.96'
 
               run: |
-                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip --quiet
+                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
                 sudo mv chromedriver /usr/bin
                 sudo chmod +x /usr/bin/chromedriver
                 chromedriver --version
@@ -121,20 +120,20 @@ jobs:
                 sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
                 java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
 
-#            - name: Start mysql service
-#              run: sudo /etc/init.d/mysql start
+            - name: Start mysql service
+              run: sudo /etc/init.d/mysql start
 #
-#            - name: Install database
-#              run: |
-#                  symfony console doctrine:database:create || echo "Error while creating the DB"
-#              env:
-#                DATABASE_URL: mysql://root:chamilo@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
-#                DATABASE_HOST: 127.0.0.1
-#                DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
-#                DATABASE_NAME: chamilo
-#                DATABASE_USER: root
-#                DATABASE_PASSWORD: chamilo
-#                APP_INSTALLED: 1
+            - name: Install database
+              run: |
+                  symfony console doctrine:database:create || echo "Error while creating the DB"
+              env:
+                DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
+                DATABASE_HOST: 127.0.0.1
+                DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
+                DATABASE_NAME: chamilo
+                DATABASE_USER: root
+                DATABASE_PASSWORD: chamilo
+                APP_INSTALLED: 1
 
             - name: Apache
               run: |

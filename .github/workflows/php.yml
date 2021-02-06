@@ -98,6 +98,8 @@ jobs:
                 sudo mv chromedriver /usr/bin
                 sudo chmod +x /usr/bin/chromedriver
                 chromedriver --version
+                export DISPLAY=:99.0
+                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
 #            - run: |
 #                export DISPLAY=:99
@@ -112,7 +114,6 @@ jobs:
 
             - name: Get Selenium
               run: |
-                export DISPLAY=:99.0
                 wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
 
             - name: Run Selenium

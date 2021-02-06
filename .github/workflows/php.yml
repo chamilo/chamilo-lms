@@ -29,7 +29,8 @@ jobs:
 
             - name: Setup apache
               run: |
-                sudo apt install apache2 php${{ matrix.php-versions }} libapache2-mod-php${{ matrix.php-versions }}
+                sudo apt update
+                sudo apt install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
                 sudo a2enmod rewrite actions
                 sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
                 sudo chmod 777 -R $HOME

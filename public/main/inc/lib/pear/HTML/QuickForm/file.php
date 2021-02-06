@@ -257,7 +257,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $ratio = 'aspectRatio: '.$param['ratio'].',';
         }
         $scalable = 'false';
-        if (!empty($param['scalable']) && $param['scalable'] != 'false') {
+        if (!empty($param['scalable']) && $param['scalable'] !== 'false') {
             $ratio = '';
             $scalable = $param['scalable'];
         }
@@ -300,8 +300,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                         scalable: '.$scalable.',
                         crop: function(e) {
                             // Output the result data for cropping image.
-                            $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);
-                            $inputForResource.val(
+                            //$input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);
+                            $input.val(
                                 parseInt(event.detail.width) + \',\' + parseInt(event.detail.height) + \',\' +  parseInt(event.detail.x) + \',\' + parseInt(event.detail.y)
                             );
                         }

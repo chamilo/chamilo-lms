@@ -116,8 +116,6 @@ jobs:
             - name: Run Selenium
               run: |
                 java -version
-#                export DISPLAY=:99.0
-#                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
                 nohup sudo Xvfb :10 -ac
                 export DISPLAY=:10
                 java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &

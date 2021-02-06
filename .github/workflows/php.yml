@@ -27,6 +27,16 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
+            - name: Setup apache
+              run: |
+                sudo apt install apache2 php-${{ matrix.php-versions }} libapache2-mod-php${{ matrix.php-versions }}
+                sudo a2enmod rewrite actions
+                sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
+                sudo chmod 777 -R $HOME
+                cat /etc/apache2/sites-available/000-default.conf
+                sudo service apache2 restart
+                sudo systemctl restart apache2
+
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
               with:
@@ -136,17 +146,7 @@ jobs:
                 DATABASE_PASSWORD: root
                 APP_INSTALLED: 1
 
-            - name: Apache
-              run: |
-                  sudo apt install apache2 libapache2-mod-php${{ matrix.php-versions }}
-                  sudo a2enmod rewrite actions
-                  sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
-                  sudo chmod 777 -R $HOME
-                  cat /etc/apache2/sites-available/000-default.conf
 
-                  # Starting Apache
-                  sudo service apache2 restart
-                  sudo systemctl restart apache2
 
             - name: Install chamilo
               run: |

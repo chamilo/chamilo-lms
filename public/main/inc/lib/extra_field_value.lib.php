@@ -119,6 +119,7 @@ class ExtraFieldValue extends Model
 
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
+        $em = Database::getManager();
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
@@ -189,7 +190,6 @@ class ExtraFieldValue extends Model
                             $params['item_id'],
                             $extraFieldInfo['id']
                         );
-
                         UserManager::process_tags(
                             $value,
                             $params['item_id'],
@@ -198,7 +198,6 @@ class ExtraFieldValue extends Model
                         break;
                     }
 
-                    $em = Database::getManager();
                     $currentTags = $em
                         ->getRepository(ExtraFieldRelTag::class)
                         ->findBy([
@@ -258,9 +257,9 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                    /*
                     $fileDir = $fileDirStored = '';
-
-                    /*switch ($this->type) {
+                    switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
                             $fileDirStored = "courses/";
@@ -281,13 +280,11 @@ class ExtraFieldValue extends Model
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
                         $file = new UploadedFile($value['tmp_name'], $fileName, null, null, true);
-                        $em = Database::getManager();
                         $asset = new Asset();
                         $asset
                             ->setCategory(Asset::EXTRA_FIELD)
                             ->setTitle($fileName)
                             ->setFile($file)
-                            ->setCompressed(true)
                         ;
                         $cropVariable = 'extra_'.$field_variable.'_crop_result';
                         if (isset($params[$cropVariable])) {
@@ -297,7 +294,6 @@ class ExtraFieldValue extends Model
                         $em->flush();
                         $assetId = $asset->getId();
                         //$repo = Container::getAssetRepository();
-
                         if ($assetId) {
                             // Crop the image to adjust 16:9 ratio
                             /*$imageExtraField = new Image($value['tmp_name']);
@@ -314,7 +310,7 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    $fileDir = $fileDirStored = '';
+                    /*$fileDir = $fileDirStored = '';
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
@@ -336,16 +332,16 @@ class ExtraFieldValue extends Model
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'scheduled_announcement/';
                             $fileDirStored = 'scheduled_announcement/';
                             break;
-                    }
+                    }*/
 
                     $cleanedName = api_replace_dangerous_char($value['name']);
                     $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
-                    if (!file_exists($fileDir)) {
+                    /*if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
-                    }
+                    }*/
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
-                        $cleanedName = api_replace_dangerous_char($value['name']);
+                        /*$cleanedName = api_replace_dangerous_char($value['name']);
                         $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                         moveUploadedFile($value, $fileDir.$fileName);
 
@@ -353,13 +349,30 @@ class ExtraFieldValue extends Model
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName,
-                        ];
+                        ];*/
+                        $file = new UploadedFile($value['tmp_name'], $fileName, null, null, true);
+                        $asset = new Asset();
+                        $asset
+                            ->setCategory(Asset::EXTRA_FIELD)
+                            ->setTitle($fileName)
+                            ->setFile($file)
+                        ;
+                        $em->persist($asset);
+                        $em->flush();
+                        $assetId = $asset->getId();
 
-                        if ('session' !== $this->type && 'course' !== $this->type) {
-                            $new_params['comment'] = $comment;
+                        if ($assetId) {
+                            $new_params = [
+                                'item_id' => $params['item_id'],
+                                'field_id' => $extraFieldInfo['id'],
+                                'value' => $assetId,
+                            ];
+                            if ('session' !== $this->type && 'course' !== $this->type) {
+                                $new_params['comment'] = $comment;
+                            }
+
+                            $this->save($new_params);
                         }
-
-                        $this->save($new_params);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_CHECKBOX:

@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class ExtraField.
@@ -998,8 +999,9 @@ class ExtraField extends Model
             }
 
             foreach ($extra as $field_details) {
+                $variable = $field_details['variable'];
                 if (!empty($showOnlyTheseFields)) {
-                    if (!in_array($field_details['variable'], $showOnlyTheseFields)) {
+                    if (!in_array($variable, $showOnlyTheseFields)) {
                         continue;
                     }
                 }
@@ -1028,15 +1030,15 @@ class ExtraField extends Model
                         continue;
                     }
 
-                    if (in_array($field_details['variable'], $exclude)) {
+                    if (in_array($variable, $exclude)) {
                         continue;
                     }
                 }
 
                 if (!empty($introductionTextList) &&
-                    in_array($field_details['variable'], array_keys($introductionTextList))
+                    in_array($variable, array_keys($introductionTextList))
                 ) {
-                    $form->addHtml($introductionTextList[$field_details['variable']]);
+                    $form->addHtml($introductionTextList[$variable]);
                 }
 
                 $freezeElement = false;
@@ -1135,14 +1137,14 @@ class ExtraField extends Model
                                 $options[$option_details['option_value']] = $option_details['display_text'];
                                 $group[] = $form->createElement(
                                     'checkbox',
-                                    'extra_'.$field_details['variable'],
+                                    'extra_'.$variable,
                                     $option_details['option_value'],
                                     $option_details['display_text'].'<br />',
                                     $option_details['option_value']
                                 );
                             }
                         } else {
-                            $fieldVariable = "extra_{$field_details['variable']}";
+                            $fieldVariable = "extra_$variable";
                             $checkboxAttributes = [];
                             if (is_array($extraData) &&
                                 array_key_exists($fieldVariable, $extraData)
@@ -1265,8 +1267,7 @@ class ExtraField extends Model
                                         'itemId' => $itemId,
                                     ]
                                 );
-                            // ofaj
-
+                            // ofaj.
                             for ($i = 0; $i < $separateValue; $i++) {
                                 $tagsSelect = $form->addSelect(
                                     'extra_'.$field_details['variable'].'['.$i.']',
@@ -1535,9 +1536,12 @@ class ExtraField extends Model
                         ];
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
-                            if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
+                            $assetId = $extraData[$fieldVariable];
+                            $assetRepo = Container::getAssetRepository();
+                            $asset = $assetRepo->find($assetId);
+                            if (null !== $asset) {
                                 $fieldTexts[] = Display::img(
-                                    api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
+                                    $assetRepo->getAssetUrl($asset),
                                     $field_details['display_text'],
                                     ['width' => '300']
                                 );
@@ -2906,7 +2910,6 @@ JAVASCRIPT;
         $valuesData = [];
         $fields = $this->get_all();
         $em = Database::getManager();
-
         $repoTag = $em->getRepository(ExtraFieldRelTag::class);
 
         foreach ($fields as $field) {
@@ -2929,10 +2932,12 @@ JAVASCRIPT;
                 $field['id'],
                 true
             );
-            if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
+
+            $fieldType = (int) $field['field_type'];
+            if (ExtraField::FIELD_TYPE_TAG === (int) $fieldType) {
                 $tags = $repoTag->findBy(['fieldId' => $field['id'], 'itemId' => $itemId]);
                 if ($tags) {
-                    /** @var \Chamilo\CoreBundle\Entity\ExtraFieldRelTag $tag */
+                    /** @var ExtraFieldRelTag $tag */
                     $data = [];
                     foreach ($tags as $extraFieldTag) {
                         /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
@@ -2949,7 +2954,7 @@ JAVASCRIPT;
             }
             $displayedValue = get_lang('None');
 
-            switch ($field['field_type']) {
+            switch ($fieldType) {
                 case self::FIELD_TYPE_CHECKBOX:
                     if (false !== $valueData && '1' == $valueData['value']) {
                         $displayedValue = get_lang('Yes');
@@ -2967,45 +2972,43 @@ JAVASCRIPT;
                         $displayedValue = $valueData;
                     }
                     break;
+                case self::FIELD_TYPE_FILE:
                 case self::FIELD_TYPE_FILE_IMAGE:
                     if (false === $valueData || empty($valueData['value'])) {
                         break;
                     }
+                    $assetId = $valueData['value'];
+                    $assetRepo = Container::getAssetRepository();
+                    $asset = $assetRepo->find($assetId);
 
-                    if (!file_exists(api_get_path(SYS_UPLOAD_PATH).$valueData['value'])) {
+                    if (null === $asset) {
                         break;
                     }
 
-                    $image = Display::img(
-                        api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
-                        $field['display_text'],
-                        ['width' => '300']
-                    );
+                    $url = $assetRepo->getAssetUrl($asset);
 
-                    $displayedValue = Display::url(
-                        $image,
-                        api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
-                        ['target' => '_blank']
-                    );
-                    break;
-                case self::FIELD_TYPE_FILE:
-                    if (false === $valueData || empty($valueData['value'])) {
-                        break;
+                    if ($fieldType === self::FIELD_TYPE_FILE_IMAGE) {
+                        $image = Display::img(
+                            $url,
+                            $field['display_text'],
+                            ['width' => '300']
+                        );
+                        $displayedValue = Display::url(
+                            $image,
+                            $url,
+                            ['target' => '_blank']
+                        );
+                    } else {
+                        $displayedValue = Display::url(
+                            get_lang('Download'),
+                            $url,
+                            [
+                                'title' => $field['display_text'],
+                                'target' => '_blank',
+                                'class' => 'download_extra_field',
+                            ]
+                        );
                     }
-
-                    if (!file_exists(api_get_path(SYS_UPLOAD_PATH).$valueData['value'])) {
-                        break;
-                    }
-
-                    $displayedValue = Display::url(
-                        get_lang('Download'),
-                        api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
-                        [
-                            'title' => $field['display_text'],
-                            'target' => '_blank',
-                            'class' => 'download_extra_field',
-                        ]
-                    );
                     break;
                 default:
                     $displayedValue = $valueData['value'];

@@ -299,9 +299,7 @@ class SessionManager
                 $em->persist($session);
                 $em->flush();
                 $session_id = $session->getId();
-
                 $duration = (int) $duration;
-
                 if (!empty($duration)) {
                     $sql = "UPDATE $tbl_session SET
                         access_start_date = NULL,
@@ -315,8 +313,8 @@ class SessionManager
                     Database::query($sql);
                 } else {
                     $sql = "UPDATE $tbl_session
-                        SET duration = 0
-                        WHERE id = $session_id";
+                            SET duration = 0
+                            WHERE id = $session_id";
                     Database::query($sql);
                 }
 
@@ -1622,7 +1620,7 @@ class SessionManager
         $visibility,
         $description = null,
         $showDescription = 0,
-        $duration = null,
+        $duration = 0,
         $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
@@ -1632,6 +1630,7 @@ class SessionManager
         $coachId = (int) $coachId;
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
+        $duration = (int) $duration;
 
         $em = Database::getManager();
 
@@ -7933,7 +7932,10 @@ class SessionManager
                 'session_template',
                 get_lang('SessionTemplate'),
                 [],
-                ['url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_template_session', 'id' => 'system_template']
+                [
+                    'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_template_session',
+                    'id' => 'system_template',
+                ]
             );
         }
 

@@ -35,16 +35,14 @@ class Asset
     protected $id;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @Assert\Choice({
      *     Asset::SCORM,
@@ -56,7 +54,7 @@ class Asset
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $category;
+    protected string $category;
 
     /**
      * @var File
@@ -87,11 +85,9 @@ class Asset
     protected $mimeType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $originalName;
+    protected ?string $originalName;
 
     /**
      * @var string
@@ -102,11 +98,9 @@ class Asset
     protected $dimensions;
 
     /**
-     * @var int
-     *
      * @ORM\Column(type="integer")
      */
-    protected $size;
+    protected int $size;
 
     /**
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
@@ -114,11 +108,9 @@ class Asset
     protected ?string $crop;
 
     /**
-     * @var array
-     *
      * @ORM\Column(type="array", nullable=true)
      */
-    protected $metadata;
+    protected ?array $metadata;
 
     /**
      * @var string

@@ -30,6 +30,7 @@ jobs:
             - name: Setup apache
               run: |
                 sudo apt update
+                sudo apt upgrade
                 sudo apt install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
                 sudo a2enmod rewrite actions
                 sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
@@ -44,6 +45,10 @@ jobs:
                   php-version: ${{ matrix.php-versions }}
                   tools: behat, symfony
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, intl, zip, bcmath
+                  ini-values: post_max_size=256M, max_execution_time=600, date.timezone=Europe/Paris, memory_limit=4096M
+
+
+
 
             - name: Get composer cache directory
               id: composer-cache

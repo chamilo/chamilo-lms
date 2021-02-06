@@ -83,20 +83,21 @@ jobs:
             - name: Start chrome
               run: |
                 sudo apt install google-chrome-stable
+                google-chrome-stable --version
                 google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
             # https://github.com/marketplace/actions/setup-chromedriver
             - name: Start chromedriver
-              uses: nanasess/setup-chromedriver@master
-              with:
-                  # Optional: do not specify to match Chrome's version
-                  chromedriver-version: '88.0.4324.96'
+#              uses: nanasess/setup-chromedriver@master
+#              with:
+#                  # Optional: do not specify to match Chrome's version
+#                  chromedriver-version: '88.0.4324.96'
 
-#              run: |
-#                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
-#                sudo mv chromedriver /usr/bin
-#                sudo chmod +x /usr/bin/chromedriver
-#                chromedriver --version
+              run: |
+                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+                sudo mv chromedriver /usr/bin
+                sudo chmod +x /usr/bin/chromedriver
+                chromedriver --version
 
 #            - run: |
 #                export DISPLAY=:99

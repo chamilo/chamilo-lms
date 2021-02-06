@@ -1,7 +1,7 @@
 vich_uploader:
     db_driver: orm
     storage: flysystem
-
+    twig: true
     mappings:
         resources:
             uri_prefix: ''

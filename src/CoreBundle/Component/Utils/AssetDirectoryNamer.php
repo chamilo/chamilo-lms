@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Component\Utils;
 
+use Chamilo\CoreBundle\Entity\Asset;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
@@ -50,14 +51,17 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
     public function directoryName($object, PropertyMapping $mapping): string
     {
         $fileName = $mapping->getFileName($object);
-
         $category = $this->propertyAccessor->getValue($object, $this->propertyPath);
 
         $parts[] = $category;
-        /*for ($i = 0, $start = 0; $i < $this->dirs; $i++, $start += $this->charsPerDir) {
-            $parts[] = \substr($fileName, $start, $this->charsPerDir);
-        }*/
-        $parts[] = $fileName;
+
+        if (Asset::EXTRA_FIELD === $category) {
+            for ($i = 0, $start = 0; $i < $this->dirs; $i++, $start += $this->charsPerDir) {
+                $parts[] = \substr($fileName, $start, $this->charsPerDir);
+            }
+        } else {
+            $parts[] = $fileName;
+        }
 
         return \implode('/', $parts);
     }

@@ -12,18 +12,21 @@ use League\Flysystem\MountManager;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class AssetRepository extends ServiceEntityRepository
 {
     protected $mountManager;
     protected $storage;
     protected $router;
+    protected $uploaderHelper;
 
-    public function __construct(ManagerRegistry $registry, RouterInterface $router, MountManager $mountManager)
+    public function __construct(ManagerRegistry $registry, RouterInterface $router, MountManager $mountManager, UploaderHelper $uploaderHelper)
     {
         parent::__construct($registry, Asset::class);
         $this->router = $router;
         $this->mountManager = $mountManager;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
     /**
@@ -34,6 +37,11 @@ class AssetRepository extends ServiceEntityRepository
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
         return $this->mountManager->getFilesystem('assets_fs');
     }
+
+    /*public function getUploaderHelper(): UploaderHelper
+    {
+        return $this->uploaderHelper;
+    }*/
 
     public function unZipFile(Asset $asset, ZipArchiveAdapter $zipArchiveAdapter)
     {
@@ -70,10 +78,18 @@ class AssetRepository extends ServiceEntityRepository
 
     public function getAssetUrl(Asset $asset)
     {
-        return $this->router->generate(
-            'chamilo_core_asset_showfile',
-            ['category' => $asset->getCategory(), 'path' => $asset->getTitle()]
-        );
+        if (Asset::SCORM === $asset->getCategory()) {
+            return $this->router->generate(
+                'chamilo_core_asset_showfile',
+                ['category' => $asset->getCategory(), 'path' => $asset->getTitle()]
+            );
+        }
+
+        // Classic
+
+        $helper = $this->uploaderHelper;
+
+        return '/assets'.$helper->asset($asset);
     }
 
     public function getFileContent(Asset $asset): string

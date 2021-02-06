@@ -2985,9 +2985,8 @@ JAVASCRIPT;
                         break;
                     }
 
-                    $url = $assetRepo->getAssetUrl($asset);
-
                     if ($fieldType === self::FIELD_TYPE_FILE_IMAGE) {
+                        $url = $assetRepo->getAssetUrl($asset);
                         $image = Display::img(
                             $url,
                             $field['display_text'],

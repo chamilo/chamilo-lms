@@ -7,8 +7,6 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
-use Chamilo\CoreBundle\Framework\Container;
-use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**

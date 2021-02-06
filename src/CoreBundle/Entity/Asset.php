@@ -25,7 +25,7 @@ class Asset
     public const SCORM = 'scorm';
     public const WATERMARK = 'watermark';
     public const CSS = 'css';
-    public const EXTRA_FIELD = 'extra_field';
+    public const EXTRA_FIELD = 'ef';
 
     /**
      * @ORM\Id
@@ -77,12 +77,10 @@ class Asset
     protected bool $compressed;
 
     /**
-     * @var string
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $mimeType;
+    protected ?string $mimeType;
 
     /**
      * @ORM\Column(type="text", nullable=true)

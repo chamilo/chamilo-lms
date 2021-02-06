@@ -65,6 +65,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * Class Container

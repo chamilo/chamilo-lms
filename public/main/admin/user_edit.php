@@ -16,6 +16,8 @@ $user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
+$userObj = api_get_user_entity($user_id);
+$illustrationRepo = Container::getIllustrationRepository();
 
 $htmlHeadXtra[] = '
 <script>
@@ -66,8 +68,6 @@ function confirmation(name) {
 }
 </script>';
 
-//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('Edit user information');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
@@ -166,7 +166,10 @@ $form->addRule(
     'filetype',
     $allowed_picture_types
 );
-if (strlen($user_data['picture_uri']) > 0) {
+
+$hasPicture = $illustrationRepo->hasIllustration($userObj);
+
+if ($hasPicture) {
     $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
 }
 
@@ -394,7 +397,6 @@ if ($form->validate()) {
     } else {
         $picture_element = $form->getElement('picture');
         $picture = $picture_element->getValue();
-
         $picture_uri = $user_data['picture_uri'];
         if (isset($user['delete_picture']) && $user['delete_picture']) {
             $picture_uri = UserManager::deleteUserPicture($user_id);
@@ -477,7 +479,6 @@ if ($form->validate()) {
         $currentUserId = api_get_user_id();
 
         if ($user_id != $currentUserId) {
-            $userObj = api_get_user_entity($user_id);
             if (1 == $platform_admin) {
                 UserManager::addUserAsAdmin($userObj);
             } else {
@@ -502,7 +503,12 @@ if ($form->validate()) {
 }
 
 if ($error_drh) {
-    Display::addFlash(Display::return_message(get_lang('The status of this user cannot be changed to human resources manager.'), 'error'));
+    Display::addFlash(
+        Display::return_message(
+            get_lang('The status of this user cannot be changed to human resources manager.'),
+            'error'
+        )
+    );
 }
 
 $actions = [
@@ -522,21 +528,22 @@ $actions = [
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
+        api_get_path(WEB_CODE_PATH).
+        'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
     ),
 ];
 
 $content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
-$bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
-$normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
+$bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
+$normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
 $content .= '<div class="row">';
 $content .= '<div class="col-md-10">';
 // Display form
 $content .= $form->returnForm();
 $content .= '</div>';
 $content .= '<div class="col-md-2">';
-$content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
+$content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'" /></a>';
 $content .= '</div>';
 
 $tpl = new Template($tool_name);

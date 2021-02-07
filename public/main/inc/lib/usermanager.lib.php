@@ -1854,8 +1854,9 @@ class UserManager
         }
 
         $url = $illustrationRepo->getIllustrationUrl($user);
+        $params = [];
         if (!empty($width)) {
-            $params = ['w' => $width];
+            $params['w'] = $width;
         }
 
         if ($addRandomId) {
@@ -1864,7 +1865,7 @@ class UserManager
 
         $paramsToString = '';
         if (!empty($params)) {
-            $paramsToString = http_build_query($params);
+            $paramsToString = '?'.http_build_query($params);
         }
 
         return $url.$paramsToString;

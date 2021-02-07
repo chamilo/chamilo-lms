@@ -131,7 +131,7 @@ jobs:
                 java -version
                 export DISPLAY=:99.0
                 sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-                java -jar selenium-server-standalone-3.141.59.jar -log selenium.log > /dev/null &
+                java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-standalone-3.141.59.jar  -log selenium.log > /dev/null &
 
             - name: Start mysql service
               run: |

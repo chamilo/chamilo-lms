@@ -45,7 +45,7 @@ jobs:
                   php-version: ${{ matrix.php-versions }}
                   tools: behat, symfony
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, intl, zip, bcmath
-                  ini-values: post_max_size=256M, max_execution_time=600, date.timezone=Europe/Paris, memory_limit=4096M
+                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
 
             - name: Get composer cache directory
               id: composer-cache

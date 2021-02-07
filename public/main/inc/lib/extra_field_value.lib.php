@@ -277,7 +277,8 @@ class ExtraFieldValue extends Model
                     }*/
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
-                        $file = new UploadedFile($value['tmp_name'], $fileName, null, null, true);
+                        $mimeType = mime_content_type($value['tmp_name']);
+                        $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
                         $asset = new Asset();
                         $asset
                             ->setCategory(Asset::EXTRA_FIELD)
@@ -348,7 +349,8 @@ class ExtraFieldValue extends Model
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName,
                         ];*/
-                        $file = new UploadedFile($value['tmp_name'], $fileName, null, null, true);
+                        $mimeType = mime_content_type($value['tmp_name']);
+                        $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
                         $asset = new Asset();
                         $asset
                             ->setCategory(Asset::EXTRA_FIELD)

@@ -6110,7 +6110,8 @@ This folder contains all sessions that have been opened in the chat. Although th
                 // $path points to a file in the directory
                 if (file_exists($realPath) && !is_dir($realPath)) {
                     error_log('file_exists');
-                    $file = new UploadedFile($realPath, $title, null, null, true);
+                    $mimeType = mime_content_type($realPath);
+                    $file = new UploadedFile($realPath, $title, $mimeType, null, true);
                     $resourceFile->setFile($file);
                 } else {
                     // We get the content and create a file

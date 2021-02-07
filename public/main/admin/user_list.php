@@ -489,7 +489,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             USER_IMAGE_SIZE_SMALL
         );
         $photo = '<img
-            src="'.$userPicture.'" width="22" height="22"
+            src="'.$userPicture.'"
             alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 

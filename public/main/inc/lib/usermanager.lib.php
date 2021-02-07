@@ -1830,14 +1830,44 @@ class UserManager
      */
     public static function getUserPicture(
         $userId,
-        $size = USER_IMAGE_SIZE_MEDIUM,
+        int $size = USER_IMAGE_SIZE_MEDIUM,
         $addRandomId = true,
         $userInfo = []
     ) {
         $user = api_get_user_entity($userId);
         $illustrationRepo = Container::getIllustrationRepository();
 
-        return $illustrationRepo->getIllustrationUrl($user);
+        switch ($size) {
+            case USER_IMAGE_SIZE_SMALL:
+                $width = 32;
+                break;
+            case USER_IMAGE_SIZE_MEDIUM:
+                $width = 64;
+                break;
+            case USER_IMAGE_SIZE_BIG:
+                $width = 128;
+                break;
+            case USER_IMAGE_SIZE_ORIGINAL:
+            default:
+                $width = 0;
+                break;
+        }
+
+        $url = $illustrationRepo->getIllustrationUrl($user);
+        if (!empty($width)) {
+            $params = ['w' => $width];
+        }
+
+        if ($addRandomId) {
+            $params['rand'] = uniqid('u_', true);
+        }
+
+        $paramsToString = '';
+        if (!empty($params)) {
+            $paramsToString = http_build_query($params);
+        }
+
+        return $url.$paramsToString;
 
         /*
         // Make sure userInfo is defined. Otherwise, define it!

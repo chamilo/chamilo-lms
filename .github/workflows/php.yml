@@ -38,7 +38,6 @@ jobs:
                 cat /etc/apache2/sites-available/000-default.conf
                 sudo service apache2 restart
                 sudo systemctl restart apache2
-                php -v
 
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
@@ -136,7 +135,9 @@ jobs:
                 java -jar selenium-server-standalone-3.141.59.jar -Dwebdriver.chrome.driver=/usr/bin/chromedriver > /dev/null &
 
             - name: Start mysql service
-              run: sudo /etc/init.d/mysql start
+              run: |
+                sudo /etc/init.d/mysql start
+                sudo systemctl restart apache2
 #
             - name: Install database
               run: |
@@ -150,10 +151,15 @@ jobs:
                 DATABASE_PASSWORD: root
                 APP_INSTALLED: 1
 
-            - name: Install chamilo
+            - name: Check settings
               run: |
                   php vendor/bin/requirements-checker
+                  php -ini
+                  php -v
+                  php -m
 
+            - name: Install chamilo
+              run: |
                   sudo chmod 777 -R ${{ github.workspace }}
                   curl http://localhost/main/install/index.php
                   cd tests/behat

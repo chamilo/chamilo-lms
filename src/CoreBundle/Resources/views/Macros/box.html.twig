@@ -437,14 +437,19 @@
         <dl class="dl-horizontal">
             {% if user.status %}
                 <dt>{{ 'Status'|trans }}</dt>
-                <dd>{{ user.status }}</dd>
+
+                {% if user.status == 1 %}
+                    <dd>{{ 'Trainer' | trans }}</dd>
+                {% else %}
+                    <dd>{{ 'Learner' | trans }}</dd>
+                {% endif %}
             {% endif %}
 
-            <dt>{{ 'OfficialCode'|trans }}</dt>
+            <dt>{{ 'Official code'|trans }}</dt>
             {% if user.officialCode is defined %}
                 <dd>{{ user.officialCode }}</dd>
             {% else %}
-                <dd>{{ 'NoOfficialCode'|trans }}</dd>
+                <dd>{{ 'No official code'|trans }}</dd>
             {% endif %}
             <dt>{{ 'OnLine'|trans }}</dt>
             <dd>

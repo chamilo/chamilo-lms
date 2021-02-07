@@ -43,7 +43,7 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, intl, zip, bcmath
+                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
 
             - name: Get composer cache directory
@@ -131,7 +131,7 @@ jobs:
                 java -version
                 export DISPLAY=:99.0
                 sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-                java -jar selenium-server-standalone-3.141.59.jar -Dwebdriver.chrome.driver=/usr/bin/chromedriver > /dev/null &
+                java -jar selenium-server-standalone-3.141.59.jar -log selenium.log > /dev/null &
 
             - name: Start mysql service
               run: |
@@ -171,6 +171,11 @@ jobs:
 
             - name: Composer analyse
               run: composer analyse
+
+            - name: The job has failed
+              if: ${{ failure() }}
+              run: |
+                  cat selenium.log
 
         # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
         # Docs: https://getcomposer.org/doc/articles/scripts.md

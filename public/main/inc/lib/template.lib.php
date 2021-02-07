@@ -1607,13 +1607,15 @@ class Template
 
                     $sessionValues = new ExtraFieldValue('session');
                     $sessionImage = $sessionValues->get_values_by_handler_and_field_variable($session->getId(), 'image')['value'];
-                    $sessionImageSysPath = api_get_path(SYS_UPLOAD_PATH).$sessionImage;
-
-                    if (!empty($sessionImage) && is_file($sessionImageSysPath)) {
-                        $sessionImagePath = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
-                        $socialMeta .= '<meta property="og:image" content="'.$sessionImagePath.'" />'."\n";
-                        $socialMeta .= '<meta property="twitter:image" content="'.$sessionImagePath.'" />'."\n";
-                        $socialMeta .= '<meta property="twitter:image:alt" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                    //$sessionImageSysPath = api_get_path(SYS_UPLOAD_PATH).$sessionImage;
+                    if (!empty($sessionImage)) {
+                        $asset = Container::getAssetRepository()->find($sessionImage);
+                        $sessionImagePath = Container::getAssetRepository()->getAssetUrl($asset);
+                        if (!empty($sessionImagePath)) {
+                            $socialMeta .= '<meta property="og:image" content="'.$sessionImagePath.'" />'."\n";
+                            $socialMeta .= '<meta property="twitter:image" content="'.$sessionImagePath.'" />'."\n";
+                            $socialMeta .= '<meta property="twitter:image:alt" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                        }
                     } else {
                         $socialMeta .= $this->getMetaPortalImagePath($metaTitle);
                     }

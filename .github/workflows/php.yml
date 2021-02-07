@@ -43,7 +43,6 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  tools: behat, symfony
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, intl, zip, bcmath
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
 

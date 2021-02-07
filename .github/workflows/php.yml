@@ -132,7 +132,7 @@ jobs:
                 java -version
                 export DISPLAY=:99.0
                 sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-                java -jar selenium-server-standalone-3.141.59.jar -Dwebdriver.chrome.driver="/usr/bin/chromedriver"  > /dev/null &
+                java -jar selenium-server-standalone-3.141.59.jar -Dwebdriver.chrome.driver=/usr/bin/chromedriver > /dev/null &
 
             - name: Start mysql service
               run: sudo /etc/init.d/mysql start
@@ -152,7 +152,6 @@ jobs:
             - name: Install chamilo
               run: |
                   php -v
-                  php -m
                   sudo chmod 777 -R ${{ github.workspace }}
                   curl http://localhost/main/install/index.php
                   cd tests/behat

@@ -258,20 +258,24 @@ function detect_browser_language()
     ];
 
     $system_available_languages = get_language_folder_list();
-    $accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
-    foreach ($language_index as $code => $language) {
-        if (0 === strpos($accept_languages, $code)) {
-            if (!empty($system_available_languages[$language])) {
-                return $language;
+    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        $accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
+        foreach ($language_index as $code => $language) {
+            if (0 === strpos($accept_languages, $code)) {
+                if (!empty($system_available_languages[$language])) {
+                    return $language;
+                }
             }
         }
     }
 
-    $user_agent = strtolower(str_replace('_', '-', $_SERVER['HTTP_USER_AGENT']));
-    foreach ($language_index as $code => $language) {
-        if (@preg_match("/[\[\( ]{$code}[;,_\-\)]/", $user_agent)) {
-            if (!empty($system_available_languages[$language])) {
-                return $language;
+    if (isset($_SERVER['HTTP_USER_AGENT'])) {
+        $user_agent = strtolower(str_replace('_', '-', $_SERVER['HTTP_USER_AGENT']));
+        foreach ($language_index as $code => $language) {
+            if (@preg_match("/[\[\( ]{$code}[;,_\-\)]/", $user_agent)) {
+                if (!empty($system_available_languages[$language])) {
+                    return $language;
+                }
             }
         }
     }

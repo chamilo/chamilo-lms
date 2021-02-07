@@ -319,8 +319,8 @@ define('REL_HOME_PATH', 'REL_HOME_PATH');
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYMFONY_SYS_PATH', 'SYMFONY_SYS_PATH');
-define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
-define('WEB_UPLOAD_PATH', 'WEB_UPLOAD_PATH');
+//define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
+//define('WEB_UPLOAD_PATH', 'WEB_UPLOAD_PATH');
 
 define('REL_PATH', 'REL_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
@@ -8171,19 +8171,6 @@ function api_download_uploaded_file($type, $itemId, $file, $title = '')
         }
     }
     api_not_allowed(true);
-}
-
-/**
- * @param string $type
- * @param string $file
- */
-function api_remove_uploaded_file($type, $file)
-{
-    $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
-    $path = $typePath.'/'.$file;
-    if (Security::check_abs_path($path, $typePath) && file_exists($path) && is_file($path)) {
-        unlink($path);
-    }
 }
 
 /**

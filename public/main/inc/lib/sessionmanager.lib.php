@@ -1872,10 +1872,7 @@ class SessionManager
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($sessionId);
 
-        $repo->deleteResource(
-            $sessionId,
-            SequenceResource::SESSION_TYPE
-        );
+        $repo->deleteSequenceResource($sessionId, SequenceResource::SESSION_TYPE);
 
         // Add event to system log
         Event::addEvent(

@@ -106,7 +106,7 @@ jobs:
 #                  chromedriver-version: '88.0.4324.96'
 
               run: |
-                wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
+                wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
                 sudo mv chromedriver /usr/bin
                 sudo chmod +x /usr/bin/chromedriver
                 chromedriver --version
@@ -132,6 +132,7 @@ jobs:
                 export DISPLAY=:99.0
                 sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
                 java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-standalone-3.141.59.jar  -log selenium.log > /dev/null &
+                chromedriver --url-base=/wd/hub
 
             - name: Start mysql service
               run: |

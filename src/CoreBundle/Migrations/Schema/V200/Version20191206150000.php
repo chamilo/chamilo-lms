@@ -46,7 +46,7 @@ class Version20191206150000 extends AbstractMigrationChamilo
         $counter = 1;
         $q = $em->createQuery('SELECT v FROM Chamilo\CoreBundle\Entity\ExtraFieldValues v');
 
-        $fieldWithFiles = [\ExtraField::FIELD_TYPE_FILE, \ExtraField::FIELD_TYPE_FILE_IMAGE];
+        $fieldWithFiles = \ExtraField::getExtraFieldTypesWithFiles();
 
         /** @var ExtraFieldValues $item */
         foreach ($q->toIterable() as $item) {

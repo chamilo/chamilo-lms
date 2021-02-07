@@ -39,7 +39,7 @@ class Asset
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected string $title;
+    protected ?string $title;
 
     /**
      * @Assert\NotBlank()
@@ -54,7 +54,7 @@ class Asset
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected string $category;
+    protected ?string $category;
 
     /**
      * @var File
@@ -98,7 +98,7 @@ class Asset
     /**
      * @ORM\Column(type="integer")
      */
-    protected int $size;
+    protected ?int $size;
 
     /**
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
@@ -111,11 +111,9 @@ class Asset
     protected ?array $metadata;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     public function __construct()
     {

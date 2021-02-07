@@ -8175,6 +8175,19 @@ function api_download_uploaded_file($type, $itemId, $file, $title = '')
 
 /**
  * @param string $type
+ * @param string $file
+ */
+function api_remove_uploaded_file($type, $file)
+{
+    $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
+    $path = $typePath.'/'.$file;
+    if (Security::check_abs_path($path, $typePath) && file_exists($path) && is_file($path)) {
+        unlink($path);
+    }
+}
+
+/**
+ * @param string $type
  * @param int    $itemId
  * @param string $file
  *

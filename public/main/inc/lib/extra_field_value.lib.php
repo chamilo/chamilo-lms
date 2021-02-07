@@ -165,7 +165,6 @@ class ExtraFieldValue extends Model
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
-            $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
@@ -1044,13 +1043,31 @@ class ExtraFieldValue extends Model
     {
         $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $sql = "SELECT DISTINCT fv.id, value, field_type FROM {$this->table} fv
+                INNER JOIN {$this->table_handler_field} f
+                ON (fv.field_id = f.id)
+                WHERE extra_field_type = $extraFieldType AND item_id = $itemId";
+        $result = Database::query($sql);
+        $result = Database::store_result($result, 'ASSOC');
+        $em = Database::getManager();
+        $repo = Container::getAssetRepository();
+        foreach ($result as $item) {
+            $fieldType = (int) $item['field_type'];
+            if (in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)) {
+                $asset = $repo->find($item['value']);
+                if ($asset) {
+                    $em->remove($asset);
+                }
+            }
+        }
+        $em->flush();
 
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$itemId' AND
                     field_id IN (
                         SELECT id FROM {$this->table_handler_field}
-                        WHERE extra_field_type = ".$extraFieldType."
+                        WHERE extra_field_type = $extraFieldType
                     )
                 ";
         Database::query($sql);
@@ -1067,21 +1084,20 @@ class ExtraFieldValue extends Model
     {
         $itemId = (int) $itemId;
         $fieldId = (int) $fieldId;
-
         $fieldData = $this->getExtraField()->get($fieldId);
         if ($fieldData) {
             $fieldValue = Database::escape_string($fieldValue);
 
             $sql = "DELETE FROM {$this->table}
-                WHERE
-                    item_id = '$itemId' AND
-                    field_id = '$fieldId' AND
-                    value = '$fieldValue'
-                ";
+                    WHERE
+                        item_id = '$itemId' AND
+                        field_id = '$fieldId' AND
+                        value = '$fieldValue'
+                    ";
             Database::query($sql);
 
-            // Delete file from uploads
-            if (in_array($fieldData['field_type'], [ExtraField::FIELD_TYPE_FILE, ExtraField::FIELD_TYPE_FILE_IMAGE])) {
+            // Delete file from uploads.
+            if (in_array($fieldData['field_type'], ExtraField::getExtraFieldTypesWithFiles())) {
                 $repo = Container::getAssetRepository();
                 $asset = $repo->find($fieldValue);
                 $repo->delete($asset);

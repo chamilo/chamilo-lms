@@ -80,12 +80,10 @@ class ExtraField extends Model
     public $pageName;
     public $pageUrl;
     public $extraFieldType = 0;
-
     public $table_field_options;
     public $table_field_values;
     public $table_field_tag;
     public $table_field_rel_tag;
-
     public $handler_id;
     public $primaryKey;
 
@@ -102,7 +100,6 @@ class ExtraField extends Model
         $this->table_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $this->table_field_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $this->table_field_rel_tag = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
-
         $this->handler_id = 'item_id';
 
         switch ($this->type) {

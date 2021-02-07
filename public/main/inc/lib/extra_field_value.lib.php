@@ -722,6 +722,8 @@ class ExtraFieldValue extends Model
         }
         $sql .= ' ORDER BY id';
 
+        $repo = Container::getAssetRepository();
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
@@ -741,10 +743,8 @@ class ExtraFieldValue extends Model
                 if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $result['field_type']) {
                     if (!empty($result['value'])) {
                         $options = explode('::', $result['value']);
-
                         $field_option = new ExtraFieldOption($this->type);
                         $result = $field_option->get($options[0]);
-
                         if (!empty($result)) {
                             $result['value'] = $result['display_text']
                                 .'&rarr;'
@@ -756,7 +756,6 @@ class ExtraFieldValue extends Model
                     if (!empty($result['value'])) {
                         $optionIds = explode(';', $result['value']);
                         $optionValues = [];
-
                         foreach ($optionIds as $optionId) {
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get($optionId);
@@ -765,6 +764,17 @@ class ExtraFieldValue extends Model
                         }
 
                         $result['value'] = implode(' / ', $optionValues);
+                    }
+                }
+
+                if (in_array($result['field_type'], ExtraField::getExtraFieldTypesWithFiles())) {
+                    $result['url'] = '';
+                    if (!empty($result['value'])) {
+                        $asset = $repo->find($result['value']);
+                        if ($asset) {
+                            $url = $repo->getAssetUrl($asset);
+                            $result['url'] = $url;
+                        }
                     }
                 }
             }
@@ -916,7 +926,18 @@ class ExtraFieldValue extends Model
         if (Database::num_rows($result)) {
             $result = Database::store_result($result, 'ASSOC');
             $finalResult = [];
+
+            $repo = Container::getAssetRepository();
             foreach ($result as $item) {
+                $fieldType = (int) $item['field_type'];
+                $item['url'] = '';
+                if (in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)) {
+                    $asset = $repo->find($item['value']);
+                    if ($asset) {
+                        $url = $repo->getAssetUrl($asset);
+                        $item['url'] = $url;
+                    }
+                }
                 $finalResult[$item['id']] = $item;
             }
             $idList = array_column($result, 'id');
@@ -928,10 +949,11 @@ class ExtraFieldValue extends Model
         $allData = $extraField->get_all(['filter = ?' => 1]);
         $allResults = [];
         foreach ($allData as $field) {
+            $fieldType = (int) $field['field_type'];
             if (in_array($field['id'], $idList)) {
                 $allResults[] = $finalResult[$field['id']];
             } else {
-                if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
+                if (ExtraField::FIELD_TYPE_TAG === $fieldType) {
                     $tagResult = [];
                     $tags = $em->getRepository(ExtraFieldRelTag::class)
                         ->findBy(

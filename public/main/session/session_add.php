@@ -319,9 +319,8 @@ $(function() {
                             }
                             break;
                         case '16':
-                            if (item.value_url) {
-                                var url = item.value_url;
-
+                            if (item.url) {
+                                var url = item.url;
                                 var divFormGroup = fieldName + '-form-group';
                                 var divWrapper = fieldName + '_crop_image';
                                 var divPreview = fieldName + '_preview_image';

@@ -149,7 +149,6 @@ switch ($action) {
             $valueList = array_column($values, 'id');
             foreach ($allExtraFields as $extra) {
                 if (!in_array($extra['id'], $valueList)) {
-                    //$urlUpload = api_get_path(WEB_UPLOAD_PATH);
                     $values[] = [
                         'id' => $extra['id'],
                         'variable' => $extra['variable'],
@@ -159,23 +158,7 @@ switch ($action) {
                 }
             }
         }
-
-        $repo = \Chamilo\CoreBundle\Framework\Container::getAssetRepository();
-        foreach ($values as &$valueItem) {
-            if ($valueItem['field_type'] &&
-                in_array($valueItem['field_type'], [ExtraField::FIELD_TYPE_FILE, ExtraField::FIELD_TYPE_FILE_IMAGE])
-            ) {
-                $valueItem['value_url'] = '';
-                $asset = $repo->find($valueItem['value']);
-                if ($asset) {
-                    $url = $repo->getAssetUrl($asset);
-                    $valueItem['value_url'] = $url;
-                }
-            }
-        }
-
         $sessionInfo['extra_fields'] = $values;
-
         if (!empty($sessionInfo)) {
             echo json_encode($sessionInfo);
         }

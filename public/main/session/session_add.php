@@ -131,8 +131,6 @@ $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form);
 
 $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php';
-$urlUpload = api_get_path(WEB_UPLOAD_PATH);
-$sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
 $htmlHeadXtra[] = "
@@ -321,11 +319,8 @@ $(function() {
                             }
                             break;
                         case '16':
-                            if (item.value) {
-                                //    $('input[name='+fieldName+']').val(item.value);
-                                var url = '".$urlUpload."';
-
-                                url = url + item.value;
+                            if (item.value_url) {
+                                var url = item.value_url;
 
                                 var divFormGroup = fieldName + '-form-group';
                                 var divWrapper = fieldName + '_crop_image';
@@ -405,12 +400,13 @@ if ($form->validate()) {
             $extraFieldInfo['id']
         );
 
-        if ($extraFieldValueData && file_exists($sysUploadPath.$extraFieldValueData['value'])) {
-            $extraFields['extra_image']['name'] = basename($extraFieldValueData['value']);
-            $extraFields['extra_image']['tmp_name'] = $sysUploadPath.$extraFieldValueData['value'];
-            $extraFields['extra_image']['type'] = 'image/png';
-            $extraFields['extra_image']['error'] = 0;
-            $extraFields['extra_image']['size'] = filesize($sysUploadPath.$extraFieldValueData['value']);
+        if ($extraFieldValueData) {
+            $repo = \Chamilo\CoreBundle\Framework\Container::getAssetRepository();
+            /** @var \Chamilo\CoreBundle\Entity\Asset $asset */
+            $asset = $repo->find($extraFieldValueData);
+            if ($asset) {
+                $extraFields['extra_image']['id'] = $extraFieldValueData;
+            }
         }
     }
 

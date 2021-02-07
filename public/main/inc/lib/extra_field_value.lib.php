@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -1058,8 +1059,10 @@ class ExtraFieldValue extends Model
             Database::query($sql);
 
             // Delete file from uploads
-            if (ExtraField::FIELD_TYPE_FILE == $fieldData['field_type']) {
-                api_remove_uploaded_file($this->type, basename($fieldValue));
+            if (in_array($fieldData['field_type'], [ExtraField::FIELD_TYPE_FILE, ExtraField::FIELD_TYPE_FILE_IMAGE])) {
+                $repo = Container::getAssetRepository();
+                $asset = $repo->find($fieldValue);
+                $repo->delete($asset);
             }
 
             return true;

@@ -187,7 +187,7 @@ class Asset
 
     public function getSize(): int
     {
-        return (int) $this->size;
+        return $this->size;
     }
 
     /**

@@ -123,4 +123,12 @@ class AssetRepository extends ServiceEntityRepository
             throw new FileNotFoundException($asset);
         }
     }
+
+    public function delete(Asset $asset = null)
+    {
+        if ($asset) {
+            $this->getEntityManager()->remove($asset);
+            $this->getEntityManager()->flush();
+        }
+    }
 }

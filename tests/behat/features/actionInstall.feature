@@ -1,7 +1,7 @@
 @administration
 Feature: Install portal
 
-  Scenario: See the company reports link on the admin page
+  Scenario: Installation process
     Given I am on "/main/install/index.php"
     Then I should see "Step1 – Installation Language"
     Then I press "Next"

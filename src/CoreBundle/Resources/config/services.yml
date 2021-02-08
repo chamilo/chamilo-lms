@@ -185,11 +185,10 @@ services:
 
     Chamilo\CoreBundle\EventListener\LogoutListener:
         tags:
-            -
-               name: kernel.event_listener
-               event: Symfony\Component\Security\Http\Event\LogoutEvent
-               dispatcher: security.event_dispatcher.admin
-               priority: 20
+            - name: kernel.event_listener
+              event: Symfony\Component\Security\Http\Event\LogoutEvent
+              dispatcher: security.event_dispatcher.admin
+              priority: 20
 
     Chamilo\CoreBundle\Twig\SettingsHelper:
         arguments:

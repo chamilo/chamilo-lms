@@ -4,7 +4,7 @@
 
 /**
  * Config setting:
- * $_configuration['allow_scheduled_announcements'] = true;
+ * $_configuration['allow_scheduled_announcements'] = true;.
  *
  * Setup linux cron file:
  * main/cron/scheduled_announcement.php

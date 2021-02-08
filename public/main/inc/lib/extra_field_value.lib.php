@@ -727,7 +727,8 @@ class ExtraFieldValue extends Model
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
             if ($transform) {
-                if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $result['field_type']) {
+                $fieldType = $result['field_type'];
+                if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $fieldType) {
                     if (!empty($result['value'])) {
                         $field_option = new ExtraFieldOption($this->type);
                         $options = explode('::', $result['value']);
@@ -739,7 +740,7 @@ class ExtraFieldValue extends Model
                         }
                     }
                 }
-                if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $result['field_type']) {
+                if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $fieldType) {
                     if (!empty($result['value'])) {
                         $options = explode('::', $result['value']);
                         $field_option = new ExtraFieldOption($this->type);
@@ -751,7 +752,7 @@ class ExtraFieldValue extends Model
                         }
                     }
                 }
-                if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $result['field_type']) {
+                if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $fieldType) {
                     if (!empty($result['value'])) {
                         $optionIds = explode(';', $result['value']);
                         $optionValues = [];

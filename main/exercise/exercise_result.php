@@ -234,7 +234,7 @@ ob_start();
 $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exeId,
-    $saveResults,
+    false,
     $remainingMessage,
     $allowSignature,
     api_get_configuration_value('quiz_results_answers_report'),

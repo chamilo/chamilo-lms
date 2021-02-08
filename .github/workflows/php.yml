@@ -143,7 +143,7 @@ jobs:
 #
             - name: Install database
               run: |
-                  symfony console doctrine:database:create || echo "Error while creating the DB"
+                  bin/console doctrine:database:create || echo "Error while creating the DB"
               env:
                 DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
                 DATABASE_HOST: 127.0.0.1

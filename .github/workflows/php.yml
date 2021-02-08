@@ -92,6 +92,7 @@ jobs:
             - name: Start chrome
               run: |
                 sudo apt install google-chrome-stable
+                google-chrome --version
                 google-chrome-stable --version
                 google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
                 whereis google-chrome-stable
@@ -155,10 +156,13 @@ jobs:
                   php -v
                   php -m
 
+            - name: Check chamilo
+              run: |
+                 sudo chmod 777 -R ${{ github.workspace }}
+                 curl http://localhost/main/install/index.php
+
             - name: Install chamilo
               run: |
-                  sudo chmod 777 -R ${{ github.workspace }}
-                  curl http://localhost/main/install/index.php
                   cd tests/behat
                   ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
                   cd ..

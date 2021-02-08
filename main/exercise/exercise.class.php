@@ -96,6 +96,7 @@ class Exercise
     public $hideNoAnswer;
     public $hideExpectedAnswer;
     public $forceShowExpectedChoiceColumn;
+    public $disableHideCorrectAnsweredQuestions;
 
     /**
      * Constructor of the class.
@@ -140,6 +141,7 @@ class Exercise
         $this->hideComment = false;
         $this->hideNoAnswer = false;
         $this->hideExpectedAnswer = false;
+        $this->disableHideCorrectAnsweredQuestions = false;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);

@@ -421,10 +421,11 @@ services:
             - ''
             - '/resources/usergroup/'
             - ~
-            -   usergroups:
+            -
+                usergroups:
                     repository: Chamilo\CoreBundle\Repository\Node\UsergroupRepository
         tags:
-            - { name: chamilo_core.tool }
+            - {name: chamilo_core.tool}
 
     chamilo_core.tool.wiki:
         class: Chamilo\CoreBundle\Tool\Wiki

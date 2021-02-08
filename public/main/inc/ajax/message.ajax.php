@@ -1,7 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\User;
+/* For licensing terms, see /license.txt */
 
 $_dont_save_user_course_access = true;
 
@@ -16,7 +15,7 @@ switch ($action) {
     case 'get_notifications_inbox':
         $userId = api_get_user_id();
         $listInbox = [];
-        if ('true' == api_get_setting('allow_message_tool')) {
+        if ('true' === api_get_setting('allow_message_tool')) {
             $list = MessageManager::getMessageData(
                 0,
                 10,
@@ -41,7 +40,7 @@ switch ($action) {
         $userId = api_get_user_id();
         $listInvitations = [];
         $temp = [];
-        if ('true' == api_get_setting('allow_social_tool')) {
+        if ('true' === api_get_setting('allow_social_tool')) {
             $list = SocialManager::get_list_invitation_of_friends_by_user_id($userId, 3);
 
             foreach ($list as $row) {
@@ -131,7 +130,10 @@ switch ($action) {
         if ($result) {
             echo Display::return_message(get_lang('Your message has been sent.'), 'confirmation');
         } else {
-            echo Display::return_message(get_lang('There was an error while trying to send the message.'), 'confirmation');
+            echo Display::return_message(
+                get_lang('There was an error while trying to send the message.'),
+                'confirmation'
+            );
         }
         break;
     case 'send_invitation':
@@ -158,7 +160,6 @@ switch ($action) {
         $showEmail = 'true' === api_get_setting('show_email_addresses');
         $return = ['items' => []];
 
-        /** @var User $user */
         foreach ($users as $user) {
             $userName = UserManager::formatUserFullName($user, true);
 

@@ -554,6 +554,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      * @param int    $currentUserId The current user ID
      * @param string $searchFilter  Optional. The search text to filter the user list
      * @param int    $limit         Optional. Sets the maximum number of results to retrieve
+     *
+     * @return User[]
      */
     public function findUsersToSendMessage($currentUserId, $searchFilter = null, $limit = 10)
     {

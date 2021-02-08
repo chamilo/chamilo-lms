@@ -8,17 +8,16 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 $category = isset($_GET['category']) ? $_GET['category'] : null;
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+$categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 $parentInfo = [];
 if (!empty($category)) {
     $parentInfo = CourseCategory::getCategory($category);
 }
-$categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
-
 if (!empty($categoryId)) {
     $categoryInfo = CourseCategory::getCategory($categoryId);
 }
-$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
@@ -28,7 +27,7 @@ if (!empty($action)) {
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
-    } elseif (('add' == $action || 'edit' === $action) && isset($_POST['formSent']) && $_POST['formSent']) {
+    } elseif (('add' === $action || 'edit' === $action) && isset($_POST['formSent']) && $_POST['formSent']) {
         if ('add' === $action) {
             $ret = CourseCategory::addNode(
                 $_POST['code'],
@@ -36,7 +35,6 @@ if (!empty($action)) {
                 $_POST['auth_course_child'],
                 $parentInfo ? $parentInfo['id'] : null
             );
-
             $errorMsg = Display::return_message(get_lang('Created'));
         } else {
             $ret = CourseCategory::editNode(
@@ -60,9 +58,9 @@ if (!empty($action)) {
             $errorMsg = Display::return_message(get_lang('This category is already used'), 'error');
         } else {
             if ($myCourseListAsCategory) {
-                if (isset($_FILES['image'])) {
+                /*if (isset($_FILES['image'])) {
                     CourseCategory::saveImage($ret, $_FILES['image']);
-                }
+                }*/
                 CourseCategory::saveDescription($ret, $_POST['description']);
             }
         }
@@ -70,7 +68,7 @@ if (!empty($action)) {
         Display::addFlash($errorMsg);
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php');
         exit;
-    } elseif ('moveUp' == $action) {
+    } elseif ('moveUp' === $action) {
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Update successful')));
@@ -87,7 +85,7 @@ $interbreadcrumb[] = [
 Display::display_header($tool_name);
 $urlId = api_get_current_access_url_id();
 
-if ('add' == $action || 'edit' == $action) {
+if ('add' === $action || 'edit' === $action) {
     echo '<div class="actions">';
     echo Display::url(
         Display::return_icon('folder_up.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
@@ -95,7 +93,7 @@ if ('add' == $action || 'edit' == $action) {
     );
     echo '</div>';
 
-    $form_title = 'add' == $action ? get_lang('Add category') : get_lang('Edit this category');
+    $form_title = 'add' === $action ? get_lang('Add category') : get_lang('Edit this category');
     if (!empty($category)) {
         $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
     }
@@ -145,9 +143,8 @@ if ('add' == $action || 'edit' == $action) {
             false,
             ['ToolbarSet' => 'Minimal']
         );
-        $form->addFile('image', get_lang('Image'), ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]);
-
-        if ('edit' == $action && !empty($categoryInfo['image'])) {
+        /*$form->addFile('image', get_lang('Image'), ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]);
+        if ('edit' === $action && !empty($categoryInfo['image'])) {
             $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
             $form->addHtml('
                 <div class="form-group row">
@@ -159,7 +156,7 @@ if ('add' == $action || 'edit' == $action) {
                 ).'</div>
                 </div>
             ');
-        }
+        }*/
     }
 
     if (!empty($categoryInfo)) {

@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Resource\CGlossaryType;
-use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CourseBundle\Entity\CGlossary;
@@ -53,22 +52,23 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
-/*
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
-    {
-        /** @var CGlossary $newResource * /
-        $newResource = $form->getData();
 
-        $newResource
-            ->setCId($course->getId());
+    /*
+        public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
+        {
+            /** @var CGlossary $newResource * /
+            $newResource = $form->getData();
 
-        if ($session) {
-            $newResource->setSessionId($session->getId());
+            $newResource
+                ->setCId($course->getId());
+
+            if ($session) {
+                $newResource->setSessionId($session->getId());
+            }
+
+            return $newResource;
         }
-
-        return $newResource;
-    }
-*/
+    */
     public function getResourceFormType(): string
     {
         return CGlossaryType::class;

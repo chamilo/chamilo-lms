@@ -104,10 +104,11 @@ jobs:
                   # Optional: do not specify to match Chrome's version
                   chromedriver-version: '88.0.4324.96'
 
-              run: |
-                  export DISPLAY=:99
-                  chromedriver --url-base=/wd/hub &
-                  sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+            - run: |
+                export DISPLAY=:99
+                chromedriver --url-base=/wd/hub &
+                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+
 #                wget https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
 #                sudo mv chromedriver /usr/bin
 #                sudo chmod +x /usr/bin/chromedriver

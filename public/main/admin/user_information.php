@@ -135,7 +135,6 @@ if (!empty($studentBossList)) {
     $studentBossListToString = $table->toHtml();
 }
 
-
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Information'));
 $csvContent[] = [get_lang('Information')];

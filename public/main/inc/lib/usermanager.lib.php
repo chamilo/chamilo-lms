@@ -1823,6 +1823,7 @@ class UserManager
      *                            USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool   $addRandomId
      * @param array  $userInfo    to avoid query the DB
+     *
      * @todo add gravatar support
      * @todo replace $userId with User entity
      *
@@ -1973,7 +1974,6 @@ class UserManager
             $repoIllustration = Container::getIllustrationRepository();
             $repoIllustration->addIllustration($user, $user, $file, $crop);
         }
-
     }
 
     /**

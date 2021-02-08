@@ -3117,7 +3117,7 @@ JAVASCRIPT;
         return $result;
     }
 
-    public static function getExtraFieldTypesWithFiles() : array
+    public static function getExtraFieldTypesWithFiles(): array
     {
         return [self::FIELD_TYPE_FILE_IMAGE, self::FIELD_TYPE_FILE];
     }

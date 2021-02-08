@@ -1358,8 +1358,6 @@ class SocialManager extends UserManager
      */
     public static function display_productions($user_id)
     {
-        return;
-
         /*$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
         $sysdir = UserManager::getUserPathById($user_id, 'system');
         $webdir = UserManager::getUserPathById($user_id, 'web');

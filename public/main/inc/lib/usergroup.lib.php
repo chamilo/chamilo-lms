@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Usergroup as UserGroupEntity;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class UserGroup.
@@ -1601,9 +1601,9 @@ class UserGroup extends Model
     }
 
     /**
-     * @param UserGroupEntity    $groupId
-     * @param string $picture
-     * @param string $cropParameters
+     * @param UserGroupEntity $groupId
+     * @param string          $picture
+     * @param string          $cropParameters
      *
      * @return bool
      */
@@ -1612,6 +1612,7 @@ class UserGroup extends Model
         if ($userGroup) {
             $illustrationRepo = Container::getIllustrationRepository();
             $illustrationRepo->addIllustration($userGroup, api_get_user_entity(), $picture, $cropParameters);
+
             return true;
         }
 

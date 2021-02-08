@@ -941,7 +941,9 @@ class CourseCategory
 
     /**
      * Save image for a course category.
+     *
      * @deprecated
+     *
      * @param int   $categoryId Course category ID
      * @param array $fileData   File data from $_FILES
      */

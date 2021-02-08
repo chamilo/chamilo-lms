@@ -7,19 +7,22 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Resource\CGlossaryType;
 use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Routing\RouterInterface;
 
-final class CGlossaryRepository extends ResourceRepository implements GridInterface
+final class CGlossaryRepository extends ResourceRepository implements ResourceWithLinkInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -50,10 +53,10 @@ final class CGlossaryRepository extends ResourceRepository implements GridInterf
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
-
+/*
     public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
-        /** @var CGlossary $newResource */
+        /** @var CGlossary $newResource * /
         $newResource = $form->getData();
 
         $newResource
@@ -65,9 +68,19 @@ final class CGlossaryRepository extends ResourceRepository implements GridInterf
 
         return $newResource;
     }
-
+*/
     public function getResourceFormType(): string
     {
         return CGlossaryType::class;
+    }
+
+    public function getLink(ResourceInterface $resource, RouterInterface $router): string
+    {
+        $params = ['name' => 'glossary/index.php', 'glossary_id' => $resource->getResourceIdentifier()];
+        if (!empty($extraParams)) {
+            $params = array_merge($params, $extraParams);
+        }
+
+        return $router->generate('legacy_main', $params);
     }
 }

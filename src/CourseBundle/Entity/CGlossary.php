@@ -13,11 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CGlossary.
  *
  * @ORM\Table(
- *  name="c_glossary",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *  name="c_glossary"
  * )
  * @ORM\Entity
  */
@@ -31,13 +27,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @Assert\NotBlank()
@@ -56,18 +45,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="display_order", type="integer", nullable=true)
      */
     protected $displayOrder;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    public function __toString(): string
-    {
-        return $this->getName();
-    }
 
     /**
      * Set name.
@@ -132,30 +109,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CGlossary
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
      * Set glossaryId.
      *
      * @param int $glossaryId
@@ -167,30 +120,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
         $this->glossaryId = $glossaryId;
 
         return $this;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CGlossary
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getIid(): int
@@ -212,4 +141,10 @@ class CGlossary extends AbstractResource implements ResourceInterface
     {
         return $this->setName($name);
     }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
 }

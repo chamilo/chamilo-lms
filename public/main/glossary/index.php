@@ -57,6 +57,7 @@ $(function() {
 // Tracking
 Event::event_access_tool(TOOL_GLOSSARY);
 
+/*
 function sorter($item1, $item2)
 {
     if ($item1[2] == $item2[2]) {
@@ -65,7 +66,7 @@ function sorter($item1, $item2)
 
     return $item1[2] < $item2[2] ? -1 : 1;
 }
-
+*/
 // Displaying the header
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $currentUrl = api_get_self().'?'.api_get_cidreq();

@@ -11,7 +11,7 @@ jobs:
             fail-fast: false
             matrix:
                 operating-system: [ubuntu-latest]
-                php-versions: ['7.4', '8.0']
+                php-versions: ['7.4']
 
 #        services:
 #            mysql:
@@ -123,7 +123,7 @@ jobs:
             - name: Set up JDK 1.8
               uses: actions/setup-java@v1
               with:
-                java-version: 1.8
+                  java-version: 1.8
 
             - name: Get Selenium
               run: |
@@ -145,13 +145,13 @@ jobs:
               run: |
                   bin/console doctrine:database:create || echo "Error while creating the DB"
               env:
-                DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
-                DATABASE_HOST: 127.0.0.1
-                DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
-                DATABASE_NAME: chamilo
-                DATABASE_USER: root
-                DATABASE_PASSWORD: root
-                APP_INSTALLED: 1
+                  DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
+                  DATABASE_HOST: 127.0.0.1
+                  DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
+                  DATABASE_NAME: chamilo
+                  DATABASE_USER: root
+                  DATABASE_PASSWORD: root
+                  APP_INSTALLED: 1
 
             - name: Check settings
               run: |
@@ -179,6 +179,7 @@ jobs:
               run: |
                   cd ${{ github.workspace }}/tests/behat
                   ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
 
             - name: Composer analyse
               run: composer analyse

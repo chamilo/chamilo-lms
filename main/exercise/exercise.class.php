@@ -2206,6 +2206,12 @@ class Exercise
                         null,
                         get_lang('HideCategoryTable')
                     ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_correct_answered_questions',
+                        null,
+                        get_lang('HideCorrectAnsweredQuestions')
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
@@ -3719,7 +3725,6 @@ class Exercise
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
-
             $objQuestionTmp->initFile(
                 api_get_session_id(),
                 isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
@@ -8327,10 +8332,11 @@ class Exercise
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
             $params = [
-                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
-                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
-                'hide_category_table' => isset($values['hide_category_table']) ? $values['hide_category_table'] : '',
+                'hide_expected_answer' => $values['hide_expected_answer'] ?? '',
+                'hide_question_score' => $values['hide_question_score'] ?? '',
+                'hide_total_score' => $values['hide_total_score'] ?? '',
+                'hide_category_table' => $values['hide_category_table'] ?? '',
+                'hide_correct_answered_questions' => $values['hide_correct_answered_questions'] ?? '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();

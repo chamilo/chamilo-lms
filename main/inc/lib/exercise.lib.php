@@ -4941,6 +4941,16 @@ EOT;
                 }
 
                 $contents = ob_get_clean();
+
+                // Hide correct answers
+                if ($scorePassed && !api_is_allowed_to_edit(false, true)) {
+                    // Skip correct answers.
+                    $hide = (int) $objExercise->getPageConfigurationAttribute('hide_correct_answered_questions');
+                    if (1 === $hide) {
+                        continue;
+                    }
+                }
+
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';

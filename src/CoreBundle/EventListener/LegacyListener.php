@@ -44,6 +44,7 @@ class LegacyListener
         // Setting container
         Container::setRequest($request);
         Container::setContainer($container);
+        Container::$twig = $this->twig;
         Container::setLegacyServices($container);
 
         // Legacy way of detect current access_url

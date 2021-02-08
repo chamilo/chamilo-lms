@@ -7,22 +7,42 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Messages.
- */
 final class Version20200821224242 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Messages';
+    }
+
     public function up(Schema $schema): void
     {
+        $table = $schema->getTable('message');
+        $this->addSql('ALTER TABLE message CHANGE parent_id parent_id BIGINT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_B6BD307F727ACA70')) {
+            $this->addSql(
+                'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F727ACA70 FOREIGN KEY (parent_id) REFERENCES message (id)'
+            );
+        }
+
+        if ($table->hasIndex('idx_message_parent')) {
+            $this->addSql('DROP INDEX idx_message_parent ON message');
+        }
+
+        $this->addSql('UPDATE message SET parent_id = NULL WHERE parent_id = 0');
+
+        if (false === $table->hasForeignKey('FK_B6BD307F727ACA70')) {
+            $this->addSql(
+                'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F727ACA70 FOREIGN KEY (parent_id) REFERENCES message (id);'
+            );
+            $this->addSql('CREATE INDEX IDX_B6BD307F727ACA70 ON message (parent_id)');
+        }
         $this->addSql('DELETE FROM message WHERE user_sender_id IS NULL OR user_sender_id = 0');
         $this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
         $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
-        $this->addSql(
-            'DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)'
-        );
+        $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
 
-        $table = $schema->getTable('message');
         if (false === $table->hasForeignKey('FK_B6BD307FF6C43E79')) {
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)'
@@ -70,6 +90,15 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         if (false === $table->hasForeignKey('FK_B68FF524537A1329')) {
             $this->addSql('ALTER TABLE message_attachment ADD CONSTRAINT FK_B68FF524537A1329 FOREIGN KEY (message_id) REFERENCES message (id)');
+        }
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE message_attachment ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_B68FF5241BAD783F ON message_attachment (resource_node_id);');
+        }
+
+        if (false === $table->hasForeignKey('FK_B68FF5241BAD783F')) {
+            $this->addSql(' ALTER TABLE message_attachment ADD CONSTRAINT FK_B68FF5241BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
         }
 
         if (false === $schema->hasTable('c_chat_conversation')) {

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 $cidReset = true;
@@ -15,6 +16,8 @@ $user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
+$userObj = api_get_user_entity($user_id);
+$illustrationRepo = Container::getIllustrationRepository();
 
 $htmlHeadXtra[] = '
 <script>
@@ -65,8 +68,6 @@ function confirmation(name) {
 }
 </script>';
 
-//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('Edit user information');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
@@ -139,7 +140,12 @@ if ('true' == api_get_setting('registration', 'email')) {
 }
 
 if ('true' == api_get_setting('login_is_email')) {
-    $form->addRule('email', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'email',
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
 
@@ -160,15 +166,23 @@ $form->addRule(
     'filetype',
     $allowed_picture_types
 );
-if (strlen($user_data['picture_uri']) > 0) {
+
+$hasPicture = $illustrationRepo->hasIllustration($userObj);
+
+if ($hasPicture) {
     $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
 }
 
 // Username
-if ('true' != api_get_setting('login_is_email')) {
+if ('true' !== api_get_setting('login_is_email')) {
     $form->addElement('text', 'username', get_lang('Login'), ['maxlength' => USERNAME_MAX_LENGTH]);
     $form->addRule('username', get_lang('Required field'), 'required');
-    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'username',
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
     $form->addRule('username', get_lang('Only letters and numbers allowed'), 'username');
     $form->addRule('username', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
@@ -262,7 +276,12 @@ $form->addGroup($group, 'mail', get_lang('Send mail to new user'), null, false);
 
 // Registration User and Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
-$date = sprintf(get_lang('Create by <a href="%s">%s</a> on %s'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
+$date = sprintf(
+    get_lang('Create by <a href="%s">%s</a> on %s'),
+    'user_information.php?user_id='.$user_data['creator_id'],
+    $creatorInfo['username'],
+    $user_data['registration_date']
+);
 $form->addElement('label', get_lang('Registration date'), $date);
 
 if (!$user_data['platform_admin']) {
@@ -364,7 +383,7 @@ $error_drh = false;
 // Validate form
 if ($form->validate()) {
     $user = $form->getSubmitValues(1);
-    $reset_password = intval($user['reset_password']);
+    $reset_password = (int) $user['reset_password'];
     if (2 == $reset_password && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('The password is too short')));
         header('Location: '.api_get_self().'?user_id='.$user_id);
@@ -378,15 +397,15 @@ if ($form->validate()) {
     } else {
         $picture_element = $form->getElement('picture');
         $picture = $picture_element->getValue();
-
         $picture_uri = $user_data['picture_uri'];
         if (isset($user['delete_picture']) && $user['delete_picture']) {
             $picture_uri = UserManager::deleteUserPicture($user_id);
         } elseif (!empty($picture['name'])) {
+            $request = Container::getRequest();
+            $file = $request->files->get('picture');
             $picture_uri = UserManager::update_user_picture(
                 $user_id,
-                $_FILES['picture']['name'],
-                $_FILES['picture']['tmp_name'],
+                $file,
                 $user['picture_crop_result']
             );
         }
@@ -460,7 +479,6 @@ if ($form->validate()) {
         $currentUserId = api_get_user_id();
 
         if ($user_id != $currentUserId) {
-            $userObj = api_get_user_entity($user_id);
             if (1 == $platform_admin) {
                 UserManager::addUserAsAdmin($userObj);
             } else {
@@ -485,7 +503,12 @@ if ($form->validate()) {
 }
 
 if ($error_drh) {
-    Display::addFlash(Display::return_message(get_lang('The status of this user cannot be changed to human resources manager.'), 'error'));
+    Display::addFlash(
+        Display::return_message(
+            get_lang('The status of this user cannot be changed to human resources manager.'),
+            'error'
+        )
+    );
 }
 
 $actions = [
@@ -505,21 +528,22 @@ $actions = [
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
+        api_get_path(WEB_CODE_PATH).
+        'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
     ),
 ];
 
 $content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
-$bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
-$normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
+$bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
+$normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
 $content .= '<div class="row">';
 $content .= '<div class="col-md-10">';
 // Display form
 $content .= $form->returnForm();
 $content .= '</div>';
 $content .= '<div class="col-md-2">';
-$content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
+$content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'" /></a>';
 $content .= '</div>';
 
 $tpl = new Template($tool_name);

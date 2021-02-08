@@ -489,7 +489,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             USER_IMAGE_SIZE_SMALL
         );
         $photo = '<img
-            src="'.$userPicture.'" width="22" height="22"
+            src="'.$userPicture.'"
             alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
@@ -1003,13 +1003,13 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple', 'get', null, null, null, 'inline');
+$form = new FormValidator('search_simple', 'get', null, null, null, FormValidator::LAYOUT_INLINE);
 $form->addText(
     'keyword',
-    get_lang('Search'),
+    null,
     false,
     [
-        'aria-label' => get_lang('Search users'),
+        'placeholder' => get_lang('Search users'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -1135,7 +1135,7 @@ $table = new SortableTable(
     20,
     'ASC',
     null,
-    ['style' => 'font-size: 1.4rem;', 'class' => 'table table-hover table-striped table-bordered table-condensed']
+    ['class' => 'table table-hover table-striped table-bordered table-condensed']
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');

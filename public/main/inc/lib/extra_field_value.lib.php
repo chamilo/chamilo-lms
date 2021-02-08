@@ -2,11 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
-use ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class ExtraFieldValue
@@ -116,6 +118,7 @@ class ExtraFieldValue extends Model
 
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
+        $em = Database::getManager();
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
@@ -125,7 +128,7 @@ class ExtraFieldValue extends Model
                     //only admins should be able to add those values
                     if (!api_is_platform_admin(true, true)) {
                         // although if not admin but sent through a CLI script, we should accept it as well
-                        if (PHP_SAPI != 'cli') {
+                        if (PHP_SAPI !== 'cli') {
                             continue; //not a CLI script, so don't write the value to DB
                         }
                     }
@@ -133,8 +136,8 @@ class ExtraFieldValue extends Model
             }
 
             $field_variable = $fieldDetails['variable'];
-
-            if ($onlySubmittedFields && !isset($params['extra_'.$field_variable])) {
+            $fieldVariableWithExtra = 'extra_'.$field_variable;
+            if ($onlySubmittedFields && !isset($params[$fieldVariableWithExtra])) {
                 continue;
             }
 
@@ -151,8 +154,8 @@ class ExtraFieldValue extends Model
             }
 
             $value = '';
-            if (isset($params['extra_'.$field_variable])) {
-                $value = $params['extra_'.$field_variable];
+            if (isset($params[$fieldVariableWithExtra])) {
+                $value = $params[$fieldVariableWithExtra];
             }
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
@@ -162,7 +165,6 @@ class ExtraFieldValue extends Model
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
-            $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
@@ -186,7 +188,6 @@ class ExtraFieldValue extends Model
                             $params['item_id'],
                             $extraFieldInfo['id']
                         );
-
                         UserManager::process_tags(
                             $value,
                             $params['item_id'],
@@ -194,8 +195,6 @@ class ExtraFieldValue extends Model
                         );
                         break;
                     }
-
-                    $em = Database::getManager();
 
                     $currentTags = $em
                         ->getRepository(ExtraFieldRelTag::class)
@@ -210,7 +209,6 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];
-
                     foreach ($tagValues as $tagValue) {
                         if (empty($tagValue)) {
                             continue;
@@ -257,6 +255,7 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                    /*
                     $fileDir = $fileDirStored = '';
                     switch ($this->type) {
                         case 'course':
@@ -275,35 +274,42 @@ class ExtraFieldValue extends Model
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
                             $fileDirStored = 'work/';
                             break;
-                    }
-
+                    }*/
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
-
-                    if (!file_exists($fileDir)) {
-                        mkdir($fileDir, $dirPermissions, true);
-                    }
-
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
-                        // Crop the image to adjust 16:9 ratio
-                        if (isset($params['extra_'.$field_variable.'_crop_result'])) {
-                            $crop = new Image($value['tmp_name']);
-                            $crop->crop($params['extra_'.$field_variable.'_crop_result']);
+                        $mimeType = mime_content_type($value['tmp_name']);
+                        $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
+                        $asset = new Asset();
+                        $asset
+                            ->setCategory(Asset::EXTRA_FIELD)
+                            ->setTitle($fileName)
+                            ->setFile($file)
+                        ;
+                        $cropVariable = 'extra_'.$field_variable.'_crop_result';
+                        if (isset($params[$cropVariable])) {
+                            $asset->setCrop($params[$cropVariable]);
                         }
-
-                        $imageExtraField = new Image($value['tmp_name']);
-                        $imageExtraField->resize(400);
-                        $imageExtraField->send_image($fileDir.$fileName, -1, 'png');
-                        $newParams = [
-                            'item_id' => $params['item_id'],
-                            'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored.$fileName,
-                            'comment' => $comment,
-                        ];
-                        $this->save($newParams);
+                        $em->persist($asset);
+                        $em->flush();
+                        $assetId = $asset->getId();
+                        //$repo = Container::getAssetRepository();
+                        if ($assetId) {
+                            // Crop the image to adjust 16:9 ratio
+                            /*$imageExtraField = new Image($value['tmp_name']);
+                            $imageExtraField->resize(400);
+                            $imageExtraField->send_image($fileDir.$fileName, -1, 'png');*/
+                            $newParams = [
+                                'item_id' => $params['item_id'],
+                                'field_id' => $extraFieldInfo['id'],
+                                'value' => $assetId,
+                                'comment' => $comment,
+                            ];
+                            $this->save($newParams);
+                        }
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    $fileDir = $fileDirStored = '';
+                    /*$fileDir = $fileDirStored = '';
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
@@ -325,16 +331,16 @@ class ExtraFieldValue extends Model
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'scheduled_announcement/';
                             $fileDirStored = 'scheduled_announcement/';
                             break;
-                    }
+                    }*/
 
                     $cleanedName = api_replace_dangerous_char($value['name']);
                     $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
-                    if (!file_exists($fileDir)) {
+                    /*if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
-                    }
+                    }*/
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
-                        $cleanedName = api_replace_dangerous_char($value['name']);
+                        /*$cleanedName = api_replace_dangerous_char($value['name']);
                         $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                         moveUploadedFile($value, $fileDir.$fileName);
 
@@ -342,13 +348,31 @@ class ExtraFieldValue extends Model
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName,
-                        ];
+                        ];*/
+                        $mimeType = mime_content_type($value['tmp_name']);
+                        $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
+                        $asset = new Asset();
+                        $asset
+                            ->setCategory(Asset::EXTRA_FIELD)
+                            ->setTitle($fileName)
+                            ->setFile($file)
+                        ;
+                        $em->persist($asset);
+                        $em->flush();
+                        $assetId = $asset->getId();
 
-                        if ('session' !== $this->type && 'course' !== $this->type) {
-                            $new_params['comment'] = $comment;
+                        if ($assetId) {
+                            $new_params = [
+                                'item_id' => $params['item_id'],
+                                'field_id' => $extraFieldInfo['id'],
+                                'value' => $assetId,
+                            ];
+                            if ('session' !== $this->type && 'course' !== $this->type) {
+                                $new_params['comment'] = $comment;
+                            }
+
+                            $this->save($new_params);
                         }
-
-                        $this->save($new_params);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_CHECKBOX:
@@ -697,11 +721,14 @@ class ExtraFieldValue extends Model
         }
         $sql .= ' ORDER BY id';
 
+        $repo = Container::getAssetRepository();
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
             if ($transform) {
-                if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $result['field_type']) {
+                $fieldType = $result['field_type'];
+                if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $fieldType) {
                     if (!empty($result['value'])) {
                         $field_option = new ExtraFieldOption($this->type);
                         $options = explode('::', $result['value']);
@@ -713,13 +740,11 @@ class ExtraFieldValue extends Model
                         }
                     }
                 }
-                if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $result['field_type']) {
+                if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $fieldType) {
                     if (!empty($result['value'])) {
                         $options = explode('::', $result['value']);
-
                         $field_option = new ExtraFieldOption($this->type);
                         $result = $field_option->get($options[0]);
-
                         if (!empty($result)) {
                             $result['value'] = $result['display_text']
                                 .'&rarr;'
@@ -727,11 +752,10 @@ class ExtraFieldValue extends Model
                         }
                     }
                 }
-                if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $result['field_type']) {
+                if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $fieldType) {
                     if (!empty($result['value'])) {
                         $optionIds = explode(';', $result['value']);
                         $optionValues = [];
-
                         foreach ($optionIds as $optionId) {
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get($optionId);
@@ -740,6 +764,17 @@ class ExtraFieldValue extends Model
                         }
 
                         $result['value'] = implode(' / ', $optionValues);
+                    }
+                }
+
+                if (in_array($result['field_type'], ExtraField::getExtraFieldTypesWithFiles())) {
+                    $result['url'] = '';
+                    if (!empty($result['value'])) {
+                        $asset = $repo->find($result['value']);
+                        if ($asset) {
+                            $url = $repo->getAssetUrl($asset);
+                            $result['url'] = $url;
+                        }
                     }
                 }
             }
@@ -891,7 +926,18 @@ class ExtraFieldValue extends Model
         if (Database::num_rows($result)) {
             $result = Database::store_result($result, 'ASSOC');
             $finalResult = [];
+
+            $repo = Container::getAssetRepository();
             foreach ($result as $item) {
+                $fieldType = (int) $item['field_type'];
+                $item['url'] = '';
+                if (in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)) {
+                    $asset = $repo->find($item['value']);
+                    if ($asset) {
+                        $url = $repo->getAssetUrl($asset);
+                        $item['url'] = $url;
+                    }
+                }
                 $finalResult[$item['id']] = $item;
             }
             $idList = array_column($result, 'id');
@@ -903,10 +949,11 @@ class ExtraFieldValue extends Model
         $allData = $extraField->get_all(['filter = ?' => 1]);
         $allResults = [];
         foreach ($allData as $field) {
+            $fieldType = (int) $field['field_type'];
             if (in_array($field['id'], $idList)) {
                 $allResults[] = $finalResult[$field['id']];
             } else {
-                if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
+                if (ExtraField::FIELD_TYPE_TAG === $fieldType) {
                     $tagResult = [];
                     $tags = $em->getRepository(ExtraFieldRelTag::class)
                         ->findBy(
@@ -997,13 +1044,31 @@ class ExtraFieldValue extends Model
     {
         $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $sql = "SELECT DISTINCT fv.id, value, field_type FROM {$this->table} fv
+                INNER JOIN {$this->table_handler_field} f
+                ON (fv.field_id = f.id)
+                WHERE extra_field_type = $extraFieldType AND item_id = $itemId";
+        $result = Database::query($sql);
+        $result = Database::store_result($result, 'ASSOC');
+        $em = Database::getManager();
+        $repo = Container::getAssetRepository();
+        foreach ($result as $item) {
+            $fieldType = (int) $item['field_type'];
+            if (in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)) {
+                $asset = $repo->find($item['value']);
+                if ($asset) {
+                    $em->remove($asset);
+                }
+            }
+        }
+        $em->flush();
 
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$itemId' AND
                     field_id IN (
                         SELECT id FROM {$this->table_handler_field}
-                        WHERE extra_field_type = ".$extraFieldType."
+                        WHERE extra_field_type = $extraFieldType
                     )
                 ";
         Database::query($sql);
@@ -1020,22 +1085,23 @@ class ExtraFieldValue extends Model
     {
         $itemId = (int) $itemId;
         $fieldId = (int) $fieldId;
-
         $fieldData = $this->getExtraField()->get($fieldId);
         if ($fieldData) {
             $fieldValue = Database::escape_string($fieldValue);
 
             $sql = "DELETE FROM {$this->table}
-                WHERE
-                    item_id = '$itemId' AND
-                    field_id = '$fieldId' AND
-                    value = '$fieldValue'
-                ";
+                    WHERE
+                        item_id = '$itemId' AND
+                        field_id = '$fieldId' AND
+                        value = '$fieldValue'
+                    ";
             Database::query($sql);
 
-            // Delete file from uploads
-            if (ExtraField::FIELD_TYPE_FILE == $fieldData['field_type']) {
-                api_remove_uploaded_file($this->type, basename($fieldValue));
+            // Delete file from uploads.
+            if (in_array($fieldData['field_type'], ExtraField::getExtraFieldTypesWithFiles())) {
+                $repo = Container::getAssetRepository();
+                $asset = $repo->find($fieldValue);
+                $repo->delete($asset);
             }
 
             return true;

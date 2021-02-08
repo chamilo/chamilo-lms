@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-interface ResourceWithUrlInterface
+interface ResourceWithAccessUrlInterface
 {
     public function addUrl(AccessUrl $url);
 }

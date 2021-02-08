@@ -43,11 +43,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content;
 
     /**
      * @var int

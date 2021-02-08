@@ -37,20 +37,16 @@ class CGroupRelTutor
     protected $cId;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courseGroupsAsTutor")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var CGroup
-     *
      * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="tutors")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
      */
-    protected $group;
+    protected CGroup $group;
 
     /**
      * Set userId.

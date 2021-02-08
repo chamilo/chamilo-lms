@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Room.
@@ -24,6 +25,7 @@ class Room
     protected $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=true, unique=false)
      */
     protected string $title;

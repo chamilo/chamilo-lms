@@ -183,8 +183,17 @@ class Version20 extends AbstractMigrationChamilo
         );
 
         $table = $schema->getTable('usergroup');
-        if (!$table->hasColumn('author_id')) {
+        if (false === $table->hasColumn('author_id')) {
             $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
+        }
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE usergroup ADD resource_node_id INT DEFAULT NULL');
+        }
+
+        if (false === $table->hasForeignKey('FK_4A6478171BAD783F')) {
+            $this->addSql('ALTER TABLE usergroup ADD CONSTRAINT FK_4A6478171BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_4A6478171BAD783F ON usergroup (resource_node_id)');
         }
 
         // Update template.

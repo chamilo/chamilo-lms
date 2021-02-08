@@ -760,7 +760,6 @@ class AddCourse
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
-                ->setCreationDate(new \DateTime())
                 ->setExpirationDate(new \DateTime($expiration_date))
                 ->setDepartmentName($department_name)
                 ->setDepartmentUrl($department_url)

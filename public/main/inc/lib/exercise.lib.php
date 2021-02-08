@@ -136,7 +136,7 @@ class ExerciseLib
                 case DRAGGABLE:
                 case MATCHING_DRAGGABLE:
                     if (DRAGGABLE == $answerType) {
-                        $isVertical = 'v' == $objQuestionTmp->extra;
+                        $isVertical = 'v' === $objQuestionTmp->extra;
                         $s .= '
                             <div class="row">
                                 <div class="col-md-12">
@@ -416,7 +416,7 @@ class ExerciseLib
                 ];
                 $counter2 = 0;
                 foreach ($objQuestionTmp->options as $item) {
-                    if ('True' == $item || 'False' == $item) {
+                    if ('True' === $item || 'False' === $item) {
                         $header2 .= Display::tag('td',
                             '&nbsp;',
                             ['style' => 'background-color: #F7E1D7; color: black;border-right: solid #FFFFFF 1px;']);

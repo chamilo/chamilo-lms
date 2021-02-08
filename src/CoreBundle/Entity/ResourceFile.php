@@ -82,19 +82,19 @@ class ResourceFile
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected string $name;
+    protected $name;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected string $mimeType;
+    protected $mimeType;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected string $originalName;
+    protected $originalName;
 
     /**
      * @var string
@@ -129,11 +129,9 @@ class ResourceFile
     protected $file;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
-    protected $crop;
+    protected ?string $crop;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceFile")
@@ -141,32 +139,24 @@ class ResourceFile
     protected ResourceNode $resourceNode;
 
     /**
-     * @var array
-     *
      * @ORM\Column(type="array", nullable=true)
      */
-    protected $metadata;
+    protected ?array $metadata;
 
     /**
-     * @var bool
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected $image;
+    protected ?bool $image;
 
     /**
-     * @var bool
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected $video;
+    protected ?bool $video;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * Constructor.

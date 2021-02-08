@@ -36,7 +36,7 @@ class CLink extends AbstractResource implements ResourceInterface
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=150, nullable=true)
      */
-    protected string  $title;
+    protected string $title;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)

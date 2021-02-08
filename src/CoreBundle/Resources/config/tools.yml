@@ -404,11 +404,26 @@ services:
         arguments:
             - 'user'
             - 'interaction'
-            - ~
+            - '/resources/user/'
             - ~
             -
                 files:
-                    repository: Chamilo\CoreBundle\Repository\PersonalFileRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\PersonalFileRepository
+                message_attachments:
+                    repository: Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository
+        tags:
+            - {name: chamilo_core.tool}
+
+    chamilo_core.tool.usergroup:
+        class: Chamilo\CoreBundle\Tool\UserGroup
+        arguments:
+            - 'usergroup'
+            - ''
+            - '/resources/usergroup/'
+            - ~
+            -
+                usergroups:
+                    repository: Chamilo\CoreBundle\Repository\Node\UsergroupRepository
         tags:
             - {name: chamilo_core.tool}
 

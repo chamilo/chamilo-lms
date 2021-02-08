@@ -726,6 +726,7 @@ class TicketManager
         $ticketId,
         $message_id
     ) {
+        throw new Exception('Implement saveMessageAttachmentFile');
         $now = api_get_utc_datetime();
         $userId = api_get_user_id();
         $ticketId = (int) $ticketId;

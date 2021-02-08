@@ -106,14 +106,15 @@ class ResourceNodeVoter extends Voter
 
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
+        $resourceTypeName = $resourceNode->getResourceType()->getName();
 
         // Illustrations are always visible.
-        if ('illustrations' === $resourceNode->getResourceType()->getName()) {
+        if ('illustrations' === $resourceTypeName) {
             return true;
         }
 
-        // Courses are also a ResourceNode. Courses are protected using the CourseVoter not by ResourceNodeVoter.
-        if ('courses' === $resourceNode->getResourceType()->getName()) {
+        // Courses are also a ResourceNode. Courses are protected using the CourseVoter, not by ResourceNodeVoter.
+        if ('courses' === $resourceTypeName) {
             return true;
         }
 
@@ -186,8 +187,7 @@ class ResourceNodeVoter extends Voter
             if ($linkSession instanceof Session && !empty($sessionId) &&
                 $linkCourse instanceof Course && !empty($courseId)
             ) {
-                if (
-                    $linkCourse->getId() === $courseId &&
+                if ($linkCourse->getId() === $courseId &&
                     $linkSession->getId() === $sessionId
                 ) {
                     $linkFound = true;

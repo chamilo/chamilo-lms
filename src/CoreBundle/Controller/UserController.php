@@ -32,7 +32,7 @@ class UserController extends AbstractController
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 
-        $url = $illustrationRepository->getIllustrationUrlFromNode($user->getResourceNode());
+        $url = $illustrationRepository->getIllustrationUrl($user);
 
         return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user, 'illustration_url' => $url]);
     }

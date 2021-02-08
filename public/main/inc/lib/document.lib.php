@@ -5874,44 +5874,6 @@ This folder contains all sessions that have been opened in the chat. Although th
     }
 
     /**
-     * This function calculates the resized width and resized heigt
-     * according to the source and target widths
-     * and heights, height so that no distortions occur
-     * parameters.
-     *
-     * @param $image = the absolute path to the image
-     * @param $target_width = how large do you want your resized image
-     * @param $target_height = how large do you want your resized image
-     * @param $slideshow (default=0) =
-     *      indicates weither we are generating images for a slideshow or not,
-     *		this overrides the $_SESSION["image_resizing"] a bit so that a thumbnail
-     *	    view is also possible when you choose not to resize the source images
-     *
-     * @return array
-     */
-    public static function resizeImageSlideShow(
-        $image,
-        $target_width,
-        $target_height,
-        $slideshow = 0
-    ) {
-        // Modifications by Ivan Tcholakov, 04-MAY-2009.
-        $result = [];
-        $imageResize = Session::read('image_resizing');
-        if ('resizing' == $imageResize || 1 == $slideshow) {
-            $new_sizes = api_resize_image($image, $target_width, $target_height);
-            $result[] = $new_sizes['height'];
-            $result[] = $new_sizes['width'];
-        } else {
-            $size = api_getimagesize($image);
-            $result[] = $size['height'];
-            $result[] = $size['width'];
-        }
-
-        return $result;
-    }
-
-    /**
      * Adds a cloud link to the database.
      *
      * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
@@ -6148,7 +6110,8 @@ This folder contains all sessions that have been opened in the chat. Although th
                 // $path points to a file in the directory
                 if (file_exists($realPath) && !is_dir($realPath)) {
                     error_log('file_exists');
-                    $file = new UploadedFile($realPath, $title, null, null, true);
+                    $mimeType = mime_content_type($realPath);
+                    $file = new UploadedFile($realPath, $title, $mimeType, null, true);
                     $resourceFile->setFile($file);
                 } else {
                     // We get the content and create a file

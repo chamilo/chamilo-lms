@@ -8,7 +8,9 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,13 +51,15 @@ class CourseController extends AbstractController
      *
      * @Entity("course", expr="repository.find(cid)")
      */
-    public function aboutAction(Course $course): Response
+    public function aboutAction(Course $course, IllustrationRepository $illustrationRepository): Response
     {
         $courseId = $course->getId();
         $userId = $this->getUser()->getId();
         $em = $this->getDoctrine()->getManager();
 
+        /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
+        /** @var EntityRepository $fieldTagsRepo */
         $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
 
         /** @var CCourseDescription $courseDescription */
@@ -81,10 +85,7 @@ class CourseController extends AbstractController
             $teacher = $teacherSubscription->getUser();
             $userData = [
                 'complete_name' => UserManager::formatUserFullName($teacher),
-                'image' => UserManager::getUserPicture(
-                    $teacher->getId(),
-                    USER_IMAGE_SIZE_ORIGINAL
-                ),
+                'image' => $illustrationRepository->getIllustrationUrl($teacher),
                 'diploma' => $teacher->getDiplomas(),
                 'openarea' => $teacher->getOpenarea(),
             ];

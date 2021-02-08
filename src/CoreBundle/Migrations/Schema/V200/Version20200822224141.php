@@ -7,11 +7,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Messages.
- */
 final class Version20200822224141 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Portfolio';
+    }
+
     public function up(Schema $schema): void
     {
         // Portfolio

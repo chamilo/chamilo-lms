@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CSurveyQuestion.
@@ -66,18 +67,16 @@ class CSurveyQuestion
     protected $surveyId;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="survey_question", type="text", nullable=false)
      */
-    protected $surveyQuestion;
+    protected string $surveyQuestion;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="survey_question_comment", type="text", nullable=false)
      */
-    protected $surveyQuestionComment;
+    protected ?string $surveyQuestionComment;
 
     /**
      * @var string

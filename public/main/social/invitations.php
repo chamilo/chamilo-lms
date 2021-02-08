@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -79,7 +80,7 @@ if (is_array($_GET) && count($_GET) > 0) {
     }
 }
 
-$content = null;
+$content = '';
 
 // Block Menu Social
 $social_menu_block = SocialManager::show_social_menu('invitations');

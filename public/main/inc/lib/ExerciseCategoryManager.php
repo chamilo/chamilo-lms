@@ -179,7 +179,7 @@ class ExerciseCategoryManager extends Model
         $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
         $confirmMessage = addslashes(
-            api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
+            api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)
         );
 
         $courseParams = api_get_cidreq();

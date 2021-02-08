@@ -8,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -18,7 +19,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Table(name="usergroup")
  * @ORM\Entity
  */
-class Usergroup
+class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceToRootInterface
 {
     use TimestampableEntity;
 
@@ -32,18 +33,16 @@ class Usergroup
     protected $id;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var int
@@ -57,14 +56,12 @@ class Usergroup
      *
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
-    protected $picture;
+    protected ?string $picture;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
-    protected $url;
+    protected ?string $url;
 
     /**
      * @var string
@@ -88,28 +85,23 @@ class Usergroup
     protected $allowMembersToLeaveGroup;
 
     /**
+     * @var UsergroupRelUser[]
      * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
      */
     protected $users;
 
-    /**
-     * Usergroup constructor.
-     */
     public function __construct()
     {
-        //$this->users = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     /**
-     * @return ArrayCollection
+     * @return UsergroupRelUser[]
      */
     public function getUsers()
     {
@@ -158,12 +150,8 @@ class Usergroup
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Usergroup
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -184,10 +172,8 @@ class Usergroup
      * Set description.
      *
      * @param string $description
-     *
-     * @return Usergroup
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -222,5 +208,80 @@ class Usergroup
         $this->groupType = $groupType;
 
         return $this;
+    }
+
+    public function getVisibility(): string
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(string $visibility): Usergroup
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): Usergroup
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getAuthorId(): string
+    {
+        return $this->authorId;
+    }
+
+    public function setAuthorId(string $authorId): Usergroup
+    {
+        $this->authorId = $authorId;
+
+        return $this;
+    }
+
+    public function getAllowMembersToLeaveGroup(): int
+    {
+        return $this->allowMembersToLeaveGroup;
+    }
+
+    public function setAllowMembersToLeaveGroup(int $allowMembersToLeaveGroup): self
+    {
+        $this->allowMembersToLeaveGroup = $allowMembersToLeaveGroup;
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function getDefaultIllustration($size): string
+    {
+        $size = empty($size) ? 32 : (int) $size;
+
+        return "/img/icons/$size/group_na.png";
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

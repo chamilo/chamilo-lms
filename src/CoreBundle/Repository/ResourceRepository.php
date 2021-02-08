@@ -356,7 +356,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $resourceFile;
     }
 
-    public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
+    public function addResourceNode(ResourceInterface $resource, User $creator, ResourceInterface $parent = null): ResourceNode
     {
         if (null !== $parent) {
             $parent = $parent->getResourceNode();

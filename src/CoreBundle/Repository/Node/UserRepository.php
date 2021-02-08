@@ -585,7 +585,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                             U.active = 1 AND
                             U.status != 6 AND
                             UF.relationType NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.") AND
-                            UF.userId = $currentUserId AND
+                            UF.user = $currentUserId AND
                             UF.friendUserId != $currentUserId AND
                             U = R.user AND
                             R.url = $accessUrlId";

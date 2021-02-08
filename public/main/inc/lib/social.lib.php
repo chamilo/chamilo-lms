@@ -273,9 +273,7 @@ class SocialManager extends UserManager
 
         //Just in case we replace the and \n and \n\r while saving in the DB
         $message_content = str_replace(["\n", "\n\r"], '<br />', $message_content);
-
         $clean_message_content = Database::escape_string($message_content);
-        $now = api_get_utc_datetime();
         $sql = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
                 WHERE
                     user_sender_id='.$user_id.' AND
@@ -284,31 +282,32 @@ class SocialManager extends UserManager
                 ';
         $res_exist = Database::query($sql);
         $row_exist = Database::fetch_array($res_exist, 'ASSOC');
-
-        if (0 == $row_exist['count']) {
-            $params = [
-                'user_sender_id' => $user_id,
-                'user_receiver_id' => $friend_id,
-                'msg_status' => MESSAGE_STATUS_INVITATION_PENDING,
-                'send_date' => $now,
-                'title' => $message_title,
-                'content' => $message_content,
-                'group_id' => 0,
-                'parent_id' => 0,
-                'update_date' => $now,
-            ];
-            $messageId = Database::insert($tbl_message, $params);
-
-            $senderInfo = api_get_user_info($user_id);
-            $notification = new Notification();
-            $notification->saveNotification(
-                $messageId,
-                Notification::NOTIFICATION_TYPE_INVITATION,
-                [$friend_id],
-                $message_title,
-                $message_content,
-                $senderInfo
-            );
+        if (0 === (int) $row_exist['count']) {
+            $em = Database::getManager();
+            $message = new Message();
+            $message
+                ->setUserSender(api_get_user_entity($user_id))
+                ->setUserReceiver(api_get_user_entity($friend_id))
+                ->setMsgStatus(MESSAGE_STATUS_INVITATION_PENDING)
+                ->setTitle($message_title)
+                ->setContent($message_content)
+                ->setGroupId(0)
+            ;
+            $em->persist($message);
+            $em->flush();
+            $messageId = $message->getId();
+            if ($messageId) {
+                $senderInfo = api_get_user_info($user_id);
+                $notification = new Notification();
+                $notification->saveNotification(
+                    $messageId,
+                    Notification::NOTIFICATION_TYPE_INVITATION,
+                    [$friend_id],
+                    $message_title,
+                    $message_content,
+                    $senderInfo
+                );
+            }
 
             return true;
         } else {
@@ -330,10 +329,10 @@ class SocialManager extends UserManager
                 Database::query($sql);
 
                 return true;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     /**
@@ -668,7 +667,7 @@ class SocialManager extends UserManager
         $success = get_lang('The message has been sent to');
         $success .= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
 
-        if (isset($subject) && isset($content) && isset($userId)) {
+        if (!empty($subject) && !empty($content) && !empty($userId)) {
             $result = MessageManager::send_message($userId, $subject, $content);
 
             if ($result) {
@@ -677,37 +676,39 @@ class SocialManager extends UserManager
                 );
             } else {
                 Display::addFlash(
-                    Display::return_message(get_lang('There was an error while trying to send the message.'), 'error', false)
+                    Display::return_message(
+                        get_lang('There was an error while trying to send the message.'),
+                        'error',
+                        false
+                    )
                 );
             }
 
             return false;
-        } elseif (isset($userId) && !isset($subject)) {
-            if (isset($userId) && $userId > 0) {
-                $count = self::send_invitation_friend(
-                    api_get_user_id(),
-                    $userId,
-                    get_lang('Invitation'),
-                    $content
-                );
+        } elseif (!empty($userId) && empty($subject)) {
+            $count = self::send_invitation_friend(
+                api_get_user_id(),
+                $userId,
+                get_lang('Invitation'),
+                $content
+            );
 
-                if ($count) {
-                    Display::addFlash(
-                        Display::return_message(
-                            api_htmlentities(get_lang('The invitation has been sent')),
-                            'normal',
-                            false
-                        )
-                    );
-                } else {
-                    Display::addFlash(
-                        Display::return_message(
-                            api_htmlentities(get_lang('You already sent an invitation')),
-                            'warning',
-                            false
-                        )
-                    );
-                }
+            if ($count) {
+                Display::addFlash(
+                    Display::return_message(
+                        api_htmlentities(get_lang('The invitation has been sent')),
+                        'normal',
+                        false
+                    )
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        api_htmlentities(get_lang('You already sent an invitation')),
+                        'warning',
+                        false
+                    )
+                );
             }
         }
     }

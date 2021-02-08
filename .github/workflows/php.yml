@@ -175,6 +175,11 @@ jobs:
                   php bin/console cache:clear
                   sudo chmod -R 777 var public
 
+            - name: Behat tests
+              run: |
+                  cd ${{ github.workspace }}tests/behat
+                  ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
+
             - name: Composer analyse
               run: composer analyse
 

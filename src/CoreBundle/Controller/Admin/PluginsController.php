@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PluginsController extends BaseController
 {
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @Route("/plugins")
      *
@@ -34,7 +34,7 @@ class PluginsController extends BaseController
     }
 
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @Route("/plugins/add")
      *

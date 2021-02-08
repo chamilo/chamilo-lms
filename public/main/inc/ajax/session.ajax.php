@@ -158,9 +158,7 @@ switch ($action) {
                 }
             }
         }
-
         $sessionInfo['extra_fields'] = $values;
-
         if (!empty($sessionInfo)) {
             echo json_encode($sessionInfo);
         }

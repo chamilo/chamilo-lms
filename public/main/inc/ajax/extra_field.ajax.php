@@ -66,6 +66,7 @@ switch ($action) {
         echo json_encode(['items' => $result]);
         break;
     case 'search_options_from_tags':
+        exit;
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
         $fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
         $tag = isset($_REQUEST['tag']) ? $_REQUEST['tag'] : null;

@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Traits;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -42,6 +43,8 @@ trait ControllerTrait
         $services['glide'] = Glide::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+
+        $services[] = MessageAttachmentRepository::class;
         $services[] = ResourceFactory::class;
         $services[] = ResourceNodeRepository::class;
 

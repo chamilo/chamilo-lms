@@ -5,37 +5,44 @@ on: [push, pull_request]
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-18.04
 
         strategy:
             fail-fast: false
             matrix:
                 operating-system: [ubuntu-latest]
-                php-versions: ['7.4', '8.0']
+                php-versions: ['7.4']
 
-        services:
-            mysql:
-                image: mysql:5.7
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: false
-                    MYSQL_ROOT_PASSWORD: chamilo
-                    MYSQL_DATABASE: chamilo
-                ports:
-                    - 3306/tcp
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+#        services:
+#            mysql:
+#                image: mysql:5.7
+#                env:
+#                    MYSQL_ALLOW_EMPTY_PASSWORD: false
+#                    MYSQL_ROOT_PASSWORD: chamilo
+#                    MYSQL_DATABASE: chamilo
+#                ports:
+#                    - 3306/tcp
+#                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         steps:
             - name: Checkout
               uses: actions/checkout@v2
+
+            - name: Setup apache
+              run: |
+                sudo apt install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
+                sudo a2enmod rewrite actions
+                sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
+                sudo chmod 777 -R $HOME
+                cat /etc/apache2/sites-available/000-default.conf
+                sudo service apache2 restart
+                sudo systemctl restart apache2
 
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  tools: behat, symfony
-                  extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
-
-            - name: Start mysql service
-              run: sudo /etc/init.d/mysql start
+                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
+                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
 
             - name: Get composer cache directory
               id: composer-cache
@@ -51,7 +58,7 @@ jobs:
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
-              run: composer install --prefer-dist --no-progress --no-suggest
+              run: composer install --prefer-dist --no-progress
 
             - name: Install assets
               run: php bin/console assets:install
@@ -82,20 +89,105 @@ jobs:
               with:
                   cmd: run encore dev
 
+            - name: Start chrome
+              run: |
+                sudo apt install google-chrome-stable
+                google-chrome --version
+                google-chrome-stable --version
+                google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+                whereis google-chrome-stable
+
+            # https://github.com/marketplace/actions/setup-chromedriver
+            - name: Start chromedriver
+              uses: nanasess/setup-chromedriver@master
+              with:
+                  # Optional: do not specify to match Chrome's version
+                  chromedriver-version: '88.0.4324.96'
+
+            - run: |
+                export DISPLAY=:99
+                chromedriver --url-base=/wd/hub &
+                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+
+#                wget https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
+#                sudo mv chromedriver /usr/bin
+#                sudo chmod +x /usr/bin/chromedriver
+#                chromedriver --version
+
+#            - run: |
+#                export DISPLAY=:99
+#                chromedriver --url-base=/wd/hub &
+#                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+#                chromedriver --version
+
+            - name: Set up JDK 1.8
+              uses: actions/setup-java@v1
+              with:
+                  java-version: 1.8
+
+            - name: Get Selenium
+              run: |
+                wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar --quiet
+
+            - name: Run Selenium
+              run: |
+                java -version
+                export DISPLAY=:99.0
+                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+                java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-standalone-3.141.59.jar  -log selenium.log > /dev/null &
+
+            - name: Start mysql service
+              run: |
+                sudo /etc/init.d/mysql start
+                sudo systemctl restart apache2
+#
             - name: Install database
               run: |
-                  symfony console doctrine:database:create || echo "Error while creating the DB"
+                  bin/console doctrine:database:create || echo "Error while creating the DB"
               env:
-                DATABASE_URL: mysql://root:chamilo@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
-                DATABASE_HOST: 127.0.0.1
-                DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
-                DATABASE_NAME: chamilo
-                DATABASE_USER: root
-                DATABASE_PASSWORD: chamilo
-                APP_INSTALLED: 1
+                  DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
+                  DATABASE_HOST: 127.0.0.1
+                  DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
+                  DATABASE_NAME: chamilo
+                  DATABASE_USER: root
+                  DATABASE_PASSWORD: root
+                  APP_INSTALLED: 1
+
+            - name: Check settings
+              run: |
+                  php vendor/bin/requirements-checker
+                  php -ini
+                  php -v
+                  php -m
+
+            - name: Check chamilo
+              run: |
+                 sudo chmod 777 -R ${{ github.workspace }}
+                 curl http://localhost/main/install/index.php
+
+            - name: Install chamilo
+              run: |
+                  cd tests/behat
+                  ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
+                  cd ..
+                  cd ..
+                  sudo chmod -R 777 var public
+                  php bin/console cache:clear
+                  sudo chmod -R 777 var public
+
+            - name: Behat tests
+              run: |
+                  cd ${{ github.workspace }}/tests/behat
+                  ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
 
             - name: Composer analyse
               run: composer analyse
+
+            - name: The job has failed
+              if: ${{ failure() }}
+              run: |
+                  cat selenium.log
 
         # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
         # Docs: https://getcomposer.org/doc/articles/scripts.md

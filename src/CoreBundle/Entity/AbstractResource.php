@@ -230,7 +230,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function setParent(AbstractResource $parent)
+    public function setParent(ResourceInterface $parent)
     {
         $this->parentResource = $parent;
 

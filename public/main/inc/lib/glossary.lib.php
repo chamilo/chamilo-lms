@@ -219,13 +219,13 @@ class GlossaryManager
                 Database::query($sql);
 
                 //insert into item_property
-                api_item_property_update(
+                /*api_item_property_update(
                     api_get_course_info(),
                     TOOL_GLOSSARY,
                     $id,
                     'GlossaryAdded',
                     api_get_user_id()
-                );
+                );*/
             }
             */
             // display the feedback message
@@ -289,13 +289,13 @@ class GlossaryManager
             }
 
             //update glossary into item_property
-            api_item_property_update(
+            /*api_item_property_update(
                 api_get_course_info(),
                 TOOL_GLOSSARY,
                 intval($values['glossary_id']),
                 'GlossaryUpdated',
                 api_get_user_id()
-            );
+            );*/
 
             */
             if ($showMessage) {
@@ -371,7 +371,7 @@ class GlossaryManager
      *
      * @return bool True if term exists
      */
-    public static function glossary_exists($term, $not_id = '')
+    public static function glossary_exists($term, $not_id = 0)
     {
         $repo = Container::getGlossaryRepository();
 
@@ -500,7 +500,7 @@ class GlossaryManager
         }
 
         /*
-        // update item_property (delete)
+         // update item_property (delete)
         api_item_property_update(
             api_get_course_info(),
             TOOL_GLOSSARY,
@@ -1106,6 +1106,7 @@ class GlossaryManager
             'ASC'
         );
         usort($data, 'self::sorter');
+        //usort($data, 'sorter');
         $list = [];
         $list[] = ['term', 'definition'];
         $allowStrip = api_get_configuration_value('allow_remove_tags_in_glossary_export');

@@ -1,7 +1,7 @@
 @administration
 Feature: Install portal
 
-  Scenario: See the company reports link on the admin page
+  Scenario: Installation process
     Given I am on "/main/install/index.php"
     Then I should see "Step1 – Installation Language"
     Then I press "Next"
@@ -13,12 +13,12 @@ Feature: Install portal
     Then I should see "Step4 – Database settings"
     Then I fill in the following:
       | dbUsernameForm | root |
-#      | dbPassForm | |
+      | dbPassForm | root |
       | dbNameForm | master |
     Then I press "step3"
-    Then I should see "Database host: localhost"
+    Then I should see "Database driver: pdo_mysql"
     Then I press "step4"
-    Then I should see "Step5 – ConfigurationSettings"
+    Then I should see "Step5"
     Then I fill in the following:
       | passForm | admin |
     Then I press "step5"

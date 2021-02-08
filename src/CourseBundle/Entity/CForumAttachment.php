@@ -45,11 +45,9 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     protected $path;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
      * @var int

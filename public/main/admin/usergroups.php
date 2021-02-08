@@ -125,7 +125,8 @@ switch ($action) {
             api_get_self().'?action='.$action.'&id='.$userGroupId
         );
 
-        $usergroup->setForm($form, 'edit', $defaults);
+        $repo = \Chamilo\CoreBundle\Framework\Container::getUsergroupRepository();
+        $usergroup->setForm($form, 'edit', $repo->find($userGroupId));
 
         // Setting the form elements
         $form->addElement('hidden', 'id', $userGroupId);

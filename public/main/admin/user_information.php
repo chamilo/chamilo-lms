@@ -13,41 +13,30 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
-require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-
 $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
 
 if (empty($userId)) {
     api_not_allowed(true);
 }
-$user = api_get_user_info($userId, true);
+$user = api_get_user_entity($userId);
+//$user = api_get_user_info($userId, true);
 
-if (empty($user)) {
+if (null === $user) {
     api_not_allowed(true);
 }
-$tpl = new Template(null, false, false, false, false, false, false);
-/** @var User $userEntity */
-$userEntity = api_get_user_entity($user['user_id']);
-$myUserId = api_get_user_id();
 
+$myUserId = api_get_user_id();
 if (!api_is_student_boss()) {
     api_protect_admin_script();
 } else {
-    $isBoss = UserManager::userIsBossOfStudent($myUserId, $user['user_id']);
+    $isBoss = UserManager::userIsBossOfStudent($myUserId, $userId);
     if (!$isBoss) {
         api_not_allowed(true);
     }
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ["url" => 'user_list.php', 'name' => get_lang('User list')];
-
-$userId = $user['user_id'];
-
 $currentUrl = api_get_self().'?user_id='.$userId;
-
-$tool_name = UserManager::formatUserFullName($userEntity);
+$tool_name = $completeName = UserManager::formatUserFullName($user);
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $csvContent = [];
@@ -128,7 +117,7 @@ if (api_is_platform_admin()) {
         );
     }
 }
-$userInfo = null;
+
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if (!empty($studentBossList)) {
@@ -146,35 +135,25 @@ if (!empty($studentBossList)) {
     $studentBossListToString = $table->toHtml();
 }
 
-$registrationDate = $user['registration_date'];
-
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Information'));
-
 $csvContent[] = [get_lang('Information')];
 $data = [
-    get_lang('Name') => $user['complete_name'],
-    get_lang('e-mail') => $user['email'],
-    get_lang('Phone') => $user['phone'],
-    get_lang('Course code') => $user['official_code'],
-    get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
-    get_lang('Status') => 1 == $user['status'] ? get_lang('Trainer') : get_lang('Learner'),
+    get_lang('Name') => $completeName,
+    get_lang('e-mail') => $user->getEmail(),
+    get_lang('Phone') => $user->getPhone(),
+    get_lang('Course code') => $user->getOfficialCode(),
+    //get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
+    get_lang('Status') => 1 == $user->getStatus() ? get_lang('Trainer') : get_lang('Learner'),
 ];
 
-$userInfo = [
-    'complete_name' => $user['complete_name'],
-    'email' => $user['email'],
-    'phone' => $user['phone'],
-    'official_code' => $user['official_code'],
-    'user_is_online' => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
-    'status' => 1 == $user['status'] ? get_lang('Trainer') : get_lang('Learner'),
-    'avatar' => $user['avatar'],
-];
+$params = [];
 
 // Show info about who created this user and when
-$creatorId = $user['creator_id'];
+$creatorId = $user->getCreatorId();
 $creatorInfo = api_get_user_info($creatorId);
 if (!empty($creatorId) && !empty($creatorInfo)) {
+    $registrationDate = $user->getRegistrationDate()->format('Y-m-d H:i:s');
     $userInfo['created'] = sprintf(
         get_lang('Create by <a href="%s">%s</a> on %s'),
         'user_information.php?user_id='.$creatorId,
@@ -196,11 +175,11 @@ foreach ($data as $label => $item) {
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Reporting'));
 $csvContent[] = [get_lang('Reporting')];
-$userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
-$userInfo['last_connection'] = Tracking::get_last_connection_date($userId, true);
+$params['first_connection'] = Tracking::get_first_connection_date($userId);
+$params['last_connection'] = Tracking::get_last_connection_date($userId, true);
 $data = [
-    get_lang('First connection') => $userInfo['first_connection'],
-    get_lang('Latest login') => $userInfo['last_connection'],
+    get_lang('First connection') => $params['first_connection'],
+    get_lang('Latest login') => $params['last_connection'],
 ];
 
 if ('true' === api_get_setting('allow_terms_conditions')) {
@@ -229,8 +208,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     }
 
     $data[get_lang('Legal accepted')] = $icon;
-
-    $userInfo['legal'] = [
+    $params['legal'] = [
         'icon' => $icon,
         'datetime' => $timeLegalAccept,
         'url_send' => $btn,
@@ -272,7 +250,7 @@ if ('true' === api_get_setting('allow_social_tool')) {
     $countReceived = SocialManager::get_message_number_invitation_by_user_id($userId);
     $data[] = [get_lang('Invitation received'), $countReceived];
 
-    $userInfo['social'] = [
+    $params['social'] = [
         'friends' => $friends,
         'invitation_sent' => $countSent,
         'invitation_received' => $countReceived,
@@ -342,7 +320,8 @@ if (count($sessions) > 0) {
                 Display::return_icon('course_home.png', get_lang('Course home')).'</a>';
 
             if (!empty($my_course['status']) && STUDENT == $my_course['status']) {
-                $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
+                $tools .= '<a
+                    href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
 
@@ -530,7 +509,6 @@ if (api_is_multiple_url_enabled()) {
         $header = [];
         $header[] = ['URL', true];
         $data = [];
-
         $csvContent[] = [];
         $csvContent[] = ['Url'];
         foreach ($urlList as $url) {
@@ -641,18 +619,16 @@ $em = Database::getManager();
 $userRepository = UserManager::getRepository();
 
 $hrmList = $userRepository->getAssignedHrmUserList(
-    $userEntity->getId(),
+    $user->getId(),
     api_get_current_access_url_id()
 );
 
 if ($hrmList) {
     echo Display::page_subheader(get_lang('Human Resource Managers list'));
     echo '<div class="row">';
-
     /** @var UserRelUser $hrm */
     foreach ($hrmList as $hrm) {
         $hrmInfo = api_get_user_info($hrm->getFriendUserId());
-
         $userPicture = isset($hrmInfo['avatar_medium']) ? $hrmInfo['avatar_medium'] : $hrmInfo['avatar'];
         echo '<div class="col-sm-4 col-md-3">';
         echo '<div class="media">';
@@ -669,16 +645,14 @@ if ($hrmList) {
     echo '</div>';
 }
 
-if (DRH == $user['status']) {
+if (DRH == $user->getStatus()) {
     $usersAssigned = UserManager::get_users_followed_by_drh($userId);
-
     if ($usersAssigned) {
         echo Display::page_subheader(get_lang('List of users assigned to Human Resources manager'));
         echo '<div class="row">';
         foreach ($usersAssigned as $userAssigned) {
             $userAssigned = api_get_user_info($userAssigned['user_id']);
             $userPicture = isset($userAssigned['avatar_medium']) ? $userAssigned['avatar_medium'] : $userAssigned['avatar'];
-
             echo '<div class="col-sm-4 col-md-3">';
             echo '<div class="media">';
             echo '<div class="media-left">';
@@ -694,10 +668,16 @@ if (DRH == $user['status']) {
         echo '</div>';
     }
 }
-$socialTool = api_get_setting('allow_social_tool');
-$tpl->assign('social_tool', $socialTool);
 
-$tpl->assign('user', $userInfo);
+$socialTool = api_get_setting('allow_social_tool');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$tpl = new Template(null, false, false, false, false, false, false);
+
+$tpl->assign('social_tool', $socialTool);
+$tpl->assign('user', $user);
+$tpl->assign('params', $params);
+
 $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;

@@ -89,22 +89,27 @@ class ToolChain
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $name = $tool->getName();
-            $toolExists = $repo->findOneBy(['name' => $name]);
-            if ($toolExists) {
-                continue;
+            $toolFromDatabase = $repo->findOneBy(['name' => $name]);
+            $toolEntity = new Tool();
+
+            if (null !== $toolFromDatabase) {
+                $toolEntity = $toolFromDatabase;
+            } else {
+                $toolEntity->setName($name);
+                if ($tool->isCourseTool()) {
+                    $this->setToolPermissions($toolEntity);
+                }
+                $manager->persist($toolEntity);
             }
 
-            $toolEntity = new Tool();
-            $toolEntity->setName($name);
-            if ($tool->isCourseTool()) {
-                $this->setToolPermissions($toolEntity);
-            }
-            $manager->persist($toolEntity);
             $types = $tool->getResourceTypes();
             if (!empty($types)) {
                 foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
+                    if ($toolEntity->hasResourceType($resourceType)) {
+                        continue;
+                    }
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }

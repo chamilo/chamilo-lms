@@ -6,17 +6,11 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Repository\AssetRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Vich\UploaderBundle\Event\Event;
 
 class AssetListener
 {
     protected $assetRepository;
-
-    /**
-     * @var Request
-     */
-    protected $request;
 
     public function __construct(AssetRepository $assetRepository)
     {

@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
-use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
+use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
@@ -87,7 +87,7 @@ class ResourceListener
         $request = $this->request;
 
         $url = null;
-        if ($resource instanceof ResourceWithUrlInterface) {
+        if ($resource instanceof ResourceWithAccessUrlInterface) {
             $url = $this->getAccessUrl($em);
             $resource->addUrl($url);
         }
@@ -103,7 +103,7 @@ class ResourceListener
             return true;
         }
 
-        // Add resource node
+        // Add resource node.
         $creator = $this->security->getUser();
 
         if (null === $creator) {
@@ -126,7 +126,7 @@ class ResourceListener
         $resourceType = $repo->findOneBy(['name' => $name]);
 
         if (null === $resourceType) {
-            throw new \InvalidArgumentException('ResourceType not found');
+            throw new \InvalidArgumentException("ResourceType: $name not found");
         }
 
         $resourceNode

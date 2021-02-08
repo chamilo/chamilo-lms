@@ -2551,7 +2551,7 @@ class CourseManager
             $sql = "UPDATE $table SET course_id = NULL WHERE course_id = $courseId";
             Database::query($sql);
 
-            $repo->deleteResource(
+            $repo->deleteSequenceResource(
                 $courseId,
                 SequenceResource::COURSE_TYPE
             );

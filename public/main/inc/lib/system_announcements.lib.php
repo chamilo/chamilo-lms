@@ -269,7 +269,7 @@ class SystemAnnouncementManager
         }
 
         // course path
-        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
+        /*$store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
 
         if (!file_exists($store_path)) {
             mkdir($store_path);
@@ -298,7 +298,7 @@ class SystemAnnouncementManager
 
         $result = $normal;
 
-        return $result ? $result : false;
+        return $result ? $result : false;*/
     }
 
     /**
@@ -1106,7 +1106,7 @@ class SystemAnnouncementManager
      */
     public static function deleteAnnouncementPicture($announcementId)
     {
-        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
+        /*$store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
 
         // image name
         $announcementPicture = $store_path.'/announcement_'.$announcementId.'.png';
@@ -1117,7 +1117,7 @@ class SystemAnnouncementManager
         }
         if (file_exists($announcementPictureSmall)) {
             unlink($announcementPictureSmall);
-        }
+        }*/
     }
 
     /**
@@ -1129,7 +1129,7 @@ class SystemAnnouncementManager
      */
     private static function getPictureAnnouncement($announcementId)
     {
-        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
+        /*$store_path = api_get_path(SYS_UPLOAD_PATH).'announcements';
         $announcementPicture = $store_path.'/announcement_'.$announcementId.'.png';
         if (file_exists($announcementPicture)) {
             $web_path = api_get_path(WEB_UPLOAD_PATH).'announcements';
@@ -1138,6 +1138,6 @@ class SystemAnnouncementManager
             return $urlPicture;
         }
 
-        return null;
+        return null;*/
     }
 }

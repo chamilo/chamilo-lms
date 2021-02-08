@@ -366,7 +366,7 @@ class CourseController extends BaseController
      * @Route("/", name="chamilo_lti_configure")
      * @Route("/add/{id}", name="chamilo_lti_configure_global", requirements={"id"="\d+"})
      *
-     * @Security("has_role('ROLE_TEACHER')")
+     * @Security("is_granted('ROLE_TEACHER')")
      *
      * @param string $id
      */
@@ -470,7 +470,7 @@ class CourseController extends BaseController
     /**
      * @Route("/grade/{catId}", name="chamilo_lti_grade", requirements={"catId"="\d+"})
      *
-     * @Security("has_role('ROLE_TEACHER')")
+     * @Security("is_granted('ROLE_TEACHER')")
      *
      * @param string $catId
      *

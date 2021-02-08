@@ -56,7 +56,7 @@ class AccountController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $illustration = $form['illustration']->getData();
             if ($illustration) {
-                $illustrationRepo->addIllustrationToUser($this->getUser(), $illustration);
+                $illustrationRepo->addIllustration($user, $user, $illustration);
             }
             $userRepository->updateUser($user);
             $this->addFlash('success', $this->trans('Updated'));

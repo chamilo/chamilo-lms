@@ -9,6 +9,11 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20200505064121 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'reset_password_request';
+    }
+
     public function up(Schema $schema): void
     {
         if (false === $schema->hasTable('reset_password_request')) {

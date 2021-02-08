@@ -250,7 +250,14 @@ if ($is_allowedToEdit && !empty($action)) {
                 $zip->finish();
                 exit;
             } else {
-                Display::addFlash(Display::return_message(get_lang('There was an error writing the XML file. Please ask the administrator to check the error logs.'), 'error'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang(
+                            'There was an error writing the XML file. Please ask the administrator to check the error logs.'
+                        ),
+                        'error'
+                    )
+                );
                 header('Location: '.$currentUrl);
                 exit;
             }
@@ -432,7 +439,6 @@ if (false === api_get_configuration_value('allow_exercise_categories')) {
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
                 $counter++;
-
                 if ($total === $counter) {
                     $down = Display::url(Display::return_icon('down_na.png'), '#');
                 }

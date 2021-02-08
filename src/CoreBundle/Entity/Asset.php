@@ -25,6 +25,7 @@ class Asset
     public const SCORM = 'scorm';
     public const WATERMARK = 'watermark';
     public const CSS = 'css';
+    public const EXTRA_FIELD = 'ef';
 
     /**
      * @ORM\Id
@@ -34,16 +35,14 @@ class Asset
     protected $id;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $title;
+    protected ?string $title;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @Assert\Choice({
      *     Asset::SCORM,
@@ -55,7 +54,7 @@ class Asset
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $category;
+    protected ?string $category;
 
     /**
      * @var File
@@ -78,19 +77,15 @@ class Asset
     protected bool $compressed;
 
     /**
-     * @var string
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $mimeType;
+    protected ?string $mimeType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $originalName;
+    protected ?string $originalName;
 
     /**
      * @var string
@@ -101,32 +96,24 @@ class Asset
     protected $dimensions;
 
     /**
-     * @var int
-     *
      * @ORM\Column(type="integer")
      */
-    protected $size;
+    protected ?int $size;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
-    protected $crop;
+    protected ?string $crop;
 
     /**
-     * @var array
-     *
      * @ORM\Column(type="array", nullable=true)
      */
-    protected $metadata;
+    protected ?array $metadata;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     public function __construct()
     {
@@ -188,8 +175,6 @@ class Asset
 
     /**
      * @param string $crop
-     *
-     * @return $this
      */
     public function setCrop($crop): self
     {
@@ -200,7 +185,7 @@ class Asset
 
     public function getSize(): int
     {
-        return (int) $this->size;
+        return $this->size;
     }
 
     /**

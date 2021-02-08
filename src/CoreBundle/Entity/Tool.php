@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Tool.
@@ -26,6 +27,7 @@ class Tool
     protected $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      */
     protected string $name;
@@ -35,12 +37,14 @@ class Tool
      */
     protected $resourceTypes;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __construct()
     {
-        return (string) $this->getName();
+        $this->resourceTypes = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     /**
@@ -96,12 +100,8 @@ class Tool
 
     /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return Tool
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -110,10 +110,8 @@ class Tool
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -126,10 +124,21 @@ class Tool
         return $this->resourceTypes;
     }
 
-    /**
-     * @return Tool
-     */
-    public function setResourceTypes($resourceTypes)
+    public function hasResourceType(ResourceType $resourceType): bool
+    {
+        if ($this->resourceTypes->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq('name', $resourceType->getName())
+            );
+            $relation = $this->resourceTypes->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
+    }
+
+    public function setResourceTypes($resourceTypes): self
     {
         $this->resourceTypes = $resourceTypes;
 

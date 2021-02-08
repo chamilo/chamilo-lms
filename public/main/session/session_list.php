@@ -66,10 +66,11 @@ $sessionFilter = new FormValidator(
 );
 $courseSelect = $sessionFilter->addSelectAjax(
     'course_name',
-    get_lang('Search courses'),
+    null,
     null,
     [
         'id' => 'course_name',
+        'placeholder' => get_lang('Search courses'),
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
     ]
 );

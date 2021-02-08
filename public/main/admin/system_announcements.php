@@ -241,7 +241,7 @@ if ($action_todo) {
 
     // Add Picture Announcements
     try {
-        $form->addFile(
+        /*$form->addFile(
             'picture',
             [
                 get_lang('Add Picture'),
@@ -270,7 +270,7 @@ if ($action_todo) {
 
             $form->addHtml($image);
             $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
-        }
+        }*/
     } catch (Exception $e) {
         error_log($e);
     }
@@ -356,6 +356,7 @@ if ($action_todo) {
                 );
 
                 if (false !== $announcement_id) {
+                    /*
                     // ADD Picture
                     $picture = $_FILES['picture'];
                     if (!empty($picture['name'])) {
@@ -364,7 +365,7 @@ if ($action_todo) {
                             $picture['tmp_name'],
                             $values['picture_crop_result']
                         );
-                    }
+                    }*/
 
                     if (isset($values['group'])) {
                         SystemAnnouncementManager::announcement_for_groups(

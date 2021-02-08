@@ -554,6 +554,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      * @param int    $currentUserId The current user ID
      * @param string $searchFilter  Optional. The search text to filter the user list
      * @param int    $limit         Optional. Sets the maximum number of results to retrieve
+     *
+     * @return User[]
      */
     public function findUsersToSendMessage($currentUserId, $searchFilter = null, $limit = 10)
     {
@@ -583,7 +585,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                             U.active = 1 AND
                             U.status != 6 AND
                             UF.relationType NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.") AND
-                            UF.userId = $currentUserId AND
+                            UF.user = $currentUserId AND
                             UF.friendUserId != $currentUserId AND
                             U = R.user AND
                             R.url = $accessUrlId";

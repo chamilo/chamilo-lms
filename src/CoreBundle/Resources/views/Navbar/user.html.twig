@@ -2,7 +2,7 @@
 {% import "ChamiloCoreBundle:Macros:image.html.twig" as macro_image %}
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-        <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(32)) }}"
+        <img class="img-circle" src="{{ user | illustration }}"
              alt="{{ user.completeName }}" />
         <span class="caret"></span>
     </a>
@@ -10,7 +10,7 @@
     <ul class="dropdown-menu" role="menu">
         <li class="user-header">
             <div class="text-center">
-            <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(64)) }}" alt="{{ user.completeName }}" />
+            <img class="img-circle" src="{{ user | illustration }}" alt="{{ user.completeName }}" />
             <p class="name">
                 <a href="{{ url('legacy_main', { 'name' : 'social/home.php' })}}">
                     {{ user.completeName }}

@@ -75,11 +75,9 @@ class ExtraField // extends BaseAttribute
     protected ?string $displayText;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="helper_text", type="text", nullable=true, unique=false)
      */
-    protected $helperText;
+    protected ?string $helperText;
 
     /**
      * @var string

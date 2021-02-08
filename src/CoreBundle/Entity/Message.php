@@ -18,7 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="idx_message_user_receiver_status", columns={"user_receiver_id", "msg_status"}),
  *     @ORM\Index(name="idx_message_receiver_status_send_date", columns={"user_receiver_id", "msg_status", "send_date"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
- *     @ORM\Index(name="idx_message_parent", columns={"parent_id"}),
  *     @ORM\Index(name="idx_message_status", columns={"msg_status"})
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
@@ -52,11 +51,9 @@ class Message
     protected int $msgStatus;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
-    protected $sendDate;
+    protected \DateTime $sendDate;
 
     /**
      * @Assert\NotBlank
@@ -79,11 +76,16 @@ class Message
     protected $groupId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="parent_id", type="integer", nullable=false)
+     * @var ArrayCollection|Message[]
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="parent")
      */
-    protected $parentId;
+    protected $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Message", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    protected ?Message $parent;
 
     /**
      * @var \DateTime
@@ -113,14 +115,15 @@ class Message
      */
     protected $likes;
 
-    /**
-     * Message constructor.
-     */
     public function __construct()
     {
+        $this->sendDate = new \DateTime('now');
+        $this->updateDate = $this->sendDate;
         $this->content = '';
         $this->attachments = new ArrayCollection();
+        $this->children = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->votes = 0;
     }
 
     /**
@@ -207,10 +210,8 @@ class Message
      * Set title.
      *
      * @param string $title
-     *
-     * @return Message
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -231,10 +232,8 @@ class Message
      * Set content.
      *
      * @param string $content
-     *
-     * @return Message
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -276,30 +275,6 @@ class Message
     }
 
     /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return Message
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
      * Set updateDate.
      *
      * @param \DateTime $updateDate
@@ -337,10 +312,8 @@ class Message
      * Set votes.
      *
      * @param int $votes
-     *
-     * @return Message
      */
-    public function setVotes($votes)
+    public function setVotes($votes): self
     {
         $this->votes = $votes;
 
@@ -360,21 +333,55 @@ class Message
     /**
      * Get attachments.
      *
-     * @return ArrayCollection
+     * @return MessageAttachment[]|ArrayCollection
      */
     public function getAttachments()
     {
         return $this->attachments;
     }
 
+    public function addAttachment(MessageAttachment $attachment): self
+    {
+        $this->attachments->add($attachment);
+        $attachment->setMessage($this);
+
+        return $this;
+    }
+
+    public function getParent(): self
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return ArrayCollection|Message[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function addChild(self $child): self
+    {
+        $this->children[] = $child;
+        $child->setParent($this);
+
+        return $this;
+    }
+
+    public function setParent(self $parent = null): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
     /**
      * Get an excerpt from the content.
      *
      * @param int $length Optional. Length of the excerpt.
-     *
-     * @return string
      */
-    public function getExcerpt($length = 50)
+    public function getExcerpt(int $length = 50): string
     {
         $striped = strip_tags($this->content);
         $replaced = str_replace(["\r\n", "\n"], ' ', $striped);

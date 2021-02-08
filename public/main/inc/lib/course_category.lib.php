@@ -942,11 +942,14 @@ class CourseCategory
     /**
      * Save image for a course category.
      *
+     * @deprecated
+     *
      * @param int   $categoryId Course category ID
      * @param array $fileData   File data from $_FILES
      */
     public static function saveImage($categoryId, $fileData)
     {
+        /*
         $categoryInfo = self::getCategoryById($categoryId);
         if (empty($categoryInfo)) {
             return;
@@ -973,7 +976,7 @@ class CourseCategory
             $table,
             ['image' => $dirName.$fileName],
             ['id = ?' => $categoryId]
-        );
+        );*/
     }
 
     /**

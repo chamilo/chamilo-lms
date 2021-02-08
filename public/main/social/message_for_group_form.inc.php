@@ -9,18 +9,14 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if ('true' != api_get_setting('allow_social_tool')) {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 
 $tok = Security::get_token();
 
 if (isset($_REQUEST['user_friend'])) {
-    $info_user_friend = [];
-    $info_path_friend = [];
     $userfriend_id = intval($_REQUEST['user_friend']);
-    $info_user_friend = api_get_user_info($userfriend_id);
-    $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id, 'web');
 }
 
 $group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;

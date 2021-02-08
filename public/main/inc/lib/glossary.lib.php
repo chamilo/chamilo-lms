@@ -275,7 +275,7 @@ class GlossaryManager
      *
      * @return bool True if term exists
      */
-    public static function glossary_exists($term, $not_id = '')
+    public static function glossary_exists($term, $not_id = 0)
     {
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);
@@ -368,13 +368,13 @@ class GlossaryManager
         }
 
         // update item_property (delete)
-        api_item_property_update(
+        /*api_item_property_update(
             api_get_course_info(),
             TOOL_GLOSSARY,
             $glossary_id,
             'delete',
             api_get_user_id()
-        );
+        );*/
 
         // reorder the remaining terms
         self::reorder_glossary();

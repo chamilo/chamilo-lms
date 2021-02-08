@@ -2399,7 +2399,6 @@ function finishInstallationWithContainer(
     // Add tickets defaults
     $ticketProject = new TicketProject();
     $ticketProject
-        ->setId(1)
         ->setName('Ticket System')
         ->setInsertUserId(1);
 
@@ -2419,7 +2418,6 @@ function finishInstallationWithContainer(
         // Online evaluation requires a course
         $ticketCategory = new TicketCategory();
         $ticketCategory
-            ->setId($i)
             ->setName($category)
             ->setDescription($description)
             ->setProject($ticketProject)
@@ -2443,7 +2441,6 @@ function finishInstallationWithContainer(
     foreach ($defaultPriorities as $code => $priority) {
         $ticketPriority = new TicketPriority();
         $ticketPriority
-            ->setId($i)
             ->setName($priority)
             ->setCode($code)
             ->setInsertUserId(1);

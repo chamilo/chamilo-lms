@@ -18,7 +18,7 @@ Feature: Install portal
     Then I press "step3"
     Then I should see "Database driver: pdo_mysql"
     Then I press "step4"
-    Then I should see "Step5 – ConfigurationSettings"
+    Then I should see "Step5"
     Then I fill in the following:
       | passForm | admin |
     Then I press "step5"

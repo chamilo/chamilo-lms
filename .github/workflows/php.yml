@@ -29,8 +29,6 @@ jobs:
 
             - name: Setup apache
               run: |
-                sudo apt update
-                sudo apt upgrade
                 sudo apt install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
                 sudo a2enmod rewrite actions
                 sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
@@ -106,7 +104,7 @@ jobs:
 #                  chromedriver-version: '88.0.4324.96'
 
               run: |
-                wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
+                wget https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
                 sudo mv chromedriver /usr/bin
                 sudo chmod +x /usr/bin/chromedriver
                 chromedriver --version

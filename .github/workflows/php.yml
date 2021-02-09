@@ -55,8 +55,8 @@ jobs:
                   path: ${{ steps.composer-cache-v1.outputs.dir }}
                   # Use composer.json for key, if composer.lock is not committed.
                   # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: ${{ runner.os }}-composer-
+                  key: v1-${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: v1-${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
               run: composer install --prefer-dist --no-progress
@@ -189,4 +189,3 @@ jobs:
               run: |
                   cd ${{ github.workspace }}/tests/behat
                   ../../vendor/behat/behat/bin/behat -vvv
-

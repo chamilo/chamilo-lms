@@ -82,10 +82,10 @@ $allowed_views = ['mygroups', 'newest', 'pop'];
 $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
-    if ('mygroups' == $_GET['view']) {
+    if ('mygroups' === $_GET['view']) {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('My groups')];
-    } elseif ('newest' == $_GET['view']) {
+    } elseif ('newest' === $_GET['view']) {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Newest')];
     } else {
@@ -107,14 +107,13 @@ $relation_group_title = '';
 $role = 0;
 
 $usergroup = new UserGroup();
-
 if (0 != $group_id) {
     $groupInfo = $usergroup->get($group_id);
     $groupInfo['name'] = Security::remove_XSS($groupInfo['name']);
     $groupInfo['description'] = Security::remove_XSS($groupInfo['description']);
     $interbreadcrumb[] = ['url' => '#', 'name' => $groupInfo['name']];
 
-    if (isset($_GET['action']) && 'leave' == $_GET['action']) {
+    if (isset($_GET['action']) && 'leave' === $_GET['action']) {
         $user_leaved = intval($_GET['u']);
         // I can "leave me myself"
         if (api_get_user_id() == $user_leaved) {
@@ -128,7 +127,7 @@ if (0 != $group_id) {
     }
 
     // add a user to a group if its open
-    if (isset($_GET['action']) && 'join' == $_GET['action']) {
+    if (isset($_GET['action']) && 'join' === $_GET['action']) {
         // we add a user only if is a open group
         $user_join = intval($_GET['u']);
         if (api_get_user_id() == $user_join && !empty($group_id)) {
@@ -182,14 +181,18 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
         )) {
             $social_right_content .= '<div class="group-tool">';
             $social_right_content .= '<div class="pull-right">';
-            $social_right_content .= '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+            $social_right_content .= '<a
+                class="btn btn-default btn-sm"
+                href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                 get_lang('Join group').'</a>';
             $social_right_content .= '</div>';
             $social_right_content .= '</div>';
         } elseif (GROUP_USER_PERMISSION_PENDING_INVITATION == $role) {
             $social_right_content .= '<div class="group-tool">';
             $social_right_content .= '<div class="pull-right">';
-            $social_right_content .= '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+            $social_right_content .= '<a
+                class="btn btn-default btn-sm"
+                href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                     Display::returnFontAwesomeIcon('envelope').' '.
                 get_lang('You have been invited to join now').'</a>';
         }
@@ -290,7 +293,10 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
                     ).'&nbsp;'.$icon,
                     $member['user_info']['profile_url']
                 );
-                $member_content .= Display::div('<img class="img-circle" src="'.$userPicture.'"/>', ['class' => 'avatar']);
+                $member_content .= Display::div(
+                    '<img class="img-circle" src="'.$userPicture.'"/>',
+                    ['class' => 'avatar']
+                );
                 $member_content .= Display::div($member_name, ['class' => 'name']);
                 $member_content .= '</div>';
                 $member_content .= '</div>';
@@ -317,9 +323,13 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
             GROUP_USER_PERMISSION_PENDING_INVITATION,
         ]
     )) {
-        $social_right_content .= '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('Join group').'</a>';
+        $social_right_content .= '<a
+            class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+            get_lang('Join group').'</a>';
     } elseif (GROUP_USER_PERMISSION_PENDING_INVITATION == $role) {
-        $social_right_content .= '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('You have been invited to join now').'</a>';
+        $social_right_content .= '<a
+            class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+            get_lang('You have been invited to join now').'</a>';
     }
 }
 

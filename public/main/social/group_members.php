@@ -50,7 +50,7 @@ $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Members list')];
 
 //if i'm a moderator
-if (isset($_GET['action']) && 'add' == $_GET['action']) {
+if (isset($_GET['action']) && 'add' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -60,7 +60,7 @@ if (isset($_GET['action']) && 'add' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'delete' == $_GET['action']) {
+if (isset($_GET['action']) && 'delete' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -70,7 +70,7 @@ if (isset($_GET['action']) && 'delete' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'set_moderator' == $_GET['action']) {
+if (isset($_GET['action']) && 'set_moderator' === $_GET['action']) {
     // we add a user only if is a open group
     $user_moderator = intval($_GET['u']);
     //if i'm the admin
@@ -84,7 +84,7 @@ if (isset($_GET['action']) && 'set_moderator' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'delete_moderator' == $_GET['action']) {
+if (isset($_GET['action']) && 'delete_moderator' === $_GET['action']) {
     // we add a user only if is a open group
     $user_moderator = intval($_GET['u']);
     //only group admins can do that

@@ -1466,10 +1466,20 @@ function create_unexisting_directory(
     $visibility = '',
     $generateNewNameIfExists = false,
     $sendNotification = true,
-    $parentInfo = []
+    $parentInfo = null
 ) {
     $course_id = $_course['real_id'];
     $session_id = (int) $session_id;
+
+    $parentId = 0;
+    if (!empty($parentInfo)) {
+        if (is_array($parentInfo) && isset($parentInfo['iid'])) {
+            $parentId = $parentInfo['iid'];
+        }
+        if ($parentInfo instanceof CDocument) {
+            $parentId = $parentInfo->getIid();
+        }
+    }
 
     $document = DocumentManager::addDocument(
         $_course,
@@ -1485,7 +1495,7 @@ function create_unexisting_directory(
         $user_id,
         $sendNotification,
         '',
-        null
+        $parentId
     );
 
     if ($document) {

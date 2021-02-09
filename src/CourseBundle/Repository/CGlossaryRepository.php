@@ -53,22 +53,6 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
 
-    /*
-        public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
-        {
-            /** @var CGlossary $newResource * /
-            $newResource = $form->getData();
-
-            $newResource
-                ->setCId($course->getId());
-
-            if ($session) {
-                $newResource->setSessionId($session->getId());
-            }
-
-            return $newResource;
-        }
-    */
     public function getResourceFormType(): string
     {
         return CGlossaryType::class;

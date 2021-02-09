@@ -146,5 +146,4 @@ class CGlossary extends AbstractResource implements ResourceInterface
     {
         return $this->getName();
     }
-
 }

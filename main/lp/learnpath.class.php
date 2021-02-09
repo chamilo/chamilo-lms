@@ -2343,7 +2343,6 @@ class learnpath
         $now = time();
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs, 'ASSOC');
-
             if (!empty($row['category_id'])) {
                 $category = self::getCategory($row['category_id']);
                 if (self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id)) === false) {
@@ -4415,11 +4414,6 @@ class learnpath
      *
      * @param int $id
      * @param int $visibility
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return bool
      */
@@ -12076,9 +12070,7 @@ EOD;
         $cb->set_tools_to_build(['learnpaths']);
 
         //Setting elements that will be copied
-        $cb->set_tools_specific_id_list(
-            ['learnpaths' => [$this->lp_id]]
-        );
+        $cb->set_tools_specific_id_list(['learnpaths' => [$this->lp_id]]);
 
         $course = $cb->build();
 
@@ -12460,21 +12452,21 @@ EOD;
             $cats = [get_lang('SelectACategory')];
         }
 
-        $checkSession = false;
+        /*$checkSession = false;
         $sessionId = api_get_session_id();
         if (api_get_configuration_value('allow_session_lp_category')) {
             $checkSession = true;
-        }
+        }*/
 
         if (!empty($items)) {
             foreach ($items as $cat) {
                 $categoryId = $cat->getId();
-                if ($checkSession) {
+                /*if ($checkSession) {
                     $inSession = self::getCategorySessionId($categoryId);
                     if ($inSession != $sessionId) {
                         continue;
                     }
-                }
+                }*/
                 $cats[$categoryId] = $cat->getName();
             }
         }
@@ -13259,10 +13251,10 @@ EOD;
                 return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
                     .http_build_query([
                         'lp_init' => 1,
-                        'learnpath_item_view_id' => $learnpathItemViewId,
-                        'learnpath_id' => $learningPathId,
-                        'learnpath_item_id' => $id_in_path,
-                        'exerciseId' => $id,
+                        'learnpath_item_view_id' => (int) $learnpathItemViewId,
+                        'learnpath_id' => (int) $learningPathId,
+                        'learnpath_item_id' => (int) $id_in_path,
+                        'exerciseId' => (int) $id,
                     ]);
             case TOOL_HOTPOTATOES: //lowercase because of strtolower above
                 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -13324,9 +13316,7 @@ EOD;
                     $file = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                     if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
                         if (Link::isPdfLink($file)) {
-                            $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
-
-                            return $pdfUrl;
+                            return api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html?zoom=page-width#'.$file;
                         }
                     }
 

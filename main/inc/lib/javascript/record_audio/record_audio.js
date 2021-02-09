@@ -185,8 +185,6 @@ window.RecordAudio = (function () {
             if (!recordRTC) {
                 return;
             }
-
-            console.log('stop');
             stopTimer();
             recordRTC.stopRecording(function (audioURL) {
                 btnStart.prop('disabled', false).removeClass('hidden');

@@ -1522,12 +1522,12 @@ class CourseBuilder
                     $obj->expired_on,
                     $obj->session_id,
                     $obj->category_id,
+                    $obj->subscribe_users,
+                    $obj->hide_toc_frame,
                     $items
                 );
-
                 $extraFieldValue = new \ExtraFieldValue('lp');
                 $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);
-
                 $this->course->add_resource($lp);
 
                 if (!empty($obj->preview_image)) {

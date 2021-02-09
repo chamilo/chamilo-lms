@@ -88,7 +88,7 @@ if (!$hideHeaderAndFooter) {
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && !$hideHeaderAndFooter) {
+if (!$hideHeaderAndFooter && api_is_course_admin()) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';

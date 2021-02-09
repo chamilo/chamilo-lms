@@ -461,7 +461,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 } else {
     // If student can unsubscribe
-    if (isset($_REQUEST['unregister']) && $_REQUEST['unregister'] == 'yes') {
+    if (isset($_REQUEST['unregister']) && $_REQUEST['unregister'] === 'yes') {
         if ($course_info['unsubscribe'] == 1) {
             $user_id = api_get_user_id();
             CourseManager::unsubscribe_user($user_id, $course_info['code']);

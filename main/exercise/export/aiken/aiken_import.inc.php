@@ -338,6 +338,10 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
                 continue;
             }
 
+            if (false !== strpos($data[$next], 'DESCRIPTION:')) {
+                continue;
+            }
+
             // Check if next has score, otherwise loop too next question.
             if (false === strpos($data[$next], 'SCORE:')) {
                 $answers_array = [];
@@ -351,11 +355,21 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             continue;
         } elseif (preg_match('/^DESCRIPTION:\s?(.*)/', $info, $matches)) {
             $exercise_info['question'][$question_index]['description'] = $matches[1];
+            $next = $line + 1;
+
+            if (false !== strpos($data[$next], 'ANSWER_EXPLANATION:')) {
+                continue;
+            }
+            // Check if next has score, otherwise loop too next question.
+            if (false === strpos($data[$next], 'SCORE:')) {
+                $answers_array = [];
+                $question_index++;
+                continue;
+            }
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             // Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['feedback'] = $matches[1];
-
             $next = $line + 1;
             // Check if next has score, otherwise loop too next question.
             if (false === strpos($data[$next], 'SCORE:')) {

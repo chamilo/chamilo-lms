@@ -90,6 +90,9 @@ class CourseCopyLearnpath extends Resource
      */
     public $preview_image;
 
+    public $subscribeUsers;
+    public $hideTableOfContents;
+
     /**
      * Create a new learnpath.
      *
@@ -141,6 +144,8 @@ class CourseCopyLearnpath extends Resource
         $expired_on,
         $session_id,
         $categoryId,
+        $subscribeUsers,
+        $hideTableOfContents,
         $items
     ) {
         parent::__construct($id, RESOURCE_LEARNPATH);
@@ -170,6 +175,8 @@ class CourseCopyLearnpath extends Resource
         $this->author = $author;
         $this->preview_image = $preview_image;
         $this->categoryId = $categoryId;
+        $this->subscribeUsers = $subscribeUsers;
+        $this->hideTableOfContents = $hideTableOfContents;
         $this->items = $items;
     }
 

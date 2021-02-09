@@ -2989,7 +2989,6 @@ class CourseManager
      */
     public static function get_special_course_list()
     {
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -3000,8 +2999,7 @@ class CourseManager
 
         // Get special course field
         $sql = "SELECT id FROM $tbl_course_field
-                WHERE extra_field_type = $extraFieldType AND
-                variable = 'special_course'";
+                WHERE extra_field_type = $extraFieldType AND variable = 'special_course'";
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
@@ -3010,28 +3008,27 @@ class CourseManager
             // Note: The value is better indexed as string, so
             // using '1' instead of integer is more efficient
             $sql = "SELECT DISTINCT(item_id) as cid
-                FROM $tbl_course_field_value
-                WHERE field_id = ".$row['id']." AND value = '1'";
+                    FROM $tbl_course_field_value
+                    WHERE field_id = ".$row['id']." AND value = '1'";
             $result = Database::query($sql);
             while ($row = Database::fetch_assoc($result)) {
                 $courseList[] = $row['cid'];
             }
-            if (count($courseList) < 1) {
-                return $courseList;
+            if (empty($courseList)) {
+                return [];
             }
             if (api_get_multiple_access_url()) {
                 //we filter the courses by the active URL
-                $coursesSelect = '';
-                if (count($courseList) == 1) {
+                if (count($courseList) === 1) {
                     $coursesSelect = $courseList[0];
                 } else {
                     $coursesSelect = implode(',', $courseList);
                 }
-                $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
+                $urlId = api_get_current_access_url_id();
+                if ($urlId != -1) {
+                    $courseList = [];
                     $sql = "SELECT c_id FROM $tbl_url_course
-                            WHERE access_url_id = $access_url_id
-                            AND c_id IN ($coursesSelect)";
+                            WHERE access_url_id = $urlId AND c_id IN ($coursesSelect)";
                     $result = Database::query($sql);
                     while ($row = Database::fetch_assoc($result)) {
                         $courseList[] = $row['c_id'];

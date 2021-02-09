@@ -6553,7 +6553,7 @@ class DocumentManager
             // checking
             $table = Database::get_course_table(TABLE_DOCUMENT);
             $courseId = $courseInfo['real_id'];
-            echo $sql = "SELECT * FROM $table WHERE id = $documentId AND c_id = $courseId";
+            $sql = "SELECT * FROM $table WHERE id = $documentId AND c_id = $courseId";
             $result = Database::query($sql);
             $exists = Database::num_rows($result) > 0;
             $fileDeletedFromDb = !$exists;
@@ -6647,6 +6647,12 @@ class DocumentManager
      */
     public static function getFileHostingWhiteList()
     {
+        $links = api_get_configuration_value('documents_custom_cloud_link_list');
+
+        if (!empty($links) && isset($links['links'])) {
+            return $links['links'];
+        }
+
         return [
             'asuswebstorage.com',
             'box.com',

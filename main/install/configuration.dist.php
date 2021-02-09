@@ -1824,6 +1824,15 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Add certificate footer. Add your template main/template/default/export/pdf_certificate_footer.tpl
 // $_configuration['add_certificate_pdf_footer'] = true;
 
+// Shows a popup with the list of answered/unanswered questions before sending a test.
+// $_configuration['quiz_check_all_answers_before_end_test'] = true;
+
+// Custom cloud link URLS, this requires enable_add_file_link = true
+// $_configuration['documents_custom_cloud_link_list'] = ['links' => ['example.com', 'example2.com']];
+
+// Shows exercise session attempts in the base course.
+// $_configuration['show_exercise_session_attempts_in_base_course'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -179,6 +179,12 @@ switch ($action) {
         $controller->details($httpRequest);
 
         return;
+    case 'export_pdf':
+        $controller->exportPdf();
+        break;
+    case 'export_zip':
+        $controller->exportZip();
+        break;
     case 'list':
     default:
         $controller->index($httpRequest);

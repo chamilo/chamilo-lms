@@ -102,21 +102,17 @@
             var svg1 = document.getElementsByTagName("svg")[0];
             var data = svg1.getBBox();
             var widthValue = data.width + 100;
-            var heightValue = data.height + 50;
+            var heightValue = data.height + 100;
 
             var att = document.createAttributeNS(null, "viewBox");
-            att.value = '0 0 ' + widthValue + ' '+heightValue;
+            att.value = '0 0 ' + widthValue + ' ' + heightValue;
             svg1.setAttributeNode(att);
-
-            //$('[data-toggle="popover"]').popover({container: 'body'});
-            //$('.popup').popover({trigger: 'hover'});
 
             $(".popup").qtip({
                 content: {
                     text: function(event, api) {
                         var item = $(this);
                         var itemId = $(this).attr("id");
-
                         var desc = $(this).attr("data-description");
                         var period = $(this).attr("data-period");
                         var teacherText = $(this).attr("data-teacher-text");
@@ -125,11 +121,16 @@
                         var value = $(this).attr("data-score-value");
                         var info = $(this).attr("data-info");
 
-                        var textToShow = desc
-                            + '<br />'+ period + '<br />'
-                            + teacherText +': '+ teacher + '<br />'
-                            + score +': '+ value + '<br />'
-                            + '<br />'+ info + '<br />'
+                        var teacherLabel = '';
+                        if (teacher != '') {
+                            teacherLabel = teacherText + ': ' + teacher + '<br />';
+                        }
+
+                        var textToShow = desc + '<br />' +
+                            period + '<br />' +
+                            teacherLabel +
+                            score + ': ' + value + '<br /><br />'+
+                            info + '<br />'
                         ;
 
                         return textToShow;
@@ -141,10 +142,6 @@
                         var bg = popup.attr("data-background-color");
                         var color = popup.attr("data-color");
                         var borderColor = popup.attr("data-border-color");
-
-                        console.log(bg);
-                        console.log(color);
-                        console.log(borderColor);
                         // Grab the tooltip element from the API
                         //var tooltip = api.elements.tooltip;
 
@@ -157,12 +154,11 @@
                     my: 'bottom left',  // Position my top left...
                     at: 'top right', // at the bottom right of...
                     adjust: {
-                        x: -55,
-                        y: -55
+                        x: 0,
+                        y: 0
                     }
                 }
             });
-
         });
     </script>
     {{ content }}

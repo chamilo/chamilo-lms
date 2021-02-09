@@ -1266,7 +1266,7 @@ class MySpace
             $htmlData .= '<tbody>';
             $totalStudents = 0;
             $lastTeacher = '';
-            /*** csv ***/
+            /* csv */
             $csv_row = [];
             $csv_row[] = get_lang('Author');
             $csv_row[] = get_lang('LearningPathList');
@@ -1274,7 +1274,7 @@ class MySpace
             $csv_row[] = get_lang('StudentList');
             $csvContent[] = $csv_row;
             $studentsName = '';
-            /*** csv ***/
+            /* csv */
             foreach ($teachers as $authorLId => $teacher) {
                 foreach ($teacher as $lpId => $teacherData) {
                     $lpSessionId = 0;
@@ -1288,12 +1288,12 @@ class MySpace
                     $courseStudent = $lpData['courseStudent'];
                     $sessionStudent = $lpData['sessionStudent'];
                     $htmlData .= "<td>$lpName</td><td>".count($courseStudent)." ( ".count($sessionStudent)." )</td><td>";
-                    /*** CSV ***/
+                    /* CSV */
                     $csv_row = [];
                     $csv_row[] = $printTeacherName;
                     $csv_row[] = $lpName;
                     $csv_row[] = count($courseStudent).' ( '.count($sessionStudent)." )";
-                    /*** CSV ***/
+                    /* CSV */
                     if (!empty($courseStudent) || !empty($sessionStudent)) {
                         $htmlData .= "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>";
                         $htmlData .= "<div class='icon_add'>$iconAdd</div>";
@@ -1302,7 +1302,6 @@ class MySpace
                         $htmlData .= "<div id='$hiddenField' class='hidden'>";
 
                         foreach ($courseStudent as $student) {
-
                             $reportLink = Display::url(
                                 Display::return_icon('statistics.png', get_lang('Stats')),
                                 api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
@@ -1331,11 +1330,11 @@ class MySpace
                     }
                     $htmlData .= '</td></tr>';
                     $index++;
-                    /*** CSV ***/
+                    /* CSV */
                     $csv_row[] = trim($studentsName, ' / ');
                     $studentsName = '';
                     $csvContent[] = $csv_row;
-                    /*** CSV ***/
+                    /* CSV */
                     $lastTeacher = $teacherData['complete_name'];
                 }
                 $htmlData .= '<tr>';
@@ -1458,7 +1457,7 @@ class MySpace
         $totalData = count($data);
         for ($i = 0; $i < $totalData; $i++) {
             $item = $data[$i];
-            $lpItemId = (int)$item['lp_item_id'];
+            $lpItemId = (int) $item['lp_item_id'];
             $whereInLpItem[] = $item['lp_item_id'];
             $whereInLp[] = $item['lp_id'];
             $author = isset($cLpItemsAutor[$lpItemId]) ? $cLpItemsAutor[$lpItemId] : null;
@@ -1490,7 +1489,6 @@ class MySpace
                 $startDate,
                 $endDate,
                 $whereInLpItem
-
             );
             $registeredUsers = self::getCompanyLearnpathSubscription(
                 $startDate,
@@ -1515,17 +1513,17 @@ class MySpace
                         $dataSet[$tempArrayAuthor[$j]][$lpItemId] = [
                             'course' => $byCourse,
                             'session' => $bySession,
-                            'lp_item' => $lpItem
+                            'lp_item' => $lpItem,
                         ];
                     }
                 } else {
                     if (!isset($authorArray[$author])) {
                         $authorArray[$author] = api_get_user_info($author);
                     }
-                        $dataSet[$author][$lpItemId] = [
+                    $dataSet[$author][$lpItemId] = [
                             'course' => $byCourse,
                             'session' => $bySession,
-                            'lp_item' => $lpItem
+                            'lp_item' => $lpItem,
                         ];
                 }
             }
@@ -1593,7 +1591,7 @@ class MySpace
                                 "</a>".
                                 "<div id='$hiddenField' class='hidden'>";
                             $studentInSesion = [];
-                            /*** Student by session, keep it first **/
+                            /* Student by session, keep it first */
                             for ($i = 0; $i < $studenRegisterBySession; $i++) {
                                 $student = $bySession[$i];
                                 $studentId = $student['id'];
@@ -1605,7 +1603,7 @@ class MySpace
                                 $tableTemp .= "<strong>".$tempStudent['complete_name']." (".$student['company'].")</strong><br>";
                                 $totalStudent++;
                             }
-                            /*** Student by course, keep it last **/
+                            /* Student by course, keep it last */
                             for ($i = 0; $i < $studenRegister; $i++) {
                                 $student = $byCourse[$i];
                                 $studentId = $student['id'];
@@ -1713,7 +1711,6 @@ class MySpace
                 $autor = $authorArray[$authorId];
                 $totalSudent = 0;
                 foreach ($lpItems as $lpItem) {
-
                     $totalStudent = 0;
                     $itemLp = $lpItem['lp_item'];
                     $title = $itemLp['title'];
@@ -1730,7 +1727,7 @@ class MySpace
 
                     $studentsName = '';
                     if ($studenRegister != 0 || $studenRegisterBySession != 0) {
-                        /*** Student by session, keep it first **/
+                        /* Student by session, keep it first */
                         for ($i = 0; $i < $studenRegisterBySession; $i++) {
                             $student = $bySession[$i];
                             $studentId = $student['id'];
@@ -1742,7 +1739,7 @@ class MySpace
                             $studentsName .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].") / ";
                             $totalStudent++;
                         }
-                        /*** Student by course, keep it last **/
+                        /* Student by course, keep it last */
                         for ($i = 0; $i < $studenRegister; $i++) {
                             $student = $byCourse[$i];
                             $studentId = $student['id'];
@@ -1755,11 +1752,9 @@ class MySpace
                                 $totalStudent++;
                             }
                         }
-
                     }
                     $csv_row[] = trim($studentsName, " / ");
                     $csv_content[] = $csv_row;
-
                 }
             }
             Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');
@@ -4175,8 +4170,7 @@ class MySpace
         $startDate = null,
         $endDate = null,
         $whereInLp = null
-    )
-    {
+    ) {
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);

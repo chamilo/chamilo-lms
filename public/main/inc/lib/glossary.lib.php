@@ -338,7 +338,6 @@ class GlossaryManager
         $session = api_get_session_entity($sessionId);
         $qb = $repo->getResourcesByCourse($course, $session);
 
-
         try {
             $count = $qb->select('COUNT(resource)')->getQuery()->getSingleScalarResult();
         } catch (NoResultException $e) {
@@ -1139,5 +1138,4 @@ class GlossaryManager
 
         return $item1[2] < $item2[2] ? -1 : 1;
     }
-
 }

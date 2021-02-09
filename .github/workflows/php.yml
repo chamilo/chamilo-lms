@@ -176,6 +176,9 @@ jobs:
                   php bin/console cache:clear
                   sudo chmod -R 777 var public
 
+            - name: Composer analyse
+              run: composer analyse
+
             - name: Behat tests
               run: |
                   cd ${{ github.workspace }}/tests/behat
@@ -201,13 +204,10 @@ jobs:
                   # ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
                   # ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
                   # ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
-                  #  ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
+                  # ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolLink.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
-
-            - name: Composer analyse
-              run: composer analyse
 
             - name: The job has failed
               if: ${{ failure() }}

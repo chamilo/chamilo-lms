@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

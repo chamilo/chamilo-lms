@@ -134,9 +134,6 @@ class GradebookEvaluation
      */
     protected $userScoreList;
 
-    /**
-     * GradebookEvaluation constructor.
-     */
     public function __construct()
     {
         $this->locked = 0;
@@ -168,12 +165,8 @@ class GradebookEvaluation
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return GradebookEvaluation
      */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

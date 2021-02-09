@@ -45,7 +45,7 @@ class Category implements GradebookItem
     {
         $this->id = 0;
         $this->name = null;
-        $this->description = null;
+        $this->description = '';
         $this->user_id = 0;
         $this->course_code = '';
         $this->courseId = 0;

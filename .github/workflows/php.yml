@@ -29,6 +29,7 @@ jobs:
 
             - name: Setup apache
               run: |
+                sudo apt update
                 sudo apt install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
                 sudo a2enmod rewrite actions
                 sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
@@ -180,6 +181,30 @@ jobs:
                   cd ${{ github.workspace }}/tests/behat
                   ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/career.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/course.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/createUser.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/profile.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/promotion.feature -vv
+                  # ../../vendor/behat/behat/bin/behat features/registration.feature -v
+                  ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/ticket.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -vv
+                  # ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
+                  # ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
+                  # ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
+                  #  ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/toolLink.feature -vv
+                  #../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
 
             - name: Composer analyse
               run: composer analyse

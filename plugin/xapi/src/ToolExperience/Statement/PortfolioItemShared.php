@@ -5,10 +5,14 @@
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
 use Chamilo\CoreBundle\Entity\Portfolio as PortfolioEntity;
+use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioCategory as PortfolioCategoryActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Shared as SharedVerb;
+use Xabbuh\XApi\Model\Attachment;
+use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Model\LanguageMap;
 use Xabbuh\XApi\Model\Statement;
 
 /**
@@ -50,6 +54,14 @@ class PortfolioItemShared extends BaseStatement
             $context = $context->withContextActivities($contextActivities);
         }
 
+        $em = \Database::getManager();
+        $itemAttachments = $em->getRepository(PortfolioAttachment::class)->findFromItem($this->portfolioItem);
+
+        $attachments = $this->generateAttachments(
+            $itemAttachments,
+            $this->portfolioItem->getUser()
+        );
+
         return new Statement(
             null,
             $userActor->generate(),
@@ -59,7 +71,8 @@ class PortfolioItemShared extends BaseStatement
             null,
             $this->portfolioItem->getCreationDate(),
             null,
-            $context
+            $context,
+            $attachments
         );
     }
 }

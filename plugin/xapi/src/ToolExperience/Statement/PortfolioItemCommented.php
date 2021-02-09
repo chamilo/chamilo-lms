@@ -4,6 +4,7 @@
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
+use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioComment as PortfolioCommentEntity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioComment as PortfolioCommentActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
@@ -35,6 +36,14 @@ class PortfolioItemCommented extends BaseStatement
 
         $context = $this->generateContext();
 
+        $em = \Database::getManager();
+        $commentAttachments = $em->getRepository(PortfolioAttachment::class)->findFromComment($this->comment);
+
+        $attachments = $this->generateAttachments(
+            $commentAttachments,
+            $this->comment->getAuthor()
+        );
+
         if ($commentParent) {
             $repliedVerb = new RepliedVerb();
 
@@ -54,7 +63,8 @@ class PortfolioItemCommented extends BaseStatement
                 null,
                 $this->comment->getDate(),
                 null,
-                $context->withContextActivities($contextActivities)
+                $context->withContextActivities($contextActivities),
+                $attachments
             );
         } else {
             $itemShared = new PortfolioItemShared($portfolioItem);
@@ -66,7 +76,8 @@ class PortfolioItemCommented extends BaseStatement
                 ->withVerb($commentedVerb->generate())
                 ->withStored($this->comment->getDate())
                 ->withResult($statementResult)
-                ->withContext($context);
+                ->withContext($context)
+                ->withAttachments($attachments);
         }
     }
 }

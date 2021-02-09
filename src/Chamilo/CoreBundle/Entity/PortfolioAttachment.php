@@ -68,27 +68,16 @@ class PortfolioAttachment
      */
     private $originType;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return PortfolioAttachment
-     */
     public function setPath(string $path): PortfolioAttachment
     {
         $this->path = $path;
@@ -96,19 +85,11 @@ class PortfolioAttachment
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    /**
-     * @param string|null $comment
-     *
-     * @return PortfolioAttachment
-     */
     public function setComment(?string $comment): PortfolioAttachment
     {
         $this->comment = $comment;
@@ -116,19 +97,11 @@ class PortfolioAttachment
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSize(): int
     {
         return $this->size;
     }
 
-    /**
-     * @param int $size
-     *
-     * @return PortfolioAttachment
-     */
     public function setSize(int $size): PortfolioAttachment
     {
         $this->size = $size;
@@ -136,19 +109,11 @@ class PortfolioAttachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFilename(): string
     {
         return $this->filename;
     }
 
-    /**
-     * @param string $filename
-     *
-     * @return PortfolioAttachment
-     */
     public function setFilename(string $filename): PortfolioAttachment
     {
         $this->filename = $filename;
@@ -156,19 +121,11 @@ class PortfolioAttachment
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOrigin(): int
     {
         return $this->origin;
     }
 
-    /**
-     * @param int $origin
-     *
-     * @return PortfolioAttachment
-     */
     public function setOrigin(int $origin): PortfolioAttachment
     {
         $this->origin = $origin;
@@ -176,19 +133,11 @@ class PortfolioAttachment
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOriginType(): int
     {
         return $this->originType;
     }
 
-    /**
-     * @param int $originType
-     *
-     * @return PortfolioAttachment
-     */
     public function setOriginType(int $originType): PortfolioAttachment
     {
         $this->originType = $originType;

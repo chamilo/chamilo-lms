@@ -58,8 +58,7 @@ abstract class BaseStatement
     }
 
     /**
-     * @param array|PortfolioAttachment[]     $portfolioAttachments
-     * @param \Chamilo\UserBundle\Entity\User $user
+     * @param array|PortfolioAttachment[] $portfolioAttachments
      *
      * @return array|Attachment[]
      */

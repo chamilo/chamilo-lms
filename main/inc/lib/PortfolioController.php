@@ -232,94 +232,6 @@ class PortfolioController
         exit;
     }
 
-    private function addAttachmentsFieldToForm(FormValidator $form) {
-        $form->addButton('add_attachment', get_lang('AddAttachment'), 'plus');
-        $form->addHtml('<div id="container-attachments" style="display: none;">');
-        $form->addFile('attachment_file[]', get_lang('FilesAttachment'));
-        $form->addText('attachment_comment[]', get_lang('Description'), false);
-        $form->addHtml('</div>');
-
-        $script = "$(function () {
-            var attachmentsTemplate = $('#container-attachments').html();
-            var \$btnAdd = $('[name=\"add_attachment\"]');
-            var \$reference = \$btnAdd.parents('.form-group');
-
-            \$btnAdd.on('click', function (e) {
-                e.preventDefault();
-
-                $(attachmentsTemplate).insertBefore(\$reference);
-            });
-        })";
-
-        $form->addHtml("<script>$script</script>");
-    }
-
-    private function processAttachments(
-        FormValidator $form,
-        User $user,
-        int $originId,
-        int $originType
-    ) {
-        $em = Database::getManager();
-        $fs = new Filesystem();
-
-        $comments = $form->getSubmitValue('attachment_comment');
-
-        foreach ($_FILES['attachment_file']['error'] as $i => $attachmentFileError) {
-            if ($attachmentFileError != UPLOAD_ERR_OK) {
-                continue;
-            }
-
-            $_file = [
-                'name' => $_FILES['attachment_file']['name'][$i],
-                'type' => $_FILES['attachment_file']['type'][$i],
-                'tmp_name' => $_FILES['attachment_file']['tmp_name'][$i],
-                'size' => $_FILES['attachment_file']['size'][$i],
-            ];
-
-            if (empty($_file['type'])) {
-                $_file['type'] = DocumentManager::file_get_mime_type($_file['name']);
-            }
-
-            $newFileName = add_ext_on_mime(stripslashes($_file['name']), $_file['type']);
-
-            if (!filter_extension($newFileName)) {
-                Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
-                continue;
-            }
-
-            $newFileName = uniqid();
-            $attachmentsDirectory = UserManager::getUserPathById($user->getId(), 'system').'portfolio_attachments/';
-
-            if (!$fs->exists($attachmentsDirectory)) {
-                $fs->mkdir($attachmentsDirectory, api_get_permissions_for_new_directories());
-            }
-
-            $attachmentFilename = $attachmentsDirectory.$newFileName;
-
-            if (is_uploaded_file($_file['tmp_name'])) {
-                $moved = move_uploaded_file($_file['tmp_name'], $attachmentFilename);
-
-                if (!$moved) {
-                    Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFile'), 'error'));
-                    continue;
-                }
-            }
-
-            $attachment = new PortfolioAttachment();
-            $attachment
-                ->setFilename($_file['name'])
-                ->setComment(Security::remove_XSS($comments[$i]))
-                ->setPath($newFileName)
-                ->setOrigin($originId)
-                ->setOriginType($originType)
-                ->setSize($_file['size']);
-
-            $em->persist($attachment);
-            $em->flush();
-        }
-    }
-
     /**
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -654,60 +566,6 @@ class PortfolioController
         $content = $template->fetch($layout);
 
         $this->renderView($content, get_lang('Portfolio'), $actions);
-    }
-
-    private function generateAttachmentList($post): string
-    {
-        $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
-
-        $postOwnerId = 0;
-
-        if ($post instanceof Portfolio) {
-            $attachments = $attachmentsRepo->findFromItem($post);
-
-            $postOwnerId = $post->getUser()->getId();
-        } elseif ($post instanceof PortfolioComment) {
-            $attachments = $attachmentsRepo->findFromComment($post);
-
-            $postOwnerId = $post->getAuthor()->getId();
-        }
-
-        if (empty($attachments)) {
-            return '';
-        }
-
-        $currentUserId = api_get_user_id();
-
-        $listItems = '';
-
-        $deleteIcon = Display::return_icon(
-            'delete.png',
-            get_lang('DeleteAttachment'),
-            ['style' => 'display: inline-block'],
-            ICON_SIZE_TINY
-        );
-
-        /** @var PortfolioAttachment $attachment */
-        foreach ($attachments as $attachment) {
-            $downloadParams = http_build_query(['action' => 'download_attachment', 'file' => $attachment->getPath()]);
-            $deleteParams = http_build_query(['action' => 'delete_attachment', 'file' => $attachment->getPath()]);
-
-            $listItems .= '<li>'
-                .'<span class="fa-li fa fa-paperclip" aria-hidden="true"></span>'
-                .Display::url($attachment->getFilename(), $this->baseUrl.$downloadParams);
-
-            if ($currentUserId === $postOwnerId) {
-                $listItems .= PHP_EOL.Display::url($deleteIcon, $this->baseUrl.$deleteParams);
-            }
-
-            if ($attachment->getComment()) {
-                $listItems .= PHP_EOL.Display::span($attachment->getComment(), ['class' => 'text-muted']);
-            }
-
-            $listItems .= '</li>';
-        }
-
-        return '<h5 class="h4">'.get_lang('AttachmentFiles').'</h5>'.'<ul class="fa-ul">'.$listItems.'</ul>';
     }
 
     /**
@@ -1680,6 +1538,253 @@ class PortfolioController
         return $this->renderView($form->returnForm(), get_lang('Qualify'), $actions);
     }
 
+    public function downloadAttachment(HttpRequest $httpRequest)
+    {
+        $path = $httpRequest->query->get('file');
+
+        if (empty($path)) {
+            api_not_allowed(true);
+        }
+
+        $em = Database::getManager();
+        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
+
+        $attachment = $attachmentRepo->findOneByPath($path);
+
+        if (empty($attachment)) {
+            api_not_allowed(true);
+        }
+
+        $originOwnerId = 0;
+
+        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+            $item = $em->find(Portfolio::class, $attachment->getOrigin());
+
+            $originOwnerId = $item->getUser()->getId();
+        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
+
+            $originOwnerId = $comment->getAuthor()->getId();
+        } else {
+            api_not_allowed(true);
+        }
+
+        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
+        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
+        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
+
+        if (!Security::check_abs_path($attachmentFilename, $attachmentsDirectory)) {
+            api_not_allowed(true);
+        }
+
+        $downloaded = DocumentManager::file_send_for_download(
+            $attachmentFilename,
+            true,
+            $attachment->getFilename()
+        );
+
+        if (!$downloaded) {
+            api_not_allowed(true);
+        }
+    }
+
+    public function deleteAttachment(HttpRequest $httpRequest)
+    {
+        $currentUserId = api_get_user_id();
+
+        $path = $httpRequest->query->get('file');
+
+        if (empty($path)) {
+            api_not_allowed(true);
+        }
+
+        $em = Database::getManager();
+        $fs = new Filesystem();
+
+        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
+        $attachment = $attachmentRepo->findOneByPath($path);
+
+        if (empty($attachment)) {
+            api_not_allowed(true);
+        }
+
+        $originOwnerId = 0;
+        $itemId = 0;
+
+        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+            $item = $em->find(Portfolio::class, $attachment->getOrigin());
+            $originOwnerId = $item->getUser()->getId();
+            $itemId = $item->getId();
+        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
+            $originOwnerId = $comment->getAuthor()->getId();
+            $itemId = $comment->getItem()->getId();
+        }
+
+        if ($currentUserId !== $originOwnerId) {
+            api_not_allowed(true);
+        }
+
+        $em->remove($attachment);
+        $em->flush();
+
+        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
+        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
+        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
+
+        $fs->remove($attachmentFilename);
+
+        Display::addFlash(
+            Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'success')
+        );
+
+        header('Location: '.$this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]));
+        exit;
+    }
+
+    private function addAttachmentsFieldToForm(FormValidator $form)
+    {
+        $form->addButton('add_attachment', get_lang('AddAttachment'), 'plus');
+        $form->addHtml('<div id="container-attachments" style="display: none;">');
+        $form->addFile('attachment_file[]', get_lang('FilesAttachment'));
+        $form->addText('attachment_comment[]', get_lang('Description'), false);
+        $form->addHtml('</div>');
+
+        $script = "$(function () {
+            var attachmentsTemplate = $('#container-attachments').html();
+            var \$btnAdd = $('[name=\"add_attachment\"]');
+            var \$reference = \$btnAdd.parents('.form-group');
+
+            \$btnAdd.on('click', function (e) {
+                e.preventDefault();
+
+                $(attachmentsTemplate).insertBefore(\$reference);
+            });
+        })";
+
+        $form->addHtml("<script>$script</script>");
+    }
+
+    private function processAttachments(
+        FormValidator $form,
+        User $user,
+        int $originId,
+        int $originType
+    ) {
+        $em = Database::getManager();
+        $fs = new Filesystem();
+
+        $comments = $form->getSubmitValue('attachment_comment');
+
+        foreach ($_FILES['attachment_file']['error'] as $i => $attachmentFileError) {
+            if ($attachmentFileError != UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            $_file = [
+                'name' => $_FILES['attachment_file']['name'][$i],
+                'type' => $_FILES['attachment_file']['type'][$i],
+                'tmp_name' => $_FILES['attachment_file']['tmp_name'][$i],
+                'size' => $_FILES['attachment_file']['size'][$i],
+            ];
+
+            if (empty($_file['type'])) {
+                $_file['type'] = DocumentManager::file_get_mime_type($_file['name']);
+            }
+
+            $newFileName = add_ext_on_mime(stripslashes($_file['name']), $_file['type']);
+
+            if (!filter_extension($newFileName)) {
+                Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+                continue;
+            }
+
+            $newFileName = uniqid();
+            $attachmentsDirectory = UserManager::getUserPathById($user->getId(), 'system').'portfolio_attachments/';
+
+            if (!$fs->exists($attachmentsDirectory)) {
+                $fs->mkdir($attachmentsDirectory, api_get_permissions_for_new_directories());
+            }
+
+            $attachmentFilename = $attachmentsDirectory.$newFileName;
+
+            if (is_uploaded_file($_file['tmp_name'])) {
+                $moved = move_uploaded_file($_file['tmp_name'], $attachmentFilename);
+
+                if (!$moved) {
+                    Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFile'), 'error'));
+                    continue;
+                }
+            }
+
+            $attachment = new PortfolioAttachment();
+            $attachment
+                ->setFilename($_file['name'])
+                ->setComment(Security::remove_XSS($comments[$i]))
+                ->setPath($newFileName)
+                ->setOrigin($originId)
+                ->setOriginType($originType)
+                ->setSize($_file['size']);
+
+            $em->persist($attachment);
+            $em->flush();
+        }
+    }
+
+    private function generateAttachmentList($post): string
+    {
+        $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
+
+        $postOwnerId = 0;
+
+        if ($post instanceof Portfolio) {
+            $attachments = $attachmentsRepo->findFromItem($post);
+
+            $postOwnerId = $post->getUser()->getId();
+        } elseif ($post instanceof PortfolioComment) {
+            $attachments = $attachmentsRepo->findFromComment($post);
+
+            $postOwnerId = $post->getAuthor()->getId();
+        }
+
+        if (empty($attachments)) {
+            return '';
+        }
+
+        $currentUserId = api_get_user_id();
+
+        $listItems = '';
+
+        $deleteIcon = Display::return_icon(
+            'delete.png',
+            get_lang('DeleteAttachment'),
+            ['style' => 'display: inline-block'],
+            ICON_SIZE_TINY
+        );
+
+        /** @var PortfolioAttachment $attachment */
+        foreach ($attachments as $attachment) {
+            $downloadParams = http_build_query(['action' => 'download_attachment', 'file' => $attachment->getPath()]);
+            $deleteParams = http_build_query(['action' => 'delete_attachment', 'file' => $attachment->getPath()]);
+
+            $listItems .= '<li>'
+                .'<span class="fa-li fa fa-paperclip" aria-hidden="true"></span>'
+                .Display::url($attachment->getFilename(), $this->baseUrl.$downloadParams);
+
+            if ($currentUserId === $postOwnerId) {
+                $listItems .= PHP_EOL.Display::url($deleteIcon, $this->baseUrl.$deleteParams);
+            }
+
+            if ($attachment->getComment()) {
+                $listItems .= PHP_EOL.Display::span($attachment->getComment(), ['class' => 'text-muted']);
+            }
+
+            $listItems .= '</li>';
+        }
+
+        return '<h5 class="h4">'.get_lang('AttachmentFiles').'</h5>'.'<ul class="fa-ul">'.$listItems.'</ul>';
+    }
+
     /**
      * @param bool $showHeader
      */
@@ -2103,109 +2208,5 @@ class PortfolioController
         }
 
         return $commentsHtml;
-    }
-
-    public function downloadAttachment(HttpRequest $httpRequest)
-    {
-        $path = $httpRequest->query->get('file');
-
-        if (empty($path)) {
-            api_not_allowed(true);
-        }
-
-        $em = Database::getManager();
-        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
-
-        $attachment = $attachmentRepo->findOneByPath($path);
-
-        if (empty($attachment)) {
-            api_not_allowed(true);
-        }
-
-        $originOwnerId = 0;
-
-        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
-            $item = $em->find(Portfolio::class, $attachment->getOrigin());
-
-            $originOwnerId = $item->getUser()->getId();
-        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
-            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
-
-            $originOwnerId = $comment->getAuthor()->getId();
-        } else {
-            api_not_allowed(true);
-        }
-
-        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
-        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
-        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
-
-        if (!Security::check_abs_path($attachmentFilename, $attachmentsDirectory)) {
-            api_not_allowed(true);
-        }
-
-        $downloaded = DocumentManager::file_send_for_download(
-            $attachmentFilename,
-            true,
-            $attachment->getFilename()
-        );
-
-        if (!$downloaded) {
-            api_not_allowed(true);
-        }
-    }
-
-    public function deleteAttachment(HttpRequest $httpRequest)
-    {
-        $currentUserId = api_get_user_id();
-
-        $path = $httpRequest->query->get('file');
-
-        if (empty($path)) {
-            api_not_allowed(true);
-        }
-
-        $em = Database::getManager();
-        $fs = new Filesystem();
-
-        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
-        $attachment = $attachmentRepo->findOneByPath($path);
-
-        if (empty($attachment)) {
-            api_not_allowed(true);
-        }
-
-        $originOwnerId = 0;
-        $itemId = 0;
-
-        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
-            $item = $em->find(Portfolio::class, $attachment->getOrigin());
-            $originOwnerId = $item->getUser()->getId();
-            $itemId = $item->getId();
-        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
-            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
-            $originOwnerId = $comment->getAuthor()->getId();
-            $itemId = $comment->getItem()->getId();
-        }
-
-        if ($currentUserId !== $originOwnerId) {
-            api_not_allowed(true);
-        }
-
-        $em->remove($attachment);
-        $em->flush();
-
-        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
-        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
-        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
-
-        $fs->remove($attachmentFilename);
-
-        Display::addFlash(
-            Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'success')
-        );
-
-        header('Location: '.$this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]));
-        exit;
     }
 }

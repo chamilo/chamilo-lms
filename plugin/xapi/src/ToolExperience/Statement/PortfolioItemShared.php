@@ -10,9 +10,6 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioCategory as Portf
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Shared as SharedVerb;
-use Xabbuh\XApi\Model\Attachment;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\LanguageMap;
 use Xabbuh\XApi\Model\Statement;
 
 /**

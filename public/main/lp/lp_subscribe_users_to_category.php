@@ -191,7 +191,7 @@ if ($allowUserGroups) {
                 }
             }
 
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         } else {

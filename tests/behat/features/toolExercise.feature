@@ -13,6 +13,7 @@ Feature: Exercise tool
       | category_name | Category 1 |
     And I fill in ckeditor field "category_description" with "Category 1 description"
     And I press "SubmitNote"
+    And wait for the page to be loaded
     Then I should see "Category added"
 
   Scenario: Create a second question category
@@ -22,6 +23,7 @@ Feature: Exercise tool
       | category_name | Category 2 |
     And I fill in ckeditor field "category_description" with "Category 2 description"
     And I press "SubmitNote"
+    And wait for the page to be loaded
     Then I should see "Category added"
 
   Scenario: Create an exercise
@@ -31,6 +33,7 @@ Feature: Exercise tool
       | exercise_title | Exercise 1 |
     And I fill in ckeditor field "exerciseDescription" with "Exercise description"
     And I press "submitExercise"
+    And wait for the page to be loaded
     Then I should see "Test added"
 
   Scenario: Edit an exercise
@@ -39,6 +42,7 @@ Feature: Exercise tool
     And I follow "Edit"
     And I follow "Edit test name and settings"
     And I press "submitExercise"
+    And wait for the page to be loaded
     Then I should see "Test name and settings have been saved."
 
   Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
@@ -59,6 +63,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[3]" with "Comment false"
     Then I fill in ckeditor field "comment[4]" with "Comment false"
     And I press "submit-question"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Multiple answer" to exercise created "Exercise 1"
@@ -80,6 +85,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[3]" with "Comment false"
     Then I fill in ckeditor field "comment[4]" with "Comment false"
     And I press "submit-question"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Fill in blanks" to "Exercise 1"
@@ -91,6 +97,7 @@ Feature: Exercise tool
       | questionName | Fill blanks |
     Then I fill in ckeditor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Matching" to exercise created "Exercise 1"
@@ -106,6 +113,7 @@ Feature: Exercise tool
     And I fill in ckeditor field "option[2]" with "Option B"
     And I fill in select bootstrap static input "#matches_2" select "2"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
     Scenario: Add question "Open" to exercise created "Exercise 1"
@@ -117,6 +125,7 @@ Feature: Exercise tool
       | questionName | Open question |
       | weighting | 10 |
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
 #    Scenario: Add question "Oral expression" to exercise created "Exercise 1"
@@ -144,6 +153,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[1]" with "Comment true"
     Then I fill in ckeditor field "comment[2]" with "Comment false"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
     Scenario: Add question "Unique answer with unknown" to exercise created "Exercise 1"
@@ -163,6 +173,7 @@ Feature: Exercise tool
       Then I fill in ckeditor field "comment[2]" with "Comment false"
       Then I fill in ckeditor field "comment[3]" with "Comment false"
       And I press "submitQuestion"
+      And wait for the page to be loaded
       Then I should see "Item added"
 
   Scenario: Add question "Multiple answer true/false/don't know" to exercise created "Exercise 1"
@@ -188,6 +199,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[3]" with "Comment true"
     Then I fill in ckeditor field "comment[4]" with "Comment true"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Combination true/false/don't-know" to exercise created "Exercise 1"
@@ -206,6 +218,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[1]" with "Comment true"
     Then I fill in ckeditor field "comment[2]" with "Comment false"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Global multiple answer" to exercise created "Exercise 1"
@@ -230,6 +243,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[4]" with "Comment false"
 
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Duplicate exercise
@@ -237,6 +251,7 @@ Feature: Exercise tool
     And I follow "Copy this exercise as a new one"
     And I confirm the popup
     Then I should see "Exercise copied"
+    And wait for the page to be loaded
     And I should see "Exercise 1 - Copy"
 
   Scenario: Import exercise to test questions categories

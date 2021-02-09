@@ -227,6 +227,7 @@ if (api_is_allowed_to_edit(false, true)) {
 $actionsRight = GroupManager::getSearchForm();
 $toolbar = Display::toolbarAction('toolbar-groups', [$actionsLeft, $actionsRight]);
 $categories = GroupManager::get_categories();
+
 echo $toolbar;
 echo UserManager::getUserSubscriptionTab(3);
 
@@ -249,10 +250,6 @@ if ('true' === api_get_setting('allow_group_categories')) {
             true
         );
         $groupToShow = GroupManager::processGroups($groupList, $categoryId);
-
-        if (empty($groupToShow)) {
-            continue;
-        }
 
         if (empty($categoryId) && empty($groupList)) {
             continue;

@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository")
  * @ORM\MappedSuperclass
  */
-class ExtraFieldValues // extends BaseAttributeValue
+class ExtraFieldValues
 {
     use TimestampableEntity;
 

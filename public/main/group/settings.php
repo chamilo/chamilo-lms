@@ -10,6 +10,10 @@
  *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroup;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -18,8 +22,8 @@ api_protect_course_script(true);
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
-$groupRepo = \Chamilo\CoreBundle\Framework\Container::getGroupRepository();
-/** @var \Chamilo\CourseBundle\Entity\CGroup $groupEntity */
+$groupRepo = Container::getGroupRepository();
+/** @var CGroup $groupEntity */
 $groupEntity = $groupRepo->find($group_id);
 
 if (empty($groupEntity)) {
@@ -364,7 +368,7 @@ if ($form->validate()) {
 $defaults = $current_group;
 $category = GroupManager::get_category_from_group($current_group['iid']);
 if (!empty($category)) {
-    $defaults['category_id'] = $category['id'];
+    $defaults['category_id'] = $category['iid'];
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';

@@ -525,7 +525,7 @@ switch ($action) {
 
             if (empty($directoryParentId) || '/' === $directoryParentId) {
                 $result = $oLP->generate_lp_folder($courseInfo);
-                $directoryParentId = $result['id'];
+                $directoryParentId = $result->getIid();
             }
 
             $parent = isset($_POST['parent']) ? $_POST['parent'] : '';

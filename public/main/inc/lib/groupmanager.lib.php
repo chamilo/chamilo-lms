@@ -873,7 +873,6 @@ class GroupManager
             return false;
         }
 
-        $courseId = $course_info['real_id'];
         $sql = "SELECT gc.* FROM $table_group_cat gc
                 INNER JOIN $table_group g
                 ON (gc.iid = g.category_id)

@@ -61,11 +61,11 @@ if (isset($_POST['action'])) {
     $group_id = intval($_POST['group_id']);
     $parent_id = intval($_POST['parent_id']);
 
-    if ('reply_message_group' == $_POST['action']) {
+    if ('reply_message_group' === $_POST['action']) {
         $title = cut($content, 50);
     }
 
-    if ('edit_message_group' == $_POST['action']) {
+    if ('edit_message_group' === $_POST['action']) {
         $edit_message_id = intval($_POST['message_id']);
         $res = MessageManager::send_message(
             0,
@@ -80,7 +80,7 @@ if (isset($_POST['action'])) {
             $topic_id
         );
     } else {
-        if ('add_message_group' == $_POST['action'] && !$is_member) {
+        if ('add_message_group' === $_POST['action'] && !$is_member) {
             api_not_allowed(true);
         }
         $res = MessageManager::send_message(
@@ -101,7 +101,7 @@ if (isset($_POST['action'])) {
         Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
     }
     $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
-    if ('add_message_group' == $_POST['action']) {
+    if ('add_message_group' === $_POST['action']) {
         $topic_id = $res;
     }
     $message_id = $res;

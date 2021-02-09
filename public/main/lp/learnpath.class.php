@@ -723,7 +723,7 @@ class learnpath
         $id = null;
         $sessionEntity = api_get_session_entity();
         $courseEntity = api_get_course_entity($courseInfo['real_id']);
-
+        $lp = null;
         switch ($origin) {
             case 'zip':
                 // Check zip name string. If empty, we are currently creating a new Chamilo learnpath.
@@ -763,10 +763,6 @@ class learnpath
                 $em = Database::getManager();
                 $em->persist($lp);
                 $em->flush();
-
-                if ($lp->getIid()) {
-                    $id = $lp->getIid();
-                }
 
                 // Insert into item_property.
                 /*api_item_property_update(
@@ -6446,16 +6442,15 @@ class learnpath
      * @param array $course
      * @param int   $creatorId
      *
-     * @return bool
+     * @return CDocument
      */
     public static function generate_learning_path_folder($course, $creatorId = 0)
     {
         // Creating learning_path folder
         $dir = 'learning_path';
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
-        $folder = false;
 
-        $folderData = create_unexisting_directory(
+        return create_unexisting_directory(
             $course,
             $creatorId,
             0,
@@ -6466,12 +6461,6 @@ class learnpath
             get_lang('Learning paths'),
             0
         );
-
-        if (!empty($folderData)) {
-            $folder = true;
-        }
-
-        return $folder;
     }
 
     /**
@@ -6479,7 +6468,7 @@ class learnpath
      * @param string $lp_name
      * @param int    $creatorId
      *
-     * @return array
+     * @return CDocument
      */
     public function generate_lp_folder($course, $lp_name = '', $creatorId = 0)
     {
@@ -6490,7 +6479,7 @@ class learnpath
             $lp_name = $this->name;
         }
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
-        $folder = self::generate_learning_path_folder($course, $creatorId);
+        $parent = self::generate_learning_path_folder($course, $creatorId);
 
         // Limits title size
         $title = api_substr(api_replace_dangerous_char($lp_name), 0, 80);
@@ -6498,8 +6487,9 @@ class learnpath
 
         // Creating LP folder
         $documentId = null;
-        if ($folder) {
-            $folderData = create_unexisting_directory(
+        $folder = null;
+        if ($parent) {
+            $folder = create_unexisting_directory(
                 $course,
                 $creatorId,
                 0,
@@ -6507,30 +6497,15 @@ class learnpath
                 0,
                 $filepath,
                 $dir,
-                $lp_name
+                $lp_name,
+                '',
+                false,
+                false,
+                $parent
             );
-            if (!empty($folderData)) {
-                $folder = true;
-            }
-
-            $documentId = $folderData->getIid();
-            $dir = $dir.'/';
-            if ($folder) {
-                // $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
-            }
         }
 
-        if (empty($documentId)) {
-            $dir = api_remove_trailing_slash($dir);
-            $documentId = DocumentManager::get_document_id($course, $dir, 0);
-        }
-
-        return [
-            'dir' => $dir,
-            'filepath' => $filepath,
-            'folder' => $folder,
-            'id' => $documentId,
-        ];
+       return $folder;
     }
 
     /**
@@ -6564,7 +6539,6 @@ class learnpath
 
         // Generates folder
         $result = $this->generate_lp_folder($courseInfo);
-        $dir = $result['dir'];
         // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
         $originalTitle = !empty($title) ? $title : $_POST['title'];
@@ -6618,11 +6592,11 @@ class learnpath
             );
         }
 
-        $save_file_path = $dir.$filename;
+        //$save_file_path = $dir.$filename;
 
         $document = DocumentManager::addDocument(
             $courseInfo,
-            $save_file_path,
+            null,
             'file',
             '',
             $tmp_filename,
@@ -7241,8 +7215,8 @@ class learnpath
                     'directory_parent_id'
                 );
 
-                if (isset($data['id'])) {
-                    $defaults['directory_parent_id'] = $data['id'];
+                if ($data) {
+                    $defaults['directory_parent_id'] = $data->getIid();
                 }
 
                 break;
@@ -7899,11 +7873,11 @@ class learnpath
             true
         );
 
-        $lpPathInfo = $this->generate_lp_folder(api_get_course_info());
+        $folder = $this->generate_lp_folder(api_get_course_info());
 
         DocumentManager::build_directory_selector(
             $folders,
-            $lpPathInfo['id'],
+            $folder->getIid(),
             [],
             true,
             $form,
@@ -7953,9 +7927,10 @@ class learnpath
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
         $form->addMultipleUpload($url);
 
-        /*$lpItem = new CLpItem();
+        $lpItem = new CLpItem();
+        $lpItem->setTitle('');
         $lpItem->setItemType(TOOL_DOCUMENT);
-        $new = $this->displayDocumentForm('add', $lpItem);*/
+        $new = $this->displayDocumentForm('add', $lpItem);
 
         /*$lpItem = new CLpItem();
         $lpItem->setItemType(TOOL_READOUT_TEXT);
@@ -7970,7 +7945,7 @@ class learnpath
 
         return Display::tabs(
             $headers,
-            [$documentTree, $form->returnForm()],
+            [$documentTree, $new, $form->returnForm()],
             'subtab'
         );
     }

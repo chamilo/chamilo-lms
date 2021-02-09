@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -22,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository")
  * @ORM\MappedSuperclass
  */
-class ExtraFieldValues // extends BaseAttributeValue
+class ExtraFieldValues
 {
     use TimestampableEntity;
 

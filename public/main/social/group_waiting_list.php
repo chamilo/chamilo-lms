@@ -9,7 +9,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if ('true' != api_get_setting('allow_social_tool')) {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 
@@ -46,7 +46,7 @@ $admins = $usergroup->get_users_by_group(
 );
 $show_message = '';
 
-if (isset($_GET['action']) && 'accept' == $_GET['action']) {
+if (isset($_GET['action']) && 'accept' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -56,7 +56,7 @@ if (isset($_GET['action']) && 'accept' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'deny' == $_GET['action']) {
+if (isset($_GET['action']) && 'deny' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -66,7 +66,7 @@ if (isset($_GET['action']) && 'deny' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'set_moderator' == $_GET['action']) {
+if (isset($_GET['action']) && 'set_moderator' === $_GET['action']) {
     // we add a user only if is a open group
     $user_moderator = intval($_GET['u']);
     //if i'm the admin

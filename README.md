@@ -1,6 +1,6 @@
 # Chamilo 2.x
 
-[![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=master)](https://travis-ci.org/chamilo/chamilo-lms)
+[![PHP Composer](https://github.com/chamilo/chamilo-lms/workflows/PHP%20Composer/badge.svg)](https://github.com/chamilo/chamilo-lms/actions?query=workflow%3A%22PHP+Composer%22+branch%3Amaster)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=master)
 [![Bountysource](https://www.bountysource.com/badge/team?team_id=12439&style=raised)](https://www.bountysource.com/teams/chamilo?utm_source=chamilo&utm_medium=shield&utm_campaign=raised)
 [![Code Consistency](https://squizlabs.github.io/PHP_CodeSniffer/analysis/chamilo/chamilo-lms/grade.svg)](http://squizlabs.github.io/PHP_CodeSniffer/analysis/chamilo/chamilo-lms/)
@@ -11,7 +11,7 @@ Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under G
 
 ## Quick install
 
-**Chamilo 2.0 is still in development stage. This install procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch README.md for details.**
+**Chamilo 2.0 is still in development stage. This installation procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch README.md for details.**
 
 We assume you have already installed "yarn" and "composer" and you're installing the portal in a domain,
 not in a sub folder inside a domain.

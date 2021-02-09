@@ -225,7 +225,7 @@ class GlossaryManager
                     $id,
                     'GlossaryAdded',
                     api_get_user_id()
-                );*/
+                );* /
             }
             */
             // display the feedback message
@@ -295,7 +295,7 @@ class GlossaryManager
                 intval($values['glossary_id']),
                 'GlossaryUpdated',
                 api_get_user_id()
-            );*/
+            );* /
 
             */
             if ($showMessage) {

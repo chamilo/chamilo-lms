@@ -190,10 +190,11 @@ jobs:
                   ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -vv
                   ../../vendor/behat/behat/bin/behat features/profile.feature -vv
                   ../../vendor/behat/behat/bin/behat features/promotion.feature -vv
-#                  ../../vendor/behat/behat/bin/behat features/registration.feature -v
+                  # ../../vendor/behat/behat/bin/behat features/registration.feature -v
                   ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
                   ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
                   ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -vv
 
 
 

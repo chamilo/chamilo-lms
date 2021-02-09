@@ -180,6 +180,9 @@ jobs:
                   cd ${{ github.workspace }}/tests/behat
                   ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/career.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/course.feature -vvv
 
             - name: Composer analyse
               run: composer analyse

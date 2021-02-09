@@ -749,13 +749,12 @@ class AnnouncementManager
                 api_get_session_entity($sessionId),
                 api_get_group_entity()
             );
-
-        $repo = Container::getAnnouncementRepository();
+        $em->persist($announcement);
         $em->flush();
-        $last_id = $announcement->getIid();
 
         // Store the attach file
-        if ($last_id) {
+        if ($announcement) {
+            $last_id = $announcement->getIid();
             if (!empty($file)) {
                 self::add_announcement_attachment_file(
                     $announcement,
@@ -815,9 +814,11 @@ class AnnouncementManager
             if ($sendToUsersInSession) {
                 self::addAnnouncementToAllUsersInSessions($announcement);
             }
+
+            return $announcement;
         }
 
-        return $last_id;
+        return null;
     }
 
     /**

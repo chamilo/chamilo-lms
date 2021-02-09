@@ -6505,7 +6505,7 @@ class learnpath
             );
         }
 
-       return $folder;
+        return $folder;
     }
 
     /**

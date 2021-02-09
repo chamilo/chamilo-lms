@@ -178,7 +178,6 @@ $form->addGroup(
     false
 );
 $form->addElement('html', '</div>');
-
 $form->addElement('hidden', 'action');
 
 $form->addElement('html', '<div class="col-md-12">');
@@ -386,7 +385,7 @@ if ($form->validate()) {
     switch ($values['action']) {
         case 'update_settings':
             GroupManager::update_category(
-                $values['id'],
+                $_GET['id'],
                 $values['title'],
                 $values['description'],
                 $values['doc_state'],

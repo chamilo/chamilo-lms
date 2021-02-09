@@ -1043,8 +1043,6 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = (int) $id;
 
-        $courseId = api_get_course_int_id();
-
         $allowDocumentAccess = api_get_configuration_value('group_category_document_access');
         $documentCondition = '';
         if ($allowDocumentAccess) {
@@ -1068,7 +1066,6 @@ class GroupManager
                     $documentCondition
                     max_student = ".intval($maximum_number_of_students)."
                 WHERE iid = $id";
-
         Database::query($sql);
 
         // Updating all groups inside this category

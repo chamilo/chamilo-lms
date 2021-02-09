@@ -186,6 +186,16 @@ jobs:
                   ../../vendor/behat/behat/bin/behat features/course.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -vv
                   ../../vendor/behat/behat/bin/behat features/createUser.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/profile.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/promotion.feature -vv
+#                  ../../vendor/behat/behat/bin/behat features/registration.feature -v
+                  ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vv
+
+
 
             - name: Composer analyse
               run: composer analyse

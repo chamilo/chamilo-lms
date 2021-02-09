@@ -181,6 +181,8 @@ jobs:
                   sudo chmod -R 777 app/cache app/logs app/courses app/upload web
                   php ${{ github.workspace }}/chash/chash.php chash:chamilo_status
                   ls -la
+                  bash tests/travis/post_installation.sh
+                  curl http://localhost/index.php
                   ls -la web/build
 
             - name: Behat tests

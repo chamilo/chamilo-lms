@@ -1324,7 +1324,7 @@ class MySpace
                                 ."&course=$lpCourseCode"
                             );
                             $studentsName .= $student['complete_name'].' / ';
-                            $htmlData .= "$reportLink <strong>".$student['complete_name'].'</strong><pre>'.var_export($student, true).'</pre><br>';
+                            $htmlData .= "$reportLink <strong>".$student['complete_name'].'</strong><br>';
                             $totalStudents++;
                         }
                         $htmlData .= '</div>';

@@ -21,7 +21,7 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 $usergroup = new UserGroup();
 $form = new FormValidator('add_group');
 $usergroup->setGroupType($usergroup::SOCIAL_CLASS);
-$usergroup->setForm($form, 'add', []);
+$usergroup->setForm($form, 'add');
 
 if ($form->validate()) {
     $values = $form->exportValues();

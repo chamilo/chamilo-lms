@@ -617,6 +617,12 @@ class MessageManager
         $table = Database::get_main_table(TABLE_MESSAGE);
 
         $em = Database::getManager();
+        $repo = $em->getRepository(Message::class);
+        $parent = null;
+        if (!empty($parent_id)) {
+            $parent = $repo->find($parent_id);
+        }
+
         $message = null;
 
         // Just in case we replace the and \n and \n\r while saving in the DB
@@ -631,8 +637,6 @@ class MessageManager
                 Database::query($query);
                 $messageId = $editMessageId;
             } else {
-                $repo = $em->getRepository(Message::class);
-                $parent = $repo->find($parent_id);
                 $message = new Message();
                 $message
                     ->setUserSender($userSender)
@@ -649,7 +653,6 @@ class MessageManager
             }
 
             // Forward also message attachments.
-            $forwardAttachments = [];
             if (!empty($forwardId)) {
                 $forwardMessage = $repo->find($forwardId);
                 if (null !== $forwardMessage) {
@@ -681,18 +684,19 @@ class MessageManager
 
             // Save message in the outbox for user friend or group.
             if (empty($group_id) && MESSAGE_STATUS_UNREAD === $status) {
-                $params = [
-                    'user_sender_id' => $user_sender_id,
-                    'user_receiver_id' => $receiverUserId,
-                    'msg_status' => MESSAGE_STATUS_OUTBOX,
-                    'send_date' => $now,
-                    'title' => $subject,
-                    'content' => $content,
-                    'group_id' => $group_id,
-                    'parent_id' => $parent_id,
-                    'update_date' => $now,
-                ];
-                Database::insert($table, $params);
+                $message = new Message();
+                $message
+                    ->setUserSender($userSender)
+                    ->setUserReceiver($userRecipient)
+                    ->setMsgStatus(MESSAGE_STATUS_OUTBOX)
+                    ->setTitle($subject)
+                    ->setContent($content)
+                    ->setGroupId($group_id)
+                    ->setParent($parent)
+                ;
+                $em->persist($message);
+                $em->flush();
+                $messageId = $message->getId();
 
                 // save attachment file for outbox messages
                 /*if (is_array($attachmentList)) {

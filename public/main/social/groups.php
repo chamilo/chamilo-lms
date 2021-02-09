@@ -102,7 +102,7 @@ if (is_array($results) && count($results) > 0) {
             $result['picture'],
             80
         );
-        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
+        $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
 
         $members = Display::returnFontAwesomeIcon('user').$count_users_group;
         $html = '<div class="row">';
@@ -155,7 +155,7 @@ foreach ($results as $result) {
     $url = '<a href="group_view.php?id='.$id.'">'.$name.'</a>';
 
     $picture = $usergroup->get_picture_group($result['id'], $result['picture'], 80);
-    $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
+    $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
     $members = Display::returnFontAwesomeIcon('user').$count_users_group;
 
     $html = '<div class="row">';
@@ -216,7 +216,7 @@ if (is_array($results) && count($results) > 0) {
         $url = '<a href="group_view.php?id='.$id.'">'.$name.'</a>';
 
         $picture = $usergroup->get_picture_group($result['id'], $result['picture'], 80);
-        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
+        $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
 
         $html = '<div class="row">';
         $html .= '<div class="col-md-2">';

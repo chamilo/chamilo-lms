@@ -758,14 +758,12 @@ class SocialManager extends UserManager
             // Group image
             $userGroup = new UserGroup();
             $group_info = $userGroup->get($group_id);
-
             $userGroupImage = $userGroup->get_picture_group(
                 $group_id,
                 $group_info['picture'],
                 128,
                 GROUP_IMAGE_SIZE_BIG
             );
-
             $template->assign('show_group', true);
             $template->assign('group_id', $group_id);
             $template->assign('user_group_image', $userGroupImage);

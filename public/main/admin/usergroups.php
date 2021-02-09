@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -125,7 +127,7 @@ switch ($action) {
             api_get_self().'?action='.$action.'&id='.$userGroupId
         );
 
-        $repo = \Chamilo\CoreBundle\Framework\Container::getUsergroupRepository();
+        $repo = Container::getUsergroupRepository();
         $usergroup->setForm($form, 'edit', $repo->find($userGroupId));
 
         // Setting the form elements

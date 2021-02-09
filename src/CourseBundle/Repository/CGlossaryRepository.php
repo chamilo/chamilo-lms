@@ -18,7 +18,6 @@ use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 final class CGlossaryRepository extends ResourceRepository implements ResourceWithLinkInterface
@@ -58,7 +57,7 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
         return CGlossaryType::class;
     }
 
-    public function getLink(ResourceInterface $resource, RouterInterface $router): string
+    public function getLink(ResourceInterface $resource, RouterInterface $router, $extraParams = []): string
     {
         $params = ['name' => 'glossary/index.php', 'glossary_id' => $resource->getResourceIdentifier()];
         if (!empty($extraParams)) {

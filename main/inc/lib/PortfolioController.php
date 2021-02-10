@@ -1660,7 +1660,7 @@ class PortfolioController
             return api_convert_and_format_date($date);
         };
 
-        $tblItems = new SortableTable('tbl_items', $getItemsTotalNumber, $getItemsData, 0);
+        $tblItems = new SortableTable('tbl_items', $getItemsTotalNumber, $getItemsData, 1, 20, 'DESC');
         $tblItems->set_additional_parameters(['action' => 'details', 'user' => $this->owner->getId()]);
         $tblItems->set_header(0, get_lang('Title'));
         $tblItems->set_column_filter(0, $portfolioItemColumnFilter);
@@ -1748,7 +1748,7 @@ class PortfolioController
             );
         };
 
-        $tblComments = new SortableTable('tbl_comments', $getCommentsTotalNumber, $getCommentsData, 0);
+        $tblComments = new SortableTable('tbl_comments', $getCommentsTotalNumber, $getCommentsData, 1, 20, 'DESC');
         $tblComments->set_additional_parameters(['action' => 'details', 'user' => $this->owner->getId()]);
         $tblComments->set_header(0, get_lang('Resume'));
         $tblComments->set_column_filter(

@@ -777,9 +777,9 @@ if (!$_user['user_id'] && 0 == $forumEntity->getAllowAnonymous()) {
 }
 
 if (0 != $forumEntity->getForumOfGroup()) {
-    $show_forum = GroupManager::user_has_access(
+    $show_forum = GroupManager::userHasAccess(
         api_get_user_id(),
-        $forumEntity->getForumOfGroup(),
+        api_get_group_entity($forumEntity->getForumOfGroup()),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {

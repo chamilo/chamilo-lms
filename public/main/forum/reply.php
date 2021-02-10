@@ -129,9 +129,9 @@ if (!$_user['user_id'] &&
 }
 
 if (0 != $forum->getForumOfGroup()) {
-    $show_forum = GroupManager::user_has_access(
+    $show_forum = GroupManager::userHasAccess(
         api_get_user_id(),
-        $forum->getForumOfGroup(),
+        api_get_group_entity($forum->getForumOfGroup()),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {

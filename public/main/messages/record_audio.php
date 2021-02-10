@@ -7,10 +7,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
 $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 
 $tpl = new Template(get_lang('Compose message'), false, false, false, true);

@@ -7970,17 +7970,17 @@ function api_protect_course_group($tool, $showHeader = true)
             }
         }
 
-        $groupInfo = GroupManager::get_group_properties($groupId);
+        $group = api_get_group_entity($groupId);
 
         // Group doesn't exists
-        if (empty($groupInfo)) {
+        if (null === $group) {
             api_not_allowed($showHeader);
         }
 
         // Check group access
-        $allow = GroupManager::user_has_access(
+        $allow = GroupManager::userHasAccess(
             $userId,
-            $groupInfo['iid'],
+            $group,
             $tool
         );
 

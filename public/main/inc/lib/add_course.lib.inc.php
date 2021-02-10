@@ -334,16 +334,15 @@ class AddCourse
         }
 
         $certificateId = 'NULL';
-
         /*    Documents   */
         if ($fill_with_exemplary_content) {
             $files = [
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
+                //['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
+                //['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
             ];
             $paths = [];
             foreach ($files as $file) {

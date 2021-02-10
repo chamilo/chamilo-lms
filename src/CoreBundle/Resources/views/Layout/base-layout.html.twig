@@ -10,7 +10,7 @@
 <html lang="{{ app.request.locale }}" class="no-js h-100">
 {% block chamilo_head %}
 <head>
-{% include "@ChamiloCore/Layout/head.html.twig" %}
+{%- include "@ChamiloCore/Layout/head.html.twig" %}
 </head>
 {% endblock %}
 <body
@@ -21,11 +21,11 @@
     data-session-id="{{ session ? session.id : '' }}"
 >
     <noscript>{{ "Your browser does not support Javascript" | trans }}</noscript>
-    {%- block chamilo_wrap %}
-        {% block page_content %}
+    {%- block chamilo_wrap -%}
+        {%- block page_content %}
         {% endblock %}
     {% endblock -%}
-    {%- block chamilo_footer %}
+    {%- block chamilo_footer -%}
     {% endblock -%}
     <script src="{{ url('home') ~ 'build/vue.js' }}"></script>
 </body>

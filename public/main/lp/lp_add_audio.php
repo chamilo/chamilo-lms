@@ -134,10 +134,6 @@ $page .= '</div>';
 $recordVoiceForm = '<h3 class="page-header">'.get_lang('RecordYourVoice').'</h3>';
 $page .= '<div id="doc_form" class="col-md-8">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
-
 $tpl = new Template(get_lang('Add'));
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());

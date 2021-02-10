@@ -396,10 +396,10 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
 
     $form->addText(
         'keyword',
-        get_lang('Search'),
+        null,
         false,
         [
-            'aria-label' => get_lang('Search'),
+            'placeholder' => get_lang('Search'),
         ]
     );
     $form->addButtonSearch(get_lang('Search'));

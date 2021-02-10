@@ -21,18 +21,17 @@
 {% set message_url = '' %}
 {% set profile_link = '' %}
 {% set message_link = '' %}
-
 {%- block stylesheets %}
-    {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
-    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
+{# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
+<link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
 {#    {{ encore_entry_link_tags('app') }}#}
-    {% if theme is defined %}
+{% if theme is defined %}
 {#    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>#}
-    {% endif %}
-    <link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
+{% endif %}
+<link rel="stylesheet" href="{{ url('home') ~ 'build/css/print.css' }}" media="print" />
 {#    {{ encore_entry_link_tags('vue') }}#}
-    <link rel="stylesheet" href="{{ url('home') ~ 'build/vue.css' }}"/>
-{% endblock -%}
+<link rel="stylesheet" href="{{ url('home') ~ 'build/vue.css' }}"/>
+{% endblock %}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
 <script src="{{ url('home') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script>
 <script src="{{ url('home') ~ 'build/runtime.js' }}"></script>
@@ -42,14 +41,13 @@
 {#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
 <script src="{{ url('home') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}
     {% block chamilo_header_js %}
         {# Loading legacy js using the $htmlHeadXtra array #}
         {% autoescape false %}
             {% for js in legacy_javascript %}
-                {{ js }}
+                {{~ js }}
             {% endfor %}
         {% endautoescape %}
     {% endblock %}

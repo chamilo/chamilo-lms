@@ -56,16 +56,16 @@ switch ($action) {
 $token = Security::get_token();
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager::get_group_properties($group_id);
+    $group_properties = api_get_group_entity($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access(
+        $show_work = GroupManager::userHasAccess(
             $user_id,
-            $group_properties['iid'],
+            $group_properties,
             GroupManager::GROUP_TOOL_WORK
         );
     }
@@ -80,7 +80,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id,
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties->getName(),
     ];
 }
 
@@ -93,7 +93,7 @@ $interbreadcrumb[] = [
     'name' => $my_folder_data['title'],
 ];
 
-if (isset($_GET['list']) && 'with' == $_GET['list']) {
+if (isset($_GET['list']) && 'with' === $_GET['list']) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Learners who sent their work')];
 } else {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Learners who didn\'t send their work')];

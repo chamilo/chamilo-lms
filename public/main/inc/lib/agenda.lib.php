@@ -81,9 +81,9 @@ class Agenda
 
                 $group = api_get_group_entity();
                 if (!empty($group)) {
-                    $userHasAccess = GroupManager::user_has_access(
+                    $userHasAccess = GroupManager::userHasAccess(
                         api_get_user_id(),
-                        $group->getIid(),
+                        $group,
                         GroupManager::GROUP_TOOL_CALENDAR
                     );
                     $isTutor = GroupManager::isTutorOfGroup(
@@ -2566,7 +2566,7 @@ class Agenda
             ('1' == api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
             api_is_allowed_to_session_edit(false, true)
             || (
-                GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
+                GroupManager::userHasAccess($currentUserId, $group, GroupManager::GROUP_TOOL_CALENDAR)
                 && GroupManager::isTutorOfGroup($currentUserId, $group)
             )
         ) {

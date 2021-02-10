@@ -53,6 +53,7 @@ if (!in_array(
         'get_work_user_list',
         'get_work_user_list_others',
         'get_work_user_list_all',
+        'get_work_pending_list',
         'get_timelines',
         'get_user_skill_ranking',
         'get_usergroups',
@@ -558,6 +559,20 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $count = get_count_work($work_id);
+        break;
+    case 'get_work_pending_list':
+        $courseId = $_REQUEST['course'] ?? 0;
+        $status = $_REQUEST['status'] ?? 0;
+        $count = getAllWork(
+            null,
+            null,
+            null,
+            null,
+            $whereCondition,
+            true,
+            $courseId,
+            $status
+        );
         break;
     case 'get_work_user_list_others':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -1369,6 +1384,38 @@ switch ($action) {
             $sord,
             $work_id,
             $whereCondition
+        );
+        break;
+    case 'get_work_pending_list':
+        api_block_anonymous_users();
+        if (false === api_is_teacher()) {
+            exit;
+        }
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
+        $columns = [
+            'course',
+            'work_name',
+            'fullname',
+            'title',
+            'qualification',
+            'sent_date',
+            'qualificator_id',
+            'correction',
+        ];
+        $columns = array_merge($columns, $plagiarismColumns);
+        $columns[] = 'actions';
+        $result = getAllWork(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $whereCondition,
+            false,
+            $courseId,
+            $status
         );
         break;
     case 'get_work_user_list_others':

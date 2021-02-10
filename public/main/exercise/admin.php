@@ -286,7 +286,7 @@ $templateName = $template->get_template('exercise/submit.js.tpl');
 $htmlHeadXtra[] = $template->fetch($templateName);
 //$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
+//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {

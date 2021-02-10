@@ -103,16 +103,16 @@ Feature: Group tool
 #    Then I should see "Are you sure to delete"
 #    Then I follow "delete_item"
 #
-  Scenario: Delete directory
-    Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I follow "Group 0001"
-    Then I should see "Group 0001"
-    And I follow "Documents"
-    Then I should see "My folder in group"
-    Then I follow "Delete"
-    Then wait for the page to be loaded
-    Then I should see "Are you sure to delete"
-    Then I follow "delete_item"
+#  Scenario: Delete directory
+#    Given I am on "/main/group/group.php?cid=1&sid=0"
+#    And I follow "Group 0001"
+#    Then I should see "Group 0001"
+#    And I follow "Documents"
+#    Then I should see "My folder in group"
+#    Then I follow "Delete"
+#    Then wait for the page to be loaded
+#    Then I should see "Are you sure to delete"
+#    Then I follow "delete_item"
 
   Scenario: Add fapple to the Group 0001
     Given I am on "/main/group/group.php?cid=1&sid=0"
@@ -146,13 +146,12 @@ Feature: Group tool
     Then I follow "Group 0003"
     Then I should not see "Fiona"
 
- # Group category overwrites all other groups settings.
+  # Group category overwrites all other groups settings.
   Scenario: Change Group category to allow multiple inscription of the user
     Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Edit this category"
     Then I should see "Edit group category: Group category 1"
     And I select "10" from "groups_per_user"
-    #Then I fill in select bootstrap static by text "#groups_per_user" select "10"
     Then I press "Edit"
     And wait the page to be loaded when ready
     Then I should see "Group settings have been modified"

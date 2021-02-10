@@ -423,9 +423,9 @@ if (is_array($forumCategories)) {
                         if ('0' == $forum->getForumOfGroup()) {
                             $show_forum = true;
                         } else {
-                            $show_forum = GroupManager::user_has_access(
+                            $show_forum = GroupManager::userHasAccess(
                                 $user_id,
-                                $forum->getForumOfGroup(),
+                                api_get_group_entity($forum->getForumOfGroup()),
                                 GroupManager::GROUP_TOOL_FORUM
                             );
                         }

@@ -1,15 +1,15 @@
 <div id="record-audio-recordrtc-{{ question_id }}" class="row">
-    <div class="col-sm-4 col-sm-offset-4">
+    <div class="col-sm-12">
         <div class="form-group text-center">
             <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
-            <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
+            <span class="sr-only">{{ 'Record audio'|trans }}</span>
         </div>
     </div>
     <div class="col-sm-12">
         <div class="form-group text-center">
             <div id="timer" style="display: none">
                 <h2>
-                    <div class="label label-danger">
+                    <div class="badge badge-danger">
                         <span id="hour">00</span>
                         <span class="divider">:</span>
                         <span id="minute">00</span>
@@ -21,31 +21,36 @@
             </div>
 
             <button class="btn btn-primary" type="button" id="btn-start-record-{{ question_id }}">
-                <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
+                <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'Start recording'|trans }}
             </button>
             <button class="btn btn-primary hidden" type="button" id="btn-pause-record-{{ question_id }}" disabled>
-                <span class="fa fa-pause fa-fw" aria-hidden="true"></span> {{ 'PauseRecordingAudio'|get_lang }}
+                <span class="fa fa-pause fa-fw" aria-hidden="true"></span> {{ 'Pause recording'|trans }}
             </button>
             <button class="btn btn-primary hidden" type="button" id="btn-play-record-{{ question_id }}" disabled>
-                <span class="fa fa-play fa-fw" aria-hidden="true"></span> {{ 'PlayRecordingAudio'|get_lang }}
+                <span class="fa fa-play fa-fw" aria-hidden="true"></span> {{ 'Resume recording'|trans }}
             </button>
             <button class="btn btn-danger hidden" type="button" id="btn-stop-record-{{ question_id }}" disabled>
-                <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
+                <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'Stop recording'|trans }}
             </button>
             <button class="btn btn-success hidden" type="button" id="btn-save-record-{{ question_id }}"
-                    data-loadingtext="{{ 'Uploading'|get_lang }}"
+                    data-loadingtext="{{ 'Uploading'|trans }}"
                     disabled>
-                <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
+                <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'Save recorded audio'|trans }}
             </button>
-            <button id="hide_description_{{ question_id }}" type="button" class="btn btn-default advanced_options" data-toggle="button" aria-pressed="false" autocomplete="off">
-                <em class="fa fa-bars"></em> {{ 'AddText' | get_lang }}
+            <button
+                id="hide_description_{{ question_id }}"
+                type="button"
+                class="btn btn-default advanced_options" data-toggle="button" aria-pressed="false" autocomplete="off">
+                <em class="fa fa-bars"></em> {{ 'Add text' | trans }}
             </button>
         </div>
         <div class="form-group text-center">
             <audio class="skip hidden center-block" controls id="record-preview-{{ question_id }}"></audio>
         </div>
-        <div class="well">
-            {{ 'OralExpressionHelpText' | get_lang }}
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+        {{ 'When you start recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied? the file is automatically sent to the server so you can just continue your exercise.'|trans }}
+            </div>
         </div>
         <div class="record-message"></div>
     </div>
@@ -67,13 +72,9 @@
             btnStopId: '#btn-stop-record-{{ question_id }}',
             plyrPreviewId: '#record-preview-{{ question_id }}',
             directory: '{{ directory }}',
-            type: 'document'
-        }, {
-            blockId: '#record-audio-wami-{{ question_id }}',
-            containerId: 'record-audio-wami-container-{{ question_id }}',
-            directory: '{{ directory }}',
-            userId: {{ user_id }},
-            type: 'document'
+            type: 'document',
+            recordAudioUrl: '{{ url('legacy_main', {name: 'inc/ajax/record_audio_rtc.ajax.php'}) }}',
+            cidReq: '{{ course_url_params }}'
         }, '{{ file_name }}');
 
         if (0 === $('#hide_description_{{ question_id }}_options').length) {

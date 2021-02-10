@@ -178,7 +178,6 @@ $form->addGroup(
     false
 );
 $form->addElement('html', '</div>');
-
 $form->addElement('hidden', 'action');
 
 $form->addElement('html', '<div class="col-md-12">');
@@ -380,13 +379,13 @@ if ($form->validate()) {
         $max_member = $values['max_member'];
     }
 
-    $self_reg_allowed = isset($values['self_reg_allowed']) ? $values['self_reg_allowed'] : 0;
-    $self_unreg_allowed = isset($values['self_unreg_allowed']) ? $values['self_unreg_allowed'] : 0;
+    $self_reg_allowed = $values['self_reg_allowed'] ?? 0;
+    $self_unreg_allowed = $values['self_unreg_allowed'] ?? 0;
 
     switch ($values['action']) {
         case 'update_settings':
             GroupManager::update_category(
-                $values['id'],
+                $_GET['id'],
                 $values['title'],
                 $values['description'],
                 $values['doc_state'],
@@ -400,7 +399,7 @@ if ($form->validate()) {
                 $self_unreg_allowed,
                 $max_member,
                 $values['groups_per_user'],
-                isset($values['document_access']) ? $values['document_access'] : 0
+                $values['document_access'] ?? 0
             );
             Display::addFlash(Display::return_message(get_lang('Group settings have been modified')));
             header('Location: '.$currentUrl.'&category='.$values['id']);
@@ -420,7 +419,7 @@ if ($form->validate()) {
                 $self_unreg_allowed,
                 $max_member,
                 $values['groups_per_user'],
-                isset($values['document_access']) ? $values['document_access'] : 0
+                $values['document_access'] ?? 0
             );
             Display::addFlash(Display::return_message(get_lang('Category created')));
             header('Location: '.$currentUrl);

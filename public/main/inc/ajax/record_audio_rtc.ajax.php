@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -9,10 +10,10 @@ api_block_anonymous_users();
 
 $courseInfo = api_get_course_info();
 /** @var string $tool document or exercise */
-$tool = isset($_REQUEST['tool']) ? $_REQUEST['tool'] : '';
-$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'document'; // can be document or message
+$tool = $_REQUEST['tool'] ?? '';
+$type = $_REQUEST['type'] ?? 'document'; // can be document or message
 
-if ('document' == $type) {
+if ('document' === $type) {
     api_protect_course_script();
 }
 
@@ -23,15 +24,21 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
         header('Content-Type: application/json');
         echo json_encode([
             'error' => true,
-            'message' => Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error'),
+            'message' => Display::return_message(
+                get_lang('Upload failed, please check maximum file size limits and folder rights.'),
+                'error'
+            ),
         ]);
 
-        Display::cleanFlashMessages();
+        //Display::cleanFlashMessages();
         exit;
     }
 
     Display::addFlash(
-        Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error')
+        Display::return_message(
+            get_lang('Upload failed, please check maximum file size limits and folder rights.'),
+            'error'
+        )
     );
     exit;
 }
@@ -86,11 +93,11 @@ switch ($type) {
                 header('Content-Type: application/json');
                 echo json_encode([
                     'error' => $error,
-                    'message' => Display::getFlashToString(),
+                    //'message' => Display::getFlashToString(),
                     'fileUrl' => $data['document_url'],
                 ]);
 
-                Display::cleanFlashMessages();
+                //Display::cleanFlashMessages();
                 exit;
             }
 

@@ -677,7 +677,6 @@ class GroupManager
         $categoryId = null,
         $documentAccess = 0
     ) {
-        $table_group = Database::get_course_table(TABLE_GROUP);
         $table_forum = Database::get_course_table(TABLE_FORUM);
         $categoryId = (int) $categoryId;
         $group_id = (int) $group_id;
@@ -1043,8 +1042,6 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = (int) $id;
 
-        $courseId = api_get_course_int_id();
-
         $allowDocumentAccess = api_get_configuration_value('group_category_document_access');
         $documentCondition = '';
         if ($allowDocumentAccess) {
@@ -1068,7 +1065,6 @@ class GroupManager
                     $documentCondition
                     max_student = ".intval($maximum_number_of_students)."
                 WHERE iid = $id";
-
         Database::query($sql);
 
         // Updating all groups inside this category
@@ -1958,15 +1954,19 @@ class GroupManager
      * Check if a user has access to a certain group tool.
      *
      * @param int    $user_id  The user id
-     * @param int    $group_id The group iid
+     * @param CGroup $group
      * @param string $tool     The tool to check the access rights. This should be
      *                         one of constants: GROUP_TOOL_DOCUMENTS
      *
      * @return bool true if the given user has access to the given tool in the
      *              given course
      */
-    public static function user_has_access($user_id, $group_id, $tool)
+    public static function userHasAccess($user_id, CGroup $group = null, $tool)
     {
+        if (null === $group) {
+            return false;
+        }
+
         // Admin have access everywhere
         if (api_is_platform_admin()) {
             return true;
@@ -1977,50 +1977,37 @@ class GroupManager
             return true;
         }
 
+        if (0 == $group->getStatus()) {
+            return false;
+        }
+
         switch ($tool) {
             case self::GROUP_TOOL_FORUM:
-                $key = 'forum_state';
+                $toolStatus = $group->getForumState();
                 break;
             case self::GROUP_TOOL_DOCUMENTS:
-                $key = 'doc_state';
+                $toolStatus = $group->getDocState();
                 break;
             case self::GROUP_TOOL_CALENDAR:
-                $key = 'calendar_state';
+                $toolStatus = $group->getCalendarState();
                 break;
             case self::GROUP_TOOL_ANNOUNCEMENT:
-                $key = 'announcements_state';
+                $toolStatus = $group->getAnnouncementsState();
                 break;
             case self::GROUP_TOOL_WORK:
-                $key = 'work_state';
+                $toolStatus = $group->getWorkState();
                 break;
             case self::GROUP_TOOL_WIKI:
-                $key = 'wiki_state';
+                $toolStatus = $group->getWikiState();
                 break;
             case self::GROUP_TOOL_CHAT:
-                $key = 'chat_state';
+                $toolStatus = $group->getChatState();
                 break;
             default:
                 return false;
         }
 
-        // Check group properties
-        $groupInfo = self::get_group_properties($group_id, true);
-
-        if (empty($groupInfo)) {
-            return false;
-        }
-
-        if (0 == $groupInfo['status']) {
-            return false;
-        }
-
-        if (!isset($groupInfo[$key])) {
-            return false;
-        }
-
-        $status = $groupInfo[$key];
-
-        switch ($status) {
+        switch ($toolStatus) {
             case self::TOOL_NOT_AVAILABLE:
                 return false;
                 break;
@@ -2028,14 +2015,14 @@ class GroupManager
                 return true;
                 break;
             case self::TOOL_PRIVATE:
-                $userIsInGroup = self::isUserInGroup($user_id, $groupInfo);
+                $userIsInGroup = self::isUserInGroup($user_id, $group);
                 if ($userIsInGroup) {
                     return true;
                 }
                 break;
             case self::TOOL_PRIVATE_BETWEEN_USERS:
                 // Only works for announcements for now
-                $userIsInGroup = self::isUserInGroup($user_id, $groupInfo);
+                $userIsInGroup = self::isUserInGroup($user_id, $group);
                 if ($userIsInGroup && self::GROUP_TOOL_ANNOUNCEMENT == $tool) {
                     return true;
                 }
@@ -2051,9 +2038,9 @@ class GroupManager
      *
      * @return bool
      */
-    public static function userHasAccessToBrowse($userId, CGroup $group, $sessionId = 0)
+    public static function userHasAccessToBrowse($userId, CGroup $group = null, $sessionId = 0)
     {
-        if (empty($group)) {
+        if (null === $group) {
             return false;
         }
 
@@ -2084,15 +2071,14 @@ class GroupManager
         if (0 == $group->getStatus()) {
             return false;
         }
-        $groupId = $group->getIid();
 
-        if (self::user_has_access($userId, $groupId, self::GROUP_TOOL_FORUM) ||
-            self::user_has_access($userId, $groupId, self::GROUP_TOOL_DOCUMENTS) ||
-            self::user_has_access($userId, $groupId, self::GROUP_TOOL_CALENDAR) ||
-            self::user_has_access($userId, $groupId, self::GROUP_TOOL_ANNOUNCEMENT) ||
-            self::user_has_access($userId, $groupId, self::GROUP_TOOL_WORK) ||
-            self::user_has_access($userId, $groupId, self::GROUP_TOOL_WIKI) ||
-            self::user_has_access($userId, $groupId, self::GROUP_TOOL_CHAT)
+        if (self::userHasAccess($userId, $group, self::GROUP_TOOL_FORUM) ||
+            self::userHasAccess($userId, $group, self::GROUP_TOOL_DOCUMENTS) ||
+            self::userHasAccess($userId, $group, self::GROUP_TOOL_CALENDAR) ||
+            self::userHasAccess($userId, $group, self::GROUP_TOOL_ANNOUNCEMENT) ||
+            self::userHasAccess($userId, $group, self::GROUP_TOOL_WORK) ||
+            self::userHasAccess($userId, $group, self::GROUP_TOOL_WIKI) ||
+            self::userHasAccess($userId, $group, self::GROUP_TOOL_CHAT)
         ) {
             return true;
         }

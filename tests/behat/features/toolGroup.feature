@@ -28,7 +28,7 @@ Feature: Group tool
     When I fill in the following:
       | number_of_groups | 5 |
     And I press "submit"
-    And wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "New groups creation"
     When I fill in the following:
       | group_0_places | 1 |
@@ -120,8 +120,8 @@ Feature: Group tool
     Then I should see "Group 0001"
     Then I follow "Edit this group"
     Then I should see "Group members"
-    Then wait for the page to be loaded
     Then I follow "group_members_tab"
+    And wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
@@ -136,8 +136,8 @@ Feature: Group tool
     Then I should see "Group 0003"
     Then I follow "Edit this group"
     Then I should see "Group members"
-    Then wait for the page to be loaded
     Then I follow "group_members_tab"
+    Then wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
@@ -153,7 +153,7 @@ Feature: Group tool
     Then I should see "Edit group category: Group category 1"
     And I select "10" from "groups_per_user"
     Then I press "Edit"
-    And wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "Group settings have been modified"
 
   Scenario: Change Group 0003 settings to make announcements private
@@ -192,8 +192,8 @@ Feature: Group tool
     Then I should see "Group 0005"
     Then I follow "Edit this group"
     Then I should see "Group members"
-    Then wait for the page to be loaded
     Then I follow "group_members_tab"
+    Then wait for the page to be loaded
     Then I additionally select "Fiona Apple Maggart (fapple)" from "group_members"
     Then I additionally select "Andrea Costea (acostea)" from "group_members"
     Then I press "group_members_rightSelected"
@@ -210,7 +210,6 @@ Feature: Group tool
     Then I should see "Group 0003"
     Then I follow "Edit this group"
     Then I should see "Group members"
-    Then wait for the page to be loaded
     Then I follow "group_members_tab"
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     Then I press "group_members_rightSelected"
@@ -226,9 +225,9 @@ Feature: Group tool
     Then I should see "Group 0002"
     Then I follow "Edit this group"
     Then I should see "Group members"
-    Then wait for the page to be loaded
     Then I follow "group_members_tab"
     Then I select "Andrea Costea (acostea)" from "group_members"
+    Then wait for the page to be loaded
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
     And wait very long for the page to be loaded
@@ -262,10 +261,10 @@ Feature: Group tool
     And I follow "Announcements"
     Then I should see "Announcements"
     Then I follow "Add an announcement"
-    Then wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "Add an announcement"
     Then I press "choose_recipients"
-    Then I select "Fiona Apple" from "users"
+    Then I select "Fiona Apple Maggart" from "users"
     Then I press "users_rightSelected"
     Then I fill in the following:
       | title | Announcement for user fapple inside Group 0001 |
@@ -317,6 +316,7 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
     Then I press "submit"
+    Then wait for the page to be loaded
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement as acostea and send only to fapple
@@ -326,7 +326,7 @@ Feature: Group tool
     And I follow "Group 0005"
     Then I should see "Group 0005"
     And I follow "Announcements"
-    Then wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "Announcements"
     Then I follow "Add an announcement"
     Then wait for the page to be loaded
@@ -341,6 +341,7 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
     Then I press "submit"
+    Then wait for the page to be loaded
     Then I should see "Announcement has been added"
 
   Scenario: Check fapple/acostea access of announcements
@@ -354,7 +355,7 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement for all users inside Group 0001"
     Then I should see "Announcement for user fapple inside Group 0001"
-    Then I follow "Announcement for user fapple inside Group 0001 Group"
+    Then I follow "Announcement for user fapple inside Group 0001"
     Then I should see "Announcement description for user fapple inside Group 0001"
     Then I save current URL with name "announcement_for_user_fapple_group_0001_public"
     Then I move backward one page
@@ -368,9 +369,9 @@ Feature: Group tool
     Then I should see "Group 0003"
     Then I follow "Announcements"
     And wait for the page to be loaded
-    Then I should see "Announcement for all users inside Group 0003"
+    Then I should see "AnnCheck fapple/acostea access of announcemenouncement for all users inside Group 0003"
     Then I should see "Announcement for user fapple inside Group 0003"
-    Then I follow "Announcement for user fapple inside Group 0003 Group"
+    Then I follow "Announcement for user fapple inside Group 0003"
     Then I should see "Announcement description for user fapple inside Group 0003"
     Then I save current URL with name "announcement_for_user_fapple_group_0003_private"
     Then I move backward one page

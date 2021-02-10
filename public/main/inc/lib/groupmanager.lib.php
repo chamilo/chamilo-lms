@@ -1194,11 +1194,10 @@ class GroupManager
         $sql = "$select
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
-                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
+                ON (gu.group_id = g.iid)
                 INNER JOIN $user_table u
                 ON (u.id = gu.user_id)
                 WHERE
-                    gu.c_id = $courseId AND
                     g.iid = $group_id";
 
         if (!empty($column) && !empty($direction)) {
@@ -1367,8 +1366,6 @@ class GroupManager
     {
         $result = [];
         $table = Database::get_course_table(TABLE_GROUP_USER);
-        $course_id = api_get_course_int_id();
-
         $groups = array_map('intval', $groups);
         // protect individual elements with surrounding quotes
         $groups = implode(', ', $groups);

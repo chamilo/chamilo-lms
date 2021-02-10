@@ -47,17 +47,7 @@ class GroupVoter extends Voter
             self::DELETE,
         ];
 
-        // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options)) {
-            return false;
-        }
-
-        // only vote on Post objects inside this voter
-        if (!$subject instanceof CGroup) {
-            return false;
-        }
-
-        return true;
+        return $subject instanceof CGroup && in_array($attribute, $options);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -69,7 +59,7 @@ class GroupVoter extends Voter
             return false;
         }
 
-        if (false == $subject) {
+        if (false === $subject) {
             return false;
         }
 
@@ -77,6 +67,7 @@ class GroupVoter extends Voter
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
+
         /** @var CGroup $group */
         $group = $subject;
 

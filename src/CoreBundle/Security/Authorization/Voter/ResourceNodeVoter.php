@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource as SecurityResource;
 use Laminas\Permissions\Acl\Role\GenericRole as Role;
@@ -33,20 +34,17 @@ class ResourceNodeVoter extends Voter
 
     public const ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
     public const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
+    public const ROLE_CURRENT_COURSE_GROUP_TEACHER = 'ROLE_CURRENT_COURSE_GROUP_TEACHER';
+    public const ROLE_CURRENT_COURSE_GROUP_STUDENT = 'ROLE_CURRENT_COURSE_GROUP_STUDENT';
     public const ROLE_CURRENT_SESSION_COURSE_TEACHER = 'ROLE_CURRENT_SESSION_COURSE_TEACHER';
     public const ROLE_CURRENT_SESSION_COURSE_STUDENT = 'ROLE_CURRENT_SESSION_COURSE_STUDENT';
 
     private $requestStack;
     private $security;
-    //private $entityManager;
 
-    /**
-     * Constructor.
-     */
     public function __construct(Security $security, RequestStack $requestStack)
     {
         $this->security = $security;
-        //$this->entityManager = $entityManager;
         $this->requestStack = $requestStack;
     }
 
@@ -113,7 +111,7 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
-        // Courses are also a ResourceNode. Courses are protected using the CourseVoter, not by ResourceNodeVoter.
+        // Courses are also a Resource but courses are protected using the CourseVoter, not by ResourceNodeVoter.
         if ('courses' === $resourceTypeName) {
             return true;
         }
@@ -142,9 +140,9 @@ class ResourceNodeVoter extends Voter
         // Checking links connected to this resource.
         $request = $this->requestStack->getCurrentRequest();
 
-        // @todo fix parameters.
         $courseId = (int) $request->get('cid');
         $sessionId = (int) $request->get('sid');
+        $groupId = (int) $request->get('gid');
 
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
@@ -172,16 +170,46 @@ class ResourceNodeVoter extends Voter
             }
 
             $linkCourse = $link->getCourse();
-            $linkSession = $link->getSession();
-            //$linkUserGroup = $link->getUserGroup();
 
             // Course found, but courseId not set, skip course checking.
             if ($linkCourse instanceof Course && empty($courseId)) {
                 continue;
             }
 
+            $linkSession = $link->getSession();
+            $linkGroup = $link->getGroup();
+            //$linkUserGroup = $link->getUserGroup();
+
             // @todo Check if resource was sent to a usergroup
-            // @todo Check if resource was sent to a group inside a course.
+
+            // Check if resource was sent inside a group in a course session.
+            if ($linkGroup instanceof CGroup && !empty($groupId) &&
+                $linkSession instanceof Session && !empty($sessionId) &&
+                $linkCourse instanceof Course && !empty($courseId)
+            ) {
+                if ($linkCourse->getId() === $courseId &&
+                    $linkSession->getId() === $sessionId &&
+                    $linkGroup->getIid() === $groupId
+                ) {
+                    $linkFound = true;
+
+                    break;
+                }
+            }
+
+            // Check if resource was sent inside a group in a base course.
+            if ($linkGroup instanceof CGroup && !empty($groupId) &&
+                empty($sessionId) &&
+                $linkCourse instanceof Course && !empty($courseId)
+            ) {
+                if ($linkCourse->getId() === $courseId &&
+                    $linkGroup->getIid() === $groupId
+                ) {
+                    $linkFound = true;
+
+                    break;
+                }
+            }
 
             // Check if resource was sent to a course inside a session.
             if ($linkSession instanceof Session && !empty($sessionId) &&
@@ -197,7 +225,7 @@ class ResourceNodeVoter extends Voter
             }
 
             // Check if resource was sent to a course.
-            if ($linkCourse instanceof Course && !empty($courseId) && false === $link->hasUser()) {
+            if ($linkCourse instanceof Course && !empty($courseId)) {
                 if ($linkCourse->getId() === $courseId) {
                     $linkFound = true;
 
@@ -212,6 +240,7 @@ class ResourceNodeVoter extends Voter
             }*/
         }
 
+        var_dump($link->getId());
         // No link was found or not available.
         if (false === $linkFound) {
             return false;
@@ -258,6 +287,23 @@ class ResourceNodeVoter extends Voter
                     $rights[] = $resourceRight;
                 }
             }
+
+            if (!empty($groupId)) {
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(self::ROLE_CURRENT_SESSION_COURSE_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($readerMask)
+                    ->setRole(self::ROLE_CURRENT_SESSION_COURSE_STUDENT)
+                ;
+                $rights[] = $resourceRight;
+            }
+
 
             if (!empty($sessionId)) {
                 $resourceRight = new ResourceRight();

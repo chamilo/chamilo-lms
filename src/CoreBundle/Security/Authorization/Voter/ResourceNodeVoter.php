@@ -304,7 +304,6 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-
             if (!empty($sessionId)) {
                 $resourceRight = new ResourceRight();
                 $resourceRight

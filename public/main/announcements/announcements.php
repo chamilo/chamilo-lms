@@ -657,9 +657,9 @@ switch ($action) {
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
-            $data['users'] = isset($data['users']) ? $data['users'] : [];
-            $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
-            $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
+            $data['users'] = $data['users'] ?? [];
+            $sendToUsersInSession = isset($data['send_to_users_in_session']);
+            $sendMeCopy = isset($data['send_me_a_copy_by_email']);
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];

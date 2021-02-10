@@ -463,7 +463,6 @@ class AnnouncementManager
 
         $stok = null;
         $html = '';
-
         $announcement = self::getAnnouncementInfoById(
             $id,
             api_get_course_int_id(),
@@ -531,11 +530,13 @@ class AnnouncementManager
 
         $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
         if ($allow && api_is_allowed_to_edit(false, true)) {
-            $sent_to = $announcement->getUsersAndGroupSubscribedToResource();
-            $sentToForm = self::sent_to_form($sent_to);
+            $sentTo = $announcement->getUsersAndGroupSubscribedToResource();
+            $sentToForm = self::sent_to_form($sentTo);
+            $createdBy = '<br />'.
+                get_lang('Created by').': '.UserManager::formatUserFullName($announcement->getResourceNode()->getCreator());
             $html .= Display::tag(
                 'td',
-                get_lang('Visible to').': '.$sentToForm,
+                get_lang('Visible to').': '.$sentToForm.$createdBy,
                 ['class' => 'announcements_datum']
             );
         }
@@ -730,13 +731,15 @@ class AnnouncementManager
         $sendToUsersInSession = false
     ) {
         $courseInfo = api_get_course_info();
-
         $order = self::getLastAnnouncementOrder($courseInfo);
         $em = Database::getManager();
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
         $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
+
         $announcement = new CAnnouncement();
         $announcement
             ->setContent($newContent)
@@ -744,71 +747,62 @@ class AnnouncementManager
             ->setEndDate(new DateTime($now))
             ->setDisplayOrder($order)
             ->setParent($course)
-            ->addCourseLink(
+            ;
+
+        $em->persist($announcement);
+
+        $sendToUsers = CourseManager::separateUsersGroups($to_users);
+        // if nothing was selected in the menu then send to all the group
+        $sentToAllGroup = false;
+        if (empty($sendToUsers['groups']) && empty($sendToUsers['users'])) {
+            $announcement->addCourseLink(
                 $course,
-                api_get_session_entity($sessionId),
-                api_get_group_entity()
+                $session,
+                $group
             );
+            $sentToAllGroup = true;
+        }
+
+        if (false === $sentToAllGroup) {
+            if (!empty($sendToUsers['groups'])) {
+                foreach ($sendToUsers['groups'] as $groupItemId) {
+                    $groupItem = api_get_group_entity($groupItemId);
+                    if (null !== $groupItem) {
+                        $announcement->addCourseLink(
+                            $course,
+                            $session,
+                            $groupItem
+                        );
+                    }
+                }
+            }
+
+            if (!empty($sendToUsers['users'])) {
+                foreach ($sendToUsers['users'] as $user) {
+                    $userToAdd = api_get_user_entity($user);
+                    if (null !== $userToAdd) {
+                        $announcement->addUserLink(
+                            $userToAdd,
+                            $course,
+                            $session,
+                            $group
+                        );
+                    }
+                }
+            }
+        }
+
         $em->persist($announcement);
         $em->flush();
 
-        // Store the attach file
-        if ($announcement) {
-            $last_id = $announcement->getIid();
+        $id = $announcement->getIid();
+        if ($id) {
             if (!empty($file)) {
                 self::add_announcement_attachment_file(
                     $announcement,
                     $file_comment,
                     $file
                 );
-            }
-
-            $send_to_users = CourseManager::separateUsersGroups($to_users);
-
-            // if nothing was selected in the menu then send to all the group
-            $sentToAllGroup = false;
-            if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
-                $groupInfo = GroupManager::get_group_properties($groupId);
-                /*api_item_property_update(
-                    $courseInfo,
-                    TOOL_ANNOUNCEMENT,
-                    $last_id,
-                    'AnnouncementAdded',
-                    api_get_user_id(),
-                    $groupInfo
-                );*/
-                $sentToAllGroup = true;
-            }
-
-            if (false === $sentToAllGroup) {
-                if (!empty($send_to_users['groups'])) {
-                    foreach ($send_to_users['groups'] as $group) {
-                        $groupInfo = GroupManager::get_group_properties($group);
-                        /*api_item_property_update(
-                            $courseInfo,
-                            TOOL_ANNOUNCEMENT,
-                            $last_id,
-                            'AnnouncementAdded',
-                            api_get_user_id(),
-                            $groupInfo
-                        );*/
-                    }
-                }
-
-                $groupInfo = GroupManager::get_group_properties($groupId);
-                if (!empty($send_to_users['users'])) {
-                    foreach ($send_to_users['users'] as $user) {
-                        /*api_item_property_update(
-                            $courseInfo,
-                            TOOL_ANNOUNCEMENT,
-                            $last_id,
-                            'AnnouncementAdded',
-                            api_get_user_id(),
-                            $groupInfo,
-                            $user
-                        );*/
-                    }
-                }
             }
 
             if ($sendToUsersInSession) {
@@ -819,6 +813,7 @@ class AnnouncementManager
         }
 
         return null;
+
     }
 
     /**
@@ -1125,7 +1120,6 @@ class AnnouncementManager
                 $output[] = "&nbsp;".get_lang('All');
             }
         }
-
         if (!empty($output)) {
             $output = array_filter($output);
             if (count($output) > 0) {

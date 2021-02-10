@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class SessionVoter.
+ *
  * @todo remove legacy code.
  */
 class SessionVoter extends Voter

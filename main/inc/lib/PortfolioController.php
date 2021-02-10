@@ -1811,8 +1811,15 @@ class PortfolioController
             $pdfContent .= '</p>';
         }
 
-        $itemsHtml = $this->getItemsInHtmlFormatted();
-        $commentsHtml = $this->getCommentsInHtmlFormatted();
+        $items = $this->em
+            ->getRepository(Portfolio::class)
+            ->findItemsByUser($this->owner, $this->course, $this->session);
+        $comments = $this->em
+            ->getRepository(PortfolioComment::class)
+            ->findCommentsByUser($this->owner, $this->course, $this->session);
+
+        $itemsHtml = $this->getItemsInHtmlFormatted($items);
+        $commentsHtml = $this->getCommentsInHtmlFormatted($comments);
 
         $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
 
@@ -1848,19 +1855,8 @@ class PortfolioController
         );
     }
 
-    private function getItemsInHtmlFormatted(): array
+    private function getItemsInHtmlFormatted(array $items): array
     {
-        $itemsRepo = $this->em->getRepository(Portfolio::class);
-
-        $itemsCriteria = ['user' => $this->owner];
-
-        if ($this->course) {
-            $itemsCriteria['course'] = $this->course;
-            $itemsCriteria['session'] = $this->session ?: null;
-        }
-
-        $items = $itemsRepo->findBy($itemsCriteria);
-
         $itemsHtml = [];
 
         /** @var Portfolio $item */
@@ -1896,32 +1892,8 @@ class PortfolioController
         return $itemsHtml;
     }
 
-    private function getCommentsInHtmlFormatted(): array
+    private function getCommentsInHtmlFormatted(array $comments): array
     {
-        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
-
-        $qbComments = $commentsRepo->createQueryBuilder('comment');
-        $qbComments
-            ->where('comment.author = :owner')
-            ->setParameter('owner', $this->owner);
-
-        if ($this->course) {
-            $qbComments
-                ->join('comment.item', 'item')
-                ->andWhere('item.course = :course')
-                ->setParameter('course', $this->course);
-
-            if ($this->session) {
-                $qbComments
-                    ->andWhere('item.session = :session')
-                    ->setParameter('session', $this->session);
-            } else {
-                $qbComments->andWhere('item.session IS NULL');
-            }
-        }
-
-        $comments = $qbComments->getQuery()->getResult();
-
         $commentsHtml = [];
 
         /** @var PortfolioComment $comment */
@@ -1949,32 +1921,92 @@ class PortfolioController
 
     public function exportZip()
     {
-        $itemsHtml = $this->getItemsInHtmlFormatted();
-        $commentsHtml = $this->getCommentsInHtmlFormatted();
+        $itemsRepo = $this->em->getRepository(Portfolio::class);
+        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+        $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
+
+        $items = $itemsRepo->findItemsByUser($this->owner, $this->course, $this->session);
+        $comments = $commentsRepo->findCommentsByUser($this->owner, $this->course, $this->session);
+
+        $itemsHtml = $this->getItemsInHtmlFormatted($items);
+        $commentsHtml = $this->getCommentsInHtmlFormatted($comments);
 
         $sysArchivePath = api_get_path(SYS_ARCHIVE_PATH);
-        $tempPortfolioDirectory = $sysArchivePath."portfolio/{$this->owner->getId()}/";
+        $tempPortfolioDirectory = $sysArchivePath."portfolio/{$this->owner->getId()}";
+
+        $userDirectory = UserManager::getUserPathById($this->owner->getId(), 'system');
+        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
 
         $filenames = [];
 
         $fs = new Filesystem();
 
-        foreach ($itemsHtml as $i => $itemHtml) {
-            $itemFileContent = $this->fixImagesSourcesToHtml($itemHtml);
-            $itemFilename = $tempPortfolioDirectory.'items/item-'.($i + 1).'.html';
+        /**
+         * @var int       $i
+         * @var Portfolio $item
+         */
+        foreach ($items as $i => $item) {
+            $itemDirectory = $item->getCreationDate()->format('Y-m-d-H-i-s');
+
+            $itemFilename = sprintf('%s/items/%s/item.html', $tempPortfolioDirectory, $itemDirectory);
+            $itemFileContent = $this->fixImagesSourcesToHtml($itemsHtml[$i]);
+
+            $fs->dumpFile($itemFilename, $itemFileContent);
 
             $filenames[] = $itemFilename;
 
-            $fs->dumpFile($itemFilename, $itemFileContent);
+            $attachments = $attachmentsRepo->findFromItem($item);
+
+            /** @var PortfolioAttachment $attachment */
+            foreach ($attachments as $attachment) {
+                $attachmentFilename = sprintf(
+                    '%s/items/%s/attachments/%s',
+                    $tempPortfolioDirectory,
+                    $itemDirectory,
+                    $attachment->getFilename()
+                );
+
+                $fs->copy(
+                    $attachmentsDirectory.$attachment->getPath(),
+                    $attachmentFilename
+                );
+
+                $filenames[] = $attachmentFilename;
+            }
         }
 
-        foreach ($commentsHtml as $i => $commentHtml) {
-            $commentFileContent = $this->fixImagesSourcesToHtml($commentHtml);
-            $commentFilename = $tempPortfolioDirectory.'comments/comment-'.($i + 1).'.html';
+        /**
+         * @var int              $i
+         * @var PortfolioComment $comment
+         */
+        foreach ($comments as $i => $comment) {
+            $commentDirectory = $comment->getDate()->format('Y-m-d-H-i-s');
+
+            $commentFileContent = $this->fixImagesSourcesToHtml($commentsHtml[$i]);
+            $commentFilename = sprintf('%s/comments/%s/comment.html', $tempPortfolioDirectory, $commentDirectory);
+
+            $fs->dumpFile($commentFilename, $commentFileContent);
 
             $filenames[] = $commentFilename;
 
-            $fs->dumpFile($commentFilename, $commentFileContent);
+            $attachments = $attachmentsRepo->findFromComment($comment);
+
+            /** @var PortfolioAttachment $attachment */
+            foreach ($attachments as $attachment) {
+                $attachmentFilename = sprintf(
+                    '%s/comments/%s/attachments/%s',
+                    $tempPortfolioDirectory,
+                    $commentDirectory,
+                    $attachment->getFilename()
+                );
+
+                $fs->copy(
+                    $attachmentsDirectory.$attachment->getPath(),
+                    $attachmentFilename
+                );
+
+                $filenames[] = $attachmentFilename;
+            }
         }
 
         $zipName = $this->owner->getCompleteName()

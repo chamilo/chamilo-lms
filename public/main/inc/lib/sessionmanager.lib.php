@@ -2370,7 +2370,6 @@ class SessionManager
         $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
         $forums = [];
         if (1 === $subscribe) {
-            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
             $forums = get_forums(0, $course_code, true, $session_id);
         }
 

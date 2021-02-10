@@ -8283,8 +8283,6 @@ class learnpath
      */
     public function get_forums()
     {
-        require_once '../forum/forumfunction.inc.php';
-
         $forumCategories = get_forum_categories();
         $forumsInNoCategory = get_forums_in_category(0);
         if (!empty($forumsInNoCategory)) {
@@ -10344,8 +10342,6 @@ EOD;
      */
     public function createForum(CForumCategory $forumCategory)
     {
-        require_once api_get_path(SYS_CODE_PATH).'/forum/forumfunction.inc.php';
-
         return store_forum(
             [
                 'lp_id' => $this->lp_id,
@@ -10937,8 +10933,6 @@ EOD;
                 $itemList['quiz']
             );
         }
-
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         /*if (!empty($itemList['thread'])) {
             $postList = [];

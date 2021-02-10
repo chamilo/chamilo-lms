@@ -335,8 +335,6 @@ class GroupManager
 
             // create a forum if needed
             if ($forumState >= 0) {
-                require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
                 $forumName = get_lang('Group forums');
                 $repo = Container::getForumCategoryRepository();
                 $criteria = ['cId' => $course_id, 'catTitle' => $forumName];
@@ -1953,10 +1951,10 @@ class GroupManager
     /**
      * Check if a user has access to a certain group tool.
      *
-     * @param int    $user_id  The user id
+     * @param int    $user_id The user id
      * @param CGroup $group
-     * @param string $tool     The tool to check the access rights. This should be
-     *                         one of constants: GROUP_TOOL_DOCUMENTS
+     * @param string $tool    The tool to check the access rights. This should be
+     *                        one of constants: GROUP_TOOL_DOCUMENTS
      *
      * @return bool true if the given user has access to the given tool in the
      *              given course

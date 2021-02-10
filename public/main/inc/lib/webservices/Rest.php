@@ -629,7 +629,7 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
 
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
@@ -699,7 +699,7 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
@@ -741,7 +741,7 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $threadInfo = get_thread_information($forumId, $threadId, $sessionId);
@@ -972,7 +972,7 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
 
         $forum = get_forums($forumId, $this->course->getCode());
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
@@ -1114,7 +1114,7 @@ class Rest extends WebService
      */
     public function saveForumThread(array $values, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);

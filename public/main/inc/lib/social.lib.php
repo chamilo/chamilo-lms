@@ -2954,8 +2954,6 @@ class SocialManager extends UserManager
         return [];
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $threads = [];
         if (!empty($forumCourseId)) {
             $courseInfo = api_get_course_info_by_id($forumCourseId);

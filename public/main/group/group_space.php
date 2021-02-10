@@ -17,8 +17,6 @@ $current_course_tool = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true, false, 'group');
 
-require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 $groupEntity = null;
@@ -26,8 +24,7 @@ if (!empty($group_id)) {
     $groupEntity = api_get_group_entity($group_id);
 }
 
-$group_id = $groupEntity->getIid();
-if (empty($groupEntity)) {
+if (null === $groupEntity) {
     api_not_allowed(true);
 }
 

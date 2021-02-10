@@ -169,8 +169,6 @@ class MoodleImport
         }
         $activities = $doc->getElementsByTagName('activity');
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         if ($debug) {
             error_log('Loading activities: '.count($activities));
         }

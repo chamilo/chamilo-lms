@@ -529,10 +529,7 @@ class AddCourse
             $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
             $answer->createAnswer(get_lang('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, get_lang('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
             $answer->save();
-
-            /* Forum tool */
-            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
+            // Forums.
             $params = [
                 'forum_category_title' => get_lang('Example Forum Category'),
                 'forum_category_comment' => '',

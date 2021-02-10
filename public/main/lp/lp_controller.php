@@ -1305,8 +1305,6 @@ switch ($action) {
             $forumThread = $selectedItem->getForumThread($oLP->course_int_id, $oLP->lp_session_id);
 
             if (empty($forumThread)) {
-                require_once '../forum/forumfunction.inc.php';
-
                 $forumCategory = getForumCategoryByTitle(
                     get_lang('Learning paths'),
                     $oLP->course_int_id,

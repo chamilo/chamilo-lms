@@ -4346,8 +4346,6 @@ class learnpathItem
      */
     public function createForumThread(CForumForum $forum)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $em = Database::getManager();
         $threadRepo = Container::getForumThreadRepository();
         $forumThread = $threadRepo->findOneBy([

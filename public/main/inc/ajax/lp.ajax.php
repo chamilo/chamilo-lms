@@ -212,7 +212,6 @@ switch ($action) {
         $forum = false;
 
         if (empty($forum)) {
-            require_once '../../forum/forumfunction.inc.php';
             $forumCategory = getForumCategoryByTitle(
                 get_lang('Learning paths'),
                 $courseId,

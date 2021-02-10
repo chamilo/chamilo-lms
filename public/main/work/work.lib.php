@@ -2765,13 +2765,12 @@ function getAllWork(
 
         $qualification_string = '';
         if ($qualification_exists) {
-            if ($work['qualification'] == '') {
+            if ('' == $work['qualification']) {
                 $qualification_string = Display::label('-');
             } else {
                 $qualification_string = formatWorkScore($work['qualification'], $work['qualification']);
             }
         }
-
 
         $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
@@ -2790,7 +2789,7 @@ function getAllWork(
             $add_string = Display::label(get_lang('Expired'), 'important').' - ';
         }
 
-        if (($can_read && $work['accepted'] == '1') ||
+        if (($can_read && '1' == $work['accepted']) ||
             ($is_author && in_array($work['accepted'], ['1', '0'])) ||
             ($is_allowed_to_edit || api_is_drh())
         ) {
@@ -3001,11 +3000,11 @@ function getAllWork(
                     $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
                         Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
                 }*/
-            } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
+            } elseif ($is_author && (empty($work['qualificator_id']) || 0 == $work['qualificator_id'])) {
                 $action .= '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
                     Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
 
-                if (api_get_course_setting('student_delete_own_publication') == 1) {
+                if (1 == api_get_course_setting('student_delete_own_publication')) {
                     if (api_is_allowed_to_session_edit(false, true)) {
                         $action .= '<a href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
                             Display::return_icon('edit.png', get_lang('Comment'), [], ICON_SIZE_SMALL).'</a>';

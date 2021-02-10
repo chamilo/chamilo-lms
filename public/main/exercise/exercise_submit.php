@@ -47,7 +47,7 @@ if ($allowTimePerQuestion) {
 
 $showPreviousButton = true;
 $showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 }
 if ($showGlossary) {
@@ -78,9 +78,6 @@ if (api_get_configuration_value('quiz_prevent_copy_paste')) {
 
 if ('true' === api_get_setting('enable_record_audio')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
@@ -1241,8 +1238,8 @@ if ($objExercise->review_answers) {
 }
 
     if (!empty($exercise_sound)) {
-        echo '<a 
-            href="../document/download.php?doc_url=%2Faudio%2F'.Security::remove_XSS($exercise_sound).'" 
+        echo '<a
+            href="../document/download.php?doc_url=%2Faudio%2F'.Security::remove_XSS($exercise_sound).'"
             target="_blank">';
         echo '<img src="../img/sound.gif" border="0" align="absmiddle" alt=', get_lang('Audio or video file').'" /></a>';
     }
@@ -1315,11 +1312,11 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                 elm.attachEvent(\'on\' + evType, fn);
             } else{
                 elm[\'on\'+evType] = fn;
-            }            
+            }
             return;
         }
-        
-        var calledUpdateDuration = false;        
+
+        var calledUpdateDuration = false;
         function updateDuration() {
             if (calledUpdateDuration === false) {
                 var saveDurationUrl = "'.$saveDurationUrl.'";
@@ -1329,12 +1326,12 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                     success: function (data) {
                         calledUpdateDuration = true;
                         return;
-                    }, 
+                    },
                 });
                 return;
             }
         }
-        
+
         $(function() {
         '.$questionTimeCondition.'
             //This pre-load the save.png icon
@@ -1345,14 +1342,14 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             $(".block_on_enter").keypress(function(event) {
                 return event.keyCode != 13;
             });
-            
+
             $(".checkCalculatedQuestionOnEnter").keypress(function(event) {
                 if (event.keyCode === 13) {
                     event.preventDefault();
                     var id = $(this).attr("id");
                     var parts = id.split("_");
                     var buttonId = "button_" + parts[1];
-                    document.getElementById(buttonId).click();                    
+                    document.getElementById(buttonId).click();
                 }
             });
 
@@ -1365,10 +1362,10 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
 
 
             $("form#exercise_form").prepend($("#exercise-description"));
-        
+
             $(\'button[name="previous_question_and_save"]\').on("touchstart click", function (e) {
                 e.preventDefault();
-                e.stopPropagation();    
+                e.stopPropagation();
                 var
                     $this = $(this),
                     previousId = parseInt($this.data(\'prev\')) || 0,
@@ -1431,7 +1428,7 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             $(\'button[name="save_now"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 var
                     $this = $(this),
                     questionId = parseInt($this.data(\'question\')) || 0,
@@ -1443,13 +1440,13 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             $(\'button[name="validate_all"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 validate_all();
             });
-            
+
             // Save attempt duration
-            addExerciseEvent(window, \'unload\', updateDuration , false);            
-            addExerciseEvent(window, \'beforeunload\', updateDuration , false);                                    
+            addExerciseEvent(window, \'unload\', updateDuration , false);
+            addExerciseEvent(window, \'beforeunload\', updateDuration , false);
         });
 
         function previous_question(question_num) {
@@ -1475,11 +1472,11 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
             } else {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
-            }            
+            }
             window.location = url;
         }
-        
-        function redirectExerciseToResult() 
+
+        function redirectExerciseToResult()
         {
             window.location = "'.$script_php.'?'.$params.'";
         }
@@ -1487,13 +1484,13 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
         function save_now(question_id, url_extra) {
             // 1. Normal choice inputs
             var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
-            
+
             // 2. Reminder checkbox
             var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
             // 3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
-            
+
             // 4. choice for degree of certainty
             var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
@@ -1506,7 +1503,7 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                     my_choice = $.param(my_choice);
                 }
             }
-            
+
             if ($(\'input[name="remind_list[\'+question_id+\']"]\').is(\':checked\')) {
                 $("#question_div_"+question_id).addClass("remind_highlight");
             } else {
@@ -1519,7 +1516,7 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             dataparam += hotspot ? ("&" + hotspot) : "";
             dataparam += remind_list ? ("&" + remind_list) : "";
             dataparam += my_choiceDc ? ("&" + my_choiceDc) : "";
-            
+
         $("#save_for_now_"+question_id).html(\''.$loading.'\');
             $.ajax({
                 type:"post",
@@ -1583,7 +1580,7 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
 
             // 3. Hotspots.
             var hotspot = $(\'*[name*="hotspot"]\').serialize();
-            
+
             // Question list.
             var question_list = ['.implode(',', $questionList).'];
             var free_answers = {};
@@ -1643,7 +1640,7 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
          <input type="hidden" name="origin" value="'.$origin.'" />
          <input type="hidden" name="reminder" value="'.$reminder.'" />
          <input type="hidden" name="learnpath_id" value="'.$learnpath_id.'" />
-         <input type="hidden" name="learnpath_item_id" value="'.$learnpath_item_id.'" />         
+         <input type="hidden" name="learnpath_item_id" value="'.$learnpath_item_id.'" />
          <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id.'" />';
 
     // Show list of questions

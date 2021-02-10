@@ -371,14 +371,18 @@ class PortfolioController
 
                 $form->addLabel(
                     sprintf(get_lang('PortfolioItemFromXUser'), $origin->getUser()->getCompleteName()),
-                    Display::panel($origin->getContent())
+                    Display::panel(
+                        Security::remove_XSS($origin->getContent())
+                    )
                 );
             } elseif (Portfolio::TYPE_COMMENT === $item->getOriginType()) {
                 $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
 
                 $form->addLabel(
                     sprintf(get_lang('PortfolioCommentFromXUser'), $origin->getAuthor()->getCompleteName()),
-                    Display::panel($origin->getContent())
+                    Display::panel(
+                        Security::remove_XSS($origin->getContent())
+                    )
                 );
             }
         }
@@ -694,7 +698,7 @@ class PortfolioController
                     }
 
                     $nodeHtml = '<p class="media-heading h4">'.PHP_EOL
-                        .$comment->getAuthor()->getCompleteName().'</>'.PHP_EOL.'<small>'.$clockIcon.PHP_EOL
+                        .$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'.$clockIcon.PHP_EOL
                         .Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'.PHP_EOL;
 
                     if ($comment->isImportant()
@@ -707,7 +711,8 @@ class PortfolioController
 
                     $nodeHtml .= '</p>'.PHP_EOL
                         .'<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'
-                        .$comment->getContent().PHP_EOL;
+                        .Security::remove_XSS($comment->getContent())
+                        .PHP_EOL;
 
                     $nodeHtml .= $this->generateAttachmentList($comment);
 
@@ -735,7 +740,7 @@ class PortfolioController
             $this->baseUrl
         );
 
-        $this->renderView($content, $item->getTitle(), $actions, false);
+        $this->renderView($content, Security::remove_XSS($item->getTitle()), $actions, false);
     }
 
     /**
@@ -826,7 +831,9 @@ class PortfolioController
 
         $form->addLabel(
             sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName()),
-            Display::panel($originItem->getContent())
+            Display::panel(
+                Security::remove_XSS($originItem->getContent())
+            )
         );
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
 
@@ -915,7 +922,9 @@ class PortfolioController
 
         $form->addLabel(
             sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName()),
-            Display::panel($originComment->getContent())
+            Display::panel(
+                Security::remove_XSS($originComment->getContent())
+            )
         );
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
 
@@ -1160,7 +1169,7 @@ class PortfolioController
 
         $portfolioItemColumnFilter = function (Portfolio $item) {
             return Display::url(
-                $item->getTitle(),
+                Security::remove_XSS($item->getTitle()),
                 $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
             );
         };
@@ -1263,7 +1272,7 @@ class PortfolioController
             0,
             function (PortfolioComment $comment) {
                 return Display::url(
-                    $comment->getContent(),
+                    $comment->getExcerpt(),
                     $this->baseUrl.http_build_query(['action' => 'view', 'id' => $comment->getItem()->getId()])
                     .'#comment-'.$comment->getId()
                 );
@@ -1458,7 +1467,9 @@ class PortfolioController
         $form->addUserAvatar('user', get_lang('Author'));
         $form->addLabel(get_lang('Title'), $item->getTitle());
 
-        $itemContent = $this->generateItemContent($item);
+        $itemContent = Security::remove_XSS(
+            $this->generateItemContent($item)
+        );
 
         $form->addLabel(get_lang('Content'), $itemContent);
         $form->addNumeric(
@@ -1495,7 +1506,7 @@ class PortfolioController
             'url' => $this->baseUrl,
         ];
         $interbreadcrumb[] = [
-            'name' => $item->getTitle(),
+            'name' => Security::remove_XSS($item->getTitle()),
             'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
         ];
 
@@ -1564,7 +1575,7 @@ class PortfolioController
             'url' => $this->baseUrl,
         ];
         $interbreadcrumb[] = [
-            'name' => $item->getTitle(),
+            'name' => Security::remove_XSS($item->getTitle()),
             'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
         ];
 
@@ -1759,7 +1770,7 @@ class PortfolioController
             $attachment = new PortfolioAttachment();
             $attachment
                 ->setFilename($_file['name'])
-                ->setComment(Security::remove_XSS($comments[$i]))
+                ->setComment($comments[$i])
                 ->setPath($newFileName)
                 ->setOrigin($originId)
                 ->setOriginType($originType)
@@ -1808,14 +1819,20 @@ class PortfolioController
 
             $listItems .= '<li>'
                 .'<span class="fa-li fa fa-paperclip" aria-hidden="true"></span>'
-                .Display::url($attachment->getFilename(), $this->baseUrl.$downloadParams);
+                .Display::url(
+                    Security::remove_XSS($attachment->getFilename()),
+                    $this->baseUrl.$downloadParams
+                );
 
             if ($currentUserId === $postOwnerId) {
                 $listItems .= PHP_EOL.Display::url($deleteIcon, $this->baseUrl.$deleteParams);
             }
 
             if ($attachment->getComment()) {
-                $listItems .= PHP_EOL.Display::span($attachment->getComment(), ['class' => 'text-muted']);
+                $listItems .= PHP_EOL.Display::span(
+                    Security::remove_XSS($attachment->getComment()),
+                    ['class' => 'text-muted']
+                );
             }
 
             $listItems .= '</li>';
@@ -2196,9 +2213,11 @@ class PortfolioController
 
             $metadata .= '</ul>';
 
-            $itemContent = $this->generateItemContent($item);
+            $itemContent = Security::remove_XSS(
+                $this->generateItemContent($item)
+            );
 
-            $itemsHtml[] = Display::panel($itemContent, $item->getTitle(), '', 'info', $metadata);
+            $itemsHtml[] = Display::panel($itemContent, Security::remove_XSS($item->getTitle()), '', 'info', $metadata);
         }
 
         return $itemsHtml;
@@ -2239,10 +2258,16 @@ class PortfolioController
 
             $metadata = '<ul class="list-unstyled text-muted">';
             $metadata .= '<li>'.sprintf(get_lang('DateXDate'), $date).'</li>';
-            $metadata .= '<li>'.sprintf(get_lang('PortfolioItemTitleXName'), $item->getTitle()).'</li>';
+            $metadata .= '<li>'.sprintf(get_lang('PortfolioItemTitleXName'), Security::remove_XSS($item->getTitle())).'</li>';
             $metadata .= '</ul>';
 
-            $commentsHtml[] = Display::panel($comment->getContent(), '', '', 'default', $metadata);
+            $commentsHtml[] = Display::panel(
+                Security::remove_XSS($comment->getContent()),
+                '',
+                '',
+                'default',
+                $metadata
+            );
         }
 
         return $commentsHtml;

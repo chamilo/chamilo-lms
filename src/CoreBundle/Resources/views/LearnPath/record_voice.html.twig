@@ -1,37 +1,38 @@
 <div id="record-audio-recordrtc" class="text-center">
     <p>
         <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
-        <span class="sr-only">{{ 'RecordAudio'|trans }}</span>
-    <div id="timer" style="display: none">
-        <h2>
-            <div class="label label-danger">
-                <span id="hour">00</span>
-                <span class="divider">:</span>
-                <span id="minute">00</span>
-                <span class="divider">:</span>
-                <span id="second">00</span>
-            </div>
-        </h2>
-        <br />
-    </div>
-    <div class="form-group">
-        <input type="text" name="audio_title" id="audio-title-rtc" class="form-control" placeholder="{{ 'InputNameHere'|trans }}" />
-    </div>
+        <span class="sr-only">{{ 'Record audio'|trans }}</span>
+        <div id="timer" style="display: none">
+            <h2>
+                <div class="badge badge-danger">
+                    <span id="hour">00</span>
+                    <span class="divider">:</span>
+                    <span id="minute">00</span>
+                    <span class="divider">:</span>
+                    <span id="second">00</span>
+                </div>
+            </h2>
+            <br />
+        </div>
+        <div class="form-group">
+            <input
+                type="text"
+                name="audio_title"
+                id="audio-title-rtc"
+                class="form-control"
+                placeholder="{{ 'Enter filename here'|trans }}"
+            />
+        </div>
     </p>
-
     <button class="btn btn-primary" type="button" id="btn-start-record">
-        <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|trans }}
+        <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'Start recording'|trans }}
     </button>
     <button class="btn btn-success" type="button" id="btn-stop-record" disabled>
-        <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|trans }}
+        <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'Stop recording'|trans }}
     </button>
 </div>
-
-<div id="record-audio-wami" class="wami-container"></div>
-
 <script>
     $(function() {
-        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
         function startTimer() {
             $("#timer").show();
@@ -84,7 +85,7 @@
 
             btnStart.on('click', function () {
                 if ('' === audioTitle.val()) {
-                    alert('{{ 'TitleIsRequired'|trans | escape }} ');
+                    alert('{{ 'Title is required'|trans | escape }} ');
 
                     return false;
                 }
@@ -93,11 +94,12 @@
                     stopTimer();
                     startTimer();
                     recordRTC = RecordRTC(stream, {
-                        recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
-                        type: 'audio'
+                        recorderType: RecordRTC.StereoAudioRecorder,
+                        type: 'audio',
+                        mimeType: 'audio/wav',
+                        numberOfAudioChannels: 2
                     });
                     recordRTC.startRecording();
-
                     btnStop.prop('disabled', false);
                     btnStart.prop('disabled', true);
                 }
@@ -155,38 +157,6 @@
             });
         }
 
-        function useWami(){
-            $('#record-audio-wami').show();
-
-            function setupGUI() {
-                var gui = new Wami.GUI({
-                    id : 'record-audio-wami',
-                    singleButton : true,
-                    recordUrl : '{{ url('legacy_main', {name: 'inc/ajax/record_audio_wami.ajax.php'}) }}?' + $.param({
-                        waminame: 'rec_' + (new Date()).getTime() + '.wav',
-                        wamidir: '{{ cur_dir_path }}',
-                        wamiuserid: {{ app.user.id }},
-                        lp_item_id: {{ lp_item_id }}
-                    }),
-                    buttonUrl : 'wami-recorder/buttons.png',
-                    buttonNoUrl: 'blank.gif',
-                    onRecordFinish: function() {
-                        $('#start-recording').hide();
-                        window.location.reload();
-                    }
-                });
-
-                gui.setPlayEnabled(false);
-            }
-
-            Wami.setup({
-                id : "record-audio-wami",
-                onReady : setupGUI,
-                swfUrl: '{{ url('legacy_main', {name: 'inc/lib/wami-recorder/Wami.swf'})  }}'
-            });
-        }
-
-        $('#record-audio-recordrtc, #record-audio-wami').hide();
         var webRTCIsEnabled = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia ||
             navigator.mediaDevices.getUserMedia;
 
@@ -195,7 +165,5 @@
 
             return;
         }
-
-        useWami();
     });
 </script>

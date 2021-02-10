@@ -3629,11 +3629,6 @@ table.certaintyTable {
   border-radius: 25px;
 }
 
-.wami-container {
-  height: 144px;
-  position: relative;
-}
-
 /****** MAIN QUESTION ******/
 
 .exercise_overview_options {
@@ -3990,4 +3985,8 @@ table.certaintyTable {
 
 .img-responsive {
   @extend .img-fluid;
+}
+
+.hidden {
+  display: none!important;
 }

@@ -58,13 +58,7 @@
                 directory: '{{ directory }}',
                 reload_page: '{{ reload_page }}',
                 type: 'message',
-            },
-            {
-                blockId: '#record-audio-wami',
-                containerId: 'record-audio-wami-container',
-                directory: '{{ directory }}',
-                userId: {{ user_id }},
-                type: 'message'
+                recordAudioUrl: '{{ url('legacy_main', {name: 'inc/ajax/record_audio_rtc.ajax.php'}) }}',
             },
             null
         );

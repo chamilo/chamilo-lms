@@ -455,7 +455,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     var vis = div.append("svg")
     //.attr("class", "Blues")
     .attr("width", '100%')
-    .attr("height", '100%')
+    .attr("height", $(window).height())
     .attr('viewBox', '0 0 ' + (w + padding * 2) + ' ' + (h + padding * 2))
     .append("g")
     .attr("transform", "translate(" + (r + padding) + "," + (r/reduce_top + padding) + ")");
@@ -466,6 +466,10 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     .attr("id", "intro")
     .text("{{ "ClickToZoom"|get_lang }}");
 
+    $( window ).resize(function() {
+        $( "#skill_wheel svg" )
+            .attr("height", $(window).height());
+    });
     /* Generate the partition layout */
     var partition = d3.layout.partition()
     .sort(null)

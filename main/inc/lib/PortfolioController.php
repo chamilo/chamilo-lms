@@ -1356,13 +1356,54 @@ class PortfolioController
         );
     }
 
+    private function fixImagesSourcesToHtml(string $htmlContent): string
+    {
+        $doc = new DOMDocument();
+        @$doc->loadHTML($htmlContent);
+
+        $elements = $doc->getElementsByTagName('img');
+
+        if (empty($elements->length)) {
+            return $htmlContent;
+        }
+
+        $webCoursePath = api_get_path(WEB_COURSE_PATH);
+        $webUploadPath = api_get_path(WEB_UPLOAD_PATH);
+
+        /** @var \DOMElement $element */
+        foreach ($elements as $element) {
+            $src = trim($element->getAttribute('src'));
+
+            if (strpos($src, 'http') === 0) {
+                continue;
+            }
+
+            if (strpos($src, '/app/upload/') === 0) {
+                $element->setAttribute(
+                    'src',
+                    preg_replace('/\/app/upload\//', $webUploadPath, $src, 1)
+                );
+
+                continue;
+            }
+
+            if (strpos($src, '/courses/') === 0) {
+                $element->setAttribute(
+                    'src',
+                    preg_replace('/\/courses\//', $webCoursePath, $src, 1)
+                );
+
+                continue;
+            }
+        }
+
+        return $doc->saveHTML();
+    }
+
     public function exportZip()
     {
         $itemsHtml = $this->getItemsInHtmlFormatted();
         $commentsHtml = $this->getCommentsInHtmlFormatted();
-
-        $view = new Template('', false, false, false, false, false, false);
-        $template = $view->get_template('layout/blank.tpl');
 
         $sysArchivePath = api_get_path(SYS_ARCHIVE_PATH);
         $tempPortfolioDirectory = $sysArchivePath."portfolio/{$this->owner->getId()}/";
@@ -1372,8 +1413,7 @@ class PortfolioController
         $fs = new Filesystem();
 
         foreach ($itemsHtml as $i => $itemHtml) {
-            $view->assign('content', $itemHtml);
-            $itemFileContent = $view->fetch($template);
+            $itemFileContent = $this->fixImagesSourcesToHtml($itemHtml);
             $itemFilename = $tempPortfolioDirectory.'items/item-'.($i + 1).'.html';
 
             $filenames[] = $itemFilename;
@@ -1382,8 +1422,7 @@ class PortfolioController
         }
 
         foreach ($commentsHtml as $i => $commentHtml) {
-            $view->assign('content', $commentHtml);
-            $commentFileContent = $view->fetch($template);
+            $commentFileContent = $this->fixImagesSourcesToHtml($commentHtml);
             $commentFilename = $tempPortfolioDirectory.'comments/comment-'.($i + 1).'.html';
 
             $filenames[] = $commentFilename;
@@ -2122,7 +2161,6 @@ class PortfolioController
     private function getItemsInHtmlFormatted(): array
     {
         $itemsRepo = $this->em->getRepository(Portfolio::class);
-        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
 
         $itemsCriteria = ['user' => $this->owner];
 

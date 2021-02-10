@@ -5191,11 +5191,11 @@ class DocumentManager
             // HTML-files an some other types are shown in a frameset by default.
             $is_browser_viewable_file = self::isBrowserViewable($ext);
             if ($is_browser_viewable_file) {
-                if ($ext == 'pdf' || in_array($ext, $webODFList)) {
+                /*if ($ext == 'pdf' || in_array($ext, $webODFList)) {
                     $url = $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
-                } else {
-                    $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
-                }
+                } else {*/
+                $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
+                //}
             } else {
                 // url-encode for problematic characters (we may not call them dangerous characters...)
                 //$path = str_replace('%2F', '/', $url_path).'?'.$courseParams;

@@ -417,7 +417,7 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        $this->getSession()->wait(9000);
+        $this->getSession()->wait(5000);
     }
 
     /**
@@ -426,7 +426,7 @@ class FeatureContext extends MinkContext
     public function waitVeryLongForThePageToBeLoaded()
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(10000);
+        $this->getSession()->wait(9000);
     }
 
     /**
@@ -434,7 +434,7 @@ class FeatureContext extends MinkContext
      */
     public function waitVeryLongForThePageToBeLoadedWhenReady()
     {
-        $this->getSession()->wait(10000, "document.readyState === 'complete'");
+        $this->getSession()->wait(9000, "document.readyState === 'complete'");
     }
 
     /**

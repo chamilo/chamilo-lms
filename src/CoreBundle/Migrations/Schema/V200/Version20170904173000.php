@@ -15,6 +15,10 @@ class Version20170904173000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_group_info');
+
+        $this->addSql('ALTER TABLE c_group_info CHANGE doc_state doc_state INT NOT NULL, CHANGE calendar_state calendar_state INT NOT NULL, CHANGE work_state work_state INT NOT NULL');
+        $this->addSql('ALTER TABLE c_group_info CHANGE announcements_state announcements_state INT NOT NULL, CHANGE forum_state forum_state INT NOT NULL, CHANGE wiki_state wiki_state INT NOT NULL, CHANGE chat_state chat_state INT NOT NULL;');
+
         if ($table->hasIndex('session_id')) {
             $this->addSql('DROP INDEX session_id ON c_group_info');
         }

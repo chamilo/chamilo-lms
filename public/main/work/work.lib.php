@@ -6444,13 +6444,11 @@ function protectWork($courseInfo, $workId)
     if (empty($isAllow)) {
         api_not_allowed(true);
     }
-
-    $groupInfo = GroupManager::get_group_properties($groupId);
-
     if (!empty($groupId)) {
-        $showWork = GroupManager::user_has_access(
+        $group = api_get_group_entity($groupId);
+        $showWork = GroupManager::userHasAccess(
             $userId,
-            $groupInfo['iid'],
+            $group,
             GroupManager::GROUP_TOOL_WORK
         );
         if (!$showWork) {

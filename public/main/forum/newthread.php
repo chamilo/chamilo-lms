@@ -150,9 +150,9 @@ if (!$_user['user_id'] && 1 != $forumEntity->getAllowAnonymous()) {
 
 // 5. Check user access
 if (0 != $forumEntity->getForumOfGroup()) {
-    $show_forum = GroupManager::user_has_access(
+    $show_forum = GroupManager::userHasAccess(
         api_get_user_id(),
-        $forumEntity->getForumOfGroup(),
+        api_get_group_entity($forumEntity->getForumOfGroup()),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {

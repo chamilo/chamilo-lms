@@ -75,51 +75,51 @@ class CGroup extends AbstractResource implements ResourceInterface
     protected $maxStudent;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="doc_state", type="boolean", nullable=false)
+     * @ORM\Column(name="doc_state", type="integer", nullable=false)
      */
     protected $docState;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="calendar_state", type="boolean", nullable=false)
+     * @ORM\Column(name="calendar_state", type="integer", nullable=false)
      */
     protected $calendarState;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="work_state", type="boolean", nullable=false)
+     * @ORM\Column(name="work_state", type="integer", nullable=false)
      */
     protected $workState;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="announcements_state", type="boolean", nullable=false)
+     * @ORM\Column(name="announcements_state", type="integer", nullable=false)
      */
     protected $announcementsState;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="forum_state", type="boolean", nullable=false)
+     * @ORM\Column(name="forum_state", type="integer", nullable=false)
      */
     protected $forumState;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="wiki_state", type="boolean", nullable=false)
+     * @ORM\Column(name="wiki_state", type="integer", nullable=false)
      */
     protected $wikiState;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="chat_state", type="boolean", nullable=false)
+     * @ORM\Column(name="chat_state", type="integer", nullable=false)
      */
     protected $chatState;
 
@@ -261,8 +261,6 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     /**
      * Set docState.
-     *
-     * @param bool $docState
      */
     public function setDocState($docState): self
     {
@@ -274,7 +272,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Get docState.
      *
-     * @return bool
+     * @return int
      */
     public function getDocState()
     {
@@ -284,7 +282,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Set calendarState.
      *
-     * @param bool $calendarState
+     * @param int $calendarState
      */
     public function setCalendarState($calendarState): self
     {
@@ -296,7 +294,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Get calendarState.
      *
-     * @return bool
+     * @return int
      */
     public function getCalendarState()
     {
@@ -306,7 +304,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Set workState.
      *
-     * @param bool $workState
+     * @param int $workState
      */
     public function setWorkState($workState): self
     {
@@ -318,7 +316,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Get workState.
      *
-     * @return bool
+     * @return int
      */
     public function getWorkState()
     {
@@ -328,7 +326,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Set announcementsState.
      *
-     * @param bool $announcementsState
+     * @param int $announcementsState
      */
     public function setAnnouncementsState($announcementsState): self
     {
@@ -340,7 +338,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Get announcementsState.
      *
-     * @return bool
+     * @return int
      */
     public function getAnnouncementsState()
     {
@@ -350,7 +348,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Set forumState.
      *
-     * @param bool $forumState
+     * @param int $forumState
      */
     public function setForumState($forumState): self
     {
@@ -361,22 +359,18 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     /**
      * Get forumState.
-     *
-     * @return bool
      */
-    public function getForumState()
+    public function getForumState(): int
     {
-        return $this->forumState;
+        return (int) $this->forumState;
     }
 
     /**
      * Set wikiState.
      *
      * @param bool $wikiState
-     *
-     * @return CGroup
      */
-    public function setWikiState($wikiState)
+    public function setWikiState($wikiState): self
     {
         $this->wikiState = $wikiState;
 
@@ -386,7 +380,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Get wikiState.
      *
-     * @return bool
+     * @return int
      */
     public function getWikiState()
     {
@@ -396,11 +390,9 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Set chatState.
      *
-     * @param bool $chatState
-     *
-     * @return CGroup
+     * @param int $chatState
      */
-    public function setChatState($chatState)
+    public function setChatState($chatState): self
     {
         $this->chatState = $chatState;
 
@@ -410,7 +402,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Get chatState.
      *
-     * @return bool
+     * @return int
      */
     public function getChatState()
     {

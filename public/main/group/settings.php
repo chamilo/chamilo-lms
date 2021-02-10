@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroup;
+
 /**
  * This script displays an area where teachers can edit the group properties and member list.
  *
@@ -10,10 +13,6 @@
  *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */
-
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CGroup;
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -26,7 +25,7 @@ $groupRepo = Container::getGroupRepository();
 /** @var CGroup $groupEntity */
 $groupEntity = $groupRepo->find($group_id);
 
-if (empty($groupEntity)) {
+if (null === $groupEntity) {
     api_not_allowed(true);
 }
 
@@ -93,8 +92,12 @@ $group = [
     $form->createElement('static', null, null, ' '.get_lang('seats (optional)')),
 ];
 $form->addGroup($group, 'max_member_group', get_lang('Limit'), null, false);
-$form->addRule('max_member_group', get_lang('Please enter a valid number for the maximum number of members.'), 'callback', 'check_max_number_of_members');
-
+$form->addRule(
+    'max_member_group',
+    get_lang('Please enter a valid number for the maximum number of members.'),
+    'callback',
+    'check_max_number_of_members'
+);
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
@@ -250,7 +253,7 @@ $group = [
     $form->createElement('radio', 'announcements_state', get_lang('Announcements'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
-    $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only)BetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Private between users'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 
 $form->addGroup(
@@ -326,17 +329,16 @@ $form->addElement('html', '</div>');
 
 if ($form->validate()) {
     $values = $form->exportValues();
+    $max_member = $values['max_member'];
     if (GroupManager::MEMBER_PER_GROUP_NO_LIMIT == $values['max_member_no_limit']) {
         $max_member = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
-    } else {
-        $max_member = $values['max_member'];
     }
     $self_registration_allowed = isset($values['self_registration_allowed']) ? 1 : 0;
     $self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
-    $categoryId = isset($values['category_id']) ? $values['category_id'] : null;
+    $categoryId = $values['category_id'] ?? null;
 
     GroupManager::set_group_properties(
-        $current_group['id'],
+        $group_id,
         $values['name'],
         $values['description'],
         $max_member,
@@ -350,13 +352,20 @@ if ($form->validate()) {
         $self_registration_allowed,
         $self_unregistration_allowed,
         $categoryId,
-        isset($values['document_access']) ? $values['document_access'] : 0
+        $values['document_access'] ?? 0
     );
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
         GroupManager::MEMBER_PER_GROUP_NO_LIMIT != $max_member
     ) {
-        Display::addFlash(Display::return_message(get_lang('Number proposed exceeds max. that you allowed (you can modify in the group settings). Group composition has not been modified'), 'warning'));
+        Display::addFlash(
+            Display::return_message(
+                get_lang(
+                    'Number proposed exceeds max. that you allowed (you can modify in the group settings). Group composition has not been modified'
+                ),
+                'warning'
+            )
+        );
         header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     } else {
         Display::addFlash(Display::return_message(get_lang('Group settings modified'), 'success'));

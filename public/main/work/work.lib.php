@@ -2726,6 +2726,7 @@ function getAllWork(
     $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
     $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
     $qualification_exists = true;
+    $repo = Container::getStudentPublicationRepository();
     while ($work = Database::fetch_array($result, 'ASSOC')) {
         $courseId = $work['c_id'];
         $courseInfo = $courseList[$work['c_id']];

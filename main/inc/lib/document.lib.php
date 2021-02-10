@@ -5158,7 +5158,6 @@ class DocumentManager
         $filetype = $document_data['filetype'];
         $path = $document_data['path'];
         $url_path = urlencode($document_data['path']);
-
         $basePageUrl = api_get_path(WEB_CODE_PATH).'document/';
         $pageUrl = $basePageUrl.'document.php';
 
@@ -5171,19 +5170,19 @@ class DocumentManager
 
         if (!$show_as_icon) {
             // Build download link (icon)
-            $forcedownload_link = $filetype == 'folder'
+            $forcedownload_link = $filetype === 'folder'
                 ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id']
                 : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
             // Folder download or file download?
-            $forcedownload_icon = $filetype == 'folder' ? 'save_pack.png' : 'save.png';
+            $forcedownload_icon = $filetype === 'folder' ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
-            $prevent_multiple_click = $filetype == 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
+            $prevent_multiple_click = $filetype === 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
         }
 
         $target = '_self';
         $is_browser_viewable_file = false;
 
-        if ($filetype == 'file') {
+        if ($filetype === 'file') {
             // Check the extension
             $ext = explode('.', $path);
             $ext = strtolower($ext[count($ext) - 1]);
@@ -5195,7 +5194,6 @@ class DocumentManager
                     $url = $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
                 } else {*/
                 $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
-                //}
             } else {
                 // url-encode for problematic characters (we may not call them dangerous characters...)
                 //$path = str_replace('%2F', '/', $url_path).'?'.$courseParams;

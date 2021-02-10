@@ -2738,8 +2738,11 @@ function getAllWork(
         $is_author = false;
         $can_read = false;
         $owner_id = $work['user_id'];
-        $visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $sessionId);
-        if ($visibility != 1) {
+        //$visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $sessionId);
+        $studentPublication = $repo->find($work['iid']);
+        $workId = $studentPublication->getIid();
+        $isVisible = $studentPublication->isVisible($courseEntity, $sessionEntity);
+        if (false === $isVisible) {
             continue;
         }
         /*$locked = api_resource_is_locked_by_gradebook(
@@ -2767,6 +2770,9 @@ function getAllWork(
                 $qualification_string = formatWorkScore($work['qualification'], $work['qualification']);
             }
         }
+
+
+        $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
         $work['qualification_score'] = $work['qualification'];
         $add_string = '';
@@ -2857,6 +2863,7 @@ function getAllWork(
                 $parent = $parentList[$work['parent_id']];
             } else {
                 $parent = get_work_data_by_id($work['parent_id'], $courseId);
+                $parentList[$work['parent_id']] = $parent;
             }
             $work['work_name'] = $parent['title'];
 
@@ -3020,7 +3027,7 @@ function getAllWork(
             $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
             $work['correction'] = $correction;
 
-            if (!empty($compilation) && $is_allowed_to_edit) {
+            /*if (!empty($compilation) && $is_allowed_to_edit) {
                 $compilationId = $compilation->getCompilatioId($item_id, $courseId);
                 if ($compilationId) {
                     $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
@@ -3046,7 +3053,7 @@ function getAllWork(
                     }
                 }
                 $work['compilatio'] = $actionCompilatio;
-            }
+            }*/
             $works[] = $work;
         }
     }

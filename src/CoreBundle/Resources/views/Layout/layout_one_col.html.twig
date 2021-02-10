@@ -2,8 +2,8 @@
 {%- block page_content %}
     {%- autoescape false %}
         {% if js is defined %}
-            {% for item in js %}
-                {{ item }}
+            {%- for item in js %}
+                {{- item }}
             {% endfor %}
         {% endif %}
 

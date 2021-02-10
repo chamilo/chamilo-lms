@@ -2828,7 +2828,7 @@ class GroupManager
             'h3',
             Display::url(
                 Security::remove_XSS($group['name']),
-                $url.'&gidReq='.$groupId
+                $url.'&gid='.$groupId
             )
         );
         $users = self::getTutors($group);

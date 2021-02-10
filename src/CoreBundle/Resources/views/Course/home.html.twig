@@ -77,7 +77,12 @@
                 <div class="items-tools col">
                     <div class="tools mt-3 mb-3">
                         <div class="big_icon">
-                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolName': item.name, 'cid': course.id })|raw }}" >
+                            <a
+                                href="{{ url(
+                                    'chamilo_core_course_redirect_tool',
+                                    { 'toolName': item.name, 'cid': course.id, 'sid': session ? session.id : 0, })|raw
+                                }}"
+                            >
                                 <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
                             </a>
                         </div>

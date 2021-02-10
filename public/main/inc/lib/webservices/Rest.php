@@ -629,8 +629,6 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
 
-
-
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
         $includeGroupsForums = 'true' === api_get_setting('display_groups_forum_in_general_tool');
@@ -699,8 +697,6 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
-
-
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
 
@@ -741,8 +737,6 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
-
-
         $sessionId = $this->session ? $this->session->getId() : 0;
         $threadInfo = get_thread_information($forumId, $threadId, $sessionId);
 
@@ -972,8 +966,6 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
-
-
         $forum = get_forums($forumId, $this->course->getCode());
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
@@ -1114,8 +1106,6 @@ class Rest extends WebService
      */
     public function saveForumThread(array $values, $forumId)
     {
-
-
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
         $courseInfo = api_get_course_info($this->course->getCode());

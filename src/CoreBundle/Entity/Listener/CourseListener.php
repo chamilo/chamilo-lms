@@ -30,9 +30,6 @@ class CourseListener
      */
     protected $settingsManager;
 
-    /**
-     * CourseListener constructor.
-     */
     public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {
         $this->toolChain = $toolChain;

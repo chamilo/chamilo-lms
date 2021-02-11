@@ -703,7 +703,7 @@ class SystemAnnouncementManager
             return true;
         }
         $whereUsersInGroup = '';
-        if($groupId != 0){
+        if (0 != $groupId) {
             $tblGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
             $sql = "select user_id from $tblGroupRelUser where usergroup_id = $groupId";
             $result = Database::query($sql);

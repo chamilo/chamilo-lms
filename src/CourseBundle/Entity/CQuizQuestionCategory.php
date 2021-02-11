@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
@@ -52,9 +53,9 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $course;
+    protected Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
@@ -136,15 +137,12 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this->description;
     }
 
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @return CQuizQuestionCategory
-     */
-    public function setCourse($course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -158,20 +156,15 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * @param Session $session
-     *
-     * @return CQuizQuestionCategory
      */
-    public function setSession($session)
+    public function setSession($session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasSession()
+    public function hasSession(): bool
     {
         return null !== $this->session;
     }
@@ -197,19 +190,14 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * @param CQuizQuestion[]|Collection $questions
-     *
-     * @return CQuizQuestionCategory
      */
-    public function setQuestions($questions)
+    public function setQuestions($questions): self
     {
         $this->questions = $questions;
 
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

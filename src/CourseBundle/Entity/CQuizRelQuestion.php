@@ -46,14 +46,14 @@ class CQuizRelQuestion
     /**
      * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="relQuizzes", cascade={"persist"})
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CQuizQuestion $question;
 
     /**
      * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="questions", cascade={"persist"})
-     * @ORM\JoinColumn(name="quiz_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="quiz_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CQuiz $quiz;
 

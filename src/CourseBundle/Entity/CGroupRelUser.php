@@ -47,7 +47,7 @@ class CGroupRelUser
 
     /**
      * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="members")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
     protected CGroup $group;
 

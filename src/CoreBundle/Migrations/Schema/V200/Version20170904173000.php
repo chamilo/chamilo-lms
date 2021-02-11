@@ -53,7 +53,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
 
         if (false === $table->hasForeignKey('FK_C5D3D49FFE54D947')) {
             $this->addSql(
-                'ALTER TABLE c_group_rel_user ADD CONSTRAINT FK_C5D3D49FFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid)'
+                'ALTER TABLE c_group_rel_user ADD CONSTRAINT FK_C5D3D49FFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE;'
             );
         }
         if (false === $table->hasIndex('IDX_C5D3D49FA76ED395')) {

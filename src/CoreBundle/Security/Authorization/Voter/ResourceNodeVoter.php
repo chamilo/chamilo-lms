@@ -240,7 +240,6 @@ class ResourceNodeVoter extends Voter
             }*/
         }
 
-        var_dump($link->getId());
         // No link was found or not available.
         if (false === $linkFound) {
             return false;

@@ -38,7 +38,7 @@ Feature: Session management tool
     And wait for the page to be loaded
     And I fill in ckeditor field "description" with "Description for Temp Session"
     And I press "submit"
-    Then wait the page to be loaded when ready
+    Then wait for the page to be loaded
     Then I should see "Add courses to this session (Temp Session)"
     Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
     And I press "add_course"

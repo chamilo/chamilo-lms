@@ -375,7 +375,8 @@ Feature: Exercise tool
     Then I should see "Update successful"
 
   Scenario: Try exercise with categorized questions as student
-    Given I am a student
+    Given I am not logged
+    And I am a student
     And I am on course "TEMP" homepage in session "Session Exercise"
     Then I should see "TEMP (Session Exercise)"
     And I am on "/main/exercise/exercise.php?cid=1"

@@ -991,7 +991,7 @@ function deletePost(CForumPost $post)
                 WHERE c_id = $course_id AND iid = ".(int) ($_GET['thread']);
         Database::query($sql);
 
-        Display::addFlash(Display::return_message(get_lang('Special Post Deleted')));
+        Display::addFlash(Display::return_message(get_lang('Thread deleted')));
     }
 }
 

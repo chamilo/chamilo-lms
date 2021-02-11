@@ -231,6 +231,7 @@ define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
 define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE', 'qst_attempt_deleted');
+define('LOG_QUESTION_SCORE_UPDATE', 'score_attempt_updated');
 
 define('LOG_MY_FOLDER_CREATE', 'my_folder_created');
 define('LOG_MY_FOLDER_CHANGE', 'my_folder_changed');

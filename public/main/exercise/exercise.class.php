@@ -99,6 +99,8 @@ class Exercise
     public $hideComment;
     public $hideNoAnswer;
     public $hideExpectedAnswer;
+    public $forceShowExpectedChoiceColumn;
+    public $disableHideCorrectAnsweredQuestions;
 
     /**
      * Constructor of the class.
@@ -143,6 +145,7 @@ class Exercise
         $this->hideComment = false;
         $this->hideNoAnswer = false;
         $this->hideExpectedAnswer = false;
+        $this->disableHideCorrectAnsweredQuestions = false;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -2101,6 +2104,12 @@ class Exercise
                     'hide_category_table',
                     null,
                     get_lang('HideCategoryTable')
+                ),
+                $form->createElement(
+                    'checkbox',
+                    'hide_correct_answered_questions',
+                    null,
+                    get_lang('HideCorrectAnsweredQuestions')
                 ),
             ];
             $form->addGroup(
@@ -9060,7 +9069,7 @@ class Exercise
                                         ICON_SIZE_SMALL
                                     ),
                                     'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
+                                    ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 $actions .= Display::url(
@@ -9071,21 +9080,21 @@ class Exercise
                                         ICON_SIZE_SMALL
                                     ),
                                     'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
+                                    ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
 
                         // Export
                         $actions .= Display::url(
-                            Display::return_icon('cd.png', get_lang('CopyExercise')),
+                            Display::return_icon('cd.png', get_lang('Copy this exercise as a new one')),
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(
-                                        api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset)
+                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES, $charset)
                                     )." ".addslashes($title)."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
+                                    ).'&action=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
                             ]
                         );
 
@@ -9110,7 +9119,7 @@ class Exercise
                                                 )
                                             )." ".addslashes($title)."?"."')) return false;",
                                         'href' => 'exercise.php?'.api_get_cidreq(
-                                            ).'&choice=clean_results&sec_token='.$token.'&exerciseId='.$exerciseId,
+                                            ).'&action=clean_results&sec_token='.$token.'&exerciseId='.$exerciseId,
                                     ]
                                 );
                             } else {
@@ -9261,7 +9270,7 @@ class Exercise
                                             api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset)
                                         )." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                     'href' => 'exercise.php?'.api_get_cidreq(
-                                        ).'&choice=delete&sec_token='.$token.'&exerciseId='.$exerciseId,
+                                        ).'&action=delete&sec_token='.$token.'&exerciseId='.$exerciseId,
                                 ]
                             );
                         } else {

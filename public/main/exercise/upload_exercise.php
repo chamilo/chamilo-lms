@@ -70,8 +70,9 @@ function lp_upload_quiz_main()
     $form->addElement('header', get_lang('Import quiz from Excel'));
     $form->addElement('file', 'user_upload_quiz', get_lang('File upload'));
 
-    $link = '<a href="../exercise/quiz_template.xls">'.
-        Display::return_icon('export_excel.png', get_lang('Download the Excel Template')).get_lang('Download the Excel Template').'</a>';
+    $label = Display::return_icon('export_excel.png', get_lang('Download the Excel Template')).
+        get_lang('Download the Excel Template');
+    $link = '<a href="../exercise/quiz_template.xls">'.$label.'</a>';
     $form->addElement('label', '', $link);
 
     $table = new HTML_Table(['class' => 'table']);
@@ -154,6 +155,7 @@ function lp_upload_quiz_action_handling()
     $quizTitle = '';
 
     $objPHPExcel = PHPExcel_IOFactory::load($_FILES['user_upload_quiz']['tmp_name']);
+
     $objPHPExcel->setActiveSheetIndex(0);
     $worksheet = $objPHPExcel->getActiveSheet();
     $highestRow = $worksheet->getHighestRow(); // e.g. 10

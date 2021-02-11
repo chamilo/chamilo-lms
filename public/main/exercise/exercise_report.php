@@ -171,41 +171,62 @@ if (isset($_REQUEST['comments']) &&
     $lp_item_view_id = (int) $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
     $exeWeighting = $track_exercise_info['max_score'];
+
+    $attemptData = Event::get_exercise_results_by_attempt($id);
+    $questionListData = [];
+    if ($attemptData && $attemptData[$id] && $attemptData[$id]['question_list']) {
+        $questionListData = $attemptData[$id]['question_list'];
+    }
     $post_content_id = [];
     $comments_exist = false;
 
+    $questionListInPost = [];
     foreach ($_POST as $key_index => $key_value) {
         $my_post_info = explode('_', $key_index);
         $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
 
         if ('comments' === $my_post_info[0]) {
             $comments_exist = true;
+            $questionListInPost[] = $my_post_info[1];
         }
     }
 
-    $loop_in_track = true === $comments_exist ? count($_POST) / 2 : count($_POST);
-    if (true === $comments_exist) {
-        $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
-    } else {
-        $array_content_id_exe = $post_content_id;
-    }
-
-    for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : 0;
-        $my_comments = '';
-        if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
-            $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
-        }
-        $my_questionid = (int) $array_content_id_exe[$i];
-
+    foreach ($questionListInPost as $questionId) {
+        $marks = $_POST['marks_'.$questionId] ?? 0;
+        $my_comments = $_POST['comments_'.$questionId] ?? '';
         $params = [
-            'marks' => $my_marks,
             'teacher_comment' => $my_comments,
         ];
+        $question = Question::read($questionId);
+        if (false === $question) {
+            continue;
+    }
+
+        // From the database.
+        $marksFromDatabase = $questionListData[$questionId]['marks'];
+        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            // From the form.
+            $params['marks'] = $marks;
+            if ($marksFromDatabase != $marks) {
+                Event::addEvent(
+                    LOG_QUESTION_SCORE_UPDATE,
+                    LOG_EXERCISE_ATTEMPT_QUESTION_ID,
+                    [
+                        'exe_id' => $id,
+                        'question_id' => $questionId,
+                        'old_marks' => $marksFromDatabase,
+                        'new_marks' => $marks,
+                    ]
+                );
+            }
+        } else {
+            $marks = $marksFromDatabase;
+        }
+
         Database::update(
             $TBL_TRACK_ATTEMPT,
             $params,
-            ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]
+            ['question_id = ? AND exe_id = ?' => [$questionId, $id]]
         );
 
         $recording = new TrackEAttemptRecording();
@@ -222,15 +243,6 @@ if (isset($_REQUEST['comments']) &&
         $em = Database::getManager();
         $em->persist($recording);
         $em->flush();
-
-        /*$params = [
-            'marks' => $my_marks,
-            //'insert_date' => api_get_utc_datetime(),
-            'author' => api_get_user_id(),
-            'teacher_comment' => $my_comments,
-            'session_id' => api_get_session_id(),
-        ];
-        Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);*/
     }
 
     $useEvaluationPlugin = false;

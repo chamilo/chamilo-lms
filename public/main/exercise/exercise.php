@@ -59,7 +59,7 @@ $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
 
 $exerciseRepo = Container::getQuizRepository();
@@ -77,18 +77,14 @@ if (api_is_in_gradebook()) {
 }
 
 $nameTools = get_lang('Tests');
-
 // Simple actions
 if ($is_allowedToEdit && !empty($action)) {
     $objExerciseTmp = new Exercise();
-    $exercise_action_locked = api_resource_is_locked_by_gradebook(
-        $exerciseId,
-        LINK_EXERCISE
-    );
+    $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
     $result = $objExerciseTmp->read($exerciseId);
 
     if (empty($result)) {
-        api_not_allowed();
+        api_not_allowed(true);
     }
 
     switch ($action) {
@@ -182,7 +178,7 @@ if ($is_allowedToEdit && !empty($action)) {
             }
 
             break;
-        case 'copy_exercise': //copy an exercise
+        case 'copy_exercise':
             api_set_more_memory_and_time_limits();
             $objExerciseTmp->copyExercise();
             Display::addFlash(Display::return_message(

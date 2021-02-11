@@ -251,6 +251,7 @@ class SystemAnnouncementManager
      * @param bool   $sendEmailTest
      * @param int    $careerId
      * @param int    $promotionId
+     * @param int    $groupId
      *
      * @return mixed insert_id on success, false on failure
      */
@@ -265,7 +266,8 @@ class SystemAnnouncementManager
         $add_to_calendar = false,
         $sendEmailTest = false,
         $careerId = 0,
-        $promotionId = 0
+        $promotionId = 0,
+        $groupId = 0
     ) {
         $original_content = $content;
         $a_dateS = explode(' ', $date_start);
@@ -362,7 +364,9 @@ class SystemAnnouncementManager
                 if ($send_mail == 1) {
                     self::send_system_announcement_by_email(
                         $resultId,
-                        $visibility
+                        $visibility,
+                        false,
+                        $groupId
                     );
                 }
             }
@@ -475,7 +479,8 @@ class SystemAnnouncementManager
         $send_mail = 0,
         $sendEmailTest = false,
         $careerId = 0,
-        $promotionId = 0
+        $promotionId = 0,
+        $groupId = 0
     ) {
         $em = Database::getManager();
         $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
@@ -582,7 +587,9 @@ class SystemAnnouncementManager
             if ($send_mail == 1) {
                 self::send_system_announcement_by_email(
                     $id,
-                    $visibility
+                    $visibility,
+                    false,
+                    $groupId
                 );
             }
         }
@@ -665,6 +672,7 @@ class SystemAnnouncementManager
      * @param int   $id
      * @param array $visibility
      * @param bool  $sendEmailTest
+     * @param int   $groupId
      *
      * @return bool True if the message was sent or there was no destination matching.
      *              False on database or e-mail sending error.
@@ -672,7 +680,8 @@ class SystemAnnouncementManager
     public static function send_system_announcement_by_email(
         $id,
         $visibility,
-        $sendEmailTest = false
+        $sendEmailTest = false,
+        $groupId = 0
     ) {
         $announcement = self::get_announcement($id);
 
@@ -693,6 +702,21 @@ class SystemAnnouncementManager
 
             return true;
         }
+        $whereUsersInGroup = '';
+        if($groupId != 0){
+            $tblGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+            $sql = "select user_id from $tblGroupRelUser where usergroup_id = $groupId";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            Database::free_result($result);
+            $usersId = [];
+            $totalUsers = count($data);
+            for ($i = 0; $i < $totalUsers; $i++) {
+                $usersId[] = $data[$i]['user_id'];
+            }
+            $usersId = implode(',', $usersId);
+            $whereUsersInGroup = " AND u.user_id in ($usersId) ";
+        }
 
         $urlJoin = '';
         $urlCondition = '';
@@ -706,17 +730,17 @@ class SystemAnnouncementManager
 
         if ($teacher != 0 && $student == 0) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
-                    WHERE status = '1' $urlCondition";
+                    WHERE status = '1' $urlCondition $whereUsersInGroup";
         }
 
         if ($teacher == 0 && $student != 0) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
-                    WHERE status = '5' $urlCondition";
+                    WHERE status = '5' $urlCondition $whereUsersInGroup";
         }
 
         if ($teacher != 0 && $student != 0) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
-                    WHERE 1 = 1 $urlCondition";
+                    WHERE 1 = 1 $urlCondition $whereUsersInGroup";
         }
 
         if (!isset($sql)) {

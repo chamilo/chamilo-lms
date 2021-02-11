@@ -422,6 +422,7 @@ abstract class AbstractResource
         foreach ($links as $link) {
             if ($link->getUser()) {
                 $users[] = $link->getUser()->getId();
+                continue;
             }
             if ($link->getGroup()) {
                 $groups[] = $link->getGroup()->getIid();

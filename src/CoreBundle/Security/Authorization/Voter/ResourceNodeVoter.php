@@ -145,27 +145,26 @@ class ResourceNodeVoter extends Voter
         $groupId = (int) $request->get('gid');
 
         $links = $resourceNode->getResourceLinks();
-        $linkFound = false;
+        $linkFound = 0;
         //$courseManager = $this->entityManager->getRepository(Course::class);
         //$sessionManager = $this->entityManager->getRepository(Session::class);
 
         $course = null;
         $link = null;
-
+        $case = 0;
         // @todo implement view, edit, delete.
         foreach ($links as $link) {
-            // Block access if visibility is deleted. Creator and admin already can access before.
+            // Block access if visibility is deleted. Creator and admin have already access.
             if (ResourceLink::VISIBILITY_DELETED === $link->getVisibility()) {
-                $linkFound = false;
-
-                break;
+                continue;
             }
 
             // Check if resource was sent to the current user.
             $linkUser = $link->getUser();
-            if ($linkUser instanceof UserInterface && $linkUser->getUsername() === $creator->getUsername()) {
-                $linkFound = true;
-
+            if ($linkUser instanceof UserInterface &&
+                $user instanceof UserInterface &&
+                $linkUser->getUsername() === $user->getUsername()) {
+                $linkFound = 2;
                 break;
             }
 
@@ -183,7 +182,8 @@ class ResourceNodeVoter extends Voter
             // @todo Check if resource was sent to a usergroup
 
             // Check if resource was sent inside a group in a course session.
-            if ($linkGroup instanceof CGroup && !empty($groupId) &&
+            if (null === $linkUser &&
+                $linkGroup instanceof CGroup && !empty($groupId) &&
                 $linkSession instanceof Session && !empty($sessionId) &&
                 $linkCourse instanceof Course && !empty($courseId)
             ) {
@@ -191,43 +191,46 @@ class ResourceNodeVoter extends Voter
                     $linkSession->getId() === $sessionId &&
                     $linkGroup->getIid() === $groupId
                 ) {
-                    $linkFound = true;
+                    $linkFound = 3;
 
                     break;
                 }
             }
 
             // Check if resource was sent inside a group in a base course.
-            if ($linkGroup instanceof CGroup && !empty($groupId) &&
+            if (null === $linkUser &&
                 empty($sessionId) &&
+                $linkGroup instanceof CGroup && !empty($groupId) &&
                 $linkCourse instanceof Course && !empty($courseId)
             ) {
                 if ($linkCourse->getId() === $courseId &&
                     $linkGroup->getIid() === $groupId
                 ) {
-                    $linkFound = true;
+                    $linkFound = 4;
 
                     break;
                 }
             }
 
             // Check if resource was sent to a course inside a session.
-            if ($linkSession instanceof Session && !empty($sessionId) &&
+            if (null === $linkUser &&
+                $linkSession instanceof Session && !empty($sessionId) &&
                 $linkCourse instanceof Course && !empty($courseId)
             ) {
                 if ($linkCourse->getId() === $courseId &&
                     $linkSession->getId() === $sessionId
                 ) {
-                    $linkFound = true;
+                    $linkFound = 5;
 
                     break;
                 }
             }
 
             // Check if resource was sent to a course.
-            if ($linkCourse instanceof Course && !empty($courseId)) {
+            if (null === $linkUser &&
+                $linkCourse instanceof Course && !empty($courseId)) {
                 if ($linkCourse->getId() === $courseId) {
-                    $linkFound = true;
+                    $linkFound = 6;
 
                     break;
                 }
@@ -241,7 +244,7 @@ class ResourceNodeVoter extends Voter
         }
 
         // No link was found or not available.
-        if (false === $linkFound) {
+        if (0 === $linkFound) {
             return false;
         }
 
@@ -291,14 +294,14 @@ class ResourceNodeVoter extends Voter
                 $resourceRight = new ResourceRight();
                 $resourceRight
                     ->setMask($editorMask)
-                    ->setRole(self::ROLE_CURRENT_SESSION_COURSE_TEACHER)
+                    ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
                 ;
                 $rights[] = $resourceRight;
 
                 $resourceRight = new ResourceRight();
                 $resourceRight
                     ->setMask($readerMask)
-                    ->setRole(self::ROLE_CURRENT_SESSION_COURSE_STUDENT)
+                    ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
                 ;
                 $rights[] = $resourceRight;
             }
@@ -320,7 +323,7 @@ class ResourceNodeVoter extends Voter
             }
 
             if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-                // Give just read access
+                // Give just read access.
                 $resourceRight = new ResourceRight();
                 $resourceRight
                     ->setMask($readerMask)
@@ -335,7 +338,7 @@ class ResourceNodeVoter extends Voter
         $mask->add($attribute);
         $askedMask = $mask->get();
 
-        // Setting Laminas simple ACL
+        // Setting Simple ACL.
         $acl = new Acl();
 
         // Creating roles
@@ -347,6 +350,9 @@ class ResourceNodeVoter extends Voter
 
         $currentStudent = new Role(self::ROLE_CURRENT_COURSE_STUDENT);
         $currentTeacher = new Role(self::ROLE_CURRENT_COURSE_TEACHER);
+
+        $currentStudentGroup = new Role(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
+        $currentTeacherGroup = new Role(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
 
         $currentStudentSession = new Role(self::ROLE_CURRENT_SESSION_COURSE_STUDENT);
         $currentTeacherSession = new Role(self::ROLE_CURRENT_SESSION_COURSE_TEACHER);
@@ -360,10 +366,16 @@ class ResourceNodeVoter extends Voter
             ->addRole($userRole)
             ->addRole($student)
             ->addRole($teacher)
+
             ->addRole($currentStudent)
             ->addRole($currentTeacher, self::ROLE_CURRENT_COURSE_STUDENT)
+
             ->addRole($currentStudentSession)
             ->addRole($currentTeacherSession, self::ROLE_CURRENT_SESSION_COURSE_STUDENT)
+
+            ->addRole($currentStudentGroup)
+            ->addRole($currentTeacherGroup, self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
+
             ->addRole($superAdmin)
             ->addRole($admin)
         ;

@@ -551,8 +551,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ResourceNode $parentNode = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
-
-        $qb->andWhere('links.user = :user OR links.user IS NULL');
+        $qb->andWhere('node.creator = :user OR (links.user = :user OR links.user IS NULL)');
         $qb->setParameter('user', $user);
 
         return $qb;

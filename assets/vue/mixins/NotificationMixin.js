@@ -40,7 +40,7 @@ export default {
                 type: type,
                 position: 'top-center',
                 timeout: 10000, // 10 seconds
-                closeOnClick: true,
+                closeOnClick: false,
                 pauseOnFocusLoss: true,
                 pauseOnHover: true,
                 draggable: true,

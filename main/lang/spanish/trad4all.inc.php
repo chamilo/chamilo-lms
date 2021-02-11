@@ -8784,4 +8784,6 @@ $QualifyThisPortfolioComment = "Calificar este comentario";
 $PortfolioCommentGraded = "El comentario en el portafolio fue calificado";
 $QualifyPortfolioItems = "Calificar artículos";
 $QualifyPortfolioComments = "Calificar comentarios";
+$HideCorrectAnsweredQuestions = "Esconder las preguntas con respuestas correctas";
+$TheSettingXWillChangeToX = "La opción \"%s\" será modificada con el valor \"%s\"";
 ?>

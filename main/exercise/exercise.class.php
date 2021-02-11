@@ -2625,6 +2625,11 @@ class Exercise
     {
         // Feedback type.
         $feedback = [];
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('ShowResultsToStudents'),
+            get_lang('ShowScoreAndRightAnswer')
+        );
         $endTest = $form->createElement(
             'radio',
             'exerciseFeedbackType',
@@ -2633,7 +2638,8 @@ class Exercise
             EXERCISE_FEEDBACK_TYPE_END,
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_END,
-                'onclick' => 'check_feedback()',
+                //'onclick' => 'if confirm() check_feedback()',
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_feedback(); } else { return false;} ',
             ]
         );
 

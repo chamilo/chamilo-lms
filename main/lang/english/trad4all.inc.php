@@ -8756,4 +8756,6 @@ $QualifyThisPortfolioComment = "Grade this comment";
 $PortfolioCommentGraded = "Portfolio comment was graded";
 $QualifyPortfolioItems = "Grade items";
 $QualifyPortfolioComments = "Grade comments";
+$HideCorrectAnsweredQuestions = "Hide correct answered questions";
+$TheSettingXWillChangeToX = "The setting \"%s\" will change to \"%s\"";
 ?>

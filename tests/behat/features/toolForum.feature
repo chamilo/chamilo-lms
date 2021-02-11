@@ -7,7 +7,7 @@ Feature: Forum tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a forum category
-    Given I am on "/main/forum/index.php?action=add&content=forumcategory&cid=1"
+    Given I am on "/main/forum/index.php?action=add_category&cid=1"
     When I fill in the following:
       | forum_category_title   | Forum Category Test |
     And I fill in ckeditor field "forum_category_comment" with "This is the first forum category for test"
@@ -15,7 +15,7 @@ Feature: Forum tool
     Then I should see "The forum category has been added"
 
   Scenario: Create a forum
-    Given I am on "/main/forum/index.php?action=add&content=forum&cid=1"
+    Given I am on "/main/forum/index.php?action=add_forum&cid=1"
     When I fill in the following:
       | forum_title   | Forum Test |
     And I fill in ckeditor field "forum_comment" with "This is the first forum for test"

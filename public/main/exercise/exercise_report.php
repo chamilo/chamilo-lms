@@ -200,7 +200,7 @@ if (isset($_REQUEST['comments']) &&
         $question = Question::read($questionId);
         if (false === $question) {
             continue;
-    }
+        }
 
         // From the database.
         $marksFromDatabase = $questionListData[$questionId]['marks'];

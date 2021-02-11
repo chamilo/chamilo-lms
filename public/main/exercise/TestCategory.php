@@ -121,7 +121,7 @@ class TestCategory
         if ($category) {
             // remove link between question and category
             $sql = "DELETE FROM $tbl_question_rel_cat
-                    WHERE category_id = $id AND c_id=".$course_id;
+                    WHERE category_id = $id ";
             Database::query($sql);
 
             $repo = Container::getQuestionCategoryRepository();

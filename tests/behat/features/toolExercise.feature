@@ -297,7 +297,8 @@ Feature: Exercise tool
       | choice_id_3_9 | l'été |
       | choice_id_3_10 | cherchent à |
       | choice_id_3_11 | Übung |
-    Then I fill in select bootstrap static by text "#choice_id_3_12" select "Ärger"
+    #Then I fill in select bootstrap static by text "#choice_id_3_12" select "Ärger"
+    Then I select "Ärger" from "choice_id_3_12"
     Then I press "Next question"
     And wait for the page to be loaded
     # Question 4 - Matching

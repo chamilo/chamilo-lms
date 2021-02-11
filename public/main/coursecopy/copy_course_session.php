@@ -292,7 +292,7 @@ if (Security::check_token('post') && (
         $destination_session = $_POST['destination_session'];
         $origin_session = $_POST['origin_session'];
 
-        if ($course_code != $origin_course) {
+        if ($destination_course !== $origin_course) {
             $course = CourseSelectForm::get_posted_course(
                 'copy_course',
                 $origin_session,

@@ -813,7 +813,6 @@ class AnnouncementManager
         }
 
         return null;
-
     }
 
     /**

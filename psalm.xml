@@ -21,7 +21,7 @@
         <directory name="public/main/course_description"/>
         <directory name="public/main/course_info"/>
 <!--        <directory name="public/main/course_progress"/>-->
-<!--        <directory name="public/main/coursecopy"/>-->
+        <directory name="public/main/coursecopy"/>
         <directory name="public/main/create_course"/>
         <directory name="public/main/dashboard"/>
 <!--        <directory name="public/main/dropbox"/>-->
@@ -84,18 +84,17 @@
 <!--        <file name="public/main/inc/lib/events.lib.php"/>-->
 <!--        <file name="public/main/inc/lib/exercise.lib.php"/>-->
         <file name="public/main/inc/lib/exercise_show_functions.lib.php"/>
-<!--        <file name="public/main/inc/lib/ExerciseCategoryManager.php"/>-->
+        <file name="public/main/inc/lib/ExerciseCategoryManager.php"/>
 <!--        <file name="public/main/inc/lib/export.lib.inc.php"/>-->
 
         <file name="public/main/inc/lib/extra_field.lib.php"/>
         <file name="public/main/inc/lib/extra_field_option.lib.php"/>
-<!--        <file name="public/main/inc/lib/extra_field_value.lib.php"/>-->
+        <file name="public/main/inc/lib/extra_field_value.lib.php"/>
 
         <file name="public/main/inc/lib/glossary.lib.php"/>
         <file name="public/main/inc/lib/grade_model.lib.php"/>
         <file name="public/main/inc/lib/gradebook.lib.php"/>
         <file name="public/main/inc/lib/groupmanager.lib.php"/>
-<!--        <file name="public/main/inc/lib/image.lib.php"/>-->
         <file name="public/main/inc/lib/import.lib.php"/>
         <file name="public/main/inc/lib/internationalization.lib.php"/>
         <file name="public/main/inc/lib/legal.lib.php"/>

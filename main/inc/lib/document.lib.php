@@ -5190,9 +5190,6 @@ class DocumentManager
             // HTML-files an some other types are shown in a frameset by default.
             $is_browser_viewable_file = self::isBrowserViewable($ext);
             if ($is_browser_viewable_file) {
-                /*if ($ext == 'pdf' || in_array($ext, $webODFList)) {
-                    $url = $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
-                } else {*/
                 $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
             } else {
                 // url-encode for problematic characters (we may not call them dangerous characters...)
@@ -5211,12 +5208,12 @@ class DocumentManager
         $tooltip_title = $title;
         $tooltip_title_alt = $tooltip_title;
 
-        if ($filetype == 'link') {
+        if ($filetype === 'link') {
             $tooltip_title_alt = $title;
             $url = $document_data['comment'].'" target="_blank';
         }
 
-        if ($path == '/shared_folder') {
+        if ($path === '/shared_folder') {
             $tooltip_title_alt = get_lang('UserFolders');
         } elseif (strstr($path, 'shared_folder_session_')) {
             $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name(api_get_session_id()).')';

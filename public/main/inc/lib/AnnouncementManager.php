@@ -482,11 +482,11 @@ class AnnouncementManager
 
         $repo = Container::getAnnouncementRepository();
         $isVisible = $repo->isGranted(ResourceNodeVoter::VIEW, $announcement);
-
+        $url = api_get_self()."?".api_get_cidreq();
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
-            $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$id."\">".
+            $modify_icons = "<a href=\"".$url."&action=modify&id=".$id."\">".
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
 
             $image_visibility = 'invisible';
@@ -497,11 +497,14 @@ class AnnouncementManager
                 $alt_visibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
             }
-            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
+            $modify_icons .= "<a
+                href=\"".$url."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
+                $modify_icons .= "<a
+                    href=\"".$url."&action=delete&id=".$id."&sec_token=".$stok."\"
+                    onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
@@ -532,8 +535,8 @@ class AnnouncementManager
         if ($allow && api_is_allowed_to_edit(false, true)) {
             $sentTo = $announcement->getUsersAndGroupSubscribedToResource();
             $sentToForm = self::sent_to_form($sentTo);
-            $createdBy = '<br />'.
-                get_lang('Created by').': '.UserManager::formatUserFullName($announcement->getResourceNode()->getCreator());
+            $createdBy = '<br />'.get_lang('Created by').': '.
+                UserManager::formatUserFullName($announcement->getResourceNode()->getCreator());
             $html .= Display::tag(
                 'td',
                 get_lang('Visible to').': '.$sentToForm.$createdBy,
@@ -544,6 +547,7 @@ class AnnouncementManager
         $attachments = $announcement->getAttachments();
         if (count($attachments) > 0) {
             $repo = Container::getAnnouncementAttachmentRepository();
+            $deleteUrl = api_get_self()."?".api_get_cidreq()."&action=delete_attachment";
             /** @var CAnnouncementAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $attachmentId = $attachment->getIid();
@@ -554,8 +558,7 @@ class AnnouncementManager
                 $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';
                 $html .= ' - <span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
                 if (api_is_allowed_to_edit(false, true)) {
-                    $url = api_get_self()."?".api_get_cidreq().
-                        "&action=delete_attachment&id_attach=".$attachmentId."&sec_token=".$stok;
+                    $url = $deleteUrl."&id_attach=".$attachmentId."&sec_token=".$stok;
                     $html .= Display::url(
                         Display::return_icon(
                             'delete.png',
@@ -1780,7 +1783,6 @@ class AnnouncementManager
                     $image_visibility = 'invisible';
                     $setNewStatus = 'visible';
                     $alt_visibility = get_lang('Visible');
-
                     if ($visibility) {
                         $image_visibility = 'visible';
                         $setNewStatus = 'invisible';

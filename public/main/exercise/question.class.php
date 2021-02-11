@@ -1105,7 +1105,7 @@ abstract class Question
                 foreach ($options as $item) {
                     $item['question_id'] = $newQuestionId;
                     $item['c_id'] = $course_id;
-                    unset($item['id']);
+                    unset($item['iid']);
                     unset($item['iid']);
                     Database::insert($TBL_QUESTION_OPTIONS, $item);
                 }

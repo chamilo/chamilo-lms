@@ -870,7 +870,7 @@ class Answer
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
-                    $new_option_list[] = $item['id'];
+                    $new_option_list[] = $item['iid'];
                 }
             }
 
@@ -881,7 +881,7 @@ class Answer
             $i = 0;
             if (!empty($destination_options)) {
                 foreach ($destination_options as $item) {
-                    $fixed_list[$new_option_list[$i]] = $item['id'];
+                    $fixed_list[$new_option_list[$i]] = $item['iid'];
                     $i++;
                 }
             }

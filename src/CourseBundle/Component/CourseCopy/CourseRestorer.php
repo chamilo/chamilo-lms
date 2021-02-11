@@ -2124,8 +2124,8 @@ class CourseRestorer
                 if ($question_option_list) {
                     $old_option_ids = [];
                     foreach ($question_option_list as $item) {
-                        $old_id = $item['id'];
-                        unset($item['id']);
+                        $old_id = $item['iid'];
+                        unset($item['iid']);
                         if (isset($item['iid'])) {
                             unset($item['iid']);
                         }

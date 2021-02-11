@@ -109,9 +109,9 @@ class MultipleAnswerTrueFalse extends Question
             $answer_number->freeze();
 
             if (is_object($answer)) {
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $correct = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i] ?? null;
+                $defaults['comment['.$i.']'] = $answer->comment[$i] ?? null;
+                $correct = $answer->correct[$i] ?? false;
                 $defaults['correct['.$i.']'] = $correct;
 
                 $j = 1;
@@ -201,9 +201,9 @@ class MultipleAnswerTrueFalse extends Question
         $renderer->setElementTemplate($doubtScoreInputTemplate, 'option[3]');
 
         // 3 scores
-        $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
-        $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
-        $form->addElement('text', 'option[3]', get_lang('Don\'t know'), ['class' => 'span1', 'value' => '0']);
+        $txtOption1 = $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
+        $txtOption2 = $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
+        $txtOption3 = $form->addElement('text', 'option[3]', get_lang('Don\'t know'), ['class' => 'span1', 'value' => '0']);
 
         $form->addRule('option[1]', get_lang('Required field'), 'required');
         $form->addRule('option[2]', get_lang('Required field'), 'required');
@@ -252,8 +252,8 @@ class MultipleAnswerTrueFalse extends Question
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['id'];
-                unset($optionData['id']);
+                $id = $optionData['iid'];
+                unset($optionData['iid']);
                 Question::updateQuestionOption($id, $optionData, $course_id);
             }
         } else {
@@ -293,7 +293,7 @@ class MultipleAnswerTrueFalse extends Question
             if (empty($options)) {
                 //If this is the first time that the question is created when
                 // change the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['id'] : '';
+                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['iid'] : '';
             }
             $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);

@@ -252,8 +252,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['id'];
-                unset($optionData['id']);
+                $id = $optionData['iid'];
+                unset($optionData['iid']);
                 Question::updateQuestionOption($id, $optionData, $courseId);
             }
         } else {
@@ -949,7 +949,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $userId = $data['exe_user_id'];
         $attemptDate = $data['exe_date'];
 
-        if ('0000-00-00 00:00:00' == $attemptDate) {
+        if ('0000-00-00 00:00:00' === $attemptDate) {
             // incomplete attempt, close it before continue
             return 0;
         }
@@ -958,14 +958,15 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $exerciseId = (int) $exerciseId;
         $userId = (int) $userId;
         $sql = "SELECT *
-            FROM $tblTrackEExercise
-            WHERE c_id = '$courseCode'
-            AND exe_exo_id = $exerciseId
-            AND exe_user_id = $userId
-            AND status = ''
-            AND exe_date > '0000-00-00 00:00:00'
-            AND exe_date < '$attemptDate'
-            ORDER BY exe_date DESC";
+                FROM $tblTrackEExercise
+                WHERE
+                      c_id = '$courseCode' AND
+                      exe_exo_id = $exerciseId AND
+                      exe_user_id = $userId AND
+                      status = '' AND
+                      exe_date > '0000-00-00 00:00:00' AND
+                      exe_date < '$attemptDate'
+                ORDER BY exe_date DESC";
 
         $res = Database::query($sql);
 

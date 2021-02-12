@@ -20,17 +20,17 @@ Feature: Group tool
     When I fill in the following:
       | title | Group category 1 |
     And I press "group_category_submit"
-    And wait very long for the page to be loaded
+    And wait for the page to be loaded
     Then I should see "Category created"
 
   Scenario: Create 4 groups
     Given I am on "/main/group/group_creation.php?cid=1&sid=0"
-    When I fill in the following:
+    Then I fill in the following:
       | number_of_groups | 5 |
     And I press "submit"
-    And wait very long for the page to be loaded
+    And wait for the page to be loaded
     Then I should see "New groups creation"
-    When I fill in the following:
+    Then I fill in the following:
       | group_0_places | 1 |
       | group_1_places | 1 |
       | group_2_places | 1 |
@@ -42,7 +42,7 @@ Feature: Group tool
     And I select "Group category 1" from "category_3"
     And I select "Group category 1" from "category_4"
     And I press "submit"
-    And wait very long for the page to be loaded
+    And wait for the page to be loaded
     Then I should see "group(s) has (have) been added"
 
 #  Scenario: Create document folder in group
@@ -321,8 +321,9 @@ Feature: Group tool
 
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am not logged
-    Given I am logged as "acostea"
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Then I am logged as "acostea"
+    Then wait the page to be loaded when ready
+    Then I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0005"
     Then I should see "Group 0005"
     And I follow "Announcements"
@@ -369,7 +370,7 @@ Feature: Group tool
     Then I should see "Group 0003"
     Then I follow "Announcements"
     And wait for the page to be loaded
-    Then I should see "AnnCheck fapple/acostea access of announcemenouncement for all users inside Group 0003"
+    Then I should see "Announcement for all users inside Group 0003"
     Then I should see "Announcement for user fapple inside Group 0003"
     Then I follow "Announcement for user fapple inside Group 0003"
     Then I should see "Announcement description for user fapple inside Group 0003"
@@ -399,11 +400,11 @@ Feature: Group tool
     And I should see "Group 0003"
     And I should see "Group 0004"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should not see "not allowed"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should not see "not allowed"
 
     Given I am not logged
     Given I am logged as "acostea"
@@ -416,12 +417,12 @@ Feature: Group tool
     And I should see "Group 0005"
 
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should not see "not allowed"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should see "not allowed"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should see "not allowed"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    Then I should see "Sorry, you are not allowed to access this page"
+    Then I should not see "not allowed"

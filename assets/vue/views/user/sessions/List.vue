@@ -20,8 +20,8 @@ export default {
   },
   data() {
     return {
-      status: null,
-        sessions:null
+        status: '',
+        sessions: []
     };
   },
   created: function () {
@@ -31,12 +31,18 @@ export default {
     load: function() {
         this.status = 'Loading';
         let user = this.$store.getters['security/getUser'];
-        axios.get(ENTRYPOINT + 'users/' + user.id + '/session_course_subscriptions.json').then(response => {
+        if (user) {
+          axios.get(ENTRYPOINT + 'users/' + user.id + '/session_course_subscriptions.json').then(response => {
             this.status = '';
-            this.sessions = response.data;
-        }).catch(function (error) {
+            if (Array.isArray(response.data)) {
+              this.sessions = response.data;
+            }
+          }).catch(function (error) {
             this.status = error;
-        });
+          });
+        } else {
+          this.status = '';
+        }
     }
   }
 };

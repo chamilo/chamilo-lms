@@ -59,7 +59,7 @@ jobs:
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
-              run: composer install --prefer-dist --no-progress
+              run: composer install --prefer-dist --no-progress --optimize-autoloader
 
             - name: Install assets
               run: php bin/console assets:install
@@ -85,10 +85,10 @@ jobs:
               with:
                   cmd: install # will run `yarn install` command
 
-            - name: Yarn run encore dev
+            - name: Yarn run encore
               uses: borales/actions-yarn@v2.3.0
               with:
-                  cmd: run encore dev
+                  cmd: run encore production
 
             - name: Start chrome
               run: |
@@ -172,8 +172,9 @@ jobs:
                   ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
                   cd ..
                   cd ..
-                  sudo chmod -R 777 var public
-                  php bin/console cache:clear
+                  sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env.local
+                  sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env.local
+                  sudo php bin/console cache:clear
                   sudo chmod -R 777 var public
 
             - name: Composer analyse
@@ -195,7 +196,7 @@ jobs:
                   ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -vv
                   ../../vendor/behat/behat/bin/behat features/profile.feature -vv
                   ../../vendor/behat/behat/bin/behat features/promotion.feature -vv
-                  # ../../vendor/behat/behat/bin/behat features/registration.feature -v
+                  # ../../vendor/behat/behat/bin/behat features/registration.feature -vv
                   ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
                   ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
                   ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vv
@@ -203,9 +204,9 @@ jobs:
                   ../../vendor/behat/behat/bin/behat features/ticket.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
+                  ../../vendor/behat/behat/bin/behat features/toolDocument.feature -vv
                   # ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
-                  ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
+                  ../../vendor/behat/behat/bin/behat features/toolForum.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolLink.feature -vv
                   #../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv

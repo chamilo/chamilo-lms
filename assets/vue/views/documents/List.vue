@@ -104,7 +104,6 @@
                 :href="row.item['contentUrl'] "
               >
                 <ResourceFileIcon :file="row.item['resourceNode']['resourceFile']" />
-
                 {{ row.item['resourceNode']['title'] }}
               </a>
             </div>

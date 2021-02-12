@@ -6,10 +6,10 @@
       md="6"
     >
       <div v-if="item">
-        <div v-if="item['resourceLinkList']">
+        <div v-if="item['resourceLinkListFromEntity']">
           <ul>
             <li
-              v-for="link in item['resourceLinkList']"
+              v-for="link in item['resourceLinkListFromEntity']"
             >
               <div v-if="link['course']">
                 Course: {{ link.course.resourceNode.title }}

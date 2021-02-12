@@ -12,15 +12,18 @@
 <!--        </v-toolbar-title>-->
       </template>
     </Toolbar>
-    <br>
+    <br />
     <div
       v-if="item"
       class="table-documents-show"
     >
-      <div v-if="item['resourceLinkList']">
+      <h2>
+        {{ item['title'] }}
+      </h2>
+      <div v-if="item['resourceLinkListFromEntity']">
         <ul>
           <li
-            v-for="link in item['resourceLinkList']"
+              v-for="link in item['resourceLinkListFromEntity']"
           >
             Status: {{ link.visibilityName }}
             <div v-if="link['course']">
@@ -32,11 +35,6 @@
           </li>
         </ul>
       </div>
-
-      <h2>
-        {{ item['title'] }}
-      </h2>
-
       <b-table-simple>
         <template slot="default">
           <tbody>

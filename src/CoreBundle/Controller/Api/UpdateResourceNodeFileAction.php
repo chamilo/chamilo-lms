@@ -23,7 +23,7 @@ class UpdateResourceNodeFileAction
             $title = $contentData['title'];
             $content = $contentData['contentFile'];
             $comment = $contentData['comment'] ?? '';
-            $resourceLinkList = $contentData['resourceLinkList'] ?? [];
+            $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');

@@ -52,12 +52,17 @@ class CourseHomeController extends ToolBaseController
         $js = '<script>'.api_get_language_translate_html().'</script>';
         $htmlHeadXtra[] = $js;
 
-        $userId = $this->getUser()->getId();
+        $userId = 0;
+        $user = $this->getUser();
+        if ($user) {
+            $userId = $this->getUser()->getId();
+        }
+
         $courseCode = $course->getCode();
         $courseId = $course->getId();
         $sessionId = $this->getSessionId();
 
-        if (api_is_invitee()) {
+        if ($user && api_is_invitee()) {
             $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
@@ -73,8 +78,8 @@ class CourseHomeController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
-        if ($isSpecialCourse) {
-            if (isset($_GET['autoreg']) && 1 == $_GET['autoreg']) {
+        if ($user && $isSpecialCourse) {
+            if (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) {
                 if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
                     $session->set('is_allowed_in_course', true);
                 }

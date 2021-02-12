@@ -220,7 +220,7 @@ class ResourceListener
 
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl)) {
-            if (null == $resourceNode->getParent()) {
+            if (null === $resourceNode->getParent()) {
                 throw new \InvalidArgumentException('Resource Node should have a parent');
             }
         }

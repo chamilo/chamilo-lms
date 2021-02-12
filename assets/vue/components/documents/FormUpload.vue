@@ -18,7 +18,7 @@
           <div class="custom-file">
 
             <input
-                id="inputGroupFile02"
+                id="file_upload"
                 type="file"
                 class="custom-file-input"
                 ref="fileList"
@@ -27,7 +27,7 @@
                 @change="selectFile"
             />
 
-            <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">
+            <label class="custom-file-label" for="file_upload" aria-describedby="File upload">
               Choose file
             </label>
           </div>

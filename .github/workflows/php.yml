@@ -203,7 +203,7 @@ jobs:
                   ../../vendor/behat/behat/bin/behat features/ticket.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -vv
-                  # ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
+                  ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
                   # ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
                   ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
                   ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv

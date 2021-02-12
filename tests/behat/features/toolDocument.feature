@@ -4,67 +4,79 @@ Feature: Document tool
 
   Background:
     Given I am a platform administrator
+    And I am on course "TEMP" homepage
 
   Scenario: Create a folder
-    Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I follow "New folder"
-    And I fill in the following:
-      | c_document_title | My new directory |
-    And I press "Save"
-    Then I should see "Saved"
+    Then I follow "document"
+    And wait the page to be loaded when ready
+    Then I should see "New folder"
+    Then I press "New folder"
+    Then I fill in the following:
+      | item_title | My new directory |
+    And I press "Submit"
+    And wait for the page to be loaded
+    Then I should see "created"
 
   Scenario: Create a folder that already exists
-    Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I follow "New folder"
+    Then I follow "document"
+    Then I press "New folder"
     And I fill in the following:
-      | c_document_title | My new directory |
-    And I press "Save"
-    Then I should see "Saved"
-
-  Scenario: Create a simple document
-    Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I follow "Create new document"
-    Then I fill in the following:
-      | c_document_title   | My first document |
-    And I fill in ckeditor field "c_document_content" with "This is my first document!!!"
+      | item_title | My new directory |
+    And I press "Submit"
     And wait for the page to be loaded
-    And I press "c_document_save"
-    Then I should see "Saved"
-    And I should see "My first document.html"
-    Then I follow "Info My first document.html"
-    And wait the page to be loaded when ready
-    Then I follow "View"
-    Then I should see "This is my first document"
+    Then I should see "created"
+
+  Scenario: Create a text document
+    Then I follow "document"
+    Then I press "New document"
+    And wait for the page to be loaded
+    Then I fill in the following:
+      | item_title   | My first document |
+    And I fill in tinymce field "item_content" with "This is my first document!"
+    And I press "Submit"
+    And wait for the page to be loaded
+    Then I should see "created"
+    And I should see "My first document"
+    And wait for the page to be loaded
+
+#    Then I follow "View"
+#    Then I should see "This is my first document"
 
   Scenario: Create a HTML document
-    Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I follow "Create new document"
+    Then I follow "document"
+    Then I press "New document"
+    And wait for the page to be loaded
     Then I fill in the following:
-      | c_document_title   | My second document |
-    And I fill in ckeditor field "c_document_content" with "<a href='www.chamilo.org'>Click here</a><span><strong>This is my second document!!!</strong></span>"
-    And I press "c_document_save"
-    Then I should see "Saved"
-    And I should see "My second document.html"
-    Then I follow "Info My second document.html"
-    And wait the page to be loaded when ready
-    Then I follow "View"
-    And I should not see "<strong>"
-    And I should not see "www.chamilo.org"
-    And I should see "Click here"
+      | item_title   | My second document |
+    And I fill in tinymce field "item_content" with "<a href='www.chamilo.org'>Click here</a><span><b>This is my second document!!</b></span>"
+    And I press "Submit"
+    And wait for the page to be loaded
+    Then I should see "created"
+    And I should see "My second document"
+
+#    Then I follow "Info My second document.html"
+#    And wait the page to be loaded when ready
+#    Then I follow "View"
+#    And I should not see "<strong>"
+#    And I should not see "www.chamilo.org"
 
   Scenario: Upload a document
-    Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I follow "Upload"
-    Then I attach the file "/public/favicon.ico" to "fileupload"
+    Then I follow "document"
+    Then I press "File upload"
     And wait for the page to be loaded
-    Then I should see "File upload succeeded"
-    Then I am on "/resources/document/files?cid=1&sid=0"
+    Then I attach the file "/public/favicon.ico" to "file_upload"
+    And I press "Submit"
+    And wait for the page to be loaded
+    Then I should see "created"
+    Then I move backward one page
     Then I should see "favicon.ico"
 
-  Scenario: Delete simple document
-    Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I follow "Info My first document.html"
-    Then I should see "Created at"
-    Then I follow "Delete"
-    Then I should see "Deleted"
-    And I should not see "My first document.html"
+#  Scenario: Delete simple document
+#    Then I follow "document"
+#    Then I press "File upload"
+#    And wait for the page to be loaded
+#    Then I follow "My first document"
+#    Then I should see "Created at"
+#    Then I follow "Delete"
+#    Then I should see "Deleted"
+#    And I should not see "My first document.html"

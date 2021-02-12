@@ -204,14 +204,11 @@ export default {
       selectMode: 'multi',
       isBusy: false
     };
-
   },
   created() {
     let nodeId = this.$route.params['node'];
     this.findResourceNode('/api/resource_nodes/' + nodeId);
     this.onUpdateOptions(this.options);
-
-
   },
   mounted() {
     // Detect when scrolled to bottom.

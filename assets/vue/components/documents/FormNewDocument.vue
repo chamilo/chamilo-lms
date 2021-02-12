@@ -8,6 +8,7 @@
       >
         <b-form-group>
           <b-form-input
+            id="item_title"
             v-model="item.title"
             :error-messages="titleErrors"
             :placeholder="$t('Title')"
@@ -18,6 +19,7 @@
         </b-form-group>
 
         <editor
+          id="item_content"
           v-if="item.resourceNode && item.resourceNode.fileEditableText || item.newDocument"
           v-model="item.contentFile"
           :error-messages="contentFileErrors"

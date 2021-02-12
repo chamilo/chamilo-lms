@@ -5,6 +5,7 @@
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
+use Database;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -62,57 +63,7 @@ class LrsRequest
         $response->send();
     }
 
-    /**
-     * @return string|null
-     */
-    private function getControllerName(): ?string
-    {
-        $segments = explode('/', $this->request->getPathInfo());
-        $segments = array_filter($segments);
-        $segments = array_values($segments);
-
-        if (empty($segments)) {
-            return null;
-        }
-
-        $segments = array_map('ucfirst', $segments);
-        $controllerName = implode('', $segments).'Controller';
-
-        return "Chamilo\\PluginBundle\\XApi\Lrs\\$controllerName";
-    }
-
-    /**
-     * @return string
-     */
-    private function getMethodName()
-    {
-        $method = $this->request->getMethod();
-
-        return strtolower($method);
-    }
-
-    /**
-     * @param string $version
-     *
-     * @return bool
-     */
-    private function isValidVersion($version)
-    {
-        if (preg_match('/^1\.0(?:\.\d+)?$/', $version)) {
-            if ('1.0' === $version) {
-                $this->request->headers->set('X-Experience-API-Version', '1.0.0');
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    private function validAuth()
+    private function validAuth(): bool
     {
         if (!$this->request->headers->has('Authorization')) {
             throw new AccessDeniedHttpException();
@@ -136,7 +87,7 @@ class LrsRequest
 
         list($username, $password) = $parts;
 
-        $auth = \Database::getManager()
+        $auth = Database::getManager()
             ->getRepository(LrsAuth::class)
             ->findOneBy(
                 ['username' => $username, 'password' => $password, 'enabled' => true]
@@ -147,5 +98,41 @@ class LrsRequest
         }
 
         return true;
+    }
+
+    private function isValidVersion(string $version): string
+    {
+        if (preg_match('/^1\.0(?:\.\d+)?$/', $version)) {
+            if ('1.0' === $version) {
+                $this->request->headers->set('X-Experience-API-Version', '1.0.0');
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function getControllerName(): ?string
+    {
+        $segments = explode('/', $this->request->getPathInfo());
+        $segments = array_filter($segments);
+        $segments = array_values($segments);
+
+        if (empty($segments)) {
+            return null;
+        }
+
+        $segments = array_map('ucfirst', $segments);
+        $controllerName = implode('', $segments).'Controller';
+
+        return "Chamilo\\PluginBundle\\XApi\Lrs\\$controllerName";
+    }
+
+    private function getMethodName(): string
+    {
+        $method = $this->request->getMethod();
+
+        return strtolower($method);
     }
 }

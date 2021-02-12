@@ -44,10 +44,11 @@ Feature: Forum tool
     And I press "SubmitPost"
     Then I should see "The reply has been added"
 
-  Scenario: Delete a forum message
+  Scenario: Delete a forum thread
     Given I am on "/main/forum/index.php?cid=1"
     And I follow "Forum Test"
-    When I follow "Delete"
+    Then I follow "Thread One"
+    Then I follow "Delete"
     And I confirm the popup
     Then I should see "Thread deleted"
 

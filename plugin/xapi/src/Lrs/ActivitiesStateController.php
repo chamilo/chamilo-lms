@@ -67,6 +67,11 @@ class ActivitiesStateController extends BaseController
         return JsonResponse::create($documentData);
     }
 
+    public function post(): Response
+    {
+        return $this->put();
+    }
+
     public function put(): Response
     {
         $activityId = $this->httpRequest->query->get('activityId');

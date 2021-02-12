@@ -4,12 +4,15 @@
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
+use Symfony\Component\HttpFoundation\Response;
 use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Model\StatementResult;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 use Xabbuh\XApi\Serializer\Symfony\StatementResultSerializer;
 use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 use XApi\LrsBundle\Controller\StatementGetController;
+use XApi\LrsBundle\Controller\StatementPostController;
 use XApi\LrsBundle\Controller\StatementPutController;
 use XApi\LrsBundle\Model\StatementsFilterFactory;
 use XApi\Repository\Doctrine\Mapping\Statement as StatementEntity;
@@ -63,6 +66,23 @@ class StatementsController extends BaseController
         return $putStatementController->putStatement($this->httpRequest, $statement);
     }
 
+    public function post(): Response
+    {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $postStatementController = new StatementPostController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            )
+        );
+
+        $statements = $this->deserializeStatements(
+            $this->httpRequest->getContent()
+        );
+
+        return $postStatementController->postStatements($this->httpRequest, $statements);
+    }
+
     /**
      * @param string $content
      *
@@ -73,5 +93,12 @@ class StatementsController extends BaseController
         $serializer = Serializer::createSerializer();
 
         return $serializer->deserialize($content, Statement::class, 'json');
+    }
+
+    private function deserializeStatements($content): array
+    {
+        $serializer = Serializer::createSerializer();
+
+        return $serializer->deserialize($content, Statement::class.'[]', 'json');
     }
 }

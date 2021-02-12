@@ -6426,10 +6426,8 @@ function api_get_jquery_ui_js()
 
 function api_get_jqgrid_js()
 {
-    $routePublic = Container::getRouter()->generate('home');
-
-    return api_get_css($routePublic.'build/free-jqgrid.css').PHP_EOL
-        .api_get_js_simple($routePublic.'build/free-jqgrid.js');
+    return api_get_build_css('free-jqgrid.css').PHP_EOL
+        .api_get_build_js('free-jqgrid.js');
 }
 
 /**

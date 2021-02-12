@@ -41,9 +41,14 @@ if (!$groupMember && !api_is_allowed_to_edit(false, true)) {
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
+
+$form->addHtml('<div class="row">');
 $form->addElement('html', '<div class="col-md-12">');
 $form->addElement('header', $nameTools);
-$form->addElement('html', '</div>');
+$form->addHtml('</div>');
+$form->addHtml('</div>');
+
+$form->addHtml('<div class="row">');
 $form->addElement('html', '<div class="col-md-6">');
 
 // Group name
@@ -63,12 +68,10 @@ $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
 $form->addElement('textarea', 'description', get_lang('Description'));
-$form->addElement('html', '</div>');
+$form->addHtml('</div>');
+$form->addHtml('</div>');
 
-$form->addElement('html', '<div class="col-md-12">');
-$form->addElement('header', '');
-$form->addElement('html', '</div>');
-
+$form->addHtml('<div class="row">');
 $form->addElement('html', '<div class="col-md-6">');
 
 // Members per group
@@ -129,6 +132,7 @@ $form->addGroup(
 );
 
 $form->addElement('html', '</div>');
+$form->addHtml('</div>');
 
 $form->addElement('html', '<div class="col-md-12">');
 $form->addElement('header', get_lang('Default settings for new groups'));
@@ -398,8 +402,6 @@ Display::display_header($nameTools, 'Group');
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('settings');
-echo '<div class="row">';
 $form->display();
-echo '</div>';
 
 Display :: display_footer();

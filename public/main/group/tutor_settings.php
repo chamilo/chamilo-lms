@@ -148,7 +148,6 @@ $group_tutors_element = $form->addElement(
     'group_tutors',
     get_lang('Coaches'),
     $possible_users,
-    'style="width: 280px;"'
 );
 
 // submit button

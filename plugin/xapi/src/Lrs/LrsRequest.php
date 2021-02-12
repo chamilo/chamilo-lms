@@ -65,15 +65,18 @@ class LrsRequest
     /**
      * @return string|null
      */
-    private function getControllerName()
+    private function getControllerName(): ?string
     {
         $segments = explode('/', $this->request->getPathInfo());
+        $segments = array_filter($segments);
+        $segments = array_values($segments);
 
-        if (empty($segments[1])) {
+        if (empty($segments)) {
             return null;
         }
 
-        $controllerName = ucfirst($segments[1]).'Controller';
+        $segments = array_map('ucfirst', $segments);
+        $controllerName = implode('', $segments).'Controller';
 
         return "Chamilo\\PluginBundle\\XApi\Lrs\\$controllerName";
     }

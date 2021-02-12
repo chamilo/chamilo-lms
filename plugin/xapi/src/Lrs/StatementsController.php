@@ -5,8 +5,13 @@
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
+use Xabbuh\XApi\Serializer\Symfony\StatementResultSerializer;
+use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
+use XApi\LrsBundle\Controller\StatementGetController;
 use XApi\LrsBundle\Controller\StatementPutController;
+use XApi\LrsBundle\Model\StatementsFilterFactory;
 use XApi\Repository\Doctrine\Mapping\Statement as StatementEntity;
 use XApi\Repository\Doctrine\Repository\StatementRepository;
 use XApiPlugin;
@@ -18,6 +23,26 @@ use XApiPlugin;
  */
 class StatementsController extends BaseController
 {
+    public function get()
+    {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $serializer = Serializer::createSerializer();
+
+        $getStatementController = new StatementGetController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            ),
+            new StatementSerializer($serializer),
+            new StatementResultSerializer($serializer),
+            new StatementsFilterFactory(
+                new ActorSerializer($serializer)
+            )
+        );
+
+        return $getStatementController->getStatement($this->httpRequest);
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */

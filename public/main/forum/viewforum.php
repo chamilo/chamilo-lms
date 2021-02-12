@@ -505,7 +505,7 @@ if (is_array($threads)) {
                             ICON_SIZE_SMALL
                         );
                     } else {
-                        $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete&content=thread&id='
+                        $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete_thread&content=thread&id='
                             .$thread->getIid()."\" onclick=\"javascript:if(!confirm('"
                             .addslashes(api_htmlentities(get_lang('Delete complete thread?'), ENT_QUOTES))
                             ."')) return false;\">"

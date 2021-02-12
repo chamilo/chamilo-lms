@@ -346,7 +346,7 @@ if (is_array($forumCategories)) {
                     .'</a>';
 
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                    .'&action=delete&content=forumcategory&id='.$categoryId
+                    .'&action=delete_category&content=forumcategory&id='.$categoryId
                     ."\" onclick=\"javascript:if(!confirm('"
                     .addslashes(api_htmlentities(
                         get_lang('Delete forum category ?'),
@@ -554,7 +554,7 @@ if (is_array($forumCategories)) {
                                 .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
                                 .'</a>';
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                                .'&action=delete&content=forum&id='.$forumId
+                                .'&action=delete_forum&content=forum&id='.$forumId
                                 ."\" onclick=\"javascript:if(!confirm('".addslashes(
                                     api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES)
                                 )

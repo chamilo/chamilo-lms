@@ -45,9 +45,7 @@ function handleForum($url)
         $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
         $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : '';
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-
         $repo = null;
-
         switch ($content) {
             case 'forumcategory':
                 $repo = Container::getForumCategoryRepository();
@@ -60,6 +58,7 @@ function handleForum($url)
                 break;
         }
 
+        $resource = null;
         if ($repo && $id) {
             $resource = $repo->find($id);
         }
@@ -103,7 +102,7 @@ function handleForum($url)
                 break;
             case 'lock':
             case 'unlock':
-                if ($resource) {
+                if (null !== $resource) {
                     if ('lock' === $action) {
                         $locked = 1;
                         $message = get_lang('Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted');
@@ -135,32 +134,49 @@ function handleForum($url)
                 break;
             case 'visible':
             case 'invisible':
-                if ('visible' === $action) {
-                    $repo->setVisibilityPublished($resource);
-                } else {
-                    $repo->setVisibilityPending($resource);
-                }
+                if (null !== $resource) {
+                    if ('visible' === $action) {
+                        $repo->setVisibilityPublished($resource);
+                    } else {
+                        $repo->setVisibilityPending($resource);
+                    }
 
-                if ('visible' === $action) {
-                    handle_mail_cue($content, $id);
-                }
+                    if ('visible' === $action) {
+                        handle_mail_cue($content, $id);
+                    }
 
-                Display::addFlash(
-                    Display::return_message(get_lang('Updated'), 'confirmation', false)
-                );
+                    Display::addFlash(
+                        Display::return_message(get_lang('Updated'), 'confirmation', false)
+                    );
+                }
                 header('Location: '.$url);
                 exit;
                 break;
-            case 'delete':
+            case 'delete_category':
+                if ($resource) {
+                    $repo->delete($resource);
+
+                    Display::addFlash(
+                        Display::return_message(get_lang('Forum category deleted'), 'confirmation', false)
+                    );
+                }
+                header('Location: '.$url);
+                exit;
+                break;
+            case 'delete_forum':
+                if ($resource) {
+                    $repo->delete($resource);
+                    Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
+                }
+
+                header('Location: '.$url);
+                exit;
+                break;
+            case 'delete_thread':
                 $locked = api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD);
                 if ($resource && false === $locked) {
                     $repo->delete($resource);
-
-                    if ('thread' === $content) {
-                        $return_message = get_lang('Thread deleted');
-                        Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
-                    }
-
+                    Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
                     $link_info = GradebookUtils::isResourceInCourseGradebook(
                         api_get_course_id(),
                         5,
@@ -172,9 +188,9 @@ function handleForum($url)
                         $link_id = $link_info['id'];
                         GradebookUtils::remove_resource_from_course_gradebook($link_id);
                     }
+                    Display::addFlash(Display::return_message(get_lang('Thread deleted'), 'confirmation', false));
                 }
 
-                Display::addFlash(Display::return_message(get_lang('Forum category deleted'), 'confirmation', false));
                 header('Location: '.$url);
                 exit;
                 break;

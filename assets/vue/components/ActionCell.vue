@@ -7,24 +7,21 @@
         size="sm"
         class="mr-2"
         @click="handleShow"
-      >
-        Info
+      >{{ $t('Info') }}
       </b-button>
       <b-button
         v-if="handleEdit"
         size="sm"
         class="mr-2"
         @click="handleEdit"
-      >
-        Edit
+      >{{ $t('Edit') }}
       </b-button>
       <b-button
         v-if="handleDelete"
         variant="danger"
         size="sm"
         @click="confirmDelete = true"
-      >
-        Delete
+      >{{ $t('Delete') }}
       </b-button>
     </b-button-toolbar>
 

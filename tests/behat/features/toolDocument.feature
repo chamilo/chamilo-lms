@@ -19,6 +19,8 @@ Feature: Document tool
 
   Scenario: Create a folder that already exists
     Then I follow "document"
+    And wait the page to be loaded when ready
+    Then I should see "New folder"
     Then I press "New folder"
     And I fill in the following:
       | item_title | My new directory |
@@ -70,6 +72,29 @@ Feature: Document tool
     Then I should see "created"
     Then I move backward one page
     Then I should see "favicon.ico"
+
+  Scenario: Search for "My second document" and edit it
+    Then I follow "document"
+    Then I press "Search"
+    And wait for the page to be loaded
+    Then I fill in the following:
+      | search_filter | My second document |
+    Then I press "Filter"
+    And wait for the page to be loaded
+    Then I should not see "My first document"
+    Then I press "Info"
+    Then I should see "My second document"
+    Then I press "Edit"
+    And wait for the page to be loaded
+    Then I fill in the following:
+      | item_title | My second document edited |
+    Then I press "Submit"
+    And wait very long for the page to be loaded
+    Then I should see "updated"
+    Then move backward one page
+    And I should see "My second document edited"
+
+
 
 #  Scenario: Delete simple document
 #    Then I follow "document"

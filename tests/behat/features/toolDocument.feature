@@ -82,7 +82,7 @@ Feature: Document tool
     Then I fill in the following:
       | item_title | My second document edited |
     Then I press "Submit"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "updated"
     Then move backward one page
     And I should see "My second document edited"
@@ -104,8 +104,6 @@ Feature: Document tool
     Then I should see "Deleted"
     And wait for the page to be loaded
     And I should not see "My second document"
-
-
 
 #  Scenario: Delete simple document
 #    Then I follow "document"

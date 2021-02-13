@@ -211,7 +211,7 @@ jobs:
                   ../../vendor/behat/behat/bin/behat features/toolForum.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
                   ../../vendor/behat/behat/bin/behat features/toolLink.feature -vv
-                  #../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
 
             - name: The job has failed

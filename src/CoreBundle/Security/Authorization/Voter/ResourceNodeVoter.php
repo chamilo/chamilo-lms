@@ -21,9 +21,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class ResourceNodeVoter.
- */
 class ResourceNodeVoter extends Voter
 {
     public const VIEW = 'VIEW';
@@ -133,7 +130,8 @@ class ResourceNodeVoter extends Voter
         $creator = $resourceNode->getCreator();
         if ($creator instanceof UserInterface &&
             $user instanceof UserInterface &&
-            $user->getUsername() === $creator->getUsername()) {
+            $user->getUsername() === $creator->getUsername()
+        ) {
             return true;
         }
 
@@ -242,7 +240,7 @@ class ResourceNodeVoter extends Voter
                 break;
             }*/
         }
-
+        //var_dump($linkFound, $link->getId());
         // No link was found or not available.
         if (0 === $linkFound) {
             return false;

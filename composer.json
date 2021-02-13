@@ -98,7 +98,7 @@
         "paragonie/random-lib": "~2.0",
         "php-ffmpeg/php-ffmpeg": "~0.14",
         "phpoffice/phpspreadsheet": "~1.16",
-        "phpoffice/phpword": "~0.16",
+        "phpoffice/phpword": "~0.18",
         "sabre/vobject": "~4.2",
         "sensio/framework-extra-bundle": "~6.0",
         "sonata-project/exporter": "^2.2",

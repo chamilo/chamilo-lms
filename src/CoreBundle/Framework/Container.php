@@ -5,7 +5,7 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
-use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;

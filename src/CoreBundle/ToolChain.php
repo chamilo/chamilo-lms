@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
-use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;

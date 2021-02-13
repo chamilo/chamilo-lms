@@ -5,7 +5,7 @@
 namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Component\Utils\Glide;
-use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;

@@ -49,8 +49,9 @@ if (isset($_GET['action'])) {
                         $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
                     }
                 }
+                throw new Exception('export_surveys');
 
-                if (!empty($exportList)) {
+                /*if (!empty($exportList)) {
                     $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
                     $zip = new PclZip($tempZipFile);
                     foreach ($exportList as $file) {
@@ -64,7 +65,7 @@ if (isset($_GET['action'])) {
                     );
                     unlink($tempZipFile);
                     exit;
-                }
+                }*/
             }
 
             Display::addFlash(Display::return_message(get_lang('NoSurveyAvailable')));

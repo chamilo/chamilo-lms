@@ -20,7 +20,7 @@ export default function makeService(endpoint) {
     },
     update(payload) {
       console.log('update');
-      console.log(JSON.stringify(payload));
+      //console.log(JSON.stringify(payload));
 
       return fetch(payload['@id'], {
         method: 'PUT',

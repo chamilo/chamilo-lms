@@ -80,6 +80,8 @@ if ($form->validate()) {
     $upload = process_uploaded_file($_FILES['file'], false);
 
     if ($upload) {
+        throw new Exception('upload corrections');
+        /*
         $zip = new PclZip($_FILES['file']['tmp_name']);
         // Check the zip content (real size and file extension)
         $zipFileList = (array) $zip->listContent();
@@ -98,9 +100,8 @@ if ($form->validate()) {
                     'warning'
                 )
             );
-        }
+        }*/
 
-        throw new Exception('upload corrections');
         /*$folder = api_get_unique_id();
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
         mkdir($destinationDir, api_get_permissions_for_new_directories(), true);

@@ -103,6 +103,7 @@ Feature: Document tool
     And wait for the page to be loaded
     Then I should see "Deleted"
     And wait for the page to be loaded
+    And wait for the page to be loaded
     And I should not see "My second document"
 
 #  Scenario: Delete simple document

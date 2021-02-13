@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *              "controller"=UpdateResourceNodeFileAction::class,
  *              "deserialize"=false,
  *              "security" = "is_granted('EDIT', object.resourceNode)",
- *              "validation_groups"={"Default", "media_object_create", "document:write"},
+ *              "validation_groups"={"media_object_create", "document:write"},
  *          },
  *          "get" = {
  *              "security" = "is_granted('VIEW', object.resourceNode)",
@@ -94,9 +94,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                 }
  *             }
  *         },
- *         "get" = {
- *              "security"="is_granted('ROLE_USER')",
- *         },
+ *         "get"
  *     },
  * )
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
@@ -167,9 +165,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     protected $template;
 
-    /**
-     * CDocument constructor.
-     */
     public function __construct()
     {
         $this->comment = '';

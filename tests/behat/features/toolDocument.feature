@@ -5,10 +5,10 @@ Feature: Document tool
   Background:
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-
-  Scenario: Create a folder
     Then I follow "document"
     And wait the page to be loaded when ready
+
+  Scenario: Create a folder
     Then I should see "New folder"
     Then I press "New folder"
     Then I fill in the following:
@@ -18,8 +18,6 @@ Feature: Document tool
     Then I should see "created"
 
   Scenario: Create a folder that already exists
-    Then I follow "document"
-    And wait the page to be loaded when ready
     Then I should see "New folder"
     Then I press "New folder"
     And I fill in the following:
@@ -29,7 +27,6 @@ Feature: Document tool
     Then I should see "created"
 
   Scenario: Create a text document
-    Then I follow "document"
     Then I press "New document"
     And wait for the page to be loaded
     Then I fill in the following:
@@ -45,7 +42,6 @@ Feature: Document tool
 #    Then I should see "This is my first document"
 
   Scenario: Create a HTML document
-    Then I follow "document"
     Then I press "New document"
     And wait for the page to be loaded
     Then I fill in the following:
@@ -63,7 +59,6 @@ Feature: Document tool
 #    And I should not see "www.chamilo.org"
 
   Scenario: Upload a document
-    Then I follow "document"
     Then I press "File upload"
     And wait for the page to be loaded
     Then I attach the file "/public/favicon.ico" to "file_upload"
@@ -74,9 +69,7 @@ Feature: Document tool
     Then I should see "favicon.ico"
 
   Scenario: Search for "My second document" and edit it
-    Then I follow "document"
     Then I press "Search"
-    And wait for the page to be loaded
     Then I fill in the following:
       | search_filter | My second document |
     Then I press "Filter"
@@ -89,10 +82,28 @@ Feature: Document tool
     Then I fill in the following:
       | item_title | My second document edited |
     Then I press "Submit"
-    And wait very long for the page to be loaded
+    And wait for the page to be loaded
     Then I should see "updated"
     Then move backward one page
     And I should see "My second document edited"
+
+  Scenario: Search for "My second document" and delete it
+    Then I press "Search"
+    Then I fill in the following:
+      | search_filter | My second document |
+    Then I press "Filter"
+    And wait very long for the page to be loaded
+    Then I should see "My second document"
+    Then I press "Info"
+    And wait for the page to be loaded
+    Then I should see "My second document"
+    Then I press "Delete"
+    And wait for the page to be loaded
+    And I press "Yes"
+    And wait for the page to be loaded
+    Then I should see "Deleted"
+    And wait for the page to be loaded
+    And I should not see "My second document"
 
 
 

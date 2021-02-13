@@ -9,15 +9,13 @@
       <b-button
         color="error darken-1"
         @click="handleDelete"
-      >
-        {{ $t('Delete') }}
+      >{{ $t('Yes') }}
       </b-button>
       <b-button
         color="secondary darken-1"
         text
         @click.stop="show = false"
-      >
-        {{ $t('Cancel') }}
+      >{{ $t('No') }}
       </b-button>
     </b-card>
   </b-modal>

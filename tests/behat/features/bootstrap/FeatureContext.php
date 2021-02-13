@@ -440,7 +440,7 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        $this->getSession()->wait(5000);
+        $this->getSession()->wait(3000);
     }
 
     /**

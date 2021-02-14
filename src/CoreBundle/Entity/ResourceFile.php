@@ -154,13 +154,15 @@ class ResourceFile
     protected ?bool $video;
 
     /**
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     */
+    protected ?bool $text;
+
+    /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected ?string $description;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->metadata = [];
@@ -171,6 +173,16 @@ class ResourceFile
     public function __toString(): string
     {
         return $this->getOriginalName();
+    }
+
+    public function isText(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'text')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isImage(): bool

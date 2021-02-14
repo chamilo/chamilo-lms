@@ -198,7 +198,7 @@ class ResourceNode
         $this->resourceLinks = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->editableContent = false;
+        $this->fileEditableText = false;
     }
 
     /**

@@ -20,7 +20,7 @@
 
         <editor
           id="item_content"
-          v-if="item.resourceNode && item.resourceNode.fileEditableText || item.newDocument"
+          v-if="(item.resourceNode && item.resourceNode.resourceFile && item.resourceNode.resourceFile.text) || item.newDocument"
           v-model="item.contentFile"
           :error-messages="contentFileErrors"
           required
@@ -73,7 +73,6 @@ import has from 'lodash/has';
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 //import UploadAdapter from './UploadAdapter';
-
 import Editor from '../Editor'
 
 export default {
@@ -119,7 +118,7 @@ export default {
     contentFileErrors() {
       const errors = [];
 
-      if (this.item.resourceNode && this.item.resourceNode.fileEditableText) {
+      if (this.item.resourceNode && this.item.resourceNode.resourceFile && this.item.resourceNode.resourceFile.text) {
         if (!this.$v.item.contentFile.$dirty) return errors;
         has(this.violations, 'contentFile') && errors.push(this.violations.contentFile);
         !this.$v.item.contentFile.required && errors.push(this.$t('Content is required'));

@@ -5,11 +5,11 @@
 namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Component\Utils\Glide;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;

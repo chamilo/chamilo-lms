@@ -18,7 +18,7 @@ class CreateResourceNodeFileAction
         $contentData = $request->getContent();
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
-            error_log(print_r($contentData, 1));
+            //error_log(print_r($contentData, 1));
             $title = $contentData['title'];
             $comment = $contentData['comment'];
         } else {

@@ -46,7 +46,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use ResourceControllerTrait;
     use ControllerTrait;
 
-    private $fileContentName = 'file_content';
+    private string $fileContentName = 'file_content';
 
     /**
      * @deprecated in favor of vue CRUD methods

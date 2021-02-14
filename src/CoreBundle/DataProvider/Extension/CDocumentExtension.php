@@ -7,14 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
-final class CDocumentExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
     private $security;
 
@@ -29,11 +29,11 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface, Que
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
+    /*public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
     {
         error_log('applyToItem');
         $this->addWhere($queryBuilder, $resourceClass);
-    }
+    }*/
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {

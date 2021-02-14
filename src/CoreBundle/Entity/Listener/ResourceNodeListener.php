@@ -13,9 +13,6 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * Class ResourceNodeListener.
- */
 class ResourceNodeListener
 {
     protected $slugify;
@@ -23,9 +20,6 @@ class ResourceNodeListener
     protected $accessUrl;
     protected $resourceNodeRepository;
 
-    /**
-     * ResourceListener constructor.
-     */
     public function __construct(
         SlugifyInterface $slugify,
         ToolChain $toolChain,

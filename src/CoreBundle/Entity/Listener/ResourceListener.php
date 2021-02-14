@@ -25,9 +25,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * Class ResourceListener.
- */
 class ResourceListener
 {
     protected $slugify;

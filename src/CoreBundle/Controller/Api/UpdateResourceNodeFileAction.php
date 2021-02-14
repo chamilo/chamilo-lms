@@ -43,8 +43,10 @@ class UpdateResourceNodeFileAction
             $document->setResourceNode($resourceNode);
         }
 
+        $link = null;
         if (!empty($resourceLinkList)) {
             foreach ($resourceLinkList as $linkArray) {
+                // Find the exact link.
                 $linkId = $linkArray['id'];
                 /** @var ResourceLink $link */
                 $link = $document->getResourceNode()->getResourceLinks()
@@ -56,8 +58,15 @@ class UpdateResourceNodeFileAction
 
                 if (null !== $link) {
                     $link->setVisibility((int) $linkArray['visibility']);
+                    break;
                 }
             }
+        }
+
+        $isRecursive = 'folder' === $fileType;
+        // If it's a folder then change the visibility to the children (That have the same link).
+        if ($isRecursive && null !== $link) {
+            $repo->copyVisibilityToChildren($document->getResourceNode(), $link);
         }
 
         $document->setComment($comment);

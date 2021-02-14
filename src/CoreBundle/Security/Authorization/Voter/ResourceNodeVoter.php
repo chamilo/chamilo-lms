@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Laminas\Permissions\Acl\Acl;
-use Laminas\Permissions\Acl\Resource\GenericResource as SecurityResource;
+use Laminas\Permissions\Acl\Resource\GenericResource;
 use Laminas\Permissions\Acl\Role\GenericRole as Role;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
@@ -76,6 +76,7 @@ class ResourceNodeVoter extends Voter
             self::EXPORT,
         ];
 
+        error_log('resourceNode supports');
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, $options)) {
             return false;
@@ -91,6 +92,7 @@ class ResourceNodeVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
+        error_log('resourceNode voteOnAttribute');
         $user = $token->getUser();
 
         // Make sure there is a user object (i.e. that the user is logged in)
@@ -121,7 +123,6 @@ class ResourceNodeVoter extends Voter
         // @todo
         switch ($attribute) {
             case self::VIEW:
-                break;
             case self::EDIT:
                 break;
         }
@@ -240,7 +241,8 @@ class ResourceNodeVoter extends Voter
                 break;
             }*/
         }
-        //var_dump($linkFound, $link->getId());
+        //var_dump($linkFound, $link->getId()); exit;
+
         // No link was found or not available.
         if (0 === $linkFound) {
             return false;
@@ -266,18 +268,27 @@ class ResourceNodeVoter extends Voter
             $editorMask = self::getEditorMask();
 
             if ($courseId) {
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(self::ROLE_CURRENT_COURSE_TEACHER);
-                $rights[] = $resourceRight;
+                // If is teacher.
+                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($editorMask)
+                        ->setRole(self::ROLE_CURRENT_COURSE_TEACHER);
+                    $rights[] = $resourceRight;
+                }
 
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($readerMask)
-                    ->setRole(self::ROLE_CURRENT_COURSE_STUDENT);
-                $rights[] = $resourceRight;
+                // If is student.
+                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT) &&
+                    ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+                ) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($readerMask)
+                        ->setRole(self::ROLE_CURRENT_COURSE_STUDENT);
+                    $rights[] = $resourceRight;
+                }
 
+                // For everyone.
                 if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() && $link->getCourse()->isPublic()) {
                     $allowAnonsToSee = true;
                     $resourceRight = new ResourceRight();
@@ -331,13 +342,17 @@ class ResourceNodeVoter extends Voter
             }
         }
 
+        //var_dump($allowAnonsToSee);
+        /*foreach ($rights as $right) {
+            var_dump($right->getRole());
+        }*/
+
+        //exit;
+
         // Asked mask
         $mask = new MaskBuilder();
         $mask->add($attribute);
         $askedMask = $mask->get();
-
-        // Setting Simple ACL.
-        $acl = new Acl();
 
         // Creating roles
         // @todo move this in a service
@@ -358,7 +373,8 @@ class ResourceNodeVoter extends Voter
         $superAdmin = new Role('ROLE_SUPER_ADMIN');
         $admin = new Role('ROLE_ADMIN');
 
-        // Adding roles to the ACL.
+        // Setting Simple ACL.
+        $acl = new Acl();
         $acl
             ->addRole($anon)
             ->addRole($userRole)
@@ -379,8 +395,8 @@ class ResourceNodeVoter extends Voter
         ;
 
         // Add a security resource.
-        $securityResource = new SecurityResource($link);
-        $acl->addResource($securityResource);
+        $linkId = $link->getId();
+        $acl->addResource(new GenericResource($linkId));
 
         // Check all the right this link has.
         // Set rights from the ResourceRight.
@@ -388,32 +404,31 @@ class ResourceNodeVoter extends Voter
             $acl->allow($right->getRole(), null, $right->getMask());
         }
 
-        // var_dump($askedMask, $roles);
         // Role and permissions settings
         // Student can just view (read)
-        $acl->allow($student, null, self::getReaderMask());
-
-        // Anons can see.
-        if ($allowAnonsToSee) {
-            $acl->allow($anon, null, self::getReaderMask());
-        }
+        //$acl->allow($student, null, self::getReaderMask());
 
         // Teacher can view/edit
-        $acl->allow(
+        /*$acl->allow(
             $teacher,
             null,
             [
                 self::getReaderMask(),
                 self::getEditorMask(),
             ]
-        );
+        );*/
+
+        // Anons can see.
+        if ($allowAnonsToSee) {
+            $acl->allow($anon, null, self::getReaderMask());
+        }
 
         // Admin can do everything
         $acl->allow($admin);
         $acl->allow($superAdmin);
 
         if ($token instanceof AnonymousToken) {
-            if ($acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $securityResource, $askedMask)) {
+            if ($acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask)) {
                 return true;
             }
 
@@ -421,7 +436,8 @@ class ResourceNodeVoter extends Voter
         }
 
         foreach ($user->getRoles() as $role) {
-            if ($acl->isAllowed($role, $securityResource, $askedMask)) {
+            //var_dump($role, $acl->isAllowed($role, $linkId, $askedMask));
+            if ($acl->isAllowed($role, $linkId, $askedMask)) {
                 return true;
             }
         }

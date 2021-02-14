@@ -76,7 +76,6 @@ class CourseListener
 
         // Check if URL has cid value. Using Symfony request.
         $courseId = (int) $request->get('cid');
-        error_log($courseId);
         $checker = $container->get('security.authorization_checker');
 
         //dump("cid value in request: $courseId");

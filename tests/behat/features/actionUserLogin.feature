@@ -7,8 +7,8 @@ Feature: Login user
     And I fill in "admin" for "password"
     Then I press "Login"
     Then wait very long for the page to be loaded
-    Then I should see "MyCourses"
-    #Then I should not see an error
+    #Then I should see "MyCourses"
+    Then I should not see an error
 
   Scenario: Login as admin
     Given I am a platform administrator

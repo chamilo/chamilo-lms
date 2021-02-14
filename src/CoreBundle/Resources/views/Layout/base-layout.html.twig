@@ -15,10 +15,9 @@
 {% endblock %}
 <body
     class="{{ section_name }}"
-    data-in-course="{{ course ? 'true' : 'false' }}"
-    data-course-id="{{ course ? course.id : '' }}"
+    data-course-id="{{ course ? course.id : 0 }}"
     data-course-code="{{ course ? course.code : '' }}"
-    data-session-id="{{ session ? session.id : '' }}"
+    data-session-id="{{ session ? session.id : 0 }}"
 >
     <noscript>{{ "Your browser does not support Javascript" | trans }}</noscript>
     {%- block chamilo_wrap -%}

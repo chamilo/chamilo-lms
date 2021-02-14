@@ -49,7 +49,8 @@ var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
 $(function () {
-  var webCidReq = '&cid=' + $('body').attr('data-course-id') + '&sid=' + $('body').attr('data-session-id');
+  let courseId = $('body').attr('data-course-id');
+  let webCidReq = '&cid=' + courseId + '&sid=' + $('body').attr('data-session-id');
   window.webCidReq = webCidReq;
 
   $("#menu_courses").click(function(){
@@ -62,15 +63,14 @@ $(function () {
     return false;
   });
 
-  var isInCourse = $("body").data("in-course");
-  if (isInCourse == true) {
-    var courseCode = $("body").data("course-code");
-    var logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
+  if (courseId >0) {
+    let courseCode = $("body").data("course-code");
+    let logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
     function courseLogout() {
       $.ajax({
         async: false,
         url: logOutUrl,
-        success: function (data) {
+        success: function () {
           return 1;
         }
       });

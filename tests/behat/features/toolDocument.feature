@@ -87,16 +87,16 @@ Feature: Document tool
     Then move backward one page
     And I should see "My second document edited"
 
-  Scenario: Search for "My second document" and delete it
+  Scenario: Search for "My first document" and delete it
     Then I press "Search"
     Then I fill in the following:
-      | search_filter | My second document |
+      | search_filter | My first document |
     Then I press "Filter"
     And wait very long for the page to be loaded
-    Then I should see "My second document"
+    Then I should see "My first document"
     Then I press "Info"
     And wait for the page to be loaded
-    Then I should see "My second document"
+    Then I should see "My first document"
     Then I press "Delete"
     And wait for the page to be loaded
     And I press "Yes"
@@ -104,7 +104,7 @@ Feature: Document tool
     Then I should see "Deleted"
     And wait for the page to be loaded
     And wait for the page to be loaded
-    And I should not see "My second document"
+    And I should not see "My first document"
 
 #  Scenario: Delete simple document
 #    Then I follow "document"

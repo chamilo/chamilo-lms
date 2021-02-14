@@ -1,7 +1,7 @@
 <template>
   <div>
     <DocumentsForm
-      v-if="item"
+      v-if="!isLoading"
       ref="updateForm"
       :values="item"
       :errors="violations"
@@ -14,7 +14,7 @@
     />
 
     <Toolbar
-      v-if="item"
+      v-if="!isLoading"
       :handle-submit="onSendForm"
       :handle-reset="resetForm"
       :handle-delete="del"

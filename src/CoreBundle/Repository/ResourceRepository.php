@@ -888,6 +888,43 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->getAuthorizationChecker()->isGranted($subject, $resource->getResourceNode());
     }
 
+    /**
+     * Changes the visibility of the children that matches the exact same link.
+     */
+    public function copyVisibilityToChildren(ResourceNode $resourceNode, ResourceLink $link): bool
+    {
+        $children = $resourceNode->getChildren();
+
+        if (0 === $children->count()) {
+            return false;
+        }
+
+        $em = $this->getEntityManager();
+
+        /** @var ResourceNode $child */
+        foreach ($children as $child) {
+            if ($child->getChildren()->count() > 0) {
+                $this->copyVisibilityToChildren($child, $link);
+            }
+
+            $links = $child->getResourceLinks();
+            foreach ($links as $linkItem) {
+                if ($linkItem->getUser() === $link->getUser() &&
+                    $linkItem->getSession() === $link->getSession() &&
+                    $linkItem->getCourse() === $link->getCourse() &&
+                    $linkItem->getUserGroup() === $link->getUserGroup()
+                ) {
+                    $linkItem->setVisibility($link->getVisibility());
+                    $em->persist($linkItem);
+                }
+            }
+        }
+
+        $em->flush();
+
+        return true;
+    }
+
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
     {
         $resourceNode = $resource->getResourceNode();
@@ -937,43 +974,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 $em->persist($link);
             }
         }
-        $em->flush();
-
-        return true;
-    }
-
-    /**
-     * Changes the visibility of the children that matches the exact same link.
-     */
-    public function copyVisibilityToChildren(ResourceNode $resourceNode, ResourceLink $link): bool
-    {
-        $children = $resourceNode->getChildren();
-
-        if (0 === $children->count()) {
-            return false;
-        }
-
-        $em = $this->getEntityManager();
-
-        /** @var ResourceNode $child */
-        foreach ($children as $child) {
-            if ($child->getChildren()->count() > 0) {
-                $this->copyVisibilityToChildren($child, $link);
-            }
-
-            $links = $child->getResourceLinks();
-            foreach ($links as $linkItem) {
-                if ($linkItem->getUser() === $link->getUser() &&
-                    $linkItem->getSession() === $link->getSession() &&
-                    $linkItem->getCourse() === $link->getCourse() &&
-                    $linkItem->getUserGroup() === $link->getUserGroup()
-                ) {
-                    $linkItem->setVisibility($link->getVisibility());
-                    $em->persist($linkItem);
-                }
-            }
-        }
-
         $em->flush();
 
         return true;

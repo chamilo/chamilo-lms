@@ -31,6 +31,7 @@ Feature: Forum tool
       | post_title | Thread One |
     And I fill in ckeditor field "post_text" with "This is a the first thread in a forum for test"
     And I press "SubmitPost"
+    And wait for the page to be loaded
     Then I should see "The new thread has been added"
 
   Scenario: Reply to forum message
@@ -50,6 +51,7 @@ Feature: Forum tool
     Then I follow "Thread One"
     Then I follow "Delete"
     And I confirm the popup
+    And wait for the page to be loaded
     Then I should see "Thread deleted"
 
 # This test is commented because to quote a message is necessary load HTML code inside of textarea.

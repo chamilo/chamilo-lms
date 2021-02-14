@@ -1,6 +1,7 @@
 <template>
   <div>
     <Toolbar
+      v-if="item"
       :handle-edit="editHandler"
       :handle-delete="del"
     >

@@ -14,6 +14,7 @@
     />
 
     <Toolbar
+       v-if="item"
       :handle-submit="onSendForm"
       :handle-reset="resetForm"
       :handle-delete="del"

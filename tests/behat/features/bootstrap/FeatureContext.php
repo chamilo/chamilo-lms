@@ -125,7 +125,7 @@ class FeatureContext extends MinkContext
         $this->fillField('password', $username);
         $this->pressButton('Login');
         $this->waitForThePageToBeLoaded();
-        $this->waitForThePageToBeLoaded();
+        //$this->waitForThePageToBeLoaded();
     }
 
     /**

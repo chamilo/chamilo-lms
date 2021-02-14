@@ -35,9 +35,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
-    if (false === Security::check_token('get')) {
-        exit;
-    }
+        if (false === Security::check_token('get')) {
+            exit;
+        }
         $add_as_announcement = $_REQUEST['add_as_annonuncement'] ?? null;
         $title = $_REQUEST['title'] ?? null;
         $content = $_REQUEST['content'] ?? null;
@@ -67,6 +67,8 @@ switch ($action) {
         }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
+        $title = $_REQUEST['title'] ?? null;
+        $content = $_REQUEST['content'] ?? null;
         $agenda->editEvent(
             $id,
             $_REQUEST['start'],

@@ -570,7 +570,7 @@ foreach ($questionList as $questionId) {
                     <script>
                         AnnotationQuestion({
                             questionId: '.(int) $questionId.',
-                            exerciseId: '.(int) $id.',
+                            exerciseId: '.$id.',
                             relPath: \''.$relPath.'\',
                             courseId: '.(int) $courseInfo['real_id'].'
                         });
@@ -850,14 +850,12 @@ foreach ($questionList as $questionId) {
             $countPendingQuestions++;
         }
     }
-
-    unset($objAnswerTmp);
     $i++;
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
     if ($show_results && $objQuestionTmp) {
-        $objQuestionTmp->export = 'export' == $action;
+        $objQuestionTmp->export = 'export' === $action;
         // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
             $objExercise,

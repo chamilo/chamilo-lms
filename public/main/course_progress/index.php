@@ -17,6 +17,7 @@ $current_course_tool = TOOL_COURSE_PROGRESS;
 // protect a course script
 api_protect_course_script(true);
 $courseId = api_get_course_int_id();
+$description_type = null;
 
 // get actions
 $actions = [
@@ -132,7 +133,6 @@ $interbreadcrumb[] = [
 ];
 
 $actionLeft = '';
-
 // instance thematic object for using like library here
 $thematicManager = new Thematic();
 
@@ -724,10 +724,10 @@ switch ($action) {
         } else {
             $header_form = $default_thematic_plan_title[$description_type];
         }
-        if (!$error) {
+        /*if (!$error) {
             $token = md5(uniqid(rand(), true));
             Session::write('thematic_plan_token', $token);
-        }
+        }*/
 
         // display form
         $form = new FormValidator(
@@ -779,7 +779,7 @@ switch ($action) {
         }
 
         // error messages
-        if ($error) {
+        /*if ($error) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('The form contains incorrect or incomplete data. Please check your input.'),
@@ -787,7 +787,7 @@ switch ($action) {
                     false
                 )
             );
-        }
+        }*/
         $content = $form->returnForm();
         break;
     case 'thematic_plan_delete':

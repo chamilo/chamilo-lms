@@ -113,7 +113,7 @@ $attemptInfo = Database::select(
     [
         'where' => [
             'exe_exo_id = ? AND c_id = ? AND exe_user_id = ? AND status = ?' => [
-                (int) $exerciseId,
+                $exerciseId,
                 $course_id,
                 api_get_user_id(),
                 'incomplete',

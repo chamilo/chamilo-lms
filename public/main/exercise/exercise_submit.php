@@ -1136,7 +1136,8 @@ if ($limit_time_exists) {
 }
 
 // Blocking empty start times see BT#2800
-global $_custom;
+// @todo use api_get_configuration_value()
+/*global $_custom;
 if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     $_custom['exercises_hidden_when_no_start_date']
 ) {
@@ -1154,7 +1155,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
             exit;
         }
     }
-}
+}*/
 
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();

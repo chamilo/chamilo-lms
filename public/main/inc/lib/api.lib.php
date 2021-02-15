@@ -18,6 +18,8 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ZipStream\Option\Archive;
+use ZipStream\ZipStream;
 
 /**
  * This is a code library for Chamilo.
@@ -8434,18 +8436,16 @@ function api_get_language_list_for_flag()
 /**
  * @param string $name
  *
- * @return \ZipStream\ZipStream
+ * @return ZipStream
  */
 function api_create_zip($name)
 {
-    $zipStreamOptions = new \ZipStream\Option\Archive();
+    $zipStreamOptions = new Archive();
     $zipStreamOptions->setSendHttpHeaders(true);
     $zipStreamOptions->setContentDisposition('attachment');
     $zipStreamOptions->setContentType('application/x-zip');
 
-    $zip = new \ZipStream\ZipStream($name, $zipStreamOptions);
-
-    return $zip;
+    return new ZipStream($name, $zipStreamOptions);
 }
 
 /**

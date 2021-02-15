@@ -231,7 +231,7 @@ if ($is_allowedToEdit && !empty($action)) {
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
-            require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
+            require_once __DIR__.'/export/qti2/qti2_export.php';
             $export = export_exercise_to_qti($exerciseId, true);
 
             $xmlReader = new XMLReader();

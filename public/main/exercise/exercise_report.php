@@ -203,7 +203,11 @@ if (isset($_REQUEST['comments']) &&
         }
 
         // From the database.
-        $marksFromDatabase = $questionListData[$questionId]['marks'];
+        $marksFromDatabase = 0;
+        if (isset($questionListData[$questionId])) {
+            $marksFromDatabase = $questionListData[$questionId]['marks'];
+        }
+
         if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
             // From the form.
             $params['marks'] = $marks;
@@ -232,11 +236,11 @@ if (isset($_REQUEST['comments']) &&
         $recording = new TrackEAttemptRecording();
         $recording
             ->setExeId($id)
-            ->setQuestionId($my_questionid)
+            ->setQuestionId($questionId)
             ->setAuthor(api_get_user_id())
             ->setTeacherComment($my_comments)
             ->setExeId($id)
-            ->setMarks($my_marks)
+            ->setMarks($marks)
             ->setSessionId(api_get_session_id())
         ;
 

@@ -106,12 +106,12 @@ if (isset($_REQUEST['convertAnswer'])) {
 $objAnswer = Session::read('objAnswer');
 $_course = api_get_course_info();
 
-// tables used in the exercise tool
-if (!empty($_GET['action']) && 'exportqti2' == $_GET['action'] && !empty($_GET['questionId'])) {
+// tables used in the exercise tool.
+if (!empty($_GET['action']) && 'exportqti2' === $_GET['action'] && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
     $export = export_question_qti($_GET['questionId'], true);
     $qid = (int) $_GET['questionId'];
-
+    $name = 'qti2_export_'.$qid.'.zip';
     $zip = api_create_zip($name);
     $zip->addFile("qti2export_$qid.xml", $export);
     $zip->finish();

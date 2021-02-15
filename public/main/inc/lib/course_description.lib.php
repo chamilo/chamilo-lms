@@ -2,19 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+
 /**
  * This file contains a class used like library provides functions for
  * course description tool. It's also used like model to
  * course_description_controller (MVC pattern).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- */
-
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CCourseDescription;
-
-/**
- * Class CourseDescription course descriptions.
  */
 class CourseDescription
 {
@@ -26,9 +22,6 @@ class CourseDescription
     private $description_type;
     private $progress;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
@@ -115,7 +108,7 @@ class CourseDescription
      * first you must set session_id property with the object CourseDescription.
      *
      * @param int    $description_type Description type
-     * @param string $courseId         Course code (optional)
+     * @param int    $courseId         Course code (optional)
      * @param int    $session_id       Session id (optional)
      *
      * @return array List of fields from the descriptions found of the given type

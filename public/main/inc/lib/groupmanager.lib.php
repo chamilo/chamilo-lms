@@ -60,9 +60,6 @@ class GroupManager
     public const DOCUMENT_MODE_READ_ONLY = 1;
     public const DOCUMENT_MODE_COLLABORATION = 2;
 
-    /**
-     * GroupManager constructor.
-     */
     public function __construct()
     {
     }
@@ -76,18 +73,20 @@ class GroupManager
     {
         $repo = Container::getGroupRepository();
         $course = api_get_course_entity($courseId);
+        if (null !== $course) {
+            return [];
+        }
 
         $qb = $repo->getResourcesByCourse($course);
 
         return $qb->getQuery()->getResult();
-
-        $table_group = Database::get_course_table(TABLE_GROUP);
+        /*$table_group = Database::get_course_table(TABLE_GROUP);
         $courseId = !empty($courseId) ? (int) $courseId : api_get_course_int_id();
 
         $sql = "SELECT * FROM $table_group WHERE c_id = $courseId  ";
         $result = Database::query($sql);
 
-        return Database::store_result($result, 'ASSOC');
+        return Database::store_result($result, 'ASSOC');*/
     }
 
     /**
@@ -153,9 +152,7 @@ class GroupManager
         }
 
         return $qb->getQuery()->getArrayResult();
-
-        $table_group = Database::get_course_table(TABLE_GROUP);
-
+        /*$table_group = Database::get_course_table(TABLE_GROUP);
         $select = ' g.iid,
                     g.name,
                     g.description,
@@ -223,7 +220,7 @@ class GroupManager
             $groups[] = $thisGroup;
         }
 
-        return $groups;
+        return $groups;*/
     }
 
     /**
@@ -733,15 +730,17 @@ class GroupManager
         $repo = Container::getGroupRepository();
 
         $course = api_get_course_entity(api_get_course_int_id());
+        if (null === $course) {
+            return 0;
+        }
+
         $session = api_get_session_entity(api_get_session_id());
         $group = api_get_group_entity(api_get_group_id());
-
         $qb = $repo->getResourcesByCourse($course, $session, $group);
         $qb->select('count(resource)');
 
         return $qb->getQuery()->getSingleScalarResult();
-
-        $courseId = api_get_course_int_id();
+        /*$courseId = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT COUNT(id) AS number_of_groups
                 FROM $table
@@ -749,7 +748,7 @@ class GroupManager
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return $obj->number_of_groups;
+        return $obj->number_of_groups;*/
     }
 
     /**
@@ -770,8 +769,7 @@ class GroupManager
         $qb = $repo->getResourcesByCourse($course, $session, $group);
 
         return $qb->getQuery()->getArrayResult();
-
-        $course_info = api_get_course_info($course_code);
+        /*$course_info = api_get_course_info($course_code);
         $courseId = $course_info['real_id'];
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table
@@ -783,7 +781,7 @@ class GroupManager
             $cats[] = $cat;
         }
 
-        return $cats;
+        return $cats;*/
     }
 
     /**
@@ -802,7 +800,7 @@ class GroupManager
 
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $id = intval($id);
+        $id = (int) $id;
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table
                 WHERE  iid = $id
@@ -1325,8 +1323,10 @@ class GroupManager
             ->getResult();
 
         $users = [];
-        foreach ($subscriptions as $subscription) {
-            $users[] = api_get_user_info($subscription['id']);
+        if (!empty($subscriptions)) {
+            foreach ($subscriptions as $subscription) {
+                $users[] = api_get_user_info($subscription['id']);
+            }
         }
 
         return $users;
@@ -2801,16 +2801,19 @@ class GroupManager
         echo '
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link '.$activeSettings.'" id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
+                    <a class="nav-link '.$activeSettings.'"
+                        id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link '.$activeMember.'" id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                    <a class="nav-link '.$activeMember.'"
+                        id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
                     '.Display::return_icon('user.png').' '.get_lang('Group members').'</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  '.$activeTutor.'" id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
+                    <a class="nav-link  '.$activeTutor.'"
+                        id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
                     '.Display::return_icon('teacher.png').' '.get_lang('Group tutors').'
                     </a>
                 </li>

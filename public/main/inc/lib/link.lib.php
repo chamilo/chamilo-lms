@@ -799,7 +799,7 @@ class Link extends Model
         $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
 
         return $qb->getQuery()->getResult();
-
+        /*
         $tblLinkCategory = Database::get_course_table(TABLE_LINK_CATEGORY);
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
@@ -869,7 +869,7 @@ class Link extends Model
                 ";
         $result = Database::query($sql);
 
-        return Database::store_result($result, 'ASSOC');
+        return Database::store_result($result, 'ASSOC');*/
     }
 
     /**

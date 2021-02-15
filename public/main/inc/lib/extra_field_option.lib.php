@@ -203,7 +203,7 @@ class ExtraFieldOption extends Model
                         'option_order' => 0,
                     ];
                     // Looking if option already exists:
-                    $option_info = self::get_field_option_by_field_id_and_option_display_text(
+                    $option_info = $this->get_field_option_by_field_id_and_option_display_text(
                         $field_id,
                         $option['label']
                     );
@@ -231,7 +231,7 @@ class ExtraFieldOption extends Model
                             'display_text' => $sub_option,
                             'option_order' => 0,
                         ];
-                        $option_info = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                        $option_info = $this->getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                             $field_id,
                             $sub_option,
                             $sub_id
@@ -263,7 +263,7 @@ class ExtraFieldOption extends Model
                         'display_text' => $level1['label'],
                         'option_order' => 0,
                     ];
-                    $optionInfo = self::get_field_option_by_field_id_and_option_display_text(
+                    $optionInfo = $this->get_field_option_by_field_id_and_option_display_text(
                         $field_id,
                         $level1['label']
                     );
@@ -283,7 +283,7 @@ class ExtraFieldOption extends Model
                             'display_text' => $level2['label'],
                             'display_order' => 0,
                         ];
-                        $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                        $optionInfo = $this->getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                             $field_id,
                             $level2['label'],
                             $level1Id
@@ -305,7 +305,7 @@ class ExtraFieldOption extends Model
                                     'display_text' => $item,
                                     'display_order' => 0,
                                 ];
-                                $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                                $optionInfo = $this->getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                                     $field_id,
                                     $item,
                                     $level2Id

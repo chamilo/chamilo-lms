@@ -25,7 +25,7 @@ $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 
 $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+$keyword = $_GET['keyword'] ?? '';
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -50,7 +50,6 @@ if (isset($_GET['action'])) {
                     }
                 }
                 throw new Exception('export_surveys');
-
                 /*if (!empty($exportList)) {
                     $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
                     $zip = new PclZip($tempZipFile);

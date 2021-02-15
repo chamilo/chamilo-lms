@@ -88,7 +88,9 @@ class CreateResourceNodeFileAction
             }
             error_log(print_r($links, 1));
             if (empty($links)) {
-                throw new \InvalidArgumentException('resourceLinkList is not a valid json. Example: [{"c_id":1, "visibility":1}]');
+                throw new \InvalidArgumentException(
+                    'resourceLinkList is not a valid json. Example: [{"c_id":1, "visibility":1}]'
+                );
             }
             $document->setResourceLinkArray($links);
         }

@@ -3,8 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\BranchSync;
-use Chamilo\CoreBundle\Repository\BranchSyncRepository;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\BranchSyncRepository;
 use GuzzleHttp\Client;
 use League\Flysystem\Filesystem;
 

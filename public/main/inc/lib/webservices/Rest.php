@@ -6,11 +6,11 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
-use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class RestApi.

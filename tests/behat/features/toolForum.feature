@@ -43,6 +43,7 @@ Feature: Forum tool
       | post_title | Reply |
     And I fill in ckeditor field "post_text" with "This is a reply to the first message for test"
     And I press "SubmitPost"
+    And wait for the page to be loaded
     Then I should see "The reply has been added"
 
   Scenario: Delete a forum thread
@@ -52,7 +53,7 @@ Feature: Forum tool
     Then I follow "Delete"
     And I confirm the popup
     And wait for the page to be loaded
-    Then I should see "Thread deleted"
+    Then I should see "deleted"
 
 # This test is commented because to quote a message is necessary load HTML code inside of textarea.
 # And this breaks the page for Behat

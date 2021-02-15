@@ -747,7 +747,6 @@ function handleSearch()
 {
     global $SettingsStored, $_configuration;
 
-    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $search_enabled = api_get_setting('search_enabled');
 
     $form = new FormValidator(

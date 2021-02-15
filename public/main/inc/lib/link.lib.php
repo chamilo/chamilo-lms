@@ -154,7 +154,6 @@ class Link extends Model
             if (('true' === api_get_setting('search_enabled')) &&
                 $link_id && extension_loaded('xapian')
             ) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                 $courseCode = $course_info['code'];
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
@@ -446,7 +445,6 @@ class Link extends Model
             Database:: query($sql);
 
             // Remove terms from db.
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             delete_all_values_for_item($course_id, TOOL_DOCUMENT, $link_id);
         }
     }
@@ -582,8 +580,6 @@ class Link extends Model
             $res = Database:: query($sql);
 
             if (Database:: num_rows($res) > 0) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
                 $se_ref = Database:: fetch_array($res);
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
@@ -1702,7 +1698,6 @@ Do you really want to delete this category and its links ?')."')) return false;\
         ];
 
         if ('true' === api_get_setting('search_enabled')) {
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
             $form->addCheckBox('index_document', get_lang('Index link title and description?s'), get_lang('Yes'));
 

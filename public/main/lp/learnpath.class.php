@@ -1039,7 +1039,6 @@ class learnpath
         }
 
         if ('true' === api_get_setting('search_enabled')) {
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
         }
     }
@@ -1448,7 +1447,6 @@ class learnpath
      */
     public function get_common_index_terms_by_prefix($prefix)
     {
-        require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
         $terms = get_specific_field_values_list_by_prefix(
             $prefix,
             $this->cc,

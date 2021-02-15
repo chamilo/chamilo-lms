@@ -13,7 +13,6 @@
  * Defines the "OpenOfficeTextDocument" child of class "learnpath".
  */
 require_once 'openoffice_document.class.php';
-require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 class OpenOfficeTextDocument extends OpenofficeDocument
 {

@@ -2354,7 +2354,6 @@ class Exercise
 
             $defaults = [];
             if ('true' === api_get_setting('search_enabled')) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                 $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
                 $form->addSelectLanguage('language', get_lang('Document language for indexation'));
                 $specific_fields = get_specific_field_list();
@@ -2729,9 +2728,6 @@ class Exercise
             return;
         }
         $course_id = api_get_course_id();
-
-        require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
         $specific_fields = get_specific_field_list();
         $ic_slide = new IndexableChunk();
 
@@ -2796,8 +2792,6 @@ class Exercise
             $res = Database::query($sql);
 
             if (Database::num_rows($res) > 0) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
                 $se_ref = Database::fetch_array($res);
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
@@ -2897,7 +2891,6 @@ class Exercise
             Database::query($sql);
 
             // remove terms from db
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             delete_all_values_for_item($course_id, TOOL_QUIZ, $this->getId());
         }
     }

@@ -11,7 +11,6 @@ use ChamiloSession as Session;
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
-require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 api_protect_course_script();
 

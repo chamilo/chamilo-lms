@@ -38,7 +38,7 @@
             {% endif %}
         </div>
 
-        <h4 class="h3">{{ item.title }}</h4>
+        <h4 class="h3">{{ item.title|remove_xss }}</h4>
 
         <ul class="fa-ul list-inline">
             {% if _c is empty %}
@@ -80,7 +80,7 @@
 
         <hr>
 
-        {{ item_content }}
+        {{ item_content|remove_xss }}
 
         {% if attachment_list %}
             <hr>

@@ -357,6 +357,7 @@ Feature: Group tool
     Then I should see "Announcement for all users inside Group 0001"
     Then I should see "Announcement for user fapple inside Group 0001"
     Then I follow "Announcement for user fapple inside Group 0001"
+    And wait for the page to be loaded
     Then I should see "Announcement description for user fapple inside Group 0001"
     Then I save current URL with name "announcement_for_user_fapple_group_0001_public"
     Then I move backward one page

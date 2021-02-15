@@ -1007,7 +1007,7 @@ class Answer
             // Fix correct answers
             if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
                 $onlyAnswersFlip = array_flip($onlyAnswers);
-                foreach ($correctAnswers as $answer_id => $correct_answer) {
+                foreach ($correctAnswers as $answerIdItem => $correct_answer) {
                     $params = [];
                     if (isset($allAnswers[$correct_answer]) &&
                         isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
@@ -1017,8 +1017,8 @@ class Answer
                             $tableAnswer,
                             $params,
                             [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
-                                    $answer_id,
+                                'iid = ? AND c_id = ? AND question_id = ? ' => [
+                                    $answerIdItem,
                                     $courseId,
                                     $newQuestionId,
                                 ],

@@ -19,11 +19,14 @@
         <directory name="public/main/calendar"/>
 <!--        <directory name="public/main/chat"/>-->
         <directory name="public/main/course_description"/>
+        <directory name="public/main/course_home"/>
         <directory name="public/main/course_info"/>
-<!--        <directory name="public/main/course_progress"/>-->
+        <directory name="public/main/course_progress"/>
         <directory name="public/main/coursecopy"/>
         <directory name="public/main/create_course"/>
+<!--        <directory name="public/main/cron"/>-->
         <directory name="public/main/dashboard"/>
+<!--        <directory name="public/main/document"/>-->
 <!--        <directory name="public/main/dropbox"/>-->
 <!--        <directory name="public/main/exercise"/>-->
         <file name="public/main/exercise/oral_expression.class.php"/>

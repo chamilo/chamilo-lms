@@ -263,12 +263,17 @@ $file_url_web = $file_url.'?'.api_get_cidreq();
 if ($show_web_odf) {
     echo '<div class="text-center">';
     $browser = api_get_navigator();
-    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
+    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html?zoom=page-width#'.$file_url;
     if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
         $pdfUrl = $file_url;
     }
     echo '<div id="viewerJS">';
-    echo '<iframe id="viewerJSContent" frameborder="0" allowfullscreen="allowfullscreen" webkitallowfullscreen style="width:100%;"
+    echo '<iframe
+            id="viewerJSContent"
+            frameborder="0"
+            allowfullscreen="allowfullscreen"
+            webkitallowfullscreen
+            style="width:100%;height:600px;"
             src="'.$pdfUrl.'">
         </iframe>';
     echo '</div>';

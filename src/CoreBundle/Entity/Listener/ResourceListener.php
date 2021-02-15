@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -171,6 +172,7 @@ class ResourceListener
         // Use by api platform
         $links = $resource->getResourceLinkArray();
         if ($links) {
+            $groupRepo = $em->getRepository(CGroup::class);
             $courseRepo = $em->getRepository(Course::class);
             $sessionRepo = $em->getRepository(Session::class);
 
@@ -185,12 +187,21 @@ class ResourceListener
                     }
                 }
 
-                if (isset($link['session_id']) && !empty($link['session_id'])) {
-                    $session = $sessionRepo->find($link['session_id']);
+                if (isset($link['sid']) && !empty($link['sid'])) {
+                    $session = $sessionRepo->find($link['sid']);
                     if ($session) {
                         $resourceLink->setSession($session);
                     } else {
-                        throw new \InvalidArgumentException(sprintf('Session #%s does not exists', $link['session_id']));
+                        throw new \InvalidArgumentException(sprintf('Session #%s does not exists', $link['sid']));
+                    }
+                }
+
+                if (isset($link['gid']) && !empty($link['gid'])) {
+                    $group = $groupRepo->find($link['gid']);
+                    if ($group) {
+                        $resourceLink->setGroup($group);
+                    } else {
+                        throw new \InvalidArgumentException(sprintf('Group #%s does not exists', $link['gid']));
                     }
                 }
 

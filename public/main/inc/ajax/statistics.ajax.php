@@ -430,16 +430,17 @@ switch ($action) {
                     if (!empty($row['value'])) {
                         $date1 = new DateTime($row['value']);
                         $interval = $now->diff($date1);
-                        $years = (int) $interval->y;
-
-                        if ($years >= 16 && $years <= 17) {
-                            $all['16-17']++;
-                        }
-                        if ($years >= 18 && $years <= 25) {
-                            $all['18-25']++;
-                        }
-                        if ($years >= 26 && $years <= 30) {
-                            $all['26-30']++;
+                        if ($interval) {
+                            $years = $interval->y;
+                            if ($years >= 16 && $years <= 17) {
+                                $all['16-17']++;
+                            }
+                            if ($years >= 18 && $years <= 25) {
+                                $all['18-25']++;
+                            }
+                            if ($years >= 26 && $years <= 30) {
+                                $all['26-30']++;
+                            }
                         }
                     }
                 }

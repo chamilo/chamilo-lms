@@ -9,67 +9,67 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
-use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CNotebookRepository;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class RestApi.
  */
 class Rest extends WebService
 {
-    const SERVICE_NAME = 'MsgREST';
-    const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
+    public const SERVICE_NAME = 'MsgREST';
+    public const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
-    const GET_AUTH = 'authenticate';
-    const GET_USER_MESSAGES = 'user_messages';
-    const POST_USER_MESSAGE_READ = 'user_message_read';
-    const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
-    const SAVE_GCM_ID = 'gcm_id';
-    const GET_USER_COURSES = 'user_courses';
-    const GET_PROFILE = 'user_profile';
-    const GET_COURSE_INFO = 'course_info';
-    const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
-    const GET_COURSE_DOCUMENTS = 'course_documents';
-    const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
-    const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
-    const GET_COURSE_AGENDA = 'course_agenda';
-    const GET_COURSE_NOTEBOOKS = 'course_notebooks';
-    const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
-    const GET_COURSE_FORUM = 'course_forum';
-    const GET_COURSE_FORUM_THREAD = 'course_forumthread';
-    const GET_COURSE_LEARNPATHS = 'course_learnpaths';
-    const GET_COURSE_LEARNPATH = 'course_learnpath';
-    const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
-    const SAVE_FORUM_POST = 'save_forum_post';
-    const GET_USER_SESSIONS = 'user_sessions';
-    const SAVE_USER_MESSAGE = 'save_user_message';
-    const GET_MESSAGE_USERS = 'message_users';
-    const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
-    const SAVE_FORUM_THREAD = 'save_forum_thread';
-    const SAVE_COURSE = 'save_course';
-    const SAVE_USER = 'save_user';
-    const SAVE_USER_JSON = 'save_user_json';
-    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
-    const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
-    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
-    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
-    const DELETE_USER_MESSAGE = 'delete_user_message';
-    const SET_MESSAGE_READ = 'set_message_read';
-    const CREATE_CAMPUS = 'add_campus';
-    const EDIT_CAMPUS = 'edit_campus';
-    const DELETE_CAMPUS = 'delete_campus';
-    const SAVE_SESSION = 'save_session';
-    const GET_USERS = 'get_users';
-    const GET_COURSES = 'get_courses';
-    const ADD_COURSES_SESSION = 'add_courses_session';
-    const ADD_USERS_SESSION = 'add_users_session';
-    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
-    const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
-    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
-    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
-    const USERNAME_EXIST = 'username_exist';
-    const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
-    const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+    public const GET_AUTH = 'authenticate';
+    public const GET_USER_MESSAGES = 'user_messages';
+    public const POST_USER_MESSAGE_READ = 'user_message_read';
+    public const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
+    public const SAVE_GCM_ID = 'gcm_id';
+    public const GET_USER_COURSES = 'user_courses';
+    public const GET_PROFILE = 'user_profile';
+    public const GET_COURSE_INFO = 'course_info';
+    public const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
+    public const GET_COURSE_DOCUMENTS = 'course_documents';
+    public const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
+    public const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
+    public const GET_COURSE_AGENDA = 'course_agenda';
+    public const GET_COURSE_NOTEBOOKS = 'course_notebooks';
+    public const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
+    public const GET_COURSE_FORUM = 'course_forum';
+    public const GET_COURSE_FORUM_THREAD = 'course_forumthread';
+    public const GET_COURSE_LEARNPATHS = 'course_learnpaths';
+    public const GET_COURSE_LEARNPATH = 'course_learnpath';
+    public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
+    public const SAVE_FORUM_POST = 'save_forum_post';
+    public const GET_USER_SESSIONS = 'user_sessions';
+    public const SAVE_USER_MESSAGE = 'save_user_message';
+    public const GET_MESSAGE_USERS = 'message_users';
+    public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
+    public const SAVE_FORUM_THREAD = 'save_forum_thread';
+    public const SAVE_COURSE = 'save_course';
+    public const SAVE_USER = 'save_user';
+    public const SAVE_USER_JSON = 'save_user_json';
+    public const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    public const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
+    public const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    public const GET_USER_MESSAGES_SENT = 'user_messages_sent';
+    public const DELETE_USER_MESSAGE = 'delete_user_message';
+    public const SET_MESSAGE_READ = 'set_message_read';
+    public const CREATE_CAMPUS = 'add_campus';
+    public const EDIT_CAMPUS = 'edit_campus';
+    public const DELETE_CAMPUS = 'delete_campus';
+    public const SAVE_SESSION = 'save_session';
+    public const GET_USERS = 'get_users';
+    public const GET_COURSES = 'get_courses';
+    public const ADD_COURSES_SESSION = 'add_courses_session';
+    public const ADD_USERS_SESSION = 'add_users_session';
+    public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
+    public const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
+    public const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    public const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    public const USERNAME_EXIST = 'username_exist';
+    public const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
+    public const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
 
     /**
      * @var Session
@@ -1773,8 +1773,7 @@ class Rest extends WebService
         if (is_null($userId)) {
             throw new Exception(get_lang('NoData'));
         }
-        /** @var User $user */
-        $user = UserManager::getRepository()->find($userId);
+        $user = api_get_user_entity($userId);
         if (empty($user)) {
             throw new Exception(get_lang('CouldNotLoadUser'));
         }
@@ -1999,12 +1998,12 @@ class Rest extends WebService
                     'indent' => 0,
                     'onclick' => '',
                     'afterlink' => null,
-                    'customdata' => "",
+                    'customdata' => '',
                     'noviewlink' => false,
                     'completion' => (int) ($exercise[1] > 0),
                 ];
             },
-            Exercise::exerciseGrid(0, '', $userId, $courseId, $sessionId, true)
+            Exercise::exerciseGridResource(0, '', $userId, $courseId, $sessionId, true)
         );
 
         return [$json];

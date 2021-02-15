@@ -938,7 +938,7 @@ switch ($action) {
         $confirmed = !empty($_POST['quiz_confirm_saved_answers_check']);
 
         $em = Database::getManager();
-        $repo = $em->getRepository('ChamiloCoreBundle:TrackEExerciseConfirmation');
+        $repo = $em->getRepository(TrackEExerciseConfirmation::class);
 
         try {
             if (!$trackConfirmationId) {

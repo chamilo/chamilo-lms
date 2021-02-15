@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -162,9 +163,9 @@ if (!empty($action)) {
                 $postId = str_replace('status_post_', '', $postId);
                 $em = Database::getManager();
                 /** @var CForumPost $post */
-                $post = $em->find('ChamiloCourseBundle:CForumPost', $postId);
+                $post = $em->find(CForumPost::class, $postId);
                 if ($post) {
-                    $forum = get_forums($post->getForumId(), api_get_course_id());
+                    $forum = $post->getForum();
                     $status = $post->getStatus();
                     if (empty($status)) {
                         $status = CForumPost::STATUS_WAITING_MODERATION;

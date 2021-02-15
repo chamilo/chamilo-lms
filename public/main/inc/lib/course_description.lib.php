@@ -107,9 +107,9 @@ class CourseDescription
      * Get all data by description and session id,
      * first you must set session_id property with the object CourseDescription.
      *
-     * @param int    $description_type Description type
-     * @param int    $courseId         Course code (optional)
-     * @param int    $session_id       Session id (optional)
+     * @param int $description_type Description type
+     * @param int $courseId         Course code (optional)
+     * @param int $session_id       Session id (optional)
      *
      * @return array List of fields from the descriptions found of the given type
      */

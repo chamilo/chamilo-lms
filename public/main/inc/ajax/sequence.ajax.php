@@ -23,9 +23,9 @@ $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
 
 $em = Database::getManager();
 /** @var SequenceRepository $sequenceRepository */
-$sequenceRepository = $em->getRepository('ChamiloCoreBundle:Sequence');
+$sequenceRepository = $em->getRepository(Sequence::class);
 /** @var SequenceResourceRepository $sequenceResourceRepository */
-$sequenceResourceRepository = $em->getRepository('ChamiloCoreBundle:SequenceResource');
+$sequenceResourceRepository = $em->getRepository(SequenceResource::class);
 
 switch ($action) {
     case 'graph':

@@ -6118,13 +6118,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
     return $resultData;*/
 }
 
-/**
- * @param array $row
- * @param bool  $addWrapper
- *
- * @return string
- */
-function getPostStatus(CForumForum $forum, $row, $addWrapper = true)
+function getPostStatus(CForumForum $forum, array $row, bool $addWrapper = true): string
 {
     $statusIcon = '';
     if ($forum->isModerated()) {

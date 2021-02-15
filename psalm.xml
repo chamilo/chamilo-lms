@@ -40,6 +40,8 @@
 <!--        <directory name="public/main/gamification"/>-->
         <directory name="public/main/glossary"/>
         <directory name="public/main/group"/>
+<!--        <directory name="public/main/inc/ajax" />-->
+
         <directory name="public/main/link" />
 <!--        <directory name="public/main/lp"/>-->
         <directory name="public/main/messages" />
@@ -48,7 +50,6 @@
         <directory name="public/main/session" />
         <directory name="public/main/social" />
 <!--        <directory name="public/main/survey" />-->
-        <!--        <directory name="public/main/inc/ajax" />-->
 <!--        <directory name="public/main/ticket" />-->
 <!--        <directory name="public/main/tracking" />-->
 <!--        <directory name="public/main/upload" />-->
@@ -156,6 +157,20 @@
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/GraphQlBundle"/>
             <directory name="src/LtiBundle"/>
+
+            <directory name="public/main/inc/lib/elfinder" />
+            <directory name="public/main/inc/lib/javascript" />
+            <directory name="public/main/inc/lib/kses-0.2.2" />
+            <directory name="public/main/inc/lib/mimetex" />
+            <directory name="public/main/inc/lib/nusoap" />
+            <directory name="public/main/inc/lib/opengraph" />
+            <directory name="public/main/inc/lib/pear" />
+            <directory name="public/main/inc/lib/ppt2png" />
+            <directory name="public/main/inc/lib/search" />
+            <directory name="public/main/inc/lib/svg-edit" />
+            <directory name="public/main/inc/lib/zombie" />
+
+
 
             <file name="public/main/lp/openoffice_presentation.class.php"/>
             <file name="public/main/lp/openoffice_document.class.php"/>

@@ -41,7 +41,7 @@ class ExtraFieldSavedSearch
     protected User $user;
 
     /**
-     * @var string
+     * @var array
      *
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
@@ -57,20 +57,12 @@ class ExtraFieldSavedSearch
         return $this->id;
     }
 
-    /**
-     * @return ExtraField
-     */
-    public function getField()
+    public function getField(): ExtraField
     {
         return $this->field;
     }
 
-    /**
-     * @param ExtraField $field
-     *
-     * @return ExtraFieldSavedSearch
-     */
-    public function setField($field)
+    public function setField(ExtraField $field): self
     {
         $this->field = $field;
 
@@ -78,19 +70,14 @@ class ExtraFieldSavedSearch
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     *
-     * @return ExtraFieldSavedSearch
-     */
-    public function setValue($value)
+    public function setValue(array $value): self
     {
         $this->value = $value;
 

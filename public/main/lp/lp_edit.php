@@ -11,7 +11,6 @@ use ChamiloSession as Session;
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
-
 api_protect_course_script();
 
 /** @var learnpath $learnPath */

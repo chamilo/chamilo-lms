@@ -282,7 +282,7 @@ switch ($action) {
                     1
                 );
 
-                $id = (int) $newFolderData['iid'];
+                $id = $newFolderData->getIid();
             } else {
                 $id = DocumentManager::get_document_id($courseInfo, $folderName, $session->getId());
             }

@@ -173,10 +173,7 @@ class CourseHomeController extends ToolBaseController
 
                         if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
                             /** @var Graph $graph */
-                            $graph = UnserializeApi::unserialize(
-                                'career',
-                                $item['value']
-                            );
+                            $graph = UnserializeApi::unserialize('career', $item['value']);
                             $diagram = Career::renderDiagram($careerInfo, $graph);
                         }
                     }
@@ -192,8 +189,12 @@ class CourseHomeController extends ToolBaseController
 
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
-        $shortcutQuery = $shortcutRepository->getResources($this->getUser(), $course->getResourceNode(), $course);
-        $shortcuts = $shortcutQuery->getQuery()->getResult();
+
+        $shortcuts = [];
+        if ($user) {
+            $shortcutQuery = $shortcutRepository->getResources($user, $course->getResourceNode(), $course);
+            $shortcuts = $shortcutQuery->getQuery()->getResult();
+        }
 
         return $this->render(
             '@ChamiloCore/Course/home.html.twig',

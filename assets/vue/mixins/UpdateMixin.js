@@ -59,7 +59,7 @@ export default {
     onSendForm() {
       const updateForm = this.$refs.updateForm;
       updateForm.$v.$touch();
-
+      console.log('onSendForm');
       if (!updateForm.$v.$invalid) {
         this.update(updateForm.$v.item.$model);
       }

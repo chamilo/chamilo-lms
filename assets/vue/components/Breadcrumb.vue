@@ -40,7 +40,7 @@ export default {
         });
       }*/
       for (let i = 0, len = this.legacy.length; i < len; i += 1) {
-        console.log(this.legacy[i]);
+        //console.log(this.legacy[i]);
           items.push({
             text: this.legacy[i]['name'] ,
             //disabled: route.path === path || lastItem.path === route.path,

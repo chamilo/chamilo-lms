@@ -12,11 +12,15 @@
               v-for="link in item['resourceLinkListFromEntity']"
             >
               <div v-if="link['course']">
-                Course: {{ link.course.resourceNode.title }}
+                {{ $t('Course') }}:  {{ link.course.resourceNode.title }}
               </div>
 
               <div v-if="link['session']">
-                Session: {{ link.session.resourceNode.title }}
+                {{ $t('Session') }}:  {{ link.session.name }}
+              </div>
+
+              <div v-if="link['group']">
+                {{ $t('Group') }}: {{ link.session.resourceNode.title }}
               </div>
 
               <b-form-select

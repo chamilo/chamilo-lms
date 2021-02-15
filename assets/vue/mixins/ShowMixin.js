@@ -43,9 +43,13 @@ export default {
     },
     formatDateTime,
     editHandler() {
+      let folderParams = this.$route.query;
+      folderParams['id'] = this.item['@id'];
+
       this.$router.push({
         name: `${this.$options.servicePrefix}Update`,
-        params: { id: this.item['@id'] }
+        params: { id: this.item['@id'] },
+        query: folderParams
       });
     },
   },

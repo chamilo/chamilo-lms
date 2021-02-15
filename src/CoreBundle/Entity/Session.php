@@ -140,7 +140,7 @@ class Session
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read"})
+     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read"})
      * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
     protected string $name;

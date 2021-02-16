@@ -41,7 +41,7 @@ class CreateResourceNodeFileAction
                     $content = $request->request->get('contentFile');
                 }
                 $fileParsed = false;
-                // File upload
+                // File upload.
                 if ($request->files->count() > 0) {
                     /** @var UploadedFile $uploadedFile */
                     $uploadedFile = $request->files->get('uploadFile');
@@ -86,11 +86,9 @@ class CreateResourceNodeFileAction
             } else {
                 $links = json_decode($links, true);
             }
-            error_log(print_r($links, 1));
             if (empty($links)) {
-                throw new \InvalidArgumentException(
-                    'resourceLinkList is not a valid json. Example: [{"c_id":1, "visibility":1}]'
-                );
+                $message = 'resourceLinkList is not a valid json. Use for example: [{"c_id":1, "visibility":1}]';
+                throw new \InvalidArgumentException($message);
             }
             $document->setResourceLinkArray($links);
         }

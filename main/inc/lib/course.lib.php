@@ -541,8 +541,8 @@ class CourseManager
             if (api_get_configuration_value('allow_session_lp_category')) {
                 //$criteria = ['cId' => $course_id, 'sessionId' => $session_id];
                 $table = Database::get_course_table('lp_category');
-                $conditionSession = api_get_session_condition($session_id, false);
-                $sql = "SELECT * FROM $table WHERE c_id = $course_id AND $conditionSession";
+                $conditionSession = api_get_session_condition($session_id, true);
+                $sql = "SELECT * FROM $table WHERE c_id = $course_id $conditionSession";
                 $result = Database::query($sql);
                 $categories = [];
                 if (Database::num_rows($result)) {

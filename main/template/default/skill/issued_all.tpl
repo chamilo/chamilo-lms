@@ -55,10 +55,10 @@
                     'isFromA2p':'true',
                     'issueMonth':badge.issue_info.month,
                     'issueYear': badge.issue_info.year,
-                    'name':badge.issue_info.skill_name,
+                    'name':'BadgeXTitle'|get_lang|format(badge.issue_info.skill_name),
                     'organizationId':badge.issue_info.linkedin_organization_id
                     }|url_encode }}" target="_new">
-                        <em class='fa fa-linkedin-square fa-3x' aria-hidden='true'></em>
+                        <em class='fa fa-linkedin-square fa-3x txt-linkedin' aria-hidden='true'></em>
                     </a>
                 </div>
                 {% endif %}

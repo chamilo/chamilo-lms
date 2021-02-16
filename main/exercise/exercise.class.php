@@ -96,6 +96,7 @@ class Exercise
     public $hideNoAnswer;
     public $hideExpectedAnswer;
     public $forceShowExpectedChoiceColumn;
+    public $disableHideCorrectAnsweredQuestions;
 
     /**
      * Constructor of the class.
@@ -140,6 +141,7 @@ class Exercise
         $this->hideComment = false;
         $this->hideNoAnswer = false;
         $this->hideExpectedAnswer = false;
+        $this->disableHideCorrectAnsweredQuestions = false;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -2206,6 +2208,12 @@ class Exercise
                         null,
                         get_lang('HideCategoryTable')
                     ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_correct_answered_questions',
+                        null,
+                        get_lang('HideCorrectAnsweredQuestions')
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
@@ -2617,6 +2625,11 @@ class Exercise
     {
         // Feedback type.
         $feedback = [];
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('ShowResultsToStudents'),
+            get_lang('ShowScoreAndRightAnswer')
+        );
         $endTest = $form->createElement(
             'radio',
             'exerciseFeedbackType',
@@ -2625,7 +2638,8 @@ class Exercise
             EXERCISE_FEEDBACK_TYPE_END,
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_END,
-                'onclick' => 'check_feedback()',
+                //'onclick' => 'if confirm() check_feedback()',
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_feedback(); } else { return false;} ',
             ]
         );
 
@@ -3328,11 +3342,13 @@ class Exercise
                 $endReminderValue = true;
             }
         }
+        $endTest = false;
         if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
                 $label = get_lang('ReviewQuestions');
                 $class = 'btn btn-success';
             } else {
+                $endTest = true;
                 $label = get_lang('EndTest');
                 $class = 'btn btn-warning';
             }
@@ -3395,10 +3411,15 @@ class Exercise
                     ]
                 );
             } else {
+                $attributes = ['type' => 'button', 'class' => $class, 'data-question' => $question_id];
+                $name = 'save_now';
+                if ($endTest && api_get_configuration_value('quiz_check_all_answers_before_end_test')) {
+                    $name = 'check_answers';
+                }
                 $buttonList[] = Display::button(
-                    'save_now',
+                    $name,
                     $label,
-                    ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
+                    $attributes
                 );
             }
             $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>';
@@ -3712,7 +3733,6 @@ class Exercise
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
-
             $objQuestionTmp->initFile(
                 api_get_session_id(),
                 isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
@@ -4449,14 +4469,13 @@ class Exercise
                         $result = Database::query($sql);
                         $data = Database::fetch_array($result);
                         $choice = '';
+                        $questionScore = 0;
                         if ($data) {
                             $choice = $data['answer'];
+                            $questionScore = $data['marks'];
                         }
-
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
-                        $questionScore = $data['marks'];
-
                         if (-1 == $questionScore) {
                             $totalScore += 0;
                         } else {
@@ -4922,7 +4941,7 @@ class Exercise
                         $coords = array_filter($coords);
                         $user_array = '';
                         foreach ($coords as $coord) {
-                            list($x, $y) = explode(';', $coord);
+                            [$x, $y] = explode(';', $coord);
                             $user_array .= round($x).';'.round($y).'/';
                         }
                         $user_array = substr($user_array, 0, -1) ?: '';
@@ -8321,10 +8340,11 @@ class Exercise
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
             $params = [
-                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
-                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
-                'hide_category_table' => isset($values['hide_category_table']) ? $values['hide_category_table'] : '',
+                'hide_expected_answer' => $values['hide_expected_answer'] ?? '',
+                'hide_question_score' => $values['hide_question_score'] ?? '',
+                'hide_total_score' => $values['hide_total_score'] ?? '',
+                'hide_category_table' => $values['hide_category_table'] ?? '',
+                'hide_correct_answered_questions' => $values['hide_correct_answered_questions'] ?? '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
@@ -10363,7 +10383,7 @@ class Exercise
         return $lpList;
     }
 
-    public function getReminderTable($questionList, $exercise_stat_info)
+    public function getReminderTable($questionList, $exercise_stat_info, $disableCheckBoxes = false)
     {
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
@@ -10376,7 +10396,6 @@ class Exercise
 
         $remindList = $exercise_stat_info['questions_to_check'];
         $remindList = explode(',', $remindList);
-
         $exeId = $exercise_stat_info['exe_id'];
         $exerciseId = $exercise_stat_info['exe_exo_id'];
         $exercise_result = $this->getUserAnswersSavedInExercise($exeId);
@@ -10414,10 +10433,11 @@ class Exercise
             if (!in_array($questionId, $exercise_result)) {
                 $questionTitle = Display::label($questionTitle, 'danger');
             }
-
             $label_attributes = [];
             $label_attributes['for'] = $check_id;
-            $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            if (false === $disableCheckBoxes) {
+                $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            }
             $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
         }
 

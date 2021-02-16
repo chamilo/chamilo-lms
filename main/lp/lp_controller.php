@@ -876,7 +876,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            if (isset($_POST['submit_button']) && !empty($post_title)) {
+            if (isset($_POST) && !empty($post_title)) {
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
@@ -907,7 +907,6 @@ switch ($action) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 $is_success = true;
-
                 $extraFieldValues = new ExtraFieldValue('lp_item');
                 $extraFieldValues->saveFieldValues($_POST, true);
 

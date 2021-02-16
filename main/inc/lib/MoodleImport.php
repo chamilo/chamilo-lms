@@ -710,7 +710,7 @@ class MoodleImport
             case 'essay':
                 return FREE_ANSWER;
             case 'truefalse':
-                return UNIQUE_ANSWER_NO_OPTION;
+                return UNIQUE_ANSWER;
         }
     }
 

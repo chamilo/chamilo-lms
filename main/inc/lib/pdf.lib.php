@@ -502,6 +502,7 @@ class PDF
             $document_html
         );
 
+        $document_html = str_replace(api_get_path(WEB_UPLOAD_PATH), api_get_path(SYS_UPLOAD_PATH), $document_html);
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
         // The library mPDF expects UTF-8 encoded input data.

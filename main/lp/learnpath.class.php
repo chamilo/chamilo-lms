@@ -2343,7 +2343,6 @@ class learnpath
         $now = time();
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs, 'ASSOC');
-
             if (!empty($row['category_id'])) {
                 $category = self::getCategory($row['category_id']);
                 if (self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id)) === false) {
@@ -2548,7 +2547,7 @@ class learnpath
      */
     public function getProgressBar($mode = null)
     {
-        list($percentage, $text_add) = $this->get_progress_bar_text($mode);
+        [$percentage, $text_add] = $this->get_progress_bar_text($mode);
 
         return self::get_progress_bar($percentage, $text_add);
     }
@@ -3577,7 +3576,7 @@ class learnpath
             $lp_item_params = $row['liparams'];
 
             if (empty($lp_item_params) && strpos($lp_item_path, '?') !== false) {
-                list($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
+                [$lp_item_path, $lp_item_params] = explode('?', $lp_item_path);
             }
             $sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
             if ($type === 'http') {
@@ -3640,23 +3639,27 @@ class learnpath
                             $file = 'lp_content.php?type=dir&'.api_get_cidreq();
                             break;
                         case 'link':
-                            if (Link::is_youtube_link($file)) {
-                                $src = Link::get_youtube_video_id($file);
-                                $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=youtube&source='.$src;
-                            } elseif (Link::isVimeoLink($file)) {
-                                $src = Link::getVimeoLinkId($file);
-                                $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=vimeo&source='.$src;
-                            } else {
-                                // If the current site is HTTPS and the link is
-                                // HTTP, browsers will refuse opening the link
-                                $urlId = api_get_current_access_url_id();
-                                $url = api_get_access_url($urlId, false);
-                                $protocol = substr($url['url'], 0, 5);
-                                if ($protocol === 'https') {
-                                    $linkProtocol = substr($file, 0, 5);
-                                    if ($linkProtocol === 'http:') {
-                                        //this is the special intervention case
-                                        $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                            if (!empty($file)) {
+                                if (Link::is_youtube_link($file)) {
+                                    $src = Link::get_youtube_video_id($file);
+                                    $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=youtube&source='.$src;
+                                } elseif (Link::isVimeoLink($file)) {
+                                    $src = Link::getVimeoLinkId($file);
+                                    $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=vimeo&source='.$src;
+                                } else {
+                                    // If the current site is HTTPS and the link is
+                                    // HTTP, browsers will refuse opening the link
+                                    $urlId = api_get_current_access_url_id();
+                                    $url = api_get_access_url($urlId, false);
+                                    $protocol = substr($url['url'], 0, 5);
+                                    if ($protocol === 'https') {
+                                        $linkProtocol = substr($file, 0, 5);
+                                        if ($linkProtocol === 'http:') {
+                                            //this is the special intervention case
+                                            $file = api_get_path(
+                                                    WEB_CODE_PATH
+                                                ).'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                                        }
                                     }
                                 }
                             }
@@ -3755,7 +3758,7 @@ class learnpath
                             if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))) {
                                 // if file not found.
                                 $decoded = html_entity_decode($lp_item_path);
-                                list($decoded) = explode('?', $decoded);
+                                [$decoded] = explode('?', $decoded);
                                 if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))) {
                                     $file = self::rl_get_resource_link_for_learnpath(
                                         $course_id,
@@ -4416,11 +4419,6 @@ class learnpath
      * @param int $id
      * @param int $visibility
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
      * @return bool
      */
     public static function toggleCategoryVisibility($id, $visibility = 1)
@@ -4947,7 +4945,7 @@ class learnpath
 
         if (!api_is_invitee()) {
             // Save progress.
-            list($progress) = $this->get_progress_bar_text('%');
+            [$progress] = $this->get_progress_bar_text('%');
             $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
@@ -12076,9 +12074,7 @@ EOD;
         $cb->set_tools_to_build(['learnpaths']);
 
         //Setting elements that will be copied
-        $cb->set_tools_specific_id_list(
-            ['learnpaths' => [$this->lp_id]]
-        );
+        $cb->set_tools_specific_id_list(['learnpaths' => [$this->lp_id]]);
 
         $course = $cb->build();
 
@@ -12460,18 +12456,22 @@ EOD;
             $cats = [get_lang('SelectACategory')];
         }
 
-        $checkSession = false;
         $sessionId = api_get_session_id();
+        $avoidCategoryInSession = false;
+        if (empty($sessionId)) {
+            $avoidCategoryInSession = true;
+        }
+        /*$checkSession = false;
         if (api_get_configuration_value('allow_session_lp_category')) {
             $checkSession = true;
-        }
+        }*/
 
         if (!empty($items)) {
             foreach ($items as $cat) {
                 $categoryId = $cat->getId();
-                if ($checkSession) {
+                if ($avoidCategoryInSession) {
                     $inSession = self::getCategorySessionId($categoryId);
-                    if ($inSession != $sessionId) {
+                    if (!empty($inSession)) {
                         continue;
                     }
                 }
@@ -13259,10 +13259,10 @@ EOD;
                 return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
                     .http_build_query([
                         'lp_init' => 1,
-                        'learnpath_item_view_id' => $learnpathItemViewId,
-                        'learnpath_id' => $learningPathId,
-                        'learnpath_item_id' => $id_in_path,
-                        'exerciseId' => $id,
+                        'learnpath_item_view_id' => (int) $learnpathItemViewId,
+                        'learnpath_id' => (int) $learningPathId,
+                        'learnpath_item_id' => (int) $id_in_path,
+                        'exerciseId' => (int) $id,
                     ]);
             case TOOL_HOTPOTATOES: //lowercase because of strtolower above
                 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -13324,9 +13324,7 @@ EOD;
                     $file = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                     if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
                         if (Link::isPdfLink($file)) {
-                            $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file;
-
-                            return $pdfUrl;
+                            return api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html?zoom=page-width#'.$file;
                         }
                     }
 

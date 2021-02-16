@@ -12452,8 +12452,12 @@ EOD;
             $cats = [get_lang('SelectACategory')];
         }
 
-        /*$checkSession = false;
         $sessionId = api_get_session_id();
+        $avoidCategoryInSession = false;
+        if (empty($sessionId)) {
+            $avoidCategoryInSession = true;
+        }
+        /*$checkSession = false;
         if (api_get_configuration_value('allow_session_lp_category')) {
             $checkSession = true;
         }*/
@@ -12461,12 +12465,12 @@ EOD;
         if (!empty($items)) {
             foreach ($items as $cat) {
                 $categoryId = $cat->getId();
-                /*if ($checkSession) {
+                if ($avoidCategoryInSession) {
                     $inSession = self::getCategorySessionId($categoryId);
-                    if ($inSession != $sessionId) {
+                    if (!empty($inSession)) {
                         continue;
                     }
-                }*/
+                }
                 $cats[$categoryId] = $cat->getName();
             }
         }

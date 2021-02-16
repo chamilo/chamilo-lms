@@ -82,6 +82,16 @@ class CoursesAndSessionsCatalog
         // Check special courses
         $courseListToAvoid = CourseManager::get_special_course_list();
 
+        $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        if (!empty($categoryToAvoid) && api_is_student()) {
+            $coursesInCategoryToAvoid = CourseCategory::getCoursesInCategory($categoryToAvoid, '', false);
+            if (!empty($coursesInCategoryToAvoid)) {
+                foreach ($coursesInCategoryToAvoid as $courseToAvoid) {
+                    $courseListToAvoid[] = $courseToAvoid['id'];
+                }
+            }
+        }
+
         // Checks "hide_from_catalog" extra field
         $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
 

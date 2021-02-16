@@ -19,7 +19,7 @@ export default function makeService(endpoint) {
       return fetch(item['@id'], { method: 'DELETE' });
     },
     update(payload) {
-      console.log('update');
+      console.log('api.js - update');
       //console.log(JSON.stringify(payload));
 
       return fetch(payload['@id'], {

@@ -1,25 +1,22 @@
 <template>
   <div>
     <DocumentsForm
-      v-if="item"
+      v-if="item && !isLoading"
       ref="updateForm"
       :values="item"
       :errors="violations"
     />
-
     <ResourceLinkForm
-      v-if="item"
+      v-if="item && !isLoading"
       ref="resourceLinkForm"
       :values="item"
     />
-
     <Toolbar
-       v-if="item"
+       v-if="item && !isLoading"
       :handle-submit="onSendForm"
       :handle-reset="resetForm"
       :handle-delete="del"
     />
-
     <Loading :visible="isLoading || deleteLoading" />
   </div>
 </template>

@@ -371,8 +371,7 @@ if (($execute_iframe || $show_web_odf) && !$isChatFolder) {
             '#',
             [
                 'data-item-title' => $titleToShow,
-                'data-href' =>
-                    api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&'.$urlDeleteParams,
+                'data-href' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&'.$urlDeleteParams,
                 'data-toggle' => 'modal',
                 'data-target' => '#confirm-delete',
             ]

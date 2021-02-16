@@ -9,7 +9,7 @@ use Xabbuh\XApi\Model\LanguageMap;
 use Xabbuh\XApi\Model\Verb;
 
 /**
- * Class BaseVerb
+ * Class BaseVerb.
  *
  * @package Chamilo\PluginBundle\XApi\ToolExperience\Verb
  */
@@ -38,7 +38,7 @@ abstract class BaseVerb
             IRI::fromString($this->iri),
             LanguageMap::create(
                 [
-                    $langIso => get_lang($this->display)
+                    $langIso => get_lang($this->display),
                 ]
             )
         );

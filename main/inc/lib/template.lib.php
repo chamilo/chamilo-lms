@@ -149,6 +149,7 @@ class Template
             'api_get_user_info',
             'api_get_configuration_value',
             'api_get_setting',
+            'api_get_course_setting',
             'api_get_plugin_setting',
             [
                 'name' => 'return_message',

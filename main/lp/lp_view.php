@@ -259,6 +259,11 @@ if (!isset($src)) {
                     $get_toc_list
                 );
 
+                if (empty($src)) {
+                    $src = 'blank.php?'.api_get_cidreq().'&error=document_protected';
+                    break;
+                }
+
                 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
                 if (isset($file_info['path'])) {

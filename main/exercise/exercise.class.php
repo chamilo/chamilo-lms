@@ -96,6 +96,7 @@ class Exercise
     public $hideNoAnswer;
     public $hideExpectedAnswer;
     public $forceShowExpectedChoiceColumn;
+    public $disableHideCorrectAnsweredQuestions;
 
     /**
      * Constructor of the class.
@@ -140,6 +141,7 @@ class Exercise
         $this->hideComment = false;
         $this->hideNoAnswer = false;
         $this->hideExpectedAnswer = false;
+        $this->disableHideCorrectAnsweredQuestions = false;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -2206,6 +2208,12 @@ class Exercise
                         null,
                         get_lang('HideCategoryTable')
                     ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_correct_answered_questions',
+                        null,
+                        get_lang('HideCorrectAnsweredQuestions')
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
@@ -2617,6 +2625,11 @@ class Exercise
     {
         // Feedback type.
         $feedback = [];
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('ShowResultsToStudents'),
+            get_lang('ShowScoreAndRightAnswer')
+        );
         $endTest = $form->createElement(
             'radio',
             'exerciseFeedbackType',
@@ -2625,7 +2638,8 @@ class Exercise
             EXERCISE_FEEDBACK_TYPE_END,
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_END,
-                'onclick' => 'check_feedback()',
+                //'onclick' => 'if confirm() check_feedback()',
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_feedback(); } else { return false;} ',
             ]
         );
 
@@ -3719,7 +3733,6 @@ class Exercise
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
-
             $objQuestionTmp->initFile(
                 api_get_session_id(),
                 isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
@@ -4456,14 +4469,13 @@ class Exercise
                         $result = Database::query($sql);
                         $data = Database::fetch_array($result);
                         $choice = '';
+                        $questionScore = 0;
                         if ($data) {
                             $choice = $data['answer'];
+                            $questionScore = $data['marks'];
                         }
-
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
-                        $questionScore = $data['marks'];
-
                         if (-1 == $questionScore) {
                             $totalScore += 0;
                         } else {
@@ -8328,10 +8340,11 @@ class Exercise
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
             $params = [
-                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
-                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
-                'hide_category_table' => isset($values['hide_category_table']) ? $values['hide_category_table'] : '',
+                'hide_expected_answer' => $values['hide_expected_answer'] ?? '',
+                'hide_question_score' => $values['hide_question_score'] ?? '',
+                'hide_total_score' => $values['hide_total_score'] ?? '',
+                'hide_category_table' => $values['hide_category_table'] ?? '',
+                'hide_correct_answered_questions' => $values['hide_correct_answered_questions'] ?? '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();

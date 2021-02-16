@@ -11,8 +11,7 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Statement\QuizQuestionAnswered;
 /**
  * Class XApiQuizQuestionAnsweredHook.
  */
-class XApiQuizQuestionAnsweredHookObserver extends XApiActivityHookObserver
-    implements HookQuizQuestionAnsweredObserverInterface
+class XApiQuizQuestionAnsweredHookObserver extends XApiActivityHookObserver implements HookQuizQuestionAnsweredObserverInterface
 {
     /**
      * {@inheritdoc}

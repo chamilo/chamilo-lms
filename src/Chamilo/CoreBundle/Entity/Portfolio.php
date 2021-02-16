@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * ORM\Entity()
+ * ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioRepository")
  */
 class Portfolio
 {
@@ -124,6 +124,13 @@ class Portfolio
      * @ORM\Column(name="origin_type", type="integer", nullable=true)
      */
     private $originType;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="score", type="float", nullable=true)
+     */
+    private $score;
 
     /**
      * Portfolio constructor.
@@ -390,5 +397,15 @@ class Portfolio
         $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
 
         return $excerpt;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
     }
 }

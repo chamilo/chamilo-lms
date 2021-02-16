@@ -97,7 +97,7 @@ class QuizQuestion extends BaseActivity
                 $choices = [];
 
                 for ($i = 1; $i <= $objAnswer->nbrAnswers; $i++) {
-                    if ((int)$objAnswer->correct[$i] > 0) {
+                    if ((int) $objAnswer->correct[$i] > 0) {
                         $choices[] = new InteractionComponent(
                             $objAnswer->correct[$i],
                             LanguageMap::create([$languageIso => $objAnswer->answer[$i]])
@@ -130,7 +130,7 @@ class QuizQuestion extends BaseActivity
                         LanguageMap::create([$languageIso => $objAnswer->selectAnswer($i)])
                     );
 
-                    if ((int)$objAnswer->correct[$i] > 0) {
+                    if ((int) $objAnswer->correct[$i] > 0) {
                         $source[] = $interactionComponent;
 
                         $correctResponsesPattern[] = $objAnswer->selectAutoId($i).'[.]'.$objAnswer->correct[$i];

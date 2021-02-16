@@ -536,26 +536,41 @@ class CourseManager
         $subscriptionSettings = learnpath::getSubscriptionSettings();
         if ($subscriptionSettings['allow_add_users_to_lp_category']) {
             $em = Database::getManager();
-            $criteria = ['cId' => $course_id];
+            $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
+
             if (api_get_configuration_value('allow_session_lp_category')) {
-                $criteria = ['cId' => $course_id, 'sessionId' => $session_id];
-            }
-            $categories = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy($criteria);
-            /** @var \Chamilo\CourseBundle\Entity\CLpCategory $category */
-            foreach ($categories as $category) {
-                if ($category->getUsers()->count() > 0) {
-                    foreach ($userList as $uid) {
-                        $user = api_get_user_entity($uid);
-                        $criteria = Criteria::create()->where(
-                            Criteria::expr()->eq('user', $user)
-                        );
-                        $userCategory = $category->getUsers()->matching($criteria)->first();
-                        if ($userCategory) {
-                            $category->removeUsers($userCategory);
-                        }
+                //$criteria = ['cId' => $course_id, 'sessionId' => $session_id];
+                $table = Database::get_course_table('lp_category');
+                $conditionSession = api_get_session_condition($session_id, true);
+                $sql = "SELECT * FROM $table WHERE c_id = $course_id $conditionSession";
+                $result = Database::query($sql);
+                $categories = [];
+                if (Database::num_rows($result)) {
+                    while ($row = Database::fetch_array($result)) {
+                        $categories[] = $repo->find($row['iid']);
                     }
-                    $em->persist($category);
-                    $em->flush();
+                }
+            } else {
+                $criteria = ['cId' => $course_id];
+                $categories = $repo->findBy($criteria);
+            }
+            if (!empty($categories)) {
+                /** @var \Chamilo\CourseBundle\Entity\CLpCategory $category */
+                foreach ($categories as $category) {
+                    if ($category->getUsers()->count() > 0) {
+                        foreach ($userList as $uid) {
+                            $user = api_get_user_entity($uid);
+                            $criteria = Criteria::create()->where(
+                                Criteria::expr()->eq('user', $user)
+                            );
+                            $userCategory = $category->getUsers()->matching($criteria)->first();
+                            if ($userCategory) {
+                                $category->removeUsers($userCategory);
+                            }
+                        }
+                        $em->persist($category);
+                        $em->flush();
+                    }
                 }
             }
         }
@@ -566,7 +581,8 @@ class CourseManager
             $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
                 'code' => $course_code,
             ]);
-            if (is_null($course)) {
+
+            if (null === $course) {
                 return false;
             }
             /** @var Chamilo\UserBundle\Entity\User $user */
@@ -5880,6 +5896,12 @@ class CourseManager
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');
         if ($allowLPReturnLink === 'true') {
             $courseSettings[] = 'lp_return_link';
+        }
+
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $courseSettings[] = 'qualify_portfolio_item';
+            $courseSettings[] = 'qualify_portfolio_comment';
+            $courseSettings[] = 'portfolio_max_score';
         }
 
         if (!empty($pluginCourseSettings)) {

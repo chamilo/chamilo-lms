@@ -3908,11 +3908,11 @@ EOT;
     /**
      * Get student results (only in completed exercises) stats by question.
      *
-     * @param int    $question_id
-     * @param int    $exercise_id
-     * @param int    $courseId
-     * @param int    $session_id
-     * @param bool   $onlyStudent Filter only enrolled students
+     * @param int  $question_id
+     * @param int  $exercise_id
+     * @param int  $courseId
+     * @param int  $session_id
+     * @param bool $onlyStudent Filter only enrolled students
      *
      * @return array
      */
@@ -4690,7 +4690,7 @@ EOT;
                     }
 
                     // Check if the current attempt is the last.
-                    if (false === $save_user_result && !empty($attempts)) {
+                    /*if (false === $save_user_result && !empty($attempts)) {
                         $showTotalScoreAndUserChoicesInLastAttempt = false;
                         $position = 1;
                         foreach ($attempts as $attempt) {
@@ -4703,7 +4703,7 @@ EOT;
                         if ($position == $objExercise->attempts) {
                             $showTotalScoreAndUserChoicesInLastAttempt = true;
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -4941,6 +4941,16 @@ EOT;
                 }
 
                 $contents = ob_get_clean();
+
+                // Hide correct answers.
+                if ($scorePassed && false === $objExercise->disableHideCorrectAnsweredQuestions) {
+                    // Skip correct answers.
+                    $hide = (int) $objExercise->getPageConfigurationAttribute('hide_correct_answered_questions');
+                    if (1 === $hide) {
+                        continue;
+                    }
+                }
+
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';

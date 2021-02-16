@@ -27,7 +27,8 @@ switch ($action) {
     case 'preview':
         $allowToEdit = (
             api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
+            ($sessionId && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
         );
 
         $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();

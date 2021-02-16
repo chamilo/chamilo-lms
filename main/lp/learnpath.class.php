@@ -2547,7 +2547,7 @@ class learnpath
      */
     public function getProgressBar($mode = null)
     {
-        list($percentage, $text_add) = $this->get_progress_bar_text($mode);
+        [$percentage, $text_add] = $this->get_progress_bar_text($mode);
 
         return self::get_progress_bar($percentage, $text_add);
     }
@@ -3576,7 +3576,7 @@ class learnpath
             $lp_item_params = $row['liparams'];
 
             if (empty($lp_item_params) && strpos($lp_item_path, '?') !== false) {
-                list($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
+                [$lp_item_path, $lp_item_params] = explode('?', $lp_item_path);
             }
             $sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
             if ($type === 'http') {
@@ -3639,23 +3639,27 @@ class learnpath
                             $file = 'lp_content.php?type=dir&'.api_get_cidreq();
                             break;
                         case 'link':
-                            if (Link::is_youtube_link($file)) {
-                                $src = Link::get_youtube_video_id($file);
-                                $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=youtube&source='.$src;
-                            } elseif (Link::isVimeoLink($file)) {
-                                $src = Link::getVimeoLinkId($file);
-                                $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=vimeo&source='.$src;
-                            } else {
-                                // If the current site is HTTPS and the link is
-                                // HTTP, browsers will refuse opening the link
-                                $urlId = api_get_current_access_url_id();
-                                $url = api_get_access_url($urlId, false);
-                                $protocol = substr($url['url'], 0, 5);
-                                if ($protocol === 'https') {
-                                    $linkProtocol = substr($file, 0, 5);
-                                    if ($linkProtocol === 'http:') {
-                                        //this is the special intervention case
-                                        $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                            if (!empty($file)) {
+                                if (Link::is_youtube_link($file)) {
+                                    $src = Link::get_youtube_video_id($file);
+                                    $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=youtube&source='.$src;
+                                } elseif (Link::isVimeoLink($file)) {
+                                    $src = Link::getVimeoLinkId($file);
+                                    $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=vimeo&source='.$src;
+                                } else {
+                                    // If the current site is HTTPS and the link is
+                                    // HTTP, browsers will refuse opening the link
+                                    $urlId = api_get_current_access_url_id();
+                                    $url = api_get_access_url($urlId, false);
+                                    $protocol = substr($url['url'], 0, 5);
+                                    if ($protocol === 'https') {
+                                        $linkProtocol = substr($file, 0, 5);
+                                        if ($linkProtocol === 'http:') {
+                                            //this is the special intervention case
+                                            $file = api_get_path(
+                                                    WEB_CODE_PATH
+                                                ).'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                                        }
                                     }
                                 }
                             }
@@ -3754,7 +3758,7 @@ class learnpath
                             if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))) {
                                 // if file not found.
                                 $decoded = html_entity_decode($lp_item_path);
-                                list($decoded) = explode('?', $decoded);
+                                [$decoded] = explode('?', $decoded);
                                 if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))) {
                                     $file = self::rl_get_resource_link_for_learnpath(
                                         $course_id,
@@ -4941,7 +4945,7 @@ class learnpath
 
         if (!api_is_invitee()) {
             // Save progress.
-            list($progress) = $this->get_progress_bar_text('%');
+            [$progress] = $this->get_progress_bar_text('%');
             $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
@@ -12452,8 +12456,12 @@ EOD;
             $cats = [get_lang('SelectACategory')];
         }
 
-        /*$checkSession = false;
         $sessionId = api_get_session_id();
+        $avoidCategoryInSession = false;
+        if (empty($sessionId)) {
+            $avoidCategoryInSession = true;
+        }
+        /*$checkSession = false;
         if (api_get_configuration_value('allow_session_lp_category')) {
             $checkSession = true;
         }*/
@@ -12461,12 +12469,12 @@ EOD;
         if (!empty($items)) {
             foreach ($items as $cat) {
                 $categoryId = $cat->getId();
-                /*if ($checkSession) {
+                if ($avoidCategoryInSession) {
                     $inSession = self::getCategorySessionId($categoryId);
-                    if ($inSession != $sessionId) {
+                    if (!empty($inSession)) {
                         continue;
                     }
-                }*/
+                }
                 $cats[$categoryId] = $cat->getName();
             }
         }

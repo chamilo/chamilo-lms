@@ -4690,7 +4690,7 @@ EOT;
                     }
 
                     // Check if the current attempt is the last.
-                    if (false === $save_user_result && !empty($attempts)) {
+                    /*if (false === $save_user_result && !empty($attempts)) {
                         $showTotalScoreAndUserChoicesInLastAttempt = false;
                         $position = 1;
                         foreach ($attempts as $attempt) {
@@ -4703,7 +4703,7 @@ EOT;
                         if ($position == $objExercise->attempts) {
                             $showTotalScoreAndUserChoicesInLastAttempt = true;
                         }
-                    }
+                    }*/
                 }
             }
 

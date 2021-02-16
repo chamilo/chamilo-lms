@@ -88,7 +88,8 @@ if ($form->validate()) {
                 u.status		AS Status,
                 u.official_code	AS OfficialCode,
                 u.phone		AS Phone,
-                u.registration_date AS RegistrationDate";
+                u.registration_date AS RegistrationDate,
+                u.active    AS Active";
     if (strlen($course_code) > 0) {
         $sql .= " FROM $user_table u, $course_user_table cu
                     WHERE
@@ -102,7 +103,7 @@ if ($form->validate()) {
                     WHERE
                         u.user_id = scu.user_id AND
                         scu.c_id = $courseSessionId AND
-                        scu.session_id = $sessionId 
+                        scu.session_id = $sessionId
                     ORDER BY lastname,firstname";
         $filename = 'export_users_'.$courseSessionCode.'_'.$sessionInfo['name'].'_'.api_get_local_time();
     } else {
@@ -138,6 +139,7 @@ if ($form->validate()) {
                     'OfficialCode',
                     'PhoneNumber',
                     'RegistrationDate',
+                    'Active',
                 ];
             } else {
                 $data[] = [
@@ -152,6 +154,7 @@ if ($form->validate()) {
                     'OfficialCode',
                     'PhoneNumber',
                     'RegistrationDate',
+                    'Active',
                 ];
             }
 

@@ -28,16 +28,16 @@ class GradeBookResult
     public function exportCompleteReportCSV($dato)
     {
         $filename = 'gradebook_results_'.gmdate('YmdGis').'.csv';
-
         $data = '';
-        //build the results
-        //titles
-
         foreach ($dato[0] as $header_col) {
             if (!empty($header_col)) {
                 if (is_array($header_col)) {
                     if (isset($header_col['header'])) {
-                        $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($header_col['header']))).';';
+                        $data .= str_replace(
+                                "\r\n",
+                                '  ',
+                                api_html_entity_decode(strip_tags($header_col['header']))
+                            ).';';
                     }
                 } else {
                     $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($header_col))).';';
@@ -47,9 +47,7 @@ class GradeBookResult
 
         $data .= "\r\n";
         $cant_students = count($dato[1]);
-
         for ($i = 0; $i < $cant_students; $i++) {
-            $column = 0;
             foreach ($dato[1][$i] as $col_name) {
                 $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($col_name))).';';
             }
@@ -93,11 +91,9 @@ class GradeBookResult
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
-
         $line = 1;
         $column = 0;
-
-        //headers
+        // headers.
         foreach ($data[0] as $header_col) {
             $worksheet->SetCellValueByColumnAndRow(
                 $column,
@@ -107,9 +103,7 @@ class GradeBookResult
             $column++;
         }
         $line++;
-
         $cant_students = count($data[1]);
-
         for ($i = 0; $i < $cant_students; $i++) {
             $column = 0;
             foreach ($data[1][$i] as $col_name) {

@@ -604,6 +604,7 @@ class GradebookUtils
      * @param $alllinks
      * @param $params
      * @param null $mainCourseCategory
+     * @param bool $onlyScore
      *
      * @return array
      */
@@ -613,7 +614,8 @@ class GradebookUtils
         $alleval,
         $alllinks,
         $params,
-        $mainCourseCategory = null
+        $mainCourseCategory = null,
+        $onlyScore = false
     ) {
         $datagen = new FlatViewDataGenerator(
             $users,
@@ -624,10 +626,8 @@ class GradebookUtils
         );
 
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
-
         // step 2: generate rows: students
         $datagen->category = $cat;
-
         $count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : GRADEBOOK_ITEM_LIMIT;
         $header_names = $datagen->get_header_names($offset, $count, true);
         $data_array = $datagen->get_data(
@@ -636,7 +636,7 @@ class GradebookUtils
             null,
             $offset,
             $count,
-            true,
+            true === $onlyScore,
             true
         );
 

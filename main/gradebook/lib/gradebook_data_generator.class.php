@@ -684,7 +684,7 @@ class GradebookDataGenerator
                 $score,
                 SCORE_DIV,
                 SCORE_BOTH,
-                false,
+                true,
                 true,
                 true
             );
@@ -775,7 +775,7 @@ class GradebookDataGenerator
                             true
                         );
 
-                        $type = $item->get_item_type();
+                        /*$type = $item->get_item_type();
                         if ('L' === $type && 'ExerciseLink' === get_class($item)) {
                             $display = ExerciseLib::show_score(
                                 $score[0],
@@ -789,7 +789,7 @@ class GradebookDataGenerator
                                 false,
                                 true
                             );
-                        }
+                        }*/
                     } else {
                         $display = ExerciseLib::show_score(
                             $score[0],

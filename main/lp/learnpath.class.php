@@ -13330,7 +13330,7 @@ EOD;
                         false
                     );
 
-                    if (false === $isVisible) {
+                    if (!api_is_allowed_to_edit() && !$isVisible) {
                         return '';
                     }
 

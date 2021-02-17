@@ -76,9 +76,13 @@ class StatementsController extends BaseController
             )
         );
 
-        $statements = $this->deserializeStatements(
-            $this->httpRequest->getContent()
-        );
+        $content = $this->httpRequest->getContent();
+
+        if (substr($content, 0, 1) !== '[') {
+            $content = "[$content]";
+        }
+
+        $statements = $this->deserializeStatements($content);
 
         return $postStatementController->postStatements($this->httpRequest, $statements);
     }

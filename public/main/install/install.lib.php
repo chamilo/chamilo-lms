@@ -1603,12 +1603,14 @@ function display_configuration_parameter(
             value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue;
     } else {
         $html .= '<div class="col-sm-6">';
+        $typeField = 'text';
         if ('passForm' == $formFieldName) {
             $html .= '<label for="showPassword" style="cursor: pointer;" class="form-check-inline">';
+            $typeField = 'password';
         }
         $html .= '<input
                     class="form-control"
-                    type="text"
+                    type="'.$typeField.'"
                     size="'.FORM_FIELD_DISPLAY_LENGTH.'"
                     maxlength="'.MAX_FORM_FIELD_LENGTH.'"
                     name="'.$formFieldName.'"

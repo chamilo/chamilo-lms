@@ -3535,7 +3535,7 @@ class DocumentManager
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
                 $docId = $resource['id'];
-                if (in_array($added, $docId)) {
+                if (in_array($docId, $added)) {
                     continue;
                 }
 

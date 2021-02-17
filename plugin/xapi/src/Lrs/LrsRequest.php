@@ -42,8 +42,10 @@ class LrsRequest
             && method_exists($controllerName, $methodName)
         ) {
             try {
-                $this->validateAuth();
-                $this->validateVersion();
+                if ($controllerName !== AboutController::class) {
+                    $this->validateAuth();
+                    $this->validateVersion();
+                }
 
                 /** @var HttpResponse $response */
                 $response = call_user_func([new $controllerName(), $methodName]);

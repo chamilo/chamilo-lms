@@ -1602,15 +1602,22 @@ function display_configuration_parameter(
             name="'.$formFieldName.'"
             value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue;
     } else {
-        $html .= '<div class="col-sm-6">
-                    <input
-                        class="form-control"
-                        type="text"
-                        size="'.FORM_FIELD_DISPLAY_LENGTH.'"
-                        maxlength="'.MAX_FORM_FIELD_LENGTH.'"
-                        name="'.$formFieldName.'"
-                        value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />
-                    '.'</div>';
+        $html .= '<div class="col-sm-6">';
+        if ('passForm' == $formFieldName) {
+            $html .= '<label for="showPassword" style="cursor: pointer;" class="form-check-inline">';
+        }
+        $html .= '<input
+                    class="form-control"
+                    type="text"
+                    size="'.FORM_FIELD_DISPLAY_LENGTH.'"
+                    maxlength="'.MAX_FORM_FIELD_LENGTH.'"
+                    name="'.$formFieldName.'"
+                    value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />';
+        if ('passForm' == $formFieldName) {
+            $html .= Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye')
+                .'<input type="checkbox" id="showPassword" class="d-none"></label>';
+        }
+        $html .= '</div>';
     }
     $html .= '</div>';
 

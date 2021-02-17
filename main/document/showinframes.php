@@ -99,7 +99,8 @@ $is_visible = DocumentManager::check_visibility_tree(
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
-    api_not_allowed(true, Display::return_message(get_lang('ProtectedDocument'), 'warning'));
+    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
+    api_not_allowed(false, '&nbsp;');
 }
 
 $pathinfo = pathinfo($header_file);

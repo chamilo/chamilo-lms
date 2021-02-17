@@ -13320,20 +13320,18 @@ EOD;
                 Session::write('openmethod', $openmethod);
                 Session::write('officedoc', $officedoc);
 
+                // Same validation as in document/download.php
+                $isVisible = DocumentManager::is_visible(
+                    $document->getPath(),
+                    api_get_course_info(),
+                    api_get_session_id()
+                );
+
+                if (!api_is_allowed_to_edit() && !$isVisible) {
+                    return '';
+                }
+
                 if ($showDirectUrl) {
-                    $isVisible = DocumentManager::check_visibility_tree(
-                        $document->getIid(),
-                        api_get_course_info(),
-                        api_get_session_id(),
-                        api_get_user_id(),
-                        api_get_group_id(),
-                        false
-                    );
-
-                    if (!api_is_allowed_to_edit() && !$isVisible) {
-                        return '';
-                    }
-
                     $file = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                     if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
                         if (Link::isPdfLink($file)) {

@@ -503,7 +503,6 @@ class CourseCategory
                 $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
 
                 $actions = [];
-
                 if ($urlId == $category['access_url_id']) {
                     $actions[] = Display::url($editIcon, $editUrl);
                     $actions[] = Display::url($moveIcon, $moveUrl);

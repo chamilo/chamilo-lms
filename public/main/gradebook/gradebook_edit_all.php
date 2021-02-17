@@ -39,7 +39,7 @@ $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $table_evaluated[LINK_EXERCISE] = [
     TABLE_QUIZ_TEST,
     'title',
-    'id',
+    'iid',
     get_lang('Test'),
 ];
 $table_evaluated[LINK_DROPBOX] = [
@@ -51,31 +51,31 @@ $table_evaluated[LINK_DROPBOX] = [
 $table_evaluated[LINK_STUDENTPUBLICATION] = [
     TABLE_STUDENT_PUBLICATION,
     'url',
-    'id',
+    'iid',
     get_lang('Assignments'),
 ];
 $table_evaluated[LINK_LEARNPATH] = [
     TABLE_LP_MAIN,
     'name',
-    'id',
+    'iid',
     get_lang('Courses'),
 ];
 $table_evaluated[LINK_FORUM_THREAD] = [
     TABLE_FORUM_THREAD,
     'thread_title_qualify',
-    'thread_id',
+    'iid',
     get_lang('Forum'),
 ];
 $table_evaluated[LINK_ATTENDANCE] = [
     TABLE_ATTENDANCE,
     'attendance_title_qualify',
-    'id',
+    'iid',
     get_lang('Attendance'),
 ];
 $table_evaluated[LINK_SURVEY] = [
     TABLE_SURVEY,
     'code',
-    'survey_id',
+    'iid',
     get_lang('Survey'),
 ];
 
@@ -147,7 +147,12 @@ foreach ($links as &$row) {
         ).' </td>';
     $output .= '<td>
                     <input type="hidden" name="link_'.$row['id'].'" value="1" />
-                    <input size="10" type="text" name="link['.$row['id'].']" value="'.$item_weight.'"/>
+                    <input
+                        class="form-control col-md-3"
+                        size="10"
+                        type="text"
+                        name="link['.$row['id'].']"
+                        value="'.$item_weight.'"/>
                </td></tr>';
 }
 
@@ -165,7 +170,6 @@ foreach ($evaluations as $evaluationRow) {
             $evaluationRow['id'],
             $new_weight
         );
-
         $item_weight = $new_weight;
     }
 
@@ -174,7 +178,12 @@ foreach ($evaluations as $evaluationRow) {
                 <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Score')).'</td>';
     $output .= '<td>
                     <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="1" />
-                    <input type="text" size="10" name="evaluation['.$evaluationRow['id'].']" value="'.$item_weight.'"/>
+                    <input
+                        type="text"
+                        class="form-control col-md-3"
+                        size="10"
+                        name="evaluation['.$evaluationRow['id'].']"
+                        value="'.$item_weight.'"/>
                 </td></tr>';
 }
 

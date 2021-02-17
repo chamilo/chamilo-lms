@@ -109,15 +109,19 @@ class MultipleAnswerTrueFalse extends Question
             $answer_number->freeze();
 
             if (is_object($answer)) {
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $correct = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i] ?? null;
+                $defaults['comment['.$i.']'] = $answer->comment[$i] ?? null;
+                $correct = $answer->correct[$i] ?? false;
                 $defaults['correct['.$i.']'] = $correct;
 
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
-                        $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+                        $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+
+                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $id == $_POST['correct'][$i]) {
+                            $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
+                        }
                         $j++;
                         if (3 == $j) {
                             break;
@@ -141,9 +145,12 @@ class MultipleAnswerTrueFalse extends Question
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 
+            if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+                $form->getElement("answer[$i]")->setValue(Security::remove_XSS($_POST['answer'][$i]));
+            }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
-                $form->addElement(
+                $txtComment = $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
                     null,
@@ -154,6 +161,9 @@ class MultipleAnswerTrueFalse extends Question
                         'Height' => '100',
                     ]
                 );
+                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+                    $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));
+                }
             }
 
             $form->addHtml('</tr>');
@@ -191,9 +201,9 @@ class MultipleAnswerTrueFalse extends Question
         $renderer->setElementTemplate($doubtScoreInputTemplate, 'option[3]');
 
         // 3 scores
-        $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
-        $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
-        $form->addElement('text', 'option[3]', get_lang('Don\'t know'), ['class' => 'span1', 'value' => '0']);
+        $txtOption1 = $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
+        $txtOption2 = $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
+        $txtOption3 = $form->addElement('text', 'option[3]', get_lang('Don\'t know'), ['class' => 'span1', 'value' => '0']);
 
         $form->addRule('option[1]', get_lang('Required field'), 'required');
         $form->addRule('option[2]', get_lang('Required field'), 'required');
@@ -206,9 +216,9 @@ class MultipleAnswerTrueFalse extends Question
             $scores = explode(':', $this->extra);
 
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; $i++) {
-                    $defaults['option['.$i.']'] = $scores[$i - 1];
-                }
+                $txtOption1->setValue($scores[0]);
+                $txtOption2->setValue($scores[1]);
+                $txtOption3->setValue($scores[2]);
             }
         }
 
@@ -224,9 +234,7 @@ class MultipleAnswerTrueFalse extends Question
             $form->addGroup($buttonGroup);
         }
 
-        if (!empty($this->id)) {
-            $form->setDefaults($defaults);
-        } else {
+        if (!empty($this->id) && !$form->isSubmitted()) {
             $form->setDefaults($defaults);
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
@@ -244,8 +252,8 @@ class MultipleAnswerTrueFalse extends Question
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['id'];
-                unset($optionData['id']);
+                $id = $optionData['iid'];
+                unset($optionData['iid']);
                 Question::updateQuestionOption($id, $optionData, $course_id);
             }
         } else {
@@ -285,7 +293,7 @@ class MultipleAnswerTrueFalse extends Question
             if (empty($options)) {
                 //If this is the first time that the question is created when
                 // change the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['id'] : '';
+                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['iid'] : '';
             }
             $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
@@ -309,7 +317,7 @@ class MultipleAnswerTrueFalse extends Question
         ) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+                $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
         }
 
@@ -327,7 +335,9 @@ class MultipleAnswerTrueFalse extends Question
                 ]
             )
         ) {
-            $header .= '<th>'.get_lang('Comment').'</th>';
+            if (false === $exercise->hideComment) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
         }
         $header .= '</tr>';
 

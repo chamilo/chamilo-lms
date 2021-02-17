@@ -61,6 +61,7 @@ class Documents extends Basic
                 'Flash',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'Asciimath',
                 'Asciisvg',
@@ -94,7 +95,7 @@ class Documents extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            $this->getNewPageBlock(),
+            array_merge(['Save'], $this->getNewPageBlock()),
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'inserthtml'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -105,6 +106,7 @@ class Documents extends Basic
                 'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'leaflet',
                 'Smiley',
@@ -149,8 +151,10 @@ class Documents extends Basic
                 'Link',
                 'Image',
                 'Video',
+                'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'Table',
                 'Asciimath',

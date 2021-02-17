@@ -47,18 +47,6 @@ class AccessUrlRelUserGroup
     }
 
     /**
-     * @param int $id
-     *
-     * @return AccessUrlRelUserGroup
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getUserGroupId()

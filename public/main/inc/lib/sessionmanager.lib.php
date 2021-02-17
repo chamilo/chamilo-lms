@@ -298,12 +298,8 @@ class SessionManager
                 $em = Database::getManager();
                 $em->persist($session);
                 $em->flush();
-
-                //$session_id = Database::insert($tbl_session, $values);
                 $session_id = $session->getId();
-
                 $duration = (int) $duration;
-
                 if (!empty($duration)) {
                     $sql = "UPDATE $tbl_session SET
                         access_start_date = NULL,
@@ -317,8 +313,8 @@ class SessionManager
                     Database::query($sql);
                 } else {
                     $sql = "UPDATE $tbl_session
-                        SET duration = 0
-                        WHERE id = $session_id";
+                            SET duration = 0
+                            WHERE id = $session_id";
                     Database::query($sql);
                 }
 
@@ -326,7 +322,6 @@ class SessionManager
                     $extraFields['item_id'] = $session_id;
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
-
                     /*
                       Sends a message to the user_id = 1
 
@@ -1014,7 +1009,7 @@ class SessionManager
                     ON
                       sqo.c_id = sa.c_id AND
                       sqo.question_id = sq.question_id AND
-                      sqo.question_option_id = sa.option_id AND
+                      sqo.iid = sa.option_id AND
                       sqo.survey_id = sq.survey_id
                     WHERE
                       sa.survey_id = %d AND
@@ -1625,7 +1620,7 @@ class SessionManager
         $visibility,
         $description = null,
         $showDescription = 0,
-        $duration = null,
+        $duration = 0,
         $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
@@ -1635,6 +1630,7 @@ class SessionManager
         $coachId = (int) $coachId;
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
+        $duration = (int) $duration;
 
         $em = Database::getManager();
 
@@ -1876,10 +1872,7 @@ class SessionManager
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($sessionId);
 
-        $repo->deleteResource(
-            $sessionId,
-            SequenceResource::SESSION_TYPE
-        );
+        $repo->deleteSequenceResource($sessionId, SequenceResource::SESSION_TYPE);
 
         // Add event to system log
         Event::addEvent(
@@ -2377,7 +2370,6 @@ class SessionManager
         $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
         $forums = [];
         if (1 === $subscribe) {
-            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
             $forums = get_forums(0, $course_code, true, $session_id);
         }
 
@@ -2428,13 +2420,13 @@ class SessionManager
                 }
             }
 
-            if (!empty($forums)) {
+            /*if (!empty($forums)) {
                 $userInfo = api_get_user_info($enreg_user);
                 foreach ($forums as $forum) {
                     $forumId = $forum['iid'];
                     //set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }
-            }
+            }*/
 
             // Checking if user exists in session - user table.
             $sql = "SELECT count(user_id) as count
@@ -2574,6 +2566,7 @@ class SessionManager
      *                                              existing courses and users (true, default) or not (false)
      * @param bool  $copyEvaluation                 from base course to session course
      * @param bool  $copyCourseTeachersAsCoach
+     * @param bool  $importAssignments
      *
      * @throws Exception
      *
@@ -2584,12 +2577,17 @@ class SessionManager
         $courseList,
         $removeExistingCoursesWithUsers = true,
         $copyEvaluation = false,
-        $copyCourseTeachersAsCoach = false
+        $copyCourseTeachersAsCoach = false,
+        $importAssignments = false
     ) {
         $sessionId = (int) $sessionId;
 
         if (empty($sessionId) || empty($courseList)) {
             return false;
+        }
+
+        if ($importAssignments) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         }
 
         $session = api_get_session_entity($sessionId);
@@ -2773,6 +2771,34 @@ class SessionManager
                     }
                 }
 
+                if ($importAssignments) {
+                    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                    $sql = " SELECT * FROM $workTable
+                             WHERE active = 1 AND
+                                   c_id = $courseId AND
+                                   parent_id = 0 AND
+                                   (session_id IS NULL OR session_id = 0)";
+                    $result = Database::query($sql);
+                    $workList = Database::store_result($result, 'ASSOC');
+
+                    foreach ($workList as $work) {
+                        $values = [
+                            'work_title' => $work['title'],
+                            'new_dir' => $work['url'].'_session_'.$sessionId,
+                            'description' => $work['description'],
+                            'qualification' => $work['qualification'],
+                            'allow_text_assignment' => $work['allow_text_assignment'],
+                        ];
+                        // @todo add addDir with resources
+                        /*addDir(
+                            $values,
+                            api_get_user_id(),
+                            $courseInfo,
+                            0,
+                            $sessionId
+                        );*/
+                    }
+                }
                 // If the course isn't subscribed yet
                 $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id, nbr_users, position)
                         VALUES ($sessionId, $courseId, 0, 0)";
@@ -3303,9 +3329,8 @@ class SessionManager
             foreach ($conditions as $field => $options) {
                 $operator = strtolower($options['operator']);
                 $value = Database::escape_string($options['value']);
-                $sql_query .= ' AND ';
                 if (in_array($field, $availableFields) && in_array($operator, $availableOperator)) {
-                    $sql_query .= $field." $operator '".$value."'";
+                    $sql_query .= ' AND '.$field." $operator '".$value."'";
                 }
             }
         }
@@ -3892,7 +3917,6 @@ class SessionManager
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (s.name LIKE '%$keyword%' ) ";
-
             if (!empty($description)) {
                 $description = Database::escape_string($description);
                 $keywordCondition = " AND (s.name LIKE '%$keyword%' OR s.description LIKE '%$description%' ) ";
@@ -3936,8 +3960,6 @@ class SessionManager
 
         $sessions = [];
         if (Database::num_rows($result) > 0) {
-            $sysUploadPath = api_get_path(SYS_UPLOAD_PATH).'sessions/';
-            $webUploadPath = api_get_path(WEB_UPLOAD_PATH).'sessions/';
             $imgPath = Display::return_icon(
                 'session_default_small.png',
                 null,
@@ -3947,38 +3969,43 @@ class SessionManager
                 true
             );
 
+            $extraFieldValue = new ExtraFieldValue('session');
             while ($row = Database::fetch_array($result)) {
                 if ($getOnlySessionId) {
                     $sessions[$row['id']] = $row;
                     continue;
                 }
-                $imageFilename = ExtraFieldModel::FIELD_TYPE_FILE_IMAGE.'_'.$row['id'].'.png';
-                $row['image'] = is_file($sysUploadPath.$imageFilename) ? $webUploadPath.$imageFilename : $imgPath;
 
-                if ('0000-00-00 00:00:00' == $row['display_start_date'] || '0000-00-00' == $row['display_start_date']) {
+                $extraFieldImage = $extraFieldValue->get_values_by_handler_and_field_variable($row['id'], 'image');
+                $image = $imgPath;
+                if (!empty($extraFieldImage) && isset($extraFieldImage['url'])) {
+                    $image = $extraFieldImage['url'];
+                }
+                $row['image'] = $image;
+                if ('0000-00-00 00:00:00' === $row['display_start_date'] || '0000-00-00' === $row['display_start_date']) {
                     $row['display_start_date'] = null;
                 }
 
-                if ('0000-00-00 00:00:00' == $row['display_end_date'] || '0000-00-00' == $row['display_end_date']) {
+                if ('0000-00-00 00:00:00' === $row['display_end_date'] || '0000-00-00' === $row['display_end_date']) {
                     $row['display_end_date'] = null;
                 }
 
-                if ('0000-00-00 00:00:00' == $row['access_start_date'] || '0000-00-00' == $row['access_start_date']) {
+                if ('0000-00-00 00:00:00' === $row['access_start_date'] || '0000-00-00' === $row['access_start_date']) {
                     $row['access_start_date'] = null;
                 }
 
-                if ('0000-00-00 00:00:00' == $row['access_end_date'] || '0000-00-00' == $row['access_end_date']) {
+                if ('0000-00-00 00:00:00' === $row['access_end_date'] || '0000-00-00' === $row['access_end_date']) {
                     $row['access_end_date'] = null;
                 }
 
-                if ('0000-00-00 00:00:00' == $row['coach_access_start_date'] ||
-                    '0000-00-00' == $row['coach_access_start_date']
+                if ('0000-00-00 00:00:00' === $row['coach_access_start_date'] ||
+                    '0000-00-00' === $row['coach_access_start_date']
                 ) {
                     $row['coach_access_start_date'] = null;
                 }
 
-                if ('0000-00-00 00:00:00' == $row['coach_access_end_date'] ||
-                    '0000-00-00' == $row['coach_access_end_date']
+                if ('0000-00-00 00:00:00' === $row['coach_access_end_date'] ||
+                    '0000-00-00' === $row['coach_access_end_date']
                 ) {
                     $row['coach_access_end_date'] = null;
                 }
@@ -4541,17 +4568,20 @@ class SessionManager
         $extraFieldsValuesToCopy = [];
         if (!empty($extraFieldsValues)) {
             foreach ($extraFieldsValues as $extraFieldValue) {
-                //$extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
+                $extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
                 $extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']]['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
             }
         }
 
-        if (isset($extraFieldsValuesToCopy['extra_image']) && isset($extraFieldsValuesToCopy['extra_image']['extra_image'])) {
+        // @todo fix session image url copy.
+        /*if (isset($extraFieldsValuesToCopy['extra_image']) &&
+            isset($extraFieldsValuesToCopy['extra_image']['extra_image'])
+        ) {
             $extraFieldsValuesToCopy['extra_image'] = [
                 'tmp_name' => api_get_path(SYS_UPLOAD_PATH).$extraFieldsValuesToCopy['extra_image']['extra_image'],
                 'error' => 0,
             ];
-        }
+        }*/
 
         // Now try to create the session
         $sid = self::create_session(
@@ -5656,10 +5686,9 @@ class SessionManager
                                         !empty($groupBackup['user'][$teacherToAdd][$course_code])
                                     ) {
                                         foreach ($groupBackup['user'][$teacherToAdd][$course_code] as $data) {
-                                            $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                            GroupManager::subscribe_users(
+                                            GroupManager::subscribeUsers(
                                                 $teacherToAdd,
-                                                $groupInfo,
+                                                api_get_group_entity($data['group_id']),
                                                 $data['c_id']
                                             );
                                         }
@@ -5670,10 +5699,9 @@ class SessionManager
                                         !empty($groupBackup['tutor'][$teacherToAdd][$course_code])
                                     ) {
                                         foreach ($groupBackup['tutor'][$teacherToAdd][$course_code] as $data) {
-                                            $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                            GroupManager::subscribe_tutors(
+                                            GroupManager::subscribeTutors(
                                                 $teacherToAdd,
-                                                $groupInfo,
+                                                api_get_group_entity($data['group_id']),
                                                 $data['c_id']
                                             );
                                         }
@@ -5779,10 +5807,9 @@ class SessionManager
                                             !empty($groupBackup['user'][$teacherId][$course_code])
                                         ) {
                                             foreach ($groupBackup['user'][$teacherId][$course_code] as $data) {
-                                                $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                                GroupManager::subscribe_users(
+                                                GroupManager::subscribeUsers(
                                                     $teacherId,
-                                                    $groupInfo,
+                                                    api_get_group_entity($data['group_id']),
                                                     $data['c_id']
                                                 );
                                             }
@@ -5793,10 +5820,9 @@ class SessionManager
                                             !empty($groupBackup['tutor'][$teacherId][$course_code])
                                         ) {
                                             foreach ($groupBackup['tutor'][$teacherId][$course_code] as $data) {
-                                                $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                                GroupManager::subscribe_tutors(
+                                                GroupManager::subscribeTutors(
                                                     $teacherId,
-                                                    $groupInfo,
+                                                    api_get_group_entity($data['group_id']),
                                                     $data['c_id']
                                                 );
                                             }
@@ -7907,7 +7933,10 @@ class SessionManager
                 'session_template',
                 get_lang('SessionTemplate'),
                 [],
-                ['url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_template_session', 'id' => 'system_template']
+                [
+                    'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_template_session',
+                    'id' => 'system_template',
+                ]
             );
         }
 

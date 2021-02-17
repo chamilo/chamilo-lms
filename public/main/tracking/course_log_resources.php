@@ -66,7 +66,7 @@ if ($export_csv || $exportXls) {
     if ($exportXls) {
         Export::arrayToXls($csvData);
     }
-    die;
+    exit;
 }
 
 if (empty($session_id)) {

@@ -57,9 +57,12 @@ DirectoryIndex index.php
     # Ignore static files
     RewriteRule ^(build)($|/) - [L]
     RewriteRule ^(bundles)($|/) - [L]
+    RewriteRule ^(documentation)($|/) - [L]
     RewriteRule ^(img)($|/) - [L]
+    RewriteRule ^(js)($|/) - [L]
     RewriteRule ^(libs)($|/) - [L]
     RewriteRule ^(main)($|/) - [L]
+    RewriteRule ^(sound)($|/) - [L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>

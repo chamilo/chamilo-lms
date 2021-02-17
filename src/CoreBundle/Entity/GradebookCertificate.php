@@ -8,8 +8,6 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookCertificate.
- *
  * @ORM\Table(
  *     name="gradebook_certificate",
  *     indexes={
@@ -40,12 +38,10 @@ class GradebookCertificate
     protected $catId;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCertificates")
      * @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @var float

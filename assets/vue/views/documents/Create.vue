@@ -49,8 +49,10 @@ export default {
   created() {
     this.item.parentResourceNodeId = this.$route.params.node;
     this.item.resourceLinkList = JSON.stringify([{
+      gid: this.$route.query.gid,
+      sid: this.$route.query.sid,
       c_id: this.$route.query.cid,
-      visibility: 2,
+      visibility: 2, // visible by default
     }]);
   },
   methods: {

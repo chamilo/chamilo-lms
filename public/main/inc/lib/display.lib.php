@@ -141,7 +141,7 @@ class Display
         $params['legacy_breadcrumb'] = $interbreadcrumb;
 
         Template::setVueParams($params);
-        $content = Container::getTemplating()->render($tpl, $params);
+        $content = Container::getTwig()->render($tpl, $params);
         $response->setContent($content);
         $response->send();
         exit;
@@ -166,7 +166,7 @@ class Display
         $params['legacy_javascript'] = $htmlHeadXtra;
         $params['legacy_breadcrumb'] = $interbreadcrumb;
 
-        $content = Container::getTemplating()->render($tpl, $params);
+        $content = Container::getTwig()->render($tpl, $params);
         $response->setContent($content);
         $response->send();
         exit;
@@ -841,12 +841,6 @@ class Display
         $filterPath = true
     ) {
         if (empty($image_path)) {
-            // For some reason, the call to img() happened without a proper
-            // image. Log the error and return an empty string to avoid
-            // breaking the HTML
-            $trace = debug_backtrace();
-            $caller = $trace[1];
-            //error_log('No image provided in Display::img(). Caller info: '.print_r($caller, 1));
             return '';
         }
         // Sanitizing the parameter $image_path
@@ -2347,7 +2341,7 @@ class Display
         }
         $link = self::url($label.' ', $link_to_show, $linkAttributes);
 
-        return  '<li class = "'.$class.'">'.$link.'</li>';
+        return '<li class = "'.$class.'">'.$link.'</li>';
     }
 
     /**
@@ -2547,10 +2541,8 @@ class Display
      * @param string $id
      * @param array  $content
      * @param array  $colsWidth Optional. Columns width
-     *
-     * @return string
      */
-    public static function toolbarAction($id, $content, $colsWidth = [])
+    public static function toolbarAction($id, $content, $colsWidth = []): string
     {
         $col = count($content);
 
@@ -2561,9 +2553,7 @@ class Display
             });
         }
 
-        $html = '<div id="'.$id.'" class="actions">';
-        $html .= '<div class="row">';
-
+        $html = '<ul id="'.$id.'" class="nav nav-tabs actions">';
         for ($i = 0; $i < $col; $i++) {
             $class = 'col-sm-'.$colsWidth[$i];
 
@@ -2575,11 +2565,10 @@ class Display
                 }
             }
 
-            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+            $html .= '<li class="nav-item '.$class.'">'.$content[$i].'</li>';
         }
 
-        $html .= '</div>';
-        $html .= '</div>';
+        $html .= '</ul>';
 
         return $html;
     }
@@ -2639,7 +2628,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return string|null
+     * @return string
      *
      * @todo rework function to easy use
      */
@@ -2675,7 +2664,7 @@ HTML;
                 $params['id'] = $id;
             }
             $params['class'] = 'card';
-            $html = null;
+            $html = '';
             if (!empty($title)) {
                 $html .= '<div class="card-header">'.$title.'</div>'.PHP_EOL;
             }
@@ -2732,7 +2721,7 @@ HTML;
         }
 
         return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">
-                    <img src="'.$userInfo['avatar'].'" class="rounded">
+                    <img src="'.$userInfo['avatar'].'" class="rounded" />
                     <h3 class="card-title">'.$userInfo['complete_name'].'</h3>
                     <div class="card-body">
                        <div class="card-title">
@@ -2829,6 +2818,10 @@ HTML;
             $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
+        $lpJs = api_get_path(WEB_PUBLIC_PATH).'build/lp.js';
+        // {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
+        // {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
+        // {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
@@ -2845,22 +2838,18 @@ HTML;
         },
         "'.$frameName.'",
         [
-            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
-            {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+            {type:"script", src:"'.$lpJs.'", deps: [
+
             {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-            {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
+
             {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js",
                 deps: [
                 {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/vrview/vrview.js"},
-                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
                 '.$videoPluginFiles.'
             ]},
             '.$translateHtml.'
             ]},
             '.$videoPluginCssFiles.'
-            {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
         ]);';
 
         return $frameReady;
@@ -2899,7 +2888,7 @@ HTML;
         }
         $html = self::tag('ul', $links, $attr);
 
-        return  $html;
+        return $html;
     }
 
     /**

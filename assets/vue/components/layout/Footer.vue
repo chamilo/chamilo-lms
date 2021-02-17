@@ -8,7 +8,7 @@
         <div class="text-center text-lg-left text-muted">
           © {{ year }}
           <a
-            href="https://www.chamilo.com"
+            href="https://www.chamilo.org"
             class="font-weight-bold ml-1"
             target="_blank"
           >

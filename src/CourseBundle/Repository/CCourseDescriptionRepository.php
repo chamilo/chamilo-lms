@@ -16,10 +16,16 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 
 final class CCourseDescriptionRepository extends ResourceRepository implements GridInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CCourseDescription::class);
+    }
+
     public function getResourceSettings(): Settings
     {
         $settings = parent::getResourceSettings();
@@ -48,17 +54,15 @@ final class CCourseDescriptionRepository extends ResourceRepository implements G
     public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         /** @var CCourseDescription $newResource */
-        $newResource = $form->getData();
+        return $form->getData();
 
-        $newResource
+        /*$newResource
             ->setCId($course->getId())
         ;
 
         if ($session) {
             $newResource->setSessionId($session->getId());
-        }
-
-        return $newResource;
+        }*/
     }
 
     public function getResourceFormType(): string

@@ -30,8 +30,6 @@ api_protect_course_script(true);
 
 $nameTools = get_lang('Forums');
 
-require_once 'forumfunction.inc.php';
-
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 

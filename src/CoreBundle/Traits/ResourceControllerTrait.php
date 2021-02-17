@@ -9,13 +9,18 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\EntityNotFoundException;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 trait ResourceControllerTrait
 {
+    /** @var ContainerInterface */
+    protected $container;
+
     public function getRepositoryFromRequest(Request $request): ResourceRepository
     {
         $tool = $request->get('tool');
@@ -24,9 +29,14 @@ trait ResourceControllerTrait
         return $this->getRepository($tool, $type);
     }
 
+    public function getResourceNodeRepository(): ResourceNodeRepository
+    {
+        return $this->container->get(ResourceNodeRepository::class);
+    }
+
     public function getResourceRepositoryFactory(): ResourceFactory
     {
-        return $this->container->get('resource_factory');
+        return $this->container->get(ResourceFactory::class);
     }
 
     public function getRepository($tool, $type): ResourceRepository
@@ -82,13 +92,13 @@ trait ResourceControllerTrait
             if ($this->hasCourse()) {
                 $parentResourceNode = $this->getCourse()->getResourceNode();
             } else {
-                if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                     /** @var User $user */
                     $parentResourceNode = $this->getUser()->getResourceNode();
                 }
             }
         } else {
-            $repo = $this->getDoctrine()->getRepository(ResourceNode::class);
+            $repo = $this->container->get('doctrine')->getRepository(ResourceNode::class);
             $parentResourceNode = $repo->find($parentNodeId);
         }
 
@@ -97,6 +107,24 @@ trait ResourceControllerTrait
         }
 
         return $parentResourceNode;
+    }
+
+    protected function getUser()
+    {
+        if (!$this->container->has('security.token_storage')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
+        }
+
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return null;
+        }
+
+        if (!\is_object($user = $token->getUser())) {
+            // e.g. anonymous authentication
+            return null;
+        }
+
+        return $user;
     }
 
     private function setBreadCrumb(Request $request, ResourceNode $resourceNode)

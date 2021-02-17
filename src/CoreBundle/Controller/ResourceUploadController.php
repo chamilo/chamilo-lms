@@ -91,10 +91,7 @@ class ResourceUploadController extends BlueimpController
                     $em->persist($resource);
                     $em->flush();
 
-                    $repo->addFile(
-                        $resource,
-                        $file
-                    );
+                    $repo->addFile($resource, $file);
                     $em->flush();
                     // Finish uploading.
 

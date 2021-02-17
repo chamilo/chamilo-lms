@@ -42,9 +42,13 @@ export default {
   methods: {
     del() {
       this.deleteItem(this.retrieved).then(() => {
+        let folderParams = this.$route.query;
         this.showMessage(`${this.item['@id']} deleted.`);
         this.$router
-          .push({ name: `${this.$options.servicePrefix}List` })
+          .push({
+            name: `${this.$options.servicePrefix}List`,
+            query: folderParams
+          })
           .catch(() => {});
       });
     },
@@ -59,7 +63,7 @@ export default {
     onSendForm() {
       const updateForm = this.$refs.updateForm;
       updateForm.$v.$touch();
-
+      console.log('onSendForm');
       if (!updateForm.$v.$invalid) {
         this.update(updateForm.$v.item.$model);
       }
@@ -75,8 +79,13 @@ export default {
       if (!deleted) {
         return;
       }
+
+      let folderParams = this.$route.query;
       this.$router
-        .push({ name: `${this.$options.servicePrefix}List` })
+        .push({
+          name: `${this.$options.servicePrefix}List`,
+          query: folderParams
+        })
         .catch(() => {});
     },
 

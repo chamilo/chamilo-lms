@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-class CThematicPlan extends AbstractResource implements ResourceInterface
+class CThematicPlan //extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -33,13 +33,11 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @var int
@@ -49,19 +47,15 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var CThematic
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic", inversedBy="plans")
      * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
-    protected $thematic;
+    protected CThematic $thematic;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var int
@@ -212,9 +206,7 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
+    /*
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
@@ -228,5 +220,5 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
-    }
+    }*/
 }

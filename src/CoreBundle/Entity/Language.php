@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Language.
@@ -28,25 +29,25 @@ class Language
     protected $id;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="original_name", type="string", length=255, nullable=true)
      */
-    protected $originalName;
+    protected string $originalName;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="english_name", type="string", length=255, nullable=true)
      */
-    protected $englishName;
+    protected string $englishName;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="isocode", type="string", length=10, nullable=true)
      */
-    protected $isocode;
+    protected string $isocode;
 
     /**
      * @var bool

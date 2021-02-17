@@ -2,6 +2,7 @@
   <b-row>
     <b-col cols="12">
       <b-form-input
+        id="search_filter"
         v-model="item.title"
         :placeholder="$t('title')"
         type="text"

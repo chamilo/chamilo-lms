@@ -367,7 +367,7 @@ class CourseBuilder
 
             if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -382,7 +382,7 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -410,7 +410,7 @@ class CourseBuilder
         } else {
             if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -425,7 +425,7 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -769,18 +769,18 @@ class CourseBuilder
 
             // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
-                    WHERE 
-                      c_id = $courseId AND 
+                    WHERE
+                      c_id = $courseId AND
                       $idCondition
-                      active >=0 
+                      active >=0
                       $sessionCondition ";
         } else {
             // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
-                    WHERE 
-                      c_id = $courseId AND 
+                    WHERE
+                      c_id = $courseId AND
                       $idCondition
-                      active >=0 AND 
+                      active >=0 AND
                       (session_id = 0 OR session_id IS NULL)";
         }
 
@@ -799,7 +799,7 @@ class CourseBuilder
 
             $quiz = new Quiz($obj);
             $sql = 'SELECT * FROM '.$table_rel.'
-                    WHERE c_id = '.$courseId.' AND exercice_id = '.$obj->id;
+                    WHERE c_id = '.$courseId.' AND quiz_id = '.$obj->id;
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $quiz->add_question($obj2->question_id, $obj2->question_order);
@@ -905,7 +905,7 @@ class CourseBuilder
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
                         INNER JOIN $table_qui ex
-                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        ON (ex.id = r.quiz_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = $courseId AND ex.active = '-1'
                     )
                     UNION
@@ -920,7 +920,7 @@ class CourseBuilder
                         SELECT question_id, q.* FROM $table_que q
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        WHERE r.c_id = $courseId AND (r.exercice_id = '-1' OR r.exercice_id = '0')
+                        WHERE r.c_id = $courseId AND (r.quiz_id = '-1' OR r.quiz_id = '0')
                      )
                  ";
 
@@ -1008,12 +1008,12 @@ class CourseBuilder
                 LEFT JOIN '.$table_rel.' as quizz_questions
                 ON questions.id=quizz_questions.question_id
                 LEFT JOIN '.$table_qui.' as exercises
-                ON quizz_questions.exercice_id = exercises.id
+                ON quizz_questions.quiz_id = exercises.id
                 WHERE
                     questions.c_id = quizz_questions.c_id AND
                     questions.c_id = exercises.c_id AND
                     exercises.c_id = '.$courseId.' AND
-                    (quizz_questions.exercice_id IS NULL OR
+                    (quizz_questions.quiz_id IS NULL OR
                     exercises.active = -1)';
 
         $db_result = Database::query($sql);
@@ -1084,8 +1084,7 @@ class CourseBuilder
         $category = new TestCategory();
         $categories = $category->getCategories();
         foreach ($categories as $category) {
-            $this->findAndSetDocumentsInText($category->description);
-
+            $this->findAndSetDocumentsInText($category->getDescription());
             /** @var TestCategory $category */
             $courseCopyTestCategory = new CourseCopyTestCategory(
                 $category->id,
@@ -1513,7 +1512,7 @@ class CourseBuilder
                     $obj->debug,
                     $visibility,
                     $obj->author,
-                    $obj->preview_image,
+                    //$obj->preview_image,
                     $obj->use_max_score,
                     $obj->autolaunch,
                     $obj->created_on,
@@ -1527,7 +1526,7 @@ class CourseBuilder
 
                 $this->course->add_resource($lp);
 
-                if (!empty($obj->preview_image)) {
+                /*if (!empty($obj->preview_image)) {
                     // Add LP teacher image
                     $asset = new Asset(
                         $obj->preview_image,
@@ -1535,7 +1534,7 @@ class CourseBuilder
                         '/upload/learning_path/images/'.$obj->preview_image
                     );
                     $this->course->add_resource($asset);
-                }
+                }*/
             }
         }
 
@@ -1850,8 +1849,8 @@ class CourseBuilder
 
         $sql = "SELECT * FROM $table_work
                 WHERE
-                    c_id = $courseId                    
-                    $sessionCondition AND                    
+                    c_id = $courseId
+                    $sessionCondition AND
                     filetype = 'folder' AND
                     parent_id = 0 AND
                     active = 1

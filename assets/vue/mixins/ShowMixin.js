@@ -35,17 +35,28 @@ export default {
     },
     del() {
       this.deleteItem(this.item).then(() => {
+        let folderParams = this.$route.query;
+        folderParams['id'] = '';
         this.showMessage(`${this.item['@id']} deleted.`);
         this.$router
-          .push({ name: `${this.$options.servicePrefix}List` })
+          .push(
+              {
+                name: `${this.$options.servicePrefix}List`,
+                query: folderParams
+              }
+          )
           .catch(() => {});
       });
     },
     formatDateTime,
     editHandler() {
+      let folderParams = this.$route.query;
+      folderParams['id'] = this.item['@id'];
+
       this.$router.push({
         name: `${this.$options.servicePrefix}Update`,
-        params: { id: this.item['@id'] }
+        params: { id: this.item['@id'] },
+        query: folderParams
       });
     },
   },

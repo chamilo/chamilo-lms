@@ -12,24 +12,21 @@ use Chamilo\CoreBundle\Entity\TicketStatus;
  */
 class TicketManager
 {
-    const PRIORITY_NORMAL = 'NRM';
-    const PRIORITY_HIGH = 'HGH';
-    const PRIORITY_LOW = 'LOW';
+    public const PRIORITY_NORMAL = 'NRM';
+    public const PRIORITY_HIGH = 'HGH';
+    public const PRIORITY_LOW = 'LOW';
 
-    const SOURCE_EMAIL = 'MAI';
-    const SOURCE_PHONE = 'TEL';
-    const SOURCE_PLATFORM = 'PLA';
-    const SOURCE_PRESENTIAL = 'PRE';
+    public const SOURCE_EMAIL = 'MAI';
+    public const SOURCE_PHONE = 'TEL';
+    public const SOURCE_PLATFORM = 'PLA';
+    public const SOURCE_PRESENTIAL = 'PRE';
 
-    const STATUS_NEW = 'NAT';
-    const STATUS_PENDING = 'PND';
-    const STATUS_UNCONFIRMED = 'XCF';
-    const STATUS_CLOSE = 'CLS';
-    const STATUS_FORWARDED = 'REE';
+    public const STATUS_NEW = 'NAT';
+    public const STATUS_PENDING = 'PND';
+    public const STATUS_UNCONFIRMED = 'XCF';
+    public const STATUS_CLOSE = 'CLS';
+    public const STATUS_FORWARDED = 'REE';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
@@ -285,6 +282,8 @@ class TicketManager
      * @param string $priority
      * @param string $status
      * @param int    $assignedUserId
+     * @param int    $exerciseId
+     * @param int    $lpId
      *
      * @return bool
      */
@@ -301,7 +300,9 @@ class TicketManager
         $source = '',
         $priority = '',
         $status = '',
-        $assignedUserId = 0
+        $assignedUserId = 0,
+        $exerciseId = null,
+        $lpId = null
     ) {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
@@ -365,6 +366,13 @@ class TicketManager
             'total_messages' => 0,
         ];
 
+        if (!empty($exerciseId)) {
+            $params['exercise_id'] = $exerciseId;
+        }
+
+        if (!empty($lpId)) {
+            $params['lp_id'] = $lpId;
+        }
         if (!empty($course_id)) {
             $params['course_id'] = $course_id;
         }
@@ -715,6 +723,7 @@ class TicketManager
         $ticketId,
         $message_id
     ) {
+        throw new Exception('Implement saveMessageAttachmentFile');
         $now = api_get_utc_datetime();
         $userId = api_get_user_id();
         $ticketId = (int) $ticketId;
@@ -1117,7 +1126,7 @@ class TicketManager
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $item = $em->getRepository('TicketMessageAttachment')->find($id);
+        $item = $em->getRepository(TicketMessageAttachment::class)->find($id);
         if ($item) {
             return $item;
         }
@@ -1134,7 +1143,7 @@ class TicketManager
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $items = $em->getRepository('TicketMessageAttachment')->findBy(['ticket' => $id]);
+        $items = $em->getRepository(TicketMessageAttachment::class)->findBy(['ticket' => $id]);
         if ($items) {
             return $items;
         }
@@ -1205,6 +1214,34 @@ class TicketManager
                     if ($course) {
                         $row['course_url'] = '<a href="'.$course['course_public_url'].'?id_session='.$sessionId.'">'.$course['name'].'</a>';
                     }
+                    $row['exercise_url'] = null;
+
+                    if (!empty($row['exercise_id'])) {
+                        $exerciseTitle = ExerciseLib::getExerciseTitleById($row['exercise_id']);
+                        $dataExercise = [
+                            'cidReq' => $course['code'],
+                            'id_session' => $sessionId,
+                            'exerciseId' => $row['exercise_id'],
+                        ];
+                        $urlParamsExercise = http_build_query($dataExercise);
+
+                        $row['exercise_url'] = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.$urlParamsExercise.'">'.$exerciseTitle.'</a>';
+                    }
+
+                    $row['lp_url'] = null;
+
+                    if (!empty($row['lp_id'])) {
+                        $lpName = learnpath::getLpNameById($row['lp_id']);
+                        $dataLp = [
+                            'cidReq' => $course['code'],
+                            'id_session' => $sessionId,
+                            'lp_id' => $row['lp_id'],
+                            'action' => 'view',
+                        ];
+                        $urlParamsLp = http_build_query($dataLp);
+
+                        $row['lp_url'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.$lpName.'</a>';
+                    }
                 }
 
                 $userInfo = api_get_user_info($row['sys_insert_user_id']);
@@ -1217,7 +1254,7 @@ class TicketManager
             $sql = "SELECT *, message.id as message_id
                     FROM $table_support_messages message
                     INNER JOIN $table_main_user user
-                    ON (message.sys_insert_user_id = user.user_id)
+                    ON (message.sys_insert_user_id = user.id)
                     WHERE
                         message.ticket_id = '$ticketId' ";
             $result = Database::query($sql);
@@ -1828,7 +1865,7 @@ class TicketManager
      */
     public static function getStatusList()
     {
-        $items = Database::getManager()->getRepository('TicketStatus')->findAll();
+        $items = Database::getManager()->getRepository(TicketStatus::class)->findAll();
 
         $list = [];
         /** @var TicketStatus $row */
@@ -1846,8 +1883,7 @@ class TicketManager
      */
     public static function getTicketsFromCriteria($criteria)
     {
-        $items = Database::getManager()->getRepository('ChamiloCoreBundle:Ticket')->findBy($criteria);
-
+        $items = Database::getManager()->getRepository(Ticket::class)->findBy($criteria);
         $list = [];
         /** @var Ticket $row */
         foreach ($items as $row) {
@@ -1865,7 +1901,7 @@ class TicketManager
     public static function getStatusIdFromCode($code)
     {
         $item = Database::getManager()
-            ->getRepository('TicketStatus')
+            ->getRepository(TicketStatus::class)
             ->findOneBy(['code' => $code])
         ;
 
@@ -1881,8 +1917,7 @@ class TicketManager
      */
     public static function getPriorityList()
     {
-        $projects = Database::getManager()->getRepository('TicketPriority')->findAll();
-
+        $projects = Database::getManager()->getRepository(TicketPriority::class)->findAll();
         $list = [];
         /** @var TicketPriority $row */
         foreach ($projects as $row) {
@@ -1897,7 +1932,7 @@ class TicketManager
      */
     public static function getProjects()
     {
-        $projects = Database::getManager()->getRepository('TicketProject')->findAll();
+        $projects = Database::getManager()->getRepository(TicketProject::class)->findAll();
 
         $list = [];
         /** @var TicketProject $row */
@@ -1919,8 +1954,7 @@ class TicketManager
      */
     public static function getProjectsSimple()
     {
-        $projects = Database::getManager()->getRepository('TicketProject')->findAll();
-
+        $projects = Database::getManager()->getRepository(TicketProject::class)->findAll();
         $list = [];
         /** @var TicketProject $row */
         foreach ($projects as $row) {
@@ -1943,12 +1977,10 @@ class TicketManager
      */
     public static function getProjectsCount()
     {
-        $count = Database::getManager()->getRepository('TicketProject')->createQueryBuilder('p')
+        return Database::getManager()->getRepository(TicketProject::class)->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
-
-        return $count;
     }
 
     /**
@@ -1972,7 +2004,7 @@ class TicketManager
      */
     public static function getProject($id)
     {
-        return Database::getManager()->getRepository('TicketProject')->find($id);
+        return Database::getManager()->getRepository(TicketProject::class)->find($id);
     }
 
     /**
@@ -2023,8 +2055,7 @@ class TicketManager
      */
     public static function getStatusAdminList()
     {
-        $items = Database::getManager()->getRepository('TicketStatus')->findAll();
-
+        $items = Database::getManager()->getRepository(TicketStatus::class)->findAll();
         $list = [];
         /** @var TicketStatus $row */
         foreach ($items as $row) {
@@ -2046,8 +2077,7 @@ class TicketManager
      */
     public static function getStatusSimple()
     {
-        $projects = Database::getManager()->getRepository('TicketStatus')->findAll();
-
+        $projects = Database::getManager()->getRepository(TicketStatus::class)->findAll();
         $list = [];
         /** @var TicketProject $row */
         foreach ($projects as $row) {
@@ -2067,12 +2097,10 @@ class TicketManager
      */
     public static function getStatusCount()
     {
-        $count = Database::getManager()->getRepository('TicketStatus')->createQueryBuilder('p')
+        return Database::getManager()->getRepository(TicketStatus::class)->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
-
-        return $count;
     }
 
     /**
@@ -2096,7 +2124,7 @@ class TicketManager
      */
     public static function getStatus($id)
     {
-        return Database::getManager()->getRepository('TicketStatus')->find($id);
+        return Database::getManager()->getRepository(TicketStatus::class)->find($id);
     }
 
     /**
@@ -2145,7 +2173,7 @@ class TicketManager
      */
     public static function getPriorityAdminList()
     {
-        $items = Database::getManager()->getRepository('TicketPriority')->findAll();
+        $items = Database::getManager()->getRepository(TicketPriority::class)->findAll();
 
         $list = [];
         /** @var TicketStatus $row */
@@ -2168,7 +2196,7 @@ class TicketManager
      */
     public static function getPrioritySimple()
     {
-        $projects = Database::getManager()->getRepository('TicketPriority')->findAll();
+        $projects = Database::getManager()->getRepository(TicketPriority::class)->findAll();
 
         $list = [];
         /** @var TicketPriority $row */
@@ -2189,12 +2217,10 @@ class TicketManager
      */
     public static function getPriorityCount()
     {
-        $count = Database::getManager()->getRepository('TicketPriority')->createQueryBuilder('p')
+        return Database::getManager()->getRepository(TicketPriority::class)->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
-
-        return $count;
     }
 
     /**
@@ -2223,7 +2249,7 @@ class TicketManager
      */
     public static function getPriority($id)
     {
-        return Database::getManager()->getRepository('TicketPriority')->find($id);
+        return Database::getManager()->getRepository(TicketPriority::class)->find($id);
     }
 
     /**

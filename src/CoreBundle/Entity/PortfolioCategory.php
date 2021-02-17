@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -94,18 +93,6 @@ class PortfolioCategory
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return PortfolioCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -210,12 +197,7 @@ class PortfolioCategory
         return $this->items->matching($criteria);
     }
 
-    /**
-     * Set items.
-     *
-     * @return PortfolioCategory
-     */
-    public function setItems(Collection $items)
+    public function setItems(ArrayCollection $items): self
     {
         $this->items = $items;
 

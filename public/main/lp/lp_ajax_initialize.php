@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -104,7 +105,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
         $sql = "SELECT objective_id, status, score_raw, score_max, score_min
                 FROM $mycoursedb
                 WHERE lp_iv_id = $mylp_iv_id AND c_id = $course_id
-                ORDER BY id ASC;";
+                ORDER BY iid ASC;";
         $res = Database::query($sql);
         while ($row = Database::fetch_row($res)) {
             $phpobjectives[] = $row;
@@ -180,8 +181,8 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
 }
 
 echo initialize_item(
-    $_POST['lid'],
-    $_POST['uid'],
-    $_POST['vid'],
-    $_POST['iid']
+    $_REQUEST['lid'],
+    $_REQUEST['uid'],
+    $_REQUEST['vid'],
+    $_REQUEST['iid']
 );

@@ -249,7 +249,7 @@ function handlePlugins()
     echo '<div class="form-actions bottom_actions">';
     echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
     echo '<i class="fa fa-check" aria-hidden="true"></i> ';
-    echo  get_lang('Enable the selected plugins').'</button>';
+    echo get_lang('Enable the selected plugins').'</button>';
     echo '</div>';
     echo '</form>';
 }
@@ -747,7 +747,6 @@ function handleSearch()
 {
     global $SettingsStored, $_configuration;
 
-    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $search_enabled = api_get_setting('search_enabled');
 
     $form = new FormValidator(
@@ -833,7 +832,7 @@ function handleSearch()
     echo '</div>';
 
     if ('true' == $search_enabled) {
-        $xapianPath = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
+        //$xapianPath = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
 
         /*
         @todo Test the Xapian connection

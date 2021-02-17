@@ -51,6 +51,7 @@ if (0 == count($userAccess)) {
     $days = SessionManager::getDayLeftInSession($sessionInfo, $userId);
     $firstAccess = api_strtotime($userAccess['login_course_date'], 'UTC');
     $firstAccessString = api_convert_and_format_date($userAccess['login_course_date'], DATE_FORMAT_SHORT, 'UTC');
+    $duration = 0;
     if ($days > 0) {
         $userSubscription = SessionManager::getUserSession($userId, $sessionId);
         $duration = $sessionInfo['duration'];

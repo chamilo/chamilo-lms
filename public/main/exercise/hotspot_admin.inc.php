@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -18,6 +19,12 @@ $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 
 $debug = 0;
+
+$reponse = $_REQUEST['reponse'] ?? null;
+$comment = $_REQUEST['comment'] ?? null;
+$weighting = $_REQUEST['weighting'] ?? null;
+$hotspot_coordinates = $_REQUEST['hotspot_coordinates'] ?? null;
+$hotspot_type = $_REQUEST['hotspot_type'] ?? null;
 
 // if we come from the warning box "this question is used in several exercises"
 if ($modifyIn) {
@@ -75,12 +82,8 @@ if ($submitAnswers || $buttonBack) {
         }
         $questionWeighting = $nbrGoodAnswers = 0;
         for ($i = 1; $i <= $nbrAnswers; $i++) {
-            if ($debug > 0) {
-                echo str_repeat('&nbsp;', 4).'$answerType is HOT_SPOT'."<br />\n";
-            }
-
-            $reponse[$i] = trim($reponse[$i]);
-            $comment[$i] = trim($comment[$i]);
+            $reponse[$i] = trim($reponse[$i] ?? null);
+            $comment[$i] = trim($comment[$i] ?? null);
             $weighting[$i] = $weighting[$i]; // it can be float
 
             // checks if field is empty
@@ -101,7 +104,7 @@ if ($submitAnswers || $buttonBack) {
                 break;
             }
 
-            if ('0;0|0|0' == $hotspot_coordinates[$i] || empty($hotspot_coordinates[$i])) {
+            if ('0;0|0|0' === $hotspot_coordinates[$i] || empty($hotspot_coordinates[$i])) {
                 $msgErr = get_lang('You haven\'t drawn all your hotspots yet');
                 // clears answers already recorded into the Answer object
                 $objAnswer->cancel();
@@ -116,9 +119,9 @@ if ($submitAnswers || $buttonBack) {
                     echo str_repeat('&nbsp;', 4).'$answerType is HOT_SPOT'."<br />\n";
                 }
 
-                $reponse[$i] = trim($reponse[$i]);
-                $comment[$i] = trim($comment[$i]);
-                $weighting[$i] = $weighting[$i]; // It can be float.
+                $reponse[$i] = trim($reponse[$i] ?? null);
+                $comment[$i] = trim($comment[$i] ?? null);
+                $weighting[$i] = $weighting[$i] ?? null; // It can be float.
 
                 if ($weighting[$i]) {
                     $questionWeighting += $weighting[$i];
@@ -162,14 +165,14 @@ if ($submitAnswers || $buttonBack) {
         $url = isset($_POST['url']) ? $_POST['url'] : '';
         $destination = [];
 
-        $threadhold1 = $_POST['threadhold1'];
-        $threadhold2 = $_POST['threadhold2'];
-        $threadhold3 = $_POST['threadhold3'];
+        $threadhold1 = $_POST['threadhold1'] ?? null;
+        $threadhold2 = $_POST['threadhold2'] ?? null;
+        $threadhold3 = $_POST['threadhold3'] ?? null;
 
         for ($i = 1; $i <= $nbrAnswers; $i++) {
-            $reponse[$i] = trim($reponse[$i]);
-            $comment[$i] = trim($comment[$i]);
-            $weighting[$i] = $weighting[$i];
+            $reponse[$i] = trim($reponse[$i] ?? null);
+            $comment[$i] = trim($comment[$i] ?? null);
+            $weighting[$i] = $weighting[$i] ?? null;
 
             if (empty($threadhold1[$i])) {
                 $threadhold1_str = 0;
@@ -191,7 +194,7 @@ if ($submitAnswers || $buttonBack) {
 
             $threadhold_total = $threadhold1_str.';'.$threadhold2_str.';'.$threadhold3_str;
 
-            if (isset($try[$i]) && 'on' == $try[$i]) {
+            if (isset($try[$i]) && 'on' === $try[$i]) {
                 $try_str = 1;
             } else {
                 $try_str = 0;
@@ -207,10 +210,8 @@ if ($submitAnswers || $buttonBack) {
             if (isset($url[$i]) && !empty($url[$i])) {
                 $url_str = $url[$i];
             }
-
-            if ('' == $select_question[$i]) {
-                $question_str = 0;
-            } else {
+            $question_str = 0;
+            if (isset($select_question[$i]) && !empty($select_question[$i])) {
                 $question_str = $select_question[$i];
             }
 
@@ -226,7 +227,7 @@ if ($submitAnswers || $buttonBack) {
                 break;
             }
 
-            if ($weighting[$i] <= 0 && 'oar' != $_SESSION['tmp_answers']['hotspot_type'][$i]) {
+            if ($weighting[$i] <= 0 && 'oar' !== $_SESSION['tmp_answers']['hotspot_type'][$i]) {
                 $msgErr = get_lang('You must give a positive score for each hotspots');
                 // clears answers already recorded into the Answer object
                 $objAnswer->cancel();
@@ -234,7 +235,7 @@ if ($submitAnswers || $buttonBack) {
                 break;
             }
 
-            if ('0;0|0|0' == $hotspot_coordinates[$i] || empty($hotspot_coordinates[$i])) {
+            if ('0;0|0|0' === $hotspot_coordinates[$i] || empty($hotspot_coordinates[$i])) {
                 $msgErr = get_lang('You haven\'t drawn all your hotspots yet');
                 // clears answers already recorded into the Answer object
                 $objAnswer->cancel();

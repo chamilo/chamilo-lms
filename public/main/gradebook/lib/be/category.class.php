@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -44,7 +45,7 @@ class Category implements GradebookItem
     {
         $this->id = 0;
         $this->name = null;
-        $this->description = null;
+        $this->description = '';
         $this->user_id = 0;
         $this->course_code = '';
         $this->courseId = 0;
@@ -916,7 +917,6 @@ class Category implements GradebookItem
             $count = 0;
             $ressum = 0;
             $weightsum = 0;
-
             if (!empty($cats)) {
                 /** @var Category $cat */
                 foreach ($cats as $cat) {
@@ -1085,8 +1085,10 @@ class Category implements GradebookItem
                         foreach ($links as $link) {
                             $linkres = $link->calc_score($studentId, null);
                             $linkweight = $link->get_weight();
-                            $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
-                            $ressum = $linkres[0] / $link_res_denom * $linkweight;
+                            if ($linkres) {
+                                $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
+                                $ressum = $linkres[0] / $link_res_denom * $linkweight;
+                            }
 
                             if (!isset($totalScorePerStudent[$studentId])) {
                                 $totalScorePerStudent[$studentId] = 0;
@@ -2073,16 +2075,18 @@ class Category implements GradebookItem
     /**
      * Generates a certificate for this user if everything matches.
      *
-     * @param int  $category_id      gradebook id
+     * @param int  $category_id            gradebook id
      * @param int  $user_id
      * @param bool $sendNotification
+     * @param bool $skipGenerationIfExists
      *
      * @return array
      */
     public static function generateUserCertificate(
         $category_id,
         $user_id,
-        $sendNotification = false
+        $sendNotification = false,
+        $skipGenerationIfExists = false
     ) {
         $user_id = (int) $user_id;
         $category_id = (int) $category_id;
@@ -2173,6 +2177,10 @@ class Category implements GradebookItem
             $category_id,
             $user_id
         );
+
+        if ($skipGenerationIfExists && !empty($my_certificate)) {
+            return false;
+        }
 
         if (empty($my_certificate)) {
             GradebookUtils::registerUserInfoAboutCertificate(
@@ -2267,10 +2275,8 @@ class Category implements GradebookItem
      * @param int   $catId
      * @param array $userList
      */
-    public static function exportAllCertificates(
-        $catId,
-        $userList = []
-    ) {
+    public static function exportAllCertificates($catId, $userList = [])
+    {
         $orientation = api_get_configuration_value('certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
@@ -2284,7 +2290,9 @@ class Category implements GradebookItem
         $params['bottom'] = 0;
         $page_format = 'landscape' == $params['orientation'] ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
-
+        if (api_get_configuration_value('add_certificate_pdf_footer')) {
+            $pdf->setCertificateFooter();
+        }
         $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);
         $certificate_path_list = [];
 
@@ -2349,7 +2357,7 @@ class Category implements GradebookItem
      */
     public static function userFinishedCourse(
         $userId,
-        \Category $category,
+        Category $category,
         $recalculateScore = false
     ) {
         if (empty($category)) {
@@ -2671,7 +2679,7 @@ class Category implements GradebookItem
             $cat->set_locked($data['locked']);
             $cat->setGenerateCertificates($data['generate_certificates']);
             $cat->setIsRequirement($data['is_requirement']);
-            $cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
+            //$cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
             $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
             $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
             $cat->setDocumentId($data['document_id']);
@@ -2798,22 +2806,22 @@ class Category implements GradebookItem
      *
      * @return float The score
      */
-    private static function calculateCurrentScore(
-        $userId,
-        $category
-    ) {
+    private static function calculateCurrentScore($userId, $category)
+    {
         if (empty($category)) {
             return 0;
         }
-        $courseEvaluations = $category->get_evaluations(
-            $userId,
-            true
-        );
+
+        $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
+
         $categoryScore = 0;
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
+            /** @var AbstractLink $item */
             $item = $evaluationsAndLinks[$i];
+            // Set session id from category
+            $item->set_session_id($category->get_session_id());
             $score = $item->calc_score($userId);
             $itemValue = 0;
             if (!empty($score)) {

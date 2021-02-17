@@ -4,33 +4,189 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CourseBundle\Repository\CLpRepository;
+use Chamilo\Kernel;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Class Version20190110182615.
- */
 class Version20190110182615 extends AbstractMigrationChamilo
 {
-    public function up(Schema $schema): void
+    public function getDescription(): string
     {
-        $this->addSql(
-            'ALTER TABLE resource_link DROP FOREIGN KEY FK_398C394BFE54D947;');
-        $this->addSql(
-            'ALTER TABLE resource_link ADD CONSTRAINT FK_398C394BFE54D947
-            FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE;'
-        );
-        $this->addSql(
-            'ALTER TABLE resource_right DROP
-            FOREIGN KEY FK_9F710F26F004E599;'
-        );
-        $this->addSql(
-            'ALTER TABLE resource_right ADD CONSTRAINT FK_9F710F26F004E599
-            FOREIGN KEY (resource_link_id) REFERENCES resource_link (id) ON DELETE CASCADE;'
-        );
+        return 'Migrate c_lp';
     }
 
-    public function down(Schema $schema): void
+    public function up(Schema $schema): void
     {
+        $container = $this->getContainer();
+        /** @var Kernel $kernel */
+        $kernel = $container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
+        $doctrine = $container->get('doctrine');
+
+        $this->addSql('ALTER TABLE c_lp CHANGE author author LONGTEXT NOT NULL');
+
+        $table = $schema->getTable('c_lp');
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_lp ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql(
+                'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
+            );
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_F67ABBEB1BAD783F ON c_lp (resource_node_id);');
+        }
+
+        if (false === $table->hasColumn('asset_id')) {
+            $this->addSql('ALTER TABLE c_lp ADD asset_id INT DEFAULT NULL;');
+            $this->addSql(
+                'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB5DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id);'
+            );
+            $this->addSql('CREATE INDEX IDX_F67ABBEB5DA1941 ON c_lp (asset_id);');
+        }
+
+        if (false === $table->hasColumn('accumulate_work_time')) {
+            $this->addSql('ALTER TABLE c_lp ADD accumulate_work_time INT DEFAULT 0 NOT NULL');
+        }
+
+        $this->addSql('ALTER TABLE c_lp CHANGE category_id category_id INT DEFAULT NULL');
+
+        if (false === $table->hasColumn('id')) {
+            $this->addSql('ALTER TABLE c_lp DROP id');
+        }
+
+        if (false === $table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_lp');
+        }
+        if (false === $table->hasIndex('session')) {
+            $this->addSql('DROP INDEX session ON c_lp');
+        }
+
+        $this->addSql('UPDATE c_lp SET category_id = NULL WHERE category_id = 0');
+        if (false === $table->hasForeignKey('FK_F67ABBEB12469DE2')) {
+            $this->addSql(
+                'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB12469DE2 FOREIGN KEY (category_id) REFERENCES c_lp_category (iid)'
+            );
+        }
+
+        $em = $doctrine->getManager();
+        /** @var Connection $connection */
+        $connection = $em->getConnection();
+        $lpRepo = $container->get(CLpRepository::class);
+
+        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        /** @var Course $course */
+        foreach ($q->toIterable() as $course) {
+            $courseId = $course->getId();
+            $sql = "SELECT * FROM c_lp WHERE c_id = $courseId
+                    ORDER BY iid";
+            $result = $connection->executeQuery($sql);
+            $items = $result->fetchAllAssociative();
+            foreach ($items as $itemData) {
+                $id = $itemData['iid'];
+                $lp = $lpRepo->find($id);
+                if ($lp && !empty($lp->getPreviewImage())) {
+                    $path = $lp->getPreviewImage();
+                    $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/learning_path/images/'.$path;
+                    if (file_exists($rootPath)) {
+                        $this->addLegacyFileToResource($filePath, $lpRepo, $lp, $lp->getIid(), $path);
+                        $em->persist($lp);
+                        $em->flush();
+                    }
+                }
+            }
+
+            $em->flush();
+            $em->clear();
+        }
+
+        $table = $schema->getTable('c_lp_category');
+        if (false === $table->hasColumn('session_id')) {
+            $this->addSql('ALTER TABLE c_lp_category ADD session_id INT DEFAULT NULL');
+        }
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_lp_category ADD resource_node_id INT DEFAULT NULL');
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_lp_category');
+        }
+
+        if (false === $table->hasForeignKey('FK_90A0FC07613FECDF')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_category ADD CONSTRAINT FK_90A0FC07613FECDF FOREIGN KEY (session_id) REFERENCES session (id)'
+            );
+        }
+        if (false === $table->hasForeignKey('FK_90A0FC071BAD783F')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_category ADD CONSTRAINT FK_90A0FC071BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (false === $table->hasIndex('IDX_90A0FC07613FECDF')) {
+            $this->addSql('CREATE INDEX IDX_90A0FC07613FECDF ON c_lp_category (session_id)');
+        }
+        if (false === $table->hasIndex('UNIQ_90A0FC071BAD783F')) {
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_90A0FC071BAD783F ON c_lp_category (resource_node_id)');
+        }
+
+        if (false === $schema->getTable('c_lp')->hasIndex('IDX_F67ABBEB12469DE2')) {
+            $this->addSql('CREATE INDEX IDX_F67ABBEB12469DE2 ON c_lp (category_id)');
+        }
+
+        $table = $schema->getTable('c_lp_item');
+        if ($table->hasColumn('id')) {
+            $this->addSql('ALTER TABLE c_lp_item DROP id');
+        }
+        $this->addSql('ALTER TABLE c_lp_item CHANGE lp_id lp_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_CCC9C1ED68DFD1EF')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_item ADD CONSTRAINT FK_CCC9C1ED68DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid)'
+            );
+        }
+
+        $table = $schema->getTable('c_lp_view');
+        if ($table->hasColumn('id')) {
+            $this->addSql('ALTER TABLE c_lp_view DROP id');
+        }
+
+        $table = $schema->getTable('c_lp_item_view');
+        if ($table->hasColumn('id')) {
+            $this->addSql('ALTER TABLE c_lp_item_view DROP id');
+        }
+
+        if (false === $table->hasIndex('idx_c_lp_item_view_cid_id_view_count')) {
+            $this->addSql('CREATE INDEX idx_c_lp_item_view_cid_id_view_count ON c_lp_item_view (c_id, iid, view_count)');
+        }
+
+        $table = $schema->getTable('c_lp_iv_interaction');
+        if ($table->hasColumn('id')) {
+            $this->addSql('ALTER TABLE c_lp_iv_interaction DROP id');
+        }
+
+        $table = $schema->getTable('c_lp_iv_objective');
+        if ($table->hasColumn('id')) {
+            $this->addSql('ALTER TABLE c_lp_iv_objective DROP id');
+        }
+
+        if (false === $schema->hasTable('c_lp_rel_usergroup')) {
+            $this->addSql(
+                'CREATE TABLE c_lp_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_id INT DEFAULT NULL, session_id INT DEFAULT NULL, c_id INT NOT NULL, usergroup_id INT DEFAULT NULL, created_at DATETIME NOT NULL, INDEX IDX_DB8689FF68DFD1EF (lp_id), INDEX IDX_DB8689FF613FECDF (session_id), INDEX IDX_DB8689FF91D79BD3 (c_id), INDEX IDX_DB8689FFD2112630 (usergroup_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+            $this->addSql(
+                'ALTER TABLE c_lp_rel_usergroup ADD CONSTRAINT FK_DB8689FF68DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid);'
+            );
+            $this->addSql(
+                'ALTER TABLE c_lp_rel_usergroup ADD CONSTRAINT FK_DB8689FF613FECDF FOREIGN KEY (session_id) REFERENCES session (id);'
+            );
+            $this->addSql(
+                'ALTER TABLE c_lp_rel_usergroup ADD CONSTRAINT FK_DB8689FF91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);'
+            );
+            $this->addSql(
+                'ALTER TABLE c_lp_rel_usergroup ADD CONSTRAINT FK_DB8689FFD2112630 FOREIGN KEY (usergroup_id) REFERENCES usergroup (id);'
+            );
+        }
     }
 }

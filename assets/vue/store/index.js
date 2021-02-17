@@ -11,6 +11,5 @@ export default new Vuex.Store({
     modules: {
         notifications,
         security: SecurityModule,
-        //session,
     }
 });

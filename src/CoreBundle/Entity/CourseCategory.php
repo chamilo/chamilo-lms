@@ -54,20 +54,18 @@ class CourseCategory
     protected $children;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
-    protected $code;
+    protected string $code;
 
     /**
      * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
@@ -129,9 +127,6 @@ class CourseCategory
      */
     protected $courses;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->childrenCount = 0;
@@ -139,10 +134,7 @@ class CourseCategory
         $this->courses = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         $name = strip_tags($this->name);
 
@@ -159,10 +151,7 @@ class CourseCategory
         return $this->id;
     }
 
-    /**
-     * @return CourseCategory
-     */
-    public function getParent()
+    public function getParent(): self
     {
         return $this->parent;
     }
@@ -175,15 +164,19 @@ class CourseCategory
         return $this->children;
     }
 
-    public function addChild(self $child)
+    public function addChild(self $child): self
     {
         $this->children[] = $child;
         $child->setParent($this);
+
+        return $this;
     }
 
-    public function setParent(self $parent)
+    public function setParent(self $parent): self
     {
         $this->parent = $parent;
+
+        return $this;
     }
 
     /**

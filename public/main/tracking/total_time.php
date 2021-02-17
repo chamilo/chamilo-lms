@@ -17,7 +17,7 @@ $export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
 $session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : 0;
 
 $this_section = SECTION_COURSES;
-if ('myspace' == $from) {
+if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
@@ -276,7 +276,6 @@ $is_western_name_order = api_is_western_name_order();
 
 if (count($a_students) > 0) {
     $all_datas = [];
-    $course_code = $_course['id'];
     $user_ids = array_keys($a_students);
 
     $table = new SortableTable(

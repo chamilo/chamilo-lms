@@ -34,6 +34,7 @@ class CQuizQuestionOption
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
+
     /**
      * @var int
      *
@@ -157,17 +158,5 @@ class CQuizQuestionOption
     public function getIid()
     {
         return $this->iid;
-    }
-
-    /**
-     * @param int $iid
-     *
-     * @return CQuizQuestionOption
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 }

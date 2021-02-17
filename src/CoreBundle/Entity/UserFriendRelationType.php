@@ -63,14 +63,4 @@ class UserFriendRelationType
     {
         return $this->id;
     }
-
-    /**
-     * Set id.
-     *
-     * @return int
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
 }

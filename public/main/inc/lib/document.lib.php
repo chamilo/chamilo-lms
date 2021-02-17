@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -1127,7 +1128,7 @@ class DocumentManager
 
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
-            $sql = "SELECT id FROM $table
+            $sql = "SELECT iid FROM $table
                     WHERE
                         c_id = $courseId AND
                         path LIKE BINARY '$path'
@@ -1138,7 +1139,7 @@ class DocumentManager
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
 
-                return (int) $row['id'];
+                return (int) $row['iid'];
             }
         }
 
@@ -1154,6 +1155,8 @@ class DocumentManager
      * @param int    $session_id    The session ID,
      *                              0 if requires context *out of* session, and null to use global context
      * @param bool   $ignoreDeleted
+     *
+     * @deprecated  use $repo->find()
      *
      * @return array document content
      */
@@ -1174,20 +1177,19 @@ class DocumentManager
         $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $groupId = api_get_group_id();
 
-        $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
-                WHERE c_id = $course_id $sessionCondition AND iid = $id";
+                WHERE iid = $id";
 
         if ($ignoreDeleted) {
             $sql .= " AND path NOT LIKE '%_DELETED_%' ";
         }
 
         $result = Database::query($sql);
-        $courseParam = '&cidReq='.$course_code.'&id='.$id.'&id_session='.$session_id.'&gidReq='.$groupId;
+        $courseParam = '&cid='.$course_id.'&id='.$id.'&sid='.$session_id.'&gid='.$groupId;
         if ($result && 1 == Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             //@todo need to clarify the name of the URLs not nice right now
@@ -1200,7 +1202,7 @@ class DocumentManager
             //$row['absolute_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
             $row['absolute_path_from_document'] = '/document'.$row['path'];
             //$row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'].'/';
-            $row['direct_url'] = $www.$path;
+            //$row['direct_url'] = $www.$path;
             $row['basename'] = basename($row['path']);
 
             if ('.' == dirname($row['path'])) {
@@ -1496,7 +1498,7 @@ class DocumentManager
             $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
             /** @var CDocument $document */
             $document = $repo->find($doc_id);
-            $link = $document->getCourseSessionResourceLink($course_info['entity']);
+            $link = $document->getFirstResourceLinkFromCourseSession($course_info['entity']);
             if ($link && ResourceLink::VISIBILITY_PUBLISHED == $link->getVisibility()) {
                 return true;
             }
@@ -2623,9 +2625,6 @@ class DocumentManager
     ) {
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
-        $course_dir = $course_info['path'].'/document';
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $base_work_dir = $sys_course_path.$course_dir;
 
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
@@ -2634,7 +2633,7 @@ class DocumentManager
                 $document = handle_uploaded_document(
                     $course_info,
                     $files[$fileKey],
-                    $base_work_dir,
+                    null,
                     $path,
                     api_get_user_id(),
                     api_get_group_id(),
@@ -2932,8 +2931,12 @@ class DocumentManager
                     $folder = '';
                 }
 
-                $link .= '<a data_id="'.$node['id'].'" data_type="document" class="moved ui-sortable-handle link_with_id">';
-                $link .= $folder.'&nbsp;'.$node['slug'];
+                $link .= '<a
+                    data_id="'.$node['id'].'"
+                    data_type="document"
+                    class="moved ui-sortable-handle link_with_id"
+                    >';
+                $link .= $folder.'&nbsp;'.addslashes($node['title']);
                 $link .= '</a>';
 
                 $link .= '</div>';
@@ -2943,11 +2946,11 @@ class DocumentManager
         ];
 
         $type = $repo->getResourceType();
-        $em = $repo->getEntityManager();
-        $query = $em
+        $em = Database::getManager();
+        $qb = $em
             ->createQueryBuilder()
             ->select('node')
-            ->from(\Chamilo\CoreBundle\Entity\ResourceNode::class, 'node')
+            ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
             ->leftJoin('node.resourceFile', 'file')
@@ -2957,18 +2960,17 @@ class DocumentManager
             ->setParameters(['type' => $type, 'course' => $course_info['entity']])
             ->orderBy('node.parent', 'ASC')
             ->addSelect('file')
-            ->getQuery()
         ;
 
-        /*$em->getConfiguration()->addCustomHydrationMode('tree', 'Gedmo\Tree\Hydrator\ORM\TreeObjectHydrator');
-        $tree = $query->getQuery()
-            ->setHint(\Doctrine\ORM\Query::HINT_INCLUDE_META_COLUMNS, true)
-            ->getResult('tree');
-        */
-
-        /*foreach ($tree as $a) {
-            var_dump(get_class($a));
-        }*/
+        if (!empty($filterByExtension)) {
+            $orX = $qb->expr()->orX();
+            foreach ($filterByExtension as $extension) {
+                $orX->add($qb->expr()->like('file.originalName', ':'.$extension));
+                $qb->setParameter($extension, '%'.$extension);
+            }
+            $qb->andWhere($orX);
+        }
+        $query = $qb->getQuery();
 
         return $nodeRepository->buildTree($query->getArrayResult(), $options);
 
@@ -4138,7 +4140,7 @@ class DocumentManager
     /**
      * @param array $_course
      *
-     * @return int
+     * @return CDocument
      */
     public static function createDefaultAudioFolder($_course)
     {
@@ -4146,7 +4148,7 @@ class DocumentManager
             return false;
         }
 
-        self::addDocument($_course, '/audio', 'folder', 0, 'Audio');
+        return self::addDocument($_course, '/audio', 'folder', 0, 'Audio');
     }
 
     /**
@@ -4428,13 +4430,13 @@ class DocumentManager
 
         // Check if pathname already exists inside document table
         $table = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "SELECT id, path FROM $table
+        $sql = "SELECT iid, title FROM $table
                 WHERE
                     filetype = 'file' AND
                     c_id = $courseId AND
                     (
-                        path = '".$fileNameEscape."' OR
-                        path = '$fileNameWithSuffix'
+                        title = '".$fileNameEscape."' OR
+                        title = '$fileNameWithSuffix'
                     ) AND
                     (session_id = 0 OR session_id = $sessionId)
         ";
@@ -4492,6 +4494,11 @@ class DocumentManager
         $counter = 1;
         $filePath = $path.$name;
         $uniqueName = $name;
+        $baseName = pathinfo($name, PATHINFO_FILENAME);
+        $extension = pathinfo($name, PATHINFO_EXTENSION);
+
+        return uniqid($baseName.'-', true).'.'.$extension;
+
         while ($documentExists = self::documentExists(
             $filePath,
             $courseInfo,
@@ -4570,8 +4577,9 @@ class DocumentManager
             $attributes = ['onchange' => 'javascript: document.selector.submit();'];
         }
         $form->addElement('hidden', 'cidReq', api_get_course_id());
-        $form->addElement('hidden', 'id_session', api_get_session_id());
-        $form->addElement('hidden', 'gidReq', api_get_group_id());
+        $form->addElement('hidden', 'cid', api_get_course_int_id());
+        $form->addElement('hidden', 'sid', api_get_session_id());
+        $form->addElement('hidden', 'gid', api_get_group_id());
 
         $parent_select = $form->addSelect(
             $selectName,
@@ -5866,44 +5874,6 @@ This folder contains all sessions that have been opened in the chat. Although th
     }
 
     /**
-     * This function calculates the resized width and resized heigt
-     * according to the source and target widths
-     * and heights, height so that no distortions occur
-     * parameters.
-     *
-     * @param $image = the absolute path to the image
-     * @param $target_width = how large do you want your resized image
-     * @param $target_height = how large do you want your resized image
-     * @param $slideshow (default=0) =
-     *      indicates weither we are generating images for a slideshow or not,
-     *		this overrides the $_SESSION["image_resizing"] a bit so that a thumbnail
-     *	    view is also possible when you choose not to resize the source images
-     *
-     * @return array
-     */
-    public static function resizeImageSlideShow(
-        $image,
-        $target_width,
-        $target_height,
-        $slideshow = 0
-    ) {
-        // Modifications by Ivan Tcholakov, 04-MAY-2009.
-        $result = [];
-        $imageResize = Session::read('image_resizing');
-        if ('resizing' == $imageResize || 1 == $slideshow) {
-            $new_sizes = api_resize_image($image, $target_width, $target_height);
-            $result[] = $new_sizes['height'];
-            $result[] = $new_sizes['width'];
-        } else {
-            $size = api_getimagesize($image);
-            $result[] = $size['height'];
-            $result[] = $size['width'];
-        }
-
-        return $result;
-    }
-
-    /**
      * Adds a cloud link to the database.
      *
      * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
@@ -6140,7 +6110,8 @@ This folder contains all sessions that have been opened in the chat. Although th
                 // $path points to a file in the directory
                 if (file_exists($realPath) && !is_dir($realPath)) {
                     error_log('file_exists');
-                    $file = new UploadedFile($realPath, $title, null, null, true);
+                    $mimeType = mime_content_type($realPath);
+                    $file = new UploadedFile($realPath, $title, $mimeType, null, true);
                     $resourceFile->setFile($file);
                 } else {
                     // We get the content and create a file
@@ -6229,12 +6200,26 @@ This folder contains all sessions that have been opened in the chat. Although th
         $readonly = (int) $readonly;
         $documentRepo = Container::getDocumentRepository();
 
-        $parentNode = $courseEntity;
+        /** @var \Chamilo\CoreBundle\Entity\AbstractResource $parentResource */
+        $parentResource = $courseEntity;
         if (!empty($parentId)) {
             $parent = $documentRepo->find($parentId);
             if ($parent) {
-                $parentNode = $parent;
+                $parentResource = $parent;
             }
+        }
+
+        $document = $documentRepo->findResourceByTitle(
+            $title,
+            $parentResource->getResourceNode(),
+            $courseEntity,
+            $session,
+            null
+        );
+
+        // Document already exists
+        if (null !== $document) {
+            return $document;
         }
 
 //        $criteria = ['path' => $path, 'course' => $courseEntity];
@@ -6252,13 +6237,12 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->setTitle($title)
             ->setComment($comment)
             ->setReadonly($readonly)
-            ->setParent($parentNode)
+            ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, $group)
         ;
 
-        $em = $documentRepo->getEntityManager();
+        $em = Database::getManager();
         $em->persist($document);
-
         $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
 
         if ($document) {
@@ -6271,10 +6255,9 @@ This folder contains all sessions that have been opened in the chat. Although th
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$document->getIid();
+                    'document/showinframes.php?cid='.$courseInfo['code'].'&sid='.$sessionId.'&id='.$document->getIid();
                 $link = Display::url(basename($title), $url, ['target' => '_blank']);
                 $userInfo = api_get_user_info($userId);
-
                 $message = sprintf(
                     get_lang('A new document %s has been added to the document tool in your course %s by %s.'),
                     $link,
@@ -6327,7 +6310,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         $courseId = $courseInfo['real_id'];
-        $group_properties = GroupManager::get_group_properties($groupId);
+        $group = api_get_group_entity($groupId);
 
         $sortable_data = [];
         foreach ($documentAndFolders as $key => $document_data) {
@@ -6442,7 +6425,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
                 $userId,
                 $courseId,
-                $group_properties,
+                $group,
                 $document_data
             );
 
@@ -6542,12 +6525,12 @@ This folder contains all sessions that have been opened in the chat. Although th
             $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&file='.$documentId.'&lp_id='.$lp_id;
         } else {
             // Direct document URL
-            $url = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
+            $url = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&sid='.$session_id.'&id='.$documentId;
         }
 
         if (!empty($overwrite_url)) {
             $overwrite_url = Security::remove_XSS($overwrite_url);
-            $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId;
+            $url = $overwrite_url.'&cidReq='.$course_info['code'].'&sid='.$session_id.'&document_id='.$documentId;
         }
 
         $img = Display::returnIconPath($icon);
@@ -6561,7 +6544,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             ['target' => $target, 'class' => 'moved']
         );
 
-        $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
+        $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&sid='.$session_id.'&id='.$documentId;
         $link .= '&nbsp;'.Display::url(
             Display::return_icon('preview_view.png', get_lang('Preview')),
             $directUrl,

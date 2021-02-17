@@ -81,7 +81,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 if (!empty($my_folder_data)) {
-    $homework = get_work_assignment_by_id($my_folder_data['id']);
+    $homework = get_work_assignment_by_id($my_folder_data['iid']);
 
     if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
         $time_now = time();
@@ -148,7 +148,7 @@ $form->addText('title', get_lang('Title'), true, ['id' => 'file_upload']);
 if ($is_allowed_to_edit && !empty($item_id)) {
     $sql = "SELECT contains_file, url
             FROM $work_table
-            WHERE c_id = $course_id AND id ='$item_id' ";
+            WHERE c_id = $course_id AND iid ='$item_id' ";
     $result = Database::query($sql);
     if (false !== $result && Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);
@@ -266,8 +266,7 @@ if ($form->validate()) {
                     ->setDescription($description)
                     ->setTitle($title)
                 ;
-                $repo->getEntityManager()->persist($studentPublication);
-                $repo->getEntityManager()->flush();
+                $repo->update($studentPublication);
             }
 
             /*api_item_property_update(

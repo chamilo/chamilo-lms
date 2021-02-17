@@ -16,10 +16,9 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
@@ -64,7 +63,7 @@ class ResourceNode
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @Assert\NotBlank()
@@ -72,22 +71,13 @@ class ResourceNode
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="slug", type="string", length=255, nullable=false)
      */
-    protected $slug;
+    protected string $slug;
 
     /**
-     * @var UuidInterface|null
-     *
-     * @ORM\Column(type="uuid", unique=true)
-     */
-    protected $uuid;
-
-    /**
-     * @var ResourceType
-     *
      * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
-    protected $resourceType;
+    protected ResourceType $resourceType;
 
     /**
      * @ApiSubresource()
@@ -99,14 +89,14 @@ class ResourceNode
     protected $resourceLinks;
 
     /**
-     * @var ResourceFile available file for this node
+     * ResourceFile available file for this node.
      *
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $resourceFile;
+    protected ?ResourceFile $resourceFile = null;
 
     /**
      * @var User the creator of this node
@@ -115,7 +105,7 @@ class ResourceNode
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected $creator;
+    protected User $creator;
 
     /**
      * @ApiSubresource()
@@ -197,16 +187,18 @@ class ResourceNode
     protected $content;
 
     /**
-     * Constructor.
+     * @ORM\Column(type="uuid", unique=true)
      */
+    protected $uuid;
+
     public function __construct()
     {
-        $this->uuid = Uuid::uuid4()->toString();
+        $this->uuid = Uuid::v4();
         $this->children = new ArrayCollection();
         $this->resourceLinks = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->editableContent = false;
+        $this->fileEditableText = false;
     }
 
     /**
@@ -315,7 +307,8 @@ class ResourceNode
      */
     public function getPathForDisplay()
     {
-        return self::convertPathForDisplay($this->path);
+        return $this->path;
+        //return $this->convertPathForDisplay($this->path);
     }
 
     public function getPathForDisplayToArray($baseRoot = null)
@@ -346,7 +339,7 @@ class ResourceNode
     {
         $path = str_replace($base, '', $this->path);
 
-        return self::convertPathForDisplay($path);
+        return $this->convertPathForDisplay($path);
     }
 
     public function getSlug()
@@ -384,7 +377,7 @@ class ResourceNode
      *
      * @return string
      */
-    public static function convertPathForDisplay($path)
+    public function convertPathForDisplay($path)
     {
         /*$pathForDisplay = preg_replace(
             '/-\d+'.self::PATH_SEPARATOR.'/',
@@ -395,13 +388,14 @@ class ResourceNode
             $pathForDisplay = substr_replace($pathForDisplay, '', -3);
         }
         */
+        var_dump($this->getTitle(), $path);
         $pathForDisplay = preg_replace(
             '/-\d+'.self::PATH_SEPARATOR.'/',
             '/',
             $path
         );
 
-        if (null !== $pathForDisplay && strlen($pathForDisplay) > 0) {
+        if (null !== $pathForDisplay && '' !== $pathForDisplay) {
             $pathForDisplay = substr_replace($pathForDisplay, '', -1);
         }
 
@@ -478,11 +472,6 @@ class ResourceNode
         }
 
         return false;
-    }
-
-    public function isFileEditableText(): bool
-    {
-        return $this->hasEditableTextContent();
     }
 
     public function isResourceFileAnImage(): bool

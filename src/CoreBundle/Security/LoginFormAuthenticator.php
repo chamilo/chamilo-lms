@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Security;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Hook\HookFactory;
-use Chamilo\CoreBundle\Repository\UserRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

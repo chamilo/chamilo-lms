@@ -417,14 +417,6 @@ function domesticate($input)
 }
 
 /**
- * function make_clickable($string).
- *
- * @desc   Completes url contained in the text with "<a href ...".
- *         However the function simply returns the submitted text without any
- *         transformation if it already contains some "<a href:" or "<img src=".
- *
- * @return text after conversion
- *
  * @author Rewritten by Nathan Codding - Feb 6, 2001.
  *         completed by Hugues Peeters - July 22, 2002
  *

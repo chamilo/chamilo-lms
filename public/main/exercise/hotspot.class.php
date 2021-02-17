@@ -98,4 +98,27 @@ class HotSpot extends Question
         return parent::return_header($exercise, $counter, $score)
             .'<table><tr><td><table class="table">';
     }
+
+    public static function getLangVariables()
+    {
+        return [
+            'Square' => get_lang('Square'),
+            'Ellipse' => get_lang('Ellipse'),
+            'Polygon' => get_lang('Polygon'),
+            'HotspotStatus1' => get_lang('Draw a hotspot'),
+            'HotspotStatus2Polygon' => get_lang('Use right-click to close the polygon'),
+            'HotspotStatus2Other' => get_lang('Release the mousebutton to save the hotspot'),
+            'HotspotStatus3' => get_lang('Hotspot saved'),
+            'HotspotShowUserPoints' => get_lang('Show/Hide userclicks'),
+            'ShowHotspots' => get_lang('Show / Hide hotspots'),
+            'Triesleft' => get_lang('Attempts left'),
+            'HotspotExerciseFinished' => get_lang('Now click on the button below to validate your answers'),
+            'NextAnswer' => get_lang('Now click on:'),
+            'Delineation' => get_lang('Delineation'),
+            'CloseDelineation' => get_lang('Close delineation'),
+            'Oar' => get_lang('Area to avoid'),
+            'ClosePolygon' => get_lang('Close polygon'),
+            'DelineationStatus1' => get_lang('Use right-click to close the delineation'),
+        ];
+    }
 }

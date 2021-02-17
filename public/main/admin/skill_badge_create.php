@@ -34,10 +34,11 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $params = [
         'id' => $skillId,
     ];
-
+    throw new Exception('implement skill badge');
     if ((isset($_FILES['image']) && 0 == $_FILES['image']['error']) ||
         !empty($_POST['badge_studio_image'])
     ) {
+        /*
         $dirPermissions = api_get_permissions_for_new_directories();
         $fileName = sha1($skill['name']);
         $badgePath = api_get_path(SYS_UPLOAD_PATH).'badges/';
@@ -83,7 +84,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
                 ),
                 'warning'
             );
-        }
+        }*/
     }
 
     Display::addFlash(Display::return_message(get_lang('Update successful')));

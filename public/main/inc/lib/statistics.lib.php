@@ -475,8 +475,8 @@ class Statistics
         $isFileSize = false
     ) {
         $total = 0;
-        $content = '<table class="data_table" cellspacing="0" cellpadding="3" width="90%">
-                <tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr>';
+        $content = '<table class="table table-hover table-striped data_table" cellspacing="0" cellpadding="3" width="90%">
+            <thead><tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr></thead><tbody>';
         $i = 0;
         foreach ($stats as $subtitle => $number) {
             $total += $number;
@@ -500,13 +500,16 @@ class Statistics
             $content .= '</tr>';
             $i++;
         }
+        $content .= '</tbody>';
         if ($showTotal) {
             if (!$isFileSize) {
                 $total_label = number_format($total, 0, ',', '.');
             } else {
                 $total_label = self::makeSizeString($total);
             }
-            $content .= '<tr><th colspan="4" align="right">'.get_lang('Total').': '.$total_label.'</td></tr>';
+            $content .= '
+                <tfoot><tr><th colspan="4" align="right">'.get_lang('Total').': '.$total_label.'</td></tr></tfoot>
+            ';
         }
         $content .= '</table>';
 

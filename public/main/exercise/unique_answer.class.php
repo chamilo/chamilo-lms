@@ -139,10 +139,10 @@ class UniqueAnswer extends Question
                 if (isset($answer->destination[$i])) {
                     $item_list = explode('@@', $answer->destination[$i]);
                 }
-                $try = isset($item_list[0]) ? $item_list[0] : '';
-                $lp = isset($item_list[1]) ? $item_list[1] : '';
-                $list_dest = isset($item_list[2]) ? $item_list[2] : '';
-                $url = isset($item_list[3]) ? $item_list[3] : '';
+                $try = $item_list[0] ?? '';
+                $lp = $item_list[1] ?? '';
+                $list_dest = $item_list[2] ?? '';
+                $url = $item_list[3] ?? '';
 
                 if (0 == $try) {
                     $try_result = 0;
@@ -445,14 +445,16 @@ class UniqueAnswer extends Question
 
         $header .= '<th>'.get_lang('Your choice').'</th>';
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+            $header .= '<th>'.get_lang('Expected choice').'</th>';
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         }
-        $header .= '<th>'.get_lang('Comment').'</th>';
+        if (false === $exercise->hideComment) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
+        }
         $header .= '</tr>';
 
         return $header;

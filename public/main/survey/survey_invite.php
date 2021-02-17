@@ -11,6 +11,9 @@
  * @todo check if the mailtext contains the **link** part, if not, add the link to the end
  * @todo add rules: title and text cannot be empty
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -84,12 +87,12 @@ if (Database::num_rows($result) > 1) {
 if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
     $message = Display::url(
         $survey_data['answered'],
-        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq()
+        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['iid'].'&'.api_get_cidreq()
     );
     $message .= ' '.get_lang('have answered').' ';
     $message .= Display::url(
         $survey_data['invited'],
-        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq());
+        api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['iid'].'&'.api_get_cidreq());
     $message .= ' '.get_lang('were invited');
     echo Display::return_message($message, 'normal', false);
 }
@@ -161,7 +164,10 @@ if ($form->validate()) {
 
     if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
-            echo Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error');
+            echo Display::return_message(
+                get_lang('The form contains incorrect or incomplete data. Please check your input.'),
+                'error'
+            );
             // Getting the invited users
             $defaults = SurveyUtil::get_invited_users($survey_data['code']);
 
@@ -180,7 +186,8 @@ if ($form->validate()) {
         }
     }
 
-    $survey = Database::getManager()->getRepository('ChamiloCourseBundle:CSurvey')->find($survey_data['survey_id']);
+    $repo = Container::getSurveyRepository();
+    $survey = $repo->find($survey_data['iid']);
 
     // Save the invitation mail
     SurveyUtil::saveInviteMail(
@@ -192,7 +199,7 @@ if ($form->validate()) {
 
     // Saving the invitations for the course users
     $count_course_users = SurveyUtil::saveInvitations(
-        $survey_data['survey_id'],
+        $survey_data['iid'],
         $users,
         $values['mail_title'],
         $values['mail_text'],
@@ -212,7 +219,7 @@ if ($form->validate()) {
     }
 
     $counter_additional_users = SurveyUtil::saveInvitations(
-        $survey_data['survey_id'],
+        $survey_data['iid'],
         $additional_users,
         $values['mail_title'],
         $values['mail_text'],
@@ -226,7 +233,7 @@ if ($form->validate()) {
     // Counting the number of people that are invited
     $total_invited = SurveyUtil::update_count_invited($survey_data['code']);
     $total_count = $count_course_users + $counter_additional_users;
-    $invitationUrl = api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq();
+    $invitationUrl = api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?survey_id='.$survey_data['iid'].'&'.api_get_cidreq();
     if ($total_invited > 0) {
         $message = '<a href="'.$invitationUrl.'&view=answered">'.
             $survey_data['answered'].'</a> ';

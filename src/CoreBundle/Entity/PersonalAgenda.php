@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * PersonalAgenda.
@@ -28,26 +29,22 @@ class PersonalAgenda
     protected $id;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="personalAgendas")
      * @ORM\JoinColumn(name="user", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="text", type="text", nullable=true)
      */
-    protected $text;
+    protected ?string $text;
 
     /**
      * @var \DateTime

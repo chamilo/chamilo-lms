@@ -25,7 +25,7 @@ function delete_friend (element_div) {
 			type: "POST",
 			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=delete_friend",
 			data: "delete_friend_id="+user_id[1],
-			success: function(datos) {			
+			success: function(datos) {
 			    $("#user_card_"+user_id[1]).hide("slow");
 			}
 		});
@@ -109,7 +109,6 @@ if (0 == count($friends)) {
     $social_right_content .= $filterForm->returnForm();
 
     $friend_html = '<div id="whoisonline">';
-    $friend_html .= '<div class="row">';
     $number_friends = count($friends);
     $j = 0;
 
@@ -127,7 +126,6 @@ if (0 == count($friends)) {
             $j++;
         }
     }
-    $friend_html .= '</div>';
     $friend_html .= '</div>';
     $social_right_content .= $friend_html;
 }

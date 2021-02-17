@@ -71,7 +71,6 @@ function importFile($array_file)
     if ($process && 1 == $unzip) {
         $main_path = api_get_path(SYS_CODE_PATH);
         require_once $main_path.'exercise/export/exercise_import.inc.php';
-        require_once $main_path.'exercise/export/qti2/qti2_classes.php';
 
         return import_exercise($array_file['name']);
     }

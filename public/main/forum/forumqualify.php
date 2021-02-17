@@ -10,7 +10,60 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  * @todo fix all this qualify files avoid including files, use classes POO jmontoya
  */
 require_once __DIR__.'/../inc/global.inc.php';
-require_once 'forumfunction.inc.php';
+
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+$htmlHeadXtra[] = '<script>
+
+function check_unzip() {
+    if (document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+    }
+}
+function setFocus() {
+    $("#title_file").focus();
+}
+</script>';
+// The next javascript script is to manage ajax upload file
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+
+// Recover Thread ID, will be used to generate delete attachment URL to do ajax
+$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
+// The next javascript script is to delete file by ajax
+$htmlHeadXtra[] = '<script>
+$(function () {
+    $(document).on("click", ".deleteLink", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var l = $(this);
+        var id = l.closest("tr").attr("id");
+        var filename = l.closest("tr").find(".attachFilename").html();
+        if (confirm("'.get_lang('Are you sure to delete').'", filename)) {
+            $.ajax({
+                type: "POST",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                dataType: "json",
+                success: function(data) {
+                    if (data.error == false) {
+                        l.closest("tr").remove();
+                        if ($(".files td").length < 1) {
+                            $(".files").closest(".control-group").hide();
+                        }
+                    }
+                }
+            })
+        }
+    });
+});
+</script>';
 
 api_protect_course_script(true);
 
@@ -197,11 +250,7 @@ if (!empty($message)) {
 
 // show qualifications history
 $type = isset($_GET['type']) ? $_GET['type'] : '';
-$historyList = getThreadScoreHistory(
-    $userIdToQualify,
-    $threadId,
-    $type
-);
+$historyList = getThreadScoreHistory($userIdToQualify, $threadId, $type);
 
 $counter = count($historyList);
 
@@ -238,16 +287,14 @@ $form->addText(
     $qualify
 );
 
-$course = api_get_course_info();
-
-$rows = get_thread_user_post($course['code'], $threadId, $_GET['user']);
+$rows = get_thread_user_post($course, $threadId, $_GET['user']);
 if (isset($rows)) {
     $counter = 1;
     foreach ($rows as $row) {
+        $style = '';
         if ('0' == $row['status']) {
             $style = " id = 'post".$post_en."' class=\"hide-me\" style=\"border:1px solid red; display:none; background-color:#F7F7F7; width:95%; margin: 0px 0px 4px 40px; \" ";
         } else {
-            $style = '';
             $post_en = $row['post_parent_id'];
         }
 
@@ -287,7 +334,7 @@ if (isset($rows)) {
         echo '</tr>';
 
         // The check if there is an attachment
-        $attachment_list = get_attachment($row['post_id']);
+        $attachment_list = get_attachment($row['iid']);
         if (!empty($attachment_list)) {
             echo '<tr ><td height="50%">';
             $realname = $attachment_list['path'];

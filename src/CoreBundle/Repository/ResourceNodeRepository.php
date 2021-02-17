@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
+use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
@@ -36,15 +37,28 @@ class ResourceNodeRepository extends MaterializedPathRepository
         return $this->storage->resolveUri($resourceFile);
     }
 
+    /*public function create(ResourceNode $node): void
+    {
+        $this->getEntityManager()->persist($node);
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(ResourceNode $node, $andFlush = true): void
+    {
+        //$node->setUpdatedAt(new \DateTime());
+        $this->getEntityManager()->persist($node);
+        if ($andFlush) {
+            $this->getEntityManager()->flush();
+        }
+    }*/
+
     /**
-     * @return \League\Flysystem\FilesystemInterface
+     * @return FilesystemInterface
      */
     public function getFileSystem()
     {
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
-        $this->fs = $this->mountManager->getFilesystem('resources_fs');
-
-        return $this->fs;
+        return $this->mountManager->getFilesystem('resources_fs');
     }
 
     public function getResourceNodeFileContent(ResourceNode $resourceNode): string

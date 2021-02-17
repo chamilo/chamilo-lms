@@ -9,7 +9,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
-
+$_course = api_get_course_info();
 $is_allowedToTrack = Tracking::isAllowToTrack(api_get_session_id());
 
 if (!$is_allowedToTrack) {
@@ -20,7 +20,8 @@ $export_to_csv = false;
 if (isset($_GET['export'])) {
     $export_to_csv = true;
 }
-
+$filter_score = null;
+$exercise_id = null;
 $global = false;
 if (api_is_platform_admin()) {
     $global = true;
@@ -58,13 +59,13 @@ if ($global) {
     //Get exam lists
     $course_id = api_get_course_int_id();
     $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $sqlExercices = "SELECT quiz.title,id FROM ".$t_quiz." AS quiz
+    $sqlExercices = "SELECT quiz.title,iid FROM ".$t_quiz." AS quiz
                      WHERE c_id = $course_id AND active='1'
                      ORDER BY quiz.title ASC";
     $resultExercices = Database::query($sqlExercices);
     $exercise_list[0] = get_lang('All');
     while ($a_exercices = Database::fetch_array($resultExercices)) {
-        $exercise_list[$a_exercices['id']] = $a_exercices['title'];
+        $exercise_list[$a_exercices['iid']] = $a_exercices['title'];
     }
     $form->addElement('select', 'exercise_id', get_lang('Test'), $exercise_list);
 }
@@ -170,7 +171,7 @@ if (!empty($user_list)) {
 }
 $export_array = [];
 if (!empty($main_result)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result = '<table  class="data_table">';
     $html_result .= '<tr><th>'.get_lang('Course').'</th>';
     $html_result .= '<th>'.get_lang('Learning paths').'</th>';
     $html_result .= '<th>'.get_lang('Test').'</th>';

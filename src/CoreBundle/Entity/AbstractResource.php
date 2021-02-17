@@ -109,7 +109,7 @@ abstract class AbstractResource
     public function addCourseLink(Course $course, Session $session = null, CGroup $group = null, int $visibility = ResourceLink::VISIBILITY_PUBLISHED)
     {
         if (null === $this->getParent()) {
-            throw new \Exception('addCourseLink requires to set the parent.');
+            throw new \Exception('addCourseLink requires to set the parent first.');
         }
 
         $resourceLink = new ResourceLink();
@@ -119,6 +119,7 @@ abstract class AbstractResource
             ->setSession($session)
             ->setGroup($group)
         ;
+
         $rights = [];
         switch ($visibility) {
             case ResourceLink::VISIBILITY_PENDING:
@@ -229,7 +230,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function setParent(AbstractResource $parent)
+    public function setParent(ResourceInterface $parent)
     {
         $this->parentResource = $parent;
 
@@ -330,7 +331,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function setResourceNode(ResourceNode $resourceNode): self
+    public function setResourceNode(ResourceNode $resourceNode): ResourceInterface
     {
         $this->resourceNode = $resourceNode;
 
@@ -345,11 +346,6 @@ abstract class AbstractResource
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
-    }
-
-    public function getCourseSessionResourceLink(Course $course, Session $session = null): ?ResourceLink
-    {
-        return $this->getFirstResourceLinkFromCourseSession($course, $session);
     }
 
     public function getFirstResourceLink(): ?ResourceLink
@@ -371,12 +367,12 @@ abstract class AbstractResource
      */
     public function getLinkVisibility(Course $course, Session $session = null): ?ResourceLink
     {
-        return $this->getCourseSessionResourceLink($course, $session)->getVisibility();
+        return $this->getFirstResourceLinkFromCourseSession($course, $session)->getVisibility();
     }
 
     public function isVisible(Course $course, Session $session = null): bool
     {
-        $link = $this->getCourseSessionResourceLink($course, $session);
+        $link = $this->getFirstResourceLinkFromCourseSession($course, $session);
         if (null === $link) {
             return false;
         }
@@ -386,24 +382,31 @@ abstract class AbstractResource
 
     public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink
     {
-        $criteria = Criteria::create();
+        /*$criteria = Criteria::create();
         $criteria
-            ->where(Criteria::expr()->eq('course', $course))
+            ->where(Criteria::expr()->eq('course', $course->getId()))
             ->andWhere(
                 Criteria::expr()->eq('session', $session)
-            );
+            )
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+        ;*/
         $resourceNode = $this->getResourceNode();
-
         $result = null;
         if ($resourceNode && $resourceNode->getResourceLinks()->count() > 0) {
-            //var_dump($resourceNode->getResourceLinks()->count());
-            foreach ($resourceNode->getResourceLinks() as $link) {
-                //var_dump(get_class($link));
+            $links = $resourceNode->getResourceLinks();
+            $found = false;
+            $link = null;
+            foreach ($links as $link) {
+                if ($link->getCourse() === $course && $link->getSession() === $session) {
+                    $found = true;
+                    break;
+                }
             }
-            $result = $resourceNode->getResourceLinks()->matching($criteria)->first();
+            //$result = $links->matching($criteria)->count();
             //var_dump($result);
-            if ($result) {
-                return $result;
+            if ($found) {
+                return $link;
             }
         }
 
@@ -419,6 +422,7 @@ abstract class AbstractResource
         foreach ($links as $link) {
             if ($link->getUser()) {
                 $users[] = $link->getUser()->getId();
+                continue;
             }
             if ($link->getGroup()) {
                 $groups[] = $link->getGroup()->getIid();

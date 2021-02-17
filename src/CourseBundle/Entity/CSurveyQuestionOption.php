@@ -39,13 +39,6 @@ class CSurveyQuestionOption
     /**
      * @var int
      *
-     * @ORM\Column(name="question_option_id", type="integer")
-     */
-    protected $questionOptionId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
     protected $questionId;
@@ -78,24 +71,13 @@ class CSurveyQuestionOption
      */
     protected $value;
 
-    /**
-     * CSurveyQuestionOption constructor.
-     */
     public function __construct()
     {
-        $this->questionOptionId = 0;
     }
 
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 
     /**
@@ -216,30 +198,6 @@ class CSurveyQuestionOption
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * Set questionOptionId.
-     *
-     * @param int $questionOptionId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setQuestionOptionId($questionOptionId)
-    {
-        $this->questionOptionId = $questionOptionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionOptionId.
-     *
-     * @return int
-     */
-    public function getQuestionOptionId()
-    {
-        return $this->questionOptionId;
     }
 
     /**

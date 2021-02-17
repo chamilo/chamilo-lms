@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class ExtraFieldValues.
@@ -21,7 +21,7 @@ use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository")
  * @ORM\MappedSuperclass
  */
-class ExtraFieldValues // extends BaseAttributeValue
+class ExtraFieldValues
 {
     use TimestampableEntity;
 
@@ -35,35 +35,30 @@ class ExtraFieldValues // extends BaseAttributeValue
     protected $id;
 
     /**
-     * @var string
      * @ORM\Column(name="value", type="text", nullable=true, unique=false)
      */
-    protected $value;
+    protected ?string $value;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
-    protected $field;
+    protected ExtraField $field;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      * @ORM\Column(name="item_id", type="integer", nullable=false, unique=false)
      */
-    protected $itemId;
+    protected int $itemId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true, unique=false)
      */
-    protected $comment;
+    protected ?string $comment;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->comment = '';
     }
 
     /**
@@ -120,10 +115,8 @@ class ExtraFieldValues // extends BaseAttributeValue
 
     /**
      * Get comment.
-     *
-     * @return string
      */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }

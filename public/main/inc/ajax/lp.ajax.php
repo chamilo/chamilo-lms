@@ -16,6 +16,21 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 switch ($action) {
+    case 'get_lp_list_by_course':
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
+        $session_id = (isset($_GET['session_id']) && !empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        $onlyActiveLp = !(api_is_platform_admin(true) || api_is_course_admin());
+        $results = learnpath::getLpList($course_id, $session_id, $onlyActiveLp);
+        $data = [];
+
+        if (!empty($results)) {
+            foreach ($results as $lp) {
+                $data[] = ['id' => $lp['id'], 'text' => html_entity_decode($lp['name'])];
+            }
+        }
+
+        echo json_encode($data);
+        break;
     case 'get_documents':
         $courseInfo = api_get_course_info();
         $folderId = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
@@ -49,11 +64,9 @@ switch ($action) {
         $learningPath = Session::read('oLP');
         if ($learningPath) {
             $learningPath->set_modified_on();
-            $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
-            $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
-            $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
-            error_log($id);
-            error_log($type);
+            $title = $_REQUEST['title'] ?? '';
+            $type = $_REQUEST['type'] ?? '';
+            $id = $_REQUEST['id'] ?? 0;
             switch ($type) {
                 case TOOL_QUIZ:
                     $title = Exercise::format_title_variable($title);
@@ -67,8 +80,8 @@ switch ($action) {
                     break;
             }
 
-            $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
-            $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
+            $parentId = $_REQUEST['parent_id'] ?? '';
+            $previousId = $_REQUEST['previous_id'] ?? '';
 
             $itemId = $learningPath->add_item(
                 $parentId,
@@ -79,11 +92,7 @@ switch ($action) {
                 null
             );
 
-            /** @var learnpath $learningPath */
-            $learningPath = Session::read('oLP');
-            if ($learningPath) {
-                echo $learningPath->returnLpItemList(null);
-            }
+            echo $learningPath->returnLpItemList(null);
         }
         break;
     case 'update_lp_item_order':
@@ -96,7 +105,7 @@ switch ($action) {
             $orderList = [];
 
             foreach ($sections as $items) {
-                list($id, $parentId) = explode('|', $items);
+                [$id, $parentId] = explode('|', $items);
 
                 $orderList[$id] = $parentId;
             }
@@ -158,6 +167,12 @@ switch ($action) {
 
         break;
     case 'get_forum_thread':
+        // @todo fix get forum thread
+        echo json_encode([
+            'error' => true,
+        ]);
+        break;
+
         $lpId = isset($_GET['lp']) ? intval($_GET['lp']) : 0;
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         $sessionId = api_get_session_id();
@@ -192,11 +207,11 @@ switch ($action) {
             ]);
             break;
         }
-
-        $forum = $learningPath->getForum($sessionId);
+        // @todo fix get forum
+        //$forum = $learningPath->getForum($sessionId);
+        $forum = false;
 
         if (empty($forum)) {
-            require_once '../../forum/forumfunction.inc.php';
             $forumCategory = getForumCategoryByTitle(
                 get_lang('Learning paths'),
                 $courseId,
@@ -204,7 +219,7 @@ switch ($action) {
             );
 
             if (empty($forumCategory)) {
-                $forumCategoryId = store_forumcategory(
+                $forumCategory = store_forumcategory(
                     [
                         'lp_id' => 0,
                         'forum_category_title' => get_lang('Learning paths'),
@@ -213,11 +228,9 @@ switch ($action) {
                     [],
                     false
                 );
-            } else {
-                $forumCategoryId = $forumCategory['cat_id'];
             }
 
-            $forumId = $learningPath->createForum($forumCategoryId);
+            $forumId = $learningPath->createForum($forumCategory);
         } else {
             $forumId = $forum['forum_id'];
         }

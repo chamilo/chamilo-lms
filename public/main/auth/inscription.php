@@ -121,6 +121,10 @@ if (false === $user_already_registered_show_terms &&
         }
     }
 
+    $LastnameLabel = get_lang('LastName');
+    if (true == api_get_configuration_value('registration_add_helptext_for_2_names')) {
+        $LastnameLabel = [$LastnameLabel, get_lang('InsertTwoNames')];
+    }
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('First name'), ['size' => 40]);
@@ -798,50 +802,8 @@ if ($form->validate()) {
             sent a mail to the platform admin and exit the page.*/
             if ('approval' === api_get_setting('allow_registration')) {
                 // 1. Send mail to all platform admin
-                $emailsubject = get_lang('Approval for new account').': '.$values['username'];
-                $emailbody = get_lang('Approval for new account')."\n";
-                $emailbody .= get_lang('Username').': '.$values['username']."\n";
-
-                if (api_is_western_name_order()) {
-                    $emailbody .= get_lang('First name').': '.$values['firstname']."\n";
-                    $emailbody .= get_lang('Last name').': '.$values['lastname']."\n";
-                } else {
-                    $emailbody .= get_lang('Last name').': '.$values['lastname']."\n";
-                    $emailbody .= get_lang('First name').': '.$values['firstname']."\n";
-                }
-                $emailbody .= get_lang('e-mail').': '.$values['email']."\n";
-                $emailbody .= get_lang('Status').': '.$values['status']."\n\n";
-
-                $url_edit = Display::url(
-                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id,
-                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
-                );
-
-                $emailbody .= get_lang('Manage user').": $url_edit";
-
-                if (api_get_configuration_value('send_inscription_notification_to_general_admin_only')) {
-                    $email = api_get_setting('emailAdministrator');
-                    $firtname = api_get_setting('administratorSurname');
-                    $lastname = api_get_setting('administratorName');
-
-                    api_mail_html("$firtname $lastname", $email, $emailsubject, $emailbody);
-                } else {
-                    $admins = UserManager::get_all_administrators();
-                    foreach ($admins as $admin_info) {
-                        MessageManager::send_message(
-                            $admin_info['user_id'],
-                            $emailsubject,
-                            $emailbody,
-                            [],
-                            [],
-                            null,
-                            null,
-                            null,
-                            null,
-                            $user_id
-                        );
-                    }
-                }
+                $chamiloUser = api_get_user_entity($user_id);
+                MessageManager::sendNotificationOfNewRegisteredUserApproval($chamiloUser);
 
                 // 2. set account inactive
                 UserManager::disable($user_id);

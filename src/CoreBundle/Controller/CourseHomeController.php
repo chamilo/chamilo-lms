@@ -52,12 +52,17 @@ class CourseHomeController extends ToolBaseController
         $js = '<script>'.api_get_language_translate_html().'</script>';
         $htmlHeadXtra[] = $js;
 
-        $userId = $this->getUser()->getId();
+        $userId = 0;
+        $user = $this->getUser();
+        if ($user) {
+            $userId = $this->getUser()->getId();
+        }
+
         $courseCode = $course->getCode();
         $courseId = $course->getId();
         $sessionId = $this->getSessionId();
 
-        if (api_is_invitee()) {
+        if ($user && api_is_invitee()) {
             $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
@@ -73,8 +78,8 @@ class CourseHomeController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
-        if ($isSpecialCourse) {
-            if (isset($_GET['autoreg']) && 1 == $_GET['autoreg']) {
+        if ($user && $isSpecialCourse) {
+            if (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) {
                 if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
                     $session->set('is_allowed_in_course', true);
                 }
@@ -168,10 +173,7 @@ class CourseHomeController extends ToolBaseController
 
                         if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
                             /** @var Graph $graph */
-                            $graph = UnserializeApi::unserialize(
-                                'career',
-                                $item['value']
-                            );
+                            $graph = UnserializeApi::unserialize('career', $item['value']);
                             $diagram = Career::renderDiagram($careerInfo, $graph);
                         }
                     }
@@ -187,8 +189,12 @@ class CourseHomeController extends ToolBaseController
 
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
-        $shortcutQuery = $shortcutRepository->getResources($this->getUser(), $course->getResourceNode(), $course);
-        $shortcuts = $shortcutQuery->getQuery()->getResult();
+
+        $shortcuts = [];
+        if ($user) {
+            $shortcutQuery = $shortcutRepository->getResources($user, $course->getResourceNode(), $course);
+            $shortcuts = $shortcutQuery->getQuery()->getResult();
+        }
 
         return $this->render(
             '@ChamiloCore/Course/home.html.twig',
@@ -202,25 +208,28 @@ class CourseHomeController extends ToolBaseController
     }
 
     /**
-     * @Route("/{cid}/tool/{toolId}", name="chamilo_core_course_redirect_tool")
+     * Redirects the page to a tool, following the tools.yml settings.
+     *
+     * @Route("/{cid}/tool/{toolName}", name="chamilo_core_course_redirect_tool")
      */
-    public function redirectTool($toolId, ToolChain $toolChain)
+    public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain)
     {
-        $criteria = ['iid' => $toolId];
         /** @var CTool $tool */
-        $tool = $this->getDoctrine()->getRepository(CTool::class)->findOneBy($criteria);
+        $tool = $repo->findOneBy(['name' => $toolName]);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $nodeId = $this->getCourse()->getResourceNode()->getId();
-
         /** @var AbstractTool $tool */
         $tool = $toolChain->getToolFromName($tool->getTool()->getName());
-
         $link = $tool->getLink();
-        $link = str_replace(':nodeId', $nodeId, $link);
+
+        if (strpos($link, 'nodeId')) {
+            $nodeId = $this->getCourse()->getResourceNode()->getId();
+            $link = str_replace(':nodeId', $nodeId, $link);
+        }
+
         $url = $link.'?'.$this->getCourseUrlQuery();
 
         return $this->redirect($url);

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 
 /**
@@ -13,6 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GLOSSARY;
 
 // Notification for unauthorized people.
+$this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Additional javascripts.
@@ -54,6 +57,7 @@ $(function() {
 // Tracking
 Event::event_access_tool(TOOL_GLOSSARY);
 
+/*
 function sorter($item1, $item2)
 {
     if ($item1[2] == $item2[2]) {
@@ -62,7 +66,7 @@ function sorter($item1, $item2)
 
     return $item1[2] < $item2[2] ? -1 : 1;
 }
-
+*/
 // Displaying the header
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $currentUrl = api_get_self().'?'.api_get_cidreq();
@@ -168,6 +172,10 @@ switch ($action) {
                 ['ToolbarSet' => 'Glossary', 'Height' => '300']
             );
 
+            $repo = Container::getGlossaryRepository();
+            /** @var CGlossary $glossaryData */
+            $glossaryData = $repo->find($glossaryId);
+            /*
             // setting the defaults
             $glossary_data = GlossaryManager::get_glossary_information($glossaryId);
 
@@ -187,8 +195,14 @@ switch ($action) {
             $form->addLabel(get_lang('Creation date'), $glossary_data['insert_date']);
             $form->addLabel(get_lang('Updated'), $glossary_data['update_date']);
 
+            */
             $form->addButtonUpdate(get_lang('Update term'), 'SubmitGlossary');
-            $form->setDefaults($glossary_data);
+            $default = [
+                'glossary_id' => $glossaryData->getIid(),
+                'name' => $glossaryData->getName(),
+                'description' => $glossaryData->getDescription(),
+            ];
+            $form->setDefaults($default);
 
             // setting the rules
             $form->addRule('name', get_lang('Required field'), 'required');

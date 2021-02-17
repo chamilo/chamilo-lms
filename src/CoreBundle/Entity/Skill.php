@@ -57,30 +57,27 @@ class Skill
     protected $id;
 
     /**
-     * @var string
      * @Groups({"skill:read", "skill:write"})
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @Groups({"skill:read", "skill:write"})
      *
      * @ORM\Column(name="short_code", type="string", length=100, nullable=false)
      */
-    protected $shortCode;
+    protected string $shortCode;
 
     /**
-     * @var string
      * @Groups({"skill:read", "skill:write"})
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var int
@@ -119,11 +116,9 @@ class Skill
      */
     protected $updatedAt;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->description = '';
         $this->status = self::STATUS_ENABLED;
     }
 

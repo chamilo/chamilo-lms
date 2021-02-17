@@ -182,7 +182,7 @@ if ($exerciseReporting) {
     );
     echo '<table class="data_table">';
     $course_id = api_get_course_int_id();
-    $sql = "SELECT id, title FROM $TABLEQUIZ
+    $sql = "SELECT iid, title FROM $TABLEQUIZ
             WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
     $rs = Database::query($sql);
 
@@ -202,7 +202,7 @@ if ($exerciseReporting) {
                     $avg_student_score = Tracking::get_avg_student_exercise_score(
                         $student_id,
                         $course_code,
-                        $quiz['id'],
+                        $quiz['iid'],
                         $session_id
                     );
                     $quiz_avg_score += $avg_student_score;
@@ -210,7 +210,7 @@ if ($exerciseReporting) {
             }
             $studentCount = (0 == $studentCount || is_null($studentCount) || '' == $studentCount) ? 1 : $studentCount;
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
-            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
+            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['iid'].$course_path_params;
 
             echo '<tr><td>';
             echo Display::url(
@@ -239,19 +239,19 @@ if (!empty($groupId)) {
     $filterByUsers = $student_ids;
 }
 
-$count_number_of_forums_by_course = Tracking:: count_number_of_forums_by_course(
+$count_number_of_forums_by_course = Tracking::count_number_of_forums_by_course(
     $course_code,
     $session_id,
     $groupId
 );
 
-$count_number_of_threads_by_course = Tracking:: count_number_of_threads_by_course(
+$count_number_of_threads_by_course = Tracking::count_number_of_threads_by_course(
     $course_code,
     $session_id,
     $groupId
 );
 
-$count_number_of_posts_by_course = Tracking:: count_number_of_posts_by_course(
+$count_number_of_posts_by_course = Tracking::count_number_of_posts_by_course(
     $course_code,
     $session_id,
     $groupId
@@ -321,7 +321,7 @@ if ($showTrackingReporting) {
             get_lang('Tools most used')
         ).' '.get_lang('Tools most used')
     );
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
 
     $tools_most_used = Tracking::get_tools_most_used_by_course(
         $course_id,
@@ -371,7 +371,7 @@ if ($documentReporting) {
         ).'&nbsp;'.get_lang('Documents most downloaded').$link
     );
 
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course(
         $course_code,
         $session_id,
@@ -425,7 +425,7 @@ if ($linkReporting) {
             get_lang('Links most visited')
         ).'&nbsp;'.get_lang('Links most visited')
     );
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $links_most_visited = Tracking::get_links_most_visited_by_course(
         $course_code,
         $session_id
@@ -448,7 +448,7 @@ if ($linkReporting) {
             if ($export_csv) {
                 $temp = [
                     $row['title'],
-                    $row['count_visits'].' '.get_lang('clicks', ''),
+                    $row['count_visits'].' '.get_lang('clicks'),
                 ];
                 $csv_content[] = $temp;
             }

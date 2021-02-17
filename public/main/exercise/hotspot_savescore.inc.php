@@ -19,7 +19,7 @@ $courseCode = $_GET['coursecode'];
 $questionId = $_GET['questionId'];
 $coordinates = $_GET['coord'];
 $objExercise = Session::read('objExercise');
-$exerciseId = $objExercise->selectId();
+$exerciseId = $objExercise->getId();
 // Save clicking order
 $answerOrderId = count($_SESSION['exerciseResult'][$questionId]['ids']) + 1;
 if ('0' == $_GET['answerId']) {

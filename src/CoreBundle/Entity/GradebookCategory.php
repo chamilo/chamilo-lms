@@ -5,11 +5,11 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * GradebookCategory.
- *
  * @ORM\Table(name="gradebook_category",
  *  indexes={
  *     @ORM\Index(name="idx_gb_cat_parent", columns={"parent_id"}),
@@ -30,18 +30,16 @@ class GradebookCategory
     protected $id;
 
     /**
-     * @var string
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var User
@@ -161,10 +159,16 @@ class GradebookCategory
     protected $gradeBooksToValidateInDependence;
 
     /**
-     * GradebookCategory constructor.
+     * @var ArrayCollection|GradebookComment[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradebook")
      */
+    protected $comments;
+
     public function __construct()
     {
+        $this->description = '';
+        $this->comments = new ArrayCollection();
         $this->locked = 0;
         $this->generateCertificates = false;
         $this->isRequirement = false;
@@ -206,12 +210,8 @@ class GradebookCategory
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return GradebookCategory
      */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -220,22 +220,16 @@ class GradebookCategory
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
      * Set course.
-     *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     *
-     * @return \Chamilo\CoreBundle\Entity\GradebookCategory
      */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -245,7 +239,7 @@ class GradebookCategory
     /**
      * Get course.
      *
-     * @return \Chamilo\CoreBundle\Entity\Course
+     * @return Course
      */
     public function getCourse()
     {

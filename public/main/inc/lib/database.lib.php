@@ -1,10 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -19,41 +22,103 @@ class Database
     private static $connection;
 
     /**
-     * Only used by the installer.
+     *  Setup doctrine for the installation.
      *
      * @param array  $params
      * @param string $entityRootPath
-     *
-     * @throws \Doctrine\ORM\ORMException
      */
-    public function connect(
-        $params = [],
-        $entityRootPath = ''
-    ) {
+    public function connect($params = [], $entityRootPath = '')
+    {
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
         $config->setEntityNamespaces(
             [
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
             ]
         );
 
         $params['charset'] = 'utf8';
-        $entityManager = EntityManager::create($params, $config);
-        $connection = $entityManager->getConnection();
-
-        //$sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
         $sysPath = api_get_path(SYMFONY_SYS_PATH);
-        AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
+
+        $cache = new Doctrine\Common\Cache\ArrayCache();
+        // standard annotation reader
+        $annotationReader = new Doctrine\Common\Annotations\AnnotationReader();
+        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
+            $annotationReader, // use reader
+            $cache // and a cache driver
         );
 
-        // Registering gedmo extensions
-        AnnotationRegistry::registerAutoloadNamespace(
-            'Gedmo\Mapping\Annotation',
-            $sysPath."vendor/gedmo/doctrine-extensions/lib"
+        $evm = new EventManager();
+        $timestampableListener = new Gedmo\Timestampable\TimestampableListener();
+        $timestampableListener->setAnnotationReader($cachedAnnotationReader);
+        $evm->addEventSubscriber($timestampableListener);
+
+        $driverChain = new \Doctrine\Persistence\Mapping\Driver\MappingDriverChain();
+        // load superclass metadata mapping only, into driver chain
+        // also registers Gedmo annotations.NOTE: you can personalize it
+        Gedmo\DoctrineExtensions::registerAbstractMappingIntoDriverChainORM(
+            $driverChain, // our metadata driver chain, to hook into
+            $cachedAnnotationReader // our cached annotation reader
+        );
+
+        AnnotationRegistry::registerLoader(
+            function ($class) use ($sysPath) {
+                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
+                $file = str_replace('Symfony/Component/Validator', '', $file);
+                $file = str_replace('Symfony\Component\Validator', '', $file);
+                $file = str_replace('Symfony/Component/Serializer', '', $file);
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
+
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/serializer/'.$file;
+
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+            }
+        );
+
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiResource.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiFilter.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiProperty.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Annotation/ApiSubresource.php'
+        );
+
+        $entityManager = EntityManager::create($params, $config, $evm);
+
+        if (false === Type::hasType('uuid')) {
+            Type::addType('uuid', \Symfony\Bridge\Doctrine\Types\UuidType::class);
+        }
+
+        $connection = $entityManager->getConnection();
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php'
         );
 
         $this->setConnection($connection);
@@ -630,41 +695,29 @@ class Database
      *
      * @param string $path
      *
-     * @return \Doctrine\ORM\Configuration
+     * @return Configuration
      */
     public static function getDoctrineConfig($path)
     {
         $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
-        $path = !empty($path) ? $path : api_get_path(SYS_PATH);
+        $path = !empty($path) ? $path : api_get_path(SYMFONY_SYS_PATH);
 
         $paths = [
-            //$path.'src/Chamilo/ClassificationBundle/Entity',
-            //$path.'src/Chamilo/MediaBundle/Entity',
-            //$path.'src/Chamilo/PageBundle/Entity',
             $path.'src/Chamilo/CoreBundle/Entity',
-            //$path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
-            $path.'src/Chamilo/TicketBundle/Entity',
-            $path.'src/Chamilo/SkillBundle/Entity',
-            $path.'src/Chamilo/PluginBundle/Entity',
-            //$path.'vendor/sonata-project/user-bundle/Entity',
-            //$path.'vendor/sonata-project/user-bundle/Model',
-            //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
         ];
 
         $proxyDir = $path.'var/cache/';
 
-        $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+        return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,
             $isDevMode,
             $proxyDir,
             $cache,
             $isSimpleMode
         );
-
-        return $config;
     }
 
     /**

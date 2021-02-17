@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -126,7 +126,7 @@ class CourseVoter extends Voter
                 break;
             case self::EDIT:
             case self::DELETE:
-                // Only teacher can edit/delete stuff
+                // Only teacher can edit/delete stuff.
                 if ($course->hasTeacher($user)) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
                     $token->setUser($user);

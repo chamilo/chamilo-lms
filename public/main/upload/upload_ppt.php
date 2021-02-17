@@ -22,7 +22,6 @@ if (isset($_POST['convert'])) {
             require_once api_get_path(SYS_CODE_PATH).'lp/lp_upload.php';
             if (isset($o_ppt) && 0 != $first_item_id) {
                 if ('true' == api_get_setting('search_enabled')) {
-                    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                     $specific_fields = get_specific_field_list();
                     foreach ($specific_fields as $specific_field) {
                         $values = explode(',', trim($_POST[$specific_field['code']]));
@@ -86,7 +85,6 @@ $form->addElement('checkbox', 'take_slide_name', '', get_lang('Use the slides na
 $options = ChamiloApi::getDocumentConversionSizes();
 $form->addElement('select', 'slide_size', get_lang('Size of the slides'), $options);
 if ('true' === api_get_setting('search_enabled')) {
-    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $specific_fields = get_specific_field_list();
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
     $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentumentLanguage'));

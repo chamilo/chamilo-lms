@@ -221,7 +221,7 @@ if (isset($_GET['export'])) {
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 Display::display_header(get_lang('Current courses'));
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {

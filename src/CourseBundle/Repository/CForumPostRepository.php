@@ -11,12 +11,18 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class CForumPostRepository.
  */
 class CForumPostRepository extends ResourceRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CForumPost::class);
+    }
+
     /**
      * @param bool   $onlyVisibles
      * @param bool   $isAllowedToEdit

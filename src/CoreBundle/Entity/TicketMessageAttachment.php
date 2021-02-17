@@ -97,18 +97,6 @@ class TicketMessageAttachment
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketMessageAttachment
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return TicketMessage
      */
     public function getMessage()

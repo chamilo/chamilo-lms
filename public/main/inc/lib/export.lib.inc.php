@@ -188,7 +188,7 @@ class Export
         unset($data[0]);
 
         $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : [];
-        $table = new HTML_Table(['class' => 'data_table', 'repeat_header' => '1']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table', 'repeat_header' => '1']);
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {

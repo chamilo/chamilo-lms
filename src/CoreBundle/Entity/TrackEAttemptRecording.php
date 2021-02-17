@@ -79,8 +79,17 @@ class TrackEAttemptRecording
      */
     protected $sessionId;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="answer", type="text", nullable=true)
+     */
+    protected $answer;
+
     public function __construct()
     {
+        $this->teacherComment = '';
+        $this->answer = '';
         $this->sessionId = 0;
     }
 
@@ -260,5 +269,23 @@ class TrackEAttemptRecording
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAnswer()
+    {
+        return $this->answer;
+    }
+
+    /**
+     * @param int $answer
+     */
+    public function setAnswer($answer): self
+    {
+        $this->answer = $answer;
+
+        return $this;
     }
 }

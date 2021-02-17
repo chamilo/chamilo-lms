@@ -42,20 +42,16 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="question", type="text", nullable=false)
      */
-    protected $question;
+    protected string $question;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var float
@@ -130,12 +126,20 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $relQuizzes;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="mandatory", type="integer")
+     */
+    protected $mandatory;
+
+    /**
      * CQuizQuestion constructor.
      */
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->ponderation = 0.0;
+        $this->mandatory = 0;
     }
 
     public function __toString(): string
@@ -198,12 +202,10 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * Get question.
-     *
-     * @return string
      */
-    public function getQuestion()
+    public function getQuestion(): string
     {
-        return (string) $this->question;
+        return $this->question;
     }
 
     /**

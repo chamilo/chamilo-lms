@@ -58,11 +58,11 @@ if ($isManager) {
         $form = new FormValidator('group_filter');
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {
-            $itemGroupId = $groupData['iid'];
+            $itemGroupId = $groupData->getIid();
             /*if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
                 $groupData['name'] .= ' ('.get_lang('Active').')';
             }*/
-            $groupList[$itemGroupId] = $groupData['name'];
+            $groupList[$itemGroupId] = $groupData->getName();
         }
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);
         $form->setDefaults(['group_id' => $groupId]);

@@ -13,6 +13,7 @@ use ChamiloSession as Session;
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
+$this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || 1 != $lp_controller_touched) {
     header('Location: lp_controller.php?action=list&'.api_get_cidreq());
@@ -994,6 +995,17 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
         }
     }
 }
+
+/*$em = Database::getManager();
+$asset = $em->getRepository(\Chamilo\CoreBundle\Entity\Asset::class)->find(1);
+$fs = Container::getAssetFileSystem();
+var_dump($fs->listContents());
+$data = $fs->get('/scorm/'.$asset->getTitle().'/'.$asset->getTitle());
+$data =
+var_dump($data->getType());
+exit;*/
+//$zipAdapter->getArchive()->extractTo();
+//$asset->getFile()
 
 $template = new Template($nameTools);
 $template->assign('first_session_category', $firstSessionCategoryId);

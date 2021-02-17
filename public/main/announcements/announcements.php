@@ -26,6 +26,7 @@ $token = Security::get_existing_token();
 $courseId = api_get_course_int_id();
 $_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('Announcements');
@@ -33,11 +34,11 @@ $repo = Container::getAnnouncementRepository();
 
 $allowToEdit = (
     api_is_allowed_to_edit(false, true) ||
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
+    ($sessionId && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
 );
 $allowStudentInGroupToSend = false;
 
-$sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
@@ -49,6 +50,7 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $isTutor = false;
 if (!empty($group_id)) {
+    $groupEntity = api_get_group_entity($group_id);
     $groupProperties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -61,11 +63,10 @@ if (!empty($group_id)) {
 
     if (false === $allowToEdit) {
         // Check if user is tutor group
-        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
+        $isTutor = $groupEntity->userIsTutor(api_get_user_entity());
         if ($isTutor) {
             $allowToEdit = true;
         }
-
         // Last chance ... students can send announcements
         if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupProperties['announcements_state']) {
             $allowStudentInGroupToSend = true;
@@ -656,9 +657,9 @@ switch ($action) {
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
-            $data['users'] = isset($data['users']) ? $data['users'] : [];
-            $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
-            $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
+            $data['users'] = $data['users'] ?? [];
+            $sendToUsersInSession = isset($data['send_to_users_in_session']);
+            $sendMeCopy = isset($data['send_me_a_copy_by_email']);
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];

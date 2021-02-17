@@ -1074,7 +1074,7 @@ class Wiki
         if ($row && '' == $row['content'] && '' == $row['title'] && 'index' === $page) {
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
-                GroupManager::is_user_in_group(api_get_user_id(), $groupInfo) ||
+                GroupManager::isUserInGroup(api_get_user_id(), api_get_group_entity()) ||
                 api_is_allowed_in_course()
             ) {
                 //Table structure for better export to pdf
@@ -1157,9 +1157,9 @@ class Wiki
                 $actionsLeft .= $editLink;
             } else {
                 if ((api_is_allowed_in_course() ||
-                    GroupManager::is_user_in_group(
+                    GroupManager::isUserInGroup(
                         api_get_user_id(),
-                        $groupInfo
+                        api_get_group_entity()
                     ))
                 ) {
                     $actionsLeft .= $editLink;
@@ -1255,9 +1255,9 @@ class Wiki
             if ($row['id']) {
                 if (api_is_allowed_to_session_edit(false, true) &&
                     api_is_allowed_to_edit() ||
-                    GroupManager::is_user_in_group(
+                    GroupManager::isUserInGroup(
                         api_get_user_id(),
-                        $groupInfo
+                        api_get_group_entity()
                     )
                 ) {
                     // menu discuss page
@@ -2553,6 +2553,8 @@ class Wiki
         $session_id = $this->session_id;
         $groupId = api_get_group_id();
         $groupInfo = GroupManager::get_group_properties($groupId);
+        $group = api_get_group_entity($groupId);
+
         if (0 == $groupId) {
             //extract course members
             if (!empty($session_id)) {
@@ -2569,9 +2571,11 @@ class Wiki
         } else {
             //extract group members
             $subscribed_users = GroupManager::get_subscribed_users($groupInfo);
-            $subscribed_tutors = GroupManager::get_subscribed_tutors(
-                $groupInfo
-            );
+            $tutors = $group->getTutors();
+            $subscribed_tutors = [];
+            foreach ($tutors as $tutor) {
+                $subscribed_tutors[] = $tutor->getUser()->getId();
+            }
             $a_users_to_add_with_duplicates = array_merge(
                 $subscribed_users,
                 $subscribed_tutors
@@ -2637,15 +2641,15 @@ class Wiki
                     )." . ".$username;
                 $photo = '<img src="'.$userPicture.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
 
-                $is_tutor_of_group = GroupManager::is_tutor_of_group(
+                $is_tutor_of_group = GroupManager::isTutorOfGroup(
                     $assig_user_id,
-                    $groupInfo
+                    $group
                 ); //student is tutor
-                $is_tutor_and_member = GroupManager::is_tutor_of_group(
+                $is_tutor_and_member = GroupManager::isTutorOfGroup(
                         $assig_user_id,
-                        $groupInfo
+                        $group
                     ) &&
-                    GroupManager::is_subscribed($assig_user_id, $groupInfo);
+                    GroupManager::is_subscribed($assig_user_id, $group);
                 // student is tutor and member
                 if ($is_tutor_and_member) {
                     $status_in_group = get_lang('Coach and group member');
@@ -4336,57 +4340,57 @@ class Wiki
                     // stars
                     $p_score = $row['p_score'];
                     switch ($p_score) {
-                        case  0:
+                        case 0:
                             $imagerating = Display::return_icon(
                                 'rating/stars_0.gif'
                             );
                             break;
-                        case  1:
+                        case 1:
                             $imagerating = Display::return_icon(
                                 'rating/stars_5.gif'
                             );
                             break;
-                        case  2:
+                        case 2:
                             $imagerating = Display::return_icon(
                                 'rating/stars_10.gif'
                             );
                             break;
-                        case  3:
+                        case 3:
                             $imagerating = Display::return_icon(
                                 'rating/stars_15.gif'
                             );
                             break;
-                        case  4:
+                        case 4:
                             $imagerating = Display::return_icon(
                                 'rating/stars_20.gif'
                             );
                             break;
-                        case  5:
+                        case 5:
                             $imagerating = Display::return_icon(
                                 'rating/stars_25.gif'
                             );
                             break;
-                        case  6:
+                        case 6:
                             $imagerating = Display::return_icon(
                                 'rating/stars_30.gif'
                             );
                             break;
-                        case  7:
+                        case 7:
                             $imagerating = Display::return_icon(
                                 'rating/stars_35.gif'
                             );
                             break;
-                        case  8:
+                        case 8:
                             $imagerating = Display::return_icon(
                                 'rating/stars_40.gif'
                             );
                             break;
-                        case  9:
+                        case 9:
                             $imagerating = Display::return_icon(
                                 'rating/stars_45.gif'
                             );
                             break;
-                        case  10:
+                        case 10:
                             $imagerating = Display::return_icon(
                                 'rating/stars_50.gif'
                             );
@@ -5358,7 +5362,7 @@ class Wiki
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false, true) ||
                     api_is_platform_admin() ||
-                    GroupManager::is_user_in_group($userId, $groupInfo) ||
+                    GroupManager::isUserInGroup($userId, api_get_group_entity($this->group_id)) ||
                     api_is_allowed_in_course()
                 ) {
                     $PassEdit = true;
@@ -6248,7 +6252,7 @@ class Wiki
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false, true) ||
                     api_is_platform_admin() ||
-                    GroupManager::is_user_in_group($userId, $groupInfo)
+                    GroupManager::isUserInGroup($userId, api_get_group_entity($groupId))
                 ) {
                     $PassEdit = true;
                 } else {
@@ -7084,9 +7088,9 @@ class Wiki
                 if (self::checktitle('index')) {
                     if (api_is_allowed_to_edit(false, true) ||
                         api_is_platform_admin() ||
-                        GroupManager::is_user_in_group(
+                        GroupManager::isUserInGroup(
                             api_get_user_id(),
-                            $groupInfo
+                            api_get_group_entity()
                         ) ||
                         api_is_allowed_in_course()
                     ) {
@@ -7124,9 +7128,9 @@ class Wiki
                     );
                     if (api_is_allowed_to_edit(false, true) ||
                         api_is_platform_admin() ||
-                        GroupManager::is_user_in_group(
+                        GroupManager::isUserInGroup(
                             api_get_user_id(),
-                            $groupInfo
+                            api_get_group_entity
                         ) ||
                         0 == $_GET['group_id']
                     ) {

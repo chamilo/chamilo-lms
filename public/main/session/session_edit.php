@@ -12,10 +12,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $formSent = 0;
 
-// Crop picture plugin for session images
-//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
-
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -128,12 +124,6 @@ $formDefaults['coach_username'] = $sessionInfo['id_coach'];
 $formDefaults['session_category'] = $sessionInfo['session_category_id'];
 $formDefaults['session_visibility'] = $sessionInfo['visibility'];
 
-if ($formSent) {
-    $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
-} else {
-    $formDefaults['name'] = Security::remove_XSS($sessionInfo['name']);
-}
-
 $form->setDefaults($formDefaults);
 
 if ($form->validate()) {
@@ -200,7 +190,6 @@ if ($form->validate()) {
     }
 }
 
-// display the header
 Display::display_header($tool_name);
 $form->display();
 ?>

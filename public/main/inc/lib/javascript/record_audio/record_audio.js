@@ -1,5 +1,45 @@
 /* For licensing terms, see /license.txt */
 window.RecordAudio = (function () {
+
+    function startTimer() {
+        $("#timer").show();
+        var timerData = {
+            hour: parseInt($("#hour").text()),
+            minute: parseInt($("#minute").text()),
+            second: parseInt($("#second").text())
+        };
+
+        clearInterval(window.timerInterval);
+        window.timerInterval = setInterval(function(){
+            // Seconds
+            timerData.second++;
+            if (timerData.second >= 60) {
+                timerData.second = 0;
+                timerData.minute++;
+            }
+
+            // Minutes
+            if (timerData.minute >= 60) {
+                timerData.minute = 0;
+                timerData.hour++;
+            }
+
+            $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+            $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+            $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+        }, 1000);
+    }
+
+    function stopTimer() {
+        $("#hour").text('00');
+        $("#minute").text('00');
+        $("#second").text('00');
+        $("#timer").hide();
+    }
+
+    function pauseTimer() {
+        clearInterval(window.timerInterval);
+    }
     function useRecordRTC(rtcInfo, fileName) {
         $(rtcInfo.blockId).show();
 
@@ -26,12 +66,16 @@ window.RecordAudio = (function () {
             var formData = new FormData();
             formData.append('audio_blob', recordedBlob, fileName + fileExtension);
             formData.append('audio_dir', rtcInfo.directory);
+            var courseParams = "";
+            if (rtcInfo.cidReq) {
+                courseParams = "&"+rtcInfo.cidReq;
+            }
 
             $.ajax({
-                url: _p.web_ajax + 'record_audio_rtc.ajax.php?' + $.param({
+                url: rtcInfo.recordAudioUrl + '?'+ $.param({
                     type: rtcInfo.type,
                     tool: (!!txtName.length ? 'document' : 'exercise')
-                }),
+                }) + courseParams,
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -74,12 +118,15 @@ window.RecordAudio = (function () {
                 }
             }
 
-            navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
 
             function successCallback(stream) {
+                stopTimer();
+                startTimer();
                 recordRTC = RecordRTC(stream, {
-                    numberOfAudioChannels: 1,
-                    type: 'audio'
+                    recorderType: RecordRTC.StereoAudioRecorder,
+                    type: 'audio',
+                    mimeType: 'audio/wav',
+                    numberOfAudioChannels: 2
                 });
                 recordRTC.startRecording();
 
@@ -94,22 +141,25 @@ window.RecordAudio = (function () {
             }
 
             function errorCallback(error) {
-                alert(error.message);
+                stopTimer();
+                alert(error);
             }
 
-            if (navigator.getUserMedia) {
+            if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
                 navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-            } else if (navigator.mediaDevices.getUserMedia) {
+                return;
+            }
                 navigator.mediaDevices.getUserMedia(mediaConstraints)
                     .then(successCallback)
-                    .error(errorCallback);
-            }
+                .catch(errorCallback);
         });
 
         btnPause.on('click', function () {
             if (!recordRTC) {
                 return;
             }
+            pauseTimer();
 
             btnPause.prop('disabled', true).addClass('hidden');
             btnPlay.prop('disabled', false).removeClass('hidden');
@@ -126,6 +176,7 @@ window.RecordAudio = (function () {
             btnPause.prop('disabled', false).removeClass('hidden');
             btnStop.prop('disabled', false).removeClass('hidden');
             recordRTC.resumeRecording();
+            startTimer();
         });
 
         btnStop.on('click', function () {
@@ -133,6 +184,7 @@ window.RecordAudio = (function () {
                 return;
             }
 
+            stopTimer();
             recordRTC.stopRecording(function (audioURL) {
                 btnStart.prop('disabled', false).removeClass('hidden');
                 btnPause.prop('disabled', true).addClass('hidden');
@@ -162,57 +214,9 @@ window.RecordAudio = (function () {
         }
     }
 
-    function useWami(wamiInfo, fileName) {
-        $(wamiInfo.blockId).show();
-
-        if (!fileName) {
-            $('#btn-activate-wami').on('click', function (e) {
-                e.preventDefault();
-
-                fileName = $('#audio-title-wami').val();
-
-                if (!$.trim(fileName)) {
-                    return;
-                }
-
-                $('#audio-title-wami').prop('readonly', true);
-                $(this).prop('disabled', true);
-
-                Wami.setup({
-                    id: wamiInfo.containerId,
-                    onReady : setupGUI,
-                    swfUrl: _p.web_lib + 'wami-recorder/Wami.swf'
-                });
-            });
-        } else {
-            Wami.setup({
-                id: wamiInfo.containerId,
-                onReady: setupGUI,
-                swfUrl: _p.web_lib + 'wami-recorder/Wami.swf'
-            });
-        }
-
-        function setupGUI() {
-            var gui = new Wami.GUI({
-                id: wamiInfo.containerId,
-                singleButton: true,
-                recordUrl: _p.web_ajax + 'record_audio_wami.ajax.php?' + $.param({
-                    waminame: fileName + '.wav',
-                    wamidir: wamiInfo.directory,
-                    wamiuserid: wamiInfo.userId,
-                    type: wamiInfo.type
-                }),
-                buttonUrl: _p.web_lib + 'wami-recorder/buttons.png',
-                buttonNoUrl: _p.web_img + 'blank.gif'
-            });
-
-            gui.setPlayEnabled(false);
-        }
-    }
-
     return {
-        init: function (rtcInfo, wamiInfo, fileName) {
-            $(rtcInfo.blockId + ', ' + wamiInfo.blockId).hide();
+        init: function (rtcInfo, fileName) {
+            $(rtcInfo.blockId).hide();
 
             var webRTCIsEnabled = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia ||
                 navigator.mediaDevices.getUserMedia;
@@ -222,8 +226,6 @@ window.RecordAudio = (function () {
 
                 return;
             }
-
-            useWami(wamiInfo, fileName);
         }
     }
 })();

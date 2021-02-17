@@ -126,6 +126,11 @@ class CLpItemView
         $this->coreExit = 'none';
     }
 
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
     /**
      * Set lpItemId.
      *

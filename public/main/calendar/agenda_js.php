@@ -7,14 +7,13 @@ $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
+$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
 if ('personal' === $type || 'admin' === $type) {
     $cidReset = true; // fixes #5162
 }
-
 require_once __DIR__.'/../inc/global.inc.php';
-
-$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
+api_block_inactive_user();
 
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
@@ -41,18 +40,12 @@ api_protect_course_group(GroupManager::GROUP_TOOL_CALENDAR);
 
 $agenda = new Agenda($type);
 
-$is_group_tutor = false;
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 $courseId = api_get_course_int_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
-    $is_group_tutor = GroupManager::is_tutor_of_group(
-        api_get_user_id(),
-        $group_properties,
-        $courseId
-    );
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
@@ -109,7 +102,7 @@ switch ($type) {
 $tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
-if ('en' == $region_value) {
+if ('en' === $region_value) {
     $region_value = 'en-GB';
 }
 $tpl->assign('region_value', $region_value);
@@ -230,6 +223,8 @@ if ('course' === $type && !empty($courseId)) {
 if (isset($_GET['session_id'])) {
     $agenda_ajax_url .= '&session_id='.intval($_GET['session_id']);
 }
+
+$agenda_ajax_url .= '&sec_token='.Security::get_token();
 
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 

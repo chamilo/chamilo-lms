@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * GradebookLink.
@@ -34,11 +35,10 @@ class GradebookLink
     protected $id;
 
     /**
-     * @var int
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    protected $type;
+    protected int $type;
 
     /**
      * @var int

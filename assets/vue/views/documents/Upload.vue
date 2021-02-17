@@ -52,6 +52,8 @@ export default {
     console.log('created');
     this.parentResourceNodeId = Number(this.$route.params.node);
     this.resourceLinkList = JSON.stringify([{
+      gid: this.$route.query.gid,
+      sid: this.$route.query.sid,
       c_id: this.$route.query.cid,
       visibility: 2,
     }]);

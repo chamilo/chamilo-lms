@@ -5,34 +5,24 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Group;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class GroupRepository.
  */
-class GroupRepository
+class GroupRepository extends ServiceEntityRepository
 {
-    /**
-     * @var EntityRepository
-     */
-    private $repository;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->repository = $entityManager->getRepository(Group::class);
+        parent::__construct($registry, Group::class);
     }
 
     public function getAdmins()
     {
         $criteria = ['name' => 'admins'];
-        $group = $this->repository->findOneBy($criteria);
+        $group = $this->findOneBy($criteria);
 
         return $group->getUsers();
-    }
-
-    public function findOneBy(array $criteria)
-    {
-        return $this->repository->findOneBy($criteria);
     }
 }

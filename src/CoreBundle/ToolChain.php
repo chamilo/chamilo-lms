@@ -8,8 +8,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
-use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,11 +53,13 @@ class ToolChain
     protected $entityManager;
     protected $settingsManager;
     protected $security;
+    protected $repoEntityList;
 
     public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)
     {
         $this->tools = [];
         $this->typeList = [];
+        $this->repoEntityList = [];
         $this->entityManager = $entityManager;
         $this->settingsManager = $settingsManager;
         $this->security = $security;
@@ -82,25 +84,32 @@ class ToolChain
     {
         $manager = $this->entityManager;
         $tools = $this->getTools();
+        $repo = $manager->getRepository(Tool::class);
 
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
+            $name = $tool->getName();
+            $toolFromDatabase = $repo->findOneBy(['name' => $name]);
             $toolEntity = new Tool();
-            $toolEntity
-                ->setName($tool->getName())
-            ;
 
-            if ($tool->isCourseTool()) {
-                $this->setToolPermissions($toolEntity);
+            if (null !== $toolFromDatabase) {
+                $toolEntity = $toolFromDatabase;
+            } else {
+                $toolEntity->setName($name);
+                if ($tool->isCourseTool()) {
+                    $this->setToolPermissions($toolEntity);
+                }
+                $manager->persist($toolEntity);
             }
-
-            $manager->persist($toolEntity);
 
             $types = $tool->getResourceTypes();
             if (!empty($types)) {
                 foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
+                    if ($toolEntity->hasResourceType($resourceType)) {
+                        continue;
+                    }
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }

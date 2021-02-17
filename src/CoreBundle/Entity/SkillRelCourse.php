@@ -68,18 +68,6 @@ class SkillRelCourse
     }
 
     /**
-     * @param int $id
-     *
-     * @return SkillRelCourse
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return Skill
      */
     public function getSkill()

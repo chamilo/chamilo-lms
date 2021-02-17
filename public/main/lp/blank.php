@@ -20,6 +20,9 @@ body { background: none;}
 $message = '';
 if (isset($_GET['error'])) {
     switch ($_GET['error']) {
+        case 'document_protected':
+            $message = Display::return_message(get_lang('ProtectedDocument'), 'warning');
+            break;
         case 'document_deleted':
             $message = Display::return_message(get_lang('The document cannot be displayed because it has been deleted'), 'error');
             break;

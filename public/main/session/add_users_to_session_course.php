@@ -78,7 +78,8 @@ if (is_array($extra_field_list)) {
 
 function search_users($needle, $type)
 {
-    global $id_session, $courseId;
+    $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+    $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -115,16 +116,15 @@ function search_users($needle, $type)
         // Only for single & multiple
         if (in_array($type, ['single', 'multiple'])) {
             if (!empty($id_session)) {
-                $id_session = (int) $id_session;
                 // check id_user from session_rel_user table
                 $sql = "
-                    SELECT su.user_id 
-                    FROM $tbl_session_rel_user  su 
+                    SELECT su.user_id
+                    FROM $tbl_session_rel_user  su
                     INNER JOIN $tableRelSessionCourseUser sc
                     ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                    WHERE 
+                    WHERE
                         sc.c_id = $courseId AND
-                        su.session_id = $id_session AND 
+                        su.session_id = $id_session AND
                         relation_type <> ".SESSION_RELATION_TYPE_RRHH;
                 $res = Database::query($sql);
                 $user_ids = [];
@@ -150,10 +150,10 @@ function search_users($needle, $type)
                             username LIKE '$needle%'
                             OR lastname LIKE '$needle%'
                             OR firstname LIKE '$needle%'
-                        ) AND 
-                      user.status <> 6 AND 
+                        ) AND
+                      user.status <> 6 AND
                       user.status <> ".DRH."
-                    $order_clause 
+                    $order_clause
                     LIMIT 11
                 ";
                 break;
@@ -162,8 +162,8 @@ function search_users($needle, $type)
                     SELECT user.id, username, lastname, firstname, official_code
                     FROM $tbl_user user
                     WHERE
-                        lastname LIKE '$needle%' AND 
-                        user.status <> ".DRH." AND 
+                        lastname LIKE '$needle%' AND
+                        user.status <> ".DRH." AND
                         user.status <> 6 $cond_user_id
                     $order_clause
                 ";
@@ -172,11 +172,11 @@ function search_users($needle, $type)
                 $sql = "
                     SELECT DISTINCT user.id, username, lastname, firstname, official_code
                     FROM $tbl_user user
-                    LEFT OUTER JOIN $tbl_session_rel_user s 
+                    LEFT OUTER JOIN $tbl_session_rel_user s
                     ON (s.user_id = user.id)
                     WHERE
-                        s.user_id IS NULL AND 
-                        user.status <> ".DRH." AND 
+                        s.user_id IS NULL AND
+                        user.status <> ".DRH." AND
                         user.status <> 6 $cond_user_id
                     $order_clause
                 ";
@@ -385,17 +385,17 @@ if ('true' === $orderListByOfficialCode) {
 
 if ($ajax_search) {
     $sql = "
-        SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code        
+        SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
         FROM $tbl_session_rel_user su
         INNER JOIN $tableRelSessionCourseUser sc
         ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
         INNER JOIN $tbl_user u
         ON su.user_id = u.id
-        WHERE 
+        WHERE
             su.session_id = ".intval($id_session)." AND
             su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
             sc.c_id = $courseId AND
-            u.status<>".DRH." AND 
+            u.status<>".DRH." AND
             u.status <> 6
         $order_clause
     ";
@@ -408,18 +408,18 @@ if ($ajax_search) {
                 SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su
-                ON 
-                    su.user_id = u.id AND 
-                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND 
+                ON
+                    su.user_id = u.id AND
+                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
                     su.session_id = ".intval($id_session)."
-                INNER JOIN $tbl_user_rel_access_url url_user 
+                INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 INNER JOIN $tableRelSessionCourseUser sc
                 ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE 
-                    access_url_id = $access_url_id AND 
-                    sc.c_id = $courseId AND 
-                    u.status <> ".DRH." AND 
+                WHERE
+                    access_url_id = $access_url_id AND
+                    sc.c_id = $courseId AND
+                    u.status <> ".DRH." AND
                     u.status <> 6
                 $order_clause
             ";
@@ -533,8 +533,8 @@ if ($ajax_search) {
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
                 AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-            WHERE 
-                u.status <> ".DRH." AND 
+            WHERE
+                u.status <> ".DRH." AND
                 u.status <> 6
             $order_clause
         ";
@@ -551,10 +551,10 @@ if ($ajax_search) {
                     AND su.session_id = $id_session
                     AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 INNER JOIN $tbl_user_rel_access_url url_user
-                ON (url_user.user_id = u.id)   
-               
+                ON (url_user.user_id = u.id)
+
                 WHERE
-                    access_url_id = $access_url_id 
+                    access_url_id = $access_url_id
                     $where_filter
                     AND u.status <> ".DRH."
                     AND u.status<>6
@@ -589,8 +589,8 @@ if ($ajax_search) {
         INNER JOIN $tableRelSessionCourseUser sc
         ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
         WHERE
-            sc.c_id = $courseId AND 
-            u.status <> ".DRH." AND u.status <> 6 
+            sc.c_id = $courseId AND
+            u.status <> ".DRH." AND u.status <> 6
         $order_clause
     ";
 
@@ -605,14 +605,14 @@ if ($ajax_search) {
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
                 AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                INNER JOIN $tbl_user_rel_access_url url_user 
+                INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 INNER JOIN $tableRelSessionCourseUser sc
                 ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE 
+                WHERE
                     sc.c_id = $courseId AND
-                    access_url_id = $access_url_id AND 
-                    u.status <> ".DRH." AND 
+                    access_url_id = $access_url_id AND
+                    u.status <> ".DRH." AND
                     u.status <> 6
                 $order_clause
             ";

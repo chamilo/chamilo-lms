@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -39,11 +40,18 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
+     * @var Session
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     */
+    protected $session;
+
+    /**
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @Gedmo\SortablePosition
@@ -52,7 +60,12 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected $position;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser", mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
+     *     mappedBy="category",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $users;
 
@@ -106,12 +119,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->cId;
     }
 
-    /**
-     * @param $name
-     *
-     * @return $this
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -120,12 +128,10 @@ class CLpCategory extends AbstractResource implements ResourceInterface
 
     /**
      * Get category name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     /**

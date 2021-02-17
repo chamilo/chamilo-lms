@@ -5,10 +5,7 @@
 /**
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- */
-require __DIR__.'/qti2_classes.php';
 
-/**
  * An IMS/QTI item. It corresponds to a single question.
  * This class allows export from Claroline to IMS/QTI2.0 XML format of a single question.
  * It is not usable as-is, but must be subclassed, to support different kinds of questions.
@@ -168,9 +165,9 @@ class ImsSection
 
     public function start_section()
     {
-        return '<section 
-            ident = "EXO_'.$this->exercise->selectId().'" 
-            title = "'.cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"            
+        return '<section
+            ident = "EXO_'.$this->exercise->getId().'"
+            title = "'.cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"
         >'."\n";
     }
 
@@ -317,7 +314,7 @@ class ImsItem
     {
         $this->question = $question;
         $this->answer = $question->answer;
-        $this->questionIdent = 'QST_'.$question->selectId();
+        $this->questionIdent = 'QST_'.$question->getId();
     }
 
     /**

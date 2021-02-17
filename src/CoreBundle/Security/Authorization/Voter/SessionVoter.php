@@ -6,8 +6,8 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Manager\SettingsManager;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class SessionVoter.
+ *
+ * @todo remove legacy code.
  */
 class SessionVoter extends Voter
 {
@@ -160,7 +162,7 @@ class SessionVoter extends Voter
 
         // If there is a session duration but there is no previous
         // access by the user, then the session is still available
-        if (0 == count($courseAccess)) {
+        if (0 === count($courseAccess)) {
             return true;
         }
 

@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+exit;
 /**
  * Script for sub-language administration.
  */

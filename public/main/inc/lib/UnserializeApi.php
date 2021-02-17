@@ -99,15 +99,8 @@ class UnserializeApi
                         scormResource::class,
                         Link::class,
                         LpItem::class,
-                        \Chamilo\CourseBundle\Entity\CLp::class,
-                        \Chamilo\CoreBundle\Entity\Course::class,
-                        \Chamilo\CoreBundle\Entity\ResourceNode::class,
-                        \Chamilo\CoreBundle\Entity\ResourceType::class,
                     ]
                 );
-
-                return unserialize($serialized);
-
                 break;
             case 'not_allowed_classes':
             default:
@@ -115,13 +108,13 @@ class UnserializeApi
         }
 
         if ($ignoreErrors) {
-            return @Unserialize::unserialize(
+            return unserialize(
                 $serialized,
                 ['allowed_classes' => $allowedClasses]
             );
         }
 
-        return Unserialize::unserialize(
+        return unserialize(
             $serialized,
             ['allowed_classes' => $allowedClasses]
         );

@@ -16,10 +16,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 // Access restrictions.
-$is_allowedToTrack = api_is_platform_admin(true, true) ||
+$allowToTrack = api_is_platform_admin(true, true) ||
     api_is_teacher() || api_is_course_tutor();
 
-if (!$is_allowedToTrack) {
+if (!$allowToTrack) {
     api_not_allowed(true);
     exit;
 }
@@ -138,7 +138,8 @@ $userInfo = api_get_user_info($user_id);
 
 echo Display::page_header(get_lang('Learner details in course'));
 echo Display::page_subheader(
-    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
+    get_lang('User').': '.$userInfo['complete_name'].' - '.
+    get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
 );
 
 $form->setDefaults(['from' => $from, 'to' => $to]);

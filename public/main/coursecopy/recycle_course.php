@@ -32,7 +32,7 @@ $interbreadcrumb[] = [
 // Displaying the header
 $nameTools = get_lang('Empty this course');
 Display::display_header($nameTools);
-
+$current_course_code = api_get_course_id();
 // Display the tool title
 echo Display::page_header($nameTools);
 $action = isset($_POST['action']) ? $_POST['action'] : '';

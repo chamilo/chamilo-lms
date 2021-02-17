@@ -24,6 +24,7 @@ $nameTools = '';
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+$this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit()) {
@@ -180,7 +181,7 @@ function edit_category_form($action)
         }
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('CannotEdit this category'), 'error')
+            Display::return_message(get_lang('Could not edit category'), 'error')
         );
     }
 }
@@ -188,9 +189,9 @@ function edit_category_form($action)
 // process to delete a category
 function delete_category_form()
 {
-    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category = new TestCategory();
-        if ($category->removeCategory($_GET['id'])) {
+        if ($category->removeCategory($_GET['category_id'])) {
             Display::addFlash(Display::return_message(get_lang('Category deleted')));
         } else {
             Display::addFlash(Display::return_message(get_lang('Error: could not delete category'), 'error'));

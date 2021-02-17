@@ -6,25 +6,25 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class CGroupRepository.
  */
 final class CGroupRepository extends ResourceRepository
 {
-    /**
-     * @param string $code
-     */
-    public function findOneByCode($code): ?CGroup
+    public function __construct(ManagerRegistry $registry)
     {
-        return $this->getRepository()->findOneByCode($code);
+        parent::__construct($registry, CGroup::class);
     }
 
-    /**
-     * @param string $name
-     */
-    public function findOneByTitle($name): ?CGroup
+    public function findOneByCode(string $code): ?CGroup
     {
-        return $this->getRepository()->findOneByTitle($name);
+        return $this->findOneBy(['code' => $code]);
+    }
+
+    public function findOneByTitle(string $name): ?CGroup
+    {
+        return $this->findOneBy(['name' => $name]);
     }
 }

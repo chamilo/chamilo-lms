@@ -167,7 +167,7 @@ function choose_image($file_name)
         }
     }
 
-    return 'defaut.gif';
+    return 'defaut_small.gif';
 }
 
 /**

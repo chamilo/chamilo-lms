@@ -6,6 +6,13 @@
  * This script initiates a video conference session, calling the BigBlueButton API.
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
+$isGlobal = isset($_GET['global']) ? true : false;
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
+
+// If global setting is used then we delete the course sessions (cidReq/id_session)
+if ($isGlobalPerUser || $isGlobal) {
+    $cidReset = true;
+}
 require_once __DIR__.'/config.php';
 
 $plugin = BBBPlugin::create();
@@ -14,8 +21,6 @@ $roomTable = Database::get_main_table('plugin_bbb_room');
 
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js');
 
-$isGlobal = isset($_GET['global']) ? true : false;
-$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $userId = api_get_user_id();
 
@@ -212,11 +217,13 @@ if ($conferenceManager) {
 
                                         if (!empty($roomData)) {
                                             $roomId = $roomData['id'];
-                                            Database::update(
-                                                $roomTable,
-                                                ['out_at' => api_get_utc_datetime()],
-                                                ['id = ? ' => $roomId]
-                                            );
+                                            if (!empty($roomId)) {
+                                                Database::update(
+                                                    $roomTable,
+                                                    ['out_at' => api_get_utc_datetime()],
+                                                    ['id = ? ' => $roomId]
+                                                );
+                                            }
                                         }
                                         $i++;
                                     }
@@ -239,11 +246,13 @@ if ($conferenceManager) {
 
                 if (!empty($roomData)) {
                     $roomId = $roomData['id'];
-                    Database::update(
-                        $roomTable,
-                        ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
-                        ['id = ? ' => $roomId]
-                    );
+                    if (!empty($roomId)) {
+                        Database::update(
+                            $roomTable,
+                            ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                            ['id = ? ' => $roomId]
+                        );
+                    }
                 }
 
                 $message = Display::return_message(
@@ -293,17 +302,19 @@ if ($conferenceManager) {
 
             $i = 0;
             foreach ($roomData as $item) {
-                $roomId = $roomData['id'];
-                if (0 == $i) {
-                    Database::update(
-                        $roomTable,
-                        ['out_at' => api_get_utc_datetime()],
-                        ['id = ? ' => $roomId]
-                    );
-                } else {
-                    Database::update($roomTable, ['close' => BBBPlugin::ROOM_CLOSE], ['id = ? ' => $roomId]);
+                $roomId = $item['id'];
+                if (!empty($roomId)) {
+                    if (0 == $i) {
+                        Database::update(
+                            $roomTable,
+                                ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                            ['id = ? ' => $roomId]
+                        );
+                    } else {
+                        Database::update($roomTable, ['close' => BBBPlugin::ROOM_CLOSE], ['id = ? ' => $roomId]);
+                    }
+                    $i++;
                 }
-                $i++;
             }
 
             $message = Display::return_message(
@@ -367,6 +378,15 @@ if (false === $bbb->isGlobalConference() &&
     if ($conferenceManager) {
         $groups = GroupManager::get_groups();
     } else {
+        if (!empty($groupId)) {
+            $group = api_get_group_entity($groupId);
+            if ($group) {
+                $isSubscribed = GroupManager::isUserInGroup(api_get_user_id(), $group);
+                if (false === $isSubscribed) {
+                    api_not_allowed(true);
+                }
+            }
+        }
         $groups = GroupManager::getAllGroupPerUserSubscription(
             api_get_user_id(),
             api_get_course_int_id(),
@@ -380,11 +400,17 @@ if (false === $bbb->isGlobalConference() &&
 
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {
-            $itemGroupId = $groupData['iid'];
-            if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
-                $groupData['name'] .= ' ('.get_lang('Active').')';
+            if ($groupData instanceof \Chamilo\CourseBundle\Entity\CGroup) {
+                $itemGroupId = $groupData->getIid();
+                $name = $groupData->getName();
+            } else {
+                $itemGroupId = $groupData['iid'];
+                $name = $groupData['name'];
             }
-            $groupList[$itemGroupId] = $groupData['name'];
+            if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
+                $name .= ' ('.get_lang('Active').')';
+            }
+            $groupList[$itemGroupId] = $name;
         }
 
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);

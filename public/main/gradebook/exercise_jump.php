@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -16,8 +17,7 @@ $this_section = SECTION_COURSES;
 
 $gradebook = Security::remove_XSS($_GET['gradebook']);
 $session_id = api_get_session_id();
-$courseId = api_get_course_int_id();
-$cidReq = Security::remove_XSS($_GET['cidReq']);
+$courseId = Security::remove_XSS($_GET['cid']);
 $type = Security::remove_XSS($_GET['type']);
 $doExerciseUrl = '';
 
@@ -70,8 +70,8 @@ if (!empty($doExerciseUrl)) {
             } else {
                 $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
                     [
-                        'session_id' => $session_id,
-                        'cidReq' => $cidReq,
+                        'sid' => $session_id,
+                        'cid' => $courseId,
                         'gradebook' => $gradebook,
                         'origin' => '',
                         'learnpath_id' => '',

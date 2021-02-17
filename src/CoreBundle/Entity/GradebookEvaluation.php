@@ -33,18 +33,14 @@ class GradebookEvaluation
     protected $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var User
@@ -138,9 +134,6 @@ class GradebookEvaluation
      */
     protected $userScoreList;
 
-    /**
-     * GradebookEvaluation constructor.
-     */
     public function __construct()
     {
         $this->locked = 0;
@@ -172,12 +165,8 @@ class GradebookEvaluation
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return GradebookEvaluation
      */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

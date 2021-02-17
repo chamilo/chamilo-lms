@@ -1,6 +1,6 @@
 # Chamilo 2.x
 
-[![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=master)](https://travis-ci.org/chamilo/chamilo-lms)
+[![PHP Composer](https://github.com/chamilo/chamilo-lms/workflows/PHP%20Composer/badge.svg)](https://github.com/chamilo/chamilo-lms/actions?query=workflow%3A%22PHP+Composer%22+branch%3Amaster)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=master)
 [![Bountysource](https://www.bountysource.com/badge/team?team_id=12439&style=raised)](https://www.bountysource.com/teams/chamilo?utm_source=chamilo&utm_medium=shield&utm_campaign=raised)
 [![Code Consistency](https://squizlabs.github.io/PHP_CodeSniffer/analysis/chamilo/chamilo-lms/grade.svg)](http://squizlabs.github.io/PHP_CodeSniffer/analysis/chamilo/chamilo-lms/)
@@ -11,7 +11,7 @@ Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under G
 
 ## Quick install
 
-**Chamilo 2.0 is still in development stage. This install procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch README.md for details.**
+**Chamilo 2.0 is still in development stage. This installation procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch README.md for details.**
 
 We assume you have already installed "yarn" and "composer" and you're installing the portal in a domain,
 not in a sub folder inside a domain.
@@ -22,7 +22,8 @@ apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-c
 # otherwise, you can use the following directly:
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
-composer install (If composer asks to accept recipes, just press enter or "n")
+composer install
+# *important*: when composer asks to accept recipes, about 11 times, press enter or "n"
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 yarn install
 yarn run encore dev
@@ -50,6 +51,14 @@ yarn encore dev
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies.
 
+### Quick re-install
+
+If you have it installed in a dev environment and feel like you should clean it up completely (might be necessary after changes to the database), you can do so by:
+
+* Removing the `.env.local`
+* Load the {url}/main/install/index.php script again
+
+The database should be automatically destroyed, table by table. In some extreme cases (a previous version created a table that is not necessary anymore and creates issues), you might want to clean it completely by just dropping it, but this shouldn't be necessary most of the time.
 
 ## Installation guide (Dev environment, stable environment not yet available)
 

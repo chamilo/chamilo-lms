@@ -18,8 +18,7 @@ api_protect_course_script(false);
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
 if (!$isAllowedToEdit) {
-    api_not_allowed(true);
-    exit;
+    api_not_allowed();
 }
 
 $_course = api_get_course_info();
@@ -27,33 +26,20 @@ $questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
 $questionRepo = Container::getQuestionRepository();
 /** @var CQuizQuestion $objQuestion */
 $objQuestion = $questionRepo->find($questionId);
+if (!$objQuestion) {
+    api_not_allowed();
+}
+if (!$objQuestion->getResourceNode()->hasResourceFile()) {
+    api_not_allowed();
+}
 $resourceFile = $objQuestion->getResourceNode()->getResourceFile();
-
 $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
-$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion).'?'.api_get_cidreq();
 
 $data = [];
 $data['type'] = 'admin';
-$data['lang'] = [
-    'Square' => get_lang('Square'),
-    'Ellipse' => get_lang('Ellipse'),
-    'Polygon' => get_lang('Polygon'),
-    'HotspotStatus1' => get_lang('HotspotStatus1'),
-    'HotspotStatus2Polygon' => get_lang('HotspotStatus2Polygon'),
-    'HotspotStatus2Other' => get_lang('HotspotStatus2Other'),
-    'HotspotStatus3' => get_lang('HotspotStatus3'),
-    'HotspotShowUserPoints' => get_lang('HotspotShowUserPoints'),
-    'ShowHotspots' => get_lang('ShowHotspots'),
-    'Triesleft' => get_lang('Triesleft'),
-    'HotspotExerciseFinished' => get_lang('HotspotExerciseFinished'),
-    'NextAnswer' => get_lang('NextAnswer'),
-    'Delineation' => get_lang('Delineation'),
-    'CloseDelineation' => get_lang('CloseDelineation'),
-    'Oar' => get_lang('Oar'),
-    'ClosePolygon' => get_lang('ClosePolygon'),
-    'DelineationStatus1' => get_lang('DelineationStatus1'),
-];
+$data['lang'] = HotSpot::getLangVariables();
 $data['image'] = $imagePath;
 $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;
@@ -78,18 +64,18 @@ for ($i = 1; $i <= $nbrAnswers; $i++) {
             $hotSpot['type'] = 'oar';
         }
     } else {
-        // Square or rectancle
-        if ('square' == $answers['hotspot_type'][$i]) {
+        // Square or rectangle
+        if ('square' === $answers['hotspot_type'][$i]) {
             $hotSpot['type'] = 'square';
         }
 
-        // Circle or ovale
-        if ('circle' == $answers['hotspot_type'][$i]) {
+        // Circle or oval
+        if ('circle' === $answers['hotspot_type'][$i]) {
             $hotSpot['type'] = 'circle';
         }
 
         // Polygon
-        if ('poly' == $answers['hotspot_type'][$i]) {
+        if ('poly' === $answers['hotspot_type'][$i]) {
             $hotSpot['type'] = 'poly';
         }
         /*// Delineation

@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +22,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CLp extends AbstractResource implements ResourceInterface
 {
+    public const LP_TYPE = 1;
+    public const SCORM_TYPE = 2;
+    public const AICC_TYPE = 3;
+
     /**
      * @var int
      *
@@ -39,17 +44,16 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="lp_type", type="integer", nullable=false)
      */
     protected $lpType;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
@@ -59,11 +63,9 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $ref;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var string
@@ -148,13 +150,6 @@ class CLp extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="theme", type="string", length=255, nullable=false)
      */
     protected $theme;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="preview_image", type="string", length=255, nullable=false)
-     */
-    protected $previewImage;
 
     /**
      * @var string
@@ -281,8 +276,19 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $items;
 
     /**
-     * Constructor.
+     * @var CForumForum
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="lp")
      */
+    protected $forum;
+
+    /**
+     * @var Asset|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
+     */
+    protected $asset;
+
     public function __construct()
     {
         $this->accumulateScormTime = 1;
@@ -294,6 +300,7 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->contentLicense = '';
         $this->createdOn = new \DateTime();
         $this->modifiedOn = new \DateTime();
+        $this->publicatedOn = new \DateTime();
         $this->defaultEncoding = 'UTF-8';
         $this->defaultViewMod = 'embedded';
         $this->description = '';
@@ -306,8 +313,6 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->preventReinit = true;
         $this->path = '';
         $this->prerequisite = 0;
-        $this->previewImage = '';
-        $this->publicatedOn = new \DateTime();
         $this->seriousgameMode = 0;
         $this->subscribeUsers = 0;
         $this->useMaxScore = 1;
@@ -360,12 +365,10 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     /**
@@ -394,12 +397,8 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CLp
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -408,10 +407,8 @@ class CLp extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -702,30 +699,6 @@ class CLp extends AbstractResource implements ResourceInterface
     public function getTheme()
     {
         return $this->theme;
-    }
-
-    /**
-     * Set previewImage.
-     *
-     * @param string $previewImage
-     *
-     * @return CLp
-     */
-    public function setPreviewImage($previewImage)
-    {
-        $this->previewImage = $previewImage;
-
-        return $this;
-    }
-
-    /**
-     * Get previewImage.
-     *
-     * @return string
-     */
-    public function getPreviewImage()
-    {
-        return $this->previewImage;
     }
 
     /**
@@ -1080,9 +1053,47 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->subscribeUsers;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function setSubscribeUsers($value): self
+    {
+        $this->subscribeUsers = $value;
+
+        return $this;
+    }
+
+    public function getForum(): ?CForumForum
+    {
+        return $this->forum;
+    }
+
+    public function hasForum(): bool
+    {
+        return null !== $this->forum;
+    }
+
+    public function setForum(CForumForum $forum): self
+    {
+        $this->forum = $forum;
+
+        return $this;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function hasAsset(): bool
+    {
+        return null !== $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

@@ -46,8 +46,6 @@ class Answer
     private $exercise;
 
     /**
-     * constructor of the class.
-     *
      * @author Olivier Brouckaert
      *
      * @param int      $questionId that answers belong to
@@ -136,6 +134,9 @@ class Answer
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
+            $this->id[$i] = $object->iid;
+            $this->autoId[$i] = $object->iid;
+            $this->iid[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -144,8 +145,6 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
-            //$this->autoId[$i] = $object->id_auto;
-            $this->iid[$i] = $object->iid;
             $i++;
         }
         $this->nbrAnswers = $i - 1;
@@ -272,7 +271,6 @@ class Answer
                     hotspot_coordinates,
                     hotspot_type,
                     destination,
-                    id_auto,
                     iid
                 FROM $TBL_ANSWER
                 WHERE
@@ -298,7 +296,7 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
-            $this->autoId[$i] = $object->id_auto;
+            $this->autoId[$i] = $object->iid;
             $this->iid[$i] = $object->iid;
             $i++;
         }
@@ -312,7 +310,7 @@ class Answer
             $this->hotspot_coordinates[$i] = isset($object->hotspot_coordinates) ? $object->hotspot_coordinates : 0;
             $this->hotspot_type[$i] = isset($object->hotspot_type) ? $object->hotspot_type : 0;
             $this->destination[$i] = $doubt_data->destination;
-            $this->autoId[$i] = $doubt_data->id_auto;
+            $this->autoId[$i] = $doubt_data->iid;
             $this->iid[$i] = $doubt_data->iid;
             $i++;
         }
@@ -396,8 +394,8 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT id, answer, id_auto FROM $table
-                WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $sql = "SELECT iid, answer FROM $table
+                WHERE c_id = {$this->course_id} AND iid='$auto_id'";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -709,7 +707,7 @@ class Answer
             $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
             $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
             $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
-            $autoId = $this->selectAutoId($i);
+            //$autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
             if (!isset($this->position[$i])) {
@@ -788,7 +786,7 @@ class Answer
                         $sql = "UPDATE $answerTable
                             SET correct = '$correct'
                             WHERE
-                                id_auto = $myAutoId
+                                iid = $myAutoId
                             ";
                         Database::query($sql);
                     }
@@ -803,7 +801,7 @@ class Answer
                         $sql = "UPDATE $answerTable
                             SET correct = '$correct'
                             WHERE
-                                id_auto = $myAutoId
+                                iid = $myAutoId
                             ";
                         Database::query($sql);
                     }
@@ -814,15 +812,17 @@ class Answer
 
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
-            while ($this->position[$i]) {
-                $position = $this->position[$i];
-                $sql = "DELETE FROM $answerTable
+            if (isset($this->position[$i])) {
+                while ($this->position[$i]) {
+                    $position = $this->position[$i];
+                    $sql = "DELETE FROM $answerTable
                         WHERE
                             c_id = {$this->course_id} AND
                             question_id = '".$questionId."' AND
                             position ='$position'";
-                Database::query($sql);
-                $i++;
+                    Database::query($sql);
+                    $i++;
+                }
             }
         }
 
@@ -870,7 +870,7 @@ class Answer
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
-                    $new_option_list[] = $item['id'];
+                    $new_option_list[] = $item['iid'];
                 }
             }
 
@@ -881,7 +881,7 @@ class Answer
             $i = 0;
             if (!empty($destination_options)) {
                 foreach ($destination_options as $item) {
-                    $fixed_list[$new_option_list[$i]] = $item['id'];
+                    $fixed_list[$new_option_list[$i]] = $item['iid'];
                     $i++;
                 }
             }
@@ -1007,7 +1007,7 @@ class Answer
             // Fix correct answers
             if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
                 $onlyAnswersFlip = array_flip($onlyAnswers);
-                foreach ($correctAnswers as $answer_id => $correct_answer) {
+                foreach ($correctAnswers as $answerIdItem => $correct_answer) {
                     $params = [];
                     if (isset($allAnswers[$correct_answer]) &&
                         isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
@@ -1017,8 +1017,8 @@ class Answer
                             $tableAnswer,
                             $params,
                             [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
-                                    $answer_id,
+                                'iid = ? AND c_id = ? AND question_id = ? ' => [
+                                    $answerIdItem,
                                     $courseId,
                                     $newQuestionId,
                                 ],

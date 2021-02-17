@@ -32,7 +32,7 @@ $courseId = api_get_course_int_id();
 $repo = Container::getCourseRepository();
 $courseCategoryRepo = Container::getCourseCategoryRepository();
 $illustrationRepo = Container::getIllustrationRepository();
-$em = $repo->getEntityManager();
+$em = Database::getManager();
 $isEditable = true;
 
 if (!$isAllowToEdit) {
@@ -43,7 +43,7 @@ $router = Container::getRouter();
 $translator = Container::getTranslator();
 
 $show_delete_watermark_text_message = false;
-if ('true' == api_get_setting('pdf_export_watermark_by_course')) {
+if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
         PDF::delete_watermark($course_code);
         $show_delete_watermark_text_message = true;
@@ -67,13 +67,18 @@ function card_settings_open($id, $title, $open = false, $icon, $parent)
     $html = '<div class="card">';
     $html .= '<div class="card-header" id="card_'.$id.'">';
     $html .= '<h5 class="card-title">';
-    $html .= '<a role="button" class="'.(($open) ? 'collapse' : ' ').'"  data-toggle="collapse" data-target="#collapse_'.$id.'" aria-expanded="true" aria-controls="collapse_'.$id.'">';
+    $html .= '<a
+        role="button" class="'.(($open) ? 'collapse' : ' ').'"
+        data-toggle="collapse" data-target="#collapse_'.$id.'"
+        aria-expanded="true" aria-controls="collapse_'.$id.'">';
     if ($icon) {
         $html .= Display::return_icon($icon, null, null, ICON_SIZE_SMALL);
     }
     $html .= $title;
     $html .= '</a></h5></div>';
-    $html .= '<div id="collapse_'.$id.'" class="collapse show" aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">';
+    $html .= '<div
+        id="collapse_'.$id.'"
+        class="collapse show" aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">';
     $html .= '<div class="card-body">';
 
     return $html;
@@ -86,14 +91,17 @@ function card_settings_close()
     return $html;
 }
 
-$form->addHtml(card_settings_open('course_settings', get_lang('Course settings'), true, 'settings.png', 'accordionSettings'));
+$form->addHtml(
+    card_settings_open('course_settings', get_lang('Course settings'), true, 'settings.png', 'accordionSettings')
+);
 
 $image = '';
 $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
 
 if (!empty($illustrationUrl)) {
-    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
-                    <div class="col-md-8"><img class="img-thumbnail" src="'.$illustrationUrl.'" /></div></div>';
+    $image = '<div class="row">
+                <label class="col-md-2 control-label">'.get_lang('Image').'</label>
+                <div class="col-md-8"><img class="img-thumbnail" src="'.$illustrationUrl.'" /></div></div>';
 }
 
 $form->addText('title', get_lang('Title'), true);
@@ -136,9 +144,7 @@ $extra = $extra_field->addElements(
     [],
     false,
     false,
-    $showOnlyTheseFields,
-    [],
-    false
+    $showOnlyTheseFields
 );
 
 //Tags ExtraField
@@ -322,14 +328,16 @@ if ('true' == api_get_setting('documents_default_visibility_defined_in_course'))
     $globalGroup[get_lang('Default visibility of new documents')] = $group;
 }
 
-$group = [
+if ('true' == api_get_setting('show_default_folders')) {
+    $group = [
     $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
 ];
 
-$globalGroup[get_lang('Show system folders.')] = $group;
+    $globalGroup[get_lang('Show system folders.')] = $group;
 
-$myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+    $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+}
 
 $group = [];
 $group[] = $form->createElement(
@@ -658,6 +666,13 @@ if ('true' === $allowLPReturnLink) {
             get_lang('My courses'),
             2
         ),
+        $form->createElement(
+            'radio',
+            'lp_return_link',
+            null,
+            get_lang('RedirectToPortalHome'),
+            3
+        ),
     ];
     $globalGroup[get_lang("Learning path return link")] = $group;
 }
@@ -953,6 +968,11 @@ if ($form->validate() && $isEditable) {
             $file->setCrop($updateValues['picture_crop_result_for_resource']);
             $em->persist($file);
             $em->flush();
+            Event::addEvent(
+                LOG_COURSE_SETTINGS_CHANGED,
+                'course_picture',
+                $picture['name']
+            );
         }
     }
 
@@ -963,11 +983,8 @@ if ($form->validate() && $isEditable) {
         $illustrationRepo->deleteIllustration($courseEntity);
     }
 
-    global $_configuration;
-    if (isset($_configuration[$urlId]) &&
-        isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
-        $_configuration[$urlId]['hosting_limit_active_courses'] > 0
-    ) {
+    $limitCourses = api_get_configuration_value('hosting_limit_active_courses');
+    if ($limitCourses > 0) {
         $courseInfo = api_get_course_info_by_id($courseId);
 
         // Check if
@@ -975,7 +992,7 @@ if ($form->validate() && $isEditable) {
             $visibility != $courseInfo['visibility']
         ) {
             $num = CourseManager::countActiveCourses($urlId);
-            if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
+            if ($num >= $limitCourses) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 
                 Display::addFlash(
@@ -998,7 +1015,7 @@ if ($form->validate() && $isEditable) {
         : null;
 
     if (!empty($pdf_export_watermark_path['name'])) {
-        $pdf_export_watermark_path_result = PDF::upload_watermark(
+        PDF::upload_watermark(
             $pdf_export_watermark_path['name'],
             $pdf_export_watermark_path['tmp_name'],
             $course_code
@@ -1043,14 +1060,13 @@ if ($form->validate() && $isEditable) {
     }
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->saveFieldValues($updateValues);
+    $courseFieldValue->saveFieldValues($updateValues, true);
 
     $appPlugin->saveCourseSettingsHook($updateValues);
     $courseParams = api_get_cidreq();
     $cidReset = true;
     $cidReq = $course_code;
     Display::addFlash(Display::return_message(get_lang('Update successful')));
-
     $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.$courseParams;
     header("Location: $url");
     exit;
@@ -1066,9 +1082,6 @@ if ($show_delete_watermark_text_message) {
 $tpl = new Template($nameTools);
 
 Display::display_header($nameTools, 'Settings');
-
-//$form->display();
-
 $tpl->assign('course_settings', $form->returnForm());
 $courseInfoLayout = $tpl->get_template("course_info/index.html.twig");
 $content = $tpl->fetch($courseInfoLayout);

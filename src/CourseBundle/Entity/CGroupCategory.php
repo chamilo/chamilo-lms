@@ -31,20 +31,16 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var bool
@@ -176,15 +172,13 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
      */
     public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
      * Set description.
-     *
-     * @param string $description
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -193,10 +187,8 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

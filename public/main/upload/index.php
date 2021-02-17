@@ -93,7 +93,6 @@ $interbreadcrumb[] = [
 Display::display_header($nameTools, 'Path');
 
 require_once '../lp/content_makers.inc.php';
-require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.

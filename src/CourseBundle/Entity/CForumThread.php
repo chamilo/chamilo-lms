@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -41,21 +42,17 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
      */
-    protected $threadTitle;
+    protected string $threadTitle;
 
     /**
-     * @var CForumForum|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="threads")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $forum;
+    protected ?CForumForum $forum = null;
 
     /**
      * @var int
@@ -65,18 +62,10 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $threadReplies;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="thread_poster_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="thread_poster_id", referencedColumnName="id")
      */
-    protected $threadPosterId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="thread_poster_name", type="string", length=100, nullable=true)
-     */
-    protected $threadPosterName;
+    protected User $user;
 
     /**
      * @var int
@@ -86,9 +75,21 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $threadViews;
 
     /**
-     * @var int
+     * @var ArrayCollection|CForumPost[]
      *
-     * @ORM\Column(name="thread_last_post", type="integer", nullable=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CForumPost",
+     *     mappedBy="thread", cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $posts;
+
+    /**
+     * @var CForumPost
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected $threadLastPost;
 
@@ -161,13 +162,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
      */
     protected $lpItemId;
-
-    /**
-     * @var ArrayCollection|CForumPost[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
-    protected $posts;
 
     public function __construct()
     {
@@ -279,54 +273,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set threadPosterId.
-     *
-     * @param int $threadPosterId
-     *
-     * @return CForumThread
-     */
-    public function setThreadPosterId($threadPosterId)
-    {
-        $this->threadPosterId = $threadPosterId;
-
-        return $this;
-    }
-
-    /**
-     * Get threadPosterId.
-     *
-     * @return int
-     */
-    public function getThreadPosterId()
-    {
-        return $this->threadPosterId;
-    }
-
-    /**
-     * Set threadPosterName.
-     *
-     * @param string $threadPosterName
-     *
-     * @return CForumThread
-     */
-    public function setThreadPosterName($threadPosterName)
-    {
-        $this->threadPosterName = $threadPosterName;
-
-        return $this;
-    }
-
-    /**
-     * Get threadPosterName.
-     *
-     * @return string
-     */
-    public function getThreadPosterName()
-    {
-        return $this->threadPosterName;
-    }
-
-    /**
      * Set threadViews.
      *
      * @param int $threadViews
@@ -348,30 +294,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     public function getThreadViews()
     {
         return $this->threadViews;
-    }
-
-    /**
-     * Set threadLastPost.
-     *
-     * @param int $threadLastPost
-     *
-     * @return CForumThread
-     */
-    public function setThreadLastPost($threadLastPost)
-    {
-        $this->threadLastPost = $threadLastPost;
-
-        return $this;
-    }
-
-    /**
-     * Get threadLastPost.
-     *
-     * @return int
-     */
-    public function getThreadLastPost()
-    {
-        return $this->threadLastPost;
     }
 
     /**
@@ -496,12 +418,10 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadQualifyMax.
      *
      * @param float $threadQualifyMax
-     *
-     * @return CForumThread
      */
-    public function setThreadQualifyMax($threadQualifyMax)
+    public function setThreadQualifyMax($threadQualifyMax): self
     {
-        $this->threadQualifyMax = $threadQualifyMax;
+        $this->threadQualifyMax = (float) $threadQualifyMax;
 
         return $this;
     }
@@ -547,9 +467,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
      *
      * @return CForumThread
      */
-    public function setThreadWeight($threadWeight)
+    public function setThreadWeight($threadWeight): self
     {
-        $this->threadWeight = $threadWeight;
+        $this->threadWeight = (float) $threadWeight;
 
         return $this;
     }
@@ -622,6 +542,18 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     /**
      * @return ArrayCollection|CForumPost[]
      */
@@ -630,9 +562,18 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->posts;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getThreadLastPost(): ?CForumPost
+    {
+        return $this->threadLastPost;
+    }
+
+    public function setThreadLastPost(CForumPost $threadLastPost): self
+    {
+        $this->threadLastPost = $threadLastPost;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

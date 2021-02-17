@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-class CSurvey
+class CSurvey extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -39,13 +41,6 @@ class CSurvey
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_id", type="integer")
-     */
-    protected $surveyId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
@@ -53,18 +48,15 @@ class CSurvey
     protected $code;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    protected $subtitle;
+    protected ?string $subtitle;
 
     /**
      * @var string
@@ -83,14 +75,14 @@ class CSurvey
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="avail_from", type="date", nullable=true)
+     * @ORM\Column(name="avail_from", type="datetime", nullable=true)
      */
     protected $availFrom;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="avail_till", type="date", nullable=true)
+     * @ORM\Column(name="avail_till", type="datetime", nullable=true)
      */
     protected $availTill;
 
@@ -109,18 +101,14 @@ class CSurvey
     protected $template;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    protected $intro;
+    protected ?string $intro;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    protected $surveyThanks;
+    protected ?string $surveyThanks;
 
     /**
      * @var \DateTime
@@ -158,11 +146,9 @@ class CSurvey
     protected $reminderMail;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mail_subject", type="string", length=255, nullable=false)
      */
-    protected $mailSubject;
+    protected string $mailSubject;
 
     /**
      * @var string
@@ -248,15 +234,13 @@ class CSurvey
      */
     protected $isMandatory = false;
 
-    /**
-     * CSurvey constructor.
-     */
     public function __construct()
     {
         $this->creationDate = new \DateTime();
         $this->invited = 0;
         $this->answered = 0;
         $this->surveyId = 0;
+        $this->subtitle = '';
         $this->inviteMail = '';
         $this->reminderMail = '';
         $this->mailSubject = '';
@@ -272,21 +256,10 @@ class CSurvey
         return $this->iid;
     }
 
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
     /**
      * Set code.
-     *
-     * @param string $code
-     *
-     * @return CSurvey
      */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -329,12 +302,8 @@ class CSurvey
 
     /**
      * Set subtitle.
-     *
-     * @param string $subtitle
-     *
-     * @return CSurvey
      */
-    public function setSubtitle($subtitle)
+    public function setSubtitle(string $subtitle): self
     {
         $this->subtitle = $subtitle;
 
@@ -343,10 +312,8 @@ class CSurvey
 
     /**
      * Get subtitle.
-     *
-     * @return string
      */
-    public function getSubtitle()
+    public function getSubtitle(): ?string
     {
         return $this->subtitle;
     }
@@ -355,10 +322,8 @@ class CSurvey
      * Set author.
      *
      * @param string $author
-     *
-     * @return CSurvey
      */
-    public function setAuthor($author)
+    public function setAuthor($author): self
     {
         $this->author = $author;
 
@@ -952,30 +917,6 @@ class CSurvey
     }
 
     /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurvey
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -1017,5 +958,25 @@ class CSurvey
     public function isMandatory()
     {
         return $this->isMandatory;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getCode();
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getCode();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCode($name);
     }
 }

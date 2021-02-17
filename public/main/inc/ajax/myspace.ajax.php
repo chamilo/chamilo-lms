@@ -23,7 +23,6 @@ switch ($action) {
         if (empty($userId)) {
             exit;
         }
-    // At this date : 23/02/2017, a minor review can't determine where is used this case 'access_detail'
         $cacheAvailable = api_get_configuration_value('apc');
         $table = null;
         $variable = 'lp_global_report_'.$userId;
@@ -41,7 +40,7 @@ switch ($action) {
         $sessionCategoryList = UserManager::get_sessions_by_category($userId, false);
         $total = 0;
         $totalAverage = 0;
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $row = 0;
         $col = 0;
         foreach ($sessionCategoryList as $category) {

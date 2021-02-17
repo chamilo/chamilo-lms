@@ -40,6 +40,7 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
         if ($controllerResult instanceof Response || !$request->attributes->getBoolean('_api_respond', true)) {
             return;
         }
+
         $attributes = RequestAttributesExtractor::extractAttributes($request);
 
         if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) ||

@@ -40,20 +40,16 @@ class CGroupRelUser
     protected $cId;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courseGroupsAsMember")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var CGroup
-     *
      * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="members")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
-    protected $group;
+    protected CGroup $group;
 
     /**
      * @var int

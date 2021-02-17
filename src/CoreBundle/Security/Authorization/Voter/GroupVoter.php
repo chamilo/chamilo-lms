@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;
@@ -47,17 +47,7 @@ class GroupVoter extends Voter
             self::DELETE,
         ];
 
-        // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options)) {
-            return false;
-        }
-
-        // only vote on Post objects inside this voter
-        if (!$subject instanceof CGroup) {
-            return false;
-        }
-
-        return true;
+        return $subject instanceof CGroup && in_array($attribute, $options);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -69,7 +59,7 @@ class GroupVoter extends Voter
             return false;
         }
 
-        if (false == $subject) {
+        if (false === $subject) {
             return false;
         }
 
@@ -77,16 +67,12 @@ class GroupVoter extends Voter
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
+
         /** @var CGroup $group */
         $group = $subject;
-        $groupInfo = [
-            'iid' => $group->getIid(),
-            'session_id' => 0,
-            'status' => $group->getStatus(),
-        ];
 
         // Legacy
-        return \GroupManager::userHasAccessToBrowse($user->getId(), $groupInfo);
+        return \GroupManager::userHasAccessToBrowse($user->getId(), $group);
 
         switch ($attribute) {
             case self::VIEW:
@@ -107,7 +93,7 @@ class GroupVoter extends Voter
 
                 break;
         }
-        dump("You don't have access to this group!!");
+        //dump("You don't have access to this group!!");
 
         return false;
     }

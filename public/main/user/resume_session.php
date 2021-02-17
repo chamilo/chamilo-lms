@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $id_session = (int) $_GET['id_session'];
 SessionManager::protect_teacher_session_edit($id_session);
-
+$url = null;
 $tool_name = get_lang('Session overview');
 
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
@@ -131,7 +131,7 @@ if ('true' === $allowTutors) {
     );
     echo Display::page_subheader(get_lang('General properties').$url); ?>
     <!-- General properties -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
     <tr>
         <td><?php echo get_lang('General coach'); ?> :</td>
         <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')'; ?></td>
@@ -216,7 +216,7 @@ if ('true' === $allowTutors) {
     <?php
     echo Display::page_subheader(get_lang('Course list').$url); ?>
     <!--List of courses -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
     <tr>
       <th width="35%"><?php echo get_lang('Course title'); ?></th>
       <th width="30%"><?php echo get_lang('Course coach'); ?></th>
@@ -295,7 +295,7 @@ if ('true' === $allowTutors) {
     <?php
     echo Display::page_subheader(get_lang('User list').$url); ?>
     <!--List of users -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
         <tr>
             <th>
                 <?php echo get_lang('User'); ?>

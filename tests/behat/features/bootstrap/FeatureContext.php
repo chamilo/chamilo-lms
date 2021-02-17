@@ -125,7 +125,7 @@ class FeatureContext extends MinkContext
         $this->fillField('password', $username);
         $this->pressButton('Login');
         $this->waitForThePageToBeLoaded();
-        $this->waitForThePageToBeLoaded();
+        //$this->waitForThePageToBeLoaded();
     }
 
     /**
@@ -290,6 +290,29 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Then /^I fill in tinymce field "([^"]*)" with "([^"]*)"$/
+     */
+    public function iFillInTinyMceOnFieldWith($locator, $value)
+    {
+        // Just in case wait that ckeditor is loaded
+        $this->getSession()->wait(2000);
+
+        $el = $this->getSession()->getPage()->findField($locator);
+        $fieldId = $el->getAttribute('id');
+
+        if (empty($fieldId)) {
+            throw new Exception(
+                'Could not find an id for field with locator: '.$locator
+            );
+        }
+
+        $this->getSession()->executeScript(
+            "tinymce.get(\"$fieldId\").getBody().innerHTML = \"$value\";"
+        );
+    }
+
+
+    /**
      * @Then /^I fill the only ckeditor in the page with "([^"]*)"$/
      */
     public function iFillTheOnlyEditorInThePage($value)
@@ -426,7 +449,7 @@ class FeatureContext extends MinkContext
     public function waitVeryLongForThePageToBeLoaded()
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(8000);
+        $this->getSession()->wait(9000);
     }
 
     /**
@@ -434,7 +457,7 @@ class FeatureContext extends MinkContext
      */
     public function waitVeryLongForThePageToBeLoadedWhenReady()
     {
-        $this->getSession()->wait(10000, "document.readyState === 'complete'");
+        $this->getSession()->wait(9000, "document.readyState === 'complete'");
     }
 
     /**

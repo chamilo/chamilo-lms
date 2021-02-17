@@ -83,7 +83,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
      * @param int $resourceId
      * @param int $type
      */
-    public function deleteResource($resourceId, $type)
+    public function deleteSequenceResource($resourceId, $type)
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
         if ($sequence && $sequence->hasGraph()) {

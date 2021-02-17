@@ -63,8 +63,7 @@ class NotebookManager
         ;
 
         $repo = Container::getNotebookRepository();
-        $repo->getEntityManager()->persist($notebook);
-        $repo->getEntityManager()->flush();
+        $repo->create($notebook);
 
         return $notebook->getIid();
     }
@@ -121,8 +120,7 @@ class NotebookManager
             ->setDescription($values['note_comment'])
         ;
 
-        $repo->getEntityManager()->persist($notebook);
-        $repo->getEntityManager()->flush();
+        $repo->update($notebook);
 
         return true;
     }

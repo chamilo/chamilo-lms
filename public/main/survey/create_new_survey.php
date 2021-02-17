@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,15 +8,13 @@
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
  * Test modification and rewriting large parts of the code
  *
- * @todo only the available platform languages should be used => need an
+ * @todo   only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $_course = api_get_course_info();
 $this_section = SECTION_COURSES;
-
-$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 $table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
@@ -23,7 +22,7 @@ $table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 if (!api_is_allowed_to_edit()) {
     if (!api_is_session_general_coach() ||
         (!empty($_GET['survey_id']) &&
-        !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
+            !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
     ) {
         api_not_allowed(true);
     }
@@ -61,17 +60,14 @@ if ('edit' == $action && is_numeric($survey_id)) {
 }
 $gradebook_link_id = null;
 // Getting the default values
-if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
-
-    if ($allowSurveyAvailabilityDatetime) {
-        $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
-        $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
-        $defaults['start_date'] = $defaults['avail_from'];
-        $defaults['end_date'] = $defaults['avail_till'];
-    }
+    $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
+    $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
+    $defaults['start_date'] = $defaults['avail_from'];
+    $defaults['end_date'] = $defaults['avail_till'];
 
     $link_info = GradebookUtils::isResourceInCourseGradebook(
         $course_id,
@@ -94,15 +90,9 @@ if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
     }
 } else {
     $defaults['survey_language'] = $_course['language'];
-    $defaults['start_date'] = date(
-        $allowSurveyAvailabilityDatetime ? 'Y-m-d 00:00:00' : 'Y-m-d',
-        api_strtotime(api_get_local_time())
-    );
+    $defaults['start_date'] = date('Y-m-d 00:00:00', api_strtotime(api_get_local_time()));
     $startdateandxdays = time() + 864000; // today + 10 days
-    $defaults['end_date'] = date(
-        $allowSurveyAvailabilityDatetime ? 'Y-m-d 23:59:59' : 'Y-m-d',
-        $startdateandxdays
-    );
+    $defaults['end_date'] = date('Y-m-d 23:59:59', $startdateandxdays);
     $defaults['anonymous'] = 0;
 }
 
@@ -154,20 +144,10 @@ $form->addElement(
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
-
-$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-
-if ($allowSurveyAvailabilityDatetime) {
-    $startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
-    $endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
-    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
-} else {
-    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
-    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'date');
-    $form->addRule('end_date', get_lang('Invalid date'), 'date');
-}
+$startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
+$endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
+$form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+$form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 
 $form->setRequired($startDateElement);
 $form->setRequired($endDateElement);
@@ -323,20 +303,20 @@ $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
 
 $form->addElement('html', '</div><br />');
 
-if (isset($_GET['survey_id']) && 'edit' == $action) {
+if (isset($_GET['survey_id']) && 'edit' === $action) {
     $form->addButtonUpdate(get_lang('Edit survey'), 'submit_survey');
 } else {
     $form->addButtonCreate(get_lang('Create survey'), 'submit_survey');
 }
 
 // Setting the rules
-if ('add' == $action) {
+if ('add' === $action) {
     $form->addRule('survey_code', get_lang('Required field'), 'required');
     $form->addRule('survey_code', '', 'maxlength', 20);
 }
 $form->addRule('survey_title', get_lang('Required field'), 'required');
-$form->addRule('start_date', get_lang('Invalid date'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
-$form->addRule('end_date', get_lang('Invalid date'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
+$form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+$form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 $form->addRule(
     ['start_date', 'end_date'],
     get_lang('Start DateShouldBeBeforeEnd Date'),

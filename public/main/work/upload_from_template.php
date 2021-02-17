@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -75,11 +77,16 @@ $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
 
 $documentTemplateData = getDocumentTemplateFromWork($work_id, $course_info, $documentId);
-
 $defaults = [];
 if (!empty($documentTemplateData)) {
-    $defaults['title'] = $userInfo['complete_name'].'_'.$documentTemplateData['title'].'_'.substr(api_get_utc_datetime(), 0, 10);
-    $defaults['description'] = $documentTemplateData['file_content'];
+    $defaults['title'] = $userInfo['complete_name'].'_'.
+        $documentTemplateData->getTitle().'_'.substr(
+        api_get_utc_datetime(),
+        0,
+        10
+    );
+    $docRepo = Container::getDocumentRepository();
+    $defaults['description'] = $docRepo->getResourceFileContent($documentTemplateData);
 }
 
 $form->setDefaults($defaults);

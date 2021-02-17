@@ -77,8 +77,13 @@
                 <div class="items-tools col">
                     <div class="tools mt-3 mb-3">
                         <div class="big_icon">
-                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.iid, 'cid': course.id })|raw }}" >
-                                <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
+                            <a
+                                href="{{ url(
+                                    'chamilo_core_course_redirect_tool',
+                                    { 'toolName': item.name, 'cid': course.id, 'sid': session ? session.id : 0, })|raw
+                                }}"
+                            >
+                                <img alt="{{ item.name }}" src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
                             </a>
                         </div>
                         <div class="content pt-2 pb-2">
@@ -96,7 +101,7 @@
                 <div class="tools mt-3 mb-3">
                     {% set url %}
                     {{-
-                        url('chamilo_core_resource_view', {
+                        url('chamilo_core_resource_link', {
                             'id': shortcut.shortCutNode.id,
                             'cid': course.id,
                             'sid': session ? session.id : 0,

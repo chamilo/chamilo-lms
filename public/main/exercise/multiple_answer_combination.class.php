@@ -228,7 +228,7 @@ class MultipleAnswerCombination extends Question
         ) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+                $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
         }
 
@@ -236,7 +236,9 @@ class MultipleAnswerCombination extends Question
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         }
-        $header .= '<th>'.get_lang('Comment').'</th>';
+        if (false === $exercise->hideComment) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
+        }
         $header .= '</tr>';
 
         return $header;

@@ -88,14 +88,14 @@ switch ($action) {
                 $contentEmail = sprintf(
                     get_lang('User %s signed the agreement.TheDateY'),
                     $currentUserInfo['complete_name'],
-                    api_get_local_time($time)
+                    api_get_local_time()
                 );
 
                 MessageManager::send_message_simple(
                     $bossId,
                     $subjectEmail,
                     $contentEmail,
-                    $user_id
+                    api_get_user_id()
                 );
             }
         }
@@ -400,7 +400,7 @@ $personalData['data'] = $personalDataContent;
 
 $em = Database::getManager();
 /** @var LegalRepository $legalTermsRepo */
-$legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
+$legalTermsRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\Legal::class);
 // Get data about the treatment of data
 $treatmentTypes = LegalManager::getTreatmentTypeList();
 

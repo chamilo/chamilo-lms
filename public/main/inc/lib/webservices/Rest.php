@@ -4,70 +4,72 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
-use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CNotebookRepository;
 
 /**
  * Class RestApi.
  */
 class Rest extends WebService
 {
-    const SERVICE_NAME = 'MsgREST';
-    const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
+    public const SERVICE_NAME = 'MsgREST';
+    public const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
-    const GET_AUTH = 'authenticate';
-    const GET_USER_MESSAGES = 'user_messages';
-    const POST_USER_MESSAGE_READ = 'user_message_read';
-    const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
-    const SAVE_GCM_ID = 'gcm_id';
-    const GET_USER_COURSES = 'user_courses';
-    const GET_PROFILE = 'user_profile';
-    const GET_COURSE_INFO = 'course_info';
-    const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
-    const GET_COURSE_DOCUMENTS = 'course_documents';
-    const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
-    const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
-    const GET_COURSE_AGENDA = 'course_agenda';
-    const GET_COURSE_NOTEBOOKS = 'course_notebooks';
-    const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
-    const GET_COURSE_FORUM = 'course_forum';
-    const GET_COURSE_FORUM_THREAD = 'course_forumthread';
-    const GET_COURSE_LEARNPATHS = 'course_learnpaths';
-    const GET_COURSE_LEARNPATH = 'course_learnpath';
-    const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
-    const SAVE_FORUM_POST = 'save_forum_post';
-    const GET_USER_SESSIONS = 'user_sessions';
-    const SAVE_USER_MESSAGE = 'save_user_message';
-    const GET_MESSAGE_USERS = 'message_users';
-    const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
-    const SAVE_FORUM_THREAD = 'save_forum_thread';
-    const SAVE_COURSE = 'save_course';
-    const SAVE_USER = 'save_user';
-    const SAVE_USER_JSON = 'save_user_json';
-    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
-    const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
-    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
-    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
-    const DELETE_USER_MESSAGE = 'delete_user_message';
-    const SET_MESSAGE_READ = 'set_message_read';
-    const CREATE_CAMPUS = 'add_campus';
-    const EDIT_CAMPUS = 'edit_campus';
-    const DELETE_CAMPUS = 'delete_campus';
-    const SAVE_SESSION = 'save_session';
-    const GET_USERS = 'get_users';
-    const GET_COURSES = 'get_courses';
-    const ADD_COURSES_SESSION = 'add_courses_session';
-    const ADD_USERS_SESSION = 'add_users_session';
-    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
-    const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
-    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
-    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
-    const USERNAME_EXIST = 'username_exist';
-    const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
-    const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+    public const GET_AUTH = 'authenticate';
+    public const GET_USER_MESSAGES = 'user_messages';
+    public const POST_USER_MESSAGE_READ = 'user_message_read';
+    public const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
+    public const SAVE_GCM_ID = 'gcm_id';
+    public const GET_USER_COURSES = 'user_courses';
+    public const GET_PROFILE = 'user_profile';
+    public const GET_COURSE_INFO = 'course_info';
+    public const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
+    public const GET_COURSE_DOCUMENTS = 'course_documents';
+    public const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
+    public const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
+    public const GET_COURSE_AGENDA = 'course_agenda';
+    public const GET_COURSE_NOTEBOOKS = 'course_notebooks';
+    public const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
+    public const GET_COURSE_FORUM = 'course_forum';
+    public const GET_COURSE_FORUM_THREAD = 'course_forumthread';
+    public const GET_COURSE_LEARNPATHS = 'course_learnpaths';
+    public const GET_COURSE_LEARNPATH = 'course_learnpath';
+    public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
+    public const SAVE_FORUM_POST = 'save_forum_post';
+    public const GET_USER_SESSIONS = 'user_sessions';
+    public const SAVE_USER_MESSAGE = 'save_user_message';
+    public const GET_MESSAGE_USERS = 'message_users';
+    public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
+    public const SAVE_FORUM_THREAD = 'save_forum_thread';
+    public const SAVE_COURSE = 'save_course';
+    public const SAVE_USER = 'save_user';
+    public const SAVE_USER_JSON = 'save_user_json';
+    public const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    public const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
+    public const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    public const GET_USER_MESSAGES_SENT = 'user_messages_sent';
+    public const DELETE_USER_MESSAGE = 'delete_user_message';
+    public const SET_MESSAGE_READ = 'set_message_read';
+    public const CREATE_CAMPUS = 'add_campus';
+    public const EDIT_CAMPUS = 'edit_campus';
+    public const DELETE_CAMPUS = 'delete_campus';
+    public const SAVE_SESSION = 'save_session';
+    public const GET_USERS = 'get_users';
+    public const GET_COURSES = 'get_courses';
+    public const ADD_COURSES_SESSION = 'add_courses_session';
+    public const ADD_USERS_SESSION = 'add_users_session';
+    public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
+    public const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
+    public const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    public const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    public const USERNAME_EXIST = 'username_exist';
+    public const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
+    public const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
 
     /**
      * @var Session
@@ -205,6 +207,42 @@ class Rest extends WebService
         );
     }
 
+    public function processMessage(Message $message)
+    {
+        $illustrationRepo = Container::getIllustrationRepository();
+        $hasAttachments = $message->getAttachments()->count() > 0;
+        $attachmentList = [];
+        if ($hasAttachments) {
+            $repo = Container::getMessageAttachmentRepository();
+            $attachments = $message->getAttachments();
+            foreach ($attachments as $attachment) {
+                $attachmentList[] = [
+                    'file_source' => $repo->getResourceFileUrl($attachment),
+                ];
+            }
+        }
+
+        $picture = $illustrationRepo->getIllustrationUrl($message->getUserSender());
+
+        return [
+            'id' => $message->getId(),
+            'title' => $message->getTitle(),
+            'sender' => [
+                'id' => $message->getUserSender()->getId(),
+                'lastname' => $message->getUserSender()->getLastname(),
+                'firstname' => $message->getUserSender()->getFirstname(),
+                'completeName' => UserManager::formatUserFullName($message->getUserSender()),
+                'pictureUri' => $picture,
+            ],
+            'sendDate' => $message->getSendDate()->format('Y-m-d H:i:s'),
+            'content' => $message->getContent(),
+            'hasAttachments' => $hasAttachments,
+            'attachmentList' => $attachmentList,
+            'url' => api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
+                .http_build_query(['type' => 1, 'id' => $message->getId()]),
+        ];
+    }
+
     /**
      * @param int $lastMessageId
      *
@@ -214,25 +252,8 @@ class Rest extends WebService
     {
         $lastMessages = MessageManager::getMessagesFromLastReceivedMessage($this->user->getId(), $lastMessageId);
         $messages = [];
-
         foreach ($lastMessages as $message) {
-            $hasAttachments = MessageManager::hasAttachments($message['id']);
-
-            $messages[] = [
-                'id' => $message['id'],
-                'title' => $message['title'],
-                'sender' => [
-                    'id' => $message['user_id'],
-                    'lastname' => $message['lastname'],
-                    'firstname' => $message['firstname'],
-                    'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
-                ],
-                'sendDate' => $message['send_date'],
-                'content' => $message['content'],
-                'hasAttachments' => $hasAttachments,
-                'url' => api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
-                    .http_build_query(['type' => 1, 'id' => $message['id']]),
-            ];
+            $messages[] = $this->processMessage($message);
         }
 
         return $messages;
@@ -245,30 +266,8 @@ class Rest extends WebService
     {
         $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), 0);
         $messages = [];
-
         foreach ($lastMessages as $message) {
-            $hasAttachments = MessageManager::hasAttachments($message['id']);
-            $attachmentList = [];
-            if ($hasAttachments) {
-                $attachmentList = MessageManager::getAttachmentList($message['id']);
-            }
-            $messages[] = [
-                'id' => $message['id'],
-                'title' => $message['title'],
-                'msgStatus' => $message['msg_status'],
-                'sender' => [
-                    'id' => $message['user_id'],
-                    'lastname' => $message['lastname'],
-                    'firstname' => $message['firstname'],
-                    'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
-                    'pictureUri' => $message['pictureUri'],
-                ],
-                'sendDate' => $message['send_date'],
-                'content' => $message['content'],
-                'hasAttachments' => $hasAttachments,
-                'attachmentList' => $attachmentList,
-                'url' => '',
-            ];
+            $messages[] = $this->processMessage($message);
         }
 
         return $messages;
@@ -283,24 +282,7 @@ class Rest extends WebService
         $messages = [];
 
         foreach ($lastMessages as $message) {
-            $hasAttachments = MessageManager::hasAttachments($message['id']);
-
-            $messages[] = [
-                'id' => $message['id'],
-                'title' => $message['title'],
-                'msgStatus' => $message['msg_status'],
-                'receiver' => [
-                    'id' => $message['user_id'],
-                    'lastname' => $message['lastname'],
-                    'firstname' => $message['firstname'],
-                    'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
-                    'pictureUri' => $message['pictureUri'],
-                ],
-                'sendDate' => $message['send_date'],
-                'content' => $message['content'],
-                'hasAttachments' => $hasAttachments,
-                'url' => '',
-            ];
+            $messages[] = $this->processMessage($message);
         }
 
         return $messages;
@@ -647,8 +629,6 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
         $includeGroupsForums = 'true' === api_get_setting('display_groups_forum_in_general_tool');
@@ -717,8 +697,6 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
 
@@ -759,8 +737,6 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $sessionId = $this->session ? $this->session->getId() : 0;
         $threadInfo = get_thread_information($forumId, $threadId, $sessionId);
 
@@ -794,10 +770,11 @@ class Rest extends WebService
      */
     public function getUserProfile()
     {
-        $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
+        $illustrationRepo = Container::getIllustrationRepository();
+        $url = $illustrationRepo->getIllustrationUrl($this->user);
 
         $result = [
-            'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
+            'pictureUri' => $url,
             'id' => $this->user->getId(),
             'status' => $this->user->getStatus(),
             'fullName' => UserManager::formatUserFullName($this->user),
@@ -989,8 +966,6 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $forum = get_forums($forumId, $this->course->getCode());
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
@@ -1131,12 +1106,10 @@ class Rest extends WebService
      */
     public function saveForumThread(array $values, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
         $courseInfo = api_get_course_info($this->course->getCode());
-        $thread = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
+        $thread = saveThread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 
         return [
             'registered' => $thread->getIid(),
@@ -1548,12 +1521,15 @@ class Rest extends WebService
     {
         $sessionId = $params['id_session'];
         $courseList = $params['list_courses'];
+        $importAssignments = isset($params['import_assignments']) ? 1 === (int) $params['import_assignments'] : false;
 
         $result = SessionManager::add_courses_to_session(
             $sessionId,
             $courseList,
             true,
-            false
+            false,
+            false,
+            $importAssignments
         );
 
         if ($result) {
@@ -1561,12 +1537,12 @@ class Rest extends WebService
                 'status' => $result,
                 'message' => get_lang('Updated'),
             ];
-        } else {
-            return [
+        }
+
+        return [
                 'status' => $result,
                 'message' => get_lang('ErrorOccurred'),
             ];
-        }
     }
 
     /**
@@ -1797,8 +1773,7 @@ class Rest extends WebService
         if (is_null($userId)) {
             throw new Exception(get_lang('NoData'));
         }
-        /** @var User $user */
-        $user = UserManager::getRepository()->find($userId);
+        $user = api_get_user_entity($userId);
         if (empty($user)) {
             throw new Exception(get_lang('CouldNotLoadUser'));
         }
@@ -2023,12 +1998,12 @@ class Rest extends WebService
                     'indent' => 0,
                     'onclick' => '',
                     'afterlink' => null,
-                    'customdata' => "",
+                    'customdata' => '',
                     'noviewlink' => false,
                     'completion' => (int) ($exercise[1] > 0),
                 ];
             },
-            Exercise::exerciseGrid(0, '', $userId, $courseId, $sessionId, true)
+            Exercise::exerciseGridResource(0, '', $userId, $courseId, $sessionId, true)
         );
 
         return [$json];

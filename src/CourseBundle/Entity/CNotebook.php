@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CNotebook.
@@ -57,18 +58,16 @@ class CNotebook extends AbstractResource implements ResourceInterface
     protected $sessionId;
 
     /**
-     * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var \DateTime
@@ -179,12 +178,8 @@ class CNotebook extends AbstractResource implements ResourceInterface
 
     /**
      * Set title.
-     *
-     * @param string $title
-     *
-     * @return CNotebook
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -193,22 +188,16 @@ class CNotebook extends AbstractResource implements ResourceInterface
 
     /**
      * Get title.
-     *
-     * @return string
      */
     public function getTitle()
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CNotebook
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

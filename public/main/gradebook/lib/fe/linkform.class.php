@@ -115,7 +115,7 @@ class LinkForm extends FormValidator
 
             if (LINK_EXERCISE == $link->get_type()) {
                 // Adding hot potatoes
-                $linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
+                /*$linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
                 $linkHot->setHp(true);
                 if ($linkHot->get_all_links(true)) {
                     $select->addOption(
@@ -128,7 +128,7 @@ class LinkForm extends FormValidator
                         LINK_HOTPOTATOES,
                         'disabled'
                     );
-                }
+                }*/
             }
         }
 

@@ -64,7 +64,9 @@ class ExerciseResult
 
         if (empty($user_id)) {
             $user_id_and = null;
-            $sql = 'SELECT '.(api_is_western_name_order() ? 'firstname as userpart1, lastname userpart2' : 'lastname as userpart1, firstname as userpart2').",
+            $sql = "SELECT
+                    firstname,
+                    lastname,
                     official_code,
                     ce.title as extitle,
                     te.score as exresult ,
@@ -82,19 +84,25 @@ class ExerciseResult
                     te.status as exstatus
                 FROM $TBL_EXERCISES AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $TBL_USER AS user
                 ON (user.id = exe_user_id)
                 LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
-                ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
+                ON (tlm.iid = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
                     te.c_id = ce.c_id $user_id_and  $session_id_and AND
                     ce.active <>-1";
         } else {
             $user_id_and = ' AND te.exe_user_id = '.api_get_user_id().' ';
+            $orderBy = 'lastname';
+            if (api_is_western_name_order()) {
+                $orderBy = 'firstname';
+            }
             // get only this user's results
-            $sql = 'SELECT '.(api_is_western_name_order() ? 'firstname as userpart1, lastname userpart2' : 'lastname as userpart1, firstname as userpart2').",
+            $sql = "SELECT
+                        firstname,
+                        lastname,
                         official_code,
                         ce.title as extitle,
                         te.score as exresult,
@@ -113,16 +121,16 @@ class ExerciseResult
                         te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te
-                    ON (te.exe_exo_id = ce.id)
+                    ON (te.exe_exo_id = ce.iid)
                     INNER JOIN $TBL_USER AS user
                     ON (user.id = exe_user_id)
                     LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
-                    ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
+                    ON (tlm.iid = te.orig_lp_id AND tlm.c_id = ce.c_id)
                     WHERE
                         ce.c_id = $course_id AND
                         te.c_id = ce.c_id $user_id_and $session_id_and AND
                         ce.active <>-1 AND
-                    ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
+                    ORDER BY $orderBy, te.c_id ASC, ce.title ASC, te.exe_date DESC";
         }
 
         $results = [];
@@ -208,13 +216,8 @@ class ExerciseResult
                 $return[$i] = [];
                 if (empty($user_id)) {
                     $return[$i]['official_code'] = $result['official_code'];
-                    if (api_is_western_name_order()) {
-                        $return[$i]['first_name'] = $results[$i]['userpart1'];
-                        $return[$i]['last_name'] = $results[$i]['userpart2'];
-                    } else {
-                        $return[$i]['first_name'] = $results[$i]['userpart2'];
-                        $return[$i]['last_name'] = $results[$i]['userpart1'];
-                    }
+                    $return[$i]['firstname'] = $results[$i]['firstname'];
+                    $return[$i]['lastname'] = $results[$i]['lastname'];
                     $return[$i]['user_id'] = $results[$i]['excruid'];
                     $return[$i]['email'] = $results[$i]['exemail'];
                     $return[$i]['username'] = $results[$i]['username'];
@@ -253,13 +256,8 @@ class ExerciseResult
 
                         if (empty($user_id)) {
                             $return[$i]['official_code'] = $student['official_code'];
-                            if ($isWestern) {
-                                $return[$i]['first_name'] = $student['firstname'];
-                                $return[$i]['last_name'] = $student['lastname'];
-                            } else {
-                                $return[$i]['first_name'] = $student['lastname'];
-                                $return[$i]['last_name'] = $student['firstname'];
-                            }
+                            $return[$i]['firstname'] = $student['firstname'];
+                            $return[$i]['lastname'] = $student['lastname'];
 
                             $return[$i]['user_id'] = $student['user_id'];
                             $return[$i]['email'] = $student['email'];
@@ -320,17 +318,17 @@ class ExerciseResult
         $filename = api_replace_dangerous_char($filename);
         $data = '';
         if (api_is_western_name_order()) {
-            if (!empty($this->results[0]['first_name'])) {
+            if (!empty($this->results[0]['firstname'])) {
                 $data .= get_lang('First name').';';
             }
-            if (!empty($this->results[0]['last_name'])) {
+            if (!empty($this->results[0]['lastname'])) {
                 $data .= get_lang('Last name').';';
             }
         } else {
-            if (!empty($this->results[0]['last_name'])) {
+            if (!empty($this->results[0]['lastname'])) {
                 $data .= get_lang('Last name').';';
             }
-            if (!empty($this->results[0]['first_name'])) {
+            if (!empty($this->results[0]['firstname'])) {
                 $data .= get_lang('First name').';';
             }
         }
@@ -369,16 +367,17 @@ class ExerciseResult
         $data .= get_lang('Status').';';
         $data .= get_lang('Learning path').';';
         $data .= get_lang('The user is currently subscribed').';';
+        $data .= get_lang('Course code').';';
         $data .= "\n";
 
         //results
         foreach ($this->results as $row) {
             if (api_is_western_name_order()) {
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['firstname']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['lastname']), ENT_QUOTES, $charset)).';';
             } else {
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['lastname']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['firstname']), ENT_QUOTES, $charset)).';';
             }
 
             // Official code
@@ -538,6 +537,7 @@ class ExerciseResult
         $list[0][] = get_lang('Status');
         $list[0][] = get_lang('Learning path');
         $list[0][] = get_lang('The user is currently subscribed');
+        $list[0][] = get_lang('Course code');
         $column = 1;
         foreach ($this->results as $row) {
             if ($withColumnUser) {
@@ -629,6 +629,7 @@ class ExerciseResult
             $list[$column][] = $row['status'];
             $list[$column][] = $row['lp_name'];
             $list[$column][] = $row['is_user_subscribed'];
+            $list[$column][] = api_get_course_id();
             $column++;
         }
         Export::arrayToXls($list, $filename);

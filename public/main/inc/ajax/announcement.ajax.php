@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -10,13 +11,15 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit();
 $courseInfo = api_get_course_info();
 $courseId = api_get_course_int_id();
+$courseCode = api_get_course_id();
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
 
 $isTutor = false;
 if (!empty($groupId)) {
     $groupInfo = GroupManager::get_group_properties($groupId);
-    $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo);
+    $groupEntity = api_get_group_entity($groupId);
+    $isTutor = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
     if ($isTutor) {
         $isAllowedToEdit = true;
     }
@@ -35,15 +38,15 @@ switch ($action) {
         }
 
         if (false === $allowToEdit && !empty($groupId)) {
-            $groupProperties = GroupManager::get_group_properties($groupId);
+            $groupEntity = api_get_group_entity($groupId);
             // Check if user is tutor group
-            $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
+            $isTutor = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
             if ($isTutor) {
                 $allowToEdit = true;
             }
 
             // Last chance ... students can send announcements.
-            if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupProperties['announcements_state']) {
+            if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupEntity->getAnnouncementsState()) {
                 $allowToEdit = true;
             }
         }

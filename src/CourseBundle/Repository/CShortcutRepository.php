@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 
 /**
@@ -20,17 +21,20 @@ use Symfony\Component\Form\FormInterface;
  */
 final class CShortcutRepository extends ResourceRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CShortcut::class);
+    }
+
     public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
     {
-        $repo = $this->getRepository();
         $criteria = ['shortCutNode' => $resource->getResourceNode()];
 
-        return $repo->findOneBy($criteria);
+        return $this->findOneBy($criteria);
     }
 
     public function addShortCut(AbstractResource $resource, $parent, Course $course, Session $session = null)
     {
-        $em = $this->getRepository()->getEntityManager();
         $shortcut = $this->getShortcutFromResource($resource);
 
         if (null === $shortcut) {
@@ -40,14 +44,14 @@ final class CShortcutRepository extends ResourceRepository
                 ->setShortCutNode($resource->getResourceNode())
                 ->setParent($parent)
                 ->addCourseLink($course, $session);
-            $em->persist($shortcut);
-            $em->flush();
+
+            $this->create($shortcut);
         }
     }
 
     public function removeShortCut(AbstractResource $resource)
     {
-        $em = $this->getRepository()->getEntityManager();
+        $em = $this->getEntityManager();
         $shortcut = $this->getShortcutFromResource($resource);
         if (null !== $shortcut) {
             $em->remove($shortcut);
@@ -57,12 +61,9 @@ final class CShortcutRepository extends ResourceRepository
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
-        $repo = $this->getRepository();
-        $className = $repo->getClassName();
-
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'

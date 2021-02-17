@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -35,11 +36,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @var int
@@ -56,25 +56,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $url;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="url_correction", type="string", length=500, nullable=true)
-     */
-    protected $urlCorrection;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title_correction", type="string", length=255, nullable=true)
-     */
-    protected $titleCorrection;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var string
@@ -211,6 +195,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->description = '';
         $this->documentId = 0;
         $this->hasProperties = 0;
         $this->containsFile = 0;
@@ -275,12 +260,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CStudentPublication
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -289,10 +270,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -721,42 +700,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return string
-     */
-    public function getUrlCorrection()
-    {
-        return $this->urlCorrection;
-    }
-
-    /**
-     * @param string $urlCorrection
-     */
-    public function setUrlCorrection($urlCorrection)
-    {
-        $this->urlCorrection = $urlCorrection;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitleCorrection()
-    {
-        return $this->titleCorrection;
-    }
-
-    /**
-     * @param string $titleCorrection
-     */
-    public function setTitleCorrection($titleCorrection)
-    {
-        $this->titleCorrection = $titleCorrection;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getDocumentId()
@@ -796,9 +739,21 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getCorrection(): ?ResourceNode
+    {
+        if ($this->hasResourceNode()) {
+            $children = $this->getResourceNode()->getChildren();
+            foreach ($children as $child) {
+                $name = $child->getResourceType()->getName();
+                if ('student_publications_corrections' === $name) {
+                    return $child;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

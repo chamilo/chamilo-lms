@@ -218,16 +218,20 @@ function WSImportLP($params)
     $manifestData = $oScorm->parse_manifest($manifest);
 
     if (!empty($manifestData)) {
+        $entity = $oScorm->getEntity();
         $oScorm->import_manifest(
             $courseInfo['code'],
             $maxScore,
             $sessionId,
             $userId
         );
-        $oScorm->set_name($lpName);
-        $oScorm->set_proximity($proximity, $courseId);
-        $oScorm->set_maker($maker, $courseId);
-        //$oScorm->set_jslib('scorm_api.php');
+        $entity
+            ->setName($lpName)
+            ->setContentLocal($proximity)
+            ->setContentMaker($maker)
+        ;
+        Database::getManager()->persist($entity);
+        Database::getManager()->flush();
 
         if ($debug) {
             error_log('scorm was added');
@@ -645,7 +649,7 @@ function WSCreateLp($params)
     if ($debug) {
         error_log('add_lp');
     }
-    $lpId = learnpath::add_lp(
+    $lp = learnpath::add_lp(
         $courseCode,
         $lpName,
         '',
@@ -657,6 +661,8 @@ function WSCreateLp($params)
         0,
         $userId
     );
+
+    $lpId = $lp->getIid();
 
     if ($lpId) {
         if ($debug) {

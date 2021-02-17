@@ -8,6 +8,8 @@
 >
     <projectFiles>
         <directory name="src"/>
+
+        <file name="public/legacy.php"/>
         <directory name="public/main/admin" />
         <directory name="public/main/announcements"/>
         <directory name="public/main/attendance"/>
@@ -16,22 +18,44 @@
         <directory name="public/main/blog"/>
         <directory name="public/main/calendar"/>
 <!--        <directory name="public/main/chat"/>-->
-<!--        <directory name="public/main/course_description"/>-->
-<!--        <directory name="public/main/course_info"/>-->
+        <directory name="public/main/course_description"/>
+        <directory name="public/main/course_home"/>
+        <directory name="public/main/course_info"/>
+        <directory name="public/main/course_progress"/>
+        <directory name="public/main/coursecopy"/>
+        <directory name="public/main/create_course"/>
+<!--        <directory name="public/main/cron"/>-->
         <directory name="public/main/dashboard"/>
+<!--        <directory name="public/main/document"/>-->
 <!--        <directory name="public/main/dropbox"/>-->
 <!--        <directory name="public/main/exercise"/>-->
         <file name="public/main/exercise/oral_expression.class.php"/>
+
+        <file name="public/main/exercise/TestCategory.php"/>
         <file name="public/main/exercise/exercise.class.php"/>
 
         <directory name="public/main/gradebook"/>
         <directory name="public/main/group"/>
         <directory name="public/main/forum"/>
+<!--        <directory name="public/main/gamification"/>-->
+        <directory name="public/main/glossary"/>
+        <directory name="public/main/group"/>
+<!--        <directory name="public/main/inc/ajax" />-->
+
         <directory name="public/main/link" />
 <!--        <directory name="public/main/lp"/>-->
-<!--        <directory name="public/main/session" />-->
-        <!--        <directory name="public/main/inc/ajax" />-->
-
+        <directory name="public/main/messages" />
+<!--        <directory name="public/main/mySpace" />-->
+        <directory name="public/main/notebook" />
+        <directory name="public/main/session" />
+        <directory name="public/main/social" />
+<!--        <directory name="public/main/survey" />-->
+<!--        <directory name="public/main/ticket" />-->
+<!--        <directory name="public/main/tracking" />-->
+<!--        <directory name="public/main/upload" />-->
+        <directory name="public/main/user" />
+<!--        <directory name="public/main/webservices" />-->
+<!--        <directory name="public/main/wiki" />-->
         <directory name="public/main/work" />
 
         <file name="public/main/inc/lib/access_url_edit_courses_to_url_functions.lib.php"/>
@@ -39,13 +63,14 @@
         <file name="public/main/inc/lib/access_url_edit_users_to_url_functions.lib.php"/>
         <file name="public/main/inc/lib/add_course.lib.inc.php"/>
         <file name="public/main/inc/lib/add_courses_to_session_functions.lib.php"/>
-<!--        <file name="public/main/inc/lib/agenda.lib.php"/>-->
+        <file name="public/main/inc/lib/agenda.lib.php"/>
         <file name="public/main/inc/lib/AnnouncementEmail.php"/>
         <file name="public/main/inc/lib/AnnouncementManager.php"/>
-        <file name="public/main/inc/lib/api.lib.php"/>
+<!--        <file name="public/main/inc/lib/api.lib.php"/>-->
         <file name="public/main/inc/lib/array.lib.php"/>
         <file name="public/main/inc/lib/attendance.lib.php"/>
         <file name="public/main/inc/lib/auth.lib.php"/>
+<!--        <file name="public/main/inc/lib/baker.lib.php"/>-->
 <!--        <file name="public/main/inc/lib/blog.lib.php"/>-->
         <file name="public/main/inc/lib/career.lib.php"/>
 <!--        <file name="public/main/inc/lib/certificate.lib.php"/>-->
@@ -63,24 +88,24 @@
 <!--        <file name="public/main/inc/lib/events.lib.php"/>-->
 <!--        <file name="public/main/inc/lib/exercise.lib.php"/>-->
         <file name="public/main/inc/lib/exercise_show_functions.lib.php"/>
-<!--        <file name="public/main/inc/lib/ExerciseCategoryManager.php"/>-->
+        <file name="public/main/inc/lib/ExerciseCategoryManager.php"/>
 <!--        <file name="public/main/inc/lib/export.lib.inc.php"/>-->
 
         <file name="public/main/inc/lib/extra_field.lib.php"/>
         <file name="public/main/inc/lib/extra_field_option.lib.php"/>
-<!--        <file name="public/main/inc/lib/extra_field_value.lib.php"/>-->
+        <file name="public/main/inc/lib/extra_field_value.lib.php"/>
 
-<!--        <file name="public/main/inc/lib/glossary.lib.php"/>-->
+        <file name="public/main/inc/lib/glossary.lib.php"/>
         <file name="public/main/inc/lib/grade_model.lib.php"/>
         <file name="public/main/inc/lib/gradebook.lib.php"/>
-
         <file name="public/main/inc/lib/groupmanager.lib.php"/>
-<!--        <file name="public/main/inc/lib/image.lib.php"/>-->
         <file name="public/main/inc/lib/import.lib.php"/>
-
+        <file name="public/main/inc/lib/internationalization.lib.php"/>
         <file name="public/main/inc/lib/legal.lib.php"/>
         <file name="public/main/inc/lib/link.lib.php"/>
-<!--        <file name="public/main/inc/lib/message.lib.php"/>-->
+        <file name="public/main/inc/lib/lp_item.lib.php"/>
+        <file name="public/main/inc/lib/MailTemplateManager.php"/>
+        <file name="public/main/inc/lib/message.lib.php"/>
         <file name="public/main/inc/lib/model.lib.php"/>
 <!--        <file name="public/main/inc/lib/MoodleImport.php"/>-->
 <!--        <file name="public/main/inc/lib/myspace.lib.php"/>-->
@@ -133,9 +158,27 @@
             <directory name="src/GraphQlBundle"/>
             <directory name="src/LtiBundle"/>
 
+            <directory name="public/main/inc/lib/elfinder" />
+            <directory name="public/main/inc/lib/javascript" />
+            <directory name="public/main/inc/lib/kses-0.2.2" />
+            <directory name="public/main/inc/lib/mimetex" />
+            <directory name="public/main/inc/lib/nusoap" />
+            <directory name="public/main/inc/lib/opengraph" />
+            <directory name="public/main/inc/lib/pear" />
+            <directory name="public/main/inc/lib/ppt2png" />
+            <directory name="public/main/inc/lib/search" />
+            <directory name="public/main/inc/lib/svg-edit" />
+            <directory name="public/main/inc/lib/zombie" />
 
-            <file name="public/main/forum/forumfunction.inc.php"/>
+
+
+            <file name="public/main/lp/openoffice_presentation.class.php"/>
+            <file name="public/main/lp/openoffice_document.class.php"/>
+            <file name="public/main/lp/openoffice_text.class.php"/>
+            <file name="public/main/lp/openoffice_text_document.class.php"/>
+
             <file name="public/main/admin/index.php"/>
+
             <file name="public/main/admin/db.php"/>
             <file name="public/main/admin/settings.php"/>
             <file name="public/main/admin/periodic_export.php"/>
@@ -143,7 +186,9 @@
             <file name="public/main/admin/settings.lib.php"/>
             <file name="public/main/admin/user_update_import.php"/>
             <file name="public/main/admin/teachers_time_by_session_report.php"/>
+            <file name="public/main/admin/specific_fields.php"/>
             <file name="public/main/admin/sub_language*"/>
+
             <file name="public/main/admin/ldap_*"/>
             <file name="public/main/admin/special_exports.php"/>
 
@@ -153,6 +198,10 @@
     </projectFiles>
 
     <issueHandlers>
+
+        <RedundantCastGivenDocblockType errorLevel="info"/>
+
+
         <InvalidClass errorLevel="info"/>
 
         <LessSpecificReturnType errorLevel="info"/>
@@ -168,7 +217,6 @@
         <MissingReturnType errorLevel="info"/>
         <MissingPropertyType errorLevel="info"/>
         <InvalidDocblock errorLevel="info"/>
-        <MisplacedRequiredParam errorLevel="info"/>
 
         <PropertyNotSetInConstructor errorLevel="info"/>
         <MissingConstructor errorLevel="info"/>
@@ -190,7 +238,7 @@
 
         <MoreSpecificReturnType errorLevel="info"/>
         <LessSpecificReturnStatement errorLevel="info"/>
-        <TypeCoercion errorLevel="info"/>
+        <ArgumentTypeCoercion errorLevel="info"/>
 
         <PossiblyFalseArgument errorLevel="info"/>
         <PossiblyFalseIterator errorLevel="info"/>

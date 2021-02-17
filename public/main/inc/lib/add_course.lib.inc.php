@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -333,16 +334,15 @@ class AddCourse
         }
 
         $certificateId = 'NULL';
-
         /*    Documents   */
         if ($fill_with_exemplary_content) {
             $files = [
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
+                //['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
+                //['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
             ];
             $paths = [];
             foreach ($files as $file) {
@@ -529,10 +529,7 @@ class AddCourse
             $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
             $answer->createAnswer(get_lang('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, get_lang('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
             $answer->save();
-
-            /* Forum tool */
-            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
+            // Forums.
             $params = [
                 'forum_category_title' => get_lang('Example Forum Category'),
                 'forum_category_comment' => '',
@@ -562,7 +559,7 @@ class AddCourse
                 'thread_peer_qualify' => 0,
             ];
 
-            store_thread($forumEntity, $params, $courseInfo, false);
+            saveThread($forumEntity, $params, $courseInfo, false);
 
             /* Gradebook tool */
             $course_code = $courseInfo['code'];
@@ -571,7 +568,7 @@ class AddCourse
                 "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','0',0,'',1,$course_id,0,100,0,75,NULL,$certificateId)"
             );
-            $gbid = Database:: insert_id();
+            $gbid = Database::insert_id();
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','0',0,'',1,$course_id,$gbid,100,1,75,NULL,$certificateId)"
@@ -744,6 +741,7 @@ class AddCourse
             return 0;
         }
 
+        $em = Database::getManager();
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
@@ -758,7 +756,6 @@ class AddCourse
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
-                ->setCreationDate(new \DateTime())
                 ->setExpirationDate(new \DateTime($expiration_date))
                 ->setDepartmentName($department_name)
                 ->setDepartmentUrl($department_url)
@@ -778,13 +775,11 @@ class AddCourse
                     }
 
                     $category = $categoryRepo->find($key);
-
                     $course->addCategory($category);
                 }
             }
 
-            $repo->getEntityManager()->persist($course);
-            $repo->getEntityManager()->flush();
+            $repo->create($course);
 
             $course_id = $course->getId();
             if ($course_id) {
@@ -802,7 +797,7 @@ class AddCourse
                         ->setRelationType(0)
                         ->setUserCourseCat(0)
                     ;
-                    Database::getManager()->persist($courseRelTutor);
+                    $em->persist($courseRelTutor);
                 }
 
                 if (!empty($teachers)) {
@@ -831,9 +826,11 @@ class AddCourse
                             ->setRelationType(0)
                             ->setUserCourseCat(0)
                         ;
-                        Database::getManager()->persist($courseRelTeacher);
+                        $em->persist($courseRelTeacher);
                     }
                 }
+
+                $em->flush();
 
                 // Adding the course to an URL.
                 //UrlManager::add_course_to_url($course_id, $accessUrlId);

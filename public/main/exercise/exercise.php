@@ -54,12 +54,12 @@ Exercise::cleanSessionVariables();
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
-$exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
 
 $exerciseRepo = Container::getQuizRepository();
@@ -77,18 +77,14 @@ if (api_is_in_gradebook()) {
 }
 
 $nameTools = get_lang('Tests');
-
 // Simple actions
 if ($is_allowedToEdit && !empty($action)) {
     $objExerciseTmp = new Exercise();
-    $exercise_action_locked = api_resource_is_locked_by_gradebook(
-        $exerciseId,
-        LINK_EXERCISE
-    );
+    $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
     $result = $objExerciseTmp->read($exerciseId);
 
     if (empty($result)) {
-        api_not_allowed();
+        api_not_allowed(true);
     }
 
     switch ($action) {
@@ -182,7 +178,7 @@ if ($is_allowedToEdit && !empty($action)) {
             }
 
             break;
-        case 'copy_exercise': //copy an exercise
+        case 'copy_exercise':
             api_set_more_memory_and_time_limits();
             $objExerciseTmp->copyExercise();
             Display::addFlash(Display::return_message(
@@ -235,7 +231,7 @@ if ($is_allowedToEdit && !empty($action)) {
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
-            require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
+            require_once __DIR__.'/export/qti2/qti2_export.php';
             $export = export_exercise_to_qti($exerciseId, true);
 
             $xmlReader = new XMLReader();
@@ -250,7 +246,14 @@ if ($is_allowedToEdit && !empty($action)) {
                 $zip->finish();
                 exit;
             } else {
-                Display::addFlash(Display::return_message(get_lang('There was an error writing the XML file. Please ask the administrator to check the error logs.'), 'error'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang(
+                            'There was an error writing the XML file. Please ask the administrator to check the error logs.'
+                        ),
+                        'error'
+                    )
+                );
                 header('Location: '.$currentUrl);
                 exit;
             }
@@ -371,7 +374,32 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
     } else {
         $actionsLeft .= $cleanAll;
     }
-    $actionsRight = '';
+    $form = new FormValidator('search_simple', 'get', $currentUrl, null, null, FormValidator::LAYOUT_INLINE);
+    $form->addCourseHiddenParams();
+
+    if (api_get_configuration_value('allow_exercise_categories')) {
+        $manager = new ExerciseCategoryManager();
+        $options = $manager->getCategoriesForSelect(api_get_course_int_id());
+        if (!empty($options)) {
+            $form->addSelect(
+                'category_id',
+                get_lang('Category'),
+                $options,
+                ['placeholder' => get_lang('SelectAnOption'), 'disable_js' => true]
+            );
+        }
+    }
+
+    $form->addText(
+        'keyword',
+        null,
+        false,
+        [
+            'placeholder' => get_lang('Search'),
+        ]
+    );
+    $form->addButtonSearch(get_lang('Search'));
+    $actionsRight = $form->returnForm();
 }
 
 if ($is_allowedToEdit) {
@@ -407,7 +435,6 @@ if (false === api_get_configuration_value('allow_exercise_categories')) {
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
                 $counter++;
-
                 if ($total === $counter) {
                     $down = Display::url(Display::return_icon('down_na.png'), '#');
                 }

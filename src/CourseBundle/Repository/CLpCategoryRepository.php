@@ -7,10 +7,17 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\RouterInterface;
 
 final class CLpCategoryRepository extends ResourceRepository implements ResourceWithLinkInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CLpCategory::class);
+    }
+
     public function getLink(ResourceInterface $resource, RouterInterface $router, $extraParams = []): string
     {
         $params = [

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Controller\EditorController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 /**
  * Class CourseListener.
@@ -30,6 +32,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class CourseListener
 {
     use ContainerAwareTrait;
+
+    private $twig;
+
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
 
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
@@ -60,7 +69,7 @@ class CourseListener
         $sessionHandler = $request->getSession();
         $container = $this->container;
         $translator = $container->get('translator');
-        $twig = $container->get('twig');
+        $twig = $this->twig;
 
         $course = null;
         $courseInfo = [];
@@ -69,6 +78,7 @@ class CourseListener
         $courseId = (int) $request->get('cid');
         $checker = $container->get('security.authorization_checker');
 
+        //dump("cid value in request: $courseId");
         if (!empty($courseId)) {
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
@@ -76,7 +86,7 @@ class CourseListener
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
-                    //dump("Course loaded from Session $courseId");
+                    //dump("Course #$courseId loaded from Session ");
                 }
             }
             $course = null;
@@ -89,7 +99,7 @@ class CourseListener
                     throw new NotFoundHttpException($translator->trans('Course does not exist'));
                 }
 
-                //dump("Course loaded from DB $courseId");
+                //dump("Course loaded from DB #$courseId");
                 $courseInfo = api_get_course_info($course->getCode());
             }
 
@@ -239,9 +249,9 @@ class CourseListener
         // This controller implements ToolInterface? Then set the course/session
         if (is_array($controllerList) &&
             (
-                $controllerList[0] instanceof CourseControllerInterface
+                $controllerList[0] instanceof CourseControllerInterface ||
+                $controllerList[0] instanceof EditorController
                 //$controllerList[0] instanceof ResourceController
-
                 //|| $controllerList[0] instanceof LegacyController
             )
         ) {
@@ -305,6 +315,8 @@ class CourseListener
         if (null !== $token) {
             $user = $token->getUser();
             if ($user instanceof UserInterface) {
+                $user->removeRole('ROLE_CURRENT_COURSE_GROUP_TEACHER');
+                $user->removeRole('ROLE_CURRENT_COURSE_GROUP_STUDENT');
                 $user->removeRole('ROLE_CURRENT_COURSE_STUDENT');
                 $user->removeRole('ROLE_CURRENT_COURSE_TEACHER');
                 $user->removeRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');

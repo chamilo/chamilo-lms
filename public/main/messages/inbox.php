@@ -8,18 +8,18 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if ('true' != api_get_setting('allow_message_tool')) {
+if ('true' !== api_get_setting('allow_message_tool')) {
     api_not_allowed(true);
 }
 
 $logInfo = [
     'tool' => 'Messages',
-    'action' => isset($_GET['action']) ? $_GET['action'] : 'inbox',
+    'action' => $_GET['action'] ?? 'inbox',
 ];
 Event::registerLog($logInfo);
 
-$allowSocial = 'true' == api_get_setting('allow_social_tool');
-$allowMessage = 'true' == api_get_setting('allow_message_tool');
+$allowSocial = 'true' === api_get_setting('allow_social_tool');
+$allowMessage = 'true' === api_get_setting('allow_message_tool');
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;

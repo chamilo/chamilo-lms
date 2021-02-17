@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
+$this_section = SECTION_COURSES;
+$current_course_tool = TOOL_GROUP;
 
 api_protect_course_script(true);
 
@@ -114,7 +116,7 @@ if (isset($_POST['number_of_groups'])) {
             disabled = element.disabled;
             $(id).prop('disabled', disabled);
             $(id).prop('value', ref.value);
-            $(id).selectpicker('refresh');
+            //$(id).selectpicker('refresh');
         }
         if (disabled) {
             ref.addEventListener("change", copy, false);

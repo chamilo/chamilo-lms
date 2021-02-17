@@ -39,7 +39,7 @@ function validate_data($user_classes)
                     $user_class['error'] = get_lang('This code does not exist').': '.$user_class['ClassName'];
                     $errors[] = $user_class;
                 } else {
-                    $classcodes[$user_class['CourseCode']] = 1;
+                    $classcodes[$user_class['ClassName']] = 1;
                 }
             }
         }
@@ -122,10 +122,9 @@ function save_data($users_classes, $deleteUsersNotInList = false)
  */
 function parse_csv_data($file)
 {
-    $courses = Import::csvToArray($file);
-
-    return $courses;
+    return Import::csvToArray($file);
 }
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

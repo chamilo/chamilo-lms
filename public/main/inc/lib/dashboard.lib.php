@@ -47,13 +47,13 @@ class DashboardManager
 
                 // change index to lower case
                 $plugin_info = array_change_key_case($plugin_info);
-
                 echo '<tr>';
                 self::display_dashboard_plugin_checkboxes($testplugin);
                 for ($i = 0; $i < count($table_cols); $i++) {
-                    if (isset($plugin_info[strtolower($table_cols[$i])])) {
+                    $key = $table_cols[$i];
+                    if (isset($plugin_info[$key])) {
                         echo '<td>';
-                        echo $plugin_info[$table_cols[$i]];
+                        echo $plugin_info[$key];
                         echo '</td>';
                     } else {
                         echo '<td></td>';
@@ -80,15 +80,16 @@ class DashboardManager
                 echo '<tr style="background-color:#eee">';
                 echo '<td><center><input type="checkbox" name="disabled_block" value="true" checked disabled /></center>';
                 for ($j = 0; $j < count($table_cols); $j++) {
-                    if (isset($disabled_block[strtolower($table_cols[$j])])) {
+                    $key = $table_cols[$j];
+                    if (isset($disabled_block[$key])) {
                         if (2 == $j) {
                             echo '<td>';
-                            echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font><br />';
+                            echo '<font color="#aaa">'.$disabled_block[$key].'</font><br />';
                             echo '<font color="red">'.get_lang('This plugin has been deleted from the dashboard plugin directory').'</font>';
                             echo '</td>';
                         } else {
                             echo '<td>';
-                            echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font>';
+                            echo '<font color="#aaa">'.$disabled_block[$key].'</font>';
                             echo '</td>';
                         }
                     } else {
@@ -101,7 +102,11 @@ class DashboardManager
 
         echo '</table>';
         echo '<br />';
-        echo '<button class="btn btn-default" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboard plugins').'">'.
+        echo '<button
+            class="btn btn-default"
+            type="submit"
+            name="submit_dashboard_plugins"
+            value="'.get_lang('EnableDashboard plugins').'">'.
             get_lang('EnableDashboard plugins').'</button></form>';
     }
 
@@ -188,7 +193,7 @@ class DashboardManager
             }
             // clean from block data
             if (!empty($not_selected_blocks_id)) {
-                $sql_check = "SELECT id FROM $tbl_block 
+                $sql_check = "SELECT id FROM $tbl_block
                               WHERE id IN(".implode(',', $not_selected_blocks_id).")";
                 $rs_check = Database::query($sql_check);
                 if (Database::num_rows($rs_check) > 0) {

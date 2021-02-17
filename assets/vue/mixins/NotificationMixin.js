@@ -13,7 +13,7 @@ export default {
             );*/
         },
         showError(error) {
-            //this.showMessage(error, 'danger');
+            this.showMessage(error, 'danger');
         },
         showMessage(message, type = 'success') {
             const content = {
@@ -40,7 +40,7 @@ export default {
                 type: type,
                 position: 'top-center',
                 timeout: 10000, // 10 seconds
-                closeOnClick: true,
+                closeOnClick: false,
                 pauseOnFocusLoss: true,
                 pauseOnHover: true,
                 draggable: true,

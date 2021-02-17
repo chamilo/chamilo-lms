@@ -15,10 +15,6 @@
  */
 require_once 'openoffice_document.class.php';
 
-if ('true' == api_get_setting('search_enabled')) {
-    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-}
-
 class OpenofficePresentation extends OpenofficeDocument
 {
     public $take_slide_name;

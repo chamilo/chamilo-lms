@@ -201,7 +201,7 @@ class MailTemplateManager extends Model
                 $emailTemplate = str_replace("{{user.$key}}", $userInfo[$key], $emailTemplate);
             }
             $template = new Template();
-            $template->twig->setLoader(new \Twig_Loader_String());
+            //$template->twig->setLoader(new \Twig_Loader_String());
             $emailBody = $template->twig->render($emailTemplate);
 
             return $emailBody;

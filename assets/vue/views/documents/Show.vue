@@ -1,6 +1,7 @@
 <template>
   <div>
     <Toolbar
+      v-if="item"
       :handle-edit="editHandler"
       :handle-delete="del"
     >
@@ -12,31 +13,32 @@
 <!--        </v-toolbar-title>-->
       </template>
     </Toolbar>
-    <br>
+    <br />
     <div
       v-if="item"
       class="table-documents-show"
     >
-      <div v-if="item['resourceLinkList']">
+      <h2>
+        {{ item['title'] }}
+      </h2>
+      <div v-if="item['resourceLinkListFromEntity']">
         <ul>
           <li
-            v-for="link in item['resourceLinkList']"
+              v-for="link in item['resourceLinkListFromEntity']"
           >
-            Status: {{ link.visibilityName }}
+            {{ $t('Status') }}: {{ link.visibilityName }}
             <div v-if="link['course']">
-              Course: {{ link.course.resourceNode.title }}
+              {{ $t('Course') }}: {{ link.course.resourceNode.title }}
             </div>
             <div v-if="link['session']">
-              Session: {{ link.session.resourceNode.title }}
+              {{ $t('Session') }}: {{ link.session.name }}
+            </div>
+            <div v-if="link['group']">
+              {{ $t('Group') }}: {{ link.group.resourceNode.title }}
             </div>
           </li>
         </ul>
       </div>
-
-      <h2>
-        {{ item['title'] }}
-      </h2>
-
       <b-table-simple>
         <template slot="default">
           <tbody>
@@ -45,7 +47,7 @@
               <td>
                 {{ item['resourceNode'].creator.username }}
               </td>
-              <td><strong /></td>
+              <td></td>
               <td />
             </tr>
             <tr>
@@ -54,7 +56,6 @@
                 {{ item['comment'] }}
               </td>
             </tr>
-
             <tr>
               <td><strong>{{ $t('Created at') }}</strong></td>
               <td>
@@ -62,7 +63,6 @@
               </td>
               <td />
             </tr>
-
             <tr>
               <td><strong>{{ $t('Updated at') }}</strong></td>
               <td>
@@ -70,7 +70,6 @@
               </td>
               <td />
             </tr>
-
             <tr v-if="item['resourceNode']['resourceFile']">
               <td><strong>{{ $t('File') }}</strong></td>
               <td>

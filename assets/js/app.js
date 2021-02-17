@@ -49,7 +49,8 @@ var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
 $(function () {
-  var webCidReq = '&cidReq=' + $('body').attr('data-course-code');
+  let courseId = $('body').attr('data-course-id');
+  let webCidReq = '&cid=' + courseId + '&sid=' + $('body').attr('data-session-id');
   window.webCidReq = webCidReq;
 
   $("#menu_courses").click(function(){
@@ -62,15 +63,14 @@ $(function () {
     return false;
   });
 
-  var isInCourse = $("body").data("in-course");
-  if (isInCourse == true) {
-    var courseCode = $("body").data("course-code");
-    var logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
+  if (courseId >0) {
+    let courseCode = $("body").data("course-code");
+    let logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
     function courseLogout() {
       $.ajax({
         async: false,
         url: logOutUrl,
-        success: function (data) {
+        success: function () {
           return 1;
         }
       });
@@ -612,7 +612,8 @@ if (typeof CKEDITOR !== 'undefined') {
       editorName = ckeditorName;
     }
     CKEDITOR.editorConfig(CKEDITOR.config);
-    CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
+
+    /*CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
       var templatesConfig = CKEDITOR.getTemplates("default");
       var $templatesUL = $("<ul>");
       if (templatesConfig) {
@@ -643,7 +644,7 @@ if (typeof CKEDITOR !== 'undefined') {
         });
       }
       $templatesUL.appendTo("#frmModel");
-    });
+    });*/
   };
 }
 

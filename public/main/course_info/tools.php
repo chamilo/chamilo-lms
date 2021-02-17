@@ -23,6 +23,7 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
 $toolName = get_lang('Customize icons');
 
+$tpl = new Template($toolName);
 switch ($action) {
     case 'delete_icon':
         $tool = CourseHome::getTool($id);
@@ -163,6 +164,5 @@ switch ($action) {
         break;
 }
 
-$tpl = new Template($toolName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

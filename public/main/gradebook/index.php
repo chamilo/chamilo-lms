@@ -465,7 +465,7 @@ if (isset($_GET['deletelink'])) {
             $sql = 'UPDATE '.$tbl_attendance.' SET
                         attendance_weight = 0,
                         attendance_qualify_title = ""
-				 	WHERE c_id = '.$course_id.' AND id = (
+				 	WHERE iid = (
 				 	    SELECT ref_id FROM '.$tbl_grade_links.'
 				 	    WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
                     )';
@@ -481,7 +481,7 @@ if (isset($_GET['deletelink'])) {
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     GradebookUtils::block_students();
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
-        die('Error: movecat or moveeval not defined');
+        exit('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId
@@ -937,6 +937,11 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
         $allowGraph = false === api_get_configuration_value('gradebook_hide_graph');
         $isAllow = api_is_allowed_to_edit(null, true);
 
+        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $showFeedBack = true;
+        if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
+            $showFeedBack = false;
+        }
         /** @var Category $cat */
         foreach ($cats as $cat) {
             $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
@@ -1026,13 +1031,13 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                         'orientation' => 'P',
                     ];
 
+                    $feedback = '';
+                    if ($showFeedBack) {
+                        $feedback = '<br />'.get_lang('Feedback').'<br />
+                                      <textarea rows="5" cols="100" >&nbsp;</textarea>';
+                    }
                     $pdf = new PDF('A4', $params['orientation'], $params);
-                    $pdf->html_to_pdf_with_template(
-                        $table.
-                        $graph.
-                        '<br />'.get_lang('Feedback').'<br />
-                        <textarea rows="5" cols="100" >&nbsp;</textarea>'
-                    );
+                    $pdf->html_to_pdf_with_template($table.$graph.$feedback);
                 } else {
                     echo $table;
                     echo $graph;

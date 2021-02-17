@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -29,32 +30,19 @@ $form = new FormValidator(
     api_get_self().'?action=add&'.api_get_cidreq()
 );
 
-$form->addElement('header', $tool_name);
+$form->addHeader($tool_name);
 $form->addHidden('anonymous', 0);
 $form->addHidden('survey_language', $courseInfo['language']);
 $form->addHidden('survey_subtitle', '');
 $form->addHidden('survey_thanks', '');
 $form->addHidden('visible_results', '0');
 $form->addHidden('survey_type', 3);
+$text = $form->addText('survey_title', get_lang('Title'));
 
-$text = $form->addText(
-    'survey_title',
-    get_lang('Title')
-);
-
-$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-
-if ($allowSurveyAvailabilityDatetime) {
-    $startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
-    $endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
-    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
-} else {
-    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
-    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'date');
-    $form->addRule('end_date', get_lang('Invalid date'), 'date');
-}
+$startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
+$endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
+$form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+$form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 
 $form->addRule(
     ['start_date', 'end_date'],
@@ -82,14 +70,14 @@ for ($i = 1; $i <= $maxEvents; $i++) {
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = 3;    
+    var number = 3;
     $("#add_button").on("click", function() {
         number++;
         $("#time_" + number + "_date_time_wrapper").show();
     });
-    
+
     $("#remove_button").on("click", function() {
-        if (number > 1) {            
+        if (number > 1) {
             $("#time_" + number + "_date_time_wrapper").hide();
             number--;
         }
@@ -152,7 +140,7 @@ if ($form->validate()) {
 
     $questionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
     $counter = 1;
-    if (!empty($surveyData['id'])) {
+    if (!empty($surveyData['iid'])) {
         foreach ($dates as $date) {
             $params = [
                 'c_id' => api_get_course_int_id(),
@@ -165,12 +153,7 @@ if ($form->validate()) {
                 'shared_question_id' => '0',
                 'max_value' => 0,
             ];
-            $questionId = Database::insert($questionTable, $params);
-            if ($questionId) {
-                $sql = "UPDATE $questionTable SET question_id = $questionId
-                        WHERE iid = $questionId";
-                Database::query($sql);
-            }
+            Database::insert($questionTable, $params);
             $counter++;
         }
     }

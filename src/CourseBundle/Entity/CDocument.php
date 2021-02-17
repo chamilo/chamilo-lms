@@ -12,9 +12,7 @@ use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateResourceNodeFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateResourceNodeFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -30,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *              "controller"=UpdateResourceNodeFileAction::class,
  *              "deserialize"=false,
  *              "security" = "is_granted('EDIT', object.resourceNode)",
- *              "validation_groups"={"Default", "media_object_create", "document:write"},
+ *              "validation_groups"={"media_object_create", "document:write"},
  *          },
  *          "get" = {
  *              "security" = "is_granted('VIEW', object.resourceNode)",
@@ -96,9 +94,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                 }
  *             }
  *         },
- *         "get" = {
- *              "security"="is_granted('ROLE_USER')",
- *         },
+ *         "get"
  *     },
  * )
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
@@ -121,8 +117,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
  *  }
  * )
- * GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
- * GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Entity
  */
@@ -140,26 +134,24 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var string
+     * @Assert\NotBlank
      * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
      * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var string File type, it can be 'folder' or 'file'
      * @Groups({"document:read", "document:write"})
      * @Assert\Choice({"folder", "file"}, message="Choose a valid filetype.")
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
-    protected $filetype;
+    protected string $filetype;
 
     /**
      * @var bool
@@ -173,11 +165,9 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     protected $template;
 
-    /**
-     * CDocument constructor.
-     */
     public function __construct()
     {
+        $this->comment = '';
         $this->filetype = 'folder';
         $this->readonly = false;
         $this->template = false;
@@ -234,7 +224,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
@@ -289,9 +279,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

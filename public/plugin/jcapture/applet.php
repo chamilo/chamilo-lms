@@ -17,7 +17,7 @@ session_write_close();
 header('Content-Type: text/html; charset=utf-8');
 $hostName = 'http'.($_SERVER['HTTPS'] ? 's' : null).'://'.$_SERVER['HTTP_HOST'];
 $imageFormat = 'PNG';
-$cookies;
+
 foreach (array_keys($_COOKIE) as $cookieName) {
     $cookies .= bin2hex($cookieName).'='.bin2hex($_COOKIE[$cookieName]).';';
 }

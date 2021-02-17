@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
@@ -13,19 +14,23 @@ use Doctrine\ORM\Mapping as ORM;
 class Group
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
      */
-    protected $name;
+    protected string $name;
+
+    /**
+     * @Assert\NotBlank()
+     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
+     */
+    protected string $code;
 
     /**
      * @var array
@@ -38,20 +43,13 @@ class Group
      */
     protected $users;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
-     */
-    protected $code;
-
     public function __construct($name, $roles = [])
     {
         $this->name = $name;
         $this->roles = $roles;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName() ?: '';
     }
@@ -122,20 +120,12 @@ class Group
         return $this->users;
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @param string $code
-     *
-     * @return Group
-     */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 

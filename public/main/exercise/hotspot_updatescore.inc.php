@@ -20,7 +20,7 @@ $questionId = $_GET['questionId'];
 $coordinates = $_GET['coord'];
 $objExercise = Session::read('objExercise');
 $hotspotId = $_GET['hotspotId'];
-$exerciseId = $objExercise->selectId();
+$exerciseId = $objExercise->getId();
 if ('0' == $_GET['answerId']) { // click is NOT on a hotspot
     $hit = 0;
     $answerId = $hotspotId;
@@ -48,8 +48,8 @@ $TBL_TRACK_E_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT)
 
 // update db
 $update_id = $_SESSION['exerciseResult'][$questionId]['ids'][$answerId];
-$sql = "UPDATE $TBL_TRACK_E_HOTSPOT 
+$sql = "UPDATE $TBL_TRACK_E_HOTSPOT
         SET coordinate = '".Database::escape_string($coordinates)."'
-        WHERE id = ".(int) $update_id.' 
+        WHERE id = ".(int) $update_id.'
         LIMIT 1';
 $result = Database::query($sql);

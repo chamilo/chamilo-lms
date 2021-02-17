@@ -6,8 +6,10 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CForumPost.
@@ -16,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="c_forum_post",
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="poster_id", columns={"poster_id"}),
  *      @ORM\Index(name="forum_id", columns={"forum_id"}),
  *      @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}),
  *      @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
@@ -48,26 +49,21 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="post_title", type="string", length=250, nullable=true)
      */
-    protected $postTitle;
+    protected string $postTitle;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="post_text", type="text", nullable=true)
      */
-    protected $postText;
+    protected ?string $postText;
 
     /**
-     * @var CForumThread|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $thread;
+    protected ?CForumThread $thread = null;
 
     /**
      * @var CForumForum|null
@@ -78,18 +74,10 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $forum;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="poster_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      */
-    protected $posterId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="poster_name", type="string", length=100, nullable=true)
-     */
-    protected $posterName;
+    protected $user;
 
     /**
      * @var \DateTime
@@ -170,12 +158,8 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     /**
      * Set postText.
-     *
-     * @param string $postText
-     *
-     * @return CForumPost
      */
-    public function setPostText($postText)
+    public function setPostText(string $postText): self
     {
         $this->postText = $postText;
 
@@ -184,20 +168,16 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     /**
      * Get postText.
-     *
-     * @return string
      */
-    public function getPostText()
+    public function getPostText(): ?string
     {
         return $this->postText;
     }
 
     /**
      * Set thread.
-     *
-     * @return CForumPost
      */
-    public function setThread(CForumThread $thread = null)
+    public function setThread(CForumThread $thread = null): self
     {
         $this->thread = $thread;
 
@@ -212,54 +192,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function getThread()
     {
         return $this->thread;
-    }
-
-    /**
-     * Set posterId.
-     *
-     * @param int $posterId
-     *
-     * @return CForumPost
-     */
-    public function setPosterId($posterId)
-    {
-        $this->posterId = $posterId;
-
-        return $this;
-    }
-
-    /**
-     * Get posterId.
-     *
-     * @return int
-     */
-    public function getPosterId()
-    {
-        return $this->posterId;
-    }
-
-    /**
-     * Set posterName.
-     *
-     * @param string $posterName
-     *
-     * @return CForumPost
-     */
-    public function setPosterName($posterName)
-    {
-        $this->posterName = $posterName;
-
-        return $this;
-    }
-
-    /**
-     * Get posterName.
-     *
-     * @return string
-     */
-    public function getPosterName()
-    {
-        return $this->posterName;
     }
 
     /**
@@ -438,8 +370,20 @@ class CForumPost extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Resource identifier.
+     * @return User
      */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

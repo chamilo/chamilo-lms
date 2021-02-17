@@ -18,6 +18,8 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ZipStream\Option\Archive;
+use ZipStream\ZipStream;
 
 /**
  * This is a code library for Chamilo.
@@ -28,7 +30,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '7.2');
+define('REQUIRED_PHP_VERSION', '7.4');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -165,6 +167,7 @@ define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
+define('SECTION_CUSTOMPAGE', 'custompage');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -230,6 +233,7 @@ define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
 define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE', 'qst_attempt_deleted');
+define('LOG_QUESTION_SCORE_UPDATE', 'score_attempt_updated');
 
 define('LOG_MY_FOLDER_CREATE', 'my_folder_created');
 define('LOG_MY_FOLDER_CHANGE', 'my_folder_changed');
@@ -285,6 +289,10 @@ define('LOG_QUESTION_UPDATED', 'question_updated');
 define('LOG_QUESTION_DELETED', 'question_deleted');
 define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
+define('LOG_SURVEY_ID', 'survey_id');
+define('LOG_SURVEY_CREATED', 'survey_created');
+define('LOG_SURVEY_DELETED', 'survey_deleted');
+define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
 //used when login_is_email setting is true
@@ -314,8 +322,8 @@ define('REL_HOME_PATH', 'REL_HOME_PATH');
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYMFONY_SYS_PATH', 'SYMFONY_SYS_PATH');
-define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
-define('WEB_UPLOAD_PATH', 'WEB_UPLOAD_PATH');
+//define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
+//define('WEB_UPLOAD_PATH', 'WEB_UPLOAD_PATH');
 
 define('REL_PATH', 'REL_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
@@ -468,6 +476,8 @@ define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAY
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
+define('RESULT_DISABLE_RADAR', 9);
+define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK', 10);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -524,6 +534,9 @@ define('ITEM_TYPE_ATTENDANCE', 8);
 define('ITEM_TYPE_SURVEY', 9);
 define('ITEM_TYPE_FORUM_THREAD', 10);
 
+// Course description blocks.
+define('ADD_BLOCK', 8);
+
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
 define(
     'QUESTION_TYPES',
@@ -562,20 +575,20 @@ define('SKILL_TYPE_ACQUIRED', 'acquired');
 define('SKILL_TYPE_BOTH', 'both');
 
 // Message
-define('MESSAGE_STATUS_NEW', '0');
-define('MESSAGE_STATUS_UNREAD', '1');
+define('MESSAGE_STATUS_NEW', 0);
+define('MESSAGE_STATUS_UNREAD', 1);
 //2 ??
-define('MESSAGE_STATUS_DELETED', '3');
-define('MESSAGE_STATUS_OUTBOX', '4');
-define('MESSAGE_STATUS_INVITATION_PENDING', '5');
-define('MESSAGE_STATUS_INVITATION_ACCEPTED', '6');
-define('MESSAGE_STATUS_INVITATION_DENIED', '7');
-define('MESSAGE_STATUS_WALL', '8');
-define('MESSAGE_STATUS_WALL_DELETE', '9');
-define('MESSAGE_STATUS_WALL_POST', '10');
-define('MESSAGE_STATUS_CONVERSATION', '11');
-define('MESSAGE_STATUS_FORUM', '12');
-define('MESSAGE_STATUS_PROMOTED', '13');
+define('MESSAGE_STATUS_DELETED', 3);
+define('MESSAGE_STATUS_OUTBOX', 4);
+define('MESSAGE_STATUS_INVITATION_PENDING', 5);
+define('MESSAGE_STATUS_INVITATION_ACCEPTED', 6);
+define('MESSAGE_STATUS_INVITATION_DENIED', 7);
+define('MESSAGE_STATUS_WALL', 8);
+define('MESSAGE_STATUS_WALL_DELETE', 9);
+define('MESSAGE_STATUS_WALL_POST', 10);
+define('MESSAGE_STATUS_CONVERSATION', 11);
+define('MESSAGE_STATUS_FORUM', 12);
+define('MESSAGE_STATUS_PROMOTED', 13);
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -1061,6 +1074,45 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
+    if ($is_visible && 'true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+        $plugin = Positioning::create();
+        $block = $plugin->get('block_course_if_initial_exercise_not_attempted');
+        if ('true' === $block) {
+            $currentPath = $_SERVER['PHP_SELF'];
+            // Allowed only this course paths.
+            $paths = [
+                '/plugin/positioning/start.php',
+                '/plugin/positioning/start_student.php',
+                '/main/course_home/course_home.php',
+                '/main/exercise/overview.php',
+            ];
+
+            if (!in_array($currentPath, $paths, true)) {
+                // Check if entering an exercise.
+                // @todo remove global $current_course_tool
+                /*global $current_course_tool;
+                if ('quiz' !== $current_course_tool) {
+                    $initialData = $plugin->getInitialExercise($course_info['real_id'], $session_id);
+                    if ($initialData && isset($initialData['exercise_id'])) {
+                        $results = Event::getExerciseResultsByUser(
+                            api_get_user_id(),
+                            $initialData['exercise_id'],
+                            $course_info['real_id'],
+                            $session_id
+                        );
+                        if (empty($results)) {
+                            api_not_allowed($print_headers);
+
+                            return false;
+                        }
+                    }
+                }*/
+            }
+        }
+    }
+
+    api_block_inactive_user();
+
     return true;
 }
 
@@ -1086,8 +1138,66 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 
         return false;
     }
+    api_block_inactive_user();
 
     return true;
+}
+
+/**
+ * Blocks inactive users with a currently active session from accessing more pages "live".
+ *
+ * @return bool Returns true if the feature is disabled or the user account is still enabled.
+ *              Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
+ */
+function api_block_inactive_user()
+{
+    $data = true;
+    if (1 != api_get_configuration_value('security_block_inactive_users_immediately')) {
+        return $data;
+    }
+
+    $userId = api_get_user_id();
+    $homeUrl = api_get_path(WEB_PATH);
+    if (0 == $userId) {
+        return $data;
+    }
+
+    $sql = "SELECT active FROM ".Database::get_main_table(TABLE_MAIN_USER)."
+            WHERE id = $userId";
+
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        $data = (bool) $result_array['active'];
+    }
+    if (false == $data) {
+        $tpl = new Template(null, true, true, false, true, false, true, 0);
+        $tpl->assign('hide_login_link', 1);
+
+        //api_not_allowed(true, get_lang('AccountInactive'));
+        // we were not in a course, return to home page
+        $msg = Display::return_message(
+            get_lang('AccountInactive'),
+            'error',
+            false
+        );
+
+        $msg .= '<p class="text-center">
+                 <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
+
+        if (api_is_anonymous()) {
+            /*$form = api_get_not_allowed_login_form();
+            $msg .= '<div class="well">';
+            $msg .= $form->returnForm();
+            $msg .= '</div>';*/
+        }
+
+        $tpl->assign('content', $msg);
+        $tpl->display_one_col_template();
+        exit;
+    }
+
+    return $data;
 }
 
 /**
@@ -1112,22 +1222,33 @@ function api_protect_teacher_script()
 /**
  * Function used to prevent anonymous users from accessing a script.
  *
- * @param bool|true $printHeaders
- *
- * @author Roan Embrechts
+ * @param bool $printHeaders
  *
  * @return bool
  */
 function api_block_anonymous_users($printHeaders = true)
 {
-    $user = api_get_user_info();
-    if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
+    $isAuth = Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
+
+    if (false === $isAuth) {
         api_not_allowed($printHeaders);
 
         return false;
     }
 
+    api_block_inactive_user();
+
     return true;
+
+    /*$user = api_get_user_info();
+    if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
+        api_not_allowed($printHeaders);
+
+        return false;
+    }
+    api_block_inactive_user();
+
+    return true;*/
 }
 
 /**
@@ -1782,7 +1903,7 @@ function api_get_user_info_from_entity(
         $result['user_is_online'] = true == $result['user_is_online'] ? 1 : 0;
     }
     if (isset($result['user_is_online_in_chat'])) {
-        $result['user_is_online_in_chat'] = (int) $result['user_is_online_in_chat'];
+        $result['user_is_online_in_chat'] = $result['user_is_online_in_chat'];
     }
 
     $result['password'] = '';
@@ -2548,6 +2669,20 @@ function get_status_from_code($status_code)
             return get_lang('SessionsAdmin', '');
         case DRH:
             return get_lang('Drh', '');
+        case ANONYMOUS:
+            return get_lang('Anonymous', '');
+        case PLATFORM_ADMIN:
+            return get_lang('Administrator', '');
+        case SESSION_COURSE_COACH:
+            return get_lang('SessionCourseCoach', '');
+        case SESSION_GENERAL_COACH:
+            return get_lang('SessionGeneralCoach', '');
+        case COURSE_TUTOR:
+            return get_lang('CourseAssistant', '');
+        case STUDENT_BOSS:
+            return get_lang('StudentBoss', '');
+        case INVITEE:
+            return get_lang('Invitee', '');
     }
 }
 
@@ -2799,7 +2934,7 @@ function api_get_session_condition(
  *
  * @param string $variable The variable name
  *
- * @return string
+ * @return string|array
  */
 function api_get_setting($variable)
 {
@@ -3712,7 +3847,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
         // Getting the permissions of the task.
         if (0 != $task_id) {
             $task_permissions = get_permissions('task', $task_id);
-            /* !!! */$_SESSION['total_permissions'][$_course['code']] = $task_permissions;
+            /* !!! */ $_SESSION['total_permissions'][$_course['code']] = $task_permissions;
         }
     }
 
@@ -5693,87 +5828,6 @@ function api_is_xml_http_request()
 }
 
 /**
- * This wrapper function has been implemented for avoiding some known problems about the function getimagesize().
- *
- * @see http://php.net/manual/en/function.getimagesize.php
- * @see http://www.dokeos.com/forum/viewtopic.php?t=12345
- * @see http://www.dokeos.com/forum/viewtopic.php?t=16355
- *
- * @return int
- */
-function api_getimagesize($path)
-{
-    $image = new Image($path);
-
-    return $image->get_image_size();
-}
-
-/**
- * This function resizes an image, with preserving its proportions (or aspect ratio).
- *
- * @author Ivan Tcholakov, MAY-2009.
- *
- * @param int $image         System path or URL of the image
- * @param int $target_width  Targeted width
- * @param int $target_height Targeted height
- *
- * @return array Calculated new width and height
- */
-function api_resize_image($image, $target_width, $target_height)
-{
-    $image_properties = api_getimagesize($image);
-
-    return api_calculate_image_size(
-        $image_properties['width'],
-        $image_properties['height'],
-        $target_width,
-        $target_height
-    );
-}
-
-/**
- * This function calculates new image size, with preserving image's proportions (or aspect ratio).
- *
- * @author Ivan Tcholakov, MAY-2009.
- * @author The initial idea has been taken from code by Patrick Cool, MAY-2004.
- *
- * @param int $image_width   Initial width
- * @param int $image_height  Initial height
- * @param int $target_width  Targeted width
- * @param int $target_height Targeted height
- *
- * @return array Calculated new width and height
- */
-function api_calculate_image_size(
-    $image_width,
-    $image_height,
-    $target_width,
-    $target_height
-) {
-    // Only maths is here.
-    $result = ['width' => $image_width, 'height' => $image_height];
-    if ($image_width <= 0 || $image_height <= 0) {
-        return $result;
-    }
-    $resize_factor_width = $target_width / $image_width;
-    $resize_factor_height = $target_height / $image_height;
-    $delta_width = $target_width - $image_width * $resize_factor_height;
-    $delta_height = $target_height - $image_height * $resize_factor_width;
-    if ($delta_width > $delta_height) {
-        $result['width'] = ceil($image_width * $resize_factor_height);
-        $result['height'] = ceil($image_height * $resize_factor_height);
-    } elseif ($delta_width < $delta_height) {
-        $result['width'] = ceil($image_width * $resize_factor_width);
-        $result['height'] = ceil($image_height * $resize_factor_width);
-    } else {
-        $result['width'] = ceil($target_width);
-        $result['height'] = ceil($target_height);
-    }
-
-    return $result;
-}
-
-/**
  * Returns a list of Chamilo's tools or
  * checks whether a given identificator is a valid Chamilo's tool.
  *
@@ -6374,10 +6428,8 @@ function api_get_jquery_ui_js()
 
 function api_get_jqgrid_js()
 {
-    $routePublic = Container::getRouter()->generate('home');
-
-    return api_get_css($routePublic.'build/free-jqgrid.css').PHP_EOL
-        .api_get_js_simple($routePublic.'build/free-jqgrid.js');
+    return api_get_build_css('free-jqgrid.css').PHP_EOL
+        .api_get_build_js('free-jqgrid.js');
 }
 
 /**
@@ -7919,17 +7971,17 @@ function api_protect_course_group($tool, $showHeader = true)
             }
         }
 
-        $groupInfo = GroupManager::get_group_properties($groupId);
+        $group = api_get_group_entity($groupId);
 
         // Group doesn't exists
-        if (empty($groupInfo)) {
+        if (null === $group) {
             api_not_allowed($showHeader);
         }
 
         // Check group access
-        $allow = GroupManager::user_has_access(
+        $allow = GroupManager::userHasAccess(
             $userId,
-            $groupInfo['iid'],
+            $group,
             $tool
         );
 
@@ -8384,18 +8436,16 @@ function api_get_language_list_for_flag()
 /**
  * @param string $name
  *
- * @return \ZipStream\ZipStream
+ * @return ZipStream
  */
 function api_create_zip($name)
 {
-    $zipStreamOptions = new \ZipStream\Option\Archive();
+    $zipStreamOptions = new Archive();
     $zipStreamOptions->setSendHttpHeaders(true);
     $zipStreamOptions->setContentDisposition('attachment');
     $zipStreamOptions->setContentType('application/x-zip');
 
-    $zip = new \ZipStream\ZipStream($name, $zipStreamOptions);
-
-    return $zip;
+    return new ZipStream($name, $zipStreamOptions);
 }
 
 /**
@@ -8472,4 +8522,57 @@ function api_get_language_translate_html()
                 }
             });
     ';
+}
+
+/**
+ * Filter a multi-language HTML string (for the multi-language HTML
+ * feature) into the given language (strip the rest).
+ *
+ * @param string $htmlString The HTML string to "translate". Usually <p><span lang="en">Some string</span></p><p><span lang="fr">Une chaîne</span></p>
+ * @param string $language   The language in which we want to get the
+ *
+ * @throws Exception
+ *
+ * @return string The filtered string in the given language, or the full string if no translated string was identified
+ */
+function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
+{
+    if (true != api_get_configuration_value('translate_html')) {
+        return $htmlString;
+    }
+    $userInfo = api_get_user_info();
+    $languageId = 0;
+    if (!empty($language)) {
+        $languageId = api_get_language_id($language);
+    } elseif (!empty($userInfo['language'])) {
+        $languageId = api_get_language_id($userInfo['language']);
+    }
+    $languageInfo = api_get_language_info($languageId);
+    $isoCode = 'en';
+
+    if (!empty($languageInfo)) {
+        $isoCode = $languageInfo['isocode'];
+    }
+
+    // Split HTML in the separate language strings
+    // Note: some strings might look like <p><span ..>...</span></p> but others might be like combine 2 <span> in 1 <p>
+    if (!preg_match('/<span.*?lang="(\w\w)">/is', $htmlString)) {
+        return $htmlString;
+    }
+    $matches = [];
+    preg_match_all('/<span.*?lang="(\w\w)">(.*?)<\/span>/is', $htmlString, $matches);
+    if (!empty($matches)) {
+        // matches[0] are the full string
+        // matches[1] are the languages
+        // matches[2] are the strings
+        foreach ($matches[1] as $id => $match) {
+            if ($match == $isoCode) {
+                return $matches[2][$id];
+            }
+        }
+        // Could find the pattern but could not find our language. Return the first language found.
+        return $matches[2][0];
+    }
+    // Could not find pattern. Just return the whole string. We shouldn't get here.
+    return $htmlString;
 }

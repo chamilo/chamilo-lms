@@ -123,10 +123,9 @@ Event::registerLog($logInfo);
 $groupId = api_get_group_id();
 $isTutor = false;
 if (!empty($groupId)) {
-    $groupInfo = GroupManager::get_group_properties($groupId);
-    $isTutor = GroupManager::is_tutor_of_group(
+    $isTutor = GroupManager::isTutorOfGroup(
         api_get_user_id(),
-        $groupInfo
+        api_get_group_entity()
     );
 }
 
@@ -231,8 +230,7 @@ switch ($action) {
             $studentPublication->setParentId($_REQUEST['move_to_id']);
             $studentPublication->getResourceNode()->setParent($newParent->getResourceNode());
 
-            $repo->getEntityManager()->persist($studentPublication);
-            $repo->getEntityManager()->flush();
+            $repo->update($studentPublication);
 
             /*api_item_property_update(
                 $courseInfo,

@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * TrackEAttempt.
@@ -18,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="exe_id", columns={"exe_id"}),
  *      @ORM\Index(name="user_id", columns={"user_id"}),
  *      @ORM\Index(name="question_id", columns={"question_id"}),
+ *      @ORM\Index(name="session_id", columns={"session_id"}),
  *      @ORM\Index(name="idx_track_e_attempt_tms", columns={"tms"}),
  *  }
  * )
@@ -38,22 +40,22 @@ class TrackEAttempt
     protected $id;
 
     /**
-     * @var int
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="exe_id", type="integer", nullable=true)
      */
-    protected $exeId;
+    protected int $exeId;
 
     /**
-     * @var User
+     * @Assert\NotBlank()
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
@@ -112,7 +114,18 @@ class TrackEAttempt
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected Course $course;
+
+    /**
+     * @ORM\Column(name="seconds_spent", type="integer")
+     */
+    protected int $secondsSpent;
+
+    public function __construct()
+    {
+        $this->teacherComment = '';
+        $this->secondsSpent = 0;
+    }
 
     /**
      * Set exeId.
@@ -338,5 +351,17 @@ class TrackEAttempt
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getSecondsSpent(): int
+    {
+        return $this->secondsSpent;
+    }
+
+    public function setSecondsSpent(int $secondsSpent): TrackEAttempt
+    {
+        $this->secondsSpent = $secondsSpent;
+
+        return $this;
     }
 }

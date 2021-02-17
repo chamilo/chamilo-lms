@@ -121,7 +121,6 @@ export default function makeCrudModule({
               retrieved['hydra:totalItems']
             );
             commit(ACTIONS.SET_VIEW, retrieved['hydra:view']);
-
             if (true === state.resetList) {
               commit(ACTIONS.RESET_LIST);
             }

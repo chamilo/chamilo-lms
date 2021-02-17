@@ -12,15 +12,22 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 /**
- * Class LegacyListener
  * Works as old global.inc.php
  * Setting old php requirements so pages inside main/* could work correctly.
  */
 class LegacyListener
 {
     use ContainerAwareTrait;
+
+    private $twig;
+
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
 
     public function onKernelRequest(RequestEvent $event)
     {
@@ -37,6 +44,7 @@ class LegacyListener
         // Setting container
         Container::setRequest($request);
         Container::setContainer($container);
+        Container::$twig = $this->twig;
         Container::setLegacyServices($container);
 
         // Legacy way of detect current access_url
@@ -47,7 +55,7 @@ class LegacyListener
             throw new \Exception('Chamilo is not installed');
         }
 
-        $twig = $container->get('twig');
+        $twig = $this->twig;
         $token = $container->get('security.token_storage')->getToken();
 
         $userObject = null;

@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use Patchwork\Utf8;
 use Westsworld\TimeAgo;
 
 /**
@@ -352,7 +351,7 @@ function api_get_local_time(
     if (is_numeric($time)) {
         $time = (int) $time;
         if ($returnNullIfInvalidDate) {
-            if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
+            if (strtotime(date('d-m-Y H:i:s', $time)) !== $time) {
                 return null;
             }
         }
@@ -597,7 +596,18 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
     date_default_timezone_set($getOldTimezone);
 
     if ($returnDateDifference) {
-        $value = $timeAgo->dateDifference($date);
+        //$value = $timeAgo->dateDifference($date);
+        $now = new DateTime('now', $date->getTimezone());
+        $value = $date->diff($now);
+
+        return [
+            'years' => $value->y,
+            'months' => $value->m,
+            'days' => $value->d,
+            'hours' => $value->h,
+            'minutes' => $value->i,
+            'seconds' => $value->s,
+        ];
     }
 
     return $value;
@@ -737,9 +747,8 @@ function api_get_person_name(
     if (empty($language)) {
         // Do not set $setParentLanguageName because this function is called before
         // the main language is loaded in global.inc.php
-        $language = api_get_interface_language(false, true, false);
+        $language = api_get_language_isocode();
     }
-
     if (!isset($valid[$format][$language])) {
         if (is_int($format)) {
             switch ($format) {
@@ -1072,7 +1081,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  */
 function api_ord($character, $encoding = 'UTF-8')
 {
-    return Utf8::ord(api_utf8_encode($character, $encoding));
+    return ord(api_utf8_encode($character, $encoding));
 }
 
 /**
@@ -1109,7 +1118,7 @@ function api_ord($character, $encoding = 'UTF-8')
  */
 function api_str_ireplace($search, $replace, $subject, &$count = null, $encoding = null)
 {
-    return Utf8::str_ireplace($search, $replace, $subject, $count);
+    return str_ireplace($search, $replace, $subject, $count);
 }
 
 /**
@@ -1132,7 +1141,7 @@ function api_str_ireplace($search, $replace, $subject, &$count = null, $encoding
  */
 function api_str_split($string, $split_length = 1, $encoding = null)
 {
-    return Utf8::str_split($string, $split_length);
+    return str_split($string, $split_length);
 }
 
 /**
@@ -1155,7 +1164,7 @@ function api_str_split($string, $split_length = 1, $encoding = null)
  */
 function api_stripos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::stripos($haystack, $needle, $offset);
+    return stripos($haystack, $needle, $offset);
 }
 
 /**
@@ -1183,7 +1192,7 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_stristr($haystack, $needle, $before_needle = false, $encoding = null)
 {
-    return Utf8::stristr($haystack, $needle, $before_needle);
+    return stristr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -1205,7 +1214,7 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
  */
 function api_strlen($string, $encoding = null)
 {
-    return Utf8::strlen($string);
+    return strlen($string);
 }
 
 /**
@@ -1225,7 +1234,7 @@ function api_strlen($string, $encoding = null)
  */
 function api_strpos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::strpos($haystack, $needle, $offset);
+    return strpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1248,7 +1257,7 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_strrchr($haystack, $needle, $before_needle = false, $encoding = null)
 {
-    return Utf8::strrchr($haystack, $needle);
+    return strrchr($haystack, $needle);
 }
 
 /**
@@ -1264,7 +1273,7 @@ function api_strrchr($haystack, $needle, $before_needle = false, $encoding = nul
  */
 function api_strrev($string, $encoding = null)
 {
-    return Utf8::strrev($string);
+    return strrev($string);
 }
 
 /**
@@ -1284,7 +1293,7 @@ function api_strrev($string, $encoding = null)
  */
 function api_strripos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::strripos($haystack, $needle, $offset);
+    return strripos($haystack, $needle, $offset);
 }
 
 /**
@@ -1304,7 +1313,7 @@ function api_strripos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_strrpos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return Utf8::strrpos($haystack, $needle, $offset);
+    return strrpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1327,7 +1336,7 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_strstr($haystack, $needle, $before_needle = false, $encoding = null)
 {
-    return Utf8::strstr($haystack, $needle, $before_needle);
+    return strstr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -1344,7 +1353,7 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
  */
 function api_strtolower($string, $encoding = null)
 {
-    return Utf8::strtolower($string);
+    return strtolower($string);
 }
 
 /**
@@ -1361,7 +1370,7 @@ function api_strtolower($string, $encoding = null)
  */
 function api_strtoupper($string, $encoding = null)
 {
-    return Utf8::strtoupper($string);
+    return strtoupper($string);
 }
 
 /**
@@ -1386,7 +1395,7 @@ function api_substr($string, $start, $length = null, $encoding = null)
         $length = api_strlen($string, $encoding);
     }
 
-    return Utf8::substr($string, $start, $length);
+    return substr($string, $start, $length);
 }
 
 /**
@@ -1403,7 +1412,7 @@ function api_substr($string, $start, $length = null, $encoding = null)
  */
 function api_substr_count($haystack, $needle, $encoding = null)
 {
-    return Utf8::substr_count($haystack, $needle);
+    return substr_count($haystack, $needle);
 }
 
 /**
@@ -1435,7 +1444,7 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
         $length = api_strlen($string);
     }
 
-    return UTf8::substr_replace($string, $replacement, $start, $length);
+    return substr_replace($string, $replacement, $start, $length);
 }
 
 /**
@@ -1452,7 +1461,7 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
  */
 function api_ucfirst($string, $encoding = null)
 {
-    return Utf8::ucfirst($string);
+    return ucfirst($string);
 }
 
 /**
@@ -1469,7 +1478,7 @@ function api_ucfirst($string, $encoding = null)
  */
 function api_ucwords($string, $encoding = null)
 {
-    return Utf8::ucwords($string);
+    return ucwords($string);
 }
 
 /**
@@ -1547,11 +1556,12 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
  *                                  If it is omitted, the platform character set will be used by default.
  *
  * @return array|string|null returns an array if the subject parameter is an array, or a string otherwise.
- *                           If matches are found, the new subject will be returned, otherwise subject will be returned unchanged or NULL if an error occurred.
+ *                           If matches are found, the new subject will be returned, otherwise subject will be returned
+ *                           unchanged or NULL if an error occurred.
  *
  * @see http://php.net/preg_replace
  */
-function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0, $encoding = null)
+function api_preg_replace($pattern, $replacement, $subject, $limit = -1, $count = 0, $encoding = null)
 {
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
@@ -1841,7 +1851,7 @@ function api_detect_encoding($string, $language = null)
  */
 function api_is_valid_utf8($string)
 {
-    return Utf8::isUtf8($string);
+    return mb_check_encoding($string, 'UTF-8');
 }
 
 /**
@@ -2130,6 +2140,7 @@ function getLegacyToIso()
 /**
  * Returns returns person name convention for a given language.
  *
+ * @param string $iso
  * @param string $type The type of the requested convention.
  *                     It may be 'format' for name order convention or 'sort_by' for name sorting convention.
  *
@@ -2139,20 +2150,18 @@ function getLegacyToIso()
 function _api_get_person_name_convention($iso, $type)
 {
     $conventions = getLegacyOrderConventions();
-    $languageName = null;
+    $languageName = '';
     if (isset(getIsoToLegacy()[$iso])) {
         $languageName = getIsoToLegacy()[$iso];
     }
 
     // Overwrite classic conventions
     $customConventions = api_get_configuration_value('name_order_conventions');
-
     if (!empty($customConventions)) {
         foreach ($customConventions as $key => $data) {
             $conventions[$key] = $data;
         }
     }
-
     $search1 = ['FIRST_NAME', 'LAST_NAME', 'TITLE'];
     $replacement1 = ['%F', '%L', '%T'];
     $search2 = ['first_name', 'last_name', 'title'];
@@ -2172,7 +2181,7 @@ function _api_get_person_name_convention($iso, $type)
                 )
             )
         );
-        $conventions[$key]['sort_by'] = 'last_name' != strtolower($conventions[$key]['sort_by']) ? true : false;
+        $conventions[$key]['sort_by'] = 'last_name' !== strtolower($conventions[$key]['sort_by']) ? true : false;
     }
 
     switch ($type) {

@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Usergroup as UserGroupEntity;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Class UserGroup.
  *
@@ -10,8 +13,8 @@
  */
 class UserGroup extends Model
 {
-    const SOCIAL_CLASS = 1;
-    const NORMAL_CLASS = 0;
+    public const SOCIAL_CLASS = 1;
+    public const NORMAL_CLASS = 0;
     public $columns = [
         'id',
         'name',
@@ -30,15 +33,15 @@ class UserGroup extends Model
     public $showGroupTypeSetting = false;
     public $usergroup_rel_user_table;
     public $usergroup_rel_course_table;
+    public $usergroup;
     public $usergroup_rel_session_table;
+    public $session_table;
     public $access_url_rel_usergroup;
+    public $session_rel_course_table;
     public $access_url_rel_user;
     public $table_course;
     public $table_user;
 
-    /**
-     * Set ups DB tables.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -46,7 +49,10 @@ class UserGroup extends Model
         $this->usergroup_rel_user_table = Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $this->usergroup_rel_course_table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
         $this->usergroup_rel_session_table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+        $this->session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $this->usergroup_table = Database::get_main_table(TABLE_USERGROUP);
         $this->access_url_rel_usergroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
+        $this->session_rel_course_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $this->access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -218,7 +224,7 @@ class UserGroup extends Model
                     INNER JOIN $this->access_url_rel_usergroup a
                     ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId $authorCondition
-                    $extraWhereCondition
+                    AND $extraWhereCondition
             ";
 
             $result = Database::query($sql);
@@ -437,20 +443,79 @@ class UserGroup extends Model
     }
 
     /**
+     * Gets all users that are part of a group or class.
+     *
+     * Example to obtain the number of registered:
+     * <code>
+     * <?php
+     *
+     * $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+     * $obj = new UserGroup();
+     * $count = $obj->getUserGroupInCourse(
+     * $options,
+     * -1,
+     * true,
+     * true
+     * );
+     * echo "<pre>".var_export($count,true)."</pre>";
+     * ?>
+     * </code>
+     *
+     *
+     * Example to obtain the list of classes or groups registered:
+     * <code>
+     * <?php
+     *
+     * $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+     * $obj = new UserGroup();
+     * $students = $obj->getUserGroupInCourse(
+     * $options,
+     * -1,
+     * false,
+     * true
+     * );
+     * echo "<pre>".var_export($students,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param array $options
-     * @param int   $type
+     * @param int   $type        0 = classes / 1 = social groups
+     * @param bool  $withClasses Return with classes.
      *
      * @return array
      */
-    public function getUserGroupInCourse($options = [], $type = -1, $getCount = false)
-    {
+    public function getUserGroupInCourse(
+        $options = [],
+        $type = -1,
+        $getCount = false,
+        $withClasses = false
+    ) {
+        $data = [];
+        $sqlClasses = '';
+        $whereClasess = '';
+        $resultClasess = null;
+        $counts = 0;
         $select = 'DISTINCT u.*';
         if ($getCount) {
             $select = 'count(u.id) as count';
         }
 
+        if (
+            true == $withClasses &&
+            isset($options['session_id']) &&
+            0 != (int) $options['session_id']
+        ) {
+            $sessionId = (int) $options['session_id'];
+            $courseId = (int) $options['course_id'];
+            unset($options['session_id']);
+            $whereClasess = " WHERE ur.session_id = $sessionId AND sc.c_id = $courseId ";
+        } else {
+            $withClasses = false;
+        }
+
         if ($this->getUseMultipleUrl()) {
-            $sql = "SELECT $select
+            if (true != $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u
                     ON (u.id = usergroup.usergroup_id)
@@ -459,16 +524,37 @@ class UserGroup extends Model
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (a.usergroup_id = u.id)
                    ";
+            } else {
+                $sqlClasses = "SELECT".
+                    " $select ".
+                    " FROM".
+                    " {$this->usergroup_rel_session_table} ur".
+                    " INNER JOIN {$this->usergroup_table} u ON  u.id = ur.usergroup_id ".
+                    " INNER JOIN `{$this->session_table}` s ON  s.id = ur.session_id".
+                    " INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.id) ".
+                    " INNER JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
+                    " $whereClasess ";
+            }
         } else {
-            $sql = "SELECT $select
+            if (true != $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u
                     ON (u.id = usergroup.usergroup_id)
                     INNER JOIN {$this->table_course} c
                     ON (usergroup.course_id = c.id)
                    ";
+            } else {
+                $sqlClasses = "SELECT".
+                    " $select ".
+                    " FROM".
+                    " {$this->usergroup_rel_session_table} ur".
+                    " INNER JOIN {$this->usergroup_table} u ON  u.id = ur.usergroup_id ".
+                    " INNER JOIN `{$this->session_table}` s ON  s.id = ur.session_id".
+                    " INNER JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
+                    " $whereClasess ";
+            }
         }
-
         if (-1 != $type) {
             $type = (int) $type;
             $options['where']['AND group_type = ? '] = $type;
@@ -479,32 +565,66 @@ class UserGroup extends Model
         }
 
         $conditions = Database::parse_conditions($options);
-        $sql .= $conditions;
+        if (true == $withClasses) {
+            $resultClasess = Database::query($sqlClasses);
+        } else {
+            $sql .= $conditions;
 
-        $result = Database::query($sql);
+            $result = Database::query($sql);
+        }
 
         if ($getCount) {
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
+            if (!empty($result)) {
+                if (Database::num_rows($result)) {
+                    $row = Database::fetch_array($result);
+                    $counts += $row['count'];
+                }
+            }
+            if (!empty($sqlClasses)) {
+                if (Database::num_rows($resultClasess)) {
+                    $row = Database::fetch_array($resultClasess);
+                    $counts += $row['count'];
+                }
+            }
 
-                return $row['count'];
+            return $counts;
+        }
+        if (!empty($result)) {
+            if (Database::num_rows($result) > 0) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    $data[] = $row;
+                }
+            }
+        }
+        if (!empty($sqlClasses)) {
+            if (Database::num_rows($resultClasess) > 0) {
+                while ($row = Database::fetch_array($resultClasess, 'ASSOC')) {
+                    $data[] = $row;
+                }
             }
         }
 
-        $array = Database::store_result($result, 'ASSOC');
-
-        return $array;
+        return $data;
     }
 
     /**
      * @param array $options
      * @param int   $type
      * @param bool  $getCount
+     * @param bool  $withClasses
      *
      * @return array|bool
      */
-    public function getUserGroupNotInCourse($options = [], $type = -1, $getCount = false)
-    {
+    public function getUserGroupNotInCourse(
+        $options = [],
+        $type = -1,
+        $getCount = false,
+        $withClasses = false
+    ) {
+        $data = [];
+        $sqlClasses = '';
+        $whereClasess = '';
+        $resultClasess = null;
         $course_id = null;
         if (isset($options['course_id'])) {
             $course_id = (int) $options['course_id'];
@@ -520,20 +640,55 @@ class UserGroup extends Model
             $select = 'count(u.id) as count';
         }
 
+        if (
+            true == $withClasses &&
+            isset($options['session_id']) &&
+            0 != (int) $options['session_id']
+        ) {
+            $sessionId = (int) $options['session_id'];
+            unset($options['session_id']);
+            $whereClasess = " WHERE ur.session_id != $sessionId ";
+        } else {
+            $withClasses = false;
+        }
+
         if ($this->getUseMultipleUrl()) {
-            $sql = "SELECT $select
+            if (false == $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->table} u
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (a.usergroup_id = u.id)
                     LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                     ON (u.id = urc.usergroup_id AND course_id = $course_id)
             ";
+            } else {
+                $sqlClasses = " SELECT".
+                    " $select".
+                    " FROM".
+                    " {$this->usergroup_rel_session_table} ur".
+                    " LEFT OUTER  JOIN {$this->usergroup_table} u ON u.id = ur.usergroup_id".
+                    " INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.id) ".
+                    " LEFT JOIN `{$this->session_table}` s ON s.id = ur.session_id".
+                    " LEFT JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
+                    " $whereClasess ";
+            }
         } else {
-            $sql = "SELECT $select
+            if (false == $withClasses) {
+                $sql = "SELECT $select
                     FROM {$this->table} u
                     LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                     ON (u.id = urc.usergroup_id AND course_id = $course_id)
             ";
+            } else {
+                $sqlClasses = " SELECT".
+                    " $select".
+                    " FROM".
+                    " {$this->usergroup_rel_session_table} ur".
+                    " LEFT OUTER  JOIN {$this->usergroup_table} u ON u.id = ur.usergroup_id".
+                    " LEFT JOIN `{$this->session_table}` s ON s.id = ur.session_id".
+                    " LEFT JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
+                    " $whereClasess ";
+            }
         }
 
         if (-1 != $type) {
@@ -554,18 +709,44 @@ class UserGroup extends Model
 
         $conditions = Database::parse_conditions($options);
 
-        $sql .= $conditions;
+        if (true == $withClasses) {
+            $resultClasess = Database::query($sqlClasses);
+        } else {
+            $sql .= $conditions;
+            $result = Database::query($sql);
+        }
 
         if ($getCount) {
-            $result = Database::query($sql);
-            $array = Database::fetch_array($result, 'ASSOC');
+            if (!empty($result)) {
+                $result = Database::query($sql);
+                $array = Database::fetch_array($result, 'ASSOC');
 
-            return $array['count'];
+                return $array['count'];
+            }
+            if (!empty($sqlClasses)) {
+                if (Database::num_rows($resultClasess)) {
+                    $row = Database::fetch_array($resultClasess);
+
+                    return $row['count'];
+                }
+            }
         }
-        $result = Database::query($sql);
-        $array = Database::store_result($result, 'ASSOC');
+        if (!empty($result)) {
+            if (Database::num_rows($result) > 0) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    $data[] = $row;
+                }
+            }
+        }
+        if (!empty($sqlClasses)) {
+            if (Database::num_rows($resultClasess) > 0) {
+                while ($row = Database::fetch_array($resultClasess, 'ASSOC')) {
+                    $data[] = $row;
+                }
+            }
+        }
 
-        return $array;
+        return $data;
     }
 
     /**
@@ -612,15 +793,28 @@ class UserGroup extends Model
      *
      * @return bool
      */
-    public function usergroup_was_added_in_course($usergroup_id, $course_id)
-    {
+    public function usergroup_was_added_in_course(
+        $usergroup_id,
+        $course_id,
+        $Session = 0
+    ) {
+        $Session = (int) $Session;
         $results = Database::select(
             'usergroup_id',
             $this->usergroup_rel_course_table,
             ['where' => ['course_id = ? AND usergroup_id = ?' => [$course_id, $usergroup_id]]]
         );
 
-        if (empty($results)) {
+        $resultSession = Database::select(
+            'usergroup_id',
+            $this->usergroup_rel_session_table,
+            ['where' => ['session_id = ? AND usergroup_id = ?' => [$Session, $usergroup_id]]]
+        );
+
+        if (empty($results) && 0 == $Session) {
+            return false;
+        }
+        if ((empty($resultSession)) && 0 != $Session) {
             return false;
         }
 
@@ -943,12 +1137,14 @@ class UserGroup extends Model
      * @param int   $usergroup_id
      * @param array $delete_items
      */
-    public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items)
+    public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items, $sessionId = 0)
     {
+        $sessionId = (int) $sessionId;
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = $this->get_users_by_usergroup($usergroup_id);
 
+            $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
             foreach ($delete_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
@@ -956,7 +1152,8 @@ class UserGroup extends Model
                         foreach ($user_list as $user_id) {
                             CourseManager::unsubscribe_user(
                                 $user_id,
-                                $course_info['code']
+                                $course_info['code'],
+                                $sessionId
                             );
                         }
                     }
@@ -970,6 +1167,11 @@ class UserGroup extends Model
                             ],
                         ]
                     );
+                }
+                if (0 != $sessionId && 0 != $groupId) {
+                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
+                } else {
+                    $s = $sessionId;
                 }
             }
         }
@@ -1324,12 +1526,25 @@ class UserGroup extends Model
         $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
-        $groupExists = $this->usergroup_exists(trim($params['name']));
-        if (false == $groupExists) {
+        $userGroupExists = $this->usergroup_exists(trim($params['name']));
+        if (false === $userGroupExists) {
+            $userGroup = new UserGroupEntity();
+            $repo = Container::getUsergroupRepository();
+            $userGroup
+                ->setName(trim($params['name']))
+                ->setDescription($params['description'])
+                ->setUrl($params['url'])
+                ->setVisibility($params['visibility'])
+                ->setGroupType($params['group_type'])
+                ->setAllowMembersToLeaveGroup($params['allow_members_leave_group'])
+            ;
             if ($this->allowTeachers()) {
-                $params['author_id'] = api_get_user_id();
+                $userGroup->setAuthorId(api_get_user_id());
             }
-            $id = parent::save($params, $showQuery);
+
+            $repo->create($userGroup);
+
+            $id = $userGroup->getId();
             if ($id) {
                 if ($this->getUseMultipleUrl()) {
                     $this->subscribeToUrl($id, api_get_current_access_url_id());
@@ -1342,16 +1557,9 @@ class UserGroup extends Model
                         $params['group_type']
                     );
                 }
-                $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
-                $picture = $this->manageFileUpload($id, $picture);
-                if ($picture) {
-                    $params = [
-                        'id' => $id,
-                        'picture' => $picture,
-                        'group_type' => $params['group_type'],
-                    ];
-                    $this->update($params);
-                }
+                $request = Container::getRequest();
+                $file = $request->files->get('picture');
+                $this->manageFileUpload($userGroup, $file);
             }
 
             return $id;
@@ -1362,26 +1570,28 @@ class UserGroup extends Model
 
     public function update($params, $showQuery = false)
     {
-        $params['updated_on'] = api_get_utc_datetime();
-        $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
-        $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
-        $params['crop_image'] = isset($params['picture_crop_result']) ? $params['picture_crop_result'] : null;
-
-        if (isset($params['id'])) {
-            $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
-            if (!empty($picture)) {
-                $picture = $this->manageFileUpload($params['id'], $picture, $params['crop_image']);
-                if ($picture) {
-                    $params['picture'] = $picture;
-                }
-            }
-
-            if (isset($params['delete_picture'])) {
-                $params['picture'] = null;
-            }
+        $repo = Container::getUsergroupRepository();
+        /** @var UserGroupEntity $userGroup */
+        $userGroup = $repo->find($params['id']);
+        if (null === $userGroup) {
+            return false;
         }
 
-        parent::update($params, $showQuery);
+        //$params['updated_on'] = api_get_utc_datetime();
+        $userGroup
+            ->setGroupType(isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS)
+            ->setAllowMembersToLeaveGroup(isset($params['allow_members_leave_group']) ? 1 : 0)
+        ;
+        $cropImage = isset($params['picture_crop_result']) ? $params['picture_crop_result'] : null;
+        $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
+        if (!empty($picture)) {
+            $request = Container::getRequest();
+            $file = $request->files->get('picture');
+            $this->manageFileUpload($userGroup, $file, $cropImage);
+        }
+
+        //parent::update($params, $showQuery);
+        $repo->update($userGroup);
 
         if (isset($params['delete_picture'])) {
             $this->delete_group_picture($params['id']);
@@ -1391,21 +1601,19 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int    $groupId
-     * @param string $picture
-     * @param string $cropParameters
+     * @param UserGroupEntity $groupId
+     * @param string          $picture
+     * @param string          $cropParameters
      *
-     * @return bool|string
+     * @return bool
      */
-    public function manageFileUpload($groupId, $picture, $cropParameters = '')
+    public function manageFileUpload($userGroup, $picture, $cropParameters = '')
     {
-        if (!empty($picture['name'])) {
-            return $this->update_group_picture(
-                $groupId,
-                $picture['name'],
-                $picture['tmp_name'],
-                $cropParameters
-            );
+        if ($userGroup) {
+            $illustrationRepo = Container::getIllustrationRepository();
+            $illustrationRepo->addIllustration($userGroup, api_get_user_entity(), $picture, $cropParameters);
+
+            return true;
         }
 
         return false;
@@ -1418,92 +1626,12 @@ class UserGroup extends Model
      */
     public function delete_group_picture($groupId)
     {
-        return $this->update_group_picture($groupId);
-    }
-
-    /**
-     * Creates new group pictures in various sizes of a user, or deletes user pfotos.
-     * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php.
-     *
-     * @param    int    The group id
-     * @param string $file The common file name for the newly created photos.
-     *                     It will be checked and modified for compatibility with the file system.
-     *                     If full name is provided, path component is ignored.
-     *                     If an empty name is provided, then old user photos are deleted only,
-     *
-     * @see UserManager::delete_user_picture() as the prefered way for deletion.
-     *
-     * @param string $source_file    the full system name of the image from which user photos will be created
-     * @param string $cropParameters
-     *
-     * @return mixed Returns the resulting common file name of created images which usually should be stored in database.
-     *               When an image is removed the function returns an empty string.
-     *               In case of internal error or negative validation it returns FALSE.
-     */
-    public function update_group_picture($group_id, $file = null, $source_file = null, $cropParameters = null)
-    {
-        $group_id = (int) $group_id;
-
-        if (empty($group_id)) {
-            return false;
+        $repo = Container::getUsergroupRepository();
+        $userGroup = $repo->find($groupId);
+        if ($userGroup) {
+            $illustrationRepo = Container::getIllustrationRepository();
+            $illustrationRepo->deleteIllustration($userGroup);
         }
-        $delete = empty($file);
-        if (empty($source_file)) {
-            $source_file = $file;
-        }
-
-        // User-reserved directory where photos have to be placed.
-        $path_info = $this->get_group_picture_path_by_id($group_id, 'system', true);
-
-        $path = $path_info['dir'];
-
-        // If this directory does not exist - we create it.
-        if (!is_dir($path)) {
-            $res = @mkdir($path, api_get_permissions_for_new_directories(), true);
-            if (false === $res) {
-                // There was an issue creating the directory $path, probably
-                // permissions-related
-                return false;
-            }
-        }
-
-        // Exit if only deletion has been requested. Return an empty picture name.
-        if ($delete) {
-            return '';
-        }
-
-        // Validation 2.
-        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-        $file = str_replace('\\', '/', $file);
-        $filename = (false !== ($pos = strrpos($file, '/'))) ? substr($file, $pos + 1) : $file;
-        $extension = strtolower(substr(strrchr($filename, '.'), 1));
-        if (!in_array($extension, $allowed_types)) {
-            return false;
-        }
-        $avatar = 'group_avatar.jpg';
-        $filename = $group_id.'_'.$filename;
-        $groupImageBig = $path.'big_'.$filename;
-        $groupImage = $path.'medium_'.$filename;
-
-        if (file_exists($groupImageBig)) {
-            unlink($groupImageBig);
-        }
-        if (file_exists($groupImage)) {
-            unlink($groupImage);
-        }
-
-        $image = new Image($source_file);
-        $image->crop($cropParameters);
-
-        //Resize the images in two formats
-        $medium = new Image($source_file);
-        $medium->resize(128);
-        $medium->send_image($groupImage, -1, 'jpg');
-        $normal = new Image($source_file);
-        $normal->resize(450);
-        $normal->send_image($groupImageBig, -1, 'jpg');
-
-        return $filename;
     }
 
     /**
@@ -1538,7 +1666,10 @@ class UserGroup extends Model
                 WHERE usergroup_id = $id";
         Database::query($sql);
 
-        parent::delete($id);
+        //parent::delete($id);
+        $repo = Container::getUsergroupRepository();
+        $userGroup = $repo->find($id);
+        $repo->delete($userGroup);
     }
 
     /**
@@ -1612,11 +1743,12 @@ class UserGroup extends Model
     /**
      * Get user list by usergroup.
      *
-     * @param int $id
+     * @param int    $id
+     * @param string $orderBy
      *
      * @return array
      */
-    public function getUserListByUserGroup($id)
+    public function getUserListByUserGroup($id, $orderBy = '')
     {
         $id = (int) $id;
         $sql = "SELECT u.* FROM $this->table_user u
@@ -1624,6 +1756,10 @@ class UserGroup extends Model
                 ON c.user_id = u.id
                 WHERE c.usergroup_id = $id"
                 ;
+        if (!empty($orderBy)) {
+            $orderBy = Database::escape_string($orderBy);
+            $sql .= " ORDER BY $orderBy ";
+        }
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -1632,9 +1768,8 @@ class UserGroup extends Model
     /**
      * @param FormValidator $form
      * @param string        $type
-     * @param array         $data
      */
-    public function setForm($form, $type = 'add', $data = [])
+    public function setForm($form, $type = 'add', UserGroupEntity $userGroup = null)
     {
         $header = '';
         switch ($type) {
@@ -1690,8 +1825,9 @@ class UserGroup extends Model
             ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
         );
 
-        if (isset($data['picture']) && strlen($data['picture']) > 0) {
-            $picture = $this->get_picture_group($data['id'], $data['picture'], 80);
+        $repo = Container::getIllustrationRepository();
+        if ($userGroup && $repo->hasIllustration($userGroup)) {
+            $picture = $repo->getIllustrationUrl($userGroup);
             $img = '<img src="'.$picture.'" />';
             $form->addElement('label', null, $img);
             $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
@@ -1718,7 +1854,7 @@ class UserGroup extends Model
      * @param int $size_picture picture size it can be small_,  medium_  or  big_
      * @param string style css
      *
-     * @return array with the file and the style of an image i.e $array['file'] $array['style']
+     * @return string
      */
     public function get_picture_group(
         $id,
@@ -1727,6 +1863,13 @@ class UserGroup extends Model
         $size_picture = GROUP_IMAGE_SIZE_MEDIUM,
         $style = ''
     ) {
+        $repoIllustration = Container::getIllustrationRepository();
+        $repoUserGroup = Container::getUsergroupRepository();
+        $userGroup = $repoUserGroup->find($id);
+
+        return $repoIllustration->getIllustrationUrl($userGroup);
+
+        /*
         $picture = [];
         //$picture['style'] = $style;
         if ('unknown.jpg' === $picture_file) {
@@ -1772,72 +1915,7 @@ class UserGroup extends Model
             }
         }
 
-        return $picture;
-    }
-
-    /**
-     * Gets the group picture URL or path from group ID (returns an array).
-     * The return format is a complete path, enabling recovery of the directory
-     * with dirname() or the file with basename(). This also works for the
-     * functions dealing with the user's productions, as they are located in
-     * the same directory.
-     *
-     * @param    int    User ID
-     * @param    string    Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param    bool    Whether we want to have the directory name returned 'as if'
-     * there was a file or not (in the case we want to know which directory to create -
-     * otherwise no file means no split subdir)
-     * @param    bool    If we want that the function returns the /main/img/unknown.jpg image set it at true
-     *
-     * @return array Array of 2 elements: 'dir' and 'file' which contain the dir
-     *               and file as the name implies if image does not exist it will return the unknown
-     *               image if anonymous parameter is true if not it returns an empty er's
-     */
-    public function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
-    {
-        switch ($type) {
-            case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_UPLOAD_PATH);
-                break;
-            case 'rel': // Base: semi-absolute web path (no server base).
-                $base = api_get_path(REL_CODE_PATH);
-                break;
-            case 'web': // Base: absolute web path.
-                $base = api_get_path(WEB_UPLOAD_PATH);
-                break;
-            case 'none':
-            default: // Base: empty, the result path below will be relative.
-                $base = '';
-        }
-        $id = (int) $id;
-
-        if (empty($id) || empty($type)) {
-            return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
-        }
-
-        $group_table = Database::get_main_table(TABLE_USERGROUP);
-        $sql = "SELECT picture FROM $group_table WHERE id = ".$id;
-        $res = Database::query($sql);
-
-        if (!Database::num_rows($res)) {
-            return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
-        }
-        $user = Database::fetch_array($res);
-        $picture_filename = trim($user['picture']);
-
-        if ('true' === api_get_setting('split_users_upload_directory')) {
-            if (!empty($picture_filename)) {
-                $dir = $base.'groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
-            } elseif ($preview) {
-                $dir = $base.'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
-            } else {
-                $dir = $base.'groups/'.$id.'/';
-            }
-        } else {
-            $dir = $base.'groups/'.$id.'/';
-        }
-
-        return ['dir' => $dir, 'file' => $picture_filename];
+        return $picture;*/
     }
 
     /**
@@ -2651,8 +2729,6 @@ class UserGroup extends Model
             $direction = 'ASC';
         }
 
-        $from = (int) $from;
-        $number_of_items = (int) $number_of_items;
         $sql .= " LIMIT $from, $number_of_items";
 
         $res = Database::query($sql);
@@ -2934,5 +3010,42 @@ class UserGroup extends Model
             api_protect_admin_script(true);
             api_protect_limit_for_session_admin();
         }
+    }
+
+    public function getGroupsByLp($lpId, $courseId, $sessionId)
+    {
+        $lpId = (int) $lpId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId, true);
+        $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+        $sql = "SELECT usergroup_id FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    lp_id = $lpId
+                    $sessionCondition
+                    ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    public function getGroupsByLpCategory($categoryId, $courseId, $sessionId)
+    {
+        $categoryId = (int) $categoryId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId, true);
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+        $sql = "SELECT usergroup_id FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    lp_category_id = $categoryId
+                    $sessionCondition
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
     }
 }

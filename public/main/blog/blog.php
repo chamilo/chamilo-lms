@@ -308,6 +308,7 @@ $tpl->assign('id_blog', $idBlog);
 $tpl->assign('calendar', $calendarBlog);
 $tpl->assign('search', $searchBlog);
 $tpl->assign('task', $taskBlog);
+$tpl->assign('blog_url', $taskBlog);
 $blogLayout = null;
 
 switch ($action) {
@@ -432,6 +433,8 @@ switch ($action) {
 
 $content = $tpl->fetch($blogLayout);
 
+$tpl->assign('course_code', api_get_course_id());
+$tpl->assign('session_id', api_get_session_id());
 if ($actionsLeft) {
     $tpl->assign(
         'actions',

@@ -23,7 +23,7 @@ Skill::isAllowed($userId);
 
 $em = Database::getManager();
 $user = api_get_user_entity($userId);
-$skill = $em->find('ChamiloCoreBundle:Skill', $skillId);
+$skill = $em->find(\Chamilo\CoreBundle\Entity\Skill::class, $skillId);
 $currentUserId = api_get_user_id();
 
 if (!$user || !$skill) {
@@ -35,9 +35,9 @@ if (!$user || !$skill) {
     exit;
 }
 
-$skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
-$skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
-$skillLevelRepo = $em->getRepository('ChamiloCoreBundle:Level');
+$skillRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class);
+$skillUserRepo = $em->getRepository(SkillRelUser::class);
+$skillLevelRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
 
 $userSkills = $skillUserRepo->findBy([
     'user' => $user,
@@ -186,7 +186,12 @@ foreach ($userSkills as $index => $skillIssue) {
     $form->addRule('comment', get_lang('Required field'), 'required');
     $form->addSelect(
         'value',
-        [get_lang('Value'), get_lang('On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?')],
+        [
+            get_lang('Value'),
+            get_lang(
+                'On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?'
+            ),
+        ],
         ['-', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     );
     $form->addHidden('user', $skillIssue->getUser()->getId());

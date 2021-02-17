@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Knp\Component\Pager\Paginator;
 
@@ -55,7 +56,7 @@ $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_l
 
 if (!empty($objExercise->id)) {
     $interbreadcrumb[] = [
-        'url' => 'admin.php?id='.$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 }
@@ -294,27 +295,6 @@ if (isset($_REQUEST['action'])) {
     }
 }
 
-Display::display_header($nameTools, 'Exercise');
-
-// Menu
-echo '<div class="actions">';
-if (isset($fromExercise) && $fromExercise > 0) {
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
-            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
-    $titleAdd = get_lang('Add question to test');
-} else {
-    echo '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo "<a href='admin.php?id=0'>".
-        Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
-    $titleAdd = get_lang('Manage all questions');
-}
-echo '</div>';
-
-if ('' != $displayMessage) {
-    echo Display::return_message($displayMessage, 'confirm');
-}
-
 // Form
 $sessionList = SessionManager::get_sessions_by_user(api_get_user_id(), api_is_platform_admin());
 $session_select_list = ['-1' => get_lang('Select')];
@@ -378,15 +358,7 @@ if ($course_id_changed) {
 }
 
 // Get category list for the course $selected_course
-$categoryList = TestCategory::getCategoriesForSelect();
-$selectCourseCategory = Display::select(
-    'courseCategoryId',
-    $categoryList,
-    $courseCategoryId,
-    ['onchange' => 'submit_form(this);'],
-    false
-);
-echo Display::form_row(get_lang('Questions category'), $selectCourseCategory);
+$categoryList = TestCategory::getCategoriesIdAndName($selected_course);
 
 // Get exercise list for this course
 $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
@@ -457,7 +429,6 @@ if (!empty($_course)) {
 
 // Answer type list
 $form = new FormValidator('question_pool', 'GET', $url);
-$form->addHeader($nameTools.' - '.$titleAdd);
 $form->addHidden('fromExercise', $fromExercise);
 $form
     ->addSelect(
@@ -522,14 +493,13 @@ $jsForExtraFields = $extraField->addElements($form, 0, [], true);
 
 $form->addButtonFilter(get_lang('Filter'), 'name');
 
-echo $form->display();
+if (isset($fromExercise) && $fromExercise > 0) {
+    $titleAdd = get_lang('Add question to test');
+} else {
+    $titleAdd = get_lang('Manage all questions');
+}
 
-echo '<script>$(function () {
-        '.$jsForExtraFields['jquery_ready_content'].'
-    })</script>';
-?>
-<div class="clear"></div>
-<?php
+$form->addHeader($nameTools.' - '.$titleAdd);
 
 /**
  * @return array
@@ -636,7 +606,7 @@ function getQuestions(
         $currentExerciseCondition = "
             AND qu.iid NOT IN (
                 SELECT question_id FROM $TBL_EXERCISE_QUESTION
-                WHERE exercice_id = $fromExercise AND c_id = $currentCourseId
+                WHERE quiz_id = $fromExercise AND c_id = $currentCourseId
             )";
     }
 
@@ -673,7 +643,7 @@ function getQuestions(
                     question,
                     type,
                     level,
-                    qt.exercice_id exerciseId';
+                    qt.quiz_id exerciseId';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -685,7 +655,7 @@ function getQuestions(
                     $from
                     {$efConditions['from']}
                 WHERE
-                    qt.exercice_id = $exerciseId AND
+                    qt.quiz_id = $exerciseId AND
                     qt.c_id = $selected_course  AND
                     qu.c_id = $selected_course
                     $where
@@ -721,7 +691,7 @@ function getQuestions(
             $answer_where .= " AND q.description LIKE '%$description%'";
         }
 
-        $select = ' qu.*, r.exercice_id exerciseId  ';
+        $select = ' qu.*, r.quiz_id exerciseId  ';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -733,7 +703,7 @@ function getQuestions(
                     INNER JOIN $TBL_EXERCISE_QUESTION r
                     ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
                     INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                    ON (ex.iid = r.quiz_id AND ex.c_id = r.c_id)
                     $from
                     {$efConditions['from']}
                     WHERE
@@ -768,7 +738,7 @@ function getQuestions(
                         {$efConditions['from']}
                         WHERE
                             r.c_id = '$selected_course' AND
-                            (r.exercice_id = '-1' OR r.exercice_id = '0')
+                            (r.quiz_id = '-1' OR r.quiz_id = '0')
                             $level_where
                             $answer_where
                             {$efConditions['where']}
@@ -810,7 +780,7 @@ function getQuestions(
         }
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
 
-        $select = 'qu.iid, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
+        $select = 'qu.iid, question, qu.type, level, q.session_id, qt.quiz_id exerciseId  ';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -823,7 +793,7 @@ function getQuestions(
                 INNER JOIN $TBL_EXERCISE_QUESTION as qt
                 ON (qu.iid = qt.question_id AND qu.c_id = qt.c_id)
                 INNER JOIN $TBL_EXERCISES as q
-                ON (q.c_id = qu.c_id AND q.iid = qt.exercice_id)
+                ON (q.c_id = qu.c_id AND q.iid = qt.quiz_id)
                 {$efConditions['from']}
                 $from
                 WHERE
@@ -888,12 +858,28 @@ if (empty($length)) {
 
 $start = ($page - 1) * $length;
 
-$paginator = new Paginator();
-$pagination = $paginator->paginate([]);
+$mainQuestionList = getQuestions(
+    false,
+    $start,
+    $length,
+    $exerciseId,
+    $courseCategoryId,
+    $selected_course,
+    $session_id,
+    $exerciseLevel,
+    $answerType,
+    $questionId,
+    $description,
+    $fromExercise,
+    $formValues
+);
+
+$paginator = new Paginator(Container::$container->get('event_dispatcher'));
+$pagination = $paginator->paginate($mainQuestionList, $page, $length);
+
 $pagination->setTotalItemCount($nbrQuestions);
 $pagination->setItemNumberPerPage($length);
 $pagination->setCurrentPageNumber($page);
-
 $pagination->renderer = function ($data) use ($url) {
     $render = '';
     if ($data['pageCount'] > 1) {
@@ -910,22 +896,6 @@ $pagination->renderer = function ($data) use ($url) {
 
     return $render;
 };
-
-$mainQuestionList = getQuestions(
-    false,
-    $start,
-    $length,
-    $exerciseId,
-    $courseCategoryId,
-    $selected_course,
-    $session_id,
-    $exerciseLevel,
-    $answerType,
-    $questionId,
-    $description,
-    $fromExercise,
-    $formValues
-);
 
 // build the line of the array to display questions
 // Actions are different if you launch the question_pool page
@@ -1053,8 +1023,35 @@ $headers = [
     $actionLabel,
 ];
 
-echo $pagination;
+Display::display_header($nameTools, 'Exercise');
 
+// Menu
+echo '<div class="actions">';
+if (isset($fromExercise) && $fromExercise > 0) {
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
+        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+} else {
+    echo '<a href="exercise.php?'.api_get_cidreq().'">'.
+        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo "<a href='admin.php?exerciseId=0'>".
+        Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
+}
+echo '</div>';
+
+if ('' != $displayMessage) {
+    echo Display::return_message($displayMessage, 'confirm');
+}
+
+echo $form->display();
+
+echo '<script>$(function () {
+        '.$jsForExtraFields['jquery_ready_content'].'
+    })</script>';
+?>
+    <div class="clear"></div>
+<?php
+
+echo $pagination;
 $tableId = 'question_pool_id';
 echo '<form id="'.$tableId.'" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
@@ -1063,7 +1060,7 @@ echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">'
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 echo '<input type="hidden" name="action">';
 
-$table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
+$table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table'], false);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
@@ -1085,9 +1082,7 @@ foreach ($data as $rows) {
     }
     $row++;
 }
-
 $table->display();
-
 echo '</form>';
 
 $html = '<div class="btn-toolbar">';
@@ -1096,12 +1091,12 @@ $html .= '<a
         class="btn btn-default"
         href="?'.$url.'selectall=1"
         onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">
-        '.get_lang('SelectAll').'</a>';
+        '.get_lang('Select all').'</a>';
 $html .= '<a
             class="btn btn-default"
             href="?'.$url.'"
             onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">
-            '.get_lang('UnSelectAll').'</a> ';
+            '.get_lang('Unselect all').'</a> ';
 $html .= '</div>';
 $html .= '<div class="btn-group">
             <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
@@ -1116,7 +1111,7 @@ if ($selected_course == api_get_course_int_id()) {
     $actions = ['reuse' => get_lang('Re-use in current testQuestion')];
 }
 
-foreach ($actions as $action => &$label) {
+foreach ($actions as $action => $label) {
     $html .= '<li>
             <a
                 data-action ="'.$action.'"
@@ -1314,7 +1309,7 @@ function isQuestionInActiveQuiz($questionId)
             "SELECT COUNT(qq.question_id) count
                     FROM $tblQuizRelQuestion qq
                     INNER JOIN $tblQuiz q
-                    ON qq.exercice_id = q.iid
+                    ON qq.quiz_id = q.iid
                     WHERE
                         q.active = 1 AND
                         qq.question_id = $questionId"

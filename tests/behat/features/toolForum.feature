@@ -7,7 +7,7 @@ Feature: Forum tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a forum category
-    Given I am on "/main/forum/index.php?action=add&content=forumcategory&cid=1"
+    Given I am on "/main/forum/index.php?action=add_category&cid=1"
     When I fill in the following:
       | forum_category_title   | Forum Category Test |
     And I fill in ckeditor field "forum_category_comment" with "This is the first forum category for test"
@@ -15,7 +15,7 @@ Feature: Forum tool
     Then I should see "The forum category has been added"
 
   Scenario: Create a forum
-    Given I am on "/main/forum/index.php?action=add&content=forum&cid=1"
+    Given I am on "/main/forum/index.php?action=add_forum&cid=1"
     When I fill in the following:
       | forum_title   | Forum Test |
     And I fill in ckeditor field "forum_comment" with "This is the first forum for test"
@@ -31,6 +31,7 @@ Feature: Forum tool
       | post_title | Thread One |
     And I fill in ckeditor field "post_text" with "This is a the first thread in a forum for test"
     And I press "SubmitPost"
+    And wait for the page to be loaded
     Then I should see "The new thread has been added"
 
   Scenario: Reply to forum message
@@ -42,14 +43,17 @@ Feature: Forum tool
       | post_title | Reply |
     And I fill in ckeditor field "post_text" with "This is a reply to the first message for test"
     And I press "SubmitPost"
+    And wait for the page to be loaded
     Then I should see "The reply has been added"
 
-  Scenario: Delete a forum message
+  Scenario: Delete a forum thread
     Given I am on "/main/forum/index.php?cid=1"
     And I follow "Forum Test"
-    When I follow "Delete"
+    Then I follow "Thread One"
+    Then I follow "Delete"
     And I confirm the popup
-    Then I should see "Thread deleted"
+    And wait for the page to be loaded
+    Then I should see "deleted"
 
 # This test is commented because to quote a message is necessary load HTML code inside of textarea.
 # And this breaks the page for Behat

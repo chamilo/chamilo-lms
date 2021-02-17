@@ -1,5 +1,10 @@
 doctrine_migrations:
-    dir_name: '%kernel.project_dir%/src/Migrations'
-    # namespace is arbitrary but should be different from App\Migrations
-    # as migrations classes should NOT be autoloaded
-    namespace: DoctrineMigrations
+    migrations_paths:
+        'Chamilo\CoreBundle\Migrations\Schema\V200': 'src/CoreBundle/Migrations/Schema/V200'
+
+    # Run all migrations in a transaction.
+    all_or_nothing: true
+
+    # Adds an extra check in the generated migrations to ensure that is executed on the same database type.
+    check_database_platform: true
+    connection: default

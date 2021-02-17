@@ -62,23 +62,23 @@ function save_item(
 ) {
     $debug = 0;
     $return = null;
-
-    if ($debug > 0) {
-        error_log('--------------------------------------');
-        error_log('lp_ajax_save_item.php : save_item() params: ');
-        error_log("item_id: $item_id");
-        error_log("lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
-        error_log("score: $score - max:$max - min: $min - status:$status");
-        error_log("time:$time - suspend: $suspend - location: $location - core_exit: $core_exit");
-        error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
-    }
-
     $courseCode = api_get_course_id();
     if (!empty($courseId)) {
         $courseInfo = api_get_course_info_by_id($courseId);
         if ($courseInfo) {
             $courseCode = $courseInfo['code'];
         }
+    }
+
+    if ($debug > 0) {
+        error_log('--------------------------------------');
+        error_log('SAVE ITEM - lp_ajax_save_item.php');
+        error_log('--------------------------------------');
+        error_log("item_id: $item_id - lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
+        error_log("SCORE: $score - max:$max - min: $min - status:$status");
+        error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
+        error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
+        error_log("courseCode: $courseCode");
     }
 
     $myLP = learnpath::getLpFromSession($courseCode, $lp_id, $user_id);
@@ -102,7 +102,7 @@ function save_item(
             error_log("item #$item_id not found in the items array: ".print_r($myLP->items, 1));
         }
 
-        return false;
+        return null;
     }
 
     // This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
@@ -112,10 +112,10 @@ function save_item(
     if (true !== $prerequisitesCheck) {
         // If prerequisites were not matched, don't update any item info
         if ($debug) {
-            error_log("prereq_check: ".intval($prerequisitesCheck));
+            error_log("prereq_check failed: ".intval($prerequisitesCheck));
         }
 
-        return $return;
+        return null;
     } else {
         if ($debug > 1) {
             error_log('Prerequisites are OK');
@@ -488,9 +488,11 @@ function save_item(
     if (true === $scoreAsProgressSetting) {
         $scoreAsProgress = $myLP->getUseScoreAsProgress();
         if ($scoreAsProgress) {
-            $score = $myLPI->get_score();
-            $maxScore = $myLPI->get_max();
-            $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            if (isset($score) && -1 != $score) {
+                $score = $myLPI->get_score();
+                $maxScore = $myLPI->get_max();
+                $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            }
             $progressBarSpecial = true;
         }
     }
@@ -525,7 +527,7 @@ function save_item(
     }
 
     // To be sure progress is updated.
-    $myLP->save_last();
+    $myLP->save_last($score);
 
     Session::write('lpobject', serialize($myLP));
     Session::write('oLP', $myLP);

@@ -7,8 +7,8 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Manager\SettingsManager;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
@@ -30,9 +30,6 @@ class CourseListener
      */
     protected $settingsManager;
 
-    /**
-     * CourseListener constructor.
-     */
     public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {
         $this->toolChain = $toolChain;

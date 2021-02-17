@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -289,7 +289,7 @@ class CourseManager
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
             $sql .= 'ASC';
         } else {
-            $sql .= ('ASC' == $orderdirection ? 'ASC' : 'DESC');
+            $sql .= ('ASC' === $orderdirection ? 'ASC' : 'DESC');
         }
 
         if (!empty($howmany) && is_int($howmany) and $howmany > 0) {
@@ -299,7 +299,7 @@ class CourseManager
         }
         if (!empty($from)) {
             $from = (int) $from;
-            $sql .= ' OFFSET '.(int) $from;
+            $sql .= ' OFFSET '.$from;
         } else {
             $sql .= ' OFFSET 0';
         }
@@ -476,7 +476,6 @@ class CourseManager
 
         // Erase user student publications (works) in the course - by André Boivin
         if (!empty($userList)) {
-            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
             foreach ($userList as $userId) {
                 // Getting all work from user
                 $workList = getWorkPerUser($userId);
@@ -891,7 +890,7 @@ class CourseManager
                 'status' => $status,
                 'sort' => $maxSort + 1,
                 'relation_type' => 0,
-                'user_course_cat' => (int) $userCourseCategoryId,
+                'user_course_cat' => $userCourseCategoryId,
             ];
             $insertId = Database::insert($courseUserTable, $params);
 
@@ -924,11 +923,9 @@ class CourseManager
 
                 $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
                 if (1 === $subscribe) {
-                    require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
                     $forums = get_forums(0, $courseCode, true, $sessionId);
                     foreach ($forums as $forum) {
-                        $forumId = $forum['iid'];
-                        set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                        set_notification('forum', $forum->getIid(), false, $userInfo, $courseInfo);
                     }
                 }
 
@@ -2554,7 +2551,7 @@ class CourseManager
             $sql = "UPDATE $table SET course_id = NULL WHERE course_id = $courseId";
             Database::query($sql);
 
-            $repo->deleteResource(
+            $repo->deleteSequenceResource(
                 $courseId,
                 SequenceResource::COURSE_TYPE
             );
@@ -2926,8 +2923,9 @@ class CourseManager
 
         // Restriction by user id
         $currentUserRestriction = '';
+
+        $byUserId = (int) $byUserId;
         if ($byUserId > 0) {
-            $byUserId = (int) $byUserId;
             $currentUserRestriction = " AND tcruc.user_id = $byUserId ";
         }
 
@@ -4188,16 +4186,22 @@ class CourseManager
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
         $course_visibility = (int) $course_info['visibility'];
+        $allowUnsubscribe = api_get_configuration_value('enable_unsubscribe_button_on_my_course_page');
 
         if (COURSE_VISIBILITY_HIDDEN === $course_visibility) {
             return '';
         }
 
+        $sessionInfo = [];
+        if (!empty($session_id)) {
+            $sessionInfo = api_get_session_info($session_id);
+        }
         $userInCourseStatus = self::getUserInCourseStatus($user_id, $course_info['real_id']);
         $course_info['status'] = empty($session_id) ? $userInCourseStatus : STUDENT;
         $course_info['id_session'] = $session_id;
 
         $is_coach = api_is_coach($session_id, $course_info['real_id']);
+        $isAdmin = api_is_platform_admin();
 
         // Display course entry.
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
@@ -4223,6 +4227,7 @@ class CourseManager
             $notifications .= Display::show_notification($course_info);
         }
 
+        $sessionCourseAvailable = false;
         if ($session_accessible) {
             if (COURSE_VISIBILITY_CLOSED != $course_visibility ||
                 COURSEMANAGER == $userInCourseStatus
@@ -4231,7 +4236,6 @@ class CourseManager
                     $course_info['id_session'] = 0;
                 }
 
-                $sessionCourseAvailable = false;
                 $sessionCourseStatus = api_get_session_visibility($session_id, $course_info['real_id']);
 
                 if (in_array(
@@ -4295,27 +4299,42 @@ class CourseManager
         $repo = $entityManager->getRepository(SequenceResource::class);
 
         $sequences = $repo->getRequirements($course_info['real_id'], SequenceResource::COURSE_TYPE);
-        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
+        $sequenceList = $repo->checkRequirementsForUser(
+            $sequences,
+            SequenceResource::COURSE_TYPE,
+            $user_id,
+            $session_id
+        );
         $completed = $repo->checkSequenceAreCompleted($sequenceList);
         //var_dump($course_info['real_id'], $completed);
         $params['completed'] = $completed;
         $params['requirements'] = '';
 
-        if ($sequences && false === $completed) {
-            $hasRequirements = false;
-            foreach ($sequences as $sequence) {
-                if (!empty($sequence['requirements'])) {
-                    $hasRequirements = true;
-                    break;
+        if ($isAdmin ||
+            COURSEMANAGER === $userInCourseStatus ||
+            $is_coach ||
+            $user_id == $sessionInfo['session_admin_id']
+        ) {
+            $params['completed'] = true;
+            $params['requirements'] = '';
+        } else {
+            if ($sequences && false === $completed) {
+                $hasRequirements = false;
+                foreach ($sequences as $sequence) {
+                    if (!empty($sequence['requirements'])) {
+                        $hasRequirements = true;
+                        break;
+                    }
                 }
-            }
-            if ($hasRequirements) {
-                $params['requirements'] = CoursesAndSessionsCatalog::getRequirements(
+                if ($hasRequirements) {
+                    $params['requirements'] = CoursesAndSessionsCatalog::getRequirements(
                     $course_info['real_id'],
                     SequenceResource::COURSE_TYPE,
                     false,
-                    false
+                        false,
+                        $session_id
                 );
+                }
             }
         }
 
@@ -4324,37 +4343,46 @@ class CourseManager
         $params['edit_actions'] = '';
         $params['document'] = '';
         $params['category'] = $course_info['categoryName'];
+        if (COURSE_VISIBILITY_CLOSED != $course_visibility &&
+            false === $is_coach && $allowUnsubscribe && '1' === $course_info['unsubscribe']) {
+            $params['unregister_button'] =
+                CoursesAndSessionsCatalog::return_unregister_button(
+                    ['code' => $course_info['code']],
+                    Security::get_existing_token(),
+                    '',
+                    '',
+                    $session_id
+                );
+        }
 
         if (COURSE_VISIBILITY_CLOSED != $course_visibility &&
             COURSE_VISIBILITY_HIDDEN != $course_visibility
         ) {
-            if (api_is_platform_admin()) {
-                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course_info['real_id'];
+            if ($isAdmin) {
+                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
                 if ($load_dirs) {
                     $params['document'] .= '<a
-                        id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'"
+                        id="document_preview_'.$course_info['real_id'].'_'.$session_id.'"
                         class="document_preview btn btn-default btn-sm"
                         href="javascript:void(0);">'.
                         Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div('', [
-                        'id' => 'document_result_'.$course_info['real_id'].'_'.$course_info['id_session'],
+                        'id' => 'document_result_'.$course_info['real_id'].'_'.$session_id,
                         'class' => 'document_preview_container',
                     ]);
                 }
             }
         }
         if ('true' === api_get_setting('display_teacher_in_courselist')) {
-            $teacher_list = self::getTeachersFromCourse(
+            $teacher_list = self::getTeachersFromCourse($course_info['real_id'], true);
+            $course_coachs = self::get_coachs_from_course(
+                $session_id,
                 $course_info['real_id'],
                 true
             );
-            $course_coachs = self::get_coachs_from_course(
-                $course_info['id_session'],
-                $course_info['real_id']
-            );
             $params['teachers'] = $teacher_list;
 
-            if ((STUDENT == $course_info['status'] && !empty($course_info['id_session'])) ||
+            if ((STUDENT == $course_info['status'] && !empty($session_id)) ||
                 ($is_coach && COURSEMANAGER != $course_info['status'])
             ) {
                 $params['coaches'] = $course_coachs;
@@ -4370,68 +4398,63 @@ class CourseManager
         $html = $params;
 
         $session_category_id = null;
-        if (1) {
-            $session = '';
-            $active = false;
-            if (!empty($course_info['id_session'])) {
-                $session = api_get_session_info($course_info['id_session']);
-                $sessionCoachName = '';
-                if (!empty($session['id_coach'])) {
-                    $coachInfo = api_get_user_info($session['id_coach']);
-                    $sessionCoachName = $coachInfo['complete_name'];
-                }
+        $active = false;
+        if (!empty($session_id)) {
+            $sessionCoachName = '';
+            if (!empty($sessionInfo['id_coach'])) {
+                $coachInfo = api_get_user_info($sessionInfo['id_coach']);
+                $sessionCoachName = $coachInfo['complete_name'];
+            }
 
-                $session_category_id = self::get_session_category_id_by_session_id($course_info['id_session']);
+            $session_category_id = self::get_session_category_id_by_session_id($course_info['id_session']);
 
-                if (
-                    '0000-00-00 00:00:00' === $session['access_start_date'] || empty($session['access_start_date']) ||
-                    '0000-00-00' === $session['access_start_date']
+            if (
+                '0000-00-00 00:00:00' === $sessionInfo['access_start_date'] ||
+                empty($sessionInfo['access_start_date']) ||
+                '0000-00-00' === $sessionInfo['access_start_date']
                 ) {
-                    $session['dates'] = '';
-                    if ('true' === api_get_setting('show_session_coach')) {
-                        $session['coach'] = get_lang('General coach').': '.$sessionCoachName;
-                    }
-                    $active = true;
-                } else {
-                    $session['dates'] = ' - '.
-                        get_lang('From').' '.$session['access_start_date'].' '.
-                        get_lang('To').' '.$session['access_end_date'];
-                    if ('true' === api_get_setting('show_session_coach')) {
-                        $session['coach'] = get_lang('General coach').': '.$sessionCoachName;
-                    }
-                    $date_start = $session['access_start_date'];
-                    $date_end = $session['access_end_date'];
-                    $active = !$date_end ? ($date_start <= $now) : ($date_start <= $now && $date_end >= $now);
+                $sessionInfo['dates'] = '';
+                if ('true' === api_get_setting('show_session_coach')) {
+                    $sessionInfo['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
                 }
+                $active = true;
+            } else {
+                $sessionInfo['dates'] = ' - '.
+                    get_lang('From').' '.$sessionInfo['access_start_date'].' '.
+                    get_lang('To').' '.$sessionInfo['access_end_date'];
+                if ('true' === api_get_setting('show_session_coach')) {
+                    $sessionInfo['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
+                }
+                $date_start = $sessionInfo['access_start_date'];
+                $date_end = $sessionInfo['access_end_date'];
+                $active = !$date_end ? ($date_start <= $now) : ($date_start <= $now && $date_end >= $now);
             }
-            $user_course_category = '';
-            if (isset($course_info['user_course_cat'])) {
-                $user_course_category = $course_info['user_course_cat'];
-            }
-            $output = [
+        }
+        $user_course_category = '';
+        if (isset($course_info['user_course_cat'])) {
+            $user_course_category = $course_info['user_course_cat'];
+        }
+        $output = [
                 $user_course_category,
                 $html,
                 $course_info['id_session'],
-                $session,
+                $sessionInfo,
                 'active' => $active,
                 'session_category_id' => $session_category_id,
             ];
 
-            if (Skill::isAllowed($user_id, false)) {
-                $em = Database::getManager();
-                $objUser = api_get_user_entity($user_id);
-                $objCourse = api_get_course_entity($course['real_id']);
-                $objSession = api_get_session_entity($session_id);
-                $skill = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class)->getLastByUser($objUser, $objCourse, $objSession);
+        if (Skill::isAllowed($user_id, false)) {
+            $em = Database::getManager();
+            $objUser = api_get_user_entity($user_id);
+            $objCourse = api_get_course_entity($course['real_id']);
+            $objSession = api_get_session_entity($session_id);
+            $skill = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class)->getLastByUser($objUser, $objCourse, $objSession);
 
-                $output['skill'] = null;
-                if ($skill) {
-                    $output['skill']['name'] = $skill->getName();
-                    $output['skill']['icon'] = $skill->getIcon();
-                }
+            $output['skill'] = null;
+            if ($skill) {
+                $output['skill']['name'] = $skill->getName();
+                $output['skill']['icon'] = $skill->getIcon();
             }
-        } else {
-            $output = [$course_info['user_course_cat'], $html];
         }
 
         return $output;
@@ -4451,20 +4474,21 @@ class CourseManager
         $source_session_id,
         $destination_course_code,
         $destination_session_id,
-        $params = []
+        $params = [],
+        $withBaseContent = true
     ) {
         $course_info = api_get_course_info($source_course_code);
 
         if (!empty($course_info)) {
             $cb = new CourseBuilder('', $course_info);
-            $course = $cb->build($source_session_id, $source_course_code, true);
-            $course_restorer = new CourseRestorer($course);
-            $course_restorer->skip_content = $params;
-            $course_restorer->restore(
+            $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
+            $restorer = new CourseRestorer($course);
+            $restorer->skip_content = $params;
+            $restorer->restore(
                 $destination_course_code,
                 $destination_session_id,
                 true,
-                true
+                $withBaseContent
             );
 
             return true;
@@ -4481,6 +4505,7 @@ class CourseManager
      * @param int source session id
      * @param int destination session id
      * @param array $params
+     * @param bool  $copySessionContent
      *
      * @return array
      */
@@ -4489,7 +4514,8 @@ class CourseManager
         $source_course_code,
         $source_session_id = 0,
         $destination_session_id = 0,
-        $params = []
+        $params = [],
+        $copySessionContent = false
     ) {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
@@ -4506,7 +4532,8 @@ class CourseManager
                         $source_session_id,
                         $new_course_info['code'],
                         $destination_session_id,
-                        $params
+                        $params,
+                        true
                     );
                     if ($result) {
                         return $new_course_info;
@@ -5285,17 +5312,18 @@ class CourseManager
      *
      * @param string $courseTableAlias Alias of the course table
      * @param bool   $hideClosed       Whether to hide closed and hidden courses
+     * @param bool   $checkHidePrivate
      *
      * @return string SQL conditions
      */
-    public static function getCourseVisibilitySQLCondition(
-        $courseTableAlias,
-        $hideClosed = false
-    ) {
+    public static function getCourseVisibilitySQLCondition($courseTableAlias, $hideClosed = false, $checkHidePrivate = true)
+    {
         $visibilityCondition = '';
-        $hidePrivate = api_get_setting('course_catalog_hide_private');
-        if ('true' === $hidePrivate) {
-            $visibilityCondition .= " AND $courseTableAlias.visibility <> ".COURSE_VISIBILITY_REGISTERED;
+        if ($checkHidePrivate) {
+            $hidePrivateSetting = api_get_setting('course_catalog_hide_private');
+            if ('true' === $hidePrivateSetting) {
+                $visibilityCondition .= " AND $courseTableAlias.visibility <> ".COURSE_VISIBILITY_REGISTERED;
+            }
         }
         if ($hideClosed) {
             $visibilityCondition .= " AND $courseTableAlias.visibility NOT IN (".COURSE_VISIBILITY_CLOSED.','.COURSE_VISIBILITY_HIDDEN.')';

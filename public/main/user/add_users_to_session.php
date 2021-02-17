@@ -11,9 +11,11 @@ $xajax->registerFunction('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$id_session = intval($_GET['id_session']);
+$id_session = (int) $_GET['id_session'];
 
 SessionManager::protect_teacher_session_edit($id_session);
+
+$session = api_get_session_entity($id_session);
 
 // setting breadcrumbs
 if (api_is_platform_admin()) {
@@ -32,7 +34,7 @@ if (api_is_platform_admin()) {
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 $extra_field_list = [];
-if ('true' == $allowTutors) {
+if ('true' === $allowTutors) {
     // Database Table Definitions
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -287,9 +289,9 @@ if ('true' == $allowTutors) {
         $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
-                ON 
-                    $tbl_session_rel_user.user_id = u.user_id AND 
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                ON
+                    $tbl_session_rel_user.user_id = u.user_id AND
+                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
                     $tbl_session_rel_user.session_id = ".intval($id_session)."
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
@@ -300,11 +302,11 @@ if ('true' == $allowTutors) {
                 $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user
-                        ON 
-                            $tbl_session_rel_user.user_id = u.user_id AND 
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                        ON
+                            $tbl_session_rel_user.user_id = u.user_id AND
+                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
                             $tbl_session_rel_user.session_id = ".intval($id_session)."
-                        INNER JOIN $tbl_user_rel_access_url url_user 
+                        INNER JOIN $tbl_user_rel_access_url url_user
                         ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";

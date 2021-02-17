@@ -18,11 +18,11 @@ services:
             - ''
             -
                 urls:
-                    repository: Chamilo\CoreBundle\Repository\AccessUrlRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\AccessUrlRepository
                 courses:
-                    repository: Chamilo\CoreBundle\Repository\CourseRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\CourseRepository
                 users:
-                    repository: Chamilo\CoreBundle\Repository\UserRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\UserRepository
         tags:
             - {name: chamilo_core.tool}
 
@@ -35,7 +35,7 @@ services:
             - ''
             -
                 illustrations:
-                    repository: Chamilo\CoreBundle\Repository\IllustrationRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\IllustrationRepository
         tags:
             - {name: chamilo_core.tool}
 
@@ -85,6 +85,8 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository
                 student_publications_comments:
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository
+                student_publications_corrections:
+                    repository: Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository
         tags:
             - {name: chamilo_core.tool}
 
@@ -119,7 +121,7 @@ services:
         arguments:
             - 'course_description'
             - 'authoring'
-            - '/resources/course_description/course_descriptions'
+            - '/main/course_description/index.php'
             - '@chamilo_course.settings.course_description'
             -
                 course_descriptions:
@@ -241,7 +243,7 @@ services:
         arguments:
             - 'glossary'
             - 'authoring'
-            - '/resources/glossary/words'
+            - '/main/glossary/index.php'
             - '@chamilo_course.settings.glossary'
             -
                 words:
@@ -402,11 +404,26 @@ services:
         arguments:
             - 'user'
             - 'interaction'
-            - ~
+            - '/resources/user/'
             - ~
             -
                 files:
-                    repository: Chamilo\CoreBundle\Repository\PersonalFileRepository
+                    repository: Chamilo\CoreBundle\Repository\Node\PersonalFileRepository
+                message_attachments:
+                    repository: Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository
+        tags:
+            - {name: chamilo_core.tool}
+
+    chamilo_core.tool.usergroup:
+        class: Chamilo\CoreBundle\Tool\UserGroup
+        arguments:
+            - 'usergroup'
+            - ''
+            - '/resources/usergroup/'
+            - ~
+            -
+                usergroups:
+                    repository: Chamilo\CoreBundle\Repository\Node\UsergroupRepository
         tags:
             - {name: chamilo_core.tool}
 

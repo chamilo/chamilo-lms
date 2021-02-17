@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once __DIR__.'/../forum/forumfunction.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
 /**
@@ -206,7 +205,7 @@ class WSCMForum extends WSCM
             $table_posts = Database::get_course_table(TABLE_FORUM_POST);
             $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
-            $sql = "SELECT * FROM ".$table_posts."posts, ".$table_users." users 
+            $sql = "SELECT * FROM ".$table_posts."posts, ".$table_users." users
                     WHERE posts.poster_id=users.user_id AND posts.post_id='".Database::escape_string($post_id)."'";
             $result = Database::query($sql);
             $post_info = Database::fetch_array($result);

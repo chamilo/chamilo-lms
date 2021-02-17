@@ -211,6 +211,8 @@ class SubLanguageManager
      * Delete sub-language.
      * In order to avoid deletion of main laguages, we check the existence of a parent.
      *
+     * @deprecated
+     *
      * @param int  $parent_id       The parent id
      * @param bool $sub_language_id
      *
@@ -468,6 +470,8 @@ class SubLanguageManager
 
     /**
      * Get parent language path (or null if no parent).
+     *
+     * @deprecated
      *
      * @param string $language_path Children language path
      *

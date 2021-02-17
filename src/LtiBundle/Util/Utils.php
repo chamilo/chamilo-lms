@@ -5,7 +5,7 @@
 namespace Chamilo\LtiBundle\Util;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 
 /**

@@ -804,7 +804,7 @@ class UrlManager
         $count = self::relation_url_course_exist($courseId, $urlId);
         if (empty($count)) {
             $sql = "INSERT INTO $table
-                    SET c_id = '".intval($courseId)."', access_url_id = ".intval($urlId);
+                    SET c_id = ".intval($courseId).", access_url_id = ".intval($urlId);
             Database::query($sql);
         }
 
@@ -1217,9 +1217,8 @@ class UrlManager
                 ON (url_rel_user.access_url_id = u.id)
                 WHERE user_id = ".intval($user_id);
         $result = Database::query($sql);
-        $url_list = Database::store_result($result, 'ASSOC');
 
-        return $url_list;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -1231,15 +1230,35 @@ class UrlManager
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $courseId = (int) $courseId;
         $sql = "SELECT url, access_url_id FROM $table c 
                 INNER JOIN $table_url u
                 ON (c.access_url_id = u.id)
-                WHERE c_id = ".intval($courseId);
+                WHERE c_id = $courseId";
 
         $result = Database::query($sql);
-        $url_list = Database::store_result($result, 'ASSOC');
 
-        return $url_list;
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    public static function getCountAccessUrlFromCourse($courseId)
+    {
+        $courseId = (int) $courseId;
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $sql = "SELECT count(u.id) count FROM $table c
+                INNER JOIN $table_url u
+                ON (c.access_url_id = u.id)
+                WHERE c_id = $courseId ";
+
+        $result = Database::query($sql);
+        if ($result) {
+            $row = Database::fetch_array($result, 'ASSOC');
+
+            return (int) $row['count'];
+        }
+
+        return 0;
     }
 
     /**

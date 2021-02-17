@@ -52,16 +52,6 @@ class SkillRelSkill
     protected $level;
 
     /**
-     * Set id.
-     *
-     * @return int
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * Set skillId.
      *
      * @param int $skillId

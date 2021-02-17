@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-class CBlog
+class CBlog extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -45,11 +47,10 @@ class CBlog
     protected $blogId;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="blog_name", type="string", length=250, nullable=false)
      */
-    protected $blogName;
+    protected string $blogName;
 
     /**
      * @var string
@@ -237,6 +238,11 @@ class CBlog
         return $this;
     }
 
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
     /**
      * Get cId.
      *
@@ -245,5 +251,25 @@ class CBlog
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getBlogName();
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getBlogName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setBlogName($name);
     }
 }

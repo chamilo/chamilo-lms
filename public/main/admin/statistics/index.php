@@ -23,6 +23,7 @@ in_array(
 )
 ) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    $htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
     // Prepare variables for the JS charts
     $url = $reportName = $reportType = $reportOptions = '';
     switch ($report) {
@@ -674,7 +675,7 @@ switch ($report) {
                 jQuery("#user_session_grid").jqGrid("navButtonAdd","#user_session_grid_pager", {
                     caption:"",
                     onClickButton : function () {
-                        jQuery("#user_session_grid").jqGrid("excelExport",{"url":"<?php echo $url; ?>&export_format=xls"});
+                        jQuery("#user_session_grid").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
                     }
                 });
             });
@@ -853,6 +854,7 @@ switch ($report) {
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
+                $row++;
             }
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -919,7 +921,7 @@ switch ($report) {
             );
 
             $scoreDisplay = ScoreDisplay::instance();
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $headers = [
                 get_lang('Name'),
                 get_lang('Count'),
@@ -1130,7 +1132,7 @@ switch ($report) {
                         if ($validDate) {
                             $date1 = new DateTime($row['value']);
                             $interval = $now->diff($date1);
-                            $years = (int) $interval->y;
+                            $years = $interval->y;
 
                             if ($years >= 16 && $years <= 17) {
                                 $all['16-17']++;

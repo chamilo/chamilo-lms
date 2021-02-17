@@ -309,7 +309,7 @@ class EvalForm extends FormValidator
         $renderer->setFormTemplate(
             '<form{attributes}>
             <div class="table-responsive">
-		      <table class="data_table">
+                <table class="table table-hover table-striped data_table">
               {content}
 		      </table>
             </div>

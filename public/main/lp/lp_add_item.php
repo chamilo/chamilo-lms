@@ -22,7 +22,8 @@ $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
-$listUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq().'&isStudentView=true';
+$listUrl = api_get_path(WEB_CODE_PATH).
+    'lp/lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq().'&isStudentView=true';
 if (!$is_allowed_to_edit) {
     header("Location: $listUrl");
     exit;
@@ -118,13 +119,15 @@ switch ($type) {
 }
 
 if ('add_item' === $action && 'document' === $type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('The rich media page/activity has been added to the course')];
+    $interbreadcrumb[] = [
+        'url' => '#',
+        'name' => get_lang('The rich media page/activity has been added to the course'),
+    ];
 }
 
 // Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
-
 Display::display_header(null, 'Path');
 
 $suredel = trim(get_lang('Are you sure to delete'));
@@ -194,11 +197,10 @@ echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, true);
-
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 
 // Show the template list.
-if (('document' == $type || 'step' == $type) && !isset($_GET['file'])) {
+if (('document' === $type || 'step' === $type) && !isset($_GET['file'])) {
     // Show the template list.
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
     echo '</div>';

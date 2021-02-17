@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * CCourseDescription.
  *
- * @ORM\Table(name="c_course_description", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
+ * @ORM\Table(name="c_course_description")
  * @ORM\Entity
  */
 class CCourseDescription extends AbstractResource implements ResourceInterface
@@ -36,34 +36,16 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
-     * @var string
-     *
      * @Assert\NotBlank
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
+    protected ?string $content;
 
     /**
      * @var int
@@ -79,11 +61,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
      */
     protected $progress;
 
-    /**
-     * CCourseDescription constructor.
-     */
     public function __construct()
     {
+        $this->content = '';
         $this->progress = 0;
         $this->descriptionType = 1;
     }
@@ -142,30 +122,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CCourseDescription
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
      * Set descriptionType.
      *
      * @param int $descriptionType
@@ -211,30 +167,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     public function getProgress()
     {
         return $this->progress;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CCourseDescription
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

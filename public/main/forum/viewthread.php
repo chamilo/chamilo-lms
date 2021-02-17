@@ -7,13 +7,63 @@ use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
-/**
- * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
-require_once 'forumfunction.inc.php';
+
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+$htmlHeadXtra[] = '<script>
+
+function check_unzip() {
+    if (document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+    }
+}
+function setFocus() {
+    $("#title_file").focus();
+}
+</script>';
+// The next javascript script is to manage ajax upload file
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+
+// Recover Thread ID, will be used to generate delete attachment URL to do ajax
+$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
+// The next javascript script is to delete file by ajax
+$htmlHeadXtra[] = '<script>
+$(function () {
+    $(document).on("click", ".deleteLink", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var l = $(this);
+        var id = l.closest("tr").attr("id");
+        var filename = l.closest("tr").find(".attachFilename").html();
+        if (confirm("'.get_lang('Are you sure to delete').'", filename)) {
+            $.ajax({
+                type: "POST",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                dataType: "json",
+                success: function(data) {
+                    if (data.error == false) {
+                        l.closest("tr").remove();
+                        if ($(".files td").length < 1) {
+                            $(".files").closest(".control-group").hide();
+                        }
+                    }
+                }
+            })
+        }
+    });
+});
+</script>';
 $nameTools = get_lang('Forum');
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
@@ -65,7 +115,11 @@ if (api_is_in_gradebook()) {
 }
 
 $groupId = api_get_group_id();
-$group_properties = GroupManager::get_group_properties($groupId);
+$groupEntity = null;
+if (!empty($groupId)) {
+    $groupEntity = api_get_group_entity($groupId);
+}
+
 $sessionId = api_get_session_id();
 
 $ajaxURL = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=change_post_status';
@@ -112,7 +166,7 @@ switch ($my_action) {
             isset($_GET['content']) &&
             isset($_GET['id']) &&
             (api_is_allowed_to_edit(false, true) ||
-                (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
+                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
@@ -126,7 +180,7 @@ switch ($my_action) {
     case 'visible':
         if (isset($_GET['id']) &&
             (api_is_allowed_to_edit(false, true) ||
-                (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
+                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
@@ -182,7 +236,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($my_search)),
@@ -315,14 +369,17 @@ $group_id = api_get_group_id();
 $locked = api_resource_is_locked_by_gradebook($threadId, LINK_FORUM_THREAD);
 $sessionId = api_get_session_id();
 $userId = api_get_user_id();
-$groupInfo = GroupManager::get_group_properties($group_id);
 $postCount = 1;
 $allowUserImageForum = api_get_course_setting('allow_user_image_forum');
-
-// The user who posted it can edit his thread only if the course admin allowed this in the properties
-// of the forum
-// The course admin him/herself can do this off course always
-$tutorGroup = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo);
+$tutorGroup = false;
+$groupEntity = null;
+if (!empty($group_id)) {
+    $groupEntity = api_get_group_entity($group_id);
+    // The user who posted it can edit his thread only if the course admin allowed this in the properties
+    // of the forum
+    // The course admin him/herself can do this off course always
+    $tutorGroup = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
+}
 
 $postList = [];
 foreach ($posts as $post) {
@@ -334,13 +391,16 @@ foreach ($posts as $post) {
         $username = sprintf(get_lang('Login: %s'), $post['username']);
     }
 
-    $name = $post['complete_name'];
+    /*$name = $post['complete_name'];
     if (empty($posterId)) {
         $name = $post['poster_name'];
-    }
+    }*/
 
     $post['user_data'] = '';
-    if ('learnpath' != $origin) {
+    $post['author'] = $postEntity->getUser();
+    $posterId = $postEntity->getUser()->getId();
+
+    /*if ('learnpath' !== $origin) {
         if ($allowUserImageForum) {
             $post['user_data'] = '<div class="thumbnail">'.
                 display_user_image($posterId, $name, $origin).'</div>';
@@ -369,7 +429,7 @@ foreach ($posts as $post) {
                 'class' => 'lead',
             ]
         );
-    }
+    }*/
 
     if ('learnpath' !== $origin) {
         $post['user_data'] .= Display::tag(
@@ -393,7 +453,7 @@ foreach ($posts as $post) {
     $editButton = '';
     $askForRevision = '';
 
-    if ((isset($groupInfo['iid']) && $tutorGroup) ||
+    if (($groupEntity && $tutorGroup) ||
         (1 == $forumEntity->getAllowEdit() && $posterId == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
         !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
@@ -408,13 +468,13 @@ foreach ($posts as $post) {
             $editButton = Display::toolbarButton(
                 get_lang('Edit'),
                 $editUrl,
-                'pencil',
+                'pencil-alt',
                 'default'
             );
         }
     }
 
-    if ((isset($groupInfo['iid']) && $tutorGroup) ||
+    if (($groupEntity && $tutorGroup) ||
         api_is_allowed_to_edit(false, true) &&
         !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId)
     ) {
@@ -433,7 +493,14 @@ foreach ($posts as $post) {
                 $deleteUrl,
                 [
                     'onclick' => "javascript:if(!confirm('"
-                        .addslashes(api_htmlentities(get_lang('Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted'), ENT_QUOTES))
+                        .addslashes(
+                            api_htmlentities(
+                                get_lang(
+                                    'Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted'
+                                ),
+                                ENT_QUOTES
+                            )
+                        )
                         ."')) return false;",
                     'id' => "delete-post-{$post['post_id']}",
                 ]
@@ -464,7 +531,7 @@ foreach ($posts as $post) {
         }
     }
 
-    $userCanQualify = 1 == $threadEntity->isThreadPeerQualify() && $post['poster_id'] != $userId;
+    $userCanQualify = 1 == $threadEntity->isThreadPeerQualify() && $posterId != $userId;
     if (api_is_allowed_to_edit(null, true)) {
         $userCanQualify = true;
     }
@@ -472,7 +539,7 @@ foreach ($posts as $post) {
     $postIsARevision = false;
     $flagRevision = '';
 
-    if ($post['poster_id'] == $userId) {
+    if ($posterId == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
             $askForRevision = getAskRevisionButton($postEntity, $threadEntity);
@@ -516,10 +583,11 @@ foreach ($posts as $post) {
                 $posterId,
                 $threadId
             );
+            $userId = $postEntity->getUser()->getId();
             if (false == $locked) {
                 $iconEdit .= '<a href="forumqualify.php?'.api_get_cidreq()
                     ."&forum=$forumId&thread=$threadId&action=list&post={$post['post_id']}"
-                    ."&user={$post['user_id']}&user_id={$post['user_id']}"
+                    ."&user={$userId}&user_id={$userId}"
                     ."&idtextqualify=$current_qualify_thread"
                     .'" >'.Display::return_icon('quiz.png', get_lang('Grade activity')).'</a>';
             }
@@ -659,10 +727,9 @@ foreach ($posts as $post) {
         $repo = Container::getForumAttachmentRepository();
         /** @var \Chamilo\CourseBundle\Entity\CForumAttachment $attachment */
         foreach ($attachments as $attachment) {
-            $post['post_attachments'] .= Display::return_icon('attachment.png', get_lang('Attachment'));
-            $url = $repo->getResourceFileDownloadUrl($attachment);
+            $post['post_attachments'] .= Display::returnFontAwesomeIcon('paperclip');
+            $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
             $post['post_attachments'] .= Display::url($attachment->getFilename(), $url);
-
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
             if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) &&
@@ -710,9 +777,9 @@ if (!$_user['user_id'] && 0 == $forumEntity->getAllowAnonymous()) {
 }
 
 if (0 != $forumEntity->getForumOfGroup()) {
-    $show_forum = GroupManager::user_has_access(
+    $show_forum = GroupManager::userHasAccess(
         api_get_user_id(),
-        $forumEntity->getForumOfGroup(),
+        api_get_group_entity($forumEntity->getForumOfGroup()),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {

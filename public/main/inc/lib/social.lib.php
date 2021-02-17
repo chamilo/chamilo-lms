@@ -1,6 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -233,7 +236,7 @@ class SocialManager extends UserManager
     {
         return [];
         // @todo
-        $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
+        /*$list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
         $list = [];
         foreach ($list_ids as $values_ids) {
             $list[] = UserManager::get_user_picture_path_by_id(
@@ -242,7 +245,7 @@ class SocialManager extends UserManager
             );
         }
 
-        return $list;
+        return $list;*/
     }
 
     /**
@@ -270,9 +273,7 @@ class SocialManager extends UserManager
 
         //Just in case we replace the and \n and \n\r while saving in the DB
         $message_content = str_replace(["\n", "\n\r"], '<br />', $message_content);
-
         $clean_message_content = Database::escape_string($message_content);
-        $now = api_get_utc_datetime();
         $sql = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
                 WHERE
                     user_sender_id='.$user_id.' AND
@@ -281,31 +282,32 @@ class SocialManager extends UserManager
                 ';
         $res_exist = Database::query($sql);
         $row_exist = Database::fetch_array($res_exist, 'ASSOC');
-
-        if (0 == $row_exist['count']) {
-            $params = [
-                'user_sender_id' => $user_id,
-                'user_receiver_id' => $friend_id,
-                'msg_status' => MESSAGE_STATUS_INVITATION_PENDING,
-                'send_date' => $now,
-                'title' => $message_title,
-                'content' => $message_content,
-                'group_id' => 0,
-                'parent_id' => 0,
-                'update_date' => $now,
-            ];
-            $messageId = Database::insert($tbl_message, $params);
-
-            $senderInfo = api_get_user_info($user_id);
-            $notification = new Notification();
-            $notification->saveNotification(
-                $messageId,
-                Notification::NOTIFICATION_TYPE_INVITATION,
-                [$friend_id],
-                $message_title,
-                $message_content,
-                $senderInfo
-            );
+        if (0 === (int) $row_exist['count']) {
+            $em = Database::getManager();
+            $message = new Message();
+            $message
+                ->setUserSender(api_get_user_entity($user_id))
+                ->setUserReceiver(api_get_user_entity($friend_id))
+                ->setMsgStatus(MESSAGE_STATUS_INVITATION_PENDING)
+                ->setTitle($message_title)
+                ->setContent($message_content)
+                ->setGroupId(0)
+            ;
+            $em->persist($message);
+            $em->flush();
+            $messageId = $message->getId();
+            if ($messageId) {
+                $senderInfo = api_get_user_info($user_id);
+                $notification = new Notification();
+                $notification->saveNotification(
+                    $messageId,
+                    Notification::NOTIFICATION_TYPE_INVITATION,
+                    [$friend_id],
+                    $message_title,
+                    $message_content,
+                    $senderInfo
+                );
+            }
 
             return true;
         } else {
@@ -327,10 +329,10 @@ class SocialManager extends UserManager
                 Database::query($sql);
 
                 return true;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     /**
@@ -665,7 +667,7 @@ class SocialManager extends UserManager
         $success = get_lang('The message has been sent to');
         $success .= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
 
-        if (isset($subject) && isset($content) && isset($userId)) {
+        if (!empty($subject) && !empty($content) && !empty($userId)) {
             $result = MessageManager::send_message($userId, $subject, $content);
 
             if ($result) {
@@ -674,37 +676,39 @@ class SocialManager extends UserManager
                 );
             } else {
                 Display::addFlash(
-                    Display::return_message(get_lang('There was an error while trying to send the message.'), 'error', false)
+                    Display::return_message(
+                        get_lang('There was an error while trying to send the message.'),
+                        'error',
+                        false
+                    )
                 );
             }
 
             return false;
-        } elseif (isset($userId) && !isset($subject)) {
-            if (isset($userId) && $userId > 0) {
-                $count = self::send_invitation_friend(
-                    api_get_user_id(),
-                    $userId,
-                    get_lang('Invitation'),
-                    $content
-                );
+        } elseif (!empty($userId) && empty($subject)) {
+            $count = self::send_invitation_friend(
+                api_get_user_id(),
+                $userId,
+                get_lang('Invitation'),
+                $content
+            );
 
-                if ($count) {
-                    Display::addFlash(
-                        Display::return_message(
-                            api_htmlentities(get_lang('The invitation has been sent')),
-                            'normal',
-                            false
-                        )
-                    );
-                } else {
-                    Display::addFlash(
-                        Display::return_message(
-                            api_htmlentities(get_lang('You already sent an invitation')),
-                            'warning',
-                            false
-                        )
-                    );
-                }
+            if ($count) {
+                Display::addFlash(
+                    Display::return_message(
+                        api_htmlentities(get_lang('The invitation has been sent')),
+                        'normal',
+                        false
+                    )
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        api_htmlentities(get_lang('You already sent an invitation')),
+                        'warning',
+                        false
+                    )
+                );
             }
         }
     }
@@ -754,14 +758,12 @@ class SocialManager extends UserManager
             // Group image
             $userGroup = new UserGroup();
             $group_info = $userGroup->get($group_id);
-
             $userGroupImage = $userGroup->get_picture_group(
                 $group_id,
                 $group_info['picture'],
                 128,
                 GROUP_IMAGE_SIZE_BIG
             );
-
             $template->assign('show_group', true);
             $template->assign('group_id', $group_id);
             $template->assign('user_group_image', $userGroupImage);
@@ -881,7 +883,7 @@ class SocialManager extends UserManager
             $show,
             ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
         )) {
-            $links = '<ul class="nav nav-pills nav-stacked">';
+            $links = '<ul class="nav-bar">';
             $active = 'home' === $show ? 'active' : null;
             $links .= '
                 <li class="home-icon '.$active.'">
@@ -1003,7 +1005,7 @@ class SocialManager extends UserManager
         }
 
         if ('shared_profile' === $show) {
-            $links = '<ul class="nav nav-pills nav-stacked">';
+            $links = '<ul class="nav-bar">';
             // My own profile
             if ($show_full_profile && $user_id == api_get_user_id()) {
                 $links .= '
@@ -1187,7 +1189,7 @@ class SocialManager extends UserManager
 
         if ($show_delete_account_button) {
             $html .= '<div class="panel panel-default"><div class="panel-body">';
-            $html .= '<ul class="nav nav-pills nav-stacked"><li>';
+            $html .= '<ul class="nav-bar"><li>';
             $url = api_get_path(WEB_CODE_PATH).'auth/unsubscribe_account.php';
             $html .= Display::url(
                 Display::return_icon(
@@ -1355,9 +1357,7 @@ class SocialManager extends UserManager
      */
     public static function display_productions($user_id)
     {
-        return;
-
-        $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
+        /*$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
         $sysdir = UserManager::getUserPathById($user_id, 'system');
         $webdir = UserManager::getUserPathById($user_id, 'web');
 
@@ -1386,7 +1386,7 @@ class SocialManager extends UserManager
                 }
             }
             echo '</ul></dd>';
-        }
+        }*/
     }
 
     /**
@@ -1443,7 +1443,7 @@ class SocialManager extends UserManager
      * @param int    $messageId      id parent
      * @param string $messageStatus  status type of message
      *
-     * @return int
+     * @return Message
      *
      * @author Yannick Warnier
      */
@@ -1454,7 +1454,6 @@ class SocialManager extends UserManager
         $messageId = 0,
         $messageStatus = ''
     ) {
-        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $userId = (int) $userId;
         $friendId = (int) $friendId;
         $messageId = (int) $messageId;
@@ -1462,46 +1461,49 @@ class SocialManager extends UserManager
         if (empty($userId) || empty($friendId)) {
             return 0;
         }
+        $em = Database::getManager();
+
+        $repo = $em->getRepository(Message::class);
+        $parent = $repo->find($messageId);
 
         // Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(["\n", "\n\r"], '<br />', $messageContent);
-        $now = api_get_utc_datetime();
 
-        $attributes = [
-            'user_sender_id' => $userId,
-            'user_receiver_id' => $friendId,
-            'msg_status' => $messageStatus,
-            'send_date' => $now,
-            'title' => '',
-            'content' => $messageContent,
-            'parent_id' => $messageId,
-            'group_id' => 0,
-            'update_date' => $now,
-        ];
+        $message = new Message();
+        $message
+            ->setUserSender(api_get_user_entity($userId))
+            ->setUserReceiver(api_get_user_entity($friendId))
+            ->setMsgStatus($messageStatus)
+            ->setTitle('')
+            ->setContent($messageContent)
+            ->setGroupId(0)
+            ->setParent($parent)
+        ;
+        $em->persist($message);
+        $em->flush();
 
-        return Database::insert($tblMessage, $attributes);
+        return $message;
     }
 
     /**
      * Send File attachment (jpg,png).
      *
-     * @author Anibal Copitan
-     *
-     * @param int    $userId      id user
-     * @param array  $fileAttach
-     * @param int    $messageId   id message (relation with main message)
-     * @param string $fileComment description attachment file
+     * @param int     $userId      id user
+     * @param array   $fileAttach
+     * @param Message $message
+     * @param string  $fileComment description attachment file
      *
      * @return bool|int
+     *
+     * @author Anibal Copitan
      */
     public static function sendWallMessageAttachmentFile(
         $userId,
         $fileAttach,
-        $messageId,
+        $message,
         $fileComment = ''
     ) {
         $safeFileName = Database::escape_string($fileAttach['name']);
-
         $extension = strtolower(substr(strrchr($safeFileName, '.'), 1));
         $allowedTypes = api_get_supported_image_extensions();
 
@@ -1510,7 +1512,7 @@ class SocialManager extends UserManager
         $allowedTypes[] = 'ogg';
 
         if (in_array($extension, $allowedTypes)) {
-            return MessageManager::saveMessageAttachmentFile($fileAttach, $fileComment, $messageId, $userId);
+            return MessageManager::saveMessageAttachmentFile($fileAttach, $fileComment, $message, $userId);
         }
 
         return false;
@@ -1694,7 +1696,7 @@ class SocialManager extends UserManager
                     $row['post_title'] = '';
                     $row['forum_title'] = '';
                     $row['thread_url'] = '';
-                    if (MESSAGE_STATUS_FORUM == $row['msg_status']) {
+                    if (MESSAGE_STATUS_FORUM === (int) $row['msg_status']) {
                         /** @var CForumPost $post */
                         $post = $repo->find($row['id']);
                         /** @var CForumThread $thread */
@@ -1768,7 +1770,7 @@ class SocialManager extends UserManager
                 </div>
                 <div class="col-sm-3 pull-right">
                 <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="btn btn-default btn-post">
-                    <em class="fa fa-pencil"></em> '.get_lang('Post').'
+                    <em class="fas fa-pencil-alt"></em> '.get_lang('Post').'
                 </a>
                 </div>
                 </form>';
@@ -1852,29 +1854,25 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param array $message
-     *
      * @return array
      */
-    public static function getAttachmentPreviewList($message)
+    public static function getAttachmentPreviewList(Message $message)
     {
-        $messageId = $message['id'];
-
         $list = [];
-
-        if (empty($message['group_id'])) {
-            $files = MessageManager::getAttachmentList($messageId);
-            if ($files) {
-                $downloadUrl = api_get_path(WEB_CODE_PATH).'social/download.php?message_id='.$messageId;
-                foreach ($files as $row_file) {
-                    $url = $downloadUrl.'&attachment_id='.$row_file['id'];
-                    $display = Display::fileHtmlGuesser($row_file['filename'], $url);
-                    $list[] = $display;
-                }
+        //if (empty($message['group_id'])) {
+        $files = $message->getAttachments();
+        if ($files) {
+            $repo = Container::getMessageAttachmentRepository();
+            /** @var MessageAttachment $file */
+            foreach ($files as $file) {
+                $url = $repo->getResourceFileUrl($file);
+                $display = Display::fileHtmlGuesser($file->getFilename(), $url);
+                $list[] = $display;
             }
-        } else {
-            $list = MessageManager::getAttachmentLinkList($messageId, 0);
         }
+        /*} else {
+            $list = MessageManager::getAttachmentLinkList($messageId, 0);
+        }*/
 
         return $list;
     }
@@ -1990,7 +1988,7 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Soft delete a message and his chidren.
+     * Soft delete a message and his children.
      *
      * @param int $id id message to delete
      *
@@ -1998,7 +1996,27 @@ class SocialManager extends UserManager
      */
     public static function deleteMessage($id)
     {
-        $id = (int) $id;
+        $em = Database::getManager();
+        $repo = $em->getRepository(Message::class);
+
+        /** @var Message $message */
+        $message = $repo->find($id);
+
+        if (null === $message) {
+            return false;
+        }
+
+        $children = $message->getChildren();
+        if ($children->count()) {
+            foreach ($children as $child) {
+                self::deleteMessage($child->getId());
+            }
+        }
+
+        $message->setMsgStatus(MESSAGE_STATUS_WALL_DELETE);
+        MessageManager::softDeleteAttachments($message);
+
+        /*$id = (int) $id;
         $messageInfo = MessageManager::get_message_by_id($id);
         if (!empty($messageInfo)) {
             // Delete comments too
@@ -2021,7 +2039,7 @@ class SocialManager extends UserManager
             return true;
         }
 
-        return false;
+        return false;*/
     }
 
     /**
@@ -2390,7 +2408,7 @@ class SocialManager extends UserManager
     public static function wrapPost($message, $content)
     {
         $class = '';
-        if (MESSAGE_STATUS_PROMOTED === $message['msg_status']) {
+        if (MESSAGE_STATUS_PROMOTED === (int) $message['msg_status']) {
             $class = 'promoted_post';
         }
 
@@ -2757,7 +2775,7 @@ class SocialManager extends UserManager
                 $messageContent = $_POST['social_wall_new_msg_main'].'<br /><br />'.$_POST['url_content'];
             }
 
-            $messageId = self::sendWallMessage(
+            $message = self::sendWallMessage(
                 api_get_user_id(),
                 $friendId,
                 $messageContent,
@@ -2765,11 +2783,11 @@ class SocialManager extends UserManager
                 MESSAGE_STATUS_WALL_POST
             );
 
-            if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
+            if ($message && !empty($_FILES['picture']['tmp_name'])) {
                 self::sendWallMessageAttachmentFile(
                     api_get_user_id(),
                     $_FILES['picture'],
-                    $messageId
+                    $message
                 );
             }
 
@@ -2933,23 +2951,21 @@ class SocialManager extends UserManager
      */
     public static function getThreadList($userId)
     {
+        return [];
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
-
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $threads = [];
         if (!empty($forumCourseId)) {
             $courseInfo = api_get_course_info_by_id($forumCourseId);
-            getNotificationsPerUser($userId, true, $forumCourseId);
+            /*getNotificationsPerUser($userId, true, $forumCourseId);
             $notification = Session::read('forum_notification');
-            Session::erase('forum_notification');
+            Session::erase('forum_notification');*/
 
             $threadUrlBase = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
                 'cid' => $courseInfo['real_id'],
             ]).'&';
             if (isset($notification['thread']) && !empty($notification['thread'])) {
                 $threadList = array_filter(array_unique($notification['thread']));
-                $em = Database::getManager();
                 $repo = Container::getForumThreadRepository();
                 foreach ($threadList as $threadId) {
                     /** @var CForumThread $thread */

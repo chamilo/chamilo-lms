@@ -18,8 +18,6 @@ $interbreadcrumb[] = ['url' => 'settings.php?category=Search', 'name' => get_lan
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-include_once $libpath.'specific_fields_manager.lib.php';
-
 // Create an add-field box
 $form = new FormValidator('add_field', 'post', '', '', null, false);
 $renderer = &$form->defaultRenderer();

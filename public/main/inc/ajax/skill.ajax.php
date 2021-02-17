@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
 
 /**
  * Responses to AJAX calls.
@@ -415,7 +416,7 @@ switch ($action) {
         if (!empty($typeId) && !empty($itemId) && !empty($skillId) && !empty($userId) && !empty($courseId)) {
             $em = Database::getManager();
             $user = api_get_user_entity($userId);
-            $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);
+            $skill = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class)->find($skillId);
             if (empty($user) || empty($skill)) {
                 exit;
             }
@@ -435,13 +436,13 @@ switch ($action) {
                     'user' => $userId,
                     'skillRelItem' => $skillRelItem,
                 ];
-                $skillRelItemRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                $skillRelItemRelUser = $em->getRepository(SkillRelItemRelUser::class)->findOneBy($criteria);
                 if ($skillRelItemRelUser) {
                     $em->remove($skillRelItemRelUser);
                     $em->flush();
                     $skillRelItemRelUser = null;
                 } else {
-                    $skillRelItemRelUser = new Chamilo\CoreBundle\Entity\SkillRelItemRelUser();
+                    $skillRelItemRelUser = new SkillRelItemRelUser();
                     $skillRelItemRelUser
                         ->setUser($user)
                         ->setSkillRelItem($skillRelItem)
@@ -476,7 +477,7 @@ switch ($action) {
         }
 
         $em = Database::getManager();
-        $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+        $skillRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class);
         $skill = $skillRepo->find($skillId);
         $user = api_get_user_entity($userId);
 
@@ -484,7 +485,7 @@ switch ($action) {
             exit;
         }
 
-        $skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
+        $skillUserRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
         $criteria = [
             'user' => $user,
             'skill' => $skill,
@@ -502,7 +503,7 @@ switch ($action) {
             $course = api_get_course_entity($courseId);
             $skillUser->setCourse($course);
             if (!empty($sessionId)) {
-                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                $session = api_get_session_entity($sessionId);
                 $skillUser->setSession($session);
             }
 

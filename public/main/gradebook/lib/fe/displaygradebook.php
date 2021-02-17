@@ -11,7 +11,8 @@ class DisplayGradebook
      * Displays the header for the result page containing the navigation tree and links.
      *
      * @param Evaluation $evalobj
-     * @param $selectcat
+     * @param int        $selectcat
+     * @param string     $page
      */
     public static function display_header_result($evalobj, $selectcat, $page)
     {
@@ -151,8 +152,8 @@ class DisplayGradebook
         $header .= '<a href="'.$url.'?'.api_get_cidreq().'&selectcat='.$select_cat.'">'.
             Display::return_icon('back.png', get_lang('Assessment home'), '', ICON_SIZE_MEDIUM).'</a>';
 
-        $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
-        $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : null;
+        $pageNum = isset($_GET['flatviewlist_page_nr']) ? (int) $_GET['flatviewlist_page_nr'] : null;
+        $perPage = isset($_GET['flatviewlist_per_page']) ? (int) $_GET['flatviewlist_per_page'] : null;
         $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
         $exportCsvUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([

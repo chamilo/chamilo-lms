@@ -22,7 +22,7 @@ export default {
   mixins: [ListMixin],
   data() {
     return {
-      status: null,
+      status: '',
       courses: []
     };
   },
@@ -33,12 +33,18 @@ export default {
     load: function () {
       this.status = 'Loading';
       let user = this.$store.getters['security/getUser'];
-      axios.get(ENTRYPOINT + 'users/' + user.id + '/courses.json').then(response => {
+      if (user) {
+        axios.get(ENTRYPOINT + 'users/' + user.id + '/courses.json').then(response => {
+          this.status = '';
+          if (Array.isArray(response.data)) {
+            this.courses = response.data;
+          }
+        }).catch(function (error) {
+          console.log(error);
+        });
+      } else {
         this.status = '';
-        this.courses = response.data;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      }
     }
   }
 };

@@ -11,8 +11,11 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
 use ExtraFieldValue;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -34,7 +37,7 @@ class SessionController extends AbstractController
      *
      * @Entity("session", expr="repository.find(sid)")
      */
-    public function aboutAction(Request $request, Session $session): Response
+    public function aboutAction(Request $request, Session $session, IllustrationRepository $illustrationRepo, UserRepository $userRepo): Response
     {
         $requestSession = $request->getSession();
 
@@ -45,9 +48,11 @@ class SessionController extends AbstractController
 
         $courses = [];
         $sessionCourses = $session->getCourses();
+
+        /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
+        /** @var EntityRepository $fieldTagsRepo */
         $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
-        $userRepo = \UserManager::getRepository();
 
         /** @var SequenceRepository $sequenceResourceRepo */
         $sequenceResourceRepo = $em->getRepository(SequenceResource::class);
@@ -76,10 +81,7 @@ class SessionController extends AbstractController
             foreach ($courseCoaches as $courseCoach) {
                 $coachData = [
                     'complete_name' => \UserManager::formatUserFullName($courseCoach),
-                    'image' => \UserManager::getUserPicture(
-                        $courseCoach->getId(),
-                        USER_IMAGE_SIZE_ORIGINAL
-                    ),
+                    'image' => $illustrationRepo->getIllustrationUrl($courseCoach),
                     'diploma' => $courseCoach->getDiplomas(),
                     'openarea' => $courseCoach->getOpenarea(),
                     'extra_fields' => $userValues->getAllValuesForAnItem(

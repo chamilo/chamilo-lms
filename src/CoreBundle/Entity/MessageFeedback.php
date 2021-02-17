@@ -81,18 +81,6 @@ class MessageFeedback
     }
 
     /**
-     * @param int $id
-     *
-     * @return MessageFeedback
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return Message
      */
     public function getMessage()

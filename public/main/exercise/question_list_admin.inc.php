@@ -161,6 +161,7 @@ if (!$inATest) {
         // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
 
+        $originalQuestionSelectType = $objExercise->questionSelectionType;
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
@@ -195,6 +196,7 @@ if (!$inATest) {
             // Classic order
             $questionList = $objExercise->selectQuestionList(true, true);
         }
+        $objExercise->questionSelectionType = $originalQuestionSelectType;
 
         echo '
             <div class="row hidden-xs">
@@ -285,7 +287,7 @@ if (!$inATest) {
                     $delete_link = '';
                 }
 
-                $btnDetail = implode(
+                $btnActions = implode(
                     PHP_EOL,
                     [$edit_link, $clone_link, $delete_link]
                 );
@@ -310,7 +312,7 @@ if (!$inATest) {
 
                 // Question category
                 $questionCategory = Security::remove_XSS(
-                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
+                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->getId())
                 );
                 if (empty($questionCategory)) {
                     $questionCategory = '-';
@@ -327,7 +329,7 @@ if (!$inATest) {
                 $questionScore = $objQuestionTmp->selectWeighting();
 
                 echo '<div id="question_id_list_'.$id.'">
-                        <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
+                        <div class="header_operations" data-exercise="'.$objExercise->getId().'"
                             data-question="'.$id.'">
                             <div class="row">
                                 <div class="question col-sm-5 col-xs-12">'
@@ -350,7 +352,7 @@ if (!$inATest) {
                                     .$questionScore.'
                                 </div>
                                 <div class="btn-actions text-right col-sm-2 col-xs-6">
-                                    <div class="edition">'.$btnDetail.'</div>
+                                    <div class="edition">'.$btnActions.'</div>
                                 </div>
                             </div>
                         </div>

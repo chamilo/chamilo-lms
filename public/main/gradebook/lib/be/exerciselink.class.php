@@ -10,6 +10,7 @@
  */
 class ExerciseLink extends AbstractLink
 {
+    public $checkBaseExercises = false;
     private $course_info;
     private $exercise_table;
     private $exercise_data = [];
@@ -126,7 +127,6 @@ class ExerciseLink extends AbstractLink
     public function calc_score($studentId = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
-
         if ($allowStats) {
             $link = $this->entity;
             if (!empty($link)) {
@@ -135,21 +135,20 @@ class ExerciseLink extends AbstractLink
                 switch ($type) {
                     case 'best':
                         $bestResult = $link->getBestScore();
-                        $result = [$bestResult, $weight];
 
-                        return $result;
+                        return [$bestResult, $weight];
+
                         break;
                     case 'average':
-                        $count = count($this->getStudentList());
+                        $count = count($link->getUserScoreList());
+                        //$count = count($this->getStudentList());
                         if (empty($count)) {
-                            $result = [0, $weight];
-
-                            return $result;
+                            return [0, $weight];
                         }
                         $sumResult = array_sum($link->getUserScoreList());
-                        $result = [$sumResult / $count, $weight];
 
-                        return $result;
+                        return [$sumResult / $count, $weight];
+
                         break;
                     case 'ranking':
                         return [null, null];
@@ -184,7 +183,7 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
-        $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
+        $exerciseId = isset($exerciseData['iid']) ? (int) $exerciseData['iid'] : 0;
         $studentId = (int) $studentId;
 
         if (empty($exerciseId)) {
@@ -225,11 +224,27 @@ class ExerciseLink extends AbstractLink
                     //$lpId = $exercise->getLpBySession($sessionId);
                     $lpList = [];
                     foreach ($exercise->lpList as $lpData) {
-                        if ((int) $lpData['session_id'] == $sessionId) {
-                            $lpList[] = $lpData['lp_id'];
+                        if ($this->checkBaseExercises) {
+                            if (0 == (int) $lpData['session_id']) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        } else {
+                            if ((int) $lpData['session_id'] == $sessionId) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
                         }
                     }
-                    $lpCondition = ' orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'")) AND ';
+
+                    if (empty($lpList) && !empty($sessionId)) {
+                        // Check also if an LP was added in the base course.
+                        foreach ($exercise->lpList as $lpData) {
+                            if (0 == (int) $lpData['session_id']) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        }
+                    }
+
+                    $lpCondition = ' (orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'"))) AND ';
                 }
 
                 $sql = "SELECT *
@@ -385,7 +400,7 @@ class ExerciseLink extends AbstractLink
     {
         $sessionId = $this->get_session_id();
         $data = $this->get_exercise_data();
-        $exerciseId = $data['id'];
+        $exerciseId = $data['iid'];
         $path = isset($data['path']) ? $data['path'] : '';
 
         return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
@@ -414,7 +429,7 @@ class ExerciseLink extends AbstractLink
     public function getLpListToString()
     {
         $data = $this->get_exercise_data();
-        $lpList = Exercise::getLpListFromExercise($data['id'], $this->getCourseId());
+        $lpList = Exercise::getLpListFromExercise($data['iid'], $this->getCourseId());
         $lpListToString = '';
         if (!empty($lpList)) {
             foreach ($lpList as &$list) {
@@ -523,7 +538,7 @@ class ExerciseLink extends AbstractLink
 
         if (empty($this->exercise_data)) {
             if (1 == $this->is_hp) {
-                $sql = "SELECT * FROM $table ex
+                /*$sql = "SELECT * FROM $table ex
                     INNER JOIN $tableItemProperty ip
                     ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
                     WHERE
@@ -535,7 +550,7 @@ class ExerciseLink extends AbstractLink
                         ex.path LIKE '%HotPotatoes_files%' AND
                         ip.visibility = 1";
                 $result = Database::query($sql);
-                $this->exercise_data = Database::fetch_array($result);
+                $this->exercise_data = Database::fetch_array($result);*/
             } else {
                 // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
@@ -552,7 +567,7 @@ class ExerciseLink extends AbstractLink
                     $sql = 'SELECT * FROM '.$table.'
                         WHERE
                             c_id = '.$this->course_id.' AND
-                            id = '.$exerciseId;
+                            iid = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

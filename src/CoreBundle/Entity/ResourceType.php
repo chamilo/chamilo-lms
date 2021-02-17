@@ -28,41 +28,31 @@ class ResourceType
      *
      * @Assert\NotBlank()
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="resourceTypes")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
-    protected $tool;
+    protected Tool $tool;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
      */
     protected $resourceNodes;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
 
     public function __toString(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setId($id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getName(): string

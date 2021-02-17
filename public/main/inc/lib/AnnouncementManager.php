@@ -266,8 +266,9 @@ class AnnouncementManager
         $repo = Container::getAnnouncementRepository();
         $announcement = $repo->find($id);
         if ($announcement) {
-            $repo->getEntityManager()->remove($announcement);
-            $repo->getEntityManager()->flush();
+            $em = Database::getManager();
+            $em->remove($announcement);
+            $em->flush();
         }
 
         /*
@@ -292,10 +293,10 @@ class AnnouncementManager
             $courseInfo,
             api_get_session_id()
         );
-
+        $em = Database::getManager();
         if (!empty($announcements)) {
             foreach ($announcements as $announcement) {
-                $repo->getEntityManager()->remove($announcement);
+                $em->remove($announcement);
                 /*api_item_property_update(
                     $courseInfo,
                     TOOL_ANNOUNCEMENT,
@@ -305,7 +306,7 @@ class AnnouncementManager
                 );*/
             }
         }
-        $repo->getEntityManager()->flush();
+        $em->flush();
     }
 
     /**
@@ -462,7 +463,6 @@ class AnnouncementManager
 
         $stok = null;
         $html = '';
-
         $announcement = self::getAnnouncementInfoById(
             $id,
             api_get_course_int_id(),
@@ -482,11 +482,11 @@ class AnnouncementManager
 
         $repo = Container::getAnnouncementRepository();
         $isVisible = $repo->isGranted(ResourceNodeVoter::VIEW, $announcement);
-
+        $url = api_get_self()."?".api_get_cidreq();
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
-            $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$id."\">".
+            $modify_icons = "<a href=\"".$url."&action=modify&id=".$id."\">".
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
 
             $image_visibility = 'invisible';
@@ -497,11 +497,14 @@ class AnnouncementManager
                 $alt_visibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
             }
-            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
+            $modify_icons .= "<a
+                href=\"".$url."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
+                $modify_icons .= "<a
+                    href=\"".$url."&action=delete&id=".$id."&sec_token=".$stok."\"
+                    onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
@@ -530,11 +533,13 @@ class AnnouncementManager
 
         $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
         if ($allow && api_is_allowed_to_edit(false, true)) {
-            $sent_to = $announcement->getUsersAndGroupSubscribedToResource();
-            $sentToForm = self::sent_to_form($sent_to);
+            $sentTo = $announcement->getUsersAndGroupSubscribedToResource();
+            $sentToForm = self::sent_to_form($sentTo);
+            $createdBy = '<br />'.get_lang('Created by').': '.
+                UserManager::formatUserFullName($announcement->getResourceNode()->getCreator());
             $html .= Display::tag(
                 'td',
-                get_lang('Visible to').': '.$sentToForm,
+                get_lang('Visible to').': '.$sentToForm.$createdBy,
                 ['class' => 'announcements_datum']
             );
         }
@@ -542,18 +547,18 @@ class AnnouncementManager
         $attachments = $announcement->getAttachments();
         if (count($attachments) > 0) {
             $repo = Container::getAnnouncementAttachmentRepository();
+            $deleteUrl = api_get_self()."?".api_get_cidreq()."&action=delete_attachment";
             /** @var CAnnouncementAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $attachmentId = $attachment->getIid();
-                $url = $repo->getResourceFileDownloadUrl($attachment);
-                $html .= "<tr><td>";
+                $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
+                $html .= '<tr><td>';
                 $html .= '<br/>';
                 $html .= Display::returnFontAwesomeIcon('paperclip');
                 $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';
                 $html .= ' - <span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
                 if (api_is_allowed_to_edit(false, true)) {
-                    $url = api_get_self()."?".api_get_cidreq().
-                        "&action=delete_attachment&id_attach=".$attachmentId."&sec_token=".$stok;
+                    $url = $deleteUrl."&id_attach=".$attachmentId."&sec_token=".$stok;
                     $html .= Display::url(
                         Display::return_icon(
                             'delete.png',
@@ -729,13 +734,15 @@ class AnnouncementManager
         $sendToUsersInSession = false
     ) {
         $courseInfo = api_get_course_info();
-
         $order = self::getLastAnnouncementOrder($courseInfo);
-
+        $em = Database::getManager();
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
         $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
+
         $announcement = new CAnnouncement();
         $announcement
             ->setContent($newContent)
@@ -743,18 +750,56 @@ class AnnouncementManager
             ->setEndDate(new DateTime($now))
             ->setDisplayOrder($order)
             ->setParent($course)
-            ->addCourseLink(
+            ;
+
+        $em->persist($announcement);
+
+        $sendToUsers = CourseManager::separateUsersGroups($to_users);
+        // if nothing was selected in the menu then send to all the group
+        $sentToAllGroup = false;
+        if (empty($sendToUsers['groups']) && empty($sendToUsers['users'])) {
+            $announcement->addCourseLink(
                 $course,
-                api_get_session_entity($sessionId),
-                api_get_group_entity()
+                $session,
+                $group
             );
+            $sentToAllGroup = true;
+        }
 
-        $repo = Container::getAnnouncementRepository();
-        $repo->getEntityManager()->flush();
-        $last_id = $announcement->getIid();
+        if (false === $sentToAllGroup) {
+            if (!empty($sendToUsers['groups'])) {
+                foreach ($sendToUsers['groups'] as $groupItemId) {
+                    $groupItem = api_get_group_entity($groupItemId);
+                    if (null !== $groupItem) {
+                        $announcement->addCourseLink(
+                            $course,
+                            $session,
+                            $groupItem
+                        );
+                    }
+                }
+            }
 
-        // Store the attach file
-        if ($last_id) {
+            if (!empty($sendToUsers['users'])) {
+                foreach ($sendToUsers['users'] as $user) {
+                    $userToAdd = api_get_user_entity($user);
+                    if (null !== $userToAdd) {
+                        $announcement->addUserLink(
+                            $userToAdd,
+                            $course,
+                            $session,
+                            $group
+                        );
+                    }
+                }
+            }
+        }
+
+        $em->persist($announcement);
+        $em->flush();
+
+        $id = $announcement->getIid();
+        if ($id) {
             if (!empty($file)) {
                 self::add_announcement_attachment_file(
                     $announcement,
@@ -763,60 +808,14 @@ class AnnouncementManager
                 );
             }
 
-            $send_to_users = CourseManager::separateUsersGroups($to_users);
-
-            // if nothing was selected in the menu then send to all the group
-            $sentToAllGroup = false;
-            if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
-                $groupInfo = GroupManager::get_group_properties($groupId);
-                /*api_item_property_update(
-                    $courseInfo,
-                    TOOL_ANNOUNCEMENT,
-                    $last_id,
-                    'AnnouncementAdded',
-                    api_get_user_id(),
-                    $groupInfo
-                );*/
-                $sentToAllGroup = true;
-            }
-
-            if (false === $sentToAllGroup) {
-                if (!empty($send_to_users['groups'])) {
-                    foreach ($send_to_users['groups'] as $group) {
-                        $groupInfo = GroupManager::get_group_properties($group);
-                        /*api_item_property_update(
-                            $courseInfo,
-                            TOOL_ANNOUNCEMENT,
-                            $last_id,
-                            'AnnouncementAdded',
-                            api_get_user_id(),
-                            $groupInfo
-                        );*/
-                    }
-                }
-
-                $groupInfo = GroupManager::get_group_properties($groupId);
-                if (!empty($send_to_users['users'])) {
-                    foreach ($send_to_users['users'] as $user) {
-                        /*api_item_property_update(
-                            $courseInfo,
-                            TOOL_ANNOUNCEMENT,
-                            $last_id,
-                            'AnnouncementAdded',
-                            api_get_user_id(),
-                            $groupInfo,
-                            $user
-                        );*/
-                    }
-                }
-            }
-
             if ($sendToUsersInSession) {
                 self::addAnnouncementToAllUsersInSessions($announcement);
             }
+
+            return $announcement;
         }
 
-        return $last_id;
+        return null;
     }
 
     /**
@@ -897,14 +896,15 @@ class AnnouncementManager
 
             // Send to everyone
             if (isset($to[0]) && 'everyone' === $to[0]) {
+                $announcement->setParent($course);
                 $announcement->addCourseLink($course, $session, $group);
             }
         } else {
+            $announcement->setParent($course);
             $announcement->addCourseLink($course, $session);
         }
 
-        $repo->getEntityManager()->persist($announcement);
-        $repo->getEntityManager()->flush();
+        $repo->update($announcement);
 
         return $announcement;
     }
@@ -1122,7 +1122,6 @@ class AnnouncementManager
                 $output[] = "&nbsp;".get_lang('All');
             }
         }
-
         if (!empty($output)) {
             $output = array_filter($output);
             if (count($output) > 0) {
@@ -1173,7 +1172,7 @@ class AnnouncementManager
     {
         $return = 0;
         $courseId = api_get_course_int_id();
-
+        $em = Database::getManager();
         if (is_array($file) && 0 == $file['error']) {
             // Try to add an extension to the file if it hasn't one
             $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
@@ -1204,16 +1203,16 @@ class AnnouncementManager
                         api_get_group_entity()
                     )
                 ;
-                $repo->getEntityManager()->persist($attachment);
-                $repo->getEntityManager()->flush();
+                $em->persist($attachment);
+                $em->flush();
 
                 $request = Container::getRequest();
                 $file = $request->files->get('user_upload');
 
                 if (!empty($file)) {
                     $repo->addFile($attachment, $file);
-                    $repo->getEntityManager()->persist($attachment);
-                    $repo->getEntityManager()->flush();
+                    $em->persist($attachment);
+                    $em->flush();
 
                     return 1;
                 }
@@ -1308,9 +1307,10 @@ class AnnouncementManager
     {
         $id = (int) $id;
         $repo = Container::getAnnouncementAttachmentRepository();
+        $em = Database::getManager();
         $attachment = $repo->find($id);
-        $repo->getEntityManager()->remove($attachment);
-        $repo->getEntityManager()->flush();
+        $em->remove($attachment);
+        $em->flush();
 
         return true;
     }
@@ -1688,7 +1688,7 @@ class AnnouncementManager
             ICON_SIZE_SMALL
         );
 
-        $isTutor = false;
+        /*$isTutor = false;
         if (!empty($group_id)) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());
             //User has access in the group?
@@ -1696,7 +1696,7 @@ class AnnouncementManager
                 api_get_user_id(),
                 $groupInfo
             );
-        }
+        }*/
 
         $results = [];
         /** @var CAnnouncement $announcement */
@@ -1783,7 +1783,6 @@ class AnnouncementManager
                     $image_visibility = 'invisible';
                     $setNewStatus = 'visible';
                     $alt_visibility = get_lang('Visible');
-
                     if ($visibility) {
                         $image_visibility = 'visible';
                         $setNewStatus = 'invisible';

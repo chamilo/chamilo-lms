@@ -77,8 +77,6 @@ class ResourceFile
     protected $id;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
@@ -87,16 +85,12 @@ class ResourceFile
     protected $name;
 
     /**
-     * @var string
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
     protected $mimeType;
 
     /**
-     * @var string
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
@@ -115,7 +109,7 @@ class ResourceFile
      *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
     protected $size;
 
@@ -135,52 +129,60 @@ class ResourceFile
     protected $file;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
-    protected $crop;
+    protected ?string $crop;
 
     /**
-     * @var ResourceNode
-     *
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceFile")
      */
-    protected $resourceNode;
+    protected ResourceNode $resourceNode;
 
     /**
-     * @var array
-     *
      * @ORM\Column(type="array", nullable=true)
      */
-    protected $metadata;
+    protected ?array $metadata;
 
     /**
-     * @var bool
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected $image;
+    protected ?bool $image;
 
     /**
-     * @var bool
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected $video;
+    protected ?bool $video;
 
     /**
-     * Constructor.
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
+    protected ?bool $text;
+
+    /**
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    protected ?string $description;
+
     public function __construct()
     {
         $this->metadata = [];
         $this->dimensions = [];
+        $this->size = 0;
     }
 
     public function __toString(): string
     {
         return $this->getOriginalName();
+    }
+
+    public function isText(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'text')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isImage(): bool
@@ -311,7 +313,7 @@ class ResourceFile
 
     public function getOriginalName(): string
     {
-        return (string) $this->originalName;
+        return $this->originalName;
     }
 
     /**
@@ -376,6 +378,18 @@ class ResourceFile
         return $this;
     }
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function getFile(): ?File
     {
         return $this->file;
@@ -384,7 +398,7 @@ class ResourceFile
     /**
      * @param File|UploadedFile $file
      */
-    public function setFile(File $file = null): void
+    public function setFile(File $file = null): self
     {
         $this->file = $file;
 
@@ -393,6 +407,8 @@ class ResourceFile
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
+
+        return $this;
     }
 
     public function getContentUrl(): ?string

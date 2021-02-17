@@ -32,6 +32,7 @@ class GradeBookResult
         $data = '';
         //build the results
         //titles
+
         foreach ($dato[0] as $header_col) {
             if (!empty($header_col)) {
                 if (is_array($header_col)) {

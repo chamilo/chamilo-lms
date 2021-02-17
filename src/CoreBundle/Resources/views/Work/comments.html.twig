@@ -1,0 +1,42 @@
+{% autoescape false %}
+<hr />
+<h3>
+    {{ 'Comments' | trans }}
+</h3>
+<hr>
+<ul>
+{% for comment in comments %}
+    <li>
+        <div class="page-header">
+            <img height="24" src="{{ comment.picture }}"/> {{ comment.complete_name }}
+
+            - {{ comment.sent_at_with_label }}
+        </div>
+        <p>
+            {% if comment.comment is not empty %}
+                {{ comment.comment }}
+            {% else %}
+                {{ 'Here is your feedback' | trans }}
+            {% endif %}
+        </p>
+        {% if comment.file_url is not empty %}
+            <ul class="fa-ul">
+                <li>
+                    <span class="fa-li fa fa-paperclip"></span>
+                    <a href="{{ comment.file_url }}">
+                        {{ comment.file_name_to_show }}
+                    </a>
+                    {% if is_allowed_to_edit %}
+                        <a href="{{ comment.delete_file_url }}">
+                            {{ 'delete.png'|img(22, 'Delete'|trans) }}
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+<br />
+
+{% endautoescape %}

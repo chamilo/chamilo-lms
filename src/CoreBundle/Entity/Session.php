@@ -22,6 +22,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     normalizationContext={"groups"={"session:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"session:write"}},
+ *     collectionOperations={
+ *         "get" = {
+ *              "denormalization_context"={
+ *                  "groups"={"session:read"},
+ *              },
+ *         },
+ *         "post"={}
+ *      },
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *     }
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
@@ -51,13 +63,12 @@ class Session
     public const COACH = 2;
 
     /**
-     * @var int
      * @Groups({"session:read"})
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var ArrayCollection|SkillRelCourse[]
@@ -128,20 +139,18 @@ class Session
     protected $currentUrl;
 
     /**
-     * @var string
      * @Assert\NotBlank()
-     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read"})
+     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read"})
      * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
      * @Groups({"session:read", "session:write"})
      *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var bool
@@ -152,32 +161,27 @@ class Session
     protected $showDescription;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
-    protected $duration;
+    protected int $duration;
 
     /**
-     * @var int
      * @Groups({"session:read"})
      * @ORM\Column(name="nbr_courses", type="smallint", nullable=true, unique=false)
      */
-    protected $nbrCourses;
+    protected int $nbrCourses;
 
     /**
-     * @var int
      * @Groups({"session:read"})
      * @ORM\Column(name="nbr_users", type="integer", nullable=true, unique=false)
      */
-    protected $nbrUsers;
+    protected int $nbrUsers;
 
     /**
-     * @var int
      * @Groups({"session:read"})
      * @ORM\Column(name="nbr_classes", type="integer", nullable=true, unique=false)
      */
-    protected $nbrClasses;
+    protected int $nbrClasses;
 
     /**
      * @var User
@@ -302,8 +306,10 @@ class Session
         $this->items = new ArrayCollection();
         $this->urls = new ArrayCollection();
 
+        $this->description = '';
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
+        $this->nbrCourses = 0;
         $this->sendSubscriptionNotification = false;
         $this->displayStartDate = new \DateTime();
         $this->displayEndDate = new \DateTime();
@@ -323,38 +329,24 @@ class Session
         $this->studentPublications = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getName();
     }
 
-    /**
-     * @return int
-     */
-    public function getDuration()
+    public function getDuration(): int
     {
         return $this->duration;
     }
 
-    /**
-     * @param int $duration
-     *
-     * @return $this
-     */
-    public function setDuration($duration)
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getShowDescription()
+    public function getShowDescription(): bool
     {
         return $this->showDescription;
     }
@@ -379,14 +371,6 @@ class Session
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -630,12 +614,8 @@ class Session
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return $this
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -644,10 +624,8 @@ class Session
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

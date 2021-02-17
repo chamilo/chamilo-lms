@@ -176,17 +176,25 @@ class CoursesAndSessionsCatalog
         ];
 
         $allCategories = CourseCategory::getAllCategories();
+        $categoryToAvoid = '';
+        if (api_is_student()) {
+            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        }
         foreach ($allCategories as $category) {
+            $categoryCode = $category['code'];
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
             if (empty($category['parent_id'])) {
-                $list[$category['code']] = $category;
-                $list[$category['code']]['level'] = 0;
-                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
+                $list[$categoryCode] = $category;
+                $list[$categoryCode]['level'] = 0;
+                list($subList, $childrenCount) = self::buildCourseCategoryTree($allCategories, $categoryCode, 0);
                 foreach ($subList as $item) {
                     $list[$item['code']] = $item;
                 }
                 // Real course count
-                $countCourses = CourseCategory::countCoursesInCategory($category['code']);
-                $list[$category['code']]['number_courses'] = $childrenCount + $countCourses;
+                $countCourses = CourseCategory::countCoursesInCategory($categoryCode);
+                $list[$categoryCode]['number_courses'] = $childrenCount + $countCourses;
             }
         }
 
@@ -1155,21 +1163,27 @@ class CoursesAndSessionsCatalog
     /**
      * Display the unregister button of a course in the course catalog.
      *
-     * @param $course
-     * @param $stok
-     * @param $search_term
-     * @param $categoryCode
+     * @param array  $course
+     * @param string $stok
+     * @param string $search_term
+     * @param string $categoryCode
+     * @param int    $sessionId
      *
      * @return string
      */
-    public static function return_unregister_button($course, $stok, $search_term, $categoryCode)
+    public static function return_unregister_button($course, $stok, $search_term, $categoryCode, $sessionId = 0)
     {
         $title = get_lang('Unsubscription');
+        $search_term = Security::remove_XSS($search_term);
+        $categoryCode = Security::remove_XSS($categoryCode);
+        $sessionId = (int) $sessionId;
+
+        $url = api_get_self().'?action=unsubscribe&sec_token='.$stok.'&sid='.$sessionId.'&course_code='.$course['code'].
+            '&search_term='.$search_term.'&category_code='.$categoryCode;
 
         return Display::url(
             Display::returnFontAwesomeIcon('sign-in').'&nbsp;'.$title,
-            api_get_self().'?action=unsubscribe&sec_token='.$stok
-            .'&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
+            $url,
             ['class' => 'btn btn-danger', 'title' => $title, 'aria-label' => $title]
         );
     }
@@ -1195,14 +1209,13 @@ class CoursesAndSessionsCatalog
     ) {
         $sessionId = (int) $sessionId;
 
+        $class = 'btn-sm';
         if ($btnBing) {
-            $btnBing = 'btn-lg btn-block';
-        } else {
-            $btnBing = 'btn-sm';
+            $class = 'btn-lg btn-block';
         }
 
         if ($checkRequirements) {
-            return self::getRequirements($sessionId, SequenceResource::SESSION_TYPE, $includeText, $btnBing);
+            return self::getRequirements($sessionId, SequenceResource::SESSION_TYPE, $includeText, $class);
         }
 
         $catalogSessionAutoSubscriptionAllowed = false;
@@ -1225,7 +1238,7 @@ class CoursesAndSessionsCatalog
                 'pencil',
                 'primary',
                 [
-                    'class' => $btnBing.' ajax',
+                    'class' => $class.' ajax',
                     'data-title' => get_lang('AreYouSureToSubscribe'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe'),
@@ -1244,7 +1257,7 @@ class CoursesAndSessionsCatalog
                 $url,
                 'pencil',
                 'primary',
-                ['class' => $btnBing],
+                ['class' => $class],
                 $includeText
             );
         }
@@ -1264,18 +1277,18 @@ class CoursesAndSessionsCatalog
         return $result;
     }
 
-    public static function getRequirements($id, $type, $includeText, $btnBing)
+    public static function getRequirements($id, $type, $includeText, $class, $sessionId = 0)
     {
         $id = (int) $id;
         $type = (int) $type;
 
-        $url = api_get_path(WEB_AJAX_PATH);
-        $url .= 'sequence.ajax.php?';
+        $url = api_get_path(WEB_AJAX_PATH).'sequence.ajax.php?';
         $url .= http_build_query(
             [
                 'a' => 'get_requirements',
                 'id' => $id,
                 'type' => $type,
+                'sid' => $sessionId,
             ]
         );
 
@@ -1285,7 +1298,7 @@ class CoursesAndSessionsCatalog
             'shield',
             'info',
             [
-                'class' => $btnBing.' ajax',
+                'class' => $class.' ajax',
                 'data-title' => get_lang('CheckRequirements'),
                 'data-size' => 'md',
                 'title' => get_lang('CheckRequirements'),

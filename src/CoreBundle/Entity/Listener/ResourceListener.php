@@ -13,10 +13,11 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
-use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
+use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -25,9 +26,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * Class ResourceListener.
- */
 class ResourceListener
 {
     protected $slugify;
@@ -82,12 +80,12 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        error_log('resource listener prePersist for obj: '.get_class($resource));
+        error_log('Resource listener prePersist for obj: '.get_class($resource));
         $em = $event->getEntityManager();
         $request = $this->request;
 
         $url = null;
-        if ($resource instanceof ResourceWithUrlInterface) {
+        if ($resource instanceof ResourceWithAccessUrlInterface) {
             $url = $this->getAccessUrl($em);
             $resource->addUrl($url);
         }
@@ -103,7 +101,7 @@ class ResourceListener
             return true;
         }
 
-        // Add resource node
+        // Add resource node.
         $creator = $this->security->getUser();
 
         if (null === $creator) {
@@ -117,13 +115,16 @@ class ResourceListener
 
         // @todo use static table instead of Doctrine
         $repo = $em->getRepository(ResourceType::class);
-        $class = str_replace('Entity', 'Repository', get_class($event->getEntity()));
-        $class .= 'Repository';
-        $name = $this->toolChain->getResourceTypeNameFromRepository($class);
+        $entityClass = get_class($event->getEntity());
+        $repoClass = str_replace('Entity', 'Repository', $entityClass).'Repository';
+        if (strpos($repoClass, 'CoreBundle')) {
+            $repoClass = str_replace('Entity', 'Repository\Node', $entityClass).'Repository';
+        }
+        $name = $this->toolChain->getResourceTypeNameFromRepository($repoClass);
         $resourceType = $repo->findOneBy(['name' => $name]);
 
         if (null === $resourceType) {
-            throw new \InvalidArgumentException('ResourceType not found');
+            throw new \InvalidArgumentException("ResourceType: $name not found");
         }
 
         $resourceNode
@@ -171,6 +172,7 @@ class ResourceListener
         // Use by api platform
         $links = $resource->getResourceLinkArray();
         if ($links) {
+            $groupRepo = $em->getRepository(CGroup::class);
             $courseRepo = $em->getRepository(Course::class);
             $sessionRepo = $em->getRepository(Session::class);
 
@@ -185,12 +187,21 @@ class ResourceListener
                     }
                 }
 
-                if (isset($link['session_id']) && !empty($link['session_id'])) {
-                    $session = $sessionRepo->find($link['session_id']);
+                if (isset($link['sid']) && !empty($link['sid'])) {
+                    $session = $sessionRepo->find($link['sid']);
                     if ($session) {
                         $resourceLink->setSession($session);
                     } else {
-                        throw new \InvalidArgumentException(sprintf('Session #%s does not exists', $link['session_id']));
+                        throw new \InvalidArgumentException(sprintf('Session #%s does not exists', $link['sid']));
+                    }
+                }
+
+                if (isset($link['gid']) && !empty($link['gid'])) {
+                    $group = $groupRepo->find($link['gid']);
+                    if ($group) {
+                        $resourceLink->setGroup($group);
+                    } else {
+                        throw new \InvalidArgumentException(sprintf('Group #%s does not exists', $link['gid']));
                     }
                 }
 
@@ -217,7 +228,7 @@ class ResourceListener
 
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl)) {
-            if (null == $resourceNode->getParent()) {
+            if (null === $resourceNode->getParent()) {
                 throw new \InvalidArgumentException('Resource Node should have a parent');
             }
         }
@@ -229,7 +240,6 @@ class ResourceListener
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
         error_log('Resource listener preUpdate');
-
         $this->setLinks($resource->getResourceNode(), $resource, $event->getEntityManager());
 
         if ($resource->hasUploadFile()) {

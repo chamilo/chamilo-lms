@@ -24,7 +24,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    'url' => "admin.php?id=$exercise_id&".api_get_cidreq(),
+    'url' => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
     'name' => $objExercise->selectTitle(true),
 ];
 
@@ -108,7 +108,7 @@ $(function() {
 </script>
 <?php
 
-$actions = '<a href="exercise_report.php?id='.(int) ($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
+$actions = '<a href="exercise_report.php?exerciseId='.(int) ($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
 echo $actions = Display::div($actions, ['class' => 'actions']);
 

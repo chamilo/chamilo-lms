@@ -25,7 +25,7 @@ class survey_question
         $questions = SurveyManager::get_questions($surveyId);
 
         $newQuestionList = [];
-        $allowTypes = ['yesno', 'multiplechoice'];
+        $allowTypes = ['yesno', 'multiplechoice', 'multipleresponse'];
         foreach ($questions as $question) {
             if (in_array($question['type'], $allowTypes)) {
                 $newQuestionList[$question['sort']] = $question;
@@ -64,7 +64,7 @@ class survey_question
                             $.getJSON({
                                 url: "'.$url.'" + "&question_id=" + questionId,
                             success: function(data) {
-                                $("#parent_options").html(data);
+                                $("#option_list").show();
                                     $.each(data, function(key, value) {
                                         $("<option>").val(key).text(value).appendTo($select);
                                     });

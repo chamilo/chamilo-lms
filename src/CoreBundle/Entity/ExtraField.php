@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class ExtraField.
@@ -34,6 +35,8 @@ class ExtraField // extends BaseAttribute
     public const FORUM_CATEGORY_TYPE = 15;
     public const FORUM_POST_TYPE = 16;
     public const EXERCISE_FIELD_TYPE = 17;
+    public const TRACK_EXERCISE_FIELD_TYPE = 18;
+    public const PORTFOLIO_TYPE = 19;
 
     /**
      * @var int
@@ -45,46 +48,36 @@ class ExtraField // extends BaseAttribute
     protected $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="extra_field_type", type="integer", nullable=false, unique=false)
      */
-    protected $extraFieldType;
+    protected int $extraFieldType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="field_type", type="integer", nullable=false, unique=false)
      */
-    protected $fieldType;
+    protected int $fieldType;
 
     /**
-     * @var string
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="variable", type="string", length=255, nullable=false, unique=false)
      */
-    protected $variable;
+    protected string $variable;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
      */
-    protected $displayText;
+    protected ?string $displayText;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="helper_text", type="text", nullable=true, unique=false)
      */
-    protected $helperText;
+    protected ?string $helperText;
 
     /**
      * @var string
@@ -141,12 +134,9 @@ class ExtraField // extends BaseAttribute
      */
     protected $createdAt;
 
-    /**
-     * ExtraField constructor.
-     */
     public function __construct()
     {
-        //parent::__construct();
+        $this->description = '';
         $this->visibleToOthers = false;
         $this->visibleToSelf = false;
     }
@@ -367,7 +357,7 @@ class ExtraField // extends BaseAttribute
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -382,12 +372,11 @@ class ExtraField // extends BaseAttribute
     public function getTypeToString(): string
     {
         switch ($this->type) {
-            case \ExtraField::FIELD_TYPE_TEXT:
-            case \ExtraField::FIELD_TYPE_TEXTAREA:
-                return 'text';
             case \ExtraField::FIELD_TYPE_RADIO:
             case \ExtraField::FIELD_TYPE_SELECT:
                 return 'choice';
+            case \ExtraField::FIELD_TYPE_TEXT:
+            case \ExtraField::FIELD_TYPE_TEXTAREA:
             default:
                 return 'text';
         }

@@ -381,35 +381,6 @@ class CourseCategory
     }
 
     /**
-     * Counts the number of children categories a category has.
-     *
-     * @param int $categoryId The ID of the category of which we want to count the children
-     *
-     * @return mixed The number of subcategories this category has
-     */
-    public static function courseCategoryChildrenCount($categoryId)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = (int) $categoryId;
-        $count = 0;
-        if (empty($categoryId)) {
-            return 0;
-        }
-        $sql = "SELECT id, code FROM $table
-                WHERE parent_id = $categoryId";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $count += self::courseCategoryChildrenCount($row['id']);
-        }
-        $sql = "UPDATE $table SET
-                    children_count = $count
-                WHERE id = $categoryId";
-        Database::query($sql);
-
-        return $count + 1;
-    }
-
-    /**
      * @param string $categoryCode
      *
      * @return array
@@ -552,10 +523,11 @@ class CourseCategory
                     ).' '.$category['name'].' ('.$category['code'].')',
                     $url
                 );
+                $countCourses = self::countCoursesInCategory($category['code'], null, false);
                 $content = [
                     $title,
                     $category['children_count'],
-                    $category['nbr_courses'],
+                    $countCourses,
                     implode('', $actions),
                 ];
                 $column = 0;
@@ -567,9 +539,9 @@ class CourseCategory
             }
 
             return $table->toHtml();
-        } else {
-            return Display::return_message(get_lang('There are no categories here'), 'warning');
         }
+
+        return Display::return_message(get_lang('NoCategories'), 'warning');
     }
 
     /**
@@ -605,8 +577,16 @@ class CourseCategory
                 ORDER BY tree_pos";
         $res = Database::query($sql);
 
+        $categoryToAvoid = '';
+        if (!api_is_platform_admin()) {
+            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        }
         $categories[''] = '-';
         while ($cat = Database::fetch_array($res)) {
+            $categoryCode = $cat['code'];
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
             $categories[$cat['id']] = '('.$cat['code'].') '.$cat['name'];
             ksort($categories);
         }
@@ -616,24 +596,44 @@ class CourseCategory
 
     /**
      * @param string $category_code
-     * @param string $searchTerm
+     * @param string $keyword
+     * @paran bool  $avoidCourses
+     * @paran array $conditions
      *
      * @return int
      */
-    public static function countCoursesInCategory($category_code = '', $searchTerm = '')
+    public static function countCoursesInCategory(
+        $category_code = '',
+        $keyword = '',
+        $avoidCourses = true,
+        $conditions = []
+    ) {
+        return self::getCoursesInCategory($category_code, $keyword, $avoidCourses, $conditions, true);
+    }
+
+    public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $conditions = [], $getCount = false)
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
+        $keyword = Database::escape_string($keyword);
         $categoryCode = Database::escape_string($category_code);
-        $searchTerm = Database::escape_string($searchTerm);
+        $avoidCoursesCondition = '';
+        if ($avoidCourses) {
+            $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        }
 
-        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
-        $categoryJoin = '';
+        $sqlInjectJoins = '';
+        $where = ' AND 1 = 1 ';
+        $sqlInjectWhere = '';
+        if (!empty($conditions)) {
+            $sqlInjectJoins = $conditions['inject_joins'];
+            $where = $conditions['where'];
+            $sqlInjectWhere = $conditions['inject_where'];
+        }
         $categoryFilter = '';
-        if ('ALL' === $categoryCode) {
+        if ('ALL' === $categoryCode || empty($categoryCode)) {
             // Nothing to do
         } elseif ('NONE' === $categoryCode) {
             $categoryFilter = ' AND course.category_id IS NULL ';
@@ -643,21 +643,26 @@ class CourseCategory
         }
 
         $searchFilter = '';
-        if (!empty($searchTerm)) {
+        if (!empty($keyword)) {
             $searchFilter = ' AND (
-                course.code LIKE "%'.$searchTerm.'%" OR
-                course.title LIKE "%'.$searchTerm.'%" OR
-                course.tutor_name LIKE "%'.$searchTerm.'%"
+                course.code LIKE "%'.$keyword.'%" OR
+                course.title LIKE "%'.$keyword.'%" OR
+                course.tutor_name LIKE "%'.$keyword.'%"
             ) ';
         }
 
         $urlCondition = ' url_rel_course.access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(course.id) as count
+
+        $select = " DISTINCT course.id, course.code, course.title, course.category_code ";
+        if ($getCount) {
+            $select = "count(DISTINCT course.id) as count";
+        }
+        $sql = "SELECT $select
                 FROM $tbl_course as course
                 INNER JOIN $tbl_url_rel_course as url_rel_course
                 ON (url_rel_course.c_id = course.id)
-                $categoryJoin
+                $sqlInjectJoins
                 WHERE
                     $urlCondition
                     course.visibility != '0' AND
@@ -666,12 +671,18 @@ class CourseCategory
                     $searchFilter
                     $avoidCoursesCondition
                     $visibilityCondition
+                    $where
+                    $sqlInjectWhere
             ";
 
         $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        if ($getCount) {
+            $row = Database::fetch_array($result);
 
-        return (int) $row['count'];
+            return (int) $row['count'];
+        }
+
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -931,11 +942,14 @@ class CourseCategory
     /**
      * Save image for a course category.
      *
+     * @deprecated
+     *
      * @param int   $categoryId Course category ID
      * @param array $fileData   File data from $_FILES
      */
     public static function saveImage($categoryId, $fileData)
     {
+        /*
         $categoryInfo = self::getCategoryById($categoryId);
         if (empty($categoryInfo)) {
             return;
@@ -962,7 +976,7 @@ class CourseCategory
             $table,
             ['image' => $dirName.$fileName],
             ['id = ?' => $categoryId]
-        );
+        );*/
     }
 
     /**

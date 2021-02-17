@@ -148,17 +148,13 @@ class Link extends Model
                 ;
             }
 
-            $repo->getEntityManager()->persist($link);
-            $repo->getEntityManager()->flush();
+            $repo->create($link);
             $link_id = $link->getIid();
 
             if (('true' === api_get_setting('search_enabled')) &&
                 $link_id && extension_loaded('xapian')
             ) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
-                $course_int_id = $_course['real_id'];
-                $courseCode = $_course['code'];
+                $courseCode = $course_info['code'];
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
 
@@ -195,7 +191,7 @@ class Link extends Model
                     SE_COURSE_ID => $courseCode,
                     SE_TOOL_ID => TOOL_LINK,
                     SE_DATA => [
-                        'link_id' => (int) $link_id,
+                        'link_id' => $link_id,
                     ],
                     SE_USER => (int) api_get_user_id(),
                 ];
@@ -212,8 +208,8 @@ class Link extends Model
                     $sql_cat = sprintf(
                         $sql_cat,
                         $table_link_category,
-                        (int) $categoryId,
-                        $course_int_id
+                        $categoryId,
+                        $course_id
                     );
                     $result = Database:: query($sql_cat);
                     if (1 == Database:: num_rows($result)) {
@@ -244,7 +240,7 @@ class Link extends Model
                     $sql = sprintf(
                         $sql,
                         $tbl_se_ref,
-                        $course_int_id,
+                        $course_id,
                         $courseCode,
                         TOOL_LINK,
                         $link_id,
@@ -336,8 +332,7 @@ class Link extends Model
             ->addCourseLink($courseEntity, $sessionEntity)
         ;
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->create($category);
         $linkId = $category->getIid();
 
         if ($linkId) {
@@ -386,8 +381,7 @@ class Link extends Model
         $repo = Container::getLinkRepository();
         $link = $repo->find($id);
         if ($link) {
-            $repo->getEntityManager()->remove($link);
-            $repo->getEntityManager()->flush();
+            $repo->delete($link);
             self::delete_link_from_search_engine(api_get_course_id(), $id);
             Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
             Display::addFlash(Display::return_message(get_lang('The link has been deleted')));
@@ -451,7 +445,6 @@ class Link extends Model
             Database:: query($sql);
 
             // Remove terms from db.
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             delete_all_values_for_item($course_id, TOOL_DOCUMENT, $link_id);
         }
     }
@@ -561,8 +554,7 @@ class Link extends Model
             $link->setCategory($category);
         }
 
-        $repo->getEntityManager()->persist($link);
-        $repo->getEntityManager()->flush();
+        $repo->update($link);
 
         // Update search enchine and its values table if enabled.
         if ('true' === api_get_setting('search_enabled')) {
@@ -588,8 +580,6 @@ class Link extends Model
             $res = Database:: query($sql);
 
             if (Database:: num_rows($res) > 0) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
                 $se_ref = Database:: fetch_array($res);
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
@@ -634,7 +624,7 @@ class Link extends Model
                     SE_COURSE_ID => $course_id,
                     SE_TOOL_ID => TOOL_LINK,
                     SE_DATA => [
-                        'link_id' => (int) $id,
+                        'link_id' => $id,
                     ],
                     SE_USER => (int) api_get_user_id(),
                 ];
@@ -721,8 +711,7 @@ class Link extends Model
             ->setDescription($values['description'])
         ;
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->update($category);
 
         Display::addFlash(Display::return_message(get_lang('The category has been modified.')));
 
@@ -806,7 +795,7 @@ class Link extends Model
         $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
 
         return $qb->getQuery()->getResult();
-
+        /*
         $tblLinkCategory = Database::get_course_table(TABLE_LINK_CATEGORY);
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
@@ -876,7 +865,7 @@ class Link extends Model
                 ";
         $result = Database::query($sql);
 
-        return Database::store_result($result, 'ASSOC');
+        return Database::store_result($result, 'ASSOC');*/
     }
 
     /**
@@ -1709,7 +1698,6 @@ Do you really want to delete this category and its links ?')."')) return false;\
         ];
 
         if ('true' === api_get_setting('search_enabled')) {
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
             $form->addCheckBox('index_document', get_lang('Index link title and description?s'), get_lang('Yes'));
 

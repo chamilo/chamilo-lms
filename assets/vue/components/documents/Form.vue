@@ -7,6 +7,7 @@
         md="6"
       >
         <b-form-input
+          id="item_title"
           v-model="item.title"
           :error-messages="titleErrors"
           :placeholder="$t('Title')"

@@ -147,7 +147,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
-                        $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+                        $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+
+                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $id == $_POST['correct'][$i]) {
+                            $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
+                        }
                         $j++;
                         if (3 == $j) {
                             break;
@@ -160,7 +164,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
 
             $boxesNames[] = 'correct['.$i.']';
-            $form->addElement(
+            $txtAnswer = $form->addElement(
                 'html_editor',
                 'answer['.$i.']',
                 null,
@@ -169,15 +173,21 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             );
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
+            if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+                $txtAnswer->setValue(Security::remove_XSS($_POST['answer'][$i]));
+            }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
-                $form->addElement(
+                $txtComment = $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
                     null,
                     ['style' => 'vertical-align:middle;'],
                     ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
                 );
+                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+                    $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));
+                }
             }
             $form->addElement('html', '</tr>');
         }
@@ -186,8 +196,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $form->addElement('html', '<br />');
 
         // 3 scores
-        $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
-        $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
+        $txtOption1 = $form->addElement('text', 'option[1]', get_lang('Correct'), ['value' => '1']);
+        $txtOption2 = $form->addElement('text', 'option[2]', get_lang('Wrong'), ['value' => '-0.5']);
 
         $form->addElement('hidden', 'option[3]', 0);
 
@@ -202,9 +212,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; $i++) {
-                    $defaults['option['.$i.']'] = $scores[$i - 1];
-                }
+                $txtOption1->setValue($scores[0]);
+                $txtOption2->setValue($scores[1]);
             }
         }
 
@@ -219,11 +228,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
         $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
         $form->addElement('html', '</div></div>');
-        $defaults['correct'] = $correct;
 
-        if (!empty($this->id)) {
-            $form->setDefaults($defaults);
-        } else {
+        if (!empty($this->id) && !$form->isSubmitted()) {
             $form->setDefaults($defaults);
         }
         $form->setConstants(['nb_answers' => $nbAnswers]);
@@ -246,8 +252,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['id'];
-                unset($optionData['id']);
+                $id = $optionData['iid'];
+                unset($optionData['iid']);
                 Question::updateQuestionOption($id, $optionData, $courseId);
             }
         } else {
@@ -303,7 +309,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $header .= '<th>'.get_lang('Your choice').'</th>';
 
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+            $header .= '<th>'.get_lang('Expected choice').'</th>';
         }
 
         $header .= '<th>'
@@ -312,10 +318,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .get_lang('Your degree of certainty')
             .'</th>'
         ;
-        if (EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType()) {
-            $header .= '<th>'.get_lang('Comment').'</th>';
-        } else {
-            $header .= '<th>&nbsp;</th>';
+        if (false === $exercise->hideComment) {
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType()) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
         }
         $header .= '</tr>';
 
@@ -943,7 +949,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $userId = $data['exe_user_id'];
         $attemptDate = $data['exe_date'];
 
-        if ('0000-00-00 00:00:00' == $attemptDate) {
+        if ('0000-00-00 00:00:00' === $attemptDate) {
             // incomplete attempt, close it before continue
             return 0;
         }
@@ -952,14 +958,15 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $exerciseId = (int) $exerciseId;
         $userId = (int) $userId;
         $sql = "SELECT *
-            FROM $tblTrackEExercise
-            WHERE c_id = '$courseCode'
-            AND exe_exo_id = $exerciseId
-            AND exe_user_id = $userId
-            AND status = ''
-            AND exe_date > '0000-00-00 00:00:00'
-            AND exe_date < '$attemptDate'
-            ORDER BY exe_date DESC";
+                FROM $tblTrackEExercise
+                WHERE
+                      c_id = '$courseCode' AND
+                      exe_exo_id = $exerciseId AND
+                      exe_user_id = $userId AND
+                      status = '' AND
+                      exe_date > '0000-00-00 00:00:00' AND
+                      exe_date < '$attemptDate'
+                ORDER BY exe_date DESC";
 
         $res = Database::query($sql);
 
@@ -1166,7 +1173,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $courseId = api_get_course_int_id();
         $idAuto = (int) $idAuto;
         $sql = "SELECT correct FROM $tblAnswer
-                WHERE c_id = $courseId AND id_auto = $idAuto";
+                WHERE c_id = $courseId AND iid = $idAuto";
 
         $res = Database::query($sql);
         $data = Database::fetch_assoc($res);

@@ -192,7 +192,6 @@ class IndexManager
             if ('' == trim($home_top_temp) && api_is_platform_admin()) {
                 //$home_top_temp = get_lang('<h2>Congratulations! You have successfully installed your e-learning portal!</h2>  <p>You can now complete the installation by following three easy steps:<br /> <ol>     <li>Configure you portal by going to the administration section, and select the Portal -> <a href="main/admin/settings.php">Configuration settings</a> entry.</li>     <li>Add some life to your portal by creating users and/or training. You can do that by inviting new people to create their accounts or creating them yourself through the <a href="main/admin/">administration</a>\'s Users and Training sections.</li>     <li>Edit this page through the <a href="main/admin/configure_homepage.php">Edit portal homepage</a> entry in the administration section.</li> </ol> <p>You can always find more information about this software on our website: <a href="http://www.chamilo.org">http://www.chamilo.org</a>.</p> <p>Have fun, and don't hesitate to join the community and give us feedback through <a href="http://www.chamilo.org/forum">our forum</a>.</p>');
             } else {
-                $home_top_temp;
             }
             $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
@@ -917,6 +916,14 @@ class IndexManager
             ];
         }
 
+        if (api_get_configuration_value('show_my_lps_page')) {
+            $items[] = [
+                'icon' => Display::return_icon('learnpath.png', get_lang('MyLps')),
+                'link' => api_get_path(WEB_CODE_PATH).'lp/my_list.php',
+                'title' => get_lang('MyLps'),
+            ];
+        }
+
         if (bbb::showGlobalConferenceLink($userInfo)) {
             $bbb = new bbb('', '', true, api_get_user_id());
             $url = $bbb->getListingUrl();
@@ -931,8 +938,19 @@ class IndexManager
             ];
         }
 
-        if (true === api_get_configuration_value('whispeak_auth_enabled')) {
-            $itemTitle = WhispeakAuthPlugin::create()->get_title();
+        if ('true' === api_get_plugin_setting('zoom', 'tool_enable')) {
+            $zoomPlugin = new ZoomPlugin();
+            $blocks = $zoomPlugin->getProfileBlockItems();
+            foreach ($blocks as $item) {
+                $items[] = $item;
+            }
+        }
+
+        if (
+            true === api_get_configuration_value('whispeak_auth_enabled') &&
+            !WhispeakAuthPlugin::checkUserIsEnrolled($userId)
+        ) {
+            $itemTitle = get_plugin_lang('EnrollmentTitle', WhispeakAuthPlugin::class);
 
             $items[] = [
                 'class' => 'whispeak-enrollment',
@@ -1026,14 +1044,12 @@ class IndexManager
         }
 
         // Sort courses
-        if (true != api_get_configuration_value('view_grid_courses')) {
-            $items[] = [
-                'class' => 'order-course',
-                'icon' => Display::return_icon('order-course.png', get_lang('Sort courses')),
-                'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
-                'title' => get_lang('Sort courses'),
-            ];
-        }
+        $items[] = [
+            'class' => 'order-course',
+            'icon' => Display::return_icon('order-course.png', get_lang('Sort courses')),
+            'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
+            'title' => get_lang('Sort courses'),
+        ];
 
         // Session history
         if (isset($_GET['history']) && 1 == intval($_GET['history'])) {

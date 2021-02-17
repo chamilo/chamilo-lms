@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
@@ -42,19 +44,16 @@ function password_switch_radio_button() {
 
 var is_platform_id = "'.$is_platform_admin.'";
 
-function display_drh_list(){
+function updateStatus(){
     if (document.getElementById("status_select").value=='.STUDENT.') {
-        document.getElementById("drh_list").style.display="block";
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
 
     } else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
-        document.getElementById("drh_list").style.display="none";
 
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
     } else {
-        document.getElementById("drh_list").style.display="none";
 
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
@@ -243,7 +242,7 @@ $form->addElement(
     $status,
     [
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
+        'onchange' => 'javascript: updateStatus();',
     ]
 );
 
@@ -373,13 +372,13 @@ if ($form->validate()) {
         }
 
         $active = (int) $user['active'];
-        if ('true' == api_get_setting('login_is_email')) {
+        if ('true' === api_get_setting('login_is_email')) {
             $username = $email;
         }
 
         $extra = [];
         foreach ($user as $key => $value) {
-            if ('extra_' == substr($key, 0, 6)) {
+            if ('extra_' === substr($key, 0, 6)) {
                 // An extra field
                 $extra[substr($key, 6)] = $value;
             }
@@ -417,10 +416,11 @@ if ($form->validate()) {
         $tok = Security::get_token();
         if (!empty($user_id)) {
             if (!empty($picture['name'])) {
-                $picture_uri = UserManager::update_user_picture(
+                $request = Container::getRequest();
+                $file = $request->files->get('picture');
+                UserManager::update_user_picture(
                     $user_id,
-                    $_FILES['picture']['name'],
-                    $_FILES['picture']['tmp_name'],
+                    $file,
                     $user['picture_crop_result']
                 );
                 UserManager::update_user(
@@ -434,7 +434,7 @@ if ($form->validate()) {
                     $status,
                     $official_code,
                     $phone,
-                    $picture_uri,
+                    null,
                     $expiration_date,
                     $active,
                     null,

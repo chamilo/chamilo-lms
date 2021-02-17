@@ -5,21 +5,26 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
-use Chamilo\CoreBundle\Manager\SettingsManager;
-use Chamilo\CoreBundle\Repository\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
-use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
+use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Repository\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
+use Chamilo\CourseBundle\Repository\CBlogRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
@@ -27,6 +32,7 @@ use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
+use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
@@ -40,14 +46,21 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
+use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use Chamilo\CourseBundle\Repository\CSurveyQuestionRepository;
+use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
 use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
+use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -85,9 +98,6 @@ class Container
     public static $roles;
     /** @var string */
     public static $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
-    //private static $settingsManager;
-    //private static $userManager;
-    //private static $siteManager;
 
     /**
      * @param ContainerInterface $container
@@ -125,18 +135,12 @@ class Container
         return self::$container->get('security.role_hierarchy');
     }
 
-    /**
-     * @return string
-     */
-    public static function getLogDir()
+    public static function getLogDir(): string
     {
         return self::$container->get('kernel')->getLogDir();
     }
 
-    /**
-     * @return string
-     */
-    public static function getCacheDir()
+    public static function getCacheDir(): string
     {
         return self::$container->get('kernel')->getCacheDir().'/';
     }
@@ -146,7 +150,7 @@ class Container
      */
     public static function getProjectDir()
     {
-        if (isset(self::$container)) {
+        if (self::$container) {
             return self::$container->get('kernel')->getProjectDir().'/';
         }
 
@@ -166,15 +170,7 @@ class Container
      */
     public static function getTwig()
     {
-        return self::$container->get('twig');
-    }
-
-    /**
-     * @return object|Environment|null
-     */
-    public static function getTemplating()
-    {
-        return self::$container->get('twig');
+        return self::$twig;
     }
 
     /**
@@ -230,7 +226,7 @@ class Container
     }
 
     /**
-     * @return object|\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage
+     * @return TokenStorage
      */
     public static function getTokenStorage()
     {
@@ -242,7 +238,7 @@ class Container
      */
     public static function getTranslator()
     {
-        if (isset(self::$translator)) {
+        if (self::$translator) {
             return self::$translator;
         }
 
@@ -253,9 +249,9 @@ class Container
         return false;
     }
 
-    public static function getMailer()
+    public static function getMailer(): Mailer
     {
-        return self::$container->get('Symfony\Component\Mailer\Mailer');
+        return self::$container->get(Mailer::class);
     }
 
     public static function getSettingsManager(): SettingsManager
@@ -265,7 +261,7 @@ class Container
 
     public static function getCourseSettingsManager(): \Chamilo\CourseBundle\Manager\SettingsManager
     {
-        return self::$container->get('Chamilo\CourseBundle\Manager\SettingsManager');
+        return self::$container->get(\Chamilo\CourseBundle\Manager\SettingsManager::class);
     }
 
     /**
@@ -276,7 +272,7 @@ class Container
         return \Database::getManager();
     }
 
-    public static function getUserManager()
+    public static function getUserManager(): UserRepository
     {
         return self::$container->get(UserRepository::class);
     }
@@ -314,6 +310,16 @@ class Container
     public static function getCourseCategoryRepository(): CourseCategoryRepository
     {
         return self::$container->get(CourseCategoryRepository::class);
+    }
+
+    public static function getCourseDescriptionRepository(): CCourseDescriptionRepository
+    {
+        return self::$container->get(CCourseDescriptionRepository::class);
+    }
+
+    public static function getGlossaryRepository(): CGlossaryRepository
+    {
+        return self::$container->get(CGlossaryRepository::class);
     }
 
     public static function getCalendarEventRepository(): CCalendarEventRepository
@@ -406,6 +412,11 @@ class Container
         return self::$container->get(CLpCategoryRepository::class);
     }
 
+    public static function getMessageAttachmentRepository(): MessageAttachmentRepository
+    {
+        return self::$container->get(MessageAttachmentRepository::class);
+    }
+
     public static function getNotebookRepository(): CNotebookRepository
     {
         return self::$container->get(CNotebookRepository::class);
@@ -414,6 +425,11 @@ class Container
     public static function getUserRepository(): UserRepository
     {
         return self::$container->get(UserRepository::class);
+    }
+
+    public static function getUsergroupRepository(): UsergroupRepository
+    {
+        return self::$container->get(UsergroupRepository::class);
     }
 
     public static function getIllustrationRepository(): IllustrationRepository
@@ -441,6 +457,11 @@ class Container
         return self::$container->get(CStudentPublicationCommentRepository::class);
     }
 
+    public static function getStudentPublicationCorrectionRepository(): CStudentPublicationCorrectionRepository
+    {
+        return self::$container->get(CStudentPublicationCorrectionRepository::class);
+    }
+
     public static function getSequenceResourceRepository(): SequenceResourceRepository
     {
         return self::$container->get(SequenceResourceRepository::class);
@@ -449,6 +470,16 @@ class Container
     public static function getSequenceRepository(): SequenceRepository
     {
         return self::$container->get(SequenceRepository::class);
+    }
+
+    public static function getSurveyRepository(): CSurveyRepository
+    {
+        return self::$container->get(CSurveyRepository::class);
+    }
+
+    public static function getSurveyQuestionRepository(): CSurveyQuestionRepository
+    {
+        return self::$container->get(CSurveyQuestionRepository::class);
     }
 
     public static function getThematicRepository(): CThematicRepository
@@ -466,10 +497,17 @@ class Container
         return self::$container->get(CThematicAdvanceRepository::class);
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormFactory
-     */
-    public static function getFormFactory()
+    public static function getBlogRepository(): CBlogRepository
+    {
+        return self::$container->get(CBlogRepository::class);
+    }
+
+    public static function getWikiRepository(): CBlogRepository
+    {
+        return self::$container->get(CWikiRepository::class);
+    }
+
+    public static function getFormFactory(): FormFactory
     {
         return self::$container->get('form.factory');
     }
@@ -484,34 +522,27 @@ class Container
         $session->getFlashBag()->add($type, $message);
     }
 
-    /**
-     * @return Router
-     */
-    public static function getRouter()
+    public static function getRouter(): Router
     {
         return self::$container->get('router');
     }
 
-    /**
-     * @return ToolChain
-     */
-    public static function getToolChain()
+    public static function getToolChain(): ToolChain
     {
         return self::$container->get(ToolChain::class);
     }
 
-    /**
-     * @param ContainerInterface $container
-     * @param bool               $setSession
-     */
-    public static function setLegacyServices($container, $setSession = true)
+    public static function getAssetRepository(): AssetRepository
+    {
+        return self::$container->get(AssetRepository::class);
+    }
+
+    public static function setLegacyServices(ContainerInterface $container, bool $setSession = true)
     {
         \Database::setConnection($container->get('doctrine.dbal.default_connection'));
         $em = $container->get('doctrine.orm.entity_manager');
         \Database::setManager($em);
         \CourseManager::setEntityManager($em);
-        //self::setSettingsManager($container->get('chamilo.settings.manager'));
-        //self::setUserManager($container->get('fos_user.user_manager'));
         \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get(ToolChain::class));

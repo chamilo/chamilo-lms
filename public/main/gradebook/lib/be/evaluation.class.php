@@ -118,6 +118,11 @@ class Evaluation implements GradebookItem
         $this->sessionId = (int) $sessionId;
     }
 
+    public function set_session_id($sessionId)
+    {
+        $this->setSessionId($sessionId);
+    }
+
     public function get_date()
     {
         return $this->created_at;
@@ -388,7 +393,7 @@ class Evaluation implements GradebookItem
             $sql .= 'null';
         }
         $sql .= ', category_id = ';
-        if (isset($this->category)) {
+        if (!empty($this->category)) {
             $sql .= intval($this->get_category_id());
         } else {
             $sql .= 'null';
@@ -522,6 +527,7 @@ class Evaluation implements GradebookItem
     public function calc_score($studentId = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
         if ($allowStats) {
             $evaluation = $this->entity;
             if (!empty($evaluation)) {
@@ -588,10 +594,12 @@ class Evaluation implements GradebookItem
                 Session::write('calc_score', [$key => $results]);
             }
 
-            $score = 0;
-            /** @var Result $res */
-            foreach ($results as $res) {
-                $score = $res->get_score();
+            $score = null;
+            if (!empty($results)) {
+                /** @var Result $res */
+                foreach ($results as $res) {
+                    $score = $res->get_score();
+                }
             }
 
             return [$score, $this->get_max()];

@@ -79,17 +79,16 @@ class Agenda
                     $isAllowToEdit = true;
                 }
 
-                $groupId = api_get_group_id();
-                if (!empty($groupId)) {
-                    $groupInfo = GroupManager::get_group_properties($groupId);
-                    $userHasAccess = GroupManager::user_has_access(
+                $group = api_get_group_entity();
+                if (!empty($group)) {
+                    $userHasAccess = GroupManager::userHasAccess(
                         api_get_user_id(),
-                        $groupInfo['iid'],
+                        $group,
                         GroupManager::GROUP_TOOL_CALENDAR
                     );
-                    $isTutor = GroupManager::is_tutor_of_group(
+                    $isTutor = GroupManager::isTutorOfGroup(
                         api_get_user_id(),
-                        $groupInfo
+                        $group
                     );
 
                     $isGroupAccess = $userHasAccess || $isTutor;
@@ -489,7 +488,7 @@ class Agenda
 
         $sql = "SELECT title, content, start_date, end_date, all_day
                 FROM $t_agenda
-                WHERE c_id = $courseId AND id = $eventId";
+                WHERE iid = $eventId";
         $res = Database::query($sql);
 
         if (1 !== Database::num_rows($res)) {
@@ -526,8 +525,8 @@ class Agenda
         $type = Database::escape_string($type);
         $end = Database::escape_string($end);
         $endTimeStamp = api_strtotime($end, 'UTC');
-        $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
-                VALUES ($courseId, '$eventId', '$type', '$endTimeStamp')";
+        $sql = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end)
+                VALUES ('$eventId', '$type', '$endTimeStamp')";
         Database::query($sql);
 
         $generatedDates = $this->generateDatesByType($type, $row['start_date'], $row['end_date'], $end);
@@ -653,7 +652,7 @@ class Agenda
                 break;
             case 'course':
                 $repo = Container::getCalendarEventRepository();
-                $em = $repo->getEntityManager();
+                $em = Database::getManager();
                 /** @var CCalendarEvent $event */
                 $event = $repo->find($id);
 
@@ -876,8 +875,8 @@ class Agenda
                     $event = $repo->find($id);
 
                     if ($event) {
-                        $repo->getEntityManager()->remove($event);
-                        $repo->getEntityManager()->flush();
+                        Database::getManager()->remove($event);
+                        Database::getManager()->flush();
 
                         // Removing from events.
                         /*Database::delete(
@@ -1660,7 +1659,7 @@ class Agenda
                 );
                 /** @var CCalendarEventAttachment $attachment */
                 foreach ($attachmentList as $attachment) {
-                    $url = $repo->getResourceFileDownloadUrl($attachment);
+                    $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
                     $event['attachment'] .= $icon.
                         Display::url(
                             $attachment->getFilename(),
@@ -2431,7 +2430,7 @@ class Agenda
         if ($valid) {
             // user's file name
             $fileName = $file->getClientOriginalName();
-
+            $em = Database::getManager();
             $attachment = new CCalendarEventAttachment();
             $attachment
                 ->setFilename($fileName)
@@ -2445,12 +2444,12 @@ class Agenda
                 );
 
             $repo = Container::getCalendarEventAttachmentRepository();
-            $repo->getEntityManager()->persist($attachment);
-            $repo->getEntityManager()->flush();
+            $em->persist($attachment);
+            $em->flush();
 
             $repo->addFile($attachment, $file);
-            $repo->getEntityManager()->persist($attachment);
-            $repo->getEntityManager()->flush();
+            $em->persist($attachment);
+            $em->flush();
         }
     }
 
@@ -2491,13 +2490,13 @@ class Agenda
         $repo = Container::getCalendarEventAttachmentRepository();
         /** @var CCalendarEventAttachment $attachment */
         $attachment = $repo->find($attachmentId);
-
+        $em = Database::getManager();
         if (empty($attachment)) {
             return false;
         }
 
-        $repo->getEntityManager()->remove($attachment);
-        $repo->getEntityManager()->flush();
+        $em->remove($attachment);
+        $em->flush();
 
         return Display::return_message(
             get_lang("The attached file has been deleted"),
@@ -2545,9 +2544,8 @@ class Agenda
      */
     public function displayActions($view, $filter = 0)
     {
-        $groupInfo = GroupManager::get_group_properties(api_get_group_id());
-        $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
-
+        $group = api_get_group_entity();
+        $groupIid = null === $group ? 0 : $group->getIid();
         $codePath = api_get_path(WEB_CODE_PATH);
 
         $currentUserId = api_get_user_id();
@@ -2568,8 +2566,8 @@ class Agenda
             ('1' == api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
             api_is_allowed_to_session_edit(false, true)
             || (
-                GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
-                && GroupManager::is_tutor_of_group($currentUserId, $groupInfo)
+                GroupManager::userHasAccess($currentUserId, $group, GroupManager::GROUP_TOOL_CALENDAR)
+                && GroupManager::isTutorOfGroup($currentUserId, $group)
             )
         ) {
             $actionsLeft .= Display::url(
@@ -2603,7 +2601,7 @@ class Agenda
             }
         }
 
-        if ('personal' == $this->type && !api_is_anonymous()) {
+        if ('personal' === $this->type && !api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('1day.png', get_lang('Sessions plan calendar'), [], ICON_SIZE_MEDIUM),
                 $codePath."calendar/planification.php"
@@ -2624,7 +2622,7 @@ class Agenda
             api_is_session_admin() ||
             api_is_coach()
         ) {
-            if ('personal' == $this->type) {
+            if ('personal' === $this->type) {
                 $form = null;
                 if (!isset($_GET['action'])) {
                     $form = new FormValidator(

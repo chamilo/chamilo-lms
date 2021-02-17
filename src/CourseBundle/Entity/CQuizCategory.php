@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CQuizCategory.
  *
+ * Manages quiz question categories inside an exercise.
+ *
  * @ORM\Table(name="c_quiz_rel_category")
  * @ORM\Entity
  */
@@ -57,18 +59,6 @@ class CQuizCategory
     public function getIid()
     {
         return $this->iid;
-    }
-
-    /**
-     * @param int $iid
-     *
-     * @return CQuizCategory
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 
     /**

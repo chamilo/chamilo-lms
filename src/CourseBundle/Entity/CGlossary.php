@@ -13,11 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CGlossary.
  *
  * @ORM\Table(
- *  name="c_glossary",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *  name="c_glossary"
  * )
  * @ORM\Entity
  */
@@ -33,25 +29,15 @@ class CGlossary extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
-     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @var int
@@ -61,25 +47,9 @@ class CGlossary extends AbstractResource implements ResourceInterface
     protected $displayOrder;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    public function __toString(): string
-    {
-        return $this->getName();
-    }
-
-    /**
      * Set name.
-     *
-     * @param string $name
-     *
-     * @return CGlossary
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -88,22 +58,16 @@ class CGlossary extends AbstractResource implements ResourceInterface
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CGlossary
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -145,30 +109,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CGlossary
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
      * Set glossaryId.
      *
      * @param int $glossaryId
@@ -182,48 +122,11 @@ class CGlossary extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get glossaryId.
-     *
-     * @return int
-     */
-    public function getGlossaryId()
-    {
-        return $this->glossaryId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CGlossary
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
@@ -237,5 +140,10 @@ class CGlossary extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setName($name);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }

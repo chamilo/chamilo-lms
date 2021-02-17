@@ -46,7 +46,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'registered' => 'false',
                     'keep_old_images_after_delete' => 'true',
                     'load_term_conditions_section' => 'login',
-                    //'server_type' => 'prod', replaced by value in .env
+                    'server_type' => 'prod', // Chamilo mode
                     'show_tabs' => [],
                     'chamilo_database_version' => '2.0.0',
                     //

@@ -126,8 +126,6 @@ switch ($action) {
             echo '';
             break;
         }
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $user_id = Session::read('social_user_id');
 
         if ($_POST['action']) {
@@ -351,8 +349,8 @@ switch ($action) {
         }
 
         $em = Database::getManager();
-        $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
-        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageFeedback');
+        $messageRepo = $em->getRepository(Message::class);
+        $messageLikesRepo = $em->getRepository(MessageFeedback::class);
 
         /** @var Message $message */
         $message = $messageRepo->find($messageId);

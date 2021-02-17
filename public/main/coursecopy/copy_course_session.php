@@ -16,7 +16,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
-api_protect_global_admin_script();
+api_protect_admin_script();
 api_protect_limit_for_session_admin();
 api_set_more_memory_and_time_limits();
 
@@ -292,7 +292,7 @@ if (Security::check_token('post') && (
         $destination_session = $_POST['destination_session'];
         $origin_session = $_POST['origin_session'];
 
-        if ($course_code != $origin_course) {
+        if ($destination_course !== $origin_course) {
             $course = CourseSelectForm::get_posted_course(
                 'copy_course',
                 $origin_session,

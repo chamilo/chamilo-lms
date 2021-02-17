@@ -4,8 +4,8 @@
 
 namespace Chamilo\CoreBundle\Twig\Extension;
 
-use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -14,7 +14,7 @@ use Twig\TwigFilter;
  */
 class ChamiloExtension extends AbstractExtension
 {
-    private $illustrationRepository;
+    private IllustrationRepository $illustrationRepository;
 
     public function __construct(IllustrationRepository $illustrationRepository)
     {
@@ -39,7 +39,6 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('remove_xss', 'Security::remove_XSS'),
             new TwigFilter('format_user_full_name', 'UserManager::formatUserFullName'),
             new TwigFilter('illustration', [$this, 'getIllustration']),
-            new TwigFilter('user_illustration', [$this, 'getUserIllustration']),
         ];
     }
 
@@ -48,20 +47,9 @@ class ChamiloExtension extends AbstractExtension
         return [];
     }
 
-    public function getIllustration(ResourceNode $node): string
+    public function getIllustration(ResourceIllustrationInterface $resource): string
     {
-        return $this->illustrationRepository->getIllustrationUrlFromNode($node);
-    }
-
-    public function getUserIllustration(ResourceNode $node): string
-    {
-        $url = $this->getIllustration($node);
-
-        if (empty($url)) {
-            return '/img/icons/32/unknown.png';
-        }
-
-        return $url;
+        return $this->illustrationRepository->getIllustrationUrl($resource);
     }
 
     /**

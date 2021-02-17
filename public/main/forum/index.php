@@ -25,7 +25,60 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-require_once 'forumfunction.inc.php';
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+$htmlHeadXtra[] = '<script>
+
+function check_unzip() {
+    if (document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+    }
+}
+function setFocus() {
+    $("#title_file").focus();
+}
+</script>';
+// The next javascript script is to manage ajax upload file
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+
+// Recover Thread ID, will be used to generate delete attachment URL to do ajax
+$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
+// The next javascript script is to delete file by ajax
+$htmlHeadXtra[] = '<script>
+$(function () {
+    $(document).on("click", ".deleteLink", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var l = $(this);
+        var id = l.closest("tr").attr("id");
+        var filename = l.closest("tr").find(".attachFilename").html();
+        if (confirm("'.get_lang('Are you sure to delete').'", filename)) {
+            $.ajax({
+                type: "POST",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                dataType: "json",
+                success: function(data) {
+                    if (data.error == false) {
+                        l.closest("tr").remove();
+                        if ($(".files td").length < 1) {
+                            $(".files").closest(".control-group").hide();
+                        }
+                    }
+                }
+            })
+        }
+    });
+});
+</script>';
+
 api_protect_course_script(true);
 
 $current_course_tool = TOOL_FORUM;
@@ -43,11 +96,11 @@ function hidecontent(content){
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('Forums');
-$_course = api_get_course_info();
-$courseEntity = $_course['entity'];
+$courseEntity = api_get_course_entity();
 $sessionId = api_get_session_id();
 $sessionEntity = api_get_session_entity($sessionId);
 $_user = api_get_user_info();
+$courseId = $courseEntity->getId();
 
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = 1 == $hideNotifications;
@@ -132,7 +185,7 @@ $user_id = api_get_user_id();
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
 
 // The groups of the user.
-$groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
+$groups_of_user = GroupManager::get_group_ids($courseId, $user_id);
 
 // All groups in the course (and sorting them as the
 // id of the group = the key of the array).
@@ -140,7 +193,7 @@ if (!api_is_anonymous()) {
     $all_groups = GroupManager::get_group_list();
     if (is_array($all_groups)) {
         foreach ($all_groups as $group) {
-            $all_groups[$group['id']] = $group;
+            $all_groups[$group['iid']] = $group;
         }
     }
 }
@@ -278,12 +331,12 @@ if (is_array($forumCategories)) {
         $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
         $visibility = $forumCategory->isVisible($courseEntity, $sessionEntity);
 
-        if (!empty($idCategory)) {
+        if (!empty($categoryId)) {
             if (api_is_allowed_to_edit(false, true) &&
                 !(0 == $categorySessionId && 0 != $sessionId)
             ) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                    .'&action=edit&content=forumcategory&id='.$categoryId
+                    .'&action=edit_category&content=forumcategory&id='.$categoryId
                     .'">'.Display::return_icon(
                         'edit.png',
                         get_lang('Edit'),
@@ -293,7 +346,7 @@ if (is_array($forumCategories)) {
                     .'</a>';
 
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                    .'&action=delete&content=forumcategory&id='.$categoryId
+                    .'&action=delete_category&content=forumcategory&id='.$categoryId
                     ."\" onclick=\"javascript:if(!confirm('"
                     .addslashes(api_htmlentities(
                         get_lang('Delete forum category ?'),
@@ -329,7 +382,7 @@ if (is_array($forumCategories)) {
         $forumCategoryInfo['forums'] = [];
         // The forums in this category.
         $forumInfo = [];
-        $forumsInCategory = get_forums_in_category($categoryId, $_course['real_id']);
+        $forumsInCategory = get_forums_in_category($categoryId, $courseId);
 
         if (!empty($forumsInCategory)) {
             $forumsDetailsList = [];
@@ -370,9 +423,9 @@ if (is_array($forumCategories)) {
                         if ('0' == $forum->getForumOfGroup()) {
                             $show_forum = true;
                         } else {
-                            $show_forum = GroupManager::user_has_access(
+                            $show_forum = GroupManager::userHasAccess(
                                 $user_id,
-                                $forum->getForumOfGroup(),
+                                api_get_group_entity($forum->getForumOfGroup()),
                                 GroupManager::GROUP_TOOL_FORUM
                             );
                         }
@@ -411,7 +464,7 @@ if (is_array($forumCategories)) {
                         }
 
                         $groupId = $forum->getForumOfGroup();
-                        $forumInfo['visibility'] = $forum->isVisible($courseEntity, $sessionEntity);
+                        $forumInfo['visibility'] = $forumVisibility = $forum->isVisible($courseEntity, $sessionEntity);
                         /*$forumInfo['number_threads'] = isset($forum['number_of_threads'])
                             ? (int) $forum['number_of_threads']
                             : 0;*/
@@ -497,11 +550,11 @@ if (is_array($forumCategories)) {
                             && !(0 == $forum->getSessionId() && 0 != $sessionId)
                         ) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                                .'&action=edit&content=forum&id='.$forumId.'">'
+                                .'&action=edit_forum&content=forum&id='.$forumId.'">'
                                 .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
                                 .'</a>';
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                                .'&action=delete&content=forum&id='.$forumId
+                                .'&action=delete_forum&content=forum&id='.$forumId
                                 ."\" onclick=\"javascript:if(!confirm('".addslashes(
                                     api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES)
                                 )
@@ -512,7 +565,7 @@ if (is_array($forumCategories)) {
                             $toolActions .= return_visible_invisible_icon(
                                 'forum',
                                 $forumId,
-                                $visibility
+                                $forumVisibility
                             );
 
                             $toolActions .= return_lock_unlock_icon(
@@ -544,8 +597,8 @@ if (is_array($forumCategories)) {
                                 .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
                                 .Display::return_icon($iconnotify, get_lang('Notify me'), null, ICON_SIZE_SMALL)
                                 .'</a>';
-                        }
-                        $forumInfo['tools'] = $toolActions;*/
+                        };*/
+                        $forumInfo['tools'] = $toolActions;
                         $forumsDetailsList[] = $forumInfo;
                     }
                 }

@@ -30,5 +30,10 @@ class ToolCompilerClass implements CompilerPassInterface
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall('addTool', [new Reference($id)]);
         }
+
+        /*$services = $container->findTaggedServiceIds('doctrine.repository_service');
+        foreach ($services as $service => $attributes) {
+            error_log($container->getDefinition($service)->getClass());
+        }*/
     }
 }

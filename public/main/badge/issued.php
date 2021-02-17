@@ -21,7 +21,7 @@ if (empty($issue)) {
 
 $entityManager = Database::getManager();
 /** @var SkillRelUser $skillIssue */
-$skillIssue = $entityManager->find('ChamiloCoreBundle:SkillRelUser', $issue);
+$skillIssue = $entityManager->find(SkillRelUser::class, $issue);
 
 if (!$skillIssue) {
     Display::addFlash(
@@ -34,8 +34,8 @@ if (!$skillIssue) {
     exit;
 }
 
-$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
-$skillLevelRepo = $entityManager->getRepository('ChamiloCoreBundle:Level');
+$skillRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Skill::class);
+$skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
 
 $user = $skillIssue->getUser();
 $skill = $skillIssue->getSkill();
@@ -199,7 +199,10 @@ $form->applyFilter('comment', 'trim');
 $form->addRule('comment', get_lang('Required field'), 'required');
 $form->addSelect(
     'value',
-    [get_lang('Value'), get_lang('On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?')],
+    [
+        get_lang('Value'),
+        get_lang('On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?'),
+    ],
     ['-', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 );
 $form->addHidden('user', $skillIssue->getUser()->getId());

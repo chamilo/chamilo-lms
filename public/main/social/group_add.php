@@ -21,13 +21,12 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 $usergroup = new UserGroup();
 $form = new FormValidator('add_group');
 $usergroup->setGroupType($usergroup::SOCIAL_CLASS);
-$usergroup->setForm($form, 'add', []);
+$usergroup->setForm($form, 'add');
 
 if ($form->validate()) {
     $values = $form->exportValues();
     $values['group_type'] = UserGroup::SOCIAL_CLASS;
     $values['relation_type'] = GROUP_USER_PERMISSION_ADMIN;
-
     $groupId = $usergroup->save($values);
     if ($groupId) {
         Display::addFlash(Display::return_message(get_lang('Group added')));
@@ -45,13 +44,12 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
 
 $social_avatar_block = SocialManager::show_social_avatar_block('group_add');
 $social_menu_block = SocialManager::show_social_menu('group_add');
-$social_right_content = $form->returnForm();
 
 $tpl = new Template(null);
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), null, null);
 $tpl->setHelp('Groups');
 $tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_right_content', $social_right_content);
+$tpl->assign('social_right_content', $form->returnForm());
 
 $social_layout = $tpl->get_template('social/add_groups.tpl');
 $content = $tpl->fetch($social_layout);

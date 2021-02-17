@@ -53,18 +53,6 @@ class TicketStatus
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketStatus
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getCode()

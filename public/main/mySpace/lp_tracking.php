@@ -13,7 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $cidReset = true;
 $from_myspace = false;
 $from_link = '';
-if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
+if (isset($_GET['from']) && 'myspace' === $_GET['from']) {
     $from_link = '&from=myspace';
     $this_section = SECTION_TRACKING;
 } else {
@@ -21,7 +21,7 @@ if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
 }
 
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : api_get_session_id();
-$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'];
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 $user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();
@@ -32,6 +32,7 @@ $courseInfo = api_get_course_info($courseCode);
 if (empty($courseInfo) || empty($lp_id)) {
     api_not_allowed('learnpath' !== api_get_origin());
 }
+$courseId = $courseInfo['real_id'];
 $userInfo = api_get_user_info($user_id);
 $name = $userInfo['complete_name'];
 $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $user_id);
@@ -52,12 +53,12 @@ if ('user_course' === $origin) {
         'name' => $courseInfo['name'],
     ];
     $interbreadcrumb[] = [
-        'url' => "../user/user.php?cidReq=$courseCode",
+        'url' => "../user/user.php?cid=$courseId",
         'name' => get_lang('Users'),
     ];
 } elseif ('tracking_course' === $origin) {
     $interbreadcrumb[] = [
-        'url' => "../tracking/courseLog.php?cidReq=$courseCode&id_session=$session_id",
+        'url' => "../tracking/courseLog.php?cid=$courseId&sid=$session_id",
         'name' => get_lang('Reporting'),
     ];
 } else {
@@ -72,14 +73,13 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learner details in course'),
 ];
 $nameTools = get_lang('Learnpath details');
-$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).'
-        WHERE c_id = '.$courseInfo['real_id'].' AND id='.$lp_id;
-$rs = Database::query($sql);
-$lp_title = Database::result($rs, 0, 0);
 
+$lpRepo = \Chamilo\CoreBundle\Framework\Container::getLpRepository();
+/** @var \Chamilo\CourseBundle\Entity\CLp $lp */
+$lp = $lpRepo->find($lp_id);
+$lp_title = $lp->getName();
 $origin = 'tracking';
-
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 switch ($action) {
     case 'export_stats':
         if (!api_is_allowed_to_edit(false, false, true)) {
@@ -90,7 +90,7 @@ switch ($action) {
         $itemViewId = isset($_REQUEST['extend_attempt_id']) ? $_REQUEST['extend_attempt_id'] : 0;
         $em = Database::getManager();
 
-        $repo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
+        $repo = $em->getRepository(CLpItemView::class);
         /** @var CLpItemView $itemView */
         $itemView = $repo->find($itemViewId);
 
@@ -98,8 +98,8 @@ switch ($action) {
             api_not_allowed();
         }
 
-        $view = $em->getRepository('ChamiloCourseBundle:CLpView')->find($itemView->getLpViewId());
-        $lp = $em->getRepository('ChamiloCourseBundle:CLp')->find($view->getLpId());
+        $view = $em->getRepository(\Chamilo\CourseBundle\Entity\CLpView::class)->find($itemView->getLpViewId());
+        $lp = $em->getRepository(\Chamilo\CourseBundle\Entity\CLp::class)->find($view->getLpId());
 
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
         $endTime = $itemView->getStartTime() + $itemView->getTotalTime();
@@ -149,7 +149,7 @@ switch ($action) {
         }
 
         $counter = 1;
-        $table = new HTML_Table(['class' => 'table data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped  data_table']);
         $row = 0;
         $scoreDisplay = new ScoreDisplay();
         $globalTotal = 0;

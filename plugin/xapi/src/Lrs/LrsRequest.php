@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Xabbuh\XApi\Common\Exception\ConflictException;
 
 /**
  * Class LrsRequest.
@@ -33,27 +35,28 @@ class LrsRequest
 
     public function send()
     {
-        $this->validAuth();
-
-        $version = $this->request->headers->get('X-Experience-API-Version');
-
-        if (null === $version) {
-            throw new BadRequestHttpException('The "X-Experience-API-Version" header is required.');
-        }
-
-        if (!$this->isValidVersion($version)) {
-            throw new BadRequestHttpException("The xAPI version \"$version\" is not supported.");
-        }
-
         $controllerName = $this->getControllerName();
         $methodName = $this->getMethodName();
 
-        if ($controllerName
-            && class_exists($controllerName)
+        if (class_exists($controllerName)
             && method_exists($controllerName, $methodName)
         ) {
-            /** @var HttpResponse $response */
-            $response = call_user_func([new $controllerName(), $methodName]);
+            try {
+                $this->validateAuth();
+                $this->validateVersion();
+
+                /** @var HttpResponse $response */
+                $response = call_user_func([new $controllerName(), $methodName]);
+            } catch (AccessDeniedHttpException | \Exception $accessDeniedHttpException) {
+                $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
+            } catch (HttpException $httpException) {
+                $response = HttpResponse::create(
+                    $httpException->getMessage(),
+                    $httpException->getStatusCode()
+                );
+            } catch (ConflictException $conflictException) {
+                $response = HttpResponse::create('', HttpResponse::HTTP_CONFLICT);
+            }
         } else {
             $response = HttpResponse::create('Not Found', HttpResponse::HTTP_NOT_FOUND);
         }
@@ -63,7 +66,7 @@ class LrsRequest
         $response->send();
     }
 
-    private function validAuth(): bool
+    private function validateAuth(): bool
     {
         if (!$this->request->headers->has('Authorization')) {
             throw new AccessDeniedHttpException();
@@ -100,17 +103,23 @@ class LrsRequest
         return true;
     }
 
-    private function isValidVersion(string $version): string
+    private function validateVersion()
     {
+        $version = $this->request->headers->get('X-Experience-API-Version');
+
+        if (null === $version) {
+            throw new BadRequestHttpException('The "X-Experience-API-Version" header is required.');
+        }
+
         if (preg_match('/^1\.0(?:\.\d+)?$/', $version)) {
             if ('1.0' === $version) {
                 $this->request->headers->set('X-Experience-API-Version', '1.0.0');
             }
 
-            return true;
+            return;
         }
 
-        return false;
+        throw new BadRequestHttpException("The xAPI version \"$version\" is not supported.");
     }
 
     private function getControllerName(): ?string

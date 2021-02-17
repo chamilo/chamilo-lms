@@ -13321,10 +13321,24 @@ EOD;
                 Session::write('officedoc', $officedoc);
 
                 if ($showDirectUrl) {
+                    $isVisible = DocumentManager::check_visibility_tree(
+                        $document->getIid(),
+                        api_get_course_info(),
+                        api_get_session_id(),
+                        api_get_user_id(),
+                        api_get_group_id(),
+                        false
+                    );
+
+                    if (false === $isVisible) {
+                        return '';
+                    }
+
                     $file = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                     if (api_get_configuration_value('allow_pdf_viewerjs_in_lp')) {
                         if (Link::isPdfLink($file)) {
-                            return api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html?zoom=page-width#'.$file;
+                            return api_get_path(WEB_LIBRARY_PATH).
+                                'javascript/ViewerJS/index.html?zoom=page-width#'.$file;
                         }
                     }
 

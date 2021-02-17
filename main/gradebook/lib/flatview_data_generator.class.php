@@ -472,7 +472,6 @@ class FlatViewDataGenerator
                                 SCORE_SIMPLE,
                                 null,
                                 $ignore_score_color
-
                             );
                         }
 
@@ -694,7 +693,7 @@ class FlatViewDataGenerator
             $divide = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
 
             // Sub cat weight
-            $item_value = isset(e[0]) ? $score[0] / $divide : null;
+            $item_value = isset($score[0]) ? $score[0] / $divide : null;
 
             // Fixing total when using one or multiple gradebooks.
             if (empty($parentCategoryIdFilter)) {

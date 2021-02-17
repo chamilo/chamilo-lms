@@ -311,8 +311,6 @@ if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
     );
     $flatViewTable->display();
 } elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
-
-
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

@@ -468,6 +468,7 @@ class ScoreDisplay
                 return $this->display_as_decimal($score).$scoreLabel;
             case SCORE_DIV_PERCENT_WITH_CUSTOM:        // X / Y (XX %) - Good!
                 $div = $this->display_as_div($score, false, $removeEmptyDecimals);
+
                 return
                     $this->display_as_percent($score).
                     ' ('.$div.')'.$scoreLabel;

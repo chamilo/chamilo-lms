@@ -3531,10 +3531,16 @@ class DocumentManager
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
         $newResources = [];
+        $added = [];
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
+                $docId = $resource['id'];
+                if (in_array($added, $docId)) {
+                    continue;
+                }
+
                 $is_visible = self::is_visible_by_id(
-                    $resource['id'],
+                    $docId,
                     $course_info,
                     $session_id,
                     api_get_user_id()
@@ -3545,7 +3551,7 @@ class DocumentManager
                         continue;
                     }
                 }
-
+                $added[] = $docId;
                 $newResources[] = $resource;
             }
         }

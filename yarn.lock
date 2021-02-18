@@ -6128,7 +6128,7 @@ __metadata:
     readmore-js: ^2.2.1
     router: ^1.3.5
     sass: ^1.26.5
-    sass-loader: ^8.0
+    sass-loader: ^9.0
     select2: ^4.0
     signature_pad: ^3.0.0-beta.4
     sweetalert2: ^10.0
@@ -6566,17 +6566,6 @@ __metadata:
     strip-ansi: ^6.0.0
     wrap-ansi: ^7.0.0
   checksum: c49ac1d13f6dda4beaa11b26f62867e0e9892eb985951187d7c691793e0fe08b9bc15cedfaf4dc6d2e9a4d1516704c0c9dcb671ebcd758dbabb18b5d757fbdb5
-  languageName: node
-  linkType: hard
-
-"clone-deep@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "clone-deep@npm:4.0.1"
-  dependencies:
-    is-plain-object: ^2.0.4
-    kind-of: ^6.0.2
-    shallow-clone: ^3.0.0
-  checksum: b0146d66cabc7e609d23d10155dcc88e2f74b03539b3b65f8a05f889500e2a78b6c6265a744445d009d512a1afa16836f62aa5737d462027142984c2d41130c8
   languageName: node
   linkType: hard
 
@@ -12374,6 +12363,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"klona@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "klona@npm:1.1.2"
+  checksum: 357ff7d43ca2dbaacda91c37bea559642a128e583a2836c09c252881dd71d054d97e7185e91a899ebd65e2b76f7d4e25ca3d06fd0a0b51a5304586d00157a06d
+  languageName: node
+  linkType: hard
+
 "last-call-webpack-plugin@npm:^3.0.0":
   version: 3.0.0
   resolution: "last-call-webpack-plugin@npm:3.0.0"
@@ -13664,7 +13660,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"neo-async@npm:^2.5.0, neo-async@npm:^2.6.0, neo-async@npm:^2.6.1":
+"neo-async@npm:^2.5.0, neo-async@npm:^2.6.0, neo-async@npm:^2.6.1, neo-async@npm:^2.6.2":
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: 34a8f5309135be258a97082af810ea43700a3e0121e7b1ea31b3e22e2663d7c0d502cd949abb6d1ab8c11abfd04500ee61721ec5408b2d4bef8105241fd8a4c2
@@ -16817,15 +16813,15 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^8.0":
-  version: 8.0.2
-  resolution: "sass-loader@npm:8.0.2"
+"sass-loader@npm:^9.0":
+  version: 9.0.3
+  resolution: "sass-loader@npm:9.0.3"
   dependencies:
-    clone-deep: ^4.0.1
-    loader-utils: ^1.2.3
-    neo-async: ^2.6.1
-    schema-utils: ^2.6.1
-    semver: ^6.3.0
+    klona: ^1.1.2
+    loader-utils: ^2.0.0
+    neo-async: ^2.6.2
+    schema-utils: ^2.7.0
+    semver: ^7.3.2
   peerDependencies:
     fibers: ">= 3.1.0"
     node-sass: ^4.0.0
@@ -16838,7 +16834,7 @@ fsevents@~2.3.1:
       optional: true
     sass:
       optional: true
-  checksum: e23d9b308f0792fb9ca3ebe314d5c9c96dfa833f89f457e4fc9c5026dacbfbb81e65b1e9b924f6aa11d749e2ba033acf7d1767929d6f9628c45525535bceb889
+  checksum: 5ce94bb6708507c3ca6af5cada1c3442d06242aa16df38fcea059aafad0c49ad0ae980fece7c3844cc82cc2e373d7b3192c55046bf506337811b759ccdb23a4f
   languageName: node
   linkType: hard
 
@@ -16881,7 +16877,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^2.0.0, schema-utils@npm:^2.5.0, schema-utils@npm:^2.6.1, schema-utils@npm:^2.6.5, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.0":
+"schema-utils@npm:^2.0.0, schema-utils@npm:^2.5.0, schema-utils@npm:^2.6.5, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.0":
   version: 2.7.1
   resolution: "schema-utils@npm:2.7.1"
   dependencies:
@@ -17167,15 +17163,6 @@ fsevents@~2.3.1:
   bin:
     sha.js: ./bin.js
   checksum: 7554240ab76e683f7115123eb4815aae16b5fc6f2cdff97009831ad5b17b107ffcef022526211f7306957bce7a67fa4d0ccad79a3040c5073414365595e90516
-  languageName: node
-  linkType: hard
-
-"shallow-clone@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "shallow-clone@npm:3.0.1"
-  dependencies:
-    kind-of: ^6.0.2
-  checksum: e329e054c286f0681fd8a9e5c353999519332f12510a99e189ea9cfa0337adb6f1414639d44493418ef6790a693b78c354525269f5db25a9feddd8b4d7891a62
   languageName: node
   linkType: hard
 

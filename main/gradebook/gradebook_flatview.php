@@ -284,7 +284,7 @@ if (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
                     height:300,
                     buttons: {
                         "'.addslashes(get_lang('Download')).'": function() {
-                            var onlyScore = $("input[name=only_score]:checked").val();
+                            let onlyScore = $("input[name=only_score]").prop("checked") ? 1 : 0;
                             location.href = targetUrl+"&only_score="+onlyScore;
                             $(this).dialog("close");
                         }

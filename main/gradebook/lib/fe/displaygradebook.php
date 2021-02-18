@@ -258,12 +258,10 @@ class DisplayGradebook
                 null,
                 ['class' => 'form-vertical']
             );
-            $form->addElement(
-                'checkbox',
+            $form->addCheckBox(
                 'only_score',
                 null,
-                get_lang('OnlyNumbers'),
-                '0'
+                get_lang('OnlyNumbers')
             );
             $dialog .= $form->returnForm();
             $dialog .= '</div>';

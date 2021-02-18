@@ -267,7 +267,7 @@ Feature: Group tool
     Then I select "Fiona Apple Maggart" from "users"
     Then I press "users_rightSelected"
     Then I fill in the following:
-      | title | Announcement for user fapple inside Group 0001 |
+      | title |Announcement for user fapple inside Group 0001|
     And I fill in ckeditor field "content" with "Announcement description for user fapple inside Group 0001"
     Then I follow "announcement_preview"
     And wait for the page to be loaded
@@ -356,8 +356,8 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement for all users inside Group 0001"
     Then I should see "Announcement for user fapple inside Group 0001"
+    And wait very long for the page to be loaded
     Then I follow "Announcement for user fapple inside Group 0001"
-    And wait for the page to be loaded
     Then I should see "Announcement description for user fapple inside Group 0001"
     Then I save current URL with name "announcement_for_user_fapple_group_0001_public"
     Then I move backward one page

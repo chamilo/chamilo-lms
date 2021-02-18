@@ -4466,10 +4466,10 @@ class learnpath
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
             $name = Database::escape_string($row['name']);
-            if ($set_visibility == 'i') {
+            if ($set_visibility === 'i') {
                 $v = 0;
             }
-            if ($set_visibility == 'v') {
+            if ($set_visibility === 'v') {
                 $v = 1;
             }
 
@@ -4480,55 +4480,83 @@ class learnpath
             $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
             $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
 
+            $extraLpCondition = '';
+            $extraLink = '';
+            if (!empty($session_id)) {
+                $extraLink = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session=0';
+                $extraLpCondition = " OR (link = '$extraLink' AND session_id = $session_id  )  ";
+            }
+
             $sql = "SELECT * FROM $tbl_tool
                     WHERE
                         c_id = $course_id AND
-                        (link = '$link' OR link = '$oldLink') AND
+                        (link = '$link' OR link = '$oldLink' $extraLpCondition ) AND
                         image = 'scormbuilder.gif' AND
                         (
                             link LIKE '$link%' OR
                             link LIKE '$oldLink%'
+                            $extraLpCondition
                         )
                         $session_condition
                     ";
 
             $result = Database::query($sql);
             $num = Database::num_rows($result);
-            if ($set_visibility == 'i' && $num > 0) {
-                $sql = "DELETE FROM $tbl_tool
+            if ($set_visibility === 'i') {
+                if ($num > 0) {
+                    $sql = "DELETE FROM $tbl_tool
                         WHERE
                             c_id = $course_id AND
-                            (link = '$link' OR link = '$oldLink') AND
+                            (link = '$link' OR link = '$oldLink' $extraLpCondition ) AND
                             image='scormbuilder.gif'
                             $session_condition";
-                Database::query($sql);
-            } elseif ($set_visibility == 'v' && $num == 0) {
-                $sql = "INSERT INTO $tbl_tool (category, c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
-                        ('authoring', $course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
-                Database::query($sql);
-                $insertId = Database::insert_id();
-                if ($insertId) {
-                    $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
                     Database::query($sql);
                 }
-            } elseif ($set_visibility == 'v' && $num > 0) {
-                $sql = "UPDATE $tbl_tool SET
-                            c_id = $course_id,
-                            name = '$name',
-                            link = '$link',
-                            image = 'scormbuilder.gif',
-                            visibility = '$v',
-                            admin = '0',
-                            address = 'pastillegris.gif',
-                            added_tool = 0,
-                            session_id = $session_id
-                        WHERE
-                            c_id = ".$course_id." AND
-                            (link = '$link' OR link = '$oldLink') AND
+
+                // Disables the base course link inside a session.
+                if (!empty($session_id)) {
+                    $sql = "UPDATE $tbl_tool
+                            SET visibility = 0
+                            WHERE
+                            c_id = $course_id AND
+                            link = '$extraLink' AND
+                            session_id = $session_id AND
                             image='scormbuilder.gif'
-                            $session_condition
-                        ";
-                Database::query($sql);
+                            ";
+                    Database::query($sql);
+                }
+            }
+
+            if ($set_visibility === 'v') {
+                if ($num == 0) {
+                    $sql = "INSERT INTO $tbl_tool (category, c_id, name, link, image, visibility, admin, address, added_tool, session_id)
+                            VALUES ('authoring', $course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
+                    Database::query($sql);
+                    $insertId = Database::insert_id();
+                    if ($insertId) {
+                        $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
+                        Database::query($sql);
+                    }
+                }
+                if ($num > 0) {
+                    $sql = "UPDATE $tbl_tool SET
+                        c_id = $course_id,
+                        name = '$name',
+                        link = '$link',
+                        image = 'scormbuilder.gif',
+                        visibility = '$v',
+                        admin = '0',
+                        address = 'pastillegris.gif',
+                        added_tool = 0,
+                        session_id = $session_id
+                    WHERE
+                        c_id = ".$course_id." AND
+                        (link = '$link' OR link = '$oldLink') AND
+                        image='scormbuilder.gif'
+                        $session_condition
+                    ";
+                    Database::query($sql);
+                }
             }
         }
 

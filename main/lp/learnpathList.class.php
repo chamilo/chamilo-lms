@@ -104,6 +104,8 @@ class LearnpathList
         $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
+        $toolSessionCondition = api_get_session_condition($session_id);
+
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
             $name = Database::escape_string($row->getName());
@@ -119,6 +121,7 @@ class LearnpathList
                             link LIKE '$link%' OR
                             link LIKE '$oldLink%'
                         )
+                        $toolSessionCondition
                       ";
             $res2 = Database::query($sql2);
             $pub = 'i';

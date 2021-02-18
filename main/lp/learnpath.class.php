@@ -4502,28 +4502,54 @@ class learnpath
 
             $result = Database::query($sql);
             $num = Database::num_rows($result);
+
             if ($set_visibility === 'i') {
                 if ($num > 0) {
                     $sql = "DELETE FROM $tbl_tool
-                        WHERE
-                            c_id = $course_id AND
-                            (link = '$link' OR link = '$oldLink' $extraLpCondition ) AND
-                            image='scormbuilder.gif'
-                            $session_condition";
+                            WHERE
+                                c_id = $course_id AND
+                                (link = '$link' OR link = '$oldLink') AND
+                                image='scormbuilder.gif'
+                                $session_condition";
                     Database::query($sql);
                 }
 
                 // Disables the base course link inside a session.
-                if (!empty($session_id)) {
-                    $sql = "UPDATE $tbl_tool
-                            SET visibility = 0
+                if (!empty($session_id) && 0 === (int) $row['session_id']) {
+                    $sql = "SELECT iid FROM $tbl_tool
                             WHERE
-                            c_id = $course_id AND
-                            link = '$extraLink' AND
-                            session_id = $session_id AND
-                            image='scormbuilder.gif'
-                            ";
-                    Database::query($sql);
+                                c_id = $course_id AND
+                                link = '$extraLink' AND
+                                image = 'scormbuilder.gif' AND
+                                session_id = $session_id
+                    ";
+                    $resultBaseLp = Database::query($sql);
+                    if (Database::num_rows($resultBaseLp)) {
+                        $resultBaseLpRow = Database::fetch_array($resultBaseLp);
+                        $id = $resultBaseLpRow['iid'];
+                        $sql = "UPDATE $tbl_tool
+                                SET visibility = 0
+                                WHERE iid = $id ";
+                        Database::query($sql);
+                    } else {
+                        $params = [
+                            'category' => 'authoring',
+                            'c_id' => $course_id,
+                            'name' => $name,
+                            'link' => $extraLink,
+                            'image' => 'scormbuilder.gif',
+                            'visibility' => '0',
+                            'admin' => '0',
+                            'address' => 'pastillegris.gif',
+                            'added_tool' => '0',
+                            'session_id' => $session_id,
+                        ];
+                        $insertId = Database::insert($tbl_tool, $params);
+                        if ($insertId) {
+                            $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
+                            Database::query($sql);
+                        }
+                    }
                 }
             }
 

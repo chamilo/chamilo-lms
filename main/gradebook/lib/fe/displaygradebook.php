@@ -209,7 +209,8 @@ class DisplayGradebook
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            $exportDocUrl
+            $exportDocUrl,
+            $attributes
         );
 
         $exportPrintUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([

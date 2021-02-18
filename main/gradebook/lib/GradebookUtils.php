@@ -628,9 +628,10 @@ class GradebookUtils
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
         // step 2: generate rows: students
         $datagen->category = $cat;
-        $count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : GRADEBOOK_ITEM_LIMIT;
-        $header_names = $datagen->get_header_names($offset, $count, true);
-        $data_array = $datagen->get_data(
+        $totalItems = $datagen->get_total_items_count();
+        $count = (($offset + 10) > $totalItems) ? ($totalItems - $offset) : GRADEBOOK_ITEM_LIMIT;
+        $headers = $datagen->get_header_names($offset, $count, true);
+        $list = $datagen->get_data(
             FlatViewDataGenerator::FVDG_SORT_LASTNAME,
             0,
             null,
@@ -641,12 +642,11 @@ class GradebookUtils
         );
 
         $result = [];
-        foreach ($data_array as $data) {
+        foreach ($list as $data) {
             $result[] = array_slice($data, 1);
         }
-        $return = [$header_names, $result];
 
-        return $return;
+        return [$headers, $result];
     }
 
     /**

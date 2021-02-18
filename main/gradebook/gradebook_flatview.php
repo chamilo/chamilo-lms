@@ -214,7 +214,7 @@ if (!empty($_GET['export_report']) &&
         if (empty($_SESSION['export_user_fields'])) {
             $_SESSION['export_user_fields'] = false;
         }
-        if (!api_is_allowed_to_edit(false, false) && !api_is_course_tutor()) {
+        if (!api_is_allowed_to_edit() && !api_is_course_tutor()) {
             $user_id = api_get_user_id();
         }
 

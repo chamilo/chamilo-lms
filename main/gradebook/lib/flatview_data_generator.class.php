@@ -566,7 +566,10 @@ class FlatViewDataGenerator
                     $items_count,
                     $items_start,
                     $show_all,
-                    $row
+                    $row,
+                    null,
+                    [],
+                    $ignore_score_color
                 );
                 $item_value_total += $result['item_value_total'];
                 $evaluationsAdded = $result['evaluations_added'];
@@ -582,7 +585,8 @@ class FlatViewDataGenerator
                 $show_all,
                 $row,
                 $mainCategoryId,
-                $evaluationsAdded
+                $evaluationsAdded,
+                $ignore_score_color
             );
 
             $item_total += $result['item_total'];
@@ -655,7 +659,8 @@ class FlatViewDataGenerator
         $show_all,
         &$row,
         $parentCategoryIdFilter = null,
-        $evaluationsAlreadyAdded = []
+        $evaluationsAlreadyAdded = [],
+        $ignoreScoreDecorations = false
     ) {
         // Generate actual data array
         $scoreDisplay = ScoreDisplay::instance();
@@ -688,13 +693,10 @@ class FlatViewDataGenerator
 
             $evaluationsAdded[] = $item->get_id();
             $score = $item->calc_score($user_id);
-
             $real_score = $score;
             $divide = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
-
             // Sub cat weight
             $item_value = isset($score[0]) ? $score[0] / $divide : null;
-
             // Fixing total when using one or multiple gradebooks.
             if (empty($parentCategoryIdFilter)) {
                 if (0 == $this->category->get_parent_id()) {
@@ -718,7 +720,8 @@ class FlatViewDataGenerator
             $complete_score = $scoreDisplay->display_score(
                 $score,
                 SCORE_DIV_PERCENT,
-                SCORE_ONLY_SCORE
+                SCORE_ONLY_SCORE,
+                $ignoreScoreDecorations
             );
 
             if ('false' === $showPercentage) {
@@ -728,17 +731,23 @@ class FlatViewDataGenerator
                 }
                 $real_score = $scoreDisplay->display_score(
                     $real_score,
-                    $defaultShowPercentageValue
+                    $defaultShowPercentageValue,
+                    null,
+                    $ignoreScoreDecorations
                 );
                 $temp_score = $scoreDisplay->display_score(
                     [$item_value, null],
-                    SCORE_DIV_SIMPLE_WITH_CUSTOM
+                    SCORE_DIV_SIMPLE_WITH_CUSTOM,
+                    null,
+                    $ignoreScoreDecorations
                 );
                 $temp_score = Display::tip($real_score, $temp_score);
             } else {
                 $temp_score = $scoreDisplay->display_score(
                     $real_score,
-                    $defaultStyle
+                    $defaultStyle,
+                    null,
+                    $ignoreScoreDecorations
                 );
                 $temp_score = Display::tip($temp_score, $complete_score);
             }

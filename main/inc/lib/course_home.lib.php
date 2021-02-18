@@ -977,7 +977,7 @@ class CourseHome
 
                 $item['extra'] = null;
                 $toolAdmin = isset($tool['admin']) ? $tool['admin'] : '';
-
+                $extraClass = '';
                 if ($is_allowed_to_edit && $allowChangeVisibility) {
                     if (empty($session_id)) {
                         if (isset($tool['id'])) {
@@ -995,6 +995,7 @@ class CourseHome
                                     class="fa fa-eye-slash text-muted"
                                     title="'.get_lang('Activate').'"></em>';
                                 $link['cmd'] = 'restore=yes';
+                                $extraClass = 'text-muted';
                                 $lnk[] = $link;
                             }
                         }
@@ -1018,6 +1019,7 @@ class CourseHome
                                         class="fa fa-eye-slash text-muted"
                                         title="'.get_lang('Activate').'"></em>';
                                     $link['cmd'] = 'restore=yes';
+                                    $extraClass = 'text-muted';
                                     $lnk[] = $link;
                                     break;
                                 case 1:
@@ -1114,7 +1116,7 @@ class CourseHome
                     $tool_link_params = [
                         'id' => 'tooldesc_'.$toolIid,
                         'href' => $tool['link'],
-                        'class' => $class,
+                        'class' => "$class $extraClass ",
                         'target' => $tool['target'],
                     ];
                 }
@@ -1689,11 +1691,9 @@ class CourseHome
             // Adding only maintenance for coaches.
             $myList = self::get_tools_category(TOOL_ADMIN_PLATFORM);
             $onlyMaintenanceList = [];
-
             foreach ($myList as $item) {
                 if ($item['name'] === 'course_maintenance') {
                     $item['link'] = 'course_info/maintenance_coach.php';
-
                     $onlyMaintenanceList[] = $item;
                 }
             }

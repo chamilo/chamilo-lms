@@ -4397,6 +4397,10 @@ class learnpath
      */
     public static function toggle_visibility($lp_id, $set_visibility = 1)
     {
+        if (empty($lp_id)) {
+            return false;
+        }
+
         $action = 'visible';
         if ($set_visibility != 1) {
             $action = 'invisible';
@@ -4450,6 +4454,9 @@ class learnpath
      */
     public static function toggle_publish($lp_id, $set_visibility = 'v')
     {
+        if (empty($lp_id)) {
+            return false;
+        }
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = (int) $lp_id;
@@ -4534,11 +4541,6 @@ class learnpath
      *
      * @param int $id
      * @param int $setVisibility
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return bool
      */

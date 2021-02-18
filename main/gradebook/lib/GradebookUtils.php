@@ -637,8 +637,9 @@ class GradebookUtils
             null,
             $offset,
             $count,
-            true === $onlyScore,
-            true
+            $onlyScore,
+            true,
+            $onlyScore
         );
 
         $result = [];

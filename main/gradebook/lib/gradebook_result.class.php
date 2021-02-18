@@ -94,11 +94,16 @@ class GradeBookResult
         $line = 1;
         $column = 0;
         // headers.
-        foreach ($data[0] as $header_col) {
+        foreach ($data[0] as $headerData) {
+            $title = $headerData;
+            if (isset($headerData['header'])) {
+                $title = $headerData['header'];
+            }
+            $title = html_entity_decode(strip_tags($title));
             $worksheet->SetCellValueByColumnAndRow(
                 $column,
                 $line,
-                html_entity_decode(strip_tags($header_col))
+                $title
             );
             $column++;
         }
@@ -141,12 +146,16 @@ class GradeBookResult
         $table->addRow();
 
         for ($i = 0; $i < count($data[0]); $i++) {
-            $table->addCell(1750)->addText(strip_tags($data[0][$i]));
+            $title = $data[0][$i];
+            if (isset($data[0][$i]['header'])) {
+                $title = $data[0][$i]['header'];
+            }
+            $title = strip_tags($title);
+            $table->addCell(1750)->addText($title);
         }
 
         foreach ($data[1] as $dataLine) {
             $table->addRow();
-
             for ($i = 0; $i < count($dataLine); $i++) {
                 $table->addCell(1750)->addText(strip_tags($dataLine[$i]));
             }

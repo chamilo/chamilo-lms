@@ -306,8 +306,9 @@ class FlatViewDataGenerator
         $users_count = null,
         $items_start = 0,
         $items_count = null,
-        $ignore_score_color = false,
-        $show_all = false
+        $ignoreScoreColor = false,
+        $show_all = false,
+        $onlyScore = false
     ) {
         // Do some checks on users/items counts, redefine if invalid values
         if (!isset($users_count)) {
@@ -457,6 +458,10 @@ class FlatViewDataGenerator
                 $defaultStyle = (int) $style;
             }
 
+            if ($onlyScore) {
+                $defaultStyle = SCORE_PERCENT;
+            }
+
             if (0 == $parent_id && !empty($allcat)) {
                 /** @var Category $sub_cat */
                 foreach ($allcat as $sub_cat) {
@@ -469,9 +474,9 @@ class FlatViewDataGenerator
                             $linkScore = $link->calc_score($user_id);
                             $linkScoreList[] = $scoreDisplay->display_score(
                                 $linkScore,
-                                SCORE_SIMPLE,
+                                $defaultStyle,
                                 null,
-                                $ignore_score_color
+                                $ignoreScoreColor
                             );
                         }
 
@@ -482,9 +487,9 @@ class FlatViewDataGenerator
                             $evalScore = $evaluation->calc_score($user_id);
                             $evalScoreList[] = $scoreDisplay->display_score(
                                 $evalScore,
-                                SCORE_SIMPLE,
+                                $defaultStyle,
                                 null,
-                                $ignore_score_color
+                                $ignoreScoreColor
                             );
                         }
                     }
@@ -504,17 +509,20 @@ class FlatViewDataGenerator
                         if (!empty($style)) {
                             $defaultShowPercentageValue = $style;
                         }
+                        if ($onlyScore) {
+                            $defaultShowPercentageValue = SCORE_PERCENT;
+                        }
                         $real_score = $scoreDisplay->display_score(
                             $real_score,
                             $defaultShowPercentageValue,
                             true,
-                            $ignore_score_color
+                            $ignoreScoreColor
                         );
                         $temp_score = $scoreDisplay->display_score(
                             $score,
                             SCORE_DIV_SIMPLE_WITH_CUSTOM,
                             null,
-                            $ignore_score_color
+                            $ignoreScoreColor
                         );
                         $temp_score = Display::tip($real_score, $temp_score);
                     } else {
@@ -522,13 +530,13 @@ class FlatViewDataGenerator
                             $real_score,
                             SCORE_DIV_PERCENT,
                             SCORE_ONLY_SCORE,
-                            $ignore_score_color
+                            $ignoreScoreColor
                         );
                         $temp_score = $scoreDisplay->display_score(
                             $score,
                             $defaultStyle,
                             null,
-                            $ignore_score_color
+                            $ignoreScoreColor
                         );
                         $temp_score = Display::tip($temp_score, $real_score);
                     }
@@ -569,7 +577,7 @@ class FlatViewDataGenerator
                     $row,
                     null,
                     [],
-                    $ignore_score_color
+                    $ignoreScoreColor
                 );
                 $item_value_total += $result['item_value_total'];
                 $evaluationsAdded = $result['evaluations_added'];
@@ -586,7 +594,8 @@ class FlatViewDataGenerator
                 $row,
                 $mainCategoryId,
                 $evaluationsAdded,
-                $ignore_score_color
+                $ignoreScoreColor,
+                $onlyScore
             );
 
             $item_total += $result['item_total'];
@@ -598,8 +607,8 @@ class FlatViewDataGenerator
                 $scoreDisplay->is_custom();
 
             if (!$show_all) {
-                $defaultStyle = empty($style) ? SCORE_DIV_PERCENT : (int) $style;
-                $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle, null, $ignore_score_color);
+                //$defaultStyle = empty($style) ? SCORE_DIV_PERCENT : (int) $style;
+                $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle, null, $ignoreScoreColor);
                 if (!empty($model)) {
                     $displayScore = ExerciseLib::show_score($total_score[0], $total_score[1]);
                 }
@@ -609,11 +618,11 @@ class FlatViewDataGenerator
                     $row[] = $displayScore;
                 }
             } else {
-                $defaultStyle = empty($style) ? SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS : (int) $style;
-                if ($ignore_score_color) {
+                /*$defaultStyle = empty($style) ? SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS : (int) $style;
+                if ($ignoreScoreColor) {
                     $defaultStyle = SCORE_DIV_PERCENT;
-                }
-                $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle, null, $ignore_score_color);
+                }*/
+                $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle, null, $ignoreScoreColor);
                 if (!empty($model)) {
                     $displayScore = ExerciseLib::show_score($total_score[0], $total_score[1]);
                 }
@@ -660,7 +669,8 @@ class FlatViewDataGenerator
         &$row,
         $parentCategoryIdFilter = null,
         $evaluationsAlreadyAdded = [],
-        $ignoreScoreDecorations = false
+        $ignoreScoreDecorations = false,
+        $onlyScore = false
     ) {
         // Generate actual data array
         $scoreDisplay = ScoreDisplay::instance();
@@ -674,6 +684,10 @@ class FlatViewDataGenerator
         if (!empty($style)) {
             $defaultStyle = (int) $style;
         }
+        if ($onlyScore) {
+            $defaultStyle = SCORE_PERCENT;
+        }
+
         $showPercentage = api_get_setting('gradebook_show_percentage_in_reports');
         for ($count = 0; $count < $items_count && ($items_start + $count < count($this->evals_links)); $count++) {
             /** @var AbstractLink $item */
@@ -737,7 +751,7 @@ class FlatViewDataGenerator
                 );
                 $temp_score = $scoreDisplay->display_score(
                     [$item_value, null],
-                    SCORE_DIV_SIMPLE_WITH_CUSTOM,
+                    $defaultStyle,
                     null,
                     $ignoreScoreDecorations
                 );

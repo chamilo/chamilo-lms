@@ -61,7 +61,9 @@ class Utils
         //    return 'Learner,urn:lti:role:ims/lis/Learner/GuestLearner';
         //}
 
-        if ($user->hasRole('ROLE_CURRENT_COURSE_STUDENT') || $user->hasRole('ROLE_CURRENT_SESSION_COURSE_STUDENT')) {
+        if ($user->hasRole('ROLE_CURRENT_COURSE_STUDENT') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+        ) {
             return 'Learner';
         }
 

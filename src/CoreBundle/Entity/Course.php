@@ -549,10 +549,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasUser(User $user)
+    public function hasUser(User $user): bool
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('user', $user)
@@ -561,10 +558,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getUsers()->matching($criteria)->count() > 0;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasStudent(User $user)
+    public function hasStudent(User $user): bool
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('user', $user)
@@ -573,10 +567,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getStudents()->matching($criteria)->count() > 0;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTeacher(User $user)
+    public function hasTeacher(User $user): bool
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('user', $user)
@@ -585,10 +576,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getTeachers()->matching($criteria)->count() > 0;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasGroup(CGroup $group)
+    public function hasGroup(CGroup $group): bool
     {
         /*$criteria = Criteria::create()->where(
             Criteria::expr()->eq('groups', $group)

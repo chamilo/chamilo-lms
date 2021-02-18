@@ -33,8 +33,8 @@ class ResourceNodeVoter extends Voter
     public const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
     public const ROLE_CURRENT_COURSE_GROUP_TEACHER = 'ROLE_CURRENT_COURSE_GROUP_TEACHER';
     public const ROLE_CURRENT_COURSE_GROUP_STUDENT = 'ROLE_CURRENT_COURSE_GROUP_STUDENT';
-    public const ROLE_CURRENT_SESSION_COURSE_TEACHER = 'ROLE_CURRENT_SESSION_COURSE_TEACHER';
-    public const ROLE_CURRENT_SESSION_COURSE_STUDENT = 'ROLE_CURRENT_SESSION_COURSE_STUDENT';
+    public const ROLE_CURRENT_COURSE_SESSION_TEACHER = 'ROLE_CURRENT_COURSE_SESSION_TEACHER';
+    public const ROLE_CURRENT_COURSE_SESSION_STUDENT = 'ROLE_CURRENT_COURSE_SESSION_STUDENT';
 
     private $requestStack;
     private $security;
@@ -93,10 +93,9 @@ class ResourceNodeVoter extends Voter
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         error_log('resourceNode voteOnAttribute');
-        $user = $token->getUser();
-
         // Make sure there is a user object (i.e. that the user is logged in)
         // Update. No, anons can enter a node depending in the visibility.
+        // $user = $token->getUser();
         /*if (!$user instanceof UserInterface) {
             return false;
         }*/
@@ -127,6 +126,7 @@ class ResourceNodeVoter extends Voter
                 break;
         }
 
+        $user = $token->getUser();
         // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
         if ($creator instanceof UserInterface &&
@@ -144,14 +144,14 @@ class ResourceNodeVoter extends Voter
         $groupId = (int) $request->get('gid');
 
         $links = $resourceNode->getResourceLinks();
-        $linkFound = 0;
+
         //$courseManager = $this->entityManager->getRepository(Course::class);
         //$sessionManager = $this->entityManager->getRepository(Session::class);
 
-        $course = null;
+        $linkFound = 0;
         $link = null;
-        $case = 0;
         // @todo implement view, edit, delete.
+        /** @var ResourceLink $link */
         foreach ($links as $link) {
             // Block access if visibility is deleted. Creator and admin have already access.
             if (ResourceLink::VISIBILITY_DELETED === $link->getVisibility()) {
@@ -241,9 +241,9 @@ class ResourceNodeVoter extends Voter
                 break;
             }*/
         }
-        //var_dump($linkFound, $link->getId()); exit;
+        //var_dump($linkFound, $link->getId(), $link->getVisibility()); exit;
 
-        // No link was found or not available.
+        // No link was found.
         if (0 === $linkFound) {
             return false;
         }
@@ -253,7 +253,7 @@ class ResourceNodeVoter extends Voter
         $allowAnonsToSee = false;
         $rights = [];
         if ($rightFromResourceLink->count() > 0) {
-            // Taken rights from the link
+            // Taken rights from the link.
             $rights = $rightFromResourceLink;
         } else {
             // Taken the rights from the default tool
@@ -267,8 +267,8 @@ class ResourceNodeVoter extends Voter
             $readerMask = self::getReaderMask();
             $editorMask = self::getEditorMask();
 
-            if ($courseId) {
-                // If is teacher.
+            if ($courseId && $link->hasCourse() && $link->getCourse()->getId() === $courseId) {
+                // If teacher.
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
                     $resourceRight = new ResourceRight();
                     $resourceRight
@@ -277,7 +277,7 @@ class ResourceNodeVoter extends Voter
                     $rights[] = $resourceRight;
                 }
 
-                // If is student.
+                // If student.
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT) &&
                     ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
                 ) {
@@ -289,7 +289,9 @@ class ResourceNodeVoter extends Voter
                 }
 
                 // For everyone.
-                if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() && $link->getCourse()->isPublic()) {
+                if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() &&
+                    $link->getCourse()->isPublic()
+                ) {
                     $allowAnonsToSee = true;
                     $resourceRight = new ResourceRight();
                     $resourceRight
@@ -300,35 +302,43 @@ class ResourceNodeVoter extends Voter
             }
 
             if (!empty($groupId)) {
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
-                ;
-                $rights[] = $resourceRight;
+                /*var_dump($groupId);
+                foreach ($user->getRoles() as $role) {
+                    var_dump($role);
+                }*/
+                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($editorMask)
+                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
+                    $rights[] = $resourceRight;
+                }
 
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($readerMask)
-                    ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
-                ;
-                $rights[] = $resourceRight;
+                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($readerMask)
+                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
+                    $rights[] = $resourceRight;
+                }
             }
 
             if (!empty($sessionId)) {
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(self::ROLE_CURRENT_SESSION_COURSE_TEACHER)
-                ;
-                $rights[] = $resourceRight;
+                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($editorMask)
+                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+                    $rights[] = $resourceRight;
+                }
 
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($readerMask)
-                    ->setRole(self::ROLE_CURRENT_SESSION_COURSE_STUDENT)
-                ;
-                $rights[] = $resourceRight;
+                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($readerMask)
+                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
+                    $rights[] = $resourceRight;
+                }
             }
 
             if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
@@ -341,7 +351,7 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
         }
-
+        //exit;
         //var_dump($allowAnonsToSee);
         /*foreach ($rights as $right) {
             var_dump($right->getRole());
@@ -367,8 +377,8 @@ class ResourceNodeVoter extends Voter
         $currentStudentGroup = new Role(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
         $currentTeacherGroup = new Role(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
 
-        $currentStudentSession = new Role(self::ROLE_CURRENT_SESSION_COURSE_STUDENT);
-        $currentTeacherSession = new Role(self::ROLE_CURRENT_SESSION_COURSE_TEACHER);
+        $currentStudentSession = new Role(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
+        $currentTeacherSession = new Role(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
 
         $superAdmin = new Role('ROLE_SUPER_ADMIN');
         $admin = new Role('ROLE_ADMIN');
@@ -385,7 +395,7 @@ class ResourceNodeVoter extends Voter
             ->addRole($currentTeacher, self::ROLE_CURRENT_COURSE_STUDENT)
 
             ->addRole($currentStudentSession)
-            ->addRole($currentTeacherSession, self::ROLE_CURRENT_SESSION_COURSE_STUDENT)
+            ->addRole($currentTeacherSession, self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
 
             ->addRole($currentStudentGroup)
             ->addRole($currentTeacherGroup, self::ROLE_CURRENT_COURSE_GROUP_STUDENT)

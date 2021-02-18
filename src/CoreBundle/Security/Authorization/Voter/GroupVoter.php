@@ -72,12 +72,23 @@ class GroupVoter extends Voter
         $group = $subject;
 
         // Legacy
-        return \GroupManager::userHasAccessToBrowse($user->getId(), $group);
+        //\GroupManager::userHasAccessToBrowse($user->getId(), $group);
+        $isTutor = $group->hasTutor($user);
 
         switch ($attribute) {
             case self::VIEW:
-                if (!$group->hasUserInCourse($user, $course)) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_STUDENT);
+                if ($isTutor) {
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
+
+                    return true;
+                }
+
+                if (0 === $group->getStatus()) {
+                    return false;
+                }
+
+                if ($group->hasMember($user)) {
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_STUDENT);
 
                     return true;
                 }
@@ -85,8 +96,8 @@ class GroupVoter extends Voter
                 break;
             case self::EDIT:
             case self::DELETE:
-                if (!$session->hasCoachInCourseWithStatus($user, $course)) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
+                if ($isTutor) {
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
 
                     return true;
                 }

@@ -319,8 +319,8 @@ class CourseListener
                 $user->removeRole('ROLE_CURRENT_COURSE_GROUP_STUDENT');
                 $user->removeRole('ROLE_CURRENT_COURSE_STUDENT');
                 $user->removeRole('ROLE_CURRENT_COURSE_TEACHER');
-                $user->removeRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
-                $user->removeRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                $user->removeRole('ROLE_CURRENT_COURSE_SESSION_STUDENT');
+                $user->removeRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
             }
         }
 

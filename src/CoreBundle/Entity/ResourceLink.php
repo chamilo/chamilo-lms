@@ -199,6 +199,11 @@ class ResourceLink
         return $this;
     }
 
+    public function hasCourse(): bool
+    {
+        return null !== $this->course;
+    }
+
     public function hasGroup(): bool
     {
         return null !== $this->group;

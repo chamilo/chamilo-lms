@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "post"={
  *             "controller"=CreateResourceNodeFileAction::class,
  *             "deserialize"=false,
- *             "security"="is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_SESSION_COURSE_TEACHER')",
+ *             "security"="is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
  *             "validation_groups"={"Default", "media_object_create", "document:write"},
  *             "openapi_context"={
  *                 "requestBody"={

@@ -368,7 +368,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * Set wikiState.
      *
-     * @param bool $wikiState
+     * @param int $wikiState
      */
     public function setWikiState($wikiState): self
     {
@@ -499,6 +499,24 @@ class CGroup extends AbstractResource implements ResourceInterface
     public function hasMembers(): bool
     {
         return $this->members->count() > 0;
+    }
+
+    public function hasMember(User $user): bool
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('user', $user)
+        );
+
+        return $this->members->matching($criteria)->count() > 0;
+    }
+
+    public function hasTutor(User $user): bool
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('user', $user)
+        );
+
+        return $this->tutors->matching($criteria)->count() > 0;
     }
 
     public function getTutors()

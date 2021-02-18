@@ -59,7 +59,7 @@ class ResourceVoter extends Voter
             self::DELETE,
             self::EXPORT,
         ];
-        error_log('resource supports');
+        //error_log('resource supports');
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, $options)) {
             return false;
@@ -75,8 +75,8 @@ class ResourceVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        error_log('resource voteOnAttribute');
-        $user = $token->getUser();
+        /*error_log('resource voteOnAttribute');
+        $user = $token->getUser();*/
 
         return true;
     }

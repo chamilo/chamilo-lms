@@ -33,16 +33,18 @@ final class StatementPostController
         $this->repository = $repository;
     }
 
-    public function postStatement(Request $request, Statement $statement)
-    {
-    }
-
     public function postStatements(Request $request, array $statements): JsonResponse
     {
-        $uuids = [];
+        $statementsToStore = [];
 
         /** @var Statement $statement */
         foreach ($statements as $statement) {
+            if (null === $statementId = $statement->getId()) {
+                $statementsToStore[] = $statement;
+
+                continue;
+            }
+
             try {
                 $existingStatement = $this->repository->findStatementById($statement->getId());
 
@@ -52,10 +54,14 @@ final class StatementPostController
                     );
                 }
             } catch (NotFoundException $e) {
-                $this->repository->storeStatement($statement, true);
+                $statementsToStore[] = $statement;
             }
+        }
 
-            $uuids[] = $statement->getId()->getValue();
+        $uuids = [];
+
+        foreach ($statementsToStore as $statement) {
+            $uuids[] = $this->repository->storeStatement($statement, true)->getValue();
         }
 
         return new JsonResponse($uuids);

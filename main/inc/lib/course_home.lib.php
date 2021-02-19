@@ -902,6 +902,7 @@ class CourseHome
 
         $items = [];
         $app_plugin = new AppPlugin();
+        $toolRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CTool');
         if (isset($all_tools_list)) {
             $lnk = '';
             foreach ($all_tools_list as &$tool) {
@@ -1006,14 +1007,16 @@ class CourseHome
                             'sessionId' => $session_id,
                         ];
                         /** @var CTool $tool */
-                        $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
+                        $toolObj = $toolRepo->findOneBy($criteria);
                         if ($toolObj) {
                             $visibility = (int) $toolObj->getVisibility();
                             switch ($visibility) {
                                 case 0:
-                                    $info = pathinfo($tool['image']);
-                                    $basename = basename($tool['image'], '.'.$info['extension']);
-                                    $tool['image'] = $basename.'_na.'.$info['extension'];
+                                    if (in_array($tool['image'], ['scormbuilder.png', 'scormbuilder.gif'])) {
+                                        $info = pathinfo($tool['image']);
+                                        $basename = basename($tool['image'], '.'.$info['extension']);
+                                        $tool['image'] = $basename.'_na.'.$info['extension'];
+                                    }
                                     $link['name'] = '<em
                                         id="'.'linktool_'.$tool['iid'].'"
                                         class="fa fa-eye-slash text-muted"

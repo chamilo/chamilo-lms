@@ -25,8 +25,14 @@ switch ($action) {
                 'sessionId' => 0,
                 'iid' => (int) $_GET['id'],
             ];
+
             /** @var CTool $tool */
             $tool = $repository->findOneBy($criteria);
+
+            if (null === $tool) {
+                return false;
+            }
+
             $visibility = 0;
             if ($tool) {
                 $visibility = $tool->getVisibility();
@@ -36,8 +42,8 @@ switch ($action) {
                 $criteria = [
                     'cId' => $course_id,
                     'sessionId' => $sessionId,
-                    'iid' => (int) $_GET['id'],
-                    //'name' => $tool->getName(),
+                    //'iid' => (int) $_GET['id'],
+                    'link' => $tool->getLink(),
                 ];
 
                 /** @var CTool $tool */

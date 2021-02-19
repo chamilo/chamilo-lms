@@ -27,7 +27,7 @@ Feature: Work tool
     And I wait for the page to be loaded
     Then I should see "Update successful"
 
-  Scenario: Send work as student
+  Scenario: Send work as student (acostea)
     Given I am not logged
     Given I am a student
     And I am on "/main/work/work.php?cid=1"
@@ -38,6 +38,7 @@ Feature: Work tool
     Then I follow "Upload my assignment"
     Then I should see "Upload a document"
     Then I follow "Upload (Simple)"
+    And wait for the page to be loaded
     Then I attach the file "/public/favicon.ico" to "form-work_file"
     And I press "Upload"
     And wait for the page to be loaded

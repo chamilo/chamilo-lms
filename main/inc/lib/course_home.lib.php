@@ -1094,13 +1094,13 @@ class CourseHome
                     }
                 }
 
-                if ($is_allowed_to_edit && $allowChangeVisibility) {
-                    if (false === $isSessionToolVisible &&
-                        ($tool['image'] === 'scormbuilder.gif' || $tool['image'] === 'scormbuilder_na.gif')
-                    ) {
-                        if (!strpos($tool['image'],'_na')) {
-                            $tool['image'] = $basename.'_na.'.$info['extension'];
-                        }
+                if ($is_allowed_to_edit && $allowChangeVisibility &&
+                    ($tool['image'] === 'scormbuilder.gif' || $tool['image'] === 'scormbuilder_na.gif')
+                ) {
+                    if (false === $isSessionToolVisible) {
+                        $tool['image'] = 'scormbuilder_na.gif';
+                    } else {
+                        $tool['image'] = 'scormbuilder.gif';
                     }
                 }
 

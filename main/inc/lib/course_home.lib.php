@@ -979,11 +979,12 @@ class CourseHome
                 $item['extra'] = null;
                 $toolAdmin = isset($tool['admin']) ? $tool['admin'] : '';
                 $extraClass = '';
+                $isSessionToolVisible = false;
                 if ($is_allowed_to_edit && $allowChangeVisibility) {
                     if (empty($session_id)) {
                         if (isset($tool['id'])) {
                             if ($tool['visibility'] == '1' && $toolAdmin != '1') {
-                                $tool['image'] = 'scormbuilder.gif';
+                                $isSessionToolVisible = true;
                                 $link['name'] = '<em
                                     id="'.'linktool_'.$tool['iid'].'"
                                     class="fa fa-eye"
@@ -992,7 +993,7 @@ class CourseHome
                                 $lnk[] = $link;
                             }
                             if ($tool['visibility'] == '0' && $toolAdmin != '1') {
-                                $tool['image'] = 'scormbuilder_na.gif';
+                                $isSessionToolVisible = false;
                                 $link['name'] = '<em
                                     id="'.'linktool_'.$tool['iid'].'"
                                     class="fa fa-eye-slash text-muted"
@@ -1014,6 +1015,7 @@ class CourseHome
                             $visibility = (int) $toolObj->getVisibility();
                             switch ($visibility) {
                                 case 0:
+                                    $isSessionToolVisible = false;
                                     if (in_array($tool['image'], ['scormbuilder.png', 'scormbuilder.gif'])) {
                                         $info = pathinfo($tool['image']);
                                         $basename = basename($tool['image'], '.'.$info['extension']);
@@ -1028,7 +1030,7 @@ class CourseHome
                                     $lnk[] = $link;
                                     break;
                                 case 1:
-                                    $tool['image'] = 'scormbuilder.gif';
+                                    $isSessionToolVisible = true;
                                     $link['name'] = '<em
                                         id="'.'linktool_'.$tool['iid'].'"
                                         class="fa fa-eye"
@@ -1038,7 +1040,7 @@ class CourseHome
                                     break;
                             }
                         } else {
-                            $tool['image'] = 'scormbuilder.gif';
+                            $isSessionToolVisible = true;
                             $link['name'] = '<em
                                 id="'.'linktool_'.$tool['iid'].'"
                                 class="fa fa-eye"
@@ -1082,13 +1084,23 @@ class CourseHome
                 }
 
                 $class = '';
+                $info = pathinfo($tool['image']);
+                $basename = basename($tool['image'], '.'.$info['extension']);
+
                 if ($tool['visibility'] == '0' && $toolAdmin != '1') {
                     $class = 'text-muted';
-                    $info = pathinfo($tool['image']);
-                    $basename = basename($tool['image'], '.'.$info['extension']);
-
                     if (!strpos($tool['image'],'_na')) {
                         $tool['image'] = $basename.'_na.'.$info['extension'];
+                    }
+                }
+
+                if ($is_allowed_to_edit && $allowChangeVisibility) {
+                    if (false === $isSessionToolVisible &&
+                        ($tool['image'] === 'scormbuilder.gif' || $tool['image'] === 'scormbuilder_na.gif')
+                    ) {
+                        if (!strpos($tool['image'],'_na')) {
+                            $tool['image'] = $basename.'_na.'.$info['extension'];
+                        }
                     }
                 }
 

@@ -108,7 +108,6 @@ class LearnpathList
 
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
-            $name = Database::escape_string($row->getName());
             $link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
             $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
 
@@ -134,8 +133,22 @@ class LearnpathList
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = (int) $row2['visibility'];
-                if (!empty($session_id) && 0 === $pub) {
+                if (!empty($session_id)) {
                     $pub = 'i';
+                    // Check exact value in session:
+                    $sql3 = "SELECT visibility FROM $tbl_tool
+                             WHERE
+                                c_id = $course_id AND
+                                image = 'scormbuilder.gif' AND
+                                (   link LIKE '$extraLink'
+                                )
+                                $toolSessionCondition
+                              ";
+                    $res3 = Database::query($sql3);
+                    if (Database::num_rows($res3)) {
+                        $pub = 'v';
+                    }
+                    //$pub = 0 === $pub ? 'i' : 'v';
                 }
             }
 

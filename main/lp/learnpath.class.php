@@ -4528,13 +4528,13 @@ class learnpath
                     if (Database::num_rows($resultBaseLp)) {
                         $resultBaseLpRow = Database::fetch_array($resultBaseLp);
                         $id = $resultBaseLpRow['iid'];
-                        $sql = "UPDATE $tbl_tool
+                        /*$sql = "UPDATE $tbl_tool
                                 SET visibility = 0
                                 WHERE iid = $id ";
-                        Database::query($sql);
-                        /*$sql = "DELETE FROM $tbl_tool
-                                WHERE iid = $id";
                         Database::query($sql);*/
+                        $sql = "DELETE FROM $tbl_tool
+                                WHERE iid = $id";
+                        Database::query($sql);
                     } else {
                         $params = [
                             'category' => 'authoring',

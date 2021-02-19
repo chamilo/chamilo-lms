@@ -4484,7 +4484,7 @@ class learnpath
             $extraLink = '';
             if (!empty($session_id)) {
                 $extraLink = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session=0';
-                $extraLpCondition = " OR (link = '$extraLink' AND session_id = $session_id  )  ";
+                $extraLpCondition = " OR (link = '$link' AND session_id = $session_id )  ";
             }
 
             $sql = "SELECT * FROM $tbl_tool
@@ -4540,7 +4540,7 @@ class learnpath
                             'category' => 'authoring',
                             'c_id' => $course_id,
                             'name' => $name,
-                            'link' => $extraLink,
+                            'link' => $link,
                             'image' => 'scormbuilder.gif',
                             'visibility' => '0',
                             'admin' => '0',

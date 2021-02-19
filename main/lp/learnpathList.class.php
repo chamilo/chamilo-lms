@@ -134,20 +134,20 @@ class LearnpathList
                 $row2 = Database::fetch_array($res2);
                 $pub = (int) $row2['visibility'];
                 if (!empty($session_id)) {
-                    $pub = 'i';
+                    $pub = 'v';
                     // Check exact value in session:
-                    $sql3 = "SELECT visibility FROM $tbl_tool
+                    /*$sql3 = "SELECT visibility FROM $tbl_tool
                              WHERE
                                 c_id = $course_id AND
                                 image = 'scormbuilder.gif' AND
-                                (   link LIKE '$extraLink'
+                                (   link LIKE '$link'
                                 )
                                 $toolSessionCondition
                               ";
                     $res3 = Database::query($sql3);
                     if (Database::num_rows($res3)) {
                         $pub = 'v';
-                    }
+                    }*/
                     //$pub = 0 === $pub ? 'i' : 'v';
                 }
             }

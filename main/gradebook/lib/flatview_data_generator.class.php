@@ -731,9 +731,13 @@ class FlatViewDataGenerator
             }
 
             $item_total += $item->get_weight();
+            $totalType = SCORE_DIV_PERCENT;
+            if ($onlyScore) {
+                $totalType = SCORE_PERCENT;
+            }
             $complete_score = $scoreDisplay->display_score(
                 $score,
-                SCORE_DIV_PERCENT,
+                $totalType,
                 SCORE_ONLY_SCORE,
                 $ignoreScoreDecorations
             );

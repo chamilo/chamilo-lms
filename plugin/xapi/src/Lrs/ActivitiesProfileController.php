@@ -38,6 +38,7 @@ class ActivitiesProfileController extends BaseController
             json_encode($activityProfile->getDocumentData())
         );
     }
+
     public function put(): Response
     {
         $profileId = $this->httpRequest->query->get('profileId');

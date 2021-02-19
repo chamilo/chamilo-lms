@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
-
-/* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ActivityState;
 use Database;

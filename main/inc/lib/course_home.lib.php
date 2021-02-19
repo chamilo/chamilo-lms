@@ -722,7 +722,12 @@ class CourseHome
                     break;
                 case 'lp_category.gif':
                     $lpCategory = self::getPublishedLpCategoryFromLink($temp_row['link']);
-                    $add = learnpath::categoryIsVisibleForStudent($lpCategory, $user);
+                    if ($showInvisibleLpsForStudents) {
+                        $add = true;
+                    } else {
+                        $add = learnpath::categoryIsVisibleForStudent($lpCategory, $user);
+                    }
+
                     break;
             }
 

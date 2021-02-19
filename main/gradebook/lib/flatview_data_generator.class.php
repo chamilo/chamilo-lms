@@ -743,6 +743,10 @@ class FlatViewDataGenerator
                 if (!empty($style)) {
                     $defaultShowPercentageValue = $style;
                 }
+                if ($onlyScore) {
+                    $defaultShowPercentageValue = SCORE_PERCENT;
+                }
+
                 $real_score = $scoreDisplay->display_score(
                     $real_score,
                     $defaultShowPercentageValue,

@@ -1098,7 +1098,7 @@ class CourseHome
 
                 if ($tool['visibility'] == '0' && $toolAdmin != '1') {
                     $class = 'text-muted';
-                    if (!strpos($tool['image'],'_na')) {
+                    if (!strpos($tool['image'], '_na')) {
                         $tool['image'] = $basename.'_na.'.$info['extension'];
                     }
                 }

@@ -28,11 +28,9 @@ switch ($action) {
 
             /** @var CTool $tool */
             $tool = $repository->findOneBy($criteria);
-
             $visibility = 0;
-
             if ($allowEditionInSession && !empty($sessionId)) {
-                $newLink = str_replace('id_session=0', 'id_session='.$sessionId,$tool->getLink());
+                $newLink = str_replace('id_session=0', 'id_session='.$sessionId, $tool->getLink());
                 $criteria = [
                     'cId' => $course_id,
                     'sessionId' => $sessionId,

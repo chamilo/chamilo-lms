@@ -1134,7 +1134,9 @@ class CourseHome
                 if ($tool['image'] === 'file_html.png' || $tool['image'] === 'file_html_na.png') {
                     $tool['link'] = $tool['link'];
                 } else {
-                    $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq(true, false).'&gidReq=0';
+                    if (!in_array($tool['image'], ['lp_category.gif', 'lp_category_na.gif'])) {
+                        $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq(true, false).'&gidReq=0';
+                    }
                 }
 
                 $toolIid = isset($tool['iid']) ? $tool['iid'] : null;

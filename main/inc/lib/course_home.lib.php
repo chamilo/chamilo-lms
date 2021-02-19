@@ -983,6 +983,7 @@ class CourseHome
                     if (empty($session_id)) {
                         if (isset($tool['id'])) {
                             if ($tool['visibility'] == '1' && $toolAdmin != '1') {
+                                $tool['image'] = 'scormbuilder.gif';
                                 $link['name'] = '<em
                                     id="'.'linktool_'.$tool['iid'].'"
                                     class="fa fa-eye"
@@ -991,6 +992,7 @@ class CourseHome
                                 $lnk[] = $link;
                             }
                             if ($tool['visibility'] == '0' && $toolAdmin != '1') {
+                                $tool['image'] = 'scormbuilder_na.gif';
                                 $link['name'] = '<em
                                     id="'.'linktool_'.$tool['iid'].'"
                                     class="fa fa-eye-slash text-muted"
@@ -1026,6 +1028,7 @@ class CourseHome
                                     $lnk[] = $link;
                                     break;
                                 case 1:
+                                    $tool['image'] = 'scormbuilder.gif';
                                     $link['name'] = '<em
                                         id="'.'linktool_'.$tool['iid'].'"
                                         class="fa fa-eye"
@@ -1035,6 +1038,7 @@ class CourseHome
                                     break;
                             }
                         } else {
+                            $tool['image'] = 'scormbuilder.gif';
                             $link['name'] = '<em
                                 id="'.'linktool_'.$tool['iid'].'"
                                 class="fa fa-eye"
@@ -1082,7 +1086,10 @@ class CourseHome
                     $class = 'text-muted';
                     $info = pathinfo($tool['image']);
                     $basename = basename($tool['image'], '.'.$info['extension']);
-                    $tool['image'] = $basename.'_na.'.$info['extension'];
+
+                    if (!strpos($tool['image'],'_na')) {
+                        $tool['image'] = $basename.'_na.'.$info['extension'];
+                    }
                 }
 
                 $qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&';

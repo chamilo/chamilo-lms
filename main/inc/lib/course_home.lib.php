@@ -932,17 +932,34 @@ class CourseHome
                 $tool['original_link'] = $tool['link'];
 
                 if ($tool['image'] === 'lp_category.gif') {
-                    if ($session_id && api_is_coach()) {
-                        $lpCategory = self::getPublishedLpCategoryFromLink($tool['link']);
-                        $itemInfo = api_get_item_property_info(
-                            $courseId,
-                            TOOL_LEARNPATH_CATEGORY,
-                            $lpCategory->getId(),
-                            $session_id
-                        );
+                    if ($session_id) {
+                        if (api_is_coach() || api_is_allowed_to_edit()) {
+                            $lpCategory = self::getPublishedLpCategoryFromLink($tool['link']);
+                            $itemInfo = api_get_item_property_info(
+                                $courseId,
+                                TOOL_LEARNPATH_CATEGORY,
+                                $lpCategory->getId(),
+                                $session_id
+                            );
 
-                        if ($itemInfo && 0 === (int) $itemInfo['visibility']) {
-                            $tool['image'] = 'lp_category_na.gif';
+                            if ($itemInfo && 0 === (int) $itemInfo['visibility']) {
+                                $tool['image'] = 'lp_category_na.gif';
+                            }
+                        } else {
+                            $categoryInSessionName = str_replace('id_session', $session_id,$tool['name']);
+                            $criteria = [
+                                'cId' => $courseId,
+                                'name' => $categoryInSessionName,
+                                'sessionId' => $session_id,
+                            ];
+                            /** @var CTool $tool */
+                            $toolObj = $toolRepo->findOneBy($criteria);
+                            if ($toolObj) {
+                                $visibility = (int) $toolObj->getVisibility();
+                                if (0 === $visibility) {
+                                    continue;
+                                }
+                            }
                         }
                     }
                 }

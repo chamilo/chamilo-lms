@@ -27,7 +27,10 @@ switch ($action) {
             ];
             /** @var CTool $tool */
             $tool = $repository->findOneBy($criteria);
-            $visibility = $tool->getVisibility();
+            $visibility = 0;
+            if ($tool) {
+                $visibility = $tool->getVisibility();
+            }
 
             if ($allowEditionInSession && !empty($sessionId)) {
                 $criteria = [
@@ -48,7 +51,7 @@ switch ($action) {
                     $toolInSession->setIid(0);
                     $toolInSession->setId(0);
                     $toolInSession->setVisibility(0);
-                    $toolInSession->setSessionId($session_id);
+                    $toolInSession->setSessionId($sessionId);
                     $em->persist($toolInSession);
                     $em->flush();
                     // Update id with iid
@@ -63,7 +66,7 @@ switch ($action) {
             $toolImage = $tool->getImage();
             $customIcon = $tool->getCustomIcon();
 
-            if (api_get_setting('homepage_view') != 'activity_big') {
+            if (api_get_setting('homepage_view') !== 'activity_big') {
                 $toolImage = Display::return_icon(
                     $toolImage,
                     null,

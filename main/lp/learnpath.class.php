@@ -4520,7 +4520,7 @@ class learnpath
                     $sql = "SELECT iid FROM $tbl_tool
                             WHERE
                                 c_id = $course_id AND
-                                link = '$extraLink' AND
+                                (link = '$extraLink') AND
                                 image = 'scormbuilder.gif' AND
                                 session_id = $session_id
                     ";
@@ -4536,7 +4536,7 @@ class learnpath
                                 WHERE iid = $id";
                         Database::query($sql);
                     } else {
-                        $params = [
+                        /*$params = [
                             'category' => 'authoring',
                             'c_id' => $course_id,
                             'name' => $name,
@@ -4552,7 +4552,7 @@ class learnpath
                         if ($insertId) {
                             $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
                             Database::query($sql);
-                        }
+                        }*/
                     }
                 }
             }

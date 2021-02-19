@@ -577,7 +577,8 @@ class FlatViewDataGenerator
                     $row,
                     null,
                     [],
-                    $ignoreScoreColor
+                    $ignoreScoreColor,
+                    $onlyScore
                 );
                 $item_value_total += $result['item_value_total'];
                 $evaluationsAdded = $result['evaluations_added'];

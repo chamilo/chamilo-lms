@@ -1113,6 +1113,16 @@ class CourseHome
                     }
                 }
 
+                if ($is_allowed_to_edit && $allowChangeVisibility &&
+                    ($tool['image'] === 'lp_category.gif' || $tool['image'] === 'lp_category_na.gif')
+                ) {
+                    if (false === $isSessionToolVisible) {
+                        $tool['image'] = 'lp_category_na.gif';
+                    } else {
+                        $tool['image'] = 'lp_category.gif';
+                    }
+                }
+
                 $qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&';
 
                 // If it's a link, we don't add the cidReq

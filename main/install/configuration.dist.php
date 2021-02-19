@@ -1838,6 +1838,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Allow coach users to always edit announcements inside active/past sessions.
 // $_configuration['allow_coach_to_edit_announcements'] = false;
 
+// Show invisible LP in the course home for students. BT#17744
+//$_configuration['show_invisible_lp_in_course_home'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

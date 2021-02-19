@@ -656,6 +656,7 @@ class CourseHome
         });
 
         $isAllowToEdit = api_is_allowed_to_edit(null, true);
+        $showInvisibleLpsForStudents = api_get_configuration_value('show_invisible_lp_in_course_home');
         foreach ($tools as $temp_row) {
             $add = false;
             if ($check) {
@@ -666,7 +667,10 @@ class CourseHome
                 $add = true;
             }
 
-            if ($allowEditionInSession && !empty($sessionId)) {
+            if (false === $showInvisibleLpsForStudents &&
+                false === $isAllowToEdit &&
+                $allowEditionInSession && !empty($sessionId)
+            ) {
                 // Checking if exist row in session
                 $criteria = [
                     'cId' => $course_id,
@@ -675,10 +679,8 @@ class CourseHome
                 ];
                 /** @var CTool $toolObj */
                 $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
-                if ($toolObj) {
-                    if ($isAllowToEdit == false && $toolObj->getVisibility() == false) {
-                        continue;
-                    }
+                if ($toolObj && $toolObj->getVisibility() == false) {
+                    continue;
                 }
             }
 
@@ -695,16 +697,20 @@ class CourseHome
                     if ($isAllowToEdit) {
                         $add = true;
                     } else {
-                        $add = learnpath::is_lp_visible_for_student(
-                            $lpId,
-                            $userId,
-                            $courseInfo,
-                            $sessionId
-                        );
-                        // Check if LP is visible.
-                        $visibility = api_get_item_visibility($courseInfo, TOOL_LEARNPATH, $lpId, $sessionId);
-                        if (1 !== $visibility) {
-                            $add = false;
+                        if ($showInvisibleLpsForStudents) {
+                            $add = true;
+                        } else {
+                            $add = learnpath::is_lp_visible_for_student(
+                                $lpId,
+                                $userId,
+                                $courseInfo,
+                                $sessionId
+                            );
+                            // Check if LP is visible.
+                            $visibility = api_get_item_visibility($courseInfo, TOOL_LEARNPATH, $lpId, $sessionId);
+                            if (1 !== $visibility) {
+                                $add = false;
+                            }
                         }
                     }
                     if ($path) {

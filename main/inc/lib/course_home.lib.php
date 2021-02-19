@@ -530,7 +530,11 @@ class CourseHome
                             category = "authoring" OR
                             category = "interaction" OR
                             category = "plugin"
-                        ) OR (t.name = "'.TOOL_TRACKING.'")
+                        ) OR
+                        (t.name = "'.TOOL_TRACKING.'")
+                        OR (
+                            image = "scormbuilder.gif"
+                        )
                     )';
                 }
 
@@ -562,7 +566,6 @@ class CourseHome
                         ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
                         $conditions AND
                         t.c_id = $course_id $condition_session
-
                         ORDER BY
                             CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
                             CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,

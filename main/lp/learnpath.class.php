@@ -4502,6 +4502,7 @@ class learnpath
 
             $result = Database::query($sql);
             $num = Database::num_rows($result);
+            $resultTool = Database::fetch_array($result, 'ASSOC');
 
             if ($set_visibility === 'i') {
                 if ($num > 0) {
@@ -4531,6 +4532,9 @@ class learnpath
                                 SET visibility = 0
                                 WHERE iid = $id ";
                         Database::query($sql);
+                        /*$sql = "DELETE FROM $tbl_tool
+                                WHERE iid = $id";
+                        Database::query($sql);*/
                     } else {
                         $params = [
                             'category' => 'authoring',
@@ -4565,6 +4569,7 @@ class learnpath
                     }
                 }
                 if ($num > 0) {
+                    $id = $resultTool['iid'];
                     $sql = "UPDATE $tbl_tool SET
                         c_id = $course_id,
                         name = '$name',
@@ -4577,9 +4582,7 @@ class learnpath
                         session_id = $session_id
                     WHERE
                         c_id = ".$course_id." AND
-                        (link = '$link' OR link = '$oldLink') AND
-                        image='scormbuilder.gif'
-                        $session_condition
+                        iid = $id
                     ";
                     Database::query($sql);
                 }

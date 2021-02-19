@@ -36,7 +36,8 @@ switch ($action) {
                 $criteria = [
                     'cId' => $course_id,
                     'sessionId' => $sessionId,
-                    'name' => $tool->getName(),
+                    'iid' => (int) $_GET['id'],
+                    //'name' => $tool->getName(),
                 ];
 
                 /** @var CTool $tool */

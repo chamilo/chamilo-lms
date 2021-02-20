@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,9 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_attendance_result",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="attendance_id", columns={"attendance_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"})
  *  }
  * )
  * @ORM\Entity
@@ -31,25 +29,16 @@ class CAttendanceResult
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $cId;
+    protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
      */
-    protected $userId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="attendance_id", type="integer", nullable=false)
-     */
-    protected $attendanceId;
+    protected CAttendance $attendance;
 
     /**
      * @var int
@@ -58,62 +47,39 @@ class CAttendanceResult
      */
     protected $score;
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
     /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
      * @return CAttendanceResult
      */
-    public function setUserId($userId)
+    public function setUser(User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
+    public function getAttendance(): CAttendance
     {
-        return $this->userId;
+        return $this->attendance;
     }
 
-    /**
-     * Set attendanceId.
-     *
-     * @param int $attendanceId
-     *
-     * @return CAttendanceResult
-     */
-    public function setAttendanceId($attendanceId)
+    public function setAttendance(CAttendance $attendance): self
     {
-        $this->attendanceId = $attendanceId;
+        $this->attendance = $attendance;
 
         return $this;
-    }
-
-    /**
-     * Get attendanceId.
-     *
-     * @return int
-     */
-    public function getAttendanceId()
-    {
-        return $this->attendanceId;
     }
 
     /**
      * Set score.
      *
      * @param int $score
-     *
-     * @return CAttendanceResult
      */
-    public function setScore($score)
+    public function setScore($score): self
     {
         $this->score = $score;
 
@@ -128,29 +94,5 @@ class CAttendanceResult
     public function getScore()
     {
         return $this->score;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAttendanceResult
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

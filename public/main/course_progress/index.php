@@ -137,11 +137,9 @@ $interbreadcrumb[] = [
 $actionLeft = '';
 // instance thematic object for using like library here
 $thematicManager = new Thematic();
-
 $thematicEntity = null;
+$repo = Container::getThematicRepository();
 if (!empty($thematicId)) {
-    $repo = Container::getThematicRepository();
-    // thematic data by id
     /** @var CThematic $thematicEntity */
     $thematicEntity = $repo->find($thematicId);
 }
@@ -383,7 +381,6 @@ switch ($action) {
         Export::arrayToCsv($csv);
         exit;
         break;
-
     case 'export_documents':
     case 'thematic_export_pdf':
         $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
@@ -491,6 +488,7 @@ switch ($action) {
         $tpl->assign('token', $url_token);
         $tpl->assign('is_allowed_to_edit', $isTeacher);
         $toolbar = null;
+        $last_done_thematic_advance = null;
         if ($thematicEntity) {
             $thematic_data[$thematicId] = $thematicEntity;
             $data['total_average_of_advances'] = $thematicManager->get_average_of_advances_by_thematic($thematicId);
@@ -600,8 +598,9 @@ switch ($action) {
                                 Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                         }
                     }
-                    if (0) {
-                    //if (api_get_session_id() == $thematic->getSessionId()) {
+
+                    if (true) {
+                        //if (api_get_session_id() == $thematic->getSessionId()) {
                         $toolbarThematic .= Display::url(
                             Display::return_icon('pdf.png', get_lang('Export to PDF'), null, ICON_SIZE_TINY),
                             api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query(
@@ -612,7 +611,7 @@ switch ($action) {
                             ),
                             ['class' => 'btn btn-default']
                         );
-                        $toolbarThematic .= Display::url(
+                        /*$toolbarThematic .= Display::url(
                             Display::return_icon(
                                 'export_to_documents.png',
                                 get_lang('Export latest version of this page to Documents'),
@@ -623,7 +622,7 @@ switch ($action) {
                                 ['action' => 'export_single_documents', 'thematic_id' => $id]
                             ),
                             ['class' => 'btn btn-default']
-                        );
+                        );*/
                         $toolbarThematic .= '<a
                             class="btn btn-default"
                             href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$id.$params.$url_token.'">'
@@ -927,7 +926,7 @@ switch ($action) {
         }
         $form->addGroup(
             [
-                $form->addButton(
+                /*$form->addButton(
                     'add_item',
                     get_lang('Save and add new item'),
                     'plus',
@@ -936,7 +935,7 @@ switch ($action) {
                     null,
                     [],
                     true
-                ),
+                ),*/
                 $form->addButtonSave(get_lang('Save'), 'submit', true),
             ]
         );
@@ -1191,7 +1190,11 @@ switch ($action) {
 
         if (!empty($thematicAdvanceId)) {
             if (api_is_allowed_to_edit(null, true)) {
-                $thematicManager->thematic_advance_destroy($thematicAdvanceId);
+                $repo = Container::getThematicAdvanceRepository();
+                $advance = $repo->find($thematicAdvanceId);
+                if ($advance) {
+                    $repo->delete($advance);
+                }
             }
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             header('Location: '.$currentUrl);

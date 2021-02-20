@@ -33,11 +33,9 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     protected $path;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
      * @var int
@@ -47,12 +45,10 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     protected $size;
 
     /**
-     * @var CAnnouncement
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncement", cascade={"persist"})
      * @ORM\JoinColumn(name="announcement_id", referencedColumnName="iid", onDelete="CASCADE" )
      */
-    protected $announcement;
+    protected CAnnouncement $announcement;
 
     /**
      * @var string
@@ -70,10 +66,8 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
      * Set path.
      *
      * @param string $path
-     *
-     * @return CAnnouncementAttachment
      */
-    public function setPath($path)
+    public function setPath($path): self
     {
         $this->path = $path;
 
@@ -173,9 +167,6 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

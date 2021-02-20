@@ -1057,7 +1057,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         foreach ($result as $item) {
             $list = [
                 'Presence: '.$item->getPresence(),
-                'Calendar id: '.$item->getAttendanceCalendarId(),
+                'Calendar id: '.$item->getAttendanceCalendar()->getIid(),
             ];
             $cAttendanceSheetList[] = implode(', ', $list);
         }
@@ -1088,7 +1088,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         foreach ($result as $item) {
             $list = [
                 'Score : '.$item->getScore(),
-                'Calendar id: '.$item->getAttendanceId(),
+                'Calendar id: '.$item->getAttendance()->getIid(),
             ];
             $cAttendanceResult[] = implode(', ', $list);
         }

@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_attendance_calendar_rel_group",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="group", columns={"group_id"})
  *  }
  * )
  * @ORM\Entity
@@ -30,95 +28,46 @@ class CAttendanceCalendarRelGroup
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
      */
-    protected $cId;
+    protected CGroup $group;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceCalendar")
+     * @ORM\JoinColumn(name="calendar_id", referencedColumnName="iid")
      */
-    protected $groupId;
+    protected CAttendanceCalendar $attendanceCalendar;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="calendar_id", type="integer", nullable=false)
+     * @return int
      */
-    protected $calendarId;
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAttendanceCalendarRelGroup
-     */
-    public function setCId($cId)
+    public function getIid()
     {
-        $this->cId = $cId;
+        return $this->iid;
+    }
+
+    public function getGroup(): CGroup
+    {
+        return $this->group;
+    }
+
+    public function setGroup(CGroup $group): self
+    {
+        $this->group = $group;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getAttendanceCalendar(): CAttendanceCalendar
     {
-        return $this->cId;
+        return $this->attendanceCalendar;
     }
 
-    /**
-     * Set groupId.
-     *
-     * @param int $groupId
-     *
-     * @return CAttendanceCalendarRelGroup
-     */
-    public function setGroupId($groupId)
+    public function setAttendanceCalendar(CAttendanceCalendar $attendanceCalendar): self
     {
-        $this->groupId = $groupId;
+        $this->attendanceCalendar = $attendanceCalendar;
 
         return $this;
-    }
-
-    /**
-     * Get groupId.
-     *
-     * @return int
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * Set calendarId.
-     *
-     * @param int $calendarId
-     *
-     * @return CAttendanceCalendarRelGroup
-     */
-    public function setCalendarId($calendarId)
-    {
-        $this->calendarId = $calendarId;
-
-        return $this;
-    }
-
-    /**
-     * Get calendarId.
-     *
-     * @return int
-     */
-    public function getCalendarId()
-    {
-        return $this->calendarId;
     }
 }

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,8 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_attendance_sheet",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="user", columns={"user_id"}),
  *      @ORM\Index(name="presence", columns={"presence"})
  *  }
  * )
@@ -31,13 +30,6 @@ class CAttendanceSheet
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="presence", type="boolean", nullable=false)
@@ -45,18 +37,16 @@ class CAttendanceSheet
     protected $presence;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $userId;
+    protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="attendance_calendar_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceCalendar")
+     * @ORM\JoinColumn(name="attendance_calendar_id", referencedColumnName="iid")
      */
-    protected $attendanceCalendarId;
+    protected CAttendanceCalendar $attendanceCalendar;
 
     /**
      * Set presence.
@@ -82,75 +72,27 @@ class CAttendanceSheet
         return $this->presence;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAttendanceSheet
-     */
-    public function setCId($cId)
+    public function getUser(): User
     {
-        $this->cId = $cId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getAttendanceCalendar(): CAttendanceCalendar
     {
-        return $this->cId;
+        return $this->attendanceCalendar;
     }
 
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CAttendanceSheet
-     */
-    public function setUserId($userId)
+    public function setAttendanceCalendar(CAttendanceCalendar $attendanceCalendar): self
     {
-        $this->userId = $userId;
+        $this->attendanceCalendar = $attendanceCalendar;
 
         return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set attendanceCalendarId.
-     *
-     * @param int $attendanceCalendarId
-     *
-     * @return CAttendanceSheet
-     */
-    public function setAttendanceCalendarId($attendanceCalendarId)
-    {
-        $this->attendanceCalendarId = $attendanceCalendarId;
-
-        return $this;
-    }
-
-    /**
-     * Get attendanceCalendarId.
-     *
-     * @return int
-     */
-    public function getAttendanceCalendarId()
-    {
-        return $this->attendanceCalendarId;
     }
 }

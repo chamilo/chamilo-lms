@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_attendance_calendar",
  *  indexes={
- *      @ORM\Index(name="attendance_id", columns={"attendance_id"}),
  *      @ORM\Index(name="done_attendance", columns={"done_attendance"})
  *  }
  * )
@@ -30,11 +29,10 @@ class CAttendanceCalendar
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="attendance_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
      */
-    protected $attendanceId;
+    protected CAttendance $attendance;
 
     /**
      * @var \DateTime
@@ -55,38 +53,24 @@ class CAttendanceCalendar
         return $this->iid;
     }
 
-    /**
-     * Set attendanceId.
-     *
-     * @param int $attendanceId
-     *
-     * @return CAttendanceCalendar
-     */
-    public function setAttendanceId($attendanceId)
+    public function getAttendance(): CAttendance
     {
-        $this->attendanceId = $attendanceId;
-
-        return $this;
+        return $this->attendance;
     }
 
-    /**
-     * Get attendanceId.
-     *
-     * @return int
-     */
-    public function getAttendanceId()
+    public function setAttendance(CAttendance $attendance): self
     {
-        return $this->attendanceId;
+        $this->attendance = $attendance;
+
+        return $this;
     }
 
     /**
      * Set dateTime.
      *
      * @param \DateTime $dateTime
-     *
-     * @return CAttendanceCalendar
      */
-    public function setDateTime($dateTime)
+    public function setDateTime($dateTime): self
     {
         $this->dateTime = $dateTime;
 

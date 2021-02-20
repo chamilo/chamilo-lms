@@ -405,38 +405,7 @@ switch ($action) {
         if ('attendance_sheet_list_no_edit' === $action) {
             $edit = false;
         }
-        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
-        $users_in_course = $attendance->get_users_rel_course($attendanceId, $groupId);
-
-        $filter_type = 'today';
-        if (!empty($_REQUEST['filter'])) {
-            $filter_type = $_REQUEST['filter'];
-        }
-
-        if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
-            $my_calendar_id = null;
-            if (is_numeric($filter_type)) {
-                $my_calendar_id = $filter_type;
-                $filter_type = 'calendar_id';
-            }
-            $attendant_calendar = $attendance->get_attendance_calendar(
-                $attendanceId,
-                $filter_type,
-                $my_calendar_id,
-                $groupId
-            );
-            $attendant_calendar_all = $attendance->get_attendance_calendar(
-                $attendanceId,
-                'all',
-                null,
-                $groupId
-            );
-            $users_presence = $attendance->get_users_attendance_sheet($attendanceId, 0, $groupId);
-            $next_attendance_calendar_id = $attendance->get_next_attendance_calendar_id($attendanceId);
-            $next_attendance_calendar_datetime = $attendance->getNextAttendanceCalendarDatetime($attendanceId);
-        }
-        $content = $attendance->getCalendarSheet($edit, $attendanceId, $student_id);
-
+        $content = $attendance->getCalendarSheet($edit, $attendanceEntity, $student_id);
         $tpl->assign('table', $content);
         $content = $tpl->fetch('@ChamiloCore/Attendance/sheet.html.twig');
         break;
@@ -462,7 +431,7 @@ switch ($action) {
                 $attendance->attendance_sheet_add(
                     $cal_id,
                     $users_present,
-                    $attendanceId
+                    $attendanceEntity
                 );
             }
         }
@@ -650,8 +619,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $attendance->attendance_calendar_delete(0, $attendanceId, true);
-
+        $attendance->attendance_calendar_delete(0, $attendanceEntity, true);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
 
         header('Location: '.$currentUrl.'&action=calendar_list&attendance_id='.$attendanceId);
@@ -661,7 +629,7 @@ switch ($action) {
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
-        $attendance->attendance_calendar_delete($calendarId, $attendanceId);
+        $attendance->attendance_calendar_delete($calendarId, $attendanceEntity);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
 
         header('Location: '.$currentUrl.'&action=calendar_list&attendance_id='.$attendanceId);

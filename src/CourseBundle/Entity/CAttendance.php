@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -54,14 +55,12 @@ class CAttendance extends AbstractResource implements ResourceInterface
      *
      * @ORM\Column(name="attendance_qualify_title", type="string", length=255, nullable=true)
      */
-    protected $attendanceQualifyTitle;
+    protected ?string $attendanceQualifyTitle;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="attendance_qualify_max", type="integer", nullable=false)
      */
-    protected $attendanceQualifyMax;
+    protected int $attendanceQualifyMax;
 
     /**
      * @var float
@@ -71,11 +70,18 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected $attendanceWeight;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    protected $locked;
+    protected int $locked;
+
+    /**
+     * @var CAttendanceCalendar[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $calendars;
 
     public function __construct()
     {
@@ -83,6 +89,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         $this->active = 1;
         $this->attendanceQualifyMax = 0;
         $this->locked = 0;
+        $this->calendars = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -240,8 +247,23 @@ class CAttendance extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Resource identifier.
+     * @return CAttendanceCalendar[]|ArrayCollection
      */
+    public function getCalendars()
+    {
+        return $this->calendars;
+    }
+
+    /**
+     * @param CAttendanceCalendar[] $calendars
+     */
+    public function setCalendars(array $calendars): self
+    {
+        $this->calendars = $calendars;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

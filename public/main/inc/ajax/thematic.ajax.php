@@ -96,25 +96,31 @@ switch ($action) {
 
             $my_list = $thematic_list_temp = [];
             foreach ($thematic_list as $item) {
-                $my_list = $thematic->get_thematic_advance_by_thematic_id($item['id']);
-                $thematic_list_temp = array_merge($my_list, $thematic_list_temp);
+                $thematic_list_temp[] = $item->getAdvances();
             }
             $new_thematic_list = [];
-
-            foreach ($thematic_list_temp as $item) {
-                if (!empty($item['attendance_id'])) {
+            foreach ($thematic_list_temp as $advanceList) {
+                foreach ($advanceList as $advance) {
+                    $new_thematic_list[$advance->getIid()] = [
+                        'attendance_id' => $advance->getAttendance()->getIid(),
+                        'start_date' => $advance->getStartDate()->format('Y-m-d H:i:s'),
+                    ];
+                }
+                /*if (!empty($item['attendance_id'])) {
                     $new_thematic_list[$item['id']] = [
                         'attendance_id' => $item['attendance_id'],
                         'start_date' => $item['start_date'],
                     ];
-                }
+                }*/
             }
 
             $attendance_calendar = $attendance->get_attendance_calendar($attendance_id);
 
             $label = get_lang('Start Date');
             if (!empty($attendance_calendar)) {
-                $input_select .= '<select id="start_date_select_calendar" name="start_date_by_attendance" size="7" class="form-control">';
+                $input_select .= '<select
+                        id="start_date_select_calendar"
+                        name="start_date_by_attendance" size="7" class="form-control">';
                 foreach ($attendance_calendar as $calendar) {
                     $selected = null;
                     $insert = true;

@@ -4,25 +4,60 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
-use Doctrine\ORM\QueryBuilder;
+use Cocur\Slugify\SlugifyInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-final class CThematicAdvanceRepository extends ResourceRepository
+final class CThematicAdvanceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CThematicAdvance::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): self
     {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
+        $this->authorizationChecker = $authorizationChecker;
+
+        return $this;
+    }
+
+    public function setRouter(RouterInterface $router): self
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
+    public function setSlugify(SlugifyInterface $slugify): self
+    {
+        $this->slugify = $slugify;
+
+        return $this;
+    }
+
+    public function setToolChain(ToolChain $toolChain): self
+    {
+        $this->toolChain = $toolChain;
+
+        return $this;
+    }
+
+    public function setResourceNodeRepository(ResourceNodeRepository $resourceNodeRepository): self
+    {
+        $this->resourceNodeRepository = $resourceNodeRepository;
+
+        return $this;
+    }
+
+    public function delete($resource)
+    {
+        $this->getEntityManager()->remove($resource);
+        $this->getEntityManager()->flush();
     }
 }

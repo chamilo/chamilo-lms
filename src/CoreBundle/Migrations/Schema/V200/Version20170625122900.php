@@ -77,28 +77,6 @@ class Version20170625122900 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_5480BD4A913AEA17 ON c_announcement_attachment (announcement_id)');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_5480BD4A1BAD783F ON c_announcement_attachment (resource_node_id)');
         }
-
-        // CAttendance
-        $table = $schema->getTable('c_attendance');
-        if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_attendance');
-        }
-        if ($table->hasIndex('session_id')) {
-            $this->addSql('DROP INDEX session_id ON c_attendance');
-        }
-
-        $this->addSql('ALTER TABLE c_attendance CHANGE active active INT NOT NULL');
-
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_attendance ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_attendance ADD CONSTRAINT FK_413634921BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_413634921BAD783F ON c_attendance (resource_node_id)');
-        }
-
-        $table = $schema->getTable('c_attendance_calendar');
-        if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_attendance_calendar');
-        }
     }
 
     public function down(Schema $schema): void

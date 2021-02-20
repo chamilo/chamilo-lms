@@ -23,7 +23,42 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_6D8F59B91BAD783F ON c_thematic (resource_node_id)');
         }
 
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_thematic');
+        }
+        if ($table->hasIndex('active')) {
+            $this->addSql('DROP INDEX active ON c_thematic');
+        }
+
+        if ($table->hasColumn('c_id')) {
+            //$this->addSql('ALTER TABLE c_thematic DROP c_id');
+        }
+
+        if ($table->hasColumn('session_id')) {
+            //$this->addSql('ALTER TABLE c_thematic DROP session_id');
+        }
+
+        if ($table->hasIndex('active')) {
+            $this->addSql('CREATE INDEX active ON c_thematic (active);');
+        }
+
         $table = $schema->getTable('c_thematic_advance');
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_thematic_advance');
+        }
+
+        if ($table->hasColumn('c_id')) {
+            //$this->addSql('ALTER TABLE c_thematic_advance DROP c_id;');
+        }
+
+        if ($table->hasIndex('thematic_id')) {
+            $this->addSql('DROP INDEX thematic_id ON c_thematic_advance');
+        }
+
+        if (false === $table->hasIndex('IDX_62798E972395FCED')) {
+            $this->addSql('CREATE INDEX IDX_62798E972395FCED ON c_thematic_advance (thematic_id)');
+        }
+
         $this->addSql(
             'ALTER TABLE c_thematic_advance CHANGE thematic_id thematic_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL'
         );
@@ -53,6 +88,12 @@ class Version20170625143000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_thematic_plan');
         $this->addSql('ALTER TABLE c_thematic_plan CHANGE thematic_id thematic_id INT DEFAULT NULL');
 
+        if (false === $table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_thematic_plan');
+        }
+        if ($table->hasColumn('c_id')) {
+            //$this->addSql('ALTER TABLE c_thematic_plan DROP c_id;');
+        }
         if (false === $table->hasForeignKey('FK_1197487C2395FCED')) {
             $this->addSql(
                 'ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C2395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)'

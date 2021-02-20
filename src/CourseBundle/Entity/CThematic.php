@@ -16,8 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_thematic",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="active", columns={"active", "session_id"})
+ *      @ORM\Index(name="active", columns={"active"})
  *  }
  * )
  * @ORM\Entity
@@ -32,13 +31,6 @@ class CThematic extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @Assert\NotBlank()
@@ -65,13 +57,6 @@ class CThematic extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     protected $active;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
 
     /**
      * @var CThematicPlan[]
@@ -188,57 +173,9 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->active;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CThematic
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CThematic
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

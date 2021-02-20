@@ -10,6 +10,8 @@ api_protect_course_script(true);
 
 $action = $_GET['a'];
 $thematic = new Thematic();
+$course = api_get_course_entity();
+$session = api_get_session_entity();
 
 switch ($action) {
     case 'save_thematic_plan':
@@ -90,7 +92,7 @@ switch ($action) {
         if (!empty($attendance_id)) {
             $attendance = new Attendance();
             $thematic = new Thematic();
-            $thematic_list = $thematic->get_thematic_list();
+            $thematic_list = $thematic->getThematicList($course, $session);
 
             $my_list = $thematic_list_temp = [];
             foreach ($thematic_list as $item) {
@@ -144,15 +146,12 @@ switch ($action) {
         <?php
         break;
     case 'update_done_thematic_advance':
-        $advanceId = (int) $_GET['thematic_advance_id'];
+        $id = (int) $_GET['thematic_advance_id'];
         $average = 0;
-        if (!empty($advanceId)) {
+        if (!empty($id)) {
             $thematic = new Thematic();
-            $thematic->update_done_thematic_advances($advanceId);
-            $average = $thematic->get_total_average_of_thematic_advances(
-                api_get_course_id(),
-                api_get_session_id()
-            );
+            $thematic->updateDoneThematicAdvance($id, $course, $session);
+            $average = $thematic->get_total_average_of_thematic_advances($course, $session);
         }
         echo $average;
         break;

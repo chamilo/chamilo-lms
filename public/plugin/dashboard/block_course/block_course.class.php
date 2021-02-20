@@ -146,6 +146,7 @@ class BlockCourse extends Block
             $course_code = $row_course['code'];
             $courseInfo = api_get_course_info($course_code);
             $courseId = $courseInfo['real_id'];
+            $course = api_get_course_entity($courseId);
             $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
             // students directly subscribed to the course
@@ -165,8 +166,8 @@ class BlockCourse extends Block
                 $avg_time_spent_in_course = null;
             }
             $tematic_advance = $thematic->get_total_average_of_thematic_advances(
-                $course_code,
-                0
+                $course,
+                null
             );
 
             if (!empty($tematic_advance)) {

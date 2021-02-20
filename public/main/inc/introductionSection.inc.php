@@ -4,6 +4,7 @@
 use Chamilo\CourseBundle\Entity\CToolIntro;
 
 /**
+ * @deprecated
  * The INTRODUCTION MICRO MODULE is used to insert and edit
  * an introduction section on a Chamilo module or on the course homepage.
  * It can be inserted on any Chamilo module, provided the corresponding setting
@@ -180,7 +181,7 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
     $class1 = '';
     if ('1' === $displayMode) {
         // Show only the current course progress step
-        $last_done_advance = $thematic->get_last_done_thematic_advance();
+        $last_done_advance = $thematic->get_last_done_thematic_advance($course, $session);
         $thematicAdvance = $thematic->getThematicAdvance($last_done_advance);
         $subTitle1 = get_lang('Current topic');
         $class1 = ' current';
@@ -193,7 +194,7 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
         $subTitle1 = $subTitle2 = get_lang('Next topic');
     } elseif ('3' === $displayMode) {
         // Show the current and next course progress steps
-        $last_done_advance = $thematic->get_last_done_thematic_advance();
+        $last_done_advance = $thematic->get_last_done_thematic_advance($course, $session);
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
         $thematicAdvance = $thematic->getThematicAdvance($last_done_advance);
         $thematicAdvance2 = $thematic->getThematicAdvance($next_advance_not_done);

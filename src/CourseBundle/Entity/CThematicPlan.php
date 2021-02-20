@@ -15,7 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_thematic_plan",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="thematic_id", columns={"thematic_id", "description_type"})
  *  }
  * )
@@ -40,13 +39,6 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
     protected string $title;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic", inversedBy="plans")
      * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
@@ -58,11 +50,9 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
-    protected $descriptionType;
+    protected int $descriptionType;
 
     public function __toString(): string
     {
@@ -70,37 +60,11 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set thematicId.
-     *
-     * @param int $thematicId
-     *
-     * @return CThematicPlan
-     */
-    public function setThematicId($thematicId)
-    {
-        $this->thematicId = $thematicId;
-
-        return $this;
-    }
-
-    /**
-     * Get thematicId.
-     *
-     * @return int
-     */
-    public function getThematicId()
-    {
-        return $this->thematicId;
-    }
-
-    /**
      * Set title.
      *
      * @param string $title
-     *
-     * @return CThematicPlan
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -119,12 +83,8 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
 
     /**
      * Set description.
-     *
-     * @param string $description
-     *
-     * @return CThematicPlan
      */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -133,22 +93,16 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
      * Set descriptionType.
-     *
-     * @param int $descriptionType
-     *
-     * @return CThematicPlan
      */
-    public function setDescriptionType($descriptionType)
+    public function setDescriptionType(int $descriptionType): self
     {
         $this->descriptionType = $descriptionType;
 
@@ -157,36 +111,10 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
 
     /**
      * Get descriptionType.
-     *
-     * @return int
      */
-    public function getDescriptionType()
+    public function getDescriptionType(): int
     {
         return $this->descriptionType;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CThematicPlan
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getIid(): int

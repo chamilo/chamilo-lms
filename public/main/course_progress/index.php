@@ -17,6 +17,8 @@ $current_course_tool = TOOL_COURSE_PROGRESS;
 // protect a course script
 api_protect_course_script(true);
 $courseId = api_get_course_int_id();
+$course = api_get_course_entity();
+$session = api_get_session_entity();
 $description_type = null;
 
 // get actions
@@ -107,7 +109,7 @@ function check_per_custom_date(obj) {
 
 $attendance = new Attendance();
 // get data for attendance input select
-$attendance_list = $attendance->get_attendances_list();
+$attendance_list = $attendance->getAttendanceList($course, $session);
 $attendance_select = [];
 $attendance_select[0] = get_lang('Select an attendance');
 foreach ($attendance_list as $attendanceEntity) {
@@ -237,7 +239,6 @@ switch ($action) {
         header('Location: '.$currentUrl);
         exit;
         break;
-
     case 'thematic_delete':
         // Delete a thematic
         if (!empty($thematicId) && api_is_allowed_to_edit(null, true)) {
@@ -252,7 +253,7 @@ switch ($action) {
 
         if (isset($_POST['replace']) && $_POST['replace']) {
             // Remove current thematic.
-            $list = $thematicManager->get_thematic_list();
+            $list = $thematicManager->getThematicList($course, $session);
             foreach ($list as $id) {
                 $thematicManager->delete($id);
             }
@@ -332,7 +333,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
-        $thematicManager->move_thematic('up', $thematicId);
+        $thematicManager->moveThematic('up', $thematicId, $course, $session);
 
         header('Location: '.$currentUrl);
         exit;
@@ -341,13 +342,13 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
-        $thematicManager->move_thematic('down', $thematicId);
+        $thematicManager->moveThematic('down', $thematicId, $course, $session);
 
         header('Location: '.$currentUrl);
         exit;
         break;
     case 'thematic_export':
-        $list = $thematicManager->get_thematic_list();
+        $list = $thematicManager->getThematicList($course, $session);
         $csv = [];
         $csv[] = ['type', 'data1', 'data2', 'data3'];
         foreach ($list as $thematicEntity) {
@@ -387,7 +388,7 @@ switch ($action) {
     case 'thematic_export_pdf':
         $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
         $view = new Template('', false, false, false, true, false, false);
-        $list = $thematicManager->get_thematic_list();
+        $list = $thematicManager->getThematicList($course, $session);
         $view->assign('data', $list);
         $template = $view->get_template('course_progress/pdf_general_thematic.tpl');
 
@@ -494,17 +495,18 @@ switch ($action) {
             $thematic_data[$thematicId] = $thematicEntity;
             $data['total_average_of_advances'] = $thematicManager->get_average_of_advances_by_thematic($thematicId);
         } else {
-            $thematic_data = $thematicManager->get_thematic_list(api_get_course_id(), api_get_session_id());
-            $max_thematic_item = $thematicManager->get_max_thematic_item();
-            $last_done_thematic_advance = $thematicManager->get_last_done_thematic_advance();
-            $total_average_of_advances = $thematicManager->get_total_average_of_thematic_advances();
+            $thematic_data = $thematicManager->getThematicList($course, $session);
+            //$max_thematic_item = $thematicManager->get_max_thematic_item($course, $session);
+            $max_thematic_item = 0;
+            $last_done_thematic_advance = $thematicManager->get_last_done_thematic_advance($course, $session);
+            $total_average_of_advances = $thematicManager->get_total_average_of_thematic_advances($course, $session);
         }
 
         // Second column
-        $thematic_plan_data = $thematicManager->get_thematic_plan_data();
+        //$thematic_plan_data = $thematicManager->get_thematic_plan_data();
 
         // Third column
-        $thematic_advance_data = $thematicManager->get_thematic_advance_list(null, true);
+        //$thematic_advance_data = $thematicManager->get_thematic_advance_list(null, true);
 
         if (!empty($message) && !empty($total_average_of_advances)) {
             $tpl->assign('message', $message);
@@ -550,6 +552,7 @@ switch ($action) {
 
         $list = [];
         $listThematic = [];
+        $extra = [];
         // Display thematic data
         if (!empty($thematic_data)) {
             /** @var CThematic $thematic */
@@ -557,9 +560,9 @@ switch ($action) {
                 $id = $thematic->getIid();
                 $session_star = '';
                 if (api_is_allowed_to_edit(null, true)) {
-                    if (api_get_session_id() == $thematic->getSessionId()) {
+                    /*if (api_get_session_id() == $thematic->getSessionId()) {
                         $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
-                    }
+                    }*/
                 }
 
                 //@todo add a validation in order to load or not course thematics in the session thematic
@@ -597,7 +600,8 @@ switch ($action) {
                                 Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                         }
                     }
-                    if (api_get_session_id() == $thematic->getSessionId()) {
+                    if (0) {
+                    //if (api_get_session_id() == $thematic->getSessionId()) {
                         $toolbarThematic .= Display::url(
                             Display::return_icon('pdf.png', get_lang('Export to PDF'), null, ICON_SIZE_TINY),
                             api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query(
@@ -633,12 +637,13 @@ switch ($action) {
                             .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_TINY).'</a>';
                     }
                 }
-                $list['last_done'] = $last_done_thematic_advance;
-                $list['toolbar'] = $toolbarThematic;
+                $extra[$thematic->getIid()]['toolbar'] = $toolbarThematic;
+                $extra[$thematic->getIid()]['last_done'] = $last_done_thematic_advance;
                 $listThematic[] = $thematic;
             }
         }
 
+        $tpl->assign('extra', $extra);
         $tpl->assign('data', $listThematic);
         $thematicLayout = $tpl->get_template('course_progress/progress.html.twig');
         $content = $tpl->fetch($thematicLayout);
@@ -828,18 +833,18 @@ switch ($action) {
                 </script>
             ";
 
-        $thematic_plan_data = $thematicManager->get_thematic_plan_data($thematicId);
+        $thematic_plan_data = $thematicEntity->getPlans();
         $description_type = isset($_GET['description_type']) ? (int) $_GET['description_type'] : null;
 
         if (!empty($thematicId) && !empty($description_type)) {
-            $thematic_plan_data = $thematicManager->get_thematic_plan_data($thematicId, $description_type);
+            //$thematic_plan_data = $thematicManager->get_thematic_plan_data($thematicId, $description_type);
         } elseif (!empty($thematicId) && 'thematic_plan_list' === $action) {
-            $thematic_plan_data = $thematicManager->get_thematic_plan_data($thematicId);
+            //$thematic_plan_data = $thematicManager->get_thematic_plan_data($thematicId);
         }
 
         $default_thematic_plan_title = $thematicManager->get_default_thematic_plan_title();
         $default_thematic_plan_icon = $thematicManager->get_default_thematic_plan_icon();
-        $next_description_type = $thematicManager->get_next_description_type($thematicId);
+        //$next_description_type = $thematicManager->get_next_description_type($thematicId);
         $default_thematic_plan_question = $thematicManager->get_default_question();
         //$thematic_data = $thematicManager->get_thematic_list($thematicId);
         //$tpl->assign('title_thematic', $thematic_data['title']);
@@ -851,7 +856,6 @@ switch ($action) {
         // actions menu
         $new_thematic_plan_data = [];
         if (!empty($thematic_plan_data)) {
-            /** @var CThematicPlan $thematic_item */
             foreach ($thematic_plan_data as $thematic_item) {
                 $thematic_simple_list[] = $thematic_item->getDescriptionType();
                 $new_thematic_plan_data[$thematic_item->getDescriptionType()] = $thematic_item;
@@ -1009,12 +1013,12 @@ switch ($action) {
         );
         $form->addGroup($radios, null, get_lang('Start date options'));
 
-        if (isset($thematic_advance_data['attendance_id']) &&
+        /*if (isset($thematic_advance_data['attendance_id']) &&
             0 == $thematic_advance_data['attendance_id']) {
             $form->addElement('html', '<div id="div_custom_datetime" style="display:block">');
         } else {
             $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
-        }
+        }*/
 
         $form->addElement('DateTimePicker', 'custom_start_date', get_lang('Start Date'));
         $form->addElement('html', '</div>');
@@ -1157,10 +1161,10 @@ switch ($action) {
 
             if ($affected_rows) {
                 // get last done thematic advance before move thematic list
-                $last_done_thematic_advance = $thematicManager->get_last_done_thematic_advance();
+                $last_done_thematic_advance = $thematicManager->get_last_done_thematic_advance($course, $session);
                 // update done advances with de current thematic list
                 if (!empty($last_done_thematic_advance)) {
-                    $thematicManager->update_done_thematic_advances($last_done_thematic_advance);
+                    $thematicManager->updateDoneThematicAdvance($last_done_thematic_advance, $course, $session);
                 }
             }
 

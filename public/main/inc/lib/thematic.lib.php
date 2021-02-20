@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -32,9 +34,6 @@ class Thematic
     private $duration;
     private $course_int_id;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->course_int_id = api_get_course_int_id();
@@ -76,20 +75,16 @@ class Thematic
      */
     public function get_thematic_data($from, $number_of_items, $column, $direction)
     {
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-        $condition_session = '';
-        if (!api_get_session_id()) {
-            $condition_session = api_get_session_condition(0);
-        }
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
         }
-
-        $course_id = api_get_course_int_id();
+        /*
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
 
         $sql = "SELECT id AS col0, title AS col1, display_order AS col2, session_id
                 FROM $tbl_thematic
@@ -158,7 +153,7 @@ class Thematic
                     } else {
                         $actions .= Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
                     }
-                    if ($thematic[2] < self::get_max_thematic_item()) {
+                    /*if ($thematic[2] < self::get_max_thematic_item()) {
                         $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('down.png', get_lang('down'), '', ICON_SIZE_SMALL).'</a>';
                     } else {
@@ -171,22 +166,20 @@ class Thematic
                 }
                 $thematics[] = [$thematic[0], $thematic[1], $actions];
             }
-        }
+        }*/
 
-        return $thematics;
+        //return $thematics;
     }
 
     /**
      * Get the maximum display order of the thematic item.
      *
-     * @param bool $use_session
-     *
      * @return int Maximum display order
      */
-    public function get_max_thematic_item($use_session = true)
+    public function get_max_thematic_item(Course $course, Session $session = null)
     {
         // Database table definition
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
+        /*$tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $session_id = api_get_session_id();
         if ($use_session) {
             $condition_session = api_get_session_condition($session_id);
@@ -200,7 +193,7 @@ class Thematic
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
-        return $row[0];
+        return $row[0];*/
     }
 
     /**
@@ -209,13 +202,13 @@ class Thematic
      * @param string $direction   (up, down)
      * @param int    $thematic_id
      */
-    public function move_thematic($direction, $thematic_id)
+    public function moveThematic($direction, $thematic_id, $course, $session = null)
     {
         // Database table definition
         $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
 
         // sort direction
-        if ('up' == $direction) {
+        if ('up' === $direction) {
             $sortorder = 'DESC';
         } else {
             $sortorder = 'ASC';
@@ -248,7 +241,7 @@ class Thematic
         }
 
         // get last done thematic advance before move thematic list
-        $last_done_thematic_advance = $this->get_last_done_thematic_advance();
+        $last_done_thematic_advance = $this->get_last_done_thematic_advance($course, $session);
 
         if (!empty($next_display_order) && !empty($current_id)) {
             $sql = "UPDATE $tbl_thematic SET display_order = $next_display_order
@@ -263,21 +256,18 @@ class Thematic
         }
 
         // update done advances with de current thematic list
-        $this->update_done_thematic_advances($last_done_thematic_advance);
+        $this->updateDoneThematicAdvance($last_done_thematic_advance, $course, $session);
     }
 
     /**
      * Get thematic list.
      *
-     * @param string $course_code
-     * @param int    $session_id
-     *
      * @return array Thematic data
      */
-    public static function get_thematic_list($course_code = null, $session_id = null)
+    public static function getThematicList(Course $course, Session $session = null)
     {
         // set current course and session
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
+        /*$tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -293,22 +283,26 @@ class Thematic
         } else {
             $condition_session = api_get_session_condition($session_id, true, true);
         }
-        $condition = " WHERE active = 1 $condition_session ";
+        $condition = " WHERE active = 1 $condition_session ";*/
 
-        $sql = "SELECT *
+        $repo = Container::getThematicRepository();
+        $qb = $repo->getResourcesByCourse($course, $session);
+
+        return $qb->getQuery()->getResult();
+
+        /*$sql = "SELECT *
                 FROM $tbl_thematic $condition AND c_id = $course_id
                 ORDER BY display_order ";
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            $repo = Container::getThematicRepository();
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $entity = $repo->find($row['iid']);
                 $data[$row['iid']] = $entity;
             }
         }
 
-        return $data;
+        return $data;*/
     }
 
     /**
@@ -325,7 +319,7 @@ class Thematic
         $session_id = intval($this->session_id);
 
         // get the maximum display order of all the glossary items
-        $max_thematic_item = $this->get_max_thematic_item(false);
+        //$max_thematic_item = $this->get_max_thematic_item(false);
 
         $repo = Container::getThematicRepository();
 
@@ -336,9 +330,8 @@ class Thematic
                 ->setTitle($title)
                 ->setContent($content)
                 ->setActive(1)
-                ->setCId($this->course_int_id)
-                ->setDisplayOrder($max_thematic_item + 1)
-                ->setSessionId($session_id)
+                //->setDisplayOrder($max_thematic_item + 1)
+                ->setDisplayOrder(0)
                 ->setParent($courseEntity)
                 ->addCourseLink($courseEntity, api_get_session_entity())
             ;
@@ -512,16 +505,15 @@ class Thematic
      *
      * @see SortableTable#get_total_number_of_items()
      */
-    public static function get_number_of_thematic_advances()
+    public static function get_number_of_thematic_advances(array $params)
     {
-        global $thematic_id;
         $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $course_id = api_get_course_int_id();
-        $thematic_id = (int) $thematic_id;
+        $thematic_id = (int) $params['thematic_id'];
 
-        $sql = "SELECT COUNT(id) AS total_number_of_items
+        $sql = "SELECT COUNT(iid) AS total_number_of_items
                 FROM $table
-                WHERE c_id = $course_id AND thematic_id = $thematic_id ";
+                WHERE thematic_id = $thematic_id ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -553,9 +545,9 @@ class Thematic
         $course_id = api_get_course_int_id();
         $thematic_id = (int) $params['thematic_id'];
         if (api_is_allowed_to_edit(null, true)) {
-            $sql = "SELECT id AS col0, start_date AS col1, duration AS col2, content AS col3
+            $sql = "SELECT iid AS col0, start_date AS col1, duration AS col2, content AS col3
                     FROM $table
-                    WHERE c_id = $course_id AND thematic_id = $thematic_id
+                    WHERE thematic_id = $thematic_id
                     ORDER BY col$column $direction
                     LIMIT $from,$number_of_items ";
 
@@ -687,7 +679,6 @@ class Thematic
         if (null === $advance) {
             $advance = new CThematicAdvance();
             $advance
-                ->setCId($this->course_int_id)
                 ->setContent($content)
                 ->setThematic($thematic)
                 ->setAttendance($attendance)
@@ -714,7 +705,6 @@ class Thematic
             $last_id = $advance->getIid();
         } else {
             $advance
-                ->setCId($this->course_int_id)
                 ->setContent($content)
                 ->setStartDate(api_get_utc_datetime($start_date, true, true))
                 ->setDuration($duration)
@@ -922,9 +912,7 @@ class Thematic
         }*/
 
         $repo = Container::getThematicPlanRepository();
-
         $criteria = [
-            'cId' => $course_id,
             'thematic' => $thematic_id,
             'descriptionType' => $description_type,
         ];
@@ -967,12 +955,10 @@ class Thematic
             );*/
         } else {
             $thematic = Container::getThematicRepository()->find($thematic_id);
-            $course = api_get_course_entity();
             $plan = new CThematicPlan();
             $plan
                 ->setTitle($title)
                 ->setDescription($description)
-                ->setCId($this->course_int_id)
                 ->setThematic($thematic)
                 ->setDescriptionType($description_type)
                 //->setParent($course)
@@ -1097,11 +1083,11 @@ class Thematic
      *
      * @return int Affected rows
      */
-    public function update_done_thematic_advances($advanceId)
+    public function updateDoneThematicAdvance($advanceId, $course, $session = null)
     {
         $repo = Container::getThematicRepository();
         $em = Database::getManager();
-        $list = self::get_thematic_list(api_get_course_id());
+        $list = self::getThematicList($course, $session);
         $ordered = [];
 
         foreach ($list as $thematic) {
@@ -1132,12 +1118,12 @@ class Thematic
 
         return true;
 
-        $_course = api_get_course_info();
-        $thematic_data = self::get_thematic_list(api_get_course_id());
+        /*$_course = api_get_course_info();
+        $thematic_data = self::getThematicList(api_get_course_id());
         $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 
         $affected_rows = 0;
-        $user_id = api_get_user_id();
+        $user_id = api_get_user_id();*/
 
         /*$all = [];
         if (!empty($thematic_data)) {
@@ -1243,9 +1229,9 @@ class Thematic
      *
      * @return int Last done thematic advance id
      */
-    public function get_last_done_thematic_advance()
+    public function get_last_done_thematic_advance($course, $session = null)
     {
-        $thematic_data = self::get_thematic_list();
+        $thematic_data = self::getThematicList($course, $session);
 
         $a_thematic_advance_ids = [];
         $last_done_advance_id = 0;
@@ -1277,9 +1263,9 @@ class Thematic
      *
      * @return int next thematic advance not done
      */
-    public function get_next_thematic_advance_not_done($offset = 1)
+    public function get_next_thematic_advance_not_done($offset = 1, $course, $session = null)
     {
-        $thematic_data = self::get_thematic_list();
+        $thematic_data = self::getThematicList($course, $session);
         $thematic_advance_data = $this->get_thematic_advance_list();
         $a_thematic_advance_ids = [];
         $next_advance_not_done = 0;
@@ -1308,40 +1294,29 @@ class Thematic
     /**
      * Get total average of thematic advances.
      *
-     * @param string $course_code (optional)
-     * @param int    $session_id  (optional)
-     *
      * @return float Average of thematic advances
      */
-    public function get_total_average_of_thematic_advances($course_code = null, $session_id = null)
+    public function get_total_average_of_thematic_advances(Course $course, Session $session = null)
     {
-        if (empty($course_code)) {
-            $course_code = api_get_course_id();
-        }
-        if (api_get_session_id()) {
-            $thematic_data = self::get_thematic_list($course_code);
-        } else {
-            $thematic_data = self::get_thematic_list($course_code, 0);
-        }
+        $thematic_data = self::getThematicList($course, $session);
 
-        $a_average_of_advances_by_thematic = [];
+        $list = [];
         $total_average = 0;
         if (!empty($thematic_data)) {
             /** @var CThematic $thematic */
             foreach ($thematic_data as $thematic) {
                 $thematic_id = $thematic->getIid();
-                $a_average_of_advances_by_thematic[$thematic_id] = $this->get_average_of_advances_by_thematic(
-                    $thematic,
-                    $course_code
+                $list[$thematic_id] = $this->get_average_of_advances_by_thematic(
+                    $thematic
                 );
             }
         }
 
         // calculate total average
-        if (!empty($a_average_of_advances_by_thematic)) {
-            $count_tematics = count($thematic_data);
-            $score = array_sum($a_average_of_advances_by_thematic);
-            $total_average = round(($score * 100) / ($count_tematics * 100));
+        if (!empty($list)) {
+            $count = count($thematic_data);
+            $score = array_sum($list);
+            $total_average = round(($score * 100) / ($count * 100));
         }
 
         return $total_average;
@@ -1351,11 +1326,10 @@ class Thematic
      * Get average of advances by thematic.
      *
      * @param CThematic $thematic
-     * @param string    $course_code
      *
      * @return float Average of thematic advances
      */
-    public function get_average_of_advances_by_thematic($thematic, $course_code = null)
+    public function get_average_of_advances_by_thematic($thematic)
     {
         $advances = $thematic->getAdvances();
         $average = 0;

@@ -165,10 +165,6 @@ services:
             -
                 thematics:
                     repository: Chamilo\CourseBundle\Repository\CThematicRepository
-                thematic_advance:
-                    repository: Chamilo\CourseBundle\Repository\CThematicAdvanceRepository
-                thematic_plans:
-                    repository: Chamilo\CourseBundle\Repository\CThematicPlanRepository
         tags:
             - {name: chamilo_core.tool}
 

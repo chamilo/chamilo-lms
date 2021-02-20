@@ -78,7 +78,7 @@
                                 {% endif %}
                                 {{ item.content }}
                                 <div class="btn-group btn-group-sm">
-                                    {{ item.toolbar }}
+                                    {{ extra[item.iid]['toolbar'] }}
                                 </div>
                             </td>
                             <td>
@@ -123,22 +123,22 @@
                                             <td style="width: 90%"
                                                 class="thematic_advance_content"
                                                 id="thematic_advance_content_id_{{ advance.iid }}">
-                                                <div id="thematic_advance_{{ advance.id }}">
+                                                <div id="thematic_advance_{{ advance.iid }}">
                                                 <strong>{{ advance.startDate | format_date }}</strong>
                                                 {{ advance.content }}
                                                 </div>
                                                 {% if tutor %}
                                                     <div class="toolbar-actions">
-                                                        <div id="thematic_advance_tools_{{ advance.id }}" class="thematic_advance_actions">
+                                                        <div id="thematic_advance_tools_{{ advance.iid }}" class="thematic_advance_actions">
                                                             <div class="btn-group btn-group-sm">
                                                                 <a class="btn btn-default btn-sm"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}"
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
                                                                    title="{{ 'Edit' |trans }}">
                                                                     <i class="fa fa-pen" aria-hidden="true"></i>
                                                                 </a>
                                                                 <a class="btn btn-default btn-sm"
                                                                    onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}"
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
                                                                    title="{{ 'Delete' |trans }}">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                                 </a>
@@ -148,7 +148,7 @@
                                                 {% endif %}
                                                 </div>
                                             </td>
-                                            {% if advance.done_advance == 1 %}
+                                            {% if advance.doneAdvance == 1 %}
                                                 {% set color = "background-color:#E5EDF9;" %}
                                             {% else %}
                                                 {% set color = "background-color:#FFFFFF;" %}
@@ -156,17 +156,17 @@
                                             {% if tutor %}
                                                 <td
                                                     style="width: 10%; {{ color }}"
-                                                    id="td_done_thematic_{{ advance.id }}">
+                                                    id="td_done_thematic_{{ advance.iid }}">
                                                     {% set check = ""  %}
-                                                    {% if item.last_done == advance.id %}
+                                                    {% if extra[item.iid]['last_done'] == advance.iid %}
                                                         {% set check = "checked"  %}
                                                     {% endif %}
                                                     <input
                                                         type="radio"
                                                         class="done_thematic"
-                                                       id="done_thematic_{{ advance.id }}"
+                                                       id="done_thematic_{{ advance.iid }}"
                                                        name="done_thematic"
-                                                       value="{{ advance.id }}" {{ check }}
+                                                       value="{{ advance.iid }}" {{ check }}
                                                        onclick="updateDoneThematicAdvance(this.value);"
                                                     />
                                             {% else %}

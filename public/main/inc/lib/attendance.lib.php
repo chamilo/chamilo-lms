@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
@@ -24,25 +26,18 @@ class Attendance
     /**
      * Get attendance list only the id, name and attendance_qualify_max fields.
      *
-     * @param int $courseId
-     * @param int $sessionId
-     *
      * @return CAttendance[]
      */
-    public function get_attendances_list($courseId = 0, $sessionId = 0)
+    public function getAttendanceList(Course $course, Session $session = null)
     {
         $repo = Container::getAttendanceRepository();
-
-        $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity($sessionId);
-
         $qb = $repo->getResourcesByCourse($course, $session, null);
         //$qb->select('resource');
         $qb->andWhere('resource.active = 1');
 
         return $qb->getQuery()->getResult();
 
-        $table = Database::get_course_table(TABLE_ATTENDANCE);
+        /*$table = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = (int) $course_id;
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
@@ -63,7 +58,7 @@ class Attendance
             }
         }
 
-        return $data;
+        return $data;*/
     }
 
     /**
@@ -1096,7 +1091,7 @@ class Attendance
             //$course_info = api_get_course_info($course_code);
             $course_id = $course['real_id'];
             $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-            $attendances = $this->get_attendances_list($course_id);
+            $attendances = $this->getAttendanceList(api_get_course_entity($course_id));
 
             foreach ($attendances as $attendance) {
                 $attendanceId = $attendance->getIid();
@@ -1132,22 +1127,18 @@ class Attendance
     /**
      * Get results of faults average by course.
      *
-     * @param int    $user_id
-     * @param string $course_code
-     * @param int Session id (optional)
-     *
      * @return array results containing number of faults,
      *               total done attendance, percent of faults and color depend on result (red, orange)
      */
-    public function get_faults_average_by_course($user_id, $course_code, $session_id = null)
+    public function get_faults_average_by_course($user_id, Course $course, Session $session = null)
     {
         // Database tables and variables
-        $course_info = api_get_course_info($course_code);
+        $courseId = $course->getId();
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $user_id = (int) $user_id;
         $results = [];
-        $total_faults = $total_weight = $porcent = 0;
-        $attendances = $this->get_attendances_list($course_info['real_id'], $session_id);
+        $total_faults = $total_weight = 0;
+        $attendances = $this->getAttendanceList($course, $session);
 
         foreach ($attendances as $attendance) {
             $attendanceId = $attendance->getIid();
@@ -1155,7 +1146,7 @@ class Attendance
             $total_done_attendance = $attendance->getAttendanceQualifyMax();
             $sql = "SELECT score FROM $tbl_attendance_result
                     WHERE
-                        c_id = {$course_info['real_id']} AND
+                        c_id = {$courseId} AND
                         user_id = $user_id AND
                         attendance_id=".$attendanceId;
             $rs = Database::query($sql);
@@ -2269,7 +2260,7 @@ class Attendance
                 $courseId = $courseItem['course_id'];
 
                 /* Get all attendance by courses*/
-                $attendanceList = $attendanceLib->get_attendances_list($courseId);
+                $attendanceList = $attendanceLib->getAttendanceList(api_get_course_entity($courseId));
                 $temp = [];
                 $sheetsProcessed = [];
                 $tempDate = [];
@@ -2352,10 +2343,9 @@ class Attendance
             $courseId = $row['c_id'];
             $sessionId = $row['session_id'];
             $courseItem = api_get_course_info_by_id($courseId);
-
-            $attendanceList = $attendanceLib->get_attendances_list(
-                $courseId,
-                $sessionId
+            $attendanceList = $attendanceLib->getAttendanceList(
+            api_get_course_entity($courseId),
+            api_get_session_entity($sessionId)
             );
             $temp = [];
             $sheetsProcessed = [];

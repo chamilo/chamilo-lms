@@ -1278,8 +1278,8 @@ if (empty($details)) {
                     // get average of faults in attendances by student
                     $results_faults_avg = $attendance->get_faults_average_by_course(
                         $studentId,
-                        $courseCodeItem,
-                        $sId
+                        api_get_course_entity($courseId),
+                        api_get_session_entity($sId)
                     );
 
                     $attendances_faults_avg = '0/0 (0%)';

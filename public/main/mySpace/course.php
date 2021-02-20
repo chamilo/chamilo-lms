@@ -272,9 +272,12 @@ function get_courses($from, $limit, $column, $direction)
 
     $courseList = [];
     if (!empty($courses)) {
+        $session = api_get_session_entity($sessionId);
         foreach ($courses as $data) {
             $courseCode = $data['code'];
             $courseInfo = api_get_course_info($courseCode);
+            $course = api_get_course_entity($courseCode['real_id']);
+
             if (empty($sessionId)) {
                 $userList = CourseManager::get_user_list_from_course_code($data['code']);
             } else {
@@ -318,7 +321,7 @@ function get_courses($from, $limit, $column, $direction)
             }
 
             $thematic = new Thematic();
-            $tematic_advance = $thematic->get_total_average_of_thematic_advances($courseCode, $sessionId);
+            $tematic_advance = $thematic->get_total_average_of_thematic_advances($course, $session);
             $tematicAdvanceProgress = '-';
             if (!empty($tematic_advance)) {
                 $tematicAdvanceProgress = '<a title="'.get_lang('Go to thematic advance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$courseCode.'&id_session='.$sessionId.'">'.

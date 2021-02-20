@@ -31,6 +31,7 @@
     "easy-pie-chart": "^2.1.7",
     "easytimer": "^1.1.1",
     "eslint": "^7.20.0",
+    "eslint-plugin-vue": "^7.6.0",
     "file-loader": "^4.2.0",
     "flag-icon-css": "^3.0",
     "fullcalendar": "^5.3.2",

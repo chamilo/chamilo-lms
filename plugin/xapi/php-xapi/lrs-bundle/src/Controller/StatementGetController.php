@@ -94,6 +94,7 @@ final class StatementGetController
 
         $now = new \DateTime();
         $response->headers->set('X-Experience-API-Consistent-Through', $now->format(\DateTime::ATOM));
+        $response->headers->set('Content-Type', 'application/json');
 
         return $response;
     }
@@ -107,7 +108,7 @@ final class StatementGetController
     {
         $json = $this->statementSerializer->serializeStatement($statement);
 
-        $response = new JsonResponse($json, 200, [], true);
+        $response = new Response($json, 200);
 
         if ($includeAttachments) {
             $response = $this->buildMultipartResponse($response, [$statement]);
@@ -128,7 +129,7 @@ final class StatementGetController
     {
         $json = $this->statementResultSerializer->serializeStatementResult(new StatementResult($statements));
 
-        $response = new JsonResponse($json, 200, [], true);
+        $response = new Response($json, 200);
 
         if ($includeAttachments) {
             $response = $this->buildMultipartResponse($response, $statements);

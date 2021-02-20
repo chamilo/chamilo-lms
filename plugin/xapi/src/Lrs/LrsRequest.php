@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 
@@ -49,15 +50,17 @@ class LrsRequest
 
                 /** @var HttpResponse $response */
                 $response = call_user_func([new $controllerName(), $methodName]);
-            } catch (AccessDeniedHttpException | \Exception $accessDeniedHttpException) {
+            } catch (AccessDeniedHttpException $accessDeniedHttpException) {
                 $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
+            } catch (ConflictException | ConflictHttpException $conflictException) {
+                $response = HttpResponse::create('', HttpResponse::HTTP_CONFLICT);
             } catch (HttpException $httpException) {
                 $response = HttpResponse::create(
                     $httpException->getMessage(),
                     $httpException->getStatusCode()
                 );
-            } catch (ConflictException $conflictException) {
-                $response = HttpResponse::create('', HttpResponse::HTTP_CONFLICT);
+            } catch (\Exception $exception) {
+                $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
             }
         } else {
             $response = HttpResponse::create('Not Found', HttpResponse::HTTP_NOT_FOUND);

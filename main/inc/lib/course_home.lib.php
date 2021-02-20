@@ -946,7 +946,7 @@ class CourseHome
                                 $tool['image'] = 'lp_category_na.gif';
                             }
                         } else {
-                            $categoryInSessionName = str_replace('id_session', $session_id,$tool['name']);
+                            $categoryInSessionName = str_replace('id_session', $session_id, $tool['name']);
                             $criteria = [
                                 'cId' => $courseId,
                                 'name' => $categoryInSessionName,

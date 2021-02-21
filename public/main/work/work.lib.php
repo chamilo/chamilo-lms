@@ -793,9 +793,13 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
 function deleteDirWork($id)
 {
     $locked = api_resource_is_locked_by_gradebook($id, LINK_STUDENTPUBLICATION);
-
-    if (true == $locked) {
-        echo Display::return_message(get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'), 'warning');
+    if ($locked) {
+        echo Display::return_message(
+            get_lang(
+                'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
+            ),
+            'warning'
+        );
 
         return false;
     }
@@ -817,121 +821,122 @@ function deleteDirWork($id)
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
     $check = true;
-    if (!empty($work_data['url'])) {
-        if ($check) {
-            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
-            if (!empty($consideredWorkingTime)) {
-                $fieldValue = new ExtraFieldValue('work');
-                $resultExtra = $fieldValue->getAllValuesForAnItem(
-                    $work_data['id'],
-                    true
-                );
 
-                $workingTime = null;
-                foreach ($resultExtra as $field) {
-                    $field = $field['value'];
-                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                        $workingTime = $field->getValue();
-
-                        break;
-                    }
-                }
-
-                $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
-                if (!empty($workingTime)) {
-                    foreach ($courseUsers as $user) {
-                        $userWorks = get_work_user_list(
-                            0,
-                            100,
-                            null,
-                            null,
-                            $work_data['iid'],
-                            null,
-                            $user['user_id'],
-                            false,
-                            $course_id,
-                            $sessionId
-                        );
-
-                        if (1 != count($userWorks)) {
-                            continue;
-                        }
-                        Event::eventRemoveVirtualCourseTime(
-                            $course_id,
-                            $user['user_id'],
-                            $sessionId,
-                            $workingTime,
-                            $work_data['iid']
-                        );
-                    }
-                }
-            }
-
-            // Deleting all contents inside the folder
-            $sql = "UPDATE $table SET active = 2
-                    WHERE filetype = 'folder' AND iid = $id";
-            Database::query($sql);
-
-            $sql = "UPDATE $table SET active = 2
-                    WHERE parent_id = $id";
-            Database::query($sql);
-
-            /*$new_dir = $work_data_url.'_DELETED_'.$id;
-
-            if ('true' == api_get_setting('permanently_remove_deleted_files')) {
-                my_delete($work_data_url);
-            } else {
-                if (file_exists($work_data_url)) {
-                    rename($work_data_url, $new_dir);
-                }
-            }*/
-
-            // Gets calendar_id from student_publication_assigment
-            $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
-                    WHERE c_id = $course_id AND publication_id = $id";
-            $res = Database::query($sql);
-            $calendar_id = Database::fetch_row($res);
-
-            // delete from agenda if it exists
-            if (!empty($calendar_id[0])) {
-                $sql = "DELETE FROM $t_agenda
-                        WHERE c_id = $course_id AND id = '".$calendar_id[0]."'";
-                Database::query($sql);
-            }
-            $sql = "DELETE FROM $TSTDPUBASG
-                    WHERE c_id = $course_id AND publication_id = $id";
-            Database::query($sql);
-
-            Skill::deleteSkillsFromItem($id, ITEM_TYPE_STUDENT_PUBLICATION);
-
-            Event::addEvent(
-                LOG_WORK_DIR_DELETE,
-                LOG_WORK_DATA,
-                [
-                    'id' => $work_data['iid'],
-                    'url' => $work_data['url'],
-                    'title' => $work_data['title'],
-                ],
-                null,
-                api_get_user_id(),
-                api_get_course_int_id(),
-                $sessionId
+    if ($check) {
+        $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+        if (!empty($consideredWorkingTime)) {
+            $fieldValue = new ExtraFieldValue('work');
+            $resultExtra = $fieldValue->getAllValuesForAnItem(
+                $work_data['id'],
+                true
             );
 
-            $linkInfo = GradebookUtils::isResourceInCourseGradebook(
-                api_get_course_id(),
-                3,
-                $id,
-                api_get_session_id()
-            );
-            $link_id = $linkInfo['id'];
-            if (false !== $linkInfo) {
-                GradebookUtils::remove_resource_from_course_gradebook($link_id);
+            $workingTime = null;
+            foreach ($resultExtra as $field) {
+                $field = $field['value'];
+                if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                    $workingTime = $field->getValue();
+
+                    break;
+                }
             }
 
-            return true;
+            $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
+            if (!empty($workingTime)) {
+                foreach ($courseUsers as $user) {
+                    $userWorks = get_work_user_list(
+                        0,
+                        100,
+                        null,
+                        null,
+                        $work_data['iid'],
+                        null,
+                        $user['user_id'],
+                        false,
+                        $course_id,
+                        $sessionId
+                    );
+
+                    if (1 != count($userWorks)) {
+                        continue;
+                    }
+                    Event::eventRemoveVirtualCourseTime(
+                        $course_id,
+                        $user['user_id'],
+                        $sessionId,
+                        $workingTime,
+                        $work_data['iid']
+                    );
+                }
+            }
         }
+
+        // Deleting all contents inside the folder
+        $sql = "UPDATE $table SET active = 2
+                WHERE filetype = 'folder' AND iid = $id";
+        Database::query($sql);
+
+        $sql = "UPDATE $table SET active = 2
+                WHERE parent_id = $id";
+        Database::query($sql);
+
+        /*$new_dir = $work_data_url.'_DELETED_'.$id;
+
+        if ('true' == api_get_setting('permanently_remove_deleted_files')) {
+            my_delete($work_data_url);
+        } else {
+            if (file_exists($work_data_url)) {
+                rename($work_data_url, $new_dir);
+            }
+        }*/
+
+        // Gets calendar_id from student_publication_assigment
+        $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
+                WHERE c_id = $course_id AND publication_id = $id";
+        $res = Database::query($sql);
+        $calendar_id = Database::fetch_row($res);
+
+        // delete from agenda if it exists
+        if (!empty($calendar_id[0])) {
+            $sql = "DELETE FROM $t_agenda
+                    WHERE c_id = $course_id AND id = '".$calendar_id[0]."'";
+            Database::query($sql);
+        }
+        $sql = "DELETE FROM $TSTDPUBASG
+                WHERE c_id = $course_id AND publication_id = $id";
+        Database::query($sql);
+
+        Skill::deleteSkillsFromItem($id, ITEM_TYPE_STUDENT_PUBLICATION);
+
+        Event::addEvent(
+            LOG_WORK_DIR_DELETE,
+            LOG_WORK_DATA,
+            [
+                'id' => $work_data['iid'],
+                'url' => $work_data['url'],
+                'title' => $work_data['title'],
+            ],
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            $sessionId
+        );
+
+        $linkInfo = GradebookUtils::isResourceInCourseGradebook(
+            api_get_course_id(),
+            3,
+            $id,
+            $sessionId
+        );
+
+        if (false !== $linkInfo) {
+            $link_id = $linkInfo['id'];
+            GradebookUtils::remove_resource_from_course_gradebook($link_id);
+        }
+
+        return true;
     }
+
 }
 
 /**

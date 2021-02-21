@@ -22,7 +22,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE gradebook_result_log CHANGE id_result result_id INT NOT NULL');
         }
 
-
         $this->addSql('UPDATE gradebook_result_log SET user_id = NULL WHERE user_id = 0');
         $this->addSql('ALTER TABLE gradebook_result_log CHANGE user_id user_id INT DEFAULT NULL');
 
@@ -36,14 +35,12 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_C5C4CABBA76ED395 ON gradebook_result_log (user_id)');
         }
 
-
         $table = $schema->getTable('gradebook_category');
 
         $this->addSql('ALTER TABLE gradebook_category CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql(
             'DELETE FROM gradebook_category WHERE user_id IS NOT NULL AND user_id NOT IN (SELECT id FROM user)'
         );
-
 
         if ($table->hasIndex('idx_gb_cat_parent')) {
             $this->addSql(' DROP INDEX idx_gb_cat_parent ON gradebook_category;');
@@ -86,7 +83,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('gradebooks_to_validate_in_dependence')) {
             $this->addSql('ALTER TABLE gradebook_category ADD gradebooks_to_validate_in_dependence INT DEFAULT NULL');
         }
-
 
         if (false === $table->hasForeignKey('FK_96A4C705A76ED395')) {
             $this->addSql(
@@ -177,7 +173,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_gl_cat ON gradebook_link (category_id)');
         }
 
-
         $this->addSql('ALTER TABLE gradebook_link CHANGE user_id user_id INT DEFAULT NULL');
 
         if (false === $table->hasForeignKey('FK_4F0F595FA76ED395')) {
@@ -225,7 +220,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_B88AEB67A76ED395')) {
             $this->addSql('CREATE INDEX IDX_B88AEB67A76ED395 ON gradebook_result (user_id)');
         }
-
 
         $table = $schema->getTable('gradebook_certificate');
         $this->addSql('ALTER TABLE gradebook_certificate CHANGE cat_id cat_id INT DEFAULT NULL;');
@@ -286,8 +280,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_1F554C7474C99BA2')) {
             $this->addSql('CREATE INDEX IDX_1F554C7474C99BA2 ON gradebook_linkeval_log (user_id_log)');
         }
-
-
 
         $table = $schema->getTable('gradebook_score_log');
 

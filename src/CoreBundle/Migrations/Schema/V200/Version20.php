@@ -191,8 +191,6 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE usergroup ADD resource_node_id INT DEFAULT NULL');
         }
 
-
-
         // Update template.
         $table = $schema->getTable('templates');
         if ($table->hasColumn('course_code')) {

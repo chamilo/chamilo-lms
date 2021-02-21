@@ -116,7 +116,6 @@ class Version20170625123000 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_2C7640A76ED395 ON c_attendance_result (user_id);');
         }
 
-
         if (false === $table->hasIndex('IDX_2C7640163DDA15')) {
             $this->addSql('CREATE INDEX IDX_2C7640163DDA15 ON c_attendance_result (attendance_id);');
         }

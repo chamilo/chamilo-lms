@@ -26,7 +26,6 @@ class Version20210221082033 extends AbstractMigrationChamilo
         $rootPath = $kernel->getProjectDir();
         $doctrine = $container->get('doctrine');
 
-
         $em = $doctrine->getManager();
         /** @var Connection $connection */
         $connection = $em->getConnection();

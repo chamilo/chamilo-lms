@@ -936,7 +936,6 @@ function deleteDirWork($id)
 
         return true;
     }
-
 }
 
 /**

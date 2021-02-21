@@ -4,11 +4,8 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20190110182615 extends AbstractMigrationChamilo
@@ -68,7 +65,6 @@ class Version20190110182615 extends AbstractMigrationChamilo
                 'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB12469DE2 FOREIGN KEY (category_id) REFERENCES c_lp_category (iid)'
             );
         }
-
 
         $table = $schema->getTable('c_lp_category');
         if (false === $table->hasColumn('session_id')) {

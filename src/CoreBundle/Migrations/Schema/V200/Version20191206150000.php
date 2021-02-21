@@ -4,12 +4,8 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\Asset;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Extra fields.

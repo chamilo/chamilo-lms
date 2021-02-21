@@ -87,7 +87,6 @@ class GradebookCategory
      */
     protected $certifMinScore;
 
-
     /**
      * @var int
      *
@@ -448,6 +447,47 @@ class GradebookCategory
     public function setIsRequirement($isRequirement)
     {
         $this->isRequirement = $isRequirement;
+
+        return $this;
+    }
+
+    public function getCourse(): Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(Course $course): self
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    public function getParent(): ?GradebookCategory
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param GradebookCategory|null $parent
+     *
+     * @return GradebookCategory
+     */
+    public function setParent(?GradebookCategory $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): self
+    {
+        $this->session = $session;
 
         return $this;
     }

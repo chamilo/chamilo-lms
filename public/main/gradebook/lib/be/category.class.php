@@ -549,7 +549,7 @@ class Category implements GradebookItem
         $category->set_user_id($gradebookCategory->getId());
         //$category->set_course_code($gradebookCategory->getCourseCode());
         $category->setCourseId($gradebookCategory->getCourse()->getId());
-        $category->set_parent_id($gradebookCategory->getParentId());
+        $category->set_parent_id($gradebookCategory->getParent()->getId());
         $category->set_weight($gradebookCategory->getWeight());
         $category->set_visible($gradebookCategory->getVisible());
         $category->set_session_id($gradebookCategory->getSessionId());
@@ -576,13 +576,17 @@ class Category implements GradebookItem
 
             $courseInfo = api_get_course_info($this->course_code);
             $course = api_get_course_entity($courseInfo['real_id']);
+            $parent = null;
+            if (!empty($this->parent)) {
+                $parent = $em->getRepository(GradebookCategory::class)->find($this->parent);
+            }
 
             $category = new GradebookCategory();
             $category->setName($this->name);
             $category->setDescription($this->description);
             $category->setUser(api_get_user_entity($this->user_id));
             $category->setCourse($course);
-            $category->setParentId($this->parent);
+            $category->setParent($parent);
             $category->setWeight($this->weight);
             $category->setVisible($this->visible);
             $category->setCertifMinScore($this->certificate_min_score);
@@ -650,32 +654,35 @@ class Category implements GradebookItem
     public function save()
     {
         $em = Database::getManager();
+        $repo = $em->getRepository(GradebookCategory::class);
 
-        /** @var GradebookCategory $gradebookCategory */
-        $gradebookCategory = $em
-            ->getRepository(GradebookCategory::class)
-            ->find($this->id);
+        /** @var GradebookCategory $category */
+        $category = $repo->find($this->id);
 
-        if (empty($gradebookCategory)) {
+        if (null === $category) {
             return false;
         }
 
+        $parent = null;
+        if (!empty($this->parent)) {
+            $parent = $repo->find($this->parent);
+        }
         $course = api_get_course_entity();
 
-        $gradebookCategory->setName($this->name);
-        $gradebookCategory->setDescription($this->description);
-        $gradebookCategory->setUser(api_get_user_entity($this->user_id));
-        $gradebookCategory->setCourse($course);
-        //$gradebookCategory->setCourseCode($this->course_code);
-        $gradebookCategory->setParentId($this->parent);
-        $gradebookCategory->setWeight($this->weight);
-        $gradebookCategory->setVisible($this->visible);
-        $gradebookCategory->setCertifMinScore($this->certificate_min_score);
-        $gradebookCategory->setGenerateCertificates($this->generateCertificates);
-        $gradebookCategory->setGradeModelId($this->grade_model_id);
-        $gradebookCategory->setIsRequirement($this->isRequirement);
+        $category->setName($this->name);
+        $category->setDescription($this->description);
+        $category->setUser(api_get_user_entity($this->user_id));
+        $category->setCourse($course);
+        //$category->setCourseCode($this->course_code);
+        $category->setParent($parent);
+        $category->setWeight($this->weight);
+        $category->setVisible($this->visible);
+        $category->setCertifMinScore($this->certificate_min_score);
+        $category->setGenerateCertificates($this->generateCertificates);
+        $category->setGradeModelId($this->grade_model_id);
+        $category->setIsRequirement($this->isRequirement);
 
-        $em->persist($gradebookCategory);
+        $em->persist($category);
         $em->flush();
 
         if (!empty($this->id)) {

@@ -49,11 +49,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_attendance_calendar ADD CONSTRAINT FK_AA3A9AB8163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid);');
         }
 
-        if ($table->hasIndex('attendance_id')) {
-            $this->addSql('DROP INDEX attendance_id ON c_attendance_calendar');
-        }
-
-        if (false === $table->hasIndex('attendance_id')) {
+        if (false === $table->hasIndex('IDX_AA3A9AB8163DDA15')) {
             $this->addSql('CREATE INDEX IDX_AA3A9AB8163DDA15 ON c_attendance_calendar (attendance_id);');
         }
 
@@ -83,9 +79,6 @@ class Version20170625123000 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_AD1394FA19EA43C3')) {
             $this->addSql('CREATE INDEX IDX_AD1394FA19EA43C3 ON c_attendance_sheet (attendance_calendar_id);');
         }
-        if ($table->hasIndex('user')) {
-            $this->addSql('DROP INDEX user ON c_attendance_sheet;');
-        }
 
         if (false === $table->hasIndex('IDX_AD1394FAA76ED395')) {
             $this->addSql('CREATE INDEX IDX_AD1394FAA76ED395 ON c_attendance_sheet (user_id);');
@@ -97,7 +90,17 @@ class Version20170625123000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_attendance_result');
         }
 
-        $this->addSql('UPDATE c_attendance_result SET attendance_id = NULL WHERE attendance_id = 0;');
+        if ($table->hasIndex('user_id')) {
+            $this->addSql('DROP INDEX user_id ON c_attendance_result');
+        }
+
+        if ($table->hasIndex('attendance_id')) {
+            $this->addSql('DROP INDEX attendance_id ON c_attendance_result;');
+        }
+
+        $this->addSql('UPDATE c_attendance_result SET attendance_id = NULL WHERE attendance_id = 0');
+        $this->addSql('UPDATE c_attendance_result SET user_id = NULL WHERE user_id = 0');
+
         //ALTER TABLE c_attendance_result DROP c_id, ;
         $this->addSql('ALTER TABLE c_attendance_result CHANGE user_id user_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL ');
 
@@ -109,16 +112,10 @@ class Version20170625123000 extends AbstractMigrationChamilo
         if (false === $table->hasForeignKey('FK_2C7640163DDA15')) {
             $this->addSql('ALTER TABLE c_attendance_result ADD CONSTRAINT FK_2C7640163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid);');
         }
-        if ($table->hasIndex('user_id')) {
-            $this->addSql('DROP INDEX user_id ON c_attendance_result;');
-        }
         if (false === $table->hasIndex('IDX_2C7640A76ED395')) {
             $this->addSql('CREATE INDEX IDX_2C7640A76ED395 ON c_attendance_result (user_id);');
         }
 
-        if ($table->hasIndex('attendance_id')) {
-            $this->addSql('DROP INDEX attendance_id ON c_attendance_result;');
-        }
 
         if (false === $table->hasIndex('IDX_2C7640163DDA15')) {
             $this->addSql('CREATE INDEX IDX_2C7640163DDA15 ON c_attendance_result (attendance_id);');
@@ -135,11 +132,10 @@ class Version20170625123000 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_attendance_calendar_rel_group SET calendar_id = NULL WHERE calendar_id = 0');
         $this->addSql('ALTER TABLE c_attendance_calendar_rel_group CHANGE group_id group_id INT DEFAULT NULL, CHANGE calendar_id calendar_id INT DEFAULT NULL;');
 
-        if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_attendance_calendar_rel_group');
-        }
-
         if (false === $table->hasForeignKey('FK_C2AB1FACFE54D947')) {
+            if ($table->hasIndex('group')) {
+                $this->addSql('DROP INDEX `group` ON c_attendance_calendar_rel_group');
+            }
             $this->addSql('ALTER TABLE c_attendance_calendar_rel_group ADD CONSTRAINT FK_C2AB1FACFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid);');
         }
 
@@ -151,9 +147,6 @@ class Version20170625123000 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_C2AB1FACA40A2C8 ON c_attendance_calendar_rel_group (calendar_id);');
         }
 
-        if ($table->hasIndex('group')) {
-            $this->addSql('DROP INDEX `group` ON c_attendance_calendar_rel_group;');
-        }
         if (false === $table->hasIndex('IDX_C2AB1FACFE54D947')) {
             $this->addSql('CREATE INDEX IDX_C2AB1FACFE54D947 ON c_attendance_calendar_rel_group (group_id);');
         }

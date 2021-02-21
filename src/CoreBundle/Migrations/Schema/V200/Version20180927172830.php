@@ -52,6 +52,8 @@ class Version20180927172830 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE c_forum_forum CHANGE lp_id lp_id INT DEFAULT NULL');
+        $this->addSql('UPDATE c_forum_forum SET lp_id = NULL WHERE lp_id = 0');
+
         if (false === $table->hasForeignKey('FK_47A9C9968DFD1EF')) {
             $this->addSql('ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9968DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid)');
         }

@@ -19,12 +19,6 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $table = $schema->getTable('message');
         $this->addSql('ALTER TABLE message CHANGE parent_id parent_id BIGINT DEFAULT NULL');
 
-        if (false === $table->hasForeignKey('FK_B6BD307F727ACA70')) {
-            $this->addSql(
-                'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F727ACA70 FOREIGN KEY (parent_id) REFERENCES message (id)'
-            );
-        }
-
         if ($table->hasIndex('idx_message_parent')) {
             $this->addSql('DROP INDEX idx_message_parent ON message');
         }

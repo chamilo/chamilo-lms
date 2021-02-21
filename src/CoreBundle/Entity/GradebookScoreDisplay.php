@@ -31,18 +31,15 @@ class GradebookScoreDisplay
     protected $score;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display", type="string", length=40, nullable=false)
      */
-    protected $display;
+    protected ?string $display;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="category_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
+     * @ORM\JoinColumn(name="category_id",referencedColumnName="id")
      */
-    protected $categoryId;
+    protected GradebookCategory $category;
 
     /**
      * @var float

@@ -39,19 +39,15 @@ class Promotion
     protected ?string $description;
 
     /**
-     * @var Career
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career")
      * @ORM\JoinColumn(name="career_id", referencedColumnName="id")
      */
-    protected $career;
+    protected Career $career;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    protected $status;
+    protected int $status;
 
     /**
      * Get id.

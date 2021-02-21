@@ -11,9 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="gradebook_certificate",
  *     indexes={
- *      @ORM\Index(name="idx_gradebook_certificate_category_id", columns={"cat_id"}),
  *      @ORM\Index(name="idx_gradebook_certificate_user_id", columns={"user_id"}),
- *      @ORM\Index(name="idx_gradebook_certificate_category_id_user_id", columns={"cat_id", "user_id"})}
+ *     }
  * )
  * @ORM\Entity
  */
@@ -31,15 +30,14 @@ class GradebookCertificate
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="cat_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
+     * @ORM\JoinColumn(name="cat_id", referencedColumnName="id")
      */
-    protected $catId;
+    protected GradebookCategory $category;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCertificates")
-     * @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id",referencedColumnName="id", onDelete="CASCADE")
      */
     protected User $user;
 
@@ -70,30 +68,6 @@ class GradebookCertificate
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
      */
     protected $downloadedAt;
-
-    /**
-     * Set catId.
-     *
-     * @param int $catId
-     *
-     * @return GradebookCertificate
-     */
-    public function setCatId($catId)
-    {
-        $this->catId = $catId;
-
-        return $this;
-    }
-
-    /**
-     * Get catId.
-     *
-     * @return int
-     */
-    public function getCatId()
-    {
-        return $this->catId;
-    }
 
     /**
      * Set scoreCertificate.

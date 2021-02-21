@@ -88,13 +88,13 @@ class ResourceFile
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $mimeType;
+    protected ?string $mimeType;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $originalName;
+    protected ?string $originalName;
 
     /**
      * @var string

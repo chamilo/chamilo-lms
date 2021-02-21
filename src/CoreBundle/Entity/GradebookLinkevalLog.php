@@ -70,12 +70,10 @@ class GradebookLinkevalLog
     protected $type;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinkEvalLogs")
      * @ORM\JoinColumn(name="user_id_log", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @var \DateTime

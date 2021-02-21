@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\MappedSuperclass
  */
-class ExtraField // extends BaseAttribute
+class ExtraField
 {
     public const USER_FIELD_TYPE = 1;
     public const COURSE_FIELD_TYPE = 2;

@@ -61,10 +61,7 @@ class ExtraFieldValues
         $this->comment = '';
     }
 
-    /**
-     * @return ExtraField
-     */
-    public function getField()
+    public function getField(): ExtraField
     {
         return $this->field;
     }

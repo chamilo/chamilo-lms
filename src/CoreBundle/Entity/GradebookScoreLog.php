@@ -32,19 +32,16 @@ class GradebookScoreLog
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="category_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
+     * @ORM\JoinColumn(name="category_id",referencedColumnName="id")
      */
-    protected $categoryId;
+    protected GradebookCategory $category;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookScoreLogs")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @var float

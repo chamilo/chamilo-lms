@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,13 +13,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table(name="gradebook_category",
  *  indexes={
- *     @ORM\Index(name="idx_gb_cat_parent", columns={"parent_id"}),
  *  }))
  * @ORM\Entity
  */
 class GradebookCategory
 {
     use UserTrait;
+    use CourseTrait;
 
     /**
      * @var int
@@ -42,25 +43,28 @@ class GradebookCategory
     protected ?string $description;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCategories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookCategories")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="parent_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
+     * @ORM\JoinColumn(name="parent_id",referencedColumnName="id")
      */
-    protected $parentId;
+    protected ?GradebookCategory $parent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    protected ?Session $session;
 
     /**
      * @var float
@@ -83,12 +87,6 @@ class GradebookCategory
      */
     protected $certifMinScore;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
 
     /**
      * @var int
@@ -224,50 +222,6 @@ class GradebookCategory
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    /**
-     * Set course.
-     */
-    public function setCourse(Course $course): self
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    /**
-     * Get course.
-     *
-     * @return Course
-     */
-    public function getCourse()
-    {
-        return $this->course;
-    }
-
-    /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return GradebookCategory
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
     }
 
     /**

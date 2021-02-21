@@ -42,26 +42,22 @@ class ResourceComment
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="comments")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $resourceNode;
+    protected ResourceNode $resourceNode;
 
     /**
-     * @var User
-     *
      * @Groups({"comment:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $author;
+    protected User $author;
 
     /**
-     * @var string
-     *
      * @Groups({"comment:read"})
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="content", type="string", nullable=false)
      */
-    protected $content;
+    protected string $content;
 
     /**
      * @Gedmo\TreeParent

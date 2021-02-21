@@ -33,37 +33,37 @@ class ResourceLink
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $resourceNode;
+    protected ResourceNode $resourceNode;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
      */
-    protected $course;
+    protected ?Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected $session;
+    protected ?Session $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
-    protected $user;
+    protected ?User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
-    protected $group;
+    protected ?CGroup $group;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
      */
-    protected $userGroup;
+    protected ?Usergroup $userGroup;
 
     /**
      * @ORM\OneToMany(
@@ -92,9 +92,6 @@ class ResourceLink
      */
     protected $endVisibilityAt;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->resourceRight = new ArrayCollection();

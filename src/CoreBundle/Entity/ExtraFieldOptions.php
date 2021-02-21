@@ -29,35 +29,27 @@ class ExtraFieldOptions
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="options")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
-    protected $field;
+    protected ExtraField $field;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="option_value", type="text", nullable=true)
      */
-    protected $value;
+    protected ?string $value;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true)
      */
-    protected $displayText;
+    protected ?string $displayText;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="priority", type="string", length=255, nullable=true)
      */
-    protected $priority;
+    protected ?string $priority;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="priority_message", type="string", length=255, nullable=true)
      */
-    protected $priorityMessage;
+    protected ?string $priorityMessage;
 
     /**
      * @var int

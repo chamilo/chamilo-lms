@@ -8,11 +8,11 @@ use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
 use Database;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Xabbuh\XApi\Common\Exception\ConflictException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Xabbuh\XApi\Common\Exception\AccessDeniedException;
+use Xabbuh\XApi\Common\Exception\XApiException;
 
 /**
  * Class LrsRequest.
@@ -39,31 +39,17 @@ class LrsRequest
         $controllerName = $this->getControllerName();
         $methodName = $this->getMethodName();
 
-        if (class_exists($controllerName)
-            && method_exists($controllerName, $methodName)
-        ) {
-            try {
-                if ($controllerName !== AboutController::class) {
-                    $this->validateAuth();
-                    $this->validateVersion();
-                }
-
-                /** @var HttpResponse $response */
-                $response = call_user_func([new $controllerName(), $methodName]);
-            } catch (AccessDeniedHttpException $accessDeniedHttpException) {
-                $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
-            } catch (ConflictException | ConflictHttpException $conflictException) {
-                $response = HttpResponse::create('', HttpResponse::HTTP_CONFLICT);
-            } catch (HttpException $httpException) {
-                $response = HttpResponse::create(
-                    $httpException->getMessage(),
-                    $httpException->getStatusCode()
-                );
-            } catch (\Exception $exception) {
-                $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
-            }
-        } else {
-            $response = HttpResponse::create('Not Found', HttpResponse::HTTP_NOT_FOUND);
+        try {
+            $response = $this->generateResponse($controllerName, $methodName);
+        } catch (XApiException $xApiException) {
+            $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
+        } catch (HttpException $httpException) {
+            $response = HttpResponse::create(
+                $httpException->getMessage(),
+                $httpException->getStatusCode()
+            );
+        } catch (\Exception $exception) {
+            $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
         }
 
         $response->headers->set('X-Experience-API-Version', '1.0.3');
@@ -71,10 +57,15 @@ class LrsRequest
         $response->send();
     }
 
+    /**
+     * @throws \Xabbuh\XApi\Common\Exception\AccessDeniedException
+     *
+     * @return bool
+     */
     private function validateAuth(): bool
     {
         if (!$this->request->headers->has('Authorization')) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         $authHeader = $this->request->headers->get('Authorization');
@@ -82,7 +73,7 @@ class LrsRequest
         $parts = explode('Basic ', $authHeader, 2);
 
         if (empty($parts[1])) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         $authDecoded = base64_decode($parts[1]);
@@ -90,7 +81,7 @@ class LrsRequest
         $parts = explode(':', $authDecoded, 2);
 
         if (empty($parts) || count($parts) !== 2) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         list($username, $password) = $parts;
@@ -102,7 +93,7 @@ class LrsRequest
             );
 
         if (null == $auth) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         return true;
@@ -148,5 +139,32 @@ class LrsRequest
         $method = $this->request->getMethod();
 
         return strtolower($method);
+    }
+
+    /**
+     * @param string $controllerName
+     * @param string $methodName
+     *
+     * @throws \Xabbuh\XApi\Common\Exception\AccessDeniedException
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function generateResponse(string $controllerName, string $methodName): HttpResponse
+    {
+        if (!class_exists($controllerName)
+            || !method_exists($controllerName, $methodName)
+        ) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($controllerName !== AboutController::class) {
+            $this->validateAuth();
+            $this->validateVersion();
+        }
+
+        /** @var HttpResponse $response */
+        $response = call_user_func([new $controllerName(), $methodName]);
+
+        return $response;
     }
 }

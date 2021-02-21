@@ -856,7 +856,7 @@ class Attendance
     /**
      * update users' attendance results.
      *
-     * @param array $user_ids     registered users inside current course
+     * @param array $user_ids registered users inside current course
      */
     public function updateUsersResults($user_ids, CAttendance $attendance)
     {
@@ -991,7 +991,7 @@ class Attendance
             return 0;
         }
 
-        return $attendance->getCalendars()->matching($criteria);
+        return $attendance->getCalendars()->matching($criteria)->count();
 
         /*$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $attendanceId = (int) $attendanceId;

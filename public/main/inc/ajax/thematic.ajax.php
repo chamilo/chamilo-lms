@@ -2,9 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * Responses to AJAX calls for thematic.
- */
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CThematicAdvance;
+
 require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
 
@@ -86,47 +87,51 @@ switch ($action) {
     case 'get_datetime_by_attendance':
         $attendance_id = (int) $_REQUEST['attendance_id'];
         $thematic_advance_id = (int) $_REQUEST['thematic_advance_id'];
-
         $label = '';
-        $input_select = '';
-        if (!empty($attendance_id)) {
-            $attendance = new Attendance();
-            $thematic = new Thematic();
-            $thematic_list = $thematic->getThematicList($course, $session);
+        $inputSelect = '';
 
+        $repo = Container::getAttendanceRepository();
+        /** @var CAttendance $attendance */
+        $attendance = $repo->find($attendance_id);
+
+        $repo = Container::getThematicAdvanceRepository();
+        /** @var CThematicAdvance $thematicAdvance */
+        $thematicAdvance = $repo->find($thematic_advance_id);
+
+        if (!empty($attendance)) {
+            $thematicList = $thematic->getThematicList($course, $session);
             $my_list = $thematic_list_temp = [];
-            foreach ($thematic_list as $item) {
+            foreach ($thematicList as $item) {
                 $thematic_list_temp[] = $item->getAdvances();
             }
+
             $new_thematic_list = [];
             foreach ($thematic_list_temp as $advanceList) {
-                foreach ($advanceList as $advance) {
-                    $new_thematic_list[$advance->getIid()] = [
-                        'attendance_id' => $advance->getAttendance()->getIid(),
-                        'start_date' => $advance->getStartDate()->format('Y-m-d H:i:s'),
-                    ];
+                foreach ($advanceList as $advanceItem) {
+                    if (!empty($advanceItem->getAttendance())) {
+                        $new_thematic_list[$advanceItem->getIid()] = [
+                            'attendance_id' => $advanceItem->getAttendance()->getIid(),
+                            'start_date' => $advanceItem->getStartDate()->format('Y-m-d H:i:s'),
+                        ];
+                    }
                 }
-                /*if (!empty($item['attendance_id'])) {
-                    $new_thematic_list[$item['id']] = [
-                        'attendance_id' => $item['attendance_id'],
-                        'start_date' => $item['start_date'],
-                    ];
-                }*/
             }
 
-            $attendance_calendar = $attendance->get_attendance_calendar($attendance_id);
-
+            $attendance_calendar = $attendance->getCalendars();
             $label = get_lang('Start Date');
             if (!empty($attendance_calendar)) {
-                $input_select .= '<select
+                $inputSelect .= '<select
                         id="start_date_select_calendar"
                         name="start_date_by_attendance" size="7" class="form-control">';
                 foreach ($attendance_calendar as $calendar) {
                     $selected = null;
                     $insert = true;
-                    //checking if was already taken
+                    $utcDateTime = $calendar->getDateTime()->format('Y-m-d H:i:s');
+                    $dateTime = api_get_local_time($calendar->getDateTime()->format('Y-m-d H:i:s'));
+
+                    // Checking if it was already taken.
                     foreach ($new_thematic_list as $key => $thematic_item) {
-                        if ($calendar['db_date_time'] == $thematic_item['start_date']) {
+                        if ($utcDateTime === $thematic_item['start_date']) {
                             $insert = false;
                             if ($thematic_advance_id == $key) {
                                 $insert = true;
@@ -135,21 +140,24 @@ switch ($action) {
                             break;
                         }
                     }
-                    if (true == $insert) {
-                        $input_select .= '<option '.$selected.' value="'.$calendar['date_time'].'">'.$calendar['date_time'].'</option>';
+
+                    if ($insert) {
+                        $inputSelect .= '<option
+                            '.$selected.'
+                            value="'.$dateTime.'">'.
+                            $dateTime.'</option>';
                     }
                 }
-                $input_select .= '</select>';
+                $inputSelect .= '</select>';
             } else {
-                $input_select .= '<em>'.get_lang('There is no date/time registered yet').'</em>';
+                $inputSelect .= '<em>'.get_lang('There is no date/time registered yet').'</em>';
             }
         }
-        ?>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"><?php echo $label; ?></label>
-            <div class="col-sm-8"><?php echo $input_select; ?></div>
-        </div>
-        <?php
+        echo '<div class="row form-group">';
+        echo '<label class="col-sm-2 control-label">'.$label.'</label>';
+        echo '<div class="col-sm-8">'.$inputSelect.'</div>';
+        echo '</div>';
+
         break;
     case 'update_done_thematic_advance':
         $id = (int) $_GET['thematic_advance_id'];

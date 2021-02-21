@@ -59,9 +59,14 @@ $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 $displayHeader = !empty($_REQUEST['display']) && 'no_header' === $_REQUEST['display'] ? false : true;
 $thematicId = isset($_REQUEST['thematic_id']) ? (int) $_REQUEST['thematic_id'] : null;
 $thematicAdvanceId = isset($_REQUEST['thematic_advance_id']) ? (int) $_REQUEST['thematic_advance_id'] : null;
+$url = api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance&'.api_get_cidreq();
 
 $htmlHeadXtra[] = '<script>
 $(function() {
+    if ($("#div_result").html() !== undefined && $("#div_result").html().length == 0) {
+        $("#div_result").html("0");
+    }
+
     $(".thematic_advance_actions, .thematic_tools ").hide();
 	$(".thematic_content").mouseover(function() {
 		var id = parseInt(this.id.split("_")[3]);
@@ -83,9 +88,7 @@ $(function() {
 		$("#thematic_advance_tools_"+id ).hide();
 	});
 });
-</script>';
 
-$htmlHeadXtra[] = '<script>
 function check_per_attendance(obj) {
 	if (obj.checked) {
         $("#div_datetime_by_attendance").show();
@@ -103,6 +106,51 @@ function check_per_custom_date(obj) {
 	} else {
         $("#div_custom_datetime").hide();
         $("#div_datetime_by_attendance").show();
+	}
+}
+
+function datetime_by_attendance(attendance_id, thematic_advance_id) {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		type: "GET",
+		url: "'.$url.'",
+		data: "attendance_id="+attendance_id+"&thematic_advance_id="+thematic_advance_id,
+		success: function(data) {
+			$("#div_datetime_attendance").html(data);
+            if (thematic_advance_id == 0) {
+                $("#from_attendance option:first").attr("checked", true);
+                $("#div_datetime_by_attendance").show();
+                $("#div_custom_datetime").hide();
+            }
+		}
+	});
+}
+
+function update_done_thematic_advance(selected_value) {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(myObject) {},
+		type: "GET",
+		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=update_done_thematic_advance",
+		data: "thematic_advance_id="+selected_value,
+		success: function(data) {
+			$("#div_result").html(data);
+		}
+	});
+
+	// clean all radios
+	for (var i=0; i< $(".done_thematic").length;i++) {
+		var id_radio_thematic = $(".done_thematic").get(i).id;
+		$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
+	}
+
+	// set background to previous radios
+	for (var i=0; i < $(".done_thematic").length;i++) {
+		var id_radio_thematic = $(".done_thematic").get(i).id;
+		$("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
+		if ($(".done_thematic").get(i).value == selected_value) {
+			break;
+		}
 	}
 }
 </script>';
@@ -164,9 +212,7 @@ switch ($action) {
         ) {
             $title = trim($_POST['title']);
             $content = trim($_POST['content']);
-            $session_id = api_get_session_id();
-            $thematicManager->set_thematic_attributes($thematicId, $title, $content, $session_id);
-            $thematicManager->thematic_save();
+            $thematicManager->thematicSave($thematicId, $title, $content, $course, $session);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
 
             header('Location: '.$currentUrl);
@@ -258,7 +304,7 @@ switch ($action) {
         }
 
         // Import the progress.
-        $current_thematic = null;
+        $currentThematic = null;
         foreach ($csv_import_array as $key => $item) {
             if (!$key) {
                 continue;
@@ -266,35 +312,22 @@ switch ($action) {
 
             switch ($item[0]) {
                 case 'title':
-                    $thematicManager->set_thematic_attributes(
-                        null,
-                        $item[1],
-                        $item[2],
-                        api_get_session_id()
-                    );
-                    $current_thematic = $thematicManager->thematic_save();
+                    $currentThematic = $thematicManager->thematicSave(null, $item[1], $item[2], $course, $session);
                     $description_type = 1;
                     break;
                 case 'plan':
-                    $thematicManager->set_thematic_plan_attributes(
-                        $current_thematic,
-                        $item[1],
-                        $item[2],
-                        $description_type
-                    );
-                    $thematicManager->thematic_plan_save();
+                    $thematicManager->thematicPlanSave($currentThematic, $item[1], $item[2], $description_type);
                     $description_type++;
                     break;
                 case 'progress':
-                    $thematicManager->set_thematic_advance_attributes(
+                    $thematicManager->thematicAdvanceSave(
+                        $currentThematic,
                         null,
-                        $current_thematic,
-                        0,
+                        null,
                         $item[3],
                         $item[1],
                         $item[2]
                     );
-                    $thematicManager->thematic_advance_save();
                     break;
             }
         }
@@ -694,26 +727,24 @@ switch ($action) {
             $description_type = $_REQUEST['description_type'];
 
             for ($i = 1; $i < count($title_list) + 1; $i++) {
-                $thematicManager->set_thematic_plan_attributes(
-                    $_REQUEST['thematic_id'],
+                $thematicManager->thematicPlanSave(
+                    $thematicEntity,
                     $title_list[$i],
                     $description_list[$i],
                     $description_type[$i]
                 );
-                $thematicManager->thematic_plan_save();
             }
 
             $saveRedirect = api_get_path(WEB_PATH).'main/course_progress/index.php?';
             $saveRedirect .= api_get_cidreq().'&';
 
             if (isset($_REQUEST['add_item'])) {
-                $thematicManager->set_thematic_plan_attributes(
-                    $_REQUEST['thematic_id'],
+                $thematicManager->thematicPlanSave(
+                    $thematicEntity,
                     '',
                     '',
                     $i
                 );
-                $thematicManager->thematic_plan_save();
                 Display::addFlash(
                     Display::return_message(get_lang('Thematic section has been created successfully'))
                 );
@@ -1012,22 +1043,20 @@ switch ($action) {
         );
         $form->addGroup($radios, null, get_lang('Start date options'));
 
-        /*if (isset($thematic_advance_data['attendance_id']) &&
-            0 == $thematic_advance_data['attendance_id']) {
-            $form->addElement('html', '<div id="div_custom_datetime" style="display:block">');
+        // Custom date.
+        if ($advance && $advance->getAttendance()) {
+            $form->addHtml('<div id="div_custom_datetime" style="display:none">');
         } else {
-            $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
-        }*/
-
+            $form->addHtml('<div id="div_custom_datetime" style="display:block">');
+        }
         $form->addElement('DateTimePicker', 'custom_start_date', get_lang('Start Date'));
-        $form->addElement('html', '</div>');
+        $form->addHtml('</div>');
 
-        if (isset($thematic_advance_data['attendance_id']) &&
-            0 == $thematic_advance_data['attendance_id']
-        ) {
-            $form->addElement('html', '<div id="div_datetime_by_attendance" style="display:none">');
+        // Date by attendance.
+        if ($advance && $advance->getAttendance()) {
+            $form->addHtml('<div id="div_datetime_by_attendance" style="display:block">');
         } else {
-            $form->addElement('html', '<div id="div_datetime_by_attendance" style="display:block">');
+            $form->addHtml('<div id="div_datetime_by_attendance" style="display:none">');
         }
 
         if (count($attendance_select) > 1) {
@@ -1046,10 +1075,20 @@ switch ($action) {
             );
         }
 
+        $calendar_select = [];
+        if ($advance) {
+            $calendars = $advance->getAttendance()->getCalendars();
+            if (!empty($calendars)) {
+                foreach ($calendars as $calendar) {
+                    $dateTime = $calendar->getDateTime()->format('Y-m-d H:i:s');
+                    $calendar_select[$dateTime] = $dateTime;
+                }
+            }
+        }
+
         $form->addHtml('<div id="div_datetime_attendance">');
         if (!empty($calendar_select)) {
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'start_date_by_attendance',
                 get_lang('Start Date'),
                 $calendar_select,
@@ -1087,7 +1126,7 @@ switch ($action) {
         } else {
             $form->addButtonUpdate(get_lang('Save'));
         }
-
+        $js = '';
         $attendance_select_item_id = null;
         if (count($attendance_select) > 1) {
             $i = 1;
@@ -1101,9 +1140,9 @@ switch ($action) {
             if (!empty($attendance_select_item_id)) {
                 $default['attendance_select'] = $attendance_select_item_id;
                 if ($thematicAdvanceId) {
-                    echo '<script> datetime_by_attendance("'.$attendance_select_item_id.'", "'.$thematicAdvanceId.'"); </script>';
+                    $js .= '<script>datetime_by_attendance("'.$attendance_select_item_id.'", "'.$thematicAdvanceId.'"); </script>';
                 } else {
-                    echo '<script> datetime_by_attendance("'.$attendance_select_item_id.'", 0); </script>';
+                    $js .= '<script>datetime_by_attendance("'.$attendance_select_item_id.'", 0); </script>';
                 }
             }
         }
@@ -1117,48 +1156,56 @@ switch ($action) {
             $default['content'] = $advance->getContent();
             $default['duration_in_hours'] = $advance->getDuration();
 
-            if ($advance->getThematic()) {
-                $default['start_date_type'] = 2;
+            if ($advance->getAttendance()) {
+                $default['start_date_type'] = 1;
                 //$default['custom_start_date'] = null;
                 //if ($advance->getStartDate()) {
-                $default['custom_start_date'] = date(
-                        'Y-m-d H:i:s',
-                        api_strtotime(api_get_local_time($advance->getStartDate()))
-                    );
-            //}
-            } else {
-                $default['start_date_type'] = 1;
                 if (!empty($thematic_advance_data['start_date'])) {
                     $default['start_date_by_attendance'] = api_get_local_time($advance->getStartDate());
                 }
-
-                $default['attendance_select'] = $thematic_advance_data['attendance_id'];
+                $default['attendance_select'] = $advance->getAttendance()->getIid();
+            //}
+            } else {
+                $default['custom_start_date'] = date(
+                    'Y-m-d H:i:s',
+                    api_strtotime(api_get_local_time($advance->getStartDate()))
+                );
             }
         }
+
         $form->setDefaults($default);
 
         if ($form->validate()) {
-            $values = $form->exportValues();
+            $values = $form->getSubmitValues();
             if (isset($_POST['start_date_by_attendance'])) {
                 $values['start_date_by_attendance'] = $_POST['start_date_by_attendance'];
             }
+            $attendanceId = 1 == $values['start_date_type'] && isset($values['attendance_select']) ? $values['attendance_select'] : 0;
+            $attendance = Container::getAttendanceRepository()->find($attendanceId);
 
             $startDate = $values['custom_start_date'];
-            if (2 == $values['start_date_type'] && isset($values['start_date_by_attendance'])) {
+            if (1 == $values['start_date_type'] && isset($values['attendance_select']) &&
+                isset($values['start_date_by_attendance'])
+            ) {
                 $startDate = $values['start_date_by_attendance'];
             }
-            $thematicManager->set_thematic_advance_attributes(
-                isset($values['thematic_advance_id']) ? $values['thematic_advance_id'] : null,
-                $values['thematic_id'],
-                1 == $values['start_date_type'] && isset($values['attendance_select']) ? $values['attendance_select'] : 0,
+
+            $advanceId = isset($values['thematic_advance_id']) ? $values['thematic_advance_id'] : null;
+            $advance = null;
+            if (!empty($advanceId)) {
+                $advance = Container::getThematicAdvanceRepository()->find($advanceId);
+            }
+
+            $newAdvance = $thematicManager->thematicAdvanceSave(
+                $thematicEntity,
+                $attendance,
+                $advance,
                 $values['content'],
                 $startDate,
                 $values['duration_in_hours']
             );
 
-            $affected_rows = $thematicManager->thematic_advance_save();
-
-            if ($affected_rows) {
+            if ($newAdvance) {
                 // get last done thematic advance before move thematic list
                 $last_done_thematic_advance = $thematicManager->get_last_done_thematic_advance($course, $session);
                 // update done advances with de current thematic list
@@ -1180,7 +1227,7 @@ switch ($action) {
             exit;
         }
 
-        $content = $form->returnForm();
+        $content = $form->returnForm().$js;
 
         break;
     case 'thematic_advance_delete':

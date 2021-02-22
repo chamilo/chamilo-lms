@@ -13,5 +13,5 @@ use Symfony\Component\Routing\RouterInterface;
  */
 interface ResourceWithLinkInterface
 {
-    public function getLink(ResourceInterface $resource, RouterInterface $router): string;
+    public function getLink(ResourceInterface $resource, RouterInterface $router, $extraParams = []): string;
 }

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
@@ -49,7 +50,7 @@ class SessionController extends AbstractController
 
         /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
-        /** @var EntityRepository $fieldTagsRepo */
+        /** @var ExtraFieldRelTagRepository $fieldTagsRepo */
         $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
 
         /** @var SequenceRepository $sequenceResourceRepo */
@@ -179,7 +180,7 @@ class SessionController extends AbstractController
             true
         );
 
-        $sessionRequirements = $sequenceResourceRepo->getRequirements(
+        /*$sessionRequirements = $sequenceResourceRepo->getRequirements(
             $session->getId(),
             SequenceResource::SESSION_TYPE
         );
@@ -191,7 +192,7 @@ class SessionController extends AbstractController
 
                 break;
             }
-        }
+        }*/
 
         $plugin = \BuyCoursesPlugin::create();
         $checker = $plugin->isEnabled();
@@ -212,7 +213,7 @@ class SessionController extends AbstractController
 
         $coursesInThisSession = \SessionManager::get_course_list_by_session_id($sessionId);
         $coursesCount = count($coursesInThisSession);
-        $redirectToSession = 1 == $coursesCount && $redirectToSession
+        $redirectToSession = 1 === $coursesCount && $redirectToSession
             ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
             : $redirectToSession;
 
@@ -224,8 +225,8 @@ class SessionController extends AbstractController
             'courses' => $courses,
             'essence' => $essence,
             'session_extra_fields' => $sessionValues->getAllValuesForAnItem($session->getId(), null, true),
-            'has_requirements' => $hasRequirements,
-            'sequences' => $sessionRequirements,
+            //'has_requirements' => $hasRequirements,
+            //'sequences' => $sessionRequirements,
             'is_premium' => $sessionIsPremium,
             'show_tutor' => 'true' === api_get_setting('show_session_coach') ? true : false,
             'page_url' => api_get_path(WEB_PATH)."sessions/{$session->getId()}/about/",
@@ -234,13 +235,13 @@ class SessionController extends AbstractController
                 $session->getId(),
                 api_get_user_id()
             ),
-            'subscribe_button' => \CoursesAndSessionsCatalog::getRegisteredInSessionButton(
+            /*'subscribe_button' => \CoursesAndSessionsCatalog::getRegisteredInSessionButton(
                 $session->getId(),
                 $session->getName(),
                 $hasRequirements,
                 true,
                 true
-            ),
+            ),*/
             'user_session_time' => SessionManager::getDayLeftInSession(
                 ['id' => $session->getId(), 'duration' => $session->getDuration()],
                 api_get_user_id()

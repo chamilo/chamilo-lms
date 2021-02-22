@@ -40,27 +40,14 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 abstract class ResourceRepository extends ServiceEntityRepository
 {
-    /**
-     * @var EntityRepository
-     */
+    /** @var EntityRepository */
     protected $repository;
 
-    /**
-     * @var FilesystemInterface
-     */
+    /** @var FilesystemInterface */
     protected $fs;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     protected $entityManager;
-
-    /**
-     * The entity class FQN.
-     *
-     * @var string
-     */
-    protected $className;
 
     /** @var RouterInterface */
     protected $router;
@@ -76,6 +63,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     /** @var ToolChain */
     protected $toolChain;
+
+    /**
+     * The entity class FQN.
+     *
+     * @var string
+     */
+    protected $className;
+
     protected $settings;
     protected $templates;
     protected $resourceType;
@@ -926,6 +921,16 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return true;
     }
 
+    public function saveUpload(UploadedFile $file)
+    {
+        throw new \Exception('Implement saveUpload');
+    }
+
+    public function getResourceFormType()
+    {
+        throw new \Exception('Implement getResourceFormType');
+    }
+
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
     {
         $resourceNode = $resource->getResourceNode();
@@ -978,15 +983,5 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->flush();
 
         return true;
-    }
-
-    public function saveUpload(UploadedFile $file)
-    {
-        throw new \Exception('Implement saveUpload');
-    }
-
-    public function getResourceFormType()
-    {
-        throw new \Exception('Implement getResourceFormType');
     }
 }

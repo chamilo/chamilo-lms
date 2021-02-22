@@ -17,7 +17,6 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use CourseManager;
 use Database;
 use Display;
-use Event;
 use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
 use Security;
@@ -105,7 +104,7 @@ class CourseHomeController extends ToolBaseController
             'tool' => 'course-main',
             'action' => $action,
         ];
-        Event::registerLog($logInfo);
+        \Event::registerLog($logInfo);
 
         /*	Introduction section (editable by course admins) */
         /*$introduction = Display::return_introduction_section(
@@ -286,9 +285,6 @@ class CourseHomeController extends ToolBaseController
         );
     }
 
-    /**
-     * @return array
-     */
     private function autoLaunch()
     {
         /* Auto launch code */
@@ -342,7 +338,8 @@ class CourseHomeController extends ToolBaseController
                             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
                                 // Redirecting to the LP
-                                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
+                                $url = api_get_path(WEB_CODE_PATH).
+                                    'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
 
                                 $_SESSION[$session_key] = true;
                                 header("Location: $url");
@@ -355,14 +352,18 @@ class CourseHomeController extends ToolBaseController
         }
 
         if ($showAutoLaunchLpWarning) {
-            $autoLaunchWarning = get_lang('The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.');
+            $autoLaunchWarning = get_lang(
+                'The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.'
+            );
         }
 
-        $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
-        if (1 == $forumAutoLaunch) {
+        $forumAutoLaunch = (int) api_get_course_setting('enable_forum_auto_launch');
+        if (1 === $forumAutoLaunch) {
             if ($allowAutoLaunchForCourseAdmins) {
                 if (empty($autoLaunchWarning)) {
-                    $autoLaunchWarning = get_lang('The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.');
+                    $autoLaunchWarning = get_lang(
+                        'The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.'
+                    );
                 }
             } else {
                 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
@@ -373,7 +374,7 @@ class CourseHomeController extends ToolBaseController
 
         if (api_get_configuration_value('allow_exercise_auto_launch')) {
             $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
-            if (2 == $exerciseAutoLaunch) {
+            if (2 === $exerciseAutoLaunch) {
                 if ($allowAutoLaunchForCourseAdmins) {
                     if (empty($autoLaunchWarning)) {
                         $autoLaunchWarning = get_lang(
@@ -386,7 +387,7 @@ class CourseHomeController extends ToolBaseController
                     header("Location: $url");
                     exit;
                 }
-            } elseif (1 == $exerciseAutoLaunch) {
+            } elseif (1 === $exerciseAutoLaunch) {
                 if ($allowAutoLaunchForCourseAdmins) {
                     if (empty($autoLaunchWarning)) {
                         $autoLaunchWarning = get_lang(
@@ -400,8 +401,8 @@ class CourseHomeController extends ToolBaseController
                     if (!empty($session_id)) {
                         $condition = api_get_session_condition($session_id);
                         $sql = "SELECT iid FROM $table
-                        WHERE c_id = $course_id AND autolaunch = 1 $condition
-                        LIMIT 1";
+                                WHERE c_id = $course_id AND autolaunch = 1 $condition
+                                LIMIT 1";
                         $result = Database::query($sql);
                         // If we found nothing in the session we just called the session_id = 0 autolaunch
                         if (0 == Database::num_rows($result)) {
@@ -410,8 +411,8 @@ class CourseHomeController extends ToolBaseController
                     }
 
                     $sql = "SELECT iid FROM $table
-                    WHERE c_id = $course_id AND autolaunch = 1 $condition
-                    LIMIT 1";
+                            WHERE c_id = $course_id AND autolaunch = 1 $condition
+                            LIMIT 1";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
                         $row = Database::fetch_array($result, 'ASSOC');
@@ -425,11 +426,13 @@ class CourseHomeController extends ToolBaseController
             }
         }
 
-        $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
-        if (1 == $documentAutoLaunch) {
+        $documentAutoLaunch = (int) api_get_course_setting('enable_document_auto_launch');
+        if (1 === $documentAutoLaunch) {
             if ($allowAutoLaunchForCourseAdmins) {
                 if (empty($autoLaunchWarning)) {
-                    $autoLaunchWarning = get_lang('The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.');
+                    $autoLaunchWarning = get_lang(
+                        'The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.'
+                    );
                 }
             } else {
                 // Redirecting to the document

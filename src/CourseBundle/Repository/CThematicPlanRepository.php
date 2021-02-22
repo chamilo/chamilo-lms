@@ -14,13 +14,40 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class CThematicPlanRepository extends ServiceEntityRepository
 {
+    /** @var EntityRepository */
+    protected $repository;
+
+    /** @var FilesystemInterface */
+    protected $fs;
+
+    /** @var EntityManager */
+    protected $entityManager;
+
+    /** @var RouterInterface */
+    protected $router;
+
+    /** @var ResourceNodeRepository */
+    protected $resourceNodeRepository;
+
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
+
+    /** @var SlugifyInterface */
+    protected $slugify;
+
+    /** @var ToolChain */
+    protected $toolChain;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CThematicPlan::class);

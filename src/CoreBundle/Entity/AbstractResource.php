@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -93,6 +94,8 @@ abstract class AbstractResource
     abstract public function getResourceName(): string;
 
     abstract public function setResourceName(string $name);
+
+    //abstract public function setResourceProperties(FormInterface $form, $course, $session, $fileType);
 
     public function getResourceLinkEntityList()
     {

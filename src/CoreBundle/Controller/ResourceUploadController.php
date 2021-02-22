@@ -82,8 +82,8 @@ class ResourceUploadController extends BlueimpController
 
                     $this->validate($file, $request, $response);
                     $this->dispatchPreUploadEvent($file, $response, $request);
-
-                    $resource = $repo->saveUpload($file, $course, $session);
+                    $resource = $repo->saveUpload($file);
+                    //$resource = $repo->saveUpload($file, $course, $session);
 
                     // @todo fix correct $parent
                     $resource->setParent($parent);

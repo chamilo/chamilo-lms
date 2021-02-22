@@ -390,7 +390,7 @@ class ResourceNode
         */
         //var_dump($this->getTitle(), $path);
         $pathForDisplay = preg_replace(
-            '/-\d+'.self::PATH_SEPARATOR.'/',
+            '/-\d+\\'.self::PATH_SEPARATOR.'/',
             '/',
             $path
         );

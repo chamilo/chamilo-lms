@@ -565,7 +565,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getTeachers()->matching($criteria)->count() > 0;
     }
 
-    public function hasGroup(CGroup $group): bool
+    public function hasGroup(CGroup $group)
     {
         /*$criteria = Criteria::create()->where(
             Criteria::expr()->eq('groups', $group)

@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\QueryBuilder;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -89,14 +88,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * If node has children show it
      */
-    public function listAction(Request $request): Response
+    public function listAction(Request $request)
     {
-        $tool = $request->get('tool');
+        /*$tool = $request->get('tool');
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
-        $settings = $repository->getResourceSettings();
+        $settings = $repository->getResourceSettings();*/
 
         /*$grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
         $parentResourceNode = $this->getParentResourceNode($request);
@@ -184,7 +183,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $data[] = $size;
         }
 
-        $groups = $course->getGroups();
+        /*$groups = $course->getGroups();
         foreach ($groups as $group) {
             $labels[] = $course->getTitle().' - '.$group->getName();
             $size = $repository->getResourceNodeRepository()->getSize(
@@ -195,7 +194,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $group
             );
             $data[] = $size;
-        }
+        }*/
 
         $used = array_sum($data);
         $labels[] = $this->trans('Free');
@@ -392,7 +391,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        /** @var ResourceLink $link */
         if ($this->hasCourse()) {
             $link = $resource->getFirstResourceLinkFromCourseSession($this->getCourse(), $this->getSession());
         } else {
@@ -552,7 +550,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function linkAction(Request $request, RouterInterface $router): Response
     {
         $id = $request->get('id');
-        $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -611,10 +608,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
              ->andWhere(Criteria::expr()->eq('resourceType', $type)) // only download same type
         ;
 
-        /** @var ArrayCollection|ResourceNode[] $children */
-        /** @var QueryBuilder $children */
         $qb = $resourceNodeRepo->getChildrenQueryBuilder($resourceNode);
         $qb->addCriteria($criteria);
+        /** @var ArrayCollection|ResourceNode[] $children */
         $children = $qb->getQuery()->getResult();
         $count = count($children);
         if (0 === $count) {
@@ -804,8 +800,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $course = $this->getDoctrine()->getRepository(Course::class)->find($course);
             $session = $this->getSession();
 
-            /** @var AbstractResource $newResource */
-            $newResource = $repository->setResourceProperties($form, $course, $session, $fileType);
+            // @var AbstractResource $newResource
+            /*$newResource = $repository->setResourceProperties($form, $course, $session, $fileType);
 
             $file = null;
             if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
@@ -818,10 +814,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $meta = stream_get_meta_data($handle);
                 $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
             }
-
-            //$parent = $repository->getResourceNodeRepository()->getResourceByNode($parentNode);
-            // @todo fix correct parent
-            $newResource->setParent($parent);
             $newResource->addCourseLink(
                 $course,
                 $session
@@ -830,7 +822,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $em->flush();
 
             $repository->addFile($newResource, $file);
-            $em->flush();
+            $em->flush();*/
 
             // Loops all sharing options
             /*foreach ($shareList as $share) {
@@ -897,6 +889,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
         }
 
+        $template = null;
         switch ($fileType) {
             case 'folder':
                 $template = $repository->getTemplates()->getFromAction('newFolderAction');
@@ -908,11 +901,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 break;
         }
 
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['form'] = $form->createView();
-        $routeParams['parent'] = $resourceNodeParentId;
-        $routeParams['file_type'] = $fileType;
+        if ($template) {
+            $routeParams = $this->getResourceParams($request);
+            $routeParams['form'] = $form->createView();
+            $routeParams['parent'] = $resourceNodeParentId;
+            $routeParams['file_type'] = $fileType;
 
-        return $this->render($template, $routeParams);
+            return $this->render($template, $routeParams);
+        }
+
+        throw $this->createAccessDeniedException();
     }
 }

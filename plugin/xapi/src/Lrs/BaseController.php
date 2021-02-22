@@ -20,9 +20,11 @@ abstract class BaseController
 
     /**
      * BaseController constructor.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $httpRequest
      */
-    public function __construct()
+    public function __construct(Request $httpRequest)
     {
-        $this->httpRequest = Request::createFromGlobals();
+        $this->httpRequest = $httpRequest;
     }
 }

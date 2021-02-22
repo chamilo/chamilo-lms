@@ -2,6 +2,9 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-symfony/extension.neon
 parameters:
+	bootstrapFiles:
+	  - public/legacy.php
+	  - public/main/inc/lib/events.lib.php
 	symfony:
 		container_xml_path: %rootDir%/../../../var/cache/dev/Chamilo_KernelDevDebugContainer.xml
 	doctrine:
@@ -19,7 +22,9 @@ parameters:
 		- src/CoreBundle/Hook/*
 		- src/CoreBundle/Menu/*
 		- src/CoreBundle/Migrations/*
+		- src/CoreBundle/Twig/SettingsHelper.php
 		- src/CoreBundle/Controller/ResourceApiController.php
+		- src/CoreBundle/Controller/EditorController.php
 		- src/CoreBundle/Component/Editor/*
 		- src/CourseBundle/Component/CourseCopy*
 		- src/LtiBundle/*

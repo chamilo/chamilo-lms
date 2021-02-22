@@ -8,17 +8,23 @@ parameters:
 		objectManagerLoader: %rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php
 
 	excludes_analyse:
-		- %rootDir%/../../../public/main/admin/db.php
-		- %rootDir%/../../../public/main/extra/*
-		- %rootDir%/../../../public/main/cron/*
-		- %rootDir%/../../../public/main/inc/lib/pear/*
-		- %rootDir%/../../../public/main/inc/lib/nusoap/*
-		- %rootDir%/../../../public/main/inc/lib/search/*
-		- %rootDir%/../../../public/main/webservices/*
-		- %rootDir%/../../../src/CoreBundle/Migrations/Schema/*
+		- public/main/admin/db.php
+		- public/main/extra/*
+		- public/main/cron/*
+		- public/main/inc/lib/pear/*
+		- public/main/inc/lib/nusoap/*
+		- public/main/inc/lib/search/*
+		- public/main/webservices/*
+
+		- src/CoreBundle/Hook/*
+		- src/CoreBundle/Menu/*
+		- src/CoreBundle/Migrations/*
+		- src/CoreBundle/Controller/ResourceApiController.php
+		- src/CoreBundle/Component/Editor/*
+		- src/CourseBundle/Component/CourseCopy*
 		- src/LtiBundle/*
 		- src/GraphQlBundle/*
-		- %rootDir%/../../../tests/*
-	level: 5
+		- tests/*
+	level: 2
 	paths:
 		- src

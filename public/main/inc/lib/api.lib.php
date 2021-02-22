@@ -1783,7 +1783,7 @@ function api_get_user_info_from_entity(
     $result['official_code'] = $user->getOfficialCode();
     $result['active'] = $user->getActive();
     $result['auth_source'] = $user->getAuthSource();
-    $result['language'] = $user->getLanguage();
+    $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();
     $result['registration_date'] = $user->getRegistrationDate()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();

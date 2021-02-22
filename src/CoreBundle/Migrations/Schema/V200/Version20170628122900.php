@@ -31,7 +31,12 @@ class Version20170628122900 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE access_url_rel_user CHANGE user_id user_id INT DEFAULT NULL');
         }
 
-        if (false === $table->hasForeignKey('FK_85574263A76ED395')) {
+        if ($table->hasForeignKey('FK_85574263A76ED395')) {
+            $this->addSql('ALTER TABLE access_url_rel_user DROP FOREIGN KEY FK_85574263A76ED395');
+            $this->addSql(
+                'ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        } else {
             $this->addSql(
                 'ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );

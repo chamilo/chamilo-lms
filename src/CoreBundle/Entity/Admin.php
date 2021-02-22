@@ -30,7 +30,7 @@ class Admin
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="admin")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * Get id.

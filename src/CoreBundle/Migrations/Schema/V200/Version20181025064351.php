@@ -299,7 +299,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
             );
         }
 
-
         if (false === $table->hasIndex('IDX_640C644912469DE2')) {
             $this->addSql('CREATE INDEX IDX_640C644912469DE2 ON gradebook_score_log (category_id);');
         }

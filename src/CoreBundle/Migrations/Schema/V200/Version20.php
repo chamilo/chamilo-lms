@@ -15,7 +15,6 @@ class Version20 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {
-        // Use $schema->createTable
         $this->addSql('set sql_mode=""');
 
         $table = $schema->getTable('user');
@@ -44,7 +43,7 @@ class Version20 extends AbstractMigrationChamilo
         // Update language to ISO
         $this->addSql('UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language)');
         $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
-        $this->addSql('UPDATE user SET language = (SELECT isocode FROM language WHERE english_name = language)');
+        $this->addSql('UPDATE user SET locale = (SELECT isocode FROM language WHERE english_name = language)');
         $this->addSql("UPDATE settings_current SET selected_value = (SELECT isocode FROM language WHERE english_name = selected_value) WHERE variable = 'platformLanguage'");
 
         $table = $schema->getTable('fos_group');
@@ -111,10 +110,6 @@ class Version20 extends AbstractMigrationChamilo
         $table = $schema->getTable('personal_agenda');
         if ($table->hasColumn('course')) {
             $this->addSql('ALTER TABLE personal_agenda DROP course');
-        }
-
-        if ($table->hasIndex('category_code')) {
-            $this->addSql('DROP INDEX category_code ON course');
         }
 
         if (false === $table->hasForeignKey('FK_D86124608D93D649')) {

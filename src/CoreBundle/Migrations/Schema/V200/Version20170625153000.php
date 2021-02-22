@@ -65,7 +65,6 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_forum_forum DROP FOREIGN KEY FK_47A9C9921BF9426');
         }
 
-
         $table = $schema->getTable('c_forum_thread');
         if ($table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
             $this->addSql('ALTER TABLE c_forum_thread DROP FOREIGN KEY FK_5DA7884C29CCBAD0');

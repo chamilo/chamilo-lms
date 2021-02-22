@@ -43,7 +43,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_cdoc_type ON c_document (filetype)');
         }
 
-        if (false === $table->hasIndex('course')) {
+        if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON c_document');
         }
 

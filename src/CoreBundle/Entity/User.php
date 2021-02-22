@@ -236,6 +236,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $salt;
 
     /**
+     * @ORM\Column(name="gender", type="string", length=1, nullable=true)
+     */
+    protected ?string $gender;
+
+    /**
      * @var \DateTime
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
@@ -641,13 +646,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Column(name="productions", type="string", length=250, nullable=true, unique=false)
      */
     protected $productions;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="language", type="string", length=40, nullable=true, unique=false)
-     */
-    protected $language;
 
     /**
      * @var \DateTime
@@ -1333,26 +1331,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setProductions($productions)
     {
         $this->productions = $productions;
-
-        return $this;
-    }
-
-    /**
-     * Get language.
-     *
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-
-    /**
-     * Set language.
-     */
-    public function setLanguage(string $language): User
-    {
-        $this->language = $language;
 
         return $this;
     }

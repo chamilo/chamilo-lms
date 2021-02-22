@@ -8690,4 +8690,5 @@ $QualifyPortfolioItems = "Noter les items";
 $QualifyPortfolioComments = "Évaluer les commentaires";
 $HideCorrectAnsweredQuestions = "Cacher les questions qui ont eu une réponse correcte";
 $TheSettingXWillChangeToX = "Le paramètre \"%s\" sera modifié avec \"%s\"";
+$VerificationOfAnsweredQuestions = "Vérification des réponses aux questions";
 ?>

@@ -3282,7 +3282,8 @@ class Exercise
         $questions_in_media = [],
         $currentAnswer = '',
         $myRemindList = [],
-        $showPreviousButton = true
+        $showPreviousButton = true,
+        $totalQuestions = 0
     ) {
         global $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
         $nbrQuestions = $this->countQuestionsInExercise();
@@ -3424,6 +3425,19 @@ class Exercise
             }
             $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>';
 
+            $extraFieldValue = new ExtraFieldValue('exercise');
+            $showHideQuestionNumber = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $this->iId,
+                'hidequestionnumber'
+            );
+            if($totalQuestions != 0 && is_array($showHideQuestionNumber) && $showHideQuestionNumber['value'] == 1)  {
+                $showQuestion = sprintf(
+                    get_lang('ShowQuestionNumber'),
+                    $questionNum,
+                    $totalQuestions
+                );
+                $buttonList[] = "<span>$showQuestion</span>";
+            }
             $html .= implode(PHP_EOL, $buttonList).PHP_EOL;
 
             return $html;

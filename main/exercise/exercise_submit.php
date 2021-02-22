@@ -368,6 +368,7 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
 
 // Fix in order to get the correct question list.
 $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
+$totalQuestions = count($questionListUncompressed);
 Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
@@ -1756,7 +1757,8 @@ foreach ($questionList as $questionId) {
                 [],
                 [],
                 $myRemindList,
-                $showPreviousButton
+                $showPreviousButton,
+                $totalQuestions
             );
             break;
         case ALL_ON_ONE_PAGE:

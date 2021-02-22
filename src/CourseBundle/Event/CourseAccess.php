@@ -16,11 +16,7 @@ class CourseAccess extends Event
     protected $user;
     protected $course;
 
-    /**
-     * @param $user
-     * @param $course
-     */
-    public function __construct($user, $course)
+    public function __construct(User $user, Course $course)
     {
         $this->user = $user;
         $this->course = $course;

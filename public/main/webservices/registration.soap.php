@@ -1991,7 +1991,7 @@ function WSEditUser($params)
         $user->setExpirationDate($expiration_date);
     }
     if (!empty($language)) {
-        $user->setLanguage($language);
+        $user->setLocale($language);
     }
 
     $user
@@ -1999,7 +1999,7 @@ function WSEditUser($params)
         ->setStatus($status)
         ->setOfficialCode($official_code)
         ->setPhone($phone)
-        ->setPictureUri($picture_uri)
+        //->setPictureUri($picture_uri)
         ->setHrDeptId($hr_dept_id)
         ->setActive(true);
 

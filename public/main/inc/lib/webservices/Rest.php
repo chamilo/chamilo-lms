@@ -1846,7 +1846,7 @@ class Rest extends WebService
                     if (!in_array($value, $languages['folder'])) {
                         throw new Exception(get_lang('LanguageUnavailable'));
                     }
-                    $user->setLanguage($value);
+                    $user->setLocale($value);
                     break;
                 case 'registration_date':
                     $user->setRegistrationDate($value);

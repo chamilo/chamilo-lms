@@ -38,7 +38,7 @@ final class CLinkRepository extends ResourceRepository implements GridInterface
         $newResource = $form->getData();
         $newResource
             ->setDisplayOrder(0)
-            ->setOnHomepage(0)
+            ->setOnHomepage('0')
         ;
 
         return $newResource;

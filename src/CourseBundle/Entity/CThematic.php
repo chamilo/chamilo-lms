@@ -59,7 +59,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected $active;
 
     /**
-     * @var CThematicPlan[]
+     * @var CThematicPlan[]|ArrayCollection
      *
      * @ORM\OneToMany(
      *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
@@ -68,7 +68,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected $plans;
 
     /**
-     * @var CThematicAdvance[]
+     * @var CThematicAdvance[]|ArrayCollection
      *
      * @ORM\OrderBy({"startDate" = "ASC"})
      *

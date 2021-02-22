@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -35,6 +36,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
+     * @var AccessUrlRelCourse[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected $courses;

@@ -59,6 +59,12 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
             $qb->setParameter('c_verb', $criteria['verb']);
         }
 
+        $qb->setFirstResult($criteria['cursor']);
+
+        if (isset($criteria['limit'])) {
+            $qb->setMaxResults($criteria['limit']);
+        }
+
         return $qb;
     }
 }

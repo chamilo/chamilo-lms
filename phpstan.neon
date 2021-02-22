@@ -1,8 +1,11 @@
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
 parameters:
 	symfony:
-	    container_xml_path: '%rootDir%/../../../var/cache/dev/srcChamilo_KernelDevDebugContainer.xml'
-	doctrine    :
-	    objectManagerLoader: '%rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php'
+		container_xml_path: %rootDir%/../../../var/cache/dev/Chamilo_KernelDevDebugContainer.xml
+	doctrine:
+		objectManagerLoader: %rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php
 	autoload_files:
 		- %rootDir%/../../../public/main/work/work.lib.php
 	excludes_analyse:
@@ -15,4 +18,6 @@ parameters:
 		- %rootDir%/../../../public/main/webservices/*
 		- %rootDir%/../../../src/CoreBundle/Migrations/Schema/*
 		- %rootDir%/../../../tests/*
-	level: max
+	level: 5
+	paths:
+		- src

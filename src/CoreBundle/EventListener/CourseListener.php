@@ -224,8 +224,6 @@ class CourseListener
 
         $request = $event->getRequest();
         $sessionHandler = $request->getSession();
-
-        /** @var ContainerInterface $container */
         //$container = $this->container;
 
         /*if ($course) {
@@ -310,9 +308,9 @@ class CourseListener
         $sessionHandler->remove('origin');
 
         // Remove user temp roles
-        /** @var User $user */
         $token = $this->container->get('security.token_storage')->getToken();
         if (null !== $token) {
+            /** @var User $user */
             $user = $token->getUser();
             if ($user instanceof UserInterface) {
                 $user->removeRole('ROLE_CURRENT_COURSE_GROUP_TEACHER');

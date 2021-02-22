@@ -58,11 +58,6 @@ class SettingsManager implements SettingsManagerInterface
     protected $schemaList;
     protected $request;
 
-    /**
-     * SettingsManager constructor.
-     *
-     * @param $eventDispatcher
-     */
     public function __construct(
         ServiceRegistryInterface $schemaRegistry,
         EntityManager $manager,
@@ -97,7 +92,6 @@ class SettingsManager implements SettingsManagerInterface
         $schemas = array_keys($this->getSchemas());
 
         /**
-         * @var string
          * @var SchemaInterface $schema
          */
         foreach ($schemas as $schema) {
@@ -245,16 +239,16 @@ class SettingsManager implements SettingsManagerInterface
 
     public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
     {
+        $settings = new Settings();
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_core.settings.'.$schemaAlias;
         if ($this->schemaRegistry->has($schemaAlias)) {
             /** @var SchemaInterface $schema */
             $schema = $this->schemaRegistry->get($schemaAlias);
         } else {
-            return [];
+            return $settings;
         }
 
-        $settings = new Settings();
         $settings->setSchemaAlias($schemaAlias);
 
         // We need to get a plain parameters array since we use the options resolver on it

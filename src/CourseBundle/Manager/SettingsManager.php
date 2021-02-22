@@ -38,16 +38,16 @@ class SettingsManager extends ChamiloSettingsManager
 
     public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
     {
+        $settings = new Settings();
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_course.settings.'.$schemaAlias;
         if ($this->schemaRegistry->has($schemaAlias)) {
             /** @var SchemaInterface $schema */
             $schema = $this->schemaRegistry->get($schemaAlias);
         } else {
-            return [];
+            return $settings;
         }
 
-        $settings = new Settings();
         $settings->setSchemaAlias($schemaAlias);
 
         // We need to get a plain parameters array since we use the options resolver on it
@@ -107,9 +107,7 @@ class SettingsManager extends ChamiloSettingsManager
             $persistedParametersMap[$parameter->getTitle()] = $parameter;
         }
 
-        /** @var SettingsCurrent $url */
         $simpleCategoryName = str_replace('chamilo_course.settings.', '', $namespace);
-
         foreach ($parameters as $name => $value) {
             if (isset($persistedParametersMap[$name])) {
                 $persistedParametersMap[$name]->setValue($value);
@@ -128,9 +126,9 @@ class SettingsManager extends ChamiloSettingsManager
 
         $this->manager->flush();
 
-        return;
+        return true;
 
-        $schema = $this->schemaRegistry->getSchema($namespace);
+        /*$schema = $this->schemaRegistry->getSchema($namespace);
 
         $settingsBuilder = new SettingsBuilder();
         $schema->buildSettings($settingsBuilder);
@@ -161,7 +159,7 @@ class SettingsManager extends ChamiloSettingsManager
             if (isset($persistedParametersMap[$name])) {
                 $persistedParametersMap[$name]->setValue($value);
             } else {
-                /** @var CCourseSetting $parameter */
+                // @var CCourseSetting $parameter
                 //$parameter = $this->parameterFactory->createNew();
                 $parameter = new CCourseSetting();
                 $parameter
@@ -171,7 +169,7 @@ class SettingsManager extends ChamiloSettingsManager
                     ->setCId($this->getCourse()->getId())
                 ;
 
-                /** @var ConstraintViolationListInterface $errors */
+                /// @var ConstraintViolationListInterface $errors
                 $errors = $this->validator->validate($parameter);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());
@@ -182,7 +180,7 @@ class SettingsManager extends ChamiloSettingsManager
         }
 
         $this->parameterManager->flush();
-        $this->cache->save($namespace, $parameters);
+        $this->cache->save($namespace, $parameters);*/
     }
 
     /**

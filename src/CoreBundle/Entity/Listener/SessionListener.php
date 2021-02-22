@@ -18,10 +18,8 @@ use Symfony\Component\Security\Core\Security;
 class SessionListener
 {
     protected $request;
+    protected $security;
 
-    /**
-     * ResourceListener constructor.
-     */
     public function __construct(RequestStack $request, Security $security)
     {
         $this->security = $security;

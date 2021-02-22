@@ -18,9 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SequenceRepository extends ServiceEntityRepository
 {
-    /**
-     * CourseCategoryRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sequence::class);
@@ -63,6 +60,7 @@ class SequenceRepository extends ServiceEntityRepository
     public function getItem($itemId, $type)
     {
         $resource = null;
+        $repo = null;
         switch ($type) {
             case SequenceResource::COURSE_TYPE:
                 $repo = $this->getEntityManager()->getRepository(Course::class);

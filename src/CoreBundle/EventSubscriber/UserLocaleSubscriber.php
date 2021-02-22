@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\EventSubscriber;
 
+use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -30,6 +31,7 @@ class UserLocaleSubscriber implements EventSubscriberInterface
      */
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
+        /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();
 
         if (null !== $user->getLocale()) {

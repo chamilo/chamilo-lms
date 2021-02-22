@@ -108,13 +108,13 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             : mb_convert_case($string, MB_CASE_LOWER);
     }
 
-    public function updateCanonicalFields(UserInterface $user)
+    public function updateCanonicalFields(User $user)
     {
         $user->setUsernameCanonical($this->canonicalize($user->getUsername()));
         $user->setEmailCanonical($this->canonicalize($user->getEmail()));
     }
 
-    public function updatePassword(UserInterface $user)
+    public function updatePassword(User $user)
     {
         //UserPasswordEncoderInterface $passwordEncoder
         if (0 !== strlen($password = $user->getPlainPassword())) {

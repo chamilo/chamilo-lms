@@ -13,21 +13,15 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * SessionRepository.
  *
- * @author  Julio Montoya <gugli100@gmail.com>
+ * @author Julio Montoya <gugli100@gmail.com>
  */
 class SessionRepository extends ServiceEntityRepository
 {
-    /**
-     * SessionRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Session::class);
     }
 
-    /**
-     * @param $status
-     */
     protected function addUserInCourse(
         int $status,
         User $user,

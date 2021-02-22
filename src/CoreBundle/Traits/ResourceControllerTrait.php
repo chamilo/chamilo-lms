@@ -93,7 +93,6 @@ trait ResourceControllerTrait
                 $parentResourceNode = $this->getCourse()->getResourceNode();
             } else {
                 if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    /** @var User $user */
                     $parentResourceNode = $this->getUser()->getResourceNode();
                 }
             }
@@ -109,7 +108,7 @@ trait ResourceControllerTrait
         return $parentResourceNode;
     }
 
-    protected function getUser()
+    protected function getUser(): ?User
     {
         if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');

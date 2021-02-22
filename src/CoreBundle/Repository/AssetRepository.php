@@ -92,7 +92,7 @@ class AssetRepository extends ServiceEntityRepository
         return '/assets'.$helper->asset($asset);
     }
 
-    public function getFileContent(Asset $asset): string
+    /*public function getFileContent(Asset $asset): string
     {
         try {
             if ($asset->hasFile()) {
@@ -106,9 +106,9 @@ class AssetRepository extends ServiceEntityRepository
         } catch (\Throwable $exception) {
             throw new FileNotFoundException($asset);
         }
-    }
+    }*/
 
-    public function getFileStream(Asset $asset)
+    /*public function getFileStream(Asset $asset)
     {
         try {
             if ($asset->hasFile()) {
@@ -122,7 +122,7 @@ class AssetRepository extends ServiceEntityRepository
         } catch (\Throwable $exception) {
             throw new FileNotFoundException($asset);
         }
-    }
+    }*/
 
     public function delete(Asset $asset = null)
     {

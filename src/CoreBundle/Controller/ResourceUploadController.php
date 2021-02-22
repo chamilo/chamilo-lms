@@ -4,7 +4,10 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Oneup\UploaderBundle\Controller\BlueimpController;
 use Oneup\UploaderBundle\Uploader\File\FileInterface;
@@ -39,19 +42,19 @@ class ResourceUploadController extends BlueimpController
 
         $course = null;
         if (!empty($courseId)) {
-            $course = $doctrine->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+            $course = $doctrine->getRepository(Course::class)->find($courseId);
         }
 
         $session = null;
         if (!empty($sessionId)) {
-            $session = $doctrine->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+            $session = $doctrine->getRepository(Session::class)->find($sessionId);
         }
 
         $token = $container->get('security.token_storage')->getToken();
         $user = $token->getUser();
 
         // Create repository from tool and type.
-        $factory = $container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
+        $factory = $container->get(ResourceFactory::class);
         $repoService = $factory->getRepositoryService($tool, $type);
 
         /** @var ResourceRepository $repo */

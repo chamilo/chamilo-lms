@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -977,5 +978,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->flush();
 
         return true;
+    }
+
+    public function saveUpload(UploadedFile $file)
+    {
+        throw new \Exception('Implement saveUpload');
     }
 }

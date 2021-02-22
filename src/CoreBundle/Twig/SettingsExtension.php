@@ -56,9 +56,6 @@ class SettingsExtension extends AbstractExtension
         return $this->helper->getSettings($namespace);
     }
 
-    /**
-     * @param $name
-     */
     public function getSettingsParameter($name)
     {
         return $this->helper->getSettingsParameter($name);

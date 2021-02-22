@@ -6,6 +6,9 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\SystemTemplate;
+use Chamilo\CoreBundle\Entity\Templates;
 
 /**
  * Class CkEditor.
@@ -89,7 +92,6 @@ class CkEditor extends Editor
         if (empty($templates)) {
             return null;
         }
-        /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
         $templateList = [];
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
@@ -101,6 +103,7 @@ class CkEditor extends Editor
             '',
         ];
 
+        /** @var SystemTemplate $template */
         foreach ($templates as $template) {
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
@@ -127,7 +130,7 @@ class CkEditor extends Editor
     /**
      * Get the templates in JSON format.
      *
-     * @return string|
+     * @return string|false
      */
     public function simpleFormatTemplates()
     {
@@ -178,7 +181,7 @@ class CkEditor extends Editor
     private function getPlatformTemplates(): array
     {
         $entityManager = \Database::getManager();
-        $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
+        $systemTemplates = $entityManager->getRepository(SystemTemplate::class)->findAll();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
         $replace = [
@@ -221,9 +224,9 @@ class CkEditor extends Editor
         }
 
         $entityManager = \Database::getManager();
-        $templatesRepo = $entityManager->getRepository('ChamiloCoreBundle:Templates');
+        $templatesRepo = $entityManager->getRepository(Templates::class);
         $user = api_get_user_entity($userId);
-        $course = $entityManager->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+        $course = $entityManager->find(Course::class, api_get_course_int_id());
 
         if (!$user || !$course) {
             return [];

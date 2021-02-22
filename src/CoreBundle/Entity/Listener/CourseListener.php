@@ -59,7 +59,6 @@ class CourseListener
     public function postPersist(Course $course, LifecycleEventArgs $args)
     {
         error_log('Course listener postPersist');
-        /** @var AccessUrlRelCourse $urlRelCourse */
         if ($course) {
             error_log('add tools');
             //$this->toolChain->addToolsInCourse($this->toolRepository, $course);

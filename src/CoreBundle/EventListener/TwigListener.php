@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,6 +14,7 @@ use Twig\Environment;
 
 class TwigListener
 {
+    private $serializer;
     private $twig;
     private $tokenStorage;
 
@@ -35,6 +37,7 @@ class TwigListener
         if (null !== $token) {
             $user = $token->getUser();
             if ($user instanceof UserInterface) {
+                /** @var User $userClone */
                 $userClone = clone $user;
                 $userClone->setPassword('');
                 $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);

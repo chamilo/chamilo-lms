@@ -105,10 +105,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $this->getRouter()->generate('chamilo_core_resource_view', $params);
     }
 
-    /**
-     * @return CDocument|null
-     */
-    public function getParent(CDocument $document)
+    public function getParent(CDocument $document): ?CDocument
     {
         $resourceParent = $document->getResourceNode()->getParent();
 

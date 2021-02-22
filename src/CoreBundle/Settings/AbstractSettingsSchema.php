@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
+use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
@@ -12,6 +13,11 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
  */
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
+    /**
+     * @var EntityRepository
+     */
+    protected $repository;
+
     /**
      * @param array                   $allowedTypes
      * @param AbstractSettingsBuilder $builder

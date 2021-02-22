@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\Security;
 class ResourceNodeListener
 {
     protected $slugify;
+    protected $security;
+    protected $toolChain;
     protected $request;
     protected $accessUrl;
     protected $resourceNodeRepository;

@@ -40,12 +40,10 @@ class SessionController extends AbstractController
     public function aboutAction(Request $request, Session $session, IllustrationRepository $illustrationRepo, UserRepository $userRepo): Response
     {
         $requestSession = $request->getSession();
-
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
         $em = $this->getDoctrine()->getManager();
 
         $sessionId = $session->getId();
-
         $courses = [];
         $sessionCourses = $session->getCourses();
 
@@ -57,6 +55,7 @@ class SessionController extends AbstractController
         /** @var SequenceRepository $sequenceResourceRepo */
         $sequenceResourceRepo = $em->getRepository(SequenceResource::class);
 
+        /** @var ExtraField $tagField */
         $tagField = $fieldsRepo->findOneBy([
             'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags',

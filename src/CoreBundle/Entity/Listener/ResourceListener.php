@@ -29,6 +29,8 @@ use Symfony\Component\Security\Core\Security;
 class ResourceListener
 {
     protected $slugify;
+    protected $security;
+    protected $toolChain;
     protected $request;
     protected $accessUrl;
 
@@ -62,7 +64,7 @@ class ResourceListener
             }
 
             $id = $sessionRequest->get('access_url_id');
-            $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
+            $url = $em->getRepository(AccessUrl::class)->find($id);
 
             if ($url) {
                 $this->accessUrl = $url;

@@ -173,6 +173,7 @@ class ToolChain
         $toolList = array_flip($toolList);
 
         // @todo handle plugin
+        $toolRepo = $manager->getRepository(Tool::class);
 
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
@@ -181,7 +182,8 @@ class ToolChain
             if (!isset($toolList[$tool->getName()])) {
                 continue;
             }
-            $toolEntity = $manager->getRepository('ChamiloCoreBundle:Tool')->findOneBy($criteria);
+            /** @var CTool $toolEntity */
+            $toolEntity = $toolRepo->findOneBy($criteria);
             $position = $toolList[$tool->getName()] + 1;
 
             $courseTool = new CTool();

@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
@@ -102,7 +103,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->setBreadCrumb($request, $parentResourceNode);*/
 
         //return $grid->getGridResponse(
-        return $this->render(
+        /*return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__),
             [
                 'parent_id' => $resourceNodeId,
@@ -112,7 +113,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'parent_resource_node' => $parentResourceNode,
                 'resource_settings' => $settings,
             ]
-        );
+        );*/
     }
 
     /**
@@ -800,7 +801,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $course = $this->getCourse()->getId();
-            $course = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Course')->find($course);
+            $course = $this->getDoctrine()->getRepository(Course::class)->find($course);
             $session = $this->getSession();
 
             /** @var AbstractResource $newResource */

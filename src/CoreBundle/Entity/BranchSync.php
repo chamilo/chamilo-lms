@@ -670,35 +670,9 @@ class BranchSync
     }
 
     /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return BranchSync
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
      * @param BranchSync $parent
-     *
-     * @return $this
      */
-    public function setParent(self $parent = null)
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
 

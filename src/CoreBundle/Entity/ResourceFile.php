@@ -331,9 +331,6 @@ class ResourceFile
         return $this->dimensions;
     }
 
-    /**
-     * @param $dimensions
-     */
     public function setDimensions($dimensions): self
     {
         $this->dimensions = $dimensions;
@@ -407,18 +404,6 @@ class ResourceFile
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
-
-        return $this;
-    }
-
-    public function getContentUrl(): ?string
-    {
-        return $this->contentUrl;
-    }
-
-    public function setContentUrl(?string $contentUrl): self
-    {
-        $this->contentUrl = $contentUrl;
 
         return $this;
     }

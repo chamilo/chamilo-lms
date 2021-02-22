@@ -538,7 +538,7 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     public function userIsTutor(User $user = null): bool
     {
-        if (empty($user)) {
+        if (null === $user) {
             return false;
         }
 
@@ -547,9 +547,6 @@ class CGroup extends AbstractResource implements ResourceInterface
         }
 
         $criteria = Criteria::create()
-            ->where(
-                Criteria::expr()->eq('cId', $this->course)
-            )
             ->andWhere(
                 Criteria::expr()->eq('user', $user)
             );

@@ -228,37 +228,11 @@ class CourseCategory
     }
 
     /**
-     * Set parentId.
-     *
-     * @param string $parentId
-     *
-     * @return CourseCategory
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return string
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
      * Set treePos.
      *
      * @param int $treePos
-     *
-     * @return CourseCategory
      */
-    public function setTreePos($treePos)
+    public function setTreePos($treePos): self
     {
         $this->treePos = $treePos;
 
@@ -279,10 +253,8 @@ class CourseCategory
      * Set childrenCount.
      *
      * @param int $childrenCount
-     *
-     * @return CourseCategory
      */
-    public function setChildrenCount($childrenCount)
+    public function setChildrenCount($childrenCount): self
     {
         $this->childrenCount = $childrenCount;
 
@@ -303,10 +275,8 @@ class CourseCategory
      * Set authCourseChild.
      *
      * @param string $authCourseChild
-     *
-     * @return CourseCategory
      */
-    public function setAuthCourseChild($authCourseChild)
+    public function setAuthCourseChild($authCourseChild): self
     {
         $this->authCourseChild = $authCourseChild;
 
@@ -327,10 +297,8 @@ class CourseCategory
      * Set authCatChild.
      *
      * @param string $authCatChild
-     *
-     * @return CourseCategory
      */
-    public function setAuthCatChild($authCatChild)
+    public function setAuthCatChild($authCatChild): self
     {
         $this->authCatChild = $authCatChild;
 

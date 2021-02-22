@@ -113,61 +113,11 @@ class BranchTransaction
     }
 
     /**
-     * Set transactionId.
-     *
-     * @param int $transactionId
-     *
-     * @return BranchTransaction
-     */
-    public function setTransactionId($transactionId)
-    {
-        $this->transactionId = $transactionId;
-
-        return $this;
-    }
-
-    /**
-     * Get transactionId.
-     *
-     * @return int
-     */
-    public function getTransactionId()
-    {
-        return $this->transactionId;
-    }
-
-    /**
-     * Set branchId.
-     *
-     * @param int $branchId
-     *
-     * @return BranchTransaction
-     */
-    public function setBranchId($branchId)
-    {
-        $this->branchId = $branchId;
-
-        return $this;
-    }
-
-    /**
-     * Get branchId.
-     *
-     * @return int
-     */
-    public function getBranchId()
-    {
-        return $this->branchId;
-    }
-
-    /**
      * Set action.
      *
      * @param string $action
-     *
-     * @return BranchTransaction
      */
-    public function setAction($action)
+    public function setAction($action): self
     {
         $this->action = $action;
 

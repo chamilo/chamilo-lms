@@ -405,8 +405,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->trackEAttempts = new ArrayCollection();
         $this->searchEngineRefs = new ArrayCollection();
         $this->templates = new ArrayCollection();
-        $this->specificFieldValues = new ArrayCollection();
-        $this->sharedSurveys = new ArrayCollection();
+        //$this->specificFieldValues = new ArrayCollection();
+        //$this->sharedSurveys = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -455,9 +455,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->urls;
     }
 
-    /**
-     * @param $urls
-     */
     public function setUrls(ArrayCollection $urls)
     {
         $this->urls = new ArrayCollection();
@@ -492,14 +489,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function getUsers()
     {
         return $this->users;
-    }
-
-    /**
-     * @return CGroup[]|ArrayCollection
-     */
-    public function getGroups()
-    {
-        return $this->groups;
     }
 
     /**
@@ -582,7 +571,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
             Criteria::expr()->eq('groups', $group)
         );*/
 
-        return $this->getGroups()->contains($group);
+        //return $this->getGroups()->contains($group);
     }
 
     /**

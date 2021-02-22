@@ -96,37 +96,11 @@ class CourseRelUserCatalogue
     }
 
     /**
-     * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return CourseRelUserCatalogue
-     */
-    public function setRelationType($relationType)
-    {
-        $this->relationType = $relationType;
-
-        return $this;
-    }
-
-    /**
-     * Get relationType.
-     *
-     * @return int
-     */
-    public function getRelationType()
-    {
-        return $this->relationType;
-    }
-
-    /**
      * Set visible.
      *
      * @param bool $visible
-     *
-     * @return CourseRelUserCatalogue
      */
-    public function setVisible($visible)
+    public function setVisible($visible): self
     {
         $this->visible = $visible;
 

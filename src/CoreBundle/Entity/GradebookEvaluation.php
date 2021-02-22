@@ -181,30 +181,6 @@ class GradebookEvaluation
     }
 
     /**
-     * Set categoryId.
-     *
-     * @param int $categoryId
-     *
-     * @return GradebookEvaluation
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
-     * Get categoryId.
-     *
-     * @return int
-     */
-    public function getCategoryId()
-    {
-        return $this->categoryId;
-    }
-
-    /**
      * Set createdAt.
      *
      * @param \DateTime $createdAt

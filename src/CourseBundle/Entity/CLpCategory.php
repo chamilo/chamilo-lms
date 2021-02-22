@@ -54,12 +54,16 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected string $name;
 
     /**
+     * @var int
+     *
      * @Gedmo\SortablePosition
      * @ORM\Column(name="position", type="integer")
      */
     protected $position;
 
     /**
+     * @var ArrayCollection|CLpCategoryUser
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
      *     mappedBy="category",
@@ -76,9 +80,6 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      */
     protected $lps;
 
-    /**
-     * CLpCategory constructor.
-     */
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -99,10 +100,8 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      * Set cId.
      *
      * @param int $cId
-     *
-     * @return CLpCategory
      */
-    public function setCId($cId)
+    public function setCId($cId): self
     {
         $this->cId = $cId;
 
@@ -134,12 +133,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->name;
     }
 
-    /**
-     * @param $position
-     *
-     * @return $this
-     */
-    public function setPosition($position)
+    public function setPosition($position): self
     {
         $this->position = $position;
 
@@ -170,13 +164,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->users;
     }
 
-    /**
-     * @param $users
-     */
     public function setUsers($users)
     {
         $this->users = new ArrayCollection();
-
         foreach ($users as $user) {
             $this->addUser($user);
         }

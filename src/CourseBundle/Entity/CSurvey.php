@@ -239,13 +239,12 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->creationDate = new \DateTime();
         $this->invited = 0;
         $this->answered = 0;
-        $this->surveyId = 0;
         $this->subtitle = '';
         $this->inviteMail = '';
         $this->reminderMail = '';
         $this->mailSubject = '';
-        $this->shuffle = 0;
-        $this->oneQuestionPerPage = 0;
+        $this->shuffle = false;
+        $this->oneQuestionPerPage = false;
         $this->surveyVersion = '';
         $this->parentId = 0;
         $this->surveyType = 0;

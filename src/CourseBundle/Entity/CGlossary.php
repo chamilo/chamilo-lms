@@ -108,20 +108,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
         return $this->displayOrder;
     }
 
-    /**
-     * Set glossaryId.
-     *
-     * @param int $glossaryId
-     *
-     * @return CGlossary
-     */
-    public function setGlossaryId($glossaryId)
-    {
-        $this->glossaryId = $glossaryId;
-
-        return $this;
-    }
-
     public function getIid(): int
     {
         return $this->iid;

@@ -68,7 +68,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $author;
 
     /**
-     * @var bool
+     * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
@@ -317,7 +317,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Get active.
      *
-     * @return bool
+     * @return int
      */
     public function getActive()
     {

@@ -59,30 +59,6 @@ class GradebookResult
     protected $createdAt;
 
     /**
-     * Set evaluationId.
-     *
-     * @param int $evaluationId
-     *
-     * @return GradebookResult
-     */
-    public function setEvaluationId($evaluationId)
-    {
-        $this->evaluationId = $evaluationId;
-
-        return $this;
-    }
-
-    /**
-     * Get evaluationId.
-     *
-     * @return int
-     */
-    public function getEvaluationId()
-    {
-        return $this->evaluationId;
-    }
-
-    /**
      * Set createdAt.
      *
      * @param \DateTime $createdAt

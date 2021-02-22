@@ -76,10 +76,8 @@ class GradebookScoreDisplay
      * Set display.
      *
      * @param string $display
-     *
-     * @return GradebookScoreDisplay
      */
-    public function setDisplay($display)
+    public function setDisplay($display): self
     {
         $this->display = $display;
 
@@ -97,37 +95,11 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Set categoryId.
-     *
-     * @param int $categoryId
-     *
-     * @return GradebookScoreDisplay
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
-     * Get categoryId.
-     *
-     * @return int
-     */
-    public function getCategoryId()
-    {
-        return $this->categoryId;
-    }
-
-    /**
      * Set scoreColorPercent.
      *
      * @param float $scoreColorPercent
-     *
-     * @return GradebookScoreDisplay
      */
-    public function setScoreColorPercent($scoreColorPercent)
+    public function setScoreColorPercent($scoreColorPercent): self
     {
         $this->scoreColorPercent = $scoreColorPercent;
 

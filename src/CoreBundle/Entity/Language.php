@@ -69,12 +69,9 @@ class Language
      */
     protected $subLanguages;
 
-    /**
-     * Language constructor.
-     */
     public function __construct()
     {
-        $this->children = new ArrayCollection();
+        //$this->children = new ArrayCollection();
     }
 
     /**

@@ -686,30 +686,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set lpId.
-     *
-     * @param int $lpId
-     *
-     * @return CForumForum
-     */
-    public function setLpId($lpId)
-    {
-        $this->lpId = $lpId;
-
-        return $this;
-    }
-
-    /**
-     * Get lpId.
-     *
-     * @return int
-     */
-    public function getLpId()
-    {
-        return $this->lpId;
-    }
-
-    /**
      * @return bool
      */
     public function isModerated()
@@ -717,12 +693,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->moderated;
     }
 
-    /**
-     * @param $moderated
-     *
-     * @return $this
-     */
-    public function setModerated($moderated)
+    public function setModerated($moderated): self
     {
         $this->moderated = $moderated;
 

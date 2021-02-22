@@ -58,16 +58,6 @@ class GradebookScoreLog
     protected $registeredAt;
 
     /**
-     * Get the category id.
-     *
-     * @return int
-     */
-    public function getCategoryId()
-    {
-        return $this->categoryId;
-    }
-
-    /**
      * Get the achieved score.
      *
      * @return float
@@ -95,20 +85,6 @@ class GradebookScoreLog
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set the category id.
-     *
-     * @param int $categoryId
-     *
-     * @return $this
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-
-        return $this;
     }
 
     /**

@@ -30,13 +30,13 @@ class AccessUrlRelCourse
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
      * @return string
@@ -58,12 +58,8 @@ class AccessUrlRelCourse
 
     /**
      * Set url.
-     *
-     * @param $url
-     *
-     * @return AccessUrlRelCourse
      */
-    public function setUrl(AccessUrl $url)
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 

@@ -143,9 +143,9 @@ class CSurveyQuestion
 
     public function __construct()
     {
-        $this->surveyGroupPri = '';
-        $this->surveyGroupSec1 = '';
-        $this->surveyGroupSec2 = '';
+        $this->surveyGroupPri = 0;
+        $this->surveyGroupSec1 = 0;
+        $this->surveyGroupSec2 = 0;
     }
 
     public function getIid(): int

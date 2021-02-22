@@ -161,10 +161,8 @@ class ExtraField
 
     /**
      * @param int $extraFieldType
-     *
-     * @return $this
      */
-    public function setExtraFieldType($extraFieldType)
+    public function setExtraFieldType($extraFieldType): self
     {
         $this->extraFieldType = $extraFieldType;
 
@@ -371,7 +369,7 @@ class ExtraField
 
     public function getTypeToString(): string
     {
-        switch ($this->type) {
+        switch ($this->getExtraFieldType()) {
             case \ExtraField::FIELD_TYPE_RADIO:
             case \ExtraField::FIELD_TYPE_SELECT:
                 return 'choice';

@@ -88,7 +88,7 @@ class Asset
     protected ?string $originalName;
 
     /**
-     * @var string
+     * @var array
      *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="simple_array", nullable=true)
@@ -118,6 +118,7 @@ class Asset
     public function __construct()
     {
         $this->metadata = [];
+        $this->dimensions = [];
         $this->size = 0;
         $this->compressed = false;
     }
@@ -245,9 +246,6 @@ class Asset
         return $this->dimensions;
     }
 
-    /**
-     * @param $dimensions
-     */
     public function setDimensions($dimensions): self
     {
         $this->dimensions = $dimensions;

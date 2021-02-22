@@ -265,7 +265,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->type = self::ONE_PER_PAGE;
         $this->showPreviousButton = true;
         $this->notifications = '';
-        $this->autoLaunch = 0;
+        $this->autoLaunch = false;
         $this->preventBackwards = 0;
         $this->random = 0;
         $this->randomAnswers = false;
@@ -275,7 +275,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->feedbackType = 0;
         $this->expiredTime = 0;
         $this->propagateNeg = 0;
-        $this->saveCorrectAnswers = false;
+        $this->saveCorrectAnswers = 0;
         $this->reviewAnswers = 0;
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;

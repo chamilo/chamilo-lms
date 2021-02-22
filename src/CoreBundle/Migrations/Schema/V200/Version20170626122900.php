@@ -84,6 +84,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
         if (false === $table->hasColumn('locale')) {
             $this->addSql('ALTER TABLE user ADD locale VARCHAR(8) DEFAULT NULL');
+            $this->addSql('UPDATE user SET locale = (SELECT isocode FROM language WHERE english_name = language)');
         }
         if (false === $table->hasColumn('timezone')) {
             $this->addSql('ALTER TABLE user ADD timezone VARCHAR(64) NOT NULL');

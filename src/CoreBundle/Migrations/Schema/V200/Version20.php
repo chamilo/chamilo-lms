@@ -43,7 +43,6 @@ class Version20 extends AbstractMigrationChamilo
         // Update language to ISO
         $this->addSql('UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language)');
         $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
-        $this->addSql('UPDATE user SET locale = (SELECT isocode FROM language WHERE english_name = language)');
         $this->addSql("UPDATE settings_current SET selected_value = (SELECT isocode FROM language WHERE english_name = selected_value) WHERE variable = 'platformLanguage'");
 
         $table = $schema->getTable('fos_group');

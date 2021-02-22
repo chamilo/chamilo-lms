@@ -53,8 +53,12 @@ class Version20180319145700 extends AbstractMigrationChamilo
                 ->addColumn('is_required', Types::BOOLEAN)
                 ->setDefault(false);
         }
-        if (false === $table->hasIndex('idx_survey_q_qid')) {
+        /*if (false === $table->hasIndex('idx_survey_q_qid')) {
             $this->addSql('CREATE INDEX idx_survey_q_qid ON c_survey_question (question_id)');
+        }*/
+
+        if ($table->hasIndex('idx_survey_q_qid')) {
+            $this->addSql('DROP INDEX idx_survey_q_qid ON c_survey_question;');
         }
 
         if (false === $table->hasColumn('parent_id')) {

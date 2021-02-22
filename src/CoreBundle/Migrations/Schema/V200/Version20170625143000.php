@@ -88,9 +88,10 @@ class Version20170625143000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_thematic_plan');
         $this->addSql('ALTER TABLE c_thematic_plan CHANGE thematic_id thematic_id INT DEFAULT NULL');
 
-        if (false === $table->hasIndex('course')) {
+        if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON c_thematic_plan');
         }
+
         if ($table->hasColumn('c_id')) {
             //$this->addSql('ALTER TABLE c_thematic_plan DROP c_id;');
         }
@@ -153,6 +154,15 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_glossary');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_glossary');
+        }
+
+        if ($table->hasIndex('session_id')) {
+            $this->addSql('DROP INDEX session_id ON c_glossary');
+        }
+
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_glossary ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
@@ -224,7 +234,21 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_A06225811BAD783F ON c_calendar_event (resource_node_id)');
         }
 
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_calendar_event');
+        }
+
+        if ($table->hasIndex('session_id')) {
+            $this->addSql('DROP INDEX session_id ON c_calendar_event');
+        }
+
+
         $table = $schema->getTable('c_calendar_event_attachment');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_calendar_event_attachment');
+        }
+
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_calendar_event_attachment ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
@@ -250,12 +274,20 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_86FD1CA87300D633 ON c_calendar_event_repeat (cal_id)');
         }
 
-        $this->addSql('ALTER TABLE c_calendar_event_repeat_not CHANGE cal_id cal_id INT DEFAULT NULL');
+        $table = $schema->getTable('c_calendar_event_repeat_not');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_calendar_event_repeat_not;');
+        }
+
         if (false === $table->hasForeignKey('FK_7D4436947300D633')) {
             $this->addSql(
                 'ALTER TABLE c_calendar_event_repeat_not ADD CONSTRAINT FK_7D4436947300D633 FOREIGN KEY (cal_id) REFERENCES c_calendar_event (iid)'
             );
         }
+
+        $this->addSql('ALTER TABLE c_calendar_event_repeat_not CHANGE cal_id cal_id INT DEFAULT NULL');
+
         if (false === $table->hasIndex('IDX_7D4436947300D633')) {
             $this->addSql('CREATE INDEX IDX_7D4436947300D633 ON c_calendar_event_repeat_not (cal_id)');
         }

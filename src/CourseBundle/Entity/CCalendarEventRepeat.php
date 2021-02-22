@@ -28,12 +28,10 @@ class CCalendarEventRepeat
     protected $iid;
 
     /**
-     * @var CCalendarEvent
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="repeatEvents")
      * @ORM\JoinColumn(name="cal_id", referencedColumnName="iid")
      */
-    protected $event;
+    protected CCalendarEvent $event;
 
     /**
      * @var string
@@ -67,10 +65,8 @@ class CCalendarEventRepeat
      * Set calType.
      *
      * @param string $calType
-     *
-     * @return CCalendarEventRepeat
      */
-    public function setCalType($calType)
+    public function setCalType($calType): self
     {
         $this->calType = $calType;
 
@@ -91,10 +87,8 @@ class CCalendarEventRepeat
      * Set calEnd.
      *
      * @param int $calEnd
-     *
-     * @return CCalendarEventRepeat
      */
-    public function setCalEnd($calEnd)
+    public function setCalEnd($calEnd): self
     {
         $this->calEnd = $calEnd;
 
@@ -115,10 +109,8 @@ class CCalendarEventRepeat
      * Set calFrequency.
      *
      * @param int $calFrequency
-     *
-     * @return CCalendarEventRepeat
      */
-    public function setCalFrequency($calFrequency)
+    public function setCalFrequency($calFrequency): self
     {
         $this->calFrequency = $calFrequency;
 
@@ -139,10 +131,8 @@ class CCalendarEventRepeat
      * Set calDays.
      *
      * @param string $calDays
-     *
-     * @return CCalendarEventRepeat
      */
-    public function setCalDays($calDays)
+    public function setCalDays($calDays): self
     {
         $this->calDays = $calDays;
 

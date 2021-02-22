@@ -48,7 +48,6 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
-            $counter = 1;
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);
 
@@ -83,6 +82,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                     $em->flush();
                     continue;
                 }
+
                 // Assign parent.
                 $parent = null;
                 if (!empty($eventData['parent_event_id'])) {
@@ -95,6 +95,9 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 if (false === $result) {
                     continue;
                 }
+
+                $this->fixItemProperty('calendar_event', $eventRepo, $course, $admin, $event, $parent);
+
                 $em->persist($event);
                 $em->flush();
             }

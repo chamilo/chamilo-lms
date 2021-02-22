@@ -42,6 +42,14 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_F67ABBEB5DA1941 ON c_lp (asset_id);');
         }
 
+        if ($table->hasIndex('session')) {
+            $this->addSql('DROP INDEX session ON c_lp');
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_lp');
+        }
+
         if (false === $table->hasColumn('accumulate_work_time')) {
             $this->addSql('ALTER TABLE c_lp ADD accumulate_work_time INT DEFAULT 0 NOT NULL');
         }

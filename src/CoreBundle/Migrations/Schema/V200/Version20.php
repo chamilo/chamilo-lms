@@ -112,6 +112,11 @@ class Version20 extends AbstractMigrationChamilo
         if ($table->hasColumn('course')) {
             $this->addSql('ALTER TABLE personal_agenda DROP course');
         }
+
+        if ($table->hasIndex('category_code')) {
+            $this->addSql('DROP INDEX category_code ON course');
+        }
+
         if (false === $table->hasForeignKey('FK_D86124608D93D649')) {
             $this->addSql('ALTER TABLE personal_agenda ADD CONSTRAINT FK_D86124608D93D649 FOREIGN KEY (user) REFERENCES user (id) ON DELETE CASCADE');
         }

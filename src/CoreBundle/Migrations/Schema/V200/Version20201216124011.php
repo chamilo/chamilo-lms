@@ -93,7 +93,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $sql = "SELECT * FROM c_student_publication
                     WHERE
                           contains_file = 1 AND
-                          c_id = $courseId AND
+                          c_id = $courseId
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();

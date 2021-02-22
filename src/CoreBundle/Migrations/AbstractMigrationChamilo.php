@@ -215,8 +215,15 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         }
     }
 
-    public function fixItemProperty($tool, $repo, $course, $admin, ResourceInterface $resource, $parent)
-    {
+    public function fixItemProperty(
+        $tool,
+        $repo,
+        $course,
+        $admin,
+        ResourceInterface $resource,
+        $parent,
+        array $items = []
+    ) {
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
@@ -226,12 +233,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $courseId = $course->getId();
         $id = $resource->getResourceIdentifier();
 
-        $sql = "SELECT * FROM c_item_property
-                WHERE tool = '$tool' AND c_id = $courseId AND ref = $id";
-        $result = $connection->executeQuery($sql);
-        $items = $result->fetchAllAssociative();
+        if (empty($items)) {
+            $sql = "SELECT * FROM c_item_property
+                    WHERE tool = '$tool' AND c_id = $courseId AND ref = $id";
+            $result = $connection->executeQuery($sql);
+            $items = $result->fetchAllAssociative();
+        }
 
-        // For some reason this document doesnt have a c_item_property value.
+        // For some reason the resource doesnt have a c_item_property value.
         if (empty($items)) {
             return false;
         }
@@ -250,9 +259,9 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $sessionList = [];
         foreach ($items as $item) {
             $visibility = $item['visibility'];
-            $sessionId = $item['session_id'];
             $userId = $item['insert_user_id'];
-            $groupId = $item['to_group_id'];
+            $sessionId = $item['session_id'] ?? 0;
+            $groupId = $item['to_group_id'] ?? 0;
 
             $newVisibility = ResourceLink::VISIBILITY_PENDING;
             switch ($visibility) {

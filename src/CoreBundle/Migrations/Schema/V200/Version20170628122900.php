@@ -19,10 +19,16 @@ class Version20170628122900 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('id')) {
             $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN access_url_id INT NOT NULL');
             $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN user_id INT NOT NULL');
-            $this->addSql('ALTER TABLE access_url_rel_user DROP PRIMARY KEY');
+            if ($table->hasPrimaryKey()) {
+                $this->addSql('ALTER TABLE access_url_rel_user DROP PRIMARY KEY');
+            }
+
             $this->addSql(
-                'ALTER TABLE access_url_rel_user ADD id INT AUTO_INCREMENT NOT NULL, CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL, ADD PRIMARY KEY (id);'
+                'ALTER TABLE access_url_rel_user ADD id INT AUTO_INCREMENT NOT NULL, ADD PRIMARY KEY (id)'
             );
+
+            $this->addSql('ALTER TABLE access_url_rel_user CHANGE access_url_id access_url_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE access_url_rel_user CHANGE user_id user_id INT DEFAULT NULL');
         }
 
         if (false === $table->hasForeignKey('FK_85574263A76ED395')) {

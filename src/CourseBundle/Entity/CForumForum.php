@@ -77,12 +77,10 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * @Gedmo\SortableGroup
      *
-     * @var CForumCategory|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumCategory", inversedBy="forums")
      * @ORM\JoinColumn(name="forum_category", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $forumCategory;
+    protected ?CForumCategory $forumCategory;
 
     /**
      * @var int
@@ -187,7 +185,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="forum")
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", nullable=true)
      */
-    protected $lp;
+    protected ?CLp $lp;
 
     /**
      * @var bool
@@ -210,9 +208,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
      */
     protected $posts;
 
-    /**
-     * CForumForum constructor.
-     */
     public function __construct()
     {
         $this->threads = new ArrayCollection();

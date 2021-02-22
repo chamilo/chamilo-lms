@@ -43,6 +43,10 @@ class Version20170625122900 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_cdoc_type ON c_document (filetype)');
         }
 
+        if (false === $table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_document');
+        }
+
         //$this->addSql('ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL;');
         $table = $schema->getTable('c_announcement');
         if (false === $table->hasColumn('resource_node_id')) {

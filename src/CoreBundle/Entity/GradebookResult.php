@@ -38,6 +38,12 @@ class GradebookResult
     protected GradebookEvaluation $evaluation;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookResults")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected User $user;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
@@ -51,12 +57,6 @@ class GradebookResult
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookResults")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected User $user;
 
     /**
      * Set evaluationId.

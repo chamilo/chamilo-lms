@@ -468,11 +468,6 @@ class GradebookCategory
         return $this->parent;
     }
 
-    /**
-     * @param GradebookCategory|null $parent
-     *
-     * @return GradebookCategory
-     */
     public function setParent(?GradebookCategory $parent): self
     {
         $this->parent = $parent;

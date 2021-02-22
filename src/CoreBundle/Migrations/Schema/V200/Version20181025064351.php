@@ -193,8 +193,9 @@ class Version20181025064351 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('gradebook_result');
-        if ($table->hasIndex('idx_gb_uid_eid')) {
-            $this->addSql('');
+
+        if (false === $table->hasIndex('idx_gb_uid_eid')) {
+            $this->addSql('CREATE INDEX idx_gb_uid_eid ON gradebook_result (user_id, evaluation_id);');
         }
 
         if (false === $table->hasIndex('IDX_B88AEB67456C5646')) {
@@ -291,6 +292,13 @@ class Version20181025064351 extends AbstractMigrationChamilo
                 'ALTER TABLE gradebook_score_log ADD CONSTRAINT FK_640C6449A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
         }
+
+        if (false === $table->hasForeignKey('FK_640C644912469DE2')) {
+            $this->addSql(
+                'ALTER TABLE gradebook_score_log ADD CONSTRAINT FK_640C644912469DE2 FOREIGN KEY (category_id) REFERENCES gradebook_category (id)'
+            );
+        }
+
 
         if (false === $table->hasIndex('IDX_640C644912469DE2')) {
             $this->addSql('CREATE INDEX IDX_640C644912469DE2 ON gradebook_score_log (category_id);');

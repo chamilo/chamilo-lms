@@ -51,7 +51,20 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_47A9C991BAD783F ON c_forum_forum (resource_node_id)');
         }
 
-        $this->addSql('ALTER TABLE c_forum_forum DROP FOREIGN KEY FK_47A9C9921BF9426');
+        if ($table->hasIndex('FK_47A9C9968DFD1EF')) {
+            $this->addSql('ALTER TABLE c_forum_forum DROP INDEX FK_47A9C9968DFD1EF');
+        }
+
+        $this->addSql('ALTER TABLE c_forum_forum CHANGE lp_id lp_id INT DEFAULT NULL');
+        $this->addSql('UPDATE c_forum_forum SET lp_id = NULL WHERE lp_id = 0');
+        if (false === $table->hasIndex('UNIQ_47A9C9968DFD1EF')) {
+            $this->addSql('ALTER TABLE c_forum_forum ADD UNIQUE INDEX UNIQ_47A9C9968DFD1EF (lp_id)');
+        }
+
+        if ($table->hasForeignKey('FK_47A9C9921BF9426')) {
+            $this->addSql('ALTER TABLE c_forum_forum DROP FOREIGN KEY FK_47A9C9921BF9426');
+        }
+
 
         $table = $schema->getTable('c_forum_thread');
         if ($table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
@@ -95,6 +108,10 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_course_description ADD resource_node_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_course_description ADD CONSTRAINT FK_EC3CD8091BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_EC3CD8091BAD783F ON c_course_description (resource_node_id)');
+        }
+
+        if ($table->hasIndex('session_id')) {
+            $this->addSql('DROP INDEX session_id ON c_course_description');
         }
 
         $table = $schema->getTable('c_notebook');

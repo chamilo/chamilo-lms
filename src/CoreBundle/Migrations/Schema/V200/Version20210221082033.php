@@ -41,11 +41,11 @@ class Version20210221082033 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+                $path = $itemData['preview_image'];
                 $lp = $lpRepo->find($id);
-                if ($lp && !empty($lp->getPreviewImage())) {
-                    $path = $lp->getPreviewImage();
+                if ($lp && !empty($path)) {
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/learning_path/images/'.$path;
-                    if (file_exists($rootPath)) {
+                    if (file_exists($rootPath) && !is_dir($filePath)) {
                         $this->addLegacyFileToResource($filePath, $lpRepo, $lp, $lp->getIid(), $path);
                         $em->persist($lp);
                         $em->flush();

@@ -36,10 +36,12 @@ class LrsRequest
 
     public function send()
     {
-        $controllerName = $this->getControllerName();
-        $methodName = $this->getMethodName();
-
         try {
+            $this->alternateRequestSyntax();
+
+            $controllerName = $this->getControllerName();
+            $methodName = $this->getMethodName();
+
             $response = $this->generateResponse($controllerName, $methodName);
         } catch (XApiException $xApiException) {
             $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
@@ -49,7 +51,7 @@ class LrsRequest
                 $httpException->getStatusCode()
             );
         } catch (\Exception $exception) {
-            $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
+            $response = HttpResponse::create($exception->getMessage(), HttpResponse::HTTP_BAD_REQUEST);
         }
 
         $response->headers->set('X-Experience-API-Version', '1.0.3');
@@ -125,7 +127,7 @@ class LrsRequest
         $segments = array_values($segments);
 
         if (empty($segments)) {
-            return null;
+            throw new BadRequestHttpException('Bad request');
         }
 
         $segments = array_map('ucfirst', $segments);
@@ -163,8 +165,64 @@ class LrsRequest
         }
 
         /** @var HttpResponse $response */
-        $response = call_user_func([new $controllerName(), $methodName]);
+        $response = call_user_func(
+            [
+                new $controllerName($this->request),
+                $methodName,
+            ]
+        );
 
         return $response;
+    }
+
+    private function alternateRequestSyntax()
+    {
+        if ('POST' !== $this->request->getMethod()) {
+            return;
+        }
+
+        if (null === $method = $this->request->query->get('method')) {
+            return;
+        }
+
+        if ($this->request->query->count() > 1) {
+            throw new BadRequestHttpException('Including other query parameters than "method" is not allowed. You have to send them as POST parameters inside the request body.');
+        }
+
+        $this->request->setMethod($method);
+        $this->request->query->remove('method');
+
+        if (null !== $content = $this->request->request->get('content')) {
+            $this->request->request->remove('content');
+
+            $this->request->initialize(
+                $this->request->query->all(),
+                $this->request->request->all(),
+                $this->request->attributes->all(),
+                $this->request->cookies->all(),
+                $this->request->files->all(),
+                $this->request->server->all(),
+                $content
+            );
+        }
+
+        $headerNames = [
+            'Authorization',
+            'X-Experience-API-Version',
+            'Content-Type',
+            'Content-Length',
+            'If-Match',
+            'If-None-Match',
+        ];
+
+        foreach ($this->request->request as $key => $value) {
+            if (in_array($key, $headerNames, true)) {
+                $this->request->headers->set($key, $value);
+            } else {
+                $this->request->query->set($key, $value);
+            }
+
+            $this->request->request->remove($key);
+        }
     }
 }

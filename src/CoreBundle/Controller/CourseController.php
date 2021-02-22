@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\EntityRepository;
@@ -59,10 +60,10 @@ class CourseController extends AbstractController
 
         /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
-        /** @var EntityRepository $fieldTagsRepo */
+        /** @var ExtraFieldRelTagRepository $fieldTagsRepo */
         $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
 
-        /** @var CCourseDescription $courseDescription */
+        /** @var CCourseDescription[] $courseDescriptionTools */
         $courseDescriptionTools = $em->getRepository(CCourseDescription::class)
             ->findBy(
                 [
@@ -92,19 +93,19 @@ class CourseController extends AbstractController
 
             $teachersData[] = $userData;
         }
-
+        /** @var ExtraField $tagField */
         $tagField = $fieldsRepo->findOneBy([
             'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags',
         ]);
 
         $courseTags = [];
-
         if (null !== $tagField) {
             $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
         }
 
-        $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssessment = '';
+        $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = '';
+        $courseMaterial = $courseResources = $courseAssessment = '';
         $courseCustom = [];
         foreach ($courseDescriptionTools as $descriptionTool) {
             switch ($descriptionTool->getDescriptionType()) {

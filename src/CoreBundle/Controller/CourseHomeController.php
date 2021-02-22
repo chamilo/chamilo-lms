@@ -263,17 +263,10 @@ class CourseHomeController extends ToolBaseController
                 $manager->save($form->getData());
                 $message = $this->trans('Update');
             } catch (ValidatorException $exception) {
-                $message = $this->trans(
-                    $exception->getMessage(),
-                    [],
-                    'validators'
-                );
+                $message = $this->trans($exception->getMessage());
                 $messageType = 'error';
             }
-            $request->getSession()->getBag('flashes')->add(
-                $messageType,
-                $message
-            );
+            $this->addFlash($messageType, $message);
 
             if ($request->headers->has('referer')) {
                 return $this->redirect($request->headers->get('referer'));

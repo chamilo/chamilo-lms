@@ -122,6 +122,7 @@ class SettingsController extends BaseController
         $searchForm = $this->getSearchForm();
 
         $keyword = '';
+        $settingsFromKeyword = null;
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $values = $searchForm->getData();
@@ -164,7 +165,8 @@ class SettingsController extends BaseController
                 $manager->save($form->getData());
                 $message = $this->trans('Settings have been successfully updated');
             } catch (ValidatorException $exception) {
-                $message = $this->trans($exception->getMessage(), [], 'validators');
+                //$message = $this->trans($exception->getMessage(), [], 'validators');
+                $message = $this->trans($exception->getMessage());
                 $messageType = 'error';
             }
 

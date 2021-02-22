@@ -115,4 +115,16 @@ class GradebookResult
     {
         return $this->id;
     }
+
+    public function getEvaluation(): GradebookEvaluation
+    {
+        return $this->evaluation;
+    }
+
+    public function setEvaluation(GradebookEvaluation $evaluation): self
+    {
+        $this->evaluation = $evaluation;
+
+        return $this;
+    }
 }

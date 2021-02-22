@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
@@ -52,6 +53,7 @@ class GroupVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
+        /** @var User $user */
         $user = $token->getUser();
 
         // make sure there is a user object (i.e. that the user is logged in)

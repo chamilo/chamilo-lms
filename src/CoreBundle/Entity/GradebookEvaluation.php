@@ -417,4 +417,16 @@ class GradebookEvaluation
 
         return $this;
     }
+
+    public function getCategory(): GradebookCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(GradebookCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
 }

@@ -277,7 +277,7 @@ class Session
      * @ORM\ManyToOne(targetEntity="SessionCategory", inversedBy="session")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */
-    protected $category;
+    protected ?SessionCategory $category;
 
     /**
      * @var bool
@@ -287,7 +287,7 @@ class Session
     protected $sendSubscriptionNotification;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|CStudentPublication[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication",
@@ -298,12 +298,13 @@ class Session
      */
     protected $studentPublications;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->items = new ArrayCollection();
+        $this->courses = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->userCourseSubscriptions = new ArrayCollection();
+        $this->studentPublications = new ArrayCollection();
+        //$this->items = new ArrayCollection();
         $this->urls = new ArrayCollection();
 
         $this->description = '';
@@ -319,14 +320,10 @@ class Session
         $this->coachAccessEndDate = new \DateTime();
         $this->visibility = 1;
 
-        $this->courses = new ArrayCollection();
-        $this->users = new ArrayCollection();
-        $this->userCourseSubscriptions = new ArrayCollection();
         $this->showDescription = false;
         $this->category = null;
         $this->status = 0;
         $this->position = 0;
-        $this->studentPublications = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -381,12 +378,7 @@ class Session
         return $this->users;
     }
 
-    /**
-     * @param $users
-     *
-     * @return $this
-     */
-    public function setUsers($users)
+    public function setUsers($users): self
     {
         $this->users = new ArrayCollection();
 
@@ -451,9 +443,6 @@ class Session
         return $this->courses;
     }
 
-    /**
-     * @param $courses
-     */
     public function setCourses(ArrayCollection $courses)
     {
         $this->courses = new ArrayCollection();
@@ -902,12 +891,7 @@ class Session
         return $this->generalCoach;
     }
 
-    /**
-     * @param $coach
-     *
-     * @return $this
-     */
-    public function setGeneralCoach($coach)
+    public function setGeneralCoach(User $coach): self
     {
         $this->generalCoach = $coach;
 
@@ -922,12 +906,7 @@ class Session
         return $this->category;
     }
 
-    /**
-     * @param $category
-     *
-     * @return $this
-     */
-    public function setCategory($category)
+    public function setCategory($category): self
     {
         $this->category = $category;
 
@@ -1055,7 +1034,7 @@ class Session
     }
 
     /**
-     * @return SessionRelCourse
+     * @return SessionRelCourse|null
      */
     public function getCourseSubscription(Course $course)
     {
@@ -1063,10 +1042,7 @@ class Session
             Criteria::expr()->eq('course', $course)
         );
 
-        /** @var SessionRelCourse $sessionCourse */
-        return $this->courses
-            ->matching($criteria)
-            ->current();
+        return $this->courses->matching($criteria)->current();
     }
 
     /**
@@ -1268,9 +1244,6 @@ class Session
         return $this->urls;
     }
 
-    /**
-     * @param $urls
-     */
     public function setUrls($urls)
     {
         $this->urls = new ArrayCollection();

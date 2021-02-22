@@ -25,7 +25,7 @@ class SessionVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    //private $entityManager;
+    private $entityManager;
     //private $courseManager;
     private $security;
     private $settingsManager;

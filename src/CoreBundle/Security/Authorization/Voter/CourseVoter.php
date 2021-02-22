@@ -22,7 +22,7 @@ class CourseVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    //private $entityManager;
+    private $entityManager;
     //private $courseManager;
     private $security;
 
@@ -31,7 +31,7 @@ class CourseVoter extends Voter
       //  CourseRepository $courseManager,
         Security $security
     ) {
-        //$this->entityManager = $entityManager;
+        $this->entityManager = $entityManager;
         //$this->courseManager = $courseManager;
         $this->security = $security;
     }

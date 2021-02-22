@@ -62,12 +62,12 @@ class SessionListener
         $limit = $url->getLimitSessions();
 
         if (!empty($limit)) {
-            $count = $repo->getCountSessionByUrl($url);
+            /*$count = $repo->getCountSessionByUrl($url);
             if ($count >= $limit) {
                 api_warn_hosting_contact('hosting_limit_sessions', $limit);
 
                 throw new \Exception('PortalSessionsLimitReached');
-            }
+            }*/
         }
     }
 }

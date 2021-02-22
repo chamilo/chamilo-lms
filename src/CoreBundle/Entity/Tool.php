@@ -146,11 +146,9 @@ class Tool
     }
 
     /**
-     * @param $name
-     *
      * @return ResourceType
      */
-    public function getResourceTypeByName($name)
+    public function getResourceTypeByName(string $name)
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('name', $name));
 

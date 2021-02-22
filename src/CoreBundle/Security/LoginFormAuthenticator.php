@@ -46,7 +46,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     //private $formFactory;
 //    private $hookFactory;
     private $userRepository;
-    //private $csrfTokenManager;
+    private $csrfTokenManager;
     private $urlGenerator;
 
     public function __construct(
@@ -65,7 +65,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         //$this->formFactory = $formFactory;
         //$this->hookFactory = $hookFactory;
         $this->userRepository = $userRepository;
-        //$this->csrfTokenManager = $csrfTokenManager;
+        $this->csrfTokenManager = $csrfTokenManager;
         //$this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->serializer = $serializer;
@@ -202,13 +202,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         }
 
         return new RedirectResponse($this->urlGenerator->generate('home'));*/
-
+        /** @var User $user */
         $user = $token->getUser();
-        $userClone = clone $user;
-        $userClone->setPassword('');
-        $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
+        if ($user) {
+            $userClone = clone $user;
+            $userClone->setPassword('');
+            $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
 
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
+            return new JsonResponse($data, Response::HTTP_OK, [], true);
+        }
     }
 
     public function getLoginUrl(): RedirectResponse

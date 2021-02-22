@@ -108,9 +108,6 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->users;
     }
 
-    /**
-     * @param $users
-     */
     public function setUsers($users)
     {
         $this->users = new ArrayCollection();
@@ -239,7 +236,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->authorId;
     }
 
-    public function setAuthorId(string $authorId): Usergroup
+    public function setAuthorId(string $authorId): self
     {
         $this->authorId = $authorId;
 

@@ -552,7 +552,11 @@ class Category implements GradebookItem
         $category->set_parent_id($gradebookCategory->getParent()->getId());
         $category->set_weight($gradebookCategory->getWeight());
         $category->set_visible($gradebookCategory->getVisible());
-        $category->set_session_id($gradebookCategory->getSessionId());
+
+        if ($gradebookCategory->getSession()) {
+            $category->set_session_id($gradebookCategory->getSession()->getId());
+        }
+
         $category->set_certificate_min_score($gradebookCategory->getCertifMinScore());
         $category->set_grade_model_id($gradebookCategory->getGradeModelId());
         $category->set_locked($gradebookCategory->getLocked());
@@ -590,7 +594,7 @@ class Category implements GradebookItem
             $category->setWeight($this->weight);
             $category->setVisible($this->visible);
             $category->setCertifMinScore($this->certificate_min_score);
-            $category->setSessionId($this->session_id);
+            $category->setSession(api_get_session_entity($this->session_id));
             $category->setGenerateCertificates($this->generateCertificates);
             $category->setGradeModelId($this->grade_model_id);
             $category->setIsRequirement($this->isRequirement);

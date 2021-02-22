@@ -122,9 +122,6 @@ class GradebookLink
      */
     protected $userScoreList;
 
-    /**
-     * GradebookEvaluation constructor.
-     */
     public function __construct()
     {
         $this->locked = 0;
@@ -294,10 +291,8 @@ class GradebookLink
 
     /**
      * @param float $bestScore
-     *
-     * @return GradebookLink
      */
-    public function setBestScore($bestScore)
+    public function setBestScore($bestScore): self
     {
         $this->bestScore = $bestScore;
 
@@ -314,10 +309,8 @@ class GradebookLink
 
     /**
      * @param float $averageScore
-     *
-     * @return GradebookLink
      */
-    public function setAverageScore($averageScore)
+    public function setAverageScore($averageScore): self
     {
         $this->averageScore = $averageScore;
 
@@ -338,10 +331,8 @@ class GradebookLink
 
     /**
      * @param array $userScoreList
-     *
-     * @return GradebookLink
      */
-    public function setUserScoreList($userScoreList)
+    public function setUserScoreList($userScoreList): self
     {
         $this->userScoreList = $userScoreList;
 
@@ -358,12 +349,22 @@ class GradebookLink
 
     /**
      * @param float $scoreWeight
-     *
-     * @return GradebookLink
      */
-    public function setScoreWeight($scoreWeight)
+    public function setScoreWeight($scoreWeight): self
     {
         $this->scoreWeight = $scoreWeight;
+
+        return $this;
+    }
+
+    public function getCategory(): GradebookCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(GradebookCategory $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

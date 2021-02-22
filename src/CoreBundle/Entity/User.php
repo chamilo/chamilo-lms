@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -369,6 +370,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $sessionCourseSubscriptions;
 
     /**
+     * @var ArrayCollection|SkillRelUser[]
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser",
      *     mappedBy="user",
@@ -547,7 +550,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $personalAgendas;
 
     /**
-     * @var Session[]|ArrayCollection
+     * @var ArrayCollection|SessionRelUser[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser",
@@ -559,7 +562,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $sessions;
 
     /**
-     * @var CGroupRelUser[]|ArrayCollection
+     * @var ArrayCollection|CGroupRelUser[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser",
@@ -571,7 +574,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $courseGroupsAsMember;
 
     /**
-     * @var Collection
+     * @var ArrayCollection|CGroupRelTutor[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user", orphanRemoval=true)
      */
@@ -592,15 +595,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $status;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="official_code", type="string", length=40, nullable=true, unique=false)
      */
-    protected $officialCode;
+    protected ?string $officialCode;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
     protected ?string $pictureUri;
@@ -613,39 +612,29 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $creatorId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="competences", type="text", nullable=true, unique=false)
      */
-    protected $competences;
+    protected ?string $competences;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="diplomas", type="text", nullable=true, unique=false)
      */
-    protected $diplomas;
+    protected ?string $diplomas;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="openarea", type="text", nullable=true, unique=false)
      */
-    protected $openarea;
+    protected ?string $openarea;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="teach", type="text", nullable=true, unique=false)
      */
-    protected $teach;
+    protected ?string $teach;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="productions", type="string", length=250, nullable=true, unique=false)
      */
-    protected $productions;
+    protected ?string $productions;
 
     /**
      * @var \DateTime
@@ -676,11 +665,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $openid;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="theme", type="string", length=255, nullable=true, unique=false)
      */
-    protected $theme;
+    protected ?string $theme;
 
     /**
      * @var int
@@ -704,7 +691,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $updatedAt;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Message[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\Message",
@@ -937,9 +924,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    /**
-     * @param $portal
-     */
     public function setPortal($portal)
     {
         $this->portals->add($portal);
@@ -970,9 +954,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->isActive();
     }
 
-    /**
-     * @param $boolean
-     */
     public function setEnabled($boolean): self
     {
         $this->enabled = (bool) $boolean;
@@ -1844,9 +1825,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->locked;
     }
 
-    /**
-     * @param $boolean
-     */
     public function setLocked($boolean): self
     {
         $this->locked = $boolean;
@@ -1870,6 +1848,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -2126,7 +2106,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function isUser(UserInterface $user = null)
+    public function isUser(User $user = null)
     {
         return null !== $user && $this->getId() === $user->getId();
     }

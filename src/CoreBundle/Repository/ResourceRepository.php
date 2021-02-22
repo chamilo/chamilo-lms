@@ -984,4 +984,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
     {
         throw new \Exception('Implement saveUpload');
     }
+
+    public function getResourceFormType()
+    {
+        throw new \Exception('Implement getResourceFormType');
+    }
 }

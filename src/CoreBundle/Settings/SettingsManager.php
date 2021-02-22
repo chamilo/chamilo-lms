@@ -104,11 +104,7 @@ class SettingsManager implements SettingsManagerInterface
     {
         $this->url = $url;
         $schemas = array_keys($this->getSchemas());
-
-        /**
-         * @var string
-         * @var SchemaInterface $schema
-         */
+        /** @var SchemaInterface $schema */
         foreach ($schemas as $schema) {
             $settings = $this->load($this->convertServiceToNameSpace($schema));
             $this->save($settings);
@@ -197,6 +193,7 @@ class SettingsManager implements SettingsManagerInterface
     {
         $loadFromSession = true;
 
+        $session = null;
         if ($loadFromSession && $this->request->getCurrentRequest()) {
             $session = $this->request->getCurrentRequest()->getSession();
             $schemaList = $session->get('schemas');
@@ -231,7 +228,7 @@ class SettingsManager implements SettingsManagerInterface
                 $schemaList[$name] = $settings;
             }
             $this->schemaList = $schemaList;
-            if ($loadFromSession && $this->request->getCurrentRequest()) {
+            if ($session && $loadFromSession && $this->request->getCurrentRequest()) {
                 $session->set('schemas', $schemaList);
             }
         }
@@ -339,7 +336,7 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlLocked(1)
                 ;
 
-                /** @var ConstraintViolationListInterface $errors */
+                // @var ConstraintViolationListInterface $errors
                 /*$errors = $this->validator->validate($parameter);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());
@@ -379,12 +376,11 @@ class SettingsManager implements SettingsManagerInterface
             ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
         );
         $persistedParametersMap = [];
-
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getTitle()] = $parameter;
         }
 
-        /** @var SettingsEvent $event */
+        // @var SettingsEvent $event
         /*$event = $this->eventDispatcher->dispatch(
             SettingsEvent::PRE_SAVE,
             new SettingsEvent($settings, $parameters)
@@ -410,7 +406,7 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlLocked(1)
                 ;
 
-                /** @var ConstraintViolationListInterface $errors */
+                // @var ConstraintViolationListInterface $errors
                 /*$errors = $this->validator->validate($parameter);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());

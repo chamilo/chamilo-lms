@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -96,7 +95,7 @@ class CourseListener
     {
         $limit = $url->getLimitCourses();
 
-        if (!empty($limit)) {
+        /*if (!empty($limit)) {
             $count = $repo->getCountCoursesByUrl($url);
             if ($count >= $limit) {
                 api_warn_hosting_contact('hosting_limit_courses', $limit);
@@ -116,6 +115,6 @@ class CourseListener
                     throw new \Exception('PortalActiveCoursesLimitReached');
                 }
             }
-        }
+        }*/
     }
 }

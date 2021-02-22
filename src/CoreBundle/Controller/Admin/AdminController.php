@@ -30,6 +30,8 @@ class AdminController extends BaseController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->loadAdminMenu();
         }
+
+        throw $this->createAccessDeniedException();
     }
 
     /**
@@ -55,7 +57,7 @@ class AdminController extends BaseController
     /**
      * Move in template.lib.
      */
-    private function loadAdminMenu()
+    private function loadAdminMenu(): Response
     {
         // Access restrictions.
         api_protect_admin_script(true);

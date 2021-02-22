@@ -776,6 +776,15 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         $repoForumCategory = Container::getForumCategoryRepository();
         $forumCategory = $repoForumCategory->find($values['forum_category']);
     }
+
+    $lpId = $values['lp_id'] ?? 0;
+    $lpRepo = Container::getLpRepository();
+    $lp = null;
+    if (!empty($lpId)) {
+        /** @var \Chamilo\CourseBundle\Entity\CLp $lp */
+        $lp = $lpRepo->find($lpId);
+    }
+
     //'forum_image' => $new_file_name,
     $forum
         ->setForumTitle($values['forum_title'])
@@ -793,7 +802,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setStartTime(!empty($values['start_time']) ? api_get_utc_datetime($values['start_time'], true, true) : null)
         ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time'], true, true) : null)
         ->setSessionId($session_id)
-        ->setLpId($values['lp_id'] ?? 0)
+        ->setLp($lp)
     ;
 
     $course = api_get_course_entity($courseId);

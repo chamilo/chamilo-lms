@@ -131,6 +131,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     {
         // this code is only an example; the exact code will depend on
         // your own application needs
+        /** @var User $user */
         $user->setPassword($newEncodedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
@@ -562,6 +563,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
         $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
 
+        $dql = null;
         if ('true' === api_get_setting('allow_social_tool') &&
             'true' === api_get_setting('allow_message_tool')
         ) {
@@ -605,8 +607,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                             U.id != $currentUserId AND
                             R.url = $accessUrlId";
             } else {
-                $time_limit = api_get_setting('time_limit_whosonline');
-                $online_time = time() - $time_limit * 60;
+                $time_limit = (int) api_get_setting('time_limit_whosonline');
+                $online_time = time() - ($time_limit * 60);
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloCoreBundle:User U
@@ -620,7 +622,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         $parameters = [];
 
-        if (!empty($searchFilter)) {
+        if (!empty($searchFilter) && !empty($dql)) {
             $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
             $parameters['search'] = "%$searchFilter%";
         }
@@ -952,7 +954,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         foreach ($trackResults['ChamiloCoreBundle:GradebookResult'] as $item) {
             $date = $item->getCreatedAt() ? $item->getCreatedAt()->format($dateFormat) : '';
             $list = [
-                'Evaluation id# '.$item->getEvaluationId(),
+                'Evaluation id# '.$item->getEvaluation()->getId(),
                 //'Score: '.$item->getScore(),
                 'Creation date: '.$date,
             ];
@@ -1470,11 +1472,10 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $normalizer = new GetSetMethodNormalizer(null, null, null, null, null, $defaultContext);
         $serializer = new Serializer(
             [$normalizer],
-            [new JsonEncoder()],
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore]
+            [new JsonEncoder()]
         );
 
-        return $serializer->serialize($user, 'json');
+        return $serializer->serialize($user, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore]);
     }
 
     /**

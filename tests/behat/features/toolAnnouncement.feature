@@ -30,7 +30,7 @@ Feature: Announcement tool
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
     Then I press "submit"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Announcement has been added"
 
 #  Scenario: Delete all announcements

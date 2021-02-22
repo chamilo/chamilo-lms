@@ -3430,7 +3430,7 @@ class Exercise
                 $this->iId,
                 'hidequestionnumber'
             );
-            if($totalQuestions != 0 && is_array($showHideQuestionNumber) && $showHideQuestionNumber['value'] == 1)  {
+            if ($totalQuestions != 0 && is_array($showHideQuestionNumber) && $showHideQuestionNumber['value'] == 1) {
                 $showQuestion = sprintf(
                     get_lang('ShowQuestionNumber'),
                     $questionNum,

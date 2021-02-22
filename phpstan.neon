@@ -6,8 +6,7 @@ parameters:
 		container_xml_path: %rootDir%/../../../var/cache/dev/Chamilo_KernelDevDebugContainer.xml
 	doctrine:
 		objectManagerLoader: %rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php
-	autoload_files:
-		- %rootDir%/../../../public/main/work/work.lib.php
+
 	excludes_analyse:
 		- %rootDir%/../../../public/main/admin/db.php
 		- %rootDir%/../../../public/main/extra/*
@@ -17,6 +16,8 @@ parameters:
 		- %rootDir%/../../../public/main/inc/lib/search/*
 		- %rootDir%/../../../public/main/webservices/*
 		- %rootDir%/../../../src/CoreBundle/Migrations/Schema/*
+		- src/LtiBundle/*
+		- src/GraphQlBundle/*
 		- %rootDir%/../../../tests/*
 	level: 5
 	paths:

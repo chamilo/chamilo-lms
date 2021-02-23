@@ -130,9 +130,7 @@ final class StatementGetController
      */
     private function buildMultiStatementsResponse(array $statements, ParameterBag $query, $includeAttachments = false)
     {
-        $moreUrlPath = null;
-
-        $moreUrlPath = $this->generateMoreIrl($query);
+        $moreUrlPath = $statements ? $this->generateMoreIrl($query) : null;
 
         $json = $this->statementResultSerializer->serializeStatementResult(
             new StatementResult($statements, $moreUrlPath)

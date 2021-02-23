@@ -5505,22 +5505,21 @@ EOT;
     /**
      * Get the recorder audio component for save a teacher audio feedback.
      *
-     * @param int $attemptId
-     * @param int $questionId
-     * @param int $userId
+     * @param Template $template
+     * @param int      $attemptId
+     * @param int      $questionId
+     * @param int      $userId
      *
      * @return string
      */
-    public static function getOralFeedbackForm($attemptId, $questionId, $userId)
+    public static function getOralFeedbackForm($template, $attemptId, $questionId, $userId)
     {
-        $view = new Template('', false, false, false, false, false, false);
-        $view->assign('user_id', $userId);
-        $view->assign('question_id', $questionId);
-        $view->assign('directory', "/../exercises/teacher_audio/$attemptId/");
-        $view->assign('file_name', "{$questionId}_{$userId}");
-        $template = $view->get_template('exercise/oral_expression.tpl');
+        $template->assign('user_id', $userId);
+        $template->assign('question_id', $questionId);
+        $template->assign('directory', "/../exercises/teacher_audio/$attemptId/");
+        $template->assign('file_name', "{$questionId}_{$userId}");
 
-        return $view->fetch($template);
+        return $template->fetch($template->get_template('exercise/oral_expression.tpl'));
     }
 
     /**

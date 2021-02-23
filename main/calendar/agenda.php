@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // use anonymous mode when accessing this course tool
@@ -16,7 +17,7 @@ $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
-        $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course'.'&'.api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
     } else {
         $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?';
     }

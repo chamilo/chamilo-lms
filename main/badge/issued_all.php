@@ -72,9 +72,18 @@ foreach ($userSkills as $index => $skillIssue) {
     }
     $argumentationAuthor = api_get_user_info($skillIssue->getArgumentationAuthorId());
 
+    $tempDate = DateTime::createFromFormat('Y-m-d H:i:s', $skillIssueDate);
+    $linkedinOrganizationId = api_get_configuration_value('linkedin_organization_id');
+    if (($linkedinOrganizationId === false)) {
+        $linkedinOrganizationId = null;
+    }
+
     $skillIssueInfo = [
         'id' => $skillIssue->getId(),
         'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
+        'year' => $tempDate->format('Y'),
+        'month' => $tempDate->format('m'),
+        'linkedin_organization_id' => $linkedinOrganizationId,
         'acquired_level' => $currentSkillLevel,
         'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
         'argumentation_author_name' => api_get_person_name(

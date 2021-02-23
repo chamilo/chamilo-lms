@@ -402,6 +402,11 @@ $arrmarks = [];
 $strids = '';
 $marksid = '';
 $countPendingQuestions = 0;
+$audioTemplate = null;
+if ($allowRecordAudio && $allowTeacherCommentAudio) {
+    $audioTemplate = new Template('', false, false, false, false, false, false);
+}
+
 foreach ($questionList as $questionId) {
     $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
     // destruction of the Question object
@@ -635,8 +640,6 @@ foreach ($questionList as $questionId) {
             $renderer = &$feedback_form->defaultRenderer();
             $renderer->setFormTemplate('<form{attributes}><div>{content}</div></form>');
             $renderer->setCustomElementTemplate('<div>{element}</div>');
-            $comnt = Event::get_comments($id, $questionId);
-
             $textareaId = 'comments_'.$questionId;
             $default = [$textareaId => $comnt];
 
@@ -657,12 +660,11 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
-
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
                 echo '<div class="col-sm-5">';
-                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
+                echo ExerciseLib::getOralFeedbackForm($audioTemplate, $id, $questionId, $student_id);
                 echo '</div>';
             }
             echo '</div>';

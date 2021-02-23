@@ -21,9 +21,9 @@ class XApiCreateCourseHookObserver extends HookObserver implements HookCreateCou
     /**
      * {@inheritdoc}
      */
-    public function hookCreateCourse(HookCreateCourseEventInterface $hookEvent)
+    public function hookCreateCourse(HookCreateCourseEventInterface $hook)
     {
-        $data = $hookEvent->getEventData();
+        $data = $hook->getEventData();
 
         $type = $data['type'];
         $courseInfo = $data['course_info'];

@@ -149,6 +149,7 @@ class Template
             'api_get_user_info',
             'api_get_configuration_value',
             'api_get_setting',
+            'api_get_course_setting',
             'api_get_plugin_setting',
             [
                 'name' => 'return_message',
@@ -446,9 +447,10 @@ class Template
 
         // Only if course is available
         $courseToolBar = '';
+        $origin = api_get_origin();
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if (api_get_setting('show_toolshortcuts') != 'false') {
+            if ($origin !== 'embeddable' && api_get_setting('show_toolshortcuts') !== 'false') {
                 // Course toolbar
                 $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }

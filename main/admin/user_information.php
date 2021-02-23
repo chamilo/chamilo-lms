@@ -718,8 +718,8 @@ if (api_get_configuration_value('allow_career_users')) {
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $row = 1;
-        foreach ($careers as $carerData) {
-            $table->setCellContents($row, 0, $carerData['name']);
+        foreach ($careers as $careerData) {
+            $table->setCellContents($row, 0, $careerData['name']);
             $row++;
         }
         echo $table->toHtml();

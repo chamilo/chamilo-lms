@@ -50,7 +50,7 @@ while ($user = Database::fetch_array($result, 'ASSOC')) {
             Database::update($table, $params, ['id = ?' => $userId]);
 
             $extraFields = [
-                'company' => $ldapUser['company'][0],
+                'company' => $ldapUser['department'][0],
             ];
             foreach ($extraFields as $variable => $value) {
                 $params = [
@@ -61,7 +61,6 @@ while ($user = Database::fetch_array($result, 'ASSOC')) {
                 print_r($params).PHP_EOL;
                 $extraFieldUser->save($params);
             }
-            exit;
         }
     }
 }

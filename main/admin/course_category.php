@@ -23,13 +23,13 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
 if (!empty($action)) {
-    if ($action == 'delete') {
+    if ($action === 'delete') {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
-    } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
-        if ($action == 'add') {
+    } elseif (($action === 'add' || $action === 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
+        if ($action === 'add') {
             $ret = CourseCategory::addNode(
                 $_POST['code'],
                 $_POST['name'],
@@ -63,7 +63,7 @@ if (!empty($action)) {
         Display::addFlash($errorMsg);
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php');
         exit;
-    } elseif ($action == 'moveUp') {
+    } elseif ($action === 'moveUp') {
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -80,7 +80,7 @@ $interbreadcrumb[] = [
 Display::display_header($tool_name);
 $urlId = api_get_current_access_url_id();
 
-if ($action == 'add' || $action == 'edit') {
+if ($action === 'add' || $action === 'edit') {
     echo '<div class="actions">';
     echo Display::url(
         Display::return_icon('folder_up.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
@@ -88,7 +88,7 @@ if ($action == 'add' || $action == 'edit') {
     );
     echo '</div>';
 
-    $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
+    $form_title = $action === 'add' ? get_lang('AddACategory') : get_lang('EditNode');
     if (!empty($category)) {
         $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
     }
@@ -139,7 +139,7 @@ if ($action == 'add' || $action == 'edit') {
             ['ToolbarSet' => 'Minimal']
         );
         $form->addFile('image', get_lang('Image'), ['accept' => 'image/*']);
-        if ($action == 'edit' && !empty($categoryInfo['image'])) {
+        if ($action === 'edit' && !empty($categoryInfo['image'])) {
             $form->addHtml('
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-8">'.
@@ -180,7 +180,7 @@ if ($action == 'add' || $action == 'edit') {
         );
     }
 
-    if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'TRUE') {
+    if (empty($parentInfo) || $parentInfo['auth_cat_child'] === 'TRUE') {
         $newCategoryLink = Display::url(
             Display::return_icon('new_folder.png', get_lang('AddACategory'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.Security::remove_XSS($category)

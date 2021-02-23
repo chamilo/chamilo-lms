@@ -348,16 +348,15 @@ class FlatViewTable extends SortableTable
 
         $header = null;
         if ($this->limit_enabled && $totalitems > GRADEBOOK_ITEM_LIMIT) {
-            $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
-                .'<tbody>'
-                .'<tr>';
-
+            $header .= '<table
+                    style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;"
+                    border="0" cellpadding="2"><tbody>
+                    <tr>';
             // previous X
             $header .= '<td style="width:100%;">';
             if ($this->offset >= GRADEBOOK_ITEM_LIMIT) {
-                $header .= '<a href="'.api_get_self()
-                    .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
-                    .'&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
+                $header .= '<a
+                    href="'.api_get_self().'?selectcat='.(int) $_GET['selectcat'].'&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
                     .Display::return_icon(
                         'action_prev.png',
@@ -434,10 +433,8 @@ class FlatViewTable extends SortableTable
         $firstHeader = [];
         while ($column < count($header_names)) {
             $headerData = $header_names[$column];
-
             if (is_array($headerData)) {
                 $countItems = count($headerData['items']);
-
                 $this->set_header(
                     $column,
                     $headerData['header'],
@@ -445,8 +442,12 @@ class FlatViewTable extends SortableTable
                     'colspan="'.$countItems.'"'
                 );
 
-                foreach ($headerData['items'] as $item) {
-                    $firstHeader[] = '<span class="text-center">'.$item.'</span>';
+                if (count($headerData['items']) > 0) {
+                    foreach ($headerData['items'] as $item) {
+                        $firstHeader[] = '<span class="text-center">'.$item.'</span>';
+                    }
+                } else {
+                    $firstHeader[] = '&mdash;';
                 }
             } else {
                 $this->set_header($column, $headerData, false, $thAttributes);
@@ -509,6 +510,8 @@ class FlatViewTable extends SortableTable
      */
     private function build_name_link($userId, $name)
     {
-        return '<a href="user_stats.php?userid='.$userId.'&selectcat='.$this->selectcat->get_id().'&'.api_get_cidreq().'">'.$name.'</a>';
+        return '<a
+            href="user_stats.php?userid='.$userId.'&selectcat='.$this->selectcat->get_id().'&'.api_get_cidreq().'">'.
+            $name.'</a>';
     }
 }

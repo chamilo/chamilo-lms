@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="portfolio_comment")
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ * ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioCommentRepository")
  */
 class PortfolioComment
 {
@@ -106,6 +106,13 @@ class PortfolioComment
      * @ORM\OrderBy({"lft"="DESC"})
      */
     private $children;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="score", type="float", nullable=true)
+     */
+    private $score;
 
     /**
      * PortfolioComment constructor.
@@ -213,5 +220,37 @@ class PortfolioComment
     public function setIsImportant(bool $isImportant): void
     {
         $this->isImportant = $isImportant;
+    }
+
+    public function getExcerpt(int $count = 190): string
+    {
+        $excerpt = strip_tags($this->content);
+        $excerpt = substr($excerpt, 0, $count);
+        $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+
+        return $excerpt;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\PortfolioComment
+     */
+    public function getRoot(): PortfolioComment
+    {
+        return $this->root;
+    }
+
+    public function getLvl(): int
+    {
+        return $this->lvl;
     }
 }

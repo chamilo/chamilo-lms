@@ -523,7 +523,7 @@ class EvalForm extends FormValidator
     private function build_basic_form($edit = 0)
     {
         $form_title = get_lang('NewEvaluation');
-        if (!empty($_GET['editeval']) && $_GET['editeval'] == 1) {
+        if (!empty($_GET['editeval'])) {
             $form_title = get_lang('EditEvaluation');
         }
 

@@ -151,9 +151,11 @@ class CourseManager
      * @param int    $orderby            The column we want to order it by. Optional, defaults to first column.
      * @param string $orderdirection     The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param int    $visibility         the visibility of the course, or all by default
-     * @param string $startwith          If defined, only return results for which the course *title* begins with this string
+     * @param string $startwith          If defined, only return results for which the course *title* begins with this
+     *                                   string
      * @param string $urlId              The Access URL ID, if using multiple URLs
-     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes (not *only* titles)
+     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes
+     *                                   (not *only* titles)
      * @param array  $conditionsLike
      * @param array  $onlyThisCourseList
      *
@@ -530,13 +532,57 @@ class CourseManager
                 );
             }
         }
+
+        $subscriptionSettings = learnpath::getSubscriptionSettings();
+        if ($subscriptionSettings['allow_add_users_to_lp_category']) {
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
+
+            if (api_get_configuration_value('allow_session_lp_category')) {
+                //$criteria = ['cId' => $course_id, 'sessionId' => $session_id];
+                $table = Database::get_course_table('lp_category');
+                $conditionSession = api_get_session_condition($session_id, true);
+                $sql = "SELECT * FROM $table WHERE c_id = $course_id $conditionSession";
+                $result = Database::query($sql);
+                $categories = [];
+                if (Database::num_rows($result)) {
+                    while ($row = Database::fetch_array($result)) {
+                        $categories[] = $repo->find($row['iid']);
+                    }
+                }
+            } else {
+                $criteria = ['cId' => $course_id];
+                $categories = $repo->findBy($criteria);
+            }
+            if (!empty($categories)) {
+                /** @var \Chamilo\CourseBundle\Entity\CLpCategory $category */
+                foreach ($categories as $category) {
+                    if ($category->getUsers()->count() > 0) {
+                        foreach ($userList as $uid) {
+                            $user = api_get_user_entity($uid);
+                            $criteria = Criteria::create()->where(
+                                Criteria::expr()->eq('user', $user)
+                            );
+                            $userCategory = $category->getUsers()->matching($criteria)->first();
+                            if ($userCategory) {
+                                $category->removeUsers($userCategory);
+                            }
+                        }
+                        $em->persist($category);
+                        $em->flush();
+                    }
+                }
+            }
+        }
+
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             // Also unlink the course from the users' currently accessible sessions
             /** @var Course $course */
             $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
                 'code' => $course_code,
             ]);
-            if (is_null($course)) {
+
+            if (null === $course) {
                 return false;
             }
             /** @var Chamilo\UserBundle\Entity\User $user */
@@ -1432,8 +1478,8 @@ class CourseManager
      * @param int       $sessionId
      * @param string    $limit
      * @param string    $order_by         the field to order the users by.
-     *                                    Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
-     *                                    that starts with ORDER BY ...
+     *                                    Valid values are 'lastname', 'firstname', 'username', 'email',
+     *                                    'official_code' OR a part of a SQL statement that starts with ORDER BY ...
      * @param int|null  $filter_by_status if using the session_id: 0 or 2 (student, coach),
      *                                    if using session_id = 0 STUDENT or COURSEMANAGER
      * @param bool|null $return_count
@@ -2959,7 +3005,6 @@ class CourseManager
      */
     public static function get_special_course_list()
     {
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -2970,8 +3015,7 @@ class CourseManager
 
         // Get special course field
         $sql = "SELECT id FROM $tbl_course_field
-                WHERE extra_field_type = $extraFieldType AND
-                variable = 'special_course'";
+                WHERE extra_field_type = $extraFieldType AND variable = 'special_course'";
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
@@ -2980,28 +3024,27 @@ class CourseManager
             // Note: The value is better indexed as string, so
             // using '1' instead of integer is more efficient
             $sql = "SELECT DISTINCT(item_id) as cid
-                FROM $tbl_course_field_value
-                WHERE field_id = ".$row['id']." AND value = '1'";
+                    FROM $tbl_course_field_value
+                    WHERE field_id = ".$row['id']." AND value = '1'";
             $result = Database::query($sql);
             while ($row = Database::fetch_assoc($result)) {
                 $courseList[] = $row['cid'];
             }
-            if (count($courseList) < 1) {
-                return $courseList;
+            if (empty($courseList)) {
+                return [];
             }
             if (api_get_multiple_access_url()) {
                 //we filter the courses by the active URL
-                $coursesSelect = '';
-                if (count($courseList) == 1) {
+                if (count($courseList) === 1) {
                     $coursesSelect = $courseList[0];
                 } else {
                     $coursesSelect = implode(',', $courseList);
                 }
-                $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
+                $urlId = api_get_current_access_url_id();
+                if ($urlId != -1) {
+                    $courseList = [];
                     $sql = "SELECT c_id FROM $tbl_url_course
-                            WHERE access_url_id = $access_url_id
-                            AND c_id IN ($coursesSelect)";
+                            WHERE access_url_id = $urlId AND c_id IN ($coursesSelect)";
                     $result = Database::query($sql);
                     while ($row = Database::fetch_assoc($result)) {
                         $courseList[] = $row['c_id'];
@@ -3073,7 +3116,8 @@ class CourseManager
      * @param int   $user_id
      * @param bool  $include_sessions                   Whether to include courses from session or not
      * @param bool  $adminGetsAllCourses                If the user is platform admin,
-     *                                                  whether he gets all the courses or just his. Note: This does *not* include all sessions
+     *                                                  whether he gets all the courses or just his. Note: This does
+     *                                                  *not* include all sessions
      * @param bool  $loadSpecialCourses
      * @param array $skipCourseList                     List of course ids to skip
      * @param bool  $useUserLanguageFilterIfAvailable
@@ -4758,8 +4802,8 @@ class CourseManager
      * Creates a new course code based in a given code.
      *
      * @param string    wanted code
-     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3</code>
-     * if the course code doest not exist in the DB the same course code will be returned
+     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return:
+     * course3</code> if the course code doest not exist in the DB the same course code will be returned
      *
      * @return string wanted unused code
      */
@@ -5852,6 +5896,12 @@ class CourseManager
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');
         if ($allowLPReturnLink === 'true') {
             $courseSettings[] = 'lp_return_link';
+        }
+
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $courseSettings[] = 'qualify_portfolio_item';
+            $courseSettings[] = 'qualify_portfolio_comment';
+            $courseSettings[] = 'portfolio_max_score';
         }
 
         if (!empty($pluginCourseSettings)) {

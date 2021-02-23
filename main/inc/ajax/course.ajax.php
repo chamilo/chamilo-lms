@@ -258,12 +258,18 @@ switch ($action) {
         }
         break;
     case 'search_user_by_course':
-        if (api_is_platform_admin()) {
-            $user = Database::get_main_table(TABLE_MAIN_USER);
-            $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $sessionId = $_GET['session_id'];
-            $course = api_get_course_info_by_id($_GET['course_id']);
+        $sessionId = $_GET['session_id'];
+        $course = api_get_course_info_by_id($_GET['course_id']);
 
+        $isPlatformAdmin = api_is_platform_admin();
+        $userIsSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
+            api_get_user_id(),
+            $course['code'],
+            !empty($sessionId),
+            $sessionId
+        );
+
+        if ($isPlatformAdmin || $userIsSubscribedInCourse) {
             $json = [
                 'items' => [],
             ];

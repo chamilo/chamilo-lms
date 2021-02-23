@@ -237,11 +237,10 @@ if ($debug) {
 
 $get_toc_list = $lp->get_toc();
 $get_teacher_buttons = $lp->get_teacher_toc_buttons();
-
-$type_quiz = false;
+$itemType = '';
 foreach ($get_toc_list as $toc) {
-    if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
-        $type_quiz = true;
+    if ($toc['id'] == $lp_item_id) {
+        $itemType = $toc['type'];
     }
 }
 
@@ -259,6 +258,11 @@ if (!isset($src)) {
                     $lp_item_id,
                     $get_toc_list
                 );
+
+                if (empty($src)) {
+                    $src = 'blank.php?'.api_get_cidreq().'&error=document_protected';
+                    break;
+                }
 
                 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
@@ -326,7 +330,6 @@ $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
 if ($debug) {
-    error_log('$type_quiz: '.$type_quiz);
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
     error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id']));
@@ -349,13 +352,12 @@ if (!empty($_REQUEST['exeId']) &&
     if (!empty($safe_id) && !empty($safe_item_id)) {
         Exercise::saveExerciseInLp($safe_item_id, $safe_exe_id);
     }
-    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
-        $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');
-    } else {
-        $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
-        if ($debug) {
-            error_log('Calling URL: '.$src);
-        }
+    /*if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
+       $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');
+    } else {*/
+    $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
+    if ($debug) {
+        error_log('Calling URL: '.$src);
     }
     $autostart = 'false';
 }
@@ -617,9 +619,9 @@ $template->assign(
     )
 );
 
-$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
-
+$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank', $itemType);
 $template->assign('frame_ready', $frameReady);
+
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);
 

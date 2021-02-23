@@ -15,11 +15,11 @@ CKEDITOR.plugins.setLang('oembed', 'fr', {
 	maxHeight: "Max. Hauteur:",
 	maxWidthTitle: "Largeur maximale du conteneur.",
 	maxHeightTitle: "Hauteur maximale du conteneur.",
-	resizeType: "Resize Type (Only Video's):",
-	noresize: "No Resize (use default)",
-	responsive: "Responsive Resize",
-	custom: "Specific Resize",
-	autoClose: "Automatically Close Dialog after Code is Embeded",
-	noVimeo: "The owner of this video has set domain restrictions and you will not be able to embed it on your website.",
-	Error: "Media Content could not been retrieved, please try a different URL."
+	resizeType: "Type de redimensionnement (uniquement les vidéos):",
+	noresize: "Pas de redimensionnement (par défaut)",
+	responsive: "Redimensionnement réactif",
+	custom: "Redimensionnement spécifique",
+	autoClose: "Fermer automatiquement la boîte de dialogue une fois le code incorporé",
+	noVimeo: "Le propriétaire de cette vidéo a défini des restrictions de domaine et vous ne pourrez pas l'intégrer à votre site Web.",
+	Error: "Impossible de récupérer le contenu multimédia, veuillez essayer une autre URL."
 });

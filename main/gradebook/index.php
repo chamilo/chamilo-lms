@@ -906,7 +906,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         foreach ($components as $component) {
                             $gradebook = new Gradebook();
                             $params = [];
-
                             $params['name'] = $component['acronym'];
                             $params['description'] = $component['title'];
                             $params['user_id'] = api_get_user_id();
@@ -918,8 +917,9 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                             $gradebook->save($params);
                         }
+
                         // Reloading cats
-                        $cats = Category:: load(
+                        $cats = Category::load(
                             null,
                             null,
                             $course_code,
@@ -1052,9 +1052,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 }
 
 api_set_in_gradebook();
-
 $contents = ob_get_contents();
-
 ob_end_clean();
 
 $view = new Template($viewTitle);

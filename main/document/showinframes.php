@@ -99,7 +99,8 @@ $is_visible = DocumentManager::check_visibility_tree(
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
-    api_not_allowed(true);
+    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
+    api_not_allowed(false, '&nbsp;');
 }
 
 $pathinfo = pathinfo($header_file);
@@ -116,7 +117,6 @@ if (isset($group_id) && $group_id != '') {
     if ($current_group) {
         $current_group_name = $current_group['name'];
     }
-
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -176,14 +176,14 @@ $frameheight = 135;
 if (api_is_course_admin()) {
     $frameheight = 165;
 }
-
+$execute_iframe = true;
 $frameReady = Display::getFrameReadyBlock('#mainFrame');
-
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
 $web_odf_supported_files[] = 'pdf';
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf = true;
+    $execute_iframe = false;
     $htmlHeadXtra[] = '
     <script>
         resizeIframe = function() {
@@ -194,15 +194,14 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
         $(function() {
             $(window).resize(resizeIframe());
         });
-    </script>'
-    ;
+    </script>';
 }
 
 // Activate code highlight.
 $isChatFolder = false;
 if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
     $chatFolder = $document_data['parents'][0];
-    if (isset($chatFolder['path']) && $chatFolder['path'] == '/chat_files') {
+    if (isset($chatFolder['path']) && $chatFolder['path'] === '/chat_files') {
         $isChatFolder = true;
     }
 }
@@ -217,17 +216,12 @@ if ($isChatFolder) {
     </script>';
 }
 
-$execute_iframe = true;
 if ($playerSupported) {
     $extension = api_strtolower($pathinfo['extension']);
     $execute_iframe = false;
 }
 
-if ($show_web_odf) {
-    $execute_iframe = false;
-}
-
-$is_freemind_available = $pathinfo['extension'] == 'mm' && api_get_setting('enable_freemind') == 'true';
+$is_freemind_available = $pathinfo['extension'] === 'mm' && api_get_setting('enable_freemind') === 'true';
 if ($is_freemind_available) {
     $execute_iframe = false;
 }
@@ -259,22 +253,6 @@ if ($originIsLearnpath) {
 
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
-
-if ($show_web_odf) {
-    echo '<div class="text-center">';
-    $browser = api_get_navigator();
-    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
-    if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
-        $pdfUrl = $file_url;
-    }
-    echo '<div id="viewerJS">';
-    echo '<iframe id="viewerJSContent" frameborder="0" allowfullscreen="allowfullscreen" webkitallowfullscreen style="width:100%;"
-            src="'.$pdfUrl.'">
-        </iframe>';
-    echo '</div>';
-    echo '</div>';
-}
-
 if ($playerSupported) {
     echo DocumentManager::generateMediaPreview($file_url_web, $extension);
 }
@@ -337,42 +315,37 @@ if ($is_freemind_available) {
         //fo.addVariable("toolTipsBgColor","0xaaeeaa");: bgcolor for tooltips ej;"0xaaeeaa"
         //fo.addVariable("defaultWordWrap","300"); //default 600
         //
-
         fo.write("flashcontent");
         // ]]>
     </script>
 <?php
 }
 
-if ($execute_iframe) {
-    if ($isChatFolder) {
-        $content = Security::remove_XSS(file_get_contents($file_url_sys));
-        echo $content;
-    } else {
-        $parentId = $document_data['parent_id'];
-        $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
-        $actionsLeft = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
-            $url
-        );
+if (($execute_iframe || $show_web_odf) && !$isChatFolder) {
+    $parentId = $document_data['parent_id'];
+    $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
+    $actionsLeft = Display::url(
+        Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+        $url
+    );
 
-        $groupMemberWithEditRights = false;
-        $groupId = api_get_group_id();
-        if (!empty($groupId)) {
-            $groupInfo = GroupManager::get_group_properties($groupId);
-            if ($groupInfo) {
-                $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
-                    api_get_user_id(),
-                    api_get_course_int_id(),
-                    $groupInfo,
-                        $document_data
-                );
-            }
+    $groupMemberWithEditRights = false;
+    $groupId = api_get_group_id();
+    if (!empty($groupId)) {
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        if ($groupInfo) {
+            $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
+                api_get_user_id(),
+                api_get_course_int_id(),
+                $groupInfo,
+                $document_data
+            );
         }
+    }
 
-        $allowToEdit = api_is_allowed_to_edit(null, true) || $groupMemberWithEditRights;
-
-        if ($allowToEdit) {
+    $allowToEdit = api_is_allowed_to_edit(null, true) || $groupMemberWithEditRights;
+    if ($allowToEdit) {
+        if (false === $show_web_odf) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',
@@ -382,36 +355,65 @@ if ($execute_iframe) {
                 ),
                 api_get_path(WEB_CODE_PATH).'document/edit_document.php?'.api_get_cidreq().'&id='.$document_id
             );
+        }
 
-            $titleToShow = addslashes(basename($document_data['title']));
+        $titleToShow = addslashes(basename($document_data['title']));
+        $urlDeleteParams = http_build_query(
+            [
+                'action' => 'delete_item',
+                'id' => $parentId,
+                'deleteid' => $document_data['id'],
+            ]
+        );
 
-            $urlDeleteParams = http_build_query(
-                [
-                    'action' => 'delete_item',
-                    'id' => $parentId,
-                    'deleteid' => $document_data['id'],
-                ]
-            );
-            $actionsLeft .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM),
-                '#',
-                [
-                    'data-item-title' => $titleToShow,
-                    'data-href' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
-                        ).'&'.$urlDeleteParams,
-                    'data-toggle' => 'modal',
-                    'data-target' => '#confirm-delete',
-                ]
-            );
+        $actionsLeft .= Display::url(
+            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM),
+            '#',
+            [
+                'data-item-title' => $titleToShow,
+                'data-href' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&'.$urlDeleteParams,
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
+        );
+
+        if (false === $show_web_odf) {
             $actionsLeft .= Display::url(
                 Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
                 ).'&action=export_to_pdf&id='.$document_id
             );
         }
+    }
+    echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
+}
 
-        echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
+if ($show_web_odf) {
+    $execute_iframe = false;
+    echo '<div class="text-center">';
+    $browser = api_get_navigator();
+    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html?zoom=page-width#'.$file_url;
+    if ($browser['name'] === 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
+        $pdfUrl = $file_url;
+    }
+    echo '<div id="viewerJS">';
+    echo '<iframe
+            id="viewerJSContent"
+            frameborder="0"
+            allowfullscreen="allowfullscreen"
+            webkitallowfullscreen
+            style="width:100%;height:600px;"
+            src="'.$pdfUrl.'">
+        </iframe>';
+    echo '</div>';
+    echo '</div>';
+}
 
+if ($execute_iframe) {
+    if ($isChatFolder) {
+        $content = Security::remove_XSS(file_get_contents($file_url_sys));
+        echo $content;
+    } else {
         echo '<iframe
             id="mainFrame"
             name="mainFrame"

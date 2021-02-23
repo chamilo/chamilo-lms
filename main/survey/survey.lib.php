@@ -2391,11 +2391,12 @@ class SurveyManager
     }
 
     /**
-     * @param array $surveyData
+     * @param array  $surveyData
+     * @param string $type       by_class or by_user
      *
      * @return bool
      */
-    public static function multiplicateQuestions($surveyData)
+    public static function multiplicateQuestions($surveyData, $type)
     {
         if (empty($surveyData)) {
             return false;
@@ -2419,43 +2420,91 @@ class SurveyManager
         if ($groupData && !empty($groupData['value'])) {
             $groupId = (int) $groupData['value'];
         }
-
-        if (null === $groupId) {
-            $obj = new UserGroup();
-            $options['where'] = [' usergroup.course_id = ? ' => $courseId];
-            $classList = $obj->getUserGroupInCourse($options);
-            $classToParse = [];
-            foreach ($classList as $class) {
-                $users = $obj->get_users_by_usergroup($class['id']);
-                if (empty($users)) {
-                    continue;
+        switch ($type) {
+            case 'by_class':
+                if (null === $groupId) {
+                    $obj = new UserGroup();
+                    $options['where'] = [' usergroup.course_id = ? ' => $courseId];
+                    $classList = $obj->getUserGroupInCourse($options);
+                    $classToParse = [];
+                    foreach ($classList as $class) {
+                        $users = $obj->get_users_by_usergroup($class['id']);
+                        if (empty($users)) {
+                            continue;
+                        }
+                        $classToParse[] = [
+                            'name' => $class['name'],
+                            'users' => $users,
+                        ];
+                    }
+                    self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData, true);
+                } else {
+                    $groupInfo = GroupManager::get_group_properties($groupId);
+                    if (!empty($groupInfo)) {
+                        $users = GroupManager::getStudents($groupInfo['iid'], true);
+                        if (!empty($users)) {
+                            $users = array_column($users, 'id');
+                            self::parseMultiplicateUserList(
+                                [
+                                    [
+                                        'name' => $groupInfo['name'],
+                                        'users' => $users,
+                                    ],
+                                ],
+                                $questions,
+                                $courseId,
+                                $surveyData,
+                                false
+                            );
+                        }
+                    }
                 }
-                $classToParse[] = [
-                    'name' => $class['name'],
-                    'users' => $users,
-                ];
-            }
-            self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData, true);
-        } else {
-            $groupInfo = GroupManager::get_group_properties($groupId);
-            if (!empty($groupInfo)) {
-                $users = GroupManager::getStudents($groupInfo['iid'], true);
-                if (!empty($users)) {
-                    $users = array_column($users, 'id');
-                    self::parseMultiplicateUserList(
-                        [
-                            [
-                                'name' => $groupInfo['name'],
-                                'users' => $users,
-                            ],
-                        ],
-                        $questions,
-                        $courseId,
-                        $surveyData,
-                        false
+                break;
+            case 'by_user':
+                if (null === $groupId) {
+                    $sessionId = api_get_session_id();
+                    $users = CourseManager:: get_student_list_from_course_code(
+                        api_get_course_id(),
+                        !empty($sessionId),
+                        $sessionId
                     );
+                    if (!empty($users)) {
+                        $users = array_column($users, 'id');
+                        self::parseMultiplicateUserListPerUser(
+                            [
+                                [
+                                    'name' => '',
+                                    'users' => $users,
+                                ],
+                            ],
+                            $questions,
+                            $courseId,
+                            $surveyData,
+                            false
+                        );
+                    }
+                } else {
+                    $groupInfo = GroupManager::get_group_properties($groupId);
+                    if (!empty($groupInfo)) {
+                        $users = GroupManager::getStudents($groupInfo['iid'], true);
+                        if (!empty($users)) {
+                            $users = array_column($users, 'id');
+                            self::parseMultiplicateUserListPerUser(
+                                [
+                                    [
+                                        'name' => $groupInfo['name'],
+                                        'users' => $users,
+                                    ],
+                                ],
+                                $questions,
+                                $courseId,
+                                $surveyData,
+                                false
+                            );
+                        }
+                    }
                 }
-            }
+                break;
         }
 
         return true;
@@ -2544,23 +2593,129 @@ class SurveyManager
                 }
 
                 if ($addClassNewPage && $classCounter < count($itemList)) {
-                    // Add end page
-                    $values = [
-                        'c_id' => $courseId,
-                        'question_comment' => 'generated',
-                        'type' => 'pagebreak',
-                        'display' => 'horizontal',
-                        'question' => get_lang('QuestionForNextClass'),
-                        'survey_id' => $surveyId,
-                        'question_id' => 0,
-                        'shared_question_id' => 0,
-                    ];
-                    self::save_question($surveyData, $values, false);
+                    self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextClass'));
                 }
             }
         }
 
         return true;
+    }
+
+    public static function parseMultiplicateUserListPerUser(
+        $itemList,
+        $questions,
+        $courseId,
+        $surveyData,
+        $addClassNewPage = false
+    ) {
+        if (empty($itemList) || empty($questions)) {
+            return false;
+        }
+
+        $surveyId = $surveyData['survey_id'];
+        $classTag = '{{class_name}}';
+        $studentTag = '{{student_full_name}}';
+        $classCounter = 0;
+        $newQuestionList = [];
+        foreach ($questions as $question) {
+            $newQuestionList[$question['sort']] = $question;
+        }
+        ksort($newQuestionList);
+
+        $order = api_get_configuration_value('survey_duplicate_order_by_name');
+        foreach ($itemList as $class) {
+            $className = $class['name'];
+            $users = $class['users'];
+            $userInfoList = [];
+            foreach ($users as $userId) {
+                $userInfoList[] = api_get_user_info($userId);
+            }
+
+            if ($order) {
+                usort(
+                    $userInfoList,
+                    function ($a, $b) {
+                        return $a['lastname'] > $b['lastname'];
+                    }
+                );
+            }
+
+            /*foreach ($newQuestionList as $question) {
+                $text = $question['question'];
+                if (false === strpos($text, $studentTag)) {
+                    $values = [
+                        'c_id' => $courseId,
+                        'question_comment' => 'generated',
+                        'type' => $question['type'],
+                        'display' => $question['horizontalvertical'],
+                        'horizontalvertical' => $question['horizontalvertical'],
+                        'question' => $text,
+                        'survey_id' => $surveyId,
+                        'question_id' => 0,
+                        'shared_question_id' => 0,
+                        'answers' => $question['answers'] ?? null,
+                    ];
+                    self::save_question($surveyData, $values, false);
+                } else {
+                    break;
+                }
+            }*/
+
+            self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextUser'));
+
+            $counter = 0;
+            foreach ($userInfoList as $userInfo) {
+                foreach ($newQuestionList as $question) {
+                    $text = $question['question'];
+                    if (false !== strpos($text, $studentTag)) {
+                        $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
+                        $values = [
+                            'c_id' => $courseId,
+                            'question_comment' => 'generated',
+                            'type' => $question['type'],
+                            'display' => $question['horizontalvertical'],
+                            'maximum_score' => $question['maximum_score'],
+                            'question' => $replacedText,
+                            'survey_id' => $surveyId,
+                            'question_id' => 0,
+                            'shared_question_id' => 0,
+                        ];
+
+                        $answers = [];
+                        if (!empty($question['answers'])) {
+                            foreach ($question['answers'] as $answer) {
+                                $replacedText = str_replace($studentTag, $userInfo['complete_name'], $answer);
+                                $answers[] = $replacedText;
+                            }
+                        }
+                        $values['answers'] = $answers;
+                        self::save_question($surveyData, $values, false);
+                    }
+                }
+                $counter++;
+                if ($counter < count($userInfoList)) {
+                    self::addGeneratedNewPage($courseId, $surveyId, $surveyData, get_lang('QuestionForNextUser'));
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static function addGeneratedNewPage($courseId, $surveyId, $surveyData, $label)
+    {
+        // Add end page
+        $values = [
+            'c_id' => $courseId,
+            'question_comment' => 'generated',
+            'type' => 'pagebreak',
+            'display' => 'horizontal',
+            'question' => $label,
+            'survey_id' => $surveyId,
+            'question_id' => 0,
+            'shared_question_id' => 0,
+        ];
+        self::save_question($surveyData, $values, false);
     }
 
     public static function hasDependency($survey)

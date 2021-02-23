@@ -1355,8 +1355,8 @@ function displayDatabaseParameter(
                     '.$extra_notice.'
                   ';
         }
-        echo '</dd>';
     }
+    echo '</dd>';
 }
 
 /**
@@ -1465,7 +1465,7 @@ function display_database_settings_form(
         null,
         'id="optional_param1"'
     );
-    echo '</dl></div></div>';
+    echo '</div></div>';
     if (INSTALL_TYPE_UPDATE != $installType) { ?>
         <button type="submit" class="btn btn-primary" name="step3" value="step3">
             <em class="fa fa-refresh"> </em>

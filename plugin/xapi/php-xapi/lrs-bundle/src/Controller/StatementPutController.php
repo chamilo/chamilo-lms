@@ -55,6 +55,8 @@ final class StatementPutController
                 throw new ConflictHttpException('The new statement is not equal to an existing statement with the same id.');
             }
         } catch (NotFoundException $e) {
+            $statement = $statement->withId($id);
+
             $this->repository->storeStatement($statement, true);
         }
 

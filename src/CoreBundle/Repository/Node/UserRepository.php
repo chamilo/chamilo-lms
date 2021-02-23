@@ -791,7 +791,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackEAttempt = [];
         /** @var TrackEAttempt $item */
         foreach ($result as $item) {
-            $date = $item->getTms() ? $item->getTms()->format($dateFormat) : '';
+            $date = $item->getTms()->format($dateFormat);
             $list = [
                 'Attempt #'.$item->getExeId(),
                 'Course # '.$item->getCourse()->getCode(),
@@ -812,7 +812,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackECourseAccessList = [];
         /** @var TrackECourseAccess $item */
         foreach ($result as $item) {
-            $startDate = $item->getLoginCourseDate() ? $item->getLoginCourseDate()->format($dateFormat) : '';
+            $startDate = $item->getLoginCourseDate()->format($dateFormat);
             $endDate = $item->getLogoutCourseDate() ? $item->getLogoutCourseDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
@@ -867,7 +867,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackELoginList = [];
         /** @var TrackELogin $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackELogin'] as $item) {
-            $startDate = $item->getLoginDate() ? $item->getLoginDate()->format($dateFormat) : '';
+            $startDate = $item->getLoginDate()->format($dateFormat);
             $endDate = $item->getLogoutDate() ? $item->getLogoutDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
@@ -881,7 +881,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackEAccessList = [];
         /** @var TrackEAccess $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackEAccess'] as $item) {
-            $date = $item->getAccessDate() ? $item->getAccessDate()->format($dateFormat) : '';
+            $date = $item->getAccessDate()->format($dateFormat);
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Tool: '.$item->getAccessTool(),
@@ -894,7 +894,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackEOnlineList = [];
         /** @var TrackEOnline $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackEOnline'] as $item) {
-            $date = $item->getLoginDate() ? $item->getLoginDate()->format($dateFormat) : '';
+            $date = $item->getLoginDate()->format($dateFormat);
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Login date: '.$date,
@@ -908,7 +908,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackEDefault = [];
         /** @var TrackEDefault $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackEDefault'] as $item) {
-            $date = $item->getDefaultDate() ? $item->getDefaultDate()->format($dateFormat) : '';
+            $date = $item->getDefaultDate()->format($dateFormat);
             $list = [
                 'Type: '.$item->getDefaultEventType(),
                 'Value: '.$item->getDefaultValue(),
@@ -924,7 +924,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackELastaccess = [];
         /** @var TrackELastaccess $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackELastaccess'] as $item) {
-            $date = $item->getAccessDate() ? $item->getAccessDate()->format($dateFormat) : '';
+            $date = $item->getAccessDate()->format($dateFormat);
             $list = [
                 'Course #'.$item->getCId(),
                 'Session # '.$item->getAccessSessionId(),
@@ -938,7 +938,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackEUploads = [];
         /** @var TrackEUploads $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackEUploads'] as $item) {
-            $date = $item->getUploadDate() ? $item->getUploadDate()->format($dateFormat) : '';
+            $date = $item->getUploadDate()->format($dateFormat);
             $list = [
                 'Course #'.$item->getCId(),
                 'Uploaded at: '.$date,
@@ -950,7 +950,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $gradebookResult = [];
         /** @var GradebookResult $item */
         foreach ($trackResults['ChamiloCoreBundle:GradebookResult'] as $item) {
-            $date = $item->getCreatedAt() ? $item->getCreatedAt()->format($dateFormat) : '';
+            $date = $item->getCreatedAt()->format($dateFormat);
             $list = [
                 'Evaluation id# '.$item->getEvaluation()->getId(),
                 //'Score: '.$item->getScore(),
@@ -962,7 +962,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackEDownloads = [];
         /** @var TrackEDownloads $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackEDownloads'] as $item) {
-            $date = $item->getDownDate() ? $item->getDownDate()->format($dateFormat) : '';
+            $date = $item->getDownDate()->format($dateFormat);
             $list = [
                 'File: '.$item->getDownDocPath(),
                 'Download at: '.$date,

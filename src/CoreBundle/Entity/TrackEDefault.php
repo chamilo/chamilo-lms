@@ -47,7 +47,7 @@ class TrackEDefault
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="default_date", type="datetime", nullable=true)
+     * @ORM\Column(name="default_date", type="datetime", nullable=false)
      */
     protected $defaultDate;
 

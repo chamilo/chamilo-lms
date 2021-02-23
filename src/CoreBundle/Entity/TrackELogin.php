@@ -25,11 +25,9 @@ class TrackELogin
     protected $loginUserId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
      */
-    protected $loginDate;
+    protected \DateTime $loginDate;
 
     /**
      * @var string
@@ -39,11 +37,9 @@ class TrackELogin
     protected $userIp;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="logout_date", type="datetime", nullable=true)
      */
-    protected $logoutDate;
+    protected ?\DateTime $logoutDate;
 
     /**
      * @var int
@@ -143,7 +139,7 @@ class TrackELogin
     /**
      * Get logoutDate.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getLogoutDate()
     {

@@ -51,18 +51,14 @@ class TrackECourseAccess
     protected $user;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="login_course_date", type="datetime", nullable=false)
      */
-    protected $loginCourseDate;
+    protected \DateTime $loginCourseDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="logout_course_date", type="datetime", nullable=true)
      */
-    protected $logoutCourseDate;
+    protected ?\DateTime $logoutCourseDate;
 
     /**
      * @var int
@@ -150,7 +146,7 @@ class TrackECourseAccess
     /**
      * Get logoutCourseDate.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getLogoutCourseDate()
     {

@@ -36,11 +36,9 @@ class TrackEAccess
     protected $accessUserId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
      */
-    protected $accessDate;
+    protected \DateTime $accessDate;
 
     /**
      * @var int

@@ -82,7 +82,7 @@ class Container
     public static $environment;
     public static $urlGenerator;
     public static $checker;
-    /** @var TranslatorInterface */
+    /** @var TranslatorInterface|null */
     public static $translator;
     public static $mailer;
     public static $template;
@@ -210,7 +210,7 @@ class Container
      */
     public static function getSession()
     {
-        if (self::$container && self::$container->has('session')) {
+        if (self::$container) {
             return self::$container->get('session');
         }
 
@@ -242,11 +242,9 @@ class Container
             return self::$translator;
         }
 
-        if (null !== self::$container) {
-            return self::$container->get('translator');
-        }
-
-        return false;
+        //if (self::$container->has('translator')) {
+        return self::$container->get('translator');
+        //}
     }
 
     public static function getMailer(): Mailer

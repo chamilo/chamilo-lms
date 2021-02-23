@@ -43,11 +43,12 @@ class CreateResourceNodeFileAction
                 $fileParsed = false;
                 // File upload.
                 if ($request->files->count() > 0) {
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('uploadFile');
-                    if (!$uploadedFile) {
+                    if (false === $request->files->has('uploadFile')) {
                         throw new BadRequestHttpException('"uploadFile" is required');
                     }
+
+                    /** @var UploadedFile $uploadedFile */
+                    $uploadedFile = $request->files->get('uploadFile');
                     $title = $uploadedFile->getClientOriginalName();
                     $document->setUploadFile($uploadedFile);
                     $fileParsed = true;

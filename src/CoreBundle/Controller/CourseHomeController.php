@@ -213,14 +213,13 @@ class CourseHomeController extends ToolBaseController
      */
     public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain)
     {
-        /** @var CTool $tool */
+        /** @var CTool|null $tool */
         $tool = $repo->findOneBy(['name' => $toolName]);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        /** @var AbstractTool $tool */
         $tool = $toolChain->getToolFromName($tool->getTool()->getName());
         $link = $tool->getLink();
 

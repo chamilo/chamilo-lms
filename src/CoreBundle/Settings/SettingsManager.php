@@ -176,7 +176,8 @@ class SettingsManager implements SettingsManagerInterface
             return $settings->get($name);
         }
 
-        exit;
+        throw new \InvalidArgumentException(sprintf('Catregory %s not found', $category));
+        /*exit;
 
         $settings = $this->load($category, $name);
 
@@ -186,15 +187,14 @@ class SettingsManager implements SettingsManagerInterface
 
         $this->settings = $settings;
 
-        return $settings->get($name);
+        return $settings->get($name);*/
     }
 
     public function loadAll()
     {
-        $loadFromSession = true;
-
+        //$loadFromSession = true;
         $session = null;
-        if ($loadFromSession && $this->request->getCurrentRequest()) {
+        if ($this->request->getCurrentRequest()) {
             $session = $this->request->getCurrentRequest()->getSession();
             $schemaList = $session->get('schemas');
             $this->schemaList = $schemaList;
@@ -228,7 +228,7 @@ class SettingsManager implements SettingsManagerInterface
                 $schemaList[$name] = $settings;
             }
             $this->schemaList = $schemaList;
-            if ($session && $loadFromSession && $this->request->getCurrentRequest()) {
+            if ($session && $this->request->getCurrentRequest()) {
                 $session->set('schemas', $schemaList);
             }
         }
@@ -419,8 +419,6 @@ class SettingsManager implements SettingsManagerInterface
         $this->manager->flush();
 
         return;
-
-        ////
         $schemaAlias = $settings->getSchemaAlias();
         $schemaAliasChamilo = str_replace('chamilo_core.settings.', '', $schemaAlias);
 

@@ -84,15 +84,13 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
      */
-    protected $course;
+    protected ?Course $course;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected $session;
+    protected ?Session $session;
 
     /**
      * @var Level
@@ -328,8 +326,7 @@ class SkillRelUser
     public function getSourceName()
     {
         $source = '';
-
-        if ($this->session && 0 != $this->session->getId()) {
+        if ($this->session) {
             $source .= "[{$this->session->getName()}] ";
         }
 

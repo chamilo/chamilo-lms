@@ -112,10 +112,10 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }*/
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->userRepository->findOneBy(['username' => $credentials['username']]);
 
-        if (!$user) {
+        if (null === $user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('username could not be found.');
         }

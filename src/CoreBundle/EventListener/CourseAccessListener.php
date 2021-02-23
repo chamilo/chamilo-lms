@@ -34,27 +34,22 @@ class CourseAccessListener
         $this->request = $requestStack->getCurrentRequest();
     }
 
-    /**
-     * @param CourseAccess $event
-     */
-    public function onCourseAccessEvent($event)
+    public function onCourseAccessEvent(CourseAccess $event)
     {
         // CourseAccess
         $user = $event->getUser();
         $course = $event->getCourse();
         $ip = $this->request->getClientIp();
 
-        if ($user && $course) {
-            $access = new TrackECourseAccess();
-            $access
-                ->setCId($course->getId())
-                ->setUser($user)
-                ->setSessionId(0)
-                ->setUserIp($ip)
-            ;
+        $access = new TrackECourseAccess();
+        $access
+            ->setCId($course->getId())
+            ->setUser($user)
+            ->setSessionId(0)
+            ->setUserIp($ip)
+        ;
 
-            $this->em->persist($access);
-            $this->em->flush();
-        }
+        $this->em->persist($access);
+        $this->em->flush();
     }
 }

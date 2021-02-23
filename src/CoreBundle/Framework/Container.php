@@ -73,10 +73,9 @@ use Twig\Environment;
  */
 class Container
 {
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface|null */
     public static $container;
+
     public static $session;
     public static $request;
     public static $configuration;
@@ -243,7 +242,7 @@ class Container
             return self::$translator;
         }
 
-        if (self::$container) {
+        if (null !== self::$container) {
             return self::$container->get('translator');
         }
 

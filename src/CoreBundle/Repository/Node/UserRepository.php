@@ -755,7 +755,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $gradebookCertificate = [];
         /** @var GradebookCertificate $item */
         foreach ($result as $item) {
-            $createdAt = $item->getCreatedAt() ? $item->getCreatedAt()->format($dateFormat) : '';
+            $createdAt = $item->getCreatedAt()->format($dateFormat);
             $list = [
                 'Score: '.$item->getScoreCertificate(),
                 'Path: '.$item->getPathCertificate(),
@@ -772,7 +772,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $trackEExercises = [];
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
-            $date = $item->getExeDate() ? $item->getExeDate()->format($dateFormat) : '';
+            $date = $item->getExeDate()->format($dateFormat);
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Start: '.$date,

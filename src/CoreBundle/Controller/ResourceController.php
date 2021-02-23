@@ -492,7 +492,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $id = $request->get('id');
 
-        /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
@@ -532,7 +531,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $id = $request->get('id');
         $filter = $request->get('filter'); // See filters definitions in /config/services.yml.
-        /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
@@ -550,7 +548,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function linkAction(Request $request, RouterInterface $router): Response
     {
         $id = $request->get('id');
-        /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
@@ -576,8 +573,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function downloadAction(Request $request)
     {
         $id = (int) $request->get('id');
-
-        /** @var ResourceNode $resourceNode */
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {

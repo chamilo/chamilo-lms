@@ -19,9 +19,6 @@ use Fhaculty\Graph\Vertex;
  */
 class SequenceResourceRepository extends ServiceEntityRepository
 {
-    /**
-     * CourseCategoryRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, SequenceResource::class);
@@ -32,10 +29,8 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @param int $resourceId
      * @param int $type
-     *
-     * @return SequenceResource
      */
-    public function findRequirementForResource($resourceId, $type)
+    public function findRequirementForResource($resourceId, $type): ?SequenceResource
     {
         return $this->findOneBy(['resourceId' => $resourceId, 'type' => $type]);
     }
@@ -96,7 +91,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
             foreach ($vertices as $vertex) {
                 $subResourceId = $vertex->getId();
                 $subSequence = $this->findRequirementForResource($subResourceId, $type);
-                if ($sequence && $subSequence->hasGraph()) {
+                if ($subSequence->hasGraph()) {
                     $graph = $subSequence->getSequence()->getUnSerializeGraph();
                     $subMainVertex = $graph->getVertex($resourceId);
                     $subMainVertex->destroy();

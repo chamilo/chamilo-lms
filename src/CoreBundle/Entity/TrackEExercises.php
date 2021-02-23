@@ -36,13 +36,11 @@ class TrackEExercises
     protected $exeUserId;
 
     /**
-     * @var \DateTime
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
-    protected $exeDate;
+    protected \DateTime $exeDate;
 
     /**
      * @var int

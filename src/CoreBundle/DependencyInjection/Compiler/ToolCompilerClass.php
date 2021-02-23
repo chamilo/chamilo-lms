@@ -21,14 +21,12 @@ class ToolCompilerClass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has(ToolChain::class)) {
-            return;
-        }
-
-        $definition = $container->findDefinition(ToolChain::class);
-        $taggedServices = $container->findTaggedServiceIds('chamilo_core.tool');
-        foreach ($taggedServices as $id => $attributes) {
-            $definition->addMethodCall('addTool', [new Reference($id)]);
+        if ($container->has(ToolChain::class)) {
+            $definition = $container->findDefinition(ToolChain::class);
+            $taggedServices = $container->findTaggedServiceIds('chamilo_core.tool');
+            foreach ($taggedServices as $id => $attributes) {
+                $definition->addMethodCall('addTool', [new Reference($id)]);
+            }
         }
 
         /*$services = $container->findTaggedServiceIds('doctrine.repository_service');

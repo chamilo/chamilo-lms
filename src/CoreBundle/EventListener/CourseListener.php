@@ -77,8 +77,12 @@ class CourseListener
         $courseId = (int) $request->get('cid');
         $checker = $container->get('security.authorization_checker');
 
+        /** @var EntityManager $em */
+        $em = $container->get('doctrine')->getManager();
+
         //dump("cid value in request: $courseId");
         if (!empty($courseId)) {
+            $course = null;
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
                 $courseFromSession = $sessionHandler->get('course');
@@ -88,10 +92,10 @@ class CourseListener
                     //dump("Course #$courseId loaded from Session ");
                 }
             }
-            $course = null;
+
+            //$course = null; force loading from database
+
             if (null === $course) {
-                /** @var EntityManager $em */
-                $em = $container->get('doctrine')->getManager();
                 $course = $em->getRepository(Course::class)->find($courseId);
 
                 if (null === $course) {
@@ -102,9 +106,9 @@ class CourseListener
                 $courseInfo = api_get_course_info($course->getCode());
             }
 
-            if (null === $course) {
+            /*if (null === $course) {
                 throw new NotFoundHttpException($translator->trans('Course does not exist'));
-            }
+            }*/
         }
 
         global $cidReset;
@@ -240,7 +244,7 @@ class CourseListener
         //$sessionId = (int) $request->get('sid');
 
         // cidReset is set in the global.inc.php files
-        global $cidReset;
+        //global $cidReset;
         //$cidReset = $sessionHandler->get('cid_reset', false);
 
         // This controller implements ToolInterface? Then set the course/session
@@ -325,10 +329,10 @@ class CourseListener
     }
 
     /**
-     * @param Course $course
-     * @param int    $sessionId
-     * @param int    $groupId
-     * @param string $origin
+     * @param Course|null $course
+     * @param int         $sessionId
+     * @param int         $groupId
+     * @param string      $origin
      */
     private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
     {

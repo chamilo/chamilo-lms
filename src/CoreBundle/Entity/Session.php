@@ -213,39 +213,30 @@ class Session
     protected $displayStartDate;
 
     /**
-     * @var \DateTime
      * @Groups({"session:read"})
      * @ORM\Column(name="display_end_date", type="datetime", nullable=true, unique=false)
      */
-    protected $displayEndDate;
+    protected ?\DateTime $displayEndDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="access_start_date", type="datetime", nullable=true, unique=false)
      */
-    protected $accessStartDate;
+    protected ?\DateTime $accessStartDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="access_end_date", type="datetime", nullable=true, unique=false)
      */
-    protected $accessEndDate;
+    protected ?\DateTime $accessEndDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="coach_access_start_date", type="datetime", nullable=true, unique=false)
      */
-    protected $coachAccessStartDate;
+    protected ?\DateTime $coachAccessStartDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="coach_access_end_date", type="datetime", nullable=true, unique=false)
      */
-    protected $coachAccessEndDate;
+    protected ?\DateTime $coachAccessEndDate;
 
     /**
      * @var int
@@ -1311,11 +1302,7 @@ class Session
     {
         $generalCoach = $this->getGeneralCoach();
 
-        if (!$generalCoach) {
-            return false;
-        }
-
-        if ($user->getId() === $generalCoach->getId()) {
+        if ($generalCoach instanceof User && $user->getId() === $generalCoach->getId()) {
             return true;
         }
 

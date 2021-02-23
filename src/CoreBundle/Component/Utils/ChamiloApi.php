@@ -63,7 +63,7 @@ class ChamiloApi
      * @param bool   $getSysPath
      * @param bool   $forcedGetter
      *
-     * @return string
+     * @return string|null
      */
     public static function getPlatformLogoPath($theme = '', $getSysPath = false, $forcedGetter = false)
     {

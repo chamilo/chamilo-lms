@@ -85,7 +85,7 @@ class GroupVoter extends Voter
                     return true;
                 }
 
-                if (0 === $group->getStatus()) {
+                if (false === $group->getStatus()) {
                     return false;
                 }
 

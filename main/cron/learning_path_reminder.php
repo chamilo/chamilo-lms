@@ -71,90 +71,181 @@ function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
     return null;
 }
 
-function getHrUserOfUser($userId = 0)
-{
-    if ($userId == 0) {
-        return [];
-    }
-    $relationStudenHRTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-    $sql = "Select * from $relationStudenHRTable where user_id = $userId and relation_type = ".USER_RELATION_TYPE_RRHH;
-    $Hr = [];
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
-        $Hr[] = api_get_user_info($row['friend_user_id']);
-    }
-
-    return $Hr;
-}
-
 function LearningPaths()
 {
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
-    $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
     $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+    $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+    $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $tblItempProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $date = new DateTime();
     $date = $date->format('Y-m-d');
 
     $sql = "
-SELECT
-    z.session_id as session_id,
-    z.to_user_id as user_id,
-    z.insert_user_id as from_user_id,
-    a.id AS l_id,
-    a.c_id AS c_id,
-    a.session_id AS session_id,
-    a.`name` AS `name`,
-    d.title AS course_name,
-    d.`code` AS `code`,
-    d.id AS course_id
-FROM
-	$tblItempProperty as z
-	INNER JOIN $lpTable as a ON a.iid = z.ref
-	INNER JOIN $courseTable as d ON a.c_id = d.id
-	INNER JOIN $extraFieldValuesTable AS b ON ( b.item_id = a.iid )
-	INNER JOIN $extraFieldTable AS c ON ( b.field_id = c.id AND c.variable = 'notify_student_and_hrm_when_available' )
-WHERE
-        z.lastedit_type  ='LearnpathSubscription'
-    AND publicated_on >= '$date 00:00:00'
-    AND publicated_on <= '$date 23:59:59'
-
-";
+    SELECT
+        tblItemProperty.session_id as session_id,
+        tblItemProperty.to_user_id as user_id,
+        tblItemProperty.insert_user_id as from_user_id,
+        tblLp.id AS l_id,
+        tblLp.c_id AS c_id,
+        tblLp.`name` AS `name`,
+        tblCourse.title AS course_name,
+        tblCourse.`code` AS `code`,
+        tblCourse.id AS course_id,
+        tblItemProperty.lastedit_type
+    FROM
+        $tblItempProperty as tblItemProperty
+        INNER JOIN $lpTable as tblLp ON tblLp.iid = tblItemProperty.ref
+        INNER JOIN $tblCourse as tblCourse ON tblLp.c_id = tblCourse.id
+        INNER JOIN $extraFieldValuesTable AS tblExtraFieldValues ON ( tblExtraFieldValues.item_id = tblLp.iid )
+        INNER JOIN $extraFieldTable AS tblExtraField ON ( tblExtraFieldValues.field_id = tblExtraField.id
+                                                   AND tblExtraField.variable = 'notify_student_and_hrm_when_available' )
+    WHERE
+        tblItemProperty.lastedit_type  ='LearnpathSubscription'
+        AND publicated_on <= '$date 23:59:59'
+        AND publicated_on >= '$date 00:00:00'
+        AND tblItemProperty.to_user_id is not null
+    ";
     $result = Database::query($sql);
     $data = Database::store_result($result);
     Database::free_result($result);
+    $groupUsers = [];
+    $alreadyInLp = [];
     foreach ($data as $row) {
-        $lpId = $row['l_id'];
-        $sessionId = $row['session_id'];
+        $lpId = (int)$row['l_id'];
+        $sessionId = (int)$row['session_id'];
         $courseCode = $row['code'];
         $courseName = $row['course_name'];
-        $toUser = $row['user_id'];
-        $fromUser = $row['from_user_id'];
+        $toUser = (int)$row['user_id'];
+        $fromUser = (int)$row['from_user_id'];
         $lpName = $row['name'];
-        $courseId = $row['course_id'];
         $userInfo = api_get_user_info($toUser);
-        $HrUsers = getHrUserOfUser($toUser);
         $href = api_get_path(WEB_CODE_PATH).
             "lp/lp_controller.php?cidReq=".htmlspecialchars($courseCode).
             "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
         $link = "<a href='$href'>$href</a>";
-        SendMessage(
-            $userInfo,
-            $fromUser,
-            $courseName,
-            $lpName,
-            $link
-        );
+        $alreadyInLp[$lpId][$sessionId] = $toUser;
+        $groupUsers[$lpId][$sessionId][$toUser] = [
+            'userInfo' => $userInfo,
+            'fromUser' => $fromUser,
+            'courseName' => $courseName,
+            'lpName' => $lpName,
+            'link' => $link,
+        ];
+    }
+    // For courses
 
-        if (count($HrUsers) != 0) {
-            foreach ($HrUsers as $userHr) {
+    $sql = "
+    SELECT
+        tblCourseRelUser.user_id AS user_id,
+        tblLp.id AS l_id,
+        tblLp.c_id AS c_id,
+        tblLp.`name` AS `name`,
+        tblCourse.title AS course_name,
+        tblCourse.`code` AS `code`,
+        tblCourse.id AS course_id
+    FROM
+        $lpTable AS tblLp
+        INNER JOIN $extraFieldValuesTable AS tblExtraFieldValues ON ( tblExtraFieldValues.item_id = tblLp.iid )
+        INNER JOIN $extraFieldTable AS tblExtraField ON ( tblExtraFieldValues.field_id = tblExtraField.id
+                                                   AND tblExtraField.variable = 'notify_student_and_hrm_when_available' )
+
+        INNER JOIN $tblCourse AS tblCourse ON tblLp.c_id = tblCourse.id
+        INNER JOIN $tblCourseRelUser AS tblCourseRelUser ON ( tblCourseRelUser.c_id = tblCourse.id)
+    WHERE
+        publicated_on <= '$date 23:59:59'
+        AND publicated_on >= '$date 00:00:00'
+        AND tblCourseRelUser.user_id  is not null
+    ";
+
+    $result = Database::query($sql);
+    $data = Database::store_result($result);
+    Database::free_result($result);
+    foreach ($data as $row) {
+        $lpId = (int)$row['l_id'];
+        $sessionId = 0;
+        $courseCode = $row['code'];
+        $courseName = $row['course_name'];
+        $toUser = (int)$row['user_id'];
+        $fromUser = (int)0;
+        $lpName = $row['name'];
+        $userInfo = api_get_user_info($toUser);
+        $href = api_get_path(WEB_CODE_PATH).
+            'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
+            "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+        $link = "<a href='$href'>$href</a>";
+        if (!isset($alreadyInLp[$lpId][$sessionId])) {
+            $groupUsers[$lpId][$sessionId][$toUser] = [
+                'userInfo' => $userInfo,
+                'fromUser' => $fromUser,
+                'courseName' => $courseName,
+                'lpName' => $lpName,
+                'link' => $link
+            ];
+        }
+    }
+    // For sessions
+    $sql = "
+    SELECT
+        tblCourseRelUser.user_id AS user_id,
+        tblCourseRelUser.session_id AS session_id,
+        tblLp.id AS l_id,
+        tblLp.c_id AS c_id,
+        tblLp.`name` AS `name`,
+        tblCourse.title AS course_name,
+        tblCourse.`code` AS `code`,
+        tblCourse.id AS course_id
+    FROM
+        $lpTable AS tblLp
+        INNER JOIN $extraFieldValuesTable AS tblExtraFieldValues ON ( tblExtraFieldValues.item_id = tblLp.iid )
+        INNER JOIN $extraFieldTable AS tblExtraField ON ( tblExtraFieldValues.field_id = tblExtraField.id AND
+                                               tblExtraField.variable = 'notify_student_and_hrm_when_available' )
+        INNER JOIN $tblCourse AS tblCourse ON tblLp.c_id = tblCourse.id
+        INNER JOIN $tblSessionCourseUser AS tblCourseRelUser ON ( tblCourseRelUser.c_id = tblCourse.id)
+    WHERE
+        publicated_on <= '$date 23:59:59'
+        AND publicated_on >= '$date 00:00:00'
+        AND tblCourseRelUser.user_id  is not null
+    ";
+    $result = Database::query($sql);
+    $data = Database::store_result($result);
+    Database::free_result($result);
+    foreach ($data as $row) {
+        $lpId = (int)$row['l_id'];
+        $sessionId = (int)$row['session_id'];
+        $courseCode = $row['code'];
+        $courseName = $row['course_name'];
+        $toUser = (int)$row['user_id'];
+        $fromUser = (int)0;
+        $lpName = $row['name'];
+        $userInfo = api_get_user_info($toUser);
+        $href = api_get_path(WEB_CODE_PATH).
+            'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
+            "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+        $link = "<a href='$href'>$href</a>";
+        if (!isset($alreadyInLp[$lpId][$sessionId]) and !empty($toUser)) {
+            $groupUsers[$lpId][$sessionId][$toUser] = [
+                'userInfo' => $userInfo,
+                'fromUser' => $fromUser,
+                'courseName' => $courseName,
+                'lpName' => $lpName,
+                'link' => $link
+            ];
+        }
+    }
+
+
+    foreach ($groupUsers as $lpId => $sessions) {
+        foreach ($sessions as $sessionId => $users) {
+            foreach ($users as $user) {
                 SendMessage(
-                    $userHr,
-                    $fromUser,
-                    $courseName,
-                    $lpName,
-                    $link
+                    $user['userInfo'],
+                    $user['fromUser'],
+                    $user['courseName'],
+                    $user['lpName'],
+                    $user['link']
                 );
             }
         }

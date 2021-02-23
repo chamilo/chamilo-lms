@@ -13,7 +13,7 @@ Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under G
 
 **Chamilo 2.0 is still in development stage. This installation procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch README.md for details.**
 
-We assume you have already installed "yarn" and "composer" and you're installing the portal in a domain,
+We assume you have already installed "yarn 2.x" and "composer 2.x" and you're installing the portal in a domain,
 not in a sub folder inside a domain.
 
 ~~~~
@@ -25,6 +25,7 @@ cd chamilo2
 composer install
 # *important*: when composer asks to accept recipes, about 11 times, press enter or "n"
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+yarn set version berry
 yarn install
 yarn run encore dev
 chmod -R 777 .
@@ -42,12 +43,12 @@ chown -R www-data: public/ var/
 
 If you have already installed it and just want to update it from Git, do:
 ~~~~
-git pull origin master
+git pull
 composer update
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
     
-yarn upgrade
-yarn encore dev
+yarn up
+yarn run encore dev
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies.
 
@@ -79,7 +80,7 @@ Go back to the beginning of this section and try again.
 * app/Resources/public/assets moved to public/assets
 * main/inc/lib/javascript moved to public/js
 * main/img/ moved to public/img
-* main/template/default moved to src/Chamilo/CoreBundle/Resources/views
+* main/template/default moved to src/CoreBundle/Resources/views
 * src/Chamilo/XXXBundle moved to src/CoreBundle or src/CourseBundle
 * bin/doctrine.php removed use bin/console doctrine:xyz options
 * Plugin images, css and js libs are loaded inside the public/plugins folder

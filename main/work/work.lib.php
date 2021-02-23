@@ -2550,6 +2550,9 @@ function getAllWork(
     }
 
     $courses = CourseManager::get_courses_list_by_user_id($userId, false, false, false);
+    if (empty($courses)) {
+        return [];
+    }
 
     if (!empty($whereCondition)) {
         $whereCondition = ' AND '.$whereCondition;
@@ -2572,7 +2575,13 @@ function getAllWork(
             continue;
         }
         $courseInfo = api_get_course_info_by_id($courseIdItem);
-        $session_id = isset($course['session_id']) ? $course['session_id'] : 0;
+        // Only teachers or platform admins.
+        $is_allowed_to_edit = api_is_platform_admin() || CourseManager::is_course_teacher($userId, $courseInfo['code']);
+        if (false === $is_allowed_to_edit) {
+            continue;
+        }
+
+        //$session_id = isset($course['session_id']) ? $course['session_id'] : 0;
         //$conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
         $conditionSession = '';
         $parentCondition = '';
@@ -2583,13 +2592,15 @@ function getAllWork(
         $courseList[$courseIdItem] = $courseInfo;
     }
 
+    if (empty($courseList)) {
+        return [];
+    }
+
     $courseQueryToString = implode(' OR ', $courseQuery);
     $compilation = null;
     /*if (api_get_configuration_value('allow_compilatio_tool')) {
         $compilation = new Compilatio();
     }*/
-
-    $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 
     if ($getCount) {
         if (empty($courseQuery)) {
@@ -2764,8 +2775,7 @@ function getAllWork(
         }
 
         if (($can_read && $work['accepted'] == '1') ||
-            ($is_author && in_array($work['accepted'], ['1', '0'])) ||
-            ($is_allowed_to_edit || api_is_drh())
+            ($is_author && in_array($work['accepted'], ['1', '0']))
         ) {
             // Firstname, lastname, username
             $work['fullname'] = Display::div(
@@ -2887,7 +2897,6 @@ function getAllWork(
                             dropZone: $(this)
                         });
                     });
-
                     $('#file_upload_".$item_id."').fileupload({
                         add: function (e, data) {
                             $('#progress_$item_id').html();

@@ -6004,11 +6004,11 @@ EOT;
     {
         $wrongAnswersCount = $stats['failed_answers_count'];
         $attemptDate = substr($trackInfo['exe_date'], 0, 10);
-        $exerciseId = $exercise->iId;
+        $exeId = $trackInfo['exe_id'];
         $resultsStudentUrl = api_get_path(WEB_CODE_PATH).
-            'exercise/result.php?id='.$exerciseId.'&'.api_get_cidreq();
+            'exercise/result.php?id='.$exeId.'&'.api_get_cidreq();
         $resultsTeacherUrl = api_get_path(WEB_CODE_PATH).
-            'exercise/exercise_show.php?action=edit&id='.$exerciseId.'&'.api_get_cidreq();
+            'exercise/exercise_show.php?action=edit&id='.$exeId.'&'.api_get_cidreq();
 
         $content = str_replace(
             [

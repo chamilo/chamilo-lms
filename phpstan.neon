@@ -1,7 +1,8 @@
-includes:
-    - vendor/phpstan/phpstan-doctrine/extension.neon
-    - vendor/phpstan/phpstan-symfony/extension.neon
 parameters:
+	level: 3
+	paths:
+		- src
+#		- public/main
 	bootstrapFiles:
 	  - public/legacy.php
 	  - public/main/inc/lib/events.lib.php
@@ -9,27 +10,64 @@ parameters:
 		container_xml_path: %rootDir%/../../../var/cache/dev/Chamilo_KernelDevDebugContainer.xml
 	doctrine:
 		objectManagerLoader: %rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php
-
 	excludes_analyse:
 		- public/main/admin/db.php
+		- public/main/admin/index.php
+		- public/main/admin/settings.php
+		- public/main/admin/periodic_export.php
+		- public/main/admin/user_move_stats.php
+		- public/main/admin/settings.lib.php
+		- public/main/admin/user_update_import.php
+		- public/main/admin/teachers_time_by_session_report.php
+		- public/main/admin/specific_fields.php
+		- public/main/admin/sub_language*
+		- public/main/admin/special_exports.php
+
+		- public/main/inc/lib/elfinder/*
+		- public/main/inc/lib/javascript/*
+		- public/main/inc/lib/kses-0.2.2/*
+		- public/main/inc/lib/mimetex/*
+		- public/main/inc/lib/nusoap/*
+		- public/main/inc/lib/opengraph/*
+		- public/main/inc/lib/pear/*
+		- public/main/inc/lib/ppt2png/*
+		- public/main/inc/lib/search/*
+		- public/main/inc/lib/svg-edit/*
+		- public/main/inc/lib/zombie/*
+
+		- public/main/admin/ldap*
+		- public/main/lp/openoffice_presentation.class.php
+		- public/main/lp/openoffice_document.class.php
+		- public/main/lp/openoffice_text.class.php
+		- public/main/lp/openoffice_text_document.class.php
+		- public/main/lp/scorm*
+
+		- public/main/exercise/export/*
+		- public/main/upload/*
+		- public/main/extra/*
+		- public/main/portfolio/*
+		- public/main/notification_event/*
+
+		- public/main/permissions/*
 		- public/main/extra/*
 		- public/main/cron/*
-		- public/main/inc/lib/pear/*
-		- public/main/inc/lib/nusoap/*
-		- public/main/inc/lib/search/*
 		- public/main/webservices/*
+		- public/main/wiki/*
 
 		- src/CoreBundle/Hook/*
 		- src/CoreBundle/Menu/*
 		- src/CoreBundle/Migrations/*
 		- src/CoreBundle/Twig/SettingsHelper.php
+		- src/CoreBundle/Settings/SettingsResolver.php
 		- src/CoreBundle/Controller/ResourceApiController.php
 		- src/CoreBundle/Controller/EditorController.php
 		- src/CoreBundle/Component/Editor/*
-		- src/CourseBundle/Component/CourseCopy*
+		- src/CourseBundle/Component/CourseCopy/*
 		- src/LtiBundle/*
 		- src/GraphQlBundle/*
 		- tests/*
-	level: 2
-	paths:
-		- src
+	ignoreErrors:
+#		- '#If condition is always true.#'
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon

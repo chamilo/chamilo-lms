@@ -2742,9 +2742,11 @@ function getAllWork(
 
         /* Because a bug found when saving items using the api_item_property_update()
            the field $item_property_data['insert_user_id'] is not reliable. */
-        if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
+        /*if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
             $is_author = true;
-        }
+        }*/
+        // Teacher can be treated as an author.
+        $is_author = true;
 
         /*if ($course_info['show_score'] == 0) {
             $can_read = true;

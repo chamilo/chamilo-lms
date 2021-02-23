@@ -76,20 +76,12 @@ class ExtraFieldValues
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getItemId()
+    public function getItemId(): int
     {
         return $this->itemId;
     }
 
-    /**
-     * @param string $itemId
-     *
-     * @return ExtraFieldValues
-     */
-    public function setItemId($itemId)
+    public function setItemId(int $itemId): self
     {
         $this->itemId = $itemId;
 

@@ -43,6 +43,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected $courses;
 
     /**
+     * @var ArrayCollection|AccessUrlRelSession[]
+     *
      * @ORM\OneToMany(targetEntity="AccessUrlRelSession", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected $sessions;

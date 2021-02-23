@@ -59,21 +59,17 @@ class SessionRelUser
     protected int $duration;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="moved_to", type="integer", nullable=true, unique=false)
      */
-    protected $movedTo;
+    protected ?int $movedTo;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="moved_status", type="integer", nullable=true, unique=false)
      */
-    protected $movedStatus;
+    protected ?int $movedStatus;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
      * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
      */
@@ -91,7 +87,6 @@ class SessionRelUser
         $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;
-        $this->movedAt = null;
         $this->registeredAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 

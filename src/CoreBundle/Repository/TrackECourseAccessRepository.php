@@ -16,9 +16,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrackECourseAccessRepository extends ServiceEntityRepository
 {
-    /**
-     * TrackECourseAccessRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TrackECourseAccess::class);
@@ -26,15 +23,10 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
 
     /**
      * Get the last registered access by an user.
-     *
-     * @param User $user The user
-     *
-     * @return TrackECourseAccess The access if exists.
-     *                            Otherwise return null
      */
-    public function getLastAccessByUser(User $user)
+    public function getLastAccessByUser(User $user = null): ?TrackECourseAccess
     {
-        if (empty($user)) {
+        if (null === $user) {
             return null;
         }
 

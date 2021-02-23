@@ -269,7 +269,7 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $accumulateWorkTime;
 
     /**
-     * @var CLpItem[]
+     * @var ArrayCollection|CLpItem[]
      *
      * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
      */
@@ -305,15 +305,15 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->defaultViewMod = 'embedded';
         $this->description = '';
         $this->displayOrder = 0;
-        $this->debug = 0;
-        $this->forceCommit = 0;
-        $this->hideTocFrame = 0;
+        $this->debug = false;
+        $this->forceCommit = false;
+        $this->hideTocFrame = false;
         $this->jsLib = '';
         $this->maxAttempts = 0;
         $this->preventReinit = true;
         $this->path = '';
         $this->prerequisite = 0;
-        $this->seriousgameMode = 0;
+        $this->seriousgameMode = false;
         $this->subscribeUsers = 0;
         $this->useMaxScore = 1;
         $this->theme = '';

@@ -52,9 +52,6 @@ class CourseRelUserCatalogue
      */
     protected $visible;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
@@ -98,7 +95,7 @@ class CourseRelUserCatalogue
     /**
      * Set visible.
      *
-     * @param bool $visible
+     * @param int $visible
      */
     public function setVisible($visible): self
     {
@@ -110,7 +107,7 @@ class CourseRelUserCatalogue
     /**
      * Get visible.
      *
-     * @return bool
+     * @return int
      */
     public function getVisible()
     {

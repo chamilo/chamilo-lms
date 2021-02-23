@@ -75,7 +75,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected int $locked;
 
     /**
-     * @var CAttendanceCalendar[]
+     * @var ArrayCollection|CAttendanceCalendar[]
      *
      * @ORM\OneToMany(
      *     targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true
@@ -246,18 +246,12 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * @return CAttendanceCalendar[]|ArrayCollection
-     */
     public function getCalendars()
     {
         return $this->calendars;
     }
 
-    /**
-     * @param CAttendanceCalendar[] $calendars
-     */
-    public function setCalendars(array $calendars): self
+    public function setCalendars($calendars): self
     {
         $this->calendars = $calendars;
 

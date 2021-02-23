@@ -126,17 +126,14 @@ class SysAnnouncement
      */
     protected $promotionId;
 
-    /**
-     * SysAnnouncement constructor.
-     */
     public function __construct()
     {
-        $this->visibleBoss = 0;
-        $this->visibleDrh = 0;
-        $this->visibleGuest = 0;
-        $this->visibleSessionAdmin = 0;
-        $this->visibleStudent = 0;
-        $this->visibleTeacher = 0;
+        $this->visibleBoss = false;
+        $this->visibleDrh = false;
+        $this->visibleGuest = false;
+        $this->visibleSessionAdmin = false;
+        $this->visibleStudent = false;
+        $this->visibleTeacher = false;
         $this->careerId = 0;
         $this->promotionId = 0;
     }

@@ -94,7 +94,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $postNotification;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="post_parent_id", type="integer", nullable=true)
      */
@@ -344,9 +344,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * @return CForumAttachment[]
-     */
     public function getAttachments()
     {
         return $this->attachments;

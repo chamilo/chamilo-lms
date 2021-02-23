@@ -167,7 +167,7 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
-        $this->status = 1;
+        $this->status = true;
         $this->members = new ArrayCollection();
         $this->tutors = new ArrayCollection();
     }

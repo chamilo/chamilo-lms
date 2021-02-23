@@ -215,7 +215,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         $this->locked = 0;
         $this->forumComment = '';
         $this->forumImage = '';
-        $this->forumOfGroup = 0;
+        $this->forumOfGroup = '';
         $this->forumPosts = 0;
         $this->forumGroupPublicPrivate = '';
     }

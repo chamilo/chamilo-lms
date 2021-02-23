@@ -348,12 +348,7 @@ class Session
         return $this->showDescription;
     }
 
-    /**
-     * @param string $showDescription
-     *
-     * @return $this
-     */
-    public function setShowDescription($showDescription)
+    public function setShowDescription($showDescription): self
     {
         $this->showDescription = $showDescription;
 

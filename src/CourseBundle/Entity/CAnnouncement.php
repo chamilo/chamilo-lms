@@ -61,7 +61,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected $emailSent;
 
     /**
-     * @var ArrayCollection|CAnnouncementAttachment[]
+     * @var ArrayCollection<int, CAnnouncementAttachment>
      *
      * @ORM\OneToMany(
      *     targetEntity="CAnnouncementAttachment",
@@ -86,10 +86,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->attachments;
     }
 
-    /**
-     * @param CAnnouncementAttachment[] $attachments
-     */
-    public function setAttachments(array $attachments): self
+    public function setAttachments($attachments): self
     {
         $this->attachments = $attachments;
 

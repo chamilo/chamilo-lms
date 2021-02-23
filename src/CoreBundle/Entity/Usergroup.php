@@ -85,7 +85,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected $allowMembersToLeaveGroup;
 
     /**
-     * @var UsergroupRelUser[]
+     * @var ArrayCollection|UsergroupRelUser[]
      * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
      */
     protected $users;

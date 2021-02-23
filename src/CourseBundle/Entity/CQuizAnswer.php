@@ -51,18 +51,14 @@ class CQuizAnswer
     protected string $answer;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="correct", type="integer", nullable=true)
      */
-    protected $correct;
+    protected ?int $correct;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
      * @var float
@@ -72,39 +68,29 @@ class CQuizAnswer
     protected $ponderation;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position;
+    protected int $position;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="hotspot_coordinates", type="text", nullable=true)
      */
-    protected $hotspotCoordinates;
+    protected ?string $hotspotCoordinates;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="hotspot_type", type="string", length=40, nullable=true)
      */
-    protected $hotspotType;
+    protected ?string $hotspotType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="destination", type="text", nullable=true)
      */
-    protected $destination;
+    protected ?string $destination;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="answer_code", type="string", length=10, nullable=true)
      */
-    protected $answerCode;
+    protected ?string $answerCode;
 
     public function __construct()
     {

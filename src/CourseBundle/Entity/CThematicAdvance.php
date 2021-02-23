@@ -78,7 +78,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
-        $this->doneAdvance = 0;
+        $this->doneAdvance = false;
         $this->duration = 1;
     }
 

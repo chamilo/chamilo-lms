@@ -8691,4 +8691,6 @@ $QualifyPortfolioComments = "Évaluer les commentaires";
 $HideCorrectAnsweredQuestions = "Cacher les questions qui ont eu une réponse correcte";
 $TheSettingXWillChangeToX = "Le paramètre \"%s\" sera modifié avec \"%s\"";
 $VerificationOfAnsweredQuestions = "Vérification des réponses aux questions";
+$StudentPublicationToCorrect = "Travaux d'étudiant à corriger";
+$StudentPublicationCorrectionWarning = "Vous trouverez ci-dessous tous les travaux qui ont été soumis par des étudiants dans l'un de vos cours (cela peut être dans le cours de base ou dans un cours en session). Vous pouvez filtrer la liste en sélectionnant un cours spécifique ou un statut de travail.";
 ?>

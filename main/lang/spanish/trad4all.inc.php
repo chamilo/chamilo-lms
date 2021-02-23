@@ -8787,4 +8787,6 @@ $QualifyPortfolioComments = "Calificar comentarios";
 $HideCorrectAnsweredQuestions = "Esconder las preguntas con respuestas correctas";
 $TheSettingXWillChangeToX = "La opción \"%s\" será modificada con el valor \"%s\"";
 $VerificationOfAnsweredQuestions = "Verificación de preguntas respondidas";
+$StudentPublicationToCorrect = "Tareas de estudiante para ser corregidas";
+$StudentPublicationCorrectionWarning = "A continuación encontrará todos los trabajos que han enviado los alumnos en uno de sus cursos (puede ser en el curso base o en un curso en una sesión). Puede filtrar la lista seleccionando un curso específico o un estado de tarea.";
 ?>

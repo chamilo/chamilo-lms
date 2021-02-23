@@ -1844,7 +1844,6 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Show start/end date in LP list for students.
 //$_configuration['lp_start_and_end_date_visible_in_student_view'] = true;
 
-
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

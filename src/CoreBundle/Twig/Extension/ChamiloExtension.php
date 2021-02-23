@@ -6,8 +6,10 @@ namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Twig\SettingsHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * Class ChamiloExtension.
@@ -15,10 +17,12 @@ use Twig\TwigFilter;
 class ChamiloExtension extends AbstractExtension
 {
     private IllustrationRepository $illustrationRepository;
+    private SettingsHelper $helper;
 
-    public function __construct(IllustrationRepository $illustrationRepository)
+    public function __construct(IllustrationRepository $illustrationRepository, SettingsHelper $helper)
     {
         $this->illustrationRepository = $illustrationRepository;
+        $this->helper = $helper;
     }
 
     public function getFilters(): array
@@ -39,17 +43,36 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('remove_xss', 'Security::remove_XSS'),
             new TwigFilter('format_user_full_name', 'UserManager::formatUserFullName'),
             new TwigFilter('illustration', [$this, 'getIllustration']),
+
+            //new \Twig_SimpleFunction('chamilo_settings_all', array($this, 'getSettings')),
+            new TwigFilter('get_setting', [$this, 'getSettingsParameter']),
+            new TwigFilter('api_get_setting', [$this, 'getSettingsParameter']),
+            //new \Twig_SimpleFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
         ];
     }
 
     public function getFunctions()
     {
-        return [];
+        return [
+            new TwigFunction('chamilo_settings_all', [$this, 'getSettings']),
+            new TwigFunction('chamilo_settings_get', [$this, 'getSettingsParameter']),
+            new TwigFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
+        ];
     }
 
     public function getIllustration(ResourceIllustrationInterface $resource): string
     {
         return $this->illustrationRepository->getIllustrationUrl($resource);
+    }
+
+    public function getSettings($namespace)
+    {
+        return $this->helper->getSettings($namespace);
+    }
+
+    public function getSettingsParameter($name)
+    {
+        return $this->helper->getSettingsParameter($name);
     }
 
     /**

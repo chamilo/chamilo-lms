@@ -108,9 +108,10 @@ class SessionController extends AbstractController
             $courseAssessment = [];
             $courseCustom = [];
 
-            if (!empty($descriptionsData['descriptions'])) {
-                foreach ($descriptionsData['descriptions'] as $descriptionInfo) {
-                    switch ($descriptionInfo['description_type']) {
+            if (!empty($descriptionsData)) {
+                foreach ($descriptionsData as $descriptionInfo) {
+                    $type = $descriptionInfo->getDescriptionType();
+                    switch ($type) {
                         case CCourseDescription::TYPE_DESCRIPTION:
                             $courseDescription[] = $descriptionInfo;
 

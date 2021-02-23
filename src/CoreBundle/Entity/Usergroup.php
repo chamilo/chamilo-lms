@@ -100,9 +100,6 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->getName();
     }
 
-    /**
-     * @return UsergroupRelUser[]
-     */
     public function getUsers()
     {
         return $this->users;

@@ -88,7 +88,7 @@ class ResourceComment
     protected $updatedAt;
 
     /**
-     * @var ResourceComment[]
+     * @var ArrayCollection|ResourceComment[]
      *
      * @ORM\OneToMany(
      *     targetEntity="ResourceComment",
@@ -100,7 +100,7 @@ class ResourceComment
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTime();
         $this->content = '';
         $this->children = new ArrayCollection();
     }
@@ -158,18 +158,12 @@ class ResourceComment
         return $this;
     }
 
-    /**
-     * @return ResourceComment[]
-     */
     public function getChildren()
     {
         return $this->children;
     }
 
-    /**
-     * @param ResourceComment[] $children
-     */
-    public function setChildren(array $children): self
+    public function setChildren($children): self
     {
         $this->children = $children;
 

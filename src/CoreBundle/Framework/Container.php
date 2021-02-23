@@ -57,10 +57,12 @@ use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -182,7 +184,7 @@ class Container
     }
 
     /**
-     * @return object|Request
+     * @return Request|null
      */
     public static function getRequest()
     {
@@ -194,7 +196,7 @@ class Container
             return self::$request;
         }
 
-        return self::$container->get('request_stack');
+        return self::$container->get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -226,7 +228,7 @@ class Container
     }
 
     /**
-     * @return TokenStorage
+     * @return TokenStorage|TokenStorageInterface
      */
     public static function getTokenStorage()
     {
@@ -502,7 +504,7 @@ class Container
         return self::$container->get(CBlogRepository::class);
     }
 
-    public static function getWikiRepository(): CBlogRepository
+    public static function getWikiRepository(): CWikiRepository
     {
         return self::$container->get(CWikiRepository::class);
     }

@@ -8,17 +8,12 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class SettingsController.
- */
 class PluginsController extends BaseController
 {
     /**
      * @Security("is_granted('ROLE_ADMIN')")
      *
      * @Route("/plugins")
-     *
-     * @return array
      */
     public function pluginsAction()
     {
@@ -37,8 +32,6 @@ class PluginsController extends BaseController
      * @Security("is_granted('ROLE_ADMIN')")
      *
      * @Route("/plugins/add")
-     *
-     * @return array
      */
     public function pluginsAddAction()
     {

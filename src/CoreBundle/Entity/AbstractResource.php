@@ -67,7 +67,7 @@ abstract class AbstractResource
      */
     public $uploadFile;
 
-    /** @var AbstractResource */
+    /** @var AbstractResource|ResourceInterface */
     public $parentResource;
 
     /**
@@ -334,7 +334,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function setResourceNode(ResourceNode $resourceNode): ResourceInterface
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
@@ -346,7 +346,7 @@ abstract class AbstractResource
         return $this->resourceNode instanceof ResourceNode;
     }
 
-    public function getResourceNode(): ResourceNode
+    public function getResourceNode(): ?ResourceNode
     {
         return $this->resourceNode;
     }
@@ -368,10 +368,10 @@ abstract class AbstractResource
     /**
      * See ResourceLink to see the visibility constants. Example: ResourceLink::VISIBILITY_DELETED.
      */
-    public function getLinkVisibility(Course $course, Session $session = null): ?ResourceLink
+    /*public function getLinkVisibility(Course $course, Session $session = null): ?ResourceLink
     {
         return $this->getFirstResourceLinkFromCourseSession($course, $session)->getVisibility();
-    }
+    }*/
 
     public function isVisible(Course $course, Session $session = null): bool
     {

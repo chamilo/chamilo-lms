@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 trait ResourceControllerTrait
 {
@@ -93,7 +94,11 @@ trait ResourceControllerTrait
                 $parentResourceNode = $this->getCourse()->getResourceNode();
             } else {
                 if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    $parentResourceNode = $this->getUser()->getResourceNode();
+                    /** @var User $user */
+                    $user = $this->getUser();
+                    if ($user) {
+                        $parentResourceNode = $user->getResourceNode();
+                    }
                 }
             }
         } else {
@@ -108,7 +113,7 @@ trait ResourceControllerTrait
         return $parentResourceNode;
     }
 
-    protected function getUser(): ?User
+    protected function getUser(): ?UserInterface
     {
         if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');

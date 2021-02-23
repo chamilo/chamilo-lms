@@ -32,7 +32,7 @@ class ToolResourceRight
     protected $role;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="mask", type="integer", nullable=false)
      */
@@ -100,10 +100,7 @@ class ToolResourceRight
         return $this->mask;
     }
 
-    /**
-     * @return $this
-     */
-    public function setMask(int $mask)
+    public function setMask(int $mask): self
     {
         $this->mask = $mask;
 

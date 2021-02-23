@@ -213,18 +213,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $expiresAt;
 
     /**
-     * @var string
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="phone", type="string", length=64, nullable=true, unique=false)
      */
-    protected $phone;
+    protected ?string $phone;
 
     /**
-     * @var string
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="address", type="string", length=250, nullable=true, unique=false)
      */
-    protected $address;
+    protected ?string $address;
 
     /**
      * @var AccessUrl
@@ -264,7 +262,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $passwordRequestedAt;
 
     /**
-     * @var CourseRelUser[]|ArrayCollection
+     * @var ArrayCollection|CourseRelUser[]
      *
      * @ApiSubresource
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
@@ -272,7 +270,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $courses;
 
     /**
-     * @var UsergroupRelUser[]|ArrayCollection
+     * @var ArrayCollection|UsergroupRelUser[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
      */
@@ -307,7 +305,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     //protected $jurySubscriptions;
 
     /**
-     * @var Group[]
+     * @var ArrayCollection|Group[]
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Group", inversedBy="users")
      * @ORM\JoinTable(
      *      name="fos_user_user_group",
@@ -327,7 +325,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $curriculumItems;
 
     /**
-     * @var AccessUrlRelUser[]|ArrayCollection
+     * @var ArrayCollection|AccessUrlRelUser[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser",
@@ -339,7 +337,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $portals;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Session[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      */
@@ -838,7 +836,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->resourceNode;
     }
 
-    public function setResourceNode(ResourceNode $resourceNode): ResourceInterface
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
@@ -1614,7 +1612,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
         // forces the object to look "dirty" to Doctrine. Avoids
         // Doctrine *not* saving this entity, if only plainPassword changes
-        $this->password = null;
+        $this->password = '';
 
         return $this;
     }
@@ -1854,18 +1852,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * Get achievedSkills.
-     *
-     * @return ArrayCollection
      */
     public function getAchievedSkills()
     {
         return $this->achievedSkills;
     }
 
-    /**
-     * @param string[] $value
-     */
-    public function setAchievedSkills(array $value): self
+    public function setAchievedSkills($value): self
     {
         $this->achievedSkills = $value;
 
@@ -1913,23 +1906,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getPortals()
     {
         return $this->portals;
     }
 
-    public function setPortals(array $value)
+    public function setPortals($value)
     {
         $this->portals = $value;
     }
 
     /**
      * Get sessionAsGeneralCoach.
-     *
-     * @return ArrayCollection
      */
     public function getSessionAsGeneralCoach()
     {
@@ -1953,9 +1941,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->commentedUserSkills;
     }
 
-    /**
-     * @return User
-     */
     public function setCommentedUserSkills(array $commentedUserSkills): self
     {
         $this->commentedUserSkills = $commentedUserSkills;

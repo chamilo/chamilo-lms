@@ -82,7 +82,7 @@ class ResourceNode
     /**
      * @ApiSubresource()
      *
-     * @var ResourceLink[]
+     * @var ArrayCollection|ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
@@ -127,7 +127,7 @@ class ResourceNode
     protected $level;
 
     /**
-     * @var ResourceNode[]
+     * @var ArrayCollection|ResourceNode[]
      *
      * @ORM\OneToMany(
      *     targetEntity="ResourceNode",
@@ -153,7 +153,7 @@ class ResourceNode
     //protected $illustration;
 
     /**
-     * @var ResourceComment[]|ArrayCollection
+     * @var ArrayCollection|ResourceComment[]
      *
      * @ORM\OneToMany(targetEntity="ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
@@ -257,7 +257,7 @@ class ResourceNode
     /**
      * Returns the parent resource.
      *
-     * @return ResourceNode
+     * @return ResourceNode|null
      */
     public function getParent()
     {

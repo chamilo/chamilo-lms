@@ -102,12 +102,10 @@ trait ControllerTrait
 
     /**
      * @param string $message
-     *
-     * @return NotFoundHttpException
      */
     public function abort($message = '')
     {
-        return new NotFoundHttpException($message);
+        throw new NotFoundHttpException($message);
     }
 
     /**

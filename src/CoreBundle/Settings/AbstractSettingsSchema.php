@@ -8,14 +8,9 @@ use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
-/**
- * Class AbstractSettingsSchema.
- */
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
-    /**
-     * @var EntityRepository
-     */
+    /** @var EntityRepository */
     protected $repository;
 
     /**
@@ -34,9 +29,6 @@ abstract class AbstractSettingsSchema implements SchemaInterface
         return $this->repository;
     }
 
-    /**
-     * @param string $repo
-     */
     public function setRepository($repo)
     {
         $this->repository = $repo;

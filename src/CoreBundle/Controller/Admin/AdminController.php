@@ -25,7 +25,7 @@ class AdminController extends BaseController
     {
         // Already filter by the router
         /*if (!$security->isGranted('ROLE_ADMIN')) {
-            return $this->abort(403, 'Access denied');
+            $this->abort(403, 'Access denied');
         }*/
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->loadAdminMenu();

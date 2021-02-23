@@ -4,9 +4,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-/**
- * Interface ResourceInterface.
- */
 interface ResourceInterface
 {
     public function __toString(): string;
@@ -19,9 +16,9 @@ interface ResourceInterface
 
     public function setResourceName(string $name);
 
-    public function getResourceNode(): ResourceNode;
+    public function getResourceNode(): ?ResourceNode;
 
-    public function setResourceNode(ResourceNode $resourceNode): ResourceInterface;
+    public function setResourceNode(ResourceNode $resourceNode);
 
     //public function setParent(AbstractResource $parent);
 

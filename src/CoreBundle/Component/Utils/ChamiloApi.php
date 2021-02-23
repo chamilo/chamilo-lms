@@ -6,25 +6,16 @@ namespace Chamilo\CoreBundle\Component\Utils;
 
 use ChamiloSession as Session;
 
-/**
- * Class ChamiloApi.
- */
 class ChamiloApi
 {
-    private static $configuration;
+    private static array $configuration;
 
-    /**
-     * ChamiloApi constructor.
-     */
     public function __construct(array $configuration)
     {
         self::$configuration = $configuration;
     }
 
-    /**
-     * @return array
-     */
-    public static function getConfigurationArray()
+    public static function getConfigurationArray(): array
     {
         return self::$configuration;
     }
@@ -269,12 +260,12 @@ class ChamiloApi
 
             if (is_array($row) && isset($row['id'])) {
                 return $row['id'];
-            } else {
-                return false;
             }
+
+            return 0;
         }
 
-        return Session::read('_real_cid', 0);
+        return (int) Session::read('_real_cid', 0);
     }
 
     /**

@@ -69,9 +69,7 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
+    /** @var UserPasswordEncoderInterface */
     protected $encoder;
 
     public function __construct(ManagerRegistry $registry)
@@ -86,7 +84,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
     public function loadUserByUsername($username): ?User
     {
-        return $this->findBy(['username' => $username]);
+        return $this->findOneBy(['username' => $username]);
     }
 
     public function updateUser($user, $andFlush = true)

@@ -37,17 +37,18 @@ class IndexController extends BaseController
     public function toggleStudentViewAction(Request $request): Response
     {
         if (!api_is_allowed_to_edit(false, false, false, false)) {
-            return '';
+            throw $this->createAccessDeniedException();
         }
+
         $studentView = $request->getSession()->get('studentview');
         if (empty($studentView) || 'studentview' === $studentView) {
-            $request->getSession()->set('studentview', 'teacherview');
-
-            return 'teacherview';
+            $content = 'teacherview';
+            $request->getSession()->set('studentview', $content);
         } else {
-            $request->getSession()->set('studentview', 'studentview');
-
-            return 'studentview';
+            $content = 'studentview';
+            $request->getSession()->set('studentview', $content);
         }
+
+        return new Response($content);
     }
 }

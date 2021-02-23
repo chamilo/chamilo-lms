@@ -80,16 +80,14 @@ class TrackEAttemptRecording
     protected $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="answer", type="text", nullable=true)
      */
-    protected $answer;
+    protected ?int $answer;
 
     public function __construct()
     {
         $this->teacherComment = '';
-        $this->answer = '';
+        $this->answer = null;
         $this->sessionId = 0;
     }
 

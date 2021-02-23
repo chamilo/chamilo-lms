@@ -93,7 +93,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected string $code;
 
     /**
-     * @var CourseRelUser[]|ArrayCollection
+     * @var ArrayCollection|CourseRelUser[]
      *
      * @ApiSubresource()
      * Groups({"course:read"})
@@ -125,19 +125,21 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $urls;
 
     /**
-     * @var SessionRelCourse[]
+     * @var ArrayCollection|SessionRelCourse[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $sessions;
 
     /**
+     * @var ArrayCollection|SessionRelCourseRelUser[]
+     *
      * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $sessionUserSubscriptions;
 
     /**
-     * @var CTool[]|ArrayCollection
+     * @var ArrayCollection|CTool[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
      */
@@ -154,36 +156,50 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $currentUrl;
 
     /**
+     * @var ArrayCollection|SkillRelCourse[]
+     *
      * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $skills;
 
     /**
+     * @var ArrayCollection|SkillRelUser[]
+     *
      * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $issuedSkills;
 
     /**
+     * @var ArrayCollection|GradebookCategory[]
+     *
      * @ORM\OneToMany(targetEntity="GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookCategories;
 
     /**
+     * @var ArrayCollection|GradebookEvaluation[]
+     *
      * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookEvaluations;
 
     /**
+     * @var ArrayCollection|GradebookLink[]
+     *
      * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookLinks;
 
     /**
+     * @var ArrayCollection|TrackEHotspot[]
+     *
      * @ORM\OneToMany(targetEntity="TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $trackEHotspots;
 
     /**
+     * @var ArrayCollection|TrackEAttempt[]
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $trackEAttempts;
@@ -414,9 +430,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getTitle();
     }
 
-    /**
-     * @return SessionRelCourse[]|ArrayCollection
-     */
     public function getSessions()
     {
         return $this->sessions;

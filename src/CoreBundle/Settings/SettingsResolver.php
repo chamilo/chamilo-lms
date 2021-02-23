@@ -6,26 +6,12 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Sylius\Bundle\SettingsBundle\Resolver\SettingsResolverInterface;
-use Sylius\Bundle\SettingsBundle\Resource\RepositoryInterface;
 
 class SettingsResolver implements SettingsResolverInterface
 {
-    /**
-     * @var RepositoryInterface
-     */
-    private $settingsRepository;
-
-    /**
-     * @param RepositoryInterface $settingsRepository
-     */
-    public function __construct(RepositoryInterface $settingsRepository)
-    {
-        $this->settingsRepository = $settingsRepository;
-    }
-
     public function resolve($schemaAlias, $namespace = null)
     {
-        try {
+        /*try {
             $criteria = [];
             if (null !== $namespace) {
                 $criteria['category'] = $namespace;
@@ -38,6 +24,6 @@ class SettingsResolver implements SettingsResolverInterface
                 $schemaAlias
             );
             throw new \LogicException($message);
-        }
+        }*/
     }
 }

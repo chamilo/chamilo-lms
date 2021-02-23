@@ -57,7 +57,6 @@ use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;

@@ -11,6 +11,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -163,11 +164,18 @@ class ResourceFile
      */
     protected ?string $description;
 
+    /**
+     * @var \DateTime|\DateTimeImmutable
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
+
     public function __construct()
     {
+        $this->size = 0;
         $this->metadata = [];
         $this->dimensions = [];
-        $this->size = 0;
     }
 
     public function __toString(): string

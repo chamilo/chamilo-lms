@@ -13,8 +13,8 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class CourseAccess extends Event
 {
-    protected $user;
-    protected $course;
+    protected User $user;
+    protected Course $course;
 
     public function __construct(User $user, Course $course)
     {

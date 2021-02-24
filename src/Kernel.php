@@ -27,7 +27,7 @@ class Kernel extends BaseKernel
         return $this->getProjectDir().'/config/configuration.php';
     }
 
-    public function setApi(array $configuration)
+    public function setApi(array $configuration): void
     {
         new ChamiloApi($configuration);
     }

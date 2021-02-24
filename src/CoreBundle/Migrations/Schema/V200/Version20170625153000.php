@@ -70,6 +70,9 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_forum_thread DROP FOREIGN KEY FK_5DA7884C29CCBAD0');
         }
 
+        $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date = "" OR thread_date is NULL OR thread_date = 0');
+        $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_date thread_date DATETIME NOT NULL');
+
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_forum_thread ADD resource_node_id INT DEFAULT NULL, DROP thread_id');
             $this->addSql(
@@ -101,6 +104,9 @@ class Version20170625153000 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_B5BEF5591BAD783F ON c_forum_post (resource_node_id)');
         }
+
+        $this->addSql('UPDATE c_forum_post SET post_date = NOW() WHERE post_date = "" OR post_date is NULL OR post_date = 0');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE post_date post_date DATETIME NOT NULL');
 
         $table = $schema->getTable('c_course_description');
         if (false === $table->hasColumn('resource_node_id')) {

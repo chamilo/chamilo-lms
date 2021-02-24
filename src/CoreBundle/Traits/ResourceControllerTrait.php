@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Traits;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
@@ -15,7 +14,6 @@ use Doctrine\ORM\EntityNotFoundException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 trait ResourceControllerTrait
 {
@@ -40,14 +38,14 @@ trait ResourceControllerTrait
         return $this->container->get(ResourceFactory::class);
     }
 
-    public function getRepository($tool, $type): ResourceRepository
+    public function getRepository(string $tool, string $type): ResourceRepository
     {
         $name = $this->getResourceRepositoryFactory()->getRepositoryService($tool, $type);
 
         return $this->container->get($name);
     }
 
-    public function denyAccessUnlessValidResource(ResourceInterface $resource = null)
+    public function denyAccessUnlessValidResource(ResourceInterface $resource = null): void
     {
         if (null === $resource) {
             throw new EntityNotFoundException($this->trans('Resource doesn\'t exists.'));

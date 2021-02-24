@@ -14,8 +14,8 @@ use Chamilo\CourseBundle\Entity\CGroup;
  */
 trait CourseControllerTrait
 {
-    protected $course;
-    protected $session;
+    protected Course $course;
+    protected ?Session $session;
     protected $container;
 
     /**
@@ -71,7 +71,7 @@ trait CourseControllerTrait
         return $this->container->get('doctrine')->getManager()->find(Session::class, $sessionId);
     }
 
-    public function getGroup()
+    public function getGroup(): ?CGroup
     {
         $request = $this->getRequest();
 
@@ -129,15 +129,12 @@ trait CourseControllerTrait
         return $url;
     }
 
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): void
     {
         $this->course = $course;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
@@ -147,23 +144,17 @@ trait CourseControllerTrait
         return null !== $this->course;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    public function setSession(Session $session)
+    public function setSession(Session $session = null): void
     {
         $this->session = $session;
     }
 
-    /**
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): int
     {
         return $this->session ? $this->getSession()->getId() : 0;
     }

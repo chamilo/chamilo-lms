@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Tool;
  */
 class Document extends AbstractTool
 {
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link.':nodeId/';
     }

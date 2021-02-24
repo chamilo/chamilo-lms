@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  */
 class SettingsManager extends ChamiloSettingsManager
 {
-    protected $course;
+    protected Course $course;
 
     /**
      * @return Course
@@ -31,12 +31,12 @@ class SettingsManager extends ChamiloSettingsManager
         return $this->course;
     }
 
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): void
     {
         $this->course = $course;
     }
 
-    public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
+    public function load(string $schemaAlias, string $namespace = null, bool $ignoreUnknown = true): SettingsInterface
     {
         $settings = new Settings();
         $schemaAliasNoPrefix = $schemaAlias;

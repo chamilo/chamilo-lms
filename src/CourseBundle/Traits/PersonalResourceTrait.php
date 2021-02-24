@@ -9,7 +9,7 @@ namespace Chamilo\CourseBundle\Traits;
  */
 trait PersonalResourceTrait
 {
-    protected $loadPersonalResources = true;
+    protected bool $loadPersonalResources = true;
 
     public function loadPersonalResources(): bool
     {

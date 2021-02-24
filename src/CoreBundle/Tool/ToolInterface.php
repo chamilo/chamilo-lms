@@ -9,23 +9,11 @@ namespace Chamilo\CoreBundle\Tool;
  */
 interface ToolInterface
 {
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 
-    /**
-     * @return string
-     */
-    public function getLink();
+    public function getLink(): string;
 
-    /**
-     * @return string
-     */
-    public function getTarget();
+    public function getTarget(): string;
 
-    /**
-     * @return string
-     */
-    public function getCategory();
+    public function getCategory(): string;
 }

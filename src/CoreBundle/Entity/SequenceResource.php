@@ -33,8 +33,6 @@ class SequenceResource
     protected Sequence $sequence;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="type", type="integer")
      */
     protected int $type;

@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Twig;
 
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
+use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Templating\Helper\SettingsHelperInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
@@ -34,7 +35,7 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
      *
      * @return Settings
      */
-    public function getSettings($schemaAlias)
+    public function getSettings($schemaAlias): SettingsInterface
     {
         return $this->settingsManager->load($schemaAlias);
     }
@@ -42,7 +43,7 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
     /**
      * @param string $parameter Example: admin.administrator_name
      */
-    public function getSettingsParameter($parameter)
+    public function getSettingsParameter(string $parameter)
     {
         return $this->settingsManager->getSetting($parameter);
     }

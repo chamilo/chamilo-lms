@@ -11,13 +11,14 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
  */
 abstract class AbstractTool implements ToolInterface
 {
-    protected $name;
-    protected $category;
-    protected $link;
-    protected $image;
-    protected $admin;
+    protected string $name;
+    protected string $category;
+    protected string $link;
+    protected string $image;
+    protected string $admin;
+    /** @var SchemaInterface|array|null */
     protected $settings;
-    protected $resourceTypes;
+    protected ?array $resourceTypes;
 
     /**
      * @var string
@@ -36,7 +37,7 @@ abstract class AbstractTool implements ToolInterface
      * @param SchemaInterface $settings
      * @param array           $resourceTypes
      */
-    public function __construct($name, $category, $link, $settings = null, $resourceTypes = null)
+    public function __construct($name, $category, $link, $settings = null, $resourceTypes = [])
     {
         $this->name = $name;
         $this->category = $category;
@@ -46,51 +47,49 @@ abstract class AbstractTool implements ToolInterface
         $this->resourceTypes = $resourceTypes;
     }
 
-    public function isCourseTool()
+    public function isCourseTool(): bool
     {
         return false;
     }
 
-    public function isGlobal()
+    public function isGlobal(): bool
     {
         return true;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link ?: '';
     }
 
-    public function getCategory()
+    public function getCategory(): string
     {
         return $this->category;
     }
 
-    public function getTarget()
+    public function getTarget(): string
     {
         return '_self';
     }
 
-    public function getImage()
+    public function getImage(): string
     {
         return $this->image;
     }
 
-    /**
-     * @return array
-     */
     public function getResourceTypes()
     {
         return $this->resourceTypes;
     }
 
-    public function setResourceTypes(array $resourceTypes): self
+    public function setResourceTypes($resourceTypes): self
     {
+        var_dump($resourceTypes);
         $this->resourceTypes = $resourceTypes;
 
         return $this;

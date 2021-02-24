@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Tool;
 
 abstract class AbstractCourseTool extends AbstractTool
 {
-    public function isCourseTool()
+    public function isCourseTool(): bool
     {
         return true;
     }

@@ -18,15 +18,9 @@ interface CourseControllerInterface
 {
     public function setCourse(Course $course);
 
-    public function setSession(Session $session);
+    public function setSession(Session $session = null);
 
-    /**
-     * @return Course
-     */
-    public function getCourse();
+    public function getCourse(): Course;
 
-    /**
-     * @return Session
-     */
-    public function getSession();
+    public function getSession(): ?Session;
 }

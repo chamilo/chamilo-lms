@@ -9,7 +9,7 @@ namespace Chamilo\CourseBundle\Traits;
  */
 trait ShowCourseResourcesInSessionTrait
 {
-    protected $loadCourseResourcesInSession = true;
+    protected bool $loadCourseResourcesInSession = true;
 
     public function isLoadCourseResourcesInSession(): bool
     {

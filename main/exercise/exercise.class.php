@@ -9467,7 +9467,6 @@ class Exercise
                                     'href' => '#!',
                                     'onclick' => 'showUserToSendNotificacion(this)',
                                     'data-link' => 'exercise.php?'.api_get_cidreq().'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['id'],
-
                                 ]
                             );
                         }
@@ -10857,15 +10856,16 @@ class Exercise
             return (isset($data[0]) && isset($data[0]['total'])) ? $data[0]['total'] : 0;
         }
         $usersArray = [];
-        foreach($data as $index =>$item){
-            if(isset($item['user_id'])){
-                if(!isset($usersArray[$item['user_id']])){
+        foreach ($data as $index => $item) {
+            if (isset($item['user_id'])) {
+                if (!isset($usersArray[$item['user_id']])) {
                     $usersArray[$item['user_id']] = api_get_user_info($item['user_id']);
                 }
                 $userData = $usersArray[$item['user_id']];
-                $data[$index]['user_name']=$userData['complete_name'];
+                $data[$index]['user_name'] = $userData['complete_name'];
             }
         }
+
         return $data;
     }
 

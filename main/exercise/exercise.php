@@ -487,12 +487,12 @@ if ($is_allowedToEdit) {
                         ));
                         break;
                     case 'send_reminder_to':
-                        $toUsers = isset($_GET['users'])?$_GET['users']:null;
-                        if(
+                        $toUsers = isset($_GET['users']) ? $_GET['users'] : null;
+                        if (
                             !empty($toUsers) &&
                             !empty($exerciseId)
                         ) {
-                            $toUsers = explode(',',$toUsers);
+                            $toUsers = explode(',', $toUsers);
                             api_set_more_memory_and_time_limits();
                             Exercise::notifyUsersOfTheExercise(
                                 $exerciseId,
@@ -501,7 +501,7 @@ if ($is_allowedToEdit) {
                                 $toUsers
                             );
                             echo json_encode([
-                                'message'=>Display::return_message(
+                                'message' => Display::return_message(
                                 get_lang('AnnounceSentByEmail'),
                                 'confirmation'
                             ),
@@ -510,7 +510,6 @@ if ($is_allowedToEdit) {
                         exit();
                         break;
                     case 'send_reminder':
-
                         $users = Exercise::getUsersInExercise(
                             $objExerciseTmp->id,
                             $courseId,

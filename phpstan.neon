@@ -1,5 +1,5 @@
 parameters:
-	level: 3
+	level: 5
 	paths:
 		- src
 #		- public/main
@@ -67,7 +67,9 @@ parameters:
 		- src/GraphQlBundle/*
 		- tests/*
 	ignoreErrors:
-#		- '#If condition is always true.#'
+		- '#If condition is always true.#'
+	checkGenericClassInNonGenericObjectType: false
+	checkMissingIterableValueType: false
 includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-symfony/extension.neon

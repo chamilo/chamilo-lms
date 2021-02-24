@@ -2593,7 +2593,7 @@ function getAllWork(
 
         //$session_id = isset($course['session_id']) ? $course['session_id'] : 0;
         //$conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
-        $conditionSession = ' AND (w.session_id = 0 OR w.session_id IS NULL)';
+        $conditionSession = ' AND (work.session_id = 0 OR work.session_id IS NULL)';
         if ($allowWorkFromAllSessions) {
             $conditionSession = '';
         }
@@ -2613,7 +2613,8 @@ function getAllWork(
                 }
 
                 foreach ($sessionList as $sessionId) {
-                    $conditionSession = " AND (w.session_id = $sessionId)";
+                    $conditionSession = " AND (work.session_id = $sessionId)";
+                    $parentCondition = '';
                     $courseQuery[] = " (work.c_id = $courseIdInSession $conditionSession $parentCondition ) ";
                 }
             }

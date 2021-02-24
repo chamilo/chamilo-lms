@@ -11051,6 +11051,7 @@ class Exercise
             return (isset($data[0]) && isset($data[0]['total'])) ? $data[0]['total'] : 0;
         }
         $usersArray = [];
+
         foreach ($data as $index => $item) {
             if (isset($item['user_id'])) {
                 if (!isset($usersArray[$item['user_id']])) {

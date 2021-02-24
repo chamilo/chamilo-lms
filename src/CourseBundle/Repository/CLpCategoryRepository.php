@@ -18,7 +18,7 @@ final class CLpCategoryRepository extends ResourceRepository implements Resource
         parent::__construct($registry, CLpCategory::class);
     }
 
-    public function getLink(ResourceInterface $resource, RouterInterface $router, $extraParams = []): string
+    public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
         $params = [
             'id' => $resource->getResourceIdentifier(),

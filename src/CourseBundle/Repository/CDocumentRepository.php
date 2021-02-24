@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -52,7 +53,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $settings;
     }
 
-    public function saveUpload(UploadedFile $file)
+    public function saveUpload(UploadedFile $file): ResourceInterface
     {
         $resource = new CDocument();
         $resource
@@ -64,7 +65,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $resource;
     }
 
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType): void
     {
         $newResource = $form->getData();
         $newResource
@@ -75,7 +76,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
             ->setReadonly(false)
         ;
 
-        return $newResource;
+        //return $newResource;
     }
 
     /**

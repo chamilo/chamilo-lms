@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -33,7 +34,7 @@ final class CShortcutRepository extends ResourceRepository
         return $this->findOneBy($criteria);
     }
 
-    public function addShortCut(AbstractResource $resource, $parent, Course $course, Session $session = null)
+    public function addShortCut(AbstractResource $resource, ResourceInterface $parent, Course $course, Session $session = null): ?CShortcut
     {
         $shortcut = $this->getShortcutFromResource($resource);
 
@@ -47,16 +48,22 @@ final class CShortcutRepository extends ResourceRepository
 
             $this->create($shortcut);
         }
+
+        return $shortcut;
     }
 
-    public function removeShortCut(AbstractResource $resource)
+    public function removeShortCut(AbstractResource $resource): bool
     {
         $em = $this->getEntityManager();
         $shortcut = $this->getShortcutFromResource($resource);
         if (null !== $shortcut) {
             $em->remove($shortcut);
             $em->flush();
+
+            return true;
         }
+
+        return false;
     }
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
@@ -86,17 +93,15 @@ final class CShortcutRepository extends ResourceRepository
         return $qb;
     }
 
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType): void
     {
-        $newResource = $form->getData();
-        $newResource
+        //return $form->getData();
+        /*$newResource
             ->setCourse($course)
             ->setSession($session)
             ->setFiletype($fileType)
             //->setTitle($title) // already added in $form->getData()
             ->setReadonly(false)
-        ;
-
-        return $newResource;
+        ;*/
     }
 }

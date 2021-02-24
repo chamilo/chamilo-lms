@@ -50,7 +50,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         return $qb;
     }
 
-    public function saveUpload(UploadedFile $file)
+    public function saveUpload(UploadedFile $file): ResourceInterface
     {
         $resource = new Illustration();
         $resource->setName($file->getClientOriginalName());
@@ -58,9 +58,9 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         return $resource;
     }
 
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType): void
     {
-        return $form->getData();
+        //return $form->getData();
 
         //->setCourse($course)
             //->setSession($session)
@@ -71,7 +71,6 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     /**
      * @param User|UserInterface|ResourceInterface $resource
      * @param User                                 $user
-     * @param UploadedFile|null                    $uploadFile
      * @param string                               $crop
      */
     public function addIllustration($resource, $user, UploadedFile $uploadFile = null, $crop = ''): ?ResourceFile

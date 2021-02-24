@@ -25,7 +25,7 @@ final class CStudentPublicationRepository extends ResourceRepository
     /**
      * Find all the works registered by a teacher.
      */
-    public function findWorksByTeacher(User $user, Course $course, Session $session = null, $groupId = 0): array
+    public function findWorksByTeacher(User $user, Course $course, Session $session = null, int $groupId = 0): array
     {
         $qb = $this->createQueryBuilder('w');
 

@@ -125,7 +125,7 @@ class AssetRepository extends ServiceEntityRepository
         }
     }*/
 
-    public function delete(Asset $asset = null)
+    public function delete(Asset $asset = null): void
     {
         if ($asset) {
             $this->getEntityManager()->remove($asset);

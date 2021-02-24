@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -83,7 +82,7 @@ final class CThematicAdvanceRepository extends ServiceEntityRepository
         return $this;
     }
 
-    public function delete(ResourceInterface $resource)
+    public function delete(CThematicAdvance $resource): void
     {
         $this->getEntityManager()->remove($resource);
         $this->getEntityManager()->flush();

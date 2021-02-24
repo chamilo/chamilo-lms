@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ProfileType;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;

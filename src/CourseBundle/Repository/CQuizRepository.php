@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
@@ -21,7 +22,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         parent::__construct($registry, CQuiz::class);
     }
 
-    public function getLink(ResourceInterface $resource, RouterInterface $router, $extraParams = []): string
+    public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
         $params = ['name' => 'exercise/overview.php', 'exerciseId' => $resource->getResourceIdentifier()];
         if (!empty($extraParams)) {
@@ -31,7 +32,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $router->generate('legacy_main', $params);
     }
 
-    public function deleteAllByCourse($course)
+    public function deleteAllByCourse(Course $course): void
     {
         $qb = $this->getResourcesByCourse($course);
         $resources = $qb->getQuery()->getResult();

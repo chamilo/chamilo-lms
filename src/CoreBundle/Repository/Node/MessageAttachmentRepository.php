@@ -42,9 +42,9 @@ final class MessageAttachmentRepository extends ResourceRepository
         return $settings;
     }
 
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType): void
     {
-        return $form->getData();
+        //return $form->getData();
 
         //->setCourse($course)
             //->setSession($session)

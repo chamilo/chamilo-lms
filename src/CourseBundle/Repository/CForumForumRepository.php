@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumForum;
@@ -17,7 +16,7 @@ final class CForumForumRepository extends ResourceRepository
         parent::__construct($registry, CForumForum::class);
     }
 
-    public function delete(ResourceInterface $resource)
+    public function delete(ResourceInterface $resource): void
     {
         /** @var CForumForum $resource */
         $threads = $resource->getThreads();

@@ -617,7 +617,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function delete(ResourceInterface $resource)
+    public function delete(ResourceInterface $resource): void
     {
         $children = $resource->getResourceNode()->getChildren();
         foreach ($children as $child) {

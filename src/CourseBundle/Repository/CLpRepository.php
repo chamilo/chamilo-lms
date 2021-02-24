@@ -21,7 +21,7 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         parent::__construct($registry, CLp::class);
     }
 
-    public function getLink(ResourceInterface $resource, RouterInterface $router, $extraParams = []): string
+    public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
         $params = ['lp_id' => $resource->getResourceIdentifier(), 'name' => 'lp/lp_controller.php', 'action' => 'view'];
         if (!empty($extraParams)) {

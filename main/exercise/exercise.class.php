@@ -6841,6 +6841,8 @@ class Exercise
                                     $blockPercentage
                                 );
                                 $isVisible = false;
+                                // See BT#18165
+                                $message .= $this->remedialCourseList(api_get_user_id(), false, api_get_session_id());
                             }
                         }
                     }
@@ -10968,7 +10970,6 @@ class Exercise
                 foreach ($attemp['question_list'] as $questionId => $answer) {
                     $question = Question::read($questionId, api_get_course_info_by_id($attemp['c_id']));
                     $questionOpen = 0;
-                    // in_array($question->type, $questionExcluded, true) dont work here
                     for ($i = 0; $i < count($questionExcluded); $i++) {
                         if ($question->type == (int) $questionExcluded[$i]) {
                             $questionOpen = 1;

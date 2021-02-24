@@ -9659,7 +9659,10 @@ class Exercise
                                 Display::return_icon('announce.png', get_lang('EmailNotifySubscription')),
                                 '',
                                 [
-                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['id'],
+                                    'href' => '#!',
+                                    'onclick' => 'showUserToSendNotificacion(this)',
+                                    'data-link' => 'exercise.php?'.api_get_cidreq().'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['id'],
+
                                 ]
                             );
                         }
@@ -10961,8 +10964,9 @@ class Exercise
         $exerciseId = 0,
         $courseId = 0,
         $sessionId = 0,
-        $count = false)
-    {
+        $count = false,
+        $toUsers = []
+    ) {
         $data = [];
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $courseId = empty($courseId) ? api_get_course_id() : (int) $courseId;
@@ -10975,6 +10979,7 @@ class Exercise
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $countSelect = " count(*) as total";
+        $sqlToUsers = '';
         if (0 == $sessionId) {
             // Courses
             if (false === $count) {
@@ -10998,12 +11003,15 @@ class Exercise
                 INNER JOIN $tblCourse as c ON ( cru.c_id = c.id )
                 INNER JOIN $tblQuiz as cq ON ( cq.c_id = c.id )
             WHERE
-                cru.is_tutor = 0
+                cru.is_tutor is null
                 AND ( cq.session_id = 0 or cq.session_id is null)
                 AND cq.active > 0
                 AND cq.c_id = $courseId
                 AND cq.iid = $exerciseId
-            ORDER BY cq.c_id";
+            ";
+            if (!empty($toUsers)) {
+                $sqlToUsers = ' AND cru.user_id IN ('.implode(',', $toUsers).') ';
+            }
         } else {
             //Sessions
             if (false === $count) {
@@ -11012,11 +11020,14 @@ class Exercise
                 cq.iid as quiz_id,
                 sru.user_id as user_id,
                 cq.c_id as course_id,
-                cq.session_id as session_id,
+                sru.session_id as session_id,
                 c.title as title,
                 c.`code` as 'code',
                 cq.active as active
                 ";
+            }
+            if (!empty($toUsers)) {
+                $sqlToUsers = ' AND sru.user_id IN ('.implode(',', $toUsers).') ';
             }
             $sql = "
             SELECT
@@ -11030,9 +11041,9 @@ class Exercise
               AND cq.c_id = $courseId
               AND sru.session_id = $sessionId
               AND cq.iid = $exerciseId
-            ORDER BY
-              cq.c_id";
+           ";
         }
+        $sql .= " $sqlToUsers ORDER BY cq.c_id ";
 
         $result = Database::query($sql);
         $data = Database::store_result($result);
@@ -11040,7 +11051,16 @@ class Exercise
         if (true === $count) {
             return (isset($data[0]) && isset($data[0]['total'])) ? $data[0]['total'] : 0;
         }
-
+        $usersArray = [];
+        foreach($data as $index =>$item){
+            if(isset($item['user_id'])){
+                if(!isset($usersArray[$item['user_id']])){
+                    $usersArray[$item['user_id']] = api_get_user_info($item['user_id']);
+                }
+                $userData = $usersArray[$item['user_id']];
+                $data[$index]['user_name']=$userData['complete_name'];
+            }
+        }
         return $data;
     }
 
@@ -11055,12 +11075,15 @@ class Exercise
     public static function notifyUsersOfTheExercise(
         $exerciseId = 0,
         $courseId = 0,
-        $sessionId = 0
+        $sessionId = 0,
+        $toUsers = []
     ) {
         $users = self::getUsersInExercise(
             $exerciseId,
             $courseId,
-            $sessionId
+            $sessionId,
+            false,
+            $toUsers
         );
         $totalUsers = count($users);
         $usersArray = [];

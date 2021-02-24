@@ -45,7 +45,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $this->toolChain = $tools;
     }
 
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $tools = $this->getProcessedToolChain();
 
@@ -116,7 +116,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $tools = $this->getProcessedToolChain();
 

@@ -228,7 +228,7 @@ class SettingsManager implements SettingsManagerInterface
         }
     }
 
-    public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
+    public function load(string $schemaAlias, string $namespace = null, bool $ignoreUnknown = true): SettingsInterface
     {
         $settings = new Settings();
         $schemaAliasNoPrefix = $schemaAlias;

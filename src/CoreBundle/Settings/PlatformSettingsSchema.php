@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class PlatformSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -78,7 +78,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $tabs = [
             'TabsCampusHomepage' => 'campus_homepage',

@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class AdminSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -36,17 +36,17 @@ class AdminSettingsSchema extends AbstractSettingsSchema
 //            );
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('administrator_name',
+            ->add(
+                'administrator_name',
                 TextType::class,
-                ['label' => 'emailAdministratorTitle', 'help' => 'emailAdministratorComment'])
+                ['label' => 'emailAdministratorTitle', 'help' => 'emailAdministratorComment']
+            )
             ->add('administrator_surname')
             ->add('administrator_email', EmailType::class)
             ->add('administrator_phone')
-            ->add('redirect_admin_to_courses_list', YesNoType::class)
-
-        ;
+            ->add('redirect_admin_to_courses_list', YesNoType::class);
     }
 }

@@ -86,11 +86,12 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         }
 
         $file = $this->addFile($illustration, $uploadFile);
-        if (!empty($crop)) {
-            $file->setCrop($crop);
+        if ($file) {
+            if (!empty($crop)) {
+                $file->setCrop($crop);
+            }
+            $em->persist($file);
         }
-
-        $em->persist($file);
         $em->flush();
 
         return $file;

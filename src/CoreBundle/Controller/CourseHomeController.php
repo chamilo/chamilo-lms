@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Career;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -167,7 +166,7 @@ class CourseHomeController extends ToolBaseController
                             'career_diagram',
                             false,
                             false,
-                            false
+                            0
                         );
 
                         if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
@@ -224,7 +223,7 @@ class CourseHomeController extends ToolBaseController
         $link = $tool->getLink();
 
         if (strpos($link, 'nodeId')) {
-            $nodeId = $this->getCourse()->getResourceNode()->getId();
+            $nodeId = (string) $this->getCourse()->getResourceNode()->getId();
             $link = str_replace(':nodeId', $nodeId, $link);
         }
 

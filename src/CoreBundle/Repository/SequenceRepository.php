@@ -86,9 +86,10 @@ class SequenceRepository extends ServiceEntityRepository
     {
         $sequence = $this->find($id);
         $em = $this->getEntityManager();
-        $em
+        // @todo check delete
+        /*$em
             ->createQuery('DELETE FROM ChamiloCoreBundle:SequenceResource sr WHERE sr.sequence = :seq')
-            ->execute(['seq' => $sequence]);
+            ->execute(['seq' => $sequence]);*/
 
         $em->remove($sequence);
         $em->flush();

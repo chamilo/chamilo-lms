@@ -115,26 +115,26 @@ trait ResourceControllerTrait
 
     protected function getUser(): ?UserInterface
     {
-        if ($this->container->has('security.token_storage')) {
-            if (null === $token = $this->container->get('security.token_storage')->getToken()) {
-                return null;
-            }
+        /*if (!$this->container->has('security.token_storage')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
+        }*/
 
-            if (!\is_object($user = $token->getUser())) {
-                // e.g. anonymous authentication
-                return null;
-            }
-
-            return $user;
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return null;
         }
 
-        throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
+        if (!\is_object($user = $token->getUser())) {
+            // e.g. anonymous authentication
+            return null;
+        }
+
+        return $user;
     }
 
     private function setBreadCrumb(Request $request, ResourceNode $resourceNode)
     {
         return false;
-        $tool = $request->get('tool');
+        /*$tool = $request->get('tool');
         $resourceNodeId = $request->get('id');
         $routeParams = $this->getResourceParams($request);
         $baseNodeId = $this->getCourse()->getResourceNode()->getId();
@@ -155,16 +155,12 @@ trait ResourceControllerTrait
             $repo = $this->getRepositoryFromRequest($request);
             $settings = $repo->getResourceSettings();
 
-            /** @var ResourceInterface $originalResource */
             //$originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
             if (null === $resourceNode) {
                 return;
             }
-            //var_dump($resourceNode->getTitle());            throw new \Exception('22');
-            $parentList = $resourceNode->getPathForDisplayToArray($baseNodeId);
-
+            $parentList = $resourceNode->getPathForDisplayToArray($baseNodeId);*/
 //            var_dump($originalParent->getPath(), $originalParent->getPathForDisplay());
-
 //            $parentList = [];
             /*          while (null !== $parent) {
                           if ($type !== $parent->getResourceType()->getName()) {
@@ -190,7 +186,7 @@ trait ResourceControllerTrait
                           );
                       }*/
 
-            foreach ($parentList as $id => $title) {
+            /*foreach ($parentList as $id => $title) {
                 $params = $routeParams;
                 $params['id'] = $id;
                 $breadcrumb->addChild(
@@ -213,6 +209,6 @@ trait ResourceControllerTrait
                     ]
                 );
             }
-        }
+        }*/
     }
 }

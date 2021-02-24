@@ -33,7 +33,7 @@ class ResourceRight
     protected $role;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="mask", type="integer", nullable=false)
      */
@@ -53,7 +53,7 @@ class ResourceRight
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getMask()
     {
@@ -61,11 +61,9 @@ class ResourceRight
     }
 
     /**
-     * @param string $mask
-     *
-     * @return $this
+     * @param int $mask
      */
-    public function setMask($mask)
+    public function setMask($mask): self
     {
         $this->mask = $mask;
 

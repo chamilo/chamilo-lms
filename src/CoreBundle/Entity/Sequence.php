@@ -113,12 +113,7 @@ class Sequence
         return unserialize($this->graph);
     }
 
-    /**
-     * @param string $graph
-     *
-     * @return Sequence
-     */
-    public function setGraphAndSerialize($graph)
+    public function setGraphAndSerialize($graph): self
     {
         $this->setGraph(serialize($graph));
 

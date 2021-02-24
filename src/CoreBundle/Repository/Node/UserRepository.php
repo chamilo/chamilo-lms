@@ -992,7 +992,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $cForumPostList = [];
         /** @var CForumPost $item */
         foreach ($result as $item) {
-            $date = $item->getPostDate() ? $item->getPostDate()->format($dateFormat) : '';
+            $date = $item->getPostDate()->format($dateFormat);
             $list = [
                 'Title: '.$item->getPostTitle(),
                 'Creation date: '.$date,
@@ -1008,7 +1008,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $cForumThreadList = [];
         /** @var CForumThread $item */
         foreach ($result as $item) {
-            $date = $item->getThreadDate() ? $item->getThreadDate()->format($dateFormat) : '';
+            $date = $item->getThreadDate()->format($dateFormat);
             $list = [
                 'Title: '.$item->getThreadTitle(),
                 'Creation date: '.$date,
@@ -1070,7 +1070,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $cBlog = [];
         /** @var CBlogPost $item */
         foreach ($result as $item) {
-            $date = $item->getDateCreation() ? $item->getDateCreation()->format($dateFormat) : '';
+            $date = $item->getDateCreation()->format($dateFormat);
             $list = [
                 'Title: '.$item->getTitle(),
                 'Date: '.$date,
@@ -1101,7 +1101,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $messageList = [];
         /** @var Message $item */
         foreach ($result as $item) {
-            $date = $item->getSendDate() ? $item->getSendDate()->format($dateFormat) : '';
+            $date = $item->getSendDate()->format($dateFormat);
             $userName = '';
             if ($item->getUserReceiver()) {
                 $userName = $item->getUserReceiver()->getUsername();
@@ -1138,7 +1138,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $cDropboxFile = [];
         /** @var CDropboxFile $item */
         foreach ($result as $item) {
-            $date = $item->getUploadDate() ? $item->getUploadDate()->format($dateFormat) : '';
+            $date = $item->getUploadDate()->format($dateFormat);
             $list = [
                 'Title: '.$item->getTitle(),
                 'Uploaded date: '.$date,
@@ -1170,7 +1170,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $cDropboxFeedback = [];
         /** @var CDropboxFeedback $item */
         foreach ($result as $item) {
-            $date = $item->getFeedbackDate() ? $item->getFeedbackDate()->format($dateFormat) : '';
+            $date = $item->getFeedbackDate()->format($dateFormat);
             $list = [
                 'File #'.$item->getFileId(),
                 'Feedback: '.$item->getFeedback(),
@@ -1187,7 +1187,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $cNotebook = [];
         /** @var CNotebook $item */
         foreach ($result as $item) {
-            $date = $item->getUpdateDate() ? $item->getUpdateDate()->format($dateFormat) : '';
+            $date = $item->getUpdateDate()->format($dateFormat);
             $list = [
                 'Title: '.$item->getTitle(),
                 'Date: '.$date,
@@ -1236,7 +1236,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $cStudentPublicationComment = [];
         /** @var CStudentPublicationComment $item */
         foreach ($result as $item) {
-            $date = $item->getSentAt() ? $item->getSentAt()->format($dateFormat) : '';
+            $date = $item->getSentAt()->format($dateFormat);
             $list = [
                 'Commment: '.$item->getComment(),
                 'File '.$item->getFile(),
@@ -1285,7 +1285,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $ticketMessage = [];
         /** @var \Chamilo\CoreBundle\Entity\TicketMessage $item */
         foreach ($result as $item) {
-            $date = $item->getInsertDateTime() ? $item->getInsertDateTime()->format($dateFormat) : '';
+            $date = $item->getInsertDateTime()->format($dateFormat);
             $list = [
                 'Subject: '.$item->getSubject(),
                 'IP: '.$item->getIpAddress(),
@@ -1303,7 +1303,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $skillRelUserComment = [];
         /** @var SkillRelUserComment $item */
         foreach ($result as $item) {
-            $date = $item->getFeedbackDateTime() ? $item->getFeedbackDateTime()->format($dateFormat) : '';
+            $date = $item->getFeedbackDateTime()->format($dateFormat);
             $list = [
                 'Feedback: '.$item->getFeedbackText(),
                 'Value: '.$item->getFeedbackValue(),

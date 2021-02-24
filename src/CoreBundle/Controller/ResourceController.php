@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
@@ -258,7 +259,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var AbstractResource $newResource */
+            /** @var AbstractResource|ResourceInterface $newResource */
             $newResource = $form->getData();
 
             if ($form->has($this->fileContentName)) {

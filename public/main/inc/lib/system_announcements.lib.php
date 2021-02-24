@@ -1035,8 +1035,8 @@ class SystemAnnouncementManager
     /**
      * Get the HTML code for an announcement.
      *
-     * @param int $announcementId The announcement ID
-     * @param int $visibility     The announcement visibility
+     * @param int    $announcementId The announcement ID
+     * @param string $visibility     The announcement visibility
      */
     public static function getAnnouncement($announcementId, $visibility): array
     {

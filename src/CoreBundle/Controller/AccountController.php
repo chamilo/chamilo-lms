@@ -4,6 +4,8 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ProfileType;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -43,6 +45,7 @@ class AccountController extends BaseController
      */
     public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo)
     {
+        /** @var User|ResourceInterface $user */
         $user = $this->getUser();
 
         if (!is_object($user) || !$user instanceof UserInterface) {

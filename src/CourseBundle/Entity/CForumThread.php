@@ -96,7 +96,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="thread_date", type="datetime", nullable=true)
+     * @ORM\Column(name="thread_date", type="datetime", nullable=false)
      */
     protected $threadDate;
 

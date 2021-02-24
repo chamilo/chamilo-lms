@@ -172,7 +172,6 @@ class ToolChain
         ];
         $toolList = array_flip($toolList);
 
-        // @todo handle plugin
         $toolRepo = $manager->getRepository(Tool::class);
 
         /** @var AbstractTool $tool */
@@ -182,7 +181,7 @@ class ToolChain
             if (!isset($toolList[$tool->getName()])) {
                 continue;
             }
-            /** @var CTool $toolEntity */
+            /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
             $position = $toolList[$tool->getName()] + 1;
 

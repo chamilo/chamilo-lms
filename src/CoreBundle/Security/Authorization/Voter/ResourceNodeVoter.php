@@ -405,7 +405,7 @@ class ResourceNodeVoter extends Voter
         ;
 
         // Add a security resource.
-        $linkId = $link->getId();
+        $linkId = (string) $link->getId();
         $acl->addResource(new GenericResource($linkId));
 
         // Check all the right this link has.

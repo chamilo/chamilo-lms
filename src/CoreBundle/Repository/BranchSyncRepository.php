@@ -27,7 +27,7 @@ class BranchSyncRepository extends NestedTreeRepository
         //$qb->innerJoin('u.courses', 'c');
 
         //@todo check app settings
-        $qb->add('orderBy', 'b.branchName ASC');
+        $qb->addOrderBy('b.branchName ASC');
         $qb->where('b.branchName LIKE :keyword');
         $qb->setParameter('keyword', "%$keyword%");
         $q = $qb->getQuery();

@@ -498,6 +498,14 @@ class Database
     /**
      * Experimental useful database finder.
      *
+     * @param mixed|array  $columns
+     * @param string       $table_name
+     * @param array        $conditions
+     * @param string       $type_result
+     * @param string       $option
+     * @param bool         $debug
+     *
+     * @return array
      * @todo lot of stuff to do here
      * @todo known issues, it doesn't work when using LIKE conditions
      *
@@ -505,14 +513,6 @@ class Database
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
      *
-     * @param array  $columns
-     * @param string $table_name
-     * @param array  $conditions
-     * @param string $type_result
-     * @param string $option
-     * @param bool   $debug
-     *
-     * @return array
      */
     public static function select(
         $columns,

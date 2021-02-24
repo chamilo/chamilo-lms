@@ -57,7 +57,7 @@ class SkillRelUserComment
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="feedback_datetime", type="datetime")
+     * @ORM\Column(name="feedback_datetime", type="datetime", nullable=false)
      */
     protected $feedbackDateTime;
 

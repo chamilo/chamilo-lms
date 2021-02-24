@@ -732,7 +732,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->website = '';
         $this->locale = 'en';
         $this->status = self::STUDENT;
-        $this->salt = sha1(uniqid(null, true));
+        $this->salt = sha1(uniqid('', true));
         $this->active = true;
         $this->registrationDate = new \DateTime();
         $this->authSource = 'platform';

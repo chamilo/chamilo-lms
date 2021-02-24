@@ -60,7 +60,8 @@ class AssetRepository extends ServiceEntityRepository
                     continue;
                 }
 
-                $fs->write($folder.'/'.$data['path'], $zipArchiveAdapter->read($data['path']));
+                $content = (string) $zipArchiveAdapter->read($data['path']);
+                $fs->write($folder.'/'.$data['path'], $content);
             }
         }
     }

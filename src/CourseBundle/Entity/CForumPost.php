@@ -82,7 +82,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="post_date", type="datetime", nullable=true)
+     * @ORM\Column(name="post_date", type="datetime", nullable=false)
      */
     protected $postDate;
 

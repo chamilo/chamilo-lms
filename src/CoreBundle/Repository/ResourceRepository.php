@@ -651,7 +651,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
             return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
         } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resource);
+            throw new FileNotFoundException((string) $resource);
         }
     }
 
@@ -703,7 +703,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
             return '';
         } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resource);
+            throw new FileNotFoundException((string) $resource);
         }
     }
 

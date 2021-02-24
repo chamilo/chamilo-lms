@@ -27,19 +27,17 @@ class SequenceResource
     protected $id;
 
     /**
-     * @var Sequence
-     *
      * @ORM\ManyToOne(targetEntity="Sequence")
-     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $sequence;
+    protected Sequence $sequence;
 
     /**
      * @var int
      *
      * @ORM\Column(name="type", type="integer")
      */
-    protected $type;
+    protected int $type;
 
     /**
      * @var int

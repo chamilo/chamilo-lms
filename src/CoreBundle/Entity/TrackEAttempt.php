@@ -90,8 +90,6 @@ class TrackEAttempt
     protected $position;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="tms", type="datetime", nullable=false)
      */
     protected \DateTime $tms;

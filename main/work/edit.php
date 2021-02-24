@@ -55,17 +55,16 @@ if (false === $is_course_member && $allowBaseCourseTeacher) {
         $redirectToSelf = true;
     }
 }
-
-$is_allowed_to_edit = api_is_allowed_to_edit() || $isCourseTeacher;
-
 if (false == $is_course_member) {
     api_not_allowed(true);
 }
 
+$is_allowed_to_edit = api_is_allowed_to_edit() || $isCourseTeacher;
+$student_can_edit_in_session = api_is_allowed_to_session_edit(false, true) || $isCourseTeacher;
+
 $check = Security::check_token('post');
 $token = Security::get_token();
 
-$student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 $has_ended = false;
 $work_item = get_work_data_by_id($item_id);
 
@@ -227,11 +226,10 @@ if ($form->validate()) {
         */
         //Get the author ID for that document from the item_property table
         $item_to_edit_id = (int) ($_POST['item_to_edit']);
-        $is_author = user_is_author($item_to_edit_id);
+        $is_author = user_is_author($item_to_edit_id) || $isCourseTeacher;
 
         if ($is_author) {
             $work_data = get_work_data_by_id($item_to_edit_id);
-
             if (!empty($_POST['title'])) {
                 $title = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
             }

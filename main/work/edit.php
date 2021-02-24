@@ -21,7 +21,6 @@ $work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
 $item_id = isset($_REQUEST['item_id']) ? (int) ($_REQUEST['item_id']) : null;
 $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-$is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
 $session_id = api_get_session_id();
@@ -47,13 +46,17 @@ $is_course_member = $is_course_member || api_is_platform_admin();
 
 $allowBaseCourseTeacher = api_get_configuration_value('assignment_base_course_teacher_access_to_all_session');
 $isCourseTeacher = false;
+$redirectToSelf = false;
 if (false === $is_course_member && $allowBaseCourseTeacher) {
     // Check if user is base course teacher.
     if (CourseManager::is_course_teacher(api_get_user_id(), $courseInfo['code'])) {
         $is_course_member = true;
         $isCourseTeacher = true;
+        $redirectToSelf = true;
     }
 }
+
+$is_allowed_to_edit = api_is_allowed_to_edit() || $isCourseTeacher;
 
 if (false == $is_course_member) {
     api_not_allowed(true);
@@ -74,7 +77,7 @@ if (!$is_author) {
 }
 
 // Student's can't edit work only if he can delete his docs.
-if (!api_is_allowed_to_edit()) {
+if (!api_is_allowed_to_edit() && false === $isCourseTeacher) {
     if (api_get_course_setting('student_delete_own_publication') != 1) {
         api_not_allowed(true);
     }
@@ -86,9 +89,7 @@ if (!empty($my_folder_data)) {
     if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
         $time_now = time();
 
-        if (!empty($homework['expires_on']) &&
-            !empty($homework['expires_on'])
-        ) {
+        if (!empty($homework['expires_on'])) {
             $time_expires = api_strtotime($homework['expires_on'], 'UTC');
             $difference = $time_expires - $time_now;
             if ($difference < 0) {
@@ -238,10 +239,6 @@ if ($form->validate()) {
 
             $add_to_update = null;
             if ($is_allowed_to_edit && ($_POST['qualification'] != '')) {
-                /*$add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
-                $add_to_update .= ' qualification = '."'".api_float_val($_POST['qualification'])."',";
-                $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";*/
-
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
                     $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $work_item['title']);
@@ -292,8 +289,12 @@ if ($form->validate()) {
     if ($is_allowed_to_edit) {
         $script = 'work_list_all.php';
     }
-    header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id);
-    exit;
+    if ($redirectToSelf) {
+        api_location(
+            api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&id='.$work_id.'&item_id='.$item_id
+        );
+    }
+    api_location(api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id);
 }
 
 $htmlHeadXtra[] = to_javascript_work();

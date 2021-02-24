@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Tag;
@@ -138,29 +139,26 @@ switch ($action) {
                 $(function() {
                     $( "#sortable" ).sortable();
                     $( "#sortable" ).disableSelection();
-                    
+
                     $( "#link_'.$variable.'" ).on("click", function() {
                         var newList = [];
                         $("#sortable").find("li").each(function(){
                             newList.push($(this).text());
                         });
-                                                
-                        var save = JSON.stringify(newList);                      
+
+                        var save = JSON.stringify(newList);
                         $.ajax({
                             url: "'.$url.'",
                             dataType: "json",
                             data: "values="+save,
                             success: function(data) {
-                                console.log(data);
                             }
                         });
-                        
+
                         alert("'.get_lang('Saved').'");
-                        
                         location.reload();
-                        
                         return false;
-                        
+
                     });
                 });
             </script>';

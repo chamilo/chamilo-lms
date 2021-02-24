@@ -34,8 +34,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = $js;
-
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     /* show eye for all show/hide*/
     function buttonForAllShowHide()
     {
@@ -53,7 +52,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                 // if the image has the eye-slash icon, prepare to make visible
                 tools_visibles.push(image_id)
             }
-
         });
         if (tools_visibles.length == 0) {
             $(".visible-all").addClass("hidden");
@@ -62,7 +60,8 @@ $htmlHeadXtra[] = '<script type="text/javascript">
             $(".visible-all").removeClass("hidden");
             $(".invisible-all").addClass("hidden");
         }
-    };
+    }
+
     /* option show/hide thematic-block */
     $(function() {
         buttonForAllShowHide();
@@ -81,11 +80,11 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                     tools_visibles.push(image_id)
                 }
             });
-            message_invisible = "'.get_lang('ToolIsNowHidden', '').'";
+            message_invisible = "'.get_lang('ToolIsNowHidden').'";
             ids = tools_invisibles;
             if (tools_invisibles.length == 0) {
                 ids = tools_visibles;
-                message_invisible = "'.get_lang('ToolIsNowVisible', '').'";
+                message_invisible = "'.get_lang('ToolIsNowVisible').'";
             }
 
             $.ajax({
@@ -100,7 +99,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                 success: function (data) {
                     data = JSON.parse(data);
                     $.each(data,function(index,item){
-                         new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + item.view;
+                        new_current_view = "'.api_get_path(WEB_IMG_PATH).'" + item.view;
                         //eyes
                         $("#linktool_"+item.id).attr("class", item.fclass);
                         //tool
@@ -122,6 +121,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                 }
             });
         });
+
         $("#thematic-show").click(function(){
             $(".btn-hide-thematic").hide();
             $(".btn-show-thematic").show(); //show using class
@@ -158,10 +158,12 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                 success: function(data) {
                     eval("var info=" + data);
                     new_current_tool_image = info.image;
-                    new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
+                    new_current_view = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
                     //eyes
                     //$("#" + tool_id).attr("src", new_current_view);
                      $("#linktool_"+my_tool_id).attr("class", info.fclass);
+                     $("#linktool_"+my_tool_id).attr("title", info.label);
+
                     //tool
                     $("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
                     //clase
@@ -169,15 +171,15 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                     $("#istooldesc_" + my_tool_id).attr("class", info.tclass);
 
                     if (info.message == "is_active") {
-                        message = "'.get_lang('ToolIsNowVisible', '').'";
+                        message = "'.get_lang('ToolIsNowVisible').'";
                         $("#" + tool_id)
-                        .attr("alt", "'.get_lang('Activate', '').'")
-                        .attr("title", "'.get_lang('Activate', '').'");
+                        .attr("alt", "'.get_lang('Deactivate').'")
+                        .attr("title", "'.get_lang('Deactivate').'");
                     } else {
-                        message = "'.get_lang('ToolIsNowHidden', '').'";
+                        message = "'.get_lang('ToolIsNowHidden').'";
                         $("#" + tool_id)
-                        .attr("alt", "'.get_lang('Deactivate', '').'")
-                        .attr("title", "'.get_lang('Deactivate', '').'");
+                        .attr("alt", "'.get_lang('Activate').'")
+                        .attr("title", "'.get_lang('Activate').'");
                     }
                     $(".normal-message").hide();
                     $("#id_confirmation_message").html(message);
@@ -186,7 +188,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
             });
         });
     });
-
 </script>';
 
 // The section for the tabs

@@ -503,7 +503,6 @@ class CourseCategory
                 $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
 
                 $actions = [];
-
                 if ($urlId == $category['access_url_id']) {
                     $actions[] = Display::url($editIcon, $editUrl);
                     $actions[] = Display::url($moveIcon, $moveUrl);
@@ -521,7 +520,7 @@ class CourseCategory
                     $url
                 );
 
-                $countCourses = self::countCoursesInCategory($category['code'], null, false);
+                $countCourses = self::countCoursesInCategory($category['code'], null, false, false);
 
                 $content = [
                     $title,
@@ -597,8 +596,9 @@ class CourseCategory
     /**
      * @param string $category_code
      * @param string $keyword
-     * @paran bool  $avoidCourses
-     * @paran array $conditions
+     * @param bool   $avoidCourses
+     * @param bool   $checkHidePrivate
+     * @param array  $conditions
      *
      * @return int
      */
@@ -606,12 +606,20 @@ class CourseCategory
         $category_code = '',
         $keyword = '',
         $avoidCourses = true,
+        $checkHidePrivate = true,
         $conditions = []
     ) {
-        return self::getCoursesInCategory($category_code, $keyword, $avoidCourses, $conditions, true);
+        return self::getCoursesInCategory(
+            $category_code,
+            $keyword,
+            $avoidCourses,
+            $checkHidePrivate,
+            $conditions,
+            true
+        );
     }
 
-    public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $conditions = [], $getCount = false)
+    public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $checkHidePrivate = true, $conditions = [], $getCount = false)
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
@@ -621,8 +629,7 @@ class CourseCategory
         if ($avoidCourses) {
             $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         }
-
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $checkHidePrivate);
 
         $sqlInjectJoins = '';
         $where = ' AND 1 = 1 ';

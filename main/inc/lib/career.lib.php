@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Fhaculty\Graph\Graph;
@@ -650,6 +651,10 @@ class Career extends Model
                 font-size: 11px;
                 height: 40px;
              }
+
+             .panel-body{
+                min-height: 55px;
+             }
              </style>';
 
         // Create groups
@@ -919,6 +924,10 @@ class Career extends Model
                         $iconData['Description'] = 'Result Id = '.$resultId;
                     }
 
+                    if ('Joe Anonymous' === $iconData['TeacherUsername']) {
+                        $iconData['TeacherUsername'] = '';
+                    }
+
                     if (!empty($icon)) {
                         $params = [
                             'id' => 'course_'.$id.'_'.$resultId,
@@ -942,7 +951,7 @@ class Career extends Model
                 }
 
                 if (!empty($results)) {
-                    $content .= '<div class="row"></div><div class="pull-right">'.$results.'</div>';
+                    $content .= '<div class="row"></div><div class="pull-left">'.$results.'</div>';
                 }
             }
 

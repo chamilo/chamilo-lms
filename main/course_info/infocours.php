@@ -922,6 +922,29 @@ $form->addPanelOption(
     $globalGroup
 );
 
+if (api_get_configuration_value('allow_portfolio_tool')) {
+    $globalGroup = [
+        get_lang('QualifyPortfolioItems') => [
+            $form->createElement('radio', 'qualify_portfolio_item', null, get_lang('Yes'), 1),
+            $form->createElement('radio', 'qualify_portfolio_item', null, get_lang('No'), 2),
+        ],
+        get_lang('QualifyPortfolioComments') => [
+            $form->createElement('radio', 'qualify_portfolio_comment', null, get_lang('Yes'), 1),
+            $form->createElement('radio', 'qualify_portfolio_comment', null, get_lang('No'), 2),
+        ],
+        get_lang('MaxScore') => [
+            $form->createElement('number', 'portfolio_max_score', get_lang('MaxScore'), ['step' => 'any', 'min' => 0]),
+        ],
+        $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true),
+    ];
+
+    $form->addPanelOption(
+        'portfolio',
+        Display::return_icon('wiki_task.png', get_lang('Portfolio')).PHP_EOL.get_lang('Portfolio'),
+        $globalGroup
+    );
+}
+
 // Plugin course settings
 $appPlugin = new AppPlugin();
 $appPlugin->add_course_settings_form($form);

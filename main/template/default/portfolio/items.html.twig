@@ -33,7 +33,7 @@
                         {% endif %}
 
                         <h3>
-                            <a href="{{ item_url }}">{{ item.title }}</a>
+                            <a href="{{ item_url }}">{{ item.title|remove_xss }}</a>
                         </h3>
 
                         <ul class="fa-ul list-inline">

@@ -126,6 +126,10 @@
                                     {% endif %}
                                     <th>{{ "AuthoringOptions"|get_lang }}</th>
                                 {% else %}
+                                    {% if allow_dates_for_student %}
+                                        <th>{{ "PublicationDate"|get_lang }}</th>
+                                        <th>{{ "ExpirationDate"|get_lang }}</th>
+                                    {% endif %}
                                     {% if not is_invitee %}
                                         <th>{{ "Progress"|get_lang }}</th>
                                     {% endif %}
@@ -167,6 +171,16 @@
                                             </td>
                                         {% endif %}
                                     {% else %}
+                                        {% if allow_dates_for_student %}
+                                            <td>
+                                                {% if row.start_time %}
+                                                    <span class="small">{{ row.start_time }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="small">{{ row.end_time }}</span>
+                                            </td>
+                                        {% endif %}
                                         {% if not is_invitee %}
                                             <td>
                                                 {{ row.dsp_progress }}
@@ -226,13 +240,16 @@
                                             {% endif %}
                                             <th>{{ "AuthoringOptions"|get_lang }}</th>
                                         {% else %}
+                                            {% if allow_dates_for_student %}
+                                                <th>{{ "PublicationDate"|get_lang }}</th>
+                                                <th>{{ "ExpirationDate"|get_lang }}</th>
+                                            {% endif %}
                                             {% if not is_invitee %}
                                                 <th>{{ "Progress"|get_lang }}</th>
                                             {% endif %}
                                             {% if allow_min_time %}
                                                 <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
                                             {% endif %}
-
                                             <th>{{ "Actions"|get_lang }}</th>
                                         {% endif %}
                                     </tr>
@@ -268,6 +285,16 @@
                                                     </td>
                                                 {% endif %}
                                             {% else %}
+                                                {% if allow_dates_for_student %}
+                                                    <td>
+                                                        {% if row.start_time %}
+                                                            <span class="small">{{ row.start_time }}</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <span class="small">{{ row.end_time }}</span>
+                                                    </td>
+                                                {% endif %}
                                                 {% if not is_invitee %}
                                                     <td>
                                                         {{ row.dsp_progress }}
@@ -281,7 +308,6 @@
                                                     </td>
                                                 {% endif %}
                                             {% endif %}
-
                                             <td>
                                                 {{ row.action_build }}
                                                 {{ row.action_edit }}
@@ -325,6 +351,16 @@
                                             <div class="col-md-3">
                                                 {{ row.dsp_progress }}
                                             </div>
+
+                                            {% if allow_dates_for_student %}
+                                                <div class="col-md-2">
+                                                    {% if row.start_time %}
+                                                        <span class="small">{{ row.start_time }}</span>
+                                                    {% endif %}
+                                                    <span class="small">{{ row.end_time }}</span>
+                                                </div>
+                                            {% endif %}
+
                                             {% if allow_min_time %}
                                                 <div class="col-md-2">
                                                     {% if row.info_time_prerequisite %}
@@ -457,6 +493,10 @@
                                                         {% endif %}
                                                         <th>{{ "AuthoringOptions"|get_lang }}</th>
                                                     {% else %}
+                                                        {% if allow_dates_for_student %}
+                                                            <th>{{ "PublicationDate"|get_lang }}</th>
+                                                            <th>{{ "ExpirationDate"|get_lang }}</th>
+                                                        {% endif %}
                                                         {% if not is_invitee %}
                                                             <th>{{ "Progress"|get_lang }}</th>
                                                         {% endif %}
@@ -499,6 +539,16 @@
                                                                 </td>
                                                             {% endif %}
                                                         {% else %}
+                                                            {% if allow_dates_for_student %}
+                                                                <td>
+                                                                    {% if row.start_time %}
+                                                                        <span class="small">{{ row.start_time }}</span>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="small">{{ row.end_time }}</span>
+                                                                </td>
+                                                            {% endif %}
                                                             {% if not is_invitee %}
                                                                 <td>
                                                                     {{ row.dsp_progress }}
@@ -552,6 +602,16 @@
                                                     <div class="col-md-3">
                                                         {{ row.dsp_progress }}
                                                     </div>
+
+                                                    {% if allow_dates_for_student %}
+                                                        <div class="col-md-2">
+                                                            {% if row.start_time %}
+                                                                <span class="small">{{ row.start_time }}</span>
+                                                            {% endif %}
+                                                            <span class="small">{{ row.end_time }}</span>
+                                                        </div>
+                                                    {% endif %}
+
                                                     {% if allow_min_time %}
                                                         <div class="col-md-2">
                                                             {% if row.info_time_prerequisite %}

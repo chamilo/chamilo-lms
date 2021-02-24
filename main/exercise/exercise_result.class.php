@@ -60,6 +60,12 @@ class ExerciseResult
         $session_id_and = ' AND te.session_id = '.$sessionId.' ';
         $exercise_id = (int) $exercise_id;
 
+        if (empty($sessionId) &&
+            api_get_configuration_value('show_exercise_session_attempts_in_base_course')
+        ) {
+            $session_id_and = '';
+        }
+
         if (!empty($exercise_id)) {
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
         }

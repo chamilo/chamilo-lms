@@ -6,9 +6,12 @@ use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Portfolio;
+use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
@@ -32,10 +35,6 @@ class PortfolioController
      * @var \Chamilo\UserBundle\Entity\User
      */
     private $owner;
-    /**
-     * @var int
-     */
-    private $currentUserId;
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -116,6 +115,11 @@ class PortfolioController
         $this->renderView($content, get_lang('AddCategory'), $actions);
     }
 
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
     public function editCategory(PortfolioCategory $category)
     {
         global $interbreadcrumb;
@@ -181,9 +185,13 @@ class PortfolioController
 
         $content = $form->returnForm();
 
-        return $this->renderView($content, get_lang('EditCategory'), $actions);
+        $this->renderView($content, get_lang('EditCategory'), $actions);
     }
 
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function showHideCategory(PortfolioCategory $category)
     {
         if (!$this->categoryBelongToOwner($category)) {
@@ -203,6 +211,10 @@ class PortfolioController
         exit;
     }
 
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function deleteCategory(PortfolioCategory $category)
     {
         if (!$this->categoryBelongToOwner($category)) {
@@ -224,6 +236,7 @@ class PortfolioController
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Exception
      */
     public function addItem()
     {
@@ -254,6 +267,8 @@ class PortfolioController
         $extraField = new ExtraField('portfolio');
         $extra = $extraField->addElements($form);
 
+        $this->addAttachmentsFieldToForm($form);
+
         $form->addButtonCreate(get_lang('Create'));
 
         if ($form->validate()) {
@@ -283,6 +298,17 @@ class PortfolioController
 
             $extraFieldValue = new ExtraFieldValue('portfolio');
             $extraFieldValue->saveFieldValues($values);
+
+            $this->processAttachments(
+                $form,
+                $portfolio->getUser(),
+                $portfolio->getId(),
+                PortfolioAttachment::TYPE_ITEM
+            );
+
+            $hook = HookPortfolioItemAdded::create();
+            $hook->setEventData(['portfolio' => $portfolio]);
+            $hook->notifyItemAdded();
 
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioItemAdded'), 'success')
@@ -316,6 +342,7 @@ class PortfolioController
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Exception
      */
     public function editItem(Portfolio $item)
     {
@@ -344,14 +371,18 @@ class PortfolioController
 
                 $form->addLabel(
                     sprintf(get_lang('PortfolioItemFromXUser'), $origin->getUser()->getCompleteName()),
-                    Display::panel($origin->getContent())
+                    Display::panel(
+                        Security::remove_XSS($origin->getContent())
+                    )
                 );
             } elseif (Portfolio::TYPE_COMMENT === $item->getOriginType()) {
                 $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
 
                 $form->addLabel(
                     sprintf(get_lang('PortfolioCommentFromXUser'), $origin->getAuthor()->getCompleteName()),
-                    Display::panel($origin->getContent())
+                    Display::panel(
+                        Security::remove_XSS($origin->getContent())
+                    )
                 );
             }
         }
@@ -469,6 +500,9 @@ class PortfolioController
         exit;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function index(HttpRequest $httpRequest)
     {
         $listByUser = false;
@@ -541,6 +575,7 @@ class PortfolioController
     /**
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function view(Portfolio $item)
     {
@@ -580,9 +615,8 @@ class PortfolioController
                     );
 
                     return '<li class="media" id="comment-'.$node['id'].'">
-                        <div class="media-left">
-                            <img class="media-object thumbnail" src="'.$userPicture.'" alt="'.$author->getCompleteName().'">
-                        </div>
+                        <div class="media-left"><img class="media-object thumbnail" src="'.$userPicture.'" alt="'
+                        .$author->getCompleteName().'"></div>
                         <div class="media-body">';
                 },
                 'childClose' => '</div></li>',
@@ -590,7 +624,7 @@ class PortfolioController
                     /** @var PortfolioComment $comment */
                     $comment = $commentsRepo->find($node['id']);
 
-                    $commentActions = Display::url(
+                    $commentActions[] = Display::url(
                         Display::return_icon('discuss.png', get_lang('ReplyToThisComment')),
                         '#',
                         [
@@ -601,8 +635,7 @@ class PortfolioController
                             'class' => 'btn-reply-to',
                         ]
                     );
-                    $commentActions .= PHP_EOL;
-                    $commentActions .= Display::url(
+                    $commentActions[] = Display::url(
                         Display::return_icon('copy.png', get_lang('CopyToMyPortfolio')),
                         $this->baseUrl.http_build_query(
                             [
@@ -616,7 +649,7 @@ class PortfolioController
                     $isAllowedToEdit = api_is_allowed_to_edit();
 
                     if ($isAllowedToEdit) {
-                        $commentActions .= Display::url(
+                        $commentActions[] = Display::url(
                             Display::return_icon('copy.png', get_lang('CopyToStudentPortfolio')),
                             $this->baseUrl.http_build_query(
                                 [
@@ -628,7 +661,7 @@ class PortfolioController
                         );
 
                         if ($comment->isImportant()) {
-                            $commentActions .= Display::url(
+                            $commentActions[] = Display::url(
                                 Display::return_icon('drawing-pin.png', get_lang('UnmarkCommentAsImportant')),
                                 $this->baseUrl.http_build_query(
                                     [
@@ -639,7 +672,7 @@ class PortfolioController
                                 )
                             );
                         } else {
-                            $commentActions .= Display::url(
+                            $commentActions[] = Display::url(
                                 Display::return_icon('drawing-pin.png', get_lang('MarkCommentAsImportant')),
                                 $this->baseUrl.http_build_query(
                                     [
@@ -650,43 +683,51 @@ class PortfolioController
                                 )
                             );
                         }
+
+                        if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
+                            $commentActions[] = Display::url(
+                                Display::return_icon('quiz.png', get_lang('QualifyThisPortfolioComment')),
+                                $this->baseUrl.http_build_query(
+                                    [
+                                        'action' => 'qualify',
+                                        'comment' => $comment->getId(),
+                                    ]
+                                )
+                            );
+                        }
                     }
 
                     $nodeHtml = '<p class="media-heading h4">'.PHP_EOL
-                        .$comment->getAuthor()->getCompleteName().'</>'.PHP_EOL.'<small>'.$clockIcon.PHP_EOL
+                        .$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'.$clockIcon.PHP_EOL
                         .Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'.PHP_EOL;
 
-                    if ($comment->isImportant() &&
-                        ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
+                    if ($comment->isImportant()
+                        && ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
                     ) {
-                        $nodeHtml .= '<span class="label label-warning origin-style">'.get_lang('CommentMarkedAsImportant')
+                        $nodeHtml .= '<span class="label label-warning origin-style">'
+                            .get_lang('CommentMarkedAsImportant')
                             .'</span>'.PHP_EOL;
                     }
 
                     $nodeHtml .= '</p>'.PHP_EOL
-                        .'<div class="pull-right">'.$commentActions.'</div>'.$comment->getContent().PHP_EOL;
+                        .'<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'
+                        .Security::remove_XSS($comment->getContent())
+                        .PHP_EOL;
+
+                    $nodeHtml .= $this->generateAttachmentList($comment);
 
                     return $nodeHtml;
                 },
             ]
         );
 
-        $origin = null;
-
-        if ($item->getOrigin() !== null) {
-            if ($item->getOriginType() === Portfolio::TYPE_ITEM) {
-                $origin = $this->em->find(Portfolio::class, $item->getOrigin());
-            } elseif ($item->getOriginType() === Portfolio::TYPE_COMMENT) {
-                $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
-            }
-        }
-
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('baseurl', $this->baseUrl);
         $template->assign('item', $item);
-        $template->assign('origin', $origin);
+        $template->assign('item_content', $this->generateItemContent($item));
         $template->assign('comments', $commentsHtml);
         $template->assign('form', $form);
+        $template->assign('attachment_list', $this->generateAttachmentList($item));
 
         $layout = $template->get_template('portfolio/view.html.twig');
         $content = $template->fetch($layout);
@@ -699,7 +740,7 @@ class PortfolioController
             $this->baseUrl
         );
 
-        $this->renderView($content, $item->getTitle(), $actions, false);
+        $this->renderView($content, Security::remove_XSS($item->getTitle()), $actions, false);
     }
 
     /**
@@ -770,6 +811,11 @@ class PortfolioController
         exit;
     }
 
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
     public function teacherCopyItem(Portfolio $originItem)
     {
         $actionParams = http_build_query(['action' => 'teacher_copy', 'copy' => 'item', 'id' => $originItem->getId()]);
@@ -785,7 +831,9 @@ class PortfolioController
 
         $form->addLabel(
             sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName()),
-            Display::panel($originItem->getContent())
+            Display::panel(
+                Security::remove_XSS($originItem->getContent())
+            )
         );
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
 
@@ -848,9 +896,20 @@ class PortfolioController
         $this->renderView($content, $toolName);
     }
 
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
     public function teacherCopyComment(PortfolioComment $originComment)
     {
-        $actionParams = http_build_query(['action' => 'teacher_copy', 'copy' => 'comment', 'id' => $originComment->getId()]);
+        $actionParams = http_build_query(
+            [
+                'action' => 'teacher_copy',
+                'copy' => 'comment',
+                'id' => $originComment->getId(),
+            ]
+        );
 
         $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
 
@@ -863,7 +922,9 @@ class PortfolioController
 
         $form->addLabel(
             sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName()),
-            Display::panel($originComment->getContent())
+            Display::panel(
+                Security::remove_XSS($originComment->getContent())
+            )
         );
         $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
 
@@ -951,23 +1012,42 @@ class PortfolioController
         exit;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function details(HttpRequest $httpRequest)
     {
+        $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
+
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl
         );
+        $actions[] = Display::url(
+            Display::return_icon('pdf.png', get_lang('ExportMyPortfolioDataPdf'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'export_pdf'])
+        );
+        $actions[] = Display::url(
+            Display::return_icon('save_pack.png', get_lang('ExportMyPortfolioDataPdf'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'export_zip'])
+        );
 
         $frmStudent = null;
 
-        if ($this->course && api_is_allowed_to_edit()) {
+        if ($isAllowedToFilterStudent) {
             if ($httpRequest->query->has('user')) {
                 $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
 
                 if (empty($this->owner)) {
                     api_not_allowed(true);
                 }
+
+                $actions[0] = Display::url(
+                    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.'action=details'
+                );
+                unset($actions[1], $actions[2]);
             }
 
             $frmStudent = new FormValidator('frm_student_list', 'get');
@@ -1055,8 +1135,10 @@ class PortfolioController
             } elseif (3 == $columnNo) {
                 $qb->orderBy('category.title', $orderDirection);
             } elseif (5 == $columnNo) {
-                $qb->orderBy('course.title', $orderDirection);
+                $qb->orderBy('item.score', $orderDirection);
             } elseif (6 == $columnNo) {
+                $qb->orderBy('course.title', $orderDirection);
+            } elseif (7 == $columnNo) {
                 $qb->orderBy('session.name', $orderDirection);
             }
 
@@ -1072,6 +1154,7 @@ class PortfolioController
                     $row[] = $item->getUpdateDate();
                     $row[] = $category ? $item->getCategory()->getTitle() : null;
                     $row[] = $item->getComments()->count();
+                    $row[] = $item->getScore();
 
                     if (!$this->course) {
                         $row[] = $item->getCourse();
@@ -1086,7 +1169,7 @@ class PortfolioController
 
         $portfolioItemColumnFilter = function (Portfolio $item) {
             return Display::url(
-                $item->getTitle(),
+                Security::remove_XSS($item->getTitle()),
                 $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
             );
         };
@@ -1094,7 +1177,7 @@ class PortfolioController
             return api_convert_and_format_date($date);
         };
 
-        $tblItems = new SortableTable('tbl_items', $getItemsTotalNumber, $getItemsData, 0);
+        $tblItems = new SortableTable('tbl_items', $getItemsTotalNumber, $getItemsData, 1, 20, 'DESC');
         $tblItems->set_additional_parameters(['action' => 'details', 'user' => $this->owner->getId()]);
         $tblItems->set_header(0, get_lang('Title'));
         $tblItems->set_column_filter(0, $portfolioItemColumnFilter);
@@ -1104,10 +1187,11 @@ class PortfolioController
         $tblItems->set_column_filter(2, $convertFormatDateColumnFilter);
         $tblItems->set_header(3, get_lang('Category'));
         $tblItems->set_header(4, get_lang('Comments'), false, [], ['class' => 'text-right']);
+        $tblItems->set_header(5, get_lang('Score'), true, [], ['class' => 'text-right']);
 
         if (!$this->course) {
-            $tblItems->set_header(5, get_lang('Course'));
-            $tblItems->set_header(6, get_lang('Session'));
+            $tblItems->set_header(6, get_lang('Course'));
+            $tblItems->set_header(7, get_lang('Session'));
         }
 
         $getCommentsTotalNumber = function () use ($commentsRepo) {
@@ -1162,6 +1246,8 @@ class PortfolioController
                 $qb->orderBy('comment.date', $orderDirection);
             } elseif (2 == $columnNo) {
                 $qb->orderBy('item.title', $orderDirection);
+            } elseif (3 == $columnNo) {
+                $qb->orderBy('comment.score', $orderDirection);
             }
 
             $qb->setFirstResult($from)->setMaxResults($limit);
@@ -1172,26 +1258,31 @@ class PortfolioController
                         $comment,
                         $comment->getDate(),
                         $comment->getItem(),
+                        $comment->getScore(),
                     ];
                 },
                 $qb->getQuery()->getResult()
             );
         };
 
-        $tblComments = new SortableTable('tbl_comments', $getCommentsTotalNumber, $getCommentsData, 0);
+        $tblComments = new SortableTable('tbl_comments', $getCommentsTotalNumber, $getCommentsData, 1, 20, 'DESC');
         $tblComments->set_additional_parameters(['action' => 'details', 'user' => $this->owner->getId()]);
         $tblComments->set_header(0, get_lang('Resume'));
-        $tblComments->set_column_filter(0, function (PortfolioComment $comment) {
-            return Display::url(
-                $comment->getContent(),
-                $this->baseUrl.http_build_query(['action' => 'view', 'id' => $comment->getItem()->getId()])
-                .'#comment-'.$comment->getId()
-            );
-        });
+        $tblComments->set_column_filter(
+            0,
+            function (PortfolioComment $comment) {
+                return Display::url(
+                    $comment->getExcerpt(),
+                    $this->baseUrl.http_build_query(['action' => 'view', 'id' => $comment->getItem()->getId()])
+                    .'#comment-'.$comment->getId()
+                );
+            }
+        );
         $tblComments->set_header(1, get_lang('Date'), true, [], ['class' => 'text-center']);
         $tblComments->set_column_filter(1, $convertFormatDateColumnFilter);
         $tblComments->set_header(2, get_lang('PortfolioItemTitle'));
         $tblComments->set_column_filter(2, $portfolioItemColumnFilter);
+        $tblComments->set_header(3, get_lang('Score'), true, [], ['class' => 'text-right']);
 
         $content = '';
 
@@ -1199,12 +1290,674 @@ class PortfolioController
             $content .= $frmStudent->returnForm();
         }
 
-        $content .= Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL
-            .$tblItems->return_table().PHP_EOL
-            .Display::page_subheader2(get_lang('Comments')).PHP_EOL
-            .$tblComments->return_table().PHP_EOL;
+        $content .= Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL;
+
+        if ($tblItems->get_total_number_of_items() > 0) {
+            $content .= $tblItems->return_table().PHP_EOL;
+        } else {
+            $content .= Display::return_message(get_lang('NoItemsInYourPortfolio'), 'warning');
+        }
+
+        $content .= Display::page_subheader2(get_lang('PortfolioCommentsMade')).PHP_EOL;
+
+        if ($tblComments->get_total_number_of_items() > 0) {
+            $content .= $tblComments->return_table().PHP_EOL;
+        } else {
+            $content .= Display::return_message(get_lang('YouHaveNotCommented'), 'warning');
+        }
 
         $this->renderView($content, get_lang('PortfolioDetails'), $actions);
+    }
+
+    /**
+     * @throws \MpdfException
+     */
+    public function exportPdf()
+    {
+        $pdfContent = Display::page_header($this->owner->getCompleteName());
+
+        if ($this->course) {
+            $pdfContent .= '<p>'.get_lang('Course').': ';
+
+            if ($this->session) {
+                $pdfContent .= $this->session->getName().' ('.$this->course->getTitle().')';
+            } else {
+                $pdfContent .= $this->course->getTitle();
+            }
+
+            $pdfContent .= '</p>';
+        }
+
+        $items = $this->em
+            ->getRepository(Portfolio::class)
+            ->findItemsByUser($this->owner, $this->course, $this->session);
+        $comments = $this->em
+            ->getRepository(PortfolioComment::class)
+            ->findCommentsByUser($this->owner, $this->course, $this->session);
+
+        $itemsHtml = $this->getItemsInHtmlFormatted($items);
+        $commentsHtml = $this->getCommentsInHtmlFormatted($comments);
+
+        $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
+
+        if (count($itemsHtml) > 0) {
+            $pdfContent .= implode(PHP_EOL, $itemsHtml);
+        } else {
+            $pdfContent .= Display::return_message(get_lang('NoItemsInYourPortfolio'), 'warning');
+        }
+
+        $pdfContent .= Display::page_subheader2(get_lang('PortfolioCommentsMade'));
+
+        if (count($commentsHtml) > 0) {
+            $pdfContent .= implode(PHP_EOL, $commentsHtml);
+        } else {
+            $pdfContent .= Display::return_message(get_lang('YouHaveNotCommented'), 'warning');
+        }
+
+        $pdfName = $this->owner->getCompleteName()
+            .($this->course ? '_'.$this->course->getCode() : '')
+            .'_'.get_lang('Portfolio');
+
+        $pdf = new PDF();
+        $pdf->content_to_pdf(
+            $pdfContent,
+            null,
+            $pdfName,
+            $this->course ? $this->course->getCode() : null,
+            'D',
+            false,
+            null,
+            false,
+            true
+        );
+    }
+
+    public function exportZip()
+    {
+        $itemsRepo = $this->em->getRepository(Portfolio::class);
+        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+        $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
+
+        $items = $itemsRepo->findItemsByUser($this->owner, $this->course, $this->session);
+        $comments = $commentsRepo->findCommentsByUser($this->owner, $this->course, $this->session);
+
+        $itemsHtml = $this->getItemsInHtmlFormatted($items);
+        $commentsHtml = $this->getCommentsInHtmlFormatted($comments);
+
+        $sysArchivePath = api_get_path(SYS_ARCHIVE_PATH);
+        $tempPortfolioDirectory = $sysArchivePath."portfolio/{$this->owner->getId()}";
+
+        $userDirectory = UserManager::getUserPathById($this->owner->getId(), 'system');
+        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
+
+        $filenames = [];
+
+        $fs = new Filesystem();
+
+        /**
+         * @var int       $i
+         * @var Portfolio $item
+         */
+        foreach ($items as $i => $item) {
+            $itemDirectory = $item->getCreationDate()->format('Y-m-d-H-i-s');
+
+            $itemFilename = sprintf('%s/items/%s/item.html', $tempPortfolioDirectory, $itemDirectory);
+            $itemFileContent = $this->fixImagesSourcesToHtml($itemsHtml[$i]);
+
+            $fs->dumpFile($itemFilename, $itemFileContent);
+
+            $filenames[] = $itemFilename;
+
+            $attachments = $attachmentsRepo->findFromItem($item);
+
+            /** @var PortfolioAttachment $attachment */
+            foreach ($attachments as $attachment) {
+                $attachmentFilename = sprintf(
+                    '%s/items/%s/attachments/%s',
+                    $tempPortfolioDirectory,
+                    $itemDirectory,
+                    $attachment->getFilename()
+                );
+
+                $fs->copy(
+                    $attachmentsDirectory.$attachment->getPath(),
+                    $attachmentFilename
+                );
+
+                $filenames[] = $attachmentFilename;
+            }
+        }
+
+        /**
+         * @var int              $i
+         * @var PortfolioComment $comment
+         */
+        foreach ($comments as $i => $comment) {
+            $commentDirectory = $comment->getDate()->format('Y-m-d-H-i-s');
+
+            $commentFileContent = $this->fixImagesSourcesToHtml($commentsHtml[$i]);
+            $commentFilename = sprintf('%s/comments/%s/comment.html', $tempPortfolioDirectory, $commentDirectory);
+
+            $fs->dumpFile($commentFilename, $commentFileContent);
+
+            $filenames[] = $commentFilename;
+
+            $attachments = $attachmentsRepo->findFromComment($comment);
+
+            /** @var PortfolioAttachment $attachment */
+            foreach ($attachments as $attachment) {
+                $attachmentFilename = sprintf(
+                    '%s/comments/%s/attachments/%s',
+                    $tempPortfolioDirectory,
+                    $commentDirectory,
+                    $attachment->getFilename()
+                );
+
+                $fs->copy(
+                    $attachmentsDirectory.$attachment->getPath(),
+                    $attachmentFilename
+                );
+
+                $filenames[] = $attachmentFilename;
+            }
+        }
+
+        $zipName = $this->owner->getCompleteName()
+            .($this->course ? '_'.$this->course->getCode() : '')
+            .'_'.get_lang('Portfolio');
+        $tempZipFile = $sysArchivePath."portfolio/$zipName.zip";
+        $zip = new PclZip($tempZipFile);
+
+        foreach ($filenames as $filename) {
+            $zip->add($filename, PCLZIP_OPT_REMOVE_PATH, $tempPortfolioDirectory);
+        }
+
+        DocumentManager::file_send_for_download($tempZipFile, true, "$zipName.zip");
+
+        $fs->remove($tempPortfolioDirectory);
+        $fs->remove($tempZipFile);
+    }
+
+    public function qualifyItem(Portfolio $item)
+    {
+        global $interbreadcrumb;
+
+        $em = Database::getManager();
+
+        $formAction = $this->baseUrl.http_build_query(['action' => 'qualify', 'item' => $item->getId()]);
+
+        $form = new FormValidator('frm_qualify', 'post', $formAction);
+        $form->addUserAvatar('user', get_lang('Author'));
+        $form->addLabel(get_lang('Title'), $item->getTitle());
+
+        $itemContent = Security::remove_XSS(
+            $this->generateItemContent($item)
+        );
+
+        $form->addLabel(get_lang('Content'), $itemContent);
+        $form->addNumeric(
+            'score',
+            [get_lang('QualifyNumeric'), null, ' / '.api_get_course_setting('portfolio_max_score')]
+        );
+        $form->addButtonSave(get_lang('QualifyThisPortfolioItem'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $item->setScore($values['score']);
+
+            $em->persist($item);
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('PortfolioItemGraded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit();
+        }
+
+        $form->setDefaults(
+            [
+                'user' => $item->getUser(),
+                'score' => (float) $item->getScore(),
+            ]
+        );
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        $interbreadcrumb[] = [
+            'name' => Security::remove_XSS($item->getTitle()),
+            'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
+        ];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
+        );
+
+        $this->renderView($form->returnForm(), get_lang('Qualify'), $actions);
+    }
+
+    public function qualifyComment(PortfolioComment $comment)
+    {
+        global $interbreadcrumb;
+
+        $em = Database::getManager();
+
+        $item = $comment->getItem();
+        $commentPath = $em->getRepository(PortfolioComment::class)->getPath($comment);
+
+        $template = new Template('', false, false, false, true, false, false);
+        $template->assign('item', $item);
+        $template->assign('comments_path', $commentPath);
+        $commentContext = $template->fetch(
+            $template->get_template('portfolio/comment_context.html.twig')
+        );
+
+        $formAction = $this->baseUrl.http_build_query(['action' => 'qualify', 'comment' => $comment->getId()]);
+
+        $form = new FormValidator('frm_qualify', 'post', $formAction);
+        $form->addHtml($commentContext);
+        $form->addUserAvatar('user', get_lang('Author'));
+        $form->addLabel(get_lang('Comment'), $comment->getContent());
+        $form->addNumeric(
+            'score',
+            [get_lang('QualifyNumeric'), null, '/ '.api_get_course_setting('portfolio_max_score')]
+        );
+        $form->addButtonSave(get_lang('QualifyThisPortfolioComment'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $comment->setScore($values['score']);
+
+            $em->persist($comment);
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('PortfolioCommentGraded'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit();
+        }
+
+        $form->setDefaults(
+            [
+                'user' => $comment->getAuthor(),
+                'score' => (float) $comment->getScore(),
+            ]
+        );
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        $interbreadcrumb[] = [
+            'name' => Security::remove_XSS($item->getTitle()),
+            'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
+        ];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
+        );
+
+        $this->renderView($form->returnForm(), get_lang('Qualify'), $actions);
+    }
+
+    public function downloadAttachment(HttpRequest $httpRequest)
+    {
+        $path = $httpRequest->query->get('file');
+
+        if (empty($path)) {
+            api_not_allowed(true);
+        }
+
+        $em = Database::getManager();
+        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
+
+        $attachment = $attachmentRepo->findOneByPath($path);
+
+        if (empty($attachment)) {
+            api_not_allowed(true);
+        }
+
+        $originOwnerId = 0;
+
+        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+            $item = $em->find(Portfolio::class, $attachment->getOrigin());
+
+            $originOwnerId = $item->getUser()->getId();
+        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
+
+            $originOwnerId = $comment->getAuthor()->getId();
+        } else {
+            api_not_allowed(true);
+        }
+
+        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
+        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
+        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
+
+        if (!Security::check_abs_path($attachmentFilename, $attachmentsDirectory)) {
+            api_not_allowed(true);
+        }
+
+        $downloaded = DocumentManager::file_send_for_download(
+            $attachmentFilename,
+            true,
+            $attachment->getFilename()
+        );
+
+        if (!$downloaded) {
+            api_not_allowed(true);
+        }
+    }
+
+    public function deleteAttachment(HttpRequest $httpRequest)
+    {
+        $currentUserId = api_get_user_id();
+
+        $path = $httpRequest->query->get('file');
+
+        if (empty($path)) {
+            api_not_allowed(true);
+        }
+
+        $em = Database::getManager();
+        $fs = new Filesystem();
+
+        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
+        $attachment = $attachmentRepo->findOneByPath($path);
+
+        if (empty($attachment)) {
+            api_not_allowed(true);
+        }
+
+        $originOwnerId = 0;
+        $itemId = 0;
+
+        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+            $item = $em->find(Portfolio::class, $attachment->getOrigin());
+            $originOwnerId = $item->getUser()->getId();
+            $itemId = $item->getId();
+        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
+            $originOwnerId = $comment->getAuthor()->getId();
+            $itemId = $comment->getItem()->getId();
+        }
+
+        if ($currentUserId !== $originOwnerId) {
+            api_not_allowed(true);
+        }
+
+        $em->remove($attachment);
+        $em->flush();
+
+        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
+        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
+        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
+
+        $fs->remove($attachmentFilename);
+
+        Display::addFlash(
+            Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'success')
+        );
+
+        header('Location: '.$this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]));
+        exit;
+    }
+
+    /**
+     * @param bool $showHeader
+     */
+    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
+    {
+        global $this_section;
+
+        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
+
+        $view = new Template($toolName);
+
+        if ($showHeader) {
+            $view->assign('header', $toolName);
+        }
+
+        $actionsStr = '';
+
+        if ($this->course) {
+            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
+        }
+
+        if ($actions) {
+            $actions = implode(PHP_EOL, $actions);
+
+            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
+        }
+
+        $view->assign('baseurl', $this->baseUrl);
+        $view->assign('actions', $actionsStr);
+
+        $view->assign('content', $content);
+        $view->display_one_col_template();
+    }
+
+    private function categoryBelongToOwner(PortfolioCategory $category): bool
+    {
+        if ($category->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function addAttachmentsFieldToForm(FormValidator $form)
+    {
+        $form->addButton('add_attachment', get_lang('AddAttachment'), 'plus');
+        $form->addHtml('<div id="container-attachments" style="display: none;">');
+        $form->addFile('attachment_file[]', get_lang('FilesAttachment'));
+        $form->addText('attachment_comment[]', get_lang('Description'), false);
+        $form->addHtml('</div>');
+
+        $script = "$(function () {
+            var attachmentsTemplate = $('#container-attachments').html();
+            var \$btnAdd = $('[name=\"add_attachment\"]');
+            var \$reference = \$btnAdd.parents('.form-group');
+
+            \$btnAdd.on('click', function (e) {
+                e.preventDefault();
+
+                $(attachmentsTemplate).insertBefore(\$reference);
+            });
+        })";
+
+        $form->addHtml("<script>$script</script>");
+    }
+
+    private function processAttachments(
+        FormValidator $form,
+        User $user,
+        int $originId,
+        int $originType
+    ) {
+        $em = Database::getManager();
+        $fs = new Filesystem();
+
+        $comments = $form->getSubmitValue('attachment_comment');
+
+        foreach ($_FILES['attachment_file']['error'] as $i => $attachmentFileError) {
+            if ($attachmentFileError != UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            $_file = [
+                'name' => $_FILES['attachment_file']['name'][$i],
+                'type' => $_FILES['attachment_file']['type'][$i],
+                'tmp_name' => $_FILES['attachment_file']['tmp_name'][$i],
+                'size' => $_FILES['attachment_file']['size'][$i],
+            ];
+
+            if (empty($_file['type'])) {
+                $_file['type'] = DocumentManager::file_get_mime_type($_file['name']);
+            }
+
+            $newFileName = add_ext_on_mime(stripslashes($_file['name']), $_file['type']);
+
+            if (!filter_extension($newFileName)) {
+                Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+                continue;
+            }
+
+            $newFileName = uniqid();
+            $attachmentsDirectory = UserManager::getUserPathById($user->getId(), 'system').'portfolio_attachments/';
+
+            if (!$fs->exists($attachmentsDirectory)) {
+                $fs->mkdir($attachmentsDirectory, api_get_permissions_for_new_directories());
+            }
+
+            $attachmentFilename = $attachmentsDirectory.$newFileName;
+
+            if (is_uploaded_file($_file['tmp_name'])) {
+                $moved = move_uploaded_file($_file['tmp_name'], $attachmentFilename);
+
+                if (!$moved) {
+                    Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFile'), 'error'));
+                    continue;
+                }
+            }
+
+            $attachment = new PortfolioAttachment();
+            $attachment
+                ->setFilename($_file['name'])
+                ->setComment($comments[$i])
+                ->setPath($newFileName)
+                ->setOrigin($originId)
+                ->setOriginType($originType)
+                ->setSize($_file['size']);
+
+            $em->persist($attachment);
+            $em->flush();
+        }
+    }
+
+    private function itemBelongToOwner(Portfolio $item): bool
+    {
+        if ($item->getUser()->getId() != $this->owner->getId()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function createFormTagFilter(): FormValidator
+    {
+        $extraField = new ExtraField('portfolio');
+        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
+
+        $chbxTagOptions = array_map(
+            function (array $tagOption) {
+                return $tagOption['tag'];
+            },
+            $tagFieldInfo['options'] ?? []
+        );
+
+        $frmTagList = new FormValidator(
+            'frm_tag_list',
+            'get',
+            $this->baseUrl,
+            '',
+            [],
+            FormValidator::LAYOUT_BOX
+        );
+
+        if (!empty($chbxTagOptions)) {
+            $frmTagList->addCheckBoxGroup('tags', $tagFieldInfo['display_text'], $chbxTagOptions);
+        }
+
+        $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');
+        $frmTagList->applyFilter('text', 'trim');
+        $frmTagList->addHtml('<br>');
+        $frmTagList->addButtonFilter(get_lang('Filter'));
+
+        if ($this->course) {
+            $frmTagList->addHidden('cidReq', $this->course->getCode());
+            $frmTagList->addHidden('id_session', $this->session ? $this->session->getId() : 0);
+            $frmTagList->addHidden('gidReq', 0);
+            $frmTagList->addHidden('gradebook', 0);
+            $frmTagList->addHidden('origin', '');
+        }
+
+        return $frmTagList;
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @return \FormValidator
+     */
+    private function createFormStudentFilter(bool $listByUser = false): FormValidator
+    {
+        $frmStudentList = new FormValidator(
+            'frm_student_list',
+            'get',
+            $this->baseUrl,
+            '',
+            [],
+            FormValidator::LAYOUT_BOX
+        );
+        $slctStudentOptions = [];
+
+        if ($listByUser) {
+            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
+        }
+
+        $urlParams = http_build_query(
+            [
+                'a' => 'search_user_by_course',
+                'course_id' => $this->course->getId(),
+                'session_id' => $this->session ? $this->session->getId() : 0,
+            ]
+        );
+
+        $frmStudentList->addSelectAjax(
+            'user',
+            get_lang('SelectLearnerPortfolio'),
+            $slctStudentOptions,
+            [
+                'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
+                'placeholder' => get_lang('SearchStudent'),
+            ]
+        );
+        $frmStudentList->addHtml('<hr>');
+        $frmStudentList->addHtml(
+            Display::url(
+                get_lang('SeeMyPortfolio'),
+                $this->baseUrl.http_build_query(['user' => api_get_user_id()])
+            )
+        );
+
+        return $frmStudentList;
+    }
+
+    private function getCategoriesForIndex(int $currentUserId): array
+    {
+        $categoriesCriteria = [];
+        $categoriesCriteria['user'] = $this->owner;
+
+        if ($currentUserId !== $this->owner->getId()) {
+            $categoriesCriteria['isVisible'] = true;
+        }
+
+        return $this->em
+            ->getRepository(PortfolioCategory::class)
+            ->findBy($categoriesCriteria);
     }
 
     private function getItemsForIndex(
@@ -1265,6 +2018,8 @@ class PortfolioController
                 }
             }
 
+            $queryBuilder->orderBy('pi.creationDate', 'DESC');
+
             $items = $queryBuilder->getQuery()->getResult();
         } else {
             $itemsCriteria = [];
@@ -1283,75 +2038,10 @@ class PortfolioController
         return $items;
     }
 
-    private function getCategoriesForIndex(int $currentUserId): array
-    {
-        $categoriesCriteria = [];
-        $categoriesCriteria['user'] = $this->owner;
-
-        if ($currentUserId !== $this->owner->getId()) {
-            $categoriesCriteria['isVisible'] = true;
-        }
-
-        return $this->em
-            ->getRepository(PortfolioCategory::class)
-            ->findBy($categoriesCriteria);
-    }
-
-    /**
-     * @param bool $showHeader
-     */
-    private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)
-    {
-        global $this_section;
-
-        $this_section = $this->course ? SECTION_COURSES : SECTION_SOCIAL;
-
-        $view = new Template($toolName);
-
-        if ($showHeader) {
-            $view->assign('header', $toolName);
-        }
-
-        $actionsStr = '';
-
-        if ($this->course) {
-            $actionsStr .= Display::return_introduction_section(TOOL_PORTFOLIO);
-        }
-
-        if ($actions) {
-            $actions = implode(PHP_EOL, $actions);
-
-            $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
-        }
-
-        $view->assign('baseurl', $this->baseUrl);
-        $view->assign('actions', $actionsStr);
-
-        $view->assign('content', $content);
-        $view->display_one_col_template();
-    }
-
-    private function categoryBelongToOwner(PortfolioCategory $category): bool
-    {
-        if ($category->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function itemBelongToOwner(Portfolio $item): bool
-    {
-        if ($item->getUser()->getId() != $this->owner->getId()) {
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function createCommentForm(Portfolio $item): string
     {
@@ -1362,6 +2052,9 @@ class PortfolioController
         $form->addHidden('item', $item->getId());
         $form->addHidden('parent', 0);
         $form->applyFilter('content', 'trim');
+
+        $this->addAttachmentsFieldToForm($form);
+
         $form->addButtonSave(get_lang('Save'));
 
         if ($form->validate()) {
@@ -1380,6 +2073,17 @@ class PortfolioController
             $this->em->persist($comment);
             $this->em->flush();
 
+            $this->processAttachments(
+                $form,
+                $comment->getAuthor(),
+                $comment->getId(),
+                PortfolioAttachment::TYPE_COMMENT
+            );
+
+            $hook = HookPortfolioItemCommented::create();
+            $hook->setEventData(['comment' => $comment]);
+            $hook->notifyItemCommented();
+
             Display::addFlash(
                 Display::return_message(get_lang('CommentAdded'), 'success')
             );
@@ -1391,83 +2095,214 @@ class PortfolioController
         return $form->returnForm();
     }
 
-    private function createFormStudentFilter(bool $listByUser = false): FormValidator
+    private function generateAttachmentList($post): string
     {
-        $frmStudentList = new FormValidator(
-            'frm_student_list',
-            'get',
-            $this->baseUrl,
-            '',
-            [],
-            FormValidator::LAYOUT_BOX
-        );
-        $slctStudentOptions = [];
+        $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
 
-        if ($listByUser) {
-            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
+        $postOwnerId = 0;
+
+        if ($post instanceof Portfolio) {
+            $attachments = $attachmentsRepo->findFromItem($post);
+
+            $postOwnerId = $post->getUser()->getId();
+        } elseif ($post instanceof PortfolioComment) {
+            $attachments = $attachmentsRepo->findFromComment($post);
+
+            $postOwnerId = $post->getAuthor()->getId();
         }
 
-        $urlParams = http_build_query(
-            [
-                'a' => 'search_user_by_course',
-                'course_id' => $this->course->getId(),
-                'session_id' => $this->session ? $this->session->getId() : 0,
-            ]
+        if (empty($attachments)) {
+            return '';
+        }
+
+        $currentUserId = api_get_user_id();
+
+        $listItems = '';
+
+        $deleteIcon = Display::return_icon(
+            'delete.png',
+            get_lang('DeleteAttachment'),
+            ['style' => 'display: inline-block'],
+            ICON_SIZE_TINY
         );
 
-        $frmStudentList->addSelectAjax(
-            'user',
-            get_lang('SelectLearnerPortfolio'),
-            $slctStudentOptions,
-            [
-                'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
-                'placeholder' => get_lang('SearchStudent'),
-            ]
-        );
-        $frmStudentList->addHtml('<hr>');
-        $frmStudentList->addHtml(
-            Display::url(
-                get_lang('SeeMyPortfolio'),
-                $this->baseUrl.http_build_query(['user' => api_get_user_id()])
-            )
-        );
+        /** @var PortfolioAttachment $attachment */
+        foreach ($attachments as $attachment) {
+            $downloadParams = http_build_query(['action' => 'download_attachment', 'file' => $attachment->getPath()]);
+            $deleteParams = http_build_query(['action' => 'delete_attachment', 'file' => $attachment->getPath()]);
 
-        return $frmStudentList;
+            $listItems .= '<li>'
+                .'<span class="fa-li fa fa-paperclip" aria-hidden="true"></span>'
+                .Display::url(
+                    Security::remove_XSS($attachment->getFilename()),
+                    $this->baseUrl.$downloadParams
+                );
+
+            if ($currentUserId === $postOwnerId) {
+                $listItems .= PHP_EOL.Display::url($deleteIcon, $this->baseUrl.$deleteParams);
+            }
+
+            if ($attachment->getComment()) {
+                $listItems .= PHP_EOL.Display::span(
+                        Security::remove_XSS($attachment->getComment()),
+                        ['class' => 'text-muted']
+                    );
+            }
+
+            $listItems .= '</li>';
+        }
+
+        return '<h5 class="h4">'.get_lang('AttachmentFiles').'</h5>'.'<ul class="fa-ul">'.$listItems.'</ul>';
     }
 
-    private function createFormTagFilter(): FormValidator
+    private function generateItemContent(Portfolio $item): string
     {
-        $extraField = new ExtraField('portfolio');
-        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
+        $originId = $item->getOrigin();
 
-        $chbxTagOptions = array_map(
-            function (array $tagOption) {
-                return $tagOption['tag'];
-            },
-            $tagFieldInfo['options']
-        );
-
-        $frmTagList = new FormValidator('frm_tag_list',
-            'get',
-            $this->baseUrl,
-            '',
-            [],
-            FormValidator::LAYOUT_BOX
-        );
-        $frmTagList->addCheckBoxGroup('tags', $tagFieldInfo['display_text'], $chbxTagOptions);
-        $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');
-        $frmTagList->applyFilter('text', 'trim');
-        $frmTagList->addHtml('<br>');
-        $frmTagList->addButtonFilter(get_lang('Filter'));
-
-        if ($this->course) {
-            $frmTagList->addHidden('cidReq', $this->course->getCode());
-            $frmTagList->addHidden('id_session', $this->session ? $this->session->getId() : 0);
-            $frmTagList->addHidden('gidReq', 0);
-            $frmTagList->addHidden('gradebook', 0);
-            $frmTagList->addHidden('origin', '');
+        if (empty($originId)) {
+            return $item->getContent();
         }
 
-        return $frmTagList;
+        $em = Database::getManager();
+
+        $originContent = '';
+        $originContentFooter = '';
+
+        if (Portfolio::TYPE_ITEM === $item->getOriginType()) {
+            $origin = $em->find(Portfolio::class, $item->getOrigin());
+
+            if ($origin) {
+                $originContent = $origin->getContent();
+                $originContentFooter = vsprintf(
+                    get_lang('OriginallyPublishedAsXTitleByYUser'),
+                    [$origin->getTitle(), $origin->getUser()->getCompleteName()]
+                );
+            }
+        } elseif (Portfolio::TYPE_COMMENT === $item->getOriginType()) {
+            $origin = $em->find(PortfolioComment::class, $item->getOrigin());
+
+            if ($origin) {
+                $originContent = $origin->getContent();
+                $originContentFooter = vsprintf(
+                    get_lang('OriginallyCommentedByXUserInYItem'),
+                    [$origin->getAuthor()->getCompleteName(), $origin->getItem()->getTitle()]
+                );
+            }
+        }
+
+        if ($originContent) {
+            return "<blockquote>$originContent<footer>$originContentFooter</footer></blockquote>"
+                .'<div class="clearfix">'.$item->getContent().'</div>';
+        }
+
+        return $item->getContent();
+    }
+
+    private function getItemsInHtmlFormatted(array $items): array
+    {
+        $itemsHtml = [];
+
+        /** @var Portfolio $item */
+        foreach ($items as $item) {
+            $creationDate = api_convert_and_format_date($item->getCreationDate());
+            $updateDate = api_convert_and_format_date($item->getUpdateDate());
+
+            $metadata = '<ul class="list-unstyled text-muted">';
+
+            if ($item->getSession()) {
+                $metadata .= '<li>'.get_lang('Course').': '.$item->getSession()->getName().' ('
+                    .$item->getCourse()->getTitle().') </li>';
+            } elseif (!$item->getSession() && $item->getCourse()) {
+                $metadata .= '<li>'.get_lang('Course').': '.$item->getCourse()->getTitle().'</li>';
+            }
+
+            $metadata .= '<li>'.sprintf(get_lang('CreationDateXDate'), $creationDate).'</li>';
+            $metadata .= '<li>'.sprintf(get_lang('UpdateDateXDate'), $updateDate).'</li>';
+
+            if ($item->getCategory()) {
+                $metadata .= '<li>'.sprintf(get_lang('CategoryXName'), $item->getCategory()->getTitle()).'</li>';
+            }
+
+            $metadata .= '</ul>';
+
+            $itemContent = Security::remove_XSS(
+                $this->generateItemContent($item)
+            );
+
+            $itemsHtml[] = Display::panel($itemContent, Security::remove_XSS($item->getTitle()), '', 'info', $metadata);
+        }
+
+        return $itemsHtml;
+    }
+
+    private function getCommentsInHtmlFormatted(array $comments): array
+    {
+        $commentsHtml = [];
+
+        /** @var PortfolioComment $comment */
+        foreach ($comments as $comment) {
+            $item = $comment->getItem();
+            $date = api_convert_and_format_date($comment->getDate());
+
+            $metadata = '<ul class="list-unstyled text-muted">';
+            $metadata .= '<li>'.sprintf(get_lang('DateXDate'), $date).'</li>';
+            $metadata .= '<li>'.sprintf(get_lang('PortfolioItemTitleXName'), Security::remove_XSS($item->getTitle()))
+                .'</li>';
+            $metadata .= '</ul>';
+
+            $commentsHtml[] = Display::panel(
+                Security::remove_XSS($comment->getContent()),
+                '',
+                '',
+                'default',
+                $metadata
+            );
+        }
+
+        return $commentsHtml;
+    }
+
+    private function fixImagesSourcesToHtml(string $htmlContent): string
+    {
+        $doc = new DOMDocument();
+        @$doc->loadHTML($htmlContent);
+
+        $elements = $doc->getElementsByTagName('img');
+
+        if (empty($elements->length)) {
+            return $htmlContent;
+        }
+
+        $webCoursePath = api_get_path(WEB_COURSE_PATH);
+        $webUploadPath = api_get_path(WEB_UPLOAD_PATH);
+
+        /** @var \DOMElement $element */
+        foreach ($elements as $element) {
+            $src = trim($element->getAttribute('src'));
+
+            if (strpos($src, 'http') === 0) {
+                continue;
+            }
+
+            if (strpos($src, '/app/upload/') === 0) {
+                $element->setAttribute(
+                    'src',
+                    preg_replace('/\/app/upload\//', $webUploadPath, $src, 1)
+                );
+
+                continue;
+            }
+
+            if (strpos($src, '/courses/') === 0) {
+                $element->setAttribute(
+                    'src',
+                    preg_replace('/\/courses\//', $webCoursePath, $src, 1)
+                );
+
+                continue;
+            }
+        }
+
+        return $doc->saveHTML();
     }
 }

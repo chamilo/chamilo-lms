@@ -922,13 +922,15 @@ ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id) ON DELETE SET NULL;
 ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
-CREATE TABLE portfolio_comment (id INT AUTO_INCREMENT NOT NULL, author_id INT NOT NULL, item_id INT NOT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, content LONGTEXT NOT NULL, date DATETIME NOT NULL, is_important TINYINT(1) DEFAULT '0' NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, INDEX IDX_C2C17DA2F675F31B (author_id), INDEX IDX_C2C17DA2126F525E (item_id), INDEX IDX_C2C17DA2A977936C (tree_root), INDEX IDX_C2C17DA2727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE portfolio_comment (id INT AUTO_INCREMENT NOT NULL, author_id INT NOT NULL, item_id INT NOT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, content LONGTEXT NOT NULL, date DATETIME NOT NULL, is_important TINYINT(1) DEFAULT '0' NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, score DOUBLE PRECISION DEFAULT NULL, INDEX IDX_C2C17DA2F675F31B (author_id), INDEX IDX_C2C17DA2126F525E (item_id), INDEX IDX_C2C17DA2A977936C (tree_root), INDEX IDX_C2C17DA2727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2F675F31B FOREIGN KEY (author_id) REFERENCES user (id);
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2126F525E FOREIGN KEY (item_id) REFERENCES portfolio (id);
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2A977936C FOREIGN KEY (tree_root) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio ADD origin INT DEFAULT NULL, ADD origin_type INT DEFAULT NULL;
+ALTER TABLE portfolio ADD score DOUBLE PRECISION DEFAULT NULL;
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, visible_to_others, changeable, created_at) VALUES (19, 10, 'tags', 'tags', 1, 1, 1, NOW());
+CREATE TABLE portfolio_attachment (id INT AUTO_INCREMENT NOT NULL, path VARCHAR(255) NOT NULL, comment LONGTEXT DEFAULT NULL, size INT NOT NULL, filename VARCHAR(255) NOT NULL, origin_id INT NOT NULL, origin_type INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 */
 // In 1.11.8, before enabling this feature, you also need to:
 // - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php
@@ -1823,6 +1825,24 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Add certificate footer. Add your template main/template/default/export/pdf_certificate_footer.tpl
 // $_configuration['add_certificate_pdf_footer'] = true;
+
+// Shows a popup with the list of answered/unanswered questions before sending a test.
+// $_configuration['quiz_check_all_answers_before_end_test'] = true;
+
+// Custom cloud link URLS, this requires enable_add_file_link = true
+// $_configuration['documents_custom_cloud_link_list'] = ['links' => ['example.com', 'example2.com']];
+
+// Shows exercise session attempts in the base course.
+// $_configuration['show_exercise_session_attempts_in_base_course'] = false;
+
+// Allow coach users to always edit announcements inside active/past sessions.
+// $_configuration['allow_coach_to_edit_announcements'] = false;
+
+// Show invisible LP in the course home for students. BT#17744
+//$_configuration['show_invisible_lp_in_course_home'] = true;
+
+// Show start/end date in LP list for students.
+//$_configuration['lp_start_and_end_date_visible_in_student_view'] = true;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

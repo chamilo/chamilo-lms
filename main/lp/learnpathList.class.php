@@ -104,27 +104,52 @@ class LearnpathList
         $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
+        $toolSessionCondition = api_get_session_condition($session_id);
+
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
-            $name = Database::escape_string($row->getName());
             $link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
             $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
+
+            $extraCondition = '';
+            if (!empty($session_id)) {
+                $extraLink = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session=0';
+                $extraCondition = " OR link LIKE '$extraLink' ";
+            }
 
             $sql2 = "SELECT visibility FROM $tbl_tool
                      WHERE
                         c_id = $course_id AND
-                        name = '$name' AND
                         image = 'scormbuilder.gif' AND
                         (
                             link LIKE '$link%' OR
                             link LIKE '$oldLink%'
+                            $extraCondition
                         )
+                        $toolSessionCondition
                       ";
             $res2 = Database::query($sql2);
             $pub = 'i';
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
-                $pub = $row2['visibility'];
+                $pub = (int) $row2['visibility'];
+                if (!empty($session_id)) {
+                    $pub = 'v';
+                    // Check exact value in session:
+                    /*$sql3 = "SELECT visibility FROM $tbl_tool
+                             WHERE
+                                c_id = $course_id AND
+                                image = 'scormbuilder.gif' AND
+                                (   link LIKE '$link'
+                                )
+                                $toolSessionCondition
+                              ";
+                    $res3 = Database::query($sql3);
+                    if (Database::num_rows($res3)) {
+                        $pub = 'v';
+                    }*/
+                    //$pub = 0 === $pub ? 'i' : 'v';
+                }
             }
 
             // Check if visible.

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -24,8 +25,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
 $session_id = api_get_session_id();
-$course_code = api_get_course_id();
-$course_info = api_get_course_info();
+$courseInfo = api_get_course_info();
 
 if (empty($work_id) || empty($item_id)) {
     api_not_allowed(true);
@@ -45,6 +45,16 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
 
 $is_course_member = $is_course_member || api_is_platform_admin();
 
+$allowBaseCourseTeacher = api_get_configuration_value('assignment_base_course_teacher_access_to_all_session');
+$isCourseTeacher = false;
+if (false === $is_course_member && $allowBaseCourseTeacher) {
+    // Check if user is base course teacher.
+    if (CourseManager::is_course_teacher(api_get_user_id(), $courseInfo['code'])) {
+        $is_course_member = true;
+        $isCourseTeacher = true;
+    }
+}
+
 if (false == $is_course_member) {
     api_not_allowed(true);
 }
@@ -54,11 +64,10 @@ $token = Security::get_token();
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 $has_ended = false;
-$is_author = false;
 $work_item = get_work_data_by_id($item_id);
 
 // Get the author ID for that document from the item_property table
-$is_author = user_is_author($item_id);
+$is_author = user_is_author($item_id) || $isCourseTeacher;
 
 if (!$is_author) {
     api_not_allowed(true);

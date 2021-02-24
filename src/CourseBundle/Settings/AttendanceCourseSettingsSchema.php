@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class AttendanceCourseSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults([
@@ -27,7 +27,7 @@ class AttendanceCourseSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add('enabled', YesNoType::class)

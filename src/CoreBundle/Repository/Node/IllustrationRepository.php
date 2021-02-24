@@ -21,6 +21,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class IllustrationRepository.
@@ -67,7 +68,13 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             //->setTitle($title) // already added in $form->getData()
     }
 
-    public function addIllustration(ResourceInterface $resource, User $user, UploadedFile $uploadFile = null, $crop = ''): ?ResourceFile
+    /**
+     * @param User|UserInterface|ResourceInterface $resource
+     * @param User                                 $user
+     * @param UploadedFile|null                    $uploadFile
+     * @param string                               $crop
+     */
+    public function addIllustration($resource, $user, UploadedFile $uploadFile = null, $crop = ''): ?ResourceFile
     {
         if (null === $uploadFile) {
             return null;

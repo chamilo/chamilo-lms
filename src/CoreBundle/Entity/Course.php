@@ -1335,12 +1335,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return false;
     }
 
-    /**
-     * @param string $relationType
-     * @param string $role
-     * @param string $status
-     */
-    public function addUser(User $user, $relationType, $role, $status): self
+    public function addUser(User $user, int $relationType, $role, int $status): self
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);

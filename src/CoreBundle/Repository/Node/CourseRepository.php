@@ -90,9 +90,9 @@ class CourseRepository extends ResourceRepository
         );
 
         if (api_is_western_name_order()) {
-            $queryBuilder->add('orderBy', 'user.firstname ASC');
+            $queryBuilder->orderBy('user.firstname ASC');
         } else {
-            $queryBuilder->add('orderBy', 'user.lastname ASC');
+            $queryBuilder->orderBy('user.lastname ASC');
         }
 
         $wherePart = $queryBuilder->expr()->andx();

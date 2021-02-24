@@ -529,24 +529,16 @@ class Session
         return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
 
-    /**
-     * @param Course $course
-     */
     public function hasCoachInCourseWithStatus(User $user, Course $course = null): bool
     {
-        if (empty($course)) {
+        if (null === $course) {
             return false;
         }
 
         return $this->hasUserInCourse($user, $course, self::COACH);
     }
 
-    /**
-     * @param string $status
-     *
-     * @return \Doctrine\Common\Collections\Collection|static
-     */
-    public function getUserInCourse(User $user, Course $course, $status = null)
+    public function getUserInCourse(User $user, Course $course, $status = null): ArrayCollection
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('course', $course)

@@ -362,7 +362,7 @@ class ResourceNodeVoter extends Voter
         // Asked mask
         $mask = new MaskBuilder();
         $mask->add($attribute);
-        $askedMask = $mask->get();
+        $askedMask = (string) $mask->get();
 
         // Creating roles
         // @todo move this in a service
@@ -411,7 +411,7 @@ class ResourceNodeVoter extends Voter
         // Check all the right this link has.
         // Set rights from the ResourceRight.
         foreach ($rights as $right) {
-            $acl->allow($right->getRole(), null, $right->getMask());
+            $acl->allow($right->getRole(), null, (string) $right->getMask());
         }
 
         // Role and permissions settings
@@ -430,7 +430,7 @@ class ResourceNodeVoter extends Voter
 
         // Anons can see.
         if ($allowAnonsToSee) {
-            $acl->allow($anon, null, self::getReaderMask());
+            $acl->allow($anon, null, (string) self::getReaderMask());
         }
 
         // Admin can do everything

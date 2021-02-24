@@ -45,7 +45,7 @@ class AdminController extends BaseController
             'search-form',
             'get',
             $url,
-            null,
+            '',
             ['class' => 'form-inline']
         );
         $form->addElement('text', 'keyword');

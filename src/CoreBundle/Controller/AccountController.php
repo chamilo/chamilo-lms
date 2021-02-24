@@ -45,7 +45,6 @@ class AccountController extends BaseController
      */
     public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo)
     {
-        /** @var User|ResourceInterface $user */
         $user = $this->getUser();
 
         if (!is_object($user) || !$user instanceof UserInterface) {
@@ -59,6 +58,7 @@ class AccountController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $illustration = $form['illustration']->getData();
             if ($illustration) {
+                /** @var User $user */
                 $illustrationRepo->addIllustration($user, $user, $illustration);
             }
             $userRepository->updateUser($user);

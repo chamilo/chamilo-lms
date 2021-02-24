@@ -206,7 +206,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     /**
      * @return FormInterface
      */
-    public function getForm(FormFactory $formFactory, AbstractResource $resource = null, $options = [])
+    public function getForm(FormFactory $formFactory, ResourceInterface $resource = null, $options = [])
     {
         $formType = $this->getResourceFormType();
 
@@ -598,7 +598,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourceFromResourceNode(int $resourceNodeId): ?AbstractResource
+    public function getResourceFromResourceNode(int $resourceNodeId): ?ResourceInterface
     {
         // Include links
         $qb = $this->createQueryBuilder('resource')
@@ -617,7 +617,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function delete(AbstractResource $resource)
+    public function delete(ResourceInterface $resource)
     {
         $children = $resource->getResourceNode()->getChildren();
         foreach ($children as $child) {
@@ -651,7 +651,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
             return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
         } catch (\Throwable $exception) {
-            throw new FileNotFoundException((string) $resource);
+            throw new FileNotFoundException($resource->getResourceName());
         }
     }
 
@@ -703,7 +703,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
             return '';
         } catch (\Throwable $exception) {
-            throw new FileNotFoundException((string) $resource);
+            throw new FileNotFoundException($resource->getResourceName());
         }
     }
 

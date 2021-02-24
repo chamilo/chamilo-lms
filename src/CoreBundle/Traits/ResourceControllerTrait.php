@@ -47,7 +47,7 @@ trait ResourceControllerTrait
         return $this->container->get($name);
     }
 
-    public function denyAccessUnlessValidResource(AbstractResource $resource = null)
+    public function denyAccessUnlessValidResource(ResourceInterface $resource = null)
     {
         if (null === $resource) {
             throw new EntityNotFoundException($this->trans('Resource doesn\'t exists.'));
@@ -113,7 +113,10 @@ trait ResourceControllerTrait
         return $parentResourceNode;
     }
 
-    protected function getUser(): ?UserInterface
+    /**
+     * @return User|null
+     */
+    protected function getUser()
     {
         /*if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
@@ -123,7 +126,10 @@ trait ResourceControllerTrait
             return null;
         }
 
-        if (!\is_object($user = $token->getUser())) {
+        /** @var User $user */
+        $user = $token->getUser();
+
+        if (!\is_object($user)) {
             // e.g. anonymous authentication
             return null;
         }

@@ -272,8 +272,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             if ($form->has('illustration')) {
                 $illustration = $form->get('illustration')->getData();
                 if ($illustration) {
-                    $file = $illustrationRepo->addIllustration($newResource, $this->getUser(), $illustration);
-                    $illustrationRepo->update($file);
+                    $illustrationRepo->addIllustration($newResource, $this->getUser(), $illustration);
                 }
             }
 
@@ -303,7 +302,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
-        /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
         $this->denyAccessUnlessValidResource($resource);
         $resourceNode = $resource->getResourceNode();
@@ -346,7 +344,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
-        /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
         $this->denyAccessUnlessValidResource($resource);
 
@@ -380,10 +377,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $repository = $this->getRepositoryFromRequest($request);
 
-        /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($id);
         $this->denyAccessUnlessValidResource($resource);
-
+        /** @var AbstractResource $resource */
         $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessGranted(

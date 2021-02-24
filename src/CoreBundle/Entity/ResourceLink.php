@@ -127,9 +127,6 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @param ArrayCollection $rights
-     */
     public function setResourceRight($rights): self
     {
         $this->resourceRight = $rights;

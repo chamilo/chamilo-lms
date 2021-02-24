@@ -199,11 +199,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $credentialsExpireAt;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_of_birth", type="datetime", nullable=true)
      */
-    protected $dateOfBirth;
+    protected ?\DateTime $dateOfBirth;
 
     /**
      * @var \DateTime
@@ -883,9 +881,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->dropBoxSentFiles;
     }
 
-    /**
-     * @param ArrayCollection $value
-     */
     public function setDropBoxSentFiles($value)
     {
         $this->dropBoxSentFiles = $value;
@@ -899,9 +894,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->dropBoxReceivedFiles;
     }
 
-    /**
-     * @param ArrayCollection $value
-     */
     public function setDropBoxReceivedFiles($value)
     {
         $this->dropBoxReceivedFiles = $value;
@@ -912,9 +904,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->courses;
     }
 
-    /**
-     * @param ArrayCollection $courses
-     */
     public function setCourses($courses): self
     {
         $this->courses = $courses;
@@ -1018,20 +1007,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return \UserManager::formatUserFullName($this).$classString;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getClasses()
     {
         return $this->classes;
     }
 
-    /**
-     * @param ArrayCollection $classes
-     *
-     * @return $this
-     */
-    public function setClasses($classes)
+    public function setClasses($classes): self
     {
         $this->classes = $classes;
 
@@ -1926,8 +1907,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * Get sessionAsGeneralCoach.
-     *
-     * @param ArrayCollection $value
      */
     public function setSessionAsGeneralCoach($value): self
     {
@@ -1980,8 +1959,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * Get receivedMessages.
-     *
-     * @return ArrayCollection
      */
     public function getReceivedMessages()
     {
@@ -2206,18 +2183,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getDateOfBirth()
+    public function getDateOfBirth(): ?\DateTime
     {
         return $this->dateOfBirth;
     }
 
-    /**
-     * @param \DateTime $dateOfBirth
-     */
-    public function setDateOfBirth($dateOfBirth): self
+    public function setDateOfBirth(\DateTime $dateOfBirth = null): self
     {
         $this->dateOfBirth = $dateOfBirth;
 

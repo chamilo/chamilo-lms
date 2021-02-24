@@ -498,16 +498,16 @@ class Database
     /**
      * Experimental useful database finder.
      *
-     * @param mixed|array  $columns
-     * @param string       $table_name
-     * @param array        $conditions
-     * @param string       $type_result
-     * @param string       $option
-     * @param bool         $debug
+     * @param mixed|array $columns
+     * @param string      $table_name
+     * @param array       $conditions
+     * @param string      $type_result
+     * @param string      $option
+     * @param bool        $debug
      *
      * @return array
-     * @todo lot of stuff to do here
-     * @todo known issues, it doesn't work when using LIKE conditions
+     * @todo    lot of stuff to do here
+     * @todo    known issues, it doesn't work when using LIKE conditions
      *
      * @example array('where'=> array('course_code LIKE "?%"'))
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))

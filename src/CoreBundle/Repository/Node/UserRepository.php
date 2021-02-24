@@ -242,11 +242,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         $qb->from('Chamilo\CoreBundle\Entity\User', 'b');
 
-        // Selecting courses for users
-        //$qb->innerJoin('u.courses', 'c');
-
         //@todo check app settings
-        $qb->add('orderBy', 'b.firstname ASC');
+        $qb->orderBy('b.firstname ASC');
         $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
         $qb->setParameter('keyword', "%$keyword%");
         $query = $qb->getQuery();
@@ -286,7 +283,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 ->setParameter('keyword', $keyword);
         }
 
-        $qb->add('orderBy', 'course.title DESC');
+        $qb->orderBy('course.title DESC');
 
         $query = $qb->getQuery();
 
@@ -739,7 +736,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         }
 
         $agenda = new \Agenda('personal');
-        $events = $agenda->getEvents('', '', null, null, $userId, 'array');
+        $events = $agenda->getEvents(0, 0, 0, 0, $userId, 'array');
         $eventList = [];
         if (!empty($events)) {
             foreach ($events as $event) {
@@ -823,14 +820,14 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         }
 
         $checkEntities = [
-            'ChamiloCoreBundle:TrackELogin' => 'loginUserId',
-            'ChamiloCoreBundle:TrackEAccess' => 'accessUserId',
-            'ChamiloCoreBundle:TrackEOnline' => 'loginUserId',
-            'ChamiloCoreBundle:TrackEDefault' => 'defaultUserId',
-            'ChamiloCoreBundle:TrackELastaccess' => 'accessUserId',
-            'ChamiloCoreBundle:TrackEUploads' => 'uploadUserId',
-            'ChamiloCoreBundle:GradebookResult' => 'userId',
-            'ChamiloCoreBundle:TrackEDownloads' => 'downUserId',
+            TrackELogin::class => 'loginUserId',
+            TrackEAccess::class => 'accessUserId',
+            TrackEOnline::class => 'loginUserId',
+            TrackEDefault::class => 'defaultUserId',
+            TrackELastaccess::class => 'accessUserId',
+            TrackEUploads::class => 'uploadUserId',
+            GradebookResult::class => 'userId',
+            TrackEDownloads::class => 'downUserId',
         ];
 
         $maxResults = 1000;

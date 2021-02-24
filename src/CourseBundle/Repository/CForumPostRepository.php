@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -76,7 +77,7 @@ class CForumPostRepository extends ResourceRepository
             ->getResult();
     }
 
-    public function delete(AbstractResource $resource)
+    public function delete(ResourceInterface $resource)
     {
         /** @var CForumPost $resource */
         $attachments = $resource->getAttachments();

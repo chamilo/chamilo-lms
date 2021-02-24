@@ -93,14 +93,6 @@ trait ControllerTrait
     }*/
 
     /**
-     * @return MenuFactoryInterface
-     */
-    public function getMenuFactory()
-    {
-        return $this->container->get('knp_menu.factory');
-    }
-
-    /**
      * @param string $message
      */
     public function abort($message = '')

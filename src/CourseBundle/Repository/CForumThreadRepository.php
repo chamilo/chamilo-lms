@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,7 +20,7 @@ class CForumThreadRepository extends ResourceRepository
         parent::__construct($registry, CForumThread::class);
     }
 
-    public function delete(AbstractResource $resource)
+    public function delete(ResourceInterface $resource)
     {
         /** @var CForumThread $resource */
         $posts = $resource->getPosts();

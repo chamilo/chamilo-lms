@@ -293,10 +293,8 @@ class SettingsCurrent
      * Set scope.
      *
      * @param string $scope
-     *
-     * @return SettingsCurrent
      */
-    public function setScope($scope)
+    public function setScope($scope): self
     {
         $this->scope = $scope;
 
@@ -317,10 +315,8 @@ class SettingsCurrent
      * Set subkeytext.
      *
      * @param string $subkeytext
-     *
-     * @return SettingsCurrent
      */
-    public function setSubkeytext($subkeytext)
+    public function setSubkeytext($subkeytext): self
     {
         $this->subkeytext = $subkeytext;
 
@@ -341,10 +337,8 @@ class SettingsCurrent
      * Set accessUrlChangeable.
      *
      * @param int $accessUrlChangeable
-     *
-     * @return SettingsCurrent
      */
-    public function setAccessUrlChangeable($accessUrlChangeable)
+    public function setAccessUrlChangeable($accessUrlChangeable): self
     {
         $this->accessUrlChangeable = $accessUrlChangeable;
 
@@ -365,10 +359,8 @@ class SettingsCurrent
      * Set accessUrlLocked.
      *
      * @param int $accessUrlLocked
-     *
-     * @return SettingsCurrent
      */
-    public function setAccessUrlLocked($accessUrlLocked)
+    public function setAccessUrlLocked($accessUrlLocked): self
     {
         $this->accessUrlLocked = (int) $accessUrlLocked;
 
@@ -405,10 +397,8 @@ class SettingsCurrent
 
     /**
      * @param AccessUrl $url
-     *
-     * @return SettingsCurrent
      */
-    public function setUrl($url)
+    public function setUrl($url): self
     {
         $this->url = $url;
 

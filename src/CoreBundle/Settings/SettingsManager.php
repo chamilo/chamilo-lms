@@ -90,10 +90,6 @@ class SettingsManager implements SettingsManagerInterface
     {
         $this->url = $url;
         $schemas = array_keys($this->getSchemas());
-
-        /**
-         * @var SchemaInterface $schema
-         */
         foreach ($schemas as $schema) {
             $settings = $this->load($this->convertServiceToNameSpace($schema));
             $this->update($settings);
@@ -104,7 +100,6 @@ class SettingsManager implements SettingsManagerInterface
     {
         $this->url = $url;
         $schemas = array_keys($this->getSchemas());
-        /** @var SchemaInterface $schema */
         foreach ($schemas as $schema) {
             $settings = $this->load($this->convertServiceToNameSpace($schema));
             $this->save($settings);
@@ -205,7 +200,6 @@ class SettingsManager implements SettingsManagerInterface
             $schemaList = [];
             $settingsBuilder = new SettingsBuilder();
             $all = $this->getAllParametersByCategory();
-            /** @var SchemaInterface $schema */
             foreach ($schemas as $schema) {
                 $schemaRegister = $this->schemaRegistry->get($schema);
                 $schemaRegister->buildSettings($settingsBuilder);
@@ -314,7 +308,6 @@ class SettingsManager implements SettingsManagerInterface
             $persistedParametersMap[$parameter->getVariable()] = $parameter;
         }
 
-        /** @var SettingsCurrent $url */
         $url = $this->getUrl();
         $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
 
@@ -386,7 +379,6 @@ class SettingsManager implements SettingsManagerInterface
             new SettingsEvent($settings, $parameters)
         );*/
 
-        /** @var SettingsCurrent $url */
         $url = $this->getUrl();
         $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
 

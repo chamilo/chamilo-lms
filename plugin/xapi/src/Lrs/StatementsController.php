@@ -6,9 +6,9 @@ namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Symfony\Component\HttpFoundation\Response;
 use Xabbuh\XApi\Model\Statement;
-use Xabbuh\XApi\Model\StatementResult;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
+use Xabbuh\XApi\Serializer\Symfony\SerializerFactory;
 use Xabbuh\XApi\Serializer\Symfony\StatementResultSerializer;
 use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 use XApi\LrsBundle\Controller\StatementGetController;
@@ -92,17 +92,17 @@ class StatementsController extends BaseController
      *
      * @return \Xabbuh\XApi\Model\Statement
      */
-    private function deserializeStatement($content)
+    private function deserializeStatement(string $content = ''): Statement
     {
-        $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory(Serializer::createSerializer());
 
-        return $serializer->deserialize($content, Statement::class, 'json');
+        return $factory->createStatementSerializer()->deserializeStatement($content);
     }
 
-    private function deserializeStatements($content): array
+    private function deserializeStatements(string $content = ''): array
     {
-        $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory(Serializer::createSerializer());
 
-        return $serializer->deserialize($content, Statement::class.'[]', 'json');
+        return $factory->createStatementSerializer()->deserializeStatements($content);
     }
 }

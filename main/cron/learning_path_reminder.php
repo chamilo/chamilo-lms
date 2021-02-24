@@ -114,12 +114,12 @@ function LearningPaths()
     $groupUsers = [];
     $alreadyInLp = [];
     foreach ($data as $row) {
-        $lpId = (int)$row['l_id'];
-        $sessionId = (int)$row['session_id'];
+        $lpId = (int) $row['l_id'];
+        $sessionId = (int) $row['session_id'];
         $courseCode = $row['code'];
         $courseName = $row['course_name'];
-        $toUser = (int)$row['user_id'];
-        $fromUser = (int)$row['from_user_id'];
+        $toUser = (int) $row['user_id'];
+        $fromUser = (int) $row['from_user_id'];
         $lpName = $row['name'];
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
@@ -164,12 +164,12 @@ function LearningPaths()
     $data = Database::store_result($result);
     Database::free_result($result);
     foreach ($data as $row) {
-        $lpId = (int)$row['l_id'];
+        $lpId = (int) $row['l_id'];
         $sessionId = 0;
         $courseCode = $row['code'];
         $courseName = $row['course_name'];
-        $toUser = (int)$row['user_id'];
-        $fromUser = (int)0;
+        $toUser = (int) $row['user_id'];
+        $fromUser = (int) 0;
         $lpName = $row['name'];
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
@@ -182,7 +182,7 @@ function LearningPaths()
                 'fromUser' => $fromUser,
                 'courseName' => $courseName,
                 'lpName' => $lpName,
-                'link' => $link
+                'link' => $link,
             ];
         }
     }
@@ -213,12 +213,12 @@ function LearningPaths()
     $data = Database::store_result($result);
     Database::free_result($result);
     foreach ($data as $row) {
-        $lpId = (int)$row['l_id'];
-        $sessionId = (int)$row['session_id'];
+        $lpId = (int) $row['l_id'];
+        $sessionId = (int) $row['session_id'];
         $courseCode = $row['code'];
         $courseName = $row['course_name'];
-        $toUser = (int)$row['user_id'];
-        $fromUser = (int)0;
+        $toUser = (int) $row['user_id'];
+        $fromUser = (int) 0;
         $lpName = $row['name'];
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
@@ -231,11 +231,10 @@ function LearningPaths()
                 'fromUser' => $fromUser,
                 'courseName' => $courseName,
                 'lpName' => $lpName,
-                'link' => $link
+                'link' => $link,
             ];
         }
     }
-
 
     foreach ($groupUsers as $lpId => $sessions) {
         foreach ($sessions as $sessionId => $users) {

@@ -11174,13 +11174,23 @@ class Exercise
             ['id' => 'result_disabled_0']
         );
 
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('FeedbackType'),
+            get_lang('NoFeedback')
+        );
+
         $resultDisabledGroup[] = $form->createElement(
             'radio',
             'results_disabled',
             null,
             get_lang('DoNotShowScoreNorRightAnswer'),
             RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS,
-            ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
+            [
+                'id' => 'result_disabled_1',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         $resultDisabledGroup[] = $form->createElement(
@@ -11189,7 +11199,11 @@ class Exercise
             null,
             get_lang('OnlyShowScore'),
             RESULT_DISABLE_SHOW_SCORE_ONLY,
-            ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
+            [
+                'id' => 'result_disabled_2',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         if (in_array($this->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
@@ -11215,7 +11229,11 @@ class Exercise
             null,
             get_lang('DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt'),
             RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-            ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
+            [
+                'id' => 'result_disabled_5',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         $resultDisabledGroup[] = $form->createElement(

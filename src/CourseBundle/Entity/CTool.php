@@ -169,7 +169,7 @@ class CTool extends AbstractResource implements ResourceInterface
     /**
      * @ORM\PostPersist()
      */
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         // Update id with iid value
         /*$em = $args->getEntityManager();

@@ -61,7 +61,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected $session;
+    protected ?Session $session;
 
     /**
      * @var Collection|CQuizQuestion[]

@@ -44,7 +44,7 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
     /**
      * Set title.
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -61,7 +61,7 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
         return $this->title;
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

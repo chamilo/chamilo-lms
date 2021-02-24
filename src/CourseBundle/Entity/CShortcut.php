@@ -60,7 +60,7 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    public function getShortCutNode()
+    public function getShortCutNode(): ResourceNode
     {
         return $this->shortCutNode;
     }

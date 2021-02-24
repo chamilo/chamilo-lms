@@ -189,7 +189,7 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Get title.
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }

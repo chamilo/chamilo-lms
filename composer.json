@@ -46,6 +46,7 @@
         "ext-json": "*",
         "ext-libxml": "*",
         "ext-mbstring": "*",
+        "ext-pdo": "*",
         "ext-soap": "*",
         "ext-xml": "*",
         "ext-xmlreader": "*",

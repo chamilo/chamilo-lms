@@ -2549,9 +2549,19 @@ function getAllWork(
         return [];
     }
 
+    $allowWorkFromAllSessions = api_get_configuration_value('assignment_base_course_teacher_access_to_all_session');
+    $coursesInSession = [];
     $courses = CourseManager::get_courses_list_by_user_id($userId, false, false, false);
-    if (empty($courses)) {
-        return [];
+    if ($allowWorkFromAllSessions) {
+        if (empty($courses)) {
+            return [];
+        }
+    } else {
+        $coursesInSession = SessionManager::getCoursesForCourseSessionCoach($userId);
+
+        if (empty($courses) && empty($coursesInSession)) {
+            return [];
+        }
     }
 
     if (!empty($whereCondition)) {
@@ -2576,23 +2586,41 @@ function getAllWork(
         }
         $courseInfo = api_get_course_info_by_id($courseIdItem);
         // Only teachers or platform admins.
-        $is_allowed_to_edit = api_is_platform_admin() || CourseManager::is_course_teacher($userId, $courseInfo['code']);
-        if (false === $is_allowed_to_edit) {
+        $isAllow = api_is_platform_admin() || CourseManager::is_course_teacher($userId, $courseInfo['code']);
+        if (false === $isAllow) {
             continue;
         }
 
         //$session_id = isset($course['session_id']) ? $course['session_id'] : 0;
         //$conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
-        $conditionSession = '';
+        $conditionSession = ' AND (w.session_id = 0 OR w.session_id IS NULL)';
+        if ($allowWorkFromAllSessions) {
+            $conditionSession = '';
+        }
         $parentCondition = '';
         if ($withResults) {
             $parentCondition = 'AND ww.parent_id is NOT NULL';
         }
-        $courseQuery[] = " (work.c_id = $courseIdItem $conditionSession $parentCondition )";
+        $courseQuery[] = " (work.c_id = $courseIdItem $conditionSession $parentCondition ) ";
         $courseList[$courseIdItem] = $courseInfo;
     }
 
-    if (empty($courseList)) {
+    if (false === $allowWorkFromAllSessions) {
+        foreach ($coursesInSession as $courseIdInSession => $sessionList) {
+            if (!empty($sessionList)) {
+                if (!isset($courseList[$courseIdInSession])) {
+                    $courseList[$courseIdInSession] = api_get_course_info_by_id($courseIdInSession);
+                }
+
+                foreach ($sessionList as $sessionId) {
+                    $conditionSession = " AND (w.session_id = $sessionId)";
+                    $courseQuery[] = " (work.c_id = $courseIdInSession $conditionSession $parentCondition ) ";
+                }
+            }
+        }
+    }
+
+    if (empty($courseQuery)) {
         return [];
     }
 

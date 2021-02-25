@@ -17,6 +17,12 @@ use Template;
 
 class ChamiloApi
 {
+    public const COURSE_MANAGER = 1;
+    public const SESSION_ADMIN = 3;
+    public const DRH = 4;
+    public const STUDENT = 5;
+    public const ANONYMOUS = 6;
+
     private static array $configuration;
 
     public function __construct(array $configuration)

@@ -99,8 +99,6 @@ class ApiRequest
     }
 
     /**
-     * @param \Chamilo\UserBundle\Entity\User $user
-     *
      * @throws \Exception
      *
      * @return array
@@ -169,7 +167,6 @@ class ApiRequest
      * @param string $uri
      * @param string $authBearer
      * @param string $lang
-     * @param array  $multipart
      * @param array  $queryParams
      *
      * @throws \GuzzleHttp\Exception\GuzzleException

@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
-use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventLp;
-use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventQuiz;
 use Chamilo\PluginBundle\WhispeakAuth\Request\ApiRequest;
 
 $cidReset = true;

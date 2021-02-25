@@ -1633,7 +1633,7 @@ if (empty($details)) {
         echo '<th>'.get_lang('AllAttempts').'</th>';
 
         $hookQuizTracking = HookMyStudentsQuizTracking::create();
-        if ($hookQuizTracking && !empty($header)) {
+        if ($hookQuizTracking) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
                     if (isset($hookHeader['value'])) {

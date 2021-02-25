@@ -92,6 +92,7 @@ class CourseCopyLearnpath extends Resource
 
     public $subscribeUsers;
     public $hideTableOfContents;
+    public $accumulateWorkTime;
 
     /**
      * Create a new learnpath.
@@ -115,6 +116,7 @@ class CourseCopyLearnpath extends Resource
      * @param string $visibility
      * @param int    $categoryId
      * @param array  $items
+     * @param int    $accumulateWorkTime
      */
     public function __construct(
         $id,
@@ -146,7 +148,8 @@ class CourseCopyLearnpath extends Resource
         $categoryId,
         $subscribeUsers,
         $hideTableOfContents,
-        $items
+        $items,
+        $accumulateWorkTime
     ) {
         parent::__construct($id, RESOURCE_LEARNPATH);
         $this->lp_type = $type;
@@ -178,6 +181,7 @@ class CourseCopyLearnpath extends Resource
         $this->subscribeUsers = $subscribeUsers;
         $this->hideTableOfContents = $hideTableOfContents;
         $this->items = $items;
+        $this->accumulateWorkTime = $accumulateWorkTime;
     }
 
     /**

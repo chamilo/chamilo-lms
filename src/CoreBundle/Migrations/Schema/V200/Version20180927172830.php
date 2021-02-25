@@ -72,6 +72,12 @@ class Version20180927172830 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid)');
         }
 
+        $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date IS NULL OR thread_date = 0 OR thread_date = ""');
+        $this->addSql('UPDATE c_forum_post SET post_date = NOW() WHERE post_date IS NULL OR post_date = 0 OR post_date = ""');
+
+        $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_date thread_date DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE post_date post_date DATETIME NOT NULL');
+
         if ($table->hasColumn('thread_poster_name')) {
             $this->addSql('ALTER TABLE c_forum_thread DROP thread_poster_name');
         }

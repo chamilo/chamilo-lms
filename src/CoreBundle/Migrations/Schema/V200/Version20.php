@@ -190,6 +190,15 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE usergroup ADD resource_node_id INT DEFAULT NULL');
         }
 
+        // sequence_resource.
+        $table = $schema->getTable('sequence_resource');
+
+        if ($table->hasForeignKey('FK_34ADA43998FB19AE')) {
+            $this->addSql('ALTER TABLE sequence_resource DROP FOREIGN KEY FK_34ADA43998FB19AE;');
+        }
+
+        $this->addSql('ALTER TABLE sequence_resource ADD CONSTRAINT FK_34ADA43998FB19AE FOREIGN KEY (sequence_id) REFERENCES sequence (id) ON DELETE CASCADE');
+
         // Update template.
         $table = $schema->getTable('templates');
         if ($table->hasColumn('course_code')) {
@@ -208,7 +217,6 @@ class Version20 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_6F287D8EA76ED395')) {
             $this->addSql('CREATE INDEX IDX_6F287D8EA76ED395 ON templates (user_id)');
         }
-
         if (false === $table->hasForeignKey('FK_6F287D8EA76ED395')) {
             $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         }
@@ -240,7 +248,7 @@ class Version20 extends AbstractMigrationChamilo
             }
         }
 
-        // Drop tables
+        // Drop unused tables.
         $dropTables = [
             'event_email_template',
             'event_sent',

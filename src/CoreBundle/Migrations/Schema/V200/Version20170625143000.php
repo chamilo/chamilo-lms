@@ -175,6 +175,11 @@ class Version20170625143000 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('filesize')) {
             $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
         }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_student_publication;');
+        }
+
         $this->addSql('ALTER TABLE c_student_publication CHANGE url url VARCHAR(500) DEFAULT NULL');
         $this->addSql(
             'ALTER TABLE c_student_publication CHANGE url_correction url_correction VARCHAR(500) DEFAULT NULL'

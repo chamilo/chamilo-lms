@@ -59,8 +59,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 );
 
 $isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh($currentUserId, $work['session_id']));
-
-if (($isDrhOfCourse || $allowEdition || $isDrhOfSession  || user_is_author($id)) ||
+if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) ||
     (
         0 == $courseInfo['show_score'] &&
         1 == $work['active'] &&

@@ -13,6 +13,7 @@ $strings['max_attempts'] = 'Máximo de intentos';
 $strings['max_attempts_help'] = '(Opcional) Si la autenticación de Whispeak falla x intentos, preguntar y verificar la contraseña del usuario';
 $strings['2fa'] = 'Autenticación en dos factores';
 $strings['2fa_help'] = 'Permite extender la página de inicio de sesión con un proceso de dos factores. Después del inicio de sesión clásico, el usuario deberá autenticarse a través de Whispeak.';
+$strings['ActionRegistryPerUser'] = 'Registro de acciones por usuario';
 
 $strings['EnrollmentSampleText'] = 'El famoso cuadro de Mona Lisa fue pintado por Leonardo Da Vinci.';
 $strings['AuthentifySampleText1'] = 'Cayendo como moscas.';

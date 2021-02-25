@@ -13,6 +13,7 @@ $strings['max_attempts'] = 'Max attempts';
 $strings['max_attempts_help'] = '(Optional) If the Whispeak authentication is failed x times, then ask and verify the password of the user';
 $strings['2fa'] = 'Two-Factor Authentication';
 $strings['2fa_help'] = 'Allows extend the login page with a Two-Factor Authentication process. After the classic login, the user must authenticate through Whispeak.';
+$strings['ActionRegistryPerUser'] = 'Action registry per user';
 
 $strings['EnrollmentSampleText'] = 'The famous Mona Lisa painting was painted by Leonardo Da Vinci.';
 $strings['AuthentifySampleText1'] = 'Dropping Like Flies.';

@@ -11110,6 +11110,7 @@ class Exercise
         $end = $objExerciseTmp->end_time;
         $start = $objExerciseTmp->start_time;
         $minutes = $objExerciseTmp->expired_time;
+        $formatDate =DATE_TIME_FORMAT_LONG;
 
         $teacherName = 'Nombre de profesor';
 
@@ -11129,13 +11130,15 @@ class Exercise
                 );
             }
             if (!empty($start)) {
-                $start = api_format_time($start);
+                // api_get_utc_datetime
+                $start = api_format_date(($start),$formatDate);
+
                 $content .= sprintf(get_lang('QuizRemindStartDate'),
                     $start
                 );
             }
             if (!empty($end)) {
-                $end = api_format_time($end);
+                $end = api_format_date(($end),$formatDate);
                 $content .= sprintf(get_lang('QuizRemindEndDate'),
                     $end
                 );
@@ -11154,8 +11157,8 @@ class Exercise
                         $drhName,
                         $studentName,
                         $quizTitle,
-                        $studentName,
                         $courseTitle,
+                        $studentName,
                         $courseTitle,
                         $quizTitle
                     );
@@ -11165,14 +11168,15 @@ class Exercise
                         );
                     }
                     if (!empty($start)) {
-                        $start = api_format_time($start);
+                        // api_get_utc_datetime
+                        $start = api_format_date(($start),$formatDate);
 
                         $contentDHR .= sprintf(get_lang('QuizRemindStartDate'),
                             $start
                         );
                     }
                     if (!empty($end)) {
-                        $end = api_format_time($end);
+                        $end = api_format_date(($end),$formatDate);
                         $contentDHR .= sprintf(get_lang('QuizRemindEndDate'),
                             $end
                         );

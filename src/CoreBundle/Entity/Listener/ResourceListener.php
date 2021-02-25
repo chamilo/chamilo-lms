@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Listener;
@@ -21,6 +23,8 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Exception;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -28,10 +32,13 @@ use Symfony\Component\Security\Core\Security;
 
 class ResourceListener
 {
-    protected $slugify;
-    protected $security;
-    protected $toolChain;
-    protected $request;
+    protected SlugifyInterface $slugify;
+    protected Security $security;
+    protected ToolChain $toolChain;
+    protected RequestStack $request;
+    /**
+     * @var null
+     */
     protected $accessUrl;
 
     /**
@@ -55,12 +62,12 @@ class ResourceListener
         if (null === $this->accessUrl) {
             $request = $this->request->getCurrentRequest();
             if (null === $request) {
-                throw new \Exception('An Request is needed');
+                throw new Exception('An Request is needed');
             }
             $sessionRequest = $request->getSession();
 
             if (null === $sessionRequest) {
-                throw new \Exception('An Session request is needed');
+                throw new Exception('An Session request is needed');
             }
 
             $id = $sessionRequest->get('access_url_id');
@@ -74,7 +81,7 @@ class ResourceListener
         }
 
         if (null === $this->accessUrl) {
-            throw new \Exception('An AccessUrl is needed');
+            throw new Exception('An AccessUrl is needed');
         }
 
         return $this->accessUrl;
@@ -107,7 +114,7 @@ class ResourceListener
         $creator = $this->security->getUser();
 
         if (null === $creator) {
-            throw new \InvalidArgumentException('User creator not found');
+            throw new InvalidArgumentException('User creator not found');
         }
 
         $resourceNode = new ResourceNode();
@@ -126,7 +133,7 @@ class ResourceListener
         $resourceType = $repo->findOneBy(['name' => $name]);
 
         if (null === $resourceType) {
-            throw new \InvalidArgumentException("ResourceType: $name not found");
+            throw new InvalidArgumentException("ResourceType: $name not found");
         }
 
         $resourceNode
@@ -182,35 +189,35 @@ class ResourceListener
                 $resourceLink = new ResourceLink();
                 if (isset($link['c_id']) && !empty($link['c_id'])) {
                     $course = $courseRepo->find($link['c_id']);
-                    if ($course) {
+                    if (null !== $course) {
                         $resourceLink->setCourse($course);
                     } else {
-                        throw new \InvalidArgumentException(sprintf('Course #%s does not exists', $link['c_id']));
+                        throw new InvalidArgumentException(sprintf('Course #%s does not exists', $link['c_id']));
                     }
                 }
 
                 if (isset($link['sid']) && !empty($link['sid'])) {
                     $session = $sessionRepo->find($link['sid']);
-                    if ($session) {
+                    if (null !== $session) {
                         $resourceLink->setSession($session);
                     } else {
-                        throw new \InvalidArgumentException(sprintf('Session #%s does not exists', $link['sid']));
+                        throw new InvalidArgumentException(sprintf('Session #%s does not exists', $link['sid']));
                     }
                 }
 
                 if (isset($link['gid']) && !empty($link['gid'])) {
                     $group = $groupRepo->find($link['gid']);
-                    if ($group) {
+                    if (null !== $group) {
                         $resourceLink->setGroup($group);
                     } else {
-                        throw new \InvalidArgumentException(sprintf('Group #%s does not exists', $link['gid']));
+                        throw new InvalidArgumentException(sprintf('Group #%s does not exists', $link['gid']));
                     }
                 }
 
                 if (isset($link['visibility'])) {
                     $resourceLink->setVisibility((int) $link['visibility']);
                 } else {
-                    throw new \InvalidArgumentException('Link needs a visibility key');
+                    throw new InvalidArgumentException('Link needs a visibility key');
                 }
 
                 $resourceLink->setResourceNode($resourceNode);
@@ -229,17 +236,15 @@ class ResourceListener
         $resource->setResourceNode($resourceNode);
 
         // All resources should have a parent, except AccessUrl.
-        if (!($resource instanceof AccessUrl)) {
-            if (null === $resourceNode->getParent()) {
-                throw new \InvalidArgumentException('Resource Node should have a parent');
-            }
+        if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
+            throw new InvalidArgumentException('Resource Node should have a parent');
         }
     }
 
     /**
      * When updating a Resource.
      */
-    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
+    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event): void
     {
         error_log('Resource listener preUpdate');
         $this->setLinks($resource->getResourceNode(), $resource, $event->getEntityManager());
@@ -259,34 +264,33 @@ class ResourceListener
         }
     }
 
-    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event)
+    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event): void
     {
         //error_log('resource listener postUpdate');
         //$em = $event->getEntityManager();
         //$this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 
-    public function updateResourceName(AbstractResource $resource)
+    public function updateResourceName(AbstractResource $resource): void
     {
         $resourceName = $resource->getResourceName();
 
         if (empty($resourceName)) {
-            throw new \InvalidArgumentException('Resource needs a name');
+            throw new InvalidArgumentException('Resource needs a name');
         }
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
             //$slug = $this->slugify->slugify($resourceName);
-        } else {
-            /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
-            $originalBasename = \basename($resourceName, $originalExtension);
-            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
         }
+        /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+        $originalBasename = \basename($resourceName, $originalExtension);
+        $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
 
         $resource->getResourceNode()->setTitle($resourceName);
     }
 
-    public function setLinks(ResourceNode $resourceNode, AbstractResource $resource, $em)
+    public function setLinks(ResourceNode $resourceNode, AbstractResource $resource, $em): void
     {
         error_log('Resource listener setLinks');
         $links = $resource->getResourceLinkEntityList();

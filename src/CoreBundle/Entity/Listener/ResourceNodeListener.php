@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Listener;
@@ -15,12 +17,15 @@ use Symfony\Component\Security\Core\Security;
 
 class ResourceNodeListener
 {
-    protected $slugify;
-    protected $security;
-    protected $toolChain;
-    protected $request;
+    protected SlugifyInterface $slugify;
+    protected Security $security;
+    protected ToolChain $toolChain;
+    protected RequestStack $request;
+    /**
+     * @var null
+     */
     protected $accessUrl;
-    protected $resourceNodeRepository;
+    protected ResourceNodeRepository $resourceNodeRepository;
 
     public function __construct(
         SlugifyInterface $slugify,
@@ -64,7 +69,7 @@ class ResourceNodeListener
         return true;
     }
 
-    public function postUpdate(ResourceNode $resourceNode, LifecycleEventArgs $event)
+    public function postUpdate(ResourceNode $resourceNode, LifecycleEventArgs $event): void
     {
         error_log('ResourceNode postUpdate');
     }

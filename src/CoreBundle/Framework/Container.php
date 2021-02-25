@@ -79,10 +79,10 @@ use Twig\Environment;
  */
 class Container
 {
-    public static ?\Symfony\Component\DependencyInjection\ContainerInterface $container = null;
+    public static ?ContainerInterface $container = null;
     public static ?SessionInterface $session = null;
-    public static ?\Symfony\Component\HttpFoundation\Request $request = null;
-    public static ?\Symfony\Contracts\Translation\TranslatorInterface $translator = null;
+    public static ?Request $request = null;
+    public static ?TranslatorInterface $translator = null;
     public static Environment $twig;
     public static string $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
 

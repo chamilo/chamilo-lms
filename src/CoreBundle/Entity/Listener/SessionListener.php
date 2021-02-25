@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Listener;
@@ -8,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
@@ -17,8 +20,8 @@ use Symfony\Component\Security\Core\Security;
  */
 class SessionListener
 {
-    protected $request;
-    protected $security;
+    protected RequestStack $request;
+    protected Security $security;
 
     public function __construct(RequestStack $request, Security $security)
     {
@@ -32,9 +35,9 @@ class SessionListener
      * new object : prePersist
      * edited object: preUpdate
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function prePersist(Session $session, LifecycleEventArgs $args)
+    public function prePersist(Session $session, LifecycleEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $id = $this->request->getCurrentRequest()->getSession()->get('access_url_id');
@@ -46,18 +49,18 @@ class SessionListener
     /**
      * This code is executed when a session is updated.
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function preUpdate(Session $session, LifecycleEventArgs $args)
+    public function preUpdate(Session $session, LifecycleEventArgs $args): void
     {
     }
 
     /**
      * @param SessionRepository $repo
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function checkLimit($repo, AccessUrl $url)
+    protected function checkLimit($repo, AccessUrl $url): void
     {
         $limit = $url->getLimitSessions();
 

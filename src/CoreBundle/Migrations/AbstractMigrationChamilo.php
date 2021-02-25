@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations;
@@ -21,21 +23,19 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Class AbstractMigrationChamilo.
- */
 abstract class AbstractMigrationChamilo extends AbstractMigration implements ContainerAwareInterface
 {
     public const BATCH_SIZE = 20;
-    private $manager;
-    private $container;
 
-    public function setEntityManager(EntityManager $manager)
+    private ?\Doctrine\ORM\EntityManager $manager = null;
+    private ?\Symfony\Component\DependencyInjection\ContainerInterface $container = null;
+
+    public function setEntityManager(EntityManager $manager): void
     {
         $this->manager = $manager;
     }
 
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(ContainerInterface $container = null): void
     {
         $this->container = $container;
     }
@@ -124,7 +124,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $accessUrlChangeable = false,
         $accessUrlLocked = true,
         $options = []
-    ) {
+    ): void {
         $setting = new SettingsCurrent();
         $setting
             ->setVariable($variable)
@@ -182,7 +182,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
      *
      * @param string $variable The setting variable name
      */
-    public function removeSettingCurrent($variable)
+    public function removeSettingCurrent($variable): void
     {
         //to be implemented
     }
@@ -194,7 +194,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $id,
         $fileName = '',
         $description = ''
-    ) {
+    ): void {
         if (!is_dir($filePath)) {
             $class = get_class($resource);
             $documentPath = basename($filePath);

@@ -19,6 +19,7 @@ $plugin->protectTool();
 $pageContent = '';
 
 $form = new FormValidator('frm_revocation', 'GET');
+$form->setAttribute('onsubmit', "return confirm('".addslashes(get_lang('AreYouSureToDelete'))."');");
 $slctUsers = $form->addSelectAjax(
     'users',
     get_lang('Users'),
@@ -29,7 +30,7 @@ $slctUsers = $form->addSelectAjax(
         'multiple' => true,
     ]
 );
-$form->addButtonSearch(get_lang('Search'));
+$form->addButton('asubmit', $plugin->get_lang('DeleteEnrollments'), 'times', 'danger');
 $form->addRule('users', get_lang('ThisFieldIsRequired'), 'required');
 
 $userIds = [];

@@ -43,5 +43,6 @@ $strings['Success'] = "Success";
 $strings['MarkForSpeechAuthentication'] = 'Cocher pour l\'authentification par la voix';
 $strings['EnrollmentTitle'] = "Enrôlement pour générer l'empreinte vocale avec Whispeak";
 $strings['Revocation'] = "Révocation";
+$strings['DeleteEnrollments'] = "Supprimer les inscriptions";
 $strings['NoEnrollment'] = "Aucune inscription";
 $strings['EnrollmentDeleted'] = "Inscription supprimée.";

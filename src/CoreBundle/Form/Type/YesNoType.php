@@ -35,7 +35,7 @@ class YesNoType extends AbstractType
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'yes_no';
     }

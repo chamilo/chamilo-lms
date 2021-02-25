@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Traits;
@@ -14,10 +16,10 @@ use Doctrine\ORM\EntityNotFoundException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use function is_object;
 
 trait ResourceControllerTrait
 {
-    /** @var ContainerInterface */
     protected $container;
 
     public function getRepositoryFromRequest(Request $request): ResourceRepository
@@ -90,13 +92,11 @@ trait ResourceControllerTrait
         if (empty($parentNodeId)) {
             if ($this->hasCourse()) {
                 $parentResourceNode = $this->getCourse()->getResourceNode();
-            } else {
-                if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    /** @var User $user */
-                    $user = $this->getUser();
-                    if ($user) {
-                        $parentResourceNode = $user->getResourceNode();
-                    }
+            } elseif ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                /** @var User $user */
+                $user = $this->getUser();
+                if ($user) {
+                    $parentResourceNode = $user->getResourceNode();
                 }
             }
         } else {
@@ -127,7 +127,7 @@ trait ResourceControllerTrait
         /** @var User $user */
         $user = $token->getUser();
 
-        if (!\is_object($user)) {
+        if (!is_object($user)) {
             // e.g. anonymous authentication
             return null;
         }

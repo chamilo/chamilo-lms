@@ -34,7 +34,7 @@ class ResourceCommentType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'chamilo_resource_comment';
     }

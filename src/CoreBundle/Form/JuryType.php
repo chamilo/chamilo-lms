@@ -66,7 +66,7 @@ class JuryType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'jury';
     }

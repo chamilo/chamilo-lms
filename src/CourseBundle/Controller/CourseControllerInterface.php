@@ -16,9 +16,9 @@ use Chamilo\CoreBundle\Entity\Session;
  */
 interface CourseControllerInterface
 {
-    public function setCourse(Course $course);
+    public function setCourse(Course $course): void;
 
-    public function setSession(Session $session = null);
+    public function setSession(Session $session = null): void;
 
     public function getCourse(): Course;
 

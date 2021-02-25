@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Traits;
@@ -7,6 +9,7 @@ namespace Chamilo\CoreBundle\Traits;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Psr\Container\ContainerInterface;
 
 /**
  * Trait CourseControllerTrait.
@@ -15,7 +18,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 trait CourseControllerTrait
 {
     protected Course $course;
-    protected ?Session $session;
+    protected ?Session $session = null;
     protected $container;
 
     /**

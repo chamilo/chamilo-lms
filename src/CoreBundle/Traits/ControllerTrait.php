@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Traits;
@@ -25,6 +27,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use Psr\Container\ContainerInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,7 +97,7 @@ trait ControllerTrait
     /**
      * @param string $message
      */
-    public function abort($message = '')
+    public function abort($message = ''): void
     {
         throw new NotFoundHttpException($message);
     }

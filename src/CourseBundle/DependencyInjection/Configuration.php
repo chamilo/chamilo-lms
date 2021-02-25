@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Adds `classes` section.
      */
-    private function addClassesSection(ArrayNodeDefinition $node)
+    private function addClassesSection(ArrayNodeDefinition $node): void
     {
         $node
             ->children()

@@ -41,7 +41,7 @@ class QuestionScoreNameType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'questionScoreName';
     }

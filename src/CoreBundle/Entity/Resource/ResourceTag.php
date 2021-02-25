@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
@@ -19,6 +21,8 @@ class ResourceTag
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @var int
      */
     protected $id;
 
@@ -32,6 +36,8 @@ class ResourceTag
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceComments")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
+     *
+     * @var \Chamilo\CoreBundle\Entity\User|null
      */
     protected $author;
 }

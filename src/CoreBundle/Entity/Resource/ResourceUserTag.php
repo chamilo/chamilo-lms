@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
@@ -19,18 +21,24 @@ class ResourceUserTag
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @var int
      */
     protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceTags")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
+     *
+     * @var \Chamilo\CoreBundle\Entity\User|null
      */
     protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceTag")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="SET NULL")
+     *
+     * @var \Chamilo\CoreBundle\Entity\Resource\ResourceTag|null
      */
     protected $tag;
 }

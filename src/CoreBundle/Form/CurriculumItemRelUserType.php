@@ -53,7 +53,7 @@ class CurriculumItemRelUserType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'curriculumItemRelUser';
     }

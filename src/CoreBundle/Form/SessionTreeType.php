@@ -98,7 +98,7 @@ class SessionTreeType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'sessionPath';
     }

@@ -32,7 +32,7 @@ class CCourseDescriptionType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'chamilo_course_description';
     }

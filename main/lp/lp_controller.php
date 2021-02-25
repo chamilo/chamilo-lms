@@ -1021,11 +1021,12 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            $_SESSION['oLP']->copy();
+            api_location($lpListUrl);
         }
-        require 'lp_list.php';
+
+        $_SESSION['oLP']->copy();
+        Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+        api_location($lpListUrl);
         break;
     case 'export':
         if (!$is_allowed_to_edit) {
@@ -1092,7 +1093,7 @@ switch ($action) {
             Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
-            require 'lp_list.php';
+            api_location($lpListUrl);
         }
         break;
     case 'toggle_category_visibility':

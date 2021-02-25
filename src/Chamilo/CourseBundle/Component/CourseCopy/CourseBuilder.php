@@ -1496,8 +1496,8 @@ class CourseBuilder
 
                 $accumulateWorkTime = 0;
                 if (api_get_configuration_value('lp_minimum_time')) {
-                    if (isset($obj->accumulateWorkTime) && !empty($obj->accumulateWorkTime)) {
-                        $accumulateWorkTime = $obj->accumulateWorkTime;
+                    if (isset($obj->accumulate_work_time) && !empty($obj->accumulate_work_time)) {
+                        $accumulateWorkTime = $obj->accumulate_work_time;
                     }
                 }
 

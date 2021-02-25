@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -8,7 +10,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
+use SessionManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -25,10 +29,9 @@ class SessionVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private $entityManager;
-    //private $courseManager;
-    private $security;
-    private $settingsManager;
+    private EntityManagerInterface $entityManager;
+    private Security $security;
+    private SettingsManager $settingsManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -155,7 +158,7 @@ class SessionVoter extends Voter
     private function sessionIsAvailableByDuration(Session $session, User $user)
     {
         $duration = $session->getDuration() * 24 * 60 * 60;
-        $courseAccess = \CourseManager::getFirstCourseAccessPerSessionAndUser(
+        $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
             $session->getId(),
             $user->getId()
         );
@@ -176,7 +179,7 @@ class SessionVoter extends Voter
             );
         }
 
-        $userDurationData = \SessionManager::getUserSession(
+        $userDurationData = SessionManager::getUserSession(
             $user->getId(),
             $session->getId()
         );
@@ -205,11 +208,7 @@ class SessionVoter extends Voter
         }
 
         if ($checkSession) {
-            if ($this->allowed($user, $session)) {
-                return true;
-            }
-
-            return false;
+            return $this->allowed($user, $session);
         }
 
         return true;
@@ -223,20 +222,12 @@ class SessionVoter extends Voter
 
         $setting = $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions');
 
-        if ('true' === $setting && $this->security->isGranted('ROLE_TEACHER')) {
-            return true;
-        }
-
-        return false;
+        return 'true' === $setting && $this->security->isGranted('ROLE_TEACHER');
     }
 
     private function allowManageAllSessions(): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SESSION_MANAGER')) {
-            return true;
-        }
-
-        return false;
+        return $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SESSION_MANAGER');
     }
 
     /**
@@ -249,19 +240,15 @@ class SessionVoter extends Voter
         }
 
         if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
-            'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
+            'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') && $session->getSessionAdmin()->getId() !== $user->getId()
         ) {
-            if ($session->getSessionAdmin()->getId() !== $user->getId()) {
-                return false;
-            }
+            return false;
         }
 
         if ($this->security->isGranted('ROLE_ADMIN') &&
-            'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions')
+            'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions') && $session->getGeneralCoach()->getId() !== $user->getId()
         ) {
-            if ($session->getGeneralCoach()->getId() !== $user->getId()) {
-                return false;
-            }
+            return false;
         }
 
         return true;

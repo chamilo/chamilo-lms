@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security;
@@ -7,6 +9,7 @@ namespace Chamilo\CoreBundle\Security;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Hook\HookFactory;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,17 +37,13 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
     use TargetPathTrait;
 
     private const LOGIN_ROUTE = 'login_json';
-    //private $entityManager;
-    public $serializer;
-    public $router;
+    public SerializerInterface $serializer;
+    public RouterInterface $router;
 
-    //private $router;
-    private $passwordEncoder;
-    //private $formFactory;
-//    private $hookFactory;
-    private $userRepository;
-    private $csrfTokenManager;
-    private $urlGenerator;
+    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserRepository $userRepository;
+    private CsrfTokenManagerInterface $csrfTokenManager;
+    private UrlGeneratorInterface $urlGenerator;
 
     public function __construct(
         //EntityManagerInterface $entityManager,
@@ -124,18 +123,13 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if ($this->passwordEncoder->isPasswordValid($user, $credentials['password'])) {
-            return true;
-        }
-
-        return false;
-
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
         /*$hook = $this->hookFactory->build(CheckLoginCredentialsHook::class);
 
         if (empty($hook)) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -20,8 +22,8 @@ class ResourceVoter extends Voter
     public const DELETE = 'DELETE';
     public const EXPORT = 'EXPORT';
 
-    private $requestStack;
-    private $security;
+    private RequestStack $requestStack;
+    private Security $security;
 
     public function __construct(Security $security, RequestStack $requestStack)
     {
@@ -64,13 +66,8 @@ class ResourceVoter extends Voter
         if (!in_array($attribute, $options)) {
             return false;
         }
-
         // only vote on ResourceNode objects inside this voter
-        if (!$subject instanceof AbstractResource) {
-            return false;
-        }
-
-        return true;
+        return $subject instanceof AbstractResource;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool

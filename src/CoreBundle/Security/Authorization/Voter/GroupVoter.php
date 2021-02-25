@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -23,10 +25,7 @@ class GroupVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    //private $entityManager;
-    //private $courseManager;
-    //private $groupManager;
-    private $security;
+    private Security $security;
 
     public function __construct(
         //EntityManager $entityManager,
@@ -85,7 +84,7 @@ class GroupVoter extends Voter
                     return true;
                 }
 
-                if (false === $group->getStatus()) {
+                if (!$group->getStatus()) {
                     return false;
                 }
 

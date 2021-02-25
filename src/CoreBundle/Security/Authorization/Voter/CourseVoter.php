@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -22,9 +24,8 @@ class CourseVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private $entityManager;
-    //private $courseManager;
-    private $security;
+    private EntityManagerInterface $entityManager;
+    private Security $security;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -48,13 +49,8 @@ class CourseVoter extends Voter
         if (!in_array($attribute, $options)) {
             return false;
         }
-
         // only vote on Post objects inside this voter
-        if (!$subject instanceof Course) {
-            return false;
-        }
-
-        return true;
+        return $subject instanceof Course;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool

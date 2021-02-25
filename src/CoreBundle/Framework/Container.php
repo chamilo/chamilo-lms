@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Framework;
@@ -54,10 +56,14 @@ use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
 use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
+use CourseManager;
+use Database;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -73,36 +79,17 @@ use Twig\Environment;
  */
 class Container
 {
-    /** @var ContainerInterface|null */
-    public static $container;
-
-    public static $session;
-    public static $request;
-    public static $configuration;
-    public static $environment;
-    public static $urlGenerator;
-    public static $checker;
-    /** @var TranslatorInterface|null */
-    public static $translator;
-    public static $mailer;
-    public static $template;
-
-    public static $rootDir;
-    public static $logDir;
-    public static $tempDir;
-    public static $dataDir;
-    public static $courseDir;
-    public static $assets;
-    public static $htmlEditor;
-    public static $twig;
-    public static $roles;
-    /** @var string */
-    public static $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
+    public static ?\Symfony\Component\DependencyInjection\ContainerInterface $container = null;
+    public static ?SessionInterface $session = null;
+    public static ?\Symfony\Component\HttpFoundation\Request $request = null;
+    public static ?\Symfony\Contracts\Translation\TranslatorInterface $translator = null;
+    public static Environment $twig;
+    public static string $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
 
     /**
      * @param ContainerInterface $container
      */
-    public static function setContainer($container)
+    public static function setContainer($container): void
     {
         self::$container = $container;
     }
@@ -150,7 +137,7 @@ class Container
      */
     public static function getProjectDir()
     {
-        if (self::$container) {
+        if (null !== self::$container) {
             return self::$container->get('kernel')->getProjectDir().'/';
         }
 
@@ -200,7 +187,7 @@ class Container
     /**
      * @param Request $request
      */
-    public static function setRequest($request)
+    public static function setRequest($request): void
     {
         self::$request = $request;
     }
@@ -210,7 +197,7 @@ class Container
      */
     public static function getSession()
     {
-        if (self::$container) {
+        if (null !== self::$container) {
             return self::$container->get('session');
         }
 
@@ -238,7 +225,7 @@ class Container
      */
     public static function getTranslator()
     {
-        if (self::$translator) {
+        if (null !== self::$translator) {
             return self::$translator;
         }
 
@@ -263,11 +250,11 @@ class Container
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @return EntityManager
      */
     public static function getEntityManager()
     {
-        return \Database::getManager();
+        return Database::getManager();
     }
 
     public static function getUserManager(): UserRepository
@@ -514,7 +501,7 @@ class Container
      * @param string $message
      * @param string $type    error|success|warning|danger
      */
-    public static function addFlash($message, $type = 'success')
+    public static function addFlash($message, $type = 'success'): void
     {
         $session = self::getSession();
         $session->getFlashBag()->add($type, $message);
@@ -535,15 +522,15 @@ class Container
         return self::$container->get(AssetRepository::class);
     }
 
-    public static function setLegacyServices(ContainerInterface $container, bool $setSession = true)
+    public static function setLegacyServices(ContainerInterface $container, bool $setSession = true): void
     {
-        \Database::setConnection($container->get('doctrine.dbal.default_connection'));
+        Database::setConnection($container->get('doctrine.dbal.default_connection'));
         $em = $container->get('doctrine.orm.entity_manager');
-        \Database::setManager($em);
-        \CourseManager::setEntityManager($em);
-        \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
+        Database::setManager($em);
+        CourseManager::setEntityManager($em);
+        CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
-        \CourseManager::setToolList($container->get(ToolChain::class));
+        CourseManager::setToolList($container->get(ToolChain::class));
         if ($setSession) {
             self::$session = $container->get('session');
         }

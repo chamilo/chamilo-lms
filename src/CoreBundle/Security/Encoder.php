@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security;
@@ -53,7 +55,7 @@ class Encoder extends BasePasswordEncoder
         return $encoder->isPasswordValid($encoded, $raw, $salt);
     }
 
-    private function getEncoder()
+    private function getEncoder(): void
     {
         /*switch ($this->passwordEncrypt) {
             case 'none':

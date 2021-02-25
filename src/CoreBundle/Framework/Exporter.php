@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Framework;
 
+use RuntimeException;
 use Sonata\Exporter\Handler;
 use Sonata\Exporter\Source\SourceIteratorInterface;
 use Sonata\Exporter\Writer\CsvWriter;
@@ -21,7 +24,7 @@ class Exporter
      * @param string $format
      * @param string $filename
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return StreamedResponse
      */
@@ -49,10 +52,10 @@ class Exporter
 
                 break;
             default:
-                throw new \RuntimeException('Invalid format');
+                throw new RuntimeException('Invalid format');
         }
 
-        $callback = function () use ($source, $writer) {
+        $callback = function () use ($source, $writer): void {
             $handler = Handler::create($source, $writer);
             $handler->export();
         };

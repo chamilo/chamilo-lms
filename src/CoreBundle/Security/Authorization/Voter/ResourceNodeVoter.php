@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -36,8 +38,8 @@ class ResourceNodeVoter extends Voter
     public const ROLE_CURRENT_COURSE_SESSION_TEACHER = 'ROLE_CURRENT_COURSE_SESSION_TEACHER';
     public const ROLE_CURRENT_COURSE_SESSION_STUDENT = 'ROLE_CURRENT_COURSE_SESSION_STUDENT';
 
-    private $requestStack;
-    private $security;
+    private RequestStack $requestStack;
+    private Security $security;
 
     public function __construct(Security $security, RequestStack $requestStack)
     {
@@ -81,13 +83,8 @@ class ResourceNodeVoter extends Voter
         if (!in_array($attribute, $options)) {
             return false;
         }
-
         // only vote on ResourceNode objects inside this voter
-        if (!$subject instanceof ResourceNode) {
-            return false;
-        }
-
-        return true;
+        return $subject instanceof ResourceNode;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -184,55 +181,42 @@ class ResourceNodeVoter extends Voter
             if (null === $linkUser &&
                 $linkGroup instanceof CGroup && !empty($groupId) &&
                 $linkSession instanceof Session && !empty($sessionId) &&
-                $linkCourse instanceof Course && !empty($courseId)
+                $linkCourse instanceof Course && !empty($courseId) &&
+                ($linkCourse->getId() === $courseId &&
+                $linkSession->getId() === $sessionId &&
+                $linkGroup->getIid() === $groupId)
             ) {
-                if ($linkCourse->getId() === $courseId &&
-                    $linkSession->getId() === $sessionId &&
-                    $linkGroup->getIid() === $groupId
-                ) {
-                    $linkFound = 3;
-
-                    break;
-                }
+                $linkFound = 3;
+                break;
             }
 
             // Check if resource was sent inside a group in a base course.
             if (null === $linkUser &&
                 empty($sessionId) &&
                 $linkGroup instanceof CGroup && !empty($groupId) &&
-                $linkCourse instanceof Course && !empty($courseId)
+                $linkCourse instanceof Course && !empty($courseId) && ($linkCourse->getId() === $courseId &&
+                $linkGroup->getIid() === $groupId)
             ) {
-                if ($linkCourse->getId() === $courseId &&
-                    $linkGroup->getIid() === $groupId
-                ) {
-                    $linkFound = 4;
-
-                    break;
-                }
+                $linkFound = 4;
+                break;
             }
 
             // Check if resource was sent to a course inside a session.
             if (null === $linkUser &&
                 $linkSession instanceof Session && !empty($sessionId) &&
-                $linkCourse instanceof Course && !empty($courseId)
+                $linkCourse instanceof Course && !empty($courseId) && ($linkCourse->getId() === $courseId &&
+                $linkSession->getId() === $sessionId)
             ) {
-                if ($linkCourse->getId() === $courseId &&
-                    $linkSession->getId() === $sessionId
-                ) {
-                    $linkFound = 5;
-
-                    break;
-                }
+                $linkFound = 5;
+                break;
             }
 
             // Check if resource was sent to a course.
             if (null === $linkUser &&
-                $linkCourse instanceof Course && !empty($courseId)) {
-                if ($linkCourse->getId() === $courseId) {
-                    $linkFound = 6;
-
-                    break;
-                }
+                $linkCourse instanceof Course && !empty($courseId) && $linkCourse->getId() === $courseId
+            ) {
+                $linkFound = 6;
+                break;
             }
 
             /*if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
@@ -438,11 +422,7 @@ class ResourceNodeVoter extends Voter
         $acl->allow($superAdmin);
 
         if ($token instanceof AnonymousToken) {
-            if ($acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask)) {
-                return true;
-            }
-
-            return false;
+            return $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask);
         }
 
         foreach ($user->getRoles() as $role) {

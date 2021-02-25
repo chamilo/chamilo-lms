@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security;
@@ -13,8 +15,8 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
-    private $urlGenerator;
-    private $session;
+    private UrlGeneratorInterface $urlGenerator;
+    private SessionInterface $session;
 
     public function __construct(UrlGeneratorInterface $urlGenerator, SessionInterface $session)
     {
@@ -25,7 +27,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
     {
         $message = $authException->getMessage();
-        if ($authException->getPrevious()) {
+        if (null !== $authException->getPrevious()) {
             $message = $authException->getPrevious()->getMessage();
         }
 

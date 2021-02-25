@@ -195,7 +195,7 @@ class CLpItem
         $this->maxScore = 100.0;
     }
 
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }

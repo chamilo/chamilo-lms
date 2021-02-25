@@ -15,7 +15,6 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Form\FormInterface;
 
 /**
  * Class CShortcutRepository.
@@ -91,17 +90,5 @@ final class CShortcutRepository extends ResourceRepository
         }
 
         return $qb;
-    }
-
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType): void
-    {
-        //return $form->getData();
-        /*$newResource
-            ->setCourse($course)
-            ->setSession($session)
-            ->setFiletype($fileType)
-            //->setTitle($title) // already added in $form->getData()
-            ->setReadonly(false)
-        ;*/
     }
 }

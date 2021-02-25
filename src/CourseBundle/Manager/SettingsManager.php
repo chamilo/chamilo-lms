@@ -76,7 +76,7 @@ class SettingsManager extends ChamiloSettingsManager
         return $settings;
     }
 
-    public function save(SettingsInterface $settings)
+    public function save(SettingsInterface $settings): bool
     {
         $namespace = $settings->getSchemaAlias();
 

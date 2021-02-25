@@ -239,18 +239,14 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $notifications;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="autolaunch", type="boolean", nullable=true, options={"default":0})
      */
-    protected $autoLaunch;
+    protected ?bool $autoLaunch;
 
     /**
-     * @var array
-     *
      * @ORM\Column(name="page_result_configuration", type="array", nullable=true)
      */
-    protected $pageResultConfiguration;
+    protected ?array $pageResultConfiguration;
 
     /**
      * @var CQuizRelQuestion[]|ArrayCollection
@@ -943,7 +939,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->pageResultConfiguration;
     }
 
-    public function setPageResultConfiguration($pageResultConfiguration): self
+    public function setPageResultConfiguration(?array $pageResultConfiguration): self
     {
         $this->pageResultConfiguration = $pageResultConfiguration;
 
@@ -953,7 +949,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\PostPersist()
      */
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
     }
 

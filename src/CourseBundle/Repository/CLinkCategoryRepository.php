@@ -43,7 +43,7 @@ final class CLinkCategoryRepository extends ResourceRepository implements GridIn
         return $settings;
     }
 
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType): void
+    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
     {
         /** @var CLink $newResource */
         $newResource = $form->getData();

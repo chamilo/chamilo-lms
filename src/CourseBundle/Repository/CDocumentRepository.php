@@ -65,7 +65,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $resource;
     }
 
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType): void
+    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
     {
         $newResource = $form->getData();
         $newResource
@@ -77,33 +77,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         ;
 
         //return $newResource;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentUrl(CDocument $document, $courseId, $sessionId)
-    {
-        // There are no URL for folders.
-        if ('folder' === $document->getFiletype()) {
-            return '';
-        }
-
-        $file = $document->getResourceNode()->getResourceFile();
-
-        if (null === $file) {
-            return '';
-        }
-
-        $params = [
-            'cid' => $courseId,
-            'sid' => $sessionId,
-            'id' => $document->getResourceNode()->getId(),
-            'tool' => 'document',
-            'type' => $document->getResourceNode()->getResourceType()->getName(),
-        ];
-
-        return $this->getRouter()->generate('chamilo_core_resource_view', $params);
     }
 
     public function getParent(CDocument $document): ?CDocument

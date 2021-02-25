@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\SessionTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,6 +30,8 @@ class CLpCategoryRelUserGroup
     protected $id;
 
     /**
+     * @var CLpCategory
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
@@ -51,6 +54,8 @@ class CLpCategoryRelUserGroup
     protected $course;
 
     /**
+     * @var Usergroup
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
      */

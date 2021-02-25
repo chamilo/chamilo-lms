@@ -91,7 +91,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }

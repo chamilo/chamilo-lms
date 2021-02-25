@@ -114,7 +114,7 @@ switch ($action) {
                 if (!empty($document)) {
                     $json['name'] = Display::url(
                         api_htmlentities($document->getTitle()),
-                        $repo->getDocumentUrl($document, api_get_course_int_id(), $sessionId),
+                        $repo->getResourceFileUrl($document).'&'.api_get_cidreq(),
                         ['target' => '_blank']
                     );
                     $json['url'] = '#';

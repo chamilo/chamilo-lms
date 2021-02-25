@@ -42,13 +42,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected string $title;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="url", type="string", length=500, nullable=true)
@@ -208,6 +201,16 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function __toString(): string
     {
         return (string) $this->getTitle();
+    }
+
+    /**
+     * Get iid.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 
     /**
@@ -682,23 +685,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->containsFile;
     }
 
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
     /**
      * @return int
      */
@@ -710,21 +696,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @param int $documentId
      */
-    public function setDocumentId($documentId)
+    public function setDocumentId($documentId): self
     {
         $this->documentId = $documentId;
 
         return $this;
-    }
-
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
     }
 
     public function getFileSize(): int

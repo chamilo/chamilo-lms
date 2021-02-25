@@ -121,7 +121,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="question", cascade={"persist"})
+     * @var ArrayCollection|CQuizRelQuestion[]
+     *
+     * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="question", cascade={"persist"})
      */
     protected $relQuizzes;
 
@@ -147,17 +149,17 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->getQuestion();
     }
 
-    public function addCategory(CQuizQuestionCategory $category)
+    public function addCategory(CQuizQuestionCategory $category): void
     {
         if ($this->categories->contains($category)) {
-            return false;
+            return;
         }
 
         $this->categories->add($category);
         $category->addQuestion($this);
     }
 
-    public function updateCategory(CQuizQuestionCategory $category)
+    public function updateCategory(CQuizQuestionCategory $category): void
     {
         if (0 === $this->categories->count()) {
             $this->addCategory($category);
@@ -172,11 +174,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         }
 
         $this->addCategory($category);
-
-        return $this;
     }
 
-    public function removeCategory(CQuizQuestionCategory $category)
+    public function removeCategory(CQuizQuestionCategory $category): void
     {
         if (!$this->categories->contains($category)) {
             return;
@@ -190,10 +190,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set question.
      *
      * @param string $question
-     *
-     * @return CQuizQuestion
      */
-    public function setQuestion($question)
+    public function setQuestion($question): self
     {
         $this->question = $question;
 
@@ -212,10 +210,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set description.
      *
      * @param string $description
-     *
-     * @return CQuizQuestion
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -236,10 +232,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set ponderation.
      *
      * @param float $ponderation
-     *
-     * @return CQuizQuestion
      */
-    public function setPonderation($ponderation)
+    public function setPonderation($ponderation): self
     {
         $this->ponderation = $ponderation;
 
@@ -260,10 +254,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set position.
      *
      * @param int $position
-     *
-     * @return CQuizQuestion
      */
-    public function setPosition($position)
+    public function setPosition($position): self
     {
         $this->position = $position;
 
@@ -284,10 +276,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set type.
      *
      * @param int $type
-     *
-     * @return CQuizQuestion
      */
-    public function setType($type)
+    public function setType($type): self
     {
         $this->type = $type;
 

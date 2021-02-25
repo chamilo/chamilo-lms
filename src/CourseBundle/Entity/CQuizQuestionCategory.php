@@ -80,7 +80,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this->getTitle();
     }
 
-    public function addQuestion(CQuizQuestion $question)
+    public function addQuestion(CQuizQuestion $question): void
     {
         if ($this->questions->contains($question)) {
             return;
@@ -90,7 +90,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         $question->addCategory($this);
     }
 
-    public function removeQuestion(CQuizQuestion $question)
+    public function removeQuestion(CQuizQuestion $question): void
     {
         if (!$this->questions->contains($question)) {
             return;
@@ -115,7 +115,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * Get title.
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -149,7 +149,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this;
     }
 
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
@@ -172,7 +172,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * @ORM\PostPersist()
      */
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         // Update id with iid value
         /*$em = $args->getEntityManager();

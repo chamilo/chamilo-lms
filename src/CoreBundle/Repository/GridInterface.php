@@ -16,7 +16,7 @@ interface GridInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null);
 
-    public function setResourceProperties(FormInterface $form, Course $course, Session $session, $fileType): void;
+    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void;
 
     public function getResourceFormType(): string;
 

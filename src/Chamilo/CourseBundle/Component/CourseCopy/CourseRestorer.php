@@ -2842,6 +2842,12 @@ class CourseRestorer
                     'max_attempts' => 0,
                 ];
 
+                if (api_get_configuration_value('lp_minimum_time')) {
+                    if (isset($lp->accumulateWorkTime) && !empty($lp->accumulateWorkTime)) {
+                        $params['accumulate_work_time'] = $lp->accumulateWorkTime;
+                    }
+                }
+
                 if (!empty($condition_session)) {
                     $params['session_id'] = $condition_session;
                 }

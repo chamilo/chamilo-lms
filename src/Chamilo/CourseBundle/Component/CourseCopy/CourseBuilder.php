@@ -1494,6 +1494,13 @@ class CourseBuilder
                     $visibility = '1';
                 }
 
+                $accumulateWorkTime = 0;
+                if (api_get_configuration_value('lp_minimum_time')) {
+                    if (isset($obj->accumulateWorkTime) && !empty($obj->accumulateWorkTime)) {
+                        $accumulateWorkTime = $obj->accumulateWorkTime;
+                    }
+                }
+
                 $lp = new CourseCopyLearnpath(
                     $obj->id,
                     $obj->lp_type,
@@ -1524,7 +1531,8 @@ class CourseBuilder
                     $obj->category_id,
                     $obj->subscribe_users,
                     $obj->hide_toc_frame,
-                    $items
+                    $items,
+                    $accumulateWorkTime
                 );
                 $extraFieldValue = new \ExtraFieldValue('lp');
                 $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);

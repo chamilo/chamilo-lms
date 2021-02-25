@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -22,14 +25,14 @@ class LegacyListener
 {
     use ContainerAwareTrait;
 
-    private $twig;
+    private Environment $twig;
 
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -52,7 +55,7 @@ class LegacyListener
 
         $urlId = 1;
         if (empty($installed)) {
-            throw new \Exception('Chamilo is not installed');
+            throw new Exception('Chamilo is not installed');
         }
 
         $twig = $this->twig;
@@ -122,11 +125,11 @@ class LegacyListener
         $session->set('access_url_id', $urlId);
     }
 
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
     }
 
-    public function onKernelController(ControllerEvent $event)
+    public function onKernelController(ControllerEvent $event): void
     {
     }
 }

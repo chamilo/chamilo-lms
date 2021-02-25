@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -15,7 +17,7 @@ class SessionPathType extends AbstractType
      * For form type details see:
      * http://symfony.com/doc/current/reference/forms/types.html.
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name', 'text')
@@ -23,7 +25,7 @@ class SessionPathType extends AbstractType
             ->add('submit', 'submit');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

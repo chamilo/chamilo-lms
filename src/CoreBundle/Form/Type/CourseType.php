@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form\Type;
@@ -20,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CourseType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // @todo as a service to load the preferred_choices
         $builder
@@ -68,7 +70,7 @@ class CourseType extends AbstractType
             ->add('save', SubmitType::class, ['label' => 'Add']);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

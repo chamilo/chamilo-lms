@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -12,7 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class JuryMembersType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(
             'role',
@@ -38,7 +40,7 @@ class JuryMembersType extends AbstractType
         // Fixes issue with the ajax select, waiting this workaround until symfony add ajax search into the core
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function ($event) use ($factory) {
+            function ($event) use ($factory): void {
                 $form = $event->getForm();
                 $case = $event->getData();
                 $id = $case['user_id'][0];
@@ -58,7 +60,7 @@ class JuryMembersType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

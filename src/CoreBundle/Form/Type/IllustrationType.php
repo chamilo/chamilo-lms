@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form\Type;
@@ -13,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class IllustrationType extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         /*$resolver->setDefaults(
             [

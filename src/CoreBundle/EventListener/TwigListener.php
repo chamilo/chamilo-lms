@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -14,9 +16,9 @@ use Twig\Environment;
 
 class TwigListener
 {
-    private $serializer;
-    private $twig;
-    private $tokenStorage;
+    private SerializerInterface $serializer;
+    private Environment $twig;
+    private TokenStorageInterface $tokenStorage;
 
     public function __construct(Environment $twig, SerializerInterface $serializer, TokenStorageInterface $tokenStorage)
     {

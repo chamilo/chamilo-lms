@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -32,7 +34,7 @@ class CourseListener
 {
     use ContainerAwareTrait;
 
-    private $twig;
+    private Environment $twig;
 
     public function __construct(Environment $twig)
     {
@@ -42,7 +44,7 @@ class CourseListener
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
      */
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             // don't do anything if it's not the master request
@@ -145,8 +147,8 @@ class CourseListener
             } else {
                 //dump("Load chamilo session from DB");
                 $session = $em->getRepository(Session::class)->find($sessionId);
-                if ($session) {
-                    if (false === $session->hasCourse($course)) {
+                if (null !== $session) {
+                    if (!$session->hasCourse($course)) {
                         throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
                     }
 
@@ -177,7 +179,7 @@ class CourseListener
                 //dump('Load chamilo group from DB');
                 $group = $em->getRepository(CGroup::class)->find($groupId);
 
-                if (!$group) {
+                if (null === $group) {
                     throw new NotFoundHttpException($translator->trans('Group not found'));
                 }
 
@@ -210,14 +212,14 @@ class CourseListener
         }
     }
 
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
     }
 
     /**
      * Once the onKernelRequest was fired, we check if the course/session object were set and we inject them in the controller.
      */
-    public function onKernelController(ControllerEvent $event)
+    public function onKernelController(ControllerEvent $event): void
     {
         $controllerList = $event->getController();
 
@@ -287,7 +289,7 @@ class CourseListener
         }
     }
 
-    public function removeCourseFromSession(Request $request)
+    public function removeCourseFromSession(Request $request): void
     {
         $sessionHandler = $request->getSession();
         $alreadyVisited = $sessionHandler->get('course_already_visited');
@@ -336,7 +338,7 @@ class CourseListener
      */
     private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
     {
-        if ($course) {
+        if (null !== $course) {
             $cidReqURL = '&cid='.$course->getId();
             $cidReqURL .= '&sid='.$sessionId;
             $cidReqURL .= '&gid='.$groupId;

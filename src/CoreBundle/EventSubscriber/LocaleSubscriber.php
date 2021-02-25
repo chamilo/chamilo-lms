@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventSubscriber;
@@ -17,9 +19,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class LocaleSubscriber implements EventSubscriberInterface
 {
-    protected $defaultLocale;
-    protected $parameterBag;
-    protected $settingsManager;
+    protected string $defaultLocale;
+    protected ParameterBagInterface $parameterBag;
+    protected SettingsManager $settingsManager;
 
     public function __construct(string $defaultLocale, SettingsManager $settingsManager, ParameterBagInterface $parameterBag)
     {
@@ -40,7 +42,7 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (false === $request->hasSession()) {
+        if (!$request->hasSession()) {
             return;
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventSubscriber;
@@ -11,11 +13,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PaginationSubscriber implements EventSubscriberInterface
 {
-    protected $defaultLocale;
-    protected $parameterBag;
-    protected $settingsManager;
-
-    public function items(ItemsEvent $event)
+    public function items(ItemsEvent $event): void
     {
         if (is_array($event->target)) {
             $event->items = $event->target;
@@ -24,7 +22,7 @@ class PaginationSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function pagination(PaginationEvent $event)
+    public function pagination(PaginationEvent $event): void
     {
         if (is_array($event->target)) {
             $event->setPagination(new SlidingPagination());

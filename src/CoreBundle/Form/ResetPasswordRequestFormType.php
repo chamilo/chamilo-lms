@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;

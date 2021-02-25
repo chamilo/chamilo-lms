@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -13,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CurriculumItemType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         //$builderData = $builder->getData();
         /*$parentIdDisabled = false;
@@ -41,7 +43,7 @@ class CurriculumItemType extends AbstractType
         $builder->add('submit', 'submit');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

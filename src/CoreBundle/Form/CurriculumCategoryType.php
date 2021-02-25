@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -10,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CurriculumCategoryType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $entity = $builder->getData();
 
@@ -30,7 +32,8 @@ class CurriculumCategoryType extends AbstractType
             'entity',
             [
                 'class' => 'Entity\CurriculumCategory',
-                'query_builder' => function ($repository) use ($course,
+                'query_builder' => function ($repository) use (
+                    $course,
                     $session
                 ) {
                     $qb = $repository->createQueryBuilder('c')
@@ -54,7 +57,7 @@ class CurriculumCategoryType extends AbstractType
         $builder->add('submit', 'submit');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

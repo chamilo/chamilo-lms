@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
 
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,14 +14,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class JuryType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', 'text');
         $builder->add(
             'opening_date',
             'datetime',
             [
-                'data' => new \DateTime(),
+                'data' => new DateTime(),
             ]
         );
 
@@ -26,7 +29,7 @@ class JuryType extends AbstractType
             'closure_date',
             'datetime',
             [
-                'data' => new \DateTime(),
+                'data' => new DateTime(),
             ]
         );
 
@@ -54,7 +57,7 @@ class JuryType extends AbstractType
         $builder->add('submit', 'submit');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

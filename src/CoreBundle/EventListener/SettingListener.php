@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -16,7 +18,7 @@ class SettingListener
     {
     }
 
-    public function onSettingPreSave(SettingsEvent $event)
+    public function onSettingPreSave(SettingsEvent $event): void
     {
         /*$urlId = $this->container->get('request')->getSession()->get('access_url_id');
         $url = $this->container->get('doctrine')->getRepository('ChamiloCoreBundle:AccessUrl')->find($urlId);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventSubscriber;
@@ -19,7 +21,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
  */
 class UserLocaleSubscriber implements EventSubscriberInterface
 {
-    private $session;
+    private SessionInterface $session;
 
     public function __construct(SessionInterface $session)
     {
@@ -29,7 +31,7 @@ class UserLocaleSubscriber implements EventSubscriberInterface
     /**
      * Set locale when user enters the platform.
      */
-    public function onInteractiveLogin(InteractiveLoginEvent $event)
+    public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
         /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();

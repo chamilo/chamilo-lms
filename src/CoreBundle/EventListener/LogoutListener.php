@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -15,10 +17,10 @@ use Symfony\Component\Security\Http\Event\LogoutEvent;
 
 class LogoutListener
 {
-    protected $router;
-    protected $checker;
-    protected $storage;
-    protected $em;
+    protected UrlGeneratorInterface $router;
+    protected AuthorizationCheckerInterface $checker;
+    protected TokenStorageInterface $storage;
+    protected EntityManagerInterface $em;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,

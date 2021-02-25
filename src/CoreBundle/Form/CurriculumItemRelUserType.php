@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -13,6 +15,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CurriculumItemRelUserType extends AbstractType
 {
+    /**
+     * @var null
+     */
     public $itemId;
 
     /**
@@ -25,7 +30,7 @@ class CurriculumItemRelUserType extends AbstractType
         $this->itemId = $itemId;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(
             'description',
@@ -39,7 +44,7 @@ class CurriculumItemRelUserType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

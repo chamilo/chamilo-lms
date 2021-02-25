@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -17,24 +19,21 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class CourseAccessListener
 {
-    protected $em;
+    protected EntityManager $em;
 
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected ?Request $request = null;
 
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
 
-    public function setRequest(RequestStack $requestStack)
+    public function setRequest(RequestStack $requestStack): void
     {
         $this->request = $requestStack->getCurrentRequest();
     }
 
-    public function onCourseAccessEvent(CourseAccess $event)
+    public function onCourseAccessEvent(CourseAccess $event): void
     {
         // CourseAccess
         $user = $event->getUser();

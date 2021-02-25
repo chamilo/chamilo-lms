@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
 
+use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +19,7 @@ class BranchType extends AbstractType
      * For form type details see:
      * http://symfony.com/doc/current/reference/forms/types.html.
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builderData = $builder->getData();
 
@@ -60,7 +63,7 @@ class BranchType extends AbstractType
                 'last_sync_trans_date',
                 'datetime',
                 [
-                    'data' => new \DateTime(),
+                    'data' => new DateTime(),
                 ]
             )
             ->add('last_sync_type', 'text')
@@ -71,7 +74,7 @@ class BranchType extends AbstractType
             ->add('submit', 'submit');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

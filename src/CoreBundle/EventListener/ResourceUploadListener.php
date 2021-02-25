@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -14,7 +16,7 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ResourceUploadListener
 {
-    private $router;
+    private RouterInterface $router;
 
     /**
      * ResourceUploadListener constructor.

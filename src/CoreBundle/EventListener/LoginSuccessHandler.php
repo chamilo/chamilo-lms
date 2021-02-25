@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -10,6 +12,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use UserManager;
 
 /**
  * Class LoginSuccessHandler.
@@ -17,9 +20,9 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 //class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 class LoginSuccessHandler
 {
-    protected $router;
-    protected $checker;
-    protected $settingsManager;
+    protected UrlGeneratorInterface $router;
+    protected AuthorizationCheckerInterface $checker;
+    protected SettingsManager $settingsManager;
 
     /**
      * LoginSuccessHandler constructor.
@@ -103,7 +106,7 @@ class LoginSuccessHandler
         // Redirecting to a course or a session.
         if ('true' === $goToCourse) {
             // Get the courses list
-            $personal_course_list = \UserManager::get_personal_session_course_list($userId);
+            $personal_course_list = UserManager::get_personal_session_course_list($userId);
             $my_session_list = [];
             $count_of_courses_no_sessions = 0;
             foreach ($personal_course_list as $course) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -10,14 +12,14 @@ use Vich\UploaderBundle\Event\Event;
 
 class AssetListener
 {
-    protected $assetRepository;
+    protected AssetRepository $assetRepository;
 
     public function __construct(AssetRepository $assetRepository)
     {
         $this->assetRepository = $assetRepository;
     }
 
-    public function onVichUploaderPostRemove(Event $event)
+    public function onVichUploaderPostRemove(Event $event): void
     {
         /** @var Asset $asset */
         $asset = $event->getObject();

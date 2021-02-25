@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventSubscriber;
@@ -13,11 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function is_a;
 
 class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterface
 {
-    private $generator;
-    private $resourceNodeRepository;
+    private UrlGeneratorInterface $generator;
+    private ResourceNodeRepository $resourceNodeRepository;
 
     public function __construct(UrlGeneratorInterface $generator, ResourceNodeRepository $resourceNodeRepository)
     {
@@ -45,7 +48,7 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
 
         if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) ||
             //!\is_a($attributes['resource_class'], ResourceFile::class, true)
-            !\is_a($attributes['resource_class'], AbstractResource::class, true)
+            !is_a($attributes['resource_class'], AbstractResource::class, true)
         ) {
             return;
         }

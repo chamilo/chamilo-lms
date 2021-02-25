@@ -11105,20 +11105,89 @@ class Exercise
             .api_get_cidreq()."&exerciseId=$exerciseId";
         $link = "<a href=\"$url\">$url</a>";
 
+        $objExerciseTmp = new Exercise();
+        $objExerciseTmp->read($exerciseId);
+        $end = $objExerciseTmp->end_time;
+        $start = $objExerciseTmp->start_time;
+        $minutes = $objExerciseTmp->expired_time;
+
+        $teacherName = 'Nombre de profesor';
+
         foreach ($usersArray as $userId => $userData) {
-            $title = get_lang('QuizRemindSubject');
-            $content = sprintf(
-                get_lang('QuizRemindBody'),
-                $courseTitle,
+            $studentName = $userData['complete_name'];
+            $title = sprintf(get_lang('QuizRemindSubject'), $teacherName);
+            $content = sprintf(get_lang('QuizFirstRemindBody'),
+                $studentName,
                 $quizTitle,
-                $link
+                $courseTitle,
+                $courseTitle,
+                $quizTitle
             );
-            MessageManager::send_message_simple(
-                $userId,
+            if (!empty($minutes)) {
+                $content .= sprintf(get_lang('QuizRemindDuration'),
+                    $minutes
+                );
+            }
+            if (!empty($start)) {
+                $start = api_format_time($start);
+                $content .= sprintf(get_lang('QuizRemindStartDate'),
+                    $start
+                );
+            }
+            if (!empty($end)) {
+                $end = api_format_time($end);
+                $content .= sprintf(get_lang('QuizRemindEndDate'),
+                    $end
+                );
+            }
+            $content .= sprintf(get_lang('QuizLastRemindBody'),
+                $link,
+                $link,
+                $teacherName
+            );
+            $drhList = UserManager::getDrhListFromUser($userId);
+            if (!empty($drhList)) {
+                foreach ($drhList as $drhUser) {
+                    $drhUserData = api_get_user_info($drhUser['id']);
+                    $drhName = $drhUserData['complete_name'];
+                    $contentDHR = sprintf(get_lang('QuizDhrRemindBody'),
+                        $drhName,
+                        $studentName,
+                        $quizTitle,
+                        $studentName,
+                        $courseTitle,
+                        $courseTitle,
+                        $quizTitle
+                    );
+                    if (!empty($minutes)) {
+                        $contentDHR .= sprintf(get_lang('QuizRemindDuration'),
+                            $minutes
+                        );
+                    }
+                    if (!empty($start)) {
+                        $start = api_format_time($start);
+
+                        $contentDHR .= sprintf(get_lang('QuizRemindStartDate'),
+                            $start
+                        );
+                    }
+                    if (!empty($end)) {
+                        $end = api_format_time($end);
+                        $contentDHR .= sprintf(get_lang('QuizRemindEndDate'),
+                            $end
+                        );
+                    }
+                    MessageManager::send_message(
+                        $drhUser['id'],
+                        $title,
+                        $contentDHR
+                    );
+                }
+            }
+            MessageManager::send_message(
+                $userData['id'],
                 $title,
-                $content,
-                0,
-                true
+                $content
             );
         }
 

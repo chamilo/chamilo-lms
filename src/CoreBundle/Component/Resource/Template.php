@@ -1,22 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Resource;
 
+use InvalidArgumentException;
+
 class Template
 {
-    protected $index;
-    protected $list;
-    protected $edit;
-    protected $viewResource;
-    protected $new;
-    protected $newFolder;
-    protected $diskSpace;
-    protected $info;
-    protected $infoAjax;
-    protected $preview;
-    protected $upload;
+    protected string $index;
+
+    protected string $list;
+
+    protected string $edit;
+
+    protected string $viewResource;
+
+    protected string $new;
+
+    protected string $newFolder;
+
+    protected string $diskSpace;
+
+    protected string $info;
+
+    protected string $infoAjax;
+
+    protected string $preview;
+
+    protected string $upload;
 
     public function __construct()
     {
@@ -46,7 +60,7 @@ class Template
             return $this->$action;
         }
 
-        throw new \InvalidArgumentException("No template found for action: $action");
+        throw new InvalidArgumentException("No template found for action: $action");
     }
 
     public function setIndex(string $index): self

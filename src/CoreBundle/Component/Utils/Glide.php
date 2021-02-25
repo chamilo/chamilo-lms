@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Utils;
@@ -8,13 +10,10 @@ use League\Glide\Responses\SymfonyResponseFactory;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
 
-/**
- * Class Glide.
- */
 class Glide
 {
-    protected $server;
-    protected $filters;
+    protected Server $server;
+    protected array $filters;
 
     /**
      * Glide constructor.

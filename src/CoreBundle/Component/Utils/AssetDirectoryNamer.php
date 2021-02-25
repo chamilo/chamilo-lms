@@ -1,28 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Utils;
 
 use Chamilo\CoreBundle\Entity\Asset;
+use InvalidArgumentException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\ConfigurableInterface;
 use Vich\UploaderBundle\Naming\DirectoryNamerInterface;
+use function array_merge;
+use function implode;
+use function substr;
 
 class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterface
 {
-    /**
-     * @var PropertyAccessorInterface
-     */
-    protected $propertyAccessor;
-    /**
-     * @var string
-     */
-    private $propertyPath;
-    private $charsPerDir = 2;
-    private $dirs = 1;
+    protected PropertyAccessorInterface $propertyAccessor;
+    private string $propertyPath;
+    private int $charsPerDir = 2;
+    private int $dirs = 1;
 
     public function __construct(?PropertyAccessorInterface $propertyAccessor)
     {
@@ -37,12 +37,12 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
     public function configure(array $options): void
     {
         if (empty($options['property'])) {
-            throw new \InvalidArgumentException('Option "property" is missing or empty.');
+            throw new InvalidArgumentException('Option "property" is missing or empty.');
         }
 
         $this->propertyPath = $options['property'];
 
-        $options = \array_merge(['chars_per_dir' => $this->charsPerDir, 'dirs' => $this->dirs], $options);
+        $options = array_merge(['chars_per_dir' => $this->charsPerDir, 'dirs' => $this->dirs], $options);
 
         $this->charsPerDir = $options['chars_per_dir'];
         $this->dirs = $options['dirs'];
@@ -57,12 +57,12 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
 
         if (Asset::EXTRA_FIELD === $category) {
             for ($i = 0, $start = 0; $i < $this->dirs; $i++, $start += $this->charsPerDir) {
-                $parts[] = \substr($fileName, $start, $this->charsPerDir);
+                $parts[] = substr($fileName, $start, $this->charsPerDir);
             }
         } else {
             $parts[] = $fileName;
         }
 
-        return \implode('/', $parts);
+        return implode('/', $parts);
     }
 }

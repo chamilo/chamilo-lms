@@ -1,10 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Utils;
 
 use ChamiloSession as Session;
+use Database;
+use DateInterval;
+use DateTime;
+use DateTimeZone;
+use Display;
+use Exception;
+use Template;
 
 class ChamiloApi
 {
@@ -83,7 +92,7 @@ class ChamiloApi
                     $accessUrlId = $accessUrl;
                 }
             }
-            $themeDir = \Template::getThemeDir($theme);
+            $themeDir = Template::getThemeDir($theme);
             $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
 
             $svgIcons = api_get_setting('icons_mode_svg');
@@ -91,25 +100,18 @@ class ChamiloApi
                 $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
                 if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG")) {
                     if ($getSysPath) {
-                        $logoPath = api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG";
-
-                        return $logoPath;
+                        return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG";
                     }
-                    $logoPath = api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
 
-                    return $logoPath;
+                    return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
                 }
             }
             if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
                 if ($getSysPath) {
-                    $logoPath = api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
-
-                    return $logoPath;
+                    return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
                 }
 
-                $logoPath = api_get_path(WEB_CSS_PATH).$customLogoPath;
-
-                return $logoPath;
+                return api_get_path(WEB_CSS_PATH).$customLogoPath;
             }
 
             $originalLogoPath = $themeDir.'images/header-logo.png';
@@ -117,26 +119,19 @@ class ChamiloApi
                 $originalLogoPathSVG = $themeDir.'images/header-logo.svg';
                 if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
                     if ($getSysPath) {
-                        $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
-
-                        return $logoPath;
+                        return api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
                     }
-                    $logoPath = api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
 
-                    return $logoPath;
+                    return api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
                 }
             }
 
             if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
                 if ($getSysPath) {
-                    $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPath;
-
-                    return $logoPath;
+                    return api_get_path(SYS_CSS_PATH).$originalLogoPath;
                 }
 
-                $logoPath = api_get_path(WEB_CSS_PATH).$originalLogoPath;
-
-                return $logoPath;
+                return api_get_path(WEB_CSS_PATH).$originalLogoPath;
             }
             $logoPath = '';
         }
@@ -167,10 +162,10 @@ class ChamiloApi
         $siteName = api_get_setting('siteName');
 
         if (null === $logoPath) {
-            $headerLogo = \Display::url($siteName, api_get_path(WEB_PATH).'index.php');
+            $headerLogo = Display::url($siteName, api_get_path(WEB_PATH).'index.php');
 
             if (!empty($institutionUrl) && !empty($institution)) {
-                $headerLogo .= ' - '.\Display::url($institution, $institutionUrl);
+                $headerLogo .= ' - '.Display::url($institution, $institutionUrl);
             }
 
             $courseInfo = api_get_course_info();
@@ -178,7 +173,7 @@ class ChamiloApi
                 $headerLogo .= '<span class="extLinkSeparator"> - </span>';
 
                 if (!empty($courseInfo['extLink']['url'])) {
-                    $headerLogo .= \Display::url(
+                    $headerLogo .= Display::url(
                         $courseInfo['extLink']['name'],
                         $courseInfo['extLink']['url'],
                         ['class' => 'extLink']
@@ -188,12 +183,12 @@ class ChamiloApi
                 }
             }
 
-            return \Display::tag('h2', $headerLogo, ['class' => 'text-left']);
+            return Display::tag('h2', $headerLogo, ['class' => 'text-left']);
         }
 
-        $image = \Display::img($logoPath, $institution, $imageAttributes);
+        $image = Display::img($logoPath, $institution, $imageAttributes);
 
-        return \Display::url($image, api_get_path(WEB_PATH).'index.php');
+        return Display::url($image, api_get_path(WEB_PATH).'index.php');
     }
 
     /**
@@ -208,7 +203,7 @@ class ChamiloApi
     {
         foreach ($tags as $tag) {
             $string2 = preg_replace('#</\b'.$tag.'\b[^>]*>#i', ' ', $string);
-            if ($string2 != $string) {
+            if ($string2 !== $string) {
                 $string = preg_replace('/<\b'.$tag.'\b[^>]*>/i', ' ', $string2);
             }
         }
@@ -227,14 +222,14 @@ class ChamiloApi
      */
     public static function addOrSubTimeToDateTime($time, $datetime = 'now', $operation = true)
     {
-        $date = new \DateTime($datetime);
+        $date = new DateTime($datetime);
         $hours = $minutes = $seconds = 0;
         sscanf($time, '%d:%d:%d', $hours, $minutes, $seconds);
         $timeSeconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
         if ($operation) {
-            $date->add(new \DateInterval('PT'.$timeSeconds.'S'));
+            $date->add(new DateInterval('PT'.$timeSeconds.'S'));
         } else {
-            $date->sub(new \DateInterval('PT'.$timeSeconds.'S'));
+            $date->sub(new DateInterval('PT'.$timeSeconds.'S'));
         }
 
         return $date->format('Y-m-d H:i:s');
@@ -250,10 +245,10 @@ class ChamiloApi
     public static function getCourseIdByDirectory($directory = null)
     {
         if (!empty($directory)) {
-            $directory = \Database::escape_string($directory);
-            $row = \Database::select(
+            $directory = Database::escape_string($directory);
+            $row = Database::select(
                 'id',
-                \Database::get_main_table(TABLE_MAIN_COURSE),
+                Database::get_main_table(TABLE_MAIN_COURSE),
                 ['where' => ['directory = ?' => [$directory]]],
                 'first'
             );
@@ -386,16 +381,16 @@ class ChamiloApi
      * @param string|null $utcTime Optional. The time to ve converted.
      *                             See api_get_local_time.
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public static function getServerMidnightTime($utcTime = null)
     {
         $localTime = api_get_local_time($utcTime);
         $localTimeZone = api_get_timezone();
 
-        $localMidnight = new \DateTime($localTime, new \DateTimeZone($localTimeZone));
+        $localMidnight = new DateTime($localTime, new DateTimeZone($localTimeZone));
         $localMidnight->modify('midnight');
 
         return $localMidnight;

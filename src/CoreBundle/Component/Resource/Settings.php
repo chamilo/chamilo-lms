@@ -1,23 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Resource;
 
 class Settings
 {
-    /** @var bool */
-    public $allowNodeCreation;
-    /** @var bool */
-    public $allowResourceCreation;
-    /** @var bool */
-    public $allowResourceUpload;
-    /** @var bool */
-    public $allowResourceEdit;
-    public $allowDownloadAll;
-    public $allowDiskSpace;
+    public bool $allowNodeCreation;
+    public bool $allowResourceCreation;
+    public bool $allowResourceUpload;
+    public bool $allowResourceEdit;
+    public bool $allowDownloadAll;
+    public bool $allowDiskSpace;
     // Shows an extra ckeditor input to save the HTML content into a ResourceFile.
-    public $allowToSaveEditorToResourceFile;
+    public bool $allowToSaveEditorToResourceFile;
     public $templates;
 
     public function __construct()

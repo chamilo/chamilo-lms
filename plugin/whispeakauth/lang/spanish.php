@@ -42,3 +42,6 @@ $strings['ActivityId'] = "Identificador de actividad";
 $strings['Success'] = "Satisfactotio";
 $strings['MarkForSpeechAuthentication'] = 'Marcarlo para autenticación con voz';
 $strings['EnrollmentTitle'] = "Inscripción para generar huella de voz con Whispeak";
+$strings['Revocation'] = "Revocación";
+$strings['NoEnrollment'] = "Sin inscripción.";
+$strings['EnrollmentDeleted'] = "Inscripción anulada.";

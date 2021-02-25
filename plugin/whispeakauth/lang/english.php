@@ -42,3 +42,6 @@ $strings['ActivityId'] = "Activity ID";
 $strings['Success'] = "Success";
 $strings['MarkForSpeechAuthentication'] = 'Mark it for speech authentication';
 $strings['EnrollmentTitle'] = "Enrollment to generate voice print with Whispeak";
+$strings['Revocation'] = "Revocation";
+$strings['NoEnrollment'] = "No enrollment.";
+$strings['EnrollmentDeleted'] = "Enrollment deleted";

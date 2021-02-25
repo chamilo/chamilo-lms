@@ -126,7 +126,22 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
 ];
 
+$actionsLeft = '';
+
+if (!empty($results)) {
+    $actionsLeft = Display::url(
+        Display::return_icon('back.png', $plugin->get_lang('Back'), [], ICON_SIZE_MEDIUM),
+        api_get_self()
+    );
+}
+
+$actionsRight = Display::url(
+    Display::return_icon('delete_terms.png', $plugin->get_lang('Revocation'), [], ICON_SIZE_MEDIUM),
+    'revocation.php'
+);
+
 $template = new Template($plugin->get_title());
+$template->assign('actions', Display::toolbarAction('whispeak_admin', [$actionsLeft, $actionsRight]));
 $template->assign(
     'content',
     $form->returnForm().PHP_EOL.$pageContent

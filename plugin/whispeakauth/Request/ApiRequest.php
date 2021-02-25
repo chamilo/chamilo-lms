@@ -99,6 +99,35 @@ class ApiRequest
     }
 
     /**
+     * @param \Chamilo\UserBundle\Entity\User $user
+     *
+     * @throws \Exception
+     *
+     * @return array
+     */
+    public function deleteEnrollment(User $user)
+    {
+        $apiKey = $this->plugin->get(\WhispeakAuthPlugin::SETTING_TOKEN);
+        $langIso = api_get_language_isocode($user->getLanguage());
+        $userAuthKey = \WhispeakAuthPlugin::getAuthUidValue($user->getId());
+
+        if (empty($userAuthKey) || empty($userAuthKey->getValue())) {
+            throw new \Exception(get_plugin_lang('NoEnrollment', 'WhispeakAuthPlugin'));
+        }
+
+        $queryData = ['speaker' => $userAuthKey->getValue()];
+
+        return $this->sendRequest(
+            'delete',
+            'enroll',
+            $apiKey,
+            $langIso,
+            [],
+            $queryData
+        );
+    }
+
+    /**
      * @param string $token
      * @param string $audioFilePath
      *
@@ -140,27 +169,35 @@ class ApiRequest
      * @param string $uri
      * @param string $authBearer
      * @param string $lang
+     * @param array  $multipart
+     * @param array  $queryParams
      *
-     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      *
      * @return array
      */
-    private function sendRequest($method, $uri, $authBearer, $lang, array $multipart = [])
+    private function sendRequest($method, $uri, $authBearer, $lang, array $multipart = [], $queryParams = [])
     {
         $httpClient = new Client(['base_uri' => $this->plugin->getApiUrl()]);
+
+        $options = [];
+        $options['headers'] = [
+            'Authorization' => "Bearer $authBearer",
+            'Accept-Language' => $lang,
+        ];
+
+        if ($queryParams) {
+            $options['query'] = $queryParams;
+        } else {
+            $options['multipart'] = $multipart;
+        }
 
         try {
             $responseBody = $httpClient
                 ->request(
                     $method,
                     $uri,
-                    [
-                        'headers' => [
-                            'Authorization' => "Bearer $authBearer",
-                            'Accept-Language' => $lang,
-                        ],
-                        'multipart' => $multipart,
-                    ]
+                    $options
                 )
                 ->getBody()
                 ->getContents();

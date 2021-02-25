@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
 
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -16,6 +19,7 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use CourseDescription;
 use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
 use ExtraFieldValue;
@@ -25,6 +29,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use UserManager;
 
 /**
  * Class SessionController.
@@ -80,7 +85,7 @@ class SessionController extends AbstractController
             /** @var User $courseCoach */
             foreach ($courseCoaches as $courseCoach) {
                 $coachData = [
-                    'complete_name' => \UserManager::formatUserFullName($courseCoach),
+                    'complete_name' => UserManager::formatUserFullName($courseCoach),
                     'image' => $illustrationRepo->getIllustrationUrl($courseCoach),
                     'diploma' => $courseCoach->getDiplomas(),
                     'openarea' => $courseCoach->getOpenarea(),
@@ -94,7 +99,7 @@ class SessionController extends AbstractController
                 $coachesData[] = $coachData;
             }
 
-            $cd = new \CourseDescription();
+            $cd = new CourseDescription();
             $cd->set_course_id($sessionCourse->getId());
             $cd->set_session_id($session->getId());
             $descriptionsData = $cd->get_description_data();
@@ -195,15 +200,15 @@ class SessionController extends AbstractController
             }
         }*/
 
-        $plugin = \BuyCoursesPlugin::create();
+        $plugin = BuyCoursesPlugin::create();
         $checker = $plugin->isEnabled();
         $sessionIsPremium = null;
         if ($checker) {
             $sessionIsPremium = $plugin->getItemByProduct(
                 $sessionId,
-                \BuyCoursesPlugin::PRODUCT_TYPE_SESSION
+                BuyCoursesPlugin::PRODUCT_TYPE_SESSION
             );
-            if ($sessionIsPremium) {
+            if ([] !== $sessionIsPremium) {
                 $requestSession->set('SessionIsPremium', true);
                 $requestSession->set('sessionId', $sessionId);
             }
@@ -212,7 +217,7 @@ class SessionController extends AbstractController
         $redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');
         $redirectToSession = $redirectToSession ? '?s='.$sessionId : false;
 
-        $coursesInThisSession = \SessionManager::get_course_list_by_session_id($sessionId);
+        $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
         $coursesCount = count($coursesInThisSession);
         $redirectToSession = 1 === $coursesCount && $redirectToSession
             ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
@@ -229,7 +234,7 @@ class SessionController extends AbstractController
             //'has_requirements' => $hasRequirements,
             //'sequences' => $sessionRequirements,
             'is_premium' => $sessionIsPremium,
-            'show_tutor' => 'true' === api_get_setting('show_session_coach') ? true : false,
+            'show_tutor' => 'true' === api_get_setting('show_session_coach'),
             'page_url' => api_get_path(WEB_PATH)."sessions/{$session->getId()}/about/",
             'session_date' => $sessionDates,
             'is_subscribed' => SessionManager::isUserSubscribedAsStudent(

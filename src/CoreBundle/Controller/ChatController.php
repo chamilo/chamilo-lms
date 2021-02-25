@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -10,6 +12,8 @@ use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Repository\CChatConversationRepository;
+use CourseChatUtils;
+use Event;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,14 +33,14 @@ class ChatController extends AbstractResourceController implements CourseControl
      */
     public function indexAction(Request $request): Response
     {
-        \Event::event_access_tool(TOOL_CHAT);
+        Event::event_access_tool(TOOL_CHAT);
 
         $logInfo = [
             'tool' => TOOL_CHAT,
             'action' => 'start',
             'action_details' => 'start-chat',
         ];
-        \Event::registerLog($logInfo);
+        Event::registerLog($logInfo);
 
         return $this->render(
             '@ChamiloCore/Chat/chat.html.twig',
@@ -66,7 +70,7 @@ class ChatController extends AbstractResourceController implements CourseControl
         $json = ['status' => false];
         $parentResourceNode = $this->getParentResourceNode($request);
 
-        $courseChatUtils = new \CourseChatUtils(
+        $courseChatUtils = new CourseChatUtils(
             $courseId,
             $userId,
             $sessionId,
@@ -84,7 +88,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                     'action' => 'exit',
                     'action_details' => 'exit-chat',
                 ];
-                \Event::registerLog($logInfo);
+                Event::registerLog($logInfo);
 
                 break;
             case 'track':
@@ -105,7 +109,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                         'oldFileSize' => false,
                         'history' => $courseChatUtils->readMessages(false, $friend),
                         'usersOnline' => $newUsersOnline,
-                        'userList' => $newUsersOnline != $oldUsersOnline ? $courseChatUtils->listUsersOnline() : null,
+                        'userList' => $newUsersOnline !== $oldUsersOnline ? $courseChatUtils->listUsersOnline() : null,
                         'currentFriend' => $friend,
                     ],
                 ];

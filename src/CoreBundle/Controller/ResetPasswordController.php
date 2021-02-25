@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\User;
@@ -25,7 +27,7 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    private $resetPasswordHelper;
+    private ResetPasswordHelperInterface $resetPasswordHelper;
 
     public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
     {
@@ -137,7 +139,7 @@ class ResetPasswordController extends AbstractController
         ]);
 
         // Do not reveal whether a user account was found or not.
-        if (!$user) {
+        if (null === $user) {
             return $this->redirectToRoute('app_check_email');
         }
 

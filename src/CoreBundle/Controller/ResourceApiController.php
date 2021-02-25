@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -75,7 +77,7 @@ class ResourceApiController extends AbstractController implements CourseControll
         return $resource->getResourceNode()->getComments()->matching($criteria);
     }
 
-    public function postResourceCommentAction($id, Request $request)
+    public function postResourceCommentAction($id, Request $request): void
     {
         $repository = $this->getRepositoryFromRequest($request);
 

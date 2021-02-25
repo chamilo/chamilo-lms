@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Display;
+use FormValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,11 +41,11 @@ class AdminController extends BaseController
     /**
      * @param string $url
      *
-     * @return \FormValidator
+     * @return FormValidator
      */
     private function getSearchForm($url)
     {
-        $form = new \FormValidator(
+        $form = new FormValidator(
             'search-form',
             'get',
             $url,
@@ -66,7 +70,7 @@ class AdminController extends BaseController
         $blocks = [];
 
         /* Users */
-        $blocks['users']['icon'] = \Display::return_icon(
+        $blocks['users']['icon'] = Display::return_icon(
             'members.png',
             get_lang('Users'),
             [],
@@ -127,7 +131,7 @@ class AdminController extends BaseController
 
         if (api_is_platform_admin()) {
             /* Courses */
-            $blocks['courses']['icon'] = \Display::return_icon(
+            $blocks['courses']['icon'] = Display::return_icon(
                 'course.png',
                 get_lang('Courses'),
                 [],
@@ -206,7 +210,7 @@ class AdminController extends BaseController
             $blocks['courses']['extra'] = null;
 
             /* Portal */
-            $blocks['platform']['icon'] = \Display::return_icon(
+            $blocks['platform']['icon'] = Display::return_icon(
                 'platform.png',
                 get_lang('Portal'),
                 [],
@@ -241,8 +245,8 @@ class AdminController extends BaseController
             ];
             $items[] = [
                 'url' => api_get_path(
-                        WEB_CODE_PATH
-                    ).'calendar/agenda_js.php?type=admin',
+                    WEB_CODE_PATH
+                ).'calendar/agenda_js.php?type=admin',
                 'label' => get_lang('Global agenda'),
             ];
             $items[] = [
@@ -259,18 +263,16 @@ class AdminController extends BaseController
             ];
             $items[] = [
                 'url' => api_get_path(
-                        WEB_CODE_PATH
-                    ).'mySpace/company_reports.php',
+                    WEB_CODE_PATH
+                ).'mySpace/company_reports.php',
                 'label' => get_lang('Reports'),
             ];
 
-            if (api_get_multiple_access_url()) {
-                if (api_is_global_platform_admin()) {
-                    $items[] = [
-                        'url' => $adminUrl.'access_urls.php',
-                        'label' => get_lang('Configure multiple access URL'),
-                    ];
-                }
+            if (api_get_multiple_access_url() && api_is_global_platform_admin()) {
+                $items[] = [
+                    'url' => $adminUrl.'access_urls.php',
+                    'label' => get_lang('Configure multiple access URL'),
+                ];
             }
 
             if ('true' ==
@@ -286,7 +288,7 @@ class AdminController extends BaseController
         }
 
         /* Course sessions */
-        $blocks['sessions']['icon'] = \Display::return_icon(
+        $blocks['sessions']['icon'] = Display::return_icon(
             'session.png',
             get_lang('Course sessions'),
             [],
@@ -301,14 +303,14 @@ class AdminController extends BaseController
         $items = [];
         $items[] = [
             'url' => api_get_path(
-                    WEB_CODE_PATH
-                ).'session/session_list.php',
+                WEB_CODE_PATH
+            ).'session/session_list.php',
             'label' => get_lang('Training sessions list'),
         ];
         $items[] = [
             'url' => api_get_path(
-                    WEB_CODE_PATH
-                ).'session/session_add.php',
+                WEB_CODE_PATH
+            ).'session/session_add.php',
             'label' => get_lang('Add a training session'),
         ];
         $items[] = [
@@ -358,7 +360,7 @@ class AdminController extends BaseController
 
         /* Settings */
         if (api_is_platform_admin()) {
-            $blocks['settings']['icon'] = \Display::return_icon(
+            $blocks['settings']['icon'] = Display::return_icon(
                 'settings.png',
                 get_lang('System'),
                 [],
@@ -402,7 +404,7 @@ class AdminController extends BaseController
 
             //Skills
             if ('true' == api_get_setting('skill.allow_skills_tool')) {
-                $blocks['skills']['icon'] = \Display::return_icon(
+                $blocks['skills']['icon'] = Display::return_icon(
                     'skill-badges.png',
                     get_lang('Skills'),
                     [],
@@ -424,8 +426,8 @@ class AdminController extends BaseController
                 //$items[] = array('url' => $adminUrl.'skills_profile.php',   'label' => get_lang('Skills Profile'));
                 $items[] = [
                     'url' => api_get_path(
-                            WEB_CODE_PATH
-                        ).'social/skills_ranking.php',
+                        WEB_CODE_PATH
+                    ).'social/skills_ranking.php',
                     'label' => get_lang('Skills ranking'),
                 ];
                 $items[] = [
@@ -438,7 +440,7 @@ class AdminController extends BaseController
             }
 
             /* Chamilo.org */
-            $blocks['chamilo']['icon'] = \Display::return_icon(
+            $blocks['chamilo']['icon'] = Display::return_icon(
                 'platform.png',
                 'Chamilo.org',
                 [],

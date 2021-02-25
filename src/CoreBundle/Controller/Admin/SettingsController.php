@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Admin;
@@ -10,6 +12,7 @@ use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -77,7 +80,7 @@ class SettingsController extends BaseController
                 $schemaAlias = $manager->convertNameSpaceToService($category);
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
-                foreach ($settings->getParameters() as $name => $value) {
+                foreach (array_keys($settings->getParameters()) as $name) {
                     if (!in_array($name, $list)) {
                         $form->remove($name);
                         $settings->remove($name);
@@ -148,8 +151,8 @@ class SettingsController extends BaseController
 
         if (!empty($keyword)) {
             $params = $settings->getParameters();
-            foreach ($params as $name => $value) {
-                if (!in_array($name, array_keys($settingsFromKeyword))) {
+            foreach (array_keys($params) as $name) {
+                if (!array_key_exists($name, $settingsFromKeyword)) {
                     $form->remove($name);
                 }
             }
@@ -192,7 +195,7 @@ class SettingsController extends BaseController
     /**
      * Sync settings from classes with the database.
      */
-    public function syncSettings(Request $request)
+    public function syncSettings(Request $request): void
     {
         $manager = $this->getSettingsManager();
         // @todo improve get the current url entity
@@ -203,7 +206,7 @@ class SettingsController extends BaseController
     }
 
     /**
-     * @return \Symfony\Component\Form\FormInterface
+     * @return FormInterface
      */
     private function getSearchForm()
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -89,7 +91,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * If node has children show it
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request): void
     {
         /*$tool = $request->get('tool');
         $type = $request->get('type');
@@ -615,7 +617,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $response = new StreamedResponse(
-            function () use ($zipName, $children, $repo) {
+            function () use ($zipName, $children, $repo): void {
                 // Define suitable options for ZipStream Archive.
                 $options = new Archive();
                 $options->setContentType('application/octet-stream');
@@ -649,7 +651,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * Upload form.
      *
      * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"},
-     *                                      options={"expose"=true})
+     *     options={"expose"=true})
      */
     public function uploadAction(Request $request, $tool, $type, $id): Response
     {
@@ -685,7 +687,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $resourceFile = $resourceNode->getResourceFile();
 
-        if (!$resourceFile) {
+        if (null === $resourceFile) {
             throw new NotFoundHttpException($this->trans('File not found for resource'));
         }
 

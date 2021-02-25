@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Api;
@@ -7,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 
 class UpdateResourceNodeFileAction
@@ -38,8 +41,8 @@ class UpdateResourceNodeFileAction
                 $resourceNode->setContent($content);
                 $resourceNode->getResourceFile()->setSize(strlen($content));
             }
-            $resourceNode->setUpdatedAt(new \DateTime());
-            $resourceNode->getResourceFile()->setUpdatedAt(new \DateTime());
+            $resourceNode->setUpdatedAt(new DateTime());
+            $resourceNode->getResourceFile()->setUpdatedAt(new DateTime());
             $document->setResourceNode($resourceNode);
         }
 
@@ -51,9 +54,7 @@ class UpdateResourceNodeFileAction
                 /** @var ResourceLink $link */
                 $link = $document->getResourceNode()->getResourceLinks()
                     ->filter(
-                        function ($link) use ($linkId) {
-                            return $link->getId() === $linkId;
-                        }
+                        fn ($link) => $link->getId() === $linkId
                     )->first();
 
                 if (null !== $link) {

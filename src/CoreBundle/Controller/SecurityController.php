@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -18,7 +20,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class SecurityController extends AbstractController
 {
-    private $serializer;
+    private SerializerInterface $serializer;
 
     public function __construct(SerializerInterface $serializer)
     {

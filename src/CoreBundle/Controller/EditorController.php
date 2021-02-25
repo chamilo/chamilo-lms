@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -14,6 +16,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
+use Chat;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,7 +60,7 @@ class EditorController extends BaseController
      */
     public function editorFileManager(): Response
     {
-        \Chat::setDisableChat();
+        Chat::setDisableChat();
         $params = [
             'course_condition' => '?'.$this->getCourseUrlQuery(),
         ];

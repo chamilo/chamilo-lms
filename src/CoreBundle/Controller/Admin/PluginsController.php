@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
+use AppPlugin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +20,7 @@ class PluginsController extends BaseController
      */
     public function pluginsAction()
     {
-        $appPlugin = new \AppPlugin();
+        $appPlugin = new AppPlugin();
         $installedPlugins = $appPlugin->getInstalledPlugins();
 
         return $this->render(
@@ -35,7 +38,7 @@ class PluginsController extends BaseController
      */
     public function pluginsAddAction()
     {
-        $appPlugin = new \AppPlugin();
+        $appPlugin = new AppPlugin();
         $allPlugins = $appPlugin->read_plugins_from_path();
         $allPluginsList = [];
         foreach ($allPlugins as $pluginName) {

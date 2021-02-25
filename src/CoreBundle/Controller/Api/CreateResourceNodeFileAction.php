@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CDocument;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -43,7 +46,7 @@ class CreateResourceNodeFileAction
                 $fileParsed = false;
                 // File upload.
                 if ($request->files->count() > 0) {
-                    if (false === $request->files->has('uploadFile')) {
+                    if (!$request->files->has('uploadFile')) {
                         throw new BadRequestHttpException('"uploadFile" is required');
                     }
 
@@ -55,7 +58,7 @@ class CreateResourceNodeFileAction
                 }
 
                 // Get data in content and create a HTML file.
-                if (false === $fileParsed && $content) {
+                if (!$fileParsed && $content) {
                     $handle = tmpfile();
                     fwrite($handle, $content);
                     $meta = stream_get_meta_data($handle);
@@ -64,8 +67,8 @@ class CreateResourceNodeFileAction
                     $fileParsed = true;
                 }
 
-                if (false === $fileParsed) {
-                    throw new \InvalidArgumentException('filetype was set to "file" but not upload found');
+                if (!$fileParsed) {
+                    throw new InvalidArgumentException('filetype was set to "file" but not upload found');
                 }
 
                 break;
@@ -75,21 +78,17 @@ class CreateResourceNodeFileAction
         }
 
         if (empty($title)) {
-            throw new \InvalidArgumentException('title required');
+            throw new InvalidArgumentException('title required');
         }
 
         $document->setTitle($title);
 
         if ($request->request->has('resourceLinkList')) {
             $links = $request->get('resourceLinkList');
-            if (false === strpos($links, '[')) {
-                $links = json_decode('['.$links.']', true);
-            } else {
-                $links = json_decode($links, true);
-            }
+            $links = false === strpos($links, '[') ? json_decode('['.$links.']', true) : json_decode($links, true);
             if (empty($links)) {
                 $message = 'resourceLinkList is not a valid json. Use for example: [{"c_id":1, "visibility":1}]';
-                throw new \InvalidArgumentException($message);
+                throw new InvalidArgumentException($message);
             }
             $document->setResourceLinkArray($links);
         }

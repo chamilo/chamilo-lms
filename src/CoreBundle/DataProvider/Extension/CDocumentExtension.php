@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Security;
 
 final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security)
     {

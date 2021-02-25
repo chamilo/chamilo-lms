@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -16,6 +18,8 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use CourseManager;
 use Database;
 use Display;
+use Event;
+use Exercise;
 use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
 use Security;
@@ -76,34 +80,28 @@ class CourseHomeController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
-        if ($user && $isSpecialCourse) {
-            if (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) {
-                if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
-                    $session->set('is_allowed_in_course', true);
-                }
+        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg'])) {
+            if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
+                $session->set('is_allowed_in_course', true);
             }
         }
 
-        $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-        if ('subscribe' === $action) {
-            if (Security::check_token('get')) {
-                Security::clear_token();
-                $result = CourseManager::autoSubscribeToCourse($courseCode);
-                if ($result) {
-                    if (CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
-                        $session->set('is_allowed_in_course', true);
-                    }
-                }
-                header('Location: '.api_get_self());
-                exit;
+        $action = empty($_GET['action']) ? '' : Security::remove_XSS($_GET['action']);
+        if ('subscribe' === $action && Security::check_token('get')) {
+            Security::clear_token();
+            $result = CourseManager::autoSubscribeToCourse($courseCode);
+            if ($result && CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
+                $session->set('is_allowed_in_course', true);
             }
+            header('Location: '.api_get_self());
+            exit;
         }
 
         $logInfo = [
             'tool' => 'course-main',
             'action' => $action,
         ];
-        \Event::registerLog($logInfo);
+        Event::registerLog($logInfo);
 
         /*	Introduction section (editable by course admins) */
         /*$introduction = Display::return_introduction_section(
@@ -186,7 +184,7 @@ class CourseHomeController extends ToolBaseController
         $session->remove('lpobject');
 
         api_remove_in_gradebook();
-        \Exercise::cleanSessionVariables();
+        Exercise::cleanSessionVariables();
 
         $shortcuts = [];
         if ($user) {
@@ -283,7 +281,7 @@ class CourseHomeController extends ToolBaseController
         );
     }
 
-    private function autoLaunch()
+    private function autoLaunch(): void
     {
         /* Auto launch code */
         $autoLaunchWarning = '';

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
 
+use SocialManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,7 +25,7 @@ class OnlineController extends BaseController
     {
         // @todo don't use legacy code
         $users = who_is_online(0, MAX_ONLINE_USERS);
-        $users = \SocialManager::display_user_list($users);
+        $users = SocialManager::display_user_list($users);
 
         return $this->render(
             '@ChamiloCore/Online/index.html.twig',
@@ -46,7 +49,7 @@ class OnlineController extends BaseController
             $cidReq
         );
 
-        $users = \SocialManager::display_user_list($users);
+        $users = SocialManager::display_user_list($users);
 
         return $this->render(
             '@ChamiloCore/Online/index.html.twig',
@@ -71,7 +74,7 @@ class OnlineController extends BaseController
             $_GET['cidReq']
         );
 
-        $users = \SocialManager::display_user_list($users);
+        $users = SocialManager::display_user_list($users);
 
         return $this->render(
             '@ChamiloCore/Online/index.html.twig',

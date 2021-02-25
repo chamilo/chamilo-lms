@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -11,7 +13,9 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use CourseManager;
 use Doctrine\ORM\EntityRepository;
+use ExtraFieldValue;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +80,7 @@ class CourseController extends AbstractController
                 ]
             );
 
-        $courseValues = new \ExtraFieldValue('course');
+        $courseValues = new ExtraFieldValue('course');
 
         $urlCourse = api_get_path(WEB_PATH)."course/$courseId/about";
         $courseTeachers = $course->getTeachers();
@@ -154,7 +158,7 @@ class CourseController extends AbstractController
             'custom' => array_reverse($courseCustom),
         ];
 
-        $subscriptionUser = \CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
+        $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
 
         /*$allowSubscribe = false;
         if ($course->getSubscribe() || api_is_platform_admin()) {

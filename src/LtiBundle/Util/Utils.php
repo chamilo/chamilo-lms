@@ -13,7 +13,7 @@ use Chamilo\LtiBundle\Entity\ExternalTool;
  */
 class Utils
 {
-    private $settingsManager;
+    private SettingsManager $settingsManager;
 
     /**
      * Utils constructor.

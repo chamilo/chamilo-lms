@@ -266,7 +266,7 @@ class ExternalTool
     /**
      * @return bool
      */
-    public function isGlobal()
+    public function isGlobal(): bool
     {
         return null === $this->course;
     }
@@ -315,7 +315,7 @@ class ExternalTool
      *
      * @return bool
      */
-    public function isActiveDeepLinking()
+    public function isActiveDeepLinking(): bool
     {
         return $this->activeDeepLinking;
     }
@@ -415,7 +415,7 @@ class ExternalTool
     /**
      * @return bool
      */
-    public function isSharingName()
+    public function isSharingName(): bool
     {
         $unserialize = $this->unserializePrivacy();
 
@@ -430,7 +430,7 @@ class ExternalTool
     /**
      * @return bool
      */
-    public function isSharingEmail()
+    public function isSharingEmail(): bool
     {
         $unserialize = $this->unserializePrivacy();
 
@@ -440,7 +440,7 @@ class ExternalTool
     /**
      * @return bool
      */
-    public function isSharingPicture()
+    public function isSharingPicture(): bool
     {
         $unserialize = $this->unserializePrivacy();
 

@@ -36,7 +36,7 @@ class Course
     /**
      * Check if a resource links to the given resource.
      */
-    public function is_linked_resource(&$resource_to_check)
+    public function is_linked_resource(&$resource_to_check): bool
     {
         foreach ($this->resources as $type => $resources) {
             if (is_array($resources)) {

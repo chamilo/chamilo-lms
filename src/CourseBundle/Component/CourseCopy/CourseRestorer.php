@@ -2531,7 +2531,7 @@ class CourseRestorer
      *
      * @return bool
      */
-    public function is_survey_code_available($survey_code)
+    public function is_survey_code_available($survey_code): bool
     {
         $table_sur = Database::get_course_table(TABLE_SURVEY);
         $sql = "SELECT * FROM $table_sur

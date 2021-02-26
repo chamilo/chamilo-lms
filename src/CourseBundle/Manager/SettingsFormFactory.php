@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CourseBundle\Manager;
 
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactoryInterface;
@@ -40,7 +42,9 @@ final class SettingsFormFactory implements SettingsFormFactoryInterface
             FormType::class,
             $data,
             array_merge_recursive(
-                ['data_class' => null],
+                [
+                    'data_class' => null,
+                ],
                 $options
             )
         );

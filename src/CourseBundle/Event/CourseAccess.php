@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Event;
@@ -8,9 +10,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class CourseAccess.
- */
 class CourseAccess extends Event
 {
     protected User $user;

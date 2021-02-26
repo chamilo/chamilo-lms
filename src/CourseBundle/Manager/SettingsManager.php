@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Manager;
@@ -76,7 +78,7 @@ class SettingsManager extends ChamiloSettingsManager
         return $settings;
     }
 
-    public function save(SettingsInterface $settings): bool
+    public function save(SettingsInterface $settings): void
     {
         $namespace = $settings->getSchemaAlias();
 
@@ -100,7 +102,9 @@ class SettingsManager extends ChamiloSettingsManager
 
         $repo = $this->manager->getRepository(SettingsCurrent::class);
         /** @var CCourseSetting[] $persistedParameters */
-        $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
+        $persistedParameters = $repo->findBy([
+            'category' => $settings->getSchemaAlias(),
+        ]);
 
         $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
@@ -125,8 +129,6 @@ class SettingsManager extends ChamiloSettingsManager
         }
 
         $this->manager->flush();
-
-        return true;
 
         /*$schema = $this->schemaRegistry->getSchema($namespace);
 
@@ -204,7 +206,9 @@ class SettingsManager extends ChamiloSettingsManager
     {
         $repo = $this->manager->getRepository(CCourseSetting::class);
         $parameters = [];
-        foreach ($repo->findBy(['category' => $namespace]) as $parameter) {
+        foreach ($repo->findBy([
+            'category' => $namespace,
+        ]) as $parameter) {
             $parameters[$parameter->getTitle()] = $parameter->getValue();
         }
 

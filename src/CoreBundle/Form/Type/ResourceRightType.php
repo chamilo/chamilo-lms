@@ -11,9 +11,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class ResourceRightType.
- */
 class ResourceRightType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -22,13 +19,18 @@ class ResourceRightType extends AbstractType
             ->add(
                 'role',
                 'choice',
-                ['choices' => ToolResourceRight::getDefaultRoles()]
+                [
+                    'choices' => ToolResourceRight::getDefaultRoles(),
+                ]
             )
             ->add(
                 'mask',
                 'choice',
-                ['choices' => ToolResourceRight::getMaskList()]
-            );
+                [
+                    'choices' => ToolResourceRight::getMaskList(),
+                ]
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

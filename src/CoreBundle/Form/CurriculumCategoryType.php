@@ -38,8 +38,11 @@ class CurriculumCategoryType extends AbstractType
                 ) {
                     $qb = $repository->createQueryBuilder('c')
                         ->where('c.cId = :id')
-                        ->orderBy('c.title', 'ASC');
-                    $parameters = ['id' => $course->getId()];
+                        ->orderBy('c.title', 'ASC')
+                    ;
+                    $parameters = [
+                        'id' => $course->getId(),
+                    ];
 
                     if (!empty($session)) {
                         $qb->andWhere('c.sessionId = :session_id');

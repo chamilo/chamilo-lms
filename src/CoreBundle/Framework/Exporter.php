@@ -15,9 +15,6 @@ use Sonata\Exporter\Writer\XlsWriter;
 use Sonata\Exporter\Writer\XmlWriter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/**
- * Class Exporter.
- */
 class Exporter
 {
     /**

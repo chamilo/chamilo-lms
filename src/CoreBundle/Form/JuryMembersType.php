@@ -24,14 +24,17 @@ class JuryMembersType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->where('u.role LIKE :role')
-                            ->setParameter(':role', 'ROLE_JURY%')
-                            ->orderBy('u.name', 'DESC');
+                        ->where('u.role LIKE :role')
+                        ->setParameter(':role', 'ROLE_JURY%')
+                        ->orderBy('u.name', 'DESC')
+                    ;
                 },
             ]
         );
 
-        $builder->add('user_id', 'choice', ['label' => 'User']);
+        $builder->add('user_id', 'choice', [
+            'label' => 'User',
+        ]);
         $builder->add('jury_id', 'hidden');
         $builder->add('submit', 'submit');
 
@@ -52,7 +55,9 @@ class JuryMembersType extends AbstractType
                             'user_id',
                             'hidden',
                             $id,
-                            ['auto_initialize' => false]
+                            [
+                                'auto_initialize' => false,
+                            ]
                         )
                     );
                 }

@@ -12,9 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class ResourceLinkType.
- */
 class ResourceLinkType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -30,7 +27,9 @@ class ResourceLinkType extends AbstractType
                         'user' => 'User',
                         'group' => 'Group',
                     ],
-                    'attr' => ['class' => 'sharing_options'],
+                    'attr' => [
+                        'class' => 'sharing_options',
+                    ],
                     'mapped' => false,
                 ]
             )
@@ -38,7 +37,9 @@ class ResourceLinkType extends AbstractType
                 'search',
                 'hidden',
                 [
-                    'attr' => ['class' => 'extra_hidden'],
+                    'attr' => [
+                        'class' => 'extra_hidden',
+                    ],
                     'mapped' => false,
                 ]
             )

@@ -10,9 +10,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class YesNoType.
- */
 class YesNoType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
@@ -32,9 +29,6 @@ class YesNoType extends AbstractType
         return ChoiceType::class;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'yes_no';

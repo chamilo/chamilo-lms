@@ -10,9 +10,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class CurriculumItemType.
- */
 class CurriculumItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -34,7 +31,8 @@ class CurriculumItemType extends AbstractType
                 'class' => 'Entity\CurriculumCategory',
                 'query_builder' => function ($repository) {
                     return $repository->createQueryBuilder('p')
-                        ->orderBy('p.title', 'ASC');
+                        ->orderBy('p.title', 'ASC')
+                    ;
                 },
                 'property' => 'title',
                 'required' => false,

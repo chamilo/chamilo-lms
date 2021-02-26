@@ -18,7 +18,9 @@ class SessionTreeType extends AbstractType
         $builder->add(
             'type',
             'choice',
-            ['choices' => ['1', '2', '3', '4']]
+            [
+                'choices' => ['1', '2', '3', '4'],
+            ]
         );
 
         $builder->add(
@@ -29,7 +31,8 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', 'DESC')
+                    ;
                 },
             ]
         );
@@ -42,7 +45,8 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', 'DESC')
+                    ;
                 },
             ]
         );
@@ -55,7 +59,8 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', 'DESC')
+                    ;
                 },
             ]
         );
@@ -68,7 +73,8 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', 'DESC')
+                    ;
                 },
             ]
         );
@@ -81,12 +87,14 @@ class SessionTreeType extends AbstractType
                 'property' => 'title',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.title', 'DESC');
+                        ->orderBy('u.title', 'DESC')
+                    ;
                 },
             ]
         );
         $builder
-            ->add('submit', 'submit');
+            ->add('submit', 'submit')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

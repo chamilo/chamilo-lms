@@ -14,9 +14,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use UserManager;
 
-/**
- * Class LoginSuccessHandler.
- */
 //class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 class LoginSuccessHandler
 {
@@ -24,9 +21,6 @@ class LoginSuccessHandler
     protected AuthorizationCheckerInterface $checker;
     protected SettingsManager $settingsManager;
 
-    /**
-     * LoginSuccessHandler constructor.
-     */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerInterface $checker,
@@ -38,7 +32,7 @@ class LoginSuccessHandler
     }
 
     /**
-     * @return RedirectResponse|null
+     * @return null|RedirectResponse
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
@@ -118,14 +112,14 @@ class LoginSuccessHandler
             }
 
             $count_of_sessions = count($my_session_list);
-            if (1 == $count_of_sessions && 0 == $count_of_courses_no_sessions) {
+            if (1 === $count_of_sessions && 0 === $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $sessionId = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid='.$sessionId;
             }
 
-            if (0 == $count_of_sessions && 1 == $count_of_courses_no_sessions) {
+            if (0 === $count_of_sessions && 1 === $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid=0';

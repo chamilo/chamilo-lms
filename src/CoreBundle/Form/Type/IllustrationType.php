@@ -10,9 +10,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class IllustrationType.
- */
 class IllustrationType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
@@ -32,9 +29,6 @@ class IllustrationType extends AbstractType
         return FileType::class;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'illustration';

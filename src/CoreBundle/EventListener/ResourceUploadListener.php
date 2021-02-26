@@ -11,16 +11,10 @@ use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class ResourceUploadListener.
- */
 class ResourceUploadListener
 {
     private RouterInterface $router;
 
-    /**
-     * ResourceUploadListener constructor.
-     */
     public function __construct(RouterInterface $router)
     {
         //$this->om = $om;

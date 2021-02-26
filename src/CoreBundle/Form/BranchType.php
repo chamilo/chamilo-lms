@@ -46,7 +46,10 @@ class BranchType extends AbstractType
             ->add(
                 'parent_id',
                 'text',
-                ['required' => false, 'disabled' => $parentIdDisabled]
+                [
+                    'required' => false,
+                    'disabled' => $parentIdDisabled,
+                ]
             )
             //->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))
             ->add('branch_ip', 'text')
@@ -58,7 +61,9 @@ class BranchType extends AbstractType
             ->add('delay', 'text')
             ->add('admin_mail', EmailType::class)
             ->add('admin_name', 'text')
-            ->add('admin_phone', 'text', ['required' => false])
+            ->add('admin_phone', 'text', [
+                'required' => false,
+            ])
             ->add(
                 'last_sync_trans_date',
                 'datetime',
@@ -71,7 +76,8 @@ class BranchType extends AbstractType
             ->add('ssl_pub_key', 'text')
             ->add('last_sync_trans_id', 'text')
             ->add('access_url_id', 'text')
-            ->add('submit', 'submit');
+            ->add('submit', 'submit')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

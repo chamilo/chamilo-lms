@@ -17,9 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class CourseType.
- */
 class CourseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -31,20 +28,30 @@ class CourseType extends AbstractType
             ->add(
                 'course_language',
                 LocaleType::class,
-                ['preferred_choices' => ['en', 'fr', 'es']]
+                [
+                    'preferred_choices' => ['en', 'fr', 'es'],
+                ]
             )
             ->add(
                 'visibility',
                 ChoiceType::class,
-                ['choices' => Course::getStatusList()]
+                [
+                    'choices' => Course::getStatusList(),
+                ]
             )
-            ->add('department_name', TextType::class, ['required' => false])
-            ->add('department_url', UrlType::class, ['required' => false])
+            ->add('department_name', TextType::class, [
+                'required' => false,
+            ])
+            ->add('department_url', UrlType::class, [
+                'required' => false,
+            ])
             //->add('disk_quota', 'text')
             ->add(
                 'expiration_date',
                 DateType::class,
-                ['required' => false]
+                [
+                    'required' => false,
+                ]
             )
             /* ->add('general_coach', 'entity', array(
                  'class' => 'ChamiloCoreBundle:User',
@@ -67,7 +74,10 @@ class CourseType extends AbstractType
              ))*/
             /*
             ->add('coach_access_end_date', 'sonata_type_datetime_picker')*/
-            ->add('save', SubmitType::class, ['label' => 'Add']);
+            ->add('save', SubmitType::class, [
+                'label' => 'Add',
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -79,9 +89,6 @@ class CourseType extends AbstractType
         );
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'course';

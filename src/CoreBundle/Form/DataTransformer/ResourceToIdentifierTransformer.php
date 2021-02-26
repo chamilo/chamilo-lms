@@ -40,7 +40,9 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
             return null;
         }
 
-        $resource = $this->repository->findOneBy([$this->identifier => $value]);
+        $resource = $this->repository->findOneBy([
+            $this->identifier => $value,
+        ]);
         if (null === $resource) {
             throw new TransformationFailedException(sprintf('Object "%s" with identifier "%s"="%s" does not exist.', $this->repository->getClassName(), $this->identifier, $value));
         }

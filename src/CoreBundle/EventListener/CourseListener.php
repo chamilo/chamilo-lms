@@ -331,7 +331,7 @@ class CourseListener
     }
 
     /**
-     * @param Course|null $course
+     * @param null|Course $course
      * @param int         $sessionId
      * @param int         $groupId
      * @param string      $origin

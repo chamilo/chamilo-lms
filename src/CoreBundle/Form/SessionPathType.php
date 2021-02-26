@@ -22,7 +22,8 @@ class SessionPathType extends AbstractType
         $builder
             ->add('name', 'text')
             ->add('description', 'text')
-            ->add('submit', 'submit');
+            ->add('submit', 'submit')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

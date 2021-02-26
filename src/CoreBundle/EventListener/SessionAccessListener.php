@@ -12,18 +12,12 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Class SessionAccessListener.
- */
 class SessionAccessListener
 {
     protected EntityManager $em;
 
     protected ?Request $request = null;
 
-    /**
-     * SessionAccessListener constructor.
-     */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
@@ -46,7 +40,8 @@ class SessionAccessListener
             ->setCId($course->getId())
             ->setUser($user)
             ->setSessionId($session->getId())
-            ->setUserIp($ip);
+            ->setUserIp($ip)
+        ;
 
         $this->em->persist($access);
         $this->em->flush();

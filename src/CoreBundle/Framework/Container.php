@@ -169,7 +169,7 @@ class Container
     }
 
     /**
-     * @return Request|null
+     * @return null|Request
      */
     public static function getRequest()
     {
@@ -193,7 +193,7 @@ class Container
     }
 
     /**
-     * @return Session|false
+     * @return false|Session
      */
     public static function getSession()
     {

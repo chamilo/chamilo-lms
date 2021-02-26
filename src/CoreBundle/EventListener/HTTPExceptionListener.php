@@ -21,7 +21,9 @@ final class HTTPExceptionListener
             return;
         }
 
-        $response = new JsonResponse(['error' => $exception->getMessage()]);
+        $response = new JsonResponse([
+            'error' => $exception->getMessage(),
+        ]);
         $response->setStatusCode($exception->getStatusCode());
         $event->setResponse($response);
     }

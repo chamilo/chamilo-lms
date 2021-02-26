@@ -9,9 +9,6 @@ namespace Chamilo\CoreBundle\EventListener;
 use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Class SettingListener.
- */
 class SettingListener
 {
     public function __construct()

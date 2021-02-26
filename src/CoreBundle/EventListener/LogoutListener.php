@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\User;
 use Database;
+use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -35,7 +36,7 @@ class LogoutListener
     }
 
     /**
-     * @return RedirectResponse|null
+     * @return null|RedirectResponse
      */
     public function onSymfonyComponentSecurityHttpEventLogoutEvent(LogoutEvent $event)
     {
@@ -50,18 +51,20 @@ class LogoutListener
             $chat->setUserStatus(0);
         }*/
         $token = $this->storage->getToken();
+        /** @var null|User $user */
         $user = $token->getUser();
         if ($user instanceof User) {
-            $userId = $token->getUser()->getId();
+            $userId = $user->getId();
             $table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
             $sql = "SELECT login_id, login_date
-                    FROM $table
-                    WHERE login_user_id = $userId
+                    FROM {$table}
+                    WHERE login_user_id = {$userId}
                     ORDER BY login_date DESC
                     LIMIT 0,1";
             $loginId = null;
             $connection = $this->em->getConnection();
+            /** @var ArrayStatement $result */
             $result = $connection->executeQuery($sql);
             if ($result->rowCount() > 0) {
                 $row = $result->fetchAssociative();
@@ -73,14 +76,14 @@ class LogoutListener
             $loginAs = $this->checker->isGranted('ROLE_PREVIOUS_ADMIN');
             if (!$loginAs) {
                 $current_date = api_get_utc_datetime();
-                $sql = "UPDATE $table
+                $sql = "UPDATE {$table}
                         SET logout_date='".$current_date."'
-                        WHERE login_id='$loginId'";
+                        WHERE login_id='{$loginId}'";
                 $connection->executeQuery($sql);
             }
 
             $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-            $sql = 'DELETE FROM '.$online_table." WHERE login_user_id = $userId";
+            $sql = 'DELETE FROM '.$online_table." WHERE login_user_id = {$userId}";
             $connection->executeQuery($sql);
         }
 

@@ -18,11 +18,14 @@ class ResourceCommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', TextareaType::class, ['label' => 'Comment'])
+            ->add('content', TextareaType::class, [
+                'label' => 'Comment',
+            ])
             ->add(
                 'save',
                 SubmitType::class
-            );
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

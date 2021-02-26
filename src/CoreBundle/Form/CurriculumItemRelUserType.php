@@ -10,9 +10,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class CurriculumItemRelUserType.
- */
 class CurriculumItemRelUserType extends AbstractType
 {
     /**
@@ -35,12 +32,21 @@ class CurriculumItemRelUserType extends AbstractType
         $builder->add(
             'description',
             'text',
-            ['label' => ' ', 'attr' => ['class' => 'span7']]
+            [
+                'label' => ' ',
+                'attr' => [
+                    'class' => 'span7',
+                ],
+            ]
         );
         $builder->add(
             'item_id',
             'hidden',
-            ['attr' => ['value' => $this->itemId]]
+            [
+                'attr' => [
+                    'value' => $this->itemId,
+                ],
+            ]
         );
     }
 

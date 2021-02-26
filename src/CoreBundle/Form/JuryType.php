@@ -43,7 +43,8 @@ class JuryType extends AbstractType
                     return $er->createQueryBuilder('u')
                             //->where('u.role LIKE :role')
                             //->setParameter(':role', 'ROLE_JURY%')
-                            ->orderBy('u.branchName', 'DESC');
+                        ->orderBy('u.branchName', 'DESC')
+                    ;
                 },
             ]
         );

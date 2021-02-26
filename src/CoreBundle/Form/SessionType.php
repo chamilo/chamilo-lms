@@ -36,7 +36,9 @@ class SessionType extends AbstractType
             ->add(
                 'visibility',
                 'choice',
-                ['choices' => Session::getStatusList()]
+                [
+                    'choices' => Session::getStatusList(),
+                ]
             )
             ->add(
                 'session_category_id',
@@ -60,7 +62,10 @@ class SessionType extends AbstractType
             ->add('access_end_date', 'sonata_type_datetime_picker')
             ->add('coach_access_start_date', 'sonata_type_datetime_picker')
             ->add('coach_access_end_date', 'sonata_type_datetime_picker')
-            ->add('save', 'submit', ['label' => 'Update']);
+            ->add('save', 'submit', [
+                'label' => 'Update',
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -72,9 +77,6 @@ class SessionType extends AbstractType
         );
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'session';

@@ -1495,6 +1495,13 @@ class MySpace
                 $endDate,
                 $whereInLp
             );
+            $registeredUsersGroups = self::getCompanyLearnpathSubscription(
+                $startDate,
+                $endDate,
+                $whereInLp,
+                true
+            );
+            /****/
 
             for ($i = 0; $i < $totalLpItems; $i++) {
                 $lpItem = $cLpItems[$i];
@@ -1502,6 +1509,7 @@ class MySpace
                 $author = str_replace(';', ',', $lpItem['author']);
                 $tempArrayAuthor = explode(',', $author);
                 $byCourse = isset($registeredUsers[$lpItemId]) ? $registeredUsers[$lpItemId] : [];
+                $byCourseGroups = isset($registeredUsersGroups[$lpItemId]) ? $registeredUsersGroups[$lpItemId] : [];
                 $bySession = isset($registeredUsersBySession[$lpItemId]) ? $registeredUsersBySession[$lpItemId] : [];
                 if (is_array($tempArrayAuthor)) {
                     $totalAuhtors = count($tempArrayAuthor);
@@ -1512,6 +1520,7 @@ class MySpace
 
                         $dataSet[$tempArrayAuthor[$j]][$lpItemId] = [
                             'course' => $byCourse,
+                            'courseGroups' => $byCourseGroups,
                             'session' => $bySession,
                             'lp_item' => $lpItem,
                         ];
@@ -1521,10 +1530,11 @@ class MySpace
                         $authorArray[$author] = api_get_user_info($author);
                     }
                     $dataSet[$author][$lpItemId] = [
-                            'course' => $byCourse,
-                            'session' => $bySession,
-                            'lp_item' => $lpItem,
-                        ];
+                        'course' => $byCourse,
+                        'courseGroups' => $byCourseGroups,
+                        'session' => $bySession,
+                        'lp_item' => $lpItem,
+                    ];
                 }
             }
         }
@@ -1558,6 +1568,7 @@ class MySpace
                         $title = $itemLp['title'];
                         $price = $itemLp['price'];
                         $byCourse = $lpItem['course'];
+                        $byCourseGroups = $lpItem['courseGroups'];
                         $bySession = $lpItem['session'];
                         $hide = "class='author_$authorId hidden' ";
                         $tableTemp = '';
@@ -1579,11 +1590,14 @@ class MySpace
                         $table .= "<td>$price</td>";
 
                         $studenRegister = count($byCourse);
+                        $studenGroupsRegister = count($byCourseGroups);
                         $studenRegisterBySession = count($bySession);
 
                         $hiddenField = 'student_show_'.$index;
                         $hiddenFieldLink = 'student_show_'.$index.'_';
-                        if ($studenRegister != 0 || $studenRegisterBySession != 0) {
+                        if (0 != $studenRegister ||
+                            0 != $studenRegisterBySession ||
+                            0 != $studenGroupsRegister) {
                             $tableTemp .= "<td>".
                                 "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
                                 "<div class='icon_add'>$iconAdd</div>".
@@ -1592,7 +1606,7 @@ class MySpace
                                 "<div id='$hiddenField' class='hidden'>";
                             $studentInSesion = [];
                             /* Student by session, keep it first */
-                            for ($i = 0; $i < $studenRegisterBySession; $i++) {
+                            for ($i = 0; $i < count($bySession); $i++) {
                                 $student = $bySession[$i];
                                 $studentId = $student['id'];
                                 if (!isset($studentArray[$studentId])) {
@@ -1603,9 +1617,22 @@ class MySpace
                                 $tableTemp .= "<strong>".$tempStudent['complete_name']." (".$student['company'].")</strong><br>";
                                 $totalStudent++;
                             }
-                            /* Student by course, keep it last */
-                            for ($i = 0; $i < $studenRegister; $i++) {
+                            /* Student by course*/
+                            for ($i = 0; $i < count($byCourse); $i++) {
                                 $student = $byCourse[$i];
+                                $studentId = $student['id'];
+                                if (!isset($studentArray[$studentId])) {
+                                    $studentArray[$studentId] = api_get_user_info($studentId);
+                                }
+                                $tempStudent = $studentArray[$studentId];
+                                if (!isset($studentInSesion[$studentId])) {
+                                    $tableTemp .= $tempStudent['complete_name']." (".$student['company'].")<br>";
+                                    $totalStudent++;
+                                }
+                            }
+                            /* Student by course groups, keep it last */
+                            for ($i = 0; $i < count($byCourseGroups); $i++) {
+                                $student = $byCourseGroups[$i];
                                 $studentId = $student['id'];
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
@@ -1753,6 +1780,19 @@ class MySpace
                                 $totalStudent++;
                             }
                         }
+                        /* Student by course groups, keep it last */
+                        for ($i = 0; $i < count($byCourseGroups); $i++) {
+                            $student = $byCourseGroups[$i];
+                            $studentId = $student['id'];
+                            if (!isset($studentArray[$studentId])) {
+                                $studentArray[$studentId] = api_get_user_info($studentId);
+                            }
+                            $tempStudent = $studentArray[$studentId];
+                            if (!isset($studentInSesion[$studentId])) {
+                                $studentsName .= $tempStudent['complete_name'].' ('.$student['company'].') / ';
+                                $totalStudent++;
+                            }
+                        }
                     }
                     $csv_row[] = trim($studentsName, " / ");
                     $csv_content[] = $csv_row;
@@ -1806,15 +1846,9 @@ class MySpace
             lp_table_item.iid as lp_item,
             lp_table_item.iid AS lp_item_id,
             track_default.default_value as id,
-            sesion_r_c_u.session_id as session_id,
-            CASE
-                WHEN  extra_field_value.`value` ='' THEN \"".get_lang('NoEntity')."\"
-                ELSE extra_field_value.`value`
-            END as company
+            sesion_r_c_u.session_id as session_id
         FROM
              $tblTrackDefault as track_default
-        INNER JOIN $tblExtraFieldValue as extra_field_value on ( extra_field_value.item_id = track_default.default_value and track_default.default_value_type ='user_id' )
-        INNER JOIN $tblExtraField as extra_field on ( extra_field_value.field_id = extra_field.id and  extra_field.variable = 'company' )
         INNER JOIN $tblSessionRelCourseUser as sesion_r_c_u on (track_default.default_value = sesion_r_c_u.user_id )
         INNER JOIN $tblLp AS lp_table on (lp_table.c_id = sesion_r_c_u.c_id)
         INNER JOIN $tblLpItem AS lp_table_item on (lp_table_item.c_id = sesion_r_c_u.c_id and lp_table.id = lp_table_item.lp_id )
@@ -1829,6 +1863,7 @@ class MySpace
         $queryResult = Database::query($sql);
         $dataTrack = Database::store_result($queryResult, 'ASSOC');
         foreach ($dataTrack as $item) {
+            $item['company'] = self::getCompanyOfUser($item['id']);
             $data[$item['lp_item_id']][] = $item;
         }
 
@@ -4171,13 +4206,15 @@ class MySpace
     protected static function getCompanyLearnpathSubscription(
         $startDate = null,
         $endDate = null,
-        $whereInLp = null
+        $whereInLp = null,
+        $withGroups = false
     ) {
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblGroupToUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
 
         $whereCondition = '';
 
@@ -4222,33 +4259,51 @@ class MySpace
             $query = "
                 SELECT DISTINCT
                     item_property.ref as lp_item,
-                    item_property.to_user_id as id,
                     lp_table_item.iid AS lp_item_id,
-                    CASE
-                        WHEN  extra_field_value.`value` ='' THEN \"".get_lang('NoEntity')."\"
-                        ELSE extra_field_value.`value`
-                    END as company
+                    ";
+            if ($withGroups) {
+                $query .= '
+                item_property.to_group_id as group_id,
+                user_to_group.user_id as id
+                ';
+            } else {
+                $query .= '
+                item_property.to_user_id as id
+                ';
+            }
+            $query .= "
                 FROM
-                    $tblItemProperty as item_property
-                INNER JOIN $tblExtraFieldValue as extra_field_value on ( extra_field_value.item_id = item_property.to_user_id )
-                INNER JOIN $tblExtraField as extra_field on ( extra_field_value.field_id = extra_field.id and  extra_field.variable = 'company' )
+                    $tblItemProperty as item_property";
+            if ($withGroups) {
+                $query .= "
+                INNER JOIN $tblGroupToUser AS user_to_group on (user_to_group.id = item_property.to_group_id )
+                ";
+            }
+            $query .= "
                 INNER JOIN $tblLp AS lp_table on (lp_table.iid = item_property.ref)
                 INNER JOIN $tblLpItem AS lp_table_item on (lp_table.id = lp_table_item.lp_id )
                 WHERE
                     item_property.lastedit_type = 'LearnpathSubscription'
                 ";
-
             if (strlen($whereCondition) > 2) {
                 $query .= $whereCondition;
+            }
+            if ($withGroups) {
+                $query .= '
+                AND item_property.to_group_id  != 0
+                ';
             }
             $query .= "
                 ORDER BY item_property.ref
                 ";
+            // @todo :: remove debug
+            echo "<br>/*".__LINE__."*/<br>$query;";
             $queryResult = Database::query($query);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);
             for ($i = 0; $i < $totalData; $i++) {
                 $row = $data[$i];
+                $row['company'] = self::getCompanyOfUser($row['id']);
                 $datas[$row['lp_item_id']][] = $row;
             }
         }
@@ -4256,15 +4311,53 @@ class MySpace
         return $datas;
     }
 
+    /***
+     * @TODO: phpdoc
+     * @param int $userId
+     *
+     * @return mixed|string
+     */
+    public static function getCompanyOfUser($userId = 0)
+    {
+        $userId = (int)$userId;
+        if (0 != $userId) {
+            $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+            $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+
+            $sql = "
+            SELECT
+                extra_field_value.item_id AS userId,
+                extra_field_value.`value` AS company
+            FROM
+                $tblExtraFieldValue AS extra_field_value
+                INNER JOIN $tblExtraField AS extra_field ON ( extra_field_value.field_id = extra_field.id AND extra_field.variable = 'company' )
+            WHERE
+                extra_field_value.`value` != ''
+                AND extra_field_value.item_id = $userId
+                ";
+
+            $queryResult = Database::query($sql);
+            $data = Database::store_result($queryResult, 'ASSOC');
+            $totalData = count($data);
+            for ($i = 0; $i < $totalData; $i++) {
+                $row = $data[$i];
+                if (isset($row['company']) && !empty($row['company'])) return $row['company'];
+            }
+        }
+
+        return get_lang('NoEntity');
+    }
+
     private static function getDataAccessTrackingFilters($sql)
     {
         if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int) $_GET['course_id'];
+            $courseId = (int)$_GET['course_id'];
             $sql .= " AND c.id = ".$courseId;
         }
 
         if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int) $_GET['session_id'];
+            $sessionId = (int)$_GET['session_id'];
             $sql .= " AND a.session_id = ".$sessionId;
         }
 

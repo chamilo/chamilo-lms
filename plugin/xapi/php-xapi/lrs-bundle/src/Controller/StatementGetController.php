@@ -31,9 +31,9 @@ use XApi\Repository\Api\StatementRepositoryInterface;
 /**
  * @author Jérôme Parmentier <jerome.parmentier@acensi.fr>
  */
-final class StatementGetController
+class StatementGetController
 {
-    private static $getParameters = [
+    protected static $getParameters = [
         'statementId' => true,
         'voidedStatementId' => true,
         'agent' => true,
@@ -51,10 +51,10 @@ final class StatementGetController
         'cursor' => true,
     ];
 
-    private $repository;
-    private $statementSerializer;
-    private $statementResultSerializer;
-    private $statementsFilterFactory;
+    protected $repository;
+    protected $statementSerializer;
+    protected $statementResultSerializer;
+    protected $statementsFilterFactory;
 
     public function __construct(StatementRepositoryInterface $repository, StatementSerializerInterface $statementSerializer, StatementResultSerializerInterface $statementResultSerializer, StatementsFilterFactory $statementsFilterFactory)
     {
@@ -92,6 +92,8 @@ final class StatementGetController
             }
         } catch (NotFoundException $e) {
             $response = $this->buildMultiStatementsResponse([]);
+        } catch (\Exception $exception) {
+            $response = Response::create('', Response::HTTP_BAD_REQUEST);
         }
 
         $now = new \DateTime();
@@ -106,7 +108,7 @@ final class StatementGetController
      *
      * @return JsonResponse|MultipartResponse
      */
-    private function buildSingleStatementResponse(Statement $statement, $includeAttachments = false)
+    protected function buildSingleStatementResponse(Statement $statement, $includeAttachments = false)
     {
         $json = $this->statementSerializer->serializeStatement($statement);
 
@@ -128,7 +130,7 @@ final class StatementGetController
      *
      * @return JsonResponse|MultipartResponse
      */
-    private function buildMultiStatementsResponse(array $statements, ParameterBag $query, $includeAttachments = false)
+    protected function buildMultiStatementsResponse(array $statements, ParameterBag $query, $includeAttachments = false)
     {
         $moreUrlPath = $statements ? $this->generateMoreIrl($query) : null;
 
@@ -150,7 +152,7 @@ final class StatementGetController
      *
      * @return MultipartResponse
      */
-    private function buildMultipartResponse(JsonResponse $statementResponse, array $statements)
+    protected function buildMultipartResponse(JsonResponse $statementResponse, array $statements)
     {
         $attachmentsParts = [];
 
@@ -168,7 +170,7 @@ final class StatementGetController
      *
      * @throws BadRequestHttpException if the parameters does not comply with the xAPI specification
      */
-    private function validate(ParameterBag $query)
+    protected function validate(ParameterBag $query)
     {
         $hasStatementId = $query->has('statementId');
         $hasVoidedStatementId = $query->has('voidedStatementId');
@@ -194,7 +196,7 @@ final class StatementGetController
         }
     }
 
-    private function generateMoreIrl(ParameterBag $query): IRL
+    protected function generateMoreIrl(ParameterBag $query): IRL
     {
         $params = $query->all();
         $params['cursor'] = empty($params['cursor']) ? 1 : $params['cursor'] + 1;

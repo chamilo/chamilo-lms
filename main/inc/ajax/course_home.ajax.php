@@ -22,18 +22,20 @@ switch ($action) {
         if (api_is_allowed_to_edit(null, true)) {
             $criteria = [
                 'cId' => $course_id,
-                'sessionId' => 0,
+                //'sessionId' => 0,
                 'iid' => (int) $_GET['id'],
             ];
+
             /** @var CTool $tool */
             $tool = $repository->findOneBy($criteria);
-            $visibility = $tool->getVisibility();
-
+            $visibility = 0;
             if ($allowEditionInSession && !empty($sessionId)) {
+                $newLink = str_replace('id_session=0', 'id_session='.$sessionId, $tool->getLink());
                 $criteria = [
                     'cId' => $course_id,
                     'sessionId' => $sessionId,
-                    'name' => $tool->getName(),
+                    //'iid' => (int) $_GET['id'],
+                    'link' => $newLink,
                 ];
 
                 /** @var CTool $tool */
@@ -45,10 +47,11 @@ switch ($action) {
                 } else {
                     // Creates new row in c_tool
                     $toolInSession = clone $tool;
+                    $toolInSession->setLink($newLink);
                     $toolInSession->setIid(0);
                     $toolInSession->setId(0);
                     $toolInSession->setVisibility(0);
-                    $toolInSession->setSessionId($session_id);
+                    $toolInSession->setSessionId($sessionId);
                     $em->persist($toolInSession);
                     $em->flush();
                     // Update id with iid
@@ -58,12 +61,14 @@ switch ($action) {
                     // $tool will be updated later
                     $tool = $toolInSession;
                 }
+            } else {
+                $visibility = $tool->getVisibility();
             }
 
             $toolImage = $tool->getImage();
             $customIcon = $tool->getCustomIcon();
 
-            if (api_get_setting('homepage_view') != 'activity_big') {
+            if (api_get_setting('homepage_view') !== 'activity_big') {
                 $toolImage = Display::return_icon(
                     $toolImage,
                     null,

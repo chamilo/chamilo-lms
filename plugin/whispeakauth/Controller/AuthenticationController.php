@@ -351,7 +351,7 @@ class AuthenticationController extends BaseController
 
         $pageTitle = $this->plugin->get_title();
 
-        $template = new \Template($pageTitle, $isFullPage, $isFullPage);
+        $template = new \Template($pageTitle, $isFullPage, $isFullPage, !$isFullPage);
 
         foreach ($variables as $key => $value) {
             $template->assign($key, $value);

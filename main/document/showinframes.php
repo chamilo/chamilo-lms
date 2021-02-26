@@ -99,7 +99,8 @@ $is_visible = DocumentManager::check_visibility_tree(
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
-    api_not_allowed(true);
+    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
+    api_not_allowed(false, '&nbsp;');
 }
 
 $pathinfo = pathinfo($header_file);
@@ -116,7 +117,6 @@ if (isset($group_id) && $group_id != '') {
     if ($current_group) {
         $current_group_name = $current_group['name'];
     }
-
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),

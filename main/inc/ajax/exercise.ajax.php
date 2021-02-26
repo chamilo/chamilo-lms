@@ -414,7 +414,7 @@ switch ($action) {
 
         $statInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 
-        echo Display::page_subheader(get_lang('QuestionsToReview'));
+        echo Display::page_subheader(get_lang('VerificationOfAnsweredQuestions'));
         echo $objExercise->getReminderTable($questionList, $statInfo, true);
         break;
     case 'save_exercise_by_now':

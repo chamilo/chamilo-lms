@@ -18,7 +18,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
 $isBossOfStudent = false;
-if (api_is_student_boss() && !empty($filter_user)) {
+if (!empty($filter_user) && api_is_student_boss()) {
     // Check if boss has access to user info.
     if (UserManager::userIsBossOfStudent(api_get_user_id(), $filter_user)) {
         $isBossOfStudent = true;

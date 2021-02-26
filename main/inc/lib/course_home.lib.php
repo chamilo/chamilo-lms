@@ -530,7 +530,11 @@ class CourseHome
                             category = "authoring" OR
                             category = "interaction" OR
                             category = "plugin"
-                        ) OR (t.name = "'.TOOL_TRACKING.'")
+                        ) OR
+                        (t.name = "'.TOOL_TRACKING.'")
+                        OR (
+                            image = "scormbuilder.gif"
+                        )
                     )';
                 }
 
@@ -562,7 +566,6 @@ class CourseHome
                         ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
                         $conditions AND
                         t.c_id = $course_id $condition_session
-
                         ORDER BY
                             CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
                             CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,
@@ -656,6 +659,7 @@ class CourseHome
         });
 
         $isAllowToEdit = api_is_allowed_to_edit(null, true);
+        $showInvisibleLpsForStudents = api_get_configuration_value('show_invisible_lp_in_course_home');
         foreach ($tools as $temp_row) {
             $add = false;
             if ($check) {
@@ -666,7 +670,10 @@ class CourseHome
                 $add = true;
             }
 
-            if ($allowEditionInSession && !empty($sessionId)) {
+            if (false === $showInvisibleLpsForStudents &&
+                false === $isAllowToEdit &&
+                $allowEditionInSession && !empty($sessionId)
+            ) {
                 // Checking if exist row in session
                 $criteria = [
                     'cId' => $course_id,
@@ -675,10 +682,8 @@ class CourseHome
                 ];
                 /** @var CTool $toolObj */
                 $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
-                if ($toolObj) {
-                    if ($isAllowToEdit == false && $toolObj->getVisibility() == false) {
-                        continue;
-                    }
+                if ($toolObj && $toolObj->getVisibility() == false) {
+                    continue;
                 }
             }
 
@@ -695,16 +700,20 @@ class CourseHome
                     if ($isAllowToEdit) {
                         $add = true;
                     } else {
-                        $add = learnpath::is_lp_visible_for_student(
-                            $lpId,
-                            $userId,
-                            $courseInfo,
-                            $sessionId
-                        );
-                        // Check if LP is visible.
-                        $visibility = api_get_item_visibility($courseInfo, TOOL_LEARNPATH, $lpId, $sessionId);
-                        if (1 !== $visibility) {
-                            $add = false;
+                        if ($showInvisibleLpsForStudents) {
+                            $add = true;
+                        } else {
+                            $add = learnpath::is_lp_visible_for_student(
+                                $lpId,
+                                $userId,
+                                $courseInfo,
+                                $sessionId
+                            );
+                            // Check if LP is visible.
+                            $visibility = api_get_item_visibility($courseInfo, TOOL_LEARNPATH, $lpId, $sessionId);
+                            if (1 !== $visibility) {
+                                $add = false;
+                            }
                         }
                     }
                     if ($path) {
@@ -713,7 +722,12 @@ class CourseHome
                     break;
                 case 'lp_category.gif':
                     $lpCategory = self::getPublishedLpCategoryFromLink($temp_row['link']);
-                    $add = learnpath::categoryIsVisibleForStudent($lpCategory, $user);
+                    if ($showInvisibleLpsForStudents) {
+                        $add = true;
+                    } else {
+                        $add = learnpath::categoryIsVisibleForStudent($lpCategory, $user);
+                    }
+
                     break;
             }
 
@@ -902,6 +916,7 @@ class CourseHome
 
         $items = [];
         $app_plugin = new AppPlugin();
+        $toolRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CTool');
         if (isset($all_tools_list)) {
             $lnk = '';
             foreach ($all_tools_list as &$tool) {
@@ -917,17 +932,34 @@ class CourseHome
                 $tool['original_link'] = $tool['link'];
 
                 if ($tool['image'] === 'lp_category.gif') {
-                    if ($session_id && api_is_coach()) {
-                        $lpCategory = self::getPublishedLpCategoryFromLink($tool['link']);
-                        $itemInfo = api_get_item_property_info(
-                            $courseId,
-                            TOOL_LEARNPATH_CATEGORY,
-                            $lpCategory->getId(),
-                            $session_id
-                        );
+                    if ($session_id) {
+                        if (api_is_coach() || api_is_allowed_to_edit()) {
+                            $lpCategory = self::getPublishedLpCategoryFromLink($tool['link']);
+                            $itemInfo = api_get_item_property_info(
+                                $courseId,
+                                TOOL_LEARNPATH_CATEGORY,
+                                $lpCategory->getId(),
+                                $session_id
+                            );
 
-                        if ($itemInfo && 0 === (int) $itemInfo['visibility']) {
-                            $tool['image'] = 'lp_category_na.gif';
+                            if ($itemInfo && 0 === (int) $itemInfo['visibility']) {
+                                $tool['image'] = 'lp_category_na.gif';
+                            }
+                        } else {
+                            $categoryInSessionName = str_replace('id_session', $session_id, $tool['name']);
+                            $criteria = [
+                                'cId' => $courseId,
+                                'name' => $categoryInSessionName,
+                                'sessionId' => $session_id,
+                            ];
+                            /** @var CTool $tool */
+                            $toolObj = $toolRepo->findOneBy($criteria);
+                            if ($toolObj) {
+                                $visibility = (int) $toolObj->getVisibility();
+                                if (0 === $visibility) {
+                                    continue;
+                                }
+                            }
                         }
                     }
                 }
@@ -977,11 +1009,13 @@ class CourseHome
 
                 $item['extra'] = null;
                 $toolAdmin = isset($tool['admin']) ? $tool['admin'] : '';
-
+                $extraClass = '';
+                $isSessionToolVisible = false;
                 if ($is_allowed_to_edit && $allowChangeVisibility) {
                     if (empty($session_id)) {
                         if (isset($tool['id'])) {
                             if ($tool['visibility'] == '1' && $toolAdmin != '1') {
+                                $isSessionToolVisible = true;
                                 $link['name'] = '<em
                                     id="'.'linktool_'.$tool['iid'].'"
                                     class="fa fa-eye"
@@ -990,11 +1024,13 @@ class CourseHome
                                 $lnk[] = $link;
                             }
                             if ($tool['visibility'] == '0' && $toolAdmin != '1') {
+                                $isSessionToolVisible = false;
                                 $link['name'] = '<em
                                     id="'.'linktool_'.$tool['iid'].'"
                                     class="fa fa-eye-slash text-muted"
                                     title="'.get_lang('Activate').'"></em>';
                                 $link['cmd'] = 'restore=yes';
+                                $extraClass = 'text-muted';
                                 $lnk[] = $link;
                             }
                         }
@@ -1005,35 +1041,41 @@ class CourseHome
                             'sessionId' => $session_id,
                         ];
                         /** @var CTool $tool */
-                        $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
+                        $toolObj = $toolRepo->findOneBy($criteria);
                         if ($toolObj) {
                             $visibility = (int) $toolObj->getVisibility();
                             switch ($visibility) {
                                 case 0:
-                                    $info = pathinfo($tool['image']);
-                                    $basename = basename($tool['image'], '.'.$info['extension']);
-                                    $tool['image'] = $basename.'_na.'.$info['extension'];
+                                    $isSessionToolVisible = false;
+                                    if (in_array($tool['image'], ['scormbuilder.png', 'scormbuilder.gif'])) {
+                                        $info = pathinfo($tool['image']);
+                                        $basename = basename($tool['image'], '.'.$info['extension']);
+                                        $tool['image'] = $basename.'_na.'.$info['extension'];
+                                    }
                                     $link['name'] = '<em
                                         id="'.'linktool_'.$tool['iid'].'"
                                         class="fa fa-eye-slash text-muted"
-                                        title="'.get_lang('Deactivate').'"></em>';
+                                        title="'.get_lang('Activate').'"></em>';
                                     $link['cmd'] = 'restore=yes';
+                                    $extraClass = 'text-muted';
                                     $lnk[] = $link;
                                     break;
                                 case 1:
+                                    $isSessionToolVisible = true;
                                     $link['name'] = '<em
                                         id="'.'linktool_'.$tool['iid'].'"
                                         class="fa fa-eye"
-                                        title="'.get_lang('Activate').'"></em>';
+                                        title="'.get_lang('Deactivate').'"></em>';
                                     $link['cmd'] = 'hide=yes';
                                     $lnk[] = $link;
                                     break;
                             }
                         } else {
+                            $isSessionToolVisible = true;
                             $link['name'] = '<em
                                 id="'.'linktool_'.$tool['iid'].'"
                                 class="fa fa-eye"
-                                title="'.get_lang('Activate').'"></em>';
+                                title="'.get_lang('Deactivate').'"></em>';
                             $link['cmd'] = 'hide=yes';
                             $lnk[] = $link;
                         }
@@ -1073,11 +1115,34 @@ class CourseHome
                 }
 
                 $class = '';
+                $info = pathinfo($tool['image']);
+                $basename = basename($tool['image'], '.'.$info['extension']);
+
                 if ($tool['visibility'] == '0' && $toolAdmin != '1') {
                     $class = 'text-muted';
-                    $info = pathinfo($tool['image']);
-                    $basename = basename($tool['image'], '.'.$info['extension']);
-                    $tool['image'] = $basename.'_na.'.$info['extension'];
+                    if (!strpos($tool['image'], '_na')) {
+                        $tool['image'] = $basename.'_na.'.$info['extension'];
+                    }
+                }
+
+                if ($is_allowed_to_edit && $allowChangeVisibility &&
+                    ($tool['image'] === 'scormbuilder.gif' || $tool['image'] === 'scormbuilder_na.gif')
+                ) {
+                    if (false === $isSessionToolVisible) {
+                        $tool['image'] = 'scormbuilder_na.gif';
+                    } else {
+                        $tool['image'] = 'scormbuilder.gif';
+                    }
+                }
+
+                if ($is_allowed_to_edit && $allowChangeVisibility &&
+                    ($tool['image'] === 'lp_category.gif' || $tool['image'] === 'lp_category_na.gif')
+                ) {
+                    if (false === $isSessionToolVisible) {
+                        $tool['image'] = 'lp_category_na.gif';
+                    } else {
+                        $tool['image'] = 'lp_category.gif';
+                    }
                 }
 
                 $qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&';
@@ -1086,7 +1151,9 @@ class CourseHome
                 if ($tool['image'] === 'file_html.png' || $tool['image'] === 'file_html_na.png') {
                     $tool['link'] = $tool['link'];
                 } else {
-                    $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq(true, false).'&gidReq=0';
+                    if (!in_array($tool['image'], ['lp_category.gif', 'lp_category_na.gif'])) {
+                        $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq(true, false).'&gidReq=0';
+                    }
                 }
 
                 $toolIid = isset($tool['iid']) ? $tool['iid'] : null;
@@ -1114,7 +1181,7 @@ class CourseHome
                     $tool_link_params = [
                         'id' => 'tooldesc_'.$toolIid,
                         'href' => $tool['link'],
-                        'class' => $class,
+                        'class' => "$class $extraClass ",
                         'target' => $tool['target'],
                     ];
                 }
@@ -1689,11 +1756,9 @@ class CourseHome
             // Adding only maintenance for coaches.
             $myList = self::get_tools_category(TOOL_ADMIN_PLATFORM);
             $onlyMaintenanceList = [];
-
             foreach ($myList as $item) {
                 if ($item['name'] === 'course_maintenance') {
                     $item['link'] = 'course_info/maintenance_coach.php';
-
                     $onlyMaintenanceList[] = $item;
                 }
             }

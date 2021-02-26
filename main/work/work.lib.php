@@ -2549,7 +2549,20 @@ function getAllWork(
         return [];
     }
 
+    $allowWorkFromAllSessions = api_get_configuration_value('assignment_base_course_teacher_access_to_all_session');
+    $coursesInSession = [];
     $courses = CourseManager::get_courses_list_by_user_id($userId, false, false, false);
+    if ($allowWorkFromAllSessions) {
+        if (empty($courses)) {
+            return [];
+        }
+    } else {
+        $coursesInSession = SessionManager::getCoursesForCourseSessionCoach($userId);
+
+        if (empty($courses) && empty($coursesInSession)) {
+            return [];
+        }
+    }
 
     if (!empty($whereCondition)) {
         $whereCondition = ' AND '.$whereCondition;
@@ -2572,15 +2585,44 @@ function getAllWork(
             continue;
         }
         $courseInfo = api_get_course_info_by_id($courseIdItem);
-        $session_id = isset($course['session_id']) ? $course['session_id'] : 0;
+        // Only teachers or platform admins.
+        $isAllow = api_is_platform_admin() || CourseManager::is_course_teacher($userId, $courseInfo['code']);
+        if (false === $isAllow) {
+            continue;
+        }
+
+        //$session_id = isset($course['session_id']) ? $course['session_id'] : 0;
         //$conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
-        $conditionSession = '';
+        $conditionSession = ' AND (work.session_id = 0 OR work.session_id IS NULL)';
+        if ($allowWorkFromAllSessions) {
+            $conditionSession = '';
+        }
         $parentCondition = '';
         if ($withResults) {
             $parentCondition = 'AND ww.parent_id is NOT NULL';
         }
-        $courseQuery[] = " (work.c_id = $courseIdItem $conditionSession $parentCondition )";
+        $courseQuery[] = " (work.c_id = $courseIdItem $conditionSession $parentCondition ) ";
         $courseList[$courseIdItem] = $courseInfo;
+    }
+
+    if (false === $allowWorkFromAllSessions) {
+        foreach ($coursesInSession as $courseIdInSession => $sessionList) {
+            if (!empty($sessionList)) {
+                if (!isset($courseList[$courseIdInSession])) {
+                    $courseList[$courseIdInSession] = api_get_course_info_by_id($courseIdInSession);
+                }
+
+                foreach ($sessionList as $sessionId) {
+                    $conditionSession = " AND (work.session_id = $sessionId)";
+                    $parentCondition = '';
+                    $courseQuery[] = " (work.c_id = $courseIdInSession $conditionSession $parentCondition ) ";
+                }
+            }
+        }
+    }
+
+    if (empty($courseQuery)) {
+        return [];
     }
 
     $courseQueryToString = implode(' OR ', $courseQuery);
@@ -2588,8 +2630,6 @@ function getAllWork(
     /*if (api_get_configuration_value('allow_compilatio_tool')) {
         $compilation = new Compilatio();
     }*/
-
-    $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 
     if ($getCount) {
         if (empty($courseQuery)) {
@@ -2731,9 +2771,11 @@ function getAllWork(
 
         /* Because a bug found when saving items using the api_item_property_update()
            the field $item_property_data['insert_user_id'] is not reliable. */
-        if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
+        /*if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
             $is_author = true;
-        }
+        }*/
+        // Teacher can be treated as an author.
+        $is_author = true;
 
         /*if ($course_info['show_score'] == 0) {
             $can_read = true;
@@ -2764,8 +2806,7 @@ function getAllWork(
         }
 
         if (($can_read && $work['accepted'] == '1') ||
-            ($is_author && in_array($work['accepted'], ['1', '0'])) ||
-            ($is_allowed_to_edit || api_is_drh())
+            ($is_author && in_array($work['accepted'], ['1', '0']))
         ) {
             // Firstname, lastname, username
             $work['fullname'] = Display::div(
@@ -2842,154 +2883,134 @@ function getAllWork(
 
             // Actions.
             $action = '';
-            if (api_is_allowed_to_edit()) {
-                if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
-                    $rateLink = '';
-                } else {
-                    $rateLink = '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        $rateIcon.'</a> ';
-                }
-                $action .= $rateLink;
-
-                if ($unoconv && empty($work['contains_file'])) {
-                    $action .= '<a
-                        href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
-                        title="'.get_lang('ExportToDoc').'" >'.
-                        Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
-                }
-
-                $alreadyUploaded = '';
-                if (!empty($work['url_correction'])) {
-                    $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIconSmall;
-                }
-
-                $correction = '
-                    <form
-                    id="file_upload_'.$item_id.'"
-                    class="work_correction_file_upload file_upload_small fileinput-button"
-                    action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.$cidReq.'&a=upload_correction_file&item_id='.$item_id.'"
-                    method="POST"
-                    enctype="multipart/form-data"
-                    >
-                    <div id="progress_'.$item_id.'" class="text-center button-load">
-                        '.addslashes(get_lang('ClickOrDropOneFileHere')).'
-                        '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
-                        '.$alreadyUploaded.'
-                    </div>
-                    <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
-                    </form>
-                ';
-
-                $correction .= "<script>
-                $(function() {
-                    $('.work_correction_file_upload').each(function () {
-                        $(this).fileupload({
-                            dropZone: $(this)
-                        });
-                    });
-
-                    $('#file_upload_".$item_id."').fileupload({
-                        add: function (e, data) {
-                            $('#progress_$item_id').html();
-                            data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
-                            data.submit();
-                            $(this).removeClass('hover');
-                        },
-                        dragover: function (e, data) {
-                            $(this).addClass('hover');
-                        },
-                        done: function (e, data) {
-                            if (data._response.result.name) {
-                                $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
-                            } else {
-                                $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
-                            }
-                            $(this).removeClass('hover');
-                        }
-                    });
-                    $('#file_upload_".$item_id."').on('dragleave', function (e) {
-                        // dragleave callback implementation
-                        $(this).removeClass('hover');
-                    });
-                });
-                </script>";
-
-                if ($locked) {
-                    if ($qualification_exists) {
-                        $action .= Display::return_icon(
-                            'edit_na.png',
-                            get_lang('CorrectAndRate'),
-                            [],
-                            ICON_SIZE_SMALL
-                        );
-                    } else {
-                        $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
-                    }
-                } else {
-                    if ($blockEdition && !api_is_platform_admin()) {
-                        $editLink = '';
-                    } else {
-                        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL);
-                        if ($qualification_exists) {
-                            $editLink = '<a
-                                href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
-                                title="'.get_lang('Edit').'"  >'.
-                                $editIcon.
-                            '</a>';
-                        } else {
-                            $editLink = '<a
-                                href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
-                                title="'.get_lang('Modify').'">'.
-                                $editIcon.'</a>';
-                        }
-                    }
-                    $action .= $editLink;
-                }
-
-                /*if ($work['contains_file']) {
-                    if ($locked) {
-                        $action .= Display::return_icon(
-                            'move_na.png',
-                            get_lang('Move'),
-                            [],
-                            ICON_SIZE_SMALL
-                        );
-                    } else {
-                        $action .= '<a href="'.$url.'work.php?'.$cidReq.'&action=move&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Move').'">'.
-                            Display::return_icon('move.png', get_lang('Move'), [], ICON_SIZE_SMALL).'</a>';
-                    }
-                }*/
-
-                /*if ($work['accepted'] == '1') {
-                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=make_invisible&item_id='.$item_id.'" title="'.get_lang('Invisible').'" >'.
-                        Display::return_icon('visible.png', get_lang('Invisible'), [], ICON_SIZE_SMALL).'</a>';
-                } else {
-                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=make_visible&item_id='.$item_id.'" title="'.get_lang('Visible').'" >'.
-                        Display::return_icon('invisible.png', get_lang('Visible'), [], ICON_SIZE_SMALL).'</a> ';
-                }*/
-                /*if ($locked) {
-                    $action .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
-                } else {
-                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-                }*/
-            } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
-                $action .= '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                    Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
-
-                if (api_get_course_setting('student_delete_own_publication') == 1) {
-                    if (api_is_allowed_to_session_edit(false, true)) {
-                        $action .= '<a href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                            Display::return_icon('edit.png', get_lang('Comment'), [], ICON_SIZE_SMALL).'</a>';
-                    }
-                    $action .= ' <a href="'.$url.'work_list.php?'.$cidReq.'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-                }
+            if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
+                $rateLink = '';
             } else {
-                $action .= '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                    Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
+                $rateLink = '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                    $rateIcon.'</a> ';
+            }
+            $action .= $rateLink;
+            if ($unoconv && empty($work['contains_file'])) {
+                $action .= '<a
+                    href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
+                    title="'.get_lang('ExportToDoc').'" >'.
+                    Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
             }
 
+            $alreadyUploaded = '';
+            if (!empty($work['url_correction'])) {
+                $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIconSmall;
+            }
+
+            $correction = '
+                <form
+                id="file_upload_'.$item_id.'"
+                class="work_correction_file_upload file_upload_small fileinput-button"
+                action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.$cidReq.'&a=upload_correction_file&item_id='.$item_id.'"
+                method="POST"
+                enctype="multipart/form-data"
+                >
+                <div id="progress_'.$item_id.'" class="text-center button-load">
+                    '.addslashes(get_lang('ClickOrDropOneFileHere')).'
+                    '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
+                    '.$alreadyUploaded.'
+                </div>
+                <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
+                </form>
+            ';
+
+            $correction .= "<script>
+            $(function() {
+                $('.work_correction_file_upload').each(function () {
+                    $(this).fileupload({
+                        dropZone: $(this)
+                    });
+                });
+                $('#file_upload_".$item_id."').fileupload({
+                    add: function (e, data) {
+                        $('#progress_$item_id').html();
+                        data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
+                        data.submit();
+                        $(this).removeClass('hover');
+                    },
+                    dragover: function (e, data) {
+                        $(this).addClass('hover');
+                    },
+                    done: function (e, data) {
+                        if (data._response.result.name) {
+                            $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
+                        } else {
+                            $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
+                        }
+                        $(this).removeClass('hover');
+                    }
+                });
+                $('#file_upload_".$item_id."').on('dragleave', function (e) {
+                    // dragleave callback implementation
+                    $(this).removeClass('hover');
+                });
+            });
+            </script>";
+
+            if ($locked) {
+                if ($qualification_exists) {
+                    $action .= Display::return_icon(
+                        'edit_na.png',
+                        get_lang('CorrectAndRate'),
+                        [],
+                        ICON_SIZE_SMALL
+                    );
+                } else {
+                    $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
+                }
+            } else {
+                if ($blockEdition && !api_is_platform_admin()) {
+                    $editLink = '';
+                } else {
+                    $editIcon = Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL);
+                    if ($qualification_exists) {
+                        $editLink = '<a
+                            href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
+                            title="'.get_lang('Edit').'"  >'.
+                            $editIcon.
+                        '</a>';
+                    } else {
+                        $editLink = '<a
+                            href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
+                            title="'.get_lang('Modify').'">'.
+                            $editIcon.'</a>';
+                    }
+                }
+                $action .= $editLink;
+            }
+
+            /*if ($work['contains_file']) {
+                if ($locked) {
+                    $action .= Display::return_icon(
+                        'move_na.png',
+                        get_lang('Move'),
+                        [],
+                        ICON_SIZE_SMALL
+                    );
+                } else {
+                    $action .= '<a href="'.$url.'work.php?'.$cidReq.'&action=move&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Move').'">'.
+                        Display::return_icon('move.png', get_lang('Move'), [], ICON_SIZE_SMALL).'</a>';
+                }
+            }*/
+
+            /*if ($work['accepted'] == '1') {
+                $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=make_invisible&item_id='.$item_id.'" title="'.get_lang('Invisible').'" >'.
+                    Display::return_icon('visible.png', get_lang('Invisible'), [], ICON_SIZE_SMALL).'</a>';
+            } else {
+                $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=make_visible&item_id='.$item_id.'" title="'.get_lang('Visible').'" >'.
+                    Display::return_icon('invisible.png', get_lang('Visible'), [], ICON_SIZE_SMALL).'</a> ';
+            }*/
+            /*if ($locked) {
+                $action .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+            } else {
+                $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
+                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+            }*/
             // Status.
             if (empty($work['qualificator_id'])) {
                 $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
@@ -3000,7 +3021,7 @@ function getAllWork(
             $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
             $work['correction'] = $correction;
 
-            if (!empty($compilation) && $is_allowed_to_edit) {
+            if (!empty($compilation)) {
                 $compilationId = $compilation->getCompilatioId($item_id, $courseId);
                 if ($compilationId) {
                     $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>

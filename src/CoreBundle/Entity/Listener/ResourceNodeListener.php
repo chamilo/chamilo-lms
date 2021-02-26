@@ -58,7 +58,7 @@ class ResourceNodeListener
 
         if ($resourceNode->hasResourceFile() && $resourceNode->hasEditableTextContent()) {
             $fileName = $this->resourceNodeRepository->getFilename($resourceNode->getResourceFile());
-            error_log("fileName: $fileName");
+            error_log("fileName: {$fileName}");
             if ($fileName) {
                 error_log('updated');
                 $content = $resourceNode->getContent();

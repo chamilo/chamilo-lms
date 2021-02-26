@@ -15,9 +15,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * Class SecurityController.
- */
 class SecurityController extends AbstractController
 {
     private SerializerInterface $serializer;

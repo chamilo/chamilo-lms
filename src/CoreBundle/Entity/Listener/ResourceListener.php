@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -36,14 +37,8 @@ class ResourceListener
     protected Security $security;
     protected ToolChain $toolChain;
     protected RequestStack $request;
-    /**
-     * @var null
-     */
-    protected $accessUrl;
+    protected ?AccessUrl $accessUrl;
 
-    /**
-     * ResourceListener constructor.
-     */
     public function __construct(
         SlugifyInterface $slugify,
         ToolChain $toolChain,
@@ -65,12 +60,8 @@ class ResourceListener
                 throw new Exception('An Request is needed');
             }
             $sessionRequest = $request->getSession();
-
-            if (null === $sessionRequest) {
-                throw new Exception('An Session request is needed');
-            }
-
             $id = $sessionRequest->get('access_url_id');
+            /** @var AccessUrl $url */
             $url = $em->getRepository(AccessUrl::class)->find($id);
 
             if ($url) {
@@ -78,10 +69,6 @@ class ResourceListener
 
                 return $url;
             }
-        }
-
-        if (null === $this->accessUrl) {
-            throw new Exception('An AccessUrl is needed');
         }
 
         return $this->accessUrl;
@@ -111,6 +98,7 @@ class ResourceListener
         }
 
         // Add resource node.
+        /** @var null|User $creator */
         $creator = $this->security->getUser();
 
         if (null === $creator) {
@@ -130,10 +118,12 @@ class ResourceListener
             $repoClass = str_replace('Entity', 'Repository\Node', $entityClass).'Repository';
         }
         $name = $this->toolChain->getResourceTypeNameFromRepository($repoClass);
-        $resourceType = $repo->findOneBy(['name' => $name]);
+        $resourceType = $repo->findOneBy([
+            'name' => $name,
+        ]);
 
         if (null === $resourceType) {
-            throw new InvalidArgumentException("ResourceType: $name not found");
+            throw new InvalidArgumentException("ResourceType: {$name} not found");
         }
 
         $resourceNode

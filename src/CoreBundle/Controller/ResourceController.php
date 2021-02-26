@@ -324,7 +324,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $params = [
             'resource' => $resource,
             'course' => $this->getCourse(),
-         //   'illustration' => $illustration,
+            //   'illustration' => $illustration,
             'tool' => $tool,
             'type' => $type,
             'comment_form' => $form->createView(),
@@ -405,7 +405,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $repository->setVisibilityPublished($resource);
         }
 
-        $result = ['icon' => $icon];
+        $result = [
+            'icon' => $icon,
+        ];
 
         return new JsonResponse($result);
     }
@@ -544,7 +546,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/link", methods={"GET"}, name="chamilo_core_resource_link")
      */
-    public function linkAction(Request $request, RouterInterface $router): Response
+    public function linkAction(Request $request, RouterInterface $router)
     {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->find($id);
@@ -561,7 +563,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->redirect($url);
         }
 
-        return $this->abort('No redirect');
+        $this->abort('No redirect');
     }
 
     /**
@@ -599,7 +601,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $criteria = Criteria::create()
             ->where(Criteria::expr()->neq('resourceFile', null)) // must have a file
-             ->andWhere(Criteria::expr()->eq('resourceType', $type)) // only download same type
+            ->andWhere(Criteria::expr()->eq('resourceType', $type)) // only download same type
         ;
 
         $qb = $resourceNodeRepo->getChildrenQueryBuilder($resourceNode);

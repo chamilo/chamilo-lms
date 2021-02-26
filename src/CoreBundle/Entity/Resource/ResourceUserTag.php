@@ -30,7 +30,7 @@ class ResourceUserTag
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceTags")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      *
-     * @var \Chamilo\CoreBundle\Entity\User|null
+     * @var null|\Chamilo\CoreBundle\Entity\User
      */
     protected $user;
 
@@ -38,7 +38,7 @@ class ResourceUserTag
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceTag")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="SET NULL")
      *
-     * @var \Chamilo\CoreBundle\Entity\Resource\ResourceTag|null
+     * @var null|\Chamilo\CoreBundle\Entity\Resource\ResourceTag
      */
     protected $tag;
 }

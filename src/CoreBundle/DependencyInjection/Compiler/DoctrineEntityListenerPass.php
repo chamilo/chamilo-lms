@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\DependencyInjection\Compiler;
@@ -7,12 +9,9 @@ namespace Chamilo\CoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * Class DoctrineEntityListenerPass.
- */
 class DoctrineEntityListenerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->getDefinition('chamilo.doctrine.entity_listener_resolver');
         $services = $container->findTaggedServiceIds('doctrine.entity_listener');

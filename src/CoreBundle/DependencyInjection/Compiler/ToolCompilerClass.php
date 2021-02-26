@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\DependencyInjection\Compiler;
@@ -19,7 +21,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ToolCompilerClass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has(ToolChain::class)) {
             $definition = $container->findDefinition(ToolChain::class);

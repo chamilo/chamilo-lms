@@ -1,20 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Composer;
 
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Class DumpTheme.
- */
 class ScriptHandler
 {
     /**
      * Dump files to the web/css folder.
      */
-    public static function dumpCssFiles()
+    public static function dumpCssFiles(): void
     {
         /*$appCss = __DIR__.'/../../../assets/libs';
         $newPath = __DIR__.'/../../../public/libs/';
@@ -33,7 +32,7 @@ class ScriptHandler
      * Delete old Symfony folder before update (generates conflicts with composer)
      * This method also applies to 1.10 folders removed for 1.11.
      */
-    public static function deleteOldFilesFrom19x()
+    public static function deleteOldFilesFrom19x(): void
     {
         $paths = self::getFoldersToDelete();
 
@@ -237,7 +236,7 @@ class ScriptHandler
      * Update the basis css files.
      * Avoid use the ScriptHandler::dumpCssFiles.
      */
-    public static function updateCss()
+    public static function updateCss(): void
     {
         $appCss = __DIR__.'/../../../../app/Resources/public/css/';
         $newPath = __DIR__.'/../../../../web/css/';
@@ -288,20 +287,20 @@ class ScriptHandler
         if ($is_object_dir) {
             while (false !== $entry = $dir->read()) {
                 // Skip pointers.
-                if ('.' == $entry || '..' == $entry) {
+                if ('.' === $entry || '..' === $entry) {
                     continue;
                 }
 
                 // Recurse.
                 if ($strict) {
-                    $result = self::rmdirr("$dirname/$entry");
-                    if (false == $result) {
+                    $result = self::rmdirr("{$dirname}/{$entry}");
+                    if (false === $result) {
                         $res = false;
 
                         break;
                     }
                 } else {
-                    self::rmdirr("$dirname/$entry");
+                    self::rmdirr("{$dirname}/{$entry}");
                 }
             }
         }
@@ -311,7 +310,7 @@ class ScriptHandler
             $dir->close();
         }
 
-        if (false == $delete_only_content_in_folder) {
+        if (false === $delete_only_content_in_folder) {
             $res = rmdir($dirname);
         }
 

@@ -38,7 +38,9 @@ class AccountController extends BaseController
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 
-        return $this->render('@ChamiloCore/Account/home.html.twig', ['user' => $user]);
+        return $this->render('@ChamiloCore/Account/home.html.twig', [
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -52,6 +54,7 @@ class AccountController extends BaseController
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 
+        /** @var User $user */
         $form = $this->createForm(ProfileType::class, $user);
         $form->setData($user);
         $form->handleRequest($request);
@@ -59,16 +62,21 @@ class AccountController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $illustration = $form['illustration']->getData();
             if ($illustration) {
-                /** @var User $user */
                 $illustrationRepo->addIllustration($user, $user, $illustration);
             }
+
             $userRepository->updateUser($user);
             $this->addFlash('success', $this->trans('Updated'));
-            $url = $this->generateUrl('chamilo_core_account_home', ['username' => $user->getUsername()]);
+            $url = $this->generateUrl('chamilo_core_account_home', [
+                'username' => $user->getUsername(),
+            ]);
 
             return new RedirectResponse($url);
         }
 
-        return $this->render('@ChamiloCore/Account/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+        return $this->render('@ChamiloCore/Account/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
     }
 }

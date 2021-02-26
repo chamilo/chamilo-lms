@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
@@ -19,9 +21,6 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-/**
- * Class ResourceUploaderController.
- */
 class ResourceUploadController extends BlueimpController
 {
     /**
@@ -84,11 +83,12 @@ class ResourceUploadController extends BlueimpController
 
                     $this->validate($file, $request, $response);
                     $this->dispatchPreUploadEvent($file, $response, $request);
+                    /** @var AbstractResource|ResourceInterface $resource */
                     $resource = $repo->saveUpload($file);
                     //$resource = $repo->saveUpload($file, $course, $session);
 
                     // @todo fix correct $parent
-                    $resource->setParent($parent);
+                    //$resource->setParent($parent);
                     $resource->addCourseLink(
                         $course,
                         $session

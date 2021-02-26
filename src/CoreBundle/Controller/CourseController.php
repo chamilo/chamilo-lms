@@ -38,7 +38,9 @@ class CourseController extends AbstractController
      */
     public function homeRedirectAction(Course $course): Response
     {
-        return $this->redirectToRoute('chamilo_core_course_home', ['cid' => $course->getId()]);
+        return $this->redirectToRoute('chamilo_core_course_home', [
+            'cid' => $course->getId(),
+        ]);
     }
 
     /**
@@ -48,7 +50,9 @@ class CourseController extends AbstractController
      */
     public function welcomeAction(Course $course): Response
     {
-        return $this->render('@ChamiloCore/Course/welcome.html.twig', ['course' => $course]);
+        return $this->render('@ChamiloCore/Course/welcome.html.twig', [
+            'course' => $course,
+        ]);
     }
 
     /**
@@ -78,11 +82,12 @@ class CourseController extends AbstractController
                     'id' => 'DESC',
                     'descriptionType' => 'ASC',
                 ]
-            );
+            )
+        ;
 
         $courseValues = new ExtraFieldValue('course');
 
-        $urlCourse = api_get_path(WEB_PATH)."course/$courseId/about";
+        $urlCourse = api_get_path(WEB_PATH)."course/{$courseId}/about";
         $courseTeachers = $course->getTeachers();
         $teachersData = [];
 

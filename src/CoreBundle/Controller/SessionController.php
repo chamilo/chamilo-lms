@@ -249,7 +249,10 @@ class SessionController extends AbstractController
                 true
             ),*/
             'user_session_time' => SessionManager::getDayLeftInSession(
-                ['id' => $session->getId(), 'duration' => $session->getDuration()],
+                [
+                    'id' => $session->getId(),
+                    'duration' => $session->getDuration(),
+                ],
                 api_get_user_id()
             ),
         ];

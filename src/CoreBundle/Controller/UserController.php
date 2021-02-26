@@ -36,6 +36,9 @@ class UserController extends AbstractController
 
         $url = $illustrationRepository->getIllustrationUrl($user);
 
-        return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user, 'illustration_url' => $url]);
+        return $this->render('@ChamiloCore/User/profile.html.twig', [
+            'user' => $user,
+            'illustration_url' => $url,
+        ]);
     }
 }

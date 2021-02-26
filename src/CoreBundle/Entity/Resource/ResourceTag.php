@@ -37,7 +37,7 @@ class ResourceTag
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceComments")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
      *
-     * @var \Chamilo\CoreBundle\Entity\User|null
+     * @var null|\Chamilo\CoreBundle\Entity\User
      */
     protected $author;
 }

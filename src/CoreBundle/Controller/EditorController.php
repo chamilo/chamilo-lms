@@ -51,7 +51,9 @@ class EditorController extends BaseController
 
         return $this->render(
             '@ChamiloCore/Editor/templates.html.twig',
-            ['templates' => $templates]
+            [
+                'templates' => $templates,
+            ]
         );
     }
 
@@ -153,7 +155,11 @@ class EditorController extends BaseController
 
         return $grid->getGridResponse(
             '@ChamiloCore/Editor/custom.html.twig',
-            ['id' => $id, 'tool' => $tool, 'type' => $type]
+            [
+                'id' => $id,
+                'tool' => $tool,
+                'type' => $type,
+            ]
         );
     }
 

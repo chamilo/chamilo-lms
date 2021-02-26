@@ -72,7 +72,9 @@ class ResourceApiController extends AbstractController implements CourseControll
         $this->denyAccessUnlessValidResource($resource);
 
         $orderBy = $paramFetcher->get('orderBy');
-        $criteria = Criteria::create()->orderBy([$orderBy => Criteria::DESC]);
+        $criteria = Criteria::create()->orderBy([
+            $orderBy => Criteria::DESC,
+        ]);
 
         return $resource->getResourceNode()->getComments()->matching($criteria);
     }
@@ -86,7 +88,9 @@ class ResourceApiController extends AbstractController implements CourseControll
         $this->denyAccessUnlessValidResource($resource);
 
         $comment = new ResourceComment();
-        $form = $this->createForm(ResourceCommentType::class, $comment, ['method' => 'POST']);
+        $form = $this->createForm(ResourceCommentType::class, $comment, [
+            'method' => 'POST',
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

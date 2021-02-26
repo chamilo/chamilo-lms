@@ -210,8 +210,10 @@ class CourseHomeController extends ToolBaseController
      */
     public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain)
     {
-        /** @var CTool|null $tool */
-        $tool = $repo->findOneBy(['name' => $toolName]);
+        /** @var null|CTool $tool */
+        $tool = $repo->findOneBy([
+            'name' => $toolName,
+        ]);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));
@@ -235,7 +237,7 @@ class CourseHomeController extends ToolBaseController
      *
      * @param string $namespace
      * @Route("/{cid}/settings/{namespace}", name="chamilo_core_course_settings")
-
+     *
      * @Entity("course", expr="repository.find(cid)")
      *
      * @return Response
@@ -292,7 +294,7 @@ class CourseHomeController extends ToolBaseController
         $allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
 
         if (!empty($lpAutoLaunch)) {
-            if (2 == $lpAutoLaunch) {
+            if (2 === $lpAutoLaunch) {
                 // LP list
                 if ($allowAutoLaunchForCourseAdmins) {
                     $showAutoLaunchLpWarning = true;
@@ -302,7 +304,7 @@ class CourseHomeController extends ToolBaseController
                         // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
-                        header("Location: $url");
+                        header("Location: {$url}");
                         exit;
                     }
                 }
@@ -311,18 +313,18 @@ class CourseHomeController extends ToolBaseController
                 $condition = '';
                 if (!empty($session_id)) {
                     $condition = api_get_session_condition($session_id);
-                    $sql = "SELECT id FROM $lp_table
-                            WHERE c_id = $course_id AND autolaunch = 1 $condition
+                    $sql = "SELECT id FROM {$lp_table}
+                            WHERE c_id = {$course_id} AND autolaunch = 1 {$condition}
                             LIMIT 1";
                     $result = Database::query($sql);
                     // If we found nothing in the session we just called the session_id =  0 autolaunch
-                    if (0 == Database::num_rows($result)) {
+                    if (0 === Database::num_rows($result)) {
                         $condition = '';
                     }
                 }
 
-                $sql = "SELECT iid FROM $lp_table
-                        WHERE c_id = $course_id AND autolaunch = 1 $condition
+                $sql = "SELECT iid FROM {$lp_table}
+                        WHERE c_id = {$course_id} AND autolaunch = 1 {$condition}
                         LIMIT 1";
                 $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) {
@@ -338,7 +340,7 @@ class CourseHomeController extends ToolBaseController
                                     'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
 
                                 $_SESSION[$session_key] = true;
-                                header("Location: $url");
+                                header("Location: {$url}");
                                 exit;
                             }
                         }
@@ -363,7 +365,7 @@ class CourseHomeController extends ToolBaseController
                 }
             } else {
                 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
-                header("Location: $url");
+                header("Location: {$url}");
                 exit;
             }
         }
@@ -380,7 +382,7 @@ class CourseHomeController extends ToolBaseController
                 } else {
                     // Redirecting to the document
                     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
-                    header("Location: $url");
+                    header("Location: {$url}");
                     exit;
                 }
             } elseif (1 === $exerciseAutoLaunch) {
@@ -396,18 +398,18 @@ class CourseHomeController extends ToolBaseController
                     $condition = '';
                     if (!empty($session_id)) {
                         $condition = api_get_session_condition($session_id);
-                        $sql = "SELECT iid FROM $table
-                                WHERE c_id = $course_id AND autolaunch = 1 $condition
+                        $sql = "SELECT iid FROM {$table}
+                                WHERE c_id = {$course_id} AND autolaunch = 1 {$condition}
                                 LIMIT 1";
                         $result = Database::query($sql);
                         // If we found nothing in the session we just called the session_id = 0 autolaunch
-                        if (0 == Database::num_rows($result)) {
+                        if (0 === Database::num_rows($result)) {
                             $condition = '';
                         }
                     }
 
-                    $sql = "SELECT iid FROM $table
-                            WHERE c_id = $course_id AND autolaunch = 1 $condition
+                    $sql = "SELECT iid FROM {$table}
+                            WHERE c_id = {$course_id} AND autolaunch = 1 {$condition}
                             LIMIT 1";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
@@ -415,7 +417,7 @@ class CourseHomeController extends ToolBaseController
                         $exerciseId = $row['iid'];
                         $url = api_get_path(WEB_CODE_PATH).
                             'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
-                        header("Location: $url");
+                        header("Location: {$url}");
                         exit;
                     }
                 }
@@ -433,7 +435,7 @@ class CourseHomeController extends ToolBaseController
             } else {
                 // Redirecting to the document
                 $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
-                header("Location: $url");
+                header("Location: {$url}");
                 exit;
             }
         }

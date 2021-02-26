@@ -68,8 +68,8 @@ class NewsController extends BaseController
         return $this->render(
             '@ChamiloCore/News/view.html.twig',
             [
-                    'announcement' => $content,
-                ]
+                'announcement' => $content,
+            ]
         );
     }
 }

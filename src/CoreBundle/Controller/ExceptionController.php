@@ -44,7 +44,9 @@ class ExceptionController extends AbstractController
         //$template = sprintf('@ChamiloCore/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
         $template = sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
 
-        return $this->render($template, ['exception' => $exception]);
+        return $this->render($template, [
+            'exception' => $exception,
+        ]);
     }
 
     /**
@@ -82,6 +84,8 @@ class ExceptionController extends AbstractController
         //$request->setRequestFormat('html');
         $template = sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
 
-        return $this->render($template, ['exception' => $exception]);
+        return $this->render($template, [
+            'exception' => $exception,
+        ]);
     }
 }

@@ -1488,7 +1488,7 @@ class MySpace
             $registeredUsersBySession = self::getSessionAddUserCourseFromTrackDefault(
                 $startDate,
                 $endDate,
-                $whereInLpItem
+                $whereInLp
             );
             $registeredUsers = self::getCompanyLearnpathSubscription(
                 $startDate,
@@ -1501,8 +1501,8 @@ class MySpace
                 $lpItemId = $lpItem['lp_item_id'];
                 $author = str_replace(';', ',', $lpItem['author']);
                 $tempArrayAuthor = explode(',', $author);
-                $byCourse = $registeredUsers[$lpItemId];
-                $bySession = $registeredUsersBySession[$lpItemId];
+                $byCourse = isset($registeredUsers[$lpItemId]) ? $registeredUsers[$lpItemId] : [];
+                $bySession = isset($registeredUsersBySession[$lpItemId]) ? $registeredUsersBySession[$lpItemId] : [];
                 if (is_array($tempArrayAuthor)) {
                     $totalAuhtors = count($tempArrayAuthor);
                     for ($j = 0; $j < $totalAuhtors; $j++) {
@@ -1713,6 +1713,7 @@ class MySpace
                 foreach ($lpItems as $lpItem) {
                     $totalStudent = 0;
                     $itemLp = $lpItem['lp_item'];
+                    $itemLpId = $itemLp['lp_item_id'];
                     $title = $itemLp['title'];
                     $price = $itemLp['price'];
                     $byCourse = $lpItem['course'];
@@ -1728,7 +1729,7 @@ class MySpace
                     $studentsName = '';
                     if ($studenRegister != 0 || $studenRegisterBySession != 0) {
                         /* Student by session, keep it first */
-                        for ($i = 0; $i < $studenRegisterBySession; $i++) {
+                        for ($i = 0; $i < count($bySession); $i++) {
                             $student = $bySession[$i];
                             $studentId = $student['id'];
                             if (!isset($studentArray[$studentId])) {
@@ -1736,11 +1737,11 @@ class MySpace
                             }
                             $tempStudent = $studentArray[$studentId];
                             $studentInSesion[$studentId] = 1;
-                            $studentsName .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].") / ";
+                            $studentsName .= $tempStudent['complete_name']." (".$student['company'].") / ";
                             $totalStudent++;
                         }
                         /* Student by course, keep it last */
-                        for ($i = 0; $i < $studenRegister; $i++) {
+                        for ($i = 0; $i < count($byCourse); $i++) {
                             $student = $byCourse[$i];
                             $studentId = $student['id'];
                             if (!isset($studentArray[$studentId])) {
@@ -1748,7 +1749,7 @@ class MySpace
                             }
                             $tempStudent = $studentArray[$studentId];
                             if (!isset($studentInSesion[$studentId])) {
-                                $studentsName .= $tempStudent['complete_name']." (".$registeredUsers[$i]['company'].") / ";
+                                $studentsName .= $tempStudent['complete_name']." (".$student['company'].") / ";
                                 $totalStudent++;
                             }
                         }
@@ -1803,6 +1804,7 @@ class MySpace
         SELECT DISTINCT
             lp_table.iid as lp,
             lp_table_item.iid as lp_item,
+            lp_table_item.iid AS lp_item_id,
             track_default.default_value as id,
             sesion_r_c_u.session_id as session_id,
             CASE
@@ -1811,7 +1813,7 @@ class MySpace
             END as company
         FROM
              $tblTrackDefault as track_default
-        INNER JOIN $tblExtraFieldValue as extra_field_value on ( extra_field_value.item_id = track_default.default_user_id )
+        INNER JOIN $tblExtraFieldValue as extra_field_value on ( extra_field_value.item_id = track_default.default_value and track_default.default_value_type ='user_id' )
         INNER JOIN $tblExtraField as extra_field on ( extra_field_value.field_id = extra_field.id and  extra_field.variable = 'company' )
         INNER JOIN $tblSessionRelCourseUser as sesion_r_c_u on (track_default.default_value = sesion_r_c_u.user_id )
         INNER JOIN $tblLp AS lp_table on (lp_table.c_id = sesion_r_c_u.c_id)
@@ -4175,6 +4177,7 @@ class MySpace
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
 
         $whereCondition = '';
 
@@ -4220,6 +4223,7 @@ class MySpace
                 SELECT DISTINCT
                     item_property.ref as lp_item,
                     item_property.to_user_id as id,
+                    lp_table_item.iid AS lp_item_id,
                     CASE
                         WHEN  extra_field_value.`value` ='' THEN \"".get_lang('NoEntity')."\"
                         ELSE extra_field_value.`value`
@@ -4228,6 +4232,8 @@ class MySpace
                     $tblItemProperty as item_property
                 INNER JOIN $tblExtraFieldValue as extra_field_value on ( extra_field_value.item_id = item_property.to_user_id )
                 INNER JOIN $tblExtraField as extra_field on ( extra_field_value.field_id = extra_field.id and  extra_field.variable = 'company' )
+                INNER JOIN $tblLp AS lp_table on (lp_table.iid = item_property.ref)
+                INNER JOIN $tblLpItem AS lp_table_item on (lp_table.id = lp_table_item.lp_id )
                 WHERE
                     item_property.lastedit_type = 'LearnpathSubscription'
                 ";
@@ -4243,7 +4249,7 @@ class MySpace
             $totalData = count($data);
             for ($i = 0; $i < $totalData; $i++) {
                 $row = $data[$i];
-                $datas[$row['lp_item']][] = $row;
+                $datas[$row['lp_item_id']][] = $row;
             }
         }
 

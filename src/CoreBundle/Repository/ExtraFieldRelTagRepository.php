@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -17,9 +19,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ExtraFieldRelTagRepository extends ServiceEntityRepository
 {
-    /**
-     * ExtraFieldRelTagRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ExtraFieldRelTag::class);
@@ -49,7 +48,8 @@ class ExtraFieldRelTagRepository extends ServiceEntityRepository
                     $queryBuilder->expr()->eq('ft.itemId', (int) $itemId),
                     $queryBuilder->expr()->eq('ft.fieldId', $extraField->getId())
                 )
-            );
+            )
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

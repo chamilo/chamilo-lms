@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -15,15 +17,13 @@ use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Throwable;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 
-/**
- * Class ResourceNodeRepository.
- */
 class ResourceNodeRepository extends MaterializedPathRepository
 {
-    protected $mountManager;
-    protected $storage;
+    protected MountManager $mountManager;
+    protected FlysystemStorage $storage;
 
     public function __construct(EntityManagerInterface $manager, FlysystemStorage $storage, MountManager $mountManager)
     {
@@ -32,7 +32,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         $this->mountManager = $mountManager;
     }
 
-    public function getFilename(ResourceFile $resourceFile)
+    public function getFilename(ResourceFile $resourceFile): ?string
     {
         return $this->storage->resolveUri($resourceFile);
     }
@@ -72,11 +72,14 @@ class ResourceNodeRepository extends MaterializedPathRepository
             }
 
             return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resourceNode);
+        } catch (Throwable $exception) {
+            throw new FileNotFoundException($resourceNode->getTitle());
         }
     }
 
+    /**
+     * @return false|resource
+     */
     public function getResourceNodeFileStream(ResourceNode $resourceNode)
     {
         try {
@@ -87,9 +90,9 @@ class ResourceNodeRepository extends MaterializedPathRepository
                 return $this->getFileSystem()->readStream($fileName);
             }
 
-            return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resourceNode);
+            return false;
+        } catch (Throwable $exception) {
+            throw new FileNotFoundException($resourceNode->getTitle());
         }
     }
 
@@ -111,10 +114,11 @@ class ResourceNodeRepository extends MaterializedPathRepository
             ->setParameter('visibility', ResourceLink::VISIBILITY_DELETED)
         ;
 
-        if ($course) {
+        if (null !== $course) {
             $qb
                 ->andWhere('l.course = :course')
-                ->setParameter('course', $course);
+                ->setParameter('course', $course)
+            ;
         }
 
         return (int) $qb->getQuery()->getSingleScalarResult();

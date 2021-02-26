@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -35,13 +38,14 @@ class CourseRepository extends ResourceRepository
     {
         $orWhere = Criteria::expr()->eq('sessionId', 0);
 
-        if ($session) {
+        if (null !== $session) {
             $orWhere = Criteria::expr()->in('sessionId', [0, $session->getId()]);
         }
 
         $criteria = Criteria::create()
             ->where(Criteria::expr()->isNull('sessionId'))
-            ->orWhere($orWhere);
+            ->orWhere($orWhere)
+        ;
 
         return $course->getTools()->matching($criteria);
     }
@@ -64,7 +68,9 @@ class CourseRepository extends ResourceRepository
 
     public function findOneByCode(string $code): ?Course
     {
-        return $this->findOneBy(['code' => $code]);
+        return $this->findOneBy([
+            'code' => $code,
+        ]);
     }
 
     /**
@@ -134,7 +140,7 @@ class CourseRepository extends ResourceRepository
      */
     public function getSubscribedTeachers(Course $course)
     {
-        return $this->getSubscribedUsersByStatus($course, COURSEMANAGER);
+        return $this->getSubscribedUsersByStatus($course, ChamiloApi::COURSE_MANAGER);
     }
 
     /**
@@ -148,12 +154,16 @@ class CourseRepository extends ResourceRepository
         $queryBuilder
             ->andWhere(
                 $queryBuilder->expr()->eq('subscriptions.status', $status)
-            );
+            )
+        ;
 
         return $queryBuilder;
     }
 
-    public function getCoursesWithNoSession($urlId)
+    /**
+     * @return Course[]
+     */
+    public function getCoursesWithNoSession(int $urlId)
     {
         $queryBuilder = $this->createQueryBuilder('c');
         $queryBuilder = $queryBuilder
@@ -174,13 +184,14 @@ class CourseRepository extends ResourceRepository
             ->where($queryBuilder->expr()->isNull('s'))
             //->where($queryBuilder->expr()->eq('s', 0))
             ->where($queryBuilder->expr()->eq('u.url', $urlId))
-            ->getQuery();
+            ->getQuery()
+        ;
 
         $courses = $queryBuilder->getResult();
         $courseList = [];
         /** @var Course $course */
         foreach ($courses as $course) {
-            if (empty(0 == $course->getSessions()->count())) {
+            if (empty(0 === $course->getSessions()->count())) {
                 $courseList[] = $course;
             }
         }
@@ -204,7 +215,10 @@ class CourseRepository extends ResourceRepository
             ->innerJoin('accessUrlRelCourse.url', 'url')
             ->where('user = :user')
             ->andWhere('url = :url')
-            ->setParameters(['user' => $user, 'url' => $url])
+            ->setParameters([
+                'user' => $user,
+                'url' => $url,
+            ])
             ->addSelect('courseRelUser')
         ;
 

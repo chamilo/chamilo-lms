@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -11,14 +13,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CCourseCategoryRepository.
- */
 class CourseCategoryRepository extends ServiceEntityRepository
 {
-    /**
-     * CourseCategoryRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CourseCategory::class);
@@ -27,12 +23,9 @@ class CourseCategoryRepository extends ServiceEntityRepository
     /**
      * Get all course categories in an access url.
      *
-     * @param int  $accessUrl
-     * @param bool $allowBaseCategories
-     *
      * @return array
      */
-    public function findAllInAccessUrl($accessUrl, $allowBaseCategories = false)
+    public function findAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false)
     {
         $qb = $this->createQueryBuilder('c');
         $qb
@@ -58,13 +51,9 @@ class CourseCategoryRepository extends ServiceEntityRepository
     /**
      * Get all categories in an access url and course id.
      *
-     * @param int  $accessUrl
-     * @param int  $courseId
-     * @param bool $allowBaseCategories
-     *
      * @return array
      */
-    public function getCategoriesByCourseIdAndAccessUrlId($accessUrl, $courseId, $allowBaseCategories = false)
+    public function getCategoriesByCourseIdAndAccessUrlId(int $accessUrl, int $courseId, bool $allowBaseCategories = false)
     {
         $qb = $this->createQueryBuilder('c');
         $qb
@@ -86,12 +75,9 @@ class CourseCategoryRepository extends ServiceEntityRepository
     /**
      * Get the number of course categories in an access url.
      *
-     * @param int  $accessUrl
-     * @param bool $allowBaseCategories
-     *
      * @return int
      */
-    public function countAllInAccessUrl($accessUrl, $allowBaseCategories = false)
+    public function countAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false)
     {
         $qb = $this->createQueryBuilder('c');
         $qb->select('COUNT(c)')
@@ -103,7 +89,8 @@ class CourseCategoryRepository extends ServiceEntityRepository
             )
             ->where(
                 $qb->expr()->eq('a.url', $accessUrl)
-            );
+            )
+        ;
 
         if ($allowBaseCategories) {
             $qb->orWhere($qb->expr()->eq('a.url', 1));
@@ -114,7 +101,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
         return (int) $count;
     }
 
-    public function updateCourseRelCategoryByCourse(Course $course, $courseData)
+    public function updateCourseRelCategoryByCourse(Course $course, array $courseData): void
     {
         $em = $this->getEntityManager();
 

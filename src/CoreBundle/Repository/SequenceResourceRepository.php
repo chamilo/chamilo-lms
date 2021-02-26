@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Category;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -13,10 +16,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Vertex;
+use SessionManager;
 
-/**
- * Class SequenceResourceRepository.
- */
 class SequenceResourceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -32,7 +33,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
      */
     public function findRequirementForResource($resourceId, $type): ?SequenceResource
     {
-        return $this->findOneBy(['resourceId' => $resourceId, 'type' => $type]);
+        return $this->findOneBy([
+            'resourceId' => $resourceId,
+            'type' => $type,
+        ]);
     }
 
     /**
@@ -46,7 +50,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
     public function getRequirementAndDependencies($resourceId, $type)
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
-        $result = ['requirements' => [], 'dependencies' => []];
+        $result = [
+            'requirements' => [],
+            'dependencies' => [],
+        ];
         if ($sequence && $sequence->hasGraph()) {
             $graph = $sequence->getSequence()->getUnSerializeGraph();
             $vertex = $graph->getVertex($resourceId);
@@ -55,7 +62,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
             foreach ($from as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
+                $sessionInfo['admin_link'] = '<a href="'.SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
                 $result['requirements'][] = $sessionInfo;
             }
 
@@ -63,7 +70,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
             foreach ($to as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
+                $sessionInfo['admin_link'] = '<a href="'.SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
                 $result['dependencies'][] = $sessionInfo;
             }
         }
@@ -78,7 +85,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
      * @param int $resourceId
      * @param int $type
      */
-    public function deleteSequenceResource($resourceId, $type)
+    public function deleteSequenceResource($resourceId, $type): void
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
         if ($sequence && $sequence->hasGraph()) {
@@ -116,7 +123,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
      */
     public function getRequirements($resourceId, $type)
     {
-        $sequencesResource = $this->findBy(['resourceId' => $resourceId, 'type' => $type]);
+        $sequencesResource = $this->findBy([
+            'resourceId' => $resourceId,
+            'type' => $type,
+        ]);
         $em = $this->getEntityManager();
         $result = [];
         /** @var SequenceResource $sequenceResource */
@@ -222,10 +232,12 @@ class SequenceResourceRepository extends ServiceEntityRepository
         $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
 
         $sessionUserList = [];
-        if (SequenceResource::COURSE_TYPE == $type) {
-            $criteria = ['user' => $userId];
+        if (SequenceResource::COURSE_TYPE === $type) {
+            $criteria = [
+                'user' => $userId,
+            ];
             $sessions = $em->getRepository(SessionRelUser::class)->findBy($criteria);
-            if ($sessions) {
+            if ([] !== $sessions) {
                 foreach ($sessions as $sessionRelUser) {
                     $sessionUserList[] = $sessionRelUser->getSession()->getId();
                 }
@@ -262,10 +274,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
                             );
 
                             foreach ($gradebooks as $gradebook) {
-                                $category = \Category::createCategoryObjectFromEntity($gradebook);
+                                $category = Category::createCategoryObjectFromEntity($gradebook);
 
                                 if (!empty($userId)) {
-                                    $resourceItem['status'] = $resourceItem['status'] && \Category::userFinishedCourse(
+                                    $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
                                         $userId,
                                         $category
                                     );
@@ -274,15 +286,14 @@ class SequenceResourceRepository extends ServiceEntityRepository
                         }
 
                         break;
-
                     case SequenceResource::COURSE_TYPE:
                         $id = $resource->getId();
                         $status = $this->checkCourseRequirements($userId, $resource, 0);
 
                         if (false === $status) {
-                            $sessionsInCourse = \SessionManager::get_session_by_course($id);
+                            $sessionsInCourse = SessionManager::get_session_by_course($id);
                             foreach ($sessionsInCourse as $session) {
-                                if (in_array($session['id'], $sessionUserList)) {
+                                if (in_array($session['id'], $sessionUserList, true)) {
                                     $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
                                     if (true === $status) {
                                         break;
@@ -311,10 +322,9 @@ class SequenceResourceRepository extends ServiceEntityRepository
         return $sequenceList;
     }
 
-    public function checkCourseRequirements($userId, Course $course, $sessionId)
+    public function checkCourseRequirements(int $userId, Course $course, int $sessionId = 0): bool
     {
         $em = $this->getEntityManager();
-        $sessionId = (int) $sessionId;
 
         $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
         $gradebooks = $gradebookCategoryRepo->findBy(
@@ -331,25 +341,23 @@ class SequenceResourceRepository extends ServiceEntityRepository
 
         $status = true;
         foreach ($gradebooks as $gradebook) {
-            $category = \Category::createCategoryObjectFromEntity($gradebook);
-            $userFinishedCourse = \Category::userFinishedCourse(
+            $category = Category::createCategoryObjectFromEntity($gradebook);
+            $userFinishedCourse = Category::userFinishedCourse(
                 $userId,
                 $category,
                 true
             );
 
             if (0 === $sessionId) {
-                if (false === $userFinishedCourse) {
+                if (!$userFinishedCourse) {
                     $status = false;
 
                     break;
                 }
-            } else {
-                if (false === $userFinishedCourse) {
-                    $status = false;
+            } elseif (!$userFinishedCourse) {
+                $status = false;
 
-                    break;
-                }
+                break;
             }
         }
 

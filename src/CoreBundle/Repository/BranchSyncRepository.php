@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
-/**
- * Class BranchSyncRepository.
- */
 class BranchSyncRepository extends NestedTreeRepository
 {
     /**
@@ -29,7 +28,7 @@ class BranchSyncRepository extends NestedTreeRepository
         //@todo check app settings
         $qb->addOrderBy('b.branchName ASC');
         $qb->where('b.branchName LIKE :keyword');
-        $qb->setParameter('keyword', "%$keyword%");
+        $qb->setParameter('keyword', "%{$keyword}%");
         $q = $qb->getQuery();
 
         return $q->execute();
@@ -52,10 +51,9 @@ class BranchSyncRepository extends NestedTreeRepository
         $q = $qb->getQuery()->getResult();
         if (empty($q)) {
             return null;
-        } else {
-            foreach ($q as $result) {
-                return $result;
-            }
+        }
+        foreach ($q as $result) {
+            return $result;
         }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -27,39 +29,37 @@ class SessionRepository extends ServiceEntityRepository
         User $user,
         Course $course,
         Session $session
-    ) {
+    ): void {
         if ($session->isActive() &&
             $user->getIsActive() &&
-            $course->isActive()
+            $course->isActive() && $session->hasCourse($course)
         ) {
-            if ($session->hasCourse($course)) {
-                switch ($status) {
-                    case Session::DRH:
-                        if ($user->hasRole('ROLE_RRHH')) {
-                            $session->addUserInSession(Session::DRH, $user);
-                        }
+            switch ($status) {
+                case Session::DRH:
+                    if ($user->hasRole('ROLE_RRHH')) {
+                        $session->addUserInSession(Session::DRH, $user);
+                    }
 
-                        break;
-                    case Session::STUDENT:
-                        $session->addUserInSession(Session::STUDENT, $user);
+                    break;
+                case Session::STUDENT:
+                    $session->addUserInSession(Session::STUDENT, $user);
+                    $session->addUserInCourse(
+                        Session::STUDENT,
+                        $user,
+                        $course
+                    );
+
+                    break;
+                case Session::COACH:
+                    if ($user->hasRole('ROLE_TEACHER')) {
                         $session->addUserInCourse(
-                            Session::STUDENT,
+                            Session::COACH,
                             $user,
                             $course
                         );
+                    }
 
-                        break;
-                    case Session::COACH:
-                        if ($user->hasRole('ROLE_TEACHER')) {
-                            $session->addUserInCourse(
-                                Session::COACH,
-                                $user,
-                                $course
-                            );
-                        }
-
-                        break;
-                }
+                    break;
             }
         }
     }

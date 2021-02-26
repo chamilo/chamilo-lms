@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -31,8 +33,12 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
         }
 
         $lastAccess = $this->findBy(
-            ['userId' => $user->getId()],
-            ['courseAccessId' => 'DESC'],
+            [
+                'userId' => $user->getId(),
+            ],
+            [
+                'courseAccessId' => 'DESC',
+            ],
             1
         );
 

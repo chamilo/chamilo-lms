@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
+use Agenda;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
@@ -14,7 +17,6 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\Ticket;
 use Chamilo\CoreBundle\Entity\TicketMessage;
@@ -30,7 +32,6 @@ use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
-use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
@@ -48,9 +49,13 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Datetime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
+use SocialManager;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -60,6 +65,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use UrlManager;
 
 /**
  * Class UserRepository.
@@ -69,25 +75,26 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
-    /** @var UserPasswordEncoderInterface */
-    protected $encoder;
+    protected ?UserPasswordEncoderInterface $encoder = null;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
     }
 
-    public function setEncoder(UserPasswordEncoderInterface $encoder)
+    public function setEncoder(UserPasswordEncoderInterface $encoder): void
     {
         $this->encoder = $encoder;
     }
 
-    public function loadUserByUsername($username): ?User
+    public function loadUserByUsername(string $username): ?User
     {
-        return $this->findOneBy(['username' => $username]);
+        return $this->findOneBy([
+            'username' => $username,
+        ]);
     }
 
-    public function updateUser($user, $andFlush = true)
+    public function updateUser(User $user, bool $andFlush = true): void
     {
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);
@@ -97,25 +104,26 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         }
     }
 
-    public function canonicalize($string)
+    public function canonicalize(string $string): string
     {
-        $encoding = mb_detect_encoding($string);
+        $encoding = mb_detect_encoding($string, mb_detect_order(), true);
 
         return $encoding
             ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
             : mb_convert_case($string, MB_CASE_LOWER);
     }
 
-    public function updateCanonicalFields(User $user)
+    public function updateCanonicalFields(User $user): void
     {
         $user->setUsernameCanonical($this->canonicalize($user->getUsername()));
         $user->setEmailCanonical($this->canonicalize($user->getEmail()));
     }
 
-    public function updatePassword(User $user)
+    public function updatePassword(User $user): void
     {
         //UserPasswordEncoderInterface $passwordEncoder
-        if (0 !== strlen($password = $user->getPlainPassword())) {
+        $password = (string) $user->getPlainPassword();
+        if ('' !== $password) {
             $password = $this->encoder->encodePassword($user, $password);
             $user->setPassword($password);
             $user->eraseCredentials();
@@ -142,7 +150,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->innerJoin(
                 'u.resourceNode',
                 'r'
-            );
+            )
+        ;
         $qb->where('r.creator = u');
         $qb->andWhere('r.parent IS NULL');
         $qb->getFirstResult();
@@ -156,7 +165,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $rootUser;
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser(User $user): void
     {
         $em = $this->getEntityManager();
         $type = $user->getResourceNode()->getResourceType();
@@ -204,7 +213,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
     public function findByUsername(string $username): ?User
     {
-        $user = $this->findOneBy(['username' => $username]);
+        $user = $this->findOneBy([
+            'username' => $username,
+        ]);
 
         if (null === $user) {
             throw new UsernameNotFoundException(sprintf("User with id '%s' not found.", $username));
@@ -214,26 +225,25 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     }
 
     /**
-     * @param string $role
-     *
-     * @return array
+     * @return User[]
      */
-    public function findByRole($role)
+    public function findByRole(string $role)
     {
         $qb = $this->createQueryBuilder('u');
 
         $qb->select('u')
             ->from($this->_entityName, 'u')
             ->where('u.roles LIKE :roles')
-            ->setParameter('roles', '%"'.$role.'"%');
+            ->setParameter('roles', '%"'.$role.'"%')
+        ;
 
         return $qb->getQuery()->getResult();
     }
 
     /**
-     * @param string $keyword
+     * @return User[]
      */
-    public function searchUserByKeyword($keyword)
+    public function searchUserByKeyword(string $keyword)
     {
         $qb = $this->createQueryBuilder('a');
 
@@ -245,7 +255,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         //@todo check app settings
         $qb->orderBy('b.firstname ASC');
         $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
-        $qb->setParameter('keyword', "%$keyword%");
+        $qb->setParameter('keyword', "%{$keyword}%");
         $query = $qb->getQuery();
 
         return $query->execute();
@@ -256,7 +266,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      *
      * @return Course[]
      */
-    public function getCourses(User $user, AccessUrl $url, int $status, $keyword = '')
+    public function getCourses(User $user, AccessUrl $url, int $status, string $keyword = '')
     {
         $qb = $this->createQueryBuilder('user');
 
@@ -274,13 +284,19 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->where('user = :user')
             ->andWhere('url = :url')
             ->andWhere('courseRelUser.status = :status')
-            ->setParameters(['user' => $user, 'url' => $url, 'status' => $status])
-            ->addSelect('courseRelUser');
+            ->setParameters([
+                'user' => $user,
+                'url' => $url,
+                'status' => $status,
+            ])
+            ->addSelect('courseRelUser')
+        ;
 
         if (!empty($keyword)) {
             $qb
                 ->andWhere('course.title like = :keyword OR course.code like = :keyword')
-                ->setParameter('keyword', $keyword);
+                ->setParameter('keyword', $keyword)
+            ;
         }
 
         $qb->orderBy('course.title DESC');
@@ -332,9 +348,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      *
      * @return array
      */
-    public function findByStatus($query, $status, $accessUrlId = null)
+    public function findByStatus(string $query, int $status, int $accessUrlId = null)
     {
-        $accessUrlId = (int) $accessUrlId;
         $queryBuilder = $this->createQueryBuilder('u');
 
         if ($accessUrlId > 0) {
@@ -349,11 +364,13 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $queryBuilder->where('u.status = :status')
             ->andWhere('u.username LIKE :query OR u.firstname LIKE :query OR u.lastname LIKE :query')
             ->setParameter('status', $status)
-            ->setParameter('query', "$query%");
+            ->setParameter('query', "{$query}%")
+        ;
 
         if ($accessUrlId > 0) {
             $queryBuilder->andWhere('auru.url = :url')
-                ->setParameter(':url', $accessUrlId);
+                ->setParameter(':url', $accessUrlId)
+            ;
         }
 
         return $queryBuilder->getQuery()->getResult();
@@ -365,7 +382,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      * @param Session $session The session
      * @param Course  $course  The course
      */
-    public function getCoachesForSessionCourse(Session $session, Course $course)
+    public function getCoachesForSessionCourse(Session $session, Course $course): Collection
     {
         $queryBuilder = $this->createQueryBuilder('u');
 
@@ -382,7 +399,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                     $queryBuilder->expr()->eq('scu.course', $course->getId()),
                     $queryBuilder->expr()->eq('scu.status', SessionRelCourseRelUser::STATUS_COURSE_COACH)
                 )
-            );
+            )
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -463,13 +481,13 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'ChamiloCoreBundle:SessionRelUser',
                 'su',
                 Join::WITH,
-                $queryBuilder->expr()->eq('u', 'su.user')
+                'u = su.user'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourseRelUser',
                 'scu',
                 Join::WITH,
-                $queryBuilder->expr()->eq('su.session', 'scu.session')
+                'su.session = scu.session'
             )
             ->where(
                 $queryBuilder->expr()->eq('scu.user', $user->getId())
@@ -496,14 +514,15 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'ChamiloCoreBundle:UserRelUser',
                 'uu',
                 Join::WITH,
-                $queryBuilder->expr()->eq('u.id', 'uu.friendUserId')
+                'u.id = uu.friendUserId'
             )
             ->where(
                 $queryBuilder->expr()->eq('uu.relationType', USER_RELATION_TYPE_BOSS)
             )
             ->andWhere(
                 $queryBuilder->expr()->eq('uu.userId', $user->getId())
-            );
+            )
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -519,9 +538,12 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->select('COUNT(a)')
             ->innerJoin('a.portals', 'u')
             ->where('u.portal = :u')
-            ->setParameters(['u' => $url])
+            ->setParameters([
+                'u' => $url,
+            ])
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -538,7 +560,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->innerJoin('a.portals', 'u')
             ->where('u.portal = :u')
             ->andWhere($qb->expr()->in('a.roles', ['ROLE_TEACHER']))
-            ->setParameters(['u' => $url])
+            ->setParameters([
+                'u' => $url,
+            ])
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -553,7 +577,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      *
      * @return User[]
      */
-    public function findUsersToSendMessage($currentUserId, $searchFilter = null, $limit = 10)
+    public function findUsersToSendMessage(int $currentUserId, string $searchFilter = null, int $limit = 10)
     {
         $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
         $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
@@ -571,8 +595,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                         WHERE
                             U.active = 1 AND
                             U.status != 6  AND
-                            U.id != $currentUserId AND
-                            R.url = $accessUrlId";
+                            U.id != {$currentUserId} AND
+                            R.url = {$accessUrlId}";
             } else {
                 $dql = 'SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
@@ -582,10 +606,10 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                             U.active = 1 AND
                             U.status != 6 AND
                             UF.relationType NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.") AND
-                            UF.user = $currentUserId AND
-                            UF.friendUserId != $currentUserId AND
+                            UF.user = {$currentUserId} AND
+                            UF.friendUserId != {$currentUserId} AND
                             U = R.user AND
-                            R.url = $accessUrlId";
+                            R.url = {$accessUrlId}";
             }
         } elseif (
             'false' === api_get_setting('allow_social_tool') &&
@@ -599,8 +623,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                         WHERE
                             U.active = 1 AND
                             U.status != 6  AND
-                            U.id != $currentUserId AND
-                            R.url = $accessUrlId";
+                            U.id != {$currentUserId} AND
+                            R.url = {$accessUrlId}";
             } else {
                 $time_limit = (int) api_get_setting('time_limit_whosonline');
                 $online_time = time() - ($time_limit * 60);
@@ -619,25 +643,23 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         if (!empty($searchFilter) && !empty($dql)) {
             $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
-            $parameters['search'] = "%$searchFilter%";
+            $parameters['search'] = "%{$searchFilter}%";
         }
 
         return $this->getEntityManager()
             ->createQuery($dql)
             ->setMaxResults($limit)
             ->setParameters($parameters)
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
      * Get the list of HRM who have assigned this user.
      *
-     * @param int $userId
-     * @param int $urlId
-     *
      * @return array
      */
-    public function getAssignedHrmUserList($userId, $urlId)
+    public function getAssignedHrmUserList(int $userId, int $urlId)
     {
         $qb = $this->createQueryBuilder('user');
 
@@ -655,21 +677,21 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
             )
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
      * Serialize the whole entity to an array.
      *
-     * @param int   $userId
      * @param array $substitutionTerms Substitute terms for some elements
      *
      * @return string
      */
-    public function getPersonalDataToJson($userId, array $substitutionTerms)
+    public function getPersonalDataToJson(int $userId, array $substitutionTerms)
     {
         $em = $this->getEntityManager();
-        $dateFormat = \Datetime::ATOM;
+        $dateFormat = Datetime::ATOM;
 
         /** @var User $user */
         $user = $this->find($userId);
@@ -698,36 +720,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $user->setWebsite($noDataLabel);
         //$user->setToken($noDataLabel);
 
-        $courses = $user->getCourses();
-        $list = [];
-        $chatFiles = [];
-        /** @var CourseRelUser $course */
-        foreach ($courses as $course) {
-            $list[] = $course->getCourse()->getCode();
-        }
-
-        $user->setCourses($list);
-
-        $classes = $user->getClasses();
-        $list = [];
-        /** @var UsergroupRelUser $class */
-        foreach ($classes as $class) {
-            $name = $class->getUsergroup()->getName();
-            $list[$class->getUsergroup()->getGroupType()][] = $name.' - Status: '.$class->getRelationType();
-        }
-        $user->setClasses($list);
-
-        $collection = $user->getSessionCourseSubscriptions();
-        $list = [];
-        /** @var SessionRelCourseRelUser $item */
-        foreach ($collection as $item) {
-            $list[$item->getSession()->getName()][] = $item->getCourse()->getCode();
-        }
-        $user->setSessionCourseSubscriptions($list);
-
-        $documents = \DocumentManager::getAllDocumentsCreatedByUser($userId);
-
-        $friends = \SocialManager::get_friends($userId);
+        $friends = SocialManager::get_friends($userId);
         $friendList = [];
         if (!empty($friends)) {
             foreach ($friends as $friend) {
@@ -735,7 +728,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             }
         }
 
-        $agenda = new \Agenda('personal');
+        $agenda = new Agenda('personal');
         $events = $agenda->getEvents(0, 0, 0, 0, $userId, 'array');
         $eventList = [];
         if (!empty($events)) {
@@ -810,7 +803,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         /** @var TrackECourseAccess $item */
         foreach ($result as $item) {
             $startDate = $item->getLoginCourseDate()->format($dateFormat);
-            $endDate = $item->getLogoutCourseDate() ? $item->getLogoutCourseDate()->format($dateFormat) : '';
+            $endDate = null !== $item->getLogoutCourseDate() ? $item->getLogoutCourseDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Start: '.$startDate,
@@ -836,8 +829,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             $qb = $em->createQueryBuilder();
             $qb->select($qb->expr()->count('l'))
                 ->from($entity, 'l')
-                ->where("l.$field = :login")
-                ->setParameter('login', $userId);
+                ->where("l.{$field} = :login")
+                ->setParameter('login', $userId)
+            ;
             $query = $qb->getQuery();
             $count = $query->getSingleScalarResult();
 
@@ -845,8 +839,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 $qb = $em->getRepository($entity)->createQueryBuilder('l');
                 $qb
                     ->select('l')
-                    ->where("l.$field = :login")
-                    ->setParameter('login', $userId);
+                    ->where("l.{$field} = :login")
+                    ->setParameter('login', $userId)
+                ;
                 $qb
                     ->setFirstResult(0)
                     ->setMaxResults($maxResults)
@@ -865,7 +860,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         /** @var TrackELogin $item */
         foreach ($trackResults['ChamiloCoreBundle:TrackELogin'] as $item) {
             $startDate = $item->getLoginDate()->format($dateFormat);
-            $endDate = $item->getLogoutDate() ? $item->getLogoutDate()->format($dateFormat) : '';
+            $endDate = null !== $item->getLogoutDate() ? $item->getLogoutDate()->format($dateFormat) : '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Start: '.$startDate,
@@ -1280,7 +1275,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         ];
         $result = $em->getRepository(TicketMessage::class)->findBy($criteria);
         $ticketMessage = [];
-        /** @var \Chamilo\CoreBundle\Entity\TicketMessage $item */
+        /** @var TicketMessage $item */
         foreach ($result as $item) {
             $date = $item->getInsertDateTime()->format($dateFormat);
             $list = [
@@ -1325,7 +1320,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             $userRelCourseVote[] = implode(', ', $list);
         }
 
-        $user->setDropBoxSentFiles(
+        /*$user->setDropBoxSentFiles(
             [
                 'Friends' => $friendList,
                 'Events' => $eventList,
@@ -1372,46 +1367,37 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'Ticket' => $ticket,
                 'TicketMessage' => $ticketMessage,
             ]
-        );
+        );*/
 
-        $user->setDropBoxReceivedFiles([]);
+        //$user->setDropBoxReceivedFiles([]);
         //$user->setGroups([]);
-        $user->setCurriculumItems([]);
+        //$user->setCurriculumItems([]);
 
-        $portals = $user->getPortals();
+        /*$portals = $user->getPortals();
         if (!empty($portals)) {
             $list = [];
             /** @var AccessUrlRelUser $portal */
-            foreach ($portals as $portal) {
-                $portalInfo = \UrlManager::get_url_data_from_id($portal->getUrl()->getId());
-                $list[] = $portalInfo['url'];
-            }
+        /*foreach ($portals as $portal) {
+            $portalInfo = UrlManager::get_url_data_from_id($portal->getUrl()->getId());
+            $list[] = $portalInfo['url'];
         }
-        $user->setPortals($list);
-
-        $coachList = $user->getSessionAsGeneralCoach();
-        $list = [];
-        /** @var Session $session */
-        foreach ($coachList as $session) {
-            $list[] = $session->getName();
         }
-        $user->setSessionAsGeneralCoach($list);
+        $user->setPortals($list);*/
 
-        $skillRelUserList = $user->getAchievedSkills();
+        /*$skillRelUserList = $user->getAchievedSkills();
         $list = [];
-        /** @var SkillRelUser $skillRelUser */
         foreach ($skillRelUserList as $skillRelUser) {
             $list[] = $skillRelUser->getSkill()->getName();
         }
         $user->setAchievedSkills($list);
-        $user->setCommentedUserSkills([]);
+        $user->setCommentedUserSkills([]);*/
 
         //$extraFieldValues = new \ExtraFieldValue('user');
 
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {
             $login = $this->getLastLogin($user);
-            if ($login) {
+            if (null !== $login) {
                 $lastLogin = $login->getLoginDate();
             }
         }
@@ -1449,7 +1435,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         ];
 
         $callback = function ($dateTime) {
-            return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ATOM) : '';
+            return $dateTime instanceof DateTime ? $dateTime->format(DateTime::ATOM) : '';
         };
 
         $defaultContext = [
@@ -1470,7 +1456,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             [new JsonEncoder()]
         );
 
-        return $serializer->serialize($user, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore]);
+        return $serializer->serialize($user, 'json', [
+            AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore,
+        ]);
     }
 
     /**
@@ -1479,9 +1467,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      * as user.last_login was only implemented in 1.10 version with a default
      * value of NULL (not the last record from track_e_login).
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return TrackELogin|null
+     * @return null|TrackELogin
      */
     public function getLastLogin(User $user)
     {
@@ -1496,6 +1484,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->setMaxResults(1)
             ->orderBy('l.loginDate', 'DESC')
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository\Node;
@@ -23,9 +25,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class IllustrationRepository.
- */
 final class IllustrationRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
     public function __construct(ManagerRegistry $registry)
@@ -69,7 +68,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     }
 
     /**
-     * @param User|UserInterface|ResourceInterface $resource
+     * @param ResourceInterface|User|UserInterface $resource
      * @param User                                 $user
      * @param string                               $crop
      */
@@ -88,11 +87,13 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             $em->persist($illustration);
             $this->addResourceNode($illustration, $user, $resource);
         } else {
-            $illustration = $this->findOneBy(['resourceNode' => $illustrationNode]);
+            $illustration = $this->findOneBy([
+                'resourceNode' => $illustrationNode,
+            ]);
         }
 
         $file = $this->addFile($illustration, $uploadFile);
-        if ($file) {
+        if (null !== $file) {
             if (!empty($crop)) {
                 $file->setCrop($crop);
             }
@@ -115,7 +116,10 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             ->innerJoin('node.resourceFile', 'file')
             ->where('node.parent = :parent')
             ->andWhere('type.name = :name')
-            ->setParameters(['parent' => $resourceNode->getId(), 'name' => $name])
+            ->setParameters([
+                'parent' => $resourceNode->getId(),
+                'name' => $name,
+            ])
             ->setMaxResults(1)
         ;
 
@@ -145,7 +149,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     public function getIllustrationUrl(
         ResourceIllustrationInterface $resource,
         string $filter = '',
-        $size = null
+        int $size = 32
     ): string {
         $illustration = $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
 

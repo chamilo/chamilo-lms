@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Security;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -31,7 +32,9 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
             $message = $authException->getPrevious()->getMessage();
         }
 
-        $this->session->getFlashBag()->add('warning', $message);
+        /** @var Session $session */
+        $session = $this->session;
+        $session->getFlashBag()->add('warning', $message);
 
         return new RedirectResponse($this->urlGenerator->generate('login'));
     }

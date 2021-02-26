@@ -63,7 +63,7 @@ class ResourceVoter extends Voter
         ];
         //error_log('resource supports');
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options)) {
+        if (!in_array($attribute, $options, true)) {
             return false;
         }
         // only vote on ResourceNode objects inside this voter

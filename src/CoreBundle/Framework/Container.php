@@ -531,8 +531,8 @@ class Container
         CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         CourseManager::setToolList($container->get(ToolChain::class));
-        if ($setSession) {
+        /*if ($setSession) {
             self::$session = $container->get('session');
-        }
+        }*/
     }
 }

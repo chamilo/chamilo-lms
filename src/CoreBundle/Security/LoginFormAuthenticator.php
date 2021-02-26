@@ -103,7 +103,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
     /**
      * @param array $credentials
      *
-     * @return UserInterface|null
+     * @return null|UserInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -111,8 +111,10 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }*/
-        /** @var User|null $user */
-        $user = $this->userRepository->findOneBy(['username' => $credentials['username']]);
+        /** @var null|User $user */
+        $user = $this->userRepository->findOneBy([
+            'username' => $credentials['username'],
+        ]);
 
         if (null === $user) {
             // fail authentication with a custom error

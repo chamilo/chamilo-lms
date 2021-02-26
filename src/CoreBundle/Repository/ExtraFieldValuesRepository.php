@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -16,9 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ExtraFieldValuesRepository extends ServiceEntityRepository
 {
-    /**
-     * ExtraFieldValuesRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ExtraFieldValues::class);

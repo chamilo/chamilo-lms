@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -16,10 +18,9 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class AssetRepository extends ServiceEntityRepository
 {
-    protected $mountManager;
-    protected $storage;
-    protected $router;
-    protected $uploaderHelper;
+    protected MountManager $mountManager;
+    protected RouterInterface $router;
+    protected UploaderHelper $uploaderHelper;
 
     public function __construct(ManagerRegistry $registry, RouterInterface $router, MountManager $mountManager, UploaderHelper $uploaderHelper)
     {
@@ -43,7 +44,7 @@ class AssetRepository extends ServiceEntityRepository
         return $this->uploaderHelper;
     }*/
 
-    public function unZipFile(Asset $asset, ZipArchiveAdapter $zipArchiveAdapter)
+    public function unZipFile(Asset $asset, ZipArchiveAdapter $zipArchiveAdapter): void
     {
         $folder = '/'.$asset->getCategory().'/'.$asset->getTitle();
 
@@ -57,6 +58,7 @@ class AssetRepository extends ServiceEntityRepository
 
                 if ('dir' === $data['type']) {
                     $fs->createDir($folder.'/'.$data['path']);
+
                     continue;
                 }
 
@@ -82,7 +84,10 @@ class AssetRepository extends ServiceEntityRepository
         if (Asset::SCORM === $asset->getCategory()) {
             return $this->router->generate(
                 'chamilo_core_asset_showfile',
-                ['category' => $asset->getCategory(), 'path' => $asset->getTitle()]
+                [
+                    'category' => $asset->getCategory(),
+                    'path' => $asset->getTitle(),
+                ]
             );
         }
 
@@ -127,7 +132,7 @@ class AssetRepository extends ServiceEntityRepository
 
     public function delete(Asset $asset = null): void
     {
-        if ($asset) {
+        if (null !== $asset) {
             $this->getEntityManager()->remove($asset);
             $this->getEntityManager()->flush();
         }

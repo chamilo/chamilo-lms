@@ -80,7 +80,7 @@ class ResourceNodeVoter extends Voter
 
         error_log('resourceNode supports');
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options)) {
+        if (!in_array($attribute, $options, true)) {
             return false;
         }
         // only vote on ResourceNode objects inside this voter
@@ -161,6 +161,7 @@ class ResourceNodeVoter extends Voter
                 $user instanceof UserInterface &&
                 $linkUser->getUsername() === $user->getUsername()) {
                 $linkFound = 2;
+
                 break;
             }
 
@@ -187,6 +188,7 @@ class ResourceNodeVoter extends Voter
                 $linkGroup->getIid() === $groupId)
             ) {
                 $linkFound = 3;
+
                 break;
             }
 
@@ -198,6 +200,7 @@ class ResourceNodeVoter extends Voter
                 $linkGroup->getIid() === $groupId)
             ) {
                 $linkFound = 4;
+
                 break;
             }
 
@@ -208,6 +211,7 @@ class ResourceNodeVoter extends Voter
                 $linkSession->getId() === $sessionId)
             ) {
                 $linkFound = 5;
+
                 break;
             }
 
@@ -216,6 +220,7 @@ class ResourceNodeVoter extends Voter
                 $linkCourse instanceof Course && !empty($courseId) && $linkCourse->getId() === $courseId
             ) {
                 $linkFound = 6;
+
                 break;
             }
 
@@ -233,12 +238,12 @@ class ResourceNodeVoter extends Voter
         }
 
         // Getting rights from the link
-        $rightFromResourceLink = $link->getResourceRight();
+        $rightsFromResourceLink = $link->getResourceRights();
         $allowAnonsToSee = false;
         $rights = [];
-        if ($rightFromResourceLink->count() > 0) {
+        if ($rightsFromResourceLink->count() > 0) {
             // Taken rights from the link.
-            $rights = $rightFromResourceLink;
+            $rights = $rightsFromResourceLink;
         } else {
             // Taken the rights from the default tool
             //$rights = $link->getResourceNode()->getTool()->getToolResourceRight();
@@ -257,7 +262,8 @@ class ResourceNodeVoter extends Voter
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($editorMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_TEACHER);
+                        ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
+                    ;
                     $rights[] = $resourceRight;
                 }
 
@@ -268,7 +274,8 @@ class ResourceNodeVoter extends Voter
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($readerMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_STUDENT);
+                        ->setRole(self::ROLE_CURRENT_COURSE_STUDENT)
+                    ;
                     $rights[] = $resourceRight;
                 }
 
@@ -280,7 +287,8 @@ class ResourceNodeVoter extends Voter
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($readerMask)
-                        ->setRole('IS_AUTHENTICATED_ANONYMOUSLY');
+                        ->setRole('IS_AUTHENTICATED_ANONYMOUSLY')
+                    ;
                     $rights[] = $resourceRight;
                 }
             }
@@ -294,7 +302,8 @@ class ResourceNodeVoter extends Voter
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($editorMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
+                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
+                    ;
                     $rights[] = $resourceRight;
                 }
 
@@ -302,7 +311,8 @@ class ResourceNodeVoter extends Voter
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($readerMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
+                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
+                    ;
                     $rights[] = $resourceRight;
                 }
             }
@@ -312,7 +322,8 @@ class ResourceNodeVoter extends Voter
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($editorMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)
+                    ;
                     $rights[] = $resourceRight;
                 }
 
@@ -320,7 +331,8 @@ class ResourceNodeVoter extends Voter
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($readerMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
+                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
+                    ;
                     $rights[] = $resourceRight;
                 }
             }

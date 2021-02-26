@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -7,15 +9,10 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Legal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
-/**
- * Class LegalRepository.
- */
 class LegalRepository extends ServiceEntityRepository
 {
-    /**
-     * LegalRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Legal::class);
@@ -25,7 +22,7 @@ class LegalRepository extends ServiceEntityRepository
      * Count the legal terms by language (only count one set of terms for each
      * language).
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -33,7 +30,8 @@ class LegalRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('l');
         $qb->select('l.languageId, COUNT(l.id)')
-            ->groupBy('l.languageId');
+            ->groupBy('l.languageId')
+        ;
 
         return count($qb->getQuery()->getResult());
     }
@@ -55,7 +53,8 @@ class LegalRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('l');
         $qb->select('l.content')
             ->where($qb->expr()->eq('l.type', $typeId))
-            ->andWhere($qb->expr()->eq('l.languageId', $languageId));
+            ->andWhere($qb->expr()->eq('l.languageId', $languageId))
+        ;
 
         return $qb->getQuery()->getResult();
     }

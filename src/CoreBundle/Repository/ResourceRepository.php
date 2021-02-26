@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -21,11 +23,14 @@ use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Exception;
 use League\Flysystem\FilesystemInterface;
+use LogicException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -33,6 +38,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Throwable;
 
 /**
  * Class ResourceRepository.
@@ -40,44 +46,31 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 abstract class ResourceRepository extends ServiceEntityRepository
 {
-    /** @var EntityRepository */
-    protected $repository;
+    protected EntityRepository $repository;
 
-    /** @var FilesystemInterface */
-    protected $fs;
+    protected FilesystemInterface $fs;
 
-    /** @var EntityManager */
-    protected $entityManager;
+    protected EntityManager $entityManager;
 
-    /** @var RouterInterface */
-    protected $router;
+    protected ?RouterInterface $router = null;
 
-    /** @var ResourceNodeRepository */
-    protected $resourceNodeRepository;
+    protected ?ResourceNodeRepository $resourceNodeRepository = null;
 
-    /** @var AuthorizationCheckerInterface */
-    protected $authorizationChecker;
+    protected ?AuthorizationCheckerInterface $authorizationChecker = null;
 
-    /** @var SlugifyInterface */
-    protected $slugify;
+    protected ?SlugifyInterface $slugify = null;
 
-    /** @var ToolChain */
-    protected $toolChain;
+    protected ?ToolChain $toolChain = null;
 
     /**
      * The entity class FQN.
-     *
-     * @var string
      */
-    protected $className;
+    protected string $className;
 
-    protected $settings;
-    protected $templates;
-    protected $resourceType;
+    protected Settings $settings;
+    protected Template $templates;
+    protected ?ResourceType $resourceType = null;
 
-    /**
-     * ResourceRepository constructor.
-     */
     /*public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         EntityManager $entityManager,
@@ -97,59 +90,49 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->templates = new Template();
     }*/
 
-    public function setResourceNodeRepository(ResourceNodeRepository $resourceNodeRepository): ResourceRepository
+    public function setResourceNodeRepository(ResourceNodeRepository $resourceNodeRepository): self
     {
         $this->resourceNodeRepository = $resourceNodeRepository;
 
         return $this;
     }
 
-    public function setRouter(RouterInterface $router): ResourceRepository
+    public function setRouter(RouterInterface $router): self
     {
         $this->router = $router;
 
         return $this;
     }
 
-    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): ResourceRepository
+    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): self
     {
         $this->authorizationChecker = $authorizationChecker;
 
         return $this;
     }
 
-    public function setSlugify(SlugifyInterface $slugify): ResourceRepository
+    public function setSlugify(SlugifyInterface $slugify): self
     {
         $this->slugify = $slugify;
 
         return $this;
     }
 
-    public function setToolChain(ToolChain $toolChain): ResourceRepository
+    public function setToolChain(ToolChain $toolChain): self
     {
         $this->toolChain = $toolChain;
 
         return $this;
     }
 
-    /**
-     * @param mixed $settings
-     *
-     * @return ResourceRepository
-     */
-    public function setSettings($settings)
+    public function setSettings(Settings $settings): self
     {
         $this->settings = $settings;
 
         return $this;
     }
 
-    /**
-     * @param mixed $templates
-     *
-     * @return ResourceRepository
-     */
-    public function setTemplates($templates)
+    public function setTemplates(Template $templates): self
     {
         $this->templates = $templates;
 
@@ -157,29 +140,30 @@ abstract class ResourceRepository extends ServiceEntityRepository
     }
 
     public function findResourceByTitle(
-        $title,
+        string $title,
         ResourceNode $parentNode,
         Course $course,
         Session $session = null,
-        $group = null
-    ) {
+        CGroup $group = null
+    ): ?ResourceInterface {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
         $qb
             ->andWhere('node.title = :title')
             ->setParameter('title', $title)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function getClassName()
+    public function getClassName(): string
     {
         $class = get_class($this);
         //Chamilo\CoreBundle\Repository\Node\IllustrationRepository
         $class = str_replace('\\Repository\\', '\\Entity\\', $class);
         $class = str_replace('Repository', '', $class);
-        if (false === class_exists($class)) {
-            throw new \Exception("Repo: $class not found ");
+        if (!class_exists($class)) {
+            throw new Exception("Repo: {$class} not found ");
         }
 
         return $class;
@@ -206,7 +190,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     /**
      * @return FormInterface
      */
-    public function getForm(FormFactory $formFactory, ResourceInterface $resource = null, $options = [])
+    public function getForm(FormFactory $formFactory, ResourceInterface $resource = null, array $options = [])
     {
         $formType = $this->getResourceFormType();
 
@@ -218,9 +202,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $formFactory->create($formType, $resource, $options);
     }
 
-    public function getResourceByResourceNode(ResourceNode $resourceNode)
+    public function getResourceByResourceNode(ResourceNode $resourceNode): ?ResourceInterface
     {
-        return $this->findOneBy(['resourceNode' => $resourceNode]);
+        return $this->findOneBy([
+            'resourceNode' => $resourceNode,
+        ]);
     }
 
     /*public function findOneBy(array $criteria, array $orderBy = null)
@@ -275,9 +261,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function update(AbstractResource $resource, $andFlush = true): void
+    public function update(AbstractResource $resource, bool $andFlush = true): void
     {
-        $resource->getResourceNode()->setUpdatedAt(new \DateTime());
+        $resource->getResourceNode()->setUpdatedAt(new DateTime());
         $resource->getResourceNode()->setTitle($resource->getResourceName());
         $this->getEntityManager()->persist($resource);
 
@@ -295,7 +281,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         if ($resourceNode->hasResourceFile()) {
             $resourceFile = $resourceNode->getResourceFile();
-            if ($resourceFile) {
+            if (null !== $resourceFile) {
                 $originalName = $resourceFile->getOriginalName();
                 $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
 
@@ -311,9 +297,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
                 $em->persist($resourceFile);
             }
-        } else {
-            //$slug = $this->slugify->slugify($resourceName);
         }
+        //$slug = $this->slugify->slugify($resourceName);
 
         $resourceNode->setTitle($resourceName);
         //$resourceNode->setSlug($slug);
@@ -326,12 +311,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $resourceNode;
     }
 
-    public function addFile(ResourceInterface $resource, UploadedFile $file, $description = ''): ?ResourceFile
+    public function addFile(ResourceInterface $resource, UploadedFile $file, string $description = ''): ?ResourceFile
     {
         $resourceNode = $resource->getResourceNode();
 
         if (null === $resourceNode) {
-            throw new \LogicException('Resource node is null');
+            throw new LogicException('Resource node is null');
         }
 
         $resourceFile = $resourceNode->getResourceFile();
@@ -361,14 +346,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->createNodeForResource($resource, $creator, $parent);
     }
 
-    /**
-     * @return ResourceType
-     */
-    public function getResourceType()
+    public function getResourceType(): ?ResourceType
     {
         $name = $this->getResourceTypeName();
         $repo = $this->getEntityManager()->getRepository(ResourceType::class);
-        $this->resourceType = $repo->findOneBy(['name' => $name]);
+        $this->resourceType = $repo->findOneBy([
+            'name' => $name,
+        ]);
 
         return $this->resourceType;
     }
@@ -381,11 +365,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
     {
         $checker = $this->getAuthorizationChecker();
-        //$reflectionClass = $repo->getClassMetadata()->getReflectionClass();
+        $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
-        //$loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
-        $loadBaseSessionContent = true;
+        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        //$loadBaseSessionContent = true;
         $resourceTypeName = $this->getResourceTypeName();
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
@@ -416,7 +400,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
         ;
 
-        if (false === $isAdmin) {
+        if (!$isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
@@ -431,16 +415,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     $qb->expr()->eq('links.session', 0)
                 )
             );
+        } elseif ($loadBaseSessionContent) {
+            // Load course base content.
+            $qb->andWhere('links.session = :session OR links.session IS NULL');
+            $qb->setParameter('session', $session);
         } else {
-            if ($loadBaseSessionContent) {
-                // Load course base content.
-                $qb->andWhere('links.session = :session OR links.session IS NULL');
-                $qb->setParameter('session', $session);
-            } else {
-                // Load only session resources.
-                $qb->andWhere('links.session = :session');
-                $qb->setParameter('session', $session);
-            }
+            // Load only session resources.
+            $qb->andWhere('links.session = :session');
+            $qb->setParameter('session', $session);
         }
 
         if (null !== $parentNode) {
@@ -463,7 +445,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null)
+    public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null): QueryBuilder
     {
         $checker = $this->getAuthorizationChecker();
         $resourceTypeName = $this->getResourceTypeName();
@@ -491,7 +473,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
         ;
 
-        if (false === $isAdmin) {
+        if (!$isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
@@ -507,10 +489,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    /**
-     * @return QueryBuilder
-     */
-    public function getResourcesByCreator(User $user, ResourceNode $parentNode = null)
+    public function getResourcesByCreator(User $user, ResourceNode $parentNode = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
@@ -582,7 +561,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
         ;
 
-        if (false === $isAdmin) {
+        if (!$isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
@@ -610,7 +589,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceLinks', 'links')
 //            ->leftJoin('node.resourceFile', 'file')
             ->where('node.id = :id')
-            ->setParameters(['id' => $resourceNodeId])
+            ->setParameters([
+                'id' => $resourceNodeId,
+            ])
             //->addSelect('node')
         ;
 
@@ -625,7 +606,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 $this->getEntityManager()->remove($child->getResourceFile());
             }
             $resourceNode = $this->getResourceFromResourceNode($child->getId());
-            if ($resourceNode) {
+            if (null !== $resourceNode) {
                 $this->delete($resourceNode);
             }
         }
@@ -637,7 +618,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
      * Deletes several entities: AbstractResource (Ex: CDocument, CQuiz), ResourceNode,
      * ResourceLinks and ResourceFile (including files via Flysystem).
      */
-    public function hardDelete(AbstractResource $resource)
+    public function hardDelete(AbstractResource $resource): void
     {
         $em = $this->getEntityManager();
         $em->remove($resource);
@@ -650,7 +631,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $resourceNode = $resource->getResourceNode();
 
             return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw new FileNotFoundException($resource->getResourceName());
         }
     }
@@ -687,7 +668,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     $params = array_merge($params, $extraParams);
                 }
 
-                $referenceType = $referenceType ?? UrlGeneratorInterface::ABSOLUTE_PATH;
+                $referenceType ??= UrlGeneratorInterface::ABSOLUTE_PATH;
 
                 $mode = $params['mode'] ?? 'view';
                 // Remove mode from params and sent directly to the controller.
@@ -702,7 +683,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             }
 
             return '';
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw new FileNotFoundException($resource->getResourceName());
         }
     }
@@ -753,7 +734,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return false;
     }
 
-    public function setResourceName(AbstractResource $resource, $title)
+    public function setResourceName(AbstractResource $resource, $title): void
     {
         $resource->setResourceName($title);
         $resourceNode = $resource->getResourceNode();
@@ -776,27 +757,27 @@ abstract class ResourceRepository extends ServiceEntityRepository
     /**
      * Change all links visibility to DELETED.
      */
-    public function softDelete(AbstractResource $resource)
+    public function softDelete(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
-    public function setVisibilityPublished(AbstractResource $resource)
+    public function setVisibilityPublished(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
     }
 
-    public function setVisibilityDeleted(AbstractResource $resource)
+    public function setVisibilityDeleted(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
-    public function setVisibilityDraft(AbstractResource $resource)
+    public function setVisibilityDraft(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
     }
 
-    public function setVisibilityPending(AbstractResource $resource)
+    public function setVisibilityPending(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
@@ -856,14 +837,16 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     'course' => $course,
                     'visibility' => ResourceLink::VISIBILITY_DELETED,
                 ]
-            );
+            )
+        ;
 
         if (null === $group) {
             $qb->andWhere('l.group IS NULL');
         } else {
             $qb
                 ->andWhere('l.group = :group')
-                ->setParameter('group', $group);
+                ->setParameter('group', $group)
+            ;
         }
 
         if (null === $session) {
@@ -871,7 +854,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         } else {
             $qb
                 ->andWhere('l.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         }
 
         $query = $qb->getQuery();
@@ -921,14 +905,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return true;
     }
 
-    public function saveUpload(UploadedFile $file)
+    public function saveUpload(UploadedFile $file): ResourceInterface
     {
-        throw new \Exception('Implement saveUpload');
+        throw new Exception('Implement saveUpload');
     }
 
-    public function getResourceFormType()
+    public function getResourceFormType(): string
     {
-        throw new \Exception('Implement getResourceFormType');
+        throw new Exception('Implement getResourceFormType');
     }
 
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
@@ -945,7 +929,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
             if (!empty($children)) {
                 /** @var ResourceNode $child */
                 foreach ($children as $child) {
-                    $criteria = ['resourceNode' => $child];
+                    $criteria = [
+                        'resourceNode' => $child,
+                    ];
                     $childDocument = $this->findOneBy($criteria);
                     if ($childDocument) {
                         $this->setLinkVisibility($childDocument, $visibility);
@@ -972,10 +958,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     $rights[] = $resourceRight;
 
                     if (!empty($rights)) {
-                        $link->setResourceRight($rights);
+                        $link->setResourceRights($rights);
                     }
                 } else {
-                    $link->setResourceRight([]);
+                    $link->setResourceRights([]);
                 }
                 $em->persist($link);
             }

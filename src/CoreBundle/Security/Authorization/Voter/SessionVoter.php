@@ -53,7 +53,7 @@ class SessionVoter extends Voter
             self::DELETE,
         ];
 
-        return $subject instanceof Session && in_array($attribute, $options);
+        return $subject instanceof Session && in_array($attribute, $options, true);
     }
 
     /**

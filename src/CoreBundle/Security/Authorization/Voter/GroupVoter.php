@@ -16,9 +16,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class GroupVoter.
- */
 class GroupVoter extends Voter
 {
     public const VIEW = 'VIEW';
@@ -47,7 +44,7 @@ class GroupVoter extends Voter
             self::DELETE,
         ];
 
-        return $subject instanceof CGroup && in_array($attribute, $options);
+        return $subject instanceof CGroup && in_array($attribute, $options, true);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool

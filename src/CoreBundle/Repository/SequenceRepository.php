@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -8,9 +10,11 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
+use CourseManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use SessionManager;
 
 /**
  * Class SequenceRepository
@@ -23,18 +27,13 @@ class SequenceRepository extends ServiceEntityRepository
         parent::__construct($registry, Sequence::class);
     }
 
-    /**
-     * @param string $type
-     *
-     * @return array
-     */
-    public static function getItems($type)
+    public static function getItems(string $type): array
     {
         $list = [];
 
         switch ($type) {
             case SequenceResource::COURSE_TYPE:
-                $courseListFromDatabase = \CourseManager::get_course_list();
+                $courseListFromDatabase = CourseManager::get_course_list();
 
                 if (!empty($courseListFromDatabase)) {
                     foreach ($courseListFromDatabase as $item) {
@@ -44,7 +43,7 @@ class SequenceRepository extends ServiceEntityRepository
 
                 break;
             case SequenceResource::SESSION_TYPE:
-                $sessionList = \SessionManager::get_sessions_list();
+                $sessionList = SessionManager::get_sessions_list();
                 if (!empty($sessionList)) {
                     foreach ($sessionList as $sessionItem) {
                         $list[$sessionItem['id']] = $sessionItem['name'].' ('.$sessionItem['id'].')';
@@ -57,7 +56,10 @@ class SequenceRepository extends ServiceEntityRepository
         return $list;
     }
 
-    public function getItem($itemId, $type)
+    /**
+     * @return null|Course|Session
+     */
+    public function getItem(int $itemId, int $type)
     {
         $resource = null;
         $repo = null;
@@ -82,7 +84,7 @@ class SequenceRepository extends ServiceEntityRepository
     /**
      * @param int $id
      */
-    public function removeSequence($id)
+    public function removeSequence($id): void
     {
         $sequence = $this->find($id);
         $em = $this->getEntityManager();
@@ -104,7 +106,8 @@ class SequenceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('r');
         $qb
-            ->leftJoin('ChamiloCoreBundle:SequenceResource', 'sr', Join::WITH, 'sr.sequence = r');
+            ->leftJoin('ChamiloCoreBundle:SequenceResource', 'sr', Join::WITH, 'sr.sequence = r')
+        ;
 
         $qb
             ->andWhere(
@@ -113,7 +116,8 @@ class SequenceRepository extends ServiceEntityRepository
                     $qb->expr()->eq('sr.type', $type)
                 )
             )
-            ->orderBy('r.name');
+            ->orderBy('r.name')
+        ;
 
         return $qb->getQuery()->getResult();
     }

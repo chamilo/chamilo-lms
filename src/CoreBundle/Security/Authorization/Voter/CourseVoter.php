@@ -15,9 +15,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class CourseVoter.
- */
 class CourseVoter extends Voter
 {
     public const VIEW = 'VIEW';
@@ -46,7 +43,7 @@ class CourseVoter extends Voter
         ];
 
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options)) {
+        if (!in_array($attribute, $options, true)) {
             return false;
         }
         // only vote on Post objects inside this voter

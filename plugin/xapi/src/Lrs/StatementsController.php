@@ -9,9 +9,8 @@ use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 use Xabbuh\XApi\Serializer\Symfony\SerializerFactory;
-use Xabbuh\XApi\Serializer\Symfony\StatementResultSerializer;
-use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 use XApi\LrsBundle\Controller\StatementGetController;
+use XApi\LrsBundle\Controller\StatementHeadController;
 use XApi\LrsBundle\Controller\StatementPostController;
 use XApi\LrsBundle\Controller\StatementPutController;
 use XApi\LrsBundle\Model\StatementsFilterFactory;
@@ -26,24 +25,46 @@ use XApiPlugin;
  */
 class StatementsController extends BaseController
 {
-    public function get()
+    public function get(): Response
     {
         $pluginEm = XApiPlugin::getEntityManager();
 
         $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory($serializer);
 
         $getStatementController = new StatementGetController(
             new StatementRepository(
                 $pluginEm->getRepository(StatementEntity::class)
             ),
-            new StatementSerializer($serializer),
-            new StatementResultSerializer($serializer),
+            $factory->createStatementSerializer(),
+            $factory->createStatementResultSerializer(),
             new StatementsFilterFactory(
                 new ActorSerializer($serializer)
             )
         );
 
         return $getStatementController->getStatement($this->httpRequest);
+    }
+
+    public function head(): Response
+    {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory($serializer);
+
+        $headStatementController = new StatementHeadController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            ),
+            $factory->createStatementSerializer(),
+            $factory->createStatementResultSerializer(),
+            new StatementsFilterFactory(
+                new ActorSerializer($serializer)
+            )
+        );
+
+        return $headStatementController->getStatement($this->httpRequest);
     }
 
     /**

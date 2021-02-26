@@ -6,15 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security;
 
-use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 
-/**
- * Class Encoder.
- */
-class Encoder extends BasePasswordEncoder
+class Encoder
 {
     //private $passwordEncrypt;
 
@@ -24,27 +20,27 @@ class Encoder extends BasePasswordEncoder
         $this->passwordEncrypt = $passwordEncrypt;*/
     }
 
-    /**
+    /*
      * @param string $raw
      * @param string $salt
      *
      * @return string
      */
-    public function encodePassword($raw, $salt)
+    /*public function encodePassword($raw, $salt)
     {
         $defaultEncoder = $this->getEncoder();
 
         return $defaultEncoder->encodePassword($raw, $salt);
-    }
+    }*/
 
-    /**
+    /*
      * @param string $encoded
      * @param string $raw
      * @param string $salt
      *
      * @return bool
      */
-    public function isPasswordValid($encoded, $raw, $salt)
+    /*public function isPasswordValid($encoded, $raw, $salt)
     {
         if ($this->isPasswordTooLong($raw)) {
             return false;
@@ -53,11 +49,11 @@ class Encoder extends BasePasswordEncoder
         $encoder = $this->getEncoder();
 
         return $encoder->isPasswordValid($encoded, $raw, $salt);
-    }
+    }*/
 
-    private function getEncoder(): void
+    /*private function getEncoder(): void
     {
-        /*switch ($this->passwordEncrypt) {
+        switch ($this->passwordEncrypt) {
             case 'none':
                 $defaultEncoder = new PlaintextPasswordEncoder();
 
@@ -71,8 +67,8 @@ class Encoder extends BasePasswordEncoder
                 $defaultEncoder = new MessageDigestPasswordEncoder($this->passwordEncrypt, false, 1);
 
                 break;
-        }*/
+        }
 
         //return $defaultEncoder;
-    }
+    }*/
 }

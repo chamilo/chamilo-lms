@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -10,9 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class LanguageSettingsSchema.
- */
 class LanguageSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -31,7 +30,8 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'hide_dltt_markup' => 'false',
                     'show_language_selector_in_menu' => 'true',
                 ]
-            );
+            )
+        ;
 
         $allowedTypes = [
             'platform_language' => ['string'],
@@ -46,10 +46,14 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
     {
         $choices = [
             '' => '',
-            'Platform language' => 'platform_lang',  // default platform language
-            'User profile language' => 'user_profil_lang', // profile language of current user
-            'Selected from login' => 'user_selected_lang', // language selected by user at login
-            'Course language' => 'course_lang', // language of the current course
+            'Platform language' => 'platform_lang',
+            // default platform language
+            'User profile language' => 'user_profil_lang',
+            // profile language of current user
+            'Selected from login' => 'user_selected_lang',
+            // language selected by user at login
+            'Course language' => 'course_lang',
+            // language of the current course
         ];
 
         // @todo replace with a call to the Language repository.
@@ -59,16 +63,27 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             $list[html_entity_decode($value)] = $index;
         }
 
-        $options = ['choices' => $list, 'choice_loader' => null];
+        $options = [
+            'choices' => $list,
+            'choice_loader' => null,
+        ];
         $builder
             ->add('platform_language', LanguageType::class, $options)
             ->add('allow_use_sub_language', YesNoType::class)
             ->add('auto_detect_language_custom_pages', YesNoType::class)
             ->add('show_different_course_language', YesNoType::class)
-            ->add('language_priority_1', ChoiceType::class, ['choices' => $choices])
-            ->add('language_priority_2', ChoiceType::class, ['choices' => $choices])
-            ->add('language_priority_3', ChoiceType::class, ['choices' => $choices])
-            ->add('language_priority_4', ChoiceType::class, ['choices' => $choices])
+            ->add('language_priority_1', ChoiceType::class, [
+                'choices' => $choices,
+            ])
+            ->add('language_priority_2', ChoiceType::class, [
+                'choices' => $choices,
+            ])
+            ->add('language_priority_3', ChoiceType::class, [
+                'choices' => $choices,
+            ])
+            ->add('language_priority_4', ChoiceType::class, [
+                'choices' => $choices,
+            ])
             ->add('hide_dltt_markup')
             ->add('show_language_selector_in_menu', YesNoType::class)
         ;

@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Tool;
 
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
-/**
- * Class AbstractTool.
- */
 abstract class AbstractTool implements ToolInterface
 {
     protected string $name;
@@ -16,7 +15,9 @@ abstract class AbstractTool implements ToolInterface
     protected string $link;
     protected string $image;
     protected string $admin;
-    /** @var SchemaInterface|array|null */
+    /**
+     * @var null|array|SchemaInterface
+     */
     protected $settings;
     protected ?array $resourceTypes;
 
@@ -28,7 +29,7 @@ abstract class AbstractTool implements ToolInterface
      *  10 global tool
      *  11 global or course or both
      */
-    protected $scope;
+    protected string $scope;
 
     /**
      * @param string          $name
@@ -82,14 +83,13 @@ abstract class AbstractTool implements ToolInterface
         return $this->image;
     }
 
-    public function getResourceTypes()
+    public function getResourceTypes(): ?array
     {
         return $this->resourceTypes;
     }
 
-    public function setResourceTypes($resourceTypes): self
+    public function setResourceTypes(?array $resourceTypes): self
     {
-        var_dump($resourceTypes);
         $this->resourceTypes = $resourceTypes;
 
         return $this;

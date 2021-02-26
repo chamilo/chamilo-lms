@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Twig\Extension;
@@ -7,13 +9,11 @@ namespace Chamilo\CoreBundle\Twig\Extension;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Twig\SettingsHelper;
+use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-/**
- * Class ChamiloExtension.
- */
 class ChamiloExtension extends AbstractExtension
 {
     private IllustrationRepository $illustrationRepository;
@@ -65,7 +65,7 @@ class ChamiloExtension extends AbstractExtension
         return $this->illustrationRepository->getIllustrationUrl($resource);
     }
 
-    public function getSettings($namespace)
+    public function getSettings($namespace): SettingsInterface
     {
         return $this->helper->getSettings($namespace);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -12,9 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class PlatformSettingsSchema.
- */
 class PlatformSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -26,10 +25,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'institution_url' => 'http://www.chamilo.org',
                     'institution_address' => '',
                     'site_name' => 'Chamilo site',
-//                    'administrator_email' => 'admin@example.org',
-//                    'administrator_name' => 'Jane',
-//                    'administrator_surname' => 'Doe',
-//                    'administrator_phone' => '123456',
+                    //                    'administrator_email' => 'admin@example.org',
+                    //                    'administrator_name' => 'Jane',
+                    //                    'administrator_surname' => 'Doe',
+                    //                    'administrator_phone' => '123456',
                     'timezone' => 'Europe/Paris',
                     'theme' => 'chamilo',
                     'gravatar_enabled' => 'false',
@@ -46,13 +45,14 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'registered' => 'false',
                     'keep_old_images_after_delete' => 'true',
                     'load_term_conditions_section' => 'login',
-                    'server_type' => 'prod', // Chamilo mode
+                    'server_type' => 'prod',
+                    // Chamilo mode
                     'show_tabs' => [],
                     'chamilo_database_version' => '2.0.0',
                     //
-//('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
-//('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
-//('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
+                    //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
+                    //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
+                    //('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
                 ]
             )
             ->setTransformer(
@@ -64,10 +64,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'institution' => ['string'],
             'institution_url' => ['string'],
             'site_name' => ['string'],
-//                    'administrator_email' => array('string'),
-//                    'administrator_name' => array('string'),
-//                    'administrator_surname' => array('string'),
-//                    'administrator_phone' => array('string'),
+            //                    'administrator_email' => array('string'),
+            //                    'administrator_name' => array('string'),
+            //                    'administrator_surname' => array('string'),
+            //                    'administrator_phone' => array('string'),
             'timezone' => ['string'],
             'gravatar_enabled' => ['string'],
             'gravatar_type' => ['string'],
@@ -124,11 +124,13 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'catalog_show_courses_sessions',
                 ChoiceType::class,
-                ['choices' => [
-                    'CatalogueShowOnlyCourses' => '0',
-                    'CatalogueShowOnlySessions' => '1',
-                    'CatalogueShowCoursesAndSessions' => '2',
-                ]]
+                [
+                    'choices' => [
+                        'CatalogueShowOnlyCourses' => '0',
+                        'CatalogueShowOnlySessions' => '1',
+                        'CatalogueShowCoursesAndSessions' => '2',
+                    ],
+                ]
             )
             ->add('use_custom_pages', YesNoType::class)
             ->add('pdf_logo_header')

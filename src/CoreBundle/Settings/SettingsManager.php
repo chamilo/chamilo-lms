@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
 use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
@@ -26,6 +29,9 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  */
 class SettingsManager implements SettingsManagerInterface
 {
+    /**
+     * @var null|\Chamilo\CoreBundle\Entity\AccessUrl
+     */
     protected $url;
 
     /**
@@ -54,8 +60,14 @@ class SettingsManager implements SettingsManagerInterface
      * @var Settings[]
      */
     protected $resolvedSettings = [];
-    protected $settings;
+    //protected $settings;
+    /**
+     * @var array<string, \Sylius\Bundle\SettingsBundle\Model\Settings>|mixed[]
+     */
     protected $schemaList;
+    /**
+     * @var \Symfony\Component\HttpFoundation\RequestStack
+     */
     protected $request;
 
     public function __construct(
@@ -81,12 +93,12 @@ class SettingsManager implements SettingsManagerInterface
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url)
+    public function setUrl(AccessUrl $url): void
     {
         $this->url = $url;
     }
 
-    public function updateSchemas(AccessUrl $url)
+    public function updateSchemas(AccessUrl $url): void
     {
         $this->url = $url;
         $schemas = array_keys($this->getSchemas());
@@ -96,7 +108,7 @@ class SettingsManager implements SettingsManagerInterface
         }
     }
 
-    public function installSchemas(AccessUrl $url)
+    public function installSchemas(AccessUrl $url): void
     {
         $this->url = $url;
         $schemas = array_keys($this->getSchemas());
@@ -137,7 +149,7 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * @param string $name
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getSetting($name)
     {
@@ -158,7 +170,7 @@ class SettingsManager implements SettingsManagerInterface
                 );
                 $name = $category.'.'.$name;
             } else {
-                throw new \InvalidArgumentException(sprintf('Parameter must be in format "category.name", "%s" given.', $name));
+                throw new InvalidArgumentException(sprintf('Parameter must be in format "category.name", "%s" given.', $name));
             }
         }
 
@@ -171,7 +183,7 @@ class SettingsManager implements SettingsManagerInterface
             return $settings->get($name);
         }
 
-        throw new \InvalidArgumentException(sprintf('Catregory %s not found', $category));
+        throw new InvalidArgumentException(sprintf('Catregory %s not found', $category));
         /*exit;
 
         $settings = $this->load($category, $name);
@@ -185,7 +197,7 @@ class SettingsManager implements SettingsManagerInterface
         return $settings->get($name);*/
     }
 
-    public function loadAll()
+    public function loadAll(): void
     {
         //$loadFromSession = true;
         $session = null;
@@ -278,7 +290,7 @@ class SettingsManager implements SettingsManagerInterface
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function update(SettingsInterface $settings)
+    public function update(SettingsInterface $settings): void
     {
         $namespace = $settings->getSchemaAlias();
 
@@ -300,7 +312,9 @@ class SettingsManager implements SettingsManagerInterface
         }
         $settings->setParameters($parameters);
         $category = $this->convertServiceToNameSpace($settings->getSchemaAlias());
-        $persistedParameters = $this->repository->findBy(['category' => $category]);
+        $persistedParameters = $this->repository->findBy([
+            'category' => $category,
+        ]);
 
         $persistedParametersMap = [];
         /** @var SettingsCurrent $parameter */
@@ -344,7 +358,7 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * @throws ValidatorException
      */
-    public function save(SettingsInterface $settings)
+    public function save(SettingsInterface $settings): void
     {
         $namespace = $settings->getSchemaAlias();
 
@@ -366,7 +380,9 @@ class SettingsManager implements SettingsManagerInterface
         }
         $settings->setParameters($parameters);
         $persistedParameters = $this->repository->findBy(
-            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
+            [
+                'category' => $this->convertServiceToNameSpace($settings->getSchemaAlias()),
+            ]
         );
         $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
@@ -409,8 +425,6 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         $this->manager->flush();
-
-        return;
 
 //        $schemaAlias = $settings->getSchemaAlias();
 //        $schemaAliasChamilo = str_replace('chamilo_core.settings.', '', $schemaAlias);
@@ -485,7 +499,7 @@ class SettingsManager implements SettingsManagerInterface
     {
         $query = $this->repository->createQueryBuilder('s')
             ->where('s.variable LIKE :keyword')
-            ->setParameter('keyword', "%$keyword%")
+            ->setParameter('keyword', "%{$keyword}%")
         ;
         $parametersFromDb = $query->getQuery()->getResult();
         $parameters = [];
@@ -507,12 +521,14 @@ class SettingsManager implements SettingsManagerInterface
     public function getParametersFromKeyword($namespace, $keyword = '', $returnObjects = false)
     {
         if (empty($keyword)) {
-            $criteria = ['category' => $namespace];
+            $criteria = [
+                'category' => $namespace,
+            ];
             $parametersFromDb = $this->repository->findBy($criteria);
         } else {
             $query = $this->repository->createQueryBuilder('s')
                 ->where('s.variable LIKE :keyword')
-                ->setParameter('keyword', "%$keyword%")
+                ->setParameter('keyword', "%{$keyword}%")
             ;
             $parametersFromDb = $query->getQuery()->getResult();
         }
@@ -540,7 +556,9 @@ class SettingsManager implements SettingsManagerInterface
     {
         $parameters = [];
         /** @var SettingsCurrent $parameter */
-        foreach ($this->repository->findBy(['category' => $namespace]) as $parameter) {
+        foreach ($this->repository->findBy([
+            'category' => $namespace,
+        ]) as $parameter) {
             $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
         }
 
@@ -583,7 +601,8 @@ class SettingsManager implements SettingsManagerInterface
             'Institution' => 'Platform',
             'InstitutionUrl' => 'Platform',
             'siteName' => 'Platform',
-            'emailAdministrator' => 'admin', //'emailAdministrator' => 'Platform',
+            'emailAdministrator' => 'admin',
+            //'emailAdministrator' => 'Platform',
             'administratorSurname' => 'admin',
             'administratorTelephone' => 'admin',
             'administratorName' => 'admin',
@@ -692,12 +711,15 @@ class SettingsManager implements SettingsManagerInterface
             'allow_students_to_create_groups_in_social' => 'Tools',
             'allow_send_message_to_all_platform_users' => 'Message',
             'message_max_upload_filesize' => 'Tools',
-            'use_users_timezone' => 'profile', //'use_users_timezone' => 'Timezones',
-            'timezone_value' => 'platform', //'timezone_value' => 'Timezones',
+            'use_users_timezone' => 'profile',
+            //'use_users_timezone' => 'Timezones',
+            'timezone_value' => 'platform',
+            //'timezone_value' => 'Timezones',
             'allow_user_course_subscription_by_course_admin' => 'Security',
             'show_link_bug_notification' => 'Platform',
             'show_link_ticket_notification' => 'Platform',
-            'course_validation' => 'course', //'course_validation' => 'Platform',
+            'course_validation' => 'course',
+            //'course_validation' => 'Platform',
             'course_validation_terms_and_conditions_url' => 'Platform',
             'enabled_wiris' => 'Editor',
             'allow_spellcheck' => 'Editor',

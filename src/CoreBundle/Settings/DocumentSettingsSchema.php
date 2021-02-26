@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -11,9 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class DocumentSettingsSchema.
- */
 class DocumentSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -54,8 +53,10 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         'quiz',
                         'gradebook',
                     ],
-                    'documents_default_visibility_defined_in_course' => 'false', // ?
-                    'allow_personal_user_files' => '', // ?
+                    'documents_default_visibility_defined_in_course' => 'false',
+                    // ?
+                    'allow_personal_user_files' => '',
+                    // ?
                     'if_file_exists_option' => 'rename',
                 ]
             )

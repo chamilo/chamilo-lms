@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,9 +10,6 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class MailSettingsSchema.
- */
 class MailSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,9 +10,6 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class LearningPathSettingsSchema.
- */
 class LearningPathSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -21,7 +20,8 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                     'fixed_encoding' => 'false',
                     'show_invisible_exercise_in_lp_toc' => 'false',
                 ]
-            );
+            )
+        ;
 
         $allowedTypes = [
             'fixed_encoding' => ['string'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,7 +11,7 @@ use Sylius\Bundle\SettingsBundle\Resolver\SettingsResolverInterface;
 
 class SettingsResolver implements SettingsResolverInterface
 {
-    public function resolve($schemaAlias, $namespace = null)
+    public function resolve($schemaAlias, $namespace = null): void
     {
         /*try {
             $criteria = [];

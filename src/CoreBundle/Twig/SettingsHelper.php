@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Twig;
@@ -10,15 +12,9 @@ use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Templating\Helper\SettingsHelperInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
-/**
- * Class SettingsHelper.
- */
 class SettingsHelper extends Helper implements SettingsHelperInterface
 {
-    /**
-     * @var SettingsManagerInterface
-     */
-    private $settingsManager;
+    private SettingsManagerInterface $settingsManager;
 
     public function __construct(SettingsManagerInterface $settingsManager)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,9 +11,6 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class GradebookSettingsSchema.
- */
 class GradebookSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -40,7 +39,8 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     'certificate_filter_by_official_code' => 'false',
                     'hide_certificate_export_link_students' => 'false',
                 ]
-            );
+            )
+        ;
         $allowedTypes = [
             'gradebook_enable' => ['string'],
             'gradebook_number_decimals' => ['string'],

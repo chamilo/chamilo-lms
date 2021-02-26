@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,9 +10,6 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class AnnouncementSettingsSchema.
- */
 class AnnouncementSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -21,7 +20,8 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                     'hide_global_announcements_when_not_connected' => 'false',
                     'hide_send_to_hrm_users' => 'true',
                 ]
-            );
+            )
+        ;
 
         $allowedTypes = [
             'hide_global_announcements_when_not_connected' => ['string'],

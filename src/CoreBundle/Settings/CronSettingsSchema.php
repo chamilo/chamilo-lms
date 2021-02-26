@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,9 +10,6 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class PlatformSettingsSchema.
- */
 class CronSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -22,7 +21,8 @@ class CronSettingsSchema extends AbstractSettingsSchema
                     'cron_remind_course_expiration_frequency' => '',
                     'cron_remind_course_expiration_activate' => 'false',
                 ]
-            );
+            )
+        ;
         $allowedTypes = [
             'cron_remind_course_finished_activate' => ['string'],
             'cron_remind_course_expiration_frequency' => ['string'],

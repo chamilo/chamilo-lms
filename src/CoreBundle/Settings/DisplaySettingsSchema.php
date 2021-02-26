@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,9 +11,6 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class DisplaySettingsSchema.
- */
 class DisplaySettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -37,12 +36,17 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'accessibility_font_resize' => 'false',
                     'show_admin_toolbar' => 'do_not_show',
                     'show_hot_courses' => 'true',
-                    'user_name_order' => '', // ?
-                    'user_name_sort_by' => '', // ?
-                    'use_virtual_keyboard' => '', //?
-                    'disable_copy_paste' => '', //?
+                    'user_name_order' => '',
+                    // ?
+                    'user_name_sort_by' => '',
+                    // ?
+                    'use_virtual_keyboard' => '',
+                    //?
+                    'disable_copy_paste' => '',
+                    //?
                     //'breadcrumb_navigation_display' => '',//?
-                    'bug_report_link' => '', //?
+                    'bug_report_link' => '',
+                    //?
                     'hide_home_top_when_connected' => 'false',
                     'hide_logout_button' => 'false',
                     'show_link_ticket_notification' => 'false',
@@ -50,7 +54,8 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'default_template' => 'default',
                     'hide_social_media_links' => 'false',
                 ]
-            );
+            )
+        ;
 
         $allowedTypes = [
             'time_limit_whosonline' => ['string'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -10,9 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class AdminSettingsSchema.
- */
 class AdminSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -26,7 +25,8 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                     'administrator_phone' => '',
                     'redirect_admin_to_courses_list' => 'false',
                 ]
-            );
+            )
+        ;
 //            ->setAllowedTypes(
 //                array(
 //                    //'administrator_email' => array('string'),
@@ -42,11 +42,15 @@ class AdminSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'administrator_name',
                 TextType::class,
-                ['label' => 'emailAdministratorTitle', 'help' => 'emailAdministratorComment']
+                [
+                    'label' => 'emailAdministratorTitle',
+                    'help' => 'emailAdministratorComment',
+                ]
             )
             ->add('administrator_surname')
             ->add('administrator_email', EmailType::class)
             ->add('administrator_phone')
-            ->add('redirect_admin_to_courses_list', YesNoType::class);
+            ->add('redirect_admin_to_courses_list', YesNoType::class)
+        ;
     }
 }

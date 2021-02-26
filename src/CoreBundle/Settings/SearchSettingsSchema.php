@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,9 +11,6 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class SearchSettingsSchema.
- */
 class SearchSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
@@ -24,7 +23,8 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                     'search_show_unlinked_results' => 'true',
                     'number_of_upcoming_events' => '0',
                 ]
-            );
+            )
+        ;
         $allowedTypes = [
             'number_of_upcoming_events' => ['string'],
         ];
@@ -46,6 +46,7 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('number_of_upcoming_events');
+            ->add('number_of_upcoming_events')
+        ;
     }
 }

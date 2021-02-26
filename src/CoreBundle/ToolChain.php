@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle;
@@ -24,35 +26,53 @@ use Symfony\Component\Security\Core\Security;
  * src/Chamilo/CourseBundle/Tool
  *
  * All this classes are registered as a service with the tag "chamilo_core.tool" here:
-
+ *
  * src/Chamilo/CoreBundle/Resources/config/tools.yml
  *
  * The register process is made using the class ToolCompilerClass:
  *
  * src/Chamilo/CoreBundle/DependencyInjection/Compiler/ToolCompilerClass.php
-
+ *
  * The tool chain is just an array that includes all the tools registered in services.yml
  *
  * The tool chain is hook when a new course is created via a listener here:
-
+ *
  * src/Chamilo/CoreBundle/Entity/Listener/CourseListener.php
-
+ *
  * After a course is created this function is called: CourseListener::prePersist()
  * This function includes the called to the function "addToolsInCourse" inside the tool chain.
-
+ *
  * This allows to tools more easily. Steps:
-
+ *
  * 1. Create a new tool class here: src/Chamilo/CoreBundle/Tool
  * 2. Add the class as a service here: src/Chamilo/CoreBundle/Resources/config/tools.yml  (see examples there)
  * 3. Create a new course. When you create a new course the new tool will be created.
  */
 class ToolChain
 {
+    /**
+     * @var \Chamilo\CoreBundle\Tool\AbstractTool[]|mixed[]
+     */
     protected $tools;
+    /**
+     * @var mixed[]
+     */
     protected $typeList;
+    /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
     protected $entityManager;
+    /**
+     * @var \Chamilo\CoreBundle\Settings\SettingsManager
+     */
     protected $settingsManager;
+    /**
+     * @var \Symfony\Component\Security\Core\Security
+     */
     protected $security;
+    /**
+     * @var mixed[]
+     */
     protected $repoEntityList;
 
     public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)
@@ -89,7 +109,9 @@ class ToolChain
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $name = $tool->getName();
-            $toolFromDatabase = $repo->findOneBy(['name' => $name]);
+            $toolFromDatabase = $repo->findOneBy([
+                'name' => $name,
+            ]);
             $toolEntity = new Tool();
 
             if (null !== $toolFromDatabase) {
@@ -177,7 +199,9 @@ class ToolChain
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $visibility = in_array($tool->getName(), $toolVisibility, true);
-            $criteria = ['name' => $tool->getName()];
+            $criteria = [
+                'name' => $tool->getName(),
+            ];
             if (!isset($toolList[$tool->getName()])) {
                 continue;
             }
@@ -214,7 +238,7 @@ class ToolChain
         throw new InvalidArgumentException(sprintf("The Tool '%s' doesn't exist.", $name));
     }
 
-    public function getResourceTypeNameFromRepository(string $repo)
+    public function getResourceTypeNameFromRepository(string $repo): string
     {
         if (isset($this->typeList[$repo]) && !empty($this->typeList[$repo])) {
             return $this->typeList[$repo];

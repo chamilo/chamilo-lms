@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -10,14 +12,16 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
-    /** @var EntityRepository */
+    /**
+     * @var EntityRepository
+     */
     protected $repository;
 
     /**
      * @param array                   $allowedTypes
      * @param AbstractSettingsBuilder $builder
      */
-    public function setMultipleAllowedTypes($allowedTypes, $builder)
+    public function setMultipleAllowedTypes($allowedTypes, $builder): void
     {
         foreach ($allowedTypes as $name => $type) {
             $builder->setAllowedTypes($name, $type);
@@ -29,7 +33,7 @@ abstract class AbstractSettingsSchema implements SchemaInterface
         return $this->repository;
     }
 
-    public function setRepository($repo)
+    public function setRepository($repo): void
     {
         $this->repository = $repo;
     }

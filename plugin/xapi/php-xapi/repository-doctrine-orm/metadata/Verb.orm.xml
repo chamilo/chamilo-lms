@@ -9,6 +9,6 @@
         </id>
 
         <field name="id" type="string" />
-        <field name="display" type="json_array" />
+        <field name="display" type="json_array" nullable="true" />
     </entity>
 </doctrine-mapping>

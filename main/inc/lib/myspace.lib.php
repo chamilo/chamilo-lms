@@ -1614,7 +1614,8 @@ class MySpace
                                 }
                                 $tempStudent = $studentArray[$studentId];
                                 $studentInSesion[$studentId] = 1;
-                                $tableTemp .= "<strong>".$tempStudent['complete_name']." (".$student['company'].")</strong><br>";
+                                $tableTemp .= "<strong>".$tempStudent['complete_name']." (".$student['company'].
+                                    ")</strong> <span class=''> SessionID ".$student['session_id']."</span><br>";
                                 $totalStudent++;
                             }
                             /* Student by course*/

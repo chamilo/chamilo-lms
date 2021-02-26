@@ -1,60 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Template;
 
-/**
- * Class Editor.
- */
 class Editor
 {
-    /**
-     * @var string
-     */
-    public $textareaId;
+    public string $textareaId;
 
     /**
      * Name of the instance.
-     *
-     * @var string
      */
-    public $name;
+    public string $name;
 
     /**
      * Name of the toolbar to load.
-     *
-     * @var string
      */
-    public $toolbarSet;
+    public string $toolbarSet;
 
     /**
      * Initial value.
-     *
-     * @var string
      */
-    public $value;
+    public string $value;
 
-    /**
-     * @var array
-     */
-    public $config;
+    public array $config;
 
-    /** @var TranslatorInterface */
-    public $translator;
+    public TranslatorInterface $translator;
 
-    /** @var RouterInterface */
-    public $urlGenerator;
+    public RouterInterface $urlGenerator;
 
-    /** @var \Template */
-    public $template;
+    public Template $template;
 
-    /**
-     * Editor constructor.
-     */
     public function __construct(
         TranslatorInterface $translator,
         RouterInterface $urlGenerator
@@ -81,7 +63,7 @@ class Editor
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -109,7 +91,7 @@ class Editor
     /**
      * @param string $key
      */
-    public function setConfigAttribute($key, $value)
+    public function setConfigAttribute($key, $value): void
     {
         $this->config[$key] = $value;
     }
@@ -125,7 +107,7 @@ class Editor
     /**
      * @param array $config
      */
-    public function processConfig($config)
+    public function processConfig($config): void
     {
         if (is_array($config)) {
             foreach ($config as $key => $value) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
@@ -21,36 +23,30 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class Connector
 {
-    /** @var Course */
-    public $course;
+    public Course $course;
 
-    /** @var User */
-    public $user;
+    public User $user;
 
-    /** @var Session */
-    public $session;
+    public Session $session;
 
-    /** @var Translator */
-    public $translator;
+    public Translator $translator;
 
-    /** @var Router */
-    public $urlGenerator;
+    public Router $urlGenerator;
 
-    public $security;
+    //public $security;
 
-    public $paths;
+    public array $paths;
 
-    public $entityManager;
+    public EntityManager $entityManager;
 
-    public $drivers = [];
-    public $driverList = [];
+    public array $drivers = [];
+    public array $driverList = [];
 
     public function __construct(
         EntityManager $entityManager,
         array $paths,
         RouterInterface $urlGenerator,
         TranslatorInterface $translator,
-        $security,
         $user,
         $course,
         $session
@@ -67,7 +63,7 @@ class Connector
         //$this->paths = $paths;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
-        $this->security = $security;
+        //$this->security = $security;
         $this->user = $user;
         $this->course = $course;
         $this->session = $session;
@@ -84,7 +80,7 @@ class Connector
      *
      * @param array $list
      */
-    public function setDriverList($list)
+    public function setDriverList($list): void
     {
         $this->driverList = $list;
     }
@@ -92,7 +88,7 @@ class Connector
     /**
      * @param Driver $driver
      */
-    public function addDriver($driver)
+    public function addDriver($driver): void
     {
         if (!empty($driver)) {
             $this->drivers[$driver->getName()] = $driver;
@@ -182,7 +178,8 @@ class Connector
     {
         // for more options: https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         return [
-            'uploadOverwrite' => false, // Replace files on upload or give them new name if the same file was uploaded
+            'uploadOverwrite' => false,
+            // Replace files on upload or give them new name if the same file was uploaded
             //'acceptedName' =>
             'uploadAllow' => [
                 'image',
@@ -200,9 +197,11 @@ class Connector
                 'application/vnd.oasis.opendocument.text',
                 'application/x-shockwave-flash',
                 'application/vnd.adobe.flash.movie',
-            ], // allow files
+            ],
+            // allow files
             //'uploadDeny' => array('text/x-php'),
-            'uploadOrder' => ['allow'], // only executes allow
+            'uploadOrder' => ['allow'],
+            // only executes allow
             'disabled' => [
                 'duplicate',
                 'rename',
@@ -280,7 +279,7 @@ class Connector
     /**
      * Set drivers from list.
      */
-    public function setDrivers()
+    public function setDrivers(): void
     {
         foreach ($this->getDriverList() as $driverName) {
             $this->setDriver($driverName);
@@ -292,7 +291,7 @@ class Connector
      *
      * @param string $driverName
      */
-    public function setDriver($driverName)
+    public function setDriver($driverName): void
     {
         $driverClass = $this->getDriverClass($driverName);
 
@@ -312,12 +311,12 @@ class Connector
      * @param string $data
      * @param string $volume
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function access($attr, $path, $data, $volume)
     {
         return 0 === strpos(basename($path), '.')       // if file/folder begins with '.' (dot)
-            ? !('read' == $attr || 'write' == $attr)    // set read+write to false, other (locked+hidden) set to true
+            ? !('read' === $attr || 'write' === $attr)    // set read+write to false, other (locked+hidden) set to true
             : null; // else elFinder decide it itself
     }
 
@@ -327,7 +326,7 @@ class Connector
      * @param array  $args
      * @param Finder $elFinder
      */
-    public function manageCommands($cmd, $result, $args, $elFinder)
+    public function manageCommands($cmd, $result, $args, $elFinder): void
     {
     }
 

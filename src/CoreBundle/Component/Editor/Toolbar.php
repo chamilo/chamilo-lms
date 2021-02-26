@@ -1,20 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
 
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class Toolbar.
- */
 class Toolbar
 {
-    public $config = [];
-    public $urlGenerator;
-    public $plugins = [];
-    public $defaultPlugins = [];
+    public array $config = [];
+    public RouterInterface $urlGenerator;
+    public array $plugins = [];
+    public array $defaultPlugins = [];
 
     /**
      * Toolbar constructor.
@@ -116,12 +115,12 @@ class Toolbar
         return [];
     }
 
-    public function setConfig(array $config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
     }
 
-    public function updateConfig(array $config)
+    public function updateConfig(array $config): void
     {
         if (empty($this->config)) {
             $this->setConfig($config);
@@ -155,7 +154,7 @@ class Toolbar
     /**
      * @param string $language
      */
-    public function setLanguage($language)
+    public function setLanguage($language): void
     {
         $this->config['language'] = $language;
     }

@@ -1,21 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 use Chamilo\CoreBundle\Component\Editor\Connector;
+use elFinder;
+use elFinderVolumeLocalFileSystem;
 
-/**
- * Class Driver.
- */
-class Driver extends \elFinderVolumeLocalFileSystem
+class Driver extends elFinderVolumeLocalFileSystem
 {
-    /** @var string */
-    public $name;
+    public string $name;
 
-    /** @var Connector */
-    public $connector;
+    public Connector $connector;
 
     /**
      * Gets driver name.
@@ -32,15 +31,12 @@ class Driver extends \elFinderVolumeLocalFileSystem
      *
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * Set connector.
-     */
-    public function setConnector(Connector $connector)
+    public function setConnector(Connector $connector): void
     {
         $this->connector = $connector;
     }
@@ -69,19 +65,19 @@ class Driver extends \elFinderVolumeLocalFileSystem
     public function customRename($hash, $name)
     {
         if (!$this->nameAccepted($name)) {
-            return $this->setError(\elFinder::ERROR_INVALID_NAME, $name);
+            return $this->setError(elFinder::ERROR_INVALID_NAME, $name);
         }
 
         if (!($file = $this->file($hash))) {
-            return $this->setError(\elFinder::ERROR_FILE_NOT_FOUND);
+            return $this->setError(elFinder::ERROR_FILE_NOT_FOUND);
         }
 
-        if ($name == $file['name']) {
+        if ($name === $file['name']) {
             return $file;
         }
 
         if (!empty($file['locked'])) {
-            return $this->setError(\elFinder::ERROR_LOCKED, $file['name']);
+            return $this->setError(elFinder::ERROR_LOCKED, $file['name']);
         }
 
         $path = $this->decode($hash);
@@ -89,11 +85,11 @@ class Driver extends \elFinderVolumeLocalFileSystem
         $stat = $this->stat($this->joinPathCE($dir, $name));
 
         if ($stat) {
-            return $this->setError(\elFinder::ERROR_EXISTS, $name);
+            return $this->setError(elFinder::ERROR_EXISTS, $name);
         }
 
         if (!$this->allowCreate($dir, $name, ('directory' === $file['mime']))) {
-            return $this->setError(\elFinder::ERROR_PERM_DENIED);
+            return $this->setError(elFinder::ERROR_PERM_DENIED);
         }
 
         $this->rmTmb($file); // remove old name tmbs, we cannot do this after dir move

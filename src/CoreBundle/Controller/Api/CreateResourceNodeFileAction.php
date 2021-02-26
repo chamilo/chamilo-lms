@@ -72,7 +72,6 @@ class CreateResourceNodeFileAction
                 }
 
                 break;
-
             case 'folder':
                 break;
         }
@@ -88,6 +87,7 @@ class CreateResourceNodeFileAction
             $links = false === strpos($links, '[') ? json_decode('['.$links.']', true) : json_decode($links, true);
             if (empty($links)) {
                 $message = 'resourceLinkList is not a valid json. Use for example: [{"c_id":1, "visibility":1}]';
+
                 throw new InvalidArgumentException($message);
             }
             $document->setResourceLinkArray($links);

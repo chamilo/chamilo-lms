@@ -57,10 +57,10 @@ class Template
         }
 
         if (property_exists($this, $action)) {
-            return $this->$action;
+            return $this->{$action};
         }
 
-        throw new InvalidArgumentException("No template found for action: $action");
+        throw new InvalidArgumentException("No template found for action: {$action}");
     }
 
     public function setIndex(string $index): self

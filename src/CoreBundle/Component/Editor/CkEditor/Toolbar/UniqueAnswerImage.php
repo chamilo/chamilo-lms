@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
@@ -18,16 +20,36 @@ class UniqueAnswerImage extends Basic
     {
         $config['toolbarGroups'] = [
             '/',
-            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
-            ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align']],
-            ['name' => 'links'],
-            ['name' => 'insert'],
+            [
+                'name' => 'basicstyles',
+                'groups' => ['basicstyles', 'cleanup'],
+            ],
+            [
+                'name' => 'paragraph',
+                'groups' => ['list', 'indent', 'blocks', 'align'],
+            ],
+            [
+                'name' => 'links',
+            ],
+            [
+                'name' => 'insert',
+            ],
             '/',
-            ['name' => 'styles'],
-            ['name' => 'colors'],
-            ['name' => 'tools'],
-            ['name' => 'others'],
-            ['name' => 'mode'],
+            [
+                'name' => 'styles',
+            ],
+            [
+                'name' => 'colors',
+            ],
+            [
+                'name' => 'tools',
+            ],
+            [
+                'name' => 'others',
+            ],
+            [
+                'name' => 'mode',
+            ],
         ];
 
         $config['fullPage'] = true;

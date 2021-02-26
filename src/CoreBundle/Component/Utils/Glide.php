@@ -15,9 +15,6 @@ class Glide
     protected Server $server;
     protected array $filters;
 
-    /**
-     * Glide constructor.
-     */
     public function __construct(array $config, array $filters)
     {
         $this->server = ServerFactory::create(

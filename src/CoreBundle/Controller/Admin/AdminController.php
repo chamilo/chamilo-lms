@@ -50,7 +50,9 @@ class AdminController extends BaseController
             'get',
             $url,
             '',
-            ['class' => 'form-inline']
+            [
+                'class' => 'form-inline',
+            ]
         );
         $form->addElement('text', 'keyword');
         $form->addElement('button', 'submit', get_lang('Search'));
@@ -151,7 +153,7 @@ class AdminController extends BaseController
                 'label' => get_lang('Course list'),
             ];
 
-            if ('true' != api_get_setting('course.course_validation')) {
+            if ('true' !== api_get_setting('course.course_validation')) {
                 $items[] = [
                     'url' => $adminUrl.'course_add.php',
                     'label' => get_lang('Create a course'),
@@ -275,7 +277,7 @@ class AdminController extends BaseController
                 ];
             }
 
-            if ('true' ==
+            if ('true' ===
                 api_get_setting('registration.allow_terms_conditions')
             ) {
                 $items[] = [
@@ -403,7 +405,7 @@ class AdminController extends BaseController
             $blocks['settings']['search_form'] = null;
 
             //Skills
-            if ('true' == api_get_setting('skill.allow_skills_tool')) {
+            if ('true' === api_get_setting('skill.allow_skills_tool')) {
                 $blocks['skills']['icon'] = Display::return_icon(
                     'skill-badges.png',
                     get_lang('Skills'),

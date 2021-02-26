@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
@@ -9,10 +11,8 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Entity\Templates;
+use Database;
 
-/**
- * Class CkEditor.
- */
 class CkEditor extends Editor
 {
     /**
@@ -75,7 +75,7 @@ class CkEditor extends Editor
         return "<script>
             $(function () {
                CKEDITOR.replace('".$this->getTextareaId()."',
-                   $javascript
+                   {$javascript}
                );
            });
 
@@ -130,7 +130,7 @@ class CkEditor extends Editor
     /**
      * Get the templates in JSON format.
      *
-     * @return string|false
+     * @return false|string
      */
     public function simpleFormatTemplates()
     {
@@ -180,7 +180,7 @@ class CkEditor extends Editor
      */
     private function getPlatformTemplates(): array
     {
-        $entityManager = \Database::getManager();
+        $entityManager = Database::getManager();
         $systemTemplates = $entityManager->getRepository(SystemTemplate::class)->findAll();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
@@ -223,7 +223,7 @@ class CkEditor extends Editor
             $userId = api_get_user_id();
         }
 
-        $entityManager = \Database::getManager();
+        $entityManager = Database::getManager();
         $templatesRepo = $entityManager->getRepository(Templates::class);
         $user = api_get_user_entity($userId);
         $course = $entityManager->find(Course::class, api_get_course_int_id());

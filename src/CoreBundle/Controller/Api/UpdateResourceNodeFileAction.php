@@ -59,6 +59,7 @@ class UpdateResourceNodeFileAction
 
                 if (null !== $link) {
                     $link->setVisibility((int) $linkArray['visibility']);
+
                     break;
                 }
             }

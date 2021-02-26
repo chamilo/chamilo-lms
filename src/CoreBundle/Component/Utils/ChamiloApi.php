@@ -78,7 +78,7 @@ class ChamiloApi
      * @param bool   $getSysPath
      * @param bool   $forcedGetter
      *
-     * @return string|null
+     * @return null|string
      */
     public static function getPlatformLogoPath($theme = '', $getSysPath = false, $forcedGetter = false)
     {
@@ -99,22 +99,22 @@ class ChamiloApi
                 }
             }
             $themeDir = Template::getThemeDir($theme);
-            $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
+            $customLogoPath = $themeDir."images/header-logo-custom{$accessUrlId}.png";
 
             $svgIcons = api_get_setting('icons_mode_svg');
             if ('true' === $svgIcons) {
                 $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
-                if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG")) {
+                if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPathSVG}")) {
                     if ($getSysPath) {
-                        return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG";
+                        return api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPathSVG}";
                     }
 
                     return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
                 }
             }
-            if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
+            if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPath}")) {
                 if ($getSysPath) {
-                    return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
+                    return api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPath}";
                 }
 
                 return api_get_path(WEB_CSS_PATH).$customLogoPath;
@@ -182,14 +182,18 @@ class ChamiloApi
                     $headerLogo .= Display::url(
                         $courseInfo['extLink']['name'],
                         $courseInfo['extLink']['url'],
-                        ['class' => 'extLink']
+                        [
+                            'class' => 'extLink',
+                        ]
                     );
                 } elseif (!empty($courseInfo['extLink']['url'])) {
                     $headerLogo .= $courseInfo['extLink']['url'];
                 }
             }
 
-            return Display::tag('h2', $headerLogo, ['class' => 'text-left']);
+            return Display::tag('h2', $headerLogo, [
+                'class' => 'text-left',
+            ]);
         }
 
         $image = Display::img($logoPath, $institution, $imageAttributes);
@@ -255,7 +259,11 @@ class ChamiloApi
             $row = Database::select(
                 'id',
                 Database::get_main_table(TABLE_MAIN_COURSE),
-                ['where' => ['directory = ?' => [$directory]]],
+                [
+                    'where' => [
+                        'directory = ?' => [$directory],
+                    ],
+                ],
                 'first'
             );
 
@@ -309,10 +317,10 @@ class ChamiloApi
     {
         $visualTheme = api_get_visual_theme();
 
-        $cssFile = api_get_path(SYS_CSS_PATH)."themes/$visualTheme/document.css";
+        $cssFile = api_get_path(SYS_CSS_PATH)."themes/{$visualTheme}/document.css";
 
         if (is_file($cssFile)) {
-            return api_get_path(WEB_CSS_PATH)."themes/$visualTheme/document.css";
+            return api_get_path(WEB_CSS_PATH)."themes/{$visualTheme}/document.css";
         }
 
         return api_get_path(WEB_CSS_PATH).'document.css';
@@ -327,10 +335,10 @@ class ChamiloApi
     {
         $visualTheme = api_get_visual_theme();
 
-        $cssFile = api_get_path(SYS_CSS_PATH)."themes/$visualTheme/editor_content.css";
+        $cssFile = api_get_path(SYS_CSS_PATH)."themes/{$visualTheme}/editor_content.css";
 
         if (is_file($cssFile)) {
-            return api_get_path(WEB_CSS_PATH)."themes/$visualTheme/editor_content.css";
+            return api_get_path(WEB_CSS_PATH)."themes/{$visualTheme}/editor_content.css";
         }
 
         return api_get_path(WEB_CSS_PATH).'editor_content.css';
@@ -384,7 +392,7 @@ class ChamiloApi
     /**
      * Get the local time for the midnight.
      *
-     * @param string|null $utcTime Optional. The time to ve converted.
+     * @param null|string $utcTime Optional. The time to ve converted.
      *                             See api_get_local_time.
      *
      * @throws Exception
@@ -427,7 +435,7 @@ class ChamiloApi
                 instance.options.markersRolls = {};
 
                 qMarkersRolls.forEach(function (qMarkerRoll) {
-                    var url = '{$webCodePath}exercise/exercise_submit.php?$cidReq&'
+                    var url = '{$webCodePath}exercise/exercise_submit.php?{$cidReq}&'
                         + $.param({
                             exerciseId: qMarkerRoll[1],
                             learnpath_id: 0,

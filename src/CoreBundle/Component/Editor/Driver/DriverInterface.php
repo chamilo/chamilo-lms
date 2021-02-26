@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 use Chamilo\CoreBundle\Component\Editor\Connector;
 
-/**
- * Class DriverInterface.
- */
 interface DriverInterface
 {
     public function setup();
@@ -27,9 +26,6 @@ interface DriverInterface
      */
     public function setName($name);
 
-    /**
-     * Set connector.
-     */
     public function setConnector(Connector $connector);
 
     /**

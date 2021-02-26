@@ -16,7 +16,7 @@ class Settings
     public bool $allowDiskSpace;
     // Shows an extra ckeditor input to save the HTML content into a ResourceFile.
     public bool $allowToSaveEditorToResourceFile;
-    public $templates;
+    //public $templates;
 
     public function __construct()
     {

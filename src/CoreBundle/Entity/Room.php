@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -18,7 +20,7 @@ class Room
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
@@ -26,7 +28,7 @@ class Room
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=255, nullable=true, unique=false)
+     * @ORM\Column(name="title", type="string", length=255)
      */
     protected string $title;
 
@@ -36,33 +38,25 @@ class Room
     protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="geolocation", type="string", length=255, nullable=true, unique=false)
      */
-    protected $geolocation;
+    protected ?string $geolocation;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ip", type="string", length=39, nullable=true, unique=false)
      */
-    protected $ip;
+    protected ?string $ip;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ip_mask", type="string", length=6, nullable=true, unique=false)
      */
-    protected $ipMask;
+    protected ?string $ipMask;
 
     /**
-     * @var BranchSync
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
      * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
      */
-    protected $branch;
+    protected BranchSync $branch;
 
     /**
      * Get id.

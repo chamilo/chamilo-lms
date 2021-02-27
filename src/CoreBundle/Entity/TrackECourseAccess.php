@@ -1,24 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackECourseAccess.
  *
  * @ORM\Table(
- *  name="track_e_course_access",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"}),
- *      @ORM\Index(name="login_course_date", columns={"login_course_date"}),
- *      @ORM\Index(name="session_id", columns={"session_id"}),
- *      @ORM\Index(name="user_course_session_date", columns={"user_id", "c_id", "session_id", "login_course_date"})
- *  }
+ *     name="track_e_course_access",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="user_id", columns={"user_id"}),
+ *         @ORM\Index(name="login_course_date", columns={"login_course_date"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"}),
+ *         @ORM\Index(name="user_course_session_date", columns={"user_id", "c_id", "session_id", "login_course_date"})
+ *     }
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\TrackECourseAccessRepository")
  */
@@ -53,12 +56,12 @@ class TrackECourseAccess
     /**
      * @ORM\Column(name="login_course_date", type="datetime", nullable=false)
      */
-    protected \DateTime $loginCourseDate;
+    protected DateTime $loginCourseDate;
 
     /**
      * @ORM\Column(name="logout_course_date", type="datetime", nullable=true)
      */
-    protected ?\DateTime $logoutCourseDate;
+    protected ?DateTime $logoutCourseDate;
 
     /**
      * @var int
@@ -108,7 +111,7 @@ class TrackECourseAccess
     /**
      * Set loginCourseDate.
      *
-     * @param \DateTime $loginCourseDate
+     * @param DateTime $loginCourseDate
      *
      * @return TrackECourseAccess
      */
@@ -122,7 +125,7 @@ class TrackECourseAccess
     /**
      * Get loginCourseDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLoginCourseDate()
     {
@@ -132,7 +135,7 @@ class TrackECourseAccess
     /**
      * Set logoutCourseDate.
      *
-     * @param \DateTime $logoutCourseDate
+     * @param DateTime $logoutCourseDate
      *
      * @return TrackECourseAccess
      */
@@ -146,7 +149,7 @@ class TrackECourseAccess
     /**
      * Get logoutCourseDate.
      *
-     * @return \DateTime|null
+     * @return null|DateTime
      */
     public function getLogoutCourseDate()
     {

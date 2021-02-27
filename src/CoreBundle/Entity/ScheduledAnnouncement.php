@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,14 +20,14 @@ class ScheduledAnnouncement
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
     protected $id;
 
     /**
-     * @ORM\Column(name="subject", type="string", length=255, nullable=false, unique=false)
+     * @ORM\Column(name="subject", type="string", length=255)
      */
     protected string $subject;
 
@@ -34,7 +37,7 @@ class ScheduledAnnouncement
     protected string $message;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
@@ -94,12 +97,12 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    public function getDate(): \DateTime
+    public function getDate(): DateTime
     {
         return $this->date;
     }
 
-    public function setDate(\DateTime $date): self
+    public function setDate(DateTime $date): self
     {
         $this->date = $date;
 

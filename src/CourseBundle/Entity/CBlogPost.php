@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,7 +58,7 @@ class CBlogPost
     protected $fullText;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
      */
@@ -126,7 +129,7 @@ class CBlogPost
     /**
      * Set dateCreation.
      *
-     * @param \DateTime $dateCreation
+     * @param DateTime $dateCreation
      *
      * @return CBlogPost
      */
@@ -140,7 +143,7 @@ class CBlogPost
     /**
      * Get dateCreation.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateCreation()
     {

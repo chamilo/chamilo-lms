@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -16,8 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_forum_category",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
  * @ORM\Entity
@@ -25,20 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CForumCategory extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
@@ -53,32 +44,19 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected ?string $catComment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cat_order", type="integer", nullable=false)
      */
-    protected $catOrder;
+    protected int $catOrder;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    protected $locked;
+    protected int $locked;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="cat_id", type="integer")
      */
-    protected $catId;
+    protected int $catId;
 
     /**
      * @var ArrayCollection|CForumForum[]
@@ -134,9 +112,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this->catTitle;
     }
 
-    /**
-     * Set catComment.
-     */
     public function setCatComment(string $catComment): self
     {
         $this->catComment = $catComment;
@@ -144,9 +119,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get catComment.
-     */
     public function getCatComment(): ?string
     {
         return $this->catComment;
@@ -201,30 +173,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CForumCategory
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return (int) $this->sessionId;
-    }
-
-    /**
      * Set catId.
      *
      * @param int $catId
@@ -249,30 +197,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CForumCategory
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * Get forums.
      *
      * @return ArrayCollection|CForumForum[]
@@ -282,9 +206,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this->forums;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

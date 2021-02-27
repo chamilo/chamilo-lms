@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -64,7 +67,7 @@ class CWikiDiscuss
     protected $pScore;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="dtime", type="datetime", nullable=false)
      */
@@ -169,7 +172,7 @@ class CWikiDiscuss
     /**
      * Set dtime.
      *
-     * @param \DateTime $dtime
+     * @param DateTime $dtime
      *
      * @return CWikiDiscuss
      */
@@ -183,7 +186,7 @@ class CWikiDiscuss
     /**
      * Get dtime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDtime()
     {

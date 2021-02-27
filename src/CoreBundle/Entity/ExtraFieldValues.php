@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -26,13 +28,11 @@ class ExtraFieldValues
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\Column(name="value", type="text", nullable=true, unique=false)
@@ -47,7 +47,7 @@ class ExtraFieldValues
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="item_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="item_id", type="integer")
      */
     protected int $itemId;
 
@@ -66,10 +66,7 @@ class ExtraFieldValues
         return $this->field;
     }
 
-    /**
-     * @return ExtraFieldValues
-     */
-    public function setField($field)
+    public function setField(ExtraField $field): self
     {
         $this->field = $field;
 
@@ -88,23 +85,13 @@ class ExtraFieldValues
         return $this;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     *
-     * @return ExtraFieldValues
-     */
-    public function setComment($comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    /**
-     * Get comment.
-     */
     public function getComment(): ?string
     {
         return $this->comment;

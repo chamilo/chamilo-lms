@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -21,20 +23,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CCourseSetting
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
      * @Assert\NotBlank()
@@ -78,9 +76,6 @@ class CCourseSetting
      */
     protected ?string $subkeytext;
 
-    /**
-     * Set variable.
-     */
     public function setVariable(string $variable): self
     {
         $this->variable = $variable;

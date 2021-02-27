@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -59,7 +62,7 @@ class CChatConnected
     protected $userId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_connection", type="datetime")
      */
@@ -164,7 +167,7 @@ class CChatConnected
     /**
      * Set lastConnection.
      *
-     * @param \DateTime $lastConnection
+     * @param DateTime $lastConnection
      *
      * @return CChatConnected
      */
@@ -178,7 +181,7 @@ class CChatConnected
     /**
      * Get lastConnection.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastConnection()
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,8 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *     name="settings_options",
- *     options={"row_format":"DYNAMIC"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})}
+ *     options={"row_format"="DYNAMIC"},
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})
+ *     }
  * )
  * @ORM\Entity
  */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,41 +17,31 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseType
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="translation_var", type="string", length=40, nullable=true)
      */
-    protected $translationVar;
+    protected ?string $translationVar;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="props", type="text", nullable=true)
      */
-    protected $props;
+    protected ?string $props;
 
     /**
      * Set name.

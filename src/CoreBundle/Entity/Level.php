@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -16,34 +18,28 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Level
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @Gedmo\SortablePosition
      *
      * @ORM\Column(name="position", type="integer")
      */
-    protected $position;
+    protected int $position;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="short_name", type="string", length=255, nullable=false)
      */
-    protected $shortName;
+    protected string $shortName;
 
     /**
      * @Gedmo\SortableGroup
@@ -51,7 +47,7 @@ class Level
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="levels")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
      */
-    protected $profile;
+    protected ?\Chamilo\CoreBundle\Entity\Profile $profile = null;
 
     /**
      * @return string

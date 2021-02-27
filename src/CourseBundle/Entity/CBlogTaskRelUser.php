@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,7 +48,7 @@ class CBlogTaskRelUser
     protected $blogId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="target_date", type="date", nullable=false)
      */
@@ -68,7 +71,7 @@ class CBlogTaskRelUser
     /**
      * Set targetDate.
      *
-     * @param \DateTime $targetDate
+     * @param DateTime $targetDate
      *
      * @return CBlogTaskRelUser
      */
@@ -82,7 +85,7 @@ class CBlogTaskRelUser
     /**
      * Get targetDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTargetDate()
     {

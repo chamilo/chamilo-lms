@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserApiKey.
  *
- * @ORM\Table(name="user_api_key", indexes={@ORM\Index(name="idx_user_api_keys_user", columns={"user_id"})})
+ * @ORM\Table(name="user_api_key", indexes={
+ *     @ORM\Index(name="idx_user_api_keys_user", columns={"user_id"})
+ * })
  * @ORM\Entity
  */
 class UserApiKey
@@ -38,35 +43,31 @@ class UserApiKey
     protected $apiKey;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="api_service", type="string", length=10, nullable=false)
      */
-    protected $apiService;
+    protected string $apiService;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="api_end_point", type="text", nullable=true)
      */
-    protected $apiEndPoint;
+    protected ?string $apiEndPoint;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created_date", type="datetime", nullable=true)
      */
     protected $createdDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="validity_start_date", type="datetime", nullable=true)
      */
     protected $validityStartDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="validity_end_date", type="datetime", nullable=true)
      */
@@ -178,7 +179,7 @@ class UserApiKey
     /**
      * Set createdDate.
      *
-     * @param \DateTime $createdDate
+     * @param DateTime $createdDate
      *
      * @return UserApiKey
      */
@@ -192,7 +193,7 @@ class UserApiKey
     /**
      * Get createdDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedDate()
     {
@@ -202,7 +203,7 @@ class UserApiKey
     /**
      * Set validityStartDate.
      *
-     * @param \DateTime $validityStartDate
+     * @param DateTime $validityStartDate
      *
      * @return UserApiKey
      */
@@ -216,7 +217,7 @@ class UserApiKey
     /**
      * Get validityStartDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getValidityStartDate()
     {
@@ -226,7 +227,7 @@ class UserApiKey
     /**
      * Set validityEndDate.
      *
-     * @param \DateTime $validityEndDate
+     * @param DateTime $validityEndDate
      *
      * @return UserApiKey
      */
@@ -240,7 +241,7 @@ class UserApiKey
     /**
      * Get validityEndDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getValidityEndDate()
     {

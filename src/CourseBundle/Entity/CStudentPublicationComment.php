@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Cocur\Slugify\Slugify;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -69,7 +72,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     protected $userId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
      */
@@ -77,7 +80,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
 
     public function __construct()
     {
-        $this->sentAt = new \DateTime();
+        $this->sentAt = new DateTime();
     }
 
     public function __toString(): string
@@ -213,7 +216,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     /**
      * Set sentAt.
      *
-     * @param \DateTime $sentAt
+     * @param DateTime $sentAt
      *
      * @return CStudentPublicationComment
      */
@@ -227,7 +230,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     /**
      * Get sentAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSentAt()
     {

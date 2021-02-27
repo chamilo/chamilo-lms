@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -13,9 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="access_url_rel_user",
  *     indexes={
- *      @ORM\Index(name="idx_access_url_rel_user_user", columns={"user_id"}),
- *      @ORM\Index(name="idx_access_url_rel_user_access_url", columns={"access_url_id"}),
- *      @ORM\Index(name="idx_access_url_rel_user_access_url_user", columns={"user_id", "access_url_id"})
+ *         @ORM\Index(name="idx_access_url_rel_user_user", columns={"user_id"}),
+ *         @ORM\Index(name="idx_access_url_rel_user_access_url", columns={"access_url_id"}),
+ *         @ORM\Index(name="idx_access_url_rel_user_access_url_user", columns={"user_id", "access_url_id"})
  *     }
  * )
  * @ORM\Entity
@@ -25,13 +27,11 @@ class AccessUrlRelUser
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(name="id", type="integer")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="portals")

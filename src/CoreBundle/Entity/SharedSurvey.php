@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SharedSurvey.
  *
- * @ORM\Table(name="shared_survey", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"survey_id"})})
+ * @ORM\Table(name="shared_survey", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="id", columns={"survey_id"})
+ * })
  * @ORM\Entity
  */
 class SharedSurvey
@@ -80,7 +85,7 @@ class SharedSurvey
     protected $surveythanks;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
@@ -286,7 +291,7 @@ class SharedSurvey
     /**
      * Set creationDate.
      *
-     * @param \DateTime $creationDate
+     * @param DateTime $creationDate
      *
      * @return SharedSurvey
      */
@@ -300,7 +305,7 @@ class SharedSurvey
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {

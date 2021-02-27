@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,14 +39,14 @@ class CStudentPublicationAssignment
     protected $cId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="expires_on", type="datetime", nullable=true)
      */
     protected $expiresOn;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="ends_on", type="datetime", nullable=true)
      */
@@ -83,7 +86,7 @@ class CStudentPublicationAssignment
     /**
      * Set expiresOn.
      *
-     * @param \DateTime $expiresOn
+     * @param DateTime $expiresOn
      *
      * @return CStudentPublicationAssignment
      */
@@ -97,7 +100,7 @@ class CStudentPublicationAssignment
     /**
      * Get expiresOn.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpiresOn()
     {
@@ -107,7 +110,7 @@ class CStudentPublicationAssignment
     /**
      * Set endsOn.
      *
-     * @param \DateTime $endsOn
+     * @param DateTime $endsOn
      *
      * @return CStudentPublicationAssignment
      */
@@ -121,7 +124,7 @@ class CStudentPublicationAssignment
     /**
      * Get endsOn.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndsOn()
     {

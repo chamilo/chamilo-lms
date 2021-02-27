@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -86,7 +89,7 @@ class CWiki extends AbstractResource implements ResourceInterface
     protected $groupId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="dtime", type="datetime", nullable=true)
      */
@@ -177,7 +180,7 @@ class CWiki extends AbstractResource implements ResourceInterface
     protected $isEditing;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="time_edit", type="datetime", nullable=true)
      */
@@ -375,7 +378,7 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * Set dtime.
      *
-     * @param \DateTime $dtime
+     * @param DateTime $dtime
      *
      * @return CWiki
      */
@@ -389,7 +392,7 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * Get dtime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDtime()
     {
@@ -687,7 +690,7 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * Set timeEdit.
      *
-     * @param \DateTime $timeEdit
+     * @param DateTime $timeEdit
      *
      * @return CWiki
      */
@@ -701,7 +704,7 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * Get timeEdit.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTimeEdit()
     {

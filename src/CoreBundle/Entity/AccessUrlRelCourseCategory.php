@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,29 +17,23 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelCourseCategory
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var AccessUrl
-     *
      * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="courseCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
-     * @var CourseCategory
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="course_category_id", referencedColumnName="id")
      */
-    protected $courseCategory;
+    protected CourseCategory $courseCategory;
 
     public function getUrl(): AccessUrl
     {

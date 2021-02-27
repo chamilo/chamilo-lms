@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -18,13 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CLink extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected ?int $iid;
 
     /**
      * @Assert\NotBlank()
@@ -34,7 +34,7 @@ class CLink extends AbstractResource implements ResourceInterface
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=150, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;
 
@@ -44,33 +44,25 @@ class CLink extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var CLinkCategory|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLinkCategory", inversedBy="links")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
-    protected $category;
+    protected ?CLinkCategory $category = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="on_homepage", type="string", length=10, nullable=false)
      */
-    protected $onHomepage;
+    protected string $onHomepage;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="target", type="string", length=10, nullable=true)
      */
-    protected $target;
+    protected ?string $target;
 
     public function __construct()
     {
@@ -90,17 +82,11 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get url.
-     */
     public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     * Set title.
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -108,9 +94,6 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(): string
     {
         return $this->title;
@@ -128,9 +111,6 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;
@@ -235,7 +215,7 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    public function setResourceName($name): self
+    public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
     }

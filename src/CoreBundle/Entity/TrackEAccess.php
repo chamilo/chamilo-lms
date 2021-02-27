@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="access_user_id", columns={"access_user_id"}),
  *     @ORM\Index(name="access_c_id", columns={"c_id"}),
  *     @ORM\Index(name="access_session_id", columns={"access_session_id"}),
- *     @ORM\Index(name="user_course_session_date", columns={"access_user_id","c_id","access_session_id", "access_date"})
+ *     @ORM\Index(name="user_course_session_date", columns={"access_user_id", "c_id", "access_session_id", "access_date"})
  * })
  * @ORM\Entity
  */
@@ -38,7 +41,7 @@ class TrackEAccess
     /**
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
      */
-    protected \DateTime $accessDate;
+    protected DateTime $accessDate;
 
     /**
      * @var int
@@ -95,7 +98,7 @@ class TrackEAccess
     /**
      * Set accessDate.
      *
-     * @param \DateTime $accessDate
+     * @param DateTime $accessDate
      *
      * @return TrackEAccess
      */
@@ -109,7 +112,7 @@ class TrackEAccess
     /**
      * Get accessDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAccessDate()
     {

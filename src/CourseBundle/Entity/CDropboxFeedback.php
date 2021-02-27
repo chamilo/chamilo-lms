@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,7 +69,7 @@ class CDropboxFeedback
     protected $feedback;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
@@ -147,7 +150,7 @@ class CDropboxFeedback
     /**
      * Set feedbackDate.
      *
-     * @param \DateTime $feedbackDate
+     * @param DateTime $feedbackDate
      *
      * @return CDropboxFeedback
      */
@@ -161,7 +164,7 @@ class CDropboxFeedback
     /**
      * Get feedbackDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getFeedbackDate()
     {

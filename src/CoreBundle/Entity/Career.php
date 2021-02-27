@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -19,13 +21,11 @@ class Career
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
@@ -39,11 +39,9 @@ class Career
     protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    protected $status;
+    protected int $status;
 
     /**
      * Get id.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -22,13 +24,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CGroupCategory extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
@@ -43,88 +43,64 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="doc_state", type="boolean", nullable=false)
      */
-    protected $docState;
+    protected bool $docState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="calendar_state", type="boolean", nullable=false)
      */
-    protected $calendarState;
+    protected bool $calendarState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="work_state", type="boolean", nullable=false)
      */
-    protected $workState;
+    protected bool $workState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="announcements_state", type="boolean", nullable=false)
      */
-    protected $announcementsState;
+    protected bool $announcementsState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="forum_state", type="boolean", nullable=false)
      */
-    protected $forumState;
+    protected bool $forumState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="wiki_state", type="boolean", nullable=false)
      */
-    protected $wikiState;
+    protected bool $wikiState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="chat_state", type="boolean", nullable=false)
      */
-    protected $chatState;
+    protected bool $chatState;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_student", type="integer", nullable=false)
      */
-    protected $maxStudent;
+    protected int $maxStudent;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="self_reg_allowed", type="boolean", nullable=false)
      */
-    protected $selfRegAllowed;
+    protected bool $selfRegAllowed;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="self_unreg_allowed", type="boolean", nullable=false)
      */
-    protected $selfUnregAllowed;
+    protected bool $selfUnregAllowed;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="groups_per_user", type="integer", nullable=false)
      */
-    protected $groupsPerUser;
+    protected int $groupsPerUser;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
      */
-    protected $documentAccess;
+    protected int $documentAccess;
 
     public function __construct()
     {
@@ -167,17 +143,11 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -185,9 +155,6 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;

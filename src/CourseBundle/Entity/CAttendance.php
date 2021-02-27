@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -24,13 +26,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CAttendance extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank
@@ -44,15 +44,11 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
-    protected $active;
+    protected int $active;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="attendance_qualify_title", type="string", length=255, nullable=true)
      */
     protected ?string $attendanceQualifyTitle;
@@ -63,11 +59,9 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected int $attendanceQualifyMax;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="attendance_weight", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $attendanceWeight;
+    protected float $attendanceWeight;
 
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
@@ -97,9 +91,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return (string) $this->getIid();
     }
 
-    /**
-     * Set name.
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -117,9 +108,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->name;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -127,17 +115,11 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set active.
-     */
     public function setActive(int $active): self
     {
         $this->active = $active;
@@ -145,12 +127,9 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get active.
-     */
     public function getActive(): int
     {
-        return (int) $this->active;
+        return $this->active;
     }
 
     /**
@@ -221,9 +200,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->attendanceWeight;
     }
 
-    /**
-     * Set locked.
-     */
     public function setLocked(int $locked): self
     {
         $this->locked = $locked;
@@ -246,12 +222,12 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    public function getCalendars()
+    public function getCalendars(): ArrayCollection
     {
         return $this->calendars;
     }
 
-    public function setCalendars($calendars): self
+    public function setCalendars(ArrayCollection $calendars): self
     {
         $this->calendars = $calendars;
 

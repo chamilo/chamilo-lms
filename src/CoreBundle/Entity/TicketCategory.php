@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,85 +18,62 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketCategory
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_tickets", type="integer", nullable=false)
      */
-    protected $totalTickets;
+    protected int $totalTickets;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="course_required", type="boolean", nullable=false)
      */
-    protected $courseRequired;
+    protected bool $courseRequired;
 
     /**
-     * @var TicketProject
-     *
      * @ORM\ManyToOne(targetEntity="TicketProject")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
-    protected $project;
+    protected TicketProject $project;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
-    protected $insertDateTime;
+    protected DateTime $insertDateTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected ?int $lastEditUserId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime;
 
-    /**
-     * Category constructor.
-     */
     public function __construct()
     {
         $this->totalTickets = 0;
-        $this->insertDateTime = new \DateTime();
+        $this->insertDateTime = new DateTime();
     }
 
     /**
@@ -164,10 +144,7 @@ class TicketCategory
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCourseRequired()
+    public function isCourseRequired(): bool
     {
         return $this->courseRequired;
     }
@@ -225,7 +202,7 @@ class TicketCategory
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDateTime()
     {
@@ -233,7 +210,7 @@ class TicketCategory
     }
 
     /**
-     * @param \DateTime $insertDateTime
+     * @param DateTime $insertDateTime
      *
      * @return TicketCategory
      */
@@ -265,7 +242,7 @@ class TicketCategory
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEditDateTime()
     {
@@ -273,7 +250,7 @@ class TicketCategory
     }
 
     /**
-     * @param \DateTime $lastEditDateTime
+     * @param DateTime $lastEditDateTime
      *
      * @return TicketCategory
      */

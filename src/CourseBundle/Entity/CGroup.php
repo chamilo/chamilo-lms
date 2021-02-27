@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -9,6 +11,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -31,139 +34,110 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CGroup extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @Groups({"group:read", "group:write"})
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @ORM\Column(name="name", type="string", length=100, nullable=false)
      * @Groups({"group:read", "group:write"})
      */
     protected string $name;
 
     /**
-     * @var bool
      * @Assert\NotBlank()
-     * @ORM\Column(name="status", type="boolean", nullable=true)
+     * @ORM\Column(name="status", type="boolean", nullable=false)
      */
-    protected $status;
+    protected bool $status;
 
     /**
-     * @var CGroupCategory
-     *
      * @ORM\ManyToOne(targetEntity="CGroupCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $category;
+    protected CGroupCategory $category;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="max_student", type="integer", nullable=false)
+     * @ORM\Column(name="max_student", type="integer")
      */
-    protected $maxStudent;
+    protected int $maxStudent;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="doc_state", type="integer", nullable=false)
+     * @ORM\Column(name="doc_state", type="integer")
      */
-    protected $docState;
+    protected int $docState;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="calendar_state", type="integer", nullable=false)
+     * @ORM\Column(name="calendar_state", type="integer")
      */
-    protected $calendarState;
+    protected int $calendarState;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="work_state", type="integer", nullable=false)
+     * @ORM\Column(name="work_state", type="integer")
      */
-    protected $workState;
+    protected int $workState;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="announcements_state", type="integer", nullable=false)
+     * @ORM\Column(name="announcements_state", type="integer")
      */
-    protected $announcementsState;
+    protected int $announcementsState;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="forum_state", type="integer", nullable=false)
+     * @ORM\Column(name="forum_state", type="integer")
      */
-    protected $forumState;
+    protected int $forumState;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="wiki_state", type="integer", nullable=false)
+     * @ORM\Column(name="wiki_state", type="integer")
      */
-    protected $wikiState;
+    protected int $wikiState;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="chat_state", type="integer", nullable=false)
+     * @ORM\Column(name="chat_state", type="integer")
      */
-    protected $chatState;
+    protected int $chatState;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="secret_directory", type="string", length=255, nullable=true)
      */
-    protected $secretDirectory;
+    protected string $secretDirectory;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="self_registration_allowed", type="boolean", nullable=false)
+     * @ORM\Column(name="self_registration_allowed", type="boolean")
      */
-    protected $selfRegistrationAllowed;
+    protected bool $selfRegistrationAllowed;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="self_unregistration_allowed", type="boolean", nullable=false)
+     * @ORM\Column(name="self_unregistration_allowed", type="boolean")
      */
-    protected $selfUnregistrationAllowed;
+    protected bool $selfUnregistrationAllowed;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
+     * @ORM\Column(name="document_access", type="integer", options={"default":0})
      */
-    protected $documentAccess;
+    protected int $documentAccess;
 
     /**
-     * @var ArrayCollection|CGroupRelUser[]
+     * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
      *
      * @ORM\OneToMany(targetEntity="CGroupRelUser", mappedBy="group")
      */
-    protected $members;
+    protected Collection $members;
 
     /**
-     * @var ArrayCollection|CGroupRelTutor[]
+     * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
      *
      * @ORM\OneToMany(targetEntity="CGroupRelTutor", mappedBy="group")
      */
-    protected $tutors;
+    protected Collection $tutors;
 
     public function __construct()
     {
@@ -199,9 +173,6 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get name.
-     */
     public function getName(): string
     {
         return $this->name;
@@ -229,9 +200,6 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->status;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -239,9 +207,6 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;
@@ -256,13 +221,10 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     public function getMaxStudent(): int
     {
-        return (int) $this->maxStudent;
+        return $this->maxStudent;
     }
 
-    /**
-     * Set docState.
-     */
-    public function setDocState($docState): self
+    public function setDocState(int $docState): self
     {
         $this->docState = $docState;
 
@@ -357,12 +319,9 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get forumState.
-     */
     public function getForumState(): int
     {
-        return (int) $this->forumState;
+        return $this->forumState;
     }
 
     /**
@@ -484,12 +443,15 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getMembers()
+    public function getMembers(): Collection
     {
         return $this->members;
     }
 
-    public function setMembers(ArrayCollection $members): self
+    /**
+     * @param CGroupRelUser[]|Collection<int, CGroupRelUser> $members
+     */
+    public function setMembers(Collection $members): self
     {
         $this->members = $members;
 
@@ -519,12 +481,15 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->tutors->matching($criteria)->count() > 0;
     }
 
-    public function getTutors()
+    public function getTutors(): Collection
     {
         return $this->tutors;
     }
 
-    public function setTutors(ArrayCollection $tutors): self
+    /**
+     * @param CGroupRelTutor[]|Collection<int, CGroupRelTutor> $tutors
+     */
+    public function setTutors(Collection $tutors): self
     {
         $this->tutors = $tutors;
 
@@ -549,7 +514,8 @@ class CGroup extends AbstractResource implements ResourceInterface
         $criteria = Criteria::create()
             ->andWhere(
                 Criteria::expr()->eq('user', $user)
-            );
+            )
+        ;
 
         $relation = $this->tutors->matching($criteria);
 
@@ -561,7 +527,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->category;
     }
 
-    public function setCategory(CGroupCategory $category = null): CGroup
+    public function setCategory(CGroupCategory $category = null): self
     {
         $this->category = $category;
 

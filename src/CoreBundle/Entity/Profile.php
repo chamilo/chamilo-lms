@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -32,12 +34,16 @@ class Profile
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Skill", mappedBy="profile", cascade={"persist"})
+     *
+     * @var \Chamilo\CoreBundle\Entity\Skill[]|\Doctrine\Common\Collections\Collection
      */
     protected $skills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position"="ASC"})
+     *
+     * @var \Chamilo\CoreBundle\Entity\Level[]|\Doctrine\Common\Collections\Collection
      */
     protected $levels;
 

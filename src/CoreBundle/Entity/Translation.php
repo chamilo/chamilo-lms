@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -12,13 +14,15 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation;
  * Gedmo\Translatable\Entity\Translation.
  *
  * @ORM\Table(
- *         name="ext_translations",
- *         indexes={@ORM\index(name="translations_lookup_idx", columns={
+ *     name="ext_translations",
+ *     indexes={
+ *         @ORM\index(name="translations_lookup_idx", columns={
  *             "locale", "object_class", "foreign_key"
- *         })},
- *         uniqueConstraints={@UniqueConstraint(name="lookup_unique_idx", columns={
- *             "locale", "object_class", "field", "foreign_key"
- *         })}
+ *         })
+ *     },
+ *     uniqueConstraints={@UniqueConstraint(name="lookup_unique_idx", columns={
+ *         "locale", "object_class", "field", "foreign_key"
+ *     })}
  * )
  * @ORM\Entity(repositoryClass="Gedmo\Translatable\Entity\Repository\TranslationRepository")
  *

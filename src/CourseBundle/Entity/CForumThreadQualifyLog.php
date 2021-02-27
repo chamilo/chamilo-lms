@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -65,7 +68,7 @@ class CForumThreadQualifyLog
     protected $qualifyUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
      */
@@ -177,7 +180,7 @@ class CForumThreadQualifyLog
     /**
      * Set qualifyTime.
      *
-     * @param \DateTime $qualifyTime
+     * @param DateTime $qualifyTime
      *
      * @return CForumThreadQualifyLog
      */
@@ -191,7 +194,7 @@ class CForumThreadQualifyLog
     /**
      * Get qualifyTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getQualifyTime()
     {

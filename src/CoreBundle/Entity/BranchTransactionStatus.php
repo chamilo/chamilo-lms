@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,20 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 class BranchTransactionStatus
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=true, unique=false)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false, unique=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * Get id.

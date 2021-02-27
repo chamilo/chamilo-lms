@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,7 +44,7 @@ class TrackEHotpotatoes
     protected $exeUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
@@ -119,7 +122,7 @@ class TrackEHotpotatoes
     /**
      * Set exeDate.
      *
-     * @param \DateTime $exeDate
+     * @param DateTime $exeDate
      *
      * @return TrackEHotpotatoes
      */
@@ -133,7 +136,7 @@ class TrackEHotpotatoes
     /**
      * Get exeDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExeDate()
     {

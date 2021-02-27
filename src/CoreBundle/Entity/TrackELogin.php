@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,7 +30,7 @@ class TrackELogin
     /**
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
      */
-    protected \DateTime $loginDate;
+    protected DateTime $loginDate;
 
     /**
      * @var string
@@ -39,7 +42,7 @@ class TrackELogin
     /**
      * @ORM\Column(name="logout_date", type="datetime", nullable=true)
      */
-    protected ?\DateTime $logoutDate;
+    protected ?DateTime $logoutDate;
 
     /**
      * @var int
@@ -77,7 +80,7 @@ class TrackELogin
     /**
      * Set loginDate.
      *
-     * @param \DateTime $loginDate
+     * @param DateTime $loginDate
      *
      * @return TrackELogin
      */
@@ -91,7 +94,7 @@ class TrackELogin
     /**
      * Get loginDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLoginDate()
     {
@@ -125,7 +128,7 @@ class TrackELogin
     /**
      * Set logoutDate.
      *
-     * @param \DateTime $logoutDate
+     * @param DateTime $logoutDate
      *
      * @return TrackELogin
      */
@@ -139,7 +142,7 @@ class TrackELogin
     /**
      * Get logoutDate.
      *
-     * @return \DateTime|null
+     * @return null|DateTime
      */
     public function getLogoutDate()
     {

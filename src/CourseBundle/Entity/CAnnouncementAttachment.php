@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -17,20 +19,16 @@ use Doctrine\ORM\Mapping as ORM;
 class CAnnouncementAttachment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
@@ -38,11 +36,9 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     protected ?string $comment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
-    protected $size;
+    protected int $size;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncement", cascade={"persist"})
@@ -51,11 +47,9 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     protected CAnnouncement $announcement;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     public function __toString(): string
     {

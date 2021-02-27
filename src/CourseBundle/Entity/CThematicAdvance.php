@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,7 +51,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     protected ?string $content;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
      */
@@ -114,7 +117,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     /**
      * Set startDate.
      *
-     * @param \DateTime $startDate
+     * @param DateTime $startDate
      *
      * @return CThematicAdvance
      */
@@ -128,7 +131,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     /**
      * Get startDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartDate()
     {

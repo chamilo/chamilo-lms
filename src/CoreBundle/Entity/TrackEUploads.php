@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEUploads.
  *
  * @ORM\Table(
- *  name="track_e_uploads",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
- *      @ORM\Index(name="upload_session_id", columns={"upload_session_id"})
- *  }
+ *     name="track_e_uploads",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
+ *         @ORM\Index(name="upload_session_id", columns={"upload_session_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -38,7 +41,7 @@ class TrackEUploads
     protected $uploadUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
      */
@@ -92,7 +95,7 @@ class TrackEUploads
     /**
      * Set uploadDate.
      *
-     * @param \DateTime $uploadDate
+     * @param DateTime $uploadDate
      *
      * @return TrackEUploads
      */
@@ -106,7 +109,7 @@ class TrackEUploads
     /**
      * Get uploadDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUploadDate()
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -20,13 +22,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CGlossary extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
@@ -40,15 +40,15 @@ class CGlossary extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=true)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
-    /**
-     * Set name.
-     */
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -56,17 +56,11 @@ class CGlossary extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get name.
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -126,10 +120,5 @@ class CGlossary extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setName($name);
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
     }
 }

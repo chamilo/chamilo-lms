@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,41 +24,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CNotebook extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="course", type="string", length=40, nullable=false)
      */
-    protected $course;
+    protected string $course;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * @Assert\NotBlank()
@@ -70,29 +63,23 @@ class CNotebook extends AbstractResource implements ResourceInterface
     protected string $description;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=false)
      */
-    protected $updateDate;
+    protected DateTime $updateDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    protected $status;
+    protected ?int $status;
 
     public function __construct()
     {
@@ -176,9 +163,6 @@ class CNotebook extends AbstractResource implements ResourceInterface
         return $this->sessionId;
     }
 
-    /**
-     * Set title.
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -186,17 +170,11 @@ class CNotebook extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -217,7 +195,7 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set creationDate.
      *
-     * @param \DateTime $creationDate
+     * @param DateTime $creationDate
      *
      * @return CNotebook
      */
@@ -231,7 +209,7 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
@@ -241,7 +219,7 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set updateDate.
      *
-     * @param \DateTime $updateDate
+     * @param DateTime $updateDate
      *
      * @return CNotebook
      */
@@ -255,7 +233,7 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Get updateDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdateDate()
     {

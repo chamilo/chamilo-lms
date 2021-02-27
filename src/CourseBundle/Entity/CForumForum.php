@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -25,20 +28,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CForumForum extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
      * @Assert\NotBlank
@@ -53,26 +52,20 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected ?string $forumComment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="forum_threads", type="integer", nullable=true)
      */
-    protected $forumThreads;
+    protected int $forumThreads;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="forum_posts", type="integer", nullable=true)
      */
-    protected $forumPosts;
+    protected int $forumPosts;
 
     /**
-     * @var CForumPost
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")
      * @ORM\JoinColumn(name="forum_last_post", referencedColumnName="iid")
      */
-    protected $forumLastPost;
+    protected CForumPost $forumLastPost;
 
     /**
      * @Gedmo\SortableGroup
@@ -83,103 +76,76 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected ?CForumCategory $forumCategory;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="allow_anonymous", type="integer", nullable=true)
      */
-    protected $allowAnonymous;
+    protected ?int $allowAnonymous;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="allow_edit", type="integer", nullable=true)
      */
-    protected $allowEdit;
+    protected ?int $allowEdit;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="approval_direct_post", type="string", length=20, nullable=true)
      */
-    protected $approvalDirectPost;
+    protected ?string $approvalDirectPost;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="allow_attachments", type="integer", nullable=true)
      */
-    protected $allowAttachments;
+    protected ?int $allowAttachments;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="allow_new_threads", type="integer", nullable=true)
      */
-    protected $allowNewThreads;
+    protected ?int $allowNewThreads;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_view", type="string", length=20, nullable=true)
      */
-    protected $defaultView;
+    protected ?string $defaultView;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="forum_of_group", type="string", length=20, nullable=true)
      */
-    protected $forumOfGroup;
+    protected ?string $forumOfGroup;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="forum_group_public_private", type="string", length=20, nullable=true)
      */
-    protected $forumGroupPublicPrivate;
+    protected ?string $forumGroupPublicPrivate;
 
     /**
-     * @var int
      * @Gedmo\SortablePosition
      *
      * @ORM\Column(name="forum_order", type="integer", nullable=true)
      */
-    protected $forumOrder;
+    protected ?int $forumOrder;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    protected $locked;
+    protected int $locked;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="forum_image", type="string", length=255, nullable=false)
      */
-    protected $forumImage;
+    protected string $forumImage;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
-    protected $startTime;
+    protected ?DateTime $startTime;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
-    protected $endTime;
+    protected ?DateTime $endTime;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="forum")
@@ -188,11 +154,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected ?CLp $lp;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
-    protected $moderated;
+    protected ?bool $moderated;
 
     /**
      * @var ArrayCollection|CForumThread[]
@@ -225,9 +189,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->getForumTitle();
     }
 
-    /**
-     * Set forumTitle.
-     */
     public function setForumTitle(string $forumTitle): self
     {
         $this->forumTitle = $forumTitle;
@@ -235,17 +196,11 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get forumTitle.
-     */
     public function getForumTitle(): string
     {
         return $this->forumTitle;
     }
 
-    /**
-     * Set forumComment.
-     */
     public function setForumComment(string $forumComment): self
     {
         $this->forumComment = $forumComment;
@@ -253,9 +208,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get forumComment.
-     */
     public function getForumComment(): string
     {
         return $this->forumComment;
@@ -283,7 +235,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->forumThreads;
     }
 
-    public function hasThread($thread)
+    public function hasThread(CForumThread $thread): bool
     {
         return $this->threads->contains($thread);
     }
@@ -327,7 +279,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Get forumCategory.
      *
-     * @return CForumCategory|null
+     * @return null|CForumCategory
      */
     public function getForumCategory()
     {
@@ -616,7 +568,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set startTime.
      *
-     * @param \DateTime $startTime
+     * @param DateTime $startTime
      *
      * @return CForumForum
      */
@@ -630,7 +582,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Get startTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartTime()
     {
@@ -640,7 +592,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set endTime.
      *
-     * @param \DateTime $endTime
+     * @param DateTime $endTime
      *
      * @return CForumForum
      */
@@ -654,7 +606,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Get endTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndTime()
     {
@@ -685,15 +637,12 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->cId;
     }
 
-    /**
-     * @return bool
-     */
-    public function isModerated()
+    public function isModerated(): bool
     {
         return $this->moderated;
     }
 
-    public function setModerated($moderated): self
+    public function setModerated(bool $moderated): self
     {
         $this->moderated = $moderated;
 
@@ -745,7 +694,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CForumPost[]|ArrayCollection
+     * @return ArrayCollection|CForumPost[]
      */
     public function getPosts()
     {

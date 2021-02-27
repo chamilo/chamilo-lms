@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -215,16 +217,13 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this->post;
     }
 
-    public function setPost(CForumPost $post)
+    public function setPost(CForumPost $post): self
     {
         $this->post = $post;
 
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

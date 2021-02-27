@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,7 +39,7 @@ class COnlineConnected
     protected $cId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_connection", type="datetime", nullable=false)
      */
@@ -52,7 +55,7 @@ class COnlineConnected
     /**
      * Set lastConnection.
      *
-     * @param \DateTime $lastConnection
+     * @param DateTime $lastConnection
      *
      * @return COnlineConnected
      */
@@ -66,7 +69,7 @@ class COnlineConnected
     /**
      * Get lastConnection.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastConnection()
     {

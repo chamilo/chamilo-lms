@@ -1,23 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Portfolio.
  *
  * @ORM\Table(
- *  name="portfolio",
- *  indexes={
- *   @ORM\Index(name="user", columns={"user_id"}),
- *   @ORM\Index(name="course", columns={"c_id"}),
- *   @ORM\Index(name="session", columns={"session_id"}),
- *   @ORM\Index(name="category", columns={"category_id"})
- *  }
+ *     name="portfolio",
+ *     indexes={
+ *         @ORM\Index(name="user", columns={"user_id"}),
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="session", columns={"session_id"}),
+ *         @ORM\Index(name="category", columns={"category_id"})
+ *     }
  * )
  * @ORM\Entity()
  */
@@ -26,83 +29,61 @@ class Portfolio
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
      * @ORM\Column(name="content", type="text")
      */
-    protected $content;
+    protected string $content;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected $session;
+    protected Session $session;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="creation_date", type="datetime")
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="update_date", type="datetime")
      */
-    protected $updateDate;
+    protected DateTime $updateDate;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
+     * @ORM\Column(name="is_visible", type="boolean", options={"default":true})
      */
-    protected $isVisible = true;
+    protected bool $isVisible = true;
 
     /**
-     * @var \Chamilo\CoreBundle\Entity\PortfolioCategory
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioCategory", inversedBy="items")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    protected $category;
+    protected \Chamilo\CoreBundle\Entity\PortfolioCategory $category;
 
-    /**
-     * Portfolio constructor.
-     */
     public function __construct()
     {
         $this->category = new PortfolioCategory();
@@ -205,7 +186,7 @@ class Portfolio
      *
      * @return Portfolio
      */
-    public function setCreationDate(\DateTime $creationDate)
+    public function setCreationDate(DateTime $creationDate)
     {
         $this->creationDate = $creationDate;
 
@@ -215,7 +196,7 @@ class Portfolio
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
@@ -227,7 +208,7 @@ class Portfolio
      *
      * @return Portfolio
      */
-    public function setUpdateDate(\DateTime $updateDate)
+    public function setUpdateDate(DateTime $updateDate)
     {
         $this->updateDate = $updateDate;
 
@@ -237,7 +218,7 @@ class Portfolio
     /**
      * Get updateDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdateDate()
     {
@@ -268,12 +249,7 @@ class Portfolio
         return $this;
     }
 
-    /**
-     * Get isVisible.
-     *
-     * @return bool
-     */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return $this->isVisible;
     }

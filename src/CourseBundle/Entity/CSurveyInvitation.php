@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,14 +69,14 @@ class CSurveyInvitation
     protected $invitationCode;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="invitation_date", type="datetime", nullable=false)
      */
     protected $invitationDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="reminder_date", type="datetime", nullable=true)
      */
@@ -101,7 +104,7 @@ class CSurveyInvitation
     protected $groupId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="answered_at", type="datetime", nullable=true)
      */
@@ -182,7 +185,7 @@ class CSurveyInvitation
     /**
      * Set invitationDate.
      *
-     * @param \DateTime $invitationDate
+     * @param DateTime $invitationDate
      *
      * @return CSurveyInvitation
      */
@@ -196,7 +199,7 @@ class CSurveyInvitation
     /**
      * Get invitationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInvitationDate()
     {
@@ -206,7 +209,7 @@ class CSurveyInvitation
     /**
      * Set reminderDate.
      *
-     * @param \DateTime $reminderDate
+     * @param DateTime $reminderDate
      *
      * @return CSurveyInvitation
      */
@@ -220,7 +223,7 @@ class CSurveyInvitation
     /**
      * Get reminderDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getReminderDate()
     {
@@ -347,12 +350,12 @@ class CSurveyInvitation
         return $this->cId;
     }
 
-    public function getAnsweredAt(): \DateTime
+    public function getAnsweredAt(): DateTime
     {
         return $this->answeredAt;
     }
 
-    public function setAnsweredAt(\DateTime $answeredAt): self
+    public function setAnsweredAt(DateTime $answeredAt): self
     {
         $this->answeredAt = $answeredAt;
 

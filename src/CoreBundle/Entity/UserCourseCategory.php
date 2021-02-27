@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -10,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UserCourseCategory.
  *
- * @ORM\Table(name="user_course_category", indexes={@ORM\Index(name="idx_user_c_cat_uid", columns={"user_id"})})
+ * @ORM\Table(name="user_course_category", indexes={
+ *     @ORM\Index(name="idx_user_c_cat_uid", columns={"user_id"})
+ * })
  * @ORM\Entity
  */
 class UserCourseCategory

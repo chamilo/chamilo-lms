@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -40,6 +42,8 @@ class TrackEHotspot
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEHotspots")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\Course
      */
     protected $course;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -16,12 +18,16 @@ class ResourceRight
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @var int
      */
     protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", inversedBy="resourceRight")
      * @ORM\JoinColumn(name="resource_link_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\ResourceLink
      */
     protected $resourceLink;
 

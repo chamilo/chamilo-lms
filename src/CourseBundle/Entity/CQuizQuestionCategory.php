@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -112,9 +114,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(): string
     {
         return $this->title;
@@ -181,7 +180,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     }
 
     /**
-     * @return CQuizQuestion[]|Collection
+     * @return Collection|CQuizQuestion[]
      */
     public function getQuestions()
     {
@@ -189,7 +188,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     }
 
     /**
-     * @param CQuizQuestion[]|Collection $questions
+     * @param Collection|CQuizQuestion[] $questions
      */
     public function setQuestions($questions): self
     {

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,7 +65,7 @@ class TrackCourseRanking
     protected $users;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
@@ -224,7 +227,7 @@ class TrackCourseRanking
     /**
      * Set creationDate.
      *
-     * @param \DateTime $creationDate
+     * @param DateTime $creationDate
      *
      * @return TrackCourseRanking
      */
@@ -238,7 +241,7 @@ class TrackCourseRanking
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {

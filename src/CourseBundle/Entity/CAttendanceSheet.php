@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -21,20 +23,16 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceSheet
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="presence", type="boolean", nullable=false)
      */
-    protected $presence;
+    protected bool $presence;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")

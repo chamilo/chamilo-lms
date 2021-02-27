@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -53,7 +56,7 @@ class UserRelUser
     protected $relationType;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
@@ -110,7 +113,7 @@ class UserRelUser
     /**
      * Set lastEdit.
      *
-     * @param \DateTime $lastEdit
+     * @param DateTime $lastEdit
      *
      * @return UserRelUser
      */
@@ -124,7 +127,7 @@ class UserRelUser
     /**
      * Get lastEdit.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEdit()
     {

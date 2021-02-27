@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,28 +17,22 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelUserGroup
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var AccessUrl
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="usergroup_id", type="integer")
      */
-    protected $userGroupId;
+    protected int $userGroupId;
 
     /**
      * @return int

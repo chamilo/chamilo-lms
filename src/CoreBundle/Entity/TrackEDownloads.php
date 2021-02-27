@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,7 +38,7 @@ class TrackEDownloads
     protected $downUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="down_date", type="datetime", nullable=false)
      */
@@ -89,7 +92,7 @@ class TrackEDownloads
     /**
      * Set downDate.
      *
-     * @param \DateTime $downDate
+     * @param DateTime $downDate
      *
      * @return TrackEDownloads
      */
@@ -103,7 +106,7 @@ class TrackEDownloads
     /**
      * Get downDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDownDate()
     {

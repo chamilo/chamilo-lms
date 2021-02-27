@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -23,13 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CLinkCategory extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
@@ -43,11 +43,9 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
      * @var ArrayCollection|CLink[]
@@ -87,17 +85,11 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get categoryTitle.
-     */
     public function getCategoryTitle(): string
     {
         return $this->categoryTitle;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -105,9 +97,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;

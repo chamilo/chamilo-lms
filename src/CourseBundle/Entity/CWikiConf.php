@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -114,14 +117,14 @@ class CWikiConf
     protected $maxVersion;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="startdate_assig", type="datetime", nullable=true)
      */
     protected $startdateAssig;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="enddate_assig", type="datetime", nullable=true)
      */
@@ -377,7 +380,7 @@ class CWikiConf
     /**
      * Set startdateAssig.
      *
-     * @param \DateTime $startdateAssig
+     * @param DateTime $startdateAssig
      *
      * @return CWikiConf
      */
@@ -391,7 +394,7 @@ class CWikiConf
     /**
      * Get startdateAssig.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartdateAssig()
     {
@@ -401,7 +404,7 @@ class CWikiConf
     /**
      * Set enddateAssig.
      *
-     * @param \DateTime $enddateAssig
+     * @param DateTime $enddateAssig
      *
      * @return CWikiConf
      */
@@ -415,7 +418,7 @@ class CWikiConf
     /**
      * Get enddateAssig.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEnddateAssig()
     {

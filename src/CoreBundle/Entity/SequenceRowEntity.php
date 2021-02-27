@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -54,6 +56,8 @@ class SequenceRowEntity
     /**
      * @ORM\ManyToOne(targetEntity="SequenceTypeEntity")
      * @ORM\JoinColumn(name="sequence_type_entity_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\SequenceTypeEntity
      */
     protected $type;
 

@@ -21,11 +21,8 @@ class ResourceNodeListener
     protected Security $security;
     protected ToolChain $toolChain;
     protected RequestStack $request;
-    /**
-     * @var null
-     */
-    protected $accessUrl;
     protected ResourceNodeRepository $resourceNodeRepository;
+    //protected $accessUrl;
 
     public function __construct(
         SlugifyInterface $slugify,
@@ -38,7 +35,7 @@ class ResourceNodeListener
         $this->security = $security;
         $this->toolChain = $toolChain;
         $this->request = $request;
-        $this->accessUrl = null;
+        //$this->accessUrl = null;
         $this->resourceNodeRepository = $resourceNodeRepository;
     }
 

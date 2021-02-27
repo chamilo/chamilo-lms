@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEOnline.
  *
  * @ORM\Table(
- *  name="track_e_online",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="login_user_id", columns={"login_user_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *     name="track_e_online",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="login_user_id", columns={"login_user_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -29,7 +32,7 @@ class TrackEOnline
     protected $loginUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
      */
@@ -99,7 +102,7 @@ class TrackEOnline
     /**
      * Set loginDate.
      *
-     * @param \DateTime $loginDate
+     * @param DateTime $loginDate
      *
      * @return TrackEOnline
      */
@@ -113,7 +116,7 @@ class TrackEOnline
     /**
      * Get loginDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLoginDate()
     {

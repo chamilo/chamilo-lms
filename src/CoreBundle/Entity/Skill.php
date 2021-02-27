@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -14,8 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      normalizationContext={"groups"={"skill:read"}}
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     normalizationContext={"groups"={"skill:read"}}
  * )
  *
  * @ORM\Table(name="skill")
@@ -27,34 +31,39 @@ class Skill
     public const STATUS_ENABLED = 1;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="skills")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
-     */
-    protected $profile;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
-     */
-    protected $issuedSkills;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"}).
-     */
-    protected $items;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"}).
-     */
-    protected $courses;
-
-    /**
-     * @var int
      * @Groups({"skill:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="skills")
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
+     */
+    protected ?Profile $profile = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
+     *
+     * @var \Chamilo\CoreBundle\Entity\SkillRelUser[]|Collection
+     */
+    protected $issuedSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
+     *
+     * @var Collection|SkillRelItem[]
+     */
+    protected $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
+     *
+     * @var Collection|SkillRelCourse[]
+     */
+    protected $courses;
 
     /**
      * @Groups({"skill:read", "skill:write"})
@@ -80,41 +89,31 @@ class Skill
     protected string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    protected $accessUrlId;
+    protected int $accessUrlId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="icon", type="string", length=255, nullable=false)
      */
-    protected $icon;
+    protected string $icon;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="criteria", type="text", nullable=true)
      */
-    protected $criteria;
+    protected ?string $criteria;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="status", type="integer", nullable=false, options={"default": 1})
+     * @ORM\Column(name="status", type="integer", nullable=false, options={"default":1})
      */
-    protected $status;
+    protected int $status;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     public function __construct()
     {
@@ -317,11 +316,11 @@ class Skill
     /**
      * Set updatedAt.
      *
-     * @param \DateTime $updatedAt The update datetime
+     * @param DateTime $updatedAt The update datetime
      *
      * @return Skill
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
@@ -331,7 +330,7 @@ class Skill
     /**
      * Get updatedAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -371,7 +370,7 @@ class Skill
     /**
      * Get issuedSkills.
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getIssuedSkills()
     {
@@ -379,7 +378,7 @@ class Skill
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getItems()
     {
@@ -409,7 +408,7 @@ class Skill
             $found = false;
             /** @var SkillRelItem $item */
             foreach ($this->getItems() as $item) {
-                if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
+                if ($item->getItemId() === $itemId && $item->getItemType() === $typeId) {
                     $found = true;
 
                     break;
@@ -422,14 +421,14 @@ class Skill
         return false;
     }
 
-    public function addItem(SkillRelItem $skillRelItem)
+    public function addItem(SkillRelItem $skillRelItem): void
     {
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getCourses()
     {
@@ -465,7 +464,7 @@ class Skill
                 if ($sessionId === $searchSessionId) {
                     $sessionPassFilter = true;
                 }
-                if ($item->getCourse()->getId() == $searchItem->getCourse()->getId() &&
+                if ($item->getCourse()->getId() === $searchItem->getCourse()->getId() &&
                     $sessionPassFilter
                 ) {
                     $found = true;
@@ -480,7 +479,7 @@ class Skill
         return false;
     }
 
-    public function addToCourse(SkillRelCourse $item)
+    public function addToCourse(SkillRelCourse $item): void
     {
         $item->setSkill($this);
         $this->courses[] = $item;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -28,7 +30,7 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;
 
@@ -41,9 +43,6 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
         return (string) $this->getTitle();
     }
 
-    /**
-     * Set title.
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;

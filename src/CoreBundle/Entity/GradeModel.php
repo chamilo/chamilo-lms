@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,48 +17,36 @@ use Doctrine\ORM\Mapping as ORM;
 class GradeModel
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    protected $defaultLowestEvalExclude;
+    protected bool $defaultLowestEvalExclude;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_external_eval", type="boolean", nullable=true)
      */
-    protected $defaultExternalEval;
+    protected bool $defaultExternalEval;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_external_eval_prefix", type="string", length=140, nullable=true)
      */
-    protected $defaultExternalEvalPrefix;
+    protected string $defaultExternalEvalPrefix;
 
     /**
      * Set name.

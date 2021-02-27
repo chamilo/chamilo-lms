@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -24,18 +26,16 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=false)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     protected string $name;
 
@@ -45,15 +45,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_type", type="integer", nullable=false)
      */
-    protected $groupType;
+    protected int $groupType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
     protected ?string $picture;
@@ -64,25 +60,19 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $url;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="visibility", type="string", length=255, nullable=false)
      */
-    protected $visibility;
+    protected string $visibility;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="author_id", type="integer", nullable=true)
      */
-    protected $authorId;
+    protected ?string $authorId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="allow_members_leave_group", type="integer")
      */
-    protected $allowMembersToLeaveGroup;
+    protected int $allowMembersToLeaveGroup;
 
     /**
      * @var ArrayCollection|UsergroupRelUser[]
@@ -105,7 +95,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->users;
     }
 
-    public function setUsers($users)
+    public function setUsers($users): void
     {
         $this->users = new ArrayCollection();
 
@@ -114,7 +104,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         }
     }
 
-    public function addUsers(UsergroupRelUser $user)
+    public function addUsers(UsergroupRelUser $user): void
     {
         $user->setUsergroup($this);
         $this->users[] = $user;
@@ -123,10 +113,10 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * Remove $user.
      */
-    public function removeUsers(UsergroupRelUser $user)
+    public function removeUsers(UsergroupRelUser $user): void
     {
         foreach ($this->users as $key => $value) {
-            if ($value->getId() == $user->getId()) {
+            if ($value->getId() === $user->getId()) {
                 unset($this->users[$key]);
             }
         }
@@ -142,9 +132,6 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->id;
     }
 
-    /**
-     * Set name.
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -209,7 +196,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->visibility;
     }
 
-    public function setVisibility(string $visibility): Usergroup
+    public function setVisibility(string $visibility): self
     {
         $this->visibility = $visibility;
 
@@ -221,7 +208,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->url;
     }
 
-    public function setUrl(?string $url): Usergroup
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 
@@ -257,11 +244,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->picture;
     }
 
-    public function getDefaultIllustration($size): string
+    public function getDefaultIllustration(int $size): string
     {
-        $size = empty($size) ? 32 : (int) $size;
+        $size = empty($size) ? 32 : $size;
 
-        return "/img/icons/$size/group_na.png";
+        return "/img/icons/{$size}/group_na.png";
     }
 
     public function getResourceIdentifier(): int

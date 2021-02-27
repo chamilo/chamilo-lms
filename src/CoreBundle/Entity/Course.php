@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -13,7 +15,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CTool;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -37,10 +41,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
- *  name="course",
- *  indexes={
- *      @ORM\Index(name="directory", columns={"directory"}),
- *  }
+ *     name="course",
+ *     indexes={
+ *         @ORM\Index(name="directory", columns={"directory"}),
+ *     }
  * )
  * @UniqueEntity("code")
  * @UniqueEntity("visualCode")
@@ -58,7 +62,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @Groups({"course:read", "course_rel_user:read"})
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -73,7 +77,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
-    protected string $title;
+    protected ?string $title;
 
     /**
      * The course code.
@@ -83,10 +87,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @Groups({"course:read", "course:write", "course_rel_user:read"})
      *
      * @Gedmo\Slug(
-     *      fields={"title"},
-     *      updatable = false,
-     *      unique = true,
-     *      style = "upper"
+     *     fields={"title"},
+     *     updatable=false,
+     *     unique=true,
+     *     style="upper"
      * )
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
@@ -115,7 +119,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $resourceLinks;
 
     /**
-     * @var ArrayCollection|AccessUrlRelCourse[]
+     * @var AccessUrlRelCourse[]|ArrayCollection
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourse",
@@ -145,15 +149,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     protected $tools;
 
-    /**
-     * @var Session
-     */
-    protected $currentSession;
+    protected Session $currentSession;
 
-    /**
-     * @var AccessUrl
-     */
-    protected $currentUrl;
+    protected AccessUrl $currentUrl;
 
     /**
      * @var ArrayCollection|SkillRelCourse[]
@@ -206,11 +204,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SearchEngineRef", mappedBy="course", cascade={"persist", "remove"})
+     *
+     * @var \Chamilo\CoreBundle\Entity\SearchEngineRef[]|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
     protected $searchEngineRefs;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="course", cascade={"persist", "remove"})
+     *
+     * @var \Chamilo\CoreBundle\Entity\Templates[]|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
     protected $templates;
 
@@ -225,36 +227,35 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     //protected $sharedSurveys;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="directory", type="string", length=40, nullable=true, unique=false)
      */
-    protected $directory;
+    protected ?string $directory;
 
     /**
-     * @var string
      * @Groups({"course:read", "list"})
-     * @ORM\Column(name="course_language", type="string", length=20, nullable=true, unique=false)
+     * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
      */
-    protected $courseLanguage;
+    protected string $courseLanguage;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
-     * @var ArrayCollection
      * @ApiSubresource()
      * @Groups({"course:read", "course:write"})
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
      * @ORM\JoinTable(
-     *      name="course_rel_category",
-     *      joinColumns={@ORM\JoinColumn(name="course_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
+     *     name="course_rel_category",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
      * )
      */
-    protected $categories;
+    protected Collection $categories;
 
     /**
      * @var int Course visibility
@@ -262,131 +263,99 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @Groups({"course:read", "course:write"})
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="visibility", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
-    protected $visibility;
+    protected int $visibility;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="show_score", type="integer", nullable=true, unique=false)
      */
-    protected $showScore;
+    protected ?int $showScore;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true, unique=false)
      */
-    protected $tutorName;
+    protected ?string $tutorName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
      */
-    protected $visualCode;
+    protected ?string $visualCode;
 
     /**
-     * @var string
-     *
      * @Groups({"course:read", "list"})
      * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */
-    protected $departmentName;
+    protected ?string $departmentName;
 
     /**
-     * @var string
      * @Groups({"course:read", "list"})
      * @Assert\Url()
      *
      * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
      */
-    protected $departmentUrl;
+    protected ?string $departmentUrl;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
      */
-    protected $diskQuota;
+    protected ?int $diskQuota;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="last_visit", type="datetime", nullable=true, unique=false)
      */
-    protected $lastVisit;
+    protected ?DateTime $lastVisit;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="last_edit", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEdit;
+    protected ?DateTime $lastEdit;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="creation_date", type="datetime", nullable=true, unique=false)
+     * @ORM\Column(name="creation_date", type="datetime", nullable=false, unique=false)
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var \DateTime
      * @Groups({"course:read", "list"})
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
-    protected $expirationDate;
+    protected ?DateTime $expirationDate;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="subscribe", type="boolean", nullable=true, unique=false)
+     * @ORM\Column(name="subscribe", type="boolean", nullable=false, unique=false)
      */
-    protected $subscribe;
+    protected bool $subscribe;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="unsubscribe", type="boolean", nullable=true, unique=false)
+     * @ORM\Column(name="unsubscribe", type="boolean", nullable=false, unique=false)
      */
-    protected $unsubscribe;
+    protected bool $unsubscribe;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="registration_code", type="string", length=255, nullable=true, unique=false)
      */
-    protected $registrationCode;
+    protected ?string $registrationCode;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="legal", type="text", nullable=true, unique=false)
      */
-    protected $legal;
+    protected ?string $legal;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="activate_legal", type="integer", nullable=true, unique=false)
      */
-    protected $activateLegal;
+    protected ?int $activateLegal;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="add_teachers_to_sessions_courses", type="boolean", nullable=true)
      */
-    protected $addTeachersToSessionsCourses;
+    protected ?bool $addTeachersToSessionsCourses;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="course_type_id", type="integer", nullable=true, unique=false)
      */
-    protected $courseTypeId;
+    protected ?int $courseTypeId;
 
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
@@ -394,21 +363,19 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     //protected $curriculumCategories;
 
     /**
-     * @var Room
-     *
      * @ORM\ManyToOne(targetEntity="Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
-    protected $room;
+    protected Room $room;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
-        $this->lastVisit = new \DateTime();
-        $this->lastEdit = new \DateTime();
+        $this->creationDate = new DateTime();
+        $this->lastVisit = new DateTime();
+        $this->lastEdit = new DateTime();
         $this->description = '';
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
@@ -497,7 +464,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return CourseRelUser[]|ArrayCollection
+     * @return ArrayCollection|CourseRelUser[]
      */
     public function getUsers()
     {
@@ -505,7 +472,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return CourseRelUser[]|ArrayCollection
+     * @return ArrayCollection|CourseRelUser[]
      */
     public function getTeachers()
     {
@@ -516,7 +483,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return CourseRelUser[]|ArrayCollection
+     * @return ArrayCollection|CourseRelUser[]
      */
     public function getStudents()
     {
@@ -578,7 +545,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getTeachers()->matching($criteria)->count() > 0;
     }
 
-    public function hasGroup(CGroup $group)
+    public function hasGroup(CGroup $group): void
     {
         /*$criteria = Criteria::create()->where(
             Criteria::expr()->eq('groups', $group)
@@ -590,10 +557,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Remove $user.
      */
-    public function removeUsers(CourseRelUser $user)
+    public function removeUsers(CourseRelUser $user): void
     {
         foreach ($this->users as $key => $value) {
-            if ($value->getId() == $user->getId()) {
+            if ($value->getId() === $user->getId()) {
                 unset($this->users[$key]);
             }
         }
@@ -711,9 +678,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(): string
     {
         return $this->title;
@@ -780,27 +744,21 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function removeCategory(CourseCategory $category)
+    public function removeCategory(CourseCategory $category): void
     {
         $this->categories->removeElement($category);
     }
 
-    /**
-     * Set visibility.
-     */
-    public function setVisibility(int $visibility): Course
+    public function setVisibility(int $visibility): self
     {
         $this->visibility = $visibility;
 
         return $this;
     }
 
-    /**
-     * Get visibility.
-     */
     public function getVisibility(): int
     {
-        return (int) $this->visibility;
+        return $this->visibility;
     }
 
     /**
@@ -827,26 +785,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->showScore;
     }
 
-    /**
-     * Set tutorName.
-     *
-     * @param string $tutorName
-     *
-     * @return Course
-     */
-    public function setTutorName($tutorName)
+    public function setTutorName(?string $tutorName): self
     {
         $this->tutorName = $tutorName;
 
         return $this;
     }
 
-    /**
-     * Get tutorName.
-     *
-     * @return string
-     */
-    public function getTutorName()
+    public function getTutorName(): ?string
     {
         return $this->tutorName;
     }
@@ -926,13 +872,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set diskQuota.
      *
-     * @param int $diskQuota
-     *
      * @return Course
      */
-    public function setDiskQuota($diskQuota)
+    public function setDiskQuota(int $diskQuota)
     {
-        $this->diskQuota = (int) $diskQuota;
+        $this->diskQuota = $diskQuota;
 
         return $this;
     }
@@ -950,7 +894,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set lastVisit.
      *
-     * @param \DateTime $lastVisit
+     * @param DateTime $lastVisit
      *
      * @return Course
      */
@@ -964,7 +908,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Get lastVisit.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastVisit()
     {
@@ -974,7 +918,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set lastEdit.
      *
-     * @param \DateTime $lastEdit
+     * @param DateTime $lastEdit
      *
      * @return Course
      */
@@ -988,7 +932,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Get lastEdit.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEdit()
     {
@@ -998,7 +942,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set creationDate.
      *
-     * @param \DateTime $creationDate
+     * @param DateTime $creationDate
      *
      * @return Course
      */
@@ -1012,7 +956,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
@@ -1022,7 +966,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set expirationDate.
      *
-     * @param \DateTime $expirationDate
+     * @param DateTime $expirationDate
      *
      * @return Course
      */
@@ -1036,7 +980,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Get expirationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpirationDate()
     {
@@ -1228,7 +1172,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
             self::OPEN_WORLD,
         ];
 
-        return in_array($this->visibility, $activeVisibilityList);
+        return in_array($this->visibility, $activeVisibilityList, true);
     }
 
     /**
@@ -1273,7 +1217,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $list = $this->getSessions();
         /** @var SessionRelCourse $item */
         foreach ($list as $item) {
-            if ($item->getSession()->getId() == $session->getId()) {
+            if ($item->getSession()->getId() === $session->getId()) {
                 $this->currentSession = $session;
 
                 break;
@@ -1288,7 +1232,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $urlList = $this->getUrls();
         /** @var AccessUrlRelCourse $item */
         foreach ($urlList as $item) {
-            if ($item->getUrl()->getId() == $url->getId()) {
+            if ($item->getUrl()->getId() === $url->getId()) {
                 $this->currentUrl = $url;
 
                 break;
@@ -1348,7 +1292,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function getDefaultIllustration($size): string
+    public function getDefaultIllustration(int $size): string
     {
         return '/img/icons/32/course.png';
     }

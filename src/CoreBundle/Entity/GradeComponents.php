@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,41 +17,31 @@ use Doctrine\ORM\Mapping as ORM;
 class GradeComponents
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="percentage", type="string", length=255, nullable=false)
      */
-    protected $percentage;
+    protected string $percentage;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="acronym", type="string", length=255, nullable=false)
      */
-    protected $acronym;
+    protected string $acronym;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="grade_model_id", type="integer", nullable=false)
      */
-    protected $gradeModelId;
+    protected int $gradeModelId;
 
     /**
      * Set percentage.

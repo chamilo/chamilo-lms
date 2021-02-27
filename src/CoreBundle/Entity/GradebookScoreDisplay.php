@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -9,7 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GradebookScoreDisplay.
  *
- * @ORM\Table(name="gradebook_score_display", indexes={@ORM\Index(name="category_id", columns={"category_id"})})
+ * @ORM\Table(name="gradebook_score_display", indexes={
+ *     @ORM\Index(name="category_id", columns={"category_id"})
+ * })
  * @ORM\Entity
  */
 class GradebookScoreDisplay
@@ -37,7 +41,7 @@ class GradebookScoreDisplay
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
-     * @ORM\JoinColumn(name="category_id",referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected GradebookCategory $category;
 

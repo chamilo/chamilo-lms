@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -12,11 +15,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="track_e_attempt_recording",
  *     indexes={
- *          @ORM\Index(name="exe_id", columns={"exe_id"}),
- *          @ORM\Index(name="question_id", columns={"question_id"}),
- *          @ORM\Index(name="session_id", columns={"session_id"})
- * })
- * @ORM\Entity
+ *         @ORM\Index(name="exe_id", columns={"exe_id"}),
+ *         @ORM\Index(name="question_id", columns={"question_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     })
+ *     @ORM\Entity
  */
 class TrackEAttemptRecording
 {
@@ -51,7 +54,7 @@ class TrackEAttemptRecording
     protected $marks;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="insert_date", type="datetime", nullable=false)
@@ -166,7 +169,7 @@ class TrackEAttemptRecording
     /**
      * Set insertDate.
      *
-     * @param \DateTime $insertDate
+     * @param DateTime $insertDate
      *
      * @return TrackEAttemptRecording
      */
@@ -180,7 +183,7 @@ class TrackEAttemptRecording
     /**
      * Get insertDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDate()
     {

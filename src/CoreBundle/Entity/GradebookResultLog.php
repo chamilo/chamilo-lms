@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -42,7 +45,7 @@ class GradebookResultLog
     protected $evaluationId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -91,7 +94,7 @@ class GradebookResultLog
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return GradebookResultLog
      */
@@ -105,7 +108,7 @@ class GradebookResultLog
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {

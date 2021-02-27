@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,22 +17,18 @@ use Doctrine\ORM\Mapping as ORM;
 class ClassUser
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="class_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $classId;
+    protected int $classId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
      * Set classId.

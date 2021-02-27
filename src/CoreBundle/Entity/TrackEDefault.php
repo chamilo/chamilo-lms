@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEDefault.
  *
  * @ORM\Table(
- *  name="track_e_default",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session", columns={"session_id"}),
- *      @ORM\Index(name="idx_default_user_id", columns={"default_user_id"})
- *  }
+ *     name="track_e_default",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="session", columns={"session_id"}),
+ *         @ORM\Index(name="idx_default_user_id", columns={"default_user_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -45,7 +48,7 @@ class TrackEDefault
     protected $cId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="default_date", type="datetime", nullable=false)
      */
@@ -130,7 +133,7 @@ class TrackEDefault
     /**
      * Set defaultDate.
      *
-     * @param \DateTime $defaultDate
+     * @param DateTime $defaultDate
      *
      * @return TrackEDefault
      */
@@ -144,7 +147,7 @@ class TrackEDefault
     /**
      * Get defaultDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDefaultDate()
     {

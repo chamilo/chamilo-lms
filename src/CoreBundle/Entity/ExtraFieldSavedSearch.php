@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -20,13 +22,11 @@ class ExtraFieldSavedSearch
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
@@ -45,7 +45,7 @@ class ExtraFieldSavedSearch
      *
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
-    protected $value;
+    protected ?array $value;
 
     /**
      * Get id.

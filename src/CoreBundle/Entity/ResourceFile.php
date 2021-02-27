@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -10,6 +12,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -25,7 +29,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ApiResource(
  *     iri="http://schema.org/MediaObject",
  *     normalizationContext={
- *      "groups"={"resource_file:read", "resource_node:read", "document:read", "media_object_read"}
+ *         "groups"={"resource_file:read", "resource_node:read", "document:read", "media_object_read"}
  *     },
  *     collectionOperations={
  *         "post"={
@@ -57,7 +61,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         "get"
  *     }
  * )
- * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"id", "name", "size", "updatedAt"})
  * @ORM\Entity
@@ -74,6 +78,8 @@ class ResourceFile
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
+     *
+     * @var int
      */
     protected $id;
 
@@ -82,6 +88,8 @@ class ResourceFile
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @var string
      */
     protected $name;
 
@@ -98,12 +106,10 @@ class ResourceFile
     protected ?string $originalName;
 
     /**
-     * @var array
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $dimensions;
+    protected ?array $dimensions;
 
     /**
      * @var int
@@ -140,6 +146,8 @@ class ResourceFile
     protected ResourceNode $resourceNode;
 
     /**
+     * @var string[]
+     *
      * @ORM\Column(type="array", nullable=true)
      */
     protected ?array $metadata;
@@ -165,7 +173,7 @@ class ResourceFile
     protected ?string $description;
 
     /**
-     * @var \DateTime|\DateTimeImmutable
+     * @var DateTime|DateTimeImmutable
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
@@ -410,7 +418,7 @@ class ResourceFile
         if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new DateTimeImmutable();
         }
 
         return $this;

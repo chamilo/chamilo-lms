@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -10,6 +12,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,36 +25,37 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     normalizationContext={"groups"={"course_category:read", "course:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"course_category:write", "course:write"}},
  * )
- * @ApiFilter(SearchFilter::class, properties={"name": "partial", "code": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial", "code":"partial"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"name", "code"})
  * @ORM\Table(
- *  name="course_category",
- *  uniqueConstraints={
- *      @ORM\UniqueConstraint(name="code", columns={"code"})
- *  },
- *  indexes={
- *      @ORM\Index(name="parent_id", columns={"parent_id"}),
- *      @ORM\Index(name="tree_pos", columns={"tree_pos"})
- *  }
+ *     name="course_category",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="code", columns={"code"})
+ *     },
+ *     indexes={
+ *         @ORM\Index(name="parent_id", columns={"parent_id"}),
+ *         @ORM\Index(name="tree_pos", columns={"tree_pos"})
+ *     }
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\CourseCategoryRepository")
  */
 class CourseCategory
 {
     /**
-     * @var int
      * @Groups({"course_category:read", "course:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
+     *
+     * @var \Chamilo\CoreBundle\Entity\CourseCategory[]|\CourseCategory[]|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
-    protected $children;
+    protected \Doctrine\Common\Collections\Collection $children;
 
     /**
      * @Assert\NotBlank()
@@ -71,61 +75,50 @@ class CourseCategory
      * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected $parent;
+    protected ?CourseCategory $parent;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="tree_pos", type="integer", nullable=true)
      */
-    protected $treePos;
+    protected ?int $treePos;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="children_count", type="smallint", nullable=true)
      */
-    protected $childrenCount;
+    protected ?int $childrenCount;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="auth_course_child", type="string", length=40, nullable=true)
      */
-    protected $authCourseChild;
+    protected ?string $authCourseChild;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
      */
-    protected $authCatChild;
+    protected ?string $authCatChild;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
-    protected $image;
+    protected ?string $image;
 
     /**
-     * @var string
      * @Groups({"course_category:read", "course_category:write"})
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory", mappedBy="courseCategory", cascade={"persist"}, orphanRemoval=true)
+     *
+     * @var \Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory[]|\Doctrine\Common\Collections\Collection
      */
     protected $urls;
 
     /**
-     * @var ArrayCollection
-     *
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="categories")
      */
-    protected $courses;
+    protected Collection $courses;
 
     public function __construct()
     {
@@ -138,7 +131,7 @@ class CourseCategory
     {
         $name = strip_tags($this->name);
 
-        return "$name ({$this->code})";
+        return "{$name} ({$this->code})";
     }
 
     /**
@@ -157,7 +150,7 @@ class CourseCategory
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getChildren()
     {
@@ -327,7 +320,7 @@ class CourseCategory
         return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -351,7 +344,7 @@ class CourseCategory
         return $this;
     }
 
-    public function addCourse(Course $course)
+    public function addCourse(Course $course): void
     {
         $this->courses[] = $course;
     }

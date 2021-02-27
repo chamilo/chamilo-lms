@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -59,7 +61,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected $active;
 
     /**
-     * @var CThematicPlan[]|ArrayCollection
+     * @var ArrayCollection|CThematicPlan[]
      *
      * @ORM\OneToMany(
      *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
@@ -68,7 +70,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected $plans;
 
     /**
-     * @var CThematicAdvance[]|ArrayCollection
+     * @var ArrayCollection|CThematicAdvance[]
      *
      * @ORM\OrderBy({"startDate" = "ASC"})
      *
@@ -111,9 +113,6 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set content.
-     */
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -121,9 +120,6 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get content.
-     */
     public function getContent(): ?string
     {
         return $this->content;
@@ -179,7 +175,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CThematicPlan[]|ArrayCollection
+     * @return ArrayCollection|CThematicPlan[]
      */
     public function getPlans()
     {
@@ -187,7 +183,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CThematicAdvance[]|ArrayCollection
+     * @return ArrayCollection|CThematicAdvance[]
      */
     public function getAdvances()
     {

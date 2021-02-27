@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,13 +28,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Message
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
@@ -53,7 +54,7 @@ class Message
     /**
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
-    protected \DateTime $sendDate;
+    protected DateTime $sendDate;
 
     /**
      * @Assert\NotBlank
@@ -69,11 +70,9 @@ class Message
     protected string $content;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    protected $groupId;
+    protected int $groupId;
 
     /**
      * @var ArrayCollection|Message[]
@@ -88,18 +87,14 @@ class Message
     protected ?Message $parent;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
-    protected $updateDate;
+    protected ?DateTime $updateDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="votes", type="integer", nullable=true)
      */
-    protected $votes;
+    protected ?int $votes;
 
     /**
      * @var ArrayCollection|MessageAttachment[]
@@ -117,7 +112,7 @@ class Message
 
     public function __construct()
     {
-        $this->sendDate = new \DateTime('now');
+        $this->sendDate = new DateTime('now');
         $this->updateDate = $this->sendDate;
         $this->content = '';
         $this->attachments = new ArrayCollection();
@@ -126,9 +121,6 @@ class Message
         $this->votes = 0;
     }
 
-    /**
-     * Set userSender.
-     */
     public function setUserSender(User $userSender): self
     {
         $this->userSender = $userSender;
@@ -136,17 +128,11 @@ class Message
         return $this;
     }
 
-    /**
-     * Get userSender.
-     */
     public function getUserSender(): User
     {
         return $this->userSender;
     }
 
-    /**
-     * Set userReceiver.
-     */
     public function setUserReceiver(User $userReceiver): self
     {
         $this->userReceiver = $userReceiver;
@@ -164,9 +150,6 @@ class Message
         return $this->userReceiver;
     }
 
-    /**
-     * Set msgStatus.
-     */
     public function setMsgStatus(int $msgStatus): self
     {
         $this->msgStatus = $msgStatus;
@@ -174,9 +157,6 @@ class Message
         return $this;
     }
 
-    /**
-     * Get msgStatus.
-     */
     public function getMsgStatus(): int
     {
         return $this->msgStatus;
@@ -185,7 +165,7 @@ class Message
     /**
      * Set sendDate.
      *
-     * @param \DateTime $sendDate
+     * @param DateTime $sendDate
      *
      * @return Message
      */
@@ -199,7 +179,7 @@ class Message
     /**
      * Get sendDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSendDate()
     {
@@ -277,7 +257,7 @@ class Message
     /**
      * Set updateDate.
      *
-     * @param \DateTime $updateDate
+     * @param DateTime $updateDate
      *
      * @return Message
      */
@@ -291,7 +271,7 @@ class Message
     /**
      * Get updateDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdateDate()
     {
@@ -333,7 +313,7 @@ class Message
     /**
      * Get attachments.
      *
-     * @return MessageAttachment[]|ArrayCollection
+     * @return ArrayCollection|MessageAttachment[]
      */
     public function getAttachments()
     {

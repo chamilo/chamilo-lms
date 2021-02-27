@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -12,13 +14,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(
  *     name="settings_current",
- *     options={"row_format":"DYNAMIC"},
+ *     options={"row_format"="DYNAMIC"},
  *     uniqueConstraints={
- *     @ORM\UniqueConstraint(
- *         name="unique_setting",
- *         columns={"variable", "subkey", "access_url"})
+ *         @ORM\UniqueConstraint(
+ *             name="unique_setting",
+ *             columns={"variable", "subkey", "access_url"})
  *     },
- *     indexes={@ORM\Index(name="access_url", columns={"access_url"})}
+ *     indexes={
+ *         @ORM\Index(name="access_url", columns={"access_url"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -43,7 +47,7 @@ class SettingsCurrent
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="variable", type="string", length=190, nullable=true)
+     * @ORM\Column(name="variable", type="string", length=190, nullable=false)
      */
     protected string $variable;
 
@@ -58,32 +62,24 @@ class SettingsCurrent
     protected ?string $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
-    protected $category;
+    protected ?string $category;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="selected_value", type="text", nullable=true)
      */
-    protected $selectedValue;
+    protected ?string $selectedValue;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
      * @var string
@@ -109,7 +105,7 @@ class SettingsCurrent
     /**
      * @var int
      *
-     * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default": 0 } )
+     * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default":0 })
      */
     protected $accessUrlLocked = 0;
 

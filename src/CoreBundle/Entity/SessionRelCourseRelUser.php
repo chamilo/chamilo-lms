@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -13,15 +15,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Class SessionRelCourseRelUser.
  *
  * @ApiResource(
- *      shortName="SessionSubscription",
- *      normalizationContext={"groups"={"session_rel_course_rel_user:read", "user:read"}}
+ *     shortName="SessionSubscription",
+ *     normalizationContext={"groups"={"session_rel_course_rel_user:read", "user:read"}}
  * )
  * @ORM\Table(
- *      name="session_rel_course_rel_user",
- *      indexes={
- *          @ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"user_id"}),
- *          @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})
- *      }
+ *     name="session_rel_course_rel_user",
+ *     indexes={
+ *         @ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"user_id"}),
+ *         @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -31,13 +33,16 @@ class SessionRelCourseRelUser
 
     public const STATUS_STUDENT = 0;
     public const STATUS_COURSE_COACH = 2;
+    /**
+     * @var string[]
+     */
     public array $statusList = [
         0 => 'student',
         2 => 'course_coach',
     ];
 
     /**
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
@@ -64,21 +69,19 @@ class SessionRelCourseRelUser
     protected Course $course;
 
     /**
-     * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="visibility", type="integer")
      */
     protected int $visibility;
 
     /**
-     * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer")
      */
     protected int $status;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="legal_agreement", type="integer", nullable=false, unique=false)
      */
-    protected $legalAgreement;
+    protected int $legalAgreement;
 
     public function __construct()
     {
@@ -128,17 +131,11 @@ class SessionRelCourseRelUser
         return $this;
     }
 
-    /**
-     * Get visibility.
-     */
     public function getVisibility(): int
     {
         return $this->visibility;
     }
 
-    /**
-     * Set status.
-     */
     public function setStatus(int $status): self
     {
         $this->status = $status;
@@ -146,9 +143,6 @@ class SessionRelCourseRelUser
         return $this;
     }
 
-    /**
-     * Get status.
-     */
     public function getStatus(): int
     {
         return $this->status;

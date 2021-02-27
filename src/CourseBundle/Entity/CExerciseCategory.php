@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -54,10 +56,11 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
      *
      * @ORM\Column(name="position", type="integer")
      */
-    protected $position;
+    protected int $position;
 
     public function __construct()
     {
+        $this->position = 0;
         $this->description = '';
     }
 
@@ -110,12 +113,12 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
-    public function setPosition($position): self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 

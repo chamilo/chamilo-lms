@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,13 +23,11 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceCalendar
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
@@ -35,18 +36,14 @@ class CAttendanceCalendar
     protected CAttendance $attendance;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_time", type="datetime", nullable=false)
      */
-    protected $dateTime;
+    protected DateTime $dateTime;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="done_attendance", type="boolean", nullable=false)
      */
-    protected $doneAttendance;
+    protected bool $doneAttendance;
 
     public function getIid(): int
     {
@@ -68,7 +65,7 @@ class CAttendanceCalendar
     /**
      * Set dateTime.
      *
-     * @param \DateTime $dateTime
+     * @param DateTime $dateTime
      */
     public function setDateTime($dateTime): self
     {
@@ -80,7 +77,7 @@ class CAttendanceCalendar
     /**
      * Get dateTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateTime()
     {

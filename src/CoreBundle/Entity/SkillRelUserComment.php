@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SkillRelUserComment class.
  *
  * @ORM\Table(
- *  name="skill_rel_user_comment",
- *  indexes={
- *      @ORM\Index(name="idx_select_su_giver", columns={"skill_rel_user_id", "feedback_giver_id"})
- *  }
+ *     name="skill_rel_user_comment",
+ *     indexes={
+ *         @ORM\Index(name="idx_select_su_giver", columns={"skill_rel_user_id", "feedback_giver_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -31,12 +34,16 @@ class SkillRelUserComment
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", inversedBy="comments")
      * @ORM\JoinColumn(name="skill_rel_user_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\SkillRelUser
      */
     protected $skillRelUser;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="commentedUserSkills")
      * @ORM\JoinColumn(name="feedback_giver_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\User
      */
     protected $feedbackGiver;
 
@@ -55,7 +62,7 @@ class SkillRelUserComment
     protected $feedbackValue;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="feedback_datetime", type="datetime", nullable=false)
      */
@@ -114,7 +121,7 @@ class SkillRelUserComment
     /**
      * Get feedbackDateTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getFeedbackDateTime()
     {
@@ -178,7 +185,7 @@ class SkillRelUserComment
      *
      * @return SkillRelUserComment
      */
-    public function setFeedbackDateTime(\DateTime $feedbackDateTime)
+    public function setFeedbackDateTime(DateTime $feedbackDateTime)
     {
         $this->feedbackDateTime = $feedbackDateTime;
 

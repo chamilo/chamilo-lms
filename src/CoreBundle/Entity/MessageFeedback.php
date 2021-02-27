@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -25,52 +28,40 @@ class MessageFeedback
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Message
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="likes")
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $message;
+    protected Message $message;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="liked", type="boolean", options={"default": false})
+     * @ORM\Column(name="liked", type="boolean", options={"default":false})
      */
-    protected $liked;
+    protected bool $liked;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="disliked", type="boolean", options={"default": false})
+     * @ORM\Column(name="disliked", type="boolean", options={"default":false})
      */
-    protected $disliked;
+    protected bool $disliked;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
      * @return int
@@ -98,10 +89,7 @@ class MessageFeedback
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isLiked()
+    public function isLiked(): bool
     {
         return $this->liked;
     }
@@ -118,10 +106,7 @@ class MessageFeedback
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDisliked()
+    public function isDisliked(): bool
     {
         return $this->disliked;
     }
@@ -139,7 +124,7 @@ class MessageFeedback
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -149,7 +134,7 @@ class MessageFeedback
     /**
      * @return MessageFeedback
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 

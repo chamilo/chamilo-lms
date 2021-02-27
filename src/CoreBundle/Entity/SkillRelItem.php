@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -18,102 +21,79 @@ class SkillRelItem
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="items")
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
      */
-    protected $skill;
+    protected ?\Chamilo\CoreBundle\Entity\Skill $skill = null;
 
     /**
      * See ITEM_TYPE_* constants in api.lib.php.
      *
-     * @var int
-     *
      * @ORM\Column(name="item_type", type="integer", nullable=false)
      */
-    protected $itemType;
+    protected int $itemType;
 
     /**
      * iid value.
      *
-     * @var int
-     *
      * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
-    protected $itemId;
+    protected int $itemId;
 
     /**
      * A text expressing what has to be achieved
      * (view, finish, get more than X score, finishing all children skills, etc),.
      *
-     * @var string
-     *
      * @ORM\Column(name="obtain_conditions", type="string", length=255, nullable=true)
      */
-    protected $obtainConditions;
+    protected ?string $obtainConditions;
 
     /**
      * if it requires validation by a teacher.
      *
-     * @var bool
-     *
      * @ORM\Column(name="requires_validation", type="boolean")
      */
-    protected $requiresValidation;
+    protected bool $requiresValidation;
 
     /**
      *  Set to false if this is a children skill used only to obtain a higher-level skill,
      * so a skill with is_real = false never appears in a student portfolio/backpack.
      *
-     * @var bool
-     *
      * @ORM\Column(name="is_real", type="boolean")
      */
-    protected $isReal;
+    protected bool $isReal;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $courseId;
+    protected ?int $courseId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    protected $createdBy;
+    protected int $createdBy;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="updated_by", type="integer", nullable=false)
      */
-    protected $updatedBy;
+    protected int $updatedBy;
 
-    /**
-     * SkillRelItem constructor.
-     */
     public function __construct()
     {
-        $this->createdAt = new \DateTime('now');
-        $this->updatedAt = new \DateTime('now');
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
         $this->isReal = false;
         $this->requiresValidation = false;
     }
@@ -184,10 +164,7 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isRequiresValidation()
+    public function isRequiresValidation(): bool
     {
         return $this->requiresValidation;
     }
@@ -204,10 +181,7 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isReal()
+    public function isReal(): bool
     {
         return $this->isReal;
     }
@@ -225,7 +199,7 @@ class SkillRelItem
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -233,7 +207,7 @@ class SkillRelItem
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return SkillRelItem
      */
@@ -245,7 +219,7 @@ class SkillRelItem
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -253,7 +227,7 @@ class SkillRelItem
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return SkillRelItem
      */

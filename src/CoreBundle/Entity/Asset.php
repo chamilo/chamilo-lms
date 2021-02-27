@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -33,7 +37,7 @@ class Asset
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
@@ -49,8 +53,8 @@ class Asset
      *     Asset::SCORM,
      *     Asset::WATERMARK,
      *     Asset::CSS
-     *     },
-     *     message="Choose a valid category."
+     * },
+     * message="Choose a valid category."
      * )
      *
      * @ORM\Column(type="string", length=255)
@@ -58,8 +62,6 @@ class Asset
     protected ?string $category;
 
     /**
-     * @var File
-     *
      * @Assert\NotNull()
      * @Vich\UploadableField(
      *     mapping="assets",
@@ -70,7 +72,7 @@ class Asset
      *     dimensions="dimensions"
      * )
      */
-    protected $file;
+    protected File $file;
 
     /**
      * @ORM\Column(type="boolean")
@@ -89,12 +91,10 @@ class Asset
     protected ?string $originalName;
 
     /**
-     * @var array
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $dimensions;
+    protected ?array $dimensions;
 
     /**
      * @ORM\Column(type="integer")
@@ -117,7 +117,7 @@ class Asset
     protected ?string $description;
 
     /**
-     * @var \DateTime|\DateTimeImmutable
+     * @var DateTime|DateTimeImmutable
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
@@ -129,6 +129,11 @@ class Asset
         $this->dimensions = [];
         $this->size = 0;
         $this->compressed = false;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getOriginalName();
     }
 
     /**
@@ -147,11 +152,6 @@ class Asset
     public function getFileUrl()
     {
         return $this->getFolder().'/'.$this->getOriginalName();
-    }
-
-    public function __toString(): string
-    {
-        return $this->getOriginalName();
     }
 
     public function isImage(): bool
@@ -330,7 +330,7 @@ class Asset
         if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new DateTimeImmutable();
         }
 
         return $this;
@@ -341,7 +341,7 @@ class Asset
         return $this->title;
     }
 
-    public function setTitle($title): Asset
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -353,7 +353,7 @@ class Asset
         return $this->category;
     }
 
-    public function setCategory(string $category): Asset
+    public function setCategory(string $category): self
     {
         $this->category = $category;
 

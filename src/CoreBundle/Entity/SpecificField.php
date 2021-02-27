@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,8 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *     name="specific_field",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_specific_field__code", columns={"code"})})
- * @ORM\Entity
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="unique_specific_field__code", columns={"code"})
+ *     })
+ *     @ORM\Entity
  */
 class SpecificField
 {

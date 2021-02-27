@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -64,7 +67,7 @@ class CBlogComment
     protected $authorId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
      */
@@ -173,7 +176,7 @@ class CBlogComment
     /**
      * Set dateCreation.
      *
-     * @param \DateTime $dateCreation
+     * @param DateTime $dateCreation
      *
      * @return CBlogComment
      */
@@ -187,7 +190,7 @@ class CBlogComment
     /**
      * Get dateCreation.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateCreation()
     {

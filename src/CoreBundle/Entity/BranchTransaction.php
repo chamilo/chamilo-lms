@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,92 +18,68 @@ use Doctrine\ORM\Mapping as ORM;
 class BranchTransaction
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Room
-     *
      * @ORM\ManyToOne(targetEntity="BranchTransactionStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
-    protected $branchTransactionStatus;
+    protected Room $branchTransactionStatus;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="transaction_id", type="bigint", nullable=false, unique=false)
+     * @ORM\Column(name="transaction_id", type="bigint")
      */
-    protected $externalTransactionId;
+    protected int $externalTransactionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="action", type="string", length=20, nullable=true, unique=false)
      */
-    protected $action;
+    protected ?string $action;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="item_id", type="string", length=255, nullable=true, unique=false)
      */
-    protected $itemId;
+    protected ?string $itemId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="origin", type="string", length=255, nullable=true, unique=false)
      */
-    protected $origin;
+    protected ?string $origin;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="dest_id", type="string", length=255, nullable=true, unique=false)
      */
-    protected $destId;
+    protected ?string $destId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="external_info", type="string", length=255, nullable=true, unique=false)
      */
-    protected $externalInfo;
+    protected ?string $externalInfo;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="time_insert", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="time_insert", type="datetime")
      */
-    protected $timeInsert;
+    protected DateTime $timeInsert;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="time_update", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="time_update", type="datetime")
      */
-    protected $timeUpdate;
+    protected DateTime $timeUpdate;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="failed_attempts", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="failed_attempts", type="integer")
      */
-    protected $failedAttempts;
+    protected int $failedAttempts;
 
     /**
-     * @var BranchSync
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
      * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
      */
-    protected $branch;
+    protected BranchSync $branch;
 
     /**
      * Get id.
@@ -185,7 +164,7 @@ class BranchTransaction
     /**
      * Set timeInsert.
      *
-     * @param \DateTime $timeInsert
+     * @param DateTime $timeInsert
      *
      * @return BranchTransaction
      */
@@ -199,7 +178,7 @@ class BranchTransaction
     /**
      * Get timeInsert.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTimeInsert()
     {
@@ -209,7 +188,7 @@ class BranchTransaction
     /**
      * Set timeUpdate.
      *
-     * @param \DateTime $timeUpdate
+     * @param DateTime $timeUpdate
      *
      * @return BranchTransaction
      */
@@ -223,7 +202,7 @@ class BranchTransaction
     /**
      * Get timeUpdate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTimeUpdate()
     {

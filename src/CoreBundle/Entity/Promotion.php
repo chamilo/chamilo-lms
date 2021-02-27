@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -19,13 +21,11 @@ class Promotion
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
@@ -105,9 +105,6 @@ class Promotion
         return $this->description;
     }
 
-    /**
-     * Set career.
-     */
     public function setCareer(Career $career): self
     {
         $this->career = $career;

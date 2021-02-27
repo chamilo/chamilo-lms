@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -128,14 +131,14 @@ class Ticket
     protected $source;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=true, unique=false)
      */
     protected $startDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="end_date", type="datetime", nullable=true, unique=false)
      */
@@ -144,14 +147,14 @@ class Ticket
     /**
      * @var int
      *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
     protected $insertUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
     protected $insertDateTime;
 
@@ -163,7 +166,7 @@ class Ticket
     protected $lastEditUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */

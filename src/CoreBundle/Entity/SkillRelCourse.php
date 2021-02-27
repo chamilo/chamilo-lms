@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -18,45 +21,34 @@ class SkillRelCourse
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Skill
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="courses")
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
      */
-    protected $skill;
+    protected Skill $skill;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="skills", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="skills", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
-    protected $session;
+    protected Session $session;
 
-    /**
-     * SkillRelItem constructor.
-     */
     public function __construct()
     {
-        $this->createdAt = new \DateTime('now');
-        $this->updatedAt = new \DateTime('now');
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
     }
 
     /**
@@ -128,7 +120,7 @@ class SkillRelCourse
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -136,7 +128,7 @@ class SkillRelCourse
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return SkillRelCourse
      */
@@ -148,7 +140,7 @@ class SkillRelCourse
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -156,7 +148,7 @@ class SkillRelCourse
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return SkillRelCourse
      */

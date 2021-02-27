@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -39,28 +42,26 @@ class ExtraField
     public const PORTFOLIO_TYPE = 19;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @ORM\Column(name="extra_field_type", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="extra_field_type", type="integer")
      */
     protected int $extraFieldType;
 
     /**
-     * @ORM\Column(name="field_type", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="field_type", type="integer")
      */
     protected int $fieldType;
 
     /**
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="variable", type="string", length=255, nullable=false, unique=false)
+     * @ORM\Column(name="variable", type="string", length=255)
      */
     protected string $variable;
 
@@ -80,59 +81,47 @@ class ExtraField
     protected ?string $helperText;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_value", type="text", nullable=true, unique=false)
      */
-    protected $defaultValue;
+    protected ?string $defaultValue;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="field_order", type="integer", nullable=true, unique=false)
      */
-    protected $fieldOrder;
+    protected ?int $fieldOrder;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
      */
-    protected $visibleToSelf;
+    protected ?bool $visibleToSelf;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
      */
-    protected $visibleToOthers;
+    protected ?bool $visibleToOthers;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="changeable", type="boolean", nullable=true, unique=false)
      */
-    protected $changeable;
+    protected ?bool $changeable;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="filter", type="boolean", nullable=true, unique=false)
      */
-    protected $filter;
+    protected ?bool $filter;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
+     *
+     * @var \Chamilo\CoreBundle\Entity\ExtraFieldOptions[]|\Doctrine\Common\Collections\Collection
      */
     protected $options;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     public function __construct()
     {
@@ -295,10 +284,7 @@ class ExtraField
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFilter()
+    public function isFilter(): bool
     {
         return $this->filter;
     }
@@ -315,10 +301,7 @@ class ExtraField
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isVisibleToSelf()
+    public function isVisibleToSelf(): bool
     {
         return $this->visibleToSelf;
     }
@@ -335,10 +318,7 @@ class ExtraField
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isVisibleToOthers()
+    public function isVisibleToOthers(): bool
     {
         return $this->visibleToOthers;
     }

@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * PersonalAgenda.
  *
- * @ORM\Table(name="personal_agenda", indexes={@ORM\Index(name="idx_personal_agenda_user", columns={"user"}),
- * @ORM\Index(name="idx_personal_agenda_parent", columns={"parent_event_id"})})
+ * @ORM\Table(name="personal_agenda", indexes={
+ *     @ORM\Index(name="idx_personal_agenda_user", columns={"user"}),
+ *     @ORM\Index(name="idx_personal_agenda_parent", columns={"parent_event_id"})
+ * })
  * @ORM\Entity
  */
 class PersonalAgenda
@@ -39,7 +44,7 @@ class PersonalAgenda
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected string $title;
+    protected ?string $title;
 
     /**
      * @ORM\Column(name="text", type="text", nullable=true)
@@ -47,14 +52,14 @@ class PersonalAgenda
     protected ?string $text;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
     protected $date;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="enddate", type="datetime", nullable=true)
      */
@@ -132,7 +137,7 @@ class PersonalAgenda
     /**
      * Set date.
      *
-     * @param \DateTime $date
+     * @param DateTime $date
      *
      * @return PersonalAgenda
      */
@@ -146,7 +151,7 @@ class PersonalAgenda
     /**
      * Get date.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDate()
     {
@@ -156,7 +161,7 @@ class PersonalAgenda
     /**
      * Set enddate.
      *
-     * @param \DateTime $value
+     * @param DateTime $value
      *
      * @return PersonalAgenda
      */
@@ -168,7 +173,7 @@ class PersonalAgenda
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndDate()
     {

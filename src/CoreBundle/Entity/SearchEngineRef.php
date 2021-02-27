@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -17,6 +19,8 @@ class SearchEngineRef
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="searchEngineRefs")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\Course
      */
     protected $course;
 

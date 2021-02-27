@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -21,23 +23,21 @@ class GradebookComment
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookComments")
-     * @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="comments")
-     * @ORM\JoinColumn(name="gradebook_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="gradebook_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected GradebookCategory $gradeBook;
 

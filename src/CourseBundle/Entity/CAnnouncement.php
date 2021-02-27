@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,18 +23,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CAnnouncement extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="title", type="text", nullable=true)
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
     protected string $title;
 
@@ -40,35 +42,29 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected ?string $content;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="end_date", type="date", nullable=true)
      */
-    protected $endDate;
+    protected ?DateTime $endDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="email_sent", type="boolean", nullable=true)
      */
-    protected $emailSent;
+    protected ?bool $emailSent;
 
     /**
-     * @var ArrayCollection<int, CAnnouncementAttachment>
+     * @var Collection<int, CAnnouncementAttachment>
      *
      * @ORM\OneToMany(
      *     targetEntity="CAnnouncementAttachment",
      *     mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $attachments;
+    protected Collection $attachments;
 
     public function __construct()
     {
@@ -81,21 +77,18 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    public function getAttachments()
+    public function getAttachments(): ArrayCollection
     {
         return $this->attachments;
     }
 
-    public function setAttachments($attachments): self
+    public function setAttachments(ArrayCollection $attachments): self
     {
         $this->attachments = $attachments;
 
         return $this;
     }
 
-    /**
-     * Set title.
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -103,17 +96,11 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set content.
-     */
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -121,32 +108,19 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get content.
-     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * Set endDate.
-     *
-     * @param \DateTime $endDate
-     */
-    public function setEndDate($endDate): self
+    public function setEndDate(?DateTime $endDate): self
     {
         $this->endDate = $endDate;
 
         return $this;
     }
 
-    /**
-     * Get endDate.
-     *
-     * @return \DateTime
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }

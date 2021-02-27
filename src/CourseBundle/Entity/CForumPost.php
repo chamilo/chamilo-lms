@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,24 +36,20 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public const STATUS_REJECTED = 3;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="post_title", type="string", length=250, nullable=true)
+     * @ORM\Column(name="post_title", type="string", length=250, nullable=false)
      */
     protected string $postTitle;
 
@@ -66,53 +65,41 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?CForumThread $thread = null;
 
     /**
-     * @var CForumForum|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="posts")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $forum;
+    protected ?CForumForum $forum = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      */
-    protected $user;
+    protected ?User $user = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="post_date", type="datetime", nullable=false)
      */
-    protected $postDate;
+    protected DateTime $postDate;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="post_notification", type="boolean", nullable=true)
      */
-    protected $postNotification;
+    protected ?bool $postNotification;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="post_parent_id", type="integer", nullable=true)
      */
-    protected $postParentId;
+    protected ?int $postParentId = null;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible", type="boolean", nullable=true)
+     * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
-    protected $visible;
+    protected bool $visible;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    protected $status;
+    protected ?int $status;
 
     /**
      * @var ArrayCollection|CForumAttachment[]
@@ -123,6 +110,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->visible = false;
         $this->postParentId = null;
         $this->attachments = new ArrayCollection();
     }
@@ -156,9 +144,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->postTitle;
     }
 
-    /**
-     * Set postText.
-     */
     public function setPostText(string $postText): self
     {
         $this->postText = $postText;
@@ -166,17 +151,11 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get postText.
-     */
     public function getPostText(): ?string
     {
         return $this->postText;
     }
 
-    /**
-     * Set thread.
-     */
     public function setThread(CForumThread $thread = null): self
     {
         $this->thread = $thread;
@@ -187,7 +166,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Get thread.
      *
-     * @return CForumThread|null
+     * @return null|CForumThread
      */
     public function getThread()
     {
@@ -197,7 +176,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Set postDate.
      *
-     * @param \DateTime $postDate
+     * @param DateTime $postDate
      *
      * @return CForumPost
      */
@@ -211,7 +190,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Get postDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getPostDate()
     {
@@ -344,12 +323,12 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    public function getAttachments()
+    public function getAttachments(): ArrayCollection
     {
         return $this->attachments;
     }
 
-    public function removeAttachment(CForumAttachment $attachment)
+    public function removeAttachment(CForumAttachment $attachment): void
     {
         $this->attachments->removeElement($attachment);
     }

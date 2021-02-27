@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
@@ -17,15 +20,19 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @var null|int
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\User|object
      */
     private $user;
 
-    public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
+    public function __construct(object $user, DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {
         $this->user = $user;
         $this->initialize($expiresAt, $selector, $hashedToken);

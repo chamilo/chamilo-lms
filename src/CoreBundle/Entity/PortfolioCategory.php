@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -13,10 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  * Class PortfolioCategory.
  *
  * @ORM\Table(
- *  name="portfolio_category",
- *  indexes={
- *      @ORM\Index(name="user", columns={"user_id"})
- *  }
+ *     name="portfolio_category",
+ *     indexes={
+ *         @ORM\Index(name="user", columns={"user_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -25,64 +27,46 @@ class PortfolioCategory
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="text", nullable=true)
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var null
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
+     * @ORM\Column(name="is_visible", type="boolean", options={"default":true})
      */
-    protected $isVisible = true;
+    protected bool $isVisible = true;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="category")
      */
-    protected $items;
+    protected \Doctrine\Common\Collections\ArrayCollection $items;
 
-    /**
-     * PortfolioCategory constructor.
-     */
     public function __construct()
     {
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
@@ -122,7 +106,7 @@ class PortfolioCategory
     /**
      * Get description.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -132,7 +116,7 @@ class PortfolioCategory
     /**
      * Set description.
      *
-     * @param string|null $description
+     * @param null|string $description
      *
      * @return PortfolioCategory
      */
@@ -143,12 +127,7 @@ class PortfolioCategory
         return $this;
     }
 
-    /**
-     * Get isVisible.
-     *
-     * @return bool
-     */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return $this->isVisible;
     }
@@ -191,7 +170,8 @@ class PortfolioCategory
                 )
                 ->andWhere(
                     Criteria::expr()->eq('session', $session)
-                );
+                )
+            ;
         }
 
         return $this->items->matching($criteria);

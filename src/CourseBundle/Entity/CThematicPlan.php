@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -81,9 +83,6 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(?string $description): self
     {
         $this->description = $description;
@@ -91,17 +90,11 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set descriptionType.
-     */
     public function setDescriptionType(int $descriptionType): self
     {
         $this->descriptionType = $descriptionType;
@@ -109,9 +102,6 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get descriptionType.
-     */
     public function getDescriptionType(): int
     {
         return $this->descriptionType;

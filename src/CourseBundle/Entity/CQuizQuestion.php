@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -26,20 +28,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CQuizQuestion extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
      * @Assert\NotBlank()
@@ -54,60 +52,44 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
-    protected $ponderation;
+    protected float $ponderation;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position;
+    protected int $position;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    protected $type;
+    protected int $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="picture", type="string", length=50, nullable=true)
      */
-    protected $picture;
+    protected ?string $picture;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
-    protected $level;
+    protected int $level;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback", type="text", nullable=true)
      */
-    protected $feedback;
+    protected ?string $feedback;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="extra", type="string", length=255, nullable=true)
      */
-    protected $extra;
+    protected ?string $extra;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="question_code", type="string", length=10, nullable=true)
      */
-    protected $questionCode;
+    protected ?string $questionCode;
 
     /**
      * @var Collection|CQuizQuestionCategory[]
@@ -128,15 +110,10 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $relQuizzes;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="mandatory", type="integer")
      */
-    protected $mandatory;
+    protected int $mandatory;
 
-    /**
-     * CQuizQuestion constructor.
-     */
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -198,9 +175,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get question.
-     */
     public function getQuestion(): string
     {
         return $this->question;

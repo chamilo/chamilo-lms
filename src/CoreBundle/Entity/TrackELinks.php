@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,7 +29,7 @@ class TrackELinks
     protected $linksUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="links_date", type="datetime", nullable=false)
      */
@@ -89,7 +92,7 @@ class TrackELinks
     /**
      * Set linksDate.
      *
-     * @param \DateTime $linksDate
+     * @param DateTime $linksDate
      *
      * @return TrackELinks
      */
@@ -103,7 +106,7 @@ class TrackELinks
     /**
      * Get linksDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLinksDate()
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -9,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\SessionTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -67,7 +70,7 @@ class CLpRelUserGroup
     protected $userGroup;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Gedmo\Timestampable(on="create")
      *

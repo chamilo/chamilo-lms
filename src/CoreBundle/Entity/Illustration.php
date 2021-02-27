@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Illustration.
  *
  * @ApiResource(
- *      normalizationContext={"groups"={"illustration:read"}}
+ *     normalizationContext={"groups"={"illustration:read"}}
  * )
  * @ORM\Table(name="illustration")
  * @ORM\Entity

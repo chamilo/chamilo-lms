@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,11 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
  * UserRelTag.
  *
  * @ORM\Table(
- *  name="user_rel_tag",
- *  indexes={
- *      @ORM\Index(name="idx_urt_uid", columns={"user_id"}),
- *      @ORM\Index(name="idx_urt_tid", columns={"tag_id"})
- *  }
+ *     name="user_rel_tag",
+ *     indexes={
+ *         @ORM\Index(name="idx_urt_uid", columns={"user_id"}),
+ *         @ORM\Index(name="idx_urt_tid", columns={"tag_id"})
+ *     }
  * )
  * @ORM\Entity
  */

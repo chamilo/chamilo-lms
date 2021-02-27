@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -12,9 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="gradebook_category",
- *  indexes={
- *  }))
- * @ORM\Entity
+ *     indexes={
+ *     }))
+ *     @ORM\Entity
  */
 class GradebookCategory
 {
@@ -22,13 +24,11 @@ class GradebookCategory
     use CourseTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank
@@ -56,7 +56,7 @@ class GradebookCategory
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
-     * @ORM\JoinColumn(name="parent_id",referencedColumnName="id")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected ?GradebookCategory $parent;
 
@@ -67,93 +67,69 @@ class GradebookCategory
     protected ?Session $session;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $weight;
+    protected float $weight;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
-    protected $visible;
+    protected bool $visible;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="certif_min_score", type="integer", nullable=true)
      */
-    protected $certifMinScore;
+    protected ?int $certifMinScore;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="document_id", type="integer", nullable=true)
      */
-    protected $documentId;
+    protected ?int $documentId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    protected $locked;
+    protected ?int $locked;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    protected $defaultLowestEvalExclude;
+    protected ?bool $defaultLowestEvalExclude;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
      */
-    protected $generateCertificates;
+    protected bool $generateCertificates;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="grade_model_id", type="integer", nullable=true)
      */
-    protected $gradeModelId;
+    protected ?int $gradeModelId;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(
-     *      name="is_requirement",
-     *      type="boolean",
-     *      nullable=false,
-     *      options={"default": 0 }
+     *     name="is_requirement",
+     *     type="boolean",
+     *     nullable=false,
+     *     options={"default":0 }
      * )
      */
-    protected $isRequirement;
+    protected bool $isRequirement;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="depends", type="text", nullable=true)
      */
-    protected $depends;
+    protected ?string $depends;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="minimum_to_validate", type="integer", nullable=true)
      */
-    protected $minimumToValidate;
+    protected ?int $minimumToValidate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="gradebooks_to_validate_in_dependence", type="integer", nullable=true)
      */
-    protected $gradeBooksToValidateInDependence;
+    protected ?int $gradeBooksToValidateInDependence;
 
     /**
      * @var ArrayCollection|GradebookComment[]
@@ -205,9 +181,6 @@ class GradebookCategory
         return $this->name;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(?string $description): self
     {
         $this->description = $description;
@@ -215,9 +188,6 @@ class GradebookCategory
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;
@@ -439,12 +409,12 @@ class GradebookCategory
         return $this;
     }
 
-    public function getParent(): ?GradebookCategory
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?GradebookCategory $parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 

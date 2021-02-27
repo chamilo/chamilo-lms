@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -13,9 +15,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * User subscriptions to a course.
  *
  * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_USER')"},
- *      normalizationContext={"groups"={"course_rel_user:read", "user:read"}},
- *      collectionOperations={
+ *     attributes={"security"="is_granted('ROLE_USER')"},
+ *     normalizationContext={"groups"={"course_rel_user:read", "user:read"}},
+ *     collectionOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user"},
  *         "post"={"security"="is_granted('ROLE_ADMIN') or object.user == user"}
  *     },
@@ -25,11 +27,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  *
  * @ORM\Table(
- *      name="course_rel_user",
- *      indexes={
- *          @ORM\Index(name="course_rel_user_user_id", columns={"id", "user_id"}),
- *          @ORM\Index(name="course_rel_user_c_id_user_id", columns={"id", "c_id", "user_id"})
- *      }
+ *     name="course_rel_user",
+ *     indexes={
+ *         @ORM\Index(name="course_rel_user_user_id", columns={"id", "user_id"}),
+ *         @ORM\Index(name="course_rel_user_c_id_user_id", columns={"id", "c_id", "user_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -38,7 +40,7 @@ class CourseRelUser
     use UserTrait;
 
     /**
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
@@ -60,37 +62,35 @@ class CourseRelUser
 
     /**
      * @Groups({"course:read", "user:read"})
-     * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="relation_type", type="integer")
      */
     protected int $relationType;
 
     /**
      * @Groups({"user:read"})
-     * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer")
      */
     protected int $status;
 
     /**
      * @ORM\Column(name="is_tutor", type="boolean", nullable=true, unique=false)
      */
-    protected bool $tutor;
+    protected ?bool $tutor;
 
     /**
      * @ORM\Column(name="sort", type="integer", nullable=true, unique=false)
      */
-    protected int $sort;
+    protected ?int $sort;
 
     /**
      * @ORM\Column(name="user_course_cat", type="integer", nullable=true, unique=false)
      */
-    protected int $userCourseCat;
+    protected ?int $userCourseCat;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
      */
-    protected $legalAgreement;
+    protected ?int $legalAgreement;
 
     public function __construct()
     {
@@ -122,9 +122,6 @@ class CourseRelUser
         return $this->course;
     }
 
-    /**
-     * Set relationType.
-     */
     public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
@@ -132,17 +129,11 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Get relationType.
-     */
     public function getRelationType(): int
     {
         return $this->relationType;
     }
 
-    /**
-     * Set status.
-     */
     public function setStatus(int $status): self
     {
         $this->status = $status;
@@ -150,9 +141,6 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Get status.
-     */
     public function getStatus(): int
     {
         return $this->status;

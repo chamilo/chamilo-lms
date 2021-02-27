@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,55 +23,41 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceSheetLog
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
-    protected $attendanceId;
+    protected int $attendanceId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
      */
-    protected $lasteditDate;
+    protected DateTime $lasteditDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lastedit_type", type="string", length=200, nullable=false)
      */
-    protected $lasteditType;
+    protected string $lasteditType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
      */
-    protected $lasteditUserId;
+    protected int $lasteditUserId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="calendar_date_value", type="datetime", nullable=true)
      */
-    protected $calendarDateValue;
+    protected ?DateTime $calendarDateValue;
 
     /**
      * Set attendanceId.
@@ -97,7 +86,7 @@ class CAttendanceSheetLog
     /**
      * Set lasteditDate.
      *
-     * @param \DateTime $lasteditDate
+     * @param DateTime $lasteditDate
      *
      * @return CAttendanceSheetLog
      */
@@ -111,7 +100,7 @@ class CAttendanceSheetLog
     /**
      * Get lasteditDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLasteditDate()
     {
@@ -169,7 +158,7 @@ class CAttendanceSheetLog
     /**
      * Set calendarDateValue.
      *
-     * @param \DateTime $calendarDateValue
+     * @param DateTime $calendarDateValue
      *
      * @return CAttendanceSheetLog
      */
@@ -183,7 +172,7 @@ class CAttendanceSheetLog
     /**
      * Get calendarDateValue.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCalendarDateValue()
     {

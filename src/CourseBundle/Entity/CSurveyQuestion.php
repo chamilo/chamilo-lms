@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -297,14 +299,9 @@ class CSurveyQuestion
         return $this->sort;
     }
 
-    /**
-     * Set sharedQuestionId.
-     *
-     * @param int $sharedQuestionId
-     */
-    public function setSharedQuestionId($sharedQuestionId): self
+    public function setSharedQuestionId(int $sharedQuestionId): self
     {
-        $this->sharedQuestionId = (int) $sharedQuestionId;
+        $this->sharedQuestionId = $sharedQuestionId;
 
         return $this;
     }
@@ -439,17 +436,11 @@ class CSurveyQuestion
         return $this->cId;
     }
 
-    /**
-     * Set isMandatory.
-     */
     public function isMandatory(): bool
     {
         return $this->isMandatory;
     }
 
-    /**
-     * Get isMandatory.
-     */
     public function setIsMandatory(bool $isMandatory): self
     {
         $this->isMandatory = $isMandatory;
@@ -457,12 +448,12 @@ class CSurveyQuestion
         return $this;
     }
 
-    public function getParent(): CSurveyQuestion
+    public function getParent(): self
     {
         return $this->parent;
     }
 
-    public function setParent(CSurveyQuestion $parent): self
+    public function setParent(self $parent): self
     {
         $this->parent = $parent;
 
@@ -470,7 +461,7 @@ class CSurveyQuestion
     }
 
     /**
-     * @return CSurveyQuestion[]|ArrayCollection
+     * @return ArrayCollection|CSurveyQuestion[]
      */
     public function getChildren()
     {
@@ -478,7 +469,7 @@ class CSurveyQuestion
     }
 
     /**
-     * @param CSurveyQuestion[]|ArrayCollection $children
+     * @param ArrayCollection|CSurveyQuestion[] $children
      */
     public function setChildren($children): self
     {

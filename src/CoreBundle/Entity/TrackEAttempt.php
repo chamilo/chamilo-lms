@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,15 +16,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  * TrackEAttempt.
  *
  * @ORM\Table(
- *  name="track_e_attempt",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="exe_id", columns={"exe_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"}),
- *      @ORM\Index(name="question_id", columns={"question_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"}),
- *      @ORM\Index(name="idx_track_e_attempt_tms", columns={"tms"}),
- *  }
+ *     name="track_e_attempt",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="exe_id", columns={"exe_id"}),
+ *         @ORM\Index(name="user_id", columns={"user_id"}),
+ *         @ORM\Index(name="question_id", columns={"question_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"}),
+ *         @ORM\Index(name="idx_track_e_attempt_tms", columns={"tms"}),
+ *     }
  * )
  * @ORM\Entity
  */
@@ -42,7 +45,7 @@ class TrackEAttempt
     /**
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="exe_id", type="integer", nullable=true)
+     * @ORM\Column(name="exe_id", type="integer", nullable=false)
      */
     protected int $exeId;
 
@@ -58,6 +61,8 @@ class TrackEAttempt
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
+     *
+     * @var null|int
      */
     protected $questionId;
 
@@ -92,7 +97,7 @@ class TrackEAttempt
     /**
      * @ORM\Column(name="tms", type="datetime", nullable=false)
      */
-    protected \DateTime $tms;
+    protected DateTime $tms;
 
     /**
      * @var int
@@ -102,11 +107,9 @@ class TrackEAttempt
     protected $sessionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)
      */
-    protected $filename;
+    protected ?string $filename;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempts")
@@ -272,7 +275,7 @@ class TrackEAttempt
     /**
      * Set tms.
      *
-     * @param \DateTime $tms
+     * @param DateTime $tms
      *
      * @return TrackEAttempt
      */
@@ -286,7 +289,7 @@ class TrackEAttempt
     /**
      * Get tms.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTms()
     {
@@ -356,7 +359,7 @@ class TrackEAttempt
         return $this->secondsSpent;
     }
 
-    public function setSecondsSpent(int $secondsSpent): TrackEAttempt
+    public function setSecondsSpent(int $secondsSpent): self
     {
         $this->secondsSpent = $secondsSpent;
 

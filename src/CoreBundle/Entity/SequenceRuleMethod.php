@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -33,12 +35,16 @@ class SequenceRuleMethod
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\SequenceRule
      */
     protected $rule;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\SequenceMethod
      */
     protected $method;
 
@@ -63,7 +69,7 @@ class SequenceRuleMethod
     /**
      * @param string $methodOrder
      */
-    public function setMethodOrder($methodOrder)
+    public function setMethodOrder($methodOrder): void
     {
         $this->methodOrder = $methodOrder;
     }
@@ -73,7 +79,7 @@ class SequenceRuleMethod
         return $this->rule;
     }
 
-    public function setRule($rule)
+    public function setRule($rule): void
     {
         $this->rule = $rule;
     }
@@ -83,7 +89,7 @@ class SequenceRuleMethod
         return $this->method;
     }
 
-    public function setMethod($method)
+    public function setMethod($method): void
     {
         $this->method = $method;
     }

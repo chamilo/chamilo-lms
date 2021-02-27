@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -18,20 +20,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *      normalizationContext={"groups"={"personal_file:read"}},
- *      denormalizationContext={"groups"={"personal_file:write"}},
- *      itemOperations={
- *          "put" ={
- *              "controller"=UpdateResourceNodeFileAction::class,
- *              "deserialize"=false,
- *              "security" = "is_granted('EDIT', object.resourceNode)",
- *          },
- *          "get" = {
- *              "security" = "is_granted('VIEW', object.resourceNode)",
- *          },
- *          "delete" = {
- *              "security" = "is_granted('DELETE', object.resourceNode)",
- *          },
+ *     normalizationContext={"groups"={"personal_file:read"}},
+ *     denormalizationContext={"groups"={"personal_file:write"}},
+ *     itemOperations={
+ *         "put"={
+ *             "controller"=UpdateResourceNodeFileAction::class,
+ *             "deserialize"=false,
+ *             "security"="is_granted('EDIT', object.resourceNode)",
+ *         },
+ *         "get"={
+ *             "security"="is_granted('VIEW', object.resourceNode)",
+ *         },
+ *         "delete"={
+ *             "security"="is_granted('DELETE', object.resourceNode)",
+ *         },
  *     },
  *     collectionOperations={
  *         "post"={
@@ -64,19 +66,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                     },
  *                                     "resourceLinkList"={
  *                                         "type"="array",
- *                                         "items": {
- *                                              "type": "object",
- *                                              "properties"={
- *                                                  "visibility"={
- *                                                       "type"="integer",
- *                                                   },
- *                                                  "c_id"={
- *                                                       "type"="integer",
- *                                                   },
- *                                                   "session_id"={
- *                                                       "type"="integer",
- *                                                   },
- *                                              }
+ *                                         "items"={
+ *                                             "type"="object",
+ *                                             "properties"={
+ *                                                 "visibility"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                                 "c_id"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                                 "session_id"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                             }
  *                                         }
  *                                     },
  *                                 }
@@ -86,22 +88,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                 }
  *             }
  *         },
- *         "get" = {
- *              "security"="is_granted('ROLE_USER')",
+ *         "get"={
+ *             "security"="is_granted('ROLE_USER')",
  *         },
  *     },
  * )
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"title":"partial", "resourceNode.parent":"exact"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={
- *          "id",
- *          "resourceNode.title",
- *          "resourceNode.createdAt",
- *          "resourceNode.resourceFile.size",
- *          "resourceNode.updatedAt"
- *      }
+ *         "id",
+ *         "resourceNode.title",
+ *         "resourceNode.createdAt",
+ *         "resourceNode.resourceFile.size",
+ *         "resourceNode.updatedAt"
+ *     }
  * )
  *
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,8 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_forum_thread",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="idx_forum_thread_forum_id", columns={"forum_id"})
  *  }
  * )
  * @ORM\Entity
@@ -26,25 +27,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CForumThread extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
+     * @ORM\Column(name="thread_title", type="string", length=255, nullable=false)
      */
     protected string $threadTitle;
 
@@ -55,11 +47,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected ?CForumForum $forum = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
+     * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default":0})
      */
-    protected $threadReplies;
+    protected int $threadReplies;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
@@ -68,11 +58,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
+     * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default":0})
      */
-    protected $threadViews;
+    protected int $threadViews;
 
     /**
      * @var ArrayCollection|CForumPost[]
@@ -86,82 +74,55 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $posts;
 
     /**
-     * @var CForumPost
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid", onDelete="SET NULL")
      */
-    protected $threadLastPost;
+    protected CForumPost $threadLastPost;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="thread_date", type="datetime", nullable=false)
      */
-    protected $threadDate;
+    protected DateTime $threadDate;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="thread_sticky", type="boolean", nullable=true)
+     * @ORM\Column(name="thread_sticky", type="boolean", nullable=false)
      */
-    protected $threadSticky;
+    protected bool $threadSticky;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    protected $locked;
+    protected int $locked;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="thread_title_qualify", type="string", length=255, nullable=true)
      */
-    protected $threadTitleQualify;
+    protected ?string $threadTitleQualify;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="thread_qualify_max", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $threadQualifyMax;
+    protected float $threadQualifyMax;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="thread_close_date", type="datetime", nullable=true)
      */
-    protected $threadCloseDate;
+    protected ?DateTime $threadCloseDate;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="thread_weight", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $threadWeight;
+    protected float $threadWeight;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="thread_peer_qualify", type="boolean")
      */
-    protected $threadPeerQualify;
+    protected bool $threadPeerQualify;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
      */
-    protected $lpItemId;
+    protected int $lpItemId;
 
     public function __construct()
     {
@@ -173,6 +134,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         $this->threadQualifyMax = 0;
         $this->threadWeight = 0;
         $this->lpItemId = 0;
+        $this->threadSticky = false;
     }
 
     public function __toString(): string
@@ -180,10 +142,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return (string) $this->getThreadTitle();
     }
 
-    /**
-     * @return bool
-     */
-    public function isThreadPeerQualify()
+    public function isThreadPeerQualify(): bool
     {
         return $this->threadPeerQualify;
     }
@@ -241,7 +200,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Get forumId.
      *
-     * @return CForumForum|null
+     * @return null|CForumForum
      */
     public function getForum()
     {
@@ -299,7 +258,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Set threadDate.
      *
-     * @param \DateTime $threadDate
+     * @param DateTime $threadDate
      */
     public function setThreadDate($threadDate): self
     {
@@ -311,7 +270,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Get threadDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getThreadDate()
     {
@@ -439,7 +398,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Set threadCloseDate.
      *
-     * @param \DateTime $threadCloseDate
+     * @param DateTime $threadCloseDate
      *
      * @return CForumThread
      */
@@ -453,7 +412,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Get threadCloseDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getThreadCloseDate()
     {

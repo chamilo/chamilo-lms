@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,48 +21,36 @@ use Doctrine\ORM\Mapping as ORM;
 class Chat
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="from_user", type="integer", nullable=true)
      */
-    protected $fromUser;
+    protected ?int $fromUser;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="to_user", type="integer", nullable=true)
      */
-    protected $toUser;
+    protected ?int $toUser;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="message", type="text", nullable=false)
      */
-    protected $message;
+    protected string $message;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sent", type="datetime", nullable=false)
      */
-    protected $sent;
+    protected DateTime $sent;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="recd", type="integer", nullable=false)
      */
-    protected $recd;
+    protected int $recd;
 
     /**
      * Get id.
@@ -146,7 +137,7 @@ class Chat
     /**
      * Set sent.
      *
-     * @param \DateTime $sent
+     * @param DateTime $sent
      *
      * @return Chat
      */
@@ -160,7 +151,7 @@ class Chat
     /**
      * Get sent.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSent()
     {

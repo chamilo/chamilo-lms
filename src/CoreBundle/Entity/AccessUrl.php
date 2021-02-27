@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     normalizationContext={"groups"={"access_url:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"access_url:write","course_category:write"}},
+ *     denormalizationContext={"groups"={"access_url:write", "course_category:write"}},
  * )
  *
  * @Gedmo\Tree(type="nested")
@@ -25,49 +29,55 @@ use Symfony\Component\Validator\Constraints as Assert;
 class AccessUrl extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue()
      *
      * @Groups({"access_url:read", "access_url:write"})
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var AccessUrlRelCourse[]|ArrayCollection
+     * @var AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse>
      *
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $courses;
+    protected Collection $courses;
 
     /**
-     * @var ArrayCollection|AccessUrlRelSession[]
+     * @var AccessUrlRelSession[]|Collection<int, AccessUrlRelSession>
      *
      * @ORM\OneToMany(targetEntity="AccessUrlRelSession", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $sessions;
+    protected Collection $sessions;
 
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelUser", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     *
+     * @var AccessUrlRelUser[]|Collection<int, AccessUrlRelUser>
      */
-    protected $user;
+    protected Collection $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="SettingsCurrent", mappedBy="url",cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     *
+     * @var Collection<int, SettingsCurrent>|SettingsCurrent[]
      */
-    protected $settings;
+    protected Collection $settings;
 
     /**
      * @ORM\OneToMany(targetEntity="SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     *
+     * @var Collection<int, SessionCategory>|SessionCategory[]
      */
-    protected $sessionCategories;
+    protected Collection $sessionCategories;
 
     /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"},orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     *
+     * @var AccessUrlRelCourseCategory[]|Collection<int, AccessUrlRelCourseCategory>
      */
-    protected $courseCategory;
+    protected Collection $courseCategory;
 
     /**
      * @Gedmo\TreeParent
@@ -76,12 +86,14 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrl",
      *     inversedBy="children"
      * )
-     * @ORM\JoinColumns({@ORM\JoinColumn(onDelete="CASCADE")})
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(onDelete="CASCADE")
+     * })
      */
-    protected $parent;
+    protected ?AccessUrl $parent = null;
 
     /**
-     * @var AccessUrl[]
+     * @var AccessUrl[]|Collection<int, AccessUrl>
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrl",
@@ -89,130 +101,112 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      * )
      * @ORM\OrderBy({"id" = "ASC"})
      */
-    protected $children;
+    protected Collection $children;
 
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
      */
-    protected $lft;
+    protected int $lft;
 
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer")
      */
-    protected $lvl;
+    protected int $lvl;
 
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer")
      */
-    protected $rgt;
+    protected int $rgt;
 
     /**
      * @Gedmo\TreeRoot
      * @ORM\ManyToOne(targetEntity="AccessUrl")
-     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="tree_root", onDelete="CASCADE")
      */
-    protected $root;
+    protected ?AccessUrl $root = null;
 
     /**
      * @Assert\NotBlank()
      * @Groups({"access_url:read", "access_url:write"})
      *
-     * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=false)
+     * @ORM\Column(name="url", type="string", length=255)
      */
     protected string $url;
 
     /**
-     * @ORM\Column(name="description", type="text", unique=false)
+     * @ORM\Column(name="description", type="text")
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="active", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="active", type="integer")
      */
-    protected $active;
+    protected int $active;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="created_by", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="created_by", type="integer")
      */
-    protected $createdBy;
+    protected int $createdBy;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="tms", type="datetime", nullable=true)
      */
-    protected $tms;
+    protected ?DateTime $tms;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="url_type", type="boolean", nullable=true)
      */
-    protected $urlType;
+    protected ?bool $urlType = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="limit_courses", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="limit_courses", type="integer", nullable=true)
      */
-    protected $limitCourses;
+    protected ?int $limitCourses = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="limit_active_courses", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="limit_active_courses", type="integer", nullable=true)
      */
-    protected $limitActiveCourses;
+    protected ?int $limitActiveCourses = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="limit_sessions", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="limit_sessions", type="integer", nullable=true)
      */
-    protected $limitSessions;
+    protected ?int $limitSessions = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="limit_users", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="limit_users", type="integer", nullable=true)
      */
-    protected $limitUsers;
+    protected ?int $limitUsers = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="limit_teachers", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="limit_teachers", type="integer", nullable=true)
      */
-    protected $limitTeachers;
+    protected ?int $limitTeachers = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="limit_disk_space", type="integer", nullable=true, unique=false)
+     * @ORM\Column(name="limit_disk_space", type="integer", nullable=true)
      */
-    protected $limitDiskSpace;
+    protected ?int $limitDiskSpace = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true, unique=false)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
-    protected $email;
+    protected ?string $email = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->tms = new \DateTime();
+        $this->tms = new DateTime();
         $this->createdBy = 1;
+        $this->courses = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
+        $this->user = new ArrayCollection();
+        $this->settings = new ArrayCollection();
+        $this->sessionCategories = new ArrayCollection();
+        $this->courseCategory = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -329,7 +323,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * Set tms.
      *
-     * @param \DateTime $tms
+     * @param DateTime $tms
      *
      * @return AccessUrl
      */
@@ -343,7 +337,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * Get tms.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTms()
     {
@@ -500,6 +494,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     }
 
     /**
+     * @param Collection<int, SettingsCurrent>|SettingsCurrent[] $settings
+     *
      * @return AccessUrl
      */
     public function setSettings($settings)
@@ -529,16 +525,13 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getCourses()
     {
         return $this->courses;
     }
 
     /**
-     * @param mixed $courses
+     * @param AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse> $courses
      *
      * @return AccessUrl
      */
@@ -549,16 +542,13 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getSessionCategories()
     {
         return $this->sessionCategories;
     }
 
     /**
-     * @param mixed $sessionCategories
+     * @param Collection<int, SessionCategory>|SessionCategory[] $sessionCategories
      *
      * @return AccessUrl
      */

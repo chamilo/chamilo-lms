@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,13 +21,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Tool
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
@@ -34,6 +35,8 @@ class Tool
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
+     *
+     * @var \Chamilo\CoreBundle\Entity\ResourceType[]|\Doctrine\Common\Collections\Collection
      */
     protected $resourceTypes;
 
@@ -47,9 +50,6 @@ class Tool
         return $this->getName();
     }
 
-    /**
-     * @return ArrayCollection
-     */
     /*public function getToolResourceRight()
     {
         return $this->toolResourceRight;
@@ -64,9 +64,6 @@ class Tool
         }
     }*/
 
-    /**
-     * @return $this
-     */
     /*public function addToolResourceRight(ToolResourceRight $toolResourceRight)
     {
         $toolResourceRight->setTool($this);
@@ -80,9 +77,6 @@ class Tool
         return $this->resourceNodes;
     }*/
 
-    /**
-     * @return $this
-     */
     /*public function setResourceNodes($resourceNodes)
     {
         $this->resourceNodes = $resourceNodes;
@@ -90,17 +84,11 @@ class Tool
         return $this;
     }*/
 
-    /**
-     * Get id.
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Set name.
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -108,16 +96,13 @@ class Tool
         return $this;
     }
 
-    /**
-     * Get name.
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getResourceTypes()
     {

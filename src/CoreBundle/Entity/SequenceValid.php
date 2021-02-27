@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -26,12 +28,16 @@ class SequenceValid
     /**
      * @ORM\ManyToOne(targetEntity="SequenceVariable")
      * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\SequenceVariable
      */
     protected $variable;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\SequenceCondition
      */
     protected $condition;
 

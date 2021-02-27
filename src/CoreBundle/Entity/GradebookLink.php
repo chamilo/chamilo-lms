@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,9 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * GradebookLink.
  *
  * @ORM\Table(name="gradebook_link",
- *  indexes={
- *     @ORM\Index(name="idx_gl_cat", columns={"category_id"}),
- *  }
+ *     indexes={
+ *         @ORM\Index(name="idx_gl_cat", columns={"category_id"}),
+ *     }
  * )
  * @ORM\Entity
  */
@@ -26,13 +29,11 @@ class GradebookLink
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
@@ -41,11 +42,9 @@ class GradebookLink
     protected int $type;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_id", type="integer", nullable=false)
      */
-    protected $refId;
+    protected int $refId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinks")
@@ -66,61 +65,45 @@ class GradebookLink
     protected GradebookCategory $category;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $weight;
+    protected float $weight;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visible", type="integer", nullable=false)
      */
-    protected $visible;
+    protected int $visible;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    protected $locked;
+    protected int $locked;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
      */
-    protected $bestScore;
+    protected ?float $bestScore;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
      */
-    protected $averageScore;
+    protected ?float $averageScore;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
      */
-    protected $scoreWeight;
+    protected ?float $scoreWeight;
 
     /**
-     * @var array
-     *
      * @ORM\Column(name="user_score_list", type="array", nullable=true)
      */
-    protected $userScoreList;
+    protected ?array $userScoreList;
 
     public function __construct()
     {
@@ -178,7 +161,7 @@ class GradebookLink
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return GradebookLink
      */
@@ -192,7 +175,7 @@ class GradebookLink
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {

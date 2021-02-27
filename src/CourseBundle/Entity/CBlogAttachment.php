@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -20,69 +22,51 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogAttachment
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
-    protected $size;
+    protected int $size;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
      */
-    protected $postId;
+    protected int $postId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    protected $blogId;
+    protected int $blogId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="comment_id", type="integer", nullable=false)
      */
-    protected $commentId;
+    protected int $commentId;
 
     /**
      * Set path.

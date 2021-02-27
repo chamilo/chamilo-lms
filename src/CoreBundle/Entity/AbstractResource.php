@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -10,7 +12,9 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,27 +26,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class AbstractResource
 {
     /**
-     * @var string|null
-     *
      * @ApiProperty(iri="http://schema.org/contentUrl")
      * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
      */
-    public $contentUrl;
+    public ?string $contentUrl = null;
 
     /**
-     * @var string|null
-     *
      * @ApiProperty(iri="http://schema.org/contentUrl")
      * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
      */
-    public $downloadUrl;
+    public ?string $downloadUrl = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read", "document:write", "media_object_read"})
      */
-    public $contentFile;
+    public ?string $contentFile = null;
 
     /**
      * @Assert\Valid()
@@ -52,36 +50,38 @@ abstract class AbstractResource
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
-     * )
+     * )AbstractResource
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public $resourceNode;
+    public ?ResourceNode $resourceNode = null;
 
     /**
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      */
-    public $parentResourceNode;
+    public ?ResourceNode $parentResourceNode = null;
 
     /**
      * @ApiProperty(iri="http://schema.org/image")
      */
-    public $uploadFile;
+    public ?UploadedFile $uploadFile = null;
 
-    /** @var AbstractResource|ResourceInterface */
+    /**
+     * @var AbstractResource|ResourceInterface
+     */
     public $parentResource;
 
     /**
      * @Groups({"resource_node:read", "document:read"})
+     *
+     * @var null|array<int, array<string, null|\Chamilo\CoreBundle\Entity\Course|\Chamilo\CoreBundle\Entity\Session|\Chamilo\CoreBundle\Entity\Usergroup|\Chamilo\CourseBundle\Entity\CGroup|int|string>>
      */
-    public $resourceLinkListFromEntity;
+    public ?array $resourceLinkListFromEntity = null;
 
     /**
      * Use when sending a request to Api platform.
      * Temporal array that saves the resource link list that will be filled by CreateResourceNodeFileAction.php.
-     *
-     * @var array
      */
-    public $resourceLinkList;
+    public array $resourceLinkList = [];
 
     /**
      * Use when sending request to Chamilo.
@@ -89,7 +89,7 @@ abstract class AbstractResource
      *
      * @var ResourceLink[]
      */
-    public $resourceLinkEntityList;
+    public array $resourceLinkEntityList = [];
 
     abstract public function getResourceName(): string;
 
@@ -112,7 +112,7 @@ abstract class AbstractResource
     public function addCourseLink(Course $course, Session $session = null, CGroup $group = null, int $visibility = ResourceLink::VISIBILITY_PUBLISHED)
     {
         if (null === $this->getParent()) {
-            throw new \Exception('addCourseLink requires to set the parent first.');
+            throw new Exception('addCourseLink requires to set the parent first.');
         }
 
         $resourceLink = new ResourceLink();
@@ -140,6 +140,7 @@ abstract class AbstractResource
 
         if (!empty($rights)) {
             foreach ($rights as $right) {
+                //$resourceLink->addResourceRights($right);
                 $resourceLink->addResourceRight($right);
             }
         }
@@ -280,7 +281,7 @@ abstract class AbstractResource
         return $this->resourceLinkListFromEntity;
     }
 
-    public function setResourceLinkListFromEntity()
+    public function setResourceLinkListFromEntity(): void
     {
         $resourceNode = $this->getResourceNode();
         $links = $resourceNode->getResourceLinks();
@@ -403,6 +404,7 @@ abstract class AbstractResource
             foreach ($links as $link) {
                 if ($link->getCourse() === $course && $link->getSession() === $session) {
                     $found = true;
+
                     break;
                 }
             }
@@ -425,6 +427,7 @@ abstract class AbstractResource
         foreach ($links as $link) {
             if ($link->getUser()) {
                 $users[] = $link->getUser()->getId();
+
                 continue;
             }
             if ($link->getGroup()) {

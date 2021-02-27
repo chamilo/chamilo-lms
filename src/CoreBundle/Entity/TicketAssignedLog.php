@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class AssignedLog.
  *
  * @ORM\Table(
- *  name="ticket_assigned_log",
+ *     name="ticket_assigned_log",
  * )
  * @ORM\Entity
  */
@@ -49,7 +52,7 @@ class TicketAssignedLog
     protected $insertUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="assigned_date", type="datetime", nullable=false)
      */

@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +40,8 @@ class SequenceValue
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
      * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\SequenceRowEntity
      */
     protected $entity;
 
@@ -69,7 +74,7 @@ class SequenceValue
     protected $success;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="success_date", type="datetime", nullable=true)
      */
@@ -83,14 +88,14 @@ class SequenceValue
     protected $available;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="available_start_date", type="datetime", nullable=true)
      */
     protected $availableStartDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="available_end_date", type="datetime", nullable=true)
      */
@@ -202,7 +207,7 @@ class SequenceValue
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSuccessDate()
     {
@@ -210,7 +215,7 @@ class SequenceValue
     }
 
     /**
-     * @param \DateTime $successDate
+     * @param DateTime $successDate
      *
      * @return SequenceValue
      */
@@ -242,7 +247,7 @@ class SequenceValue
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAvailableStartDate()
     {
@@ -250,7 +255,7 @@ class SequenceValue
     }
 
     /**
-     * @param \DateTime $availableStartDate
+     * @param DateTime $availableStartDate
      *
      * @return SequenceValue
      */
@@ -262,7 +267,7 @@ class SequenceValue
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAvailableEndDate()
     {
@@ -270,7 +275,7 @@ class SequenceValue
     }
 
     /**
-     * @param \DateTime $availableEndDate
+     * @param DateTime $availableEndDate
      *
      * @return SequenceValue
      */

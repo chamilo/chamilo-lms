@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,14 +37,14 @@ class SysCalendar
     protected ?string $content;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
     protected $startDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
@@ -112,7 +115,7 @@ class SysCalendar
     /**
      * Set startDate.
      *
-     * @param \DateTime $startDate
+     * @param DateTime $startDate
      *
      * @return SysCalendar
      */
@@ -126,7 +129,7 @@ class SysCalendar
     /**
      * Get startDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartDate()
     {
@@ -136,7 +139,7 @@ class SysCalendar
     /**
      * Set endDate.
      *
-     * @param \DateTime $endDate
+     * @param DateTime $endDate
      *
      * @return SysCalendar
      */
@@ -150,7 +153,7 @@ class SysCalendar
     /**
      * Get endDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndDate()
     {

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -61,14 +64,14 @@ class TicketPriority
     /**
      * @var int
      *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
     protected $insertUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
     protected $insertDateTime;
 
@@ -80,18 +83,15 @@ class TicketPriority
     protected $lastEditUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
     protected $lastEditDateTime;
 
-    /**
-     * Priority constructor.
-     */
     public function __construct()
     {
-        $this->insertDateTime = new \DateTime();
+        $this->insertDateTime = new DateTime();
         $this->color = '';
         $this->urgency = '';
     }
@@ -225,7 +225,7 @@ class TicketPriority
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDateTime()
     {
@@ -233,7 +233,7 @@ class TicketPriority
     }
 
     /**
-     * @param \DateTime $insertDateTime
+     * @param DateTime $insertDateTime
      *
      * @return TicketPriority
      */
@@ -265,7 +265,7 @@ class TicketPriority
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEditDateTime()
     {
@@ -273,7 +273,7 @@ class TicketPriority
     }
 
     /**
-     * @param \DateTime $lastEditDateTime
+     * @param DateTime $lastEditDateTime
      *
      * @return TicketPriority
      */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -20,13 +22,11 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceResult
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
@@ -41,11 +41,9 @@ class CAttendanceResult
     protected CAttendance $attendance;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="score", type="integer", nullable=false)
      */
-    protected $score;
+    protected int $score;
 
     public function getUser(): User
     {

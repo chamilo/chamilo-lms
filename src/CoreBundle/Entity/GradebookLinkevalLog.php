@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -19,55 +22,41 @@ class GradebookLinkevalLog
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id_linkeval_log", type="integer", nullable=false)
      */
-    protected $idLinkevalLog;
+    protected int $idLinkevalLog;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="text", nullable=true)
+     * @ORM\Column(name="name", type="text")
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="weight", type="smallint", nullable=true)
      */
-    protected $weight;
+    protected int $weight;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
-    protected $visible;
+    protected bool $visible;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=20, nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinkEvalLogs")
@@ -76,12 +65,10 @@ class GradebookLinkevalLog
     protected User $user;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * Set idLinkevalLog.
@@ -158,7 +145,7 @@ class GradebookLinkevalLog
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return GradebookLinkevalLog
      */
@@ -172,7 +159,7 @@ class GradebookLinkevalLog
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {

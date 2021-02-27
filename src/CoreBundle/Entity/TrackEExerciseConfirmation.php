@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -65,7 +67,7 @@ class TrackEExerciseConfirmation
     /**
      * @var bool
      *
-     * @ORM\Column(name="confirmed", type="boolean", options={"default": false})
+     * @ORM\Column(name="confirmed", type="boolean", options={"default":false})
      */
     private $confirmed;
 
@@ -83,9 +85,6 @@ class TrackEExerciseConfirmation
      */
     private $savedAnswersCount;
 
-    /**
-     * TrackEExerciseConfirmation constructor.
-     */
     public function __construct()
     {
         $this->confirmed = false;

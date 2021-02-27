@@ -1,13 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CourseBundle\Entity\CGroup;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -27,7 +32,7 @@ class ResourceLink
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="resourceLinks")
@@ -70,31 +75,33 @@ class ResourceLink
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceRight",
      *     mappedBy="resourceLink", cascade={"persist", "remove"}, orphanRemoval=true
      * )
+     *
+     * @var Collection|ResourceRight[]
      */
-    protected $resourceRight;
+    protected $resourceRights;
 
     /**
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
-    protected $visibility;
+    protected int $visibility;
 
     /**
      * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      *
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
      */
-    protected $startVisibilityAt;
+    protected ?DateTimeInterface $startVisibilityAt = null;
 
     /**
      * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      *
      * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
      */
-    protected $endVisibilityAt;
+    protected ?DateTimeInterface $endVisibilityAt = null;
 
     public function __construct()
     {
-        $this->resourceRight = new ArrayCollection();
+        $this->resourceRights = new ArrayCollection();
         $this->visibility = self::VISIBILITY_DRAFT;
     }
 
@@ -127,9 +134,9 @@ class ResourceLink
         return $this;
     }
 
-    public function setResourceRight($rights): self
+    public function setResourceRights($rights): self
     {
-        $this->resourceRight = $rights;
+        $this->resourceRights = $rights;
 
         /*foreach ($rights as $right) {
             $this->addResourceRight($right);
@@ -141,17 +148,17 @@ class ResourceLink
     public function addResourceRight(ResourceRight $right): self
     {
         $right->setResourceLink($this);
-        $this->resourceRight[] = $right;
+        $this->resourceRights[] = $right;
 
         return $this;
     }
 
     /**
-     * @return ArrayCollection|ResourceRight[]
+     * @return Collection|ResourceRight[]
      */
-    public function getResourceRight()
+    public function getResourceRights()
     {
-        return $this->resourceRight;
+        return $this->resourceRights;
     }
 
     /**
@@ -227,9 +234,6 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * Get user.
-     */
     public function getUser(): ?User
     {
         return $this->user;
@@ -260,7 +264,7 @@ class ResourceLink
     public function setVisibility(int $visibility): self
     {
         if (!in_array($visibility, self::getVisibilityList(), true)) {
-            throw new \LogicException('The visibility is not valid');
+            throw new LogicException('The visibility is not valid');
         }
 
         $this->visibility = $visibility;

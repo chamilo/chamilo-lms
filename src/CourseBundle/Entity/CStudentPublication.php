@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -8,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,7 +39,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;
 
@@ -81,7 +84,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $postGroupId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="sent_date", type="datetime", nullable=true)
      */
@@ -116,7 +119,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $qualification;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_of_qualification", type="datetime", nullable=true)
      */
@@ -194,7 +197,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         $this->parentId = 0;
         $this->qualificatorId = 0;
         $this->qualification = 0;
-        $this->sentDate = new \DateTime();
+        $this->sentDate = new DateTime();
     }
 
     public function __toString(): string
@@ -260,9 +263,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set description.
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -270,9 +270,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;
@@ -305,13 +302,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set active.
      *
-     * @param int $active
-     *
      * @return CStudentPublication
      */
-    public function setActive($active)
+    public function setActive(int $active)
     {
-        $this->active = (int) $active;
+        $this->active = $active;
 
         return $this;
     }
@@ -377,7 +372,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set sentDate.
      *
-     * @param \DateTime $sentDate
+     * @param DateTime $sentDate
      *
      * @return CStudentPublication
      */
@@ -391,7 +386,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Get sentDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSentDate()
     {
@@ -497,7 +492,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set dateOfQualification.
      *
-     * @param \DateTime $dateOfQualification
+     * @param DateTime $dateOfQualification
      *
      * @return CStudentPublication
      */
@@ -511,7 +506,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Get dateOfQualification.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateOfQualification()
     {
@@ -556,12 +551,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get qualificatorId.
-     */
     public function getQualificatorId(): int
     {
-        return (int) $this->qualificatorId;
+        return $this->qualificatorId;
     }
 
     /**

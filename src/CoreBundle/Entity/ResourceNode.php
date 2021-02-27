@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,11 +13,13 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use InvalidArgumentException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
@@ -30,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     normalizationContext={"groups"={"resource_node:read", "document:read"}},
  *     denormalizationContext={"groups"={"resource_node:write", "document:write"}}
  * )
- * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"title":"partial"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"id", "title", "resourceFile", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
@@ -53,6 +57,8 @@ class ResourceNode
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @var int
      */
     protected $id;
 
@@ -115,12 +121,18 @@ class ResourceNode
      *     targetEntity="ResourceNode",
      *     inversedBy="children"
      * )
-     * @ORM\JoinColumns({@ORM\JoinColumn(onDelete="CASCADE")})
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(onDelete="CASCADE")
+     * })
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\ResourceNode
      */
     protected $parent;
 
     /**
      * @Gedmo\TreeLevel
+     *
+     * @var null|int
      *
      * @ORM\Column(name="level", type="integer", nullable=true)
      */
@@ -133,15 +145,17 @@ class ResourceNode
      *     targetEntity="ResourceNode",
      *     mappedBy="parent"
      * )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"id"="ASC"})
      */
     protected $children;
 
     /**
      * @Groups({"resource_node:read", "document:read"})
-     * @Gedmo\TreePath(appendId=true,separator="/")
+     * @Gedmo\TreePath(appendId=true, separator="/")
      *
      * @ORM\Column(name="path", type="text", nullable=true)
+     *
+     * @var null|string
      */
     protected $path;
 
@@ -160,7 +174,7 @@ class ResourceNode
     protected $comments;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="create")
@@ -169,7 +183,7 @@ class ResourceNode
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="update")
@@ -184,10 +198,15 @@ class ResourceNode
      */
     protected $fileEditableText;
 
+    /**
+     * @var null|string
+     */
     protected $content;
 
     /**
      * @ORM\Column(type="uuid", unique=true)
+     *
+     * @var \Symfony\Component\Uid\UuidV4
      */
     protected $uuid;
 
@@ -197,7 +216,7 @@ class ResourceNode
         $this->children = new ArrayCollection();
         $this->resourceLinks = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new DateTime();
         $this->fileEditableText = false;
     }
 
@@ -237,7 +256,7 @@ class ResourceNode
     /**
      * Returns the children resource instances.
      *
-     * @return ResourceNode[]|ArrayCollection
+     * @return ArrayCollection|ResourceNode[]
      */
     public function getChildren()
     {
@@ -257,7 +276,7 @@ class ResourceNode
     /**
      * Returns the parent resource.
      *
-     * @return ResourceNode|null
+     * @return null|ResourceNode
      */
     public function getParent()
     {
@@ -267,9 +286,9 @@ class ResourceNode
     /**
      * Return the lvl value of the resource in the tree.
      */
-    public function getLevel()
+    public function getLevel(): int
     {
-        return (int) $this->level;
+        return $this->level;
     }
 
     /**
@@ -285,7 +304,7 @@ class ResourceNode
     }
 
     /**
-     * @return ResourceComment[]|ArrayCollection
+     * @return ArrayCollection|ResourceComment[]
      */
     public function getComments()
     {
@@ -362,7 +381,7 @@ class ResourceNode
     public function setSlug(string $slug): self
     {
         if (false !== strpos(self::PATH_SEPARATOR, $slug)) {
-            throw new \InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
+            throw new InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
         }
 
         $this->slug = $slug;
@@ -525,12 +544,12 @@ class ResourceNode
     public function getThumbnail(RouterInterface $router): string
     {
         $size = 'fa-3x';
-        $class = "fa fa-folder $size";
+        $class = "fa fa-folder {$size}";
         if ($this->hasResourceFile()) {
-            $class = "far fa-file $size";
+            $class = "far fa-file {$size}";
 
             if ($this->isResourceFileAnImage()) {
-                $class = "far fa-file-image $size";
+                $class = "far fa-file-image {$size}";
 
                 $params = [
                     'id' => $this->getId(),
@@ -543,10 +562,10 @@ class ResourceNode
                     $params
                 );
 
-                return "<img src='$url'/>";
+                return "<img src='{$url}'/>";
             }
             if ($this->isResourceFileAVideo()) {
-                $class = "far fa-file-video $size";
+                $class = "far fa-file-video {$size}";
             }
         }
 

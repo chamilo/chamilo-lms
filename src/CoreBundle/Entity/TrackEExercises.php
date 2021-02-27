@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -40,7 +43,7 @@ class TrackEExercises
      *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
-    protected \DateTime $exeDate;
+    protected DateTime $exeDate;
 
     /**
      * @var int
@@ -91,7 +94,7 @@ class TrackEExercises
     protected $dataTracking;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
      */
@@ -133,7 +136,7 @@ class TrackEExercises
     protected $exeDuration;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="expired_time_control", type="datetime", nullable=true)
      */
@@ -192,7 +195,7 @@ class TrackEExercises
     /**
      * Set exeDate.
      *
-     * @param \DateTime $exeDate
+     * @param DateTime $exeDate
      *
      * @return TrackEExercises
      */
@@ -206,7 +209,7 @@ class TrackEExercises
     /**
      * Get exeDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExeDate()
     {
@@ -251,9 +254,6 @@ class TrackEExercises
         return $this;
     }
 
-    /**
-     * Get exeExoId.
-     */
     public function getExeExoId(): int
     {
         return $this->exeExoId;
@@ -334,7 +334,7 @@ class TrackEExercises
     /**
      * Set startDate.
      *
-     * @param \DateTime $startDate
+     * @param DateTime $startDate
      *
      * @return TrackEExercises
      */
@@ -348,7 +348,7 @@ class TrackEExercises
     /**
      * Get startDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartDate()
     {
@@ -478,7 +478,7 @@ class TrackEExercises
     /**
      * Set expiredTimeControl.
      *
-     * @param \DateTime $expiredTimeControl
+     * @param DateTime $expiredTimeControl
      *
      * @return TrackEExercises
      */
@@ -492,7 +492,7 @@ class TrackEExercises
     /**
      * Get expiredTimeControl.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpiredTimeControl()
     {

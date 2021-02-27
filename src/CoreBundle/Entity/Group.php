@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,20 +36,22 @@ class Group
     protected string $code;
 
     /**
-     * @var array
      * @ORM\Column(name="roles", type="array")
      */
-    protected $roles;
+    protected array $roles;
 
     /**
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\User", mappedBy="groups")
+     *
+     * @var \Chamilo\CoreBundle\Entity\User[]|\Doctrine\Common\Collections\Collection
      */
     protected $users;
 
-    public function __construct($name, $roles = [])
+    public function __construct(string $name, array $roles = [])
     {
         $this->name = $name;
         $this->roles = $roles;
+        $this->users = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -54,7 +59,7 @@ class Group
         return $this->getName() ?: '';
     }
 
-    public function addRole($role)
+    public function addRole(string $role)
     {
         if (!$this->hasRole($role)) {
             $this->roles[] = strtoupper($role);
@@ -63,17 +68,17 @@ class Group
         return $this;
     }
 
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
         return in_array(strtoupper($role), $this->roles, true);
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
 
-    public function removeRole($role)
+    public function removeRole($role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -95,10 +100,7 @@ class Group
         return $this;
     }
 
-    /**
-     * @return Group
-     */
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 

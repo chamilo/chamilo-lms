@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -125,18 +127,17 @@ class CDocument extends AbstractResource implements ResourceInterface
     use ShowCourseResourcesInSessionTrait;
 
     /**
-     * @var int
      * @Groups({"document:read"})
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank
      * @Groups({"document:read", "document:write"})
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;
 
@@ -154,16 +155,14 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected string $filetype;
 
     /**
-     * @var bool
      * @ORM\Column(name="readonly", type="boolean", nullable=false)
      */
-    protected $readonly;
+    protected bool $readonly;
 
     /**
-     * @var bool
      * @ORM\Column(name="template", type="boolean", nullable=false)
      */
-    protected $template;
+    protected bool $template;
 
     public function __construct()
     {
@@ -227,9 +226,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set filetype.
-     */
     public function setFiletype(string $filetype): self
     {
         $this->filetype = $filetype;

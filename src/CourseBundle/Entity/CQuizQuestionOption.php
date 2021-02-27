@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -45,7 +47,7 @@ class CQuizQuestionOption
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected $name;
 

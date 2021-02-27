@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -40,7 +42,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected string $title;
+    protected ?string $title;
 
     /**
      * @ORM\Column(name="content", type="text", nullable=true)

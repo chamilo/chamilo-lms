@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -20,6 +22,8 @@ class ResourceType
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
+     *
+     * @var int
      */
     protected $id;
 
@@ -38,6 +42,8 @@ class ResourceType
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
+     *
+     * @var \Chamilo\CoreBundle\Entity\ResourceNode[]|\Doctrine\Common\Collections\Collection
      */
     protected $resourceNodes;
 

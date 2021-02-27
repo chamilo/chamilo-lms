@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -18,7 +20,7 @@ class ToolResourceRight
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
@@ -41,6 +43,8 @@ class ToolResourceRight
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="toolResourceRight", cascade={"persist"})
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\Tool
      */
     protected $tool;
 
@@ -107,9 +111,6 @@ class ToolResourceRight
         return $this;
     }
 
-    /**
-     * Get id.
-     */
     public function getId(): int
     {
         return $this->id;

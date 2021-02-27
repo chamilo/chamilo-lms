@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -18,48 +20,42 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLpCategory.
  *
  * @ORM\Table(
- *  name="c_lp_category",
+ *     name="c_lp_category",
  * )
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
 class CLpCategory extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected ?int $iid = null;
 
     /**
      * @Gedmo\SortableGroup
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected ?int $cId = null;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="session_id")
      */
-    protected $session;
+    protected Session $session;
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="name", type="text", nullable=false)
+     * @ORM\Column(name="name", type="text")
      */
     protected string $name;
 
     /**
-     * @var int
-     *
      * @Gedmo\SortablePosition
      * @ORM\Column(name="position", type="integer")
      */
-    protected $position;
+    protected int $position;
 
     /**
      * @var ArrayCollection|CLpCategoryUser
@@ -133,7 +129,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->name;
     }
 
-    public function setPosition($position): self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -149,7 +145,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CLp[]|ArrayCollection
+     * @return ArrayCollection|CLp[]
      */
     public function getLps()
     {
@@ -164,7 +160,10 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->users;
     }
 
-    public function setUsers($users)
+    /**
+     * @param ArrayCollection $users
+     */
+    public function setUsers($users): void
     {
         $this->users = new ArrayCollection();
         foreach ($users as $user) {
@@ -172,7 +171,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         }
     }
 
-    public function addUser(CLpCategoryUser $categoryUser)
+    public function addUser(CLpCategoryUser $categoryUser): void
     {
         $categoryUser->setCategory($this);
 
@@ -186,7 +185,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      */
     public function hasUser(CLpCategoryUser $categoryUser)
     {
-        if ($this->getUsers()->count()) {
+        if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('user', $categoryUser->getUser())
             )->andWhere(
@@ -208,7 +207,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      */
     public function hasUserAdded($user)
     {
-        if ($this->getUsers()->count()) {
+        if (0 !== $this->getUsers()->count()) {
             $categoryUser = new CLpCategoryUser();
             $categoryUser->setCategory($this);
             $categoryUser->setUser($user);

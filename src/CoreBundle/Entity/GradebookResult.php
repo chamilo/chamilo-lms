@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -12,24 +15,22 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * GradebookResult.
  *
  * @ORM\Table(name="gradebook_result",
- *  indexes={
- *     @ORM\Index(name="idx_gb_uid_eid", columns={"user_id", "evaluation_id"}),
- * })
+ *     indexes={
+ *         @ORM\Index(name="idx_gb_uid_eid", columns={"user_id", "evaluation_id"}),
+ *     })
  *
- * @ORM\Entity
+ *     @ORM\Entity
  */
 class GradebookResult
 {
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
@@ -44,24 +45,20 @@ class GradebookResult
     protected User $user;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected $score;
+    protected float $score;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return GradebookResult
      */
@@ -75,7 +72,7 @@ class GradebookResult
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -18,13 +20,11 @@ class AccessUrlRelCourse
     use CourseTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="urls", cascade={"persist"})
@@ -56,9 +56,6 @@ class AccessUrlRelCourse
         return $this->id;
     }
 
-    /**
-     * Set url.
-     */
     public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;

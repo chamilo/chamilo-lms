@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -10,47 +12,39 @@ use Doctrine\ORM\Mapping as ORM;
  * FieldRelTag.
  *
  * @ORM\Table(
- *  name="extra_field_rel_tag",
- *  indexes={
- *      @ORM\Index(name="field", columns={"field_id"}),
- *      @ORM\Index(name="item", columns={"item_id"}),
- *      @ORM\Index(name="tag", columns={"tag_id"}),
- *      @ORM\Index(name="field_item_tag", columns={"field_id", "item_id", "tag_id"})
- *  }
+ *     name="extra_field_rel_tag",
+ *     indexes={
+ *         @ORM\Index(name="field", columns={"field_id"}),
+ *         @ORM\Index(name="item", columns={"item_id"}),
+ *         @ORM\Index(name="tag", columns={"tag_id"}),
+ *         @ORM\Index(name="field_item_tag", columns={"field_id", "item_id", "tag_id"})
+ *     }
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository")
  */
 class ExtraFieldRelTag
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
-    protected $fieldId;
+    protected int $fieldId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="tag_id", type="integer", nullable=false)
      */
-    protected $tagId;
+    protected int $tagId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
-    protected $itemId;
+    protected int $itemId;
 
     /**
      * Set fieldId.

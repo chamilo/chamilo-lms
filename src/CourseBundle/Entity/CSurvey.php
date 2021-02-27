@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,31 +28,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CSurvey extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
      */
-    protected $code;
+    protected ?string $code;
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="text", nullable=true)
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
     protected string $title;
 
@@ -59,46 +56,34 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected ?string $subtitle;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="author", type="string", length=20, nullable=true)
      */
-    protected $author;
+    protected ?string $author;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
      */
-    protected $lang;
+    protected string $lang;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="avail_from", type="datetime", nullable=true)
      */
-    protected $availFrom;
+    protected ?DateTime $availFrom;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="avail_till", type="datetime", nullable=true)
      */
-    protected $availTill;
+    protected ?DateTime $availTill;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="is_shared", type="string", length=1, nullable=true)
      */
-    protected $isShared;
+    protected ?string $isShared;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="template", type="string", length=20, nullable=true)
      */
-    protected $template;
+    protected ?string $template;
 
     /**
      * @ORM\Column(name="intro", type="text", nullable=true)
@@ -111,39 +96,29 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected ?string $surveyThanks;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="invited", type="integer", nullable=false)
      */
-    protected $invited;
+    protected int $invited;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
-    protected $answered;
+    protected int $answered;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="invite_mail", type="text", nullable=false)
      */
-    protected $inviteMail;
+    protected string $inviteMail;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="reminder_mail", type="text", nullable=false)
      */
-    protected $reminderMail;
+    protected string $reminderMail;
 
     /**
      * @ORM\Column(name="mail_subject", type="string", length=255, nullable=false)
@@ -151,92 +126,68 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected string $mailSubject;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="anonymous", type="string", length=10, nullable=false)
      */
-    protected $anonymous;
+    protected string $anonymous;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="access_condition", type="text", nullable=true)
      */
-    protected $accessCondition;
+    protected ?string $accessCondition;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="shuffle", type="boolean", nullable=false)
      */
-    protected $shuffle;
+    protected bool $shuffle;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="one_question_per_page", type="boolean", nullable=false)
      */
-    protected $oneQuestionPerPage;
+    protected bool $oneQuestionPerPage;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="survey_version", type="string", length=255, nullable=false)
      */
-    protected $surveyVersion;
+    protected string $surveyVersion;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
-    protected $parentId;
+    protected int $parentId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_type", type="integer", nullable=false)
      */
-    protected $surveyType;
+    protected int $surveyType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="show_form_profile", type="integer", nullable=false)
      */
-    protected $showFormProfile;
+    protected int $showFormProfile;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="form_fields", type="text", nullable=false)
      */
-    protected $formFields;
+    protected string $formFields;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visible_results", type="integer", nullable=true)
      */
-    protected $visibleResults;
+    protected ?int $visibleResults;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
      */
-    protected $isMandatory = false;
+    protected bool $isMandatory = false;
 
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = new DateTime();
         $this->invited = 0;
         $this->answered = 0;
         $this->subtitle = '';
@@ -250,14 +201,16 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->surveyType = 0;
     }
 
+    public function __toString(): string
+    {
+        return $this->getCode();
+    }
+
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * Set code.
-     */
     public function setCode(string $code): self
     {
         $this->code = $code;
@@ -299,9 +252,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set subtitle.
-     */
     public function setSubtitle(string $subtitle): self
     {
         $this->subtitle = $subtitle;
@@ -309,9 +259,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get subtitle.
-     */
     public function getSubtitle(): ?string
     {
         return $this->subtitle;
@@ -366,7 +313,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set availFrom.
      *
-     * @param \DateTime $availFrom
+     * @param DateTime $availFrom
      *
      * @return CSurvey
      */
@@ -380,7 +327,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Get availFrom.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAvailFrom()
     {
@@ -390,7 +337,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set availTill.
      *
-     * @param \DateTime $availTill
+     * @param DateTime $availTill
      *
      * @return CSurvey
      */
@@ -404,7 +351,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Get availTill.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAvailTill()
     {
@@ -510,7 +457,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set creationDate.
      *
-     * @param \DateTime $creationDate
+     * @param DateTime $creationDate
      *
      * @return CSurvey
      */
@@ -524,7 +471,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
@@ -951,17 +898,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isMandatory()
+    public function isMandatory(): bool
     {
         return $this->isMandatory;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getCode();
     }
 
     public function getResourceIdentifier(): int

@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,61 +16,55 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(
  *     name="language",
- *     options={"row_format":"DYNAMIC"}
+ *     options={"row_format"="DYNAMIC"}
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\LanguageRepository")
  */
 class Language
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="original_name", type="string", length=255, nullable=true)
      */
-    protected string $originalName;
+    protected ?string $originalName;
 
     /**
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="english_name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="english_name", type="string", length=255)
      */
     protected string $englishName;
 
     /**
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="isocode", type="string", length=10, nullable=true)
+     * @ORM\Column(name="isocode", type="string", length=10)
      */
     protected string $isocode;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="available", type="boolean", nullable=false)
      */
-    protected $available;
+    protected bool $available;
 
     /**
-     * @var Language
      * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
-    protected $parent;
+    protected ?Language $parent;
 
     /**
-     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Language", mappedBy="parent")
      */
-    protected $subLanguages;
+    protected Collection $subLanguages;
 
     public function __construct()
     {

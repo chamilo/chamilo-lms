@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -9,7 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SessionRelCourse.
  *
- * @ORM\Table(name="session_rel_course", indexes={@ORM\Index(name="idx_session_rel_course_course_id", columns={"c_id"})})
+ * @ORM\Table(name="session_rel_course", indexes={
+ *     @ORM\Index(name="idx_session_rel_course_course_id", columns={"c_id"})
+ * })
  * @ORM\Entity
  */
 class SessionRelCourse
@@ -33,12 +37,16 @@ class SessionRelCourse
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\Session
      */
     protected $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\Course
      */
     protected $course;
 
@@ -146,7 +154,7 @@ class SessionRelCourse
     /**
      * @param int $position
      */
-    public function setPosition($position)
+    public function setPosition($position): void
     {
         $this->position = $position;
     }

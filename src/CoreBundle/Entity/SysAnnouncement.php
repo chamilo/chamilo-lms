@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,14 +28,14 @@ class SysAnnouncement
     protected $id;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_start", type="datetime", nullable=false)
      */
     protected $dateStart;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_end", type="datetime", nullable=false)
      */
@@ -141,7 +144,7 @@ class SysAnnouncement
     /**
      * Set dateStart.
      *
-     * @param \DateTime $dateStart
+     * @param DateTime $dateStart
      *
      * @return SysAnnouncement
      */
@@ -155,7 +158,7 @@ class SysAnnouncement
     /**
      * Get dateStart.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateStart()
     {
@@ -165,7 +168,7 @@ class SysAnnouncement
     /**
      * Set dateEnd.
      *
-     * @param \DateTime $dateEnd
+     * @param DateTime $dateEnd
      *
      * @return SysAnnouncement
      */
@@ -179,7 +182,7 @@ class SysAnnouncement
     /**
      * Get dateEnd.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateEnd()
     {

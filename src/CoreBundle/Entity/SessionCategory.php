@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,13 +27,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SessionCategory
 {
     /**
-     * @var int
      * @Groups({"session_category:read"})
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategories", cascade={"persist"})
@@ -46,32 +48,25 @@ class SessionCategory
     /**
      * @Assert\NotBlank
      * @Groups({"session_category:read", "session_category:write"})
-     * @ORM\Column(name="name", type="string", length=100, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", length=100, nullable=false, unique=false)
      */
     protected string $name;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_start", type="date", nullable=true, unique=false)
      */
-    protected $dateStart;
+    protected ?DateTime $dateStart;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_end", type="date", nullable=true, unique=false)
      */
-    protected $dateEnd;
+    protected ?DateTime $dateEnd;
 
     public function __toString(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set url.
-     */
     public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
@@ -94,9 +89,6 @@ class SessionCategory
         return $this->id;
     }
 
-    /**
-     * Set name.
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -104,9 +96,6 @@ class SessionCategory
         return $this;
     }
 
-    /**
-     * Get name.
-     */
     public function getName(): string
     {
         return $this->name;
@@ -115,7 +104,7 @@ class SessionCategory
     /**
      * Set dateStart.
      *
-     * @param \DateTime $dateStart
+     * @param DateTime $dateStart
      */
     public function setDateStart($dateStart): self
     {
@@ -127,7 +116,7 @@ class SessionCategory
     /**
      * Get dateStart.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateStart()
     {
@@ -137,7 +126,7 @@ class SessionCategory
     /**
      * Set dateEnd.
      *
-     * @param \DateTime $dateEnd
+     * @param DateTime $dateEnd
      *
      * @return SessionCategory
      */
@@ -151,7 +140,7 @@ class SessionCategory
     /**
      * Get dateEnd.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateEnd()
     {

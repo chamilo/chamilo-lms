@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(
  *     name="gradebook_certificate",
  *     indexes={
- *      @ORM\Index(name="idx_gradebook_certificate_user_id", columns={"user_id"}),
+ *         @ORM\Index(name="idx_gradebook_certificate_user_id", columns={"user_id"}),
  *     }
  * )
  * @ORM\Entity
@@ -21,13 +24,11 @@ class GradebookCertificate
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
@@ -37,37 +38,29 @@ class GradebookCertificate
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCertificates")
-     * @ORM\JoinColumn(name="user_id",referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected User $user;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_certificate", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreCertificate;
+    protected float $scoreCertificate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path_certificate", type="text", nullable=true)
      */
-    protected $pathCertificate;
+    protected ?string $pathCertificate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
      */
-    protected $downloadedAt;
+    protected ?DateTime $downloadedAt;
 
     /**
      * Set scoreCertificate.
@@ -96,7 +89,7 @@ class GradebookCertificate
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return GradebookCertificate
      */
@@ -110,7 +103,7 @@ class GradebookCertificate
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -151,12 +144,12 @@ class GradebookCertificate
         return $this->id;
     }
 
-    public function getDownloadedAt(): \DateTime
+    public function getDownloadedAt(): DateTime
     {
         return $this->downloadedAt;
     }
 
-    public function setDownloadedAt(\DateTime $downloadedAt): self
+    public function setDownloadedAt(DateTime $downloadedAt): self
     {
         $this->downloadedAt = $downloadedAt;
 

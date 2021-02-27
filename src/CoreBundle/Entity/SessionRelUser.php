@@ -1,20 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SessionRelUser.
  *
  * @ORM\Table(
- *    name="session_rel_user",
- *      indexes={
- *          @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"user_id", "moved_to"})
- *      }
+ *     name="session_rel_user",
+ *     indexes={
+ *         @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"user_id", "moved_to"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -22,19 +26,20 @@ class SessionRelUser
 {
     use UserTrait;
 
+    /**
+     * @var string[]
+     */
     public array $relationTypeList = [
         0 => 'student',
         1 => 'drh',
     ];
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
@@ -49,12 +54,12 @@ class SessionRelUser
     protected User $user;
 
     /**
-     * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="relation_type", type="integer")
      */
     protected int $relationType;
 
     /**
-     * @ORM\Column(name="duration", type="integer", nullable=true)
+     * @ORM\Column(name="duration", type="integer", nullable=false)
      */
     protected int $duration;
 
@@ -69,35 +74,24 @@ class SessionRelUser
     protected ?int $movedStatus;
 
     /**
-     * @var \DateTime|null
-     *
      * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
      */
-    protected $movedAt;
+    protected ?DateTime $movedAt = null;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="registered_at", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="registered_at", type="datetime")
      */
-    protected $registeredAt;
+    protected DateTime $registeredAt;
 
     public function __construct()
     {
         $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;
-        $this->registeredAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->registeredAt = new DateTime('now', new DateTimeZone('UTC'));
     }
 
-    /**
-     * Set Session.
-     *
-     * @param Session $session
-     *
-     * @return SessionRelUser
-     */
-    public function setSession($session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
 
@@ -109,14 +103,7 @@ class SessionRelUser
         return $this->session;
     }
 
-    /**
-     * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return SessionRelUser
-     */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 
@@ -126,25 +113,18 @@ class SessionRelUser
     /**
      * Set relationTypeByName.
      *
-     * @param string $relationType
-     *
      * @return SessionRelUser
      */
-    public function setRelationTypeByName($relationType)
+    public function setRelationTypeByName(string $relationType): self
     {
         if (isset($this->relationTypeList[$relationType])) {
-            $this->setRelationType($this->relationTypeList[$relationType]);
+            $this->setRelationType((int) $this->relationTypeList[$relationType]);
         }
 
         return $this;
     }
 
-    /**
-     * Get relationType.
-     *
-     * @return int
-     */
-    public function getRelationType()
+    public function getRelationType(): int
     {
         return $this->relationType;
     }
@@ -200,7 +180,7 @@ class SessionRelUser
     /**
      * Set movedAt.
      *
-     * @param \DateTime $movedAt
+     * @param DateTime $movedAt
      *
      * @return SessionRelUser
      */
@@ -214,7 +194,7 @@ class SessionRelUser
     /**
      * Get movedAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getMovedAt()
     {
@@ -226,7 +206,7 @@ class SessionRelUser
      *
      * @return $this
      */
-    public function setRegisteredAt(\DateTime $registeredAt)
+    public function setRegisteredAt(DateTime $registeredAt)
     {
         $this->registeredAt = $registeredAt;
 
@@ -236,7 +216,7 @@ class SessionRelUser
     /**
      * Get registeredAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getRegisteredAt()
     {

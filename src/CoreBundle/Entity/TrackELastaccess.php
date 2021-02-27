@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,7 +29,7 @@ class TrackELastaccess
     protected $accessUserId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
      */
@@ -89,7 +92,7 @@ class TrackELastaccess
     /**
      * Set accessDate.
      *
-     * @param \DateTime $accessDate
+     * @param DateTime $accessDate
      *
      * @return TrackELastaccess
      */
@@ -103,7 +106,7 @@ class TrackELastaccess
     /**
      * Get accessDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAccessDate()
     {

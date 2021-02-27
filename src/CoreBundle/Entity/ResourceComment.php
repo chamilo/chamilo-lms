@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -35,6 +38,8 @@ class ResourceComment
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"comment:read"})
+     *
+     * @var int
      */
     protected $id;
 
@@ -66,12 +71,16 @@ class ResourceComment
      *     targetEntity="ResourceComment",
      *     inversedBy="children"
      * )
-     * @ORM\JoinColumns({@ORM\JoinColumn(onDelete="CASCADE")})
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(onDelete="CASCADE")
+     * })
+     *
+     * @var null|\Chamilo\CoreBundle\Entity\ResourceComment
      */
     protected $parent;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
@@ -79,7 +88,7 @@ class ResourceComment
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="update")
@@ -94,13 +103,13 @@ class ResourceComment
      *     targetEntity="ResourceComment",
      *     mappedBy="parent"
      * )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"id"="ASC"})
      */
     protected $children;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new DateTime();
         $this->content = '';
         $this->children = new ArrayCollection();
     }

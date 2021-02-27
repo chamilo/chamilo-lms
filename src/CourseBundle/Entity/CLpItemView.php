@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -25,101 +27,72 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpItemView
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_item_id", type="integer", nullable=false)
      */
-    protected $lpItemId;
+    protected int $lpItemId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_view_id", type="integer", nullable=false)
      */
-    protected $lpViewId;
+    protected int $lpViewId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
-    protected $viewCount;
+    protected int $viewCount;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="start_time", type="integer", nullable=false)
      */
-    protected $startTime;
+    protected int $startTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_time", type="integer", nullable=false)
      */
-    protected $totalTime;
+    protected int $totalTime;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $score;
+    protected float $score;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="status", type="string", length=32, nullable=false, options={"default":"not attempted"})
      */
-    protected $status;
+    protected string $status;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="suspend_data", type="text", nullable=true)
      */
-    protected $suspendData;
+    protected ?string $suspendData;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lesson_location", type="text", nullable=true)
      */
-    protected $lessonLocation;
+    protected ?string $lessonLocation;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="core_exit", type="string", length=32, nullable=false, options={"default":"none"})
      */
-    protected $coreExit;
+    protected string $coreExit;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="max_score", type="string", length=8, nullable=true)
      */
-    protected $maxScore;
+    protected ?string $maxScore;
 
-    /**
-     * CLpItemView constructor.
-     */
     public function __construct()
     {
         $this->status = 'not attempted';

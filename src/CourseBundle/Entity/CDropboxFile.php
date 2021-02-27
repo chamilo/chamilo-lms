@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,90 +28,66 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxFile
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="uploader_id", type="integer", nullable=false)
      */
-    protected $uploaderId;
+    protected int $uploaderId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=190, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="filesize", type="integer", nullable=false)
      */
-    protected $filesize;
+    protected int $filesize;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=250, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="string", length=250, nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="author", type="string", length=250, nullable=true)
      */
-    protected $author;
+    protected string $author;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
      */
-    protected $uploadDate;
+    protected DateTime $uploadDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="last_upload_date", type="datetime", nullable=false)
      */
-    protected $lastUploadDate;
+    protected DateTime $lastUploadDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
-    protected $catId;
+    protected int $catId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * Set uploaderId.
@@ -257,7 +236,7 @@ class CDropboxFile
     /**
      * Set uploadDate.
      *
-     * @param \DateTime $uploadDate
+     * @param DateTime $uploadDate
      *
      * @return CDropboxFile
      */
@@ -271,7 +250,7 @@ class CDropboxFile
     /**
      * Get uploadDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUploadDate()
     {
@@ -281,7 +260,7 @@ class CDropboxFile
     /**
      * Set lastUploadDate.
      *
-     * @param \DateTime $lastUploadDate
+     * @param DateTime $lastUploadDate
      *
      * @return CDropboxFile
      */
@@ -295,7 +274,7 @@ class CDropboxFile
     /**
      * Get lastUploadDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastUploadDate()
     {

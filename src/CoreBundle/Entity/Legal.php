@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,55 +17,41 @@ use Doctrine\ORM\Mapping as ORM;
 class Legal
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="date", type="integer", nullable=false)
      */
-    protected $date;
+    protected int $date;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    protected $type;
+    protected int $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="changes", type="text", nullable=false)
      */
-    protected $changes;
+    protected string $changes;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
-    protected $version;
+    protected int $version;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="language_id", type="integer")
      */
-    protected $languageId;
+    protected int $languageId;
 
     /**
      * @return int

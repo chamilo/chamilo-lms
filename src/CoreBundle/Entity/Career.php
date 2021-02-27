@@ -20,6 +20,9 @@ class Career
 {
     use TimestampableEntity;
 
+    public const CAREER_STATUS_ACTIVE = 1;
+    public const CAREER_STATUS_INACTIVE = 0;
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -42,6 +45,11 @@ class Career
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     protected int $status;
+
+    public function __construct()
+    {
+        $this->status = self::CAREER_STATUS_ACTIVE;
+    }
 
     /**
      * Get id.

@@ -432,12 +432,6 @@ define('HOOK_EVENT_TYPE_PRE', 0);
 define('HOOK_EVENT_TYPE_POST', 1);
 define('HOOK_EVENT_TYPE_ALL', 10);
 
-define('CAREER_STATUS_ACTIVE', 1);
-define('CAREER_STATUS_INACTIVE', 0);
-
-define('PROMOTION_STATUS_ACTIVE', 1);
-define('PROMOTION_STATUS_INACTIVE', 0);
-
 // Group permissions
 define('GROUP_PERMISSION_OPEN', '1');
 define('GROUP_PERMISSION_CLOSED', '2');

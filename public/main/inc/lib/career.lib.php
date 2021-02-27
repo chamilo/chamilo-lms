@@ -3,6 +3,7 @@
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Chamilo\CoreBundle\Entity\Career as CareerEntity;
 
 /**
  * Class Career.
@@ -104,8 +105,8 @@ class Career extends Model
     public function get_status_list()
     {
         return [
-            CAREER_STATUS_ACTIVE => get_lang('Unarchived'),
-            CAREER_STATUS_INACTIVE => get_lang('Archived'),
+            CareerEntity::CAREER_STATUS_ACTIVE => get_lang('Unarchived'),
+            CareerEntity::CAREER_STATUS_INACTIVE => get_lang('Archived'),
         ];
     }
 
@@ -124,7 +125,7 @@ class Career extends Model
         $form = new FormValidator('career', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             $header = get_lang('Edit');
         }
 
@@ -146,7 +147,7 @@ class Career extends Model
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             $extraField = new ExtraField('career');
             $extraField->addElements($form, $id);
 

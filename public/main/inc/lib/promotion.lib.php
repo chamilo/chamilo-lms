@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Promotion as PromotionEntity;
+
 /**
  * Class Promotion
  * This class provides methods for the promotion management.
@@ -145,14 +147,11 @@ class Promotion extends Model
         );
     }
 
-    /**
-     * @return array
-     */
-    public function get_status_list()
+    public function get_status_list(): array
     {
         return [
-            PROMOTION_STATUS_ACTIVE => get_lang('active'),
-            PROMOTION_STATUS_INACTIVE => get_lang('inactive'),
+            PromotionEntity::PROMOTION_STATUS_ACTIVE => get_lang('active'),
+            PromotionEntity::PROMOTION_STATUS_INACTIVE => get_lang('inactive'),
         ];
     }
 

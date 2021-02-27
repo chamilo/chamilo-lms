@@ -20,6 +20,9 @@ class Promotion
 {
     use TimestampableEntity;
 
+    public const PROMOTION_STATUS_ACTIVE = 1;
+    public const PROMOTION_STATUS_INACTIVE = 0;
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -48,6 +51,11 @@ class Promotion
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     protected int $status;
+
+    public function __construct()
+    {
+        $this->status = self::PROMOTION_STATUS_ACTIVE;
+    }
 
     /**
      * Get id.

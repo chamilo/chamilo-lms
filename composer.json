@@ -174,7 +174,7 @@
     },
     "scripts": {
         "analyse": [
-            "@php vendor/bin/ecs check src",
+            "@php vendor/bin/ecs check",
             "@php vendor/bin/psalm --show-info=false"
         ],
         "auto-scripts": {

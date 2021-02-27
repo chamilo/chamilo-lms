@@ -24,11 +24,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(
         Option::SETS,
         [
-            //SetList::COMMON,
+            SetList::COMMON,
             SetList::CLEAN_CODE,
             SetList::SYMFONY,
             SetList::PSR_12,
-            //SetList::PHP_CS_FIXER,
+            SetList::PHP_CS_FIXER,
             //SetList::DOCTRINE_ANNOTATIONS,
             //SetList::SYMFONY_RISKY,
         ]
@@ -39,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(\PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer::class);
     $services->set(\SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff::class);
     $services->set(PropertyTypeHintSniff::class);
-    //$services->set(\SlevomatCodingStandard\Sniffs\Namespaces\FullyQualifiedClassNameAfterKeywordSniff::class);
+    $services->set(\SlevomatCodingStandard\Sniffs\Namespaces\FullyQualifiedClassNameAfterKeywordSniff::class);
     $services->set(\PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer::class);
     $services->set(\PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer::class);
     $services->set(\PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer::class);
@@ -59,19 +59,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(
         Option::SKIP,
         [
+            __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
+            __DIR__.'/src/CoreBundle/Menu/*',
             __DIR__.'/src/CourseBundle/Component/*',
             __DIR__.'/src/CoreBundle/Hook/*',
             __DIR__.'/src/CoreBundle/Traits/*',
-        ]
-    );
-
-    // use $a++ instead of ++$a
-    $parameters->set(
-        Option::SKIP,
-        [
+            __DIR__.'/src/LtiBundle/*',
             IncrementStyleFixer::class => 'post',
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
             \PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationArrayAssignmentFixer::class,
+            \PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer::class,
+            \PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer::class
             //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
         ]
@@ -94,7 +92,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 [
                     'import_classes' => true,
                     'import_constants' => true,
-                    'import_functions' => true,
+                    'import_functions' => false,
                 ],
             ]
         );

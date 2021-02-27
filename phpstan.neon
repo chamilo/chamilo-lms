@@ -1,5 +1,5 @@
 parameters:
-	level: 6
+	level: 5
 	paths:
 		- src
 #		- public/main
@@ -63,8 +63,10 @@ parameters:
 		- src/CoreBundle/Controller/EditorController.php
 		- src/CoreBundle/Component/Editor/*
 		- src/CourseBundle/Component/CourseCopy/*
+		- src/CoreBundle/Traits/*
+		- src/CoreBundle/Twig/Extension/ChamiloExtension.php
+		- src/CoreBundle/Settings/*
 		- src/LtiBundle/*
-		- src/GraphQlBundle/*
 		- tests/*
 	ignoreErrors:
 		- '#If condition is always true.#'

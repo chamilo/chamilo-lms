@@ -24,14 +24,7 @@ $rules = [
     'ordered_imports' => true,
     'phpdoc_order' => true,
     'no_break_comment' => true,
-    'no_break_comment' => true,
-    'no_break_comment' => true,
     'global_namespace_import' => true,
-
-    // To be tested before insertion:
-//    'strict_comparison' => true,
-//    'strict_param' => true,
-//    'php_unit_strict' => true,
 ];
 
 $finder = PhpCsFixer\Finder::create()

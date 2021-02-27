@@ -155,7 +155,6 @@
             <directory name="src/CoreBundle/Menu"/>
             <directory name="src/CoreBundle/Component/Editor"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
-            <directory name="src/GraphQlBundle"/>
             <directory name="src/LtiBundle"/>
 
             <directory name="public/main/inc/lib/elfinder" />
@@ -169,8 +168,6 @@
             <directory name="public/main/inc/lib/search" />
             <directory name="public/main/inc/lib/svg-edit" />
             <directory name="public/main/inc/lib/zombie" />
-
-
 
             <file name="public/main/lp/openoffice_presentation.class.php"/>
             <file name="public/main/lp/openoffice_document.class.php"/>
@@ -199,8 +196,11 @@
 
     <issueHandlers>
 
+
+        <MismatchingDocblockPropertyType errorLevel="info"/>
         <RedundantCastGivenDocblockType errorLevel="info"/>
 
+        <MismatchingDocblockParamType errorLevel="info"/>
 
         <InvalidClass errorLevel="info"/>
 

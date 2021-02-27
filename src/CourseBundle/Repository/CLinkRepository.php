@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -17,9 +19,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * Class CLinkRepository.
- */
 final class CLinkRepository extends ResourceRepository implements GridInterface
 {
     public function __construct(ManagerRegistry $registry)

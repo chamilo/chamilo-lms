@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -22,9 +24,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Class CDocumentRepository.
- */
 final class CDocumentRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
     public function __construct(ManagerRegistry $registry)
@@ -119,7 +118,8 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
                 'user' => $userId,
                 'visibility' => ResourceLink::VISIBILITY_DELETED,
             ])
-            ->getQuery();
+            ->getQuery()
+        ;
 
         return $query->getResult();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -16,9 +18,6 @@ use Chamilo\CourseBundle\Entity\CShortcut;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CShortcutRepository.
- */
 final class CShortcutRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -28,7 +27,9 @@ final class CShortcutRepository extends ResourceRepository
 
     public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
     {
-        $criteria = ['shortCutNode' => $resource->getResourceNode()];
+        $criteria = [
+            'shortCutNode' => $resource->getResourceNode(),
+        ];
 
         return $this->findOneBy($criteria);
     }
@@ -43,7 +44,8 @@ final class CShortcutRepository extends ResourceRepository
                 ->setName($resource->getResourceName())
                 ->setShortCutNode($resource->getResourceNode())
                 ->setParent($parent)
-                ->addCourseLink($course, $session);
+                ->addCourseLink($course, $session)
+            ;
 
             $this->create($shortcut);
         }

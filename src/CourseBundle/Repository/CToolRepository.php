@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -25,12 +27,12 @@ final class CToolRepository extends ResourceRepository
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $checker = $this->getAuthorizationChecker();
-        //$reflectionClass = $repo->getClassMetadata()->getReflectionClass();
+        $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
-        //$loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
-        $loadBaseSessionContent = true;
-        $classes = class_implements($this);
+        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        //$loadBaseSessionContent = true;
+        //$classes = class_implements($this);
 
         $resourceTypeName = $this->getResourceTypeName();
         $qb = $this->createQueryBuilder('resource')
@@ -58,16 +60,14 @@ final class CToolRepository extends ResourceRepository
 
         if (null === $session) {
             $qb->andWhere('links.session IS NULL');
+        } elseif ($loadBaseSessionContent) {
+            // Load course base content.
+            $qb->andWhere('links.session = :session OR links.session IS NULL');
+            $qb->setParameter('session', $session);
         } else {
-            if ($loadBaseSessionContent) {
-                // Load course base content.
-                $qb->andWhere('links.session = :session OR links.session IS NULL');
-                $qb->setParameter('session', $session);
-            } else {
-                // Load only session resources.
-                $qb->andWhere('links.session = :session');
-                $qb->setParameter('session', $session);
-            }
+            // Load only session resources.
+            $qb->andWhere('links.session = :session');
+            $qb->setParameter('session', $session);
         }
 
         $qb->andWhere('node.parent = :parentNode');

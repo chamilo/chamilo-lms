@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -41,7 +43,8 @@ final class CCourseDescriptionRepository extends ResourceRepository implements G
 
         $templates
             ->setViewResource('@ChamiloCore/Resource/course_description/view_resource.html.twig')
-            ->setIndex('@ChamiloCore/Resource/course_description/index.html.twig');
+            ->setIndex('@ChamiloCore/Resource/course_description/index.html.twig')
+        ;
 
         return $templates;
     }

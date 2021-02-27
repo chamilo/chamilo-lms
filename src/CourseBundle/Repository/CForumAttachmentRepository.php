@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -14,9 +16,6 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CForumAttachmentRepository.
- */
 class CForumAttachmentRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -11,9 +13,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CNotebookRepository.
- */
 class CNotebookRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -58,9 +57,10 @@ class CNotebookRepository extends ResourceRepository
                     $qb->expr()->eq('N.userId', $user->getId()),
                     $qb->expr()->eq('N.cId', $course->getId())
                 )
-            );
+            )
+        ;
 
-        if ($session) {
+        if (null !== $session) {
             $qb->andWhere(
                 $qb->expr()->eq('N.sessionId', $session->getId())
             );

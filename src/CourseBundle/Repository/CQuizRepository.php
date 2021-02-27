@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -12,9 +14,6 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class CQuizRepository.
- */
 final class CQuizRepository extends ResourceRepository implements ResourceWithLinkInterface
 {
     public function __construct(ManagerRegistry $registry)
@@ -24,7 +23,10 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
 
     public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
-        $params = ['name' => 'exercise/overview.php', 'exerciseId' => $resource->getResourceIdentifier()];
+        $params = [
+            'name' => 'exercise/overview.php',
+            'exerciseId' => $resource->getResourceIdentifier(),
+        ];
         if (!empty($extraParams)) {
             $params = array_merge($params, $extraParams);
         }

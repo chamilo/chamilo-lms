@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -24,29 +26,21 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class CThematicPlanRepository extends ServiceEntityRepository
 {
-    /** @var EntityRepository */
-    protected $repository;
+    protected EntityRepository $repository;
 
-    /** @var FilesystemInterface */
-    protected $fs;
+    protected FilesystemInterface $fs;
 
-    /** @var EntityManager */
-    protected $entityManager;
+    protected EntityManager $entityManager;
 
-    /** @var RouterInterface */
-    protected $router;
+    protected ?RouterInterface $router = null;
 
-    /** @var ResourceNodeRepository */
-    protected $resourceNodeRepository;
+    protected ?ResourceNodeRepository $resourceNodeRepository = null;
 
-    /** @var AuthorizationCheckerInterface */
-    protected $authorizationChecker;
+    protected ?AuthorizationCheckerInterface $authorizationChecker = null;
 
-    /** @var SlugifyInterface */
-    protected $slugify;
+    protected ?SlugifyInterface $slugify = null;
 
-    /** @var ToolChain */
-    protected $toolChain;
+    protected ?ToolChain $toolChain = null;
 
     public function __construct(ManagerRegistry $registry)
     {

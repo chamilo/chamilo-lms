@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -9,9 +11,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CForumThreadRepository.
- */
 class CForumThreadRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -23,10 +22,8 @@ class CForumThreadRepository extends ResourceRepository
     {
         /** @var CForumThread $resource */
         $posts = $resource->getPosts();
-        if (!empty($posts)) {
-            foreach ($posts as $post) {
-                parent::delete($post);
-            }
+        foreach ($posts as $post) {
+            parent::delete($post);
         }
 
         parent::delete($resource);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -8,9 +10,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CGroupRepository.
- */
 final class CGroupRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -20,11 +19,15 @@ final class CGroupRepository extends ResourceRepository
 
     public function findOneByCode(string $code): ?CGroup
     {
-        return $this->findOneBy(['code' => $code]);
+        return $this->findOneBy([
+            'code' => $code,
+        ]);
     }
 
     public function findOneByTitle(string $name): ?CGroup
     {
-        return $this->findOneBy(['name' => $name]);
+        return $this->findOneBy([
+            'name' => $name,
+        ]);
     }
 }

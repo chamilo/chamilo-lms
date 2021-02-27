@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -13,9 +15,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CForumPostRepository.
- */
 class CForumPostRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -44,7 +43,7 @@ class CForumPostRepository extends ResourceRepository
         if (
             (empty($group) && $isAllowedToEdit) ||
             (
-                ($group ? $group->userIsTutor($currentUser) : false) ||
+                (null !== $group ? $group->userIsTutor($currentUser) : false) ||
                 !$onlyVisibles
             )
         ) {
@@ -52,12 +51,12 @@ class CForumPostRepository extends ResourceRepository
         }
 
         if ($filterModerated && $onlyVisibles && $thread->getForum()->isModerated()) {
-            $userId = $currentUser ? $currentUser->getId() : 0;
+            $userId = null !== $currentUser ? $currentUser->getId() : 0;
 
             $conditionModetared = 'AND p.status = 1 OR
-                (p.status = '.CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
-                (p.status = ".CForumPost::STATUS_REJECTED." AND p.poster = $userId) OR
-                (p.status IS NULL AND p.posterId = $userId)";
+                (p.status = '.CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = {$userId}) OR
+                (p.status = ".CForumPost::STATUS_REJECTED." AND p.poster = {$userId}) OR
+                (p.status IS NULL AND p.posterId = {$userId})";
         }
 
         $dql = "SELECT p
@@ -65,15 +64,19 @@ class CForumPostRepository extends ResourceRepository
             WHERE
                 p.thread = :thread AND
                 p.cId = :course AND
-                $conditionVisibility
-                $conditionModetared
-            ORDER BY p.iid $orderDirection";
+                {$conditionVisibility}
+                {$conditionModetared}
+            ORDER BY p.iid {$orderDirection}";
 
         return $this
             ->getEntityManager()
             ->createQuery($dql)
-            ->setParameters(['thread' => $thread, 'course' => $course])
-            ->getResult();
+            ->setParameters([
+                'thread' => $thread,
+                'course' => $course,
+            ])
+            ->getResult()
+        ;
     }
 
     public function delete(ResourceInterface $resource): void

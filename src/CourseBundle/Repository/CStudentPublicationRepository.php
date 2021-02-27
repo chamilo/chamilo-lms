@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -9,12 +11,11 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CStudentPublicationRepository.
- */
 final class CStudentPublicationRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -31,7 +32,7 @@ final class CStudentPublicationRepository extends ResourceRepository
 
         return $qb
             ->leftJoin(
-                'ChamiloCourseBundle:CStudentPublicationAssignment',
+                CStudentPublicationAssignment::class,
                 'a',
                 Join::WITH,
                 'a.publicationId = w.iid AND a.cId = w.cId'
@@ -46,7 +47,8 @@ final class CStudentPublicationRepository extends ResourceRepository
                     $qb->expr()->eq('w.userId', ':user')
                 )
             )
-            ->orderBy('w.sentDate', 'ASC')
+
+            ->orderBy('w.sentDate', Criteria::ASC)
             ->setParameters([
                 'course' => $course->getId(),
                 'session' => $session,
@@ -54,6 +56,7 @@ final class CStudentPublicationRepository extends ResourceRepository
                 'user' => $user->getId(),
             ])
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

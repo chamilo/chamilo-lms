@@ -1,4 +1,4 @@
-name: PHP analysis
+name: PHP static analysis ✨
 
 on: [push, pull_request]
 
@@ -16,12 +16,6 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
-            - name: Setup apache
-              run: |
-                sudo apt update
-                sudo apt install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
-                sudo chmod 777 -R $HOME
-
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
               with:
@@ -32,6 +26,9 @@ jobs:
             - name: Get composer cache directory
               id: composer-cache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            - name: Check Symfony requirements
+              run: vendor/bin/requirements-checker
 
             - name: Cache composer dependencies
               uses: actions/cache@v2
@@ -45,6 +42,10 @@ jobs:
             - name: Install dependencies with composer
               run: composer install --prefer-dist --no-progress --optimize-autoloader
 
-            - name: Composer analyse
-              id: analyse
-              run: composer analyse
+            - name: Psalm
+              id: psalm
+              run: vendor/bin/psalm --show-info=false
+
+            - name: PhpStan
+              if: (${{ success() }} || ${{ steps.psalm.outcome }} == 'failure')
+              run: vendor/bin/phpstan analyse

@@ -1731,14 +1731,26 @@ class MySpace
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
                                 $tempStudent = $studentArray[$studentId];
+                                $sessionId = (int)$student['session_id'];
+                                $studentName = $tempStudent['complete_name'];
+                                $studentCompany = $student['company'];
+                                $iconGroup = Display::return_icon(
+                                    'group_summary.png',
+                                    $studentName,
+                                    '',
+                                    ICON_SIZE_MEDIUM);
                                 if (!isset($studentInSesion[$studentId])) {
-                                    $tableTemp .= $tempStudent['complete_name']." (".$student['company'].")<br>";
+                                    if($sessionId != 0){
+                                        $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
+                                    }else{
+                                        $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
+                                    }
                                     $totalStudent++;
                                 }
                             }
-                            /* Student by course groups, keep it last */
-                            for ($i = 0; $i < count($byCourseGroups); $i++) {
-                                $student = $byCourseGroups[$i];
+                            /* Student by course, keep it last*/
+                            for ($i = 0; $i < count($byCourse); $i++) {
+                                $student = $byCourse[$i];
                                 $studentId = $student['id'];
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
@@ -4434,6 +4446,7 @@ class MySpace
             if ($withGroups) {
                 $query .= '
                 item_property.to_group_id as group_id,
+                item_property.session_id as session_id,
                 user_to_group.user_id as id
                 ';
             } else {
@@ -4466,8 +4479,6 @@ class MySpace
             $query .= "
                 ORDER BY item_property.ref, item_property.session_id
                 ";
-            // @todo :: remove debug
-            echo "<br>/*".__LINE__."*/<br>$query;";
             $queryResult = Database::query($query);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);
@@ -4482,10 +4493,11 @@ class MySpace
     }
 
     /***
-     * @TODO: phpdoc
+     * Gets the company name of a user based on the extra field 'company'.
+     *
      * @param int $userId
      *
-     * @return mixed|string
+     * @return string
      */
     public static function getCompanyOfUser($userId = 0)
     {
@@ -4493,15 +4505,15 @@ class MySpace
         if (0 != $userId) {
             $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
             $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-
-
             $sql = "
             SELECT
                 extra_field_value.item_id AS userId,
                 extra_field_value.`value` AS company
             FROM
                 $tblExtraFieldValue AS extra_field_value
-                INNER JOIN $tblExtraField AS extra_field ON ( extra_field_value.field_id = extra_field.id AND extra_field.variable = 'company' )
+                INNER JOIN $tblExtraField AS extra_field ON (
+                    extra_field_value.field_id = extra_field.id AND extra_field.variable = 'company'
+                    )
             WHERE
                 extra_field_value.`value` != ''
                 AND extra_field_value.item_id = $userId

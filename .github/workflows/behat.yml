@@ -1,4 +1,4 @@
-name: Behat
+name: Behat tests 🐞
 
 on: [push, pull_request]
 

@@ -27,9 +27,6 @@ jobs:
               id: composer-cache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-            - name: Check Symfony requirements
-              run: vendor/bin/requirements-checker
-
             - name: Cache composer dependencies
               uses: actions/cache@v2
               with:
@@ -41,6 +38,9 @@ jobs:
 
             - name: Install dependencies with composer
               run: composer install --prefer-dist --no-progress --optimize-autoloader
+
+            - name: Check Symfony requirements
+              run: vendor/bin/requirements-checker
 
             - name: Psalm
               id: psalm

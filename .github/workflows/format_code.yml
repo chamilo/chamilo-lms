@@ -27,9 +27,6 @@ jobs:
               id: composer-cache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-            - name: Check Symfony requirements
-              run: vendor/bin/requirements-checker
-
             - name: Cache composer dependencies
               uses: actions/cache@v2
               with:

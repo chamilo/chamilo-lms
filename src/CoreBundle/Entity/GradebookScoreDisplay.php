@@ -19,20 +19,16 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookScoreDisplay
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $score;
+    protected float $score;
 
     /**
      * @ORM\Column(name="display", type="string", length=40, nullable=false)
@@ -46,11 +42,9 @@ class GradebookScoreDisplay
     protected GradebookCategory $category;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_color_percent", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreColorPercent;
+    protected float $scoreColorPercent;
 
     /**
      * Set score.

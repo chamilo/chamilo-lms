@@ -17,48 +17,36 @@ use Doctrine\ORM\Mapping as ORM;
 class HookCall
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="hook_event_id", type="integer", nullable=false)
-     */
-    protected $hookEventId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="hook_observer_id", type="integer", nullable=false)
-     */
-    protected $hookObserverId;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
-     */
-    protected $type;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="hook_order", type="integer", nullable=false)
-     */
-    protected $hookOrder;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    protected $enabled;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
+
+    /**
+     * @ORM\Column(name="hook_event_id", type="integer", nullable=false)
+     */
+    protected int $hookEventId;
+
+    /**
+     * @ORM\Column(name="hook_observer_id", type="integer", nullable=false)
+     */
+    protected int $hookObserverId;
+
+    /**
+     * @ORM\Column(name="type", type="boolean", nullable=false)
+     */
+    protected bool $type;
+
+    /**
+     * @ORM\Column(name="hook_order", type="integer", nullable=false)
+     */
+    protected int $hookOrder;
+
+    /**
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     */
+    protected bool $enabled;
 
     /**
      * Set hookEventId.

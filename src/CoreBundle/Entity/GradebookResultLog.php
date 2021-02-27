@@ -22,50 +22,38 @@ class GradebookResultLog
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="result_id", type="integer", nullable=false)
      */
-    protected $resultId;
+    protected int $resultId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
      */
-    protected $evaluationId;
+    protected int $evaluationId;
 
     /**
-     * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected $score;
+    protected ?float $score;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookResultLogs")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * Set evaluationId.

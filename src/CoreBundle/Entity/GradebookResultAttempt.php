@@ -20,32 +20,24 @@ class GradebookResultAttempt
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?bool $comment;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", nullable=true)
      */
-    protected $score;
+    protected ?float $score;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="result_id", type="integer", nullable=false)
      */
-    protected $resultId;
+    protected int $resultId;
 }

@@ -368,15 +368,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     protected Room $room;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->creationDate = new DateTime();
         $this->lastVisit = new DateTime();
         $this->lastEdit = new DateTime();
         $this->description = '';
+        $this->tutorName = '';
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->tools = new ArrayCollection();

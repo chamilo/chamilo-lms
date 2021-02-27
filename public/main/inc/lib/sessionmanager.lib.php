@@ -259,8 +259,8 @@ class SessionManager
                     ->setSessionAdmin(api_get_user_entity($sessionAdminId))
                     ->setVisibility($visibility)
                     ->setDescription($description)
-                    ->setShowDescription($showDescription)
-                    ->setSendSubscriptionNotification((int) $sendSubscriptionNotification)
+                    ->setShowDescription(1 === $showDescription)
+                    ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                 ;
 
                 if (!empty($startDate)) {
@@ -1693,9 +1693,9 @@ class SessionManager
                     ->setName($name)
                     ->setDuration($duration)
                     ->setDescription($description)
-                    ->setShowDescription($showDescription)
+                    ->setShowDescription(1 === $showDescription)
                     ->setVisibility($visibility)
-                    ->setSendSubscriptionNotification($sendSubscriptionNotification)
+                    ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                     ->setAccessStartDate(null)
                     ->setAccessStartDate(null)
                     ->setDisplayStartDate(null)
@@ -1976,9 +1976,7 @@ class SessionManager
             $course_list[] = $row['c_id'];
         }
 
-        if ($session->getSendSubscriptionNotification() &&
-            is_array($userList)
-        ) {
+        if ($session->getSendSubscriptionNotification() && is_array($userList)) {
             // Sending emails only
             foreach ($userList as $user_id) {
                 if (in_array($user_id, $existingUsers)) {

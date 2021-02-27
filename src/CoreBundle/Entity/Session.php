@@ -296,7 +296,6 @@ class Session
         $this->coachAccessStartDate = new DateTime();
         $this->coachAccessEndDate = new DateTime();
         $this->visibility = 1;
-
         $this->showDescription = false;
         $this->category = null;
         $this->status = 0;
@@ -325,7 +324,7 @@ class Session
         return $this->showDescription;
     }
 
-    public function setShowDescription($showDescription): self
+    public function setShowDescription(bool $showDescription): self
     {
         $this->showDescription = $showDescription;
 
@@ -1075,26 +1074,14 @@ class Session
         return $this;
     }
 
-    /**
-     * Set $sendSubscriptionNotification.
-     *
-     * @param bool $sendNotification
-     *
-     * @return Session
-     */
-    public function setSendSubscriptionNotification($sendNotification)
+    public function setSendSubscriptionNotification(bool $sendNotification): self
     {
         $this->sendSubscriptionNotification = $sendNotification;
 
         return $this;
     }
 
-    /**
-     * Get $sendSubscriptionNotification.
-     *
-     * @return bool
-     */
-    public function getSendSubscriptionNotification()
+    public function getSendSubscriptionNotification(): bool
     {
         return $this->sendSubscriptionNotification;
     }

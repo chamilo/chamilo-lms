@@ -2572,7 +2572,7 @@ function finishInstallationWithContainer(
     $userRepo->addUserToResourceNode($anonId, $adminId);
     $manager->flush();
 
-    installSchemas($container, false);
+    installSchemas($container);
     $accessUrl = $urlRepo->find(1);
 
     UrlManager::add_user_to_url($adminId, $adminId);

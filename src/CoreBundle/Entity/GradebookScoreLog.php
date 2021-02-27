@@ -26,13 +26,11 @@ class GradebookScoreLog
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
@@ -47,18 +45,14 @@ class GradebookScoreLog
     protected User $user;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $score;
+    protected float $score;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="registered_at", type="datetime", nullable=false)
      */
-    protected $registeredAt;
+    protected DateTime $registeredAt;
 
     /**
      * Get the achieved score.

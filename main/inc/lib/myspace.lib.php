@@ -5,7 +5,6 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class MySpace.
@@ -149,11 +148,53 @@ class MySpace
     }
 
     /**
+     * This function serves exporting data in CSV format.
+     *
+     * @param array  $header    the header labels
+     * @param array  $data      the data array
+     * @param string $file_name the name of the file which contains exported data
+     *
+     * @return string mixed             Returns a message (string) if an error occurred
+     */
+    public function export_csv($header, $data, $file_name = 'export.csv')
+    {
+        $archive_path = api_get_path(SYS_ARCHIVE_PATH);
+        $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
+        $message = '';
+        if (!$open = fopen($archive_path.$file_name, 'w+')) {
+            $message = get_lang('noOpen');
+        } else {
+            $info = '';
+
+            foreach ($header as $value) {
+                $info .= $value.';';
+            }
+            $info .= "\r\n";
+
+            foreach ($data as $row) {
+                foreach ($row as $value) {
+                    $info .= $value.';';
+                }
+                $info .= "\r\n";
+            }
+
+            fwrite($open, $info);
+            fclose($open);
+            @chmod($file_name, api_get_permissions_for_new_files());
+
+            header("Location:".$archive_url.$file_name);
+            exit;
+        }
+
+        return $message;
+    }
+
+    /**
      * Gets the connections to a course as an array of login and logout time.
      *
-     * @param int   $userId    User id
+     * @param int   $userId     User id
      * @param array $courseInfo
-     * @param int   $sessionId Session id (optional, default = 0)
+     * @param int   $sessionId  Session id (optional, default = 0)
      *
      * @return array Connections
      */
@@ -161,14 +202,13 @@ class MySpace
         $userId,
         $courseInfo,
         $sessionId = 0
-    )
-    {
+    ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         // protect data
-        $userId = (int)$userId;
-        $courseId = (int)$courseInfo['real_id'];
-        $sessionId = (int)$sessionId;
+        $userId = (int) $userId;
+        $courseId = (int) $courseInfo['real_id'];
+        $sessionId = (int) $sessionId;
         $sessionCondition = api_get_session_condition($sessionId);
 
         $sql = 'SELECT login_course_date, logout_course_date
@@ -192,8 +232,8 @@ class MySpace
     }
 
     /**
-     * @param     $user_id
-     * @param     $course_list
+     * @param $user_id
+     * @param $course_list
      * @param int $session_id
      *
      * @return array|bool
@@ -202,8 +242,7 @@ class MySpace
         $user_id,
         $course_list,
         $session_id = 0
-    )
-    {
+    ) {
         // Database table definitions
         $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (empty($course_list)) {
@@ -211,8 +250,8 @@ class MySpace
         }
 
         // protect data
-        $user_id = (int)$user_id;
-        $session_id = (int)$session_id;
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $new_course_list = [];
         foreach ($course_list as $course_item) {
             $courseInfo = api_get_course_info($course_item['code']);
@@ -250,39 +289,6 @@ class MySpace
     }
 
     /**
-     * Display a sortable table that contains an overview off all the
-     * reporting progress of all users and all courses the user is subscribed to.
-     *
-     * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     *          Alex Aragon <alex.aragon@beeznest.com>, BeezNest, Perú
-     *
-     * @version Chamilo 1.11.8
-     *
-     * @since   April 2019
-     */
-    public static function returnTrackingUserOverviewFilter($user_id)
-    {
-        $tpl = new Template('', false, false, false, false, false, false);
-        $userInfo = api_get_user_info($user_id);
-
-        $avatar = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL);
-        $user = [
-            'id' => $user_id,
-            'code_user' => $userInfo['official_code'],
-            'complete_name' => $userInfo['complete_name'],
-            'username' => $userInfo['username'],
-            'course' => self::returnCourseTracking($user_id),
-            'avatar' => $avatar,
-        ];
-
-        $tpl->assign('item', $user);
-        $templateName = $tpl->get_template('my_space/partials/tracking_user_overview.tpl');
-        $content = $tpl->fetch($templateName);
-
-        return $content;
-    }
-
-    /**
      * Creates a small table in the last column of the table with the user overview.
      *
      * @param int $user_id the id of the user
@@ -291,7 +297,7 @@ class MySpace
      */
     public static function returnCourseTracking($user_id)
     {
-        $user_id = (int)$user_id;
+        $user_id = (int) $user_id;
 
         if (empty($user_id)) {
             return [];
@@ -354,73 +360,48 @@ class MySpace
     }
 
     /**
-     * Get general information about the exercise performance of the user
-     * the total obtained score (all the score on all the questions)
-     * the maximum score that could be obtained
-     * the number of questions answered
-     * the success percentage.
+     * Display a sortable table that contains an overview off all the
+     * reporting progress of all users and all courses the user is subscribed to.
      *
-     * @param int    $user_id     the id of the user
-     * @param string $course_code the course code
-     * @param int    $session_id
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *          Alex Aragon <alex.aragon@beeznest.com>, BeezNest, Perú
      *
-     * @return array
+     * @version Chamilo 1.11.8
      *
-     * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     *
-     * @version Dokeos 1.8.6
-     *
-     * @since   November 2008
+     * @since April 2019
      */
-    public static function exercises_results($user_id, $course_code, $session_id = 0)
+    public static function returnTrackingUserOverviewFilter($user_id)
     {
-        $user_id = (int)$user_id;
-        $courseId = api_get_course_int_id($course_code);
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tpl = new Template('', false, false, false, false, false, false);
+        $userInfo = api_get_user_info($user_id);
 
-        $sql = "SELECT exe_result, exe_weighting
-                FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    exe_user_id = $user_id";
-
-        $session_id = (int)$session_id;
-        if (!empty($session_id)) {
-            $sql .= " AND session_id = '".$session_id."' ";
-        }
-        $result = Database::query($sql);
-        $score_obtained = 0;
-        $score_possible = 0;
-        $questions_answered = 0;
-        while ($row = Database::fetch_array($result)) {
-            $score_obtained += $row['exe_result'];
-            $score_possible += $row['exe_weighting'];
-            $questions_answered++;
-        }
-
-        $percentage = null;
-        if ($score_possible != 0) {
-            $percentage = round(($score_obtained / $score_possible * 100), 2);
-        }
-
-        return [
-            'score_obtained' => $score_obtained,
-            'score_possible' => $score_possible,
-            'questions_answered' => $questions_answered,
-            'percentage' => $percentage,
+        $avatar = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL);
+        $user = [
+            'id' => $user_id,
+            'code_user' => $userInfo['official_code'],
+            'complete_name' => $userInfo['complete_name'],
+            'username' => $userInfo['username'],
+            'course' => self::returnCourseTracking($user_id),
+            'avatar' => $avatar,
         ];
+
+        $tpl->assign('item', $user);
+        $templateName = $tpl->get_template('my_space/partials/tracking_user_overview.tpl');
+        $content = $tpl->fetch($templateName);
+
+        return $content;
     }
 
     /**
      * Display a sortable table that contains an overview off all the
      * reporting progress of all users and all courses the user is subscribed to.
      *
-     * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
      *         Alex Aragon <alex.aragon@beeznest.com>, BeezNest, Perú
      *
      * @version Chamilo 1.11.8
      *
-     * @since   October 2008, Update April 2019
+     * @since October 2008, Update April 2019
      */
     public static function display_tracking_user_overview()
     {
@@ -449,118 +430,6 @@ class MySpace
     }
 
     /**
-     * Displays a form with all the additionally defined user fields of the profile
-     * and give you the opportunity to include these in the CSV export.
-     *
-     * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     *
-     * @version 1.8.6
-     *
-     * @since   November 2008
-     */
-    public static function display_user_overview_export_options()
-    {
-        $message = '';
-        $defaults = [];
-        // include the user manager and formvalidator library
-        if (isset($_GET['export']) && 'options' == $_GET['export']) {
-            // get all the defined extra fields
-            $extrafields = UserManager::get_extra_fields(
-                0,
-                50,
-                5,
-                'ASC',
-                false,
-                1
-            );
-
-            // creating the form with all the defined extra fields
-            $form = new FormValidator(
-                'exportextrafields',
-                'post',
-                api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export'])
-            );
-
-            if (is_array($extrafields) && count($extrafields) > 0) {
-                foreach ($extrafields as $key => $extra) {
-                    $form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
-                }
-                $form->addButtonSave(get_lang('Ok'), 'submit');
-
-                // setting the default values for the form that contains all the extra fields
-                $exportFields = Session::read('additional_export_fields');
-                if (is_array($exportFields)) {
-                    foreach ($exportFields as $key => $value) {
-                        $defaults['extra_export_field'.$value] = 1;
-                    }
-                }
-                $form->setDefaults($defaults);
-            } else {
-                $form->addElement('html', Display::return_message(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning'));
-            }
-
-            if ($form->validate()) {
-                // exporting the form values
-                $values = $form->exportValues();
-
-                // re-initialising the session that contains the additional fields that need to be exported
-                Session::write('additional_export_fields', []);
-
-                // adding the fields that are checked to the session
-                $message = '';
-                $additionalExportFields = [];
-                foreach ($values as $field_ids => $value) {
-                    if ($value == 1 && strstr($field_ids, 'extra_export_field')) {
-                        $additionalExportFields[] = str_replace('extra_export_field', '', $field_ids);
-                    }
-                }
-                Session::write('additional_export_fields', $additionalExportFields);
-
-                // adding the fields that will be also exported to a message string
-                $additionalExportFields = Session::read('additional_export_fields');
-                if (is_array($additionalExportFields)) {
-                    foreach ($additionalExportFields as $key => $extra_field_export) {
-                        $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
-                    }
-                }
-
-                // Displaying a feedback message
-                if (!empty($additionalExportFields)) {
-                    echo Display::return_message(
-                        get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
-                        'confirm',
-                        false
-                    );
-                } else {
-                    echo Display::return_message(
-                        get_lang('NoAdditionalFieldsWillBeExported'),
-                        'confirm',
-                        false
-                    );
-                }
-            } else {
-                $form->display();
-            }
-        } else {
-            $additionalExportFields = Session::read('additional_export_fields');
-            if (!empty($additionalExportFields)) {
-                // get all the defined extra fields
-                $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-
-                foreach ($additionalExportFields as $key => $extra_field_export) {
-                    $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
-                }
-
-                echo Display::return_message(
-                    get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
-                    'normal',
-                    false
-                );
-            }
-        }
-    }
-
-    /**
      * @param $export_csv
      */
     public static function display_tracking_coach_overview($export_csv)
@@ -573,7 +442,7 @@ class MySpace
         $sort_by_first_name = api_sort_by_first_name();
 
         if (isset($_GET['tracking_list_coaches_column'])) {
-            $tracking_column = (int)$_GET['tracking_list_coaches_column'];
+            $tracking_column = (int) $_GET['tracking_list_coaches_column'];
         } else {
             $tracking_column = ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
         }
@@ -835,15 +704,14 @@ class MySpace
      *
      * @deprecated ?
      *
-     * @author     César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
     public static function display_tracking_lp_progress_overview(
         $sessionId = '',
         $courseId = '',
         $date_from,
         $date_to
-    )
-    {
+    ) {
         $course = api_get_course_info_by_id($courseId);
         /**
          * Column name
@@ -958,7 +826,7 @@ class MySpace
      *
      * @deprecated ?
      *
-     * @author     César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
     public static function display_tracking_exercise_progress_overview(
         $sessionId = 0,
@@ -966,8 +834,7 @@ class MySpace
         $exerciseId = 0,
         $date_from = null,
         $date_to = null
-    )
-    {
+    ) {
         $date_from = Security::remove_XSS($date_from);
         $date_to = Security::remove_XSS($date_to);
         /**
@@ -1045,6 +912,118 @@ class MySpace
     }
 
     /**
+     * Displays a form with all the additionally defined user fields of the profile
+     * and give you the opportunity to include these in the CSV export.
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *
+     * @version 1.8.6
+     *
+     * @since November 2008
+     */
+    public static function display_user_overview_export_options()
+    {
+        $message = '';
+        $defaults = [];
+        // include the user manager and formvalidator library
+        if (isset($_GET['export']) && 'options' == $_GET['export']) {
+            // get all the defined extra fields
+            $extrafields = UserManager::get_extra_fields(
+                0,
+                50,
+                5,
+                'ASC',
+                false,
+                1
+            );
+
+            // creating the form with all the defined extra fields
+            $form = new FormValidator(
+                'exportextrafields',
+                'post',
+                api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export'])
+            );
+
+            if (is_array($extrafields) && count($extrafields) > 0) {
+                foreach ($extrafields as $key => $extra) {
+                    $form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
+                }
+                $form->addButtonSave(get_lang('Ok'), 'submit');
+
+                // setting the default values for the form that contains all the extra fields
+                $exportFields = Session::read('additional_export_fields');
+                if (is_array($exportFields)) {
+                    foreach ($exportFields as $key => $value) {
+                        $defaults['extra_export_field'.$value] = 1;
+                    }
+                }
+                $form->setDefaults($defaults);
+            } else {
+                $form->addElement('html', Display::return_message(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning'));
+            }
+
+            if ($form->validate()) {
+                // exporting the form values
+                $values = $form->exportValues();
+
+                // re-initialising the session that contains the additional fields that need to be exported
+                Session::write('additional_export_fields', []);
+
+                // adding the fields that are checked to the session
+                $message = '';
+                $additionalExportFields = [];
+                foreach ($values as $field_ids => $value) {
+                    if ($value == 1 && strstr($field_ids, 'extra_export_field')) {
+                        $additionalExportFields[] = str_replace('extra_export_field', '', $field_ids);
+                    }
+                }
+                Session::write('additional_export_fields', $additionalExportFields);
+
+                // adding the fields that will be also exported to a message string
+                $additionalExportFields = Session::read('additional_export_fields');
+                if (is_array($additionalExportFields)) {
+                    foreach ($additionalExportFields as $key => $extra_field_export) {
+                        $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
+                    }
+                }
+
+                // Displaying a feedback message
+                if (!empty($additionalExportFields)) {
+                    echo Display::return_message(
+                        get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
+                        'confirm',
+                        false
+                    );
+                } else {
+                    echo Display::return_message(
+                        get_lang('NoAdditionalFieldsWillBeExported'),
+                        'confirm',
+                        false
+                    );
+                }
+            } else {
+                $form->display();
+            }
+        } else {
+            $additionalExportFields = Session::read('additional_export_fields');
+            if (!empty($additionalExportFields)) {
+                // get all the defined extra fields
+                $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+
+                foreach ($additionalExportFields as $key => $extra_field_export) {
+                    $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
+                }
+
+                echo Display::return_message(
+                    get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
+                    'normal',
+                    false
+                );
+            }
+        }
+    }
+
+    /**
      * Export to cvs a list of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
      *
@@ -1086,164 +1065,6 @@ class MySpace
     }
 
     /**
-     * Gets a list of users who were enrolled in the lessons.
-     * It is necessary that in the extra field, a company is defined.
-     *
-     *  if lpId is different to 0, this search by lp id too
-     *
-     * Variable $withGroups determines the consultation of the enrollment in groups. The group in total will be taken
-     *
-     * @param string|null $startDate
-     * @param string|null $endDate
-     * @param int         $lpId
-     * @param bool        $withGroups
-     *
-     * @return array
-     */
-    protected static function getCompanyLearnpathSubscription(
-        $startDate = null,
-        $endDate = null,
-        $whereInLp = null,
-        $withGroups = false
-    )
-    {
-        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
-        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tblGroupToUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-        $whereCondition = '';
-        //Validating dates
-        if (!empty($startDate)) {
-            $startDate = new DateTime($startDate);
-        }
-        if (!empty($endDate)) {
-            $endDate = new DateTime($endDate);
-        }
-        if (!empty($startDate) and !empty($endDate)) {
-            if ($startDate > $endDate) {
-                $dateTemp = $endDate;
-                $endDate = $startDate;
-                $startDate = $dateTemp;
-                unset($dateTemp);
-            }
-        }
-
-        // Settings condition and parametter GET to right date
-        if (!empty($startDate)) {
-            $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
-            $_GET['startDate'] = $startDate;
-            $whereCondition .= "
-            AND item_property.lastedit_date >= '$startDate'
-            ";
-        }
-        if (!empty($endDate)) {
-            $endDate = api_get_utc_datetime($endDate->setTime(23, 59, 59)->format('Y-m-d H:i:s'));
-            $_GET['endDate'] = $endDate;
-            $whereCondition .= "
-            AND item_property.lastedit_date <= '$endDate'
-            ";
-        }
-        if (!empty($whereInLp)) {
-            $whereCondition .= "
-            AND item_property.ref in ($whereInLp)
-            ";
-        }
-        $datas = [];
-        if (!empty($startDate) or !empty($endDate)) {
-            $query = "
-                SELECT DISTINCT
-                    item_property.ref as lp_item,
-                    lp_table_item.iid AS lp_item_id,
-                    ";
-            if ($withGroups) {
-                $query .= '
-                item_property.to_group_id as group_id,
-                item_property.session_id as session_id,
-                user_to_group.user_id as id
-                ';
-            } else {
-                $query .= '
-                item_property.to_user_id as id
-                ';
-            }
-            $query .= "
-                FROM
-                    $tblItemProperty as item_property";
-            if ($withGroups) {
-                $query .= "
-                INNER JOIN $tblGroupToUser AS user_to_group on (user_to_group.id = item_property.to_group_id )
-                ";
-            }
-            $query .= "
-                INNER JOIN $tblLp AS lp_table on (lp_table.iid = item_property.ref)
-                INNER JOIN $tblLpItem AS lp_table_item on (lp_table.id = lp_table_item.lp_id )
-                WHERE
-                    item_property.lastedit_type = 'LearnpathSubscription'
-                ";
-            if (strlen($whereCondition) > 2) {
-                $query .= $whereCondition;
-            }
-            if ($withGroups) {
-                $query .= '
-                AND item_property.to_group_id  != 0
-                ';
-            }
-            $query .= "
-                ORDER BY item_property.ref
-                ";
-            $queryResult = Database::query($query);
-            $data = Database::store_result($queryResult, 'ASSOC');
-            $totalData = count($data);
-            for ($i = 0; $i < $totalData; $i++) {
-                $row = $data[$i];
-                $row['company'] = self::getCompanyOfUser($row['id']);
-                $datas[$row['lp_item_id']][] = $row;
-            }
-        }
-
-        return $datas;
-    }
-
-    /***
-     * Gets the company name of a user based on the extra field 'company'.
-     *
-     * @param int $userId
-     *
-     * @return string
-     */
-    public static function getCompanyOfUser($userId = 0)
-    {
-        $userId = (int)$userId;
-        if (0 != $userId) {
-            $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-            $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-            $sql = "
-            SELECT
-                extra_field_value.item_id AS userId,
-                extra_field_value.`value` AS company
-            FROM
-                $tblExtraFieldValue AS extra_field_value
-                INNER JOIN $tblExtraField AS extra_field ON (
-                    extra_field_value.field_id = extra_field.id AND extra_field.variable = 'company'
-                    )
-            WHERE
-                extra_field_value.`value` != ''
-                AND extra_field_value.item_id = $userId
-                ";
-
-            $queryResult = Database::query($sql);
-            $data = Database::store_result($queryResult, 'ASSOC');
-            $totalData = count($data);
-            for ($i = 0; $i < $totalData; $i++) {
-                $row = $data[$i];
-                if (isset($row['company']) && !empty($row['company'])) return $row['company'];
-            }
-        }
-
-        return get_lang('NoEntity');
-    }
-
-    /**
      * Displays a list as a table of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
      *
@@ -1253,8 +1074,7 @@ class MySpace
     public static function displayResumeCompany(
         $startDate = null,
         $endDate = null
-    )
-    {
+    ) {
         $companys = self::getCompanyLearnpathSubscription($startDate, $endDate);
         $tableHtml = '';
         // Printing table
@@ -1333,8 +1153,7 @@ class MySpace
         $startDate = null,
         $endDate = null,
         $csv = false
-    )
-    {
+    ) {
         $tableHtml = '';
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1636,75 +1455,6 @@ class MySpace
         }
     }
 
-    public static function getSessionAddUserCourseFromTrackDefault(
-        $startDate = null,
-        $endDate = null,
-        $extraWhere = null
-    )
-    {
-        $data = [];
-        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $tblSessionRelCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
-        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
-
-        if (!empty($startDate)) {
-            $startDate = new DateTime($startDate);
-        } else {
-            $startDate = new DateTime();
-        }
-        if (!empty($endDate)) {
-            $endDate = new DateTime($endDate);
-        } else {
-            $endDate = new DateTime();
-        }
-        if (!empty($startDate) and !empty($endDate)) {
-            if ($startDate > $endDate) {
-                $dateTemp = $endDate;
-                $endDate = $startDate;
-                $startDate = $dateTemp;
-                unset($dateTemp);
-            }
-        }
-        $startDate = $startDate->format('Y-m-d H:i:s');
-        $endDate = $endDate->format('Y-m-d H:i:s');
-        $extra = '';
-        if (!empty($extraWhere)) {
-            $extra = " AND lp_table_item.lp_id in ($extraWhere) ";
-        }
-
-        $sql = "
-        SELECT DISTINCT
-            lp_table.iid as lp,
-            lp_table_item.iid as lp_item,
-            lp_table_item.iid AS lp_item_id,
-            track_default.default_value as id,
-            sesion_r_c_u.session_id as session_id
-        FROM
-             $tblTrackDefault as track_default
-        INNER JOIN $tblSessionRelCourseUser as sesion_r_c_u on (track_default.default_value = sesion_r_c_u.user_id )
-        INNER JOIN $tblLp AS lp_table on (lp_table.c_id = sesion_r_c_u.c_id)
-        INNER JOIN $tblLpItem AS lp_table_item on (lp_table_item.c_id = sesion_r_c_u.c_id and lp_table.id = lp_table_item.lp_id )
-        WHERE
-            track_default.default_event_type = 'session_add_user_course'
-            AND track_default.default_date >= '$startDate'
-            AND track_default.default_date <= '$endDate'
-            $extra
-        ORDER BY
-            track_default.default_value
-        ";
-        $queryResult = Database::query($sql);
-        $dataTrack = Database::store_result($queryResult, 'ASSOC');
-        foreach ($dataTrack as $item) {
-            $item['company'] = self::getCompanyOfUser($item['id']);
-            $data[$item['lp_item_id']][] = $item;
-        }
-
-        return $data;
-    }
-
     /**
      *  Displays a list as a table of teachers who are set authors of lp's item by a extra_field authors.
      *
@@ -1762,7 +1512,7 @@ class MySpace
         $totalData = count($data);
         for ($i = 0; $i < $totalData; $i++) {
             $item = $data[$i];
-            $lpItemId = (int)$item['lp_item_id'];
+            $lpItemId = (int) $item['lp_item_id'];
             $whereInLpItem[] = $item['lp_item_id'];
             $whereInLp[] = $item['lp_id'];
             $author = isset($cLpItemsAutor[$lpItemId]) ? $cLpItemsAutor[$lpItemId] : null;
@@ -1900,7 +1650,6 @@ class MySpace
 
                         $hiddenField = 'student_show_'.$index;
                         $hiddenFieldLink = 'student_show_'.$index.'_';
-                        $userRegistered = [];
                         if (0 != $studenRegister ||
                             0 != $studenRegisterBySession ||
                             0 != $studenGroupsRegister) {
@@ -1918,21 +1667,18 @@ class MySpace
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                if (!isset($userRegistered[$studentId])) {
-                                    $userRegistered[$studentId] = $student;
-                                    $tempStudent = $studentArray[$studentId];
-                                    $studentInSesion[$studentId] = 1;
-                                    $studentName = $tempStudent['complete_name'];
-                                    $studentCompany = $student['company'];
-                                    $iconSession = Display::return_icon(
-                                        'admin_star.png',
-                                        $studentName,
-                                        ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
-                                    );
+                                $tempStudent = $studentArray[$studentId];
+                                $studentInSesion[$studentId] = 1;
+                                $studentName = $tempStudent['complete_name'];
+                                $studentCompany = $student['company'];
+                                $iconSession = Display::return_icon(
+                                    'admin_star.png',
+                                    $studentName,
+                                    ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
+                                );
 
-                                    $tableTemp .= $iconSession."<strong>$studentName ($studentCompany)</strong><br>";
-                                    $totalStudent++;
-                                }
+                                $tableTemp .= $iconSession."<strong>$studentName ($studentCompany)</strong><br>";
+                                $totalStudent++;
                             }
                             /* Student by course groups */
                             for ($i = 0; $i < count($byCourseGroups); $i++) {
@@ -1941,25 +1687,22 @@ class MySpace
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                if (!isset($userRegistered[$studentId])) {
-                                    $userRegistered[$studentId] = $student;
-                                    $tempStudent = $studentArray[$studentId];
-                                    $sessionId = (int)$student['session_id'];
-                                    $studentName = $tempStudent['complete_name'];
-                                    $studentCompany = $student['company'];
-                                    $iconGroup = Display::return_icon(
-                                        'group_summary.png',
-                                        $studentName,
-                                        '',
-                                        ICON_SIZE_MEDIUM);
-                                    if (!isset($studentInSesion[$studentId])) {
-                                        if ($sessionId != 0) {
-                                            $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
-                                        } else {
-                                            $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
-                                        }
-                                        $totalStudent++;
+                                $tempStudent = $studentArray[$studentId];
+                                $sessionId = (int)$student['session_id'];
+                                $studentName = $tempStudent['complete_name'];
+                                $studentCompany = $student['company'];
+                                $iconGroup = Display::return_icon(
+                                    'group_summary.png',
+                                    $studentName,
+                                    '',
+                                    ICON_SIZE_MEDIUM);
+                                if (!isset($studentInSesion[$studentId])) {
+                                    if($sessionId != 0){
+                                        $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
+                                    }else{
+                                        $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
                                     }
+                                    $totalStudent++;
                                 }
                             }
                             /* Student by course, keep it last*/
@@ -1969,17 +1712,13 @@ class MySpace
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                if (!isset($userRegistered[$studentId])) {
-                                    $userRegistered[$studentId] = $student;
-                                    $studentArray[$studentId] = api_get_user_info($studentId);
-                                    $tempStudent = $studentArray[$studentId];
-                                    $studentName = $tempStudent['complete_name'];
-                                    $studentCompany = $student['company'];
+                                $tempStudent = $studentArray[$studentId];
+                                $studentName = $tempStudent['complete_name'];
+                                $studentCompany = $student['company'];
 
-                                    if (!isset($studentInSesion[$studentId])) {
-                                        $tableTemp .= "$studentName ($studentCompany)<br>";
-                                        $totalStudent++;
-                                    }
+                                if (!isset($studentInSesion[$studentId])) {
+                                    $tableTemp .= "$studentName ($studentCompany)<br>";
+                                    $totalStudent++;
                                 }
                             }
                             $index++;
@@ -2141,6 +1880,74 @@ class MySpace
         }
     }
 
+    public static function getSessionAddUserCourseFromTrackDefault(
+        $startDate = null,
+        $endDate = null,
+        $extraWhere = null
+    ) {
+        $data = [];
+        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $tblSessionRelCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+
+        if (!empty($startDate)) {
+            $startDate = new DateTime($startDate);
+        } else {
+            $startDate = new DateTime();
+        }
+        if (!empty($endDate)) {
+            $endDate = new DateTime($endDate);
+        } else {
+            $endDate = new DateTime();
+        }
+        if (!empty($startDate) and !empty($endDate)) {
+            if ($startDate > $endDate) {
+                $dateTemp = $endDate;
+                $endDate = $startDate;
+                $startDate = $dateTemp;
+                unset($dateTemp);
+            }
+        }
+        $startDate = $startDate->format('Y-m-d H:i:s');
+        $endDate = $endDate->format('Y-m-d H:i:s');
+        $extra = '';
+        if (!empty($extraWhere)) {
+            $extra = " AND lp_table_item.lp_id in ($extraWhere) ";
+        }
+
+        $sql = "
+        SELECT DISTINCT
+            lp_table.iid as lp,
+            lp_table_item.iid as lp_item,
+            lp_table_item.iid AS lp_item_id,
+            track_default.default_value as id,
+            sesion_r_c_u.session_id as session_id
+        FROM
+             $tblTrackDefault as track_default
+        INNER JOIN $tblSessionRelCourseUser as sesion_r_c_u on (track_default.default_value = sesion_r_c_u.user_id )
+        INNER JOIN $tblLp AS lp_table on (lp_table.c_id = sesion_r_c_u.c_id)
+        INNER JOIN $tblLpItem AS lp_table_item on (lp_table_item.c_id = sesion_r_c_u.c_id and lp_table.id = lp_table_item.lp_id )
+        WHERE
+            track_default.default_event_type = 'session_add_user_course'
+            AND track_default.default_date >= '$startDate'
+            AND track_default.default_date <= '$endDate'
+            $extra
+        ORDER BY
+            track_default.default_value
+        ";
+        $queryResult = Database::query($sql);
+        $dataTrack = Database::store_result($queryResult, 'ASSOC');
+        foreach ($dataTrack as $item) {
+            $item['company'] = self::getCompanyOfUser($item['id']);
+            $data[$item['lp_item_id']][] = $item;
+        }
+
+        return $data;
+    }
+
     /**
      * Display a sortable table that contains an overview of all the reporting progress of all courses.
      */
@@ -2176,6 +1983,43 @@ class MySpace
     public static function get_total_number_courses()
     {
         return CourseManager::count_courses(api_get_current_access_url_id());
+    }
+
+    /**
+     * Get data for the courses.
+     *
+     * @param int    $from        Inferior limit
+     * @param int    $numberItems Number of items to select
+     * @param string $column      Column to order on
+     * @param string $direction   Order direction
+     *
+     * @return array Results
+     */
+    public static function get_course_data_tracking_overview(
+        $from,
+        $numberItems,
+        $column,
+        $direction
+    ) {
+        $courses = CourseManager::get_courses_list(
+            $from,
+            $numberItems,
+            $column,
+            $direction,
+             -1,
+            '',
+            api_get_current_access_url_id()
+        );
+
+        $list = [];
+        foreach ($courses as $course) {
+            $list[] = [
+                '0' => $course['code'],
+                'col0' => $course['code'],
+            ];
+        }
+
+        return $list;
     }
 
     /**
@@ -2514,44 +2358,6 @@ class MySpace
     }
 
     /**
-     * Get data for the courses.
-     *
-     * @param int    $from        Inferior limit
-     * @param int    $numberItems Number of items to select
-     * @param string $column      Column to order on
-     * @param string $direction   Order direction
-     *
-     * @return array Results
-     */
-    public static function get_course_data_tracking_overview(
-        $from,
-        $numberItems,
-        $column,
-        $direction
-    )
-    {
-        $courses = CourseManager::get_courses_list(
-            $from,
-            $numberItems,
-            $column,
-            $direction,
-            -1,
-            '',
-            api_get_current_access_url_id()
-        );
-
-        $list = [];
-        foreach ($courses as $course) {
-            $list[] = [
-                '0' => $course['code'],
-                'col0' => $course['code'],
-            ];
-        }
-
-        return $list;
-    }
-
-    /**
      * Display a sortable table that contains an overview of all the reporting
      * progress of all sessions and all courses the user is subscribed to.
      *
@@ -2608,6 +2414,48 @@ class MySpace
     public static function get_total_number_sessions()
     {
         return SessionManager::count_sessions(api_get_current_access_url_id());
+    }
+
+    /**
+     * Get data for the sessions.
+     *
+     * @param int    $from        Inferior limit
+     * @param int    $numberItems Number of items to select
+     * @param string $column      Column to order on
+     * @param string $direction   Order direction
+     *
+     * @return array Results
+     */
+    public static function get_session_data_tracking_overview(
+        $from,
+        $numberItems,
+        $column,
+        $direction
+    ) {
+        $from = (int) $from;
+        $numberItems = (int) $numberItems;
+        $direction = Database::escape_string($direction);
+        $columnName = 'name';
+        if ($column === 1) {
+            $columnName = 'id';
+        }
+
+        $options = [
+            'order' => " $columnName $direction",
+            'limit' => " $from,$numberItems",
+        ];
+        $sessions = SessionManager::formatSessionsAdminForGrid($options);
+        $list = [];
+        foreach ($sessions as $session) {
+            $list[] = [
+                '0' => $session['id'],
+                'col0' => $session['id'],
+                '1' => strip_tags($session['name']),
+                'col1' => strip_tags($session['name']),
+            ];
+        }
+
+        return $list;
     }
 
     /**
@@ -2940,56 +2788,71 @@ class MySpace
     }
 
     /**
-     * Get data for the sessions.
+     * Get general information about the exercise performance of the user
+     * the total obtained score (all the score on all the questions)
+     * the maximum score that could be obtained
+     * the number of questions answered
+     * the success percentage.
      *
-     * @param int    $from        Inferior limit
-     * @param int    $numberItems Number of items to select
-     * @param string $column      Column to order on
-     * @param string $direction   Order direction
+     * @param int    $user_id     the id of the user
+     * @param string $course_code the course code
+     * @param int    $session_id
      *
-     * @return array Results
+     * @return array
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *
+     * @version Dokeos 1.8.6
+     *
+     * @since November 2008
      */
-    public static function get_session_data_tracking_overview(
-        $from,
-        $numberItems,
-        $column,
-        $direction
-    )
+    public static function exercises_results($user_id, $course_code, $session_id = 0)
     {
-        $from = (int)$from;
-        $numberItems = (int)$numberItems;
-        $direction = Database::escape_string($direction);
-        $columnName = 'name';
-        if ($column === 1) {
-            $columnName = 'id';
+        $user_id = (int) $user_id;
+        $courseId = api_get_course_int_id($course_code);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sql = "SELECT exe_result, exe_weighting
+                FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    exe_user_id = $user_id";
+
+        $session_id = (int) $session_id;
+        if (!empty($session_id)) {
+            $sql .= " AND session_id = '".$session_id."' ";
+        }
+        $result = Database::query($sql);
+        $score_obtained = 0;
+        $score_possible = 0;
+        $questions_answered = 0;
+        while ($row = Database::fetch_array($result)) {
+            $score_obtained += $row['exe_result'];
+            $score_possible += $row['exe_weighting'];
+            $questions_answered++;
         }
 
-        $options = [
-            'order' => " $columnName $direction",
-            'limit' => " $from,$numberItems",
+        $percentage = null;
+        if ($score_possible != 0) {
+            $percentage = round(($score_obtained / $score_possible * 100), 2);
+        }
+
+        return [
+            'score_obtained' => $score_obtained,
+            'score_possible' => $score_possible,
+            'questions_answered' => $questions_answered,
+            'percentage' => $percentage,
         ];
-        $sessions = SessionManager::formatSessionsAdminForGrid($options);
-        $list = [];
-        foreach ($sessions as $session) {
-            $list[] = [
-                '0' => $session['id'],
-                'col0' => $session['id'],
-                '1' => strip_tags($session['name']),
-                'col1' => strip_tags($session['name']),
-            ];
-        }
-
-        return $list;
     }
 
     /**
      * This function exports the table that we see in display_tracking_user_overview().
      *
-     * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
      *
      * @version Dokeos 1.8.6
      *
-     * @since   October 2008
+     * @since October 2008
      */
     public static function export_tracking_user_overview()
     {
@@ -3120,64 +2983,6 @@ class MySpace
         }
         Export::arrayToCsv($csv_content, 'reporting_user_overview');
         exit;
-    }
-
-    /**
-     * Get all the data for the sortable table of the reporting progress of
-     * all users and all the courses the user is subscribed to.
-     *
-     * @param int    $from
-     * @param int    $numberItems
-     * @param int    $column
-     * @param string $direction
-     *
-     * @return array
-     */
-    public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
-    {
-        $isWestern = api_is_western_name_order();
-
-        switch ($column) {
-            case '0':
-                $column = $isWestern ? 'firstname' : 'lastname';
-                break;
-        }
-
-        $order = [
-            "$column $direction",
-        ];
-        $userList = UserManager::get_user_list([], $order, $from, $numberItems);
-        $return = [];
-        foreach ($userList as $user) {
-            $return[] = [
-                '0' => $user['user_id'],
-                'col0' => $user['user_id'],
-            ];
-        }
-
-        return $return;
-    }
-
-    /**
-     * Get all information that the user with user_id = $user_data has
-     * entered in the additionally defined profile fields.
-     *
-     * @param int $user_id the id of the user
-     *
-     * @return array
-     *
-     * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     *
-     * @version Dokeos 1.8.6
-     *
-     * @since   November 2008
-     */
-    public static function get_user_overview_export_extra_fields($user_id)
-    {
-        // include the user manager
-        $data = UserManager::get_extra_user_data($user_id, true);
-
-        return $data;
     }
 
     /**
@@ -3321,6 +3126,171 @@ class MySpace
     }
 
     /**
+     * Get all the data for the sortable table of the reporting progress of
+     * all users and all the courses the user is subscribed to.
+     *
+     * @param int    $from
+     * @param int    $numberItems
+     * @param int    $column
+     * @param string $direction
+     *
+     * @return array
+     */
+    public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
+    {
+        $isWestern = api_is_western_name_order();
+
+        switch ($column) {
+            case '0':
+                $column = $isWestern ? 'firstname' : 'lastname';
+                break;
+        }
+
+        $order = [
+            "$column $direction",
+        ];
+        $userList = UserManager::get_user_list([], $order, $from, $numberItems);
+        $return = [];
+        foreach ($userList as $user) {
+            $return[] = [
+                '0' => $user['user_id'],
+                'col0' => $user['user_id'],
+            ];
+        }
+
+        return $return;
+    }
+
+    /**
+     * Get all information that the user with user_id = $user_data has
+     * entered in the additionally defined profile fields.
+     *
+     * @param int $user_id the id of the user
+     *
+     * @return array
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *
+     * @version Dokeos 1.8.6
+     *
+     * @since November 2008
+     */
+    public static function get_user_overview_export_extra_fields($user_id)
+    {
+        // include the user manager
+        $data = UserManager::get_extra_user_data($user_id, true);
+
+        return $data;
+    }
+
+    /**
+     * Checks if a username exist in the DB otherwise it create a "double"
+     * i.e. if we look into for jmontoya but the user's name already exist we create the user jmontoya2
+     * the return array will be array(username=>'jmontoya', sufix='2').
+     *
+     * @param string firstname
+     * @param string lastname
+     * @param string username
+     *
+     * @return array with the username, the sufix
+     *
+     * @author Julio Montoya
+     */
+    public static function make_username($firstname, $lastname, $username, $language = null, $encoding = null)
+    {
+        // if username exist
+        if (!UserManager::is_username_available($username) || empty($username)) {
+            $i = 0;
+            while (1) {
+                if ($i == 0) {
+                    $sufix = '';
+                } else {
+                    $sufix = $i;
+                }
+                $desired_username = UserManager::create_username(
+                    $firstname,
+                    $lastname
+                );
+                if (UserManager::is_username_available($desired_username.$sufix)) {
+                    break;
+                } else {
+                    $i++;
+                }
+            }
+            $username_array = ['username' => $desired_username, 'sufix' => $sufix];
+
+            return $username_array;
+        } else {
+            $username_array = ['username' => $username, 'sufix' => ''];
+
+            return $username_array;
+        }
+    }
+
+    /**
+     * Checks if there are repeted users in a given array.
+     *
+     * @param array $usernames  list of the usernames in the uploaded file
+     * @param array $user_array $user_array['username'] and $user_array['sufix']
+     *                          where suffix is the number part in a login i.e -> jmontoya2
+     *
+     * @return array with the $usernames array and the $user_array array
+     *
+     * @author Julio Montoya
+     */
+    public static function check_user_in_array($usernames, $user_array)
+    {
+        $user_list = array_keys($usernames);
+        $username = $user_array['username'].$user_array['sufix'];
+
+        if (in_array($username, $user_list)) {
+            $user_array['sufix'] += $usernames[$username];
+            $usernames[$username]++;
+        } else {
+            $usernames[$username] = 1;
+        }
+        $result_array = [$usernames, $user_array];
+
+        return $result_array;
+    }
+
+    /**
+     * Checks whether a username has been already subscribed in a session.
+     *
+     * @param string $username    a given username
+     * @param array  $course_list the array with the course list id
+     * @param int    $id_session  the session id
+     *
+     * @return int 0 if the user is not subscribed otherwise it returns the user_id of the given username
+     *
+     * @author Julio Montoya
+     */
+    public static function user_available_in_session($username, $course_list, $id_session)
+    {
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $id_session = (int) $id_session;
+        $username = Database::escape_string($username);
+        foreach ($course_list as $courseId) {
+            $courseId = (int) $courseId;
+            $sql = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel
+                     INNER JOIN $table_user u
+                     ON (rel.user_id = u.user_id)
+                     WHERE
+                        rel.session_id='$id_session' AND
+                        u.status='5' AND
+                        u.username ='$username' AND
+                        rel.c_id='$courseId'";
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                return Database::result($rs, 0, 0);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * This function checks whether some users in the uploaded file
      * repeated and creates unique usernames if necesary.
      * A case: Within the file there is an user repeted twice (Julio Montoya / Julio Montoya)
@@ -3374,113 +3344,6 @@ class MySpace
         }
 
         return $new_users;
-    }
-
-    /**
-     * Checks if a username exist in the DB otherwise it create a "double"
-     * i.e. if we look into for jmontoya but the user's name already exist we create the user jmontoya2
-     * the return array will be array(username=>'jmontoya', sufix='2').
-     *
-     * @param string firstname
-     * @param string lastname
-     * @param string username
-     *
-     * @return array with the username, the sufix
-     *
-     * @author Julio Montoya
-     */
-    public static function make_username($firstname, $lastname, $username, $language = null, $encoding = null)
-    {
-        // if username exist
-        if (!UserManager::is_username_available($username) || empty($username)) {
-            $i = 0;
-            while (1) {
-                if ($i == 0) {
-                    $sufix = '';
-                } else {
-                    $sufix = $i;
-                }
-                $desired_username = UserManager::create_username(
-                    $firstname,
-                    $lastname
-                );
-                if (UserManager::is_username_available($desired_username.$sufix)) {
-                    break;
-                } else {
-                    $i++;
-                }
-            }
-            $username_array = ['username' => $desired_username, 'sufix' => $sufix];
-
-            return $username_array;
-        } else {
-            $username_array = ['username' => $username, 'sufix' => ''];
-
-            return $username_array;
-        }
-    }
-
-    /**
-     * Checks whether a username has been already subscribed in a session.
-     *
-     * @param string $username    a given username
-     * @param array  $course_list the array with the course list id
-     * @param int    $id_session  the session id
-     *
-     * @return int 0 if the user is not subscribed otherwise it returns the user_id of the given username
-     *
-     * @author Julio Montoya
-     */
-    public static function user_available_in_session($username, $course_list, $id_session)
-    {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $id_session = (int)$id_session;
-        $username = Database::escape_string($username);
-        foreach ($course_list as $courseId) {
-            $courseId = (int)$courseId;
-            $sql = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel
-                     INNER JOIN $table_user u
-                     ON (rel.user_id = u.user_id)
-                     WHERE
-                        rel.session_id='$id_session' AND
-                        u.status='5' AND
-                        u.username ='$username' AND
-                        rel.c_id='$courseId'";
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                return Database::result($rs, 0, 0);
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * Checks if there are repeted users in a given array.
-     *
-     * @param array $usernames  list of the usernames in the uploaded file
-     * @param array $user_array $user_array['username'] and $user_array['sufix']
-     *                          where suffix is the number part in a login i.e -> jmontoya2
-     *
-     * @return array with the $usernames array and the $user_array array
-     *
-     * @author Julio Montoya
-     */
-    public static function check_user_in_array($usernames, $user_array)
-    {
-        $user_list = array_keys($usernames);
-        $username = $user_array['username'].$user_array['sufix'];
-
-        if (in_array($username, $user_list)) {
-            $user_array['sufix'] += $usernames[$username];
-            $usernames[$username]++;
-        } else {
-            $usernames[$username] = 1;
-        }
-        $result_array = [$usernames, $user_array];
-
-        return $result_array;
     }
 
     /**
@@ -3556,6 +3419,19 @@ class MySpace
     }
 
     /**
+     * Adds missing user-information (which isn't required, like password, etc).
+     */
+    public static function complete_missing_data($user)
+    {
+        // 1. Generate a password if it is necessary.
+        if (!isset($user['Password']) || strlen($user['Password']) == 0) {
+            $user['Password'] = api_generate_password();
+        }
+
+        return $user;
+    }
+
+    /**
      * Saves imported data.
      */
     public static function save_data($users, $course_list, $id_session)
@@ -3565,7 +3441,7 @@ class MySpace
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $id_session = (int)$id_session;
+        $id_session = (int) $id_session;
         $sendMail = $_POST['sendMail'] ? 1 : 0;
 
         // Adding users to the platform.
@@ -3603,7 +3479,7 @@ class MySpace
             $new_users = [];
             $enreg_course = Database::escape_string($enreg_course);
             foreach ($users as $index => $user) {
-                $userid = (int)$user['id'];
+                $userid = (int) $user['id'];
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
                         VALUES('$id_session','$enreg_course','$userid')";
                 $result = Database::query($sql);
@@ -3701,16 +3577,23 @@ class MySpace
     }
 
     /**
-     * Adds missing user-information (which isn't required, like password, etc).
+     * Reads CSV-file.
+     *
+     * @param string $file Path to the CSV-file
+     *
+     * @return array All userinformation read from the file
      */
-    public static function complete_missing_data($user)
+    public function parse_csv_data($file)
     {
-        // 1. Generate a password if it is necessary.
-        if (!isset($user['Password']) || strlen($user['Password']) == 0) {
-            $user['Password'] = api_generate_password();
+        $users = Import::csvToArray($file);
+        foreach ($users as $index => $user) {
+            if (isset($user['Courses'])) {
+                $user['Courses'] = explode('|', trim($user['Courses']));
+            }
+            $users[$index] = $user;
         }
 
-        return $user;
+        return $users;
     }
 
     /**
@@ -3722,7 +3605,7 @@ class MySpace
      */
     public static function parse_xml_data($file)
     {
-        $crawler = new Crawler();
+        $crawler = new \Symfony\Component\DomCrawler\Crawler();
         $crawler->addXmlContent(file_get_contents($file));
         $crawler = $crawler->filter('Contacts > Contact ');
         $array = [];
@@ -3752,11 +3635,10 @@ class MySpace
         $studentId,
         $perPage = 20,
         $dates = null
-    )
-    {
-        $courseId = (int)$courseId;
-        $sessionId = (int)$sessionId;
-        $studentId = (int)$studentId;
+    ) {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $studentId = (int) $studentId;
 
         $courseList = [];
         $sessionList = [];
@@ -3791,12 +3673,12 @@ class MySpace
             $courseList,
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query(
-                        [
-                            'a' => 'search_course_by_session_all',
-                            'session_id' => $sessionId,
-                            'course_id' => $courseId,
-                        ]
-                    ),
+                    [
+                        'a' => 'search_course_by_session_all',
+                        'session_id' => $sessionId,
+                        'course_id' => $courseId,
+                    ]
+                ),
             ]
         );
 
@@ -3948,41 +3830,6 @@ class MySpace
         return 0;
     }
 
-    private static function getDataAccessTrackingFilters($sql)
-    {
-        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int)$_GET['course_id'];
-            $sql .= " AND c.id = ".$courseId;
-        }
-
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int)$_GET['session_id'];
-            $sql .= " AND a.session_id = ".$sessionId;
-        }
-
-        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
-            $userId = (int)$_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
-        }
-
-        $sql .= " AND u.status <> ".ANONYMOUS;
-
-        if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
-            $dates = $dateRangePicker->parseDateRange($_GET['date']);
-            if (isset($dates['start']) && !empty($dates['start'])) {
-                $dates['start'] = Database::escape_string(api_get_utc_datetime($dates['start']));
-                $sql .= " AND login_course_date >= '".$dates['start']."'";
-            }
-            if (isset($dates['end']) && !empty($dates['end'])) {
-                $dates['end'] = Database::escape_string(api_get_utc_datetime($dates['end']));
-                $sql .= " AND logout_course_date <= '".$dates['end']."'";
-            }
-        }
-
-        return $sql;
-    }
-
     /**
      * @param $from
      * @param $numberItems
@@ -3996,11 +3843,10 @@ class MySpace
         $numberItems,
         $column,
         $orderDirection
-    )
-    {
-        $from = (int)$from;
-        $numberItems = (int)$numberItems;
-        $column = (int)$column;
+    ) {
+        $from = (int) $from;
+        $numberItems = (int) $numberItems;
+        $column = (int) $column;
         $orderDirection = Database::escape_string($orderDirection);
 
         $user = Database::get_main_table(TABLE_MAIN_USER);
@@ -4019,14 +3865,14 @@ class MySpace
                 a.login_course_date as col0,
                 u.username as col1,
                 ".(
-            $is_western_name_order ? "
+                    $is_western_name_order ? "
                         u.firstname AS col2,
                         u.lastname AS col3,
                     " : "
                         u.lastname AS col2,
                         u.firstname AS col3,
                 "
-            )."
+        )."
                 a.login_course_date,
                 a.logout_course_date,
                 c.title,
@@ -4078,12 +3924,12 @@ class MySpace
      * @param string $end_date
      * @param bool   $addUserIp
      *
-     * @return array
      * @author  Jorge Frisancho Jibaja
      * @author  Julio Montoya <gugli100@gmail.com> fixing the function
      *
      * @version OCT-22- 2010
      *
+     * @return array
      */
     public static function get_connections_to_course_by_date(
         $user_id,
@@ -4092,13 +3938,12 @@ class MySpace
         $start_date,
         $end_date,
         $addUserIp = false
-    )
-    {
+    ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $user_id = (int)$user_id;
+        $user_id = (int) $user_id;
         $connections = [];
         if (!empty($course_info)) {
-            $courseId = (int)$course_info['real_id'];
+            $courseId = (int) $course_info['real_id'];
             $end_date = self::add_day_to($end_date);
 
             $start_date = Database::escape_string($start_date);
@@ -4135,15 +3980,6 @@ class MySpace
         return $connections;
     }
 
-    public static function add_day_to($end_date)
-    {
-        $foo_date = strtotime($end_date);
-        $foo_date = strtotime(' +1 day', $foo_date);
-        $foo_date = date('Y-m-d', $foo_date);
-
-        return $foo_date;
-    }
-
     /**
      * @param int   $user_id
      * @param array $course_info
@@ -4169,8 +4005,8 @@ class MySpace
                 $stringStartDate = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
                 $stringEndDate = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
             }
-            $user_id = (int)$user_id;
-            $courseId = (int)$course_info['real_id'];
+            $user_id = (int) $user_id;
+            $courseId = (int) $course_info['real_id'];
             $sessionCondition = api_get_session_condition($sessionId);
             $sql = "SELECT
                 SEC_TO_TIME(AVG(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
@@ -4199,6 +4035,15 @@ class MySpace
         return $result;
     }
 
+    public static function add_day_to($end_date)
+    {
+        $foo_date = strtotime($end_date);
+        $foo_date = strtotime(' +1 day', $foo_date);
+        $foo_date = date('Y-m-d', $foo_date);
+
+        return $foo_date;
+    }
+
     /**
      * This function draw the graphic to be displayed on the user view as an image.
      *
@@ -4207,11 +4052,11 @@ class MySpace
      * @param string $end_date
      * @param string $type
      *
-     * @return string
+     * @author Jorge Frisancho Jibaja
+     *
      * @version OCT-22- 2010
      *
-     * @author  Jorge Frisancho Jibaja
-     *
+     * @return string
      */
     public static function grapher($sql_result, $start_date, $end_date, $type = '')
     {
@@ -4253,10 +4098,10 @@ class MySpace
                 $logout = api_strtotime($data['logout']);
                 //creating the main array
                 if (isset($main_month_year[date('m-Y', $login)])) {
-                    $main_month_year[date('m-Y', $login)] += (float)($logout - $login) / 60;
+                    $main_month_year[date('m-Y', $login)] += (float) ($logout - $login) / 60;
                 }
                 if (isset($main_day[date('d-m-Y', $login)])) {
-                    $main_day[date('d-m-Y', $login)] += (float)($logout - $login) / 60;
+                    $main_day[date('d-m-Y', $login)] += (float) ($logout - $login) / 60;
                 }
                 if ($i > 500) {
                     break;
@@ -4332,7 +4177,7 @@ class MySpace
                 $myPicture->setFontProperties(
                     [
                         "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                        "FontSize" => 10,]
+                        "FontSize" => 10, ]
                 );
                 /* Write the chart title */
                 $myPicture->drawText(
@@ -4424,64 +4269,194 @@ class MySpace
     }
 
     /**
-     * This function serves exporting data in CSV format.
+     * Gets a list of users who were enrolled in the lessons.
+     * It is necessary that in the extra field, a company is defined.
      *
-     * @param array  $header    the header labels
-     * @param array  $data      the data array
-     * @param string $file_name the name of the file which contains exported data
+     *  if lpId is different to 0, this search by lp id too
      *
-     * @return string mixed             Returns a message (string) if an error occurred
+     * Variable $withGroups determines the consultation of the enrollment in groups. The group in total will be taken
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param int         $lpId
+     * @param bool        $withGroups
+     *
+     * @return array
      */
-    public function export_csv($header, $data, $file_name = 'export.csv')
-    {
-        $archive_path = api_get_path(SYS_ARCHIVE_PATH);
-        $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
-        $message = '';
-        if (!$open = fopen($archive_path.$file_name, 'w+')) {
-            $message = get_lang('noOpen');
-        } else {
-            $info = '';
-
-            foreach ($header as $value) {
-                $info .= $value.';';
+    protected static function getCompanyLearnpathSubscription(
+        $startDate = null,
+        $endDate = null,
+        $whereInLp = null,
+        $withGroups = false
+    ) {
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblGroupToUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        $whereCondition = '';
+        //Validating dates
+        if (!empty($startDate)) {
+            $startDate = new DateTime($startDate);
+        }
+        if (!empty($endDate)) {
+            $endDate = new DateTime($endDate);
+        }
+        if (!empty($startDate) and !empty($endDate)) {
+            if ($startDate > $endDate) {
+                $dateTemp = $endDate;
+                $endDate = $startDate;
+                $startDate = $dateTemp;
+                unset($dateTemp);
             }
-            $info .= "\r\n";
-
-            foreach ($data as $row) {
-                foreach ($row as $value) {
-                    $info .= $value.';';
-                }
-                $info .= "\r\n";
-            }
-
-            fwrite($open, $info);
-            fclose($open);
-            @chmod($file_name, api_get_permissions_for_new_files());
-
-            header("Location:".$archive_url.$file_name);
-            exit;
         }
 
-        return $message;
+        // Settings condition and parametter GET to right date
+        if (!empty($startDate)) {
+            $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
+            $_GET['startDate'] = $startDate;
+            $whereCondition .= "
+            AND item_property.lastedit_date >= '$startDate'
+            ";
+        }
+        if (!empty($endDate)) {
+            $endDate = api_get_utc_datetime($endDate->setTime(23, 59, 59)->format('Y-m-d H:i:s'));
+            $_GET['endDate'] = $endDate;
+            $whereCondition .= "
+            AND item_property.lastedit_date <= '$endDate'
+            ";
+        }
+        if (!empty($whereInLp)) {
+            $whereCondition .= "
+            AND item_property.ref in ($whereInLp)
+            ";
+        }
+        $datas = [];
+        if (!empty($startDate) or !empty($endDate)) {
+            $query = "
+                SELECT DISTINCT
+                    item_property.ref as lp_item,
+                    lp_table_item.iid AS lp_item_id,
+                    ";
+            if ($withGroups) {
+                $query .= '
+                item_property.to_group_id as group_id,
+                item_property.session_id as session_id,
+                user_to_group.user_id as id
+                ';
+            } else {
+                $query .= '
+                item_property.to_user_id as id
+                ';
+            }
+            $query .= "
+                FROM
+                    $tblItemProperty as item_property";
+            if ($withGroups) {
+                $query .= "
+                INNER JOIN $tblGroupToUser AS user_to_group on (user_to_group.id = item_property.to_group_id )
+                ";
+            }
+            $query .= "
+                INNER JOIN $tblLp AS lp_table on (lp_table.iid = item_property.ref)
+                INNER JOIN $tblLpItem AS lp_table_item on (lp_table.id = lp_table_item.lp_id )
+                WHERE
+                    item_property.lastedit_type = 'LearnpathSubscription'
+                ";
+            if (strlen($whereCondition) > 2) {
+                $query .= $whereCondition;
+            }
+            if ($withGroups) {
+                $query .= '
+                AND item_property.to_group_id  != 0
+                ';
+            }
+            $query .= "
+                ORDER BY item_property.ref
+                ";
+            $queryResult = Database::query($query);
+            $data = Database::store_result($queryResult, 'ASSOC');
+            $totalData = count($data);
+            for ($i = 0; $i < $totalData; $i++) {
+                $row = $data[$i];
+                $row['company'] = self::getCompanyOfUser($row['id']);
+                $datas[$row['lp_item_id']][] = $row;
+            }
+        }
+
+        return $datas;
     }
 
-    /**
-     * Reads CSV-file.
+    /***
+     * Gets the company name of a user based on the extra field 'company'.
      *
-     * @param string $file Path to the CSV-file
+     * @param int $userId
      *
-     * @return array All userinformation read from the file
+     * @return string
      */
-    public function parse_csv_data($file)
+    public static function getCompanyOfUser($userId = 0)
     {
-        $users = Import::csvToArray($file);
-        foreach ($users as $index => $user) {
-            if (isset($user['Courses'])) {
-                $user['Courses'] = explode('|', trim($user['Courses']));
+        $userId = (int)$userId;
+        if (0 != $userId) {
+            $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+            $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+            $sql = "
+            SELECT
+                extra_field_value.item_id AS userId,
+                extra_field_value.`value` AS company
+            FROM
+                $tblExtraFieldValue AS extra_field_value
+                INNER JOIN $tblExtraField AS extra_field ON (
+                    extra_field_value.field_id = extra_field.id AND extra_field.variable = 'company'
+                    )
+            WHERE
+                extra_field_value.`value` != ''
+                AND extra_field_value.item_id = $userId
+                ";
+
+            $queryResult = Database::query($sql);
+            $data = Database::store_result($queryResult, 'ASSOC');
+            $totalData = count($data);
+            for ($i = 0; $i < $totalData; $i++) {
+                $row = $data[$i];
+                if (isset($row['company']) && !empty($row['company'])) return $row['company'];
             }
-            $users[$index] = $user;
         }
 
-        return $users;
+        return get_lang('NoEntity');
+    }
+
+    private static function getDataAccessTrackingFilters($sql)
+    {
+        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
+            $courseId = (int)$_GET['course_id'];
+            $sql .= " AND c.id = ".$courseId;
+        }
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+            $sessionId = (int)$_GET['session_id'];
+            $sql .= " AND a.session_id = ".$sessionId;
+        }
+
+        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
+            $userId = (int) $_GET['student_id'];
+            $sql .= " AND u.user_id = ".$userId;
+        }
+
+        $sql .= " AND u.status <> ".ANONYMOUS;
+
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
+            if (isset($dates['start']) && !empty($dates['start'])) {
+                $dates['start'] = Database::escape_string(api_get_utc_datetime($dates['start']));
+                $sql .= " AND login_course_date >= '".$dates['start']."'";
+            }
+            if (isset($dates['end']) && !empty($dates['end'])) {
+                $dates['end'] = Database::escape_string(api_get_utc_datetime($dates['end']));
+                $sql .= " AND logout_course_date <= '".$dates['end']."'";
+            }
+        }
+
+        return $sql;
     }
 }

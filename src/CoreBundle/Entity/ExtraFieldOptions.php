@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ExtraFieldOption;
 
 /**
- * Class ExtraField.
- *
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository")
  * @ORM\Table(name="extra_field_options")
  *
@@ -17,13 +18,11 @@ use Doctrine\ORM\Mapping as ORM;
 class ExtraFieldOptions
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="options")
@@ -52,11 +51,9 @@ class ExtraFieldOptions
     protected ?string $priorityMessage;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="option_order", type="integer", nullable=true)
      */
-    protected $optionOrder;
+    protected ?int $optionOrder;
 
     /**
      * @return int
@@ -134,7 +131,7 @@ class ExtraFieldOptions
     public function getDisplayText($translated = true)
     {
         if ($translated) {
-            return \ExtraFieldOption::translateDisplayName($this->displayText);
+            return ExtraFieldOption::translateDisplayName($this->displayText);
         }
 
         return $this->displayText;

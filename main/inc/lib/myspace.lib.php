@@ -1215,7 +1215,6 @@ class MySpace
         $whereInLp = implode(',', $lpItems);
 
         if (count($lpItems) != 0) {
-            /*****/
             $registeredUsers = self::getCompanyLearnpathSubscription(
                 $startDate,
                 $endDate,
@@ -1353,12 +1352,12 @@ class MySpace
                                 Display::return_icon('statistics.png', get_lang('Stats')),
                                 api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
                                 $student['id']
-                                ."&id_session=".((int)$student['session_id'])
+                                ."&id_session=".((int) $student['session_id'])
                                 ."&course=$lpCourseCode"
                             );
 
-                            if (!isset($studentRegistered[$student['id']][(int)$student['session_id']])) {
-                                $studentRegistered[$student['id']][(int)$student['session_id']] = $student;
+                            if (!isset($studentRegistered[$student['id']][(int) $student['session_id']])) {
+                                $studentRegistered[$student['id']][(int) $student['session_id']] = $student;
                                 $studentsName .= $student['complete_name'].' / ';
                                 $htmlData .= "$reportLink <strong>".$student['complete_name'].'</strong><br>';
                                 $totalStudent++;
@@ -1734,7 +1733,7 @@ class MySpace
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
                                 $tempStudent = $studentArray[$studentId];
-                                $sessionId = (int)$student['session_id'];
+                                $sessionId = (int) $student['session_id'];
                                 $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];
                                 $iconGroup = Display::return_icon(
@@ -1743,9 +1742,9 @@ class MySpace
                                     '',
                                     ICON_SIZE_MEDIUM);
                                 if (!isset($studentInSesion[$studentId])) {
-                                    if($sessionId != 0){
+                                    if ($sessionId != 0) {
                                         $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
-                                    }else{
+                                    } else {
                                         $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
                                     }
                                     $totalStudent++;
@@ -4546,12 +4545,12 @@ class MySpace
     private static function getDataAccessTrackingFilters($sql)
     {
         if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int)$_GET['course_id'];
+            $courseId = (int) $_GET['course_id'];
             $sql .= " AND c.id = ".$courseId;
         }
 
         if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int)$_GET['session_id'];
+            $sessionId = (int) $_GET['session_id'];
             $sql .= " AND a.session_id = ".$sessionId;
         }
 

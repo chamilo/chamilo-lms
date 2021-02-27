@@ -77,12 +77,12 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    public function getAttachments(): ArrayCollection
+    public function getAttachments(): Collection
     {
         return $this->attachments;
     }
 
-    public function setAttachments(ArrayCollection $attachments): self
+    public function setAttachments(Collection $attachments): self
     {
         $this->attachments = $attachments;
 

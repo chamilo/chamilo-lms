@@ -23,34 +23,26 @@ use Doctrine\ORM\Mapping as ORM;
 class HookObserver
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
-     */
-    protected $className;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
-    protected $path;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="plugin_name", type="string", length=255, nullable=true)
-     */
-    protected $pluginName;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
+
+    /**
+     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
+     */
+    protected ?string $className;
+
+    /**
+     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     */
+    protected string $path;
+
+    /**
+     * @ORM\Column(name="plugin_name", type="string", length=255, nullable=true)
+     */
+    protected ?string $pluginName;
 
     /**
      * Set className.

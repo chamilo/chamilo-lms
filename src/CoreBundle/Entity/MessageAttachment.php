@@ -17,20 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 class MessageAttachment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
@@ -49,11 +45,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     protected Message $message;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     public function __toString(): string
     {

@@ -68,7 +68,7 @@ class Language
 
     public function __construct()
     {
-        //$this->children = new ArrayCollection();
+        $this->subLanguages = new ArrayCollection();
     }
 
     /**
@@ -179,22 +179,12 @@ class Language
         return $this;
     }
 
-    /**
-     * Get parent.
-     *
-     * @return Language
-     */
-    public function getParent()
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    /**
-     * Get subLanguages.
-     *
-     * @return ArrayCollection
-     */
-    public function getSubLanguages()
+    public function getSubLanguages(): Collection
     {
         return $this->subLanguages;
     }

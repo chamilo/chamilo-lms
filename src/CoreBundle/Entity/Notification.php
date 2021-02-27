@@ -28,20 +28,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Notification
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="dest_user_id", type="integer", nullable=false)
      */
-    protected $destUserId;
+    protected int $destUserId;
 
     /**
      * @ORM\Column(name="dest_mail", type="string", length=255, nullable=true)
@@ -59,26 +55,20 @@ class Notification
     protected ?string $content;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="send_freq", type="smallint", nullable=true)
      */
-    protected $sendFreq;
+    protected ?int $sendFreq;
 
     /**
-     * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="sent_at", type="datetime", nullable=true)
      */
-    protected $sentAt;
+    protected ?DateTime $sentAt;
 
     /**
      * Set destUserId.

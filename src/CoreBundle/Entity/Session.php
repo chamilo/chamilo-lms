@@ -521,7 +521,7 @@ class Session
         return $this->hasUserInCourse($user, $course, self::COACH);
     }
 
-    public function getUserInCourse(User $user, Course $course, $status = null): ArrayCollection
+    public function getUserInCourse(User $user, Course $course, $status = null): Collection
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('course', $course)
@@ -953,10 +953,7 @@ class Session
         return false;
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getUserCourseSubscriptions()
+    public function getUserCourseSubscriptions(): Collection
     {
         return $this->userCourseSubscriptions;
     }
@@ -1131,22 +1128,12 @@ class Session
         return $this;
     }
 
-    /**
-     * Get studentPublications.
-     *
-     * @return ArrayCollection
-     */
-    public function getStudentPublications()
+    public function getStudentPublications(): Collection
     {
         return $this->studentPublications;
     }
 
-    /**
-     * Get issuedSkills.
-     *
-     * @return ArrayCollection
-     */
-    public function getIssuedSkills()
+    public function getIssuedSkills(): Collection
     {
         return $this->issuedSkills;
     }
@@ -1178,7 +1165,7 @@ class Session
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getUrls()
     {

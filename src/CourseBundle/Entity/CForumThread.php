@@ -326,30 +326,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CForumThread
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
      * Set threadTitleQualify.
      *
      * @param string $threadTitleQualify
@@ -441,30 +417,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     public function getThreadWeight()
     {
         return $this->threadWeight;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CForumThread
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

@@ -53,9 +53,9 @@ class CourseCategory
     /**
      * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
      *
-     * @var \Chamilo\CoreBundle\Entity\CourseCategory[]|\CourseCategory[]|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
+     * @var Collection|CourseCategory[]
      */
-    protected \Doctrine\Common\Collections\Collection $children;
+    protected Collection $children;
 
     /**
      * @Assert\NotBlank()
@@ -109,9 +109,12 @@ class CourseCategory
     protected ?string $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory", mappedBy="courseCategory", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory",
+     *     mappedBy="courseCategory", cascade={"persist"}, orphanRemoval=true
+     * )
      *
-     * @var \Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory[]|\Doctrine\Common\Collections\Collection
+     * @var AccessUrlRelCourseCategory[]|Collection
      */
     protected $urls;
 
@@ -332,12 +335,12 @@ class CourseCategory
         return $this;
     }
 
-    public function getCourses(): ArrayCollection
+    public function getCourses(): Collection
     {
         return $this->courses;
     }
 
-    public function setCourses(ArrayCollection $courses): self
+    public function setCourses(Collection $courses): self
     {
         $this->courses = $courses;
 

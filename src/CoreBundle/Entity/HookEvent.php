@@ -23,27 +23,21 @@ use Doctrine\ORM\Mapping as ORM;
 class HookEvent
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
-     */
-    protected $className;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
+
+    /**
+     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
+     */
+    protected ?string $className;
+
+    /**
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     */
+    protected ?string $description;
 
     /**
      * Set className.

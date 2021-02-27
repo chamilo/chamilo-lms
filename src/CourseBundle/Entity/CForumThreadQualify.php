@@ -24,55 +24,41 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumThreadQualify
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="thread_id", type="integer", nullable=false)
      */
-    protected $threadId;
+    protected int $threadId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="qualify", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $qualify;
+    protected float $qualify;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
      */
-    protected $qualifyUserId;
+    protected int $qualifyUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
      */
-    protected $qualifyTime;
+    protected DateTime $qualifyTime;
 
     /**
      * Set userId.
@@ -192,30 +178,6 @@ class CForumThreadQualify
     public function getQualifyTime()
     {
         return $this->qualifyTime;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CForumThreadQualify
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
     }
 
     /**

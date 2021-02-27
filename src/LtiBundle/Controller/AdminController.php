@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Controller;
@@ -12,9 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class AdminController.
- */
 class AdminController extends BaseController
 {
     /**
@@ -27,7 +26,9 @@ class AdminController extends BaseController
         $repo = $this->getDoctrine()->getRepository('ChamiloLtiBundle:ExternalTool');
         $tools = $repo->findAll();
 
-        return $this->render('@ChamiloCore/Lti/admin.html.twig', ['tools' => $tools]);
+        return $this->render('@ChamiloCore/Lti/admin.html.twig', [
+            'tools' => $tools,
+        ]);
     }
 
     /**
@@ -56,17 +57,23 @@ class AdminController extends BaseController
         $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
         $breadcrumb->addChild(
             $this->trans('Administration'),
-            ['route' => 'administration']
+            [
+                'route' => 'administration',
+            ]
         );
         $breadcrumb->addChild(
             $this->trans('External tools'),
-            ['route' => 'chamilo_lti_admin']
+            [
+                'route' => 'chamilo_lti_admin',
+            ]
         );
         $breadcrumb->addChild('Add external tool');
 
         return $this->render(
             '@ChamiloCore/Lti/admin_form.html.twig',
-            ['form' => $form->createView()]
+            [
+                'form' => $form->createView(),
+            ]
         );
     }
 
@@ -110,17 +117,23 @@ class AdminController extends BaseController
         $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
         $breadcrumb->addChild(
             $this->trans('Administration'),
-            ['route' => 'administration']
+            [
+                'route' => 'administration',
+            ]
         );
         $breadcrumb->addChild(
             $this->trans('External tools'),
-            ['route' => 'chamilo_lti_admin']
+            [
+                'route' => 'chamilo_lti_admin',
+            ]
         );
         $breadcrumb->addChild('Edit external tool');
 
         return $this->render(
             '@ChamiloCore/Lti/admin_form.html.twig',
-            ['form' => $form->createView()]
+            [
+                'form' => $form->createView(),
+            ]
         );
     }
 

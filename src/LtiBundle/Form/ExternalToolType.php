@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Form;
 
 use Chamilo\LtiBundle\Entity\ExternalTool;
+use SimpleXMLElement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -16,12 +19,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class ExternalToolType.
- */
 class ExternalToolType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var ExternalTool $tool */
         $tool = $builder->getData();
@@ -29,13 +29,21 @@ class ExternalToolType extends AbstractType
 
         $builder
             ->add('name', TextType::class)
-            ->add('description', TextareaType::class, ['required' => false]);
+            ->add('description', TextareaType::class, [
+                'required' => false,
+            ])
+        ;
 
         if (null === $parent) {
             $builder
                 ->add('launchUrl', UrlType::class)
-                ->add('consumerKey', TextType::class, ['required' => false])
-                ->add('sharedSecret', TextType::class, ['required' => false]);
+                ->add('consumerKey', TextType::class, [
+                    'required' => false,
+                ])
+                ->add('sharedSecret', TextType::class, [
+                    'required' => false,
+                ])
+            ;
         }
 
         $builder->add(
@@ -65,23 +73,40 @@ class ExternalToolType extends AbstractType
             ->add(
                 'shareName',
                 CheckboxType::class,
-                ['mapped' => false, 'help' => "Share launcher's name", 'required' => false]
+                [
+                    'mapped' => false,
+                    'help' => "Share launcher's name",
+                    'required' => false,
+                ]
             )
             ->add(
                 'shareEmail',
                 CheckboxType::class,
-                ['mapped' => false, 'help' => "Share launcher's email", 'required' => false]
+                [
+                    'mapped' => false,
+                    'help' => "Share launcher's email",
+                    'required' => false,
+                ]
             )
             ->add(
                 'sharePicture',
                 CheckboxType::class,
-                ['mapped' => false, 'help' => "Share launcher's picture", 'required' => false]
-            );
+                [
+                    'mapped' => false,
+                    'help' => "Share launcher's picture",
+                    'required' => false,
+                ]
+            )
+        ;
 
         $builder->add(
             empty($tool->getId()) ? 'save' : 'edit',
             SubmitType::class,
-            ['attr' => ['class' => 'btn btn-primary']]
+            [
+                'attr' => [
+                    'class' => 'btn btn-primary',
+                ],
+            ]
         );
 
         $builder->addEventListener(
@@ -90,12 +115,12 @@ class ExternalToolType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class', ExternalTool::class]);
     }
 
-    public function onPostSubmit(FormEvent $event)
+    public function onPostSubmit(FormEvent $event): void
     {
         /** @var ExternalTool $tool */
         $tool = $event->getData();
@@ -121,7 +146,7 @@ class ExternalToolType extends AbstractType
     /**
      * @param string $launchUrl
      *
-     * @return string|null
+     * @return null|string
      */
     private function getLaunchUrlFromCartridge($launchUrl)
     {
@@ -151,7 +176,7 @@ class ExternalToolType extends AbstractType
             return null;
         }
 
-        $xml = new \SimpleXMLElement($content);
+        $xml = new SimpleXMLElement($content);
         $result = $xml->xpath('blti:launch_url');
 
         if (empty($result)) {

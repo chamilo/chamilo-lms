@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
-/**
- * Class OutcomeUnsupportedResponse.
- */
+use SimpleXMLElement;
+
 class OutcomeUnsupportedResponse extends OutcomeResponse
 {
     /**
@@ -21,7 +22,7 @@ class OutcomeUnsupportedResponse extends OutcomeResponse
         parent::__construct($statusInfo);
     }
 
-    protected function generateBody(\SimpleXMLElement $xmlBody)
+    protected function generateBody(SimpleXMLElement $xmlBody): void
     {
     }
 }

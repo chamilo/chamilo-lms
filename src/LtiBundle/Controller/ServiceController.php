@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Controller;
@@ -10,12 +12,11 @@ use Chamilo\LtiBundle\Component\OutcomeReadRequest;
 use Chamilo\LtiBundle\Component\OutcomeReplaceRequest;
 use Chamilo\LtiBundle\Component\OutcomeUnsupportedRequest;
 use Chamilo\LtiBundle\Entity\ExternalTool;
+use OAuthUtil;
+use SimpleXMLElement;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class ServicesController.
- */
 class ServiceController extends BaseController
 {
     /**
@@ -26,21 +27,25 @@ class ServiceController extends BaseController
         $em = $this->getDoctrine()->getManager();
         $toolRepo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
 
-        $headers = \OAuthUtil::get_headers();
+        $headers = OAuthUtil::get_headers();
 
         if (empty($headers['Authorization'])) {
             throw $this->createAccessDeniedException();
         }
 
-        $authParams = \OAuthUtil::split_header($headers['Authorization']);
+        $authParams = OAuthUtil::split_header($headers['Authorization']);
 
         if (empty($authParams) || empty($authParams['oauth_consumer_key']) || empty($authParams['oauth_signature'])) {
             throw $this->createAccessDeniedException();
         }
 
         $course = $this->getCourse();
-        $tools = $toolRepo->findBy(['consumerKey' => $authParams['oauth_consumer_key']]);
-        $url = $this->generateUrl('chamilo_lti_os', ['code' => $course->getCode()]);
+        $tools = $toolRepo->findBy([
+            'consumerKey' => $authParams['oauth_consumer_key'],
+        ]);
+        $url = $this->generateUrl('chamilo_lti_os', [
+            'code' => $course->getCode(),
+        ]);
 
         $toolIsFound = false;
 
@@ -80,7 +85,7 @@ class ServiceController extends BaseController
     }
 
     /**
-     * @return \Chamilo\LtiBundle\Component\OutcomeResponse|null
+     * @return null|\Chamilo\LtiBundle\Component\OutcomeResponse
      */
     private function processServiceRequest()
     {
@@ -90,7 +95,7 @@ class ServiceController extends BaseController
             return null;
         }
 
-        $xml = new \SimpleXMLElement($requestContent);
+        $xml = new SimpleXMLElement($requestContent);
 
         if (empty($xml)) {
             return null;

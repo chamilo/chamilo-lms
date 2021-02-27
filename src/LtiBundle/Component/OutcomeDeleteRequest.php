@@ -1,21 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\User;
+use Result;
+use SimpleXMLElement;
 
-/**
- * Class OutcomeDeleteRequest.
- */
 class OutcomeDeleteRequest extends OutcomeRequest
 {
-    /**
-     * OutcomeDeleteRequest constructor.
-     */
-    public function __construct(\SimpleXMLElement $xml)
+    public function __construct(SimpleXMLElement $xml)
     {
         parent::__construct($xml);
 
@@ -23,7 +21,7 @@ class OutcomeDeleteRequest extends OutcomeRequest
         $this->xmlRequest = $this->xmlRequest->deleteResultRequest;
     }
 
-    protected function processBody()
+    protected function processBody(): void
     {
         $resultRecord = $this->xmlRequest->resultRecord;
         $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
@@ -34,7 +32,8 @@ class OutcomeDeleteRequest extends OutcomeRequest
         if (empty($sourcedParts)) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_ERROR)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
+            ;
 
             return;
         }
@@ -47,28 +46,31 @@ class OutcomeDeleteRequest extends OutcomeRequest
         if (empty($evaluation) || empty($user)) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
+            ;
 
             return;
         }
 
-        $results = \Result::load(null, $user->getId(), $evaluation->getId());
+        $results = Result::load(null, $user->getId(), $evaluation->getId());
 
         if (empty($results)) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
+            ;
 
             return;
         }
 
-        /** @var \Result $result */
+        /** @var Result $result */
         $result = $results[0];
         $result->addResultLog($user->getId(), $evaluation->getId());
         $result->delete();
 
         $this->statusInfo
             ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
-            ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_SUCCESS);
+            ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_SUCCESS)
+        ;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Entity;
@@ -18,104 +20,75 @@ use Doctrine\ORM\Mapping as ORM;
 class ExternalTool
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string")
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="launch_url", type="string")
      */
-    protected $launchUrl;
+    protected string $launchUrl;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="consumer_key", type="string", nullable=true)
      */
-    protected $consumerKey;
+    protected string $consumerKey;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="shared_secret", type="string", nullable=true)
      */
-    protected $sharedSecret;
+    protected string $sharedSecret;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="custom_params", type="text", nullable=true)
      */
-    protected $customParams;
+    protected ?string $customParams = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
      */
-    protected $activeDeepLinking;
+    protected bool $activeDeepLinking;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
-    protected $privacy;
+    protected ?string $privacy = null;
 
     /**
-     * @var Course|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected ?Course $course = null;
 
     /**
-     * @var GradebookEvaluation|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
      * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $gradebookEval = null;
+    protected ?GradebookEvaluation $gradebookEval = null;
 
     /**
-     * @var ExternalTool|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected $parent;
+    protected ?ExternalTool $parent = null;
 
     /**
-     * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
      */
-    protected $children;
+    protected ArrayCollection $children;
 
-    /**
-     * ExternalTool constructor.
-     */
     public function __construct()
     {
         $this->description = null;
@@ -164,7 +137,7 @@ class ExternalTool
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -172,7 +145,7 @@ class ExternalTool
     }
 
     /**
-     * @param string|null $description
+     * @param null|string $description
      *
      * @return ExternalTool
      */
@@ -244,7 +217,7 @@ class ExternalTool
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getCustomParams()
     {
@@ -252,7 +225,7 @@ class ExternalTool
     }
 
     /**
-     * @param string|null $customParams
+     * @param null|string $customParams
      *
      * @return ExternalTool
      */
@@ -263,16 +236,13 @@ class ExternalTool
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isGlobal(): bool
     {
         return null === $this->course;
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function encodeCustomParams(array $params)
     {
@@ -281,7 +251,7 @@ class ExternalTool
         }
         $pairs = [];
         foreach ($params as $key => $value) {
-            $pairs[] = "$key=$value";
+            $pairs[] = "{$key}={$value}";
         }
 
         return implode("\n", $pairs);
@@ -310,11 +280,6 @@ class ExternalTool
         return $params;
     }
 
-    /**
-     * Get activeDeepLinking.
-     *
-     * @return bool
-     */
     public function isActiveDeepLinking(): bool
     {
         return $this->activeDeepLinking;
@@ -337,7 +302,7 @@ class ExternalTool
     /**
      * Get course.
      *
-     * @return Course|null
+     * @return null|Course
      */
     public function getCourse()
     {
@@ -359,7 +324,7 @@ class ExternalTool
     /**
      * Get gradebookEval.
      *
-     * @return GradebookEvaluation|null
+     * @return null|GradebookEvaluation
      */
     public function getGradebookEval()
     {
@@ -369,7 +334,7 @@ class ExternalTool
     /**
      * Set gradebookEval.
      *
-     * @param GradebookEvaluation|null $gradebookEval
+     * @param null|GradebookEvaluation $gradebookEval
      *
      * @return ExternalTool
      */
@@ -383,7 +348,7 @@ class ExternalTool
     /**
      * Get privacy.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPrivacy()
     {
@@ -412,9 +377,6 @@ class ExternalTool
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSharingName(): bool
     {
         $unserialize = $this->unserializePrivacy();
@@ -427,9 +389,6 @@ class ExternalTool
         return unserialize($this->privacy);
     }
 
-    /**
-     * @return bool
-     */
     public function isSharingEmail(): bool
     {
         $unserialize = $this->unserializePrivacy();
@@ -437,9 +396,6 @@ class ExternalTool
         return (bool) $unserialize['share_email'];
     }
 
-    /**
-     * @return bool
-     */
     public function isSharingPicture(): bool
     {
         $unserialize = $this->unserializePrivacy();
@@ -448,7 +404,7 @@ class ExternalTool
     }
 
     /**
-     * @return ExternalTool|null
+     * @return null|ExternalTool
      */
     public function getParent()
     {

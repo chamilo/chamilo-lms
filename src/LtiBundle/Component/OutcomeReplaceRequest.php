@@ -1,21 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\User;
+use Result;
+use SimpleXMLElement;
 
-/**
- * Class OutcomeReplaceRequest.
- */
 class OutcomeReplaceRequest extends OutcomeRequest
 {
-    /**
-     * OutcomeReplaceRequest constructor.
-     */
-    public function __construct(\SimpleXMLElement $xml)
+    public function __construct(SimpleXMLElement $xml)
     {
         parent::__construct($xml);
 
@@ -23,7 +21,7 @@ class OutcomeReplaceRequest extends OutcomeRequest
         $this->xmlRequest = $this->xmlRequest->replaceResultRequest;
     }
 
-    protected function processBody()
+    protected function processBody(): void
     {
         $resultRecord = $this->xmlRequest->resultRecord;
         $sourcedId = (string) $resultRecord->sourcedGUID->sourcedId;
@@ -33,7 +31,8 @@ class OutcomeReplaceRequest extends OutcomeRequest
         if (!is_numeric($resultScore)) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_ERROR)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
+            ;
 
             return;
         }
@@ -43,7 +42,8 @@ class OutcomeReplaceRequest extends OutcomeRequest
         if (0 > $resultScore || 1 < $resultScore) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_WARNING)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
+            ;
 
             return;
         }
@@ -53,7 +53,8 @@ class OutcomeReplaceRequest extends OutcomeRequest
         if (empty($sourcedParts)) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_ERROR)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
+            ;
 
             return;
         }
@@ -66,23 +67,24 @@ class OutcomeReplaceRequest extends OutcomeRequest
         if (empty($evaluation) || empty($user)) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
-                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE);
+                ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
+            ;
 
             return;
         }
 
         $score = $evaluation->getMax() * $resultScore;
 
-        $results = \Result::load(null, $user->getId(), $evaluation->getId());
+        $results = Result::load(null, $user->getId(), $evaluation->getId());
 
         if (empty($results)) {
-            $result = new \Result();
+            $result = new Result();
             $result->set_evaluation_id($evaluation->getId());
             $result->set_user_id($user->getId());
             $result->set_score($score);
             $result->add();
         } else {
-            /** @var \Result $result */
+            /** @var Result $result */
             $result = $results[0];
             $result->addResultLog($user->getId(), $evaluation->getId());
             $result->set_score($score);
@@ -98,6 +100,7 @@ class OutcomeReplaceRequest extends OutcomeRequest
                     $user->getId(),
                     $resultScore
                 )
-            );
+            )
+        ;
     }
 }

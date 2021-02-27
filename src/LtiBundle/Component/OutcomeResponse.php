@@ -1,28 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
-/**
- * Class OutcomeResponse.
- */
+use SimpleXMLElement;
+
 abstract class OutcomeResponse
 {
     const TYPE_REPLACE = 'replace';
     const TYPE_READ = 'read';
     const TYPE_DELETE = 'delete';
 
-    protected $bodyParams;
-    /**
-     * @var OutcomeResponseStatus
-     */
-    private $statusInfo;
+    protected array $bodyParams;
+    private OutcomeResponseStatus $statusInfo;
 
     /**
      * OutcomeResponse constructor.
      *
-     * @param mixed|null $bodyParam
+     * @param null|mixed $bodyParam
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {
@@ -35,7 +33,7 @@ abstract class OutcomeResponse
      */
     public function __toString()
     {
-        $xml = new \SimpleXMLElement('<imsx_POXEnvelopeResponse></imsx_POXEnvelopeResponse>');
+        $xml = new SimpleXMLElement('<imsx_POXEnvelopeResponse></imsx_POXEnvelopeResponse>');
         $xml->addAttribute('xmlns', 'http://www.imsglobal.org/services/ltiv1p1/xsd/imsoms_v1p0');
 
         $headerInfo = $xml->addChild('imsx_POXHeader')->addChild('imsx_POXResponseHeaderInfo');
@@ -56,5 +54,5 @@ abstract class OutcomeResponse
         return $xml->asXML();
     }
 
-    abstract protected function generateBody(\SimpleXMLElement $xmlBody);
+    abstract protected function generateBody(SimpleXMLElement $xmlBody);
 }

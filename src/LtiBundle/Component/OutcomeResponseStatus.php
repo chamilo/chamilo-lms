@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
-/**
- * Class OutcomeResponseStatus.
- */
 class OutcomeResponseStatus
 {
     const SEVERITY_STATUS = 'status';
@@ -18,30 +17,15 @@ class OutcomeResponseStatus
     const CODEMAJOR_FAILURE = 'failure';
     const CODEMAJOR_UNSUPPORTED = 'unsupported';
 
-    /**
-     * @var string
-     */
-    private $codeMajor = '';
+    private string $codeMajor = '';
 
-    /**
-     * @var string
-     */
-    private $severity = '';
+    private string $severity = '';
 
-    /**
-     * @var string
-     */
-    private $messageRefIdentifier = '';
+    private string $messageRefIdentifier = '';
 
-    /**
-     * @var string
-     */
-    private $operationRefIdentifier = '';
+    private string $operationRefIdentifier = '';
 
-    /**
-     * @var string
-     */
-    private $description = '';
+    private string $description = '';
 
     /**
      * Get codeMajor.

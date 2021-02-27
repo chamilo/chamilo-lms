@@ -1,52 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
 use Doctrine\ORM\EntityManager;
+use SimpleXMLElement;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
-/**
- * Class OutcomeRequest.
- */
 abstract class OutcomeRequest
 {
-    /**
-     * @var string
-     */
-    protected $responseType;
+    protected string $responseType;
 
-    /**
-     * @var \SimpleXMLElement
-     */
-    protected $xmlHeaderInfo;
+    protected SimpleXMLElement $xmlHeaderInfo;
 
-    /**
-     * @var \SimpleXMLElement
-     */
-    protected $xmlRequest;
+    protected SimpleXMLElement $xmlRequest;
 
-    /**
-     * @var OutcomeResponseStatus
-     */
-    protected $statusInfo;
+    protected OutcomeResponseStatus $statusInfo;
 
-    protected $responseBodyParam;
+    protected array $responseBodyParam;
 
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-    /**
-     * @var Translator
-     */
-    protected $translator;
+    protected EntityManager $entityManager;
+    protected Translator $translator;
 
-    /**
-     * OutcomeRequest constructor.
-     */
-    public function __construct(\SimpleXMLElement $xml)
+    public function __construct(SimpleXMLElement $xml)
     {
         $this->statusInfo = new OutcomeResponseStatus();
 
@@ -54,18 +33,18 @@ abstract class OutcomeRequest
         $this->xmlRequest = $xml->imsx_POXBody->children();
     }
 
-    public function setEntityManager(EntityManager $entityManager)
+    public function setEntityManager(EntityManager $entityManager): void
     {
         $this->entityManager = $entityManager;
     }
 
-    public function setTranslator(Translator $translator)
+    public function setTranslator(Translator $translator): void
     {
         $this->translator = $translator;
     }
 
     /**
-     * @return OutcomeResponse|null
+     * @return null|OutcomeResponse
      */
     public function process()
     {
@@ -84,7 +63,7 @@ abstract class OutcomeRequest
         }
     }
 
-    protected function processHeader()
+    protected function processHeader(): void
     {
         $info = $this->xmlHeaderInfo;
 

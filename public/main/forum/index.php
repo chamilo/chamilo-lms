@@ -309,7 +309,8 @@ $forumCategoryInfo = [];
 if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
         $categoryId = $forumCategory->getIid();
-        $categorySessionId = $forumCategory->getSessionId();
+        //$categorySessionId = $forumCategory->getSessionId();
+        $categorySessionId = 0;
         $forumCategoryInfo['id'] = $categoryId;
         $forumCategoryInfo['title'] = $forumCategory->getCatTitle();
         /*
@@ -318,7 +319,8 @@ if (is_array($forumCategories)) {
         } else {
         }*/
         //$forumCategoryInfo['extra_fields'] = $forumCategory['extra_fields'];
-        $forumCategoryInfo['icon_session'] = api_get_session_image($categorySessionId, $_user['status']);
+        //$forumCategoryInfo['icon_session'] = api_get_session_image($categorySessionId, $_user['status']);
+        $forumCategoryInfo['icon_session'] = '';
 
         // Validation when belongs to a session
         $forumCategoryInfo['description'] = $forumCategory->getCatComment();

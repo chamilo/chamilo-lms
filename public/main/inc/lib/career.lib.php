@@ -249,10 +249,10 @@ class Career extends Model
      */
     public function save($params, $showQuery = false)
     {
-        $career = new \Chamilo\CoreBundle\Entity\Career();
+        $career = new CareerEntity();
         $career
             ->setName($params['name'])
-            ->setStatus($params['status'])
+            ->setStatus((int) $params['status'])
             ->setDescription($params['description']);
 
         Database::getManager()->persist($career);

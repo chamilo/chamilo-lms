@@ -310,14 +310,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->allowAnonymous;
     }
 
-    /**
-     * Set allowEdit.
-     *
-     * @param int $allowEdit
-     *
-     * @return CForumForum
-     */
-    public function setAllowEdit($allowEdit)
+    public function setAllowEdit(int $allowEdit): self
     {
         $this->allowEdit = $allowEdit;
 

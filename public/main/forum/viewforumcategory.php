@@ -216,7 +216,8 @@ if ('add' !== $action) {
     $html = '';
     $html .= '<div class="category-forum">';
     $session_displayed = '';
-    $sessionCategoryId = $forumCategory->getSessionId();
+    //$sessionCategoryId = $forumCategory->getSessionId();
+    $sessionCategoryId = 0;
     if (!empty($sessionCategoryId)) {
         $sessionInfo = api_get_session_entity($sessionCategoryId);
         $session_displayed = ' ('.Security::remove_XSS($sessionInfo->getName()).')';

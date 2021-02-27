@@ -610,12 +610,13 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max
+    /*$sql = "SELECT MAX(cat_order) as sort_max
             FROM $table_categories
             WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
-    $new_max = $row['sort_max'] + 1;
+    $new_max = $row['sort_max'] + 1;*/
+    $new_max = 1;
     $session_id = api_get_session_id();
     $clean_cat_title = $values['forum_category_title'];
     $last_id = null;
@@ -650,8 +651,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             ->setCatTitle($clean_cat_title)
             ->setCatComment(isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '')
             ->setCatOrder($new_max)
-            ->setCId($course_id)
-            ->setSessionId($session_id)
             ->setParent($course)
             ->addCourseLink($course, $session)
         ;
@@ -791,7 +790,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setForumComment($values['forum_comment'] ?? '')
         ->setForumCategory($forumCategory)
         ->setAllowAnonymous($values['allow_anonymous_group']['allow_anonymous'] ?? null)
-        ->setAllowEdit($values['students_can_edit_group']['students_can_edit'] ?? null)
+        ->setAllowEdit($values['students_can_edit_group']['students_can_edit'] ?? 0)
         ->setApprovalDirectPost($values['approval_direct_group']['approval_direct'] ?? null)
         ->setAllowAttachments($values['allow_attachments_group']['allow_attachments'] ?? null)
         ->setAllowNewThreads($values['allow_new_threads_group']['allow_new_threads'] ?? null)

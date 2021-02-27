@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -59,6 +61,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             if (!empty($courseRelUserList)) {
                 foreach ($courseRelUserList as $courseRelUser) {
                     $courseAdmin = $courseRelUser->getUser();
+
                     break;
                 }
             }
@@ -68,7 +71,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             }
 
             // Quiz
-            $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_quiz WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -116,7 +119,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $em->clear();
 
             // Question categories.
-            $sql = "SELECT * FROM c_quiz_question_category WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_quiz_question_category WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -150,7 +153,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
 
             $courseAdmin = $userRepo->find($courseAdmin->getId());
 
-            $sql = "SELECT * FROM c_quiz_question WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_quiz_question WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();

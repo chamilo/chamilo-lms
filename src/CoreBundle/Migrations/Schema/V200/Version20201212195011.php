@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -74,7 +76,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
             $counter = 1;
             $courseId = $course->getId();
             $sql = "SELECT * FROM c_tool
-                    WHERE c_id = $courseId ";
+                    WHERE c_id = {$courseId} ";
             $result = $connection->executeQuery($sql);
             $tools = $result->fetchAllAssociative();
 

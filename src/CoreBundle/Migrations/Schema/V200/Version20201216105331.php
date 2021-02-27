@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -54,7 +56,7 @@ final class Version20201216105331 extends AbstractMigrationChamilo
             $courseId = $course->getId();
 
             // c_thematic.
-            $sql = "SELECT * FROM c_thematic WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_thematic WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();

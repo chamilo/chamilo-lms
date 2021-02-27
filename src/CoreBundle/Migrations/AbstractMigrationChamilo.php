@@ -27,8 +27,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 {
     public const BATCH_SIZE = 20;
 
-    private ?\Doctrine\ORM\EntityManager $manager = null;
-    private ?\Symfony\Component\DependencyInjection\ContainerInterface $container = null;
+    private ?EntityManager $manager = null;
+    private ?ContainerInterface $container = null;
 
     public function setEntityManager(EntityManager $manager): void
     {
@@ -138,14 +138,15 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             ->setSubkeytext($subKeyText)
             ->setUrl($accessUrl)
             ->setAccessUrlChangeable($accessUrlChangeable)
-            ->setAccessUrlLocked($accessUrlLocked);
+            ->setAccessUrlLocked($accessUrlLocked)
+        ;
 
         $this->getEntityManager()->persist($setting);
 
         if (count($options) > 0) {
             foreach ($options as $option) {
                 if (empty($option['text'])) {
-                    if ('true' == $option['value']) {
+                    if ('true' === $option['value']) {
                         $option['text'] = 'Yes';
                     } else {
                         $option['text'] = 'No';
@@ -156,7 +157,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                 $settingOption
                     ->setVariable($variable)
                     ->setValue($option['value'])
-                    ->setDisplayText($option['text']);
+                    ->setDisplayText($option['text'])
+                ;
 
                 $this->getEntityManager()->persist($settingOption);
             }
@@ -207,10 +209,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                 if ($file) {
                     $repo->addFile($resource, $file);
                 } else {
-                    $this->warnIf(true, "Cannot migrate $class #$id path: $documentPath ");
+                    $this->warnIf(true, "Cannot migrate {$class} #{$id} path: {$documentPath} ");
                 }
             } else {
-                $this->warnIf(true, "Cannot migrate $class #'.$id.' file not found: $documentPath");
+                $this->warnIf(true, "Cannot migrate {$class} #'.{$id}.' file not found: {$documentPath}");
             }
         }
     }
@@ -235,7 +237,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
         if (empty($items)) {
             $sql = "SELECT * FROM c_item_property
-                    WHERE tool = '$tool' AND c_id = $courseId AND ref = $id";
+                    WHERE tool = '{$tool}' AND c_id = {$courseId} AND ref = {$id}";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
         }
@@ -267,12 +269,15 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             switch ($visibility) {
                 case 0:
                     $newVisibility = ResourceLink::VISIBILITY_PENDING;
+
                     break;
                 case 1:
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+
                     break;
                 case 2:
                     $newVisibility = ResourceLink::VISIBILITY_DELETED;
+
                     break;
             }
 

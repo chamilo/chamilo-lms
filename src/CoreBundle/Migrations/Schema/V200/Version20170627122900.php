@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -27,7 +29,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             );
         }
         $this->addSql(
-            'ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL, CHANGE selected_value selected_value LONGTEXT DEFAULT NULL;'
+            'ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) NOT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL, CHANGE selected_value selected_value LONGTEXT DEFAULT NULL;'
         );
         $this->addSql(
             'ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE value value VARCHAR(190) DEFAULT NULL'
@@ -38,7 +40,8 @@ class Version20170627122900 extends AbstractMigrationChamilo
         $result = $connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM settings_current WHERE variable = 'exercise_invisible_in_session' AND category = 'Session'"
-            );
+            )
+        ;
         $count = $result->fetchNumeric()[0];
         if (empty($count)) {
             $this->addSql(
@@ -111,8 +114,8 @@ class Version20170627122900 extends AbstractMigrationChamilo
         ];
 
         foreach ($settings as $oldSetting => $newSetting) {
-            $sql = "UPDATE settings_current SET variable = '$newSetting'
-                    WHERE variable = '$oldSetting'";
+            $sql = "UPDATE settings_current SET variable = '{$newSetting}'
+                    WHERE variable = '{$oldSetting}'";
             $this->addSql($sql);
         }
 
@@ -278,8 +281,8 @@ class Version20170627122900 extends AbstractMigrationChamilo
         ];
 
         foreach ($settings as $variable => $category) {
-            $sql = "UPDATE settings_current SET category = '$category'
-                    WHERE variable = '$variable'";
+            $sql = "UPDATE settings_current SET category = '{$category}'
+                    WHERE variable = '{$variable}'";
             $this->addSql($sql);
         }
 
@@ -289,8 +292,8 @@ class Version20170627122900 extends AbstractMigrationChamilo
         ];
 
         foreach ($settings as $variable => $value) {
-            $sql = "UPDATE settings_current SET selected_value = '$value'
-                    WHERE variable = '$variable'";
+            $sql = "UPDATE settings_current SET selected_value = '{$value}'
+                    WHERE variable = '{$variable}'";
             $this->addSql($sql);
         }
 
@@ -316,7 +319,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
         ];
 
         foreach ($settings as $setting) {
-            $sql = "DELETE FROM settings_current WHERE variable = '$setting'";
+            $sql = "DELETE FROM settings_current WHERE variable = '{$setting}'";
             $this->addSql($sql);
         }
 

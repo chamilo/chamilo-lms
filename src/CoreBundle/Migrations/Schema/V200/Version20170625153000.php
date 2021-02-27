@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -37,6 +39,14 @@ class Version20170625153000 extends AbstractMigrationChamilo
                 'ALTER TABLE c_forum_category ADD CONSTRAINT FK_D627B86E1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_D627B86E1BAD783F ON c_forum_category (resource_node_id)');
+        }
+
+        if ($table->hasIndex('session_id')) {
+            $this->addSql('DROP INDEX session_id ON c_forum_category;');
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_forum_category;');
         }
 
         $table = $schema->getTable('c_forum_forum');

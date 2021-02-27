@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -15,6 +17,7 @@ use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use DocumentManager;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -55,7 +58,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             $counter = 1;
             $courseId = $course->getId();
 
-            $sql = "SELECT * FROM c_document WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_document WHERE c_id = {$courseId}
                     ORDER BY filetype DESC";
             $result = $connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();
@@ -73,8 +76,10 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $resourceNode = null;
                 $parent = null;
                 if ('.' !== dirname($documentPath)) {
-                    $parentId = \DocumentManager::get_document_id(
-                        ['real_id' => $courseId],
+                    $parentId = DocumentManager::get_document_id(
+                        [
+                            'real_id' => $courseId,
+                        ],
                         dirname($documentPath)
                     );
                     $parent = $documentRepo->find($parentId);

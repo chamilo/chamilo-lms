@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -57,7 +59,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $course = $courseRepo->find($courseId);
 
             // Assignments folders.
-            $sql = "SELECT * FROM c_student_publication WHERE contains_file = 0 AND c_id = $courseId
+            $sql = "SELECT * FROM c_student_publication WHERE contains_file = 0 AND c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -93,7 +95,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $sql = "SELECT * FROM c_student_publication
                     WHERE
                           contains_file = 1 AND
-                          c_id = $courseId
+                          c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -139,7 +141,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $sql = "SELECT * FROM c_student_publication
                     WHERE
                           (title_correction <> '' OR title_correction IS NOT NULL) AND
-                          c_id = $courseId
+                          c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -172,7 +174,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
             $em->clear();
 
             // Comments.
-            $sql = "SELECT * FROM c_student_publication_comment WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_student_publication_comment WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -187,7 +189,7 @@ final class Version20201216124011 extends AbstractMigrationChamilo
                 }
                 /** @var CStudentPublication $parent */
                 $parent = $studentPublicationRepo->find($workId);
-                $sql = "SELECT * FROM c_student_publication WHERE c_id = $courseId AND id = $workId";
+                $sql = "SELECT * FROM c_student_publication WHERE c_id = {$courseId} AND id = {$workId}";
                 $result = $connection->executeQuery($sql);
                 $work = $result->fetchAssociative();
                 if (empty($work)) {

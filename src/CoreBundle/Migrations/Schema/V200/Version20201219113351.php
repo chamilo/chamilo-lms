@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -48,7 +50,7 @@ final class Version20201219113351 extends AbstractMigrationChamilo
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);
 
-            $sql = "SELECT * FROM c_blog WHERE c_id = $courseId ORDER BY iid";
+            $sql = "SELECT * FROM c_blog WHERE c_id = {$courseId} ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
@@ -79,7 +81,7 @@ final class Version20201219113351 extends AbstractMigrationChamilo
             $em->flush();
             $em->clear();
 
-            $sql = "SELECT * FROM c_blog_attachment WHERE c_id = $courseId ORDER BY iid";
+            $sql = "SELECT * FROM c_blog_attachment WHERE c_id = {$courseId} ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -51,7 +53,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);
 
-            $sql = "SELECT * FROM c_calendar_event WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_calendar_event WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $events = $result->fetchAllAssociative();
@@ -64,7 +66,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 }
 
                 $sql = "SELECT * FROM c_item_property
-                        WHERE tool = 'calendar_event' AND c_id = $courseId AND ref = $id";
+                        WHERE tool = 'calendar_event' AND c_id = {$courseId} AND ref = {$id}";
                 $result = $connection->executeQuery($sql);
                 $items = $result->fetchAllAssociative();
 
@@ -80,6 +82,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                     $this->fixItemProperty('calendar_event', $eventRepo, $course, $admin, $event, $course, $items);
                     $em->persist($event);
                     $em->flush();
+
                     continue;
                 }
 
@@ -102,7 +105,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $em->flush();
             }
 
-            $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = $courseId
+            $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $attachments = $result->fetchAllAssociative();

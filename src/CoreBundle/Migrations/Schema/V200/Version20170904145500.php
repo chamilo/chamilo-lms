@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -54,8 +56,11 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         if (false === $table->hasColumn('show_previous_button')) {
             $this->addSql(
-                'ALTER TABLE c_quiz ADD COLUMN show_previous_button TINYINT(1) DEFAULT 1;'
+                'ALTER TABLE c_quiz ADD COLUMN show_previous_button TINYINT(1) DEFAULT 1 NOT NULL'
             );
+        } else {
+            $this->addSql('UPDATE c_quiz SET show_previous_button = 1 WHERE show_previous_button IS NULL');
+            $this->addSql('ALTER TABLE c_quiz CHANGE show_previous_button show_previous_button TINYINT(1) DEFAULT 1 NOT NULL');
         }
 
         if (false === $table->hasColumn('notifications')) {

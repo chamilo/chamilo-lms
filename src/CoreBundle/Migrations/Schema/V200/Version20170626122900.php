@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -83,7 +85,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE user ADD gender VARCHAR(1) DEFAULT NULL');
         }
         if (false === $table->hasColumn('locale')) {
-            $this->addSql('ALTER TABLE user ADD locale VARCHAR(8) DEFAULT NULL');
+            $this->addSql('ALTER TABLE user ADD locale VARCHAR(8) NOT NULL');
             $this->addSql('UPDATE user SET locale = (SELECT isocode FROM language WHERE english_name = language)');
         }
         if (false === $table->hasColumn('timezone')) {

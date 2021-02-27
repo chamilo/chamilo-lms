@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -9,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use ExtraField;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -32,11 +35,11 @@ class Version20191206150030 extends AbstractMigrationChamilo
         $counter = 1;
         $q = $em->createQuery('SELECT v FROM Chamilo\CoreBundle\Entity\ExtraFieldValues v');
 
-        $fieldWithFiles = \ExtraField::getExtraFieldTypesWithFiles();
+        $fieldWithFiles = ExtraField::getExtraFieldTypesWithFiles();
 
         /** @var ExtraFieldValues $item */
         foreach ($q->toIterable() as $item) {
-            if (in_array($item->getField()->getFieldType(), $fieldWithFiles)) {
+            if (in_array($item->getField()->getFieldType(), $fieldWithFiles, true)) {
                 $path = $item->getValue();
                 if (empty($path)) {
                     continue;

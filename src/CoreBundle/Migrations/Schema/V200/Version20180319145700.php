@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -51,7 +53,8 @@ class Version20180319145700 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('is_required')) {
             $table
                 ->addColumn('is_required', Types::BOOLEAN)
-                ->setDefault(false);
+                ->setDefault(false)
+            ;
         }
         /*if (false === $table->hasIndex('idx_survey_q_qid')) {
             $this->addSql('CREATE INDEX idx_survey_q_qid ON c_survey_question (question_id)');
@@ -96,7 +99,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
         if ($data) {
             foreach ($data as $item) {
                 $id = $item['iid'];
-                $this->addSql("UPDATE c_survey SET is_mandatory = 1 WHERE iid = $id");
+                $this->addSql("UPDATE c_survey SET is_mandatory = 1 WHERE iid = {$id}");
             }
         }
     }

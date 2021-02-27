@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -26,6 +28,94 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql("CREATE TABLE asset (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, category VARCHAR(255) NOT NULL, compressed TINYINT(1) NOT NULL, mime_type LONGTEXT DEFAULT NULL, original_name LONGTEXT DEFAULT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT '(DC2Type:simple_array)', size INT NOT NULL, crop VARCHAR(255) DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)', description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
         }
 
+        $this->addSql('DELETE FROM track_e_attempt WHERE exe_id IS NULL');
+        $this->addSql('ALTER TABLE track_e_attempt CHANGE exe_id exe_id INT NOT NULL');
+
+        $this->addSql('UPDATE branch_transaction_status SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE branch_transaction_status CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE room SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE room CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE session_rel_course_rel_user SET legal_agreement = 0 WHERE legal_agreement IS NULL');
+        $this->addSql('ALTER TABLE session_rel_course_rel_user CHANGE legal_agreement legal_agreement INT NOT NULL');
+
+        $this->addSql('UPDATE session SET nbr_courses = 0 WHERE nbr_courses IS NULL');
+        $this->addSql('ALTER TABLE session CHANGE nbr_courses nbr_courses INT NOT NULL');
+
+        $this->addSql('UPDATE session SET nbr_users = 0 WHERE nbr_users IS NULL');
+        $this->addSql('ALTER TABLE session CHANGE nbr_users nbr_users INT NOT NULL');
+
+        $this->addSql('UPDATE session SET nbr_classes = 0 WHERE nbr_classes IS NULL');
+        $this->addSql('ALTER TABLE session CHANGE nbr_classes nbr_classes INT NOT NULL');
+
+        if ($schema->hasTable('mail_template')) {
+            $this->addSql('UPDATE mail_template SET name = "No name" WHERE name IS NULL');
+            $this->addSql('ALTER TABLE mail_template CHANGE name name VARCHAR(255) NOT NULL');
+        }
+
+        $this->addSql('UPDATE session_rel_user SET duration = "0" WHERE duration IS NULL');
+        $this->addSql('ALTER TABLE session_rel_user CHANGE duration duration INT NOT NULL');
+
+        if ($schema->hasTable('portfolio_category')) {
+            $this->addSql('UPDATE portfolio_category SET title = "No name" WHERE title IS NULL');
+            $this->addSql('ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL');
+        }
+
+        $this->addSql('UPDATE gradebook_linkeval_log SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE gradebook_linkeval_log CHANGE name name LONGTEXT NOT NULL');
+
+        $this->addSql('UPDATE session_category SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE session_category CHANGE name name VARCHAR(100) NOT NULL');
+
+        $this->addSql('UPDATE c_group_info SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE c_group_info CHANGE name name VARCHAR(100) NOT NULL');
+
+        $this->addSql('UPDATE c_group_info SET status = 0 WHERE status IS NULL');
+        $this->addSql('ALTER TABLE c_group_info CHANGE status status TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE c_quiz_question_option SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE c_quiz_question_option CHANGE name name VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_survey SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_survey CHANGE title title LONGTEXT NOT NULL');
+
+        $this->addSql('UPDATE c_dropbox_file SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_dropbox_file CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_announcement SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_announcement CHANGE title title LONGTEXT NOT NULL');
+
+        $this->addSql('UPDATE c_quiz SET hide_question_title = 0 WHERE hide_question_title IS NULL');
+        $this->addSql('ALTER TABLE c_quiz CHANGE hide_question_title hide_question_title TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE c_link SET title = "No name" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_link CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_post SET post_title = "No name" WHERE post_title IS NULL');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE post_title post_title VARCHAR(250) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_post SET visible = 0 WHERE visible IS NULL');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE visible visible TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE c_link SET title = "No name" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_link CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_document SET title = "No name" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_document CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_thread SET thread_title = "No name" WHERE thread_title IS NULL');
+        $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_title thread_title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_thread SET thread_sticky = 0 WHERE thread_sticky IS NULL');
+        $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_sticky thread_sticky TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE ticket_message SET subject = "Ticket #"+ id WHERE subject IS NULL');
+        $this->addSql('ALTER TABLE ticket_message CHANGE subject subject VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE settings_current SET variable = "No name" WHERE variable IS NULL');
+        $this->addSql('ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) NOT NULL;');
+
         // Global tool.
         if (false === $schema->hasTable('tool')) {
             $this->addSql(
@@ -45,6 +135,12 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
         $this->addSql("UPDATE settings_current SET selected_value = (SELECT isocode FROM language WHERE english_name = selected_value) WHERE variable = 'platformLanguage'");
 
+        $this->addSql('UPDATE language SET english_name = "No name" WHERE english_name IS NULL');
+        $this->addSql('ALTER TABLE language CHANGE english_name english_name VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE language SET isocode = "en" WHERE isocode IS NULL');
+        $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR(10) NOT NULL');
+
         $table = $schema->getTable('fos_group');
         if (false === $table->hasColumn('name')) {
             $this->addSql(
@@ -63,6 +159,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE course_request CHANGE user_id user_id INT DEFAULT NULL;');
+
         $table = $schema->getTable('course_request');
         if (false === $table->hasForeignKey('FK_33548A73A76ED395')) {
             $this->addSql(
@@ -70,6 +167,17 @@ class Version20 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE INDEX IDX_33548A73A76ED395 ON course_request (user_id);');
         }
+
+        if (false === $table->hasColumn('directory')) {
+            $this->addSql('ALTER TABLE course_request DROP directory');
+        }
+
+        if (false === $table->hasColumn('db_name')) {
+            $this->addSql('ALTER TABLE course_request DROP db_name');
+        }
+
+        $this->addSql('ALTER TABLE course_request CHANGE course_language course_language VARCHAR(20) NOT NULL');
+        $this->addSql('ALTER TABLE course_request CHANGE title title VARCHAR(250) NOT NULL');
 
         $table = $schema->getTable('search_engine_ref');
         if (false === $table->hasColumn('c_id')) {
@@ -178,7 +286,7 @@ class Version20 extends AbstractMigrationChamilo
             'CREATE TABLE IF NOT EXISTS ext_log_entries (id INT AUTO_INCREMENT NOT NULL, action VARCHAR(8) NOT NULL, logged_at DATETIME NOT NULL, object_id VARCHAR(64) DEFAULT NULL, object_class VARCHAR(191) NOT NULL, version INT NOT NULL, data LONGTEXT DEFAULT NULL COMMENT "(DC2Type:array)", username VARCHAR(191) DEFAULT NULL, INDEX log_class_lookup_idx (object_class), INDEX log_date_lookup_idx (logged_at), INDEX log_user_lookup_idx (username), INDEX log_version_lookup_idx (object_id, object_class, version), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
         );
         $this->addSql(
-            'CREATE TABLE IF NOT EXISTS mail_template (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, template LONGTEXT DEFAULT NULL, type VARCHAR(255) NOT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, default_template TINYINT(1) NOT NULL, `system` INT DEFAULT 0 NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+            'CREATE TABLE IF NOT EXISTS mail_template (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, template LONGTEXT DEFAULT NULL, type VARCHAR(255) NOT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, default_template TINYINT(1) NOT NULL, `system` INT DEFAULT 0 NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
         );
 
         $table = $schema->getTable('usergroup');
@@ -223,10 +331,22 @@ class Version20 extends AbstractMigrationChamilo
 
         // Drop unused columns
         $dropColumnsAndIndex = [
-            'track_e_uploads' => ['columns' => ['upload_cours_id'], 'index' => ['upload_cours_id']],
-            'track_e_hotspot' => ['columns' => ['hotspot_course_code'], 'index' => ['hotspot_course_code']],
-            'templates' => ['columns' => ['course_code'], 'index' => []],
-            'personal_agenda' => ['columns' => ['hotspot_course_code'], 'index' => []],
+            'track_e_uploads' => [
+                'columns' => ['upload_cours_id'],
+                'index' => ['upload_cours_id'],
+            ],
+            'track_e_hotspot' => [
+                'columns' => ['hotspot_course_code'],
+                'index' => ['hotspot_course_code'],
+            ],
+            'templates' => [
+                'columns' => ['course_code'],
+                'index' => [],
+            ],
+            'personal_agenda' => [
+                'columns' => ['hotspot_course_code'],
+                'index' => [],
+            ],
         ];
 
         foreach ($dropColumnsAndIndex as $tableName => $data) {

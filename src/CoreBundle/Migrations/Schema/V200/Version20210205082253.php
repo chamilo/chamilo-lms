@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\User;
@@ -51,7 +53,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             if (empty($picture)) {
                 continue;
             }
-            $path = "users/$id/";
+            $path = "users/{$id}/";
             if (!empty($setting) && 'true' === $setting['selected_value']) {
                 $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
@@ -84,7 +86,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             if (empty($picture)) {
                 continue;
             }
-            $path = "groups/$id/";
+            $path = "groups/{$id}/";
             if (!empty($setting) && 'true' === $setting['selected_value']) {
                 $path = 'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }

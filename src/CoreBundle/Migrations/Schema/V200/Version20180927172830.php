@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -40,6 +42,9 @@ class Version20180927172830 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_B5BEF5595BB66C05 ON c_forum_post (poster_id)');
         }
 
+        $this->addSql('UPDATE c_forum_post SET post_date = NOW() WHERE post_date IS NULL OR post_date = 0');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE post_date post_date DATETIME NOT NULL');
+
         $this->addSql('UPDATE c_forum_post SET thread_id = NULL WHERE thread_id NOT IN (SELECT iid FROM c_forum_thread)');
         $this->addSql('UPDATE c_forum_thread SET forum_id = NULL WHERE forum_id NOT IN (SELECT iid FROM c_forum_forum)');
         $this->addSql('UPDATE c_forum_forum SET forum_category = NULL WHERE forum_category NOT IN (SELECT iid FROM c_forum_category)');
@@ -68,18 +73,27 @@ class Version20180927172830 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_forum_thread');
-        if (false === $table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
-            $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid)');
+        /*if ($table->hasIndex('idx_forum_thread_forum_id')) {
+            $this->addSql('DROP INDEX idx_forum_thread_forum_id ON c_forum_thread;');
+        }*/
+
+        if (!$table->hasIndex('IDX_5DA7884C29CCBAD0')) {
+            $this->addSql('CREATE INDEX IDX_5DA7884C29CCBAD0 ON c_forum_thread (forum_id);');
         }
 
-        $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date IS NULL OR thread_date = 0 OR thread_date = ""');
-        $this->addSql('UPDATE c_forum_post SET post_date = NOW() WHERE post_date IS NULL OR post_date = 0 OR post_date = ""');
+        if (false === $table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
+            $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE SET NULL;');
+        }
 
+        $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date IS NULL OR thread_date = 0');
         $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_date thread_date DATETIME NOT NULL');
-        $this->addSql('ALTER TABLE c_forum_post CHANGE post_date post_date DATETIME NOT NULL');
 
         if ($table->hasColumn('thread_poster_name')) {
             $this->addSql('ALTER TABLE c_forum_thread DROP thread_poster_name');
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_forum_thread');
         }
 
         if (false === $table->hasForeignKey('FK_5DA7884C43CB876D')) {

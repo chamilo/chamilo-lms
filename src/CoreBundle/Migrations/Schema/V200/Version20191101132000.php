@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -31,6 +33,21 @@ class Version20191101132000 extends AbstractMigrationChamilo
         if ($table->hasIndex('category_code')) {
             $this->addSql('DROP INDEX category_code ON course');
         }
+
+        $this->addSql('UPDATE course SET course_language = "en" WHERE course_language IS NULL');
+        $this->addSql('ALTER TABLE course CHANGE course_language course_language VARCHAR(20) NOT NULL');
+
+        $this->addSql('UPDATE course SET visibility = "0" WHERE visibility IS NULL');
+        $this->addSql('ALTER TABLE course CHANGE visibility visibility INT NOT NULL');
+
+        $this->addSql('UPDATE course SET creation_date = NOW() WHERE creation_date IS NULL');
+        $this->addSql('ALTER TABLE course CHANGE creation_date creation_date DATETIME NOT NULL');
+
+        $this->addSql('UPDATE course SET subscribe = 0 WHERE subscribe IS NULL');
+        $this->addSql('ALTER TABLE course CHANGE subscribe subscribe TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE course SET unsubscribe = 0 WHERE unsubscribe IS NULL');
+        $this->addSql('ALTER TABLE course CHANGE unsubscribe unsubscribe TINYINT(1) NOT NULL');
 
         if (false === $schema->hasTable('course_rel_category')) {
             $this->addSql('CREATE TABLE course_rel_category (course_id INT NOT NULL, course_category_id INT NOT NULL, INDEX IDX_16B33772591CC992 (course_id), INDEX IDX_16B337726628AD36 (course_category_id), PRIMARY KEY(course_id, course_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
@@ -64,7 +81,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
             }
             $newParentId = $categoryCodeList[$parentId];
             if (!empty($newParentId)) {
-                $this->addSql("UPDATE course_category SET parent_id = $newParentId WHERE id = $categoryId");
+                $this->addSql("UPDATE course_category SET parent_id = {$newParentId} WHERE id = {$categoryId}");
             }
         }
 

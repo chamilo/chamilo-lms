@@ -145,18 +145,6 @@ jobs:
               run: |
                 sudo /etc/init.d/mysql start
                 sudo systemctl restart apache2
-#
-            - name: Install database
-              run: |
-                  bin/console doctrine:database:create || echo "Error while creating the DB"
-              env:
-                  DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
-                  DATABASE_HOST: 127.0.0.1
-                  DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
-                  DATABASE_NAME: chamilo
-                  DATABASE_USER: root
-                  DATABASE_PASSWORD: root
-                  APP_INSTALLED: 1
 
             - name: Check settings
               run: |
@@ -182,7 +170,6 @@ jobs:
                   sudo chmod -R 777 var public
 
             - name: Behat tests
-              if: (${{ success() }} || ${{ steps.analyse.outcome }} == 'failure')
               run: |
                   cd ${{ github.workspace }}/tests/behat
                   ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv

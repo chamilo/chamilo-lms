@@ -1648,6 +1648,7 @@ class MySpace
 
                         $hiddenField = 'student_show_'.$index;
                         $hiddenFieldLink = 'student_show_'.$index.'_';
+                        $userRegistered = [];
                         if (0 != $studenRegister ||
                             0 != $studenRegisterBySession ||
                             0 != $studenGroupsRegister) {
@@ -1671,14 +1672,14 @@ class MySpace
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
                                 $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
-                                $tempStudent = $studentArray[$studentId];
-                                $studentName = $tempStudent['complete_name'];
-                                $studentCompany = $student['company'];
-                                $iconSession = Display::return_icon(
-                                    'admin_star.png',
-                                    $studentName,
-                                    ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
-                                );
+                                    $tempStudent = $studentArray[$studentId];
+                                    $studentName = $tempStudent['complete_name'];
+                                    $studentCompany = $student['company'];
+                                    $iconSession = Display::return_icon(
+                                        'admin_star.png',
+                                        $studentName,
+                                        ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
+                                    );
 
                                 if (0 == $sessionStudentLp) {
                                     $iconSession = null;
@@ -1692,6 +1693,7 @@ class MySpace
                                     }
                                     $totalStudent++;
                                     $lpReady[$lpItemIdStudent][$sessionStudentLp][] = $student;
+                                }
                                 }
                             }
                             /* Student by course groups */
@@ -1730,22 +1732,25 @@ class MySpace
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                $tempStudent = $studentArray[$studentId];
-                                $sessionId = (int)$student['session_id'];
-                                $studentName = $tempStudent['complete_name'];
-                                $studentCompany = $student['company'];
-                                $iconGroup = Display::return_icon(
-                                    'group_summary.png',
-                                    $studentName,
-                                    '',
-                                    ICON_SIZE_MEDIUM);
-                                if (!isset($studentInSesion[$studentId])) {
-                                    if($sessionId != 0){
-                                        $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
-                                    }else{
-                                        $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
+                                if(!isset($userRegistered[$studentId])){
+                                    $userRegistered[$studentId] = $student;
+                                    $tempStudent = $studentArray[$studentId];
+                                    $sessionId = (int)$student['session_id'];
+                                    $studentName = $tempStudent['complete_name'];
+                                    $studentCompany = $student['company'];
+                                    $iconGroup = Display::return_icon(
+                                        'group_summary.png',
+                                        $studentName,
+                                        '',
+                                        ICON_SIZE_MEDIUM);
+                                    if (!isset($studentInSesion[$studentId])) {
+                                        if($sessionId != 0){
+                                            $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
+                                        }else{
+                                            $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
+                                        }
+                                        $totalStudent++;
                                     }
-                                    $totalStudent++;
                                 }
                             }
                             /* Student by course, keep it last*/
@@ -1755,10 +1760,13 @@ class MySpace
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                $tempStudent = $studentArray[$studentId];
+                                if(!isset($userRegistered[$studentId])){
+                                    $userRegistered[$studentId] = $student;
+                                    $studentArray[$studentId] = api_get_user_info($studentId);
+                                    $tempStudent = $studentArray[$studentId];
                                 $studentInSesion[$studentId] = 1;
-                                $studentName = $tempStudent['complete_name'];
-                                $studentCompany = $student['company'];
+                                    $studentName = $tempStudent['complete_name'];
+                                    $studentCompany = $student['company'];
                                 $iconSession = Display::return_icon(
                                     'admin_star.png',
                                     $studentName,

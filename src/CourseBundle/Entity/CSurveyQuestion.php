@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -37,26 +38,27 @@ class CSurveyQuestion
     protected CSurveyQuestion $parent;
 
     /**
-     * @var ArrayCollection|CSurveyQuestion[]
+     * @var Collection|CSurveyQuestion[]
      * @ORM\OneToMany(targetEntity="CSurveyQuestion", mappedBy="parentEvent")
      */
-    protected $children;
+    protected Collection $children;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", cascade="remove")
      * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
      */
     protected CSurveyQuestionOption $parentOption;
 
     /**
+     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="questions")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
+     */
+    protected CSurvey $survey;
+
+    /**
      * @ORM\Column(name="c_id", type="integer")
      */
     protected int $cId;
-
-    /**
-     * @ORM\Column(name="survey_id", type="integer", nullable=false)
-     */
-    protected int $surveyId;
 
     /**
      * @Assert\NotBlank()
@@ -117,6 +119,7 @@ class CSurveyQuestion
 
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->surveyGroupPri = 0;
         $this->surveyGroupSec1 = 0;
         $this->surveyGroupSec2 = 0;
@@ -125,30 +128,6 @@ class CSurveyQuestion
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
     }
 
     /**
@@ -433,7 +412,7 @@ class CSurveyQuestion
     }
 
     /**
-     * @return ArrayCollection|CSurveyQuestion[]
+     * @return Collection|CSurveyQuestion[]
      */
     public function getChildren()
     {
@@ -458,6 +437,18 @@ class CSurveyQuestion
     public function setParentOption(CSurveyQuestionOption $parentOption): self
     {
         $this->parentOption = $parentOption;
+
+        return $this;
+    }
+
+    public function getSurvey(): CSurvey
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(CSurvey $survey): self
+    {
+        $this->survey = $survey;
 
         return $this;
     }

@@ -99,7 +99,6 @@ if ($is_survey_type_1 && ('addgroup' == $action || 'deletegroup' == $action)) {
 
 $my_question_id_survey = isset($_GET['question_id']) ? (int) $_GET['question_id'] : null;
 $my_survey_id_survey = (int) $_GET['survey_id'];
-$message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 // Displaying the header
 if (!empty($action)) {
     switch ($action) {
@@ -112,7 +111,7 @@ if (!empty($action)) {
             }
             break;
         case 'delete':
-            $result = SurveyManager::delete_survey_question(
+            $result = SurveyManager::deleteQuestion(
             $my_survey_id_survey,
             $my_question_id_survey,
             $survey_data['is_shared']

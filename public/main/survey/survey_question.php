@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession as Session;
 
 /**
@@ -52,12 +53,12 @@ class survey_question
             'survey.ajax.php?'.api_get_cidreq().'&a=load_question_options&survey_id='.$surveyId;
         $form->addHtml('
             <script>
-                $(function() {                    
+                $(function() {
                     $("#parent_id").on("change", function() {
                         var questionId = $(this).val()
                         var $select = $("#parent_option_id");
                         $select.empty();
-                            
+
                         if (questionId === "") {
                               $("#option_list").hide();
                         } else {
@@ -69,7 +70,7 @@ class survey_question
                                         $("<option>").val(key).text(value).appendTo($select);
                                     });
                             }
-                        });        
+                        });
                         }
                     });
                 });
@@ -483,22 +484,17 @@ class survey_question
         return $formData;
     }
 
-    /**
-     * @param array $surveyData
-     * @param array $formData
-     *
-     * @return mixed
-     */
-    public function save($surveyData, $formData, $dataFromDatabase = [])
+    public function save(CSurvey $survey, array $formData, array $dataFromDatabase = [])
     {
         // Saving a question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = SurveyManager::save_question($surveyData, $formData, true, $dataFromDatabase);
+            $message = SurveyManager::saveQuestion($survey, $formData, true, $dataFromDatabase);
 
             if ('QuestionAdded' === $message || 'QuestionUpdated' === $message) {
-                $url = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq();
+                Display::addFlash(Display::return_message($message));
+                $url = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey->getIid().'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             }

@@ -35,14 +35,16 @@ class CSurveyQuestionOption
     protected int $cId;
 
     /**
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="CSurveyQuestion")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
-    protected int $questionId;
+    protected CSurveyQuestion $question;
 
     /**
-     * @ORM\Column(name="survey_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="CSurvey")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
      */
-    protected int $surveyId;
+    protected CSurvey $survey;
 
     /**
      * @ORM\Column(name="option_text", type="text", nullable=false)
@@ -66,54 +68,6 @@ class CSurveyQuestionOption
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
     }
 
     /**
@@ -210,5 +164,29 @@ class CSurveyQuestionOption
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function getQuestion(): CSurveyQuestion
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(CSurveyQuestion $question): self
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    public function getSurvey(): CSurvey
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(CSurvey $survey): self
+    {
+        $this->survey = $survey;
+
+        return $this;
     }
 }

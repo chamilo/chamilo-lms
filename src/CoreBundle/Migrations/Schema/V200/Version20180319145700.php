@@ -32,6 +32,34 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL;');
         $this->addSql('ALTER TABLE c_survey CHANGE avail_till avail_till DATETIME DEFAULT NULL;');
 
+        $this->addSql('ALTER TABLE c_survey_answer CHANGE survey_id survey_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_survey_answer CHANGE question_id question_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_survey_answer CHANGE option_id option_id INT DEFAULT NULL');
+
+        if (!$survey->hasForeignKey('FK_8A897DDB3FE509D')) {
+            $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid);');
+        }
+
+        if (!$survey->hasForeignKey('FK_8A897DD1E27F6BF')) {
+            $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DD1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid);');
+        }
+
+        if (!$survey->hasForeignKey('FK_8A897DDA7C41D6F')) {
+            $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDA7C41D6F FOREIGN KEY (option_id) REFERENCES c_survey_question_option (iid);');
+        }
+
+        if (!$survey->hasIndex('IDX_8A897DDB3FE509D')) {
+            $this->addSql('CREATE INDEX IDX_8A897DDB3FE509D ON c_survey_answer (survey_id);');
+        }
+
+        if (!$survey->hasIndex('IDX_8A897DD1E27F6BF')) {
+            $this->addSql('CREATE INDEX IDX_8A897DD1E27F6BF ON c_survey_answer (question_id);');
+        }
+
+        if (!$survey->hasIndex('IDX_8A897DDA7C41D6F')) {
+            $this->addSql('CREATE INDEX IDX_8A897DDA7C41D6F ON c_survey_answer (option_id);');
+        }
+
         /*if (!$survey->hasIndex('idx_survey_code')) {
             $this->addSql('CREATE INDEX idx_survey_code ON c_survey (code)');
         }*/
@@ -60,6 +88,16 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_survey_q_qid ON c_survey_question (question_id)');
         }*/
 
+        $this->addSql('ALTER TABLE c_survey_question CHANGE survey_id survey_id INT DEFAULT NULL;');
+
+        if ($table->hasForeignKey('FK_92F05EE7B3FE509D')) {
+            $this->addSql('ALTER TABLE c_survey_question ADD CONSTRAINT FK_92F05EE7B3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid);');
+        }
+
+        if ($table->hasIndex('IDX_92F05EE7B3FE509D')) {
+            $this->addSql('CREATE INDEX IDX_92F05EE7B3FE509D ON c_survey_question (survey_id);');
+        }
+
         if ($table->hasIndex('idx_survey_q_qid')) {
             $this->addSql('DROP INDEX idx_survey_q_qid ON c_survey_question;');
         }
@@ -77,8 +115,23 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_survey_question_option');
-        if (false === $table->hasIndex('idx_survey_qo_qid')) {
+        /*if (false === $table->hasIndex('idx_survey_qo_qid')) {
             $this->addSql('CREATE INDEX idx_survey_qo_qid ON c_survey_question_option (question_id)');
+        }*/
+
+        $this->addSql('ALTER TABLE c_survey_question_option CHANGE question_id question_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_survey_question_option CHANGE survey_id survey_id INT DEFAULT NULL;');
+
+        if (false === $table->hasForeignKey('FK_C4B6F5F1E27F6BF')) {
+            $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid);');
+        }
+
+        if (false === $table->hasForeignKey('FK_C4B6F5FB3FE509D')) {
+            $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5FB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid);');
+        }
+
+        if (false === $table->hasIndex('IDX_C4B6F5FB3FE509D')) {
+            $this->addSql('CREATE INDEX IDX_C4B6F5FB3FE509D ON c_survey_question_option (survey_id);');
         }
 
         $em = $this->getEntityManager();

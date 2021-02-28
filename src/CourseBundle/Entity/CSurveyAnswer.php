@@ -34,19 +34,22 @@ class CSurveyAnswer
     protected int $cId;
 
     /**
-     * @ORM\Column(name="survey_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="CSurvey")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
      */
-    protected int $surveyId;
+    protected CSurvey $survey;
 
     /**
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="CSurveyQuestion", inversedBy="answers")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
-    protected int $questionId;
+    protected CSurveyQuestion $question;
 
     /**
-     * @ORM\Column(name="option_id", type="text", nullable=false)
+     * @ORM\ManyToOne(targetEntity="CSurveyQuestionOption")
+     * @ORM\JoinColumn(name="option_id", referencedColumnName="iid")
      */
-    protected string $optionId;
+    protected CSurveyQuestionOption $option;
 
     /**
      * @ORM\Column(name="value", type="integer", nullable=false)
@@ -65,78 +68,6 @@ class CSurveyAnswer
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
-    }
-
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set optionId.
-     *
-     * @param string $optionId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setOptionId($optionId)
-    {
-        $this->optionId = $optionId;
-
-        return $this;
-    }
-
-    /**
-     * Get optionId.
-     *
-     * @return string
-     */
-    public function getOptionId()
-    {
-        return $this->optionId;
     }
 
     /**
@@ -161,6 +92,45 @@ class CSurveyAnswer
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function getSurvey(): CSurvey
+    {
+        return $this->survey;
+    }
+
+    /**
+     * @return CSurveyAnswer
+     */
+    public function setSurvey(CSurvey $survey): self
+    {
+        $this->survey = $survey;
+
+        return $this;
+    }
+
+    public function getQuestion(): CSurveyQuestion
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(CSurveyQuestion $question): self
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    public function getOption(): CSurveyQuestionOption
+    {
+        return $this->option;
+    }
+
+    public function setOption(CSurveyQuestionOption $option): self
+    {
+        $this->option = $option;
+
+        return $this;
     }
 
     /**

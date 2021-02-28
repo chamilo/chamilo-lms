@@ -107,7 +107,7 @@ for ($i = $currentQuestionsCount; $i <= $maxEvents; $i++) {
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = "'.--$currentQuestionsCount.'";    
+    var number = "'.--$currentQuestionsCount.'";
     $("#add_button").on("click", function() {
         number++;
         $("#time_" + number + "_date_time_wrapper").show();
@@ -115,15 +115,15 @@ $(function() {
         $("#time_" + number + "_time_range_end").val("");
         $("#time_" + number + "_alt").val("");
     });
-    
+
     $("#remove_button").on("click", function() {
-        if (number > 1) {      
+        if (number > 1) {
             console.log("#time_" + number + "_time_range_start");
             $("#time_" + number + "_date_time_wrapper").hide();
             $("#time_" + number).val("delete");
-            
+
             $("#time_" + number + "_alt").val("delete");
-            $("#time_" + number + "_time_range_start").val("delete");                        
+            $("#time_" + number + "_time_range_start").val("delete");
             number--;
         }
     });
@@ -235,7 +235,7 @@ if ($form->validate()) {
         }
 
         foreach ($deleteItems as $deleteId) {
-            SurveyManager::delete_survey_question($surveyData['iid'], $deleteId);
+            SurveyManager::deleteQuestion($surveyData['iid'], $deleteId);
         }
     }
 

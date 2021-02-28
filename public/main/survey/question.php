@@ -7,6 +7,9 @@
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
@@ -63,10 +66,10 @@ $interbreadcrumb[] = [
 ];
 
 // Tool name
-if ('add' == $_GET['action']) {
+if ('add' === $_GET['action']) {
     $tool_name = get_lang('Add a question');
 }
-if ('edit' == $_GET['action']) {
+if ('edit' === $_GET['action']) {
     $tool_name = get_lang('Edit question');
 }
 
@@ -136,7 +139,8 @@ $surveyQuestion->renderForm();
 
 if ($surveyQuestion->getForm()->validate()) {
     $values = $surveyQuestion->getForm()->getSubmitValues();
-    $surveyQuestion->save($surveyData, $values, $formData);
+    $survey = Container::getSurveyRepository()->find($surveyId);
+    $surveyQuestion->save($survey, $values, $formData);
 }
 
 Display::display_header($tool_name, 'Survey');

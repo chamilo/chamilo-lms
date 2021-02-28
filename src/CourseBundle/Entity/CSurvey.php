@@ -9,6 +9,8 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -185,6 +187,13 @@ class CSurvey extends AbstractResource implements ResourceInterface
      */
     protected bool $isMandatory = false;
 
+    /**
+     * @var Collection|CSurveyQuestion[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="survey")
+     */
+    protected Collection $questions;
+
     public function __construct()
     {
         $this->creationDate = new DateTime();
@@ -201,6 +210,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->surveyVersion = '';
         $this->parentId = 0;
         $this->surveyType = 0;
+        $this->questions = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -903,6 +913,18 @@ class CSurvey extends AbstractResource implements ResourceInterface
     public function isMandatory(): bool
     {
         return $this->isMandatory;
+    }
+
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function setQuestions(Collection $questions): self
+    {
+        $this->questions = $questions;
+
+        return $this;
     }
 
     public function getResourceIdentifier(): int

@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Behat tests 1.11.x 🐞
 
 on: [push, pull_request]
 

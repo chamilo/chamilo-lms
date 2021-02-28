@@ -1573,8 +1573,8 @@ class Exercise
         $description = $this->description;
         $sound = $this->sound;
         $type = $this->type;
-        $attempts = isset($this->attempts) ? $this->attempts : 0;
-        $feedback_type = isset($this->feedback_type) ? $this->feedback_type : 0;
+        $attempts = isset($this->attempts) ? (int) $this->attempts : 0;
+        $feedback_type = isset($this->feedback_type) ? (int) $this->feedback_type : 0;
         $random = $this->random;
         $random_answers = $this->random_answers;
         $active = $this->active;
@@ -1624,9 +1624,9 @@ class Exercise
             ->setDescription($description)
             ->setSound($sound)
             ->setType($type)
-            ->setRandom($random)
-            ->setRandomAnswers($random_answers)
-            ->setActive($active)
+            ->setRandom((int) $random)
+            ->setRandomAnswers((bool) $random_answers)
+            ->setActive((bool) $active)
             ->setResultsDisabled($results_disabled)
             ->setMaxAttempt($attempts)
             ->setFeedbackType($feedback_type)
@@ -1638,7 +1638,7 @@ class Exercise
             ->setPassPercentage($pass_percentage)
             ->setSaveCorrectAnswers($saveCorrectAnswers)
             ->setPropagateNeg($propagate_neg)
-            ->setHideQuestionTitle($this->getHideQuestionTitle())
+            ->setHideQuestionTitle(1 === (int) $this->getHideQuestionTitle())
             ->setQuestionSelectionType($this->getQuestionSelectionType());
 
         $allow = api_get_configuration_value('allow_exercise_categories');

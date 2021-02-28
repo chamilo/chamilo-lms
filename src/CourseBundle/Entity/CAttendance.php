@@ -70,7 +70,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected int $locked;
 
     /**
-     * @var ArrayCollection|CAttendanceCalendar[]
+     * @var Collection|CAttendanceCalendar[]
      *
      * @ORM\OneToMany(
      *     targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true

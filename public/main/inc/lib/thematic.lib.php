@@ -593,6 +593,7 @@ class Thematic
         $duration
     ) {
         $em = Database::getManager();
+        $duration = (int) $duration;
 
         if (null === $advance) {
             $advance = new CThematicAdvance();

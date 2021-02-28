@@ -353,7 +353,7 @@ class SurveyManager
                 ->setCode(self::generateSurveyCode($values['survey_code']))
                 ->setTitle($values['survey_title'])
                 ->setSubtitle($values['survey_title'])
-                ->setAuthor($_user['user_id'])
+                //->setAuthor($_user['user_id'])
                 ->setLang($values['survey_language'])
                 ->setAvailFrom($from)
                 ->setAvailTill($until)

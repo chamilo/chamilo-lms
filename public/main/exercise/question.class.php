@@ -552,32 +552,33 @@ abstract class Question
         if (!empty($id)) {
             /** @var CQuizQuestion $question */
             $question = $questionRepo->find($id);
-            $question
-                ->setQuestion($this->question)
-                ->setDescription($this->description)
-                ->setPonderation($this->weighting)
-                ->setPosition($this->position)
-                ->setType($this->type)
-                ->setExtra($this->extra)
-                ->setLevel($this->level)
-                ->setFeedback($this->feedback)
-            ;
+            if ($question) {
+                $question
+                    ->setQuestion($this->question)
+                    ->setDescription($this->description)
+                    ->setPonderation($this->weighting)
+                    ->setPosition($this->position)
+                    ->setType($this->type)
+                    ->setExtra($this->extra)
+                    ->setLevel((int) $this->level)
+                    ->setFeedback($this->feedback);
 
-            if (!empty($categoryId)) {
-                $category = $questionCategoryRepo->find($categoryId);
-                $question->updateCategory($category);
-            }
+                if (!empty($categoryId)) {
+                    $category = $questionCategoryRepo->find($categoryId);
+                    $question->updateCategory($category);
+                }
 
-            $em->persist($question);
-            $em->flush();
+                $em->persist($question);
+                $em->flush();
 
-            Event::addEvent(
-                LOG_QUESTION_UPDATED,
-                LOG_QUESTION_ID,
-                $this->iid
-            );
-            if ('true' === api_get_setting('search_enabled')) {
-                $this->search_engine_edit($exerciseId);
+                Event::addEvent(
+                    LOG_QUESTION_UPDATED,
+                    LOG_QUESTION_ID,
+                    $this->iid
+                );
+                if ('true' === api_get_setting('search_enabled')) {
+                    $this->search_engine_edit($exerciseId);
+                }
             }
         } else {
             // Creates a new question
@@ -604,7 +605,7 @@ abstract class Question
                 ->setPosition($position)
                 ->setType($this->type)
                 ->setExtra($this->extra)
-                ->setLevel($this->level)
+                ->setLevel((int)$this->level)
                 ->setFeedback($this->feedback)
                 //->setParent($exerciseEntity)
                 ->setParent($courseEntity)
@@ -1170,7 +1171,7 @@ abstract class Question
     public static function getInstance($type)
     {
         if (null !== $type) {
-            list($fileName, $className) = self::get_question_type($type);
+            [$fileName, $className] = self::get_question_type($type);
             if (!empty($fileName)) {
                 if (class_exists($className)) {
                     return new $className();

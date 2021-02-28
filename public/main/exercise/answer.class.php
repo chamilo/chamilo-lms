@@ -668,7 +668,7 @@ class Answer
             $quizAnswer
                 ->setAnswer($answer)
                 ->setComment($comment)
-                ->setCorrect($correct)
+                ->setCorrect((int) $correct)
                 ->setPonderation($weighting)
                 ->setPosition($position)
                 ->setDestination($destination)
@@ -700,13 +700,13 @@ class Answer
 
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
             $answer = $this->new_answer[$i];
-            $correct = isset($this->new_correct[$i]) ? $this->new_correct[$i] : '';
-            $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : '';
-            $weighting = isset($this->new_weighting[$i]) ? $this->new_weighting[$i] : '';
-            $position = isset($this->new_position[$i]) ? $this->new_position[$i] : '';
-            $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
-            $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
-            $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
+            $correct = isset($this->new_correct[$i]) ? (int) $this->new_correct[$i] : null;
+            $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : null;
+            $weighting = isset($this->new_weighting[$i]) ? $this->new_weighting[$i] : null;
+            $position = isset($this->new_position[$i]) ? $this->new_position[$i] : null;
+            $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : null;
+            $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : null;
+            $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : null;
             //$autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 

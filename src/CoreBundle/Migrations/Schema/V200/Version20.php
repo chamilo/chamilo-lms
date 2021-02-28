@@ -49,6 +49,12 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE session SET nbr_classes = 0 WHERE nbr_classes IS NULL');
         $this->addSql('ALTER TABLE session CHANGE nbr_classes nbr_classes INT NOT NULL');
 
+        $this->addSql('UPDATE user_friend_relation_type SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE user_friend_relation_type CHANGE title title VARCHAR(20) NOT NULL');
+
+        $this->addSql('UPDATE settings_options SET variable = "No variable" WHERE variable IS NULL');
+        $this->addSql('ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) NOT NULL');
+
         if ($schema->hasTable('mail_template')) {
             $this->addSql('UPDATE mail_template SET name = "No name" WHERE name IS NULL');
             $this->addSql('ALTER TABLE mail_template CHANGE name name VARCHAR(255) NOT NULL');

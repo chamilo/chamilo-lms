@@ -13,15 +13,9 @@ use Symfony\Component\Form\FormFactoryInterface;
 
 final class SettingsFormFactory implements SettingsFormFactoryInterface
 {
-    /**
-     * @var ServiceRegistryInterface
-     */
-    private $schemaRegistry;
+    private ServiceRegistryInterface $schemaRegistry;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     public function __construct(ServiceRegistryInterface $schemaRegistry, FormFactoryInterface $formFactory)
     {

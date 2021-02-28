@@ -22,7 +22,7 @@ interface CourseControllerInterface
 
     public function setSession(Session $session = null): void;
 
-    public function getCourse(): Course;
+    public function getCourse(): ?Course;
 
     public function getSession(): ?Session;
 }

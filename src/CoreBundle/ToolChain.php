@@ -53,27 +53,21 @@ class ToolChain
     /**
      * @var \Chamilo\CoreBundle\Tool\AbstractTool[]|mixed[]
      */
-    protected $tools;
+    protected array $tools;
     /**
      * @var mixed[]
      */
-    protected $typeList;
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    protected $entityManager;
-    /**
-     * @var \Chamilo\CoreBundle\Settings\SettingsManager
-     */
-    protected $settingsManager;
-    /**
-     * @var \Symfony\Component\Security\Core\Security
-     */
-    protected $security;
+    protected array $typeList;
+
+    protected \Doctrine\ORM\EntityManagerInterface $entityManager;
+
+    protected \Chamilo\CoreBundle\Settings\SettingsManager $settingsManager;
+
+    protected \Symfony\Component\Security\Core\Security $security;
     /**
      * @var mixed[]
      */
-    protected $repoEntityList;
+    protected array $repoEntityList;
 
     public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)
     {

@@ -12,10 +12,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
-    /**
-     * @var EntityRepository
-     */
-    protected $repository;
+    protected EntityRepository $repository;
 
     /**
      * @param array                   $allowedTypes

@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
  */
 trait CourseControllerTrait
 {
-    protected Course $course;
+    protected ?Course $course = null;
     protected ?Session $session = null;
     protected $container;
 
@@ -137,7 +137,7 @@ trait CourseControllerTrait
         $this->course = $course;
     }
 
-    public function getCourse(): Course
+    public function getCourse(): ?Course
     {
         return $this->course;
     }

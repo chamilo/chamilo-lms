@@ -29,46 +29,28 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  */
 class SettingsManager implements SettingsManagerInterface
 {
-    /**
-     * @var null|\Chamilo\CoreBundle\Entity\AccessUrl
-     */
-    protected $url;
+    protected ?AccessUrl $url = null;
 
-    /**
-     * @var ServiceRegistryInterface
-     */
-    protected $schemaRegistry;
+    protected ServiceRegistryInterface $schemaRegistry;
 
-    /**
-     * @var EntityManager
-     */
-    protected $manager;
+    protected EntityManager $manager;
 
-    /**
-     * @var EntityRepository
-     */
-    protected $repository;
+    protected EntityRepository $repository;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
     /**
      * Runtime cache for resolved parameters.
      *
      * @var Settings[]
      */
-    protected $resolvedSettings = [];
+    protected array $resolvedSettings = [];
     //protected $settings;
     /**
-     * @var array<string, \Sylius\Bundle\SettingsBundle\Model\Settings>|mixed[]
+     * @var array<string, \Sylius\Bundle\SettingsBundle\Model\Settings>|mixed[]|null
      */
-    protected $schemaList;
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    protected $request;
+    protected ?array $schemaList;
+    protected RequestStack $request;
 
     public function __construct(
         ServiceRegistryInterface $schemaRegistry,

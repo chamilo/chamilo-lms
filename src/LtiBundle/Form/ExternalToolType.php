@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Form;
 
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use SimpleXMLElement;
+use \SimpleXMLElement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

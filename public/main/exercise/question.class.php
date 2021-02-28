@@ -605,7 +605,7 @@ abstract class Question
                 ->setPosition($position)
                 ->setType($this->type)
                 ->setExtra($this->extra)
-                ->setLevel((int)$this->level)
+                ->setLevel((int) $this->level)
                 ->setFeedback($this->feedback)
                 //->setParent($exerciseEntity)
                 ->setParent($courseEntity)

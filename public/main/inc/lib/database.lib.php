@@ -506,13 +506,13 @@ class Database
      * @param bool        $debug
      *
      * @return array
+     *
      * @todo    lot of stuff to do here
      * @todo    known issues, it doesn't work when using LIKE conditions
      *
      * @example array('where'=> array('course_code LIKE "?%"'))
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
-     *
      */
     public static function select(
         $columns,

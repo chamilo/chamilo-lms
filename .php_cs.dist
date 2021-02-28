@@ -22,7 +22,7 @@ $rules = [
     'no_useless_return' => true,
     'ordered_class_elements' => true,
     'ordered_imports' => true,
-    'phpdoc_order' => true,
+    //'phpdoc_order' => true,
     'no_break_comment' => true,
     'global_namespace_import' => true,
 ];

@@ -49,7 +49,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(\PhpCsFixer\Fixer\ReturnNotation\NoUselessReturnFixer::class);
     $services->set(\PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer::class);
     $services->set(\PhpCsFixer\Fixer\Casing\ConstantCaseFixer::class);
-    $services->set(\PhpCsFixer\Fixer\Phpdoc\PhpdocOrderFixer::class);
+    //$services->set(\PhpCsFixer\Fixer\Phpdoc\PhpdocOrderFixer::class);
     $services->set(\PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer::class);
     $services->set(\PhpCsFixer\Fixer\Operator\ConcatSpaceFixer::class)
         ->call(
@@ -98,5 +98,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
         ]
     );
-
 };

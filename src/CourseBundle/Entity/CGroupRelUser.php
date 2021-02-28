@@ -26,20 +26,16 @@ class CGroupRelUser
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courseGroupsAsMember")
@@ -54,18 +50,14 @@ class CGroupRelUser
     protected CGroup $group;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    protected $status;
+    protected int $status;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role", type="string", length=50, nullable=false)
      */
-    protected $role;
+    protected string $role;
 
     /**
      * Set group.

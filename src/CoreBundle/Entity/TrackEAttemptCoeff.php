@@ -17,27 +17,21 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEAttemptCoeff
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="attempt_id", type="integer", nullable=false)
      */
-    protected $attemptId;
+    protected int $attemptId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="marks_coeff", type="float", precision=6, scale=2, nullable=true)
      */
-    protected $marksCoeff;
+    protected ?float $marksCoeff;
 
     /**
      * Set attemptId.

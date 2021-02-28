@@ -25,48 +25,36 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogTaskRelUser
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="blog_id", type="integer")
      */
-    protected $blogId;
+    protected int $blogId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="target_date", type="date", nullable=false)
      */
-    protected $targetDate;
+    protected DateTime $targetDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="task_id", type="integer")
      */
-    protected $taskId;
+    protected int $taskId;
 
     /**
      * Set targetDate.

@@ -63,7 +63,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
      */
-    protected string $lang;
+    protected ?string $lang;
 
     /**
      * @ORM\Column(name="avail_from", type="datetime", nullable=true)

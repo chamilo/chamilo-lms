@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class SequenceVariable.
@@ -17,34 +18,27 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceVariable
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", nullable=true)
      */
-    protected $name;
+    protected ?string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_val", type="string", nullable=true)
      */
-    protected $defaultValue;
+    protected ?string $defaultValue;
 
     /**
      * Get id.

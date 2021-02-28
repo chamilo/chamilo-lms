@@ -22,10 +22,8 @@ class ResourceType
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     *
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\Column()

@@ -25,55 +25,41 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEOnline
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="login_user_id", type="integer", nullable=false)
      */
-    protected $loginUserId;
+    protected int $loginUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
      */
-    protected $loginDate;
+    protected DateTime $loginDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    protected $accessUrlId;
+    protected int $accessUrlId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="login_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $loginId;
+    protected int $loginId;
 
     /**
      * Set loginUserId.

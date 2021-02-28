@@ -47,7 +47,7 @@ class GradebookResult
     /**
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected float $score;
+    protected ?float $score;
 
     /**
      * @Gedmo\Timestampable(on="create")

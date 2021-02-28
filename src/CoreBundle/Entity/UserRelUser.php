@@ -25,42 +25,32 @@ class UserRelUser
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userRelUsers")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="friend_user_id", type="integer", nullable=false)
      */
-    protected $friendUserId;
+    protected int $friendUserId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    protected int $relationType;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
-    protected $lastEdit;
+    protected ?DateTime $lastEdit;
 
     /**
      * Set friendUserId.

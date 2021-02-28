@@ -15,27 +15,21 @@ use Doctrine\ORM\Mapping as ORM;
 class UsergroupRelCourse
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
-    protected $usergroupId;
+    protected int $usergroupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="course_id", type="integer", nullable=false)
      */
-    protected $courseId;
+    protected int $courseId;
 
     /**
      * Set usergroupId.

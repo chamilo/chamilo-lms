@@ -21,62 +21,46 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogPost
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    protected $blogId;
+    protected int $blogId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="full_text", type="text", nullable=false)
      */
-    protected $fullText;
+    protected string $fullText;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
      */
-    protected $dateCreation;
+    protected DateTime $dateCreation;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="author_id", type="integer", nullable=false)
      */
-    protected $authorId;
+    protected int $authorId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="post_id", type="integer")
      */
-    protected $postId;
+    protected int $postId;
 
     /**
      * Set title.

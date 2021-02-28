@@ -20,41 +20,31 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketAssignedLog
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Ticket
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
      * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
      */
-    protected $ticket;
+    protected Ticket $ticket;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false)
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="assigned_date", type="datetime", nullable=false)
      */
-    protected $assignedDate;
+    protected DateTime $assignedDate;
 }

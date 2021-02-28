@@ -21,24 +21,18 @@ class ResourceUserTag
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceTags")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\User
      */
-    protected $user;
+    protected ?\Chamilo\CoreBundle\Entity\User $user = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceTag")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="SET NULL")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\Resource\ResourceTag
      */
-    protected $tag;
+    protected ?\Chamilo\CoreBundle\Entity\Resource\ResourceTag $tag = null;
 }

@@ -24,63 +24,47 @@ class TrackEHotspot
     use CourseTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $hotspotId;
+    protected int $hotspotId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_user_id", type="integer", nullable=false)
      */
-    protected $hotspotUserId;
+    protected int $hotspotUserId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEHotspots")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\Course
      */
-    protected $course;
+    protected ?\Chamilo\CoreBundle\Entity\Course $course = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_exe_id", type="integer", nullable=false)
      */
-    protected $hotspotExeId;
+    protected int $hotspotExeId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_question_id", type="integer", nullable=false)
      */
-    protected $hotspotQuestionId;
+    protected int $hotspotQuestionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_answer_id", type="integer", nullable=false)
      */
-    protected $hotspotAnswerId;
+    protected int $hotspotAnswerId;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="hotspot_correct", type="boolean", nullable=false)
      */
-    protected $hotspotCorrect;
+    protected bool $hotspotCorrect;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="hotspot_coordinate", type="text", nullable=false)
      */
-    protected $hotspotCoordinate;
+    protected string $hotspotCoordinate;
 
     /**
      * Set hotspotUserId.

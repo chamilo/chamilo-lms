@@ -106,11 +106,6 @@ class CGroup extends AbstractResource implements ResourceInterface
     protected int $chatState;
 
     /**
-     * @ORM\Column(name="secret_directory", type="string", length=255, nullable=true)
-     */
-    protected string $secretDirectory;
-
-    /**
      * @ORM\Column(name="self_registration_allowed", type="boolean")
      */
     protected bool $selfRegistrationAllowed;
@@ -366,25 +361,6 @@ class CGroup extends AbstractResource implements ResourceInterface
     public function getChatState()
     {
         return $this->chatState;
-    }
-
-    /**
-     * Set secretDirectory.
-     *
-     * @param string $secretDirectory
-     *
-     * @return CGroup
-     */
-    public function setSecretDirectory($secretDirectory)
-    {
-        $this->secretDirectory = $secretDirectory;
-
-        return $this;
-    }
-
-    public function getSecretDirectory(): string
-    {
-        return $this->secretDirectory;
     }
 
     /**

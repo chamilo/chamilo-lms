@@ -26,13 +26,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CThematic extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
@@ -47,18 +45,14 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected ?string $content;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    protected $active;
+    protected bool $active;
 
     /**
      * @var ArrayCollection|CThematicPlan[]

@@ -22,62 +22,46 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogTask
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="task_id", type="integer")
      */
-    protected $taskId;
+    protected int $taskId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    protected $blogId;
+    protected int $blogId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="color", type="string", length=10, nullable=false)
      */
-    protected $color;
+    protected string $color;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="system_task", type="boolean", nullable=false)
      */
-    protected $systemTask;
+    protected bool $systemTask;
 
     /**
      * Set blogId.

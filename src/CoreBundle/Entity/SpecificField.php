@@ -21,27 +21,21 @@ use Doctrine\ORM\Mapping as ORM;
 class SpecificField
 {
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=1, nullable=false)
      */
-    protected $code;
+    protected string $code;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=200, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * Set code.

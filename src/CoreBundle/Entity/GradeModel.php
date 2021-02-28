@@ -31,22 +31,22 @@ class GradeModel
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected string $description;
+    protected ?string $description;
 
     /**
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    protected bool $defaultLowestEvalExclude;
+    protected ?bool $defaultLowestEvalExclude;
 
     /**
      * @ORM\Column(name="default_external_eval", type="boolean", nullable=true)
      */
-    protected bool $defaultExternalEval;
+    protected ?bool $defaultExternalEval;
 
     /**
      * @ORM\Column(name="default_external_eval_prefix", type="string", length=140, nullable=true)
      */
-    protected string $defaultExternalEvalPrefix;
+    protected ?string $defaultExternalEvalPrefix;
 
     /**
      * Set name.

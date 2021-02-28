@@ -25,20 +25,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CLpItem
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items")
@@ -61,11 +57,9 @@ class CLpItem
     protected string $itemType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ref", type="text", nullable=false)
      */
-    protected $ref;
+    protected string $ref;
 
     /**
      * @ORM\Column(name="description", type="string", length=511, nullable=true)
@@ -73,123 +67,89 @@ class CLpItem
     protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="text", nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="min_score", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $minScore;
+    protected float $minScore;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="max_score", type="float", precision=10, scale=0, nullable=true, options={"default":"100"})
      */
-    protected $maxScore;
+    protected ?float $maxScore;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="mastery_score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected $masteryScore;
+    protected ?float $masteryScore;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="parent_item_id", type="integer", nullable=false)
      */
-    protected $parentItemId;
+    protected int $parentItemId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="previous_item_id", type="integer", nullable=false)
      */
-    protected $previousItemId;
+    protected int $previousItemId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="next_item_id", type="integer", nullable=false)
      */
-    protected $nextItemId;
+    protected int $nextItemId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="prerequisite", type="text", nullable=true)
      */
-    protected $prerequisite;
+    protected ?string $prerequisite;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="parameters", type="text", nullable=true)
      */
-    protected $parameters;
+    protected ?string $parameters;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="launch_data", type="text", nullable=false)
      */
-    protected $launchData;
+    protected string $launchData;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="max_time_allowed", type="string", length=13, nullable=true)
      */
-    protected $maxTimeAllowed;
+    protected ?string $maxTimeAllowed;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="terms", type="text", nullable=true)
      */
-    protected $terms;
+    protected ?string $terms;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="search_did", type="integer", nullable=true)
      */
-    protected $searchDid;
+    protected ?int $searchDid;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="audio", type="string", length=250, nullable=true)
      */
-    protected $audio;
+    protected ?string $audio;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="prerequisite_min_score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected $prerequisiteMinScore;
+    protected ?float $prerequisiteMinScore;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="prerequisite_max_score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected $prerequisiteMaxScore;
+    protected ?float $prerequisiteMaxScore;
 
     public function __construct()
     {

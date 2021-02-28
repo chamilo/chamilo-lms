@@ -22,48 +22,36 @@ use Doctrine\ORM\Mapping as ORM;
 class CRole
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role_name", type="string", length=250, nullable=false)
      */
-    protected $roleName;
+    protected string $roleName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role_comment", type="text", nullable=true)
      */
-    protected $roleComment;
+    protected ?string $roleComment;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_role", type="boolean", nullable=true)
      */
-    protected $defaultRole;
+    protected ?bool $defaultRole;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="role_id", type="integer")
      */
-    protected $roleId;
+    protected int $roleId;
 
     /**
      * Set roleName.

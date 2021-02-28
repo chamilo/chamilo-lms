@@ -21,85 +21,63 @@ class SequenceValue
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sequenceValues")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
      * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceRowEntity
      */
-    protected $entity;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceRowEntity $entity = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="advance", type="float")
      */
-    protected $advance;
+    protected int $advance;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="complete_items", type="integer")
      */
-    protected $completeItems;
+    protected int $completeItems;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_items", type="integer")
      */
-    protected $totalItems;
+    protected int $totalItems;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="success", type="boolean")
      */
-    protected $success;
+    protected int $success;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="success_date", type="datetime", nullable=true)
      */
-    protected $successDate;
+    protected ?DateTime $successDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="available", type="boolean")
      */
-    protected $available;
+    protected int $available;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="available_start_date", type="datetime", nullable=true)
      */
-    protected $availableStartDate;
+    protected ?DateTime $availableStartDate;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="available_end_date", type="datetime", nullable=true)
      */
-    protected $availableEndDate;
+    protected ?DateTime $availableEndDate;
 
     /**
      * Get id.

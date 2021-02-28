@@ -21,55 +21,41 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEHotpotatoes
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="exe_name", type="string", length=255, nullable=false)
      */
-    protected $exeName;
+    protected string $exeName;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
      */
-    protected $exeUserId;
+    protected ?int $exeUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
-    protected $exeDate;
+    protected DateTime $exeDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="score", type="smallint", nullable=false)
      */
-    protected $score;
+    protected int $score;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_score", type="smallint", nullable=false)
      */
-    protected $maxScore;
+    protected int $maxScore;
 
     /**
      * Set exeName.

@@ -19,20 +19,16 @@ use Doctrine\ORM\Mapping as ORM;
 class CChatConversation extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    protected $name;
+    protected ?string $name;
 
     public function __toString(): string
     {

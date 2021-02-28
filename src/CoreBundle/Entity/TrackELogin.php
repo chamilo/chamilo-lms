@@ -21,11 +21,9 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackELogin
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="login_user_id", type="integer", nullable=false)
      */
-    protected $loginUserId;
+    protected int $loginUserId;
 
     /**
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
@@ -33,11 +31,9 @@ class TrackELogin
     protected DateTime $loginDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
      * @ORM\Column(name="logout_date", type="datetime", nullable=true)
@@ -45,13 +41,11 @@ class TrackELogin
     protected ?DateTime $logoutDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="login_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $loginId;
+    protected int $loginId;
 
     /**
      * Set loginUserId.

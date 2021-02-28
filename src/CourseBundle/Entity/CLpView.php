@@ -25,62 +25,46 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpView
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_id", type="integer", nullable=false)
      */
-    protected $lpId;
+    protected int $lpId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
-    protected $viewCount;
+    protected int $viewCount;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="last_item", type="integer", nullable=false)
      */
-    protected $lastItem;
+    protected int $lastItem;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="progress", type="integer", nullable=true)
      */
-    protected $progress;
+    protected ?int $progress;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * Set lpId.

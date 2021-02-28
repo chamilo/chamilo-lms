@@ -19,115 +19,85 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SysAnnouncement
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_start", type="datetime", nullable=false)
      */
-    protected $dateStart;
+    protected DateTime $dateStart;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_end", type="datetime", nullable=false)
      */
-    protected $dateEnd;
+    protected DateTime $dateEnd;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_teacher", type="boolean", nullable=false)
      */
-    protected $visibleTeacher;
+    protected bool $visibleTeacher;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_student", type="boolean", nullable=false)
      */
-    protected $visibleStudent;
+    protected bool $visibleStudent;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_guest", type="boolean", nullable=false)
      */
-    protected $visibleGuest;
+    protected bool $visibleGuest;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_drh", type="boolean", nullable=false)
      */
-    protected $visibleDrh;
+    protected bool $visibleDrh;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_session_admin", type="boolean", nullable=false)
      */
-    protected $visibleSessionAdmin;
+    protected bool $visibleSessionAdmin;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_boss", type="boolean", nullable=false)
      */
-    protected $visibleBoss;
+    protected bool $visibleBoss;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    protected $content;
+    protected string $content;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lang", type="string", length=70, nullable=true)
      */
-    protected $lang;
+    protected ?string $lang;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    protected $accessUrlId;
+    protected int $accessUrlId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="career_id", type="integer", nullable=true)
      */
-    protected $careerId;
+    protected ?int $careerId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="promotion_id", type="integer", nullable=true)
      */
-    protected $promotionId;
+    protected ?int $promotionId;
 
     public function __construct()
     {

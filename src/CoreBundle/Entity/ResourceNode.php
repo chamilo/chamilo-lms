@@ -13,16 +13,17 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
+use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
@@ -47,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceNode
 {
-    use TimestampableEntity;
+    use TimestampableTypedEntity;
     use TimestampableAgoTrait;
 
     public const PATH_SEPARATOR = '/';
@@ -57,10 +58,8 @@ class ResourceNode
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
@@ -124,19 +123,15 @@ class ResourceNode
      * @ORM\JoinColumns({
      *     @ORM\JoinColumn(onDelete="CASCADE")
      * })
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\ResourceNode
      */
-    protected $parent;
+    protected ?ResourceNode $parent = null;
 
     /**
      * @Gedmo\TreeLevel
      *
-     * @var null|int
-     *
      * @ORM\Column(name="level", type="integer", nullable=true)
      */
-    protected $level;
+    protected ?int $level = null;
 
     /**
      * @var ArrayCollection|ResourceNode[]
@@ -154,10 +149,8 @@ class ResourceNode
      * @Gedmo\TreePath(appendId=true, separator="/")
      *
      * @ORM\Column(name="path", type="text", nullable=true)
-     *
-     * @var null|string
      */
-    protected $path;
+    protected ?string $path = null;
 
     /**
      * Shortcut to access Course resource from ResourceNode.
@@ -174,41 +167,30 @@ class ResourceNode
     protected $comments;
 
     /**
-     * @var DateTime
-     *
      * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var DateTime
-     *
      * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
-     * @var bool
-     *
      * @Groups({"resource_node:read", "document:read"})
      */
-    protected $fileEditableText;
+    protected bool $fileEditableText;
 
-    /**
-     * @var null|string
-     */
-    protected $content;
+    protected ?string $content = null;
 
     /**
      * @ORM\Column(type="uuid", unique=true)
-     *
-     * @var \Symfony\Component\Uid\UuidV4
      */
-    protected $uuid;
+    protected UuidV4 $uuid;
 
     public function __construct()
     {

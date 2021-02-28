@@ -22,41 +22,31 @@ use Doctrine\ORM\Mapping as ORM;
 class CQuizQuestionOption
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    protected $questionId;
+    protected int $questionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position;
+    protected int $position;
 
     /**
      * Set questionId.

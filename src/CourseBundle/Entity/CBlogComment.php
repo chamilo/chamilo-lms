@@ -23,83 +23,61 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogComment
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="comment_id", type="integer")
      */
-    protected $commentId;
+    protected int $commentId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="author_id", type="integer", nullable=false)
      */
-    protected $authorId;
+    protected int $authorId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
      */
-    protected $dateCreation;
+    protected DateTime $dateCreation;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    protected $blogId;
+    protected int $blogId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
      */
-    protected $postId;
+    protected int $postId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="task_id", type="integer", nullable=true)
      */
-    protected $taskId;
+    protected ?int $taskId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="parent_comment_id", type="integer", nullable=false)
      */
-    protected $parentCommentId;
+    protected int $parentCommentId;
 
     /**
      * Set title.

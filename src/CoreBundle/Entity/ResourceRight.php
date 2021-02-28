@@ -18,32 +18,24 @@ class ResourceRight
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", inversedBy="resourceRight")
      * @ORM\JoinColumn(name="resource_link_id", referencedColumnName="id", onDelete="CASCADE")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\ResourceLink
      */
-    protected $resourceLink;
+    protected ?\Chamilo\CoreBundle\Entity\ResourceLink $resourceLink = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role", type="string", length=255, nullable=false)
      */
-    protected $role;
+    protected string $role;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="mask", type="integer", nullable=false)
      */
-    protected $mask;
+    protected int $mask;
 
     public function __toString(): string
     {

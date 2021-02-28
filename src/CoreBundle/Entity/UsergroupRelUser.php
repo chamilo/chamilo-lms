@@ -26,13 +26,11 @@ class UsergroupRelUser
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="classes", cascade={"persist"})
@@ -47,11 +45,9 @@ class UsergroupRelUser
     protected Usergroup $usergroup;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    protected int $relationType;
 
     /**
      * Get id.

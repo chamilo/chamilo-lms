@@ -17,41 +17,31 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelSkill
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
-    protected $skillId;
+    protected int $skillId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
-    protected $parentId;
+    protected int $parentId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    protected int $relationType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
-    protected $level;
+    protected int $level;
 
     /**
      * Set skillId.

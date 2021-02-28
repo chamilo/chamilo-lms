@@ -24,27 +24,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CQuizAnswer
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer", options={"unsigned": true})
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", options={"unsigned": true, "default": null})
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    protected $questionId;
+    protected int $questionId;
 
     /**
      * @Assert\NotBlank()
@@ -63,11 +57,9 @@ class CQuizAnswer
     protected ?string $comment;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
-    protected $ponderation;
+    protected float $ponderation;
 
     /**
      * @ORM\Column(name="position", type="integer", nullable=false)

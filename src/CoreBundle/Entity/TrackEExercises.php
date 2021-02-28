@@ -23,20 +23,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class TrackEExercises
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="exe_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $exeId;
+    protected int $exeId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=false)
      */
-    protected $exeUserId;
+    protected int $exeUserId;
 
     /**
      * @Assert\NotBlank()
@@ -46,11 +42,9 @@ class TrackEExercises
     protected DateTime $exeDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
      * @Assert\NotBlank()
@@ -59,109 +53,79 @@ class TrackEExercises
     protected int $exeExoId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $score;
+    protected float $score;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="max_score", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $maxScore;
+    protected float $maxScore;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="status", type="string", length=20, nullable=false)
      */
-    protected $status;
+    protected string $status;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="data_tracking", type="text", nullable=false)
      */
-    protected $dataTracking;
+    protected string $dataTracking;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
      */
-    protected $startDate;
+    protected DateTime $startDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="steps_counter", type="smallint", nullable=false)
      */
-    protected $stepsCounter;
+    protected int $stepsCounter;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="orig_lp_id", type="integer", nullable=false)
      */
-    protected $origLpId;
+    protected int $origLpId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="orig_lp_item_id", type="integer", nullable=false)
      */
-    protected $origLpItemId;
+    protected int $origLpItemId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exe_duration", type="integer", nullable=false)
      */
-    protected $exeDuration;
+    protected int $exeDuration;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="expired_time_control", type="datetime", nullable=true)
      */
-    protected $expiredTimeControl;
+    protected ?DateTime $expiredTimeControl;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="orig_lp_item_view_id", type="integer", nullable=false)
      */
-    protected $origLpItemViewId;
+    protected int $origLpItemViewId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="questions_to_check", type="text", nullable=false)
      */
-    protected $questionsToCheck;
+    protected string $questionsToCheck;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="blocked_categories", type="text", nullable=true)
      */
-    protected $blockedCategories;
+    protected ?string $blockedCategories;
 
     public function __construct()
     {

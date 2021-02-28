@@ -78,20 +78,16 @@ class ResourceFile
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     *
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="string", length=255)
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
@@ -112,17 +108,13 @@ class ResourceFile
     protected ?array $dimensions;
 
     /**
-     * @var int
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="integer")
      */
-    protected $size;
+    protected int $size;
 
     /**
-     * @var File
-     *
      * @Assert\NotNull()
      * @Vich\UploadableField(
      *     mapping="resources",
@@ -133,7 +125,7 @@ class ResourceFile
      *     dimensions="dimensions"
      * )
      */
-    protected $file;
+    protected File $file;
 
     /**
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
@@ -255,13 +247,10 @@ class ResourceFile
 
     public function getSize(): int
     {
-        return (int) $this->size;
+        return $this->size;
     }
 
-    /**
-     * @param int $size
-     */
-    public function setSize($size): self
+    public function setSize(int $size): self
     {
         $this->size = $size;
 

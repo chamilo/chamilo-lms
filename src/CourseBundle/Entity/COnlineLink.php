@@ -22,34 +22,26 @@ use Doctrine\ORM\Mapping as ORM;
 class COnlineLink
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="url", type="string", length=100, nullable=false)
      */
-    protected $url;
+    protected string $url;
 
     /**
      * Set name.

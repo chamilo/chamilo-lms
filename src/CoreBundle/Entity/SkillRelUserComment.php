@@ -23,50 +23,38 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelUserComment
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", inversedBy="comments")
      * @ORM\JoinColumn(name="skill_rel_user_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SkillRelUser
      */
-    protected $skillRelUser;
+    protected ?\Chamilo\CoreBundle\Entity\SkillRelUser $skillRelUser = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="commentedUserSkills")
      * @ORM\JoinColumn(name="feedback_giver_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\User
      */
-    protected $feedbackGiver;
+    protected ?\Chamilo\CoreBundle\Entity\User $feedbackGiver = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback_text", type="text")
      */
-    protected $feedbackText;
+    protected string $feedbackText;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="feedback_value", type="integer", nullable=true, options={"default":1})
      */
-    protected $feedbackValue;
+    protected int $feedbackValue;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="feedback_datetime", type="datetime", nullable=false)
      */
-    protected $feedbackDateTime;
+    protected DateTime $feedbackDateTime;
 
     /**
      * Get id.

@@ -23,20 +23,16 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEAccess
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $accessId;
+    protected int $accessId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_user_id", type="integer", nullable=true)
      */
-    protected $accessUserId;
+    protected ?int $accessUserId;
 
     /**
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
@@ -44,32 +40,24 @@ class TrackEAccess
     protected DateTime $accessDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="access_tool", type="string", length=30, nullable=true)
      */
-    protected $accessTool;
+    protected ?string $accessTool;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_session_id", type="integer", nullable=false)
      */
-    protected $accessSessionId;
+    protected int $accessSessionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
      * Set accessUserId.

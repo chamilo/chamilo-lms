@@ -17,27 +17,21 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelProfile
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
-    protected $skillId;
+    protected int $skillId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="profile_id", type="integer", nullable=false)
      */
-    protected $profileId;
+    protected int $profileId;
 
     /**
      * Set skillId.

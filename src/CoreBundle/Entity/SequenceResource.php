@@ -20,13 +20,11 @@ class SequenceResource
     public const SESSION_TYPE = 2;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Sequence")
@@ -40,11 +38,9 @@ class SequenceResource
     protected int $type;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="resource_id", type="integer")
      */
-    protected $resourceId;
+    protected int $resourceId;
 
     /**
      * Get id.

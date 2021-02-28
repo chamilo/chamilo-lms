@@ -42,7 +42,7 @@ class CGlossary extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="display_order", type="integer", nullable=true)
      */
-    protected int $displayOrder;
+    protected ?int $displayOrder;
 
     public function __toString(): string
     {

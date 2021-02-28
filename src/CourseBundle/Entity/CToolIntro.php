@@ -22,34 +22,26 @@ use Doctrine\ORM\Mapping as ORM;
 class CToolIntro
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="intro_text", type="text", nullable=false)
      */
-    protected $introText;
+    protected string $introText;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer")
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * Set introText.

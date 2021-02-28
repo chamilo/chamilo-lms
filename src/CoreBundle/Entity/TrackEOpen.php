@@ -18,41 +18,31 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEOpen
 {
     /**
-     * @var string
-     *
      * @ORM\Column(name="open_remote_host", type="text", nullable=false)
      */
-    protected $openRemoteHost;
+    protected string $openRemoteHost;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="open_agent", type="text", nullable=false)
      */
-    protected $openAgent;
+    protected string $openAgent;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="open_referer", type="text", nullable=false)
      */
-    protected $openReferer;
+    protected string $openReferer;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="open_date", type="datetime", nullable=false)
      */
-    protected $openDate;
+    protected DateTime $openDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="open_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $openId;
+    protected int $openId;
 
     /**
      * Set openRemoteHost.

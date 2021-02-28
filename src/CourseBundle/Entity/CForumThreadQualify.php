@@ -53,12 +53,12 @@ class CForumThreadQualify
     /**
      * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
      */
-    protected int $qualifyUserId;
+    protected ?int $qualifyUserId;
 
     /**
      * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
      */
-    protected DateTime $qualifyTime;
+    protected ?DateTime $qualifyTime;
 
     /**
      * Set userId.

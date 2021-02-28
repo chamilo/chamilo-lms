@@ -17,49 +17,37 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRowEntity
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer")
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="row_id", type="integer")
      */
-    protected $rowId;
+    protected int $rowId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceTypeEntity")
      * @ORM\JoinColumn(name="sequence_type_entity_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceTypeEntity
      */
-    protected $type;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceTypeEntity $type = null;
 
     /**
      * Get id.

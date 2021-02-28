@@ -17,48 +17,36 @@ use Doctrine\ORM\Mapping as ORM;
 class SpecificFieldValues
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
-    protected $courseCode;
+    protected string $courseCode;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
      */
-    protected $toolId;
+    protected string $toolId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_id", type="integer", nullable=false)
      */
-    protected $refId;
+    protected int $refId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
-    protected $fieldId;
+    protected int $fieldId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="value", type="string", length=200, nullable=false)
      */
-    protected $value;
+    protected string $value;
 
     /**
      * Set courseCode.

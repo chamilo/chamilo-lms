@@ -22,48 +22,36 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEDownloads
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="down_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $downId;
+    protected int $downId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="down_user_id", type="integer", nullable=true)
      */
-    protected $downUserId;
+    protected ?int $downUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="down_date", type="datetime", nullable=false)
      */
-    protected $downDate;
+    protected DateTime $downDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="down_doc_path", type="string", length=255, nullable=false)
      */
-    protected $downDocPath;
+    protected string $downDocPath;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="down_session_id", type="integer", nullable=false)
      */
-    protected $downSessionId;
+    protected int $downSessionId;
 
     /**
      * Set downUserId.

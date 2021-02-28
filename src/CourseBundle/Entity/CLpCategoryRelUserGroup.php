@@ -25,54 +25,42 @@ class CLpCategoryRelUserGroup
     use SessionTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var CLpCategory
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
-    protected $category;
+    protected CLpCategory $category;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected $session;
+    protected ?Session $session;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Usergroup
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
      */
-    protected $userGroup;
+    protected ?Usergroup $userGroup;
 
     /**
-     * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     public function __construct()
     {

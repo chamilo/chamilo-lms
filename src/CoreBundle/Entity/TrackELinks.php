@@ -22,48 +22,36 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackELinks
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="links_user_id", type="integer", nullable=true)
      */
-    protected $linksUserId;
+    protected ?int $linksUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="links_date", type="datetime", nullable=false)
      */
-    protected $linksDate;
+    protected DateTime $linksDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="links_link_id", type="integer", nullable=false)
      */
-    protected $linksLinkId;
+    protected int $linksLinkId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="links_session_id", type="integer", nullable=false)
      */
-    protected $linksSessionId;
+    protected int $linksSessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="links_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $linksId;
+    protected int $linksId;
 
     /**
      * Set linksUserId.

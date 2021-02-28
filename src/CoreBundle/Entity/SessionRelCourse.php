@@ -19,43 +19,33 @@ use Doctrine\ORM\Mapping as ORM;
 class SessionRelCourse
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="nbr_users", type="integer")
      */
-    protected $nbrUsers;
+    protected int $nbrUsers;
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\Session
      */
-    protected $session;
+    protected ?\Chamilo\CoreBundle\Entity\Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\Course
      */
-    protected $course;
+    protected ?\Chamilo\CoreBundle\Entity\Course $course = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position;
+    protected int $position;
 
     /**
      * Constructor.

@@ -25,13 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CThematicPlan //extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()

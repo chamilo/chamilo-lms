@@ -25,13 +25,11 @@ use Doctrine\ORM\Mapping as ORM;
 class CThematicAdvance //extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic")
@@ -51,33 +49,25 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     protected ?string $content;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
      */
-    protected $startDate;
+    protected DateTime $startDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="duration", type="integer", nullable=false)
      */
-    protected $duration;
+    protected int $duration;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="done_advance", type="boolean", nullable=false)
      */
-    protected $doneAdvance;
+    protected bool $doneAdvance;
 
     /**
-     * @var Room
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
-    protected $room;
+    protected Room $room;
 
     public function __construct()
     {

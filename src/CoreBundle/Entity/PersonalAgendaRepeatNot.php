@@ -17,22 +17,18 @@ use Doctrine\ORM\Mapping as ORM;
 class PersonalAgendaRepeatNot
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $calId;
+    protected int $calId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_date", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $calDate;
+    protected int $calDate;
 
     /**
      * Set calId.

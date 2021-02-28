@@ -22,41 +22,31 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyGroup
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
-    protected $surveyId;
+    protected int $surveyId;
 
     /**
      * Set name.

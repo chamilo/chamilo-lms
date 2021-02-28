@@ -23,55 +23,41 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyQuestionOption
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    protected $questionId;
+    protected int $questionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
-    protected $surveyId;
+    protected int $surveyId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="option_text", type="text", nullable=false)
      */
-    protected $optionText;
+    protected string $optionText;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
-    protected $sort;
+    protected int $sort;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="value", type="integer", nullable=false)
      */
-    protected $value;
+    protected int $value;
 
     public function __construct()
     {

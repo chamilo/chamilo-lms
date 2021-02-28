@@ -30,28 +30,22 @@ class TrackECourseAccess
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="course_access_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $courseAccessId;
+    protected int $courseAccessId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackECourseAccess")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
      * @ORM\Column(name="login_course_date", type="datetime", nullable=false)
@@ -64,25 +58,19 @@ class TrackECourseAccess
     protected ?DateTime $logoutCourseDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="counter", type="integer", nullable=false)
      */
-    protected $counter;
+    protected int $counter;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
      * Set cId.

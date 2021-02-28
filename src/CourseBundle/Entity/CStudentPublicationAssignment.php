@@ -23,55 +23,41 @@ use Doctrine\ORM\Mapping as ORM;
 class CStudentPublicationAssignment
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="expires_on", type="datetime", nullable=true)
      */
-    protected $expiresOn;
+    protected ?DateTime $expiresOn;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="ends_on", type="datetime", nullable=true)
      */
-    protected $endsOn;
+    protected ?DateTime $endsOn;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
      */
-    protected $addToCalendar;
+    protected bool $addToCalendar;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="enable_qualification", type="boolean", nullable=false)
      */
-    protected $enableQualification;
+    protected bool $enableQualification;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="publication_id", type="integer", nullable=false)
      */
-    protected $publicationId;
+    protected int $publicationId;
 
     public function __toString(): string
     {

@@ -24,64 +24,48 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CDropboxCategory
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cat_id", type="integer")
      */
-    protected $catId;
+    protected int $catId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="cat_name", type="text", nullable=false)
      */
-    protected $catName;
+    protected string $catName;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="received", type="boolean", nullable=false)
      */
-    protected $received;
+    protected bool $received;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="sent", type="boolean", nullable=false)
      */
-    protected $sent;
+    protected bool $sent;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * Set catName.

@@ -22,34 +22,26 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogRelUser
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="blog_id", type="integer")
      */
-    protected $blogId;
+    protected int $blogId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
      * Set cId.

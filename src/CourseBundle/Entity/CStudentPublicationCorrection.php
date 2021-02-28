@@ -20,13 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CStudentPublicationCorrection extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()

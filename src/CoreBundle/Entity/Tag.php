@@ -17,34 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 class Tag
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tag", type="string", length=255, nullable=false)
      */
-    protected $tag;
+    protected string $tag;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
-    protected $fieldId;
+    protected int $fieldId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="count", type="integer", nullable=false)
      */
-    protected $count;
+    protected int $count;
 
     /**
      * Set tag.

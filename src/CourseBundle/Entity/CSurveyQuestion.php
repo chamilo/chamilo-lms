@@ -24,21 +24,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CSurveyQuestion
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var CSurveyQuestion
-     *
      * @ORM\ManyToOne(targetEntity="CSurveyQuestion", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid")
      */
-    protected $parent;
+    protected CSurveyQuestion $parent;
 
     /**
      * @var ArrayCollection|CSurveyQuestion[]
@@ -47,26 +43,20 @@ class CSurveyQuestion
     protected $children;
 
     /**
-     * @var CSurveyQuestionOption
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption")
      * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
      */
-    protected $parentOption;
+    protected CSurveyQuestionOption $parentOption;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
-    protected $surveyId;
+    protected int $surveyId;
 
     /**
      * @Assert\NotBlank()
@@ -81,67 +71,49 @@ class CSurveyQuestion
     protected ?string $surveyQuestionComment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=250, nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display", type="string", length=10, nullable=false)
      */
-    protected $display;
+    protected string $display;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
-    protected $sort;
+    protected int $sort;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="shared_question_id", type="integer", nullable=true)
      */
-    protected $sharedQuestionId;
+    protected ?int $sharedQuestionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_value", type="integer", nullable=true)
      */
-    protected $maxValue;
+    protected ?int $maxValue;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_group_pri", type="integer", nullable=false)
      */
-    protected $surveyGroupPri;
+    protected int $surveyGroupPri;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_group_sec1", type="integer", nullable=false)
      */
-    protected $surveyGroupSec1;
+    protected int $surveyGroupSec1;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_group_sec2", type="integer", nullable=false)
      */
-    protected $surveyGroupSec2;
+    protected int $surveyGroupSec2;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_required", type="boolean", options={"default": false})
      */
-    protected $isMandatory = false;
+    protected bool $isMandatory = false;
 
     public function __construct()
     {

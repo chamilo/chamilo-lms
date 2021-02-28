@@ -25,48 +25,36 @@ use Doctrine\ORM\Mapping as ORM;
 class CChatConnected
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="to_group_id", type="integer", nullable=false)
      */
-    protected $toGroupId;
+    protected int $toGroupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="last_connection", type="datetime")
      */
-    protected $lastConnection;
+    protected DateTime $lastConnection;
 
     /**
      * Set sessionId.

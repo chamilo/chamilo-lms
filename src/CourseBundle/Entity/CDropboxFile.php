@@ -67,7 +67,7 @@ class CDropboxFile
     /**
      * @ORM\Column(name="author", type="string", length=250, nullable=true)
      */
-    protected string $author;
+    protected ?string $author;
 
     /**
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)

@@ -49,7 +49,7 @@ class ExtraFieldOptionRelFieldOption
     /**
      * @ORM\Column(name="role_id", type="integer", nullable=true, unique=false)
      */
-    protected int $roleId;
+    protected ?int $roleId;
 
     /**
      * Get id.

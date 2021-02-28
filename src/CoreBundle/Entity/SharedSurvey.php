@@ -20,83 +20,61 @@ use Doctrine\ORM\Mapping as ORM;
 class SharedSurvey
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $surveyId;
+    protected int $surveyId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
      */
-    protected $code;
+    protected ?string $code;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    protected ?string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    protected $subtitle;
+    protected ?string $subtitle;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="author", type="string", length=250, nullable=true)
      */
-    protected $author;
+    protected ?string $author;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
      */
-    protected $lang;
+    protected ?string $lang;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="template", type="string", length=20, nullable=true)
      */
-    protected $template;
+    protected ?string $template;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    protected $intro;
+    protected ?string $intro;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    protected $surveythanks;
+    protected ?string $surveythanks;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
-    protected $courseCode;
+    protected string $courseCode;
 
     /**
      * Set code.

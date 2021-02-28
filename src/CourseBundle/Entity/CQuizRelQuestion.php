@@ -32,18 +32,14 @@ class CQuizRelQuestion
     protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_order", type="integer", nullable=false)
      */
-    protected $questionOrder;
+    protected int $questionOrder;
 
     /**
      * @Assert\NotBlank()

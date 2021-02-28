@@ -17,34 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 class UserGroupRelUserGroup
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    protected $groupId;
+    protected int $groupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="subgroup_id", type="integer", nullable=false)
      */
-    protected $subgroupId;
+    protected int $subgroupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    protected int $relationType;
 
     /**
      * Set groupId.

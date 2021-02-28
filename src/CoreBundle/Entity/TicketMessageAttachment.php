@@ -18,78 +18,58 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketMessageAttachment
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Ticket
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
      * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
      */
-    protected $ticket;
+    protected Ticket $ticket;
 
     /**
-     * @var TicketMessage
-     *
      * @ORM\ManyToOne(targetEntity="TicketMessage")
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id")
      */
-    protected $message;
+    protected TicketMessage $message;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="text", nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="size", type="integer")
      */
-    protected $size;
+    protected int $size;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
-    protected $insertDateTime;
+    protected DateTime $insertDateTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected ?int $lastEditUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime;
 
     /**
      * @return int

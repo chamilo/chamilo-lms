@@ -19,28 +19,22 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEventRepeatNot
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var CCalendarEvent
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="repeatEvents")
      * @ORM\JoinColumn(name="cal_id", referencedColumnName="iid")
      */
-    protected $event;
+    protected CCalendarEvent $event;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_date", type="integer")
      */
-    protected $calDate;
+    protected int $calDate;
 
     /**
      * Set calDate.

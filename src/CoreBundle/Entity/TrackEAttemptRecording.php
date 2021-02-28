@@ -24,63 +24,48 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class TrackEAttemptRecording
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exe_id", type="integer", nullable=false)
      */
-    protected $exeId;
+    protected int $exeId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    protected $questionId;
+    protected int $questionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="marks", type="integer", nullable=false)
      */
-    protected $marks;
+    protected int $marks;
 
     /**
-     * @var DateTime
      * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="insert_date", type="datetime", nullable=false)
      */
-    protected $insertDate;
+    protected DateTime $insertDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="author", type="integer", nullable=false)
      */
-    protected $author;
+    protected int $author;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
-    protected $teacherComment;
+    protected string $teacherComment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * @ORM\Column(name="answer", type="text", nullable=true)

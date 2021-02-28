@@ -18,35 +18,27 @@ use Doctrine\ORM\Mapping as ORM;
 class ToolResourceRight
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role", type="string", length=255, nullable=false)
      */
-    protected $role;
+    protected string $role;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="mask", type="integer", nullable=false)
      */
-    protected $mask;
+    protected int $mask;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="toolResourceRight", cascade={"persist"})
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\Tool
      */
-    protected $tool;
+    protected ?\Chamilo\CoreBundle\Entity\Tool $tool = null;
 
     /**
      * @return string

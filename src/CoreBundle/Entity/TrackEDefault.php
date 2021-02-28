@@ -25,62 +25,46 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEDefault
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="default_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $defaultId;
+    protected int $defaultId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="default_user_id", type="integer", nullable=false)
      */
-    protected $defaultUserId;
+    protected int $defaultUserId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $cId;
+    protected ?int $cId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="default_date", type="datetime", nullable=false)
      */
-    protected $defaultDate;
+    protected DateTime $defaultDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_event_type", type="string", length=255, nullable=false)
      */
-    protected $defaultEventType;
+    protected string $defaultEventType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_value_type", type="string", length=255, nullable=false)
      */
-    protected $defaultValueType;
+    protected string $defaultValueType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_value", type="text", nullable=false)
      */
-    protected $defaultValue;
+    protected string $defaultValue;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId;
 
     /**
      * Set defaultUserId.

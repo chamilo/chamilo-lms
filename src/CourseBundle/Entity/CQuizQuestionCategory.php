@@ -33,13 +33,11 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     use ShowCourseResourcesInSessionTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()

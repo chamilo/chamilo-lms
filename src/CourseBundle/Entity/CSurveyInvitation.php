@@ -25,90 +25,66 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyInvitation
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_invitation_id", type="integer")
      */
-    protected $surveyInvitationId;
+    protected int $surveyInvitationId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="survey_code", type="string", length=20, nullable=false)
      */
-    protected $surveyCode;
+    protected string $surveyCode;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user", type="string", length=250, nullable=false)
      */
-    protected $user;
+    protected string $user;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="invitation_code", type="string", length=250, nullable=false)
      */
-    protected $invitationCode;
+    protected string $invitationCode;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="invitation_date", type="datetime", nullable=false)
      */
-    protected $invitationDate;
+    protected DateTime $invitationDate;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="reminder_date", type="datetime", nullable=true)
      */
-    protected $reminderDate;
+    protected ?DateTime $reminderDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
-    protected $answered;
+    protected int $answered;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    protected $groupId;
+    protected int $groupId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="answered_at", type="datetime", nullable=true)
      */
-    protected $answeredAt;
+    protected ?DateTime $answeredAt;
 
     /**
      * Set surveyCode.

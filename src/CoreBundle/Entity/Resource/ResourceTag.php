@@ -21,23 +21,17 @@ class ResourceTag
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceComments")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\User
      */
-    protected $author;
+    protected ?\Chamilo\CoreBundle\Entity\User $author = null;
 }

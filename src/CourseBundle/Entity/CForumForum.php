@@ -54,12 +54,12 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="forum_threads", type="integer", nullable=true)
      */
-    protected int $forumThreads;
+    protected ?int $forumThreads;
 
     /**
      * @ORM\Column(name="forum_posts", type="integer", nullable=true)
      */
-    protected int $forumPosts;
+    protected ?int $forumPosts;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")

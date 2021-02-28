@@ -32,13 +32,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CTool extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank
@@ -48,11 +46,9 @@ class CTool extends AbstractResource implements ResourceInterface
     protected string $name;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
-    protected $visibility;
+    protected ?bool $visibility;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
@@ -64,7 +60,7 @@ class CTool extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected Session $session;
+    protected ?Session $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")

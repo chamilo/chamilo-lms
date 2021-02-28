@@ -19,47 +19,35 @@ class SearchEngineRef
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="searchEngineRefs")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\Course
      */
-    protected $course;
+    protected ?\Chamilo\CoreBundle\Entity\Course $course = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
      */
-    protected $toolId;
+    protected string $toolId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_id_high_level", type="integer", nullable=false)
      */
-    protected $refIdHighLevel;
+    protected int $refIdHighLevel;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_id_second_level", type="integer", nullable=true)
      */
-    protected $refIdSecondLevel;
+    protected ?int $refIdSecondLevel;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="search_did", type="integer", nullable=false)
      */
-    protected $searchDid;
+    protected int $searchDid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * Set course.

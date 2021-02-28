@@ -29,52 +29,40 @@ class CLpRelUserGroup
     use SessionTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var CLp
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp")
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
-    protected $lp;
+    protected CLp $lp;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected $session;
+    protected ?Session $session;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Usergroup
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
      */
-    protected $userGroup;
+    protected ?Usergroup $userGroup;
 
     /**
-     * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 }

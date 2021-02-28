@@ -17,27 +17,21 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketCategoryRelUser
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var TicketCategory
-     *
      * @ORM\ManyToOne(targetEntity="TicketCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    protected $category;
+    protected TicketCategory $category;
 
     /**
-     * @var TicketCategory
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected TicketCategory $user;
 }

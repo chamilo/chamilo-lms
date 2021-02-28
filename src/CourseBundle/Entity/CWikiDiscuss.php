@@ -23,55 +23,41 @@ use Doctrine\ORM\Mapping as ORM;
 class CWikiDiscuss
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="publication_id", type="integer", nullable=false)
      */
-    protected $publicationId;
+    protected int $publicationId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="userc_id", type="integer", nullable=false)
      */
-    protected $usercId;
+    protected int $usercId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="p_score", type="string", length=255, nullable=true)
      */
-    protected $pScore;
+    protected ?string $pScore;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="dtime", type="datetime", nullable=false)
      */
-    protected $dtime;
+    protected DateTime $dtime;
 
     /**
      * Set publicationId.

@@ -46,7 +46,7 @@ class Legal
     /**
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
-    protected int $version;
+    protected ?int $version;
 
     /**
      * @ORM\Column(name="language_id", type="integer")

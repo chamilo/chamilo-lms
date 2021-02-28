@@ -17,29 +17,23 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceFormula
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceMethod
      */
-    protected $method;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceMethod $method = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceVariable")
      * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceVariable
      */
-    protected $variable;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceVariable $variable = null;
 
     /**
      * Get id.

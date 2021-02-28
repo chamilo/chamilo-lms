@@ -24,48 +24,36 @@ use Doctrine\ORM\Mapping as ORM;
 class CWikiMailcue
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="text", nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    protected $groupId;
+    protected ?int $groupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
      * Set type.

@@ -162,14 +162,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get filename.
-     *
-     * @return string
-     */
-    public function getFilename()
+    public function getFilename(): string
     {
-        return (string) $this->filename;
+        return $this->filename;
     }
 
     /**

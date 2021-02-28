@@ -24,27 +24,21 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumAttachment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
@@ -52,26 +46,20 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     protected ?string $comment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
-    protected $size;
+    protected int $size;
 
     /**
-     * @var CForumPost
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist"}, inversedBy="attachments")
      * @ORM\JoinColumn(name="post_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $post;
+    protected CForumPost $post;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     public function __construct()
     {

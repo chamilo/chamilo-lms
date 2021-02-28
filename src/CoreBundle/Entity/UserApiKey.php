@@ -20,27 +20,21 @@ use Doctrine\ORM\Mapping as ORM;
 class UserApiKey
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="api_key", type="string", length=32, nullable=false)
      */
-    protected $apiKey;
+    protected string $apiKey;
 
     /**
      * @ORM\Column(name="api_service", type="string", length=10, nullable=false)
@@ -53,32 +47,24 @@ class UserApiKey
     protected ?string $apiEndPoint;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="created_date", type="datetime", nullable=true)
      */
-    protected $createdDate;
+    protected ?DateTime $createdDate;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="validity_start_date", type="datetime", nullable=true)
      */
-    protected $validityStartDate;
+    protected ?DateTime $validityStartDate;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="validity_end_date", type="datetime", nullable=true)
      */
-    protected $validityEndDate;
+    protected ?DateTime $validityEndDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * Set userId.

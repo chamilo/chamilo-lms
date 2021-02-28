@@ -19,41 +19,31 @@ use Doctrine\ORM\Mapping as ORM;
 class CQuizCategory
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
-    protected $categoryId;
+    protected ?int $categoryId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exercise_id", type="integer", nullable=false)
      */
-    protected $exerciseId;
+    protected int $exerciseId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="count_questions", type="integer", nullable=true)
      */
-    protected $countQuestions;
+    protected ?int $countQuestions;
 
     /**
      * @return int

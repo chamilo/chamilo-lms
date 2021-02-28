@@ -29,13 +29,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CStudentPublication extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank()
@@ -44,11 +42,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="url", type="string", length=500, nullable=true)
      */
-    protected $url;
+    protected ?string $url;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -56,137 +52,100 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="author", type="string", length=255, nullable=true)
      */
-    protected $author;
+    protected ?string $author;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
-    protected $active;
+    protected ?int $active;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="accepted", type="boolean", nullable=true)
      */
-    protected $accepted;
+    protected ?bool $accepted;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="post_group_id", type="integer", nullable=false)
      */
-    protected $postGroupId;
+    protected int $postGroupId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="sent_date", type="datetime", nullable=true)
      */
-    protected $sentDate;
+    protected ?DateTime $sentDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
-    protected $filetype;
+    protected string $filetype;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="has_properties", type="integer", nullable=false)
      */
-    protected $hasProperties;
+    protected int $hasProperties;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="view_properties", type="boolean", nullable=true)
      */
-    protected $viewProperties;
+    protected ?bool $viewProperties;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="qualification", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $qualification;
+    protected float $qualification;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_of_qualification", type="datetime", nullable=true)
      */
-    protected $dateOfQualification;
+    protected ?DateTime $dateOfQualification;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
-    protected $parentId;
+    protected int $parentId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="qualificator_id", type="integer", nullable=false)
      */
-    protected $qualificatorId;
+    protected int $qualificatorId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="weight", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $weight;
+    protected float $weight;
 
     /**
-     * @var Session
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="studentPublications")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected $session;
+    protected Session $session;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="allow_text_assignment", type="integer", nullable=false)
      */
-    protected $allowTextAssignment;
+    protected int $allowTextAssignment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="contains_file", type="integer", nullable=false)
      */
-    protected $containsFile;
+    protected int $containsFile;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="document_id", type="integer", nullable=false)
      */
-    protected $documentId;
+    protected int $documentId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="filesize", type="integer", nullable=true)
      */
-    protected $fileSize;
+    protected ?int $fileSize;
 
     public function __construct()
     {

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CCalendarEventRepeat.
@@ -21,13 +22,11 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEventRepeat
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="repeatEvents")
@@ -36,32 +35,25 @@ class CCalendarEventRepeat
     protected CCalendarEvent $event;
 
     /**
-     * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
      */
-    protected $calType;
+    protected ?string $calType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_end", type="integer", nullable=true)
      */
-    protected $calEnd;
+    protected ?int $calEnd;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
      */
-    protected $calFrequency;
+    protected ?int $calFrequency;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
      */
-    protected $calDays;
+    protected ?string $calDays;
 
     /**
      * Set calType.

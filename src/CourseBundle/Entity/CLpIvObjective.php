@@ -23,69 +23,51 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpIvObjective
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
-    protected $lpIvId;
+    protected int $lpIvId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
-    protected $orderId;
+    protected int $orderId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="objective_id", type="string", length=255, nullable=false)
      */
-    protected $objectiveId;
+    protected string $objectiveId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_raw", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreRaw;
+    protected float $scoreRaw;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_max", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreMax;
+    protected float $scoreMax;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_min", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreMin;
+    protected float $scoreMin;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="status", type="string", length=32, nullable=false)
      */
-    protected $status;
+    protected string $status;
 
     /**
      * Set lpIvId.

@@ -17,41 +17,31 @@ use Doctrine\ORM\Mapping as ORM;
 class UsergroupRelQuestion
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    protected $questionId;
+    protected int $questionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
-    protected $usergroupId;
+    protected int $usergroupId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="coefficient", type="float", precision=6, scale=2, nullable=true)
      */
-    protected $coefficient;
+    protected ?float $coefficient;
 
     /**
      * Set cId.

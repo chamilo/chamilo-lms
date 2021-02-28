@@ -17,36 +17,28 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRuleMethod
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="method_order", type="integer")
      */
-    protected $methodOrder;
+    protected string $methodOrder;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceRule
      */
-    protected $rule;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceRule $rule = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceMethod
      */
-    protected $method;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceMethod $method = null;
 
     /**
      * Get id.

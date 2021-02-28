@@ -23,62 +23,46 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackCourseRanking
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
-    protected $urlId;
+    protected int $urlId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="accesses", type="integer", nullable=false)
      */
-    protected $accesses;
+    protected int $accesses;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_score", type="integer", nullable=false)
      */
-    protected $totalScore;
+    protected int $totalScore;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="users", type="integer", nullable=false)
      */
-    protected $users;
+    protected int $users;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * Set cId.

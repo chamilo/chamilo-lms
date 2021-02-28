@@ -25,62 +25,46 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxPost
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
-    protected $feedbackDate;
+    protected DateTime $feedbackDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback", type="text", nullable=true)
      */
-    protected $feedback;
+    protected ?string $feedback;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
-    protected $catId;
+    protected int $catId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="file_id", type="integer")
      */
-    protected $fileId;
+    protected int $fileId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="dest_user_id", type="integer")
      */
-    protected $destUserId;
+    protected int $destUserId;
 
     /**
      * Set feedbackDate.

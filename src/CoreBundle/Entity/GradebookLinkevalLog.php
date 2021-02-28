@@ -46,12 +46,12 @@ class GradebookLinkevalLog
     /**
      * @ORM\Column(name="weight", type="smallint", nullable=true)
      */
-    protected int $weight;
+    protected ?int $weight;
 
     /**
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
-    protected bool $visible;
+    protected ?bool $visible;
 
     /**
      * @ORM\Column(name="type", type="string", length=20, nullable=false)

@@ -22,48 +22,36 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackELastaccess
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_user_id", type="integer", nullable=true)
      */
-    protected $accessUserId;
+    protected int $accessUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
      */
-    protected $accessDate;
+    protected DateTime $accessDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="access_tool", type="string", length=30, nullable=true)
      */
-    protected $accessTool;
+    protected ?string $accessTool;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_session_id", type="integer", nullable=true)
      */
-    protected $accessSessionId;
+    protected ?int $accessSessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $accessId;
+    protected int $accessId;
 
     /**
      * Set accessUserId.

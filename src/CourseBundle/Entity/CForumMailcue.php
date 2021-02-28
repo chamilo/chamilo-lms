@@ -25,41 +25,31 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumMailcue
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="thread_id", type="integer")
      */
-    protected $threadId;
+    protected int $threadId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="post_id", type="integer")
      */
-    protected $postId;
+    protected int $postId;
 
     /**
      * Set cId.

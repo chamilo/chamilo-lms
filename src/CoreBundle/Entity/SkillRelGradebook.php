@@ -17,34 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelGradebook
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="gradebook_id", type="integer", nullable=false)
      */
-    protected $gradebookId;
+    protected int $gradebookId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
-    protected $skillId;
+    protected int $skillId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=10, nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
      * Set gradebookId.

@@ -17,41 +17,31 @@ use Doctrine\ORM\Mapping as ORM;
 class SystemTemplate
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="image", type="string", length=250, nullable=false)
      */
-    protected $image;
+    protected string $image;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    protected $content;
+    protected string $content;
 
     public function __construct()
     {

@@ -23,52 +23,40 @@ class SkillRelItemRelUser
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var SkillRelItem
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", cascade={"persist"})
      * @ORM\JoinColumn(name="skill_rel_item_id", referencedColumnName="id", nullable=false)
      */
-    protected $skillRelItem;
+    protected SkillRelItem $skillRelItem;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="result_id", type="integer", nullable=true)
      */
-    protected $resultId;
+    protected int $resultId;
 
     /**
-     * @var int
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    protected $createdBy;
+    protected int $createdBy;
 
     /**
-     * @var int
-     *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_by", type="integer", nullable=false)
      */
-    protected $updatedBy;
+    protected int $updatedBy;
 
     public function __construct()
     {

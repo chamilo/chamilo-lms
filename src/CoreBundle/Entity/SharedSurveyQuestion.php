@@ -17,69 +17,51 @@ use Doctrine\ORM\Mapping as ORM;
 class SharedSurveyQuestion
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
-    protected $surveyId;
+    protected int $surveyId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="survey_question", type="text", nullable=false)
      */
-    protected $surveyQuestion;
+    protected string $surveyQuestion;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="survey_question_comment", type="text", nullable=false)
      */
-    protected $surveyQuestionComment;
+    protected string $surveyQuestionComment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=250, nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display", type="string", length=10, nullable=false)
      */
-    protected $display;
+    protected string $display;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
-    protected $sort;
+    protected int $sort;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
-    protected $code;
+    protected string $code;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_value", type="integer", nullable=false)
      */
-    protected $maxValue;
+    protected int $maxValue;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $questionId;
+    protected int $questionId;
 
     /**
      * Set surveyId.

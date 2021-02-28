@@ -17,48 +17,36 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceMethod
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="formula", type="text")
      */
-    protected $formula;
+    protected string $formula;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="assign", type="integer")
      */
-    protected $assign;
+    protected string $assign;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="met_type", type="string")
      */
-    protected $metType;
+    protected string $metType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="act_false", type="string")
      */
-    protected $actFalse;
+    protected string $actFalse;
 
     /**
      * Get id.

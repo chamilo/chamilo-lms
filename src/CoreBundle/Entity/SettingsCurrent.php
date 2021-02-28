@@ -29,21 +29,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SettingsCurrent
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var AccessUrl
-     *
      * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="settings", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
      * @Assert\NotBlank()
@@ -82,32 +78,24 @@ class SettingsCurrent
     protected ?string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="scope", type="string", length=50, nullable=true)
      */
-    protected $scope;
+    protected string $scope;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
-    protected $subkeytext;
+    protected string $subkeytext;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_url_changeable", type="integer", nullable=false)
      */
-    protected $accessUrlChangeable;
+    protected int $accessUrlChangeable;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default":0 })
      */
-    protected $accessUrlLocked = 0;
+    protected int $accessUrlLocked = 0;
 
     /**
      * Constructor.

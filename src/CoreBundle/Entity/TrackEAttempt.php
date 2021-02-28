@@ -34,13 +34,11 @@ class TrackEAttempt
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()
@@ -61,38 +59,28 @@ class TrackEAttempt
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
-     *
-     * @var null|int
      */
-    protected $questionId;
+    protected ?int $questionId = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
-    protected $answer;
+    protected string $answer;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
-    protected $teacherComment;
+    protected string $teacherComment;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="marks", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $marks;
+    protected float $marks;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    protected $position;
+    protected ?int $position;
 
     /**
      * @ORM\Column(name="tms", type="datetime", nullable=false)
@@ -100,11 +88,9 @@ class TrackEAttempt
     protected DateTime $tms;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)

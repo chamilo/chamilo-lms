@@ -17,29 +17,23 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRuleCondition
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceRule
      */
-    protected $rule;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceRule $rule = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\SequenceCondition
      */
-    protected $condition;
+    protected ?\Chamilo\CoreBundle\Entity\SequenceCondition $condition = null;
 
     /**
      * Get id.

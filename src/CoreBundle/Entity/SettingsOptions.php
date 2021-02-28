@@ -23,34 +23,26 @@ use Doctrine\ORM\Mapping as ORM;
 class SettingsOptions
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="variable", type="string", length=190, nullable=true)
+     * @ORM\Column(name="variable", type="string", length=190, nullable=false)
      */
-    protected $variable;
+    protected string $variable;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="value", type="string", length=190, nullable=true)
      */
-    protected $value;
+    protected ?string $value;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display_text", type="string", length=255, nullable=false)
      */
-    protected $displayText;
+    protected string $displayText;
 
     /**
      * Set variable.

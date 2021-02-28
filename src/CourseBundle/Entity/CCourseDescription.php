@@ -29,13 +29,11 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     public const TYPE_CUSTOM = 8;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
      * @Assert\NotBlank
@@ -50,18 +48,14 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     protected ?string $content;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
-    protected $descriptionType;
+    protected int $descriptionType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="progress", type="integer", nullable=false)
      */
-    protected $progress;
+    protected int $progress;
 
     public function __construct()
     {

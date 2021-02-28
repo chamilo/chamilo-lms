@@ -18,13 +18,11 @@ use Doctrine\ORM\Mapping as ORM;
 class SysCalendar
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -37,32 +35,24 @@ class SysCalendar
     protected ?string $content;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
-    protected $startDate;
+    protected ?DateTime $startDate;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
-    protected $endDate;
+    protected ?DateTime $endDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
-    protected $accessUrlId;
+    protected int $accessUrlId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
-    protected $allDay;
+    protected int $allDay;
 
     /**
      * Set title.

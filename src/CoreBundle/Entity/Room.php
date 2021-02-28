@@ -18,13 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Room
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @Assert\NotBlank()

@@ -17,20 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 class UserFriendRelationType
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=20, nullable=true)
+     * @ORM\Column(name="title", type="string", length=20, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * Set title.

@@ -23,48 +23,36 @@ use Doctrine\ORM\Mapping as ORM;
 class CRolePermissions
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_perm", type="boolean", nullable=false)
      */
-    protected $defaultPerm;
+    protected bool $defaultPerm;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="role_id", type="integer")
      */
-    protected $roleId;
+    protected int $roleId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tool", type="string", length=250)
      */
-    protected $tool;
+    protected string $tool;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="action", type="string", length=50)
      */
-    protected $action;
+    protected string $action;
 
     /**
      * Set defaultPerm.

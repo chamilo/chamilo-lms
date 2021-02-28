@@ -25,48 +25,36 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEUploads
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="upload_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $uploadId;
+    protected int $uploadId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="upload_user_id", type="integer", nullable=true)
      */
-    protected $uploadUserId;
+    protected ?int $uploadUserId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
      */
-    protected $uploadDate;
+    protected DateTime $uploadDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $cId;
+    protected ?int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="upload_work_id", type="integer", nullable=false)
      */
-    protected $uploadWorkId;
+    protected int $uploadWorkId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="upload_session_id", type="integer", nullable=false)
      */
-    protected $uploadSessionId;
+    protected int $uploadSessionId;
 
     /**
      * Set uploadUserId.

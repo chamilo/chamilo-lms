@@ -23,90 +23,66 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpIvInteraction
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
-    protected $orderId;
+    protected int $orderId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
-    protected $lpIvId;
+    protected int $lpIvId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="interaction_id", type="string", length=255, nullable=false)
      */
-    protected $interactionId;
+    protected string $interactionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="interaction_type", type="string", length=255, nullable=false)
      */
-    protected $interactionType;
+    protected string $interactionType;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="weighting", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $weighting;
+    protected float $weighting;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="completion_time", type="string", length=16, nullable=false)
      */
-    protected $completionTime;
+    protected string $completionTime;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="correct_responses", type="text", nullable=false)
      */
-    protected $correctResponses;
+    protected string $correctResponses;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="student_response", type="text", nullable=false)
      */
-    protected $studentResponse;
+    protected string $studentResponse;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="result", type="string", length=255, nullable=false)
      */
-    protected $result;
+    protected string $result;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="latency", type="string", length=16, nullable=false)
      */
-    protected $latency;
+    protected string $latency;
 
     /**
      * Set orderId.

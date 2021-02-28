@@ -8,11 +8,11 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
+use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Tree\Traits\NestedSetEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceComment
 {
-    use TimestampableEntity;
+    use TimestampableTypedEntity;
     use TimestampableAgoTrait;
     use NestedSetEntity;
 
@@ -38,10 +38,8 @@ class ResourceComment
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"comment:read"})
-     *
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="comments")
@@ -74,27 +72,22 @@ class ResourceComment
      * @ORM\JoinColumns({
      *     @ORM\JoinColumn(onDelete="CASCADE")
      * })
-     *
-     * @var null|\Chamilo\CoreBundle\Entity\ResourceComment
      */
-    protected $parent;
+    protected ?ResourceComment $parent = null;
 
     /**
-     * @var DateTime
      * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var DateTime
-     *
      * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
      * @var ArrayCollection|ResourceComment[]

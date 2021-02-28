@@ -22,62 +22,46 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogRating
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="rating_id", type="integer")
      */
-    protected $ratingId;
+    protected int $ratingId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
-    protected $blogId;
+    protected int $blogId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="rating_type", type="string", length=40, nullable=false)
      */
-    protected $ratingType;
+    protected string $ratingType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
-    protected $itemId;
+    protected int $itemId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="rating", type="integer", nullable=false)
      */
-    protected $rating;
+    protected int $rating;
 
     /**
      * Set blogId.

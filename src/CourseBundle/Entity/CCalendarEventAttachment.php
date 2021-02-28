@@ -23,35 +23,27 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEventAttachment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     /**
-     * @var CCalendarEvent
-     *
      * @ORM\ManyToOne(targetEntity="CCalendarEvent", cascade={"persist"}, inversedBy="attachments")
      * @ORM\JoinColumn(name="agenda_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $event;
+    protected CCalendarEvent $event;
 
     public function __toString(): string
     {

@@ -17,48 +17,36 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceCondition
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mat_op", type="string")
      */
-    protected $mathOperation;
+    protected string $mathOperation;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="param", type="float")
      */
-    protected $param;
+    protected string $param;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="act_true", type="integer")
      */
-    protected $actTrue;
+    protected string $actTrue;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="act_false", type="string")
      */
-    protected $actFalse;
+    protected string $actFalse;
 
     /**
      * Get id.

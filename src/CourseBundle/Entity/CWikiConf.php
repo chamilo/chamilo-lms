@@ -24,118 +24,86 @@ use Doctrine\ORM\Mapping as ORM;
 class CWikiConf
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="page_id", type="integer")
      */
-    protected $pageId;
+    protected int $pageId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="task", type="text", nullable=false)
      */
-    protected $task;
+    protected string $task;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback1", type="text", nullable=false)
      */
-    protected $feedback1;
+    protected string $feedback1;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback2", type="text", nullable=false)
      */
-    protected $feedback2;
+    protected string $feedback2;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback3", type="text", nullable=false)
      */
-    protected $feedback3;
+    protected string $feedback3;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="fprogress1", type="string", length=3, nullable=false)
      */
-    protected $fprogress1;
+    protected string $fprogress1;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="fprogress2", type="string", length=3, nullable=false)
      */
-    protected $fprogress2;
+    protected string $fprogress2;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="fprogress3", type="string", length=3, nullable=false)
      */
-    protected $fprogress3;
+    protected string $fprogress3;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_size", type="integer", nullable=true)
      */
-    protected $maxSize;
+    protected ?int $maxSize;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_text", type="integer", nullable=true)
      */
-    protected $maxText;
+    protected ?int $maxText;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_version", type="integer", nullable=true)
      */
-    protected $maxVersion;
+    protected ?int $maxVersion;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="startdate_assig", type="datetime", nullable=true)
      */
-    protected $startdateAssig;
+    protected ?DateTime $startdateAssig;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="enddate_assig", type="datetime", nullable=true)
      */
-    protected $enddateAssig;
+    protected ?DateTime $enddateAssig;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="delayedsubmit", type="integer", nullable=false)
      */
-    protected $delayedsubmit;
+    protected int $delayedsubmit;
 
     /**
      * Set task.

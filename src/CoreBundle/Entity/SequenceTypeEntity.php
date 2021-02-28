@@ -17,34 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceTypeEntity
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ent_table", type="string", length=255, nullable=false)
      */
-    protected $entityTable;
+    protected string $entityTable;
 
     /**
      * Get id.

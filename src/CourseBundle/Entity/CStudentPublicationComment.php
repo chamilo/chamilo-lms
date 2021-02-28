@@ -28,55 +28,41 @@ use Doctrine\ORM\Mapping as ORM;
 class CStudentPublicationComment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="work_id", type="integer", nullable=false)
      */
-    protected $workId;
+    protected int $workId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="file", type="string", length=255, nullable=true)
      */
-    protected $file;
+    protected ?string $file;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
      */
-    protected $sentAt;
+    protected DateTime $sentAt;
 
     public function __construct()
     {

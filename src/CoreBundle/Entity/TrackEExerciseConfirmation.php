@@ -20,70 +20,52 @@ class TrackEExerciseConfirmation
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEExerciseConfirmations")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="course_id", type="integer")
      */
-    private $courseId;
+    private int $courseId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="attempt_id", type="integer")
      */
-    private $attemptId;
+    private int $attemptId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="quiz_id", type="integer")
      */
-    private $quizId;
+    private int $quizId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer")
      */
-    private $sessionId;
+    private int $sessionId;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="confirmed", type="boolean", options={"default":false})
      */
-    private $confirmed;
+    private bool $confirmed;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="questions_count", type="integer")
      */
-    private $questionsCount;
+    private int $questionsCount;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="saved_answers_count", type="integer")
      */
-    private $savedAnswersCount;
+    private int $savedAnswersCount;
 
     public function __construct()
     {

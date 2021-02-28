@@ -31,34 +31,26 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CWiki extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="page_id", type="integer", nullable=true)
      */
-    protected $pageId;
+    protected ?int $pageId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="reflink", type="string", length=255, nullable=false)
      */
-    protected $reflink;
+    protected string $reflink;
 
     /**
      * @Assert\NotBlank()
@@ -75,151 +67,109 @@ class CWiki extends AbstractResource implements ResourceInterface
     protected string $content;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    protected $groupId;
+    protected ?int $groupId;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="dtime", type="datetime", nullable=true)
      */
-    protected $dtime;
+    protected ?DateTime $dtime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="addlock", type="integer", nullable=false)
      */
-    protected $addlock;
+    protected int $addlock;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="editlock", type="integer", nullable=false)
      */
-    protected $editlock;
+    protected int $editlock;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
-    protected $visibility;
+    protected int $visibility;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="addlock_disc", type="integer", nullable=false)
      */
-    protected $addlockDisc;
+    protected int $addlockDisc;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visibility_disc", type="integer", nullable=false)
      */
-    protected $visibilityDisc;
+    protected int $visibilityDisc;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ratinglock_disc", type="integer", nullable=false)
      */
-    protected $ratinglockDisc;
+    protected int $ratinglockDisc;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="assignment", type="integer", nullable=false)
      */
-    protected $assignment;
+    protected int $assignment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="progress", type="text", nullable=false)
      */
-    protected $progress;
+    protected string $progress;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="score", type="integer", nullable=true)
      */
-    protected $score;
+    protected ?int $score;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
-    protected $version;
+    protected ?int $version;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="is_editing", type="integer", nullable=false)
      */
-    protected $isEditing;
+    protected int $isEditing;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="time_edit", type="datetime", nullable=true)
      */
-    protected $timeEdit;
+    protected ?DateTime $timeEdit;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hits", type="integer", nullable=true)
      */
-    protected $hits;
+    protected ?int $hits;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="linksto", type="text", nullable=false)
      */
-    protected $linksto;
+    protected string $linksto;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tag", type="text", nullable=false)
      */
-    protected $tag;
+    protected string $tag;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId;
 
     public function __toString(): string
     {

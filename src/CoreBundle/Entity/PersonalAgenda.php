@@ -25,13 +25,11 @@ class PersonalAgenda
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="personalAgendas")
@@ -52,39 +50,29 @@ class PersonalAgenda
     protected ?string $text;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    protected $date;
+    protected ?DateTime $date;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="enddate", type="datetime", nullable=true)
      */
-    protected $endDate;
+    protected ?DateTime $endDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="parent_event_id", type="integer", nullable=true)
      */
-    protected $parentEventId;
+    protected ?int $parentEventId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
-    protected $allDay;
+    protected int $allDay;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
-    protected $color;
+    protected ?string $color;
 
     /**
      * Set title.

@@ -67,7 +67,7 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected int $sessionId;
+    protected ?int $sessionId;
 
     public function __toString(): string
     {

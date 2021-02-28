@@ -23,41 +23,31 @@ use Doctrine\ORM\Mapping as ORM;
 class CRoleGroup
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="role_id", type="integer", nullable=false)
      */
-    protected $roleId;
+    protected int $roleId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="scope", type="string", length=20, nullable=false)
      */
-    protected $scope;
+    protected string $scope;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer")
      */
-    protected $groupId;
+    protected int $groupId;
 
     /**
      * Set roleId.

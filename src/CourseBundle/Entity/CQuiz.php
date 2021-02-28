@@ -120,7 +120,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected int $sessionId;
+    protected ?int $sessionId;
 
     /**
      * @ORM\Column(name="propagate_neg", type="integer", nullable=false)

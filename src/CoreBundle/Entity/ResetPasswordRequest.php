@@ -20,10 +20,8 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     *
-     * @var null|int
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")

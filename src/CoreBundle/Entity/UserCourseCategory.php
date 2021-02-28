@@ -22,42 +22,32 @@ class UserCourseCategory
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userCourseCategories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sort", type="integer", nullable=true)
      */
-    protected $sort;
+    protected ?int $sort;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="collapsed", type="boolean", nullable=true)
      */
-    protected $isCollapsed;
+    protected ?bool $isCollapsed;
 
     /**
      * Set title.

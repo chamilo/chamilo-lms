@@ -25,55 +25,41 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxFeedback
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="feedback_id", type="integer")
      */
-    protected $feedbackId;
+    protected int $feedbackId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="file_id", type="integer", nullable=false)
      */
-    protected $fileId;
+    protected int $fileId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="author_user_id", type="integer", nullable=false)
      */
-    protected $authorUserId;
+    protected int $authorUserId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback", type="text", nullable=false)
      */
-    protected $feedback;
+    protected string $feedback;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
-    protected $feedbackDate;
+    protected DateTime $feedbackDate;
 
     /**
      * Set fileId.

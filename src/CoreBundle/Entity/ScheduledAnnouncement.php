@@ -18,13 +18,11 @@ use Doctrine\ORM\Mapping as ORM;
 class ScheduledAnnouncement
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\Column(name="subject", type="string", length=255)
@@ -37,32 +35,24 @@ class ScheduledAnnouncement
     protected string $message;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    protected $date;
+    protected ?DateTime $date;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="sent", type="boolean")
      */
-    protected $sent;
+    protected bool $sent;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $cId;
+    protected ?int $cId;
 
     public function __construct()
     {

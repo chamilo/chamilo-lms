@@ -51,8 +51,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(\PhpCsFixer\Fixer\Casing\ConstantCaseFixer::class);
     $services->set(\PhpCsFixer\Fixer\Phpdoc\PhpdocOrderFixer::class);
     $services->set(\PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer::class);
-
-
     $services->set(\PhpCsFixer\Fixer\Operator\ConcatSpaceFixer::class)
         ->call(
             'configure',
@@ -62,7 +60,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             ]
         );
-
     $services->set(GlobalNamespaceImportFixer::class)
         ->call(
             'configure',
@@ -90,6 +87,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__.'/src/CoreBundle/Traits/*',
             __DIR__.'/src/CoreBundle/Menu/*',
             __DIR__.'/src/CourseBundle/Component/*',
+            __DIR__.'/src/DataFixtures/*',
             //__DIR__.'/src/LtiBundle/*',
             IncrementStyleFixer::class => 'post',
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,

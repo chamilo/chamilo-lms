@@ -47,7 +47,7 @@ class SettingsManager implements SettingsManagerInterface
     protected array $resolvedSettings = [];
     //protected $settings;
     /**
-     * @var array<string, \Sylius\Bundle\SettingsBundle\Model\Settings>|mixed[]|null
+     * @var null|array<string, \Sylius\Bundle\SettingsBundle\Model\Settings>|mixed[]
      */
     protected ?array $schemaList;
     protected RequestStack $request;

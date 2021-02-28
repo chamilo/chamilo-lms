@@ -19,12 +19,10 @@ class FormValidator extends HTML_QuickForm
     private $layout;
 
     /**
-     * Constructor.
-     *
      * @param string      $name        Name of the form
      * @param string      $method      (optional) Method ('post' (default) or 'get')
      * @param string      $action      (optional) Action (default is $PHP_SELF)
-     * @param null|string $target      (optional) Form's target defaults to '_self'
+     * @param string|null $target      (optional) Form's target defaults to '_self'
      * @param mixed       $attributes  (optional) Extra attributes for <form> tag
      * @param string      $layout
      * @param bool        $trackSubmit Whether to track if the form was submitted by adding a special hidden field

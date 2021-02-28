@@ -6,13 +6,13 @@ declare(strict_types=1);
 
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Arrays\DisallowLongArraySyntaxSniff;
 use PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer;
-use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
+use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 //use SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff;
+use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
 use SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
-use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 
 // Run php vendor/bin/ecs check src
 // See documentation: https://github.com/symplify/easy-coding-standard
@@ -48,32 +48,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(\PhpCsFixer\Fixer\ControlStructure\NoUselessElseFixer::class);
     $services->set(\PhpCsFixer\Fixer\ReturnNotation\NoUselessReturnFixer::class);
     $services->set(\PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer::class);
+    $services->set(\PhpCsFixer\Fixer\Casing\ConstantCaseFixer::class);
+    $services->set(\PhpCsFixer\Fixer\Phpdoc\PhpdocOrderFixer::class);
+    $services->set(\PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer::class);
 
-    $parameters->set(
-        Option::PATHS,
-        [
-            __DIR__.'/src',
-        ]
-    );
-
-    $parameters->set(
-        Option::SKIP,
-        [
-            __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
-            __DIR__.'/src/CoreBundle/Menu/*',
-            __DIR__.'/src/CourseBundle/Component/*',
-            __DIR__.'/src/CoreBundle/Hook/*',
-            __DIR__.'/src/CoreBundle/Traits/*',
-            //__DIR__.'/src/LtiBundle/*',
-            IncrementStyleFixer::class => 'post',
-            PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
-            \PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationArrayAssignmentFixer::class,
-            \PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer::class,
-            \PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer::class
-            //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
-            //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
-        ]
-    );
 
     $services->set(\PhpCsFixer\Fixer\Operator\ConcatSpaceFixer::class)
         ->call(
@@ -96,4 +74,31 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             ]
         );
+
+    $parameters->set(
+        Option::PATHS,
+        [
+            __DIR__.'/src',
+        ]
+    );
+
+    $parameters->set(
+        Option::SKIP,
+        [
+            __DIR__.'/src/CoreBundle/Hook/*',
+            __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
+            __DIR__.'/src/CoreBundle/Traits/*',
+            __DIR__.'/src/CoreBundle/Menu/*',
+            __DIR__.'/src/CourseBundle/Component/*',
+            //__DIR__.'/src/LtiBundle/*',
+            IncrementStyleFixer::class => 'post',
+            PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
+            \PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationArrayAssignmentFixer::class,
+            \PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer::class,
+            \PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer::class,
+            //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
+            //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
+        ]
+    );
+
 };

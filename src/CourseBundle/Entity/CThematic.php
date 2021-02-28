@@ -78,6 +78,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     {
         $this->plans = new ArrayCollection();
         $this->advances = new ArrayCollection();
+        $this->active = true;
     }
 
     public function __toString(): string

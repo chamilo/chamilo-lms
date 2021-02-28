@@ -425,12 +425,12 @@ abstract class AbstractResource
         $everyone = false;
         $links = $this->getResourceNode()->getResourceLinks();
         foreach ($links as $link) {
-            if ($link->getUser()) {
+            if ($link->hasUser()) {
                 $users[] = $link->getUser()->getId();
 
                 continue;
             }
-            if ($link->getGroup()) {
+            if ($link->hasGroup()) {
                 $groups[] = $link->getGroup()->getIid();
             }
         }

@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -222,12 +223,12 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    public function getCalendars(): ArrayCollection
+    public function getCalendars(): Collection
     {
         return $this->calendars;
     }
 
-    public function setCalendars(ArrayCollection $calendars): self
+    public function setCalendars(Collection $calendars): self
     {
         $this->calendars = $calendars;
 

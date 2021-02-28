@@ -191,7 +191,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->invited = 0;
         $this->answered = 0;
         $this->subtitle = '';
+        $this->author = '';
         $this->inviteMail = '';
+        $this->lang = '';
         $this->reminderMail = '';
         $this->mailSubject = '';
         $this->shuffle = false;

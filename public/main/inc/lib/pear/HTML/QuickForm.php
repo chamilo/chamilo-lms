@@ -965,7 +965,7 @@ class HTML_QuickForm extends HTML_Common
      * @access     public
      * @return     void
      */
-    public function updateElementAttr($elements, $attrs)
+    /*public function updateElementAttr($elements, $attrs)
     {
         if (is_string($elements)) {
             $elements = split('[ ]?,[ ]?', $elements);
@@ -982,7 +982,7 @@ class HTML_QuickForm extends HTML_Common
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Removes an element
@@ -1517,7 +1517,7 @@ class HTML_QuickForm extends HTML_Common
                     );
                 }
 
-                if (!$result || (!empty($rule['howmany']) && $rule['howmany'] > (int)$result)) {
+                if (!$result || (!empty($rule['howmany']) && $rule['howmany'] > (int) $result)) {
                     if (isset($rule['group'])) {
                         $this->_errors[$rule['group']] = $rule['message'];
                     } else {

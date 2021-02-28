@@ -708,7 +708,7 @@ class Thematic
                 ->setTitle($title)
                 ->setDescription($description)
                 ->setThematic($thematic)
-                ->setDescriptionType((int) $description_type)
+                ->setDescriptionType($description_type)
                 //->setParent($course)
                 //->addCourseLink($course, api_get_session_entity())
             ;

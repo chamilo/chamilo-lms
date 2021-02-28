@@ -55,7 +55,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      *
      * @since     1.0
      */
-    private $_elements = [];
+    protected $_elements = [];
 
     /**
      * String to separate elements.
@@ -82,7 +82,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      *
      * @since    3.0
      */
-    private $_appendName = true;
+    protected $_appendName = true;
 
     /**
      * Class constructor.

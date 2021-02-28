@@ -134,7 +134,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['url'] = $studentPublication->getUrl();
         $work['active'] = $studentPublication->getActive();
         $work['allow_text_assignment'] = $studentPublication->getAllowTextAssignment();
-        $work['c_id'] = $studentPublication->getCId();
+        //$work['c_id'] = $studentPublication->getCId();
         $work['user_id'] = $studentPublication->getUserId();
         $work['parent_id'] = $studentPublication->getParentId();
         $work['qualification'] = $studentPublication->getQualification();
@@ -4859,7 +4859,7 @@ function processWorkForm(
 
         $studentPublication = new CStudentPublication();
         $studentPublication
-            ->setCId($courseId)
+            //->setCId($courseId)
             //->setUrl($url)
             ->setFiletype('file')
             ->setTitle($title)
@@ -5022,7 +5022,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 
     $studentPublication = new CStudentPublication();
     $studentPublication
-        ->setCId($course_id)
+        //->setCId($course_id)
         ->setTitle($title)
         ->setDescription($formValues['description'])
         ->setActive(true)

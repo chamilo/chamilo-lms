@@ -592,13 +592,13 @@ class Category implements GradebookItem
             $category->setCourse($course);
             $category->setParent($parent);
             $category->setWeight($this->weight);
-            $category->setVisible($this->visible);
+            $category->setVisible($this->visible ? true : false);
             $category->setCertifMinScore($this->certificate_min_score);
             $category->setSession(api_get_session_entity($this->session_id));
             $category->setGenerateCertificates($this->generateCertificates);
             $category->setGradeModelId($this->grade_model_id);
             $category->setIsRequirement($this->isRequirement);
-            $category->setLocked(false);
+            $category->setLocked(0);
 
             $em->persist($category);
             $em->flush();

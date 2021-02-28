@@ -589,10 +589,10 @@ class AnnouncementManager
         }
 
         if (!isset($courseInfo['real_id'])) {
-            return false;
+            return 0;
         }
 
-        return false;
+        return 0;
 
         $courseId = $courseInfo['real_id'];
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);

@@ -1,13 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Career as CareerEntity;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Chamilo\CoreBundle\Entity\Career as CareerEntity;
 
-/**
- * Class Career.
- */
 class Career extends Model
 {
     public $table;

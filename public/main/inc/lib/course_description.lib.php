@@ -233,7 +233,7 @@ class CourseDescription
             ->setTitle($this->title)
             ->setContent($this->content)
             ->setProgress((int) $this->progress)
-            ->setDescriptionType($this->description_type)
+            ->setDescriptionType((int) $this->description_type)
         ;
 
         $course = api_get_course_entity($course_id);

@@ -320,16 +320,6 @@ class GroupManager
                 1
             );*/
 
-            //$unique_name = $newFolderData->getPath();
-
-            /* Stores the directory path into the group table */
-            /*$sql = "UPDATE $table_group SET
-                        name = '".Database::escape_string($name)."',
-                        secret_directory = '".$unique_name."'
-                    WHERE c_id = $course_id AND id ='".$lastId."'";
-
-            Database::query($sql);*/
-
             // create a forum if needed
             if ($forumState >= 0) {
                 $forumName = get_lang('Group forums');
@@ -579,7 +569,6 @@ class GroupManager
             $result['forum_state'] = $db_object->forum_state;
             $result['wiki_state'] = $db_object->wiki_state;
             $result['chat_state'] = $db_object->chat_state;
-            $result['directory'] = $db_object->secret_directory;
             $result['self_registration_allowed'] = $db_object->self_registration_allowed;
             $result['self_unregistration_allowed'] = $db_object->self_unregistration_allowed;
             $result['count_users'] = count(

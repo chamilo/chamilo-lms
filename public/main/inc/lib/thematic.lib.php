@@ -324,7 +324,6 @@ class Thematic
             $thematic
                 ->setTitle($title)
                 ->setContent($content)
-                ->setActive(1)
                 //->setDisplayOrder($max_thematic_item + 1)
                 ->setDisplayOrder(0)
                 ->setParent($course)
@@ -708,7 +707,7 @@ class Thematic
                 ->setTitle($title)
                 ->setDescription($description)
                 ->setThematic($thematic)
-                ->setDescriptionType($description_type)
+                ->setDescriptionType((int) $description_type)
                 //->setParent($course)
                 //->addCourseLink($course, api_get_session_entity())
             ;

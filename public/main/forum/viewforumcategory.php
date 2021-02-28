@@ -122,7 +122,7 @@ $hideNotifications = 1 == $hideNotifications;
 
 /** @var CForumCategory $forumCategory */
 $forumCategory = $repo->find($categoryId);
-if (empty($forumCategory)) {
+if (null === $forumCategory) {
     header('Location: '.$mainUrl);
     exit;
 }

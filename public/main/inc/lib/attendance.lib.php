@@ -1671,7 +1671,7 @@ class Attendance
         $calendar
             ->setAttendance($attendance)
             ->setDateTime(new Datetime($this->date_time))
-            ->setDoneAttendance(0);
+            ->setDoneAttendance(false);
 
         $em = Database::getManager();
         $em->persist($calendar);

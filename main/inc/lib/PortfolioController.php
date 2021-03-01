@@ -1043,7 +1043,7 @@ class PortfolioController
             $this->baseUrl.http_build_query(['action' => 'export_pdf'])
         );
         $actions[] = Display::url(
-            Display::return_icon('save_pack.png', get_lang('ExportMyPortfolioDataPdf'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('save_pack.png', get_lang('ExportMyPortfolioDataZip'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl.http_build_query(['action' => 'export_zip'])
         );
 

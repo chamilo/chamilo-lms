@@ -26,6 +26,8 @@ $httpRequest = HttpRequest::createFromGlobals();
 
 $action = $httpRequest->query->get('action', 'list');
 
+$htmlHeadXtra[] = api_get_js('portfolio.js');
+
 switch ($action) {
     case 'add_category':
         $controller->addCategory();

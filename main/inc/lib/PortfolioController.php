@@ -399,6 +399,14 @@ class PortfolioController
         $extraField = new ExtraField('portfolio');
         $extra = $extraField->addElements($form, $item->getId());
 
+        $attachmentList = $this->generateAttachmentList($item, false);
+
+        if (!empty($attachmentList)) {
+            $form->addLabel(get_lang('AttachmentFiles'), $attachmentList);
+        }
+
+        $this->addAttachmentsFieldToForm($form);
+
         $form->addButtonUpdate(get_lang('Update'));
         $form->setDefaults(
             [
@@ -427,6 +435,13 @@ class PortfolioController
 
             $this->em->persist($item);
             $this->em->flush();
+
+            $this->processAttachments(
+                $form,
+                $item->getUser(),
+                $item->getId(),
+                PortfolioAttachment::TYPE_ITEM
+            );
 
             Display::addFlash(
                 Display::return_message(get_lang('ItemUpdated'), 'success')
@@ -1707,11 +1722,16 @@ class PortfolioController
 
         $fs->remove($attachmentFilename);
 
-        Display::addFlash(
-            Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'success')
-        );
+        if ($httpRequest->isXmlHttpRequest()) {
+            echo Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'success');
+        } else {
+            Display::addFlash(
+                Display::return_message(get_lang('AttachmentFileDeleteSuccess'), 'success')
+            );
 
-        header('Location: '.$this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]));
+            header('Location: '.$this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]));
+        }
+
         exit;
     }
 
@@ -2095,7 +2115,7 @@ class PortfolioController
         return $form->returnForm();
     }
 
-    private function generateAttachmentList($post): string
+    private function generateAttachmentList($post, bool $includeHeader = true): string
     {
         $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
 
@@ -2117,7 +2137,7 @@ class PortfolioController
 
         $currentUserId = api_get_user_id();
 
-        $listItems = '';
+        $listItems = '<ul class="fa-ul">';
 
         $deleteIcon = Display::return_icon(
             'delete.png',
@@ -2125,6 +2145,7 @@ class PortfolioController
             ['style' => 'display: inline-block'],
             ICON_SIZE_TINY
         );
+        $deleteAttrs = ['class' => 'btn-portfolio-delete'];
 
         /** @var PortfolioAttachment $attachment */
         foreach ($attachments as $attachment) {
@@ -2139,7 +2160,7 @@ class PortfolioController
                 );
 
             if ($currentUserId === $postOwnerId) {
-                $listItems .= PHP_EOL.Display::url($deleteIcon, $this->baseUrl.$deleteParams);
+                $listItems .= PHP_EOL.Display::url($deleteIcon, $this->baseUrl.$deleteParams, $deleteAttrs);
             }
 
             if ($attachment->getComment()) {
@@ -2152,7 +2173,14 @@ class PortfolioController
             $listItems .= '</li>';
         }
 
-        return '<h5 class="h4">'.get_lang('AttachmentFiles').'</h5>'.'<ul class="fa-ul">'.$listItems.'</ul>';
+        $listItems .= '</ul>';
+
+        if ($includeHeader) {
+            $listItems = Display::page_subheader(get_lang('AttachmentFiles'), null, 'h5', ['class' => 'h4'])
+                .$listItems;
+        }
+
+        return $listItems;
     }
 
     private function generateItemContent(Portfolio $item): string

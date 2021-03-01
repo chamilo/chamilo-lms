@@ -2004,10 +2004,6 @@ class PortfolioController
             if ($listByUser) {
                 $queryBuilder->andWhere('pi.user = :user');
                 $queryBuilder->setParameter('user', $this->owner);
-
-                if ($currentUserId !== $this->owner->getId()) {
-                    $queryBuilder->andWhere('pi.isVisible = TRUE');
-                }
             }
 
             if ($frmFilterList && $frmFilterList->validate()) {
@@ -2037,6 +2033,15 @@ class PortfolioController
                     $queryBuilder->setParameter('text', '%'.$values['text'].'%');
                 }
             }
+
+            $queryBuilder
+                ->andWhere(
+                    $queryBuilder->expr()->orX(
+                        'pi.user = :current_user AND (pi.isVisible = TRUE OR pi.isVisible = FALSE)',
+                        'pi.user != :current_user AND pi.isVisible = TRUE'
+                    )
+                )
+                ->setParameter('current_user', $currentUserId);
 
             $queryBuilder->orderBy('pi.creationDate', 'DESC');
 

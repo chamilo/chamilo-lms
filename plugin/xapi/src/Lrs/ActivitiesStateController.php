@@ -66,6 +66,11 @@ class ActivitiesStateController extends BaseController
         return JsonResponse::create($documentData);
     }
 
+    public function head(): Response
+    {
+        return $this->get()->setContent('');
+    }
+
     public function post(): Response
     {
         return $this->put();

@@ -1657,78 +1657,71 @@ class MySpace
                                 "<div class='icon_remove hidden'>$iconRemove</div>".
                                 "</a>".
                                 "<div id='$hiddenField' class='hidden'>";
-                            $studentInSesion = [];
-                            $lpReady = [];
+                            $tableTemp2 = '';
+                            $studentProcessed = [];
                             /* Student by course*/
                             for ($i = 0; $i < count($byCourse); $i++) {
                                 $student = $byCourse[$i];
                                 $studentId = $student['id'];
-                                $lpItemIdStudent = $student['lp_item'];
+                                $lpItemIdStudent = $student['lp_item_id'];
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
+                                $sessionStudentLp = isset($student['session_id']) ? (int)$student['session_id'] : 0;
                                 $tempStudent = $studentArray[$studentId];
                                 $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];
+                                $type = isset($student['type']) ? $student['type'] : null;
                                 $iconSession = Display::return_icon(
                                     'admin_star.png',
                                     $studentName,
                                     ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
                                 );
-
                                 if (0 == $sessionStudentLp) {
                                     $iconSession = null;
                                 }
-                                if (!isset($studentInSesion[$studentId])) {
-                                    $studentInSesion[$studentId] = 1;
-                                    if ($sessionStudentLp != 0) {
-                                        $tableTemp .= "<strong>$iconSession $studentName($studentCompany)</strong><br>";
-                                    } else {
-                                        $tableTemp .= "$iconSession $studentName($studentCompany) <br>";
-                                    }
-                                    $totalStudent++;
-                                    $lpReady[$lpItemIdStudent][$sessionStudentLp][] = $student;
+                                if ($sessionStudentLp != 0) {
+                                    $tableTemp2 = "<strong>$iconSession $studentName($studentCompany)</strong>";
+                                } else {
+                                    $tableTemp2 = "$iconSession $studentName($studentCompany)";
                                 }
+                                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tableTemp2.'<br>';
                             }
                             /* Student by course groups */
                             for ($i = 0; $i < count($byCourseGroups); $i++) {
                                 $student = $byCourseGroups[$i];
                                 $studentId = $student['id'];
-                                $lpItemIdStudent = $student['lp_item'];
+                                $lpItemIdStudent = $student['lp_item_id'];
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
                                 $tempStudent = $studentArray[$studentId];
+                                $sessionStudentLp = isset($student['session_id']) ? (int)$student['session_id'] : 0;
                                 $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];
+                                $type = isset($student['type']) ? $student['type'] : null;
                                 $iconGroup = Display::return_icon(
                                     'group_summary.png',
                                     $studentName,
                                     '',
                                     ICON_SIZE_MEDIUM);
-                                if (!isset($studentInSesion[$studentId])) {
-                                    if ($sessionStudentLp != 0) {
-                                        $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
-                                    } else {
-                                        $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
-                                    }
-                                    $totalStudent++;
-                                    $lpReady[$lpItemIdStudent][$sessionStudentLp][] = $student;
-                                    $studentInSesion[$studentId] = 1;
+                                if ($sessionStudentLp != 0) {
+                                    $tableTemp2 = "<strong>$iconGroup $studentName($studentCompany)</strong>";
+                                } else {
+                                    $tableTemp2 = "$iconGroup $studentName($studentCompany)";
                                 }
+                                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tableTemp2."<br>";
                             }
                             /* Student by session, keep it first */
                             for ($i = 0; $i < count($bySession); $i++) {
                                 $student = $bySession[$i];
                                 $studentId = $student['id'];
-                                $studentInSesion[$studentId] = 1;
-                                $lpItemIdStudent = $student['lp_item'];
+                                $lpItemIdStudent = $student['lp_item_id'];
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
                                 $tempStudent = $studentArray[$studentId];
-                                $studentInSesion[$studentId] = 1;
+                                $type = isset($student['type']) ? $student['type'] : null;
                                 $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];
                                 $iconSession = Display::return_icon(
@@ -1737,14 +1730,28 @@ class MySpace
                                     ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
                                 );
 
-                                if (!isset($lpReady[$lpItemIdStudent][$sessionStudentLp])) {
-                                    if (!isset($studentInSesion[$studentId])) {
-                                        $tableTemp .= $iconSession."<strong>$studentName ($studentCompany)</strong><br><pre>".var_export($student, true)."</pre>";
-                                        $totalStudent++;
-                                    }
-                                }
+                                $tableTemp2 = $iconSession."<strong>$studentName ($studentCompany)</strong>";
+                                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tableTemp2.'<br>';
+
                             }
                             $index++;
+                            foreach ($studentProcessed as $lpItemId => $item) {
+                                foreach($item as $type =>$student) {
+                                    foreach($student as $userId =>$text){
+                                        if('LearnpathSubscription' == $type){
+                                            $tableTemp .= $text;
+                                            $totalStudent++;
+                                        }else{
+                                            if(!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])){
+                                                $tableTemp .= $text ;
+                                                $totalStudent++;
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                            }
                             $tableTemp .= "</div></td>";
                         } else {
                             $tableTemp .= "<td></td>";
@@ -1947,7 +1954,8 @@ class MySpace
             lp_table_item.iid as lp_item,
             lp_table_item.iid AS lp_item_id,
             track_default.default_value as id,
-            sesion_r_c_u.session_id as session_id
+            sesion_r_c_u.session_id as session_id,
+            track_default.default_event_type as type
         FROM
              $tblTrackDefault as track_default
         INNER JOIN $tblSessionRelCourseUser as sesion_r_c_u on (track_default.default_value = sesion_r_c_u.user_id )
@@ -4401,6 +4409,7 @@ class MySpace
                     item_property.ref as lp_item,
                     lp_table_item.iid AS lp_item_id,
                     item_property.session_id as session_id,
+                    item_property.lastedit_type as type,
   ";
             if ($withGroups) {
                 $query .= '

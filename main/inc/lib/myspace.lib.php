@@ -1658,10 +1658,72 @@ class MySpace
                                 "</a>".
                                 "<div id='$hiddenField' class='hidden'>";
                             $studentInSesion = [];
+                            $lpReady = [];
+                            /* Student by course*/
+                            for ($i = 0; $i < count($byCourse); $i++) {
+                                $student = $byCourse[$i];
+                                $studentId = $student['id'];
+                                $lpItemIdStudent = $student['lp_item'];
+                                if (!isset($studentArray[$studentId])) {
+                                    $studentArray[$studentId] = api_get_user_info($studentId);
+                                }
+                                $sessionStudentLp = isset($student['session_id']) ? (int)$student['session_id'] : 0;
+                                $tempStudent = $studentArray[$studentId];
+                                $studentName = $tempStudent['complete_name'];
+                                $studentCompany = $student['company'];
+                                $iconSession = Display::return_icon(
+                                    'admin_star.png',
+                                    $studentName,
+                                    ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
+                                );
+
+                                if (0 == $sessionStudentLp) {
+                                    $iconSession = null;
+                                }
+                                if (!isset($studentInSesion[$studentId])) {
+                                    $studentInSesion[$studentId] = 1;
+                                    if ($sessionStudentLp != 0) {
+                                        $tableTemp .= "<strong>$iconSession $studentName($studentCompany)</strong><br>";
+                                    } else {
+                                        $tableTemp .= "$iconSession $studentName($studentCompany) <br>";
+                                    }
+                                    $totalStudent++;
+                                    $lpReady[$lpItemIdStudent][$sessionStudentLp][] = $student;
+                                }
+                            }
+                            /* Student by course groups */
+                            for ($i = 0; $i < count($byCourseGroups); $i++) {
+                                $student = $byCourseGroups[$i];
+                                $studentId = $student['id'];
+                                $lpItemIdStudent = $student['lp_item'];
+                                if (!isset($studentArray[$studentId])) {
+                                    $studentArray[$studentId] = api_get_user_info($studentId);
+                                }
+                                $tempStudent = $studentArray[$studentId];
+                                $studentName = $tempStudent['complete_name'];
+                                $studentCompany = $student['company'];
+                                $iconGroup = Display::return_icon(
+                                    'group_summary.png',
+                                    $studentName,
+                                    '',
+                                    ICON_SIZE_MEDIUM);
+                                if (!isset($studentInSesion[$studentId])) {
+                                    if ($sessionStudentLp != 0) {
+                                        $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
+                                    } else {
+                                        $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
+                                    }
+                                    $totalStudent++;
+                                    $lpReady[$lpItemIdStudent][$sessionStudentLp][] = $student;
+                                    $studentInSesion[$studentId] = 1;
+                                }
+                            }
                             /* Student by session, keep it first */
                             for ($i = 0; $i < count($bySession); $i++) {
                                 $student = $bySession[$i];
                                 $studentId = $student['id'];
+                                $studentInSesion[$studentId] = 1;
+                                $lpItemIdStudent = $student['lp_item'];
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
@@ -1675,48 +1737,11 @@ class MySpace
                                     ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
                                 );
 
-                                $tableTemp .= $iconSession."<strong>$studentName ($studentCompany)</strong><br>";
-                                $totalStudent++;
-                            }
-                            /* Student by course groups */
-                            for ($i = 0; $i < count($byCourseGroups); $i++) {
-                                $student = $byCourseGroups[$i];
-                                $studentId = $student['id'];
-                                if (!isset($studentArray[$studentId])) {
-                                    $studentArray[$studentId] = api_get_user_info($studentId);
-                                }
-                                $tempStudent = $studentArray[$studentId];
-                                $sessionId = (int) $student['session_id'];
-                                $studentName = $tempStudent['complete_name'];
-                                $studentCompany = $student['company'];
-                                $iconGroup = Display::return_icon(
-                                    'group_summary.png',
-                                    $studentName,
-                                    '',
-                                    ICON_SIZE_MEDIUM);
-                                if (!isset($studentInSesion[$studentId])) {
-                                    if ($sessionId != 0) {
-                                        $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
-                                    } else {
-                                        $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
+                                if (!isset($lpReady[$lpItemIdStudent][$sessionStudentLp])) {
+                                    if (!isset($studentInSesion[$studentId])) {
+                                        $tableTemp .= $iconSession."<strong>$studentName ($studentCompany)</strong><br><pre>".var_export($student, true)."</pre>";
+                                        $totalStudent++;
                                     }
-                                    $totalStudent++;
-                                }
-                            }
-                            /* Student by course, keep it last*/
-                            for ($i = 0; $i < count($byCourse); $i++) {
-                                $student = $byCourse[$i];
-                                $studentId = $student['id'];
-                                if (!isset($studentArray[$studentId])) {
-                                    $studentArray[$studentId] = api_get_user_info($studentId);
-                                }
-                                $tempStudent = $studentArray[$studentId];
-                                $studentName = $tempStudent['complete_name'];
-                                $studentCompany = $student['company'];
-
-                                if (!isset($studentInSesion[$studentId])) {
-                                    $tableTemp .= "$studentName ($studentCompany)<br>";
-                                    $totalStudent++;
                                 }
                             }
                             $index++;
@@ -4375,11 +4400,11 @@ class MySpace
                 SELECT DISTINCT
                     item_property.ref as lp_item,
                     lp_table_item.iid AS lp_item_id,
-                    ";
+                    item_property.session_id as session_id,
+  ";
             if ($withGroups) {
                 $query .= '
                 item_property.to_group_id as group_id,
-                item_property.session_id as session_id,
                 user_to_group.user_id as id
                 ';
             } else {
@@ -4410,7 +4435,7 @@ class MySpace
                 ';
             }
             $query .= "
-                ORDER BY item_property.ref
+                ORDER BY item_property.ref, item_property.session_id
                 ";
             $queryResult = Database::query($query);
             $data = Database::store_result($queryResult, 'ASSOC');

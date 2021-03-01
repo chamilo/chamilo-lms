@@ -1682,7 +1682,6 @@ class SurveyManager
         }
     }
 
-
     /**
      * This function deletes all the options of the questions of a given survey
      * This function is normally only called when a survey is deleted.

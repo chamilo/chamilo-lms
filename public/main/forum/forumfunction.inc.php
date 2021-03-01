@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -780,7 +781,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $lpRepo = Container::getLpRepository();
     $lp = null;
     if (!empty($lpId)) {
-        /** @var \Chamilo\CourseBundle\Entity\CLp $lp */
+        /** @var CLp $lp */
         $lp = $lpRepo->find($lpId);
     }
 
@@ -791,9 +792,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setForumCategory($forumCategory)
         ->setAllowAnonymous($values['allow_anonymous_group']['allow_anonymous'] ?? 0)
         ->setAllowEdit($values['students_can_edit_group']['students_can_edit'] ?? 0)
-        ->setApprovalDirectPost($values['approval_direct_group']['approval_direct'] ?? 0)
+        ->setApprovalDirectPost((string) ($values['approval_direct_group']['approval_direct'] ?? '0'))
         ->setAllowAttachments($values['allow_attachments_group']['allow_attachments'] ?? 0)
-        ->setAllowNewThreads($values['allow_new_threads_group']['allow_new_threads'] ?? 0)
+        ->setAllowNewThreads((int) ($values['allow_new_threads_group']['allow_new_threads'] ?? 0))
         ->setDefaultView($values['default_view_type_group']['default_view_type'] ?? null)
         ->setForumOfGroup($values['group_forum'] ?? null)
         ->setForumGroupPublicPrivate($values['public_private_group_forum_group']['public_private_group_forum'] ?? '')
@@ -1691,7 +1692,6 @@ function get_threads($forumId, $courseId = null, $sessionId = null)
     $session = api_get_session_entity($sessionId);
 
     $qb = $repo->getResourcesByCourse($course, $session);
-
     $qb->andWhere('resource.forum = :forum')->setParameter('forum', $forumId);
 
     return $qb->getQuery()->getResult();
@@ -1803,7 +1803,7 @@ function getThreadInfo($threadId, $cId)
         $thread['threadId'] = $forumThread->getIid();
         $thread['threadTitle'] = $forumThread->getThreadTitle();
         $thread['forumId'] = $forumThread->getForum() ? $forumThread->getForum()->getIid() : 0;
-        $thread['sessionId'] = $forumThread->getSessionId();
+        //$thread['sessionId'] = $forumThread->getSessionId();
         $thread['threadSticky'] = $forumThread->getThreadSticky();
         $thread['locked'] = $forumThread->getLocked();
         $thread['threadTitleQualify'] = $forumThread->getThreadTitleQualify();
@@ -2336,9 +2336,9 @@ function saveThread(
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-    $visible = 1;
+    $visible = true;
     if ('1' == $forum->getApprovalDirectPost() && !api_is_allowed_to_edit(null, true)) {
-        $visible = 0; // The post has not been approved yet.
+        $visible = false; // The post has not been approved yet.
     }
     $clean_post_title = $values['post_title'];
 
@@ -2349,17 +2349,15 @@ function saveThread(
     // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
     $thread = new CForumThread();
     $thread
-        ->setCId($course_id)
         ->setThreadTitle($clean_post_title)
         ->setForum($forum)
         ->setUser($user)
         ->setThreadDate($post_date)
-        ->setThreadSticky($values['thread_sticky'] ?? 0)
+        ->setThreadSticky((bool) ($values['thread_sticky'] ?? false))
         ->setThreadTitleQualify($values['calification_notebook_title'] ?? '')
         ->setThreadQualifyMax($values['numeric_calification'] ?? 0)
         ->setThreadWeight($values['weight_calification'] ?? 0)
         ->setThreadPeerQualify(isset($values['thread_peer_qualify']) ? (bool) $values['thread_peer_qualify'] : false)
-        ->setSessionId($sessionId)
         ->setLpItemId(isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0)
         ->setParent($forum)
         ->addCourseLink($course, $session)
@@ -2422,18 +2420,6 @@ function saveThread(
         $userId
     );*/
 
-    if (0 == $visible) {
-        /*api_item_property_update(
-            $courseInfo,
-            TOOL_FORUM_THREAD,
-            $thread->getIid(),
-            'invisible',
-            $userId,
-            $groupInfo
-        );*/
-        $visible = 1;
-    }
-
     $logInfo = [
         'tool' => TOOL_FORUM,
         'tool_id' => $values['forum_id'],
@@ -2454,7 +2440,7 @@ function saveThread(
         ->setUser(api_get_user_entity($userId))
         //->setPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
         ->setPostDate($post_date)
-        ->setPostNotification(isset($values['post_notification']) ? (int) $values['post_notification'] : null)
+        ->setPostNotification(isset($values['post_notification']) ? (bool) $values['post_notification'] : false)
         ->setVisible($visible)
         ->setStatus(CForumPost::STATUS_VALIDATED)
         ->setParent($thread)
@@ -2490,7 +2476,6 @@ function saveThread(
     $sql = "UPDATE $table_threads
             SET thread_last_post = '".$postId."'
             WHERE
-                c_id = $course_id AND
                 iid = '".$thread->getIid()."'";
     Database::query($sql);
     $message = get_lang('The new thread has been added');
@@ -3408,7 +3393,7 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
             ->setThread($thread)
             ->setForum($forum)
             ->setUser(api_get_user_entity($userId))
-            ->setPostNotification(isset($values['post_notification']) ? $values['post_notification'] : null)
+            ->setPostNotification(isset($values['post_notification']) ? (bool) $values['post_notification'] : false)
             ->setPostParentId(isset($values['post_parent_id']) ? $values['post_parent_id'] : null)
             ->setVisible($visible)
             ->setPostDate(api_get_utc_datetime(null, false, true))
@@ -3735,7 +3720,7 @@ function store_edit_post(CForumForum $forum, $values)
         $post
             ->setPostTitle($values['post_title'])
             ->setPostText($values['post_text'])
-            ->setPostNotification(isset($values['post_notification']) ? 1 : 0)
+            ->setPostNotification(isset($values['post_notification']))
         ;
 
         if ($updateStatus) {
@@ -3823,7 +3808,6 @@ function increase_thread_view($thread_id)
     $sql = "UPDATE $table_threads
             SET thread_views = thread_views + 1
             WHERE
-                c_id = $course_id AND
                 iid = '".(int) $thread_id."'";
     Database::query($sql);
 }
@@ -4297,7 +4281,7 @@ function store_move_post($values)
 
         $thread = new CForumThread();
         $thread
-            ->setCId($course_id)
+            //->setCId($course_id)
             ->setThreadTitle($post->getPostTitle())
             ->setForum($post->getForum())
             ->setUser($post->getUser())

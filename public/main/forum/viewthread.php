@@ -277,14 +277,17 @@ if (!empty($groupId)) {
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) &&
-    (!$forumEntity->isVisible($courseEntity, $sessionEntity) || !$threadEntity->isVisible($courseEntity, $sessionEntity))
+    (
+        !$forumEntity->isVisible($courseEntity, $sessionEntity) ||
+        !$threadEntity->isVisible($courseEntity, $sessionEntity)
+    )
 ) {
     api_not_allowed();
 }
 // this increases the number of times the thread has been viewed
 increase_thread_view($threadId);
 
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     $template = new Template('', false, false, true, true, false);
 } else {
     $template = new Template();

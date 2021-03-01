@@ -174,6 +174,33 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_student_publication');
+
+        $this->addSql('UPDATE c_student_publication SET user_id = NULL WHERE user_id = 0');
+        $this->addSql('ALTER TABLE c_student_publication CHANGE user_id user_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_5246F746A76ED395')) {
+            $this->addSql('ALTER TABLE c_student_publication ADD CONSTRAINT FK_5246F746A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
+        }
+
+        if ($table->hasIndex('idx_csp_u')) {
+            $this->addSql('DROP INDEX idx_csp_u ON c_student_publication');
+        }
+
+        if (false === $table->hasIndex('IDX_5246F746A76ED395')) {
+            $this->addSql('CREATE INDEX IDX_5246F746A76ED395 ON c_student_publication (user_id);');
+        }
+
+        $this->addSql('UPDATE c_student_publication SET parent_id = NULL WHERE parent_id = 0');
+        $this->addSql('ALTER TABLE c_student_publication CHANGE parent_id parent_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_5246F746727ACA70')) {
+            $this->addSql('ALTER TABLE c_student_publication ADD CONSTRAINT FK_5246F746727ACA70 FOREIGN KEY (parent_id) REFERENCES c_student_publication (iid);');
+        }
+
+        if (false === $table->hasIndex('IDX_5246F746727ACA70')) {
+            $this->addSql('CREATE INDEX IDX_5246F746727ACA70 ON c_student_publication (parent_id)');
+        }
+
         if (false === $table->hasColumn('filesize')) {
             $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
         }
@@ -234,6 +261,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_student_publication_comment');
+
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_student_publication_comment ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
@@ -242,6 +270,40 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql(
                 'CREATE UNIQUE INDEX UNIQ_35C509F61BAD783F ON c_student_publication_comment (resource_node_id)'
             );
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_student_publication_comment');
+        }
+
+        $this->addSql('UPDATE c_student_publication_comment SET work_id = NULL WHERE work_id = 0');
+        $this->addSql('UPDATE c_student_publication_comment SET user_id = NULL WHERE user_id = 0');
+
+        $this->addSql('ALTER TABLE c_student_publication_comment CHANGE work_id work_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_student_publication_comment CHANGE user_id user_id INT DEFAULT NULL;');
+
+        if (!$table->hasForeignKey('FK_35C509F6BB3453DB')) {
+            $this->addSql('ALTER TABLE c_student_publication_comment ADD CONSTRAINT FK_35C509F6BB3453DB FOREIGN KEY (work_id) REFERENCES c_student_publication (iid) ON DELETE CASCADE;');
+        }
+
+        if (!$table->hasForeignKey('FK_35C509F6A76ED395')) {
+            $this->addSql('ALTER TABLE c_student_publication_comment ADD CONSTRAINT FK_35C509F6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
+        }
+
+        if ($table->hasIndex('work')) {
+            $this->addSql('DROP INDEX work ON c_student_publication_comment;');
+        }
+
+        if ($table->hasIndex('user')) {
+            $this->addSql('DROP INDEX user ON c_student_publication_comment;');
+        }
+
+        if (!$table->hasIndex('IDX_35C509F6BB3453DB')) {
+            $this->addSql('CREATE INDEX IDX_35C509F6BB3453DB ON c_student_publication_comment (work_id);');
+        }
+
+        if (!$table->hasIndex('IDX_35C509F6A76ED395')) {
+            $this->addSql('CREATE INDEX IDX_35C509F6A76ED395 ON c_student_publication_comment (user_id);');
         }
 
         $table = $schema->getTable('c_calendar_event');

@@ -1215,7 +1215,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         foreach ($result as $item) {
             $list = [
                 'Title: '.$item->getTitle(),
-                'URL: '.$item->getUrl(),
+                //'URL: '.$item->getTitle(),
             ];
             $cStudentPublication[] = implode(', ', $list);
         }
@@ -1232,7 +1232,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             $list = [
                 'Commment: '.$item->getComment(),
                 'File '.$item->getFile(),
-                'Course # '.$item->getCId(),
+                //'Course # '.$item->getCId(),
                 'Date: '.$date,
             ];
             $cStudentPublicationComment[] = implode(', ', $list);

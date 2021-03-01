@@ -9,7 +9,10 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,7 +22,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_student_publication",
  *  indexes={
- *      @ORM\Index(name="idx_csp_u", columns={"user_id"})
  *  }
  * )
  * @ORM\Entity()
@@ -38,11 +40,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;
-
-    /**
-     * @ORM\Column(name="url", type="string", length=500, nullable=true)
-     */
-    protected ?string $url;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -100,9 +97,27 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected ?DateTime $dateOfQualification;
 
     /**
-     * @ORM\Column(name="parent_id", type="integer", nullable=false)
+     * @var Collection|CStudentPublication[]
+     * @ORM\OneToMany(targetEntity="CStudentPublication", mappedBy="publicationParent")
      */
-    protected int $parentId;
+    protected Collection $children;
+
+    /**
+     * @var Collection|CStudentPublicationComment[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationComment", mappedBy="publication")
+     */
+    protected Collection $comments;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid")
+     */
+    protected ?CStudentPublication $publicationParent;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationAssignment", mappedBy="publication")
+     */
+    protected ?CStudentPublicationAssignment $assignment = null;
 
     /**
      * @ORM\Column(name="qualificator_id", type="integer", nullable=false)
@@ -115,9 +130,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected float $weight;
 
     /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected int $userId;
+    protected User $user;
 
     /**
      * @ORM\Column(name="allow_text_assignment", type="integer", nullable=false)
@@ -139,21 +155,19 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      */
     protected ?int $fileSize;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationAssignment", mappedBy="publication")
-     */
-    protected ?CStudentPublicationAssignment $assignment;
-
     public function __construct()
     {
         $this->description = '';
         $this->documentId = 0;
         $this->hasProperties = 0;
         $this->containsFile = 0;
-        $this->parentId = 0;
+        $this->publicationParent = null;
         $this->qualificatorId = 0;
         $this->qualification = 0;
+        $this->assignment = null;
         $this->sentDate = new DateTime();
+        $this->children = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -169,30 +183,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function getIid()
     {
         return $this->iid;
-    }
-
-    /**
-     * Set url.
-     *
-     * @param string $url
-     *
-     * @return CStudentPublication
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * Get url.
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
     }
 
     /**
@@ -451,30 +441,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return CStudentPublication
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
      * Set qualificatorId.
      *
      * @param int $qualificatorId
@@ -515,30 +481,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function getWeight()
     {
         return $this->weight;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CStudentPublication
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -638,6 +580,63 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setAssignment(?CStudentPublicationAssignment $assignment): self
     {
         $this->assignment = $assignment;
+
+        return $this;
+    }
+
+    /**
+     * @return CStudentPublication[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
+    public function getPublicationParent(): ?self
+    {
+        return $this->publicationParent;
+    }
+
+    public function setPublicationParent(?self $publicationParent): self
+    {
+        $this->publicationParent = $publicationParent;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return CStudentPublicationComment[]|Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param CStudentPublicationComment[]|Collection $comments
+     */
+    public function setComments($comments): self
+    {
+        $this->comments = $comments;
 
         return $this;
     }

@@ -10,10 +10,12 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CStudentPublicationRepository extends ResourceRepository
@@ -21,6 +23,20 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CStudentPublication::class);
+    }
+
+    public function getStudentAssignments(
+        CStudentPublication $publication,
+        Course $course,
+        Session $session = null,
+        CGroup $group = null
+    ): QueryBuilder {
+        $qb = $this->getResourcesByCourse($course, $session, $group, $publication->getResourceNode());
+
+        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+        $qb->andWhere($qb->expr()->eq('resource.publicationParent', $publication));
+
+        return $qb;
     }
 
     /**

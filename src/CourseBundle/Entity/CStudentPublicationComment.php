@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,9 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_student_publication_comment",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="user", columns={"user_id"}),
- *      @ORM\Index(name="work", columns={"work_id"})
  *  }
  * )
  * @ORM\Entity
@@ -35,14 +33,10 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="CStudentPublication", inversedBy="comments")
+     * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $cId;
-
-    /**
-     * @ORM\Column(name="work_id", type="integer", nullable=false)
-     */
-    protected int $workId;
+    protected CStudentPublication $publication;
 
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
@@ -55,9 +49,10 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     protected ?string $file;
 
     /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $userId;
+    protected User $user;
 
     /**
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
@@ -80,61 +75,11 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     }
 
     /**
-     * Set workId.
-     *
-     * @param int $workId
-     *
-     * @return CStudentPublicationComment
-     */
-    public function setWorkId($workId)
-    {
-        $this->workId = $workId;
-
-        return $this;
-    }
-
-    /**
-     * Get workId.
-     *
-     * @return int
-     */
-    public function getWorkId()
-    {
-        return $this->workId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CStudentPublicationComment
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * Set comment.
      *
      * @param string $comment
-     *
-     * @return CStudentPublicationComment
      */
-    public function setComment($comment)
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 
@@ -155,10 +100,8 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
      * Set file.
      *
      * @param string $file
-     *
-     * @return CStudentPublicationComment
      */
-    public function setFile($file)
+    public function setFile($file): self
     {
         $this->file = $file;
 
@@ -175,38 +118,24 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this->file;
     }
 
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CStudentPublicationComment
-     */
-    public function setUserId($userId)
+    public function getUser(): User
     {
-        $this->userId = $userId;
-
-        return $this;
+        return $this->user;
     }
 
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
+    public function setUser(User $user): self
     {
-        return $this->userId;
+        $this->user = $user;
+
+        return $this;
     }
 
     /**
      * Set sentAt.
      *
      * @param DateTime $sentAt
-     *
-     * @return CStudentPublicationComment
      */
-    public function setSentAt($sentAt)
+    public function setSentAt($sentAt): self
     {
         $this->sentAt = $sentAt;
 
@@ -221,6 +150,18 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     public function getSentAt()
     {
         return $this->sentAt;
+    }
+
+    public function getPublication(): CStudentPublication
+    {
+        return $this->publication;
+    }
+
+    public function setPublication(CStudentPublication $publication): self
+    {
+        $this->publication = $publication;
+
+        return $this;
     }
 
     public function getResourceIdentifier(): int

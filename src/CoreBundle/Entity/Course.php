@@ -107,7 +107,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $users;
+    protected Collection $users;
 
     /**
      * @var ArrayCollection|ResourceLink[]

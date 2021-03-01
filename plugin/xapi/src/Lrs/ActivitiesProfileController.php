@@ -39,6 +39,11 @@ class ActivitiesProfileController extends BaseController
         );
     }
 
+    public function head(): Response
+    {
+        return $this->get()->setContent('');
+    }
+
     public function put(): Response
     {
         $profileId = $this->httpRequest->query->get('profileId');

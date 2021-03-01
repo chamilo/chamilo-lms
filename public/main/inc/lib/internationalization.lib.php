@@ -563,7 +563,7 @@ function api_format_date($time, $format = null, $language = null)
  * You can use it like this:
  * Display::dateToStringAgoAndLongDate($dateInUtc);.
  *
- * @param string $date                 Result of a date function in this format -> date('Y-m-d H:i:s', time());
+ * @param string|DateTime $date                 Result of a date function in this format -> date('Y-m-d H:i:s', time());
  * @param string $timeZone
  * @param bool   $returnDateDifference
  *
@@ -591,12 +591,14 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
         $language = new Westsworld\TimeAgo\Translations\En();
     }
     $timeAgo = new TimeAgo($language);
-    $date = api_get_utc_datetime($date, null, true);
+    if (!($date instanceof DateTime)) {
+        $date = api_get_utc_datetime($date, null, true);
+    }
+
     $value = $timeAgo->inWords($date);
     date_default_timezone_set($getOldTimezone);
 
     if ($returnDateDifference) {
-        //$value = $timeAgo->dateDifference($date);
         $now = new DateTime('now', $date->getTimezone());
         $value = $date->diff($now);
 

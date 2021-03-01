@@ -12,7 +12,6 @@ if (false === api_is_teacher()) {
     api_not_allowed(true);
 }
 
-require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 

@@ -8,7 +8,6 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
 
-require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $studentId = isset($_GET['studentId']) ? (int) ($_GET['studentId']) : null;

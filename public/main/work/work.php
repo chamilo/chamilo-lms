@@ -10,8 +10,6 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-require_once 'work.lib.php';
-
 $courseInfo = api_get_course_info();
 $user_id = api_get_user_id();
 $sessionId = api_get_session_id();
@@ -227,11 +225,12 @@ switch ($action) {
 
             /** @var CStudentPublication $studentPublication */
             $studentPublication = $repo->find($_REQUEST['item_id']);
-            $studentPublication->setParentId($_REQUEST['move_to_id']);
+            if ($_REQUEST['move_to_id']) {
+                $parent = $repo->find($_REQUEST['move_to_id']);
+                $studentPublication->setParent($parent);
+            }
             $studentPublication->getResourceNode()->setParent($newParent->getResourceNode());
-
             $repo->update($studentPublication);
-
             /*api_item_property_update(
                 $courseInfo,
                 'work',

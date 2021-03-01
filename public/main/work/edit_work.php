@@ -8,9 +8,6 @@ api_protect_course_script(true);
 
 $lib_path = api_get_path(LIBRARY_PATH);
 
-/* Libraries */
-require_once 'work.lib.php';
-
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 

@@ -9,11 +9,7 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-// Including necessary files
-require_once 'work.lib.php';
-
 $this_section = SECTION_COURSES;
-
 $work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
 $documentId = isset($_REQUEST['document_id']) ? (int) ($_REQUEST['document_id']) : null;
 

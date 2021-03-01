@@ -16,7 +16,7 @@ if ($blockEdition && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-require_once 'work.lib.php';
+
 
 $this_section = SECTION_COURSES;
 
@@ -193,7 +193,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     );
 
     // Check if user to qualify has some DRHs
-    $drhList = UserManager::getDrhListFromUser($studentPublication->getUserId());
+    $drhList = UserManager::getDrhListFromUser($studentPublication->getUser()->getId());
     if (!empty($drhList)) {
         $form->addCheckBox(
             'send_to_drh_users',
@@ -242,11 +242,18 @@ if ($form->validate()) {
 
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
-                    $subject = sprintf(get_lang('There\'s a new feedback in work: %s'), $studentPublication->getTitle());
-                    $message = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $studentPublication->getTitle(), $url);
+                    $subject = sprintf(
+                        get_lang('There\'s a new feedback in work: %s'),
+                        $studentPublication->getTitle()
+                    );
+                    $message = sprintf(
+                        get_lang('There\'s a new feedback in work: %sInWorkXHere'),
+                        $studentPublication->getTitle(),
+                        $url
+                    );
 
                     MessageManager::send_message_simple(
-                        $studentPublication->getUserId(),
+                        $studentPublication->getUser()->getId(),
                         $subject,
                         $message,
                         api_get_user_id(),

@@ -4,9 +4,6 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-// Including necessary files
-require_once 'work.lib.php';
-
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 $workId = isset($_GET['id']) ? (int) $_GET['id'] : null;

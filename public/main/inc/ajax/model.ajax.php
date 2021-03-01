@@ -543,20 +543,16 @@ switch ($action) {
         $count = AnnouncementManager::getNumberAnnouncements();
         break;
     case 'get_work_teacher':
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $count = getWorkListTeacher(0, $limit, $sidx, $sord, $whereCondition, true);
         break;
     case 'get_work_student':
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $count = getWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true);
         break;
     case 'get_all_work_student':
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $withResults = isset($_REQUEST['with_results']) ? (int) $_REQUEST['with_results'] : 0;
         $count = getAllWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true, $withResults);
         break;
     case 'get_work_user_list_all':
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $count = get_count_work($work_id);
         break;
@@ -575,12 +571,10 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list_others':
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $count = get_count_work($work_id, api_get_user_id());
         break;
     case 'get_work_user_list':
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $courseInfo = api_get_course_info();
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
@@ -618,7 +612,6 @@ switch ($action) {
         if (!(api_is_allowed_to_edit() || api_is_coach())) {
             return 0;
         }
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $workId = isset($_GET['work_id']) ? $_GET['work_id'] : null;
         $count = getWorkUserListData(
             $workId,
@@ -1629,7 +1622,6 @@ switch ($action) {
         if (!(api_is_allowed_to_edit() || api_is_coach())) {
             return [];
         }
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $columns = [
             'student', 'works',
         ];

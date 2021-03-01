@@ -10,19 +10,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
-require_once 'work.lib.php';
-
 $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-
 $repo = Container::getStudentPublicationRepository();
-/** @var CStudentPublication $work */
+/** @var CStudentPublication|null $work */
 $work = $repo->find($id);
 
-if (empty($work)) {
+if (null === $work) {
     api_not_allowed(true);
 }
 
-$parentId = $work->getParentId();
+$parentId = $work->getPublicationParent()->getIid();
 protectWork(api_get_course_info(), $parentId);
 
 $action = $_REQUEST['action'] ?? null;
@@ -78,7 +75,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
         $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list.php?id='.$folderData['iid'].'&'.api_get_cidreq();
     }
 
-    $userInfo = api_get_user_info($work->getUserId());
+    $userInfo = api_get_user_info($work->getUser()->getId());
     $interbreadcrumb[] = ['url' => $url_dir, 'name' => $folderData['title']];
     $interbreadcrumb[] = ['url' => '#', 'name' => $userInfo['complete_name']];
     $interbreadcrumb[] = ['url' => '#', 'name' => $work->getTitle()];
@@ -200,12 +197,10 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                 break;
         }
 
-        $comments = getWorkComments($work);
         $commentForm = getWorkCommentForm($work, $folderData);
 
         $tpl = new Template();
         $tpl->assign('work', $work);
-        $tpl->assign('comments', $comments);
         $actions = '';
 
         if ($work->getContainsFile()) {

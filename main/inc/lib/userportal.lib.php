@@ -1129,6 +1129,14 @@ class IndexManager
             ];
         }
 
+        if (api_get_configuration_value('my_courses_show_pending_work') && api_is_teacher()) {
+            $items[] = [
+                'icon' => Display::return_icon('work.png', get_lang('StudentPublicationToCorrect')),
+                'link' => api_get_path(WEB_CODE_PATH).'work/pending.php',
+                'title' => get_lang('StudentPublicationToCorrect'),
+            ];
+        }
+
         return $items;
     }
 

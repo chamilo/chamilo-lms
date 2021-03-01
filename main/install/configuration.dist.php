@@ -1787,7 +1787,8 @@ $_configuration['auth_password_links'] = [
 // Disable change user visibility tool icon.
 //$_configuration['disable_change_user_visibility_for_public_courses'] = true;
 
-// Add another layer of security by checking if the user is disabled at every page load (might generate considerable extra DB load)
+// Add another layer of security by checking if the user is disabled
+// at every page load (might generate considerable extra DB load)
 // $_configuration['security_block_inactive_users_immediately'] = false;
 
 // Allow all office suite documents to be uploaded in the "My files" section of the social network
@@ -1843,6 +1844,12 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Show start/end date in LP list for students.
 //$_configuration['lp_start_and_end_date_visible_in_student_view'] = true;
+
+// Show all student publications (from course and from all sessions) in the work/pending.php page if true. BT#18352
+//$_configuration['assignment_base_course_teacher_access_to_all_session'] = true;
+
+// Show a link to the work/pending.php page in my courses (user_portal)
+//$_configuration['my_courses_show_pending_work'] = true;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

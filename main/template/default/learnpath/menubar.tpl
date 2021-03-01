@@ -15,7 +15,7 @@
             {% set icon_expand = "fa-compress" %}
             {% if lp_mode == 'embedframe' %}
                 {% set label = "Expand" | get_lang %}
-                {% set icon_expand = "fa-collapse" %}
+                {% set icon_expand = "fa-expand" %}
             {% endif %}
             <a href="#"
                id="lp-view-expand-toggle"

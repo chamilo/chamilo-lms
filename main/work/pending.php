@@ -212,12 +212,9 @@ $(function() {
         { width:500 } // search options
     );
 });
-
 </script>
 <?php
 
-/*$actionsLeft = null;
-echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);*/
 echo Display::page_header(get_lang('StudentPublicationToCorrect'));
 echo Display::return_message(get_lang('StudentPublicationCorrectionWarning'), 'warning');
 echo $content;

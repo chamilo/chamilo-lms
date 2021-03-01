@@ -56,16 +56,6 @@ if ($dir) {
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
             if ($prerequisiteCheck === true) {
-                if (WhispeakAuthPlugin::isLpItemMarked($lpItemId)) {
-                    ChamiloSession::write(
-                        WhispeakAuthPlugin::SESSION_LP_ITEM,
-                        ['lp' => $learnPath->lp_id, 'lp_item' => $lpItemId, 'src' => $src]
-                    );
-
-                    $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
-                    break;
-                }
-
                 $src = $learnPath->get_link('http', $lpItemId);
                 if (empty($src)) {
                     $src = 'blank.php?'.api_get_cidreq().'&error=document_protected';
@@ -74,6 +64,15 @@ if ($dir) {
 
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
+
+                if (WhispeakAuthPlugin::isLpItemMarked($lpItemId)) {
+                    ChamiloSession::write(
+                        WhispeakAuthPlugin::SESSION_LP_ITEM,
+                        ['lp' => $learnPath->lp_id, 'lp_item' => $lpItemId, 'src' => $src]
+                    );
+
+                    $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
+                }
                 break;
             }
             $src = 'blank.php?'.api_get_cidreq().'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);

@@ -1926,6 +1926,8 @@ class MySpace
                             }
                         }
                     }
+                    $csv_row[] = $totalStudent;
+                    $csv_row[] = $price * $totalStudent;
                     $csv_row[] = trim($studentsName, " / ");
                     $csv_content[] = $csv_row;
                 }

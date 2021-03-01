@@ -196,7 +196,6 @@
 
     <issueHandlers>
 
-
         <MismatchingDocblockPropertyType errorLevel="info"/>
         <RedundantCastGivenDocblockType errorLevel="info"/>
 
@@ -319,11 +318,11 @@
         <InvalidArrayAssignment errorLevel="info"/>
         <InvalidArrayAccess errorLevel="info"/>
         <InvalidClone errorLevel="info"/>
-
-
     </issueHandlers>
 <plugins>
     <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
-    <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
+    <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+        <containerXml>var/cache/dev/Chamilo_KernelDevDebugContainer.xml</containerXml>
+    </pluginClass>
 </plugins>
 </psalm>

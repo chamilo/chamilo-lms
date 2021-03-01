@@ -1362,8 +1362,6 @@ class MySpace
                                 $htmlData .= "$reportLink <strong>".$student['complete_name'].'</strong><br>';
                                 $totalStudent++;
                                 $totalStudents++;
-                                $totalStudent++;
-                            }
                             }
                         }
                         foreach ($sessionStudent as $student) {
@@ -1664,9 +1662,6 @@ class MySpace
                             /* Student by course*/
                             for ($i = 0; $i < count($byCourse); $i++) {
                                 $student = $byCourse[$i];
-                            /* Student by session, keep it first */
-                            for ($i = 0; $i < count($bySession); $i++) {
-                                $student = $bySession[$i];
                                 $studentId = $student['id'];
                                 $lpItemIdStudent = $student['lp_item'];
                                 if (!isset($studentArray[$studentId])) {
@@ -1700,34 +1695,6 @@ class MySpace
                             for ($i = 0; $i < count($byCourseGroups); $i++) {
                                 $student = $byCourseGroups[$i];
                                 $studentId = $student['id'];
-                                $lpItemIdStudent = $student['lp_item'];
-                                if (!isset($studentArray[$studentId])) {
-                                    $studentArray[$studentId] = api_get_user_info($studentId);
-                                }
-                                $tempStudent = $studentArray[$studentId];
-                                $studentName = $tempStudent['complete_name'];
-                                $studentCompany = $student['company'];
-                                $iconGroup = Display::return_icon(
-                                    'group_summary.png',
-                                    $studentName,
-                                    '',
-                                    ICON_SIZE_MEDIUM);
-                                if (!isset($studentInSesion[$studentId])) {
-                                    if ($sessionStudentLp != 0) {
-                                        $tableTemp .= "<strong>$iconGroup $studentName($studentCompany)</strong><br>";
-                                    } else {
-                                        $tableTemp .= "$iconGroup $studentName($studentCompany) <br>";
-                                    }
-                                    $totalStudent++;
-                                    $lpReady[$lpItemIdStudent][$sessionStudentLp][] = $student;
-                                    $studentInSesion[$studentId] = 1;
-                                }
-                            }
-                            /* Student by session, keep it first */
-                            for ($i = 0; $i < count($bySession); $i++) {
-                                $student = $bySession[$i];
-                                $studentId = $student['id'];
-                                $studentInSesion[$studentId] = 1;
                                 $lpItemIdStudent = $student['lp_item'];
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
@@ -1911,19 +1878,6 @@ class MySpace
                             $tempStudent = $studentArray[$studentId];
                             if (!isset($studentInSesion[$studentId])) {
                                 $studentsName .= $tempStudent['complete_name']." (".$student['company'].") / ";
-                                $totalStudent++;
-                            }
-                        }
-                        /* Student by course groups, keep it last */
-                        for ($i = 0; $i < count($byCourseGroups); $i++) {
-                            $student = $byCourseGroups[$i];
-                            $studentId = $student['id'];
-                            if (!isset($studentArray[$studentId])) {
-                                $studentArray[$studentId] = api_get_user_info($studentId);
-                            }
-                            $tempStudent = $studentArray[$studentId];
-                            if (!isset($studentInSesion[$studentId])) {
-                                $studentsName .= $tempStudent['complete_name'].' ('.$student['company'].') / ';
                                 $totalStudent++;
                             }
                         }
@@ -4494,55 +4448,6 @@ class MySpace
         }
 
         return $datas;
-    }
-
-    /***
-     * Gets the company name of a user based on the extra field 'company'.
-     *
-     * @param int $userId
-     *
-     * @return string
-     */
-    public static function getCompanyOfUser($userId = 0)
-    {
-        $userId = (int)$userId;
-        if (0 != $userId) {
-            $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-            $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-            $sql = "
-            SELECT
-                extra_field_value.item_id AS userId,
-                extra_field_value.`value` AS company
-            FROM
-                $tblExtraFieldValue AS extra_field_value
-                INNER JOIN $tblExtraField AS extra_field ON (
-                    extra_field_value.field_id = extra_field.id AND extra_field.variable = 'company'
-                    )
-            WHERE
-                extra_field_value.`value` != ''
-                AND extra_field_value.item_id = $userId
-                ";
-
-            $queryResult = Database::query($sql);
-            $data = Database::store_result($queryResult, 'ASSOC');
-            $totalData = count($data);
-            for ($i = 0; $i < $totalData; $i++) {
-                $row = $data[$i];
-                if (isset($row['company']) && !empty($row['company'])) return $row['company'];
-            }
-            $query .= "
-                ORDER BY item_property.ref, item_property.session_id
-                ";
-            $queryResult = Database::query($query);
-            $data = Database::store_result($queryResult, 'ASSOC');
-            $totalData = count($data);
-            for ($i = 0; $i < $totalData; $i++) {
-                $row = $data[$i];
-                $row['company'] = self::getCompanyOfUser($row['id']);
-                $datas[$row['lp_item_id']][] = $row;
-        }
-
-        return get_lang('NoEntity');
     }
 
     private static function getDataAccessTrackingFilters($sql)

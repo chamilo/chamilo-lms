@@ -562,17 +562,16 @@ class PortfolioController
         $categories = [];
 
         if ($this->course) {
-            $frmTagList = $this->createFormTagFilter();
+            $frmTagList = $this->createFormTagFilter($listByUser);
             $frmStudentList = $this->createFormStudentFilter($listByUser);
             $frmStudentList->setDefaults(['user' => $this->owner->getId()]);
         } else {
             $categories = $this->getCategoriesForIndex($currentUserId);
         }
 
-        $items = $this->getItemsForIndex($currentUserId, $listByUser, $frmTagList);
+        $items = $this->getItemsForIndex($listByUser, $frmTagList);
 
         $template = new Template(null, false, false, false, false, false, false);
-        $template->assign('list_by_user', $listByUser);
         $template->assign('user', $this->owner);
         $template->assign('course', $this->course);
         $template->assign('session', $this->session);
@@ -1876,7 +1875,7 @@ class PortfolioController
         return true;
     }
 
-    private function createFormTagFilter(): FormValidator
+    private function createFormTagFilter(bool $listByUser = false): FormValidator
     {
         $extraField = new ExtraField('portfolio');
         $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
@@ -1891,7 +1890,7 @@ class PortfolioController
         $frmTagList = new FormValidator(
             'frm_tag_list',
             'get',
-            $this->baseUrl,
+            $this->baseUrl.($listByUser ? 'user='.$this->owner->getId() : ''),
             '',
             [],
             FormValidator::LAYOUT_BOX
@@ -1912,6 +1911,10 @@ class PortfolioController
             $frmTagList->addHidden('gidReq', 0);
             $frmTagList->addHidden('gradebook', 0);
             $frmTagList->addHidden('origin', '');
+
+            if ($listByUser) {
+                $frmTagList->addHidden('user', $this->owner->getId());
+            }
         }
 
         return $frmTagList;
@@ -1988,10 +1991,11 @@ class PortfolioController
     }
 
     private function getItemsForIndex(
-        int $currentUserId,
         bool $listByUser = false,
         FormValidator $frmFilterList = null
     ) {
+        $currentUserId = api_get_user_id();
+
         if ($this->course) {
             $queryBuilder = $this->em->createQueryBuilder();
             $queryBuilder
@@ -2006,11 +2010,6 @@ class PortfolioController
                 $queryBuilder->setParameter('session', $this->session);
             } else {
                 $queryBuilder->andWhere('pi.session IS NULL');
-            }
-
-            if ($listByUser) {
-                $queryBuilder->andWhere('pi.user = :user');
-                $queryBuilder->setParameter('user', $this->owner);
             }
 
             if ($frmFilterList && $frmFilterList->validate()) {
@@ -2039,6 +2038,12 @@ class PortfolioController
 
                     $queryBuilder->setParameter('text', '%'.$values['text'].'%');
                 }
+            }
+
+            if ($listByUser) {
+                $queryBuilder
+                    ->andWhere('pi.user = :user')
+                    ->setParameter('user', $this->owner);
             }
 
             $queryBuilder

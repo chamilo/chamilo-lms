@@ -1667,7 +1667,7 @@ class MySpace
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                $sessionStudentLp = isset($student['session_id']) ? (int)$student['session_id'] : 0;
+                                $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
                                 $tempStudent = $studentArray[$studentId];
                                 $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];
@@ -1696,7 +1696,7 @@ class MySpace
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
                                 $tempStudent = $studentArray[$studentId];
-                                $sessionStudentLp = isset($student['session_id']) ? (int)$student['session_id'] : 0;
+                                $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
                                 $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];
                                 $type = isset($student['type']) ? $student['type'] : null;
@@ -1732,25 +1732,22 @@ class MySpace
 
                                 $tableTemp2 = $iconSession."<strong>$studentName ($studentCompany)</strong>";
                                 $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tableTemp2.'<br>';
-
                             }
                             $index++;
                             foreach ($studentProcessed as $lpItemId => $item) {
-                                foreach($item as $type =>$student) {
-                                    foreach($student as $userId =>$text){
-                                        if('LearnpathSubscription' == $type){
+                                foreach ($item as $type => $student) {
+                                    foreach ($student as $userId => $text) {
+                                        if ('LearnpathSubscription' == $type) {
                                             $tableTemp .= $text;
                                             $totalStudent++;
-                                        }else{
-                                            if(!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])){
-                                                $tableTemp .= $text ;
+                                        } else {
+                                            if (!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])) {
+                                                $tableTemp .= $text;
                                                 $totalStudent++;
                                             }
                                         }
-
                                     }
                                 }
-
                             }
                             $tableTemp .= "</div></td>";
                         } else {
@@ -1867,7 +1864,6 @@ class MySpace
                     if (0 != $studenRegister ||
                         0 != $studenRegisterBySession ||
                         0 != $studenGroupsRegister) {
-
                         $tableTemp2 = '';
                         $studentProcessed = [];
                         /* Student by course*/
@@ -1882,7 +1878,7 @@ class MySpace
                             $studentName = $tempStudent['complete_name'];
                             $studentCompany = $student['company'];
                             $type = isset($student['type']) ? $student['type'] : null;
-                            $studentProcessed[$lpItemIdStudent][$type][$studentId] =  $studentName .' ('.$studentCompany.') / ';
+                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
                         }
 
                         /* Student by course groups */
@@ -1897,7 +1893,7 @@ class MySpace
                             $studentName = $tempStudent['complete_name'];
                             $studentCompany = $student['company'];
                             $type = isset($student['type']) ? $student['type'] : null;
-                            $studentProcessed[$lpItemIdStudent][$type][$studentId] =   $studentName .' ('.$studentCompany.') / ';
+                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
                         }
                         /* Student by session, keep it first */
                         for ($i = 0; $i < count($bySession); $i++) {
@@ -1911,8 +1907,7 @@ class MySpace
                             $type = isset($student['type']) ? $student['type'] : null;
                             $studentName = $tempStudent['complete_name'];
                             $studentCompany = $student['company'];
-                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName .' ('.$studentCompany.') / ';
-
+                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
                         }
                         $index++;
                         foreach ($studentProcessed as $lpItemId => $item) {
@@ -1927,13 +1922,10 @@ class MySpace
                                             $totalStudent++;
                                         }
                                     }
-
                                 }
                             }
-
                         }
-
-                    }/********/
+                    }
                     $csv_row[] = trim($studentsName, " / ");
                     $csv_content[] = $csv_row;
                 }

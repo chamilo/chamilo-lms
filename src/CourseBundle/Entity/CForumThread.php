@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -63,7 +64,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected int $threadViews;
 
     /**
-     * @var ArrayCollection|CForumPost[]
+     * @var Collection|CForumPost[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CForumPost",
@@ -77,7 +78,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid", onDelete="SET NULL")
      */
-    protected CForumPost $threadLastPost;
+    protected ?CForumPost $threadLastPost;
 
     /**
      * @ORM\Column(name="thread_date", type="datetime", nullable=false)
@@ -154,7 +155,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
      *
      * @return $this
      */
-    public function setThreadPeerQualify($threadPeerQualify)
+    public function setThreadPeerQualify($threadPeerQualify): self
     {
         $this->threadPeerQualify = $threadPeerQualify;
 
@@ -165,10 +166,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadTitle.
      *
      * @param string $threadTitle
-     *
-     * @return CForumThread
      */
-    public function setThreadTitle($threadTitle)
+    public function setThreadTitle($threadTitle): self
     {
         $this->threadTitle = $threadTitle;
 
@@ -185,12 +184,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadTitle;
     }
 
-    /**
-     * Set forum.
-     *
-     * @return CForumThread
-     */
-    public function setForum(CForumForum $forum = null)
+    public function setForum(CForumForum $forum = null): self
     {
         $this->forum = $forum;
 
@@ -214,7 +208,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
      *
      * @return CForumThread
      */
-    public function setThreadReplies($threadReplies)
+    public function setThreadReplies($threadReplies): self
     {
         $this->threadReplies = $threadReplies;
 
@@ -235,10 +229,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadViews.
      *
      * @param int $threadViews
-     *
-     * @return CForumThread
      */
-    public function setThreadViews($threadViews)
+    public function setThreadViews($threadViews): self
     {
         $this->threadViews = $threadViews;
 
@@ -281,10 +273,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadSticky.
      *
      * @param bool $threadSticky
-     *
-     * @return CForumThread
      */
-    public function setThreadSticky($threadSticky)
+    public function setThreadSticky($threadSticky): self
     {
         $this->threadSticky = $threadSticky;
 
@@ -305,10 +295,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set locked.
      *
      * @param int $locked
-     *
-     * @return CForumThread
      */
-    public function setLocked($locked)
+    public function setLocked($locked): self
     {
         $this->locked = $locked;
 
@@ -329,10 +317,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadTitleQualify.
      *
      * @param string $threadTitleQualify
-     *
-     * @return CForumThread
      */
-    public function setThreadTitleQualify($threadTitleQualify)
+    public function setThreadTitleQualify($threadTitleQualify): self
     {
         $this->threadTitleQualify = $threadTitleQualify;
 
@@ -375,10 +361,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadCloseDate.
      *
      * @param DateTime $threadCloseDate
-     *
-     * @return CForumThread
      */
-    public function setThreadCloseDate($threadCloseDate)
+    public function setThreadCloseDate($threadCloseDate): self
     {
         $this->threadCloseDate = $threadCloseDate;
 
@@ -466,7 +450,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CForumPost[]
+     * @return Collection|CForumPost[]
      */
     public function getPosts()
     {

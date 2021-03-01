@@ -9,7 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\Session;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,7 +19,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_student_publication",
  *  indexes={
- *      @ORM\Index(name="session_id", columns={"session_id"}),
  *      @ORM\Index(name="idx_csp_u", columns={"user_id"})
  *  }
  * )
@@ -117,12 +115,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected float $weight;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="studentPublications")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     */
-    protected Session $session;
-
-    /**
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     protected int $userId;
@@ -146,6 +138,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="filesize", type="integer", nullable=true)
      */
     protected ?int $fileSize;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationAssignment", mappedBy="publication")
+     */
+    protected ?CStudentPublicationAssignment $assignment;
 
     public function __construct()
     {
@@ -202,10 +199,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set title.
      *
      * @param string $title
-     *
-     * @return CStudentPublication
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -238,10 +233,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set author.
      *
      * @param string $author
-     *
-     * @return CStudentPublication
      */
-    public function setAuthor($author)
+    public function setAuthor($author): self
     {
         $this->author = $author;
 
@@ -258,12 +251,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->author;
     }
 
-    /**
-     * Set active.
-     *
-     * @return CStudentPublication
-     */
-    public function setActive(int $active)
+    public function setActive(int $active): self
     {
         $this->active = $active;
 
@@ -284,10 +272,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set accepted.
      *
      * @param bool $accepted
-     *
-     * @return CStudentPublication
      */
-    public function setAccepted($accepted)
+    public function setAccepted($accepted): self
     {
         $this->accepted = $accepted;
 
@@ -332,10 +318,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set sentDate.
      *
      * @param DateTime $sentDate
-     *
-     * @return CStudentPublication
      */
-    public function setSentDate($sentDate)
+    public function setSentDate($sentDate): self
     {
         $this->sentDate = $sentDate;
 
@@ -356,10 +340,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set filetype.
      *
      * @param string $filetype
-     *
-     * @return CStudentPublication
      */
-    public function setFiletype($filetype)
+    public function setFiletype($filetype): self
     {
         $this->filetype = $filetype;
 
@@ -380,10 +362,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set hasProperties.
      *
      * @param int $hasProperties
-     *
-     * @return CStudentPublication
      */
-    public function setHasProperties($hasProperties)
+    public function setHasProperties($hasProperties): self
     {
         $this->hasProperties = $hasProperties;
 
@@ -404,10 +384,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set viewProperties.
      *
      * @param bool $viewProperties
-     *
-     * @return CStudentPublication
      */
-    public function setViewProperties($viewProperties)
+    public function setViewProperties($viewProperties): self
     {
         $this->viewProperties = $viewProperties;
 
@@ -540,30 +518,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set session.
-     *
-     * @param Session $session
-     *
-     * @return CStudentPublication
-     */
-    public function setSession(Session $session = null)
-    {
-        $this->session = $session;
-
-        return $this;
-    }
-
-    /**
-     * Get session.
-     *
-     * @return Session
-     */
-    public function getSession()
-    {
-        return $this->session;
-    }
-
-    /**
      * Set userId.
      *
      * @param int $userId
@@ -591,10 +545,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set allowTextAssignment.
      *
      * @param int $allowTextAssignment
-     *
-     * @return CStudentPublication
      */
-    public function setAllowTextAssignment($allowTextAssignment)
+    public function setAllowTextAssignment($allowTextAssignment): self
     {
         $this->allowTextAssignment = $allowTextAssignment;
 
@@ -615,10 +567,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * Set containsFile.
      *
      * @param int $containsFile
-     *
-     * @return CStudentPublication
      */
-    public function setContainsFile($containsFile)
+    public function setContainsFile($containsFile): self
     {
         $this->containsFile = $containsFile;
 
@@ -678,6 +628,18 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         }
 
         return null;
+    }
+
+    public function getAssignment(): ?CStudentPublicationAssignment
+    {
+        return $this->assignment;
+    }
+
+    public function setAssignment(?CStudentPublicationAssignment $assignment): self
+    {
+        $this->assignment = $assignment;
+
+        return $this;
     }
 
     public function getResourceIdentifier(): int

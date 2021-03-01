@@ -253,7 +253,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $qb->from('Chamilo\CoreBundle\Entity\User', 'b');
 
         //@todo check app settings
-        $qb->orderBy('b.firstname ASC');
+        $qb->orderBy('b.firstname', 'ASC');
         $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
         $qb->setParameter('keyword', "%{$keyword}%");
         $query = $qb->getQuery();
@@ -299,7 +299,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ;
         }
 
-        $qb->orderBy('course.title DESC');
+        $qb->orderBy('course.title', 'DESC');
 
         $query = $qb->getQuery();
 

@@ -679,7 +679,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->lp;
     }
 
-    public function setLp(CLp $lp): self
+    public function setLp(?CLp $lp): self
     {
         $this->lp = $lp;
 

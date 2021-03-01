@@ -55,9 +55,10 @@ class CStudentPublicationAssignment
     protected bool $enableQualification;
 
     /**
-     * @ORM\Column(name="publication_id", type="integer", nullable=false)
+     * @ORM\OneToOne(targetEntity="CStudentPublication", inversedBy="assignment")
+     * @ORM\JoinColumn(name="publication_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $publicationId;
+    protected CStudentPublication $publication;
 
     public function __toString(): string
     {
@@ -73,10 +74,8 @@ class CStudentPublicationAssignment
      * Set expiresOn.
      *
      * @param DateTime $expiresOn
-     *
-     * @return CStudentPublicationAssignment
      */
-    public function setExpiresOn($expiresOn)
+    public function setExpiresOn($expiresOn): self
     {
         $this->expiresOn = $expiresOn;
 
@@ -97,10 +96,8 @@ class CStudentPublicationAssignment
      * Set endsOn.
      *
      * @param DateTime $endsOn
-     *
-     * @return CStudentPublicationAssignment
      */
-    public function setEndsOn($endsOn)
+    public function setEndsOn($endsOn): self
     {
         $this->endsOn = $endsOn;
 
@@ -121,10 +118,8 @@ class CStudentPublicationAssignment
      * Set addToCalendar.
      *
      * @param bool $addToCalendar
-     *
-     * @return CStudentPublicationAssignment
      */
-    public function setAddToCalendar($addToCalendar)
+    public function setAddToCalendar($addToCalendar): self
     {
         $this->addToCalendar = $addToCalendar;
 
@@ -145,10 +140,8 @@ class CStudentPublicationAssignment
      * Set enableQualification.
      *
      * @param bool $enableQualification
-     *
-     * @return CStudentPublicationAssignment
      */
-    public function setEnableQualification($enableQualification)
+    public function setEnableQualification($enableQualification): self
     {
         $this->enableQualification = $enableQualification;
 
@@ -163,30 +156,6 @@ class CStudentPublicationAssignment
     public function getEnableQualification()
     {
         return $this->enableQualification;
-    }
-
-    /**
-     * Set publicationId.
-     *
-     * @param int $publicationId
-     *
-     * @return CStudentPublicationAssignment
-     */
-    public function setPublicationId($publicationId)
-    {
-        $this->publicationId = $publicationId;
-
-        return $this;
-    }
-
-    /**
-     * Get publicationId.
-     *
-     * @return int
-     */
-    public function getPublicationId()
-    {
-        return $this->publicationId;
     }
 
     /**

@@ -117,9 +117,17 @@ class CSurveyQuestion
      */
     protected bool $isMandatory = false;
 
+    /**
+     * @var Collection|CSurveyAnswer[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question")
+     */
+    protected $answers;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->answers = new ArrayCollection();
         $this->surveyGroupPri = 0;
         $this->surveyGroupSec1 = 0;
         $this->surveyGroupSec2 = 0;

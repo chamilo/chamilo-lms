@@ -1853,6 +1853,7 @@ class MySpace
                     $price = $itemLp['price'];
                     $byCourse = $lpItem['course'];
                     $bySession = $lpItem['session'];
+                    $byCourseGroups = $lpItem['courseGroups'];
                     $csv_row = [];
                     $csv_row[] = $autor['complete_name'];
                     $csv_row[] = $title;
@@ -1860,48 +1861,79 @@ class MySpace
 
                     $studenRegister = count($byCourse);
                     $studenRegisterBySession = count($bySession);
+                    $studenGroupsRegister = count($byCourseGroups);
 
                     $studentsName = '';
-                    if ($studenRegister != 0 || $studenRegisterBySession != 0) {
+                    if (0 != $studenRegister ||
+                        0 != $studenRegisterBySession ||
+                        0 != $studenGroupsRegister) {
+
+                        $tableTemp2 = '';
+                        $studentProcessed = [];
+                        /* Student by course*/
+                        for ($i = 0; $i < count($byCourse); $i++) {
+                            $student = $byCourse[$i];
+                            $studentId = $student['id'];
+                            $lpItemIdStudent = $student['lp_item_id'];
+                            if (!isset($studentArray[$studentId])) {
+                                $studentArray[$studentId] = api_get_user_info($studentId);
+                            }
+                            $tempStudent = $studentArray[$studentId];
+                            $studentName = $tempStudent['complete_name'];
+                            $studentCompany = $student['company'];
+                            $type = isset($student['type']) ? $student['type'] : null;
+                            $studentProcessed[$lpItemIdStudent][$type][$studentId] =  $studentName .' ('.$studentCompany.') / ';
+                        }
+
+                        /* Student by course groups */
+                        for ($i = 0; $i < count($byCourseGroups); $i++) {
+                            $student = $byCourseGroups[$i];
+                            $studentId = $student['id'];
+                            $lpItemIdStudent = $student['lp_item_id'];
+                            if (!isset($studentArray[$studentId])) {
+                                $studentArray[$studentId] = api_get_user_info($studentId);
+                            }
+                            $tempStudent = $studentArray[$studentId];
+                            $studentName = $tempStudent['complete_name'];
+                            $studentCompany = $student['company'];
+                            $type = isset($student['type']) ? $student['type'] : null;
+                            $studentProcessed[$lpItemIdStudent][$type][$studentId] =   $studentName .' ('.$studentCompany.') / ';
+                        }
                         /* Student by session, keep it first */
                         for ($i = 0; $i < count($bySession); $i++) {
                             $student = $bySession[$i];
                             $studentId = $student['id'];
+                            $lpItemIdStudent = $student['lp_item_id'];
                             if (!isset($studentArray[$studentId])) {
                                 $studentArray[$studentId] = api_get_user_info($studentId);
                             }
                             $tempStudent = $studentArray[$studentId];
-                            $studentInSesion[$studentId] = 1;
-                            $studentsName .= $tempStudent['complete_name']." (".$student['company'].") / ";
-                            $totalStudent++;
+                            $type = isset($student['type']) ? $student['type'] : null;
+                            $studentName = $tempStudent['complete_name'];
+                            $studentCompany = $student['company'];
+                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName .' ('.$studentCompany.') / ';
+
                         }
-                        /* Student by course, keep it last */
-                        for ($i = 0; $i < count($byCourse); $i++) {
-                            $student = $byCourse[$i];
-                            $studentId = $student['id'];
-                            if (!isset($studentArray[$studentId])) {
-                                $studentArray[$studentId] = api_get_user_info($studentId);
+                        $index++;
+                        foreach ($studentProcessed as $lpItemId => $item) {
+                            foreach ($item as $type => $student) {
+                                foreach ($student as $userId => $text) {
+                                    if ('LearnpathSubscription' == $type) {
+                                        $studentsName .= $text;
+                                        $totalStudent++;
+                                    } else {
+                                        if (!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])) {
+                                            $studentsName .= $text;
+                                            $totalStudent++;
+                                        }
+                                    }
+
+                                }
                             }
-                            $tempStudent = $studentArray[$studentId];
-                            if (!isset($studentInSesion[$studentId])) {
-                                $studentsName .= $tempStudent['complete_name']." (".$student['company'].") / ";
-                                $totalStudent++;
-                            }
+
                         }
-                        /* Student by course groups, keep it last */
-                        for ($i = 0; $i < count($byCourseGroups); $i++) {
-                            $student = $byCourseGroups[$i];
-                            $studentId = $student['id'];
-                            if (!isset($studentArray[$studentId])) {
-                                $studentArray[$studentId] = api_get_user_info($studentId);
-                            }
-                            $tempStudent = $studentArray[$studentId];
-                            if (!isset($studentInSesion[$studentId])) {
-                                $studentsName .= $tempStudent['complete_name'].' ('.$student['company'].') / ';
-                                $totalStudent++;
-                            }
-                        }
-                    }
+
+                    }/********/
                     $csv_row[] = trim($studentsName, " / ");
                     $csv_content[] = $csv_row;
                 }

@@ -1955,13 +1955,20 @@ class PortfolioController
                 'placeholder' => get_lang('SearchStudent'),
             ]
         );
-        $frmStudentList->addHtml('<hr>');
-        $frmStudentList->addHtml(
-            Display::url(
+
+        if ($listByUser) {
+            $link = Display::url(
+                get_lang('BackToMainPortfolio'),
+                $this->baseUrl
+            );
+        } else {
+            $link = Display::url(
                 get_lang('SeeMyPortfolio'),
                 $this->baseUrl.http_build_query(['user' => api_get_user_id()])
-            )
-        );
+            );
+        }
+
+        $frmStudentList->addHtml($link);
 
         return $frmStudentList;
     }

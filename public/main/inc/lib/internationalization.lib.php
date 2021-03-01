@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Carbon\Carbon;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Westsworld\TimeAgo;
@@ -590,6 +591,9 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
     } else {
         $language = new Westsworld\TimeAgo\Translations\En();
     }
+
+    // Use carbon?
+    //Carbon::instance($this->getCreatedAt())->diffForHumans();
     $timeAgo = new TimeAgo($language);
     if (!($date instanceof DateTime)) {
         $date = api_get_utc_datetime($date, null, true);

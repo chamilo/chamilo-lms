@@ -197,10 +197,13 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                 break;
         }
 
+        $comments = getWorkComments($work);
         $commentForm = getWorkCommentForm($work, $folderData);
 
         $tpl = new Template();
         $tpl->assign('work', $work);
+        $tpl->assign('comments', $comments);
+
         $actions = '';
 
         if ($work->getContainsFile()) {

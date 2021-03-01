@@ -36,7 +36,6 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     {
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use League\Flysystem\FilesystemInterface;
@@ -106,7 +107,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
             ->innerJoin('node.resourceFile', 'file')
             ->innerJoin('node.resourceLinks', 'l')
             ->where('node.resourceType = :type')
-            ->setParameter('type', $type)
+            ->setParameter('type', $type, Types::STRING)
             ->andWhere('node.parent = :parentNode')
             ->setParameter('parentNode', $resourceNode)
             ->andWhere('file IS NOT NULL')

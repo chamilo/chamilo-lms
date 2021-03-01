@@ -69,7 +69,6 @@ use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -112,14 +111,6 @@ class Container
     public static function getEnvironment()
     {
         return self::$container->get('kernel')->getEnvironment();
-    }
-
-    /**
-     * @return RoleHierarchy
-     */
-    public static function getRoles()
-    {
-        return self::$container->get('security.role_hierarchy');
     }
 
     public static function getLogDir(): string

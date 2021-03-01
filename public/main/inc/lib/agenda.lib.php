@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -1575,8 +1576,8 @@ class Agenda
                     )
                 )
             )
-            ->setParameter('start', $start)
-            ->setParameter('end', $end);
+            ->setParameter('start', $start, Types::INTEGER)
+            ->setParameter('end', $end, Types::INTEGER);
         }
 
         /*

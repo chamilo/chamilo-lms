@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -149,7 +150,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
         $qb
             ->andWhere('node.title = :title')
-            ->setParameter('title', $title)
+            ->setParameter('title', $title, Types::STRING)
             ->setMaxResults(1)
         ;
 
@@ -380,7 +381,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->leftJoin('node.resourceFile', 'file')
 
             ->where('type.name = :type')
-            ->setParameter('type', $resourceTypeName)
+            ->setParameter('type', $resourceTypeName, Types::STRING)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
             ->addSelect('node')
@@ -397,13 +398,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
         // Do not show deleted resources.
         $qb
             ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED, Types::INTEGER)
         ;
 
         if (!$isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ;
             // @todo Add start/end visibility restrictions.
         }
@@ -460,7 +461,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
             ->where('type.name = :type')
-            ->setParameter('type', $resourceTypeName)
+            ->setParameter('type', $resourceTypeName, Types::STRING)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
         ;
@@ -470,13 +471,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
         // Do not show deleted resources
         $qb
             ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED, Types::INTEGER)
         ;
 
         if (!$isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ;
             // @todo Add start/end visibility restrictions
         }
@@ -547,7 +548,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
             ->where('type.name = :type')
-            ->setParameter('type', $resourceTypeName)
+            ->setParameter('type', $resourceTypeName, Types::STRING)
             ->andWhere('links.user = :user')
             ->setParameter('user', $user)
         ;

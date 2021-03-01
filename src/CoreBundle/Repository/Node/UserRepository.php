@@ -52,6 +52,7 @@ use Chamilo\CourseBundle\Entity\CWiki;
 use Datetime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -234,7 +235,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $qb->select('u')
             ->from($this->_entityName, 'u')
             ->where('u.roles LIKE :roles')
-            ->setParameter('roles', '%"'.$role.'"%')
+            ->setParameter('roles', '%"'.$role.'"%', Types::STRING)
         ;
 
         return $qb->getQuery()->getResult();
@@ -255,7 +256,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         //@todo check app settings
         $qb->orderBy('b.firstname', 'ASC');
         $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
-        $qb->setParameter('keyword', "%{$keyword}%");
+        $qb->setParameter('keyword', "%{$keyword}%", Types::STRING);
         $query = $qb->getQuery();
 
         return $query->execute();

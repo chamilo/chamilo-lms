@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Doctrine\DBAL\Types\Types;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 class BranchSyncRepository extends NestedTreeRepository
@@ -28,7 +29,7 @@ class BranchSyncRepository extends NestedTreeRepository
         //@todo check app settings
         $qb->addOrderBy('b.branchName ASC');
         $qb->where('b.branchName LIKE :keyword');
-        $qb->setParameter('keyword', "%{$keyword}%");
+        $qb->setParameter('keyword', "%{$keyword}%", Types::STRING);
         $q = $qb->getQuery();
 
         return $q->execute();

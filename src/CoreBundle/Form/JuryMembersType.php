@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -53,7 +54,7 @@ class JuryMembersType extends AbstractType
                     $form->add(
                         $factory->createNamed(
                             'user_id',
-                            'hidden',
+                            HiddenType::class,
                             $id,
                             [
                                 'auto_initialize' => false,

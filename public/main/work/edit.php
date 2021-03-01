@@ -16,8 +16,6 @@ if ($blockEdition && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-
-
 $this_section = SECTION_COURSES;
 
 $work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
@@ -62,7 +60,7 @@ $is_author = false;
 $repo = Container::getStudentPublicationRepository();
 /** @var CStudentPublication $studentPublication */
 $studentPublication = $repo->find($item_id);
-if (empty($studentPublication)) {
+if (null === $studentPublication) {
     api_not_allowed(true);
 }
 
@@ -85,7 +83,6 @@ if (!empty($my_folder_data)) {
 
     if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
         $time_now = time();
-
         if (!empty($homework['expires_on']) &&
             !empty($homework['expires_on'])
         ) {
@@ -112,6 +109,7 @@ if (!empty($my_folder_data)) {
         $expires_on = api_convert_and_format_date($homework['expires_on']);
     }
 }
+
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
@@ -145,21 +143,14 @@ $show_progress_bar = false;
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
 $form->addText('title', get_lang('Title'), true, ['id' => 'file_upload']);
-if ($is_allowed_to_edit && !empty($item_id)) {
-    $sql = "SELECT contains_file, url
-            FROM $work_table
-            WHERE c_id = $course_id AND iid ='$item_id' ";
-    $result = Database::query($sql);
-    if (false !== $result && Database::num_rows($result) > 0) {
-        $row = Database::fetch_array($result);
-        if ($row['contains_file'] || !empty($row['url'])) {
-            $form->addLabel(
-                get_lang('Download'),
-                '<a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
-                    Display::return_icon('save.png', get_lang('Save'), [], ICON_SIZE_MEDIUM).'
-                </a>'
-            );
-        }
+if ($is_allowed_to_edit) {
+    if ($studentPublication->getContainsFile()) {
+        $form->addLabel(
+            get_lang('Download'),
+            '<a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
+                Display::return_icon('save.png', get_lang('Save'), [], ICON_SIZE_MEDIUM).'
+            </a>'
+        );
     }
 }
 $form->addHtmlEditor(

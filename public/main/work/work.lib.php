@@ -2353,7 +2353,7 @@ function get_work_user_list(
                     ['class' => 'work-name']
                 );
                 // Title
-                $title = $studentPublication->getTitle();
+                $title = $assignment->getTitle();
                 $work['title_clean'] = $title;
                 $title = Security::remove_XSS($title);
                 if (strlen($title) > 30) {
@@ -3909,6 +3909,22 @@ function getWorkDescriptionToolbar()
     ];
 }
 
+function getWorkComments(CStudentPublication $work)
+{
+   $comments = $work->getComments();
+   $commentList = [];
+    if (!empty($comments)) {
+        foreach ($comments as $comment) {
+            //$userInfo = api_get_user_info($comment['user_id']);
+            //$comment['picture'] = $userInfo['avatar'];
+            //$comment['complete_name'] = $userInfo['complete_name_with_username'];
+            $commentList[] = getWorkComment($comment);
+        }
+    }
+
+    return $commentList;
+}
+
 /**
  * Get total score from a work list.
  *
@@ -4160,18 +4176,12 @@ function formatWorkScore($score, $weight)
             $finalScore,
             $label
         );
-    } else {
-        return $scoreBasedInModel;
     }
+
+    return $scoreBasedInModel;
 }
 
-/**
- * @param int   $id         comment id
- * @param array $courseInfo
- *
- * @return string
- */
-function getWorkComment($id, $courseInfo = [])
+function getWorkComment(CStudentPublicationComment $commentEntity, array $courseInfo = []): array
 {
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
@@ -4182,13 +4192,6 @@ function getWorkComment($id, $courseInfo = [])
     }
 
     $repo = Container::getStudentPublicationCommentRepository();
-    $criteria = [
-        'iid' => $id,
-        'cId' => $courseInfo['real_id'],
-    ];
-
-    /** @var CStudentPublicationComment $commentEntity */
-    $commentEntity = $repo->findOneBy($criteria);
 
     $comment = [];
     if ($commentEntity) {
@@ -4196,11 +4199,13 @@ function getWorkComment($id, $courseInfo = [])
         $fileUrl = null;
         $deleteUrl = null;
         $fileName = null;
+        $id = $commentEntity->getIid();
         if ($commentEntity->getResourceNode()->hasResourceFile()) {
             $fileUrl = $repo->getResourceFileDownloadUrl($commentEntity);
-            $workId = $commentEntity->getWorkId();
+            $workId = $commentEntity->getPublication()->getIid();
             $filePath = '';
-            $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
+            $deleteUrl = api_get_path(WEB_CODE_PATH).
+                'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
             $fileName = $commentEntity->getResourceNode()->getResourceFile()->getName();
         }
         $comment['comment'] = $commentEntity->getComment();
@@ -6089,7 +6094,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
 
     $isAllow = allowOnlySubscribedUser(
         api_get_user_id(),
-        $studentPublication->getParentId(),
+        $studentPublication->getPublicationParent()->getIid(),
         $courseInfo['real_id'],
         $forceAccessForCourseAdmins
     );
@@ -6306,9 +6311,7 @@ function exportAllStudentWorkFromPublication(
                         $score = $work['qualification_only'];
                     }
 
-                    throw new Exception('work comments');
-                    //$comments = getWorkComments($work);
-                    $comments = null;
+                    $comments = getWorkComments($work);
                     $feedback = null;
                     if (!empty($comments)) {
                         $content .= '<h4>'.get_lang('Feedback').': </h4>';

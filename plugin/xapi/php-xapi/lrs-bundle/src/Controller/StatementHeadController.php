@@ -23,6 +23,6 @@ class StatementHeadController extends StatementGetController
      */
     public function getStatement(Request $request)
     {
-        parent::getStatement($request)->setContent('');
+        return parent::getStatement($request)->setContent('');
     }
 }

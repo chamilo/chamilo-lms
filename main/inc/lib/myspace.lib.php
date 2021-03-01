@@ -1672,7 +1672,7 @@ class MySpace
                                 if (!isset($studentArray[$studentId])) {
                                     $studentArray[$studentId] = api_get_user_info($studentId);
                                 }
-                                $sessionStudentLp = isset($student['session_id']) ? (int)$student['session_id'] : 0;
+                                $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
                                 $tempStudent = $studentArray[$studentId];
                                 $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];

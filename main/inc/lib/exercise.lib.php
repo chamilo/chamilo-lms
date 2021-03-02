@@ -2087,7 +2087,7 @@ HOTSPOT;
      * @param array  $userExtraFieldsToAdd
      * @param bool   $useCommaAsDecimalPoint
      * @param bool   $roundValues
-     * @param bool   $getOnyIds
+     * @param bool   $getOnlyIds
      *
      * @return array
      */
@@ -2105,7 +2105,7 @@ HOTSPOT;
         $userExtraFieldsToAdd = [],
         $useCommaAsDecimalPoint = false,
         $roundValues = false,
-        $getOnyIds = false
+        $getOnlyIds = false
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2386,7 +2386,7 @@ HOTSPOT;
                 $sql .= " ORDER BY $column $direction ";
             }
 
-            if (!$getOnyIds) {
+            if (!$getOnlyIds) {
                 $sql .= " LIMIT $from, $number_of_items";
             }
 

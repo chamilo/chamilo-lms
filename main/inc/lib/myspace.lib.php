@@ -1942,12 +1942,11 @@ class MySpace
         $extraWhere = null
     ) {
         $data = [];
-        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $tblSessionRelCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
 
         if (!empty($startDate)) {
             $startDate = new DateTime($startDate);
@@ -1981,12 +1980,15 @@ class MySpace
             lp_table_item.iid AS lp_item_id,
             track_default.default_value as id,
             sesion_r_c_u.session_id as session_id,
+            u.username as username,
+            track_default.default_date as default_date,
             track_default.default_event_type as type
         FROM
              $tblTrackDefault as track_default
         INNER JOIN $tblSessionRelCourseUser as sesion_r_c_u on (track_default.default_value = sesion_r_c_u.user_id )
         INNER JOIN $tblLp AS lp_table on (lp_table.c_id = sesion_r_c_u.c_id)
         INNER JOIN $tblLpItem AS lp_table_item on (lp_table_item.c_id = sesion_r_c_u.c_id and lp_table.id = lp_table_item.lp_id )
+        INNER JOIN $tblUser AS u ON ( u.id = sesion_r_c_u.user_id )
         WHERE
             track_default.default_event_type = 'session_add_user_course'
             AND track_default.default_date >= '$startDate'
@@ -4391,6 +4393,7 @@ class MySpace
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblGroupToUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
         $whereCondition = '';
         //Validating dates
         if (!empty($startDate)) {
@@ -4436,6 +4439,8 @@ class MySpace
                     lp_table_item.iid AS lp_item_id,
                     item_property.session_id as session_id,
                     item_property.lastedit_type as type,
+                    u.username as username,
+                    item_property.lastedit_date as lastedit_date,
   ";
             if ($withGroups) {
                 $query .= '
@@ -4453,6 +4458,11 @@ class MySpace
             if ($withGroups) {
                 $query .= "
                 INNER JOIN $tblGroupToUser AS user_to_group on (user_to_group.id = item_property.to_group_id )
+                INNER JOIN $tblUser AS u ON ( u.id = user_to_group.user_id )
+                ";
+            }else{
+                $query .= "
+                INNER JOIN $tblUser AS u ON ( u.id = item_property.to_user_id )
                 ";
             }
             $query .= "

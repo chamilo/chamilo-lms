@@ -1966,8 +1966,8 @@ class MySpace
                 unset($dateTemp);
             }
         }
-         //$startDate = $startDate->format('Y-m-d H:i:s');
-         //$endDate = $endDate->format('Y-m-d H:i:s');
+        //$startDate = $startDate->format('Y-m-d H:i:s');
+        //$endDate = $endDate->format('Y-m-d H:i:s');
         $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
         $endDate = api_get_utc_datetime($endDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
         $extra = '';
@@ -4462,7 +4462,7 @@ class MySpace
                 INNER JOIN $tblGroupToUser AS user_to_group on (user_to_group.id = item_property.to_group_id )
                 INNER JOIN $tblUser AS u ON ( u.id = user_to_group.user_id )
                 ";
-            }else{
+            } else {
                 $query .= "
                 INNER JOIN $tblUser AS u ON ( u.id = item_property.to_user_id )
                 ";

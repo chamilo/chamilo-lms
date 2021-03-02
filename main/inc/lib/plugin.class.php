@@ -330,9 +330,9 @@ class Plugin
     /**
      * Returns the value of a given plugin global setting.
      *
-     * @param string $name of the plugin
+     * @param string $name of the plugin setting
      *
-     * @return string Value of the plugin
+     * @return string Value of the plugin setting
      */
     public function get($name)
     {

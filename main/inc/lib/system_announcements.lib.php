@@ -826,7 +826,6 @@ class SystemAnnouncementManager
      * Returns the group announcements where the user is subscribed.
      *
      * @param int $userId
-     *
      */
     public static function getAnnouncementsForGroups($userId = 0)
     {
@@ -888,7 +887,7 @@ class SystemAnnouncementManager
         $sql .= self::getVisibilityCondition($visible);
 
         if (isset($id) && !empty($id)) {
-            $id = (int)$id;
+            $id = (int) $id;
             $sql .= " AND id = $id ";
         }
 
@@ -1013,7 +1012,7 @@ class SystemAnnouncementManager
         $selectedUserLanguage = Database::escape_string(api_get_interface_language());
         $announcementTable = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $now = api_get_utc_datetime();
-        $announcementId = (int)$announcementId;
+        $announcementId = (int) $announcementId;
 
         $whereConditions = [
             "(lang = ? OR lang IS NULL OR lang = '') " => $selectedUserLanguage,

@@ -44,6 +44,7 @@ if (!in_array(
     $action,
     [
         'get_exercise_results',
+        'get_exercise_pending_results',
         'get_exercise_results_report',
         'get_work_student_list_overview',
         'get_hotpotatoes_exercise_results',
@@ -630,6 +631,52 @@ switch ($action) {
             null,
             true
         );
+        break;
+    case 'get_exercise_pending_results':
+        if (false === api_is_teacher()) {
+            exit;
+        }
+
+        $courseId = $_REQUEST['course_id'] ?? 0;
+        $exerciseId = $_REQUEST['exercise_id'] ?? 0;
+        $status = $_REQUEST['status'] ?? 0;
+        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
+            $filter_user = (int) $_GET['filter_by_user'];
+            if (empty($whereCondition)) {
+                $whereCondition .= " te.exe_user_id  = '$filter_user'";
+            } else {
+                $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            }
+        }
+
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+            $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
+            if (!empty($groupIdFromToolbar)) {
+                if (empty($whereCondition)) {
+                    $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
+                } else {
+                    $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+                }
+            }
+        }
+
+        if (!empty($whereCondition)) {
+            $whereCondition = " AND $whereCondition";
+        }
+
+        if (!empty($courseId)) {
+            $whereCondition .= " AND te.c_id = $courseId";
+        }
+
+        $count = ExerciseLib::get_count_exam_results(
+            $exerciseId,
+            $whereCondition,
+            '',
+            false,
+            true,
+            $status
+        );
+
         break;
     case 'get_exercise_results':
         $exercise_id = $_REQUEST['exerciseId'];
@@ -1491,6 +1538,46 @@ switch ($action) {
                 $whereCondition
             );
         }
+        break;
+    case 'get_exercise_pending_results':
+        $columns = [
+            'course',
+            'exercise',
+            'firstname',
+            'lastname',
+            'username',
+            'exe_duration',
+            'start_date',
+            'exe_date',
+            'score',
+            'user_ip',
+            'status',
+            'actions',
+        ];
+        $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
+        if ($officialCodeInList === 'true') {
+            $columns = array_merge(['official_code'], $columns);
+        }
+
+        $result = ExerciseLib::get_exam_results_data(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $exerciseId,
+            $whereCondition,
+            false,
+            null,
+            false,
+            false,
+            [],
+            false,
+            false,
+            false,
+            true,
+            $status
+        );
+
         break;
     case 'get_exercise_results':
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
@@ -2510,6 +2597,7 @@ $allowed_actions = [
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',
+    'get_exercise_pending_results',
     'get_exercise_results_report',
     'get_work_student_list_overview',
     'get_hotpotatoes_exercise_results',

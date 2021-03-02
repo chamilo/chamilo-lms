@@ -981,7 +981,7 @@ class ExerciseLib
                             }
                         }
 
-                        list($answer) = explode('@@', $answer);
+                        [$answer] = explode('@@', $answer);
                         // $correctAnswerList array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
                         api_preg_match_all(
                             '/\[[^]]+\]/',
@@ -1909,11 +1909,19 @@ HOTSPOT;
      * @param array  $conditions
      * @param string $courseCode
      * @param bool   $showSession
+     * @param bool   $searchAllTeacherCourses
+     * @param int    $status
      *
      * @return array
      */
-    public static function get_count_exam_results($exerciseId, $conditions, $courseCode = '', $showSession = false)
-    {
+    public static function get_count_exam_results(
+        $exerciseId,
+        $conditions,
+        $courseCode = '',
+        $showSession = false,
+        $searchAllTeacherCourses = false,
+        $status = 0
+    ) {
         return self::get_exam_results_data(
             null,
             null,
@@ -1923,7 +1931,14 @@ HOTSPOT;
             $conditions,
             true,
             $courseCode,
-            $showSession
+            $showSession,
+            false,
+            [],
+            false,
+            false,
+            false,
+            $searchAllTeacherCourses,
+            $status
         );
     }
 
@@ -2087,7 +2102,7 @@ HOTSPOT;
      * @param array  $userExtraFieldsToAdd
      * @param bool   $useCommaAsDecimalPoint
      * @param bool   $roundValues
-     * @param bool   $getOnyIds
+     * @param bool   $getOnlyIds
      *
      * @return array
      */
@@ -2105,21 +2120,21 @@ HOTSPOT;
         $userExtraFieldsToAdd = [],
         $useCommaAsDecimalPoint = false,
         $roundValues = false,
-        $getOnyIds = false
+        $getOnlyIds = false,
+        $searchAllTeacherCourses = false,
+        $status = 0
     ) {
         //@todo replace all this globals
         global $filter;
         $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
         $courseInfo = api_get_course_info($courseCode);
-
-        if (empty($courseInfo)) {
-            return [];
-        }
-
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $course_id = $courseInfo['real_id'];
+        $documentPath = '';
         $sessionId = api_get_session_id();
-        $exercise_id = (int) $exercise_id;
+        $courseId = 0;
+        if (!empty($courseInfo)) {
+            $courseId = $courseInfo['real_id'];
+            $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+        }
 
         $is_allowedToEdit =
             api_is_allowed_to_edit(null, true) ||
@@ -2127,6 +2142,41 @@ HOTSPOT;
             api_is_drh() ||
             api_is_student_boss() ||
             api_is_session_admin();
+
+        $courseCondition = "c_id = $courseId";
+        $statusCondition = '';
+
+        if (!empty($status)) {
+            switch ($status) {
+                case 2:
+                    // validated
+                    $statusCondition = ' AND revised = 1 ';
+                    break;
+                case 3:
+                    // not validated
+                    $statusCondition = ' AND revised = 0 ';
+                    break;
+            }
+        }
+
+        if (false === $searchAllTeacherCourses) {
+            if (empty($courseInfo)) {
+                return [];
+            }
+        } else {
+            $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false, false, false);
+
+            if (empty($courses)) {
+                return [];
+            }
+
+            $courses = array_column($courses, 'real_id');
+            $is_allowedToEdit = true;
+            $courseCondition = "c_id IN ('".implode("', '", $courses)."') ";
+        }
+
+        $exercise_id = (int) $exercise_id;
+
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
@@ -2142,6 +2192,11 @@ HOTSPOT;
             $sessionCondition = " AND ttte.session_id = $sessionId";
         }
 
+        if ($searchAllTeacherCourses) {
+            $session_id_and = " AND te.session_id = 0 ";
+            $sessionCondition = " AND ttte.session_id = 0";
+        }
+
         if (empty($sessionId) &&
             api_get_configuration_value('show_exercise_session_attempts_in_base_course')
         ) {
@@ -2150,8 +2205,10 @@ HOTSPOT;
         }
 
         $exercise_where = '';
+        $exerciseFilter = '';
         if (!empty($exercise_id)) {
             $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.' ';
+            $exerciseFilter = " AND exe_exo_id = $exercise_id ";
         }
 
         $hotpotatoe_where = '';
@@ -2168,8 +2225,8 @@ HOTSPOT;
             LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
             ON (ttte.exe_id = tr.exe_id)
             WHERE
-                c_id = $course_id AND
-                exe_exo_id = $exercise_id
+                $courseCondition
+                $exerciseFilter
                 $sessionCondition
         )";
 
@@ -2191,9 +2248,9 @@ HOTSPOT;
                         g.id as group_id
                     FROM $TBL_USER u
                     INNER JOIN $TBL_GROUP_REL_USER gru
-                    ON (gru.user_id = u.user_id AND gru.c_id= $course_id )
+                    ON (gru.user_id = u.user_id AND gru.c_id= $courseId )
                     INNER JOIN $TBL_GROUP g
-                    ON (gru.group_id = g.id AND g.c_id= $course_id )
+                    ON (gru.group_id = g.id AND g.c_id= $courseId )
                 )";
             }
 
@@ -2254,9 +2311,9 @@ HOTSPOT;
                     g.id as group_id
                 FROM $TBL_USER u
                 LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
-                ON ( gru.user_id = u.user_id AND gru.c_id= $course_id )
+                ON ( gru.user_id = u.user_id AND gru.c_id = $courseId )
                 LEFT OUTER JOIN $TBL_GROUP g
-                ON (gru.group_id = g.id AND g.c_id = $course_id )
+                ON (gru.group_id = g.id AND g.c_id = $courseId )
             )";
             }
 
@@ -2272,8 +2329,13 @@ HOTSPOT;
             )";
             }
 
-            $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
-            $sqlWhereOption = "  AND gru.c_id = $course_id AND gru.user_id = user.user_id ";
+            $sqlFromOption = '';
+            $sqlWhereOption = '';
+            if (false === $searchAllTeacherCourses) {
+                $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
+                $sqlWhereOption = "  AND gru.c_id = $courseId AND gru.user_id = user.user_id ";
+            }
+
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
@@ -2289,6 +2351,7 @@ HOTSPOT;
                     te.exe_weighting,
                     te.exe_date,
                     te.exe_id,
+                    te.c_id,
                     te.session_id,
                     email as exemail,
                     te.start_date,
@@ -2312,11 +2375,13 @@ HOTSPOT;
                 INNER JOIN $sql_inner_join_tbl_user AS user
                 ON (user.user_id = exe_user_id)
                 WHERE
-                    te.c_id = $course_id $session_id_and AND
+                    te.$courseCondition
+                    $session_id_and AND
                     ce.active <> -1 AND
-                    ce.c_id = $course_id
+                    ce.$courseCondition
                     $exercise_where
                     $extra_where_conditions
+                    $statusCondition
                 ";
 
             // sql for hotpotatoes tests for teacher / tutor view
@@ -2339,11 +2404,11 @@ HOTSPOT;
                     $TBL_USER user
                     $sqlFromOption
                 WHERE
-                    user.user_id=tth.exe_user_id
-                    AND tth.c_id = $course_id
+                    user.user_id=tth.exe_user_id AND
+                    tth.$courseCondition
                     $hotpotatoe_where
-                    $sqlWhereOption
-                    AND user.status NOT IN (".api_get_users_status_ignored_in_reports('string').")
+                    $sqlWhereOption AND
+                     user.status NOT IN (".api_get_users_status_ignored_in_reports('string').")
                 ORDER BY tth.c_id ASC, tth.exe_date DESC ";
         }
 
@@ -2358,11 +2423,13 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
         $teacher_id_list = [];
-        if (!empty($teacher_list)) {
-            foreach ($teacher_list as $teacher) {
-                $teacher_id_list[] = $teacher['user_id'];
+        if (!empty($courseCode)) {
+            $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
+            if (!empty($teacher_list)) {
+                foreach ($teacher_list as $teacher) {
+                    $teacher_id_list[] = $teacher['user_id'];
+                }
             }
         }
 
@@ -2386,27 +2453,32 @@ HOTSPOT;
                 $sql .= " ORDER BY $column $direction ";
             }
 
-            if (!$getOnyIds) {
+            if (!$getOnlyIds) {
                 $sql .= " LIMIT $from, $number_of_items";
             }
 
             $results = [];
+            error_log($sql);
             $resx = Database::query($sql);
             while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
                 $results[] = $rowx;
             }
 
-            $group_list = GroupManager::get_group_list(null, $courseInfo);
             $clean_group_list = [];
-            if (!empty($group_list)) {
-                foreach ($group_list as $group) {
-                    $clean_group_list[$group['id']] = $group['name'];
-                }
-            }
+            $lp_list = [];
 
-            $lp_list_obj = new LearnpathList(api_get_user_id());
-            $lp_list = $lp_list_obj->get_flat_list();
-            $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+            if (!empty($courseInfo)) {
+                $group_list = GroupManager::get_group_list(null, $courseInfo);
+                if (!empty($group_list)) {
+                    foreach ($group_list as $group) {
+                        $clean_group_list[$group['id']] = $group['name'];
+                    }
+                }
+
+                $lp_list_obj = new LearnpathList(api_get_user_id());
+                $lp_list = $lp_list_obj->get_flat_list();
+                $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+            }
 
             if (is_array($results)) {
                 $users_array_id = [];
@@ -2417,18 +2489,31 @@ HOTSPOT;
                 $sizeof = count($results);
                 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
                 $timeNow = strtotime(api_get_utc_datetime());
+                $courseItemList = [];
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
-                    $revised = $results[$i]['revised'];
-                    $attemptSessionId = (int) $results[$i]['session_id'];
-                    $cidReq = api_get_cidreq(false).'&id_session='.$attemptSessionId;
+                    $attempt = $results[$i];
+                    $revised = $attempt['revised'];
+                    $attemptSessionId = (int) $attempt['session_id'];
+                    if (false === $searchAllTeacherCourses) {
+                        $courseItemInfo = api_get_course_info();
+                        $cidReq = api_get_cidreq(false).'&id_session='.$attemptSessionId;
+                    } else {
+                        if (isset($courseItemList[$attempt['c_id']])) {
+                            $courseItemInfo = $courseItemList[$attempt['c_id']];
+                        } else {
+                            $courseItemInfo = api_get_course_info_by_id($attempt['c_id']);
+                            $courseItemList[$attempt['c_id']] = $courseItemInfo;
+                        }
+                        $cidReq = 'cidReq='.$courseItemInfo['code'].'&id_session='.$attemptSessionId;
+                    }
 
-                    if ('incomplete' === $results[$i]['completion_status']) {
+                    if ('incomplete' === $attempt['completion_status']) {
                         // If the exercise was incomplete, we need to determine
                         // if it is still into the time allowed, or if its
                         // allowed time has expired and it can be closed
                         // (it's "unclosed")
-                        $minutes = $results[$i]['expired_time'];
+                        $minutes = $attempt['expired_time'];
                         if ($minutes == 0) {
                             // There's no time limit, so obviously the attempt
                             // can still be "ongoing", but the teacher should
@@ -2437,32 +2522,31 @@ HOTSPOT;
                             $revised = 2;
                         } else {
                             $allowedSeconds = $minutes * 60;
-                            $timeAttemptStarted = strtotime($results[$i]['start_date']);
+                            $timeAttemptStarted = strtotime($attempt['start_date']);
                             $secondsSinceStart = $timeNow - $timeAttemptStarted;
+                            $revised = 3; // mark as "ongoing"
                             if ($secondsSinceStart > $allowedSeconds) {
                                 $revised = 2; // mark as "unclosed"
-                            } else {
-                                $revised = 3; // mark as "ongoing"
                             }
                         }
                     }
 
                     if ($from_gradebook && ($is_allowedToEdit)) {
                         if (in_array(
-                            $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'],
+                            $attempt['username'].$attempt['firstname'].$attempt['lastname'],
                             $users_array_id
                         )) {
                             continue;
                         }
-                        $users_array_id[] = $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'];
+                        $users_array_id[] = $attempt['username'].$attempt['firstname'].$attempt['lastname'];
                     }
 
-                    $lp_obj = isset($results[$i]['orig_lp_id']) &&
-                        isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
+                    $lp_obj = isset($attempt['orig_lp_id']) &&
+                        isset($lp_list[$attempt['orig_lp_id']]) ? $lp_list[$attempt['orig_lp_id']] : null;
                     if (empty($lp_obj)) {
                         // Try to get the old id (id instead of iid)
-                        $lpNewId = isset($results[$i]['orig_lp_id']) &&
-                        isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
+                        $lpNewId = isset($attempt['orig_lp_id']) &&
+                        isset($oldIds[$attempt['orig_lp_id']]) ? $oldIds[$attempt['orig_lp_id']] : null;
                         if ($lpNewId) {
                             $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
                         }
@@ -2470,7 +2554,7 @@ HOTSPOT;
                     $lp_name = null;
                     if ($lp_obj) {
                         $url = api_get_path(WEB_CODE_PATH).
-                            'lp/lp_controller.php?'.$cidReq.'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                            'lp/lp_controller.php?'.$cidReq.'&action=view&lp_id='.$attempt['orig_lp_id'];
                         $lp_name = Display::url(
                             $lp_obj['lp_name'],
                             $url,
@@ -2483,7 +2567,7 @@ HOTSPOT;
                     if ($is_empty_sql_inner_join_tbl_user) {
                         $group_list = GroupManager::get_group_ids(
                             api_get_course_int_id(),
-                            $results[$i]['user_id']
+                            $attempt['user_id']
                         );
 
                         foreach ($group_list as $id) {
@@ -2491,25 +2575,25 @@ HOTSPOT;
                                 $group_name_list .= $clean_group_list[$id].'<br/>';
                             }
                         }
-                        $results[$i]['group_name'] = $group_name_list;
+                        $attempt['group_name'] = $group_name_list;
                     }
 
-                    $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-                    $id = $results[$i]['exe_id'];
-                    $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
+                    $attempt['exe_duration'] = !empty($attempt['exe_duration']) ? round($attempt['exe_duration'] / 60) : 0;
+                    $id = $attempt['exe_id'];
+                    $dt = api_convert_and_format_date($attempt['exe_weighting']);
 
                     // we filter the results if we have the permission to
                     $result_disabled = 0;
-                    if (isset($results[$i]['results_disabled'])) {
-                        $result_disabled = (int) $results[$i]['results_disabled'];
+                    if (isset($attempt['results_disabled'])) {
+                        $result_disabled = (int) $attempt['results_disabled'];
                     }
                     if ($result_disabled == 0) {
-                        $my_res = $results[$i]['exe_result'];
-                        $my_total = $results[$i]['exe_weighting'];
-                        $results[$i]['start_date'] = api_get_local_time($results[$i]['start_date']);
-                        $results[$i]['exe_date'] = api_get_local_time($results[$i]['exe_date']);
+                        $my_res = $attempt['exe_result'];
+                        $my_total = $attempt['exe_weighting'];
+                        $attempt['start_date'] = api_get_local_time($attempt['start_date']);
+                        $attempt['exe_date'] = api_get_local_time($attempt['exe_date']);
 
-                        if (!$results[$i]['propagate_neg'] && $my_res < 0) {
+                        if (!$attempt['propagate_neg'] && $my_res < 0) {
                             $my_res = 0;
                         }
 
@@ -2529,7 +2613,7 @@ HOTSPOT;
                         if ($is_allowedToEdit) {
                             if (isset($teacher_id_list)) {
                                 if (in_array(
-                                    $results[$i]['exe_user_id'],
+                                    $attempt['exe_user_id'],
                                     $teacher_id_list
                                 )) {
                                     $actions .= Display::return_icon('teacher.png', get_lang('Teacher'));
@@ -2607,7 +2691,7 @@ HOTSPOT;
                             // Admin can always delete the attempt
                             if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                                 $ip = Tracking::get_ip_from_user_event(
-                                    $results[$i]['exe_user_id'],
+                                    $attempt['exe_user_id'],
                                     api_get_utc_datetime(),
                                     false
                                 );
@@ -2620,14 +2704,14 @@ HOTSPOT;
                                     http_build_query([
                                         'id' => $id,
                                         'exercise' => $exercise_id,
-                                        'user' => $results[$i]['exe_user_id'],
+                                        'user' => $attempt['exe_user_id'],
                                     ]);
                                 $actions .= Display::url(
                                     Display::return_icon('reload.png', get_lang('RecalculateResults')),
                                     $recalculateUrl,
                                     [
                                         'data-exercise' => $exercise_id,
-                                        'data-user' => $results[$i]['exe_user_id'],
+                                        'data-user' => $attempt['exe_user_id'],
                                         'data-id' => $id,
                                         'class' => 'exercise-recalculate',
                                     ]
@@ -2638,7 +2722,7 @@ HOTSPOT;
                                     href="exercise_report.php?'.$cidReq.'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                     onclick="javascript:if(!confirm(\''.sprintf(
                                         addslashes(get_lang('DeleteAttempt')),
-                                        $results[$i]['username'],
+                                        $attempt['username'],
                                         $dt
                                     ).'\')) return false;">';
                                 $delete_link .= Display::return_icon(
@@ -2658,7 +2742,7 @@ HOTSPOT;
                                 $actions .= $delete_link;
                             }
                         } else {
-                            $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.$cidReq.'&id='.$results[$i]['exe_id'];
+                            $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.$cidReq.'&id='.$attempt['exe_id'];
                             $attempt_link = Display::url(
                                 get_lang('Show'),
                                 $attempt_url,
@@ -2675,17 +2759,17 @@ HOTSPOT;
                             foreach ($userExtraFieldsToAdd as $variable) {
                                 $extraFieldValue = new ExtraFieldValue('user');
                                 $values = $extraFieldValue->get_values_by_handler_and_field_variable(
-                                    $results[$i]['user_id'],
+                                    $attempt['user_id'],
                                     $variable
                                 );
                                 if (isset($values['value'])) {
-                                    $results[$i][$variable] = $values['value'];
+                                    $attempt[$variable] = $values['value'];
                                 }
                             }
                         }
 
-                        $exeId = $results[$i]['exe_id'];
-                        $results[$i]['id'] = $exeId;
+                        $exeId = $attempt['exe_id'];
+                        $attempt['id'] = $exeId;
                         $category_list = [];
                         if ($is_allowedToEdit) {
                             $sessionName = '';
@@ -2698,7 +2782,14 @@ HOTSPOT;
                                 }
                             }
 
-                            $objExercise = new Exercise($course_id);
+                            $courseId = $courseItemInfo['real_id'];
+
+                            if ($searchAllTeacherCourses) {
+                                $attempt['course'] = $courseItemInfo['title'];
+                                $attempt['exercise'] = $attempt['title'];
+                            }
+
+                            $objExercise = new Exercise($courseId);
                             if ($showExerciseCategories) {
                                 // Getting attempt info
                                 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
@@ -2779,8 +2870,8 @@ HOTSPOT;
                                     $thousandSeparator,
                                     $roundValues
                                 );
-                                $results[$i]['category_'.$categoryId] = $scoreToDisplay;
-                                $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
+                                $attempt['category_'.$categoryId] = $scoreToDisplay;
+                                $attempt['category_'.$categoryId.'_score_percentage'] = self::show_score(
                                     $result['score'],
                                     $result['total'],
                                     true,
@@ -2791,14 +2882,14 @@ HOTSPOT;
                                     $thousandSeparator,
                                     $roundValues
                                 );
-                                $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
-                                $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
+                                $attempt['category_'.$categoryId.'_only_score'] = $result['score'];
+                                $attempt['category_'.$categoryId.'_total'] = $result['total'];
                             }
-                            $results[$i]['session'] = $sessionName;
-                            $results[$i]['session_access_start_date'] = $sessionStartAccessDate;
-                            $results[$i]['status'] = $revisedLabel;
-                            $results[$i]['score'] = $score;
-                            $results[$i]['score_percentage'] = self::show_score(
+                            $attempt['session'] = $sessionName;
+                            $attempt['session_access_start_date'] = $sessionStartAccessDate;
+                            $attempt['status'] = $revisedLabel;
+                            $attempt['score'] = $score;
+                            $attempt['score_percentage'] = self::show_score(
                                 $my_res,
                                 $my_total,
                                 true,
@@ -2827,7 +2918,7 @@ HOTSPOT;
                                 );
                             }
 
-                            $results[$i]['only_score'] = $onlyScore;
+                            $attempt['only_score'] = $onlyScore;
 
                             if ($roundValues) {
                                 $whole = floor($my_total); // 1
@@ -2845,15 +2936,15 @@ HOTSPOT;
                                     $thousandSeparator
                                 );
                             }
-                            $results[$i]['total'] = $onlyTotal;
-                            $results[$i]['lp'] = $lp_name;
-                            $results[$i]['actions'] = $actions;
-                            $listInfo[] = $results[$i];
+                            $attempt['total'] = $onlyTotal;
+                            $attempt['lp'] = $lp_name;
+                            $attempt['actions'] = $actions;
+                            $listInfo[] = $attempt;
                         } else {
-                            $results[$i]['status'] = $revisedLabel;
-                            $results[$i]['score'] = $score;
-                            $results[$i]['actions'] = $actions;
-                            $listInfo[] = $results[$i];
+                            $attempt['status'] = $revisedLabel;
+                            $attempt['score'] = $score;
+                            $attempt['actions'] = $actions;
+                            $listInfo[] = $attempt;
                         }
                     }
                 }

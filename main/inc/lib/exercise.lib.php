@@ -2163,7 +2163,6 @@ HOTSPOT;
             if (empty($courseInfo)) {
                 return [];
             }
-
         } else {
             $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false, false, false);
 

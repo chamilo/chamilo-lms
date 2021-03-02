@@ -291,7 +291,7 @@ $column_model = [
         'width' => '40',
         'align' => 'left',
         'search' => 'false',
-        'sortable' => 'false'
+        'sortable' => 'false',
         //'stype' => 'select',
         //for the bottom bar
         /*'searchoptions' => [
@@ -374,7 +374,7 @@ $gridJs = Display::grid_js(
                         text: exercise.text
                     }).appendTo($selectExercise);
                 });
-                $selectExercise.find("option[value=\'<?php echo $exerciseId ?>\']").attr("selected",true);
+                $selectExercise.find("option[value=\'<?php echo $exerciseId; ?>\']").attr("selected",true);
             }
             $selectExercise.selectpicker("refresh");
         }, "json");

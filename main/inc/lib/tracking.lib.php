@@ -157,21 +157,7 @@ class Tracking
         }
 
         $hideTime = api_get_configuration_value('hide_lp_time');
-        $allowNewTracking = api_get_configuration_value('use_new_tracking_in_lp_item');
         $lp_id = (int) $lp_id;
-
-        if ($allowNewTracking) {
-            $extraField = new ExtraFieldValue('lp');
-            $result = $extraField->get_values_by_handler_and_field_variable($lp_id, 'track_lp_item');
-            if (empty($result)) {
-                $allowNewTracking = false;
-            } else {
-                if (isset($result['value']) && $result['value'] == 1) {
-                    $allowNewTracking = true;
-                }
-            }
-        }
-
         $lp_item_id = (int) $lp_item_id;
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
@@ -383,7 +369,7 @@ class Tracking
                 $time_for_total = 0;
                 $attemptResult = 0;
 
-                if ($allowNewTracking && $timeCourse) {
+                if ($timeCourse) {
                     if (isset($timeCourse['learnpath_detailed']) &&
                         isset($timeCourse['learnpath_detailed'][$lp_id]) &&
                         isset($timeCourse['learnpath_detailed'][$lp_id][$my_item_id])
@@ -476,7 +462,7 @@ class Tracking
                         $extend_attempt_link = '';
                         $extend_this_attempt = 0;
 
-                        if ($allowNewTracking && $timeCourse) {
+                        if ($timeCourse) {
                             //$attemptResult = 0;
                             if (isset($timeCourse['learnpath_detailed']) &&
                                 isset($timeCourse['learnpath_detailed'][$lp_id]) &&
@@ -534,17 +520,14 @@ class Tracking
                         $attemptTime = $row['mytime'];
 
                         if ($minimumAvailable) {
-                            $lp_time = $timeCourse[TOOL_LEARNPATH];
+                            /*$lp_time = $timeCourse[TOOL_LEARNPATH];
                             $lpTime = null;
                             if (isset($lp_time[$lp_id])) {
                                 $lpTime = (int) $lp_time[$lp_id];
                             }
-                            $time_for_total = $lpTime;
-
-                            if ($allowNewTracking) {
-                                $time_for_total = (int) $attemptResult;
-                                $attemptTime = (int) $attemptResult;
-                            }
+                            $time_for_total = $lpTime;*/
+                            $time_for_total = (int) $attemptResult;
+                            $attemptTime = (int) $attemptResult;
                         }
 
                         $time = learnpathItem::getScormTimeFromParameter('js', $attemptTime);
@@ -763,10 +746,6 @@ class Tracking
                     $subtotal_time = $row['mytime'];
                     while ($tmp_row = Database::fetch_array($result)) {
                         $subtotal_time += $tmp_row['mytime'];
-                    }
-
-                    if ($allowNewTracking) {
-                        $subtotal_time = $attemptResult;
                     }
 
                     $title = $row['mytitle'];

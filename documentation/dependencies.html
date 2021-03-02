@@ -71,7 +71,7 @@ We recommend using HTML5-compatible technology.
 <h2>Dependencies - server-side</h2>
 <ul>
   <li>Apache 2+</li>
-  <li>PHP 5.6 (not recommended) with MySQL bindings or PHP 7.2 (recommended) or 7.3. PHP 7.0 is not supported by this version of Chamilo. PHP 7.1 should be supported but we lack elements of infrastructure to check it fully and thoroughly.</li>
+  <li>PHP 7.2, 7.3 or 7.4 (recommended). PHP 5.6 and 7.0 are not supported by this version of Chamilo. PHP 7.1 should be supported but we lack elements of infrastructure to check it fully and thoroughly.</li>
   <li>MySQL 5.6+ or any version of MariaDB database server</li>
   <li>php-curl</li>
   <li>php-dom (usually available by default)</li>
@@ -131,8 +131,7 @@ ensure all components are installed by an expert in the field.<br />
     </li>
     <li>Audio recording (generate mp3 from wav)
       <ul>
-        <li>libav-tools</li>
-        <li>libavcodec-extra-53</li>
+        <li>libav-tools libavcodec-extra-53 *or* ffmpeg on more recent distributions</li>
         <li>libmp3lame0</li>
       </ul>
     </li>

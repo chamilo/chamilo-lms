@@ -1159,10 +1159,6 @@ $_configuration['profile_fields_visibility'] = [
 */
 //$_configuration['lp_minimum_time'] = false;
 
-// Track LP attempts using the new tracking system.
-// Requires to add an LP extra field called "track_lp_item" (checkbox) in order to use this feature.
-//$_configuration['use_new_tracking_in_lp_item'] = false;
-
 // Add collapsable option for user course categories
 // ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
 // $_configuration['allow_user_course_category_collapsable'] = false;
@@ -1850,6 +1846,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Show a link to the work/pending.php page in my courses (user_portal)
 //$_configuration['my_courses_show_pending_work'] = true;
+
+// Show exercise report from all courses in a new page: exercise/pending.php
+//$_configuration['my_courses_show_pending_exercise_attempts'] = true;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

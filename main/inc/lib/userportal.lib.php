@@ -1129,12 +1129,22 @@ class IndexManager
             ];
         }
 
-        if (api_get_configuration_value('my_courses_show_pending_work') && api_is_teacher()) {
-            $items[] = [
-                'icon' => Display::return_icon('work.png', get_lang('StudentPublicationToCorrect')),
-                'link' => api_get_path(WEB_CODE_PATH).'work/pending.php',
-                'title' => get_lang('StudentPublicationToCorrect'),
-            ];
+        if (api_is_teacher()) {
+            if (api_get_configuration_value('my_courses_show_pending_work')) {
+                $items[] = [
+                    'icon' => Display::return_icon('work.png', get_lang('StudentPublicationToCorrect')),
+                    'link' => api_get_path(WEB_CODE_PATH).'work/pending.php',
+                    'title' => get_lang('StudentPublicationToCorrect'),
+                ];
+            }
+
+            if (api_get_configuration_value('my_courses_show_pending_exercise_attempts')) {
+                $items[] = [
+                    'icon' => Display::return_icon('quiz.png', get_lang('PendingAttempts')),
+                    'link' => api_get_path(WEB_CODE_PATH).'exercise/pending.php',
+                    'title' => get_lang('PendingAttempts'),
+                ];
+            }
         }
 
         return $items;

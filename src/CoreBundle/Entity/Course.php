@@ -386,6 +386,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->trackEAttempts = new ArrayCollection();
         $this->searchEngineRefs = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->activateLegal = 0;
         //$this->specificFieldValues = new ArrayCollection();
         //$this->sharedSurveys = new ArrayCollection();
     }

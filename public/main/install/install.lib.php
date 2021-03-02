@@ -2306,7 +2306,7 @@ function installSchemas($container, $upgrade = false)
 
     $urlRepo = $container->get(AccessUrlRepository::class);
     $accessUrl = $urlRepo->find(1);
-    if (!$accessUrl) {
+    if (null === $accessUrl) {
         $em = Database::getManager();
 
         // Creating AccessUrl

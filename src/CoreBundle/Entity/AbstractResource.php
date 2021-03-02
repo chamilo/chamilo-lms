@@ -58,7 +58,7 @@ abstract class AbstractResource
     /**
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      */
-    public ?ResourceNode $parentResourceNode = null;
+    public ?int $parentResourceNode = 0;
 
     /**
      * @ApiProperty(iri="http://schema.org/image")
@@ -303,7 +303,7 @@ abstract class AbstractResource
 
     public function hasParentResourceNode(): bool
     {
-        return null !== $this->parentResourceNode;
+        return null !== $this->parentResourceNode && 0 !== $this->parentResourceNode;
     }
 
     public function setParentResourceNode($resourceNode): self

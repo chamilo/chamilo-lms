@@ -98,7 +98,7 @@ class ResourceListener
         }
 
         // Add resource node.
-        /** @var null|User $creator */
+        /** @var User|null $creator */
         $creator = $this->security->getUser();
 
         if (null === $creator) {

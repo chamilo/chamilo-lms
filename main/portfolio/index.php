@@ -182,10 +182,10 @@ switch ($action) {
 
         return;
     case 'export_pdf':
-        $controller->exportPdf();
+        $controller->exportPdf($httpRequest);
         break;
     case 'export_zip':
-        $controller->exportZip();
+        $controller->exportZip($httpRequest);
         break;
     case 'qualify':
         api_protect_course_script(true);

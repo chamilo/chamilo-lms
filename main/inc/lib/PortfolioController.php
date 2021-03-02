@@ -1058,11 +1058,14 @@ class PortfolioController
                     api_not_allowed(true);
                 }
 
-                $actions[0] = Display::url(
-                    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-                    $this->baseUrl.'action=details'
+                $actions[1] = Display::url(
+                    Display::return_icon('pdf.png', get_lang('ExportMyPortfolioDataPdf'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.http_build_query(['action' => 'export_pdf', 'user' => $this->owner->getId()])
                 );
-                unset($actions[1], $actions[2]);
+                $actions[2] = Display::url(
+                    Display::return_icon('save_pack.png', get_lang('ExportMyPortfolioDataZip'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.http_build_query(['action' => 'export_zip', 'user' => $this->owner->getId()])
+                );
             }
 
             $frmStudent = new FormValidator('frm_student_list', 'get');
@@ -1327,8 +1330,20 @@ class PortfolioController
     /**
      * @throws \MpdfException
      */
-    public function exportPdf()
+    public function exportPdf(HttpRequest $httpRequest)
     {
+        $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
+
+        if ($isAllowedToFilterStudent) {
+            if ($httpRequest->query->has('user')) {
+                $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
+
+                if (empty($this->owner)) {
+                    api_not_allowed(true);
+                }
+            }
+        }
+
         $pdfContent = Display::page_header($this->owner->getCompleteName());
 
         if ($this->course) {
@@ -1387,8 +1402,20 @@ class PortfolioController
         );
     }
 
-    public function exportZip()
+    public function exportZip(HttpRequest $httpRequest)
     {
+        $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
+
+        if ($isAllowedToFilterStudent) {
+            if ($httpRequest->query->has('user')) {
+                $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
+
+                if (empty($this->owner)) {
+                    api_not_allowed(true);
+                }
+            }
+        }
+
         $itemsRepo = $this->em->getRepository(Portfolio::class);
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
         $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
@@ -1537,10 +1564,7 @@ class PortfolioController
 
         $fs->dumpFile(
             $itemFilename,
-            $this->fixZipIndexFile(
-                Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL.$tblItems->toHtml().PHP_EOL
-                .Display::page_subheader2(get_lang('PortfolioCommentsMade')).PHP_EOL.$tblComments->toHtml()
-            )
+            $this->formatZipIndexFile($tblItems, $tblComments)
         );
 
         $zipName = $this->owner->getCompleteName()
@@ -2418,8 +2442,21 @@ class PortfolioController
         return $doc->saveHTML();
     }
 
-    private function fixZipIndexFile(string $htmlContent): string
+    private function formatZipIndexFile(HTML_Table $tblItems, HTML_Table $tblComments): string
     {
+        $htmlContent = Display::page_header($this->owner->getCompleteNameWithUsername());
+        $htmlContent .= Display::page_subheader2(get_lang('PortfolioItems'));
+
+        $htmlContent .= $tblItems->getRowCount() > 0
+            ? $tblItems->toHtml()
+            : Display::return_message(get_lang('NoItemsInYourPortfolio'), 'warning');
+
+        $htmlContent .= Display::page_subheader2(get_lang('PortfolioCommentsMade'));
+
+        $htmlContent .= $tblComments->getRowCount() > 0
+            ? $tblComments->toHtml()
+            : Display::return_message(get_lang('YouHaveNotCommented'), 'warning');
+
         $webAssetsPath = api_get_path(WEB_PUBLIC_PATH).'assets/';
 
         $doc = new DOMDocument();

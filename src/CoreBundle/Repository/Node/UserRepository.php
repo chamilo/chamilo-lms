@@ -54,6 +54,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use SocialManager;
@@ -242,27 +243,6 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     }
 
     /**
-     * @return User[]
-     */
-    public function searchUserByKeyword(string $keyword)
-    {
-        $qb = $this->createQueryBuilder('a');
-
-        // Selecting user info
-        $qb->select('DISTINCT b');
-
-        $qb->from('Chamilo\CoreBundle\Entity\User', 'b');
-
-        //@todo check app settings
-        $qb->orderBy('b.firstname', 'ASC');
-        $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
-        $qb->setParameter('keyword', "%{$keyword}%", Types::STRING);
-        $query = $qb->getQuery();
-
-        return $query->execute();
-    }
-
-    /**
      * Get course user relationship based in the course_rel_user table.
      *
      * @return Course[]
@@ -341,40 +321,21 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     /**
      * Get a filtered list of user by status and (optionally) access url.
      *
-     * @todo not use status
-     *
-     * @param string $query       The query to filter
+     * @param string $keyword     The query to filter
      * @param int    $status      The status
      * @param int    $accessUrlId The access URL ID
      *
-     * @return array
+     * @return User[]
      */
-    public function findByStatus(string $query, int $status, int $accessUrlId = null)
+    public function findByStatus(string $keyword, int $status, int $accessUrlId = null)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $qb = $this->createQueryBuilder('u');
 
-        if ($accessUrlId > 0) {
-            $queryBuilder->innerJoin(
-                'ChamiloCoreBundle:AccessUrlRelUser',
-                'auru',
-                Join::WITH,
-                'u.id = auru.user'
-            );
-        }
+        $this->addFilterByAccessUrlQueryBuilder($accessUrlId, $qb);
+        $this->addSearchByStatusQueryBuilder($status, $qb);
+        $this->addSearchByKeywordQueryBuilder($keyword, $qb);
 
-        $queryBuilder->where('u.status = :status')
-            ->andWhere('u.username LIKE :query OR u.firstname LIKE :query OR u.lastname LIKE :query')
-            ->setParameter('status', $status)
-            ->setParameter('query', "{$query}%")
-        ;
-
-        if ($accessUrlId > 0) {
-            $queryBuilder->andWhere('auru.url = :url')
-                ->setParameter(':url', $accessUrlId)
-            ;
-        }
-
-        return $queryBuilder->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -385,9 +346,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getCoachesForSessionCourse(Session $session, Course $course): Collection
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $qb = $this->createQueryBuilder('u');
 
-        $queryBuilder->select('u')
+        $qb->select('u')
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourseRelUser',
                 'scu',
@@ -395,15 +356,15 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'scu.user = u'
             )
             ->where(
-                $queryBuilder->expr()->andX(
-                    $queryBuilder->expr()->eq('scu.session', $session->getId()),
-                    $queryBuilder->expr()->eq('scu.course', $course->getId()),
-                    $queryBuilder->expr()->eq('scu.status', SessionRelCourseRelUser::STATUS_COURSE_COACH)
+                $qb->expr()->andX(
+                    $qb->expr()->eq('scu.session', $session->getId()),
+                    $qb->expr()->eq('scu.course', $course->getId()),
+                    $qb->expr()->eq('scu.status', SessionRelCourseRelUser::STATUS_COURSE_COACH)
                 )
             )
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -413,57 +374,57 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     /*public function getCourses(User $user)
     {
-        $queryBuilder = $this->createQueryBuilder('user');
+        $qb = $this->createQueryBuilder('user');
 
         // Selecting course info.
-        $queryBuilder->select('c');
+        $qb->select('c');
 
         // Loading User.
         //$qb->from('Chamilo\CoreBundle\Entity\User', 'u');
 
         // Selecting course
-        $queryBuilder->innerJoin('Chamilo\CoreBundle\Entity\Course', 'c');
+        $qb->innerJoin('Chamilo\CoreBundle\Entity\Course', 'c');
 
         //@todo check app settings
         //$qb->add('orderBy', 'u.lastname ASC');
 
-        $wherePart = $queryBuilder->expr()->andx();
+        $wherePart = $qb->expr()->andx();
 
         // Get only users subscribed to this course
-        $wherePart->add($queryBuilder->expr()->eq('user.userId', $user->getUserId()));
+        $wherePart->add($qb->expr()->eq('user.userId', $user->getUserId()));
 
-        $queryBuilder->where($wherePart);
-        $query = $queryBuilder->getQuery();
+        $qb->where($wherePart);
+        $query = $qb->getQuery();
 
         return $query->execute();
     }
 
     public function getTeachers()
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $qb = $this->createQueryBuilder('u');
 
         // Selecting course info.
-        $queryBuilder
+        $qb
             ->select('u')
             ->where('u.groups.id = :groupId')
             ->setParameter('groupId', 1);
 
-        $query = $queryBuilder->getQuery();
+        $query = $qb->getQuery();
 
         return $query->execute();
     }*/
 
     /*public function getUsers($group)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $qb = $this->createQueryBuilder('u');
 
         // Selecting course info.
-        $queryBuilder
+        $qb
             ->select('u')
             ->where('u.groups = :groupId')
             ->setParameter('groupId', $group);
 
-        $query = $queryBuilder->getQuery();
+        $query = $qb->getQuery();
 
         return $query->execute();
     }*/
@@ -475,8 +436,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getSessionAdmins(User $user)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
-        $queryBuilder
+        $qb = $this->createQueryBuilder('u');
+        $qb
             ->distinct()
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelUser',
@@ -491,14 +452,14 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'su.session = scu.session'
             )
             ->where(
-                $queryBuilder->expr()->eq('scu.user', $user->getId())
+                $qb->expr()->eq('scu.user', $user->getId())
             )
             ->andWhere(
-                $queryBuilder->expr()->eq('su.relationType', SESSION_RELATION_TYPE_RRHH)
+                $qb->expr()->eq('su.relationType', SESSION_RELATION_TYPE_RRHH)
             )
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -508,8 +469,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getStudentBosses(User $user)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
-        $queryBuilder
+        $qb = $this->createQueryBuilder('u');
+        $qb
             ->distinct()
             ->innerJoin(
                 'ChamiloCoreBundle:UserRelUser',
@@ -518,14 +479,14 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'u.id = uu.friendUserId'
             )
             ->where(
-                $queryBuilder->expr()->eq('uu.relationType', USER_RELATION_TYPE_BOSS)
+                $qb->expr()->eq('uu.relationType', USER_RELATION_TYPE_BOSS)
             )
             ->andWhere(
-                $queryBuilder->expr()->eq('uu.userId', $user->getId())
+                $qb->expr()->eq('uu.userId', $user->getId())
             )
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -1487,5 +1448,51 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    private function addSearchByKeywordQueryBuilder($keyword, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+
+        $qb->orderBy('u.firstname', 'ASC');
+        $qb->where('u.firstname LIKE :keyword OR u.lastname LIKE :keyword ');
+        $qb->setParameter('keyword', "%{$keyword}%", Types::STRING);
+
+        return $qb;
+    }
+
+    private function addSearchByStatusQueryBuilder(int $status, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+
+        $qb
+            ->where('u.status = :status')
+            ->setParameter('status', $status, Types::INTEGER)
+        ;
+
+        return $qb;
+    }
+
+    private function addFilterByAccessUrlQueryBuilder(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+
+        if ($accessUrlId > 0) {
+            $qb->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelUser',
+                'auru',
+                Join::WITH,
+                'u.id = auru.user'
+            );
+        }
+
+        if ($accessUrlId > 0) {
+            $qb
+                ->andWhere('auru.url = :url')
+                ->setParameter(':url', $accessUrlId, Types::INTEGER)
+            ;
+        }
+
+        return $qb;
     }
 }

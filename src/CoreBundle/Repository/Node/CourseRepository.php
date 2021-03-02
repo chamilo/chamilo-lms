@@ -148,7 +148,7 @@ class CourseRepository extends ResourceRepository
      *
      * @return QueryBuilder
      */
-    public function getSubscribedUsersByStatus(Course $course, $status)
+    public function getSubscribedUsersByStatus(Course $course, int $status)
     {
         $queryBuilder = $this->getSubscribedUsers($course);
         $queryBuilder

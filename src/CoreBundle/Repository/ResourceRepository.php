@@ -495,10 +495,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
             //->from($className, 'resource')
-            ->innerJoin(
-                'resource.resourceNode',
-                'node'
-            )
+            ->innerJoin('resource.resourceNode', 'node')
             //->innerJoin('node.resourceLinks', 'links')
             //->where('node.resourceType = :type')
             //->setParameter('type',$type)
@@ -540,7 +537,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            //->from($className, 'resource')
             ->innerJoin(
                 'resource.resourceNode',
                 'node'
@@ -914,6 +910,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourceFormType(): string
     {
         throw new Exception('Implement getResourceFormType');
+    }
+
+    protected function getOrCreateQueryBuilder(QueryBuilder $qb = null, string $alias = 'resource'): QueryBuilder
+    {
+        return $qb ?: $this->createQueryBuilder($alias);
     }
 
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool

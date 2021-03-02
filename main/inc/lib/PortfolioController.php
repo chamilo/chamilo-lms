@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
@@ -1404,6 +1405,24 @@ class PortfolioController
         $userDirectory = UserManager::getUserPathById($this->owner->getId(), 'system');
         $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
 
+        $tblItemsHeaders = [];
+        $tblItemsHeaders[] = get_lang('Title');
+        $tblItemsHeaders[] = get_lang('CreationDate');
+        $tblItemsHeaders[] = get_lang('LastUpdate');
+        $tblItemsHeaders[] = get_lang('Category');
+        $tblItemsHeaders[] = get_lang('Category');
+        $tblItemsHeaders[] = get_lang('Score');
+        $tblItemsHeaders[] = get_lang('Course');
+        $tblItemsHeaders[] = get_lang('Session');
+        $tblItemsData = [];
+
+        $tblCommentsHeaders = [];
+        $tblCommentsHeaders[] = get_lang('Resume');
+        $tblCommentsHeaders[] = get_lang('Date');
+        $tblCommentsHeaders[] = get_lang('PortfolioItemTitle');
+        $tblCommentsHeaders[] = get_lang('Score');
+        $tblCommentsData = [];
+
         $filenames = [];
 
         $fs = new Filesystem();
@@ -1413,6 +1432,10 @@ class PortfolioController
          * @var Portfolio $item
          */
         foreach ($items as $i => $item) {
+            $itemCategory = $item->getCategory();
+            $itemCourse = $item->getCourse();
+            $itemSession = $item->getSession();
+
             $itemDirectory = $item->getCreationDate()->format('Y-m-d-H-i-s');
 
             $itemFilename = sprintf('%s/items/%s/item.html', $tempPortfolioDirectory, $itemDirectory);
@@ -1440,6 +1463,20 @@ class PortfolioController
 
                 $filenames[] = $attachmentFilename;
             }
+
+            $tblItemsData[] = [
+                Display::url(
+                    Security::remove_XSS($item->getTitle()),
+                    sprintf('items/%s/item.html', $itemDirectory)
+                ),
+                api_convert_and_format_date($item->getCreationDate()),
+                api_convert_and_format_date($item->getUpdateDate()),
+                $itemCategory ? $itemCategory->getTitle() : null,
+                $item->getComments()->count(),
+                $item->getScore(),
+                $itemCourse->getTitle(),
+                $itemSession ? $itemSession->getName() : null,
+            ];
         }
 
         /**
@@ -1474,7 +1511,37 @@ class PortfolioController
 
                 $filenames[] = $attachmentFilename;
             }
+
+            $tblCommentsData[] = [
+                Display::url(
+                    $comment->getExcerpt(),
+                    sprintf('comments/%s/comment.html', $commentDirectory)
+                ),
+                api_convert_and_format_date($comment->getDate()),
+                Security::remove_XSS($comment->getItem()->getTitle()),
+                $comment->getScore(),
+            ];
         }
+
+        $tblItems = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
+        $tblItems->setHeaders($tblItemsHeaders);
+        $tblItems->setData($tblItemsData);
+
+        $tblComments = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
+        $tblComments->setHeaders($tblCommentsHeaders);
+        $tblComments->setData($tblCommentsData);
+
+        $itemFilename = sprintf('%s/index.html', $tempPortfolioDirectory);
+
+        $filenames[] = $itemFilename;
+
+        $fs->dumpFile(
+            $itemFilename,
+            $this->fixZipIndexFile(
+                Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL.$tblItems->toHtml().PHP_EOL
+                .Display::page_subheader2(get_lang('PortfolioCommentsMade')).PHP_EOL.$tblComments->toHtml()
+            )
+        );
 
         $zipName = $this->owner->getCompleteName()
             .($this->course ? '_'.$this->course->getCode() : '')
@@ -2347,6 +2414,36 @@ class PortfolioController
                 continue;
             }
         }
+
+        return $doc->saveHTML();
+    }
+
+    private function fixZipIndexFile(string $htmlContent): string
+    {
+        $webAssetsPath = api_get_path(WEB_PUBLIC_PATH).'assets/';
+
+        $doc = new DOMDocument();
+        @$doc->loadHTML($htmlContent);
+
+        $stylesheet1 = $doc->createElement('link');
+        $stylesheet1->setAttribute('rel', 'stylesheet');
+        $stylesheet1->setAttribute('href', $webAssetsPath.'bootstrap/dist/css/bootstrap.min.css');
+        $stylesheet2 = $doc->createElement('link');
+        $stylesheet2->setAttribute('rel', 'stylesheet');
+        $stylesheet2->setAttribute('href', $webAssetsPath.'fontawesome/css/font-awesome.min.css');
+        $stylesheet3 = $doc->createElement('link');
+        $stylesheet3->setAttribute('rel', 'stylesheet');
+        $stylesheet3->setAttribute('href', ChamiloApi::getEditorDocStylePath());
+
+        $head = $doc->createElement('head');
+        $head->appendChild($stylesheet1);
+        $head->appendChild($stylesheet2);
+        $head->appendChild($stylesheet3);
+
+        $doc->documentElement->insertBefore(
+            $head,
+            $doc->getElementsByTagName('body')->item(0)
+        );
 
         return $doc->saveHTML();
     }

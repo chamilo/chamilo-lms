@@ -74,7 +74,7 @@ try {
     }*/
 
     if (empty($userId)) {
-        if ($plugin->get(AzureActiveDirectory::SETTING_PROVISION_USERS)) {
+        if ($plugin->get(AzureActiveDirectory::SETTING_PROVISION_USERS) === 'true') {
             // Create user
             $userId = UserManager::create_user(
                 $me['givenName'],

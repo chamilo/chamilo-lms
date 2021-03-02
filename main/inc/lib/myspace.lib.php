@@ -1966,8 +1966,10 @@ class MySpace
                 unset($dateTemp);
             }
         }
-        $startDate = $startDate->format('Y-m-d H:i:s');
-        $endDate = $endDate->format('Y-m-d H:i:s');
+         //$startDate = $startDate->format('Y-m-d H:i:s');
+         //$endDate = $endDate->format('Y-m-d H:i:s');
+        $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
+        $endDate = api_get_utc_datetime($endDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
         $extra = '';
         if (!empty($extraWhere)) {
             $extra = " AND lp_table_item.lp_id in ($extraWhere) ";

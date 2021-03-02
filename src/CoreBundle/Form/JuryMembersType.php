@@ -8,7 +8,9 @@ namespace Chamilo\CoreBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,11 +35,11 @@ class JuryMembersType extends AbstractType
             ]
         );
 
-        $builder->add('user_id', 'choice', [
+        $builder->add('user_id', ChoiceType::class, [
             'label' => 'User',
         ]);
         $builder->add('jury_id', 'hidden');
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
 
         $factory = $builder->getFormFactory();
 

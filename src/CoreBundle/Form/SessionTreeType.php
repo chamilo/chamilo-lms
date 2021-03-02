@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,7 +19,7 @@ class SessionTreeType extends AbstractType
     {
         $builder->add(
             'type',
-            'choice',
+            ChoiceType::class,
             [
                 'choices' => ['1', '2', '3', '4'],
             ]
@@ -67,7 +69,7 @@ class SessionTreeType extends AbstractType
 
         $builder->add(
             'session',
-            'entity',
+            EntityType::class,
             [
                 'class' => 'Entity\Session',
                 'property' => 'name',
@@ -81,7 +83,7 @@ class SessionTreeType extends AbstractType
 
         $builder->add(
             'course',
-            'entity',
+            EntityType::class,
             [
                 'class' => 'Entity\Course',
                 'property' => 'title',

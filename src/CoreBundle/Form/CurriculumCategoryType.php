@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,13 +19,13 @@ class CurriculumCategoryType extends AbstractType
     {
         $entity = $builder->getData();
 
-        $builder->add('title', 'text');
-        $builder->add('max_score', 'text');
-        $builder->add('min_chars', 'text');
-        $builder->add('min_chars', 'text');
+        $builder->add('title', TextType::class);
+        $builder->add('max_score', TextType::class);
+        $builder->add('min_chars', TextType::class);
+        $builder->add('min_chars', TextType::class);
 
-        $builder->add('c_id', 'hidden');
-        $builder->add('session_id', 'hidden');
+        $builder->add('c_id', HiddenType::class);
+        $builder->add('session_id', HiddenType::class);
 
         $course = $entity->getCourse();
         $session = $entity->getSession();
@@ -57,7 +60,7 @@ class CurriculumCategoryType extends AbstractType
             ]
         );
 
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

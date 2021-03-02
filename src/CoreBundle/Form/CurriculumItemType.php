@@ -6,7 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,13 +24,13 @@ class CurriculumItemType extends AbstractType
             $parentIdDisabled = true;
         }*/
 
-        $builder->add('title', 'textarea');
-        $builder->add('score', 'text');
-        $builder->add('max_repeat', 'text');
+        $builder->add('title', TextareaType::class);
+        $builder->add('score', TextType::class);
+        $builder->add('max_repeat', TextType::class);
 
         $builder->add(
             'category',
-            'entity',
+            EntityType::class,
             [
                 'class' => 'Entity\CurriculumCategory',
                 'query_builder' => function ($repository) {
@@ -38,7 +42,7 @@ class CurriculumItemType extends AbstractType
                 'required' => false,
             ]
         );
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

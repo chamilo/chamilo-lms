@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Settings;
 
-use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Chamilo\CoreBundle\Form\Type\YesNoNumericType;
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,21 +17,17 @@ class ChatCourseSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults([
-                'enabled' => '',
-                'allow_open_chat_window' => '',
+                'enabled' => 1,
+                'allow_open_chat_window' => 0,
             ])
         ;
-        $allowedTypes = [
-            'enabled' => ['string'],
-        ];
-        $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('enabled', YesNoType::class)
-            ->add('allow_open_chat_window', YesNoType::class)
+            ->add('enabled', YesNoNumericType::class)
+            ->add('allow_open_chat_window', YesNoNumericType::class)
         ;
     }
 }

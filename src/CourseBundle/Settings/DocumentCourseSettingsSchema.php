@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Settings;
 
-use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Chamilo\CoreBundle\Form\Type\YesNoNumericType;
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,12 +17,11 @@ class DocumentCourseSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults([
-                'enabled' => '',
+                'enabled' => 1,
                 'documents_default_visibility' => '',
             ])
         ;
         $allowedTypes = [
-            'enabled' => ['string'],
             'documents_default_visibility' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -31,7 +30,7 @@ class DocumentCourseSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('enabled', YesNoType::class)
+            ->add('enabled', YesNoNumericType::class)
             ->add('documents_default_visibility')
         ;
     }

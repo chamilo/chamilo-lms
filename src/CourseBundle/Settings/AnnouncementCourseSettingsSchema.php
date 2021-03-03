@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Settings;
 
-use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Chamilo\CoreBundle\Form\Type\YesNoNumericType;
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
+use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class AnnouncementCourseSettingsSchema extends AbstractSettingsSchema
@@ -16,23 +18,19 @@ class AnnouncementCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
-            ->setDefaults([
-                'enabled' => '',
-                'allow_user_edit_announcement' => '',
-            ])
-        ;
-        $allowedTypes = [
-            'enabled' => ['string'],
-            'allow_user_edit_announcement' => ['string'],
-        ];
-        $this->setMultipleAllowedTypes($allowedTypes, $builder);
+            ->setDefaults(
+                [
+                    'enabled' => 1,
+                    'allow_user_edit_announcement' => 0,
+                ]
+            );
     }
 
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('enabled', YesNoType::class)
-            ->add('allow_user_edit_announcement', YesNoType::class)
+            ->add('enabled', YesNoNumericType::class)
+            ->add('allow_user_edit_announcement', YesNoNumericType::class)
         ;
     }
 }

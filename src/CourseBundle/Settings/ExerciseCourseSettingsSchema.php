@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Settings;
 
-use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Chamilo\CoreBundle\Form\Type\YesNoNumericType;
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,22 +17,17 @@ class ExerciseCourseSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults([
-                'enabled' => '',
-                'email_alert_manager_on_new_quiz' => '',
+                'enabled' => 1,
+                'email_alert_manager_on_new_quiz' => 0,
             ])
         ;
-        $allowedTypes = [
-            'enabled' => ['string'],
-            'email_alert_manager_on_new_quiz' => ['string'],
-        ];
-        $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('enabled', YesNoType::class)
-            ->add('email_alert_manager_on_new_quiz', YesNoType::class)
+            ->add('enabled', YesNoNumericType::class)
+            ->add('email_alert_manager_on_new_quiz', YesNoNumericType::class)
         ;
     }
 }

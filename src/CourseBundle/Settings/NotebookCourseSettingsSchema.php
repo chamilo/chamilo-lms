@@ -18,11 +18,7 @@ class NotebookCourseSettingsSchema extends AbstractSettingsSchema
             ->setDefaults([
                 'enabled' => '',
             ])
-        ;
-        $allowedTypes = [
-            'enabled' => ['string'],
-        ];
-        $this->setMultipleAllowedTypes($allowedTypes, $builder);*/
+        ;*/
     }
 
     public function buildForm(FormBuilderInterface $builder): void

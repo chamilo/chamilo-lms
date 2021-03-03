@@ -4,7 +4,6 @@
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_admin_script();

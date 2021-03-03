@@ -2584,10 +2584,6 @@ class SessionManager
             return false;
         }
 
-        if ($importAssignments) {
-            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        }
-
         $session = api_get_session_entity($sessionId);
 
         if (!$session) {

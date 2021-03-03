@@ -3378,7 +3378,6 @@ class CourseRestorer
      */
     public function restore_works($sessionId = 0)
     {
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         if ($this->course->has_resources(RESOURCE_WORK)) {
             $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 

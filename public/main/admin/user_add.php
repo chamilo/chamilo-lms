@@ -15,6 +15,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
 
+var_dump(api_get_setting('site_name'));
+
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;

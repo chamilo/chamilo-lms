@@ -402,7 +402,6 @@ if (isset($_REQUEST['load_ajax'])) {
                             $sys_course_path = api_get_path(SYS_COURSE_PATH);
                             $course_dir = $sys_course_path.$course_info['path'];
                             $base_work_dir = $course_dir.'/work';
-                            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
                             // Creating the parent folder in the session if does not exists already
                             //@todo ugly fix

@@ -9,7 +9,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit();

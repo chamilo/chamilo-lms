@@ -12,7 +12,6 @@ if (!isset($_GET['course'])) {
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once '../work/work.lib.php';
 
 api_block_anonymous_users();
 

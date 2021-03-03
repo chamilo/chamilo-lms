@@ -81,6 +81,8 @@
                                 <a href="{{ item_url }}#portfolio-item-comments">
                                     {{ 'XComments'|get_lang|format(item.comments.count) }}
                                 </a>
+                                &centerdot;
+                                <a href="{{ item_url }}#frm_comment">{{ 'AddNewComment'|get_lang }}</a>
                             </h4>
                             <ul class="fa-ul">
                                 {% for comment in comments %}

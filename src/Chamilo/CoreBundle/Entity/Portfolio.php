@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -358,6 +359,16 @@ class Portfolio
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    public function getLastComments(int $number = 3): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria
+            ->orderBy(['date' => 'DESC'])
+            ->setMaxResults($number);
+
+        return $this->comments->matching($criteria);
     }
 
     public function getOrigin(): ?int

@@ -8,6 +8,7 @@
     <div class="row portfolio-items">
         {% for item in items %}
             {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
+            {% set comments = item.lastComments %}
 
             <div class="col-md-12" id="portfolio-item-{{ item.id }}">
                 <div class="thumbnail">
@@ -67,18 +68,39 @@
                                     {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
                                 </li>
                             {% endif %}
-
-                            <li>
-                                <a href="{{ item_url }}#portfolio-item-comments">
-                                    <span class="fa-li fa fa-comment-o" aria-hidden="true"></span>
-                                    {{ 'XComments'|get_lang|format(item.comments.count) }}
-                                </a>
-                            </li>
                         </ul>
 
                         <hr>
 
-                        {{ item.excerpt }}
+                        <p>{{ item.excerpt }}</p>
+
+                        <hr>
+
+                        {% if comments|length > 0 %}
+                            <h4>
+                                <a href="{{ item_url }}#portfolio-item-comments">
+                                    {{ 'XComments'|get_lang|format(item.comments.count) }}
+                                </a>
+                            </h4>
+                            <ul class="fa-ul">
+                                {% for comment in comments %}
+                                    <li>
+                                        <span class="fa-li fa fa-commenting-o" aria-hidden="true"></span>
+                                        <div>
+                                            <strong>{{ comment.author.completeName }}</strong>
+                                            <small class="fa fa-clock-o fa-fw text-muted" aria-hidden="true"></small>
+                                            <small class="text-muted">{{ comment.date|date_to_time_ago }}</small>
+                                        </div>
+                                        <p>{{ comment.excerpt }}</p>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <a href="{{ item_url }}#portfolio-item-comments">
+                                <span class="fa fa-commenting-o fa-fw" aria-hidden="true"></span>
+                                {{ 'AddNewComment'|get_lang }}
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

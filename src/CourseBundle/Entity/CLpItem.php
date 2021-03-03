@@ -153,6 +153,10 @@ class CLpItem
 
     public function __construct()
     {
+        $this->iid = null;
+        $this->path = '';
+        $this->parentItemId = 0;
+        $this->previousItemId = 0;
         $this->description = '';
         $this->maxScore = 100.0;
     }

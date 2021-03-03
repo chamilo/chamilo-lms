@@ -143,6 +143,7 @@ class SettingsManager implements SettingsManagerInterface
                 $name = $category.'.'.$name;
             } else {
                 $message = sprintf('Parameter must be in format "category.name", "%s" given.', $name);
+
                 throw new InvalidArgumentException($message);
             }
         }

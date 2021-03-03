@@ -1748,6 +1748,7 @@ function getWorkListTeacher(
         foreach ($studentPublications as $studentPublication) {
             $workId = $studentPublication->getIid();
             $work = [];
+            $work['iid'] = $workId;
             $work['type'] = $icon;
             $assignment = $studentPublication->getAssignment();
             $work['expires_on'] = '';

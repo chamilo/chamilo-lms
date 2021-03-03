@@ -403,11 +403,7 @@ class Portfolio
 
     public function getExcerpt(int $count = 380): string
     {
-        $excerpt = strip_tags($this->content);
-        $excerpt = substr($excerpt, 0, $count);
-        $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
-
-        return $excerpt;
+        return api_get_short_text_from_html($this->content, $count);
     }
 
     public function getScore(): ?float

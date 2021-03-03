@@ -13,7 +13,7 @@ if ('personal' === $type) {
 
 require_once __DIR__.'/../global.inc.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = $_REQUEST['a'] ?? null;
 $group_id = api_get_group_id();
 
 if ('course' === $type) {
@@ -116,8 +116,8 @@ switch ($action) {
         $agenda->move_event($id, $minute_delta, $allDay);
         break;
     case 'get_events':
-        $filter = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
-        $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : null;
+        $filter = $_REQUEST['user_id'] ?? null;
+        $sessionId = $_REQUEST['session_id'] ?? null;
         $result = $agenda->parseAgendaFilter($filter);
 
         $groupId = current($result['groups']);

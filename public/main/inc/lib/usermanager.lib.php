@@ -1159,7 +1159,7 @@ class UserManager
             ->setExpirationDate($expiration_date)
             ->setActive($active)
             ->setEnabled($active)
-            ->setHrDeptId($hr_dept_id)
+            ->setHrDeptId((int) $hr_dept_id)
         ;
 
         if (!is_null($password)) {

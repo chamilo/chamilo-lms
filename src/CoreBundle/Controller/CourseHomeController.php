@@ -12,9 +12,9 @@ use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Manager\SettingsFormFactory;
-use Chamilo\CourseBundle\Manager\SettingsManager;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
+use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use CourseManager;
 use Database;
 use Display;
@@ -242,7 +242,7 @@ class CourseHomeController extends ToolBaseController
      *
      * @return Response
      */
-    public function updateAction(Request $request, Course $course, $namespace, SettingsManager $manager, SettingsFormFactory $formFactory)
+    public function updateSettingsAction(Request $request, Course $course, $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory)
     {
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Manager;
+namespace Chamilo\CourseBundle\Settings;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
-use Chamilo\CoreBundle\Settings\SettingsManager as ChamiloSettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
@@ -17,11 +17,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
-/**
- * Class SettingsManager
- * Course settings manager.
- */
-class SettingsManager extends ChamiloSettingsManager
+class SettingsCourseManager extends SettingsManager
 {
     protected Course $course;
 
@@ -43,13 +39,12 @@ class SettingsManager extends ChamiloSettingsManager
         $settings = new Settings();
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_course.settings.'.$schemaAlias;
-        if ($this->schemaRegistry->has($schemaAlias)) {
-            /** @var SchemaInterface $schema */
-            $schema = $this->schemaRegistry->get($schemaAlias);
-        } else {
+        if (!$this->schemaRegistry->has($schemaAlias)) {
             return $settings;
         }
 
+        /** @var SchemaInterface $schema */
+        $schema = $this->schemaRegistry->get($schemaAlias);
         $settings->setSchemaAlias($schemaAlias);
 
         // We need to get a plain parameters array since we use the options resolver on it
@@ -83,7 +78,7 @@ class SettingsManager extends ChamiloSettingsManager
         $namespace = $settings->getSchemaAlias();
 
         /** @var SchemaInterface $schema */
-        $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
+        $schema = $this->schemaRegistry->get($namespace);
 
         $settingsBuilder = new SettingsBuilder();
         $schema->buildSettings($settingsBuilder);
@@ -103,7 +98,7 @@ class SettingsManager extends ChamiloSettingsManager
         $repo = $this->manager->getRepository(SettingsCurrent::class);
         /** @var CCourseSetting[] $persistedParameters */
         $persistedParameters = $repo->findBy([
-            'category' => $settings->getSchemaAlias(),
+            'category' => $namespace,
         ]);
 
         $persistedParametersMap = [];
@@ -129,89 +124,25 @@ class SettingsManager extends ChamiloSettingsManager
         }
 
         $this->manager->flush();
-
-        /*$schema = $this->schemaRegistry->getSchema($namespace);
-
-        $settingsBuilder = new SettingsBuilder();
-        $schema->buildSettings($settingsBuilder);
-
-        $parameters = $settingsBuilder->resolve($settings->getParameters());
-
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
-                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-            }
-        }
-
-        if (isset($this->resolvedSettings[$namespace])) {
-            $this->resolvedSettings[$namespace]->setParameters($parameters);
-        }
-
-        $persistedParameters = $this->parameterRepository->findBy(
-            ['category' => $namespace, 'cId' => $this->getCourse()->getId()]
-        );
-
-        $persistedParametersMap = [];
-
-        foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getName()] = $parameter;
-        }
-
-        foreach ($parameters as $name => $value) {
-            if (isset($persistedParametersMap[$name])) {
-                $persistedParametersMap[$name]->setValue($value);
-            } else {
-                // @var CCourseSetting $parameter
-                //$parameter = $this->parameterFactory->createNew();
-                $parameter = new CCourseSetting();
-                $parameter
-                    ->setNamespace($namespace)
-                    ->setName($name)
-                    ->setValue($value)
-                    ->setCId($this->getCourse()->getId())
-                ;
-
-                /// @var ConstraintViolationListInterface $errors
-                $errors = $this->validator->validate($parameter);
-                if (0 < $errors->count()) {
-                    throw new ValidatorException($errors->get(0)->getMessage());
-                }
-
-                $this->parameterManager->persist($parameter);
-            }
-        }
-
-        $this->parameterManager->flush();
-        $this->cache->save($namespace, $parameters);*/
     }
 
-    /**
-     * @param string $category
-     *
-     * @return string
-     */
-    public function convertNameSpaceToService($category)
+    public function convertNameSpaceToService(string $category): string
     {
         return 'chamilo_course.settings.'.$category;
     }
 
     /**
      * Load parameter from database.
-     *
-     * @param string $namespace
-     *
-     * @return array
      */
-    private function getParameters($namespace)
+    private function getParameters(string $namespace): array
     {
         $repo = $this->manager->getRepository(CCourseSetting::class);
-        $parameters = [];
-        foreach ($repo->findBy([
-            'category' => $namespace,
-        ]) as $parameter) {
-            $parameters[$parameter->getTitle()] = $parameter->getValue();
+        $list = [];
+        $parameters = $repo->findBy(['category' => $namespace]);
+        foreach ($parameters as $parameter) {
+            $list[$parameter->getTitle()] = $parameter->getValue();
         }
 
-        return $parameters;
+        return $list;
     }
 }

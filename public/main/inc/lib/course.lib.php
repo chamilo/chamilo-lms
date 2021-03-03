@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Chamilo\CourseBundle\Manager\SettingsManager;
+use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
@@ -56,18 +56,12 @@ class CourseManager
         return self::$em;
     }
 
-    /**
-     * @return SettingsManager
-     */
-    public static function getCourseSettingsManager()
+    public static function getCourseSettingsManager(): SettingsCourseManager
     {
         return self::$courseSettingsManager;
     }
 
-    /**
-     * @param SettingsManager $courseSettingsManager
-     */
-    public static function setCourseSettingsManager($courseSettingsManager)
+    public static function setCourseSettingsManager(SettingsCourseManager $courseSettingsManager): void
     {
         self::$courseSettingsManager = $courseSettingsManager;
     }

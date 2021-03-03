@@ -9,7 +9,7 @@ services:
             - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
             - 'CourseSettings'
 
-    Chamilo\CourseBundle\Manager\SettingsManager:
+    Chamilo\CourseBundle\Settings\SettingsCourseManager:
         arguments:
             - '@chamilo_course.registry.settings_schema'
             - '@doctrine.orm.entity_manager'

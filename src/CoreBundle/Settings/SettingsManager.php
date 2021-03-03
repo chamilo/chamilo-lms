@@ -47,7 +47,7 @@ class SettingsManager implements SettingsManagerInterface
     protected array $resolvedSettings = [];
     //protected $settings;
     /**
-     * @var null|array<string, \Sylius\Bundle\SettingsBundle\Model\Settings>|mixed[]
+     * @var null|array<string, Settings>|mixed[]
      */
     protected ?array $schemaList;
     protected RequestStack $request;
@@ -108,22 +108,12 @@ class SettingsManager implements SettingsManagerInterface
         return $this->schemaRegistry->all();
     }
 
-    /**
-     * @param string $category
-     *
-     * @return string
-     */
-    public function convertNameSpaceToService($category)
+    public function convertNameSpaceToService(string $category): string
     {
         return 'chamilo_core.settings.'.$category;
     }
 
-    /**
-     * @param string $category
-     *
-     * @return string
-     */
-    public function convertServiceToNameSpace($category)
+    public function convertServiceToNameSpace(string $category): string
     {
         return str_replace('chamilo_core.settings.', '', $category);
     }
@@ -268,10 +258,6 @@ class SettingsManager implements SettingsManagerInterface
         return $settings;
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function update(SettingsInterface $settings): void
     {
         $namespace = $settings->getSchemaAlias();
@@ -574,10 +560,8 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * Get variables and categories as in 1.11.x.
-     *
-     * @return array
      */
-    private function getVariablesAndCategories()
+    private function getVariablesAndCategories(): array
     {
         return [
             'Institution' => 'Platform',
@@ -1056,6 +1040,6 @@ class SettingsManager implements SettingsManagerInterface
             'active_tools_on_create' => 'course',
         ];
 
-        return isset($settings[$variable]) ? $settings[$variable] : $defaultCategory;
+        return $settings[$variable] ?? $defaultCategory;
     }
 }

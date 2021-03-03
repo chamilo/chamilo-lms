@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use League\Flysystem\FilesystemInterface;
@@ -107,20 +106,21 @@ class ResourceNodeRepository extends MaterializedPathRepository
             ->innerJoin('node.resourceFile', 'file')
             ->innerJoin('node.resourceLinks', 'l')
             ->where('node.resourceType = :type')
-            ->setParameter('type', $type, Types::STRING)
             ->andWhere('node.parent = :parentNode')
-            ->setParameter('parentNode', $resourceNode)
-            ->andWhere('file IS NOT NULL')
             ->andWhere('l.visibility <> :visibility')
-            ->setParameter('visibility', ResourceLink::VISIBILITY_DELETED)
+            ->andWhere('file IS NOT NULL')
         ;
 
+        $params = [];
         if (null !== $course) {
-            $qb
-                ->andWhere('l.course = :course')
-                ->setParameter('course', $course)
-            ;
+            $qb->andWhere('l.course = :course');
+            $params['course'] = $course;
         }
+        $params['visibility'] = ResourceLink::VISIBILITY_DELETED;
+        $params['parentNode'] = $resourceNode;
+        $params['type'] = $type;
+
+        $qb->setParameters($params);
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
-//use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

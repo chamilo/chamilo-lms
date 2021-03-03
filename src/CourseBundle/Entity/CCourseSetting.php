@@ -165,14 +165,7 @@ class CCourseSetting
         return $this->category;
     }
 
-    /**
-     * Set value.
-     *
-     * @param string $value
-     *
-     * @return CCourseSetting
-     */
-    public function setValue($value)
+    public function setValue($value): self
     {
         $this->value = $value;
 

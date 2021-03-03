@@ -56,6 +56,7 @@ use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
 use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
+use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use CourseManager;
 use Database;
 use Doctrine\ORM\EntityManager;
@@ -235,9 +236,9 @@ class Container
         return self::$container->get('chamilo.settings.manager');
     }
 
-    public static function getCourseSettingsManager(): \Chamilo\CourseBundle\Manager\SettingsManager
+    public static function getCourseSettingsManager(): SettingsCourseManager
     {
-        return self::$container->get(\Chamilo\CourseBundle\Manager\SettingsManager::class);
+        return self::$container->get(SettingsCourseManager::class);
     }
 
     /**
@@ -519,7 +520,7 @@ class Container
         $em = $container->get('doctrine.orm.entity_manager');
         Database::setManager($em);
         CourseManager::setEntityManager($em);
-        CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
+        CourseManager::setCourseSettingsManager($container->get(SettingsCourseManager::class));
         // Setting course tool chain (in order to create tools to a course)
         CourseManager::setToolList($container->get(ToolChain::class));
         /*if ($setSession) {

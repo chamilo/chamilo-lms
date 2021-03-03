@@ -140,6 +140,16 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this;
     }
 
+    public function getResourceSettings(): Settings
+    {
+        return $this->settings;
+    }
+
+    public function getTemplates(): Template
+    {
+        return $this->templates;
+    }
+
     public function findResourceByTitle(
         string $title,
         ResourceNode $parentNode,
@@ -453,11 +463,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            //->from($className, 'resource')
-            ->innerJoin(
-                'resource.resourceNode',
-                'node'
-            )
+            ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
             ->where('type.name = :type')
@@ -494,7 +500,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            //->from($className, 'resource')
             ->innerJoin('resource.resourceNode', 'node')
             //->innerJoin('node.resourceLinks', 'links')
             //->where('node.resourceType = :type')
@@ -537,10 +542,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->innerJoin(
-                'resource.resourceNode',
-                'node'
-            )
+            ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
             ->where('type.name = :type')
@@ -683,16 +685,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         } catch (Throwable $exception) {
             throw new FileNotFoundException($resource->getResourceName());
         }
-    }
-
-    public function getResourceSettings(): Settings
-    {
-        return $this->settings;
-    }
-
-    public function getTemplates(): Template
-    {
-        return $this->templates;
     }
 
     /**

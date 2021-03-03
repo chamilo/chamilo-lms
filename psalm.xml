@@ -195,7 +195,6 @@
     </projectFiles>
 
     <issueHandlers>
-
         <MismatchingDocblockPropertyType errorLevel="info"/>
         <RedundantCastGivenDocblockType errorLevel="info"/>
 
@@ -321,8 +320,8 @@
     </issueHandlers>
 <plugins>
     <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
-    <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
-        <containerXml>var/cache/dev/Chamilo_KernelDevDebugContainer.xml</containerXml>
-    </pluginClass>
+<!--    <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">-->
+<!--        <containerXml>var/cache/dev/Chamilo_KernelDevDebugContainer.xml</containerXml>-->
+<!--    </pluginClass>-->
 </plugins>
 </psalm>

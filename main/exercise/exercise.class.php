@@ -10769,7 +10769,8 @@ class Exercise
         $courseId = 0,
         $sessionId = 0,
         $count = false,
-        $toUsers = []
+        $toUsers = [],
+        $withSelectAll = true
     ) {
         $data = [];
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
@@ -10856,6 +10857,14 @@ class Exercise
             return (isset($data[0]) && isset($data[0]['total'])) ? $data[0]['total'] : 0;
         }
         $usersArray = [];
+        $return = [];
+        if($withSelectAll) {
+            $return[] = [
+                'user_id' => 'X',
+                'value' => 'X',
+                'user_name' => get_lang('AllStudents'),
+            ];
+        }
         foreach ($data as $index => $item) {
             if (isset($item['user_id'])) {
                 if (!isset($usersArray[$item['user_id']])) {
@@ -10863,10 +10872,11 @@ class Exercise
                 }
                 $userData = $usersArray[$item['user_id']];
                 $data[$index]['user_name'] = $userData['complete_name'];
+                $return[] = $data[$index];
             }
         }
 
-        return $data;
+        return $return;
     }
 
     /**

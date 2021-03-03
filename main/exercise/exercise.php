@@ -492,6 +492,25 @@ if ($is_allowedToEdit) {
                             !empty($toUsers) &&
                             !empty($exerciseId)
                         ) {
+                            $sessionId = isset($_GET['id_session'])?(int)$_GET['id_session']:0;
+                            $courseCode = isset($_GET['cidReq'])?$_GET['cidReq']:null;
+                            $courseId = api_get_course_int_id($courseCode);
+                            $temo = [];
+                            if (is_int(strpos($toUsers, 'X'))){
+                                // to all users
+                                $temo = Exercise::getUsersInExercise(
+                                    $exerciseId,
+                                    $courseId ,
+                                    $sessionId,
+                                    false,
+                                     [],
+                                    false
+                                );
+                                $toUsers = [];
+                                foreach($temo as $item){
+                                    $toUsers[] = $item['user_id'];
+                                }
+                            }
                             $toUsers = explode(',', $toUsers);
                             api_set_more_memory_and_time_limits();
                             Exercise::notifyUsersOfTheExercise(

@@ -14,8 +14,6 @@ use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Exception\ValidatorException;
 
 class SettingsCourseManager extends SettingsManager
 {
@@ -138,7 +136,9 @@ class SettingsCourseManager extends SettingsManager
     {
         $repo = $this->manager->getRepository(CCourseSetting::class);
         $list = [];
-        $parameters = $repo->findBy(['category' => $namespace]);
+        $parameters = $repo->findBy([
+            'category' => $namespace,
+        ]);
         foreach ($parameters as $parameter) {
             $list[$parameter->getTitle()] = $parameter->getValue();
         }

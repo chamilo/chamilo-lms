@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form\Type;
 
-use Chamilo\CoreBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
-use Mpdf\Tag\P;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,15 +31,10 @@ class YesNoNumericType extends AbstractType
         $builder->addModelTransformer(
             new CallbackTransformer(
                 function ($value) {
-
-                    $value = (int) $value;
-
-                    return $value;
+                    return (int) $value;
                 },
                 function ($value) {
-                    $value = (string) $value;
-
-                    return $value;
+                    return (string) $value;
                 }
             )
         );

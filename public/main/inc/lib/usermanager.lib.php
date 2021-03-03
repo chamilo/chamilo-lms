@@ -424,16 +424,8 @@ class UserManager
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
-                $tplSubject = new Template(
-                    null,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false
-                );
-                $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
-                $emailSubject = $tplSubject->fetch($layoutSubject);
+                $tpl = Container::getTwig();
+                $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig');
                 $sender_name = api_get_person_name(
                     api_get_setting('administratorName'),
                     api_get_setting('administratorSurname'),
@@ -453,28 +445,23 @@ class UserManager
                     }
                 }
 
-                $tplContent = new Template(
-                    null,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false
-                );
                 // variables for the default template
-                $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
-                $tplContent->assign('login_name', $loginName);
-                $tplContent->assign('original_password', stripslashes($original_password));
-                $tplContent->assign('mailWebPath', $url);
-                $tplContent->assign('new_user', $user);
+                $params = [
+                    'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
+                    'login_name' => $loginName,
+                    'original_password' => stripslashes($original_password),
+                    'mailWebPath' => $url,
+                    'new_user' => $user,
+                ];
 
-                $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
-                $emailBody = $tplContent->fetch($layoutContent);
+                $emailBody = $tpl->render(
+                    '@ChamiloCore/Mailer/Legacy/content_registration_platform.html.twig',
+                    $params
+                );
 
                 $userInfo = api_get_user_info($userId);
                 $mailTemplateManager = new MailTemplateManager();
-
-                $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
+                $phoneNumber = $extra['mobile_phone_number'] ?? null;
 
                 $additionalParameters = [
                     'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
@@ -497,8 +484,9 @@ class UserManager
 
                 $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
                 if (true === $twoEmail) {
-                    $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
-                    $emailBody = $tplContent->fetch($layoutContent);
+                    $emailBody = $tpl->render(
+                        '@ChamiloCore/Mailer/Legacy/new_user_first_email_confirmation.html.twig'
+                    );
 
                     if (!empty($emailBodyTemplate) &&
                         isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
@@ -524,8 +512,7 @@ class UserManager
                         $creatorEmail
                     );
 
-                    $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
-                    $emailBody = $tplContent->fetch($layoutContent);
+                    $emailBody = $tpl->render('@ChamiloCore/Mailer/Legacy/new_user_second_email_confirmation.html.twig');
 
                     if (!empty($emailBodyTemplate) &&
                         isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
@@ -589,25 +576,15 @@ class UserManager
                 $notification = api_get_configuration_value('send_notification_when_user_added');
                 if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
                     foreach ($notification['admins'] as $adminId) {
-                        $emailSubjectToAdmin = get_lang('The user has been added').': '.api_get_person_name($firstName, $lastName);
+                        $emailSubjectToAdmin = get_lang('The user has been added').': '.
+                            api_get_person_name($firstName, $lastName);
                         MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody, $userId);
                     }
                 }
 
                 if ($sendEmailToAllAdmins) {
                     $adminList = self::get_all_administrators();
-
-                    $tplContent = new Template(
-                        null,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false
-                    );
                     // variables for the default template
-                    $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
-                    $tplContent->assign('user_added', $user);
                     $renderer = FormValidator::getDefaultRenderer();
                     // Form template
                     $elementTemplate = ' {label}: {element} <br />';
@@ -617,11 +594,16 @@ class UserManager
                     $form->removeElement('submit');
                     $formData = $form->returnForm();
                     $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
-                    $tplContent->assign('link', Display::url($url, $url));
-                    $tplContent->assign('form', $formData);
-
-                    $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
-                    $emailBody = $tplContent->fetch($layoutContent);
+                    $params = [
+                        'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
+                        'user_added' => $user,
+                        'link' => Display::url($url, $url),
+                        'form' => $formData,
+                    ];
+                    $emailBody = $tpl->render(
+                        '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',
+                        $params
+                    );
 
                     if (!empty($emailBodyTemplate) &&
                         isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
@@ -634,7 +616,6 @@ class UserManager
                     }
 
                     $subject = get_lang('The user has been added');
-
                     foreach ($adminList as $adminId => $data) {
                         MessageManager::send_message_simple(
                             $adminId,
@@ -644,12 +625,13 @@ class UserManager
                         );
                     }
                 }
-                /* ENDS MANAGE EVENT WITH MAIL */
             }
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
         } else {
             Display::addFlash(
-                Display::return_message(get_lang('There happened an unknown error. Please contact the platform administrator.'))
+                Display::return_message(
+                    get_lang('There happened an unknown error. Please contact the platform administrator.')
+                )
             );
 
             return false;

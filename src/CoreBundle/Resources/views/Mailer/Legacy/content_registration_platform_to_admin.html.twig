@@ -1,0 +1,13 @@
+<p>{{ 'UserXWithLangXRegisteredTheSite'| trans | format(user_added.completeName, user_added.language) }} </p>
+<p>{{ 'HisProfileIs'| trans }} </p>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="form-horizontal">
+            {{ form }}
+        </div>
+    </div>
+</div>
+
+<p>{{ 'YouCanAssignATutorInThisLinkX'|trans | format(link)}} </p>
+
+{% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}

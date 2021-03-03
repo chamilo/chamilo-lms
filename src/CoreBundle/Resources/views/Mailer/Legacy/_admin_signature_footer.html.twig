@@ -1,0 +1,11 @@
+<p>{{ 'Sincerely'|trans }}</p>
+<p>{{ 'admin.administrator_name' | api_get_setting }} {{ 'admin.administrator_surname' | api_get_setting }}<br />
+    {{ 'Manager'|trans }} {{ 'site_name' | api_get_setting }}<br />
+
+    {% if 'admin.administrator_phone' | api_get_setting %}
+        {{ 'T. ' ~ 'admin.administrator_phone' | api_get_setting }}<br />
+    {% endif %}
+    {% if 'admin.administrator_email' | api_get_setting %}
+        {{ 'Email'|trans ~ ': ' ~ 'admin.administrator_email' | api_get_setting }}
+    {% endif %}
+</p>

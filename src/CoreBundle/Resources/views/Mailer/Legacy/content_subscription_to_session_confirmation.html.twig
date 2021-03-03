@@ -1,0 +1,5 @@
+<p>{{ 'Dear'|trans }} {{ complete_name }},</p>
+<p>{{ 'YouAreRegisterToSessionX'|trans|format(session_name) }}</p>
+<p>{{ 'Address'|trans }}  {{ _s.site_name }} {{ 'Is'|trans }} : {{ _p.web }}</p>
+<p>{{ 'Problem'|trans }}</p>
+{% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}

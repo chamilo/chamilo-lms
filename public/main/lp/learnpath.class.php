@@ -7179,10 +7179,6 @@ class learnpath
      */
     public function displayDocumentForm($action = 'add', $lpItem = null)
     {
-        if (empty($lpItem)) {
-            return '';
-        }
-
         $courseInfo = api_get_course_info();
 
         $form = new FormValidator(
@@ -7195,7 +7191,9 @@ class learnpath
 
         $data = $this->generate_lp_folder($courseInfo);
 
-        LearnPathItemForm::setForm($form, $action, $this, $lpItem);
+        if (null !== $lpItem) {
+            LearnPathItemForm::setForm($form, $action, $this, $lpItem);
+        }
 
         switch ($action) {
             case 'add':
@@ -8232,7 +8230,6 @@ class learnpath
             get_lang('Add the Assignments tool to the course').'</a>';
         $return .= '</li>';*/
 
-        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
             $icon = Display::return_icon('works.png', '', [], ICON_SIZE_TINY);

@@ -13,13 +13,6 @@ class LearnPathItemForm
 {
     public static function setForm(FormValidator $form, $action, learnpath $lp, CLpItem $lpItem)
     {
-        $itemId = $lpItem->getIid();
-        $itemTitle = $lpItem->getTitle();
-        $itemDescription = $lpItem->getDescription();
-        $parentItemId = $lpItem->getParentItemId();
-        $itemType = $lpItem->getItemType();
-        $previousItemId = $lpItem->getPreviousItemId();
-
         $arrLP = $lp->getItemsForForm();
         $lp->tree_array($arrLP);
         $arrLP = isset($lp->arrMenu) ? $lp->arrMenu : [];
@@ -43,6 +36,13 @@ class LearnPathItemForm
 
                 break;
         }
+
+        $itemId = $lpItem->getIid();
+        $itemTitle = $lpItem->getTitle();
+        $itemDescription = $lpItem->getDescription();
+        $parentItemId = $lpItem->getParentItemId();
+        $itemType = $lpItem->getItemType();
+        $previousItemId = $lpItem->getPreviousItemId();
 
         $arrHide = [];
         $count = count($arrLP);

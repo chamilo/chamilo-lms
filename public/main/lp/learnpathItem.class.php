@@ -2441,7 +2441,6 @@ class learnpathItem
 
                                         return $returnstatus;
                                     } elseif ('student_publication' === $itemToCheck->type) {
-                                        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
                                         $workId = $items[$refs_list[$prereqs_string]]->path;
                                         $count = get_work_count_by_student($user_id, $workId);
                                         if ($count >= 1) {

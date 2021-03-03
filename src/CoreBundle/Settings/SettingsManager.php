@@ -142,11 +142,12 @@ class SettingsManager implements SettingsManagerInterface
                 );
                 $name = $category.'.'.$name;
             } else {
-                throw new InvalidArgumentException(sprintf('Parameter must be in format "category.name", "%s" given.', $name));
+                $message = sprintf('Parameter must be in format "category.name", "%s" given.', $name);
+                throw new InvalidArgumentException($message);
             }
         }
 
-        list($category, $name) = explode('.', $name);
+        [$category, $name] = explode('.', $name);
         $this->loadAll();
 
         if (!empty($this->schemaList)) {
@@ -155,7 +156,7 @@ class SettingsManager implements SettingsManagerInterface
             return $settings->get($name);
         }
 
-        throw new InvalidArgumentException(sprintf('Catregory %s not found', $category));
+        throw new InvalidArgumentException(sprintf('Category %s not found', $category));
         /*exit;
 
         $settings = $this->load($category, $name);
@@ -567,6 +568,7 @@ class SettingsManager implements SettingsManagerInterface
             'Institution' => 'Platform',
             'InstitutionUrl' => 'Platform',
             'siteName' => 'Platform',
+            'site_name' => 'Platform',
             'emailAdministrator' => 'admin',
             //'emailAdministrator' => 'Platform',
             'administratorSurname' => 'admin',

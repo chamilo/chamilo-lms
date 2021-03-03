@@ -6236,7 +6236,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->setFiletype($fileType)
             ->setTitle($title)
             ->setComment($comment)
-            ->setReadonly($readonly)
+            ->setReadonly(1 === $readonly)
             ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, $group)
         ;

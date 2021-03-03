@@ -29,7 +29,7 @@ class CLpItem
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $iid;
+    protected ?int $iid;
 
     /**
      * @ORM\Column(name="c_id", type="integer")

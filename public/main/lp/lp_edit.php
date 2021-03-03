@@ -361,7 +361,7 @@ if ($form->validate()) {
         ->setContentLocal($_REQUEST['lp_proximity'] ?? '')
         ->setUseMaxScore(isset($_POST['use_max_score']) ? 1 : 0)
         ->setDefaultEncoding($_REQUEST['lp_encoding'])
-        ->setAccumulateScormTime(isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true')
+        ->setAccumulateScormTime(isset($_REQUEST['accumulate_scorm_time']) ? 1 : 0)
         ->setPublicatedOn(api_get_utc_datetime($publicated_on, true, true))
         ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
         ->setCategory($category)

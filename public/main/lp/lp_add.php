@@ -205,7 +205,7 @@ if ($form->validate()) {
         );*/
 
         $lp->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0);
-        $lp->setAccumulateScormTime($_REQUEST['accumulate_scorm_time'] ?? 'true');
+        $lp->setAccumulateScormTime(1 == (int) $_REQUEST['accumulate_scorm_time'] ? 1 : 0);
         $lpRepo->update($lp);
 
         $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();

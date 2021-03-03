@@ -373,7 +373,7 @@ class AnnouncementManager
         $groupId = (int) $groupId;
 
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
             $dql = "SELECT a, ip
                     FROM ChamiloCourseBundle:CAnnouncement a
@@ -470,7 +470,7 @@ class AnnouncementManager
             api_get_group_id()
         );
 
-        if (empty($announcement)) {
+        if (null === $announcement) {
             return '';
         }
 
@@ -482,9 +482,10 @@ class AnnouncementManager
 
         $repo = Container::getAnnouncementRepository();
         $isVisible = $repo->isGranted(ResourceNodeVoter::VIEW, $announcement);
+
         $url = api_get_self()."?".api_get_cidreq();
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
             $modify_icons = "<a href=\"".$url."&action=modify&id=".$id."\">".
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";

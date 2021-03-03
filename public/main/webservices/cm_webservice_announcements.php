@@ -136,7 +136,7 @@ class WSCMAnnouncements extends WSCM
             // the user is not member of any group
             // this is an identified user => show the general announcements AND his personal announcements
             if ($user_id) {
-                if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                if ((1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
                     $cond_user_id = " AND (
                         ip.lastedit_user_id = '".api_get_user_id()."' OR
                         ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
@@ -159,7 +159,7 @@ class WSCMAnnouncements extends WSCM
                         ORDER BY display_order DESC
                         LIMIT 0,$maximum";
             } else {
-                if (api_get_course_setting('allow_user_edit_announcement')) {
+                if (1 === (int) api_get_course_setting('allow_user_edit_announcement')) {
                     $cond_user_id = " AND (
                         ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL
                     ) ";

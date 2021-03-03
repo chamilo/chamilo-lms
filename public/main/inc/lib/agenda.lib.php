@@ -1576,8 +1576,8 @@ class Agenda
                     )
                 )
             )
-            ->setParameter('start', $start, Types::INTEGER)
-            ->setParameter('end', $end, Types::INTEGER);
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
         }
 
         /*

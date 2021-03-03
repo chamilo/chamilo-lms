@@ -294,9 +294,9 @@ class GroupManager
             ->setWikiState($wikiState)
             ->setAnnouncementsState($anonuncementState)
             ->setChatState($chatState)
-            ->setSelfRegistrationAllowed($selfRegAllowed)
-            ->setSelfUnregistrationAllowed($selfUnregAllwoed)
-            ->setDocumentAccess($documentAccess)
+            ->setSelfRegistrationAllowed(1 === (int) $selfRegAllowed)
+            ->setSelfUnregistrationAllowed(1 === (int) $selfUnregAllwoed)
+            ->setDocumentAccess((int) $documentAccess)
             ->setParent($course)
             ->addCourseLink($course, $session)
         ;
@@ -324,14 +324,12 @@ class GroupManager
             if ($forumState >= 0) {
                 $forumName = get_lang('Group forums');
                 $repo = Container::getForumCategoryRepository();
-                $criteria = ['cId' => $course_id, 'catTitle' => $forumName];
-                $category = $repo->findOneBy($criteria);
+                $category = $repo->findResourceByTitle($forumName, $course->getResourceNode(), $course);
+                /*$criteria = ['cId' => $course_id, 'catTitle' => $forumName];
+                $category = $repo->findOneBy($criteria);*/
 
                 if (empty($category)) {
-                    $categoryParam = [
-                        'forum_category_title' => $forumName,
-                    ];
-                    $categoryId = store_forumcategory($categoryParam);
+                    $categoryId = store_forumcategory(['forum_category_title' => $forumName]);
                 } else {
                     $categoryId = $category->getIid();
                 }

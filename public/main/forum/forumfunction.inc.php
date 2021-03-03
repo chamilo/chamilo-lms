@@ -785,7 +785,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         $lp = $lpRepo->find($lpId);
     }
 
-    //'forum_image' => $new_file_name,
     $forum
         ->setForumTitle($values['forum_title'])
         ->setForumComment($values['forum_comment'] ?? '')
@@ -796,9 +795,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setAllowAttachments($values['allow_attachments_group']['allow_attachments'] ?? 0)
         ->setAllowNewThreads((int) ($values['allow_new_threads_group']['allow_new_threads'] ?? 0))
         ->setDefaultView($values['default_view_type_group']['default_view_type'] ?? null)
-        ->setForumOfGroup($values['group_forum'] ?? null)
+        ->setForumOfGroup((string) ($values['group_forum'] ?? ''))
         ->setForumGroupPublicPrivate($values['public_private_group_forum_group']['public_private_group_forum'] ?? '')
-        ->setModerated($values['moderated']['moderated'] ?? null)
+        ->setModerated((bool) ($values['moderated']['moderated'] ?? false))
         ->setStartTime(!empty($values['start_time']) ? api_get_utc_datetime($values['start_time'], true, true) : null)
         ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time'], true, true) : null)
         ->setSessionId($session_id)

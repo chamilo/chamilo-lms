@@ -58,7 +58,7 @@ class CGroup extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="CGroupCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected CGroupCategory $category;
+    protected ?CGroupCategory $category;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)

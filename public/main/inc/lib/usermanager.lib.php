@@ -818,8 +818,8 @@ class UserManager
         SurveyManager::delete_all_survey_invitations_by_user($user_id);
 
         // Delete students works
-        $sql = "DELETE FROM $table_work WHERE user_id = $user_id AND c_id <> 0";
-        Database::query($sql);
+        /*$sql = "DELETE FROM $table_work WHERE user_id = $user_id ";
+        Database::query($sql);*/
 
         /*$sql = "UPDATE c_item_property SET to_user_id = NULL
                 WHERE to_user_id = '".$user_id."'";

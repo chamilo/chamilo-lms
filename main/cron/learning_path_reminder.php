@@ -31,14 +31,13 @@ if (!isset($activeMessageNewlp['default_value'])) {
 
 /**
  * Send the message to the intended user, manage the corresponding template and send through
- * MessageManager::send_message_simple, using this for the option of human resources managers
+ * MessageManager::send_message_simple, using this for the option of human resources managers.
  *
- * @param Array  $toUser
- * @param Int    $fromUser
- * @param String $courseName
- * @param String $lpName
- * @param String $link
- *
+ * @param array  $toUser
+ * @param int    $fromUser
+ * @param string $courseName
+ * @param string $lpName
+ * @param string $link
  */
 function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
 {
@@ -79,18 +78,19 @@ function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
         $fromUser,
         true
     );
-// $drhList = UserManager::getDrhListFromUser($receiverUserId);
+    // $drhList = UserManager::getDrhListFromUser($receiverUserId);
 }
 
 /**
- * Obtains the data of the learning path and course searched by the id of the LP
+ * Obtains the data of the learning path and course searched by the id of the LP.
  *
  * @param array $lpid
- *
  */
 function getLpDataByArrayId($lpid = [])
 {
-    if (count($lpid) == 0) return [];
+    if (count($lpid) == 0) {
+        return [];
+    }
     $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $sql = "
@@ -115,14 +115,12 @@ function getLpDataByArrayId($lpid = [])
         $return[$element['lp_id']] = $element;
     }
 
-
     return $return;
 }
 
 /**
  * Returns the id of the LPs that have the notification option active through the extra
- * field 'notify_student_and_hrm_when_available'
- *
+ * field 'notify_student_and_hrm_when_available'.
  */
 function getLpIdWithNotify()
 {
@@ -170,7 +168,7 @@ function LearningPaths()
     $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $tblItempProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    /*** Gets subscribed users individually in lp's by LearnpathSubscription **/
+    /* Gets subscribed users individually in lp's by LearnpathSubscription */
     $sql = "
     SELECT DISTINCT
         tblItemProperty.session_id as session_id,
@@ -196,17 +194,18 @@ function LearningPaths()
     Database::free_result($result);
     $groupUsers = [];
     foreach ($data as $row) {
-        $lpId = (int)$row['lp_id'];
+        $lpId = (int) $row['lp_id'];
         $lpData = [];
-        if (isset($lpsData[$lpId])) $lpData = $lpsData[$lpId];
+        if (isset($lpsData[$lpId])) {
+            $lpData = $lpsData[$lpId];
+        }
         $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
         $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
         $lpName = isset($lpData['name']) ? $lpData['name'] : null;
 
-
-        $sessionId = (int)$row['session_id'];
-        $toUser = (int)$row['user_id'];
-        $fromUser = (int)$row['from_user_id'];
+        $sessionId = (int) $row['session_id'];
+        $toUser = (int) $row['user_id'];
+        $fromUser = (int) $row['from_user_id'];
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
             'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
@@ -221,7 +220,7 @@ function LearningPaths()
         ];
         $itemProcessed[$lpId][$sessionId]['LearnpathSubscription'][$toUser] = $groupUsers[$lpId][$sessionId][$toUser];
     }
-    /*** Gets subscribed users by classes in lp's by LearnpathSubscription **/
+    /* Gets subscribed users by classes in lp's by LearnpathSubscription */
     $sql = "
     SELECT DISTINCT
          tblItemProperty.session_id as session_id,
@@ -252,16 +251,18 @@ function LearningPaths()
     Database::free_result($result);
     $groupUsers = [];
     foreach ($data as $row) {
-        $lpId = (int)$row['lp_id'];
+        $lpId = (int) $row['lp_id'];
         $lpData = [];
-        if (isset($lpsData[$lpId])) $lpData = $lpsData[$lpId];
+        if (isset($lpsData[$lpId])) {
+            $lpData = $lpsData[$lpId];
+        }
         $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
         $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
         $lpName = isset($lpData['name']) ? $lpData['name'] : null;
 
-        $sessionId = (int)$row['session_id'];
-        $toUser = (int)$row['user_id'];
-        $fromUser = (int)$row['from_user_id'];
+        $sessionId = (int) $row['session_id'];
+        $toUser = (int) $row['user_id'];
+        $fromUser = (int) $row['from_user_id'];
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
             'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
@@ -276,7 +277,7 @@ function LearningPaths()
         ];
         $itemProcessed[$lpId][$sessionId]['LearnpathSubscription'][$toUser] = $groupUsers[$lpId][$sessionId][$toUser];
     }
-    /*** Get users who are enrolled in the course **/
+    /* Get users who are enrolled in the course */
 
     $sql = "
     SELECT DISTINCT
@@ -298,14 +299,16 @@ function LearningPaths()
     $data = Database::store_result($result, 'ASSOC');
     Database::free_result($result);
     foreach ($data as $row) {
-        $lpId = (int)$row['lp_id'];
+        $lpId = (int) $row['lp_id'];
         $sessionId = 0;
-        if (isset($lpsData[$lpId])) $lpData = $lpsData[$lpId];
+        if (isset($lpsData[$lpId])) {
+            $lpData = $lpsData[$lpId];
+        }
         $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
         $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
         $lpName = isset($lpData['name']) ? $lpData['name'] : null;
-        $toUser = (int)$row['user_id'];
-        $fromUser = (int)0;
+        $toUser = (int) $row['user_id'];
+        $fromUser = (int) 0;
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
             'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
@@ -322,7 +325,7 @@ function LearningPaths()
             $itemProcessed[$lpId][$sessionId]['Normal'][$toUser] = $groupUsers[$lpId][$sessionId][$toUser];
         }
     }
-    /** Get the users who are registered in the sessions **/
+    /** Get the users who are registered in the sessions */
     $sql = "
     SELECT DISTINCT
       	tblSessionRelCourseRelUser.user_id AS user_id,
@@ -346,14 +349,16 @@ function LearningPaths()
     $data = Database::store_result($result, 'ASSOC');
     Database::free_result($result);
     foreach ($data as $row) {
-        $lpId = (int)$row['lp_id'];
+        $lpId = (int) $row['lp_id'];
         $sessionId = 0;
-        if (isset($lpsData[$lpId])) $lpData = $lpsData[$lpId];
+        if (isset($lpsData[$lpId])) {
+            $lpData = $lpsData[$lpId];
+        }
         $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
         $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
         $lpName = isset($lpData['name']) ? $lpData['name'] : null;
-        $toUser = (int)$row['user_id'];
-        $fromUser = (int)0;
+        $toUser = (int) $row['user_id'];
+        $fromUser = (int) 0;
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
             'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
@@ -374,7 +379,7 @@ function LearningPaths()
 
     /**
      * Send the emails to the corresponding students and their DRHs, Bearing in mind that if they exist through
-     * LearnpathSubscription, it will not send anything in the other elements
+     * LearnpathSubscription, it will not send anything in the other elements.
      */
     foreach ($itemProcessed as $lpId => $sessions) {
         foreach ($sessions as $sessionId => $types) {

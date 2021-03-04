@@ -1489,6 +1489,7 @@ class MySpace
         ";
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
+        Database::free_result($queryResult);
         $totalData = count($data);
         for ($i = 0; $i < $totalData; $i++) {
             $cLpItemsAutor[$data[$i]['lp_item_id']] = $data[$i]['author'];
@@ -1508,6 +1509,7 @@ class MySpace
         ";
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
+        Database::free_result($queryResult);
         $totalData = count($data);
         for ($i = 0; $i < $totalData; $i++) {
             $item = $data[$i];
@@ -2001,6 +2003,7 @@ class MySpace
         ";
         $queryResult = Database::query($sql);
         $dataTrack = Database::store_result($queryResult, 'ASSOC');
+        Database::free_result($queryResult);
         foreach ($dataTrack as $item) {
             $item['company'] = self::getCompanyOfUser($item['id']);
             $data[$item['lp_item_id']][] = $item;
@@ -4358,6 +4361,7 @@ class MySpace
 
             $queryResult = Database::query($sql);
             $data = Database::store_result($queryResult, 'ASSOC');
+            Database::free_result($queryResult);
             $totalData = count($data);
             for ($i = 0; $i < $totalData; $i++) {
                 $row = $data[$i];
@@ -4394,7 +4398,7 @@ class MySpace
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tblGroupToUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        $tblGroupUser = Database::get_course_table(TABLE_GROUP_USER);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
         $whereCondition = '';
         //Validating dates
@@ -4459,7 +4463,7 @@ class MySpace
                     $tblItemProperty as item_property";
             if ($withGroups) {
                 $query .= "
-                INNER JOIN $tblGroupToUser AS user_to_group on (user_to_group.id = item_property.to_group_id )
+                INNER JOIN $tblGroupUser AS user_to_group ON ( user_to_group.group_id = item_property.to_group_id )
                 INNER JOIN $tblUser AS u ON ( u.id = user_to_group.user_id )
                 ";
             } else {
@@ -4485,7 +4489,9 @@ class MySpace
                 ORDER BY item_property.ref, item_property.session_id
                 ";
             $queryResult = Database::query($query);
+            echo "<br>/*".__LINE__."<br>".__FUNCTION__."*/<br>$query;<br>";
             $data = Database::store_result($queryResult, 'ASSOC');
+            Database::free_result($queryResult);
             $totalData = count($data);
             for ($i = 0; $i < $totalData; $i++) {
                 $row = $data[$i];

@@ -1356,43 +1356,9 @@ echo '<script>
             e.preventDefault();
             e.stopPropagation();
             var $this = $(this);
-            var urlExtra = $this.data(\'url\') || null;
             var questionId = parseInt($this.data(\'question\')) || 0;
 
             save_now(questionId, "check_answers");
-
-            var checkUrl = "'.$checkAnswersUrl.'";
-
-            $("#global-modal").attr("data-keyboard", "false");
-            $("#global-modal").attr("data-backdrop", "static");
-            $("#global-modal").find(".close").hide();
-
-            $("#global-modal .modal-body").load(checkUrl, function() {
-                $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
-                var continueTest = $("<a>",{
-                    text: "'.addslashes(get_lang('ContinueTest')).'",
-                    title: "'.addslashes(get_lang('ContinueTest')).'",
-                    href: "javascript:void(0);",
-                    click: function(){
-                        $(this).attr("disabled", "disabled");
-                        $("#global-modal").modal("hide");
-                        $("#global-modal .modal-body").html("");
-                    }
-                }).addClass("btn btn-default").appendTo("#global-modal .modal-body .btn-group");
-
-                 $("<a>",{
-                    text: "'.addslashes(get_lang('EndTest')).'",
-                    title: "'.addslashes(get_lang('EndTest')).'",
-                    href: "javascript:void(0);",
-                    click: function() {
-                        $(this).attr("disabled", "disabled");
-                        continueTest.attr("disabled", "disabled");
-                        save_now(questionId, urlExtra);
-                        $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
-                    }
-                }).addClass("btn btn-primary").appendTo("#global-modal .modal-body .btn-group");
-            });
-            $("#global-modal").modal("show");
         });
 
         $(\'button[name="save_now"]\').on(\'touchstart click\', function (e) {
@@ -1522,7 +1488,44 @@ echo '<script>
                     $("#save_for_now_"+question_id).html(\''.
                         Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
+                    // Show popup
                     if ("check_answers" === url_extra) {
+                        var button = $(\'button[name="check_answers"]\');
+                        var questionId = parseInt(button.data(\'question\')) || 0;
+                        var urlExtra = button.data(\'url\') || null;
+                        var checkUrl = "'.$checkAnswersUrl.'";
+
+                        $("#global-modal").attr("data-keyboard", "false");
+                        $("#global-modal").attr("data-backdrop", "static");
+                        $("#global-modal").find(".close").hide();
+
+                        $("#global-modal .modal-body").load(checkUrl, function() {
+                            $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
+                            var continueTest = $("<a>",{
+                                text: "'.addslashes(get_lang('ContinueTest')).'",
+                                title: "'.addslashes(get_lang('ContinueTest')).'",
+                                href: "javascript:void(0);",
+                                click: function(){
+                                    $(this).attr("disabled", "disabled");
+                                    $("#global-modal").modal("hide");
+                                    $("#global-modal .modal-body").html("");
+                                }
+                            }).addClass("btn btn-default").appendTo("#global-modal .modal-body .btn-group");
+
+                             $("<a>",{
+                                text: "'.addslashes(get_lang('EndTest')).'",
+                                title: "'.addslashes(get_lang('EndTest')).'",
+                                href: "javascript:void(0);",
+                                click: function() {
+                                    $(this).attr("disabled", "disabled");
+                                    continueTest.attr("disabled", "disabled");
+                                    save_now(questionId, urlExtra);
+                                    $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
+                                }
+                            }).addClass("btn btn-primary").appendTo("#global-modal .modal-body .btn-group");
+                        });
+                        $("#global-modal").modal("show");
+
                         return true;
                     }
                     // window.quizTimeEnding will be reset in exercise.class.php

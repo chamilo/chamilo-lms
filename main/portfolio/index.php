@@ -26,6 +26,8 @@ $httpRequest = HttpRequest::createFromGlobals();
 
 $action = $httpRequest->query->get('action', 'list');
 
+$htmlHeadXtra[] = api_get_js('portfolio.js');
+
 switch ($action) {
     case 'add_category':
         $controller->addCategory();
@@ -180,10 +182,10 @@ switch ($action) {
 
         return;
     case 'export_pdf':
-        $controller->exportPdf();
+        $controller->exportPdf($httpRequest);
         break;
     case 'export_zip':
-        $controller->exportZip();
+        $controller->exportZip($httpRequest);
         break;
     case 'qualify':
         api_protect_course_script(true);

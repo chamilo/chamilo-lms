@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
@@ -2506,7 +2507,7 @@ function finishInstallationWithContainer(
         '',
         1,
         0,
-        null,
+        [],
         '',
         false,
         true,
@@ -2549,8 +2550,8 @@ function finishInstallationWithContainer(
         false,
         false
     );
-    $userRepo = $container->get('Chamilo\CoreBundle\Repository\Node\UserRepository');
-    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\Node\AccessUrlRepository');
+    $userRepo = $container->get(UserRepository::class);
+    $urlRepo = $container->get(AccessUrlRepository::class);
 
     installTools($container, $manager, false);
 

@@ -308,7 +308,12 @@ if (empty($installationProfile)) {
     }
 }
 
-$institutionUrlFormResult = api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES);
+$institutionUrlFormResult = '';
+if (api_stristr($institutionUrlForm, 'http://') || api_stristr($institutionUrlForm, 'https://')) {
+    $institutionUrlFormResult = api_htmlentities($institutionUrlForm, ENT_QUOTES);
+} else {
+    $institutionUrlFormResult = api_htmlentities($institutionUrlForm, ENT_QUOTES);
+}
 
 $form .= '<input type="hidden" name="updatePath" value="'.(!$badUpdatePath ? api_htmlentities($proposedUpdatePath, ENT_QUOTES) : '').'" />';
 $form .= '<input type="hidden" name="urlAppendPath"      value="'.api_htmlentities($urlAppendPath, ENT_QUOTES).'"/>';
@@ -479,8 +484,13 @@ if (isset($_POST['step2'])) {
 
     $content = implode('<br />', $params);
     echo Display::panel($content);
-
-    $allowSelfRegistrationLiteral = 'true' === $allowSelfReg ? get_lang('Yes') : 'approval' === $allowSelfReg ? get_lang('Approval') : get_lang('No');
+    $allowSelfRegistrationLiteral = get_lang('No');
+    if ('true' === $allowSelfReg) {
+        $allowSelfRegistrationLiteral = get_lang('Yes');
+    }
+    if ('approval' === $allowSelfReg) {
+        $allowSelfRegistrationLiteral = get_lang('Approval');
+    }
 
     if ('update' === $installType) {
         $urlForm = get_config_param('root_web');

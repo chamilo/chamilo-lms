@@ -655,7 +655,7 @@ class Exercise
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
-                    ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
+                    ON (e.question_id = q.iid)
 					WHERE e.quiz_id	= '".$this->id."' ";
 
             $orderCondition = ' ORDER BY question_order ';
@@ -757,7 +757,7 @@ class Exercise
         $sql = "SELECT count(q.iid) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
                     e.quiz_id = ".$this->getId();
         $result = Database::query($sql);
@@ -787,9 +787,8 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $exerciseQuestionTable e
                 INNER JOIN $questionTable q
-                ON (e.question_id= q.iid AND e.c_id = q.c_id)
+                ON (e.question_id= q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
                     e.quiz_id = '".$this->getId()."'
                 ORDER BY q.question";
         $result = Database::query($sql);
@@ -1163,9 +1162,8 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id= q.iid AND e.c_id = q.c_id)
+                ON (e.question_id= q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
                     e.quiz_id = '".$this->getId()."'
                     $randomLimit ";
         $result = Database::query($sql);
@@ -1212,10 +1210,9 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
                     q.iid = $questionId AND
-                    e.c_id = {$this->course_id} AND
                     e.quiz_id = ".$this->getId();
 
         $result = Database::query($sql);
@@ -1232,11 +1229,10 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
                     q.type = $type AND
-                    e.c_id = {$this->course_id} AND
-                    e.quiz_id = ".$this->id;
+                    e.quiz_id = ".$this->getId();
 
         $result = Database::query($sql);
 
@@ -8020,7 +8016,7 @@ class Exercise
                     cq.c_id = %s AND
                     (cq.session_id = %s OR cq.session_id = 0) AND
                     cq.active = 0
-                ORDER BY cq.id";
+                ORDER BY cq.iid";
         $sql = sprintf($sql, $courseId, $sessionId);
 
         $result = Database::query($sql);

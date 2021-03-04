@@ -4489,7 +4489,6 @@ class MySpace
                 ORDER BY item_property.ref, item_property.session_id
                 ";
             $queryResult = Database::query($query);
-            echo "<br>/*".__LINE__."<br>".__FUNCTION__."*/<br>$query;<br>";
             $data = Database::store_result($queryResult, 'ASSOC');
             Database::free_result($queryResult);
             $totalData = count($data);

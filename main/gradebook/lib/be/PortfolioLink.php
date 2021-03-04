@@ -30,7 +30,7 @@ class PortfolioLink extends EvalLink
 
     protected function get_evaluation()
     {
-        $this->evaluation =  parent::get_evaluation();
+        $this->evaluation = parent::get_evaluation();
         $this->evaluation->set_type('portfolio');
 
         return $this->evaluation;

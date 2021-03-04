@@ -2175,7 +2175,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getSessions(int $relationType): array
     {
         $sessions = [];
-        foreach ($this->sessions as $sessionRelUser) {
+        foreach ($this->getSessionsRelUser() as $sessionRelUser) {
             if ($sessionRelUser->getRelationType() === $relationType) {
                 $sessions[] = $sessionRelUser->getSession();
             }

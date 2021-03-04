@@ -314,7 +314,7 @@ class Message
     /**
      * Get attachments.
      *
-     * @return ArrayCollection|MessageAttachment[]
+     * @return Collection|MessageAttachment[]
      */
     public function getAttachments()
     {

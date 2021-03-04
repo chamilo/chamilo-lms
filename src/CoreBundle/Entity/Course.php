@@ -375,6 +375,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->lastEdit = new DateTime();
         $this->description = '';
         $this->tutorName = '';
+        $this->registrationCode = null;
+        $this->legal = '';
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->tools = new ArrayCollection();
@@ -387,6 +389,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->searchEngineRefs = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->activateLegal = 0;
+        $this->addTeachersToSessionsCourses = false;
+        $this->courseTypeId = null;
         //$this->specificFieldValues = new ArrayCollection();
         //$this->sharedSurveys = new ArrayCollection();
     }

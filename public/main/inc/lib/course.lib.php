@@ -2658,8 +2658,10 @@ class CourseManager
      */
     public static function userCourseSort($user_id, $course_code)
     {
-        if ($user_id != strval(intval($user_id))) {
-            return false;
+        $user_id = (int) $user_id;
+
+        if (empty($user_id) || empty($course_code)) {
+            return 0;
         }
 
         $course_code = Database::escape_string($course_code);
@@ -2738,7 +2740,7 @@ class CourseManager
             }
         }
 
-        return $course_sort;
+        return (int) $course_sort;
     }
 
     /**

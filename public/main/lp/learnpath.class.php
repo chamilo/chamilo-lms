@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -19,7 +20,6 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CTool;
 use ChamiloSession as Session;
-use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -2209,8 +2209,7 @@ class learnpath
             $row = Database::fetch_array($rs, 'ASSOC');
 
             if (!empty($row['category_id'])) {
-                $em = Database::getManager();
-                $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($row['category_id']);
+                $category = Container::getLpCategoryRepository()->find($row['category_id']);
                 if (false === self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id))) {
                     return false;
                 }
@@ -4421,84 +4420,6 @@ class learnpath
         }
 
         return true;
-
-        $em = Database::getManager();
-
-        /** @var CLpCategory $category */
-        $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
-
-        if (!$category) {
-            return false;
-        }
-
-        if (empty($courseId)) {
-            return false;
-        }
-
-        $link = self::getCategoryLinkForTool($id);
-
-        /** @var CTool $tool */
-        $tool = $em->createQuery("
-                SELECT t FROM ChamiloCourseBundle:CTool t
-                WHERE
-                    t.course = :course AND
-                    t.link = :link1 AND
-                    t.image LIKE 'lp_category.%' AND
-                    t.link LIKE :link2
-                    $sessionCondition
-            ")
-            ->setParameters([
-                'course' => $courseId,
-                'link1' => $link,
-                'link2' => "$link%",
-            ])
-            ->getOneOrNullResult();
-
-        if (0 == $setVisibility && $tool) {
-            $em->remove($tool);
-            $em->flush();
-
-            return true;
-        }
-
-        if (1 == $setVisibility && !$tool) {
-            $tool = new CTool();
-            $tool
-                ->setCategory('authoring')
-                ->setCourse(api_get_course_entity($courseId))
-                ->setName(strip_tags($category->getName()))
-                ->setLink($link)
-                ->setImage('lp_category.png')
-                ->setVisibility(1)
-                ->setAdmin(0)
-                ->setAddress('pastillegris.gif')
-                ->setAddedTool(0)
-                ->setSessionId($sessionId)
-                ->setTarget('_self');
-
-            $em->persist($tool);
-            $em->flush();
-
-            $tool->setId($tool->getIid());
-
-            $em->persist($tool);
-            $em->flush();
-
-            return true;
-        }
-
-        if (1 == $setVisibility && $tool) {
-            $tool
-                ->setName(strip_tags($category->getName()))
-                ->setVisibility(1);
-
-            $em->persist($tool);
-            $em->flush();
-
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -4515,10 +4436,6 @@ class learnpath
         $courseId = 0,
         $sessionId = 0
     ) {
-        if (empty($category)) {
-            return false;
-        }
-
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
         if ($isAllowedToEdit) {
@@ -9717,21 +9634,12 @@ EOD;
         $item = new CLpCategory();
         $item
             ->setName($params['name'])
-            ->setCId($params['c_id'])
             ->setParent($courseEntity)
             ->addCourseLink($courseEntity, api_get_session_entity())
         ;
 
         $repo = Container::getLpCategoryRepository();
         $repo->create($item);
-
-        /*api_item_property_update(
-            api_get_course_info(),
-            TOOL_LEARNPATH_CATEGORY,
-            $item->getId(),
-            'visible',
-            api_get_user_id()
-        );*/
 
         return $item->getIid();
     }
@@ -9799,8 +9707,6 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
      * @return int|mixed
      */
     public static function getCountCategories($courseId)
@@ -9808,11 +9714,11 @@ EOD;
         if (empty($courseId)) {
             return 0;
         }
-        $em = Database::getManager();
-        $query = $em->createQuery('SELECT COUNT(u.id) FROM ChamiloCourseBundle:CLpCategory u WHERE u.cId = :id');
-        $query->setParameter('id', $courseId);
+        $repo = Container::getLpCategoryRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $qb->addSelect('count(resource)');
 
-        return $query->getSingleScalarResult();
+        return $qb->getSingleScalarResult();
     }
 
     /**
@@ -9825,10 +9731,12 @@ EOD;
         $em = Database::getManager();
 
         // Using doctrine extensions
-        /** @var SortableRepository $repo */
-        $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
+        $repo = Container::getLpCategoryRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
 
-        return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+        return $qb->getQuery()->getResult();
+
+        //return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
     }
 
     public static function getCategorySessionId($id)
@@ -9849,34 +9757,6 @@ EOD;
         }
 
         return 0;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return CLpCategory
-     */
-    public static function getCategory($id)
-    {
-        $id = (int) $id;
-        $em = Database::getManager();
-
-        return $em->find('ChamiloCourseBundle:CLpCategory', $id);
-    }
-
-    /**
-     * @param int $courseId
-     *
-     * @return array
-     */
-    public static function getCategoryByCourse($courseId)
-    {
-        $em = Database::getManager();
-        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(
-            ['cId' => $courseId]
-        );
-
-        return $items;
     }
 
     /**
@@ -9914,7 +9794,8 @@ EOD;
      */
     public static function getCategoryFromCourseIntoSelect($courseId, $addSelectOption = false)
     {
-        $items = self::getCategoryByCourse($courseId);
+        $repo = Container::getLpCategoryRepository();
+        $items = $repo->getResourcesByCourse(api_get_course_entity($courseId));
         $cats = [];
         if ($addSelectOption) {
             $cats = [get_lang('Select a category')];
@@ -10895,8 +10776,8 @@ EOD;
                         $origParseUrl = parse_url($url);
                         $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
 
-                        if ('local' == $scope) {
-                            if ('abs' == $type || 'rel' == $type) {
+                        if ('local' === $scope) {
+                            if ('abs' === $type || 'rel' === $type) {
                                 $documentFile = strstr($realOrigPath, 'document');
                                 if (false !== strpos($realOrigPath, $documentFile)) {
                                     $documentFile = str_replace('document', '', $documentFile);
@@ -10957,7 +10838,7 @@ EOD;
             $em = Database::getManager();
             $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
             foreach ($itemList['thread'] as $threadId) {
-                /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                /** @var CForumThread $thread */
                 $thread = $repo->find($threadId);
                 if ($thread) {
                     $itemList['forum'][] = $thread->getForum() ? $thread->getForum()->getIid() : 0;
@@ -11265,7 +11146,10 @@ EOD;
         }
         $extraFieldValue = new ExtraFieldValue('lp');
         $doUseScore = false;
-        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable($this->get_id(), 'use_score_as_progress');
+        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->get_id(),
+            'use_score_as_progress'
+        );
         if (!empty($useScore) && isset($useScore['value'])) {
             $doUseScore = $useScore['value'];
         }
@@ -11285,7 +11169,10 @@ EOD;
             return api_get_user_info(api_get_user_id())['username'];
         } elseif (null != api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id')) {
             $extraFieldValue = new ExtraFieldValue('user');
-            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id'));
+            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(
+                api_get_user_id(),
+                api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id')
+            );
 
             return $extrafield['value'];
         } else {

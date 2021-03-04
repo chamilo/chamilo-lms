@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -48,7 +49,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     protected int $displayOrder;
 
     /**
-     * @var ArrayCollection|CLink[]
+     * @var Collection|CLink[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLink", mappedBy="category")
      */

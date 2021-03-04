@@ -8,9 +8,9 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -32,18 +32,6 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected ?int $iid = null;
-
-    /**
-     * @Gedmo\SortableGroup
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected ?int $cId = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id")
-     */
-    protected Session $session;
 
     /**
      * @Assert\NotBlank()
@@ -70,7 +58,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected $users;
 
     /**
-     * @var ArrayCollection|CLp[]
+     * @var Collection|CLp[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLp", mappedBy="category", cascade={"detach"})
      */
@@ -90,28 +78,6 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     public function getIid(): ?int
     {
         return $this->iid;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     */
-    public function setCId($cId): self
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function setName(string $name): self

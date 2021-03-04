@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
  */
@@ -47,7 +49,7 @@ $form->addElement('hidden', 'c_id', api_get_course_int_id());
 $form->addElement('hidden', 'id', 0);
 
 $form->addButtonSave(get_lang('Save'));
-
+$repo = Container::getLpCategoryRepository();
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     if (!empty($values['id'])) {
@@ -67,7 +69,7 @@ if ($form->validate()) {
     $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 
     if ($id) {
-        $item = learnpath::getCategory($id);
+        $item = $repo->find($id);
         $defaults = [
             'id' => $item->getIid(),
             'name' => $item->getName(),

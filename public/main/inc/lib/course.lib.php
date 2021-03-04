@@ -34,47 +34,6 @@ class CourseManager
     /** This constant is used to show separate user names in the course
      * list (userportal), footer, etc */
     public const USER_SEPARATOR = ' |';
-    public $columns = [];
-    public static $em;
-    public static $toolList;
-    public static $courseSettingsManager;
-    private static $manager;
-
-    /**
-     * @param EntityManager
-     */
-    public static function setEntityManager($em)
-    {
-        self::$em = $em;
-    }
-
-    /**
-     * @return EntityManager
-     */
-    public static function getEntityManager()
-    {
-        return self::$em;
-    }
-
-    public static function getCourseSettingsManager(): SettingsCourseManager
-    {
-        return self::$courseSettingsManager;
-    }
-
-    public static function setCourseSettingsManager(SettingsCourseManager $courseSettingsManager): void
-    {
-        self::$courseSettingsManager = $courseSettingsManager;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return CourseRepository
-     */
-    public static function getManager()
-    {
-        return Container::getCourseRepository();
-    }
 
     /**
      * Creates a course.
@@ -2478,14 +2437,6 @@ class CourseManager
                     //Database::query($sql);
                 }
             }
-
-            /*$course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
-            $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();
-            if (is_dir($course_dir)) {
-                rename($course_dir, $archive_dir);
-            }*/
-
-            Category::deleteFromCourse($courseEntity);
 
             // Unsubscribe all users from the course
             $sql = "DELETE FROM $table_course_user WHERE c_id = $courseId";
@@ -6869,22 +6820,6 @@ class CourseManager
         }
 
         return Display::tabsOnlyLink($tabs, $default);
-    }
-
-    /**
-     * @param ToolChain $toolList
-     */
-    public static function setToolList($toolList)
-    {
-        self::$toolList = $toolList;
-    }
-
-    /**
-     * @return ToolChain
-     */
-    public static function getToolList()
-    {
-        return self::$toolList;
     }
 
     /**

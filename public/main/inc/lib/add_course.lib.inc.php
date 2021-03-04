@@ -258,7 +258,7 @@ class AddCourse
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $course = api_get_course_entity($course_id);
-        $settingsManager = CourseManager::getCourseSettingsManager();
+        $settingsManager = Container::getCourseSettingsManager();
         $settingsManager->setCourse($course);
 
         $alert = api_get_setting('email_alert_manager_on_new_quiz');
@@ -664,9 +664,7 @@ class AddCourse
         $disk_quota = isset($params['disk_quota']) ? $params['disk_quota'] : null;
 
         if (!isset($params['visibility'])) {
-            $default_course_visibility = api_get_setting(
-                'courses_default_creation_visibility'
-            );
+            $default_course_visibility = api_get_setting('courses_default_creation_visibility');
             if (isset($default_course_visibility)) {
                 $visibility = $default_course_visibility;
             } else {
@@ -676,7 +674,16 @@ class AddCourse
             $visibility = $params['visibility'];
         }
 
-        $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : COURSE_VISIBILITY_OPEN_PLATFORM == $visibility ? 1 : 0;
+        $subscribe = false;
+        if (isset($params['subscribe'])) {
+            $subscribe = 1 === (int) $params['subscribe'];
+        } else {
+            if (COURSE_VISIBILITY_OPEN_PLATFORM == $visibility) {
+                $subscribe = true;
+            }
+        }
+
+        //$subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : COURSE_VISIBILITY_OPEN_PLATFORM == $visibility ? 1 : 0;
         $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;

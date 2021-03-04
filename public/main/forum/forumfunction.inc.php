@@ -3116,7 +3116,7 @@ function saveThreadScore(
 
         if (0 == $row[0]) {
             $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
-                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
+                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
             Database::query($sql);
 
             return 'insert';
@@ -3281,9 +3281,7 @@ function saveThreadScoreHistory(
     $user_id = (int) $user_id;
     $qualify_user_id = api_get_user_id();
 
-    if ($user_id == (string) ((int) $user_id) &&
-        $thread_id == (string) ((int) $thread_id) && 1 == $option
-    ) {
+    if (1 == $option) {
         // Extract information of thread_qualify.
         $sql = "SELECT qualify, qualify_time
                 FROM $table_threads_qualify

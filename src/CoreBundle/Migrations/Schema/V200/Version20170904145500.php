@@ -125,12 +125,17 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('mandatory')) {
             $this->addSql('ALTER TABLE c_quiz_question ADD mandatory INT NOT NULL');
         }
+
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_quiz_question DROP id');
         }
 
         if (false === $table->hasColumn('feedback')) {
             $this->addSql('ALTER TABLE c_quiz_question ADD feedback LONGTEXT DEFAULT NULL;');
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_quiz_question');
         }
 
         // c_quiz_question_category.
@@ -163,6 +168,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         if ($table->hasIndex('exercise')) {
             $this->addSql('ALTER TABLE c_quiz_rel_question DROP KEY exercise');
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_quiz_rel_question');
         }
 
         $this->addSql('ALTER TABLE c_quiz_rel_question CHANGE question_id question_id INT DEFAULT NULL');

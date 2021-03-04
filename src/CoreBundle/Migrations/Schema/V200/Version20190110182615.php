@@ -89,9 +89,9 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_lp_category');
         }
 
-        if (false === $table->hasForeignKey('FK_90A0FC07613FECDF')) {
+        if ($table->hasForeignKey('FK_90A0FC07613FECDF')) {
             $this->addSql(
-                'ALTER TABLE c_lp_category ADD CONSTRAINT FK_90A0FC07613FECDF FOREIGN KEY (session_id) REFERENCES session (id)'
+                'ALTER TABLE c_lp_category DROP FOREIGN KEY FK_90A0FC07613FECDF;'
             );
         }
         if (false === $table->hasForeignKey('FK_90A0FC071BAD783F')) {
@@ -100,8 +100,8 @@ class Version20190110182615 extends AbstractMigrationChamilo
             );
         }
 
-        if (false === $table->hasIndex('IDX_90A0FC07613FECDF')) {
-            $this->addSql('CREATE INDEX IDX_90A0FC07613FECDF ON c_lp_category (session_id)');
+        if ($table->hasIndex('IDX_90A0FC07613FECDF')) {
+            $this->addSql('DROP INDEX IDX_90A0FC07613FECDF ON c_lp_category;');
         }
         if (false === $table->hasIndex('UNIQ_90A0FC071BAD783F')) {
             $this->addSql('CREATE UNIQUE INDEX UNIQ_90A0FC071BAD783F ON c_lp_category (resource_node_id)');

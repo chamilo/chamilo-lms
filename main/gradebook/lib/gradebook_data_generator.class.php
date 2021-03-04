@@ -780,21 +780,21 @@ class GradebookDataGenerator
                                 true
                             );
                         }
-                    /*$type = $item->get_item_type();
-                    if ('L' === $type && 'ExerciseLink' === get_class($item)) {
-                        $display = ExerciseLib::show_score(
-                            $score[0],
-                            $score[1],
-                            false,
-                            true,
-                            false,
-                            false,
-                            null,
-                            null,
-                            false,
-                            true
-                        );
-                    }*/
+                        /*$type = $item->get_item_type();
+                        if ('L' === $type && 'ExerciseLink' === get_class($item)) {
+                            $display = ExerciseLib::show_score(
+                                $score[0],
+                                $score[1],
+                                false,
+                                true,
+                                false,
+                                false,
+                                null,
+                                null,
+                                false,
+                                true
+                            );
+                        }*/
                     } else {
                         $display = ExerciseLib::show_score(
                             $score[0],

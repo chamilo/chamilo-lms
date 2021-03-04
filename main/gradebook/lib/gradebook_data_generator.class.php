@@ -140,7 +140,8 @@ class GradebookDataGenerator
                         $userId,
                         $item,
                         $ignore_score_color,
-                        false
+                        false,
+                        $useExerciseScoreInTotal
                     );
                     $row[] = $resultColumn['display'];
                     $row['result_score'] = $resultColumn['score'];
@@ -150,7 +151,7 @@ class GradebookDataGenerator
                     if (isset($defaultData[$item->get_id()]) && isset($defaultData[$item->get_id()]['best'])) {
                         $best = $defaultData[$item->get_id()]['best'];
                     } else {
-                        $best = $this->buildBestResultColumn($item);
+                        $best = $this->buildBestResultColumn($item, $useExerciseScoreInTotal);
                     }
 
                     if (empty($model)) {
@@ -160,7 +161,7 @@ class GradebookDataGenerator
                         if (isset($defaultData[$item->get_id()]) && isset($defaultData[$item->get_id()]['average'])) {
                             $average = $defaultData[$item->get_id()]['average'];
                         } else {
-                            $average = $this->buildBestResultColumn($item);
+                            $average = $this->buildBestResultColumn($item, $useExerciseScoreInTotal);
                         }
 
                         $row['average'] = $average['display'];
@@ -180,7 +181,8 @@ class GradebookDataGenerator
                         $userId,
                         $item,
                         $ignore_score_color,
-                        true
+                        true,
+                        $useExerciseScoreInTotal
                     );
                     $row[] = $result['display'];
                     $row['result_score'] = $result['score'];
@@ -766,14 +768,18 @@ class GradebookDataGenerator
                     ];
 
                     if (empty($model)) {
-                        $display = $scoreDisplay->display_score(
-                            $score,
-                            SCORE_DIV_PERCENT_WITH_CUSTOM,
-                            null,
-                            false,
-                            false,
-                            true
-                        );
+                        if ($useExerciseScoreInTotal) {
+                            $display = ExerciseLib::show_score($score[0], $score[1], false);
+                        } else {
+                            $display = $scoreDisplay->display_score(
+                                $score,
+                                SCORE_DIV_PERCENT_WITH_CUSTOM,
+                                null,
+                                false,
+                                false,
+                                true
+                            );
+                        }
                     /*$type = $item->get_item_type();
                     if ('L' === $type && 'ExerciseLink' === get_class($item)) {
                         $display = ExerciseLib::show_score(

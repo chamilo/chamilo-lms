@@ -3508,16 +3508,19 @@ function saveThreadScore(
     $threadInfo,
     $user_id,
     $thread_id,
-    $thread_qualify = 0,
+    $thread_qualify,
     $qualify_time,
-    $session_id = 0
+    $session_id
 ) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $course_id = api_get_course_int_id();
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
+    $thread_id = (int) $thread_id;
+    $user_id = (int) $user_id;
     $currentUserId = api_get_user_id();
+    $qualify_time = Database::escape_string($qualify_time);
 
     if ($user_id == strval(intval($user_id)) &&
         $thread_id == strval(intval($thread_id)) &&
@@ -3713,7 +3716,9 @@ function saveThreadScoreHistory(
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
 
-    $course_id = intval($course_id);
+    $thread_id = (int) $thread_id;
+    $course_id = (int) $course_id;
+    $user_id = (int) $user_id;
     $qualify_user_id = api_get_user_id();
 
     if ($user_id == strval(intval($user_id)) &&

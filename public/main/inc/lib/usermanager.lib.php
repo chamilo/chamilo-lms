@@ -105,7 +105,7 @@ class UserManager
     public static function updatePassword($userId, $password)
     {
         $user = api_get_user_entity($userId);
-        $userManager = self::getManager();
+        $userManager = self::getRepository();
         $user->setPlainPassword($password);
         $userManager->updateUser($user, true);
     }
@@ -1065,7 +1065,7 @@ class UserManager
             return false;
         }
 
-        $userManager = self::getManager();
+        $userManager = self::getRepository();
         $user = api_get_user_entity($user_id);
 
         if (empty($user)) {
@@ -5048,7 +5048,7 @@ class UserManager
             }
 
             $user->addRole('ROLE_SUPER_ADMIN');
-            self::getManager()->updateUser($user, true);
+            self::getRepository()->updateUser($user, true);
         }
     }
 
@@ -5060,7 +5060,7 @@ class UserManager
             $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
             $user->removeRole('ROLE_SUPER_ADMIN');
-            self::getManager()->updateUser($user, true);
+            self::getRepository()->updateUser($user, true);
         }
     }
 

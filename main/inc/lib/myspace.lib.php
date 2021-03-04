@@ -1666,15 +1666,15 @@ class MySpace
                         }
                         $table .= "<td>$price</td>";
 
-                        $studenRegister = count($byCourse);
-                        $studenGroupsRegister = count($byCourseGroups);
-                        $studenRegisterBySession = count($bySession);
+                        $studentRegister = count($byCourse);
+                        $studentGroupsRegister = count($byCourseGroups);
+                        $studentRegisterBySession = count($bySession);
 
                         $hiddenField = 'student_show_'.$index;
                         $hiddenFieldLink = 'student_show_'.$index.'_';
-                        if (0 != $studenRegister ||
-                            0 != $studenRegisterBySession ||
-                            0 != $studenGroupsRegister) {
+                        if (0 != $studentRegister ||
+                            0 != $studentRegisterBySession ||
+                            0 != $studentGroupsRegister) {
                             $tableTemp .= "<td>".
                                 "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
                                 "<div class='icon_add'>$iconAdd</div>".
@@ -1880,14 +1880,14 @@ class MySpace
                     $csv_row[] = $title;
                     $csv_row[] = $price;
 
-                    $studenRegister = count($byCourse);
-                    $studenRegisterBySession = count($bySession);
-                    $studenGroupsRegister = count($byCourseGroups);
+                    $studentRegister = count($byCourse);
+                    $studentRegisterBySession = count($bySession);
+                    $studentGroupsRegister = count($byCourseGroups);
 
                     $studentsName = '';
-                    if (0 != $studenRegister ||
-                        0 != $studenRegisterBySession ||
-                        0 != $studenGroupsRegister) {
+                    if (0 != $studentRegister ||
+                        0 != $studentRegisterBySession ||
+                        0 != $studentGroupsRegister) {
                         $tableTemp2 = '';
                         $studentProcessed = [];
                         /* Student by course*/

@@ -2243,7 +2243,7 @@ class Event
     public static function eventRemoveVirtualCourseTime(
         $courseId,
         $userId,
-        $sessionId = 0,
+        $sessionId,
         $virtualTime,
         $workId
     ) {
@@ -2251,13 +2251,15 @@ class Event
             return false;
         }
 
-        $originalVirtualTime = $virtualTime;
-
-        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
+        $originalVirtualTime = Database::escape_string($virtualTime);
+        $workId = (int) $workId;
+
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+
         // Change $virtualTime format from hh:mm:ss to hhmmss which is the
         // format returned by SQL for a subtraction of two datetime values
         // @todo make sure this is portable between DBMSes

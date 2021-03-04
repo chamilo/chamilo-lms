@@ -3070,7 +3070,7 @@ function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
  * @param int          $qualify_time
  * @param int          $session_id
  *
- * @return array optional
+ * @return string
  *
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  *
@@ -3080,73 +3080,72 @@ function saveThreadScore(
     CForumThread $threadEntity,
     $user_id,
     $thread_id,
-    $thread_qualify = 0,
+    $thread_qualify,
     $qualify_time,
-    $session_id = 0
+    $session_id
 ) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
 
     $course_id = api_get_course_int_id();
     $session_id = (int) $session_id;
+    $thread_id = (int) $thread_id;
+    $user_id = (int) $user_id;
+    $thread_qualify = (float) $thread_qualify;
     $currentUserId = api_get_user_id();
+    $qualify_time = Database::escape_string($qualify_time);
 
-    if ($user_id == (string) ((int) $user_id) &&
-        $thread_id == (string) ((int) $thread_id) &&
-        $thread_qualify == (string) ((float) $thread_qualify)
-    ) {
-        $max = $threadEntity->getThreadQualifyMax();
-        if ($thread_qualify <= $max) {
-            if ($threadEntity->isThreadPeerQualify()) {
-                $sql = "SELECT COUNT(*) FROM $table_threads_qualify
-                        WHERE
-                            c_id = $course_id AND
-                            user_id = $user_id AND
-                            qualify_user_id = $currentUserId AND
-                            thread_id = ".$thread_id;
-            } else {
-                $sql = "SELECT COUNT(*) FROM $table_threads_qualify
-                        WHERE
-                            c_id = $course_id AND
-                            user_id = $user_id AND
-                            thread_id = ".$thread_id;
-            }
-
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-
-            if (0 == $row[0]) {
-                $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
-                        VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
-                Database::query($sql);
-
-                return 'insert';
-            } else {
-                saveThreadScoreHistory(
-                    '1',
-                    $course_id,
-                    $user_id,
-                    $thread_id
-                );
-
-                // Update
-                $sql = "UPDATE $table_threads_qualify
-                        SET
-                            qualify = '".$thread_qualify."',
-                            qualify_time = '".$qualify_time."'
-                        WHERE
-                            c_id = $course_id AND
-                            user_id=".$user_id.' AND
-                            thread_id='.$thread_id." AND
-                            qualify_user_id = $currentUserId
-                        ";
-                Database::query($sql);
-
-                return 'update';
-            }
+    $max = $threadEntity->getThreadQualifyMax();
+    if ($thread_qualify <= $max) {
+        if ($threadEntity->isThreadPeerQualify()) {
+            $sql = "SELECT COUNT(*) FROM $table_threads_qualify
+                    WHERE
+                        c_id = $course_id AND
+                        user_id = $user_id AND
+                        qualify_user_id = $currentUserId AND
+                        thread_id = ".$thread_id;
         } else {
-            return null;
+            $sql = "SELECT COUNT(*) FROM $table_threads_qualify
+                    WHERE
+                        c_id = $course_id AND
+                        user_id = $user_id AND
+                        thread_id = ".$thread_id;
+        }
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        if (0 == $row[0]) {
+            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
+                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
+            Database::query($sql);
+
+            return 'insert';
+        } else {
+            saveThreadScoreHistory(
+                '1',
+                $course_id,
+                $user_id,
+                $thread_id
+            );
+
+            // Update
+            $sql = "UPDATE $table_threads_qualify
+                    SET
+                        qualify = '".$thread_qualify."',
+                        qualify_time = '".$qualify_time."'
+                    WHERE
+                        c_id = $course_id AND
+                        user_id=".$user_id.' AND
+                        thread_id='.$thread_id." AND
+                        qualify_user_id = $currentUserId
+                    ";
+            Database::query($sql);
+
+            return 'update';
         }
     }
+
+    return '';
 }
 
 /**
@@ -3277,7 +3276,9 @@ function saveThreadScoreHistory(
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
 
+    $thread_id = (int) $thread_id;
     $course_id = (int) $course_id;
+    $user_id = (int) $user_id;
     $qualify_user_id = api_get_user_id();
 
     if ($user_id == (string) ((int) $user_id) &&

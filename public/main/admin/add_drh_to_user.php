@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\User as UserEntity;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -16,9 +17,8 @@ if (!isset($_REQUEST['u'])) {
 }
 
 $em = Database::getManager();
-$userRepository = UserManager::getRepository();
-/** @var UserEntity $user */
-$user = UserManager::getManager()->find($_REQUEST['u']);
+$userRepository = Container::getUserRepository();
+$user = api_get_user_entity($_REQUEST['u']);
 
 if (null === $user) {
     api_not_allowed(true);
@@ -32,8 +32,7 @@ $subscribedUsers = $userRepository->getAssignedHrmUserList(
 $hrmOptions = [];
 /** @var UserRelUser $subscribedUser */
 foreach ($subscribedUsers as $subscribedUser) {
-    /** @var UserEntity $hrm */
-    $hrm = UserManager::getManager()->find($subscribedUser->getFriendUserId());
+    $hrm = api_get_user_entity($subscribedUser->getFriendUserId());
 
     if (null === $hrm) {
         continue;
@@ -66,8 +65,7 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     foreach ($values['hrm'] as $hrmId) {
-        /** @var UserEntity $hrm */
-        $hrm = UserManager::getManager()->find($hrmId);
+        $hrm = api_get_user_entity($hrmId);
 
         if (null === $hrm) {
             continue;

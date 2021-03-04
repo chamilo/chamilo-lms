@@ -42,7 +42,7 @@ class SaveUserTest extends V2TestCase
         );
 
         // assert the user was saved and given the returned user id
-        $user = UserManager::getManager()->find($userId);
+        $user = api_get_user_entity($userId);
         $this->assertNotNull($user, 'the returned userId does not point to an user');
 
         // assert each field was filled with provided information

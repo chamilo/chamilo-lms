@@ -11,7 +11,7 @@ $form->addButtonSend(get_lang('Send message'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $user = UserManager::getManager()->findUserByUsername($values['user']);
+    $user = UserManager::getRepository()->findUserByUsername($values['user']);
     if ($user) {
         UserManager::sendUserConfirmationMail($user);
     } else {

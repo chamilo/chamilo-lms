@@ -57,16 +57,7 @@ class UserManager
      */
     public static function getRepository()
     {
-        return Container::$container->get(UserRepository::class);
-    }
-
-    /**
-     * Create/update/delete methods are available in the UserManager
-     * (based in the Sonata\UserBundle\Entity\UserManager).
-     */
-    public static function getManager()
-    {
-        return Container::getUserManager();
+        return Container::getUserRepository();
     }
 
     /**
@@ -348,8 +339,6 @@ class UserManager
         $em->persist($user);
         $em->flush();
 
-        $userId = $user->getId();
-
         // Add user to a group
         $statusToGroup = [
             COURSEMANAGER => 'TEACHER',
@@ -369,6 +358,8 @@ class UserManager
         }
 
         $em->flush();
+
+        $userId = $user->getId();
 
         if (!empty($userId)) {
             if ($isAdmin) {
@@ -1047,8 +1038,8 @@ class UserManager
         $firstname,
         $lastname,
         $username,
-        $password = null,
-        $auth_source = null,
+        $password,
+        $auth_source,
         $email,
         $status,
         $official_code,

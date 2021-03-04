@@ -45,7 +45,7 @@ class UserAvatar extends HTML_QuickForm_input
     public function setValue($value)
     {
         $this->user = !is_a($value, 'Chamilo\CoreBundle\Entity\User')
-            ? UserManager::getManager()->find($value)
+            ? UserManager::getRepository()->find($value)
             : $value;
 
         parent::setValue($this->user->getId());

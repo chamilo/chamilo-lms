@@ -102,8 +102,7 @@ if ($typeUser) {
     }
     $form->addSelect('info_select', get_lang('User'), $selectOptions);
 } elseif ($typeCourse) {
-    /** @var User $user */
-    $user = UserManager::getRepository()->find($currentUserId);
+    $user = api_get_user_entity($currentUserId);
     $courses = $user->getCourses();
     $checker = false;
     foreach ($courses as $course) {
@@ -121,8 +120,7 @@ if ($typeUser) {
     $form->addSelect('info_select', get_lang('Course'), $selectOptions);
 } elseif ($typeSession) {
     $sessions = [];
-    /** @var User $user */
-    $user = UserManager::getRepository()->find($currentUserId);
+    $user = api_get_user_entity($currentUserId);
     $userSubscriptions = $user->getSessionCourseSubscriptions();
 
     /** @var SessionRelCourseRelUser $userSubscription */

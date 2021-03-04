@@ -249,11 +249,6 @@ class Container
         return Database::getManager();
     }
 
-    public static function getUserManager(): UserRepository
-    {
-        return self::$container->get(UserRepository::class);
-    }
-
     public static function getAttendanceRepository(): CAttendanceRepository
     {
         return self::$container->get(CAttendanceRepository::class);
@@ -519,10 +514,8 @@ class Container
         Database::setConnection($container->get('doctrine.dbal.default_connection'));
         $em = $container->get('doctrine.orm.entity_manager');
         Database::setManager($em);
-        CourseManager::setEntityManager($em);
-        CourseManager::setCourseSettingsManager($container->get(SettingsCourseManager::class));
         // Setting course tool chain (in order to create tools to a course)
-        CourseManager::setToolList($container->get(ToolChain::class));
+        //CourseManager::setToolList($container->get(ToolChain::class));
         /*if ($setSession) {
             self::$session = $container->get('session');
         }*/

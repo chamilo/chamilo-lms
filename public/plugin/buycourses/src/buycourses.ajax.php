@@ -461,8 +461,7 @@ switch ($action) {
         $nodeName = '';
         if (BuyCoursesPlugin::SERVICE_TYPE_USER == $nodeType) {
             $nodeType = get_lang('User');
-            /** @var User $user */
-            $user = UserManager::getManager()->find($serviceSale['node_id']);
+            $user = api_get_user_entity($serviceSale['node_id']);
             $nodeName = $user ? $user->getCompleteNameWithUsername() : null;
         } else {
             if (BuyCoursesPlugin::SERVICE_TYPE_COURSE == $nodeType) {

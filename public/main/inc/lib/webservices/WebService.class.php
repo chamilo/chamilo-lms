@@ -29,7 +29,7 @@ class WebService
     protected function __construct($username, $apiKey)
     {
         /** @var User user */
-        $this->user = UserManager::getManager()->findUserByUsername($username);
+        $this->user = UserManager::getRepository()->findUserByUsername($username);
         $this->apiKey = $apiKey;
     }
 
@@ -54,7 +54,7 @@ class WebService
      */
     public static function findUserApiKey($username, $serviceName)
     {
-        $user = UserManager::getManager()->findUserByUsername($username);
+        $user = UserManager::getRepository()->findUserByUsername($username);
         if ($user) {
             $apiKeys = UserManager::get_api_keys($user->getId(), $serviceName);
 
@@ -86,7 +86,7 @@ class WebService
             return false;
         }
 
-        $user = UserManager::getManager()->findUserByUsername($username);
+        $user = UserManager::getRepository()->findUserByUsername($username);
 
         if (!$user) {
             return false;

@@ -1922,7 +1922,7 @@ class Rest extends WebService
         }
 
         // save modifications
-        UserManager::getManager()->updateUser($user, true);
+        UserManager::getRepository()->updateUser($user, true);
 
         // tell the world we just updated this user
         if (!empty($hook)) {

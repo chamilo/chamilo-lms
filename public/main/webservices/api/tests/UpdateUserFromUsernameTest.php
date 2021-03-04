@@ -77,7 +77,7 @@ class UpdateUserFromUsernameTest extends V2TestCase
 
         // compare each saved value to the original
         /** @var User $user */
-        $userManager = UserManager::getManager();
+        $userManager = UserManager::getRepository();
         $user = $userManager->find($userId);
         $userManager->reloadUser($user);
         $this->assertSame($newFirstName, $user->getFirstname());

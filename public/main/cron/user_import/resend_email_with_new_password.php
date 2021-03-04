@@ -21,7 +21,7 @@ exit();
 $list = file('input.txt');
 require_once '../../inc/global.inc.php';
 $users = Database::get_main_table(TABLE_MAIN_USER);
-$userManager = UserManager::getManager();
+$userManager = UserManager::getRepository();
 $repository = UserManager::getRepository();
 
 /**

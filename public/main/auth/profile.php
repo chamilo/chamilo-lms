@@ -369,8 +369,7 @@ $filtered_extension = false;
 if ($form->validate()) {
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
-    /** @var User $user */
-    $user = UserManager::getRepository()->find(api_get_user_id());
+    $user = api_get_user_entity(api_get_user_id());
 
     // set password if a new one was provided
     $validPassword = false;

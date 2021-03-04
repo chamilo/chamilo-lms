@@ -74,7 +74,34 @@ try {
     }*/
 
     if (empty($userId)) {
-        throw new Exception('User not found when checking the extra fields.');
+        if ($plugin->get(AzureActiveDirectory::SETTING_PROVISION_USERS) === 'true') {
+            // Create user
+            $userId = UserManager::create_user(
+                $me['givenName'],
+                $me['surname'],
+                STUDENT,
+                $me['mail'],
+                $me['mailNickname'],
+                '',
+                null,
+                null,
+                $me['telephoneNumber'],
+                null,
+                'azure',
+                null,
+                ($me['accountEnabled'] ? 1 : 0),
+                null,
+                [
+                    AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL => $me['mail'],
+                    AzureActiveDirectory::EXTRA_FIELD_AZURE_ID => $me['mailNickname'],
+                ]
+            );
+            if (!$userId) {
+                throw new Exception(get_lang('UserNotAdded').' '.$me['mailNickname']);
+            }
+        } else {
+            throw new Exception('User not found when checking the extra fields.');
+        }
     }
 
     $userInfo = api_get_user_info($userId);

@@ -67,7 +67,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
-    protected Room $room;
+    protected ?Room $room = null;
 
     public function __construct()
     {

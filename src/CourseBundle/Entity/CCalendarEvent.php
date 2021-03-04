@@ -64,7 +64,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="children")
      * @ORM\JoinColumn(name="parent_event_id", referencedColumnName="iid")
      */
-    protected ?CCalendarEvent $parentEvent;
+    protected ?CCalendarEvent $parentEvent = null;
 
     /**
      * @var ArrayCollection|CCalendarEventRepeat[]
@@ -92,7 +92,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
-    protected Room $room;
+    protected ?Room $room = null;
 
     /**
      * @var ArrayCollection|CCalendarEventAttachment[]

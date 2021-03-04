@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -152,7 +153,7 @@ class BranchSync
      * @ORM\OneToMany(targetEntity="BranchSync", mappedBy="parent")
      * @ORM\OrderBy({"lft"="ASC"})
      *
-     * @var BranchSync[]|\Doctrine\Common\Collections\Collection
+     * @var BranchSync[]|Collection
      */
     protected $children;
 
@@ -674,10 +675,8 @@ class BranchSync
 
     /**
      * @param string $description
-     *
-     * @return BranchSync
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -694,5 +693,13 @@ class BranchSync
         $this->url = $url;
 
         return $this;
+    }
+
+    /**
+     * @return BranchSync[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

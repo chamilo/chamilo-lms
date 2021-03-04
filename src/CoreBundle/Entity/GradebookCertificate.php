@@ -32,7 +32,7 @@ class GradebookCertificate
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
-     * @ORM\JoinColumn(name="cat_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="cat_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected GradebookCategory $category;
 

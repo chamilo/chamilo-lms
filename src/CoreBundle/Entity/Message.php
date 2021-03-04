@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -75,16 +76,16 @@ class Message
     protected int $groupId;
 
     /**
-     * @var ArrayCollection|Message[]
+     * @var Collection|Message[]
      * @ORM\OneToMany(targetEntity="Message", mappedBy="parent")
      */
-    protected $children;
+    protected Collection $children;
 
     /**
      * @ORM\ManyToOne(targetEntity="Message", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected ?Message $parent;
+    protected ?Message $parent = null;
 
     /**
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
@@ -97,18 +98,18 @@ class Message
     protected ?int $votes;
 
     /**
-     * @var ArrayCollection|MessageAttachment[]
+     * @var Collection|MessageAttachment[]
      *
      * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message")
      */
-    protected $attachments;
+    protected Collection $attachments;
 
     /**
-     * @var ArrayCollection|MessageFeedback[]
+     * @var Collection|MessageFeedback[]
      *
      * @ORM\OneToMany(targetEntity="MessageFeedback", mappedBy="message", orphanRemoval=true)
      */
-    protected $likes;
+    protected Collection $likes;
 
     public function __construct()
     {
@@ -328,13 +329,13 @@ class Message
         return $this;
     }
 
-    public function getParent(): self
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
     /**
-     * @return ArrayCollection|Message[]
+     * @return Collection|Message[]
      */
     public function getChildren()
     {
@@ -354,6 +355,14 @@ class Message
         $this->parent = $parent;
 
         return $this;
+    }
+
+    /**
+     * @return MessageFeedback[]|Collection
+     */
+    public function getLikes()
+    {
+        return $this->likes;
     }
 
     /**

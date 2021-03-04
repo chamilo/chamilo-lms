@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_quiz_question",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="position", columns={"position"})
  *  }
  * )
@@ -33,11 +32,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected int $iid;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @Assert\NotBlank()
@@ -103,7 +97,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $categories;
 
     /**
-     * @var ArrayCollection|CQuizRelQuestion[]
+     * @var Collection|CQuizRelQuestion[]
      *
      * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="question", cascade={"persist"})
      */
@@ -365,30 +359,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CQuizQuestion
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * @return string
      */
     public function getFeedback()
@@ -416,9 +386,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

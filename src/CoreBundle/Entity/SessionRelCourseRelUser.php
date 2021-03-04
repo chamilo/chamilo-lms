@@ -64,7 +64,7 @@ class SessionRelCourseRelUser
     /**
      * @Groups({"session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected Course $course;
 

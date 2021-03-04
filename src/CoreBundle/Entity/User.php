@@ -574,7 +574,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *     orphanRemoval=true
      * )
      */
-    protected Collection $sessions;
+    protected Collection $sessionsRelUser;
 
     /**
      * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
@@ -758,7 +758,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->userRelCourseVotes = new ArrayCollection();
         $this->userRelTags = new ArrayCollection();
         $this->personalAgendas = new ArrayCollection();
-        $this->sessions = new ArrayCollection();
+        $this->sessionsRelUser = new ArrayCollection();
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
 
@@ -851,7 +851,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getResourceNode(): ResourceNode
+    public function getResourceNode(): ?ResourceNode
     {
         return $this->resourceNode;
     }
@@ -1969,6 +1969,174 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->hasRole('ROLE_ADMIN');
     }
 
+    /**
+     * @return GradebookCategory[]|Collection
+     */
+    public function getGradeBookCategories()
+    {
+        return $this->gradeBookCategories;
+    }
+
+    /**
+     * @return GradebookComment[]|Collection
+     */
+    public function getGradeBookComments()
+    {
+        return $this->gradeBookComments;
+    }
+
+    /**
+     * @return GradebookEvaluation[]|Collection
+     */
+    public function getGradeBookEvaluations()
+    {
+        return $this->gradeBookEvaluations;
+    }
+
+    /**
+     * @return GradebookLink[]|Collection
+     */
+    public function getGradeBookLinks()
+    {
+        return $this->gradeBookLinks;
+    }
+
+    /**
+     * @return GradebookResult[]|Collection
+     */
+    public function getGradeBookResults()
+    {
+        return $this->gradeBookResults;
+    }
+
+    /**
+     * @return GradebookResultLog[]|Collection
+     */
+    public function getGradeBookResultLogs()
+    {
+        return $this->gradeBookResultLogs;
+    }
+
+    /**
+     * @return GradebookScoreLog[]|Collection
+     */
+    public function getGradeBookScoreLogs()
+    {
+        return $this->gradeBookScoreLogs;
+    }
+
+    /**
+     * @return GradebookLinkevalLog[]|Collection
+     */
+    public function getGradeBookLinkEvalLogs()
+    {
+        return $this->gradeBookLinkEvalLogs;
+    }
+
+    /**
+     * @return UserRelCourseVote[]|Collection
+     */
+    public function getUserRelCourseVotes()
+    {
+        return $this->userRelCourseVotes;
+    }
+
+    /**
+     * @return UserRelTag[]|Collection
+     */
+    public function getUserRelTags()
+    {
+        return $this->userRelTags;
+    }
+
+    /**
+     * @return PersonalAgenda[]|Collection
+     */
+    public function getPersonalAgendas()
+    {
+        return $this->personalAgendas;
+    }
+
+    /**
+     * @return Collection|mixed[]
+     */
+    public function getCurriculumItems()
+    {
+        return $this->curriculumItems;
+    }
+
+    /**
+     * @return UserRelUser[]|Collection
+     */
+    public function getUserRelUsers()
+    {
+        return $this->userRelUsers;
+    }
+
+    /**
+     * @return Templates[]|Collection
+     */
+    public function getTemplates()
+    {
+        return $this->templates;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getDropBoxReceivedFiles()
+    {
+        return $this->dropBoxReceivedFiles;
+    }
+
+    /**
+     * @return SequenceValue[]|Collection
+     */
+    public function getSequenceValues()
+    {
+        return $this->sequenceValues;
+    }
+
+    /**
+     * @return TrackEExerciseConfirmation[]|Collection
+     */
+    public function getTrackEExerciseConfirmations()
+    {
+        return $this->trackEExerciseConfirmations;
+    }
+
+    /**
+     * @return TrackEAttempt[]|Collection
+     */
+    public function getTrackEAccessCompleteList()
+    {
+        return $this->trackEAccessCompleteList;
+    }
+
+    /**
+     * @return TrackEAttempt[]|Collection
+     */
+    public function getTrackEAttempts()
+    {
+        return $this->trackEAttempts;
+    }
+
+    /**
+     * @return TrackECourseAccess[]|Collection
+     */
+    public function getTrackECourseAccess()
+    {
+        return $this->trackECourseAccess;
+    }
+
+    /**
+     * @return UserCourseCategory[]|Collection
+     */
+    public function getUserCourseCategories()
+    {
+        return $this->userCourseCategories;
+    }
+
     public function getCourseGroupsAsTutorFromCourse(Course $course): Collection
     {
         $criteria = Criteria::create();
@@ -1987,6 +2155,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getStudentSessions(): array
     {
         return $this->getSessions(0);
+    }
+
+    /**
+     * @return SessionRelUser[]|Collection
+     */
+    public function getSessionsRelUser()
+    {
+        return $this->sessionsRelUser;
     }
 
     /**

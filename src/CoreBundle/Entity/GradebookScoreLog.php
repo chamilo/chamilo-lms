@@ -34,7 +34,7 @@ class GradebookScoreLog
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected GradebookCategory $category;
 

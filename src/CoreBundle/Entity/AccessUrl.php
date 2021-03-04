@@ -252,10 +252,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      * Set description.
      *
      * @param string $description
-     *
-     * @return AccessUrl
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -276,10 +274,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      * Set active.
      *
      * @param int $active
-     *
-     * @return AccessUrl
      */
-    public function setActive($active)
+    public function setActive($active): self
     {
         $this->active = $active;
 
@@ -398,10 +394,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param int $limitSessions
-     *
-     * @return AccessUrl
      */
-    public function setLimitSessions($limitSessions)
+    public function setLimitSessions($limitSessions): self
     {
         $this->limitSessions = $limitSessions;
 
@@ -418,10 +412,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param int $limitUsers
-     *
-     * @return AccessUrl
      */
-    public function setLimitUsers($limitUsers)
+    public function setLimitUsers($limitUsers): self
     {
         $this->limitUsers = $limitUsers;
 
@@ -438,10 +430,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param int $limitTeachers
-     *
-     * @return AccessUrl
      */
-    public function setLimitTeachers($limitTeachers)
+    public function setLimitTeachers($limitTeachers): self
     {
         $this->limitTeachers = $limitTeachers;
 
@@ -458,10 +448,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param int $limitDiskSpace
-     *
-     * @return AccessUrl
      */
-    public function setLimitDiskSpace($limitDiskSpace)
+    public function setLimitDiskSpace($limitDiskSpace): self
     {
         $this->limitDiskSpace = $limitDiskSpace;
 
@@ -495,10 +483,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param Collection<int, SettingsCurrent>|SettingsCurrent[] $settings
-     *
-     * @return AccessUrl
      */
-    public function setSettings($settings)
+    public function setSettings($settings): self
     {
         $this->settings = $settings;
 
@@ -515,10 +501,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param int $limitCourses
-     *
-     * @return AccessUrl
      */
-    public function setLimitCourses($limitCourses)
+    public function setLimitCourses($limitCourses): self
     {
         $this->limitCourses = $limitCourses;
 
@@ -532,10 +516,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse> $courses
-     *
-     * @return AccessUrl
      */
-    public function setCourses($courses)
+    public function setCourses($courses): self
     {
         $this->courses = $courses;
 
@@ -549,10 +531,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @param Collection<int, SessionCategory>|SessionCategory[] $sessionCategories
-     *
-     * @return AccessUrl
      */
-    public function setSessionCategories($sessionCategories)
+    public function setSessionCategories($sessionCategories): self
     {
         $this->sessionCategories = $sessionCategories;
 
@@ -560,8 +540,62 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Resource identifier.
+     * @return AccessUrlRelSession[]|Collection
      */
+    public function getSessions()
+    {
+        return $this->sessions;
+    }
+
+    /**
+     * @return AccessUrl[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @return AccessUrlRelUser[]|Collection
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return AccessUrlRelCourseCategory[]|Collection
+     */
+    public function getCourseCategory()
+    {
+        return $this->courseCategory;
+    }
+
+    public function getLft(): int
+    {
+        return $this->lft;
+    }
+
+    public function getLvl(): int
+    {
+        return $this->lvl;
+    }
+
+    public function getRgt(): int
+    {
+        return $this->rgt;
+    }
+
+    public function getRoot(): ?self
+    {
+        return $this->root;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getId();

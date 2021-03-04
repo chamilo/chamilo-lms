@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -50,7 +51,7 @@ class GradebookCategory
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookCategories")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Course $course;
 
@@ -62,7 +63,7 @@ class GradebookCategory
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ?Session $session;
 
@@ -132,7 +133,7 @@ class GradebookCategory
     protected ?int $gradeBooksToValidateInDependence;
 
     /**
-     * @var ArrayCollection|GradebookComment[]
+     * @var Collection|GradebookComment[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradebook")
      */
@@ -451,6 +452,24 @@ class GradebookCategory
     public function setGradeBooksToValidateInDependence(int $value): self
     {
         $this->gradeBooksToValidateInDependence = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return GradebookComment[]|Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param GradebookComment[]|Collection $comments
+     */
+    public function setComments($comments): self
+    {
+        $this->comments = $comments;
 
         return $this;
     }

@@ -79,7 +79,7 @@ class ResourceFile
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Assert\NotBlank()
@@ -87,7 +87,7 @@ class ResourceFile
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected string $name;
+    protected ?string $name;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
@@ -112,7 +112,7 @@ class ResourceFile
      *
      * @ORM\Column(type="integer")
      */
-    protected int $size;
+    protected ?int $size = 0;
 
     /**
      * @Assert\NotNull()
@@ -125,7 +125,7 @@ class ResourceFile
      *     dimensions="dimensions"
      * )
      */
-    protected File $file;
+    protected ?File $file;
 
     /**
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)

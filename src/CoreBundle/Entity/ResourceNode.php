@@ -59,7 +59,7 @@ class ResourceNode
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Assert\NotBlank()

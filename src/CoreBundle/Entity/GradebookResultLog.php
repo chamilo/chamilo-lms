@@ -24,19 +24,21 @@ class GradebookResultLog
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue()
      */
     protected int $id;
 
     /**
-     * @ORM\Column(name="result_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookResult")
+     * @ORM\JoinColumn(name="result_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $resultId;
+    protected GradebookResult $result;
 
     /**
-     * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
+     * @ORM\JoinColumn(name="evaluation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $evaluationId;
+    protected GradebookEvaluation $evaluation;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -54,30 +56,6 @@ class GradebookResultLog
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected User $user;
-
-    /**
-     * Set evaluationId.
-     *
-     * @param int $evaluationId
-     *
-     * @return GradebookResultLog
-     */
-    public function setEvaluationId($evaluationId)
-    {
-        $this->evaluationId = $evaluationId;
-
-        return $this;
-    }
-
-    /**
-     * Get evaluationId.
-     *
-     * @return int
-     */
-    public function getEvaluationId()
-    {
-        return $this->evaluationId;
-    }
 
     /**
      * Set createdAt.
@@ -135,17 +113,5 @@ class GradebookResultLog
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getResultId(): int
-    {
-        return $this->resultId;
-    }
-
-    public function setResultId(int $resultId): self
-    {
-        $this->resultId = $resultId;
-
-        return $this;
     }
 }

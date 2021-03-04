@@ -60,7 +60,7 @@ class CTool extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
@@ -180,10 +180,7 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->position;
     }
 
-    /**
-     * @return CTool
-     */
-    public function setPosition(int $position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 

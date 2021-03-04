@@ -32,29 +32,29 @@ class ResourceLink
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="resourceLinks")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ResourceNode $resourceNode;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected ?Course $course;
+    protected ?Course $course = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected ?User $user = null;
 
@@ -62,13 +62,13 @@ class ResourceLink
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
-    protected ?CGroup $group;
+    protected ?CGroup $group = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected ?Usergroup $userGroup;
+    protected ?Usergroup $userGroup = null;
 
     /**
      * @ORM\OneToMany(

@@ -66,7 +66,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * The course title.
@@ -97,7 +97,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected string $code;
 
     /**
-     * @var ArrayCollection|CourseRelUser[]
+     * @var Collection|CourseRelUser[]
      *
      * @ApiSubresource()
      * Groups({"course:read"})
@@ -110,16 +110,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected Collection $users;
 
     /**
-     * @var ArrayCollection|ResourceLink[]
-     *
-     * ApiSubresource()
-     * Groups({"course:read"})
-     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
-     */
-    protected $resourceLinks;
-
-    /**
-     * @var AccessUrlRelCourse[]|ArrayCollection
+     * @var AccessUrlRelCourse[]|Collection
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourse",
@@ -129,21 +120,21 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $urls;
 
     /**
-     * @var ArrayCollection|SessionRelCourse[]
+     * @var Collection|SessionRelCourse[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $sessions;
 
     /**
-     * @var ArrayCollection|SessionRelCourseRelUser[]
+     * @var Collection|SessionRelCourseRelUser[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $sessionUserSubscriptions;
 
     /**
-     * @var ArrayCollection|CTool[]
+     * @var Collection|CTool[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
      */
@@ -154,49 +145,49 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected AccessUrl $currentUrl;
 
     /**
-     * @var ArrayCollection|SkillRelCourse[]
+     * @var Collection|SkillRelCourse[]
      *
      * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $skills;
 
     /**
-     * @var ArrayCollection|SkillRelUser[]
+     * @var Collection|SkillRelUser[]
      *
      * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $issuedSkills;
 
     /**
-     * @var ArrayCollection|GradebookCategory[]
+     * @var Collection|GradebookCategory[]
      *
      * @ORM\OneToMany(targetEntity="GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookCategories;
 
     /**
-     * @var ArrayCollection|GradebookEvaluation[]
+     * @var Collection|GradebookEvaluation[]
      *
      * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookEvaluations;
 
     /**
-     * @var ArrayCollection|GradebookLink[]
+     * @var Collection|GradebookLink[]
      *
      * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookLinks;
 
     /**
-     * @var ArrayCollection|TrackEHotspot[]
+     * @var Collection|TrackEHotspot[]
      *
      * @ORM\OneToMany(targetEntity="TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $trackEHotspots;
 
     /**
-     * @var ArrayCollection|TrackEAttempt[]
+     * @var Collection|TrackEAttempt[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="course", cascade={"persist", "remove"})
      */
@@ -205,14 +196,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SearchEngineRef", mappedBy="course", cascade={"persist", "remove"})
      *
-     * @var \Chamilo\CoreBundle\Entity\SearchEngineRef[]|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
+     * @var SearchEngineRef[]|Collection
      */
     protected $searchEngineRefs;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="course", cascade={"persist", "remove"})
      *
-     * @var \Chamilo\CoreBundle\Entity\Templates[]|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
+     * @var Templates[]|Collection
      */
     protected $templates;
 
@@ -366,7 +357,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\ManyToOne(targetEntity="Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
-    protected Room $room;
+    protected ?Room $room;
 
     public function __construct()
     {
@@ -391,6 +382,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->activateLegal = 0;
         $this->addTeachersToSessionsCourses = false;
         $this->courseTypeId = null;
+        $this->room = null;
         //$this->specificFieldValues = new ArrayCollection();
         //$this->sharedSurveys = new ArrayCollection();
     }
@@ -431,14 +423,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return AccessUrlRelCourse[]|ArrayCollection
+     * @return AccessUrlRelCourse[]|Collection
      */
     public function getUrls()
     {
         return $this->urls;
     }
 
-    public function setUrls(ArrayCollection $urls)
+    public function setUrls(Collection $urls)
     {
         $this->urls = new ArrayCollection();
         foreach ($urls as $url) {
@@ -467,7 +459,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return ArrayCollection|CourseRelUser[]
+     * @return Collection|CourseRelUser[]
      */
     public function getUsers()
     {
@@ -475,7 +467,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return ArrayCollection|CourseRelUser[]
+     * @return Collection|CourseRelUser[]
      */
     public function getTeachers()
     {
@@ -486,7 +478,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return ArrayCollection|CourseRelUser[]
+     * @return Collection|CourseRelUser[]
      */
     public function getStudents()
     {
@@ -497,7 +489,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @param ArrayCollection $users
+     * @param Collection $users
      */
     public function setUsers($users)
     {
@@ -728,7 +720,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @return Course
      */
-    public function setCategories(ArrayCollection $categories): self
+    public function setCategories(Collection $categories): self
     {
         $this->categories = $categories;
 
@@ -1152,10 +1144,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->courseTypeId;
     }
 
-    /**
-     * @return Room
-     */
-    public function getRoom()
+    public function getRoom(): ?Room
     {
         return $this->room;
     }
@@ -1256,7 +1245,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Get issuedSkills.
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getIssuedSkills()
     {
@@ -1291,6 +1280,173 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         //$courseRelUser->setRole($role);
         $courseRelUser->setStatus($status);
         $this->addUsers($courseRelUser);
+
+        return $this;
+    }
+
+    /**
+     * @return SessionRelCourseRelUser[]|Collection
+     */
+    public function getSessionUserSubscriptions()
+    {
+        return $this->sessionUserSubscriptions;
+    }
+
+    public function setSessionUserSubscriptions(Collection $sessionUserSubscriptions): self
+    {
+        $this->sessionUserSubscriptions = $sessionUserSubscriptions;
+
+        return $this;
+    }
+
+    /**
+     * @return SkillRelCourse[]|Collection
+     */
+    public function getSkills()
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @param SkillRelCourse[]|Collection $skills
+     *
+     * @return Course
+     */
+    public function setSkills($skills)
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return GradebookCategory[]|Collection
+     */
+    public function getGradebookCategories()
+    {
+        return $this->gradebookCategories;
+    }
+
+    /**
+     * @param GradebookCategory[]|Collection $gradebookCategories
+     *
+     * @return Course
+     */
+    public function setGradebookCategories($gradebookCategories)
+    {
+        $this->gradebookCategories = $gradebookCategories;
+
+        return $this;
+    }
+
+    /**
+     * @return GradebookEvaluation[]|Collection
+     */
+    public function getGradebookEvaluations()
+    {
+        return $this->gradebookEvaluations;
+    }
+
+    /**
+     * @param GradebookEvaluation[]|Collection $gradebookEvaluations
+     *
+     * @return Course
+     */
+    public function setGradebookEvaluations($gradebookEvaluations)
+    {
+        $this->gradebookEvaluations = $gradebookEvaluations;
+
+        return $this;
+    }
+
+    /**
+     * @return GradebookLink[]|Collection
+     */
+    public function getGradebookLinks()
+    {
+        return $this->gradebookLinks;
+    }
+
+    /**
+     * @param GradebookLink[]|Collection $gradebookLinks
+     *
+     * @return Course
+     */
+    public function setGradebookLinks($gradebookLinks)
+    {
+        $this->gradebookLinks = $gradebookLinks;
+
+        return $this;
+    }
+
+    /**
+     * @return TrackEHotspot[]|Collection
+     */
+    public function getTrackEHotspots()
+    {
+        return $this->trackEHotspots;
+    }
+
+    /**
+     * @param TrackEHotspot[]|Collection $trackEHotspots
+     */
+    public function setTrackEHotspots($trackEHotspots): self
+    {
+        $this->trackEHotspots = $trackEHotspots;
+
+        return $this;
+    }
+
+    /**
+     * @return TrackEAttempt[]|Collection
+     */
+    public function getTrackEAttempts()
+    {
+        return $this->trackEAttempts;
+    }
+
+    /**
+     * @param TrackEAttempt[]|Collection $trackEAttempts
+     */
+    public function setTrackEAttempts($trackEAttempts): self
+    {
+        $this->trackEAttempts = $trackEAttempts;
+
+        return $this;
+    }
+
+    /**
+     * @return SearchEngineRef[]|Collection
+     */
+    public function getSearchEngineRefs()
+    {
+        return $this->searchEngineRefs;
+    }
+
+    /**
+     * @param SearchEngineRef[]|Collection $searchEngineRefs
+     */
+    public function setSearchEngineRefs($searchEngineRefs): self
+    {
+        $this->searchEngineRefs = $searchEngineRefs;
+
+        return $this;
+    }
+
+    /**
+     * @return Templates[]|Collection
+     */
+    public function getTemplates()
+    {
+        return $this->templates;
+    }
+
+    /**
+     * @param Templates[]|Collection $templates
+     */
+    public function setTemplates($templates): self
+    {
+        $this->templates = $templates;
 
         return $this;
     }

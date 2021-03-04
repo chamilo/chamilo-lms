@@ -34,7 +34,7 @@ class GradebookResult
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
-     * @ORM\JoinColumn(name="evaluation_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="evaluation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected GradebookEvaluation $evaluation;
 

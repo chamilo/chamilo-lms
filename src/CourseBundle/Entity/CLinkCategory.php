@@ -72,14 +72,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set categoryTitle.
-     *
-     * @param string $categoryTitle
-     *
-     * @return CLinkCategory
-     */
-    public function setCategoryTitle($categoryTitle)
+    public function setCategoryTitle(string $categoryTitle): self
     {
         $this->categoryTitle = $categoryTitle;
 
@@ -103,28 +96,24 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @param int $displayOrder
-     *
-     * @return CLinkCategory
-     */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
         return $this;
     }
 
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
+    public function getDisplayOrder(): int
     {
         return $this->displayOrder;
+    }
+
+    /**
+     * @return CLink[]|Collection
+     */
+    public function getLinks()
+    {
+        return $this->links;
     }
 
     public function getResourceIdentifier(): int

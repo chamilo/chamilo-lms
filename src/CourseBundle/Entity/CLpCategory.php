@@ -46,7 +46,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected int $position;
 
     /**
-     * @var ArrayCollection|CLpCategoryUser
+     * @var Collection|CLpCategoryUser
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
@@ -111,7 +111,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CLp[]
+     * @return Collection|CLp[]
      */
     public function getLps()
     {
@@ -119,7 +119,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getUsers()
     {
@@ -127,7 +127,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param ArrayCollection $users
+     * @param Collection $users
      */
     public function setUsers($users): void
     {

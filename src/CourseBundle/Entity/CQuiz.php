@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -199,7 +200,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected ?array $pageResultConfiguration;
 
     /**
-     * @var ArrayCollection|CQuizRelQuestion[]
+     * @var Collection|CQuizRelQuestion[]
      *
      * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
      */
@@ -234,7 +235,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CQuizRelQuestion[]
+     * @return Collection|CQuizRelQuestion[]
      */
     public function getQuestions()
     {

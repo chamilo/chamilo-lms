@@ -11054,7 +11054,7 @@ class Exercise
         $usersArray = [];
 
         $return = [];
-        if($withSelectAll) {
+        if ($withSelectAll) {
             $return[] = [
                 'user_id' => 'X',
                 'value' => 'X',
@@ -11106,8 +11106,8 @@ class Exercise
 
         for ($i = 0; $i < $totalUsers; $i++) {
             $user = $users[$i];
-            $userId = (int)$user['user_id'];
-            if(0 != $userId ) {
+            $userId = (int) $user['user_id'];
+            if (0 != $userId) {
                 $quizTitle = $user['quiz_title'];
                 $courseTitle = $user['title'];
                 if (!isset($usersArray[$userId])) {
@@ -11125,14 +11125,14 @@ class Exercise
         $end = $objExerciseTmp->end_time;
         $start = $objExerciseTmp->start_time;
         $minutes = $objExerciseTmp->expired_time;
-        $formatDate =DATE_TIME_FORMAT_LONG;
+        $formatDate = DATE_TIME_FORMAT_LONG;
         $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tblSessionUserRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $teachersName = [];
         $teachersPrint = [];
-        if(0 == $sessionId){
+        if (0 == $sessionId) {
             $sql = "
             SELECT
                course_user.user_id as user_id
@@ -11144,15 +11144,15 @@ class Exercise
             $result = Database::query($sql);
             $data = Database::store_result($result);
             Database::free_result($result);
-            foreach($data as $teacher){
-                $teacherId = (int)$teacher['user_id'];
-                if(!isset($teachersName[$teacherId])){
+            foreach ($data as $teacher) {
+                $teacherId = (int) $teacher['user_id'];
+                if (!isset($teachersName[$teacherId])) {
                     $teachersName[$teacherId] = api_get_user_info($teacherId);
                 }
                 $teacherData = $teachersName[$teacherId];
                 $teachersPrint[] = $teacherData['complete_name'];
             }
-        }else{
+        } else {
             // general tutor
             $sql = "
             SELECT
@@ -11165,9 +11165,9 @@ class Exercise
             $result = Database::query($sql);
             $data = Database::store_result($result);
             Database::free_result($result);
-            foreach($data as $teacher){
-                $teacherId = (int)$teacher['user_id'];
-                if(!isset($teachersName[$teacherId])){
+            foreach ($data as $teacher) {
+                $teacherId = (int) $teacher['user_id'];
+                if (!isset($teachersName[$teacherId])) {
                     $teachersName[$teacherId] = api_get_user_info($teacherId);
                 }
                 $teacherData = $teachersName[$teacherId];
@@ -11187,9 +11187,9 @@ class Exercise
             $result = Database::query($sql);
             $data = Database::store_result($result);
             Database::free_result($result);
-            foreach($data as $teacher){
-                $teacherId = (int)$teacher['user_id'];
-                if(!isset($teachersName[$teacherId])){
+            foreach ($data as $teacher) {
+                $teacherId = (int) $teacher['user_id'];
+                if (!isset($teachersName[$teacherId])) {
                     $teachersName[$teacherId] = api_get_user_info($teacherId);
                 }
                 $teacherData = $teachersName[$teacherId];
@@ -11197,7 +11197,7 @@ class Exercise
             }
         }
 
-        $teacherName = implode('<br>',$teachersPrint);
+        $teacherName = implode('<br>', $teachersPrint);
 
         foreach ($usersArray as $userId => $userData) {
             $studentName = $userData['complete_name'];
@@ -11216,14 +11216,14 @@ class Exercise
             }
             if (!empty($start)) {
                 // api_get_utc_datetime
-                $start = api_format_date(($start),$formatDate);
+                $start = api_format_date(($start), $formatDate);
 
                 $content .= sprintf(get_lang('QuizRemindStartDate'),
                     $start
                 );
             }
             if (!empty($end)) {
-                $end = api_format_date(($end),$formatDate);
+                $end = api_format_date(($end), $formatDate);
                 $content .= sprintf(get_lang('QuizRemindEndDate'),
                     $end
                 );
@@ -11254,14 +11254,14 @@ class Exercise
                     }
                     if (!empty($start)) {
                         // api_get_utc_datetime
-                        $start = api_format_date(($start),$formatDate);
+                        $start = api_format_date(($start), $formatDate);
 
                         $contentDHR .= sprintf(get_lang('QuizRemindStartDate'),
                             $start
                         );
                     }
                     if (!empty($end)) {
-                        $end = api_format_date(($end),$formatDate);
+                        $end = api_format_date(($end), $formatDate);
                         $contentDHR .= sprintf(get_lang('QuizRemindEndDate'),
                             $end
                         );

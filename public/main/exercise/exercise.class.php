@@ -759,7 +759,6 @@ class Exercise
                 INNER JOIN $TBL_QUESTIONS q
                 ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
-                    e.c_id = {$this->course_id} AND
                     e.quiz_id = ".$this->getId();
         $result = Database::query($sql);
 

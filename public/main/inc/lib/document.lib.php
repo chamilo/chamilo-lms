@@ -4216,7 +4216,7 @@ class DocumentManager
             $courseData,
             $saveFilePath,
             $fileType,
-            '',
+            0,
             $title,
             $comment,
             0, //$readonly = 0,
@@ -6086,12 +6086,12 @@ This folder contains all sessions that have been opened in the chat. Although th
      */
     public static function addFileToDocument(CDocument $document, $realPath, $content, $visibility, $group)
     {
+        if (!$document->hasResourceNode()) {
+            return $document;
+        }
+
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
-
-        if (!$resourceNode) {
-            return false;
-        }
 
         $em = Database::getManager();
         $title = $document->getTitle();
@@ -6243,6 +6243,8 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         $em = Database::getManager();
         $em->persist($document);
+        $em->flush();
+
         $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
 
         if ($document) {

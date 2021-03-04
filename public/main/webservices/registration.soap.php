@@ -252,7 +252,7 @@ function WSCreateUsers($params)
     $results = [];
     $orig_user_id_value = [];
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     foreach ($users_params as $user_param) {
@@ -515,7 +515,7 @@ function WSCreateUser($params)
         $original_user_id_name
     );
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     if ($user_id > 0) {
@@ -1604,7 +1604,7 @@ function WSEditUserCredentials($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $original_user_id_value = $params['original_user_id_value'];
@@ -1711,7 +1711,7 @@ function WSEditUsers($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -1898,7 +1898,7 @@ function WSEditUser($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -2069,7 +2069,7 @@ function WSEditUserWithPicture($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     $table_user = Database::get_main_table(TABLE_MAIN_USER);

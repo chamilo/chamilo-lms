@@ -589,7 +589,7 @@ class Database
                             }
                         } else {
                             $value_array = self::escape_string($value_array);
-                            $clean_values = $value_array;
+                            $clean_values = [$value_array];
                         }
 
                         if (!empty($condition) && '' != $clean_values) {

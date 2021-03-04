@@ -8761,4 +8761,10 @@ $TheSettingXWillChangeToX = "The setting \"%s\" will change to \"%s\"";
 $VerificationOfAnsweredQuestions = "Verification of answered questions";
 $StudentPublicationToCorrect = "Student's assignments to be corrected";
 $StudentPublicationCorrectionWarning = "You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status.";
+$BackToMainPortfolio = "Back to the main course portfolio";
+$ExportMyPortfolioDataPdf = "Export my portfolio data in a PDF file";
+$ExportMyPortfolioDataZip = "Export my portfolio data in a ZIP file";
+$PortfolioCategoryFieldHelp = "Categories are for organization only in personal portfolio.";
+$ExportMytPortfolioDataPdf = "Export my portfolio data to a PDF file";
+$ExportMytPortfolioDataZip = "Export my portfolio data to a ZIP file";
 ?>

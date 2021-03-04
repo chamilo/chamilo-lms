@@ -8789,4 +8789,10 @@ $TheSettingXWillChangeToX = "La opción \"%s\" será modificada con el valor \"%
 $VerificationOfAnsweredQuestions = "Verificación de preguntas respondidas";
 $StudentPublicationToCorrect = "Tareas de estudiante para ser corregidas";
 $StudentPublicationCorrectionWarning = "A continuación encontrará todos los trabajos que han enviado los alumnos en uno de sus cursos (puede ser en el curso base o en un curso en una sesión). Puede filtrar la lista seleccionando un curso específico o un estado de tarea.";
+$BackToMainPortfolio = "Regresar al portafolio principal del curso";
+$ExportMyPortfolioDataPdf = "Exportar los datos de mi portafolio en un archivo PDF";
+$ExportMyPortfolioDataZip = "Exportar los datos de mi portafolio en un archivo ZIP";
+$PortfolioCategoryFieldHelp = "Las categorías son sólo para organización en el portafolio personal";
+$ExportMytPortfolioDataPdf = "Exportar los datos de mi portafolio a un archivo PDF";
+$ExportMytPortfolioDataZip = "Exportar los datos de mi portafolio a un archivo ZIP";
 ?>

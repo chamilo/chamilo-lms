@@ -38,15 +38,15 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     {
         $qb = $this->getResourcesByCourse($course);
         $resources = $qb->getQuery()->getResult();
+        $em = $this->getEntityManager();
 
-        /** @var CQuiz $quiz */
-        foreach ($resources as $quiz) {
+        /*foreach ($resources as $quiz) {
             $questions = $quiz->getQuestions();
             foreach ($questions as $question) {
-                //$this->getEntityManager()->remove($question);
+                //$em->remove($question);
             }
-            $this->getEntityManager()->remove($quiz);
-        }
-        $this->getEntityManager()->flush();
+            $em->remove($quiz);
+        }*/
+        //$em->flush();
     }
 }

@@ -55,11 +55,6 @@ class CLink extends AbstractResource implements ResourceInterface
     protected int $displayOrder;
 
     /**
-     * @ORM\Column(name="on_homepage", type="string", length=10, nullable=false)
-     */
-    protected string $onHomepage;
-
-    /**
      * @ORM\Column(name="target", type="string", length=10, nullable=true)
      */
     protected ?string $target;
@@ -141,37 +136,11 @@ class CLink extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set onHomepage.
-     *
-     * @param string $onHomepage
-     *
-     * @return CLink
-     */
-    public function setOnHomepage($onHomepage)
-    {
-        $this->onHomepage = $onHomepage;
-
-        return $this;
-    }
-
-    /**
-     * Get onHomepage.
-     *
-     * @return string
-     */
-    public function getOnHomepage()
-    {
-        return $this->onHomepage;
-    }
-
-    /**
      * Set target.
      *
      * @param string $target
-     *
-     * @return CLink
      */
-    public function setTarget($target)
+    public function setTarget($target): self
     {
         $this->target = $target;
 

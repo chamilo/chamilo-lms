@@ -46,9 +46,7 @@ final class CLinkCategoryRepository extends ResourceRepository implements GridIn
     {
         /** @var CLink $newResource */
         $newResource = $form->getData();
-        $newResource
-            ->setDisplayOrder(0)
-            ->setOnHomepage('0')
+        $newResource->setDisplayOrder(0)
         ;
         //return $newResource;
     }

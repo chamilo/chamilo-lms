@@ -11064,10 +11064,12 @@ class Exercise
 
         foreach ($data as $index => $item) {
             if (isset($item['user_id'])) {
-                if (!isset($usersArray[$item['user_id']])) {
-                    $usersArray[$item['user_id']] = api_get_user_info($item['user_id']);
+                $userId = (int) $item['user_id'];
+                if (!isset($usersArray[$userId])) {
+                    $usersArray[$userId] = api_get_user_info($userId);
                 }
-                $userData = $usersArray[$item['user_id']];
+                $usersArray['user_id'] = $userId;
+                $userData = $usersArray[$userId];
                 $data[$index]['user_name'] = $userData['complete_name'];
                 $return[] = $data[$index];
             }
@@ -11104,11 +11106,13 @@ class Exercise
 
         for ($i = 0; $i < $totalUsers; $i++) {
             $user = $users[$i];
-            $quizTitle = $user['quiz_title'];
-            $userId = $user['user_id'];
-            $courseTitle = $user['title'];
-            if (!isset($usersArray[$userId])) {
-                $usersArray[$userId] = api_get_user_info($userId);
+            $userId = (int)$user['user_id'];
+            if(0 != $userId ) {
+                $quizTitle = $user['quiz_title'];
+                $courseTitle = $user['title'];
+                if (!isset($usersArray[$userId])) {
+                    $usersArray[$userId] = api_get_user_info($userId);
+                }
             }
         }
 
@@ -11122,16 +11126,18 @@ class Exercise
         $start = $objExerciseTmp->start_time;
         $minutes = $objExerciseTmp->expired_time;
         $formatDate =DATE_TIME_FORMAT_LONG;
+        $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tblSessionUserRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $teachersName = [];
+        $teachersPrint = [];
         if(0 == $sessionId){
             $sql = "
             SELECT
                course_user.user_id as user_id
             FROM
-                $tblSessionUser as course_user
+                $tblCourseUser as course_user
             WHERE
                 course_user.status='1' AND
                 course_user.c_id ='".$courseId."'";
@@ -11144,7 +11150,7 @@ class Exercise
                     $teachersName[$teacherId] = api_get_user_info($teacherId);
                 }
                 $teacherData = $teachersName[$teacherId];
-                $teachersName[] = $teacherData['complete_name'];
+                $teachersPrint[] = $teacherData['complete_name'];
             }
         }else{
             // general tutor
@@ -11165,7 +11171,7 @@ class Exercise
                     $teachersName[$teacherId] = api_get_user_info($teacherId);
                 }
                 $teacherData = $teachersName[$teacherId];
-                $teachersName[] = $teacherData['complete_name'];
+                $teachersPrint[] = $teacherData['complete_name'];
             }
             // Teacher into sessions course
             $sql = "
@@ -11187,11 +11193,11 @@ class Exercise
                     $teachersName[$teacherId] = api_get_user_info($teacherId);
                 }
                 $teacherData = $teachersName[$teacherId];
-                $teachersName[] = $teacherData['complete_name'];
+                $teachersPrint[] = $teacherData['complete_name'];
             }
         }
 
-        $teacherName = implode('<br>',$teachersName);
+        $teacherName = implode('<br>',$teachersPrint);
 
         foreach ($usersArray as $userId => $userData) {
             $studentName = $userData['complete_name'];

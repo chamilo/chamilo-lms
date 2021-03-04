@@ -11122,8 +11122,76 @@ class Exercise
         $start = $objExerciseTmp->start_time;
         $minutes = $objExerciseTmp->expired_time;
         $formatDate =DATE_TIME_FORMAT_LONG;
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblSessionUserRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $teachersName = [];
+        if(0 == $sessionId){
+            $sql = "
+            SELECT
+               course_user.user_id as user_id
+            FROM
+                $tblSessionUser as course_user
+            WHERE
+                course_user.status='1' AND
+                course_user.c_id ='".$courseId."'";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            Database::free_result($result);
+            foreach($data as $teacher){
+                $teacherId = (int)$teacher['user_id'];
+                if(!isset($teachersName[$teacherId])){
+                    $teachersName[$teacherId] = api_get_user_info($teacherId);
+                }
+                $teacherData = $teachersName[$teacherId];
+                $teachersName[] = $teacherData['complete_name'];
+            }
+        }else{
+            // general tutor
+            $sql = "
+            SELECT
+                   sesion.id_coach AS user_id
+            FROM
+                `$tblSession` AS sesion
+            WHERE
+                 sesion.id = $sessionId
+            ";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            Database::free_result($result);
+            foreach($data as $teacher){
+                $teacherId = (int)$teacher['user_id'];
+                if(!isset($teachersName[$teacherId])){
+                    $teachersName[$teacherId] = api_get_user_info($teacherId);
+                }
+                $teacherData = $teachersName[$teacherId];
+                $teachersName[] = $teacherData['complete_name'];
+            }
+            // Teacher into sessions course
+            $sql = "
+            SELECT
+                session_rel_course_rel_user.user_id
+            FROM
+                $tblSessionUserRelCourse AS session_rel_course_rel_user
+            WHERE
+                  session_rel_course_rel_user.session_id = $sessionId AND
+                  session_rel_course_rel_user.c_id = $courseId AND
+                  session_rel_course_rel_user.status = 2
+            ";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            Database::free_result($result);
+            foreach($data as $teacher){
+                $teacherId = (int)$teacher['user_id'];
+                if(!isset($teachersName[$teacherId])){
+                    $teachersName[$teacherId] = api_get_user_info($teacherId);
+                }
+                $teacherData = $teachersName[$teacherId];
+                $teachersName[] = $teacherData['complete_name'];
+            }
+        }
 
-        $teacherName = 'Nombre de profesor';
+        $teacherName = implode('<br>',$teachersName);
 
         foreach ($usersArray as $userId => $userData) {
             $studentName = $userData['complete_name'];

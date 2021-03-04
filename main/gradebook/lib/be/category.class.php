@@ -268,8 +268,10 @@ class Category implements GradebookItem
     public function setCourseListDependency($value)
     {
         $this->courseDependency = [];
-
-        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+        $unserialized = false;
+        if (!empty($value)) {
+            $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+        }
 
         if (false !== $unserialized) {
             $this->courseDependency = $unserialized;

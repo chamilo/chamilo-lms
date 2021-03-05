@@ -1983,7 +1983,7 @@ class MySpace
         ON  (
             lpi.c_id = srcu.c_id and
             lpt.id = lpi.lp_id )
-        INNER JOIN $tblUser AS u
+        INNER JOIN `$tblUser` AS u
         ON  (
             u.id = srcu.user_id )
         WHERE
@@ -4419,44 +4419,57 @@ class MySpace
         }
         $datas = [];
         if (!empty($startDate) or !empty($endDate)) {
-            $query = " SELECT DISTINCT
+            $query = "
+            SELECT DISTINCT
+                ip.ref AS lp_item,
+                lp_table_item.iid AS lp_item_id,
+                ip.session_id AS session_id,
+                ip.lastedit_type AS type,
+                u.username AS username,
+                ip.lastedit_date AS lastedit_date,
+                ip.to_user_id AS id
+            FROM $tblItemProperty AS ip
+            INNER JOIN `$tblUser` AS u
+            ON ( u.id = ip.to_user_id )
+            INNER JOIN $tblLp AS lp_table
+            ON ( lp_table.iid = ip.ref )
+            INNER JOIN $tblLpItem AS lp_table_item
+            ON ( lp_table.id = lp_table_item.lp_id )
+            WHERE
+                ip.lastedit_type = 'LearnpathSubscription' ";
+            if (strlen($whereCondition) > 2) {
+                $query .= $whereCondition;
+            }
+            if ($withGroups) {
+                $query = "
+                SELECT DISTINCT
                     ip.ref AS lp_item,
                     lp_table_item.iid AS lp_item_id,
                     ip.session_id AS session_id,
                     ip.lastedit_type AS type,
                     u.username AS username,
-                    ip.lastedit_date AS lastedit_date, ";
-            if ($withGroups) {
-                $query .= ' ip.to_group_id AS group_id,
-                ug.user_id AS id ';
-            } else {
-                $query .= ' ip.to_user_id AS id
-                ';
-            }
-            $query .= " FROM
-                    $tblItemProperty AS ip";
-            if ($withGroups) {
-                $query .= " INNER JOIN $tblGroupUser AS ug
+                    ip.lastedit_date AS lastedit_date,
+                    ip.to_group_id AS group_id,
+                    ug.user_id AS id
+                FROM
+                    $tblItemProperty AS ip
+                INNER JOIN $tblGroupUser AS ug
                 ON ( ug.group_id = ip.to_group_id )
-                INNER JOIN $tblUser AS u
-                ON ( u.id = ug.user_id ) ";
-            } else {
-                $query .= " INNER JOIN $tblUser AS u
-                ON ( u.id = ip.to_user_id ) ";
+                INNER JOIN `$tblUser` AS u
+                ON ( u.id = ug.user_id )
+                INNER JOIN $tblLp AS lp_table
+                ON ( lp_table.iid = ip.ref )
+                INNER JOIN $tblLpItem AS lp_table_item
+                ON ( lp_table.id = lp_table_item.lp_id )
+                WHERE
+                    ip.lastedit_type = 'LearnpathSubscription' AND
+                    ip.to_group_id != 0
+                ";
+                if (strlen($whereCondition) > 2) {
+                    $query .= $whereCondition;
+                }
             }
-            $query .= " INNER JOIN $tblLp AS lp_table
-            ON ( lp_table.iid = ip.ref )
-            INNER JOIN $tblLpItem AS lp_table_item
-            ON ( lp_table.id = lp_table_item.lp_id )
-            WHERE
-                ip.lastedit_type = 'LearnpathSubscripion' ";
-            if (strlen($whereCondition) > 2) {
-                $query .= $whereCondition;
-            }
-            if ($withGroups) {
-                $query .= ' AND ip.to_group_id != 0 ';
-            }
-            $query .= " ORDER BY ip.ref, ip.session_id ";
+            $query .= ' ORDER BY ip.ref, ip.session_id ';
             $queryResult = Database::query($query);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);

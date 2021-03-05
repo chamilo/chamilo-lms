@@ -1628,11 +1628,11 @@ class MySpace
                         $hide = "class='author_$authorId hidden' ";
                         $tableTemp = '';
                         if ($lastAuthor != $authorTemp) {
-                            $table .= "<tr><td>" . $authorTemp['complete_name'] . "</td>";
+                            $table .= "<tr><td>".$authorTemp['complete_name']."</td>";
                         } else {
                             $table .= "<tr $hide ><td></td>";
                         }
-                        $table .= "<td>$title</td>" .
+                        $table .= "<td>$title</td>".
                             "<td>$price</td>";
                         $studentRegister = count($byCourse);
                         $studentGroupsRegister = count($byCourseGroups);
@@ -1750,7 +1750,7 @@ class MySpace
                         $table .= "<td>$invoicing</td>";
                         $total += $invoicing;
                         $totalSudent += $totalStudent;
-                        $table .= $tableTemp . "</tr>";
+                        $table .= $tableTemp."</tr>";
                         $lastAuthor = $authorTemp;
                     }
                     $hiddenFieldLink = 'student__show_'.$index.'_';

@@ -1470,7 +1470,7 @@ class MySpace
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $index = 0;
         $cLpItems = [];
-        $cLpItemsAutor = [];
+        $cLpItemsAuthor = [];
         $authorArray = [];
         $studentArray = [];
         $whereInLpItem = [];
@@ -1490,7 +1490,7 @@ class MySpace
         $data = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($data);
         for ($i = 0; $i < $totalData; $i++) {
-            $cLpItemsAutor[$data[$i]['lp_item_id']] = $data[$i]['author'];
+            $cLpItemsAuthor[$data[$i]['lp_item_id']] = $data[$i]['author'];
         }
         /** Get lp items only with price */
         $sql = " SELECT
@@ -1517,7 +1517,7 @@ class MySpace
             $lpItemId = (int) $item['lp_item_id'];
             $whereInLpItem[] = $item['lp_item_id'];
             $whereInLp[] = $item['lp_id'];
-            $author = isset($cLpItemsAutor[$lpItemId]) ? $cLpItemsAutor[$lpItemId] : null;
+            $author = isset($cLpItemsAuthor[$lpItemId]) ? $cLpItemsAuthor[$lpItemId] : null;
             $item['author'] = $author;
             if (!empty($author)) {
                 $cLpItems[count($cLpItems)] = $item;
@@ -1615,7 +1615,7 @@ class MySpace
                 $lastAuthor = '';
                 $total = 0;
                 foreach ($dataSet as $authorId => $lpItems) {
-                    $autor = $authorArray[$authorId];
+                    $authorTemp = $authorArray[$authorId];
                     $totalSudent = 0;
                     foreach ($lpItems as $lpItem) {
                         $totalStudent = 0;
@@ -1627,8 +1627,8 @@ class MySpace
                         $bySession = $lpItem['session'];
                         $hide = "class='author_$authorId hidden' ";
                         $tableTemp = '';
-                        if ($lastAuthor != $autor) {
-                            $table .= "<tr><td>" . $autor['complete_name'] . "</td>";
+                        if ($lastAuthor != $authorTemp) {
+                            $table .= "<tr><td>" . $authorTemp['complete_name'] . "</td>";
                         } else {
                             $table .= "<tr $hide ><td></td>";
                         }
@@ -1751,7 +1751,7 @@ class MySpace
                         $total += $invoicing;
                         $totalSudent += $totalStudent;
                         $table .= $tableTemp . "</tr>";
-                        $lastAuthor = $autor;
+                        $lastAuthor = $authorTemp;
                     }
                     $hiddenFieldLink = 'student__show_'.$index.'_';
                     $index++;
@@ -1830,7 +1830,7 @@ class MySpace
             $csv_content[] = $csv_row;
             $total = 0;
             foreach ($dataSet as $authorId => $lpItems) {
-                $autor = $authorArray[$authorId];
+                $authorTemp = $authorArray[$authorId];
                 $totalSudent = 0;
                 foreach ($lpItems as $lpItem) {
                     $totalStudent = 0;
@@ -1842,7 +1842,7 @@ class MySpace
                     $bySession = $lpItem['session'];
                     $byCourseGroups = $lpItem['courseGroups'];
                     $csv_row = [];
-                    $csv_row[] = $autor['complete_name'];
+                    $csv_row[] = $authorTemp['complete_name'];
                     $csv_row[] = $title;
                     $csv_row[] = $price;
 

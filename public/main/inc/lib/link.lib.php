@@ -112,7 +112,9 @@ class Link extends Model
         // If the URL is invalid, an error occurs.
         if (!api_valid_url($urllink, true)) {
             // A check against an absolute URL
-            Display::addFlash(Display::return_message(get_lang('Please give the link URL, it should be valid.'), 'error'));
+            Display::addFlash(
+                Display::return_message(get_lang('Please give the link URL, it should be valid.'), 'error')
+            );
 
             return false;
         } else {
@@ -129,7 +131,6 @@ class Link extends Model
                 ->setUrl($urllink)
                 ->setTitle($title)
                 ->setDescription($description)
-                ->setOnHomepage($onhomepage)
                 ->setTarget($target)
                 ->setCategory($category)
             ;
@@ -276,14 +277,6 @@ class Link extends Model
         $tblLink = Database::get_course_table(TABLE_LINK);
         $linkUrl = Database::escape_string($linkUrl);
         $linkId = (int) $linkId;
-        if (is_null($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-        $courseId = (int) $courseId;
-        if (is_null($sessionId)) {
-            $sessionId = api_get_session_id();
-        }
-        $sessionId = (int) $sessionId;
         if ('' != $linkUrl) {
             $sql = "UPDATE $tblLink SET
                     url = '$linkUrl'
@@ -335,20 +328,6 @@ class Link extends Model
         $repo->create($category);
         $linkId = $category->getIid();
 
-        if ($linkId) {
-            // add link_category visibility
-            // course ID is taken from context in api_set_default_visibility
-            //api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
-            /*api_item_property_update(
-                $_course,
-                TOOL_LINK_CATEGORY,
-                $linkId,
-                'LinkCategoryAdded',
-                api_get_user_id()
-            );
-            api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);*/
-        }
-
         Display::addFlash(Display::return_message(get_lang('Category added')));
 
         return $linkId;
@@ -390,33 +369,6 @@ class Link extends Model
         }
 
         return false;
-
-        $courseInfo = api_get_course_info();
-        $tbl_link = Database::get_course_table(TABLE_LINK);
-
-        $course_id = $courseInfo['real_id'];
-        $id = intval($id);
-
-        if (empty($id)) {
-            return false;
-        }
-
-        // -> Items are no longer physically deleted,
-        // but the visibility is set to 2 (in item_property).
-        // This will make a restore function possible for the platform administrator.
-        $sql = "UPDATE $tbl_link SET on_homepage='0'
-                WHERE c_id = $course_id AND iid='".$id."'";
-        Database:: query($sql);
-
-        /*api_item_property_update(
-            $courseInfo,
-            TOOL_LINK,
-            $id,
-            'delete',
-            api_get_user_id()
-        );*/
-
-        return true;
     }
 
     /**
@@ -483,7 +435,6 @@ class Link extends Model
      */
     public static function editLink($id, $values = [])
     {
-        $tbl_link = Database::get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
         $id = (int) $id;
@@ -543,7 +494,6 @@ class Link extends Model
             ->setUrl($values['url'])
             ->setTitle($values['title'])
             ->setDescription($values['description'])
-            ->setOnHomepage($values['on_homepage'])
             ->setTarget($values['target'])
         ;
 

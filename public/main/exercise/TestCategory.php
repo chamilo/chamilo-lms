@@ -89,7 +89,6 @@ class TestCategory
             $category = new CQuizQuestionCategory();
             $category
                 ->setTitle($this->name)
-                ->setCourse($course)
                 ->setDescription($this->description)
                 ->setParent($course)
                 ->addCourseLink($course, api_get_session_entity());
@@ -182,46 +181,6 @@ class TestCategory
     }
 
     /**
-     * Return an array of all Category objects in the database
-     * If $field=="" Return an array of all category objects in the database
-     * Otherwise, return an array of all in_field value
-     * in the database (in_field = id or name or description).
-     *
-     * @param string $field
-     * @param int    $courseId
-     *
-     * @return array
-     */
-    public static function getCategoryListInfo($field = '', $courseId = 0)
-    {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $categories = [];
-        if (empty($field)) {
-            $sql = "SELECT iid FROM $table
-                    WHERE c_id = $courseId
-                    ORDER BY title ASC";
-            $res = Database::query($sql);
-            while ($row = Database::fetch_array($res)) {
-                $category = new TestCategory();
-                $categories[] = $category->getCategory($row['iid'], $courseId);
-            }
-        } else {
-            $field = Database::escape_string($field);
-            $sql = "SELECT $field FROM $table
-                    WHERE c_id = $courseId
-                    ORDER BY $field ASC";
-            $res = Database::query($sql);
-            while ($row = Database::fetch_array($res)) {
-                $categories[] = $row[$field];
-            }
-        }
-
-        return $categories;
-    }
-
-    /**
      * Return the TestCategory id for question with question_id = $questionId
      * In this version, a question has only 1 TestCategory.
      * Return the TestCategory id, 0 if none.
@@ -286,7 +245,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT title
                 FROM $table
-                WHERE iid = $categoryId AND c_id = $courseId";
+                WHERE iid = $categoryId ";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
         $result = '';
@@ -474,10 +433,10 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
-        $categories = self::getCategoryListInfo('', $courseId);
-        $result = ['0' => get_lang('No category selected')];
-        for ($i = 0; $i < count($categories); $i++) {
-            $result[$categories[$i]->id] = $categories[$i]->name;
+        $categories = self::getCategories($courseId);
+        $result = [0 => get_lang('No category selected')];
+        foreach ($categories as $category) {
+            $result[$category->getIid()] = $category->getTitle();
         }
 
         return $result;
@@ -868,30 +827,6 @@ class TestCategory
     }
 
     /**
-     * @param                                                   $primaryKeys
-     * @param                                                   $allPrimaryKeys
-     * @param \Symfony\Component\HttpFoundation\Session\Session $session
-     * @param                                                   $parameters
-     */
-    public function deleteResource(
-        $primaryKeys,
-        $allPrimaryKeys,
-        Symfony\Component\HttpFoundation\Session\Session $session,
-        $parameters
-    ) {
-        $repo = Container::getQuestionCategoryRepository();
-        $translator = Container::getTranslator();
-        foreach ($primaryKeys as $id) {
-            $category = $repo->find($id);
-            $repo->hardDelete($category);
-        }
-
-        Display::addFlash(Display::return_message($translator->trans('Deleted')));
-        header('Location:'.api_get_self().'?'.api_get_cidreq());
-        exit;
-    }
-
-    /**
      * @param Exercise $exercise
      * @param int      $courseId
      * @param string   $order
@@ -1105,14 +1040,11 @@ class TestCategory
      */
     public static function categoryTitleExists($name, $courseId = 0)
     {
-        $categories = self::getCategoryListInfo('title', $courseId);
-        foreach ($categories as $title) {
-            if ($title == $name) {
-                return true;
-            }
-        }
+        $repo = Container::getQuestionCategoryRepository();
+        $courseEntity = api_get_course_entity($courseId);
+        $resource = $repo->findResourceByTitle($name, $courseEntity->getResourceNode(), $courseEntity);
 
-        return false;
+        return null !== $resource;
     }
 
     /**

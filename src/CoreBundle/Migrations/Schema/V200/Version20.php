@@ -52,7 +52,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE user_friend_relation_type SET title = "No title" WHERE title IS NULL');
         $this->addSql('ALTER TABLE user_friend_relation_type CHANGE title title VARCHAR(20) NOT NULL');
 
-        $this->addSql('UPDATE settings_options SET variable = "No variable" WHERE variable IS NULL');
+        $this->addSql('UPDATE settings_options SET variable = "No variable name" WHERE variable IS NULL');
         $this->addSql('ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) NOT NULL');
 
         if ($schema->hasTable('mail_template')) {

@@ -22,7 +22,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
             );
             $this->addSql('ALTER TABLE c_exercise_category ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
-                'ALTER TABLE c_exercise_category ADD CONSTRAINT FK_B94C157E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
+                'ALTER TABLE c_exercise_category ADD CONSTRAINT FK_B94C157E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
             );
             $this->addSql(
                 'ALTER TABLE c_exercise_category ADD CONSTRAINT FK_B94C157E1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
@@ -112,6 +112,11 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_quiz_answer DROP id');
         }
 
+        $this->addSql('ALTER TABLE c_quiz_answer CHANGE question_id question_id INT DEFAULT NULL');
+        if (false === $table->hasForeignKey('FK_AEBC3EFF1E27F6BF')) {
+            $this->addSql('ALTER TABLE c_quiz_answer ADD CONSTRAINT FK_AEBC3EFF1E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid) ON DELETE CASCADE');
+        }
+
         // c_quiz_question.
         $table = $schema->getTable('c_quiz_question');
         if (false === $table->hasColumn('resource_node_id')) {
@@ -141,7 +146,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         // c_quiz_question_category.
         $table = $schema->getTable('c_quiz_question_category');
         if (false === $table->hasColumn('session_id')) {
-            $this->addSql('ALTER TABLE c_quiz_question_category ADD session_id INT DEFAULT NULL');
+            /*$this->addSql('ALTER TABLE c_quiz_question_category ADD session_id INT DEFAULT NULL');
             if (false === $table->hasIndex('IDX_1414369D613FECDF')) {
                 $this->addSql('CREATE INDEX IDX_1414369D613FECDF ON c_quiz_question_category (session_id)');
             }
@@ -149,15 +154,22 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 $this->addSql(
                     'ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D613FECDF FOREIGN KEY (session_id) REFERENCES session (id)'
                 );
-            }
+            }*/
         }
         $this->addSql('ALTER TABLE c_quiz_question_category CHANGE description description LONGTEXT DEFAULT NULL;');
 
-        if (false === $table->hasForeignKey('FK_1414369D91D79BD3')) {
+        if ($table->hasIndex('IDX_1414369D613FECDF')) {
+            $this->addSql('DROP INDEX IDX_1414369D613FECDF ON c_quiz_question_category');
+        }
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_quiz_question_category');
+        }
+
+        /*if (false === $table->hasForeignKey('FK_1414369D91D79BD3')) {
             $this->addSql(
                 'ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;'
             );
-        }
+        }*/
 
         $table = $schema->getTable('c_quiz_question_option');
         if ($table->hasColumn('id')) {
@@ -165,6 +177,27 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_quiz_rel_question');
+
+        $this->addSql('UPDATE c_quiz_rel_category SET count_questions = 0 WHERE count_questions IS NULL');
+        $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE count_questions count_questions INT NOT NULL');
+
+        $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE exercise_id exercise_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_F8EC662312469DE2')) {
+            $this->addSql('ALTER TABLE c_quiz_rel_category ADD CONSTRAINT FK_F8EC662312469DE2 FOREIGN KEY (category_id) REFERENCES c_quiz_question_category (iid) ON DELETE CASCADE;');
+        }
+
+        if (!$table->hasIndex('IDX_F8EC662312469DE2')) {
+            $this->addSql('CREATE INDEX IDX_F8EC662312469DE2 ON c_quiz_rel_category (category_id)');
+        }
+
+        if (!$table->hasIndex('IDX_F8EC6623E934951A')) {
+            $this->addSql('CREATE INDEX IDX_F8EC6623E934951A ON c_quiz_rel_category (exercise_id)');
+        }
+
+        if (!$table->hasForeignKey('FK_F8EC6623E934951A')) {
+            $this->addSql('ALTER TABLE c_quiz_rel_category ADD CONSTRAINT FK_F8EC6623E934951A FOREIGN KEY (exercise_id) REFERENCES c_quiz (iid) ON DELETE CASCADE');
+        }
 
         if ($table->hasIndex('exercise')) {
             $this->addSql('ALTER TABLE c_quiz_rel_question DROP KEY exercise');

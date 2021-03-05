@@ -15,7 +15,7 @@ $courseCode = api_get_course_id();
 $data = [];
 
 $students = CourseManager::get_student_list_from_course_code($courseCode);
-$categories = TestCategory::getCategoryListInfo('', $courseId);
+$categories = TestCategory::getCategories($courseId);
 
 $table = Database::get_course_table(TABLE_QUIZ_TEST);
 $sql = "SELECT iid, title FROM $table
@@ -32,12 +32,11 @@ $header[] = get_lang('LastName');
 $header[] = get_lang('Email');
 $header[] = get_lang('OfficialCode');
 
-/** @var TestCategory $categoryInfo */
 foreach ($categories as $categoryInfo) {
-    $header[] = 'Aciertos: '.$categoryInfo->name;
-    $header[] = 'Errores: '.$categoryInfo->name;
-    $header[] = 'Omisiones: '.$categoryInfo->name;
-    $header[] = 'Puntos: '.$categoryInfo->name;
+    $header[] = 'Aciertos: '.$categoryInfo->getTitle();
+    $header[] = 'Errores: '.$categoryInfo->getTitle();
+    $header[] = 'Omisiones: '.$categoryInfo->getTitle();
+    $header[] = 'Puntos: '.$categoryInfo->getTitle();
 }
 
 foreach ($exercises as $exerciseInfo) {

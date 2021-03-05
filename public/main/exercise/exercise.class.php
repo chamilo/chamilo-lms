@@ -7,10 +7,9 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
 
@@ -140,7 +139,7 @@ class Exercise
         $this->globalCategoryId = null;
         $this->notifications = [];
         $this->exerciseCategoryId = 0;
-        $this->pageResultConfiguration;
+        $this->pageResultConfiguration = null;
         $this->preventBackwards = 0;
         $this->hideComment = false;
         $this->hideNoAnswer = false;
@@ -986,7 +985,7 @@ class Exercise
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
-            $repo = $em->getRepository(CQuizCategory::class);
+            $repo = $em->getRepository(CQuizRelQuestionCategory::class);
 
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $category = new TestCategory();
@@ -998,9 +997,9 @@ class Exercise
                 $categoryParentInfo = null;
                 // Parent is not set no loop here
                 if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
-                    /** @var CQuizCategory $categoryEntity */
+                    /** @var CQuizRelQuestionCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find(CQuizCategory::class, $cat['parent_id']);
+                        $categoryEntity = $em->find(CQuizRelQuestionCategory::class, $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -1012,7 +1011,7 @@ class Exercise
                         //$index = 1;
                     }
 
-                    /** @var CQuizCategory $categoryParent */
+                    /** @var CQuizRelQuestionCategory $categoryParent */
                     // @todo not implemented in 1.11.x
                     /*foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
@@ -1252,10 +1251,10 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
                     q.type NOT IN ('$questionTypeToString')  AND
-                    e.c_id = {$this->course_id} AND
+
                     e.quiz_id = ".$this->getId();
 
         $result = Database::query($sql);
@@ -1717,11 +1716,10 @@ class Exercise
                 $position = (int) $position;
                 $questionId = (int) $questionId;
                 $sql = "UPDATE $table SET
-                            question_order ='".$position."'
+                            question_order = $position
                         WHERE
-                            c_id = ".$this->course_id.' AND
-                            question_id = '.$questionId.' AND
-                            quiz_id='.$this->getId();
+                            question_id = $questionId AND
+                            quiz_id= ".$this->getId();
                 Database::query($sql);
             }
         }
@@ -1824,7 +1822,7 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $table SET active='-1'
-                WHERE c_id = ".$this->course_id.' AND iid = '.$exerciseId;
+                WHERE iid = $exerciseId";
         Database::query($sql);
 
         $repo->softDelete($exercise);
@@ -2098,23 +2096,16 @@ class Exercise
                     'checkbox',
                     'hide_category_table',
                     null,
-                    get_lang('HideCategoryTable')
+                    get_lang('Hide category table')
                 ),
                 $form->createElement(
                     'checkbox',
                     'hide_correct_answered_questions',
                     null,
-                    get_lang('HideCorrectAnsweredQuestions')
+                    get_lang('Hide correct answered questions')
                 ),
             ];
-            $form->addGroup(
-                $group,
-                null,
-                get_lang(
-                    'Results and feedback and feedback and feedback and feedback and feedback and feedback page configuration'
-                )
-            );
-
+            $form->addGroup($group, null, get_lang('Results and feedback page configuration'));
             $displayMatrix = 'none';
             $displayRandom = 'none';
             $selectionType = $this->getQuestionSelectionType();
@@ -3636,7 +3627,7 @@ class Exercise
         // Get answer list for matching
         $sql = "SELECT iid, answer
                 FROM $table_ans
-                WHERE c_id = $course_id AND question_id = $questionId";
+                WHERE question_id = $questionId";
         $res_answer = Database::query($sql);
 
         $answerMatching = [];
@@ -3651,7 +3642,7 @@ class Exercise
         ) {
             $sql = "SELECT *
                     FROM $table_ans
-                    WHERE c_id = $course_id AND question_id = $questionId
+                    WHERE question_id = $questionId
                     ORDER BY position
                     LIMIT 1";
             $result = Database::query($sql);
@@ -4445,7 +4436,6 @@ class Exercise
                         $sql = "SELECT iid, answer
                                 FROM $table_ans
                                 WHERE
-                                    c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct = 0
                                 ";
@@ -4459,7 +4449,6 @@ class Exercise
                         $sql = "SELECT iid, answer, correct, ponderation
                                 FROM $table_ans
                                 WHERE
-                                    c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct <> 0
                                 ORDER BY iid";
@@ -7283,7 +7272,7 @@ class Exercise
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->getId())) {
             $sql = "SELECT * FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id} ";
+                    WHERE exercise_id = {$this->getId()} ";
             $result = Database::query($sql);
             $list = [];
             if (Database::num_rows($result)) {
@@ -7884,7 +7873,7 @@ class Exercise
         $sql = "SELECT DISTINCT cat.*
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 INNER JOIN $categoryRelTable catRel
                 ON (catRel.question_id = e.question_id)
                 INNER JOIN $categoryTable cat
@@ -8331,7 +8320,8 @@ class Exercise
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
-            $this->pageResultConfiguration = $type->convertToDatabaseValue($params, $platform);
+            //$this->pageResultConfiguration = $type->convertToDatabaseValue($params, $platform);
+            $this->pageResultConfiguration = $params;
         }
     }
 
@@ -8372,7 +8362,7 @@ class Exercise
         $result = $this->getPageResultConfiguration();
 
         if (!empty($result)) {
-            return isset($result[$attribute]) ? $result[$attribute] : null;
+            return $result[$attribute] ?? null;
         }
 
         return null;
@@ -8565,9 +8555,9 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
+
                     e.quiz_id = '".$this->getId()."'
                 ORDER BY question_order
                 LIMIT $start, $length
@@ -9010,7 +9000,7 @@ class Exercise
 
                     // Count number exercise - teacher
                     $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
-                            WHERE c_id = $courseId AND quiz_id = $exerciseId";
+                            WHERE quiz_id = $exerciseId";
                     $sqlresult = Database::query($sql);
                     $rowi = (int) Database::result($sqlresult, 0, 0);
 
@@ -10406,9 +10396,8 @@ class Exercise
         $sql = "SELECT DISTINCT count(e.question_order) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
-                  e.c_id = {$this->course_id} AND
                   e.quiz_id	= ".$this->getId();
 
         $result = Database::query($sql);
@@ -10419,9 +10408,9 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
+
                     e.quiz_id = '".$this->getId()."'
                 ORDER BY question_order";
         $result = Database::query($sql);
@@ -10825,7 +10814,7 @@ class Exercise
                 $resultDisabledGroup,
                 null,
                 get_lang(
-                    'ShowResults and feedback and feedback and feedback and feedback and feedback and feedbackToStudents'
+                    'Show score to learner'
                 )
             );
         }
@@ -10896,7 +10885,7 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback'),
+            get_lang('Show the result to the learner: Show the score, the learner\'s choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached.'),
             RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
             ['id' => 'result_disabled_10']
         );

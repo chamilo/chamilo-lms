@@ -559,12 +559,12 @@ class Event
             return false;
         }
 
-        if (null === $answer) {
-            $answer = '';
-        }
-
         if (null === $score) {
             $score = 0;
+        }
+
+        if (null != $answer) {
+            $answer = (int) $answer;
         }
 
         $attempt = [
@@ -619,8 +619,8 @@ class Event
                     ->setExeId($attempt_id)
                     ->setQuestionId($question_id)
                     ->setAnswer($answer)
-                    ->setMarks($score)
-                    ->setAuthor('')
+                    ->setMarks((int) $score)
+                    //->setAuthor('')
                     ->setSessionId($session_id)
                 ;
                 $em->persist($recording);

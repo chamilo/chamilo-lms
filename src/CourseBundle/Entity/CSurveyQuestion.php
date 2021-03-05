@@ -35,7 +35,7 @@ class CSurveyQuestion
      * @ORM\ManyToOne(targetEntity="CSurveyQuestion", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid")
      */
-    protected CSurveyQuestion $parent;
+    protected ?CSurveyQuestion $parent = null;
 
     /**
      * @var Collection|CSurveyQuestion[]
@@ -47,7 +47,7 @@ class CSurveyQuestion
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", cascade="remove")
      * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
      */
-    protected CSurveyQuestionOption $parentOption;
+    protected ?CSurveyQuestionOption $parentOption = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="questions")
@@ -407,7 +407,7 @@ class CSurveyQuestion
         return $this;
     }
 
-    public function getParent(): self
+    public function getParent(): ?self
     {
         return $this->parent;
     }
@@ -437,7 +437,7 @@ class CSurveyQuestion
         return $this;
     }
 
-    public function getParentOption(): CSurveyQuestionOption
+    public function getParentOption(): ?CSurveyQuestionOption
     {
         return $this->parentOption;
     }
@@ -459,5 +459,13 @@ class CSurveyQuestion
         $this->survey = $survey;
 
         return $this;
+    }
+
+    /**
+     * @return CSurveyAnswer[]|Collection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
     }
 }

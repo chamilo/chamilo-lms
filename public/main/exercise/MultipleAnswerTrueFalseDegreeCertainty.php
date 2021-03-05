@@ -11,20 +11,17 @@ use ChamiloSession as Session;
  */
 class MultipleAnswerTrueFalseDegreeCertainty extends Question
 {
-    const LEVEL_DARKGREEN = 1;
-    const LEVEL_LIGHTGREEN = 2;
-    const LEVEL_WHITE = 3;
-    const LEVEL_LIGHTRED = 4;
-    const LEVEL_DARKRED = 5;
+    public const LEVEL_DARKGREEN = 1;
+    public const LEVEL_LIGHTGREEN = 2;
+    public const LEVEL_WHITE = 3;
+    public const LEVEL_LIGHTRED = 4;
+    public const LEVEL_DARKRED = 5;
 
     public $typePicture = 'mccert.png';
     public $explanationLangVar = 'Multiple answer true/false/degree of certainty';
     public $optionsTitle;
     public $options;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -288,7 +285,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if (empty($options)) {
                 // If this is the first time that the question is created then change
                 // the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = $sortedByPosition[$goodAnswer]['id'];
+                if (!empty($goodAnswer)) {
+                    $goodAnswer = $sortedByPosition[$goodAnswer]['iid'];
+                }
             }
             $questionWeighting += $extraValues[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);

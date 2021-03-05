@@ -15,7 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_quiz_answer",
  *  indexes={
- *      @ORM\Index(name="c_id", columns={"c_id"}),
  *      @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
  *  }
  * )
@@ -31,14 +30,11 @@ class CQuizAnswer
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer", options={"unsigned": true, "default": null})
+     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="answers", cascade={"persist"})
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $cId;
-
-    /**
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
-     */
-    protected int $questionId;
+    protected CQuizQuestion $question;
 
     /**
      * @Assert\NotBlank()
@@ -88,6 +84,7 @@ class CQuizAnswer
 
     public function __construct()
     {
+        $this->answer = '';
         $this->correct = null;
         $this->comment = null;
         $this->ponderation = 0.0;
@@ -97,50 +94,14 @@ class CQuizAnswer
         $this->answerCode = null;
     }
 
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CQuizAnswer
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set answer.
-     *
-     * @param string $answer
-     *
-     * @return CQuizAnswer
-     */
-    public function setAnswer($answer)
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
 
         return $this;
     }
 
-    /**
-     * Get answer.
-     *
-     * @return string
-     */
-    public function getAnswer()
+    public function getAnswer(): string
     {
         return $this->answer;
     }
@@ -149,10 +110,8 @@ class CQuizAnswer
      * Set correct.
      *
      * @param int $correct
-     *
-     * @return CQuizAnswer
      */
-    public function setCorrect($correct)
+    public function setCorrect($correct): self
     {
         $this->correct = $correct;
 
@@ -173,10 +132,8 @@ class CQuizAnswer
      * Set comment.
      *
      * @param string $comment
-     *
-     * @return CQuizAnswer
      */
-    public function setComment($comment)
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 
@@ -197,12 +154,10 @@ class CQuizAnswer
      * Set weight.
      *
      * @param float $weight
-     *
-     * @return CQuizAnswer
      */
-    public function setPonderation($weight)
+    public function setPonderation($weight): self
     {
-        $this->ponderation = empty($weight) ? 0.0 : $weight;
+        $this->ponderation = empty($weight) ? 0.0 : (float) $weight;
 
         return $this;
     }
@@ -221,10 +176,8 @@ class CQuizAnswer
      * Set position.
      *
      * @param int $position
-     *
-     * @return CQuizAnswer
      */
-    public function setPosition($position)
+    public function setPosition($position): self
     {
         $this->position = $position;
 
@@ -245,10 +198,8 @@ class CQuizAnswer
      * Set hotspotCoordinates.
      *
      * @param string $hotspotCoordinates
-     *
-     * @return CQuizAnswer
      */
-    public function setHotspotCoordinates($hotspotCoordinates)
+    public function setHotspotCoordinates($hotspotCoordinates): self
     {
         $this->hotspotCoordinates = $hotspotCoordinates;
 
@@ -269,10 +220,8 @@ class CQuizAnswer
      * Set hotspotType.
      *
      * @param string $hotspotType
-     *
-     * @return CQuizAnswer
      */
-    public function setHotspotType($hotspotType)
+    public function setHotspotType($hotspotType): self
     {
         $this->hotspotType = $hotspotType;
 
@@ -293,8 +242,6 @@ class CQuizAnswer
      * Set destination.
      *
      * @param string $destination
-     *
-     * @return CQuizAnswer
      */
     public function setDestination($destination)
     {
@@ -313,14 +260,7 @@ class CQuizAnswer
         return $this->destination;
     }
 
-    /**
-     * Set answerCode.
-     *
-     * @param string $answerCode
-     *
-     * @return CQuizAnswer
-     */
-    public function setAnswerCode($answerCode)
+    public function setAnswerCode(string $answerCode): self
     {
         $this->answerCode = $answerCode;
 
@@ -338,30 +278,6 @@ class CQuizAnswer
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CQuizAnswer
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * Get iid.
      *
      * @return int
@@ -369,5 +285,17 @@ class CQuizAnswer
     public function getIid()
     {
         return $this->iid;
+    }
+
+    public function getQuestion(): CQuizQuestion
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(CQuizQuestion $question): self
+    {
+        $this->question = $question;
+
+        return $this;
     }
 }

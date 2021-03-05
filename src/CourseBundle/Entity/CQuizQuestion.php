@@ -101,7 +101,14 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      *
      * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="question", cascade={"persist"})
      */
-    protected $relQuizzes;
+    protected Collection $relQuizzes;
+
+    /**
+     * @var Collection|CQuizAnswer[]
+     *
+     * @ORM\OneToMany(targetEntity="CQuizAnswer", mappedBy="question", cascade={"persist"})
+     */
+    protected Collection $answers;
 
     /**
      * @ORM\Column(name="mandatory", type="integer")
@@ -111,6 +118,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->relQuizzes = new ArrayCollection();
+        $this->answers = new ArrayCollection();
         $this->ponderation = 0.0;
         $this->mandatory = 0;
     }
@@ -198,10 +207,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * Set ponderation.
-     *
-     * @param float $ponderation
      */
-    public function setPonderation($ponderation): self
+    public function setPonderation(float $ponderation): self
     {
         $this->ponderation = $ponderation;
 
@@ -220,10 +227,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * Set position.
-     *
-     * @param int $position
      */
-    public function setPosition($position): self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -266,10 +271,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set picture.
      *
      * @param string $picture
-     *
-     * @return CQuizQuestion
      */
-    public function setPicture($picture)
+    public function setPicture($picture): self
     {
         $this->picture = $picture;
 
@@ -290,10 +293,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set level.
      *
      * @param int $level
-     *
-     * @return CQuizQuestion
      */
-    public function setLevel($level)
+    public function setLevel($level): self
     {
         $this->level = $level;
 
@@ -314,10 +315,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set extra.
      *
      * @param string $extra
-     *
-     * @return CQuizQuestion
      */
-    public function setExtra($extra)
+    public function setExtra($extra): self
     {
         $this->extra = $extra;
 
@@ -338,10 +337,8 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * Set questionCode.
      *
      * @param string $questionCode
-     *
-     * @return CQuizQuestion
      */
-    public function setQuestionCode($questionCode)
+    public function setQuestionCode($questionCode): self
     {
         $this->questionCode = $questionCode;
 
@@ -374,6 +371,35 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         $this->feedback = $feedback;
 
         return $this;
+    }
+
+    /**
+     * @return CQuizQuestionCategory[]|Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @return CQuizRelQuestion[]|Collection
+     */
+    public function getRelQuizzes()
+    {
+        return $this->relQuizzes;
+    }
+
+    /**
+     * @return CQuizAnswer[]|Collection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+
+    public function getMandatory(): int
+    {
+        return $this->mandatory;
     }
 
     /**

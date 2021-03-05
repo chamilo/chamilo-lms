@@ -32,8 +32,10 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     protected int $id;
 
     /**
+     * @Gedmo\SortableGroup
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected Course $course;
 

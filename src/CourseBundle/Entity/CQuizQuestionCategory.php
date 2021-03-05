@@ -7,9 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,7 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_quiz_question_category",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
  * @ORM\Entity
@@ -50,18 +47,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected ?string $description;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    protected Course $course;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
-     */
-    protected ?Session $session;
 
     /**
      * @var Collection|CQuizQuestion[]
@@ -132,38 +117,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     public function getDescription()
     {
         return $this->description;
-    }
-
-    public function getCourse(): Course
-    {
-        return $this->course;
-    }
-
-    public function setCourse(Course $course): self
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    public function getSession(): ?Session
-    {
-        return $this->session;
-    }
-
-    /**
-     * @param Session $session
-     */
-    public function setSession($session): self
-    {
-        $this->session = $session;
-
-        return $this;
-    }
-
-    public function hasSession(): bool
-    {
-        return null !== $this->session;
     }
 
     /**

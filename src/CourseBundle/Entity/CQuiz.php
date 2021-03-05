@@ -177,7 +177,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="exercise_category_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?CExerciseCategory $exerciseCategory;
+    protected ?CExerciseCategory $exerciseCategory = null;
 
     /**
      * @ORM\Column(name="show_previous_button", type="boolean", nullable=false, options={"default":1})
@@ -206,6 +206,13 @@ class CQuiz extends AbstractResource implements ResourceInterface
      */
     protected $questions;
 
+    /**
+     * @var Collection|CQuizRelQuestionCategory[]
+     *
+     * @ORM\OneToMany(targetEntity="CQuizRelQuestionCategory", mappedBy="quiz", cascade={"persist"}))
+     */
+    protected $questionsCategories;
+
     public function __construct()
     {
         $this->hideQuestionTitle = false;
@@ -226,6 +233,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->reviewAnswers = 0;
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
+        $this->pageResultConfiguration = null;
         $this->questions = new ArrayCollection();
     }
 
@@ -275,10 +283,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * Set sound.
      *
      * @param string $sound
-     *
-     * @return CQuiz
      */
-    public function setSound($sound)
+    public function setSound($sound): self
     {
         $this->sound = $sound;
 
@@ -311,10 +317,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * Set random.
      *
      * @param int $random
-     *
-     * @return CQuiz
      */
-    public function setRandom($random)
+    public function setRandom($random): self
     {
         $this->random = $random;
 
@@ -335,10 +339,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * Set randomAnswers.
      *
      * @param bool $randomAnswers
-     *
-     * @return CQuiz
      */
-    public function setRandomAnswers($randomAnswers)
+    public function setRandomAnswers($randomAnswers): self
     {
         $this->randomAnswers = $randomAnswers;
 
@@ -359,10 +361,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * Set active.
      *
      * @param bool $active
-     *
-     * @return CQuiz
      */
-    public function setActive($active)
+    public function setActive($active): self
     {
         $this->active = $active;
 
@@ -383,10 +383,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * Set resultsDisabled.
      *
      * @param int $resultsDisabled
-     *
-     * @return CQuiz
      */
-    public function setResultsDisabled($resultsDisabled)
+    public function setResultsDisabled($resultsDisabled): self
     {
         $this->resultsDisabled = $resultsDisabled;
 
@@ -781,10 +779,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * @param int $questionSelectionType
-     *
-     * @return CQuiz
      */
-    public function setQuestionSelectionType($questionSelectionType)
+    public function setQuestionSelectionType($questionSelectionType): self
     {
         $this->questionSelectionType = $questionSelectionType;
 
@@ -798,10 +794,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * @param bool $hideQuestionTitle
-     *
-     * @return CQuiz
      */
-    public function setHideQuestionTitle($hideQuestionTitle)
+    public function setHideQuestionTitle($hideQuestionTitle): self
     {
         $this->hideQuestionTitle = $hideQuestionTitle;
 
@@ -896,9 +890,19 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $maxScore;
     }
 
+    public function getAutoLaunch(): ?bool
+    {
+        return $this->autoLaunch;
+    }
+
     /**
-     * Resource identifier.
+     * @return CQuizRelQuestionCategory[]|Collection
      */
+    public function getQuestionsCategories()
+    {
+        return $this->questionsCategories;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

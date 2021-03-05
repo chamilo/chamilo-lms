@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -39,18 +41,22 @@ $choiceValue = isset($_GET['choice']) ? $_GET['choice'] : '';
 $hotSpot = isset($_GET['hotspot']) ? $_GET['hotspot'] : '';
 $tryAgain = isset($_GET['tryagain']) && 1 === (int) $_GET['tryagain'];
 
+$repo = Container::getQuestionRepository();
+/** @var CQuizQuestion $question */
+$question = $repo->find($questionId);
+
 $allowTryAgain = false;
 if ($tryAgain) {
     // Check if try again exists in this question, otherwise only allow one attempt BT#15827.
-    $objQuestionTmp = Question::read($questionId);
-    $answerType = $objQuestionTmp->selectType();
+    $answerType = $question->getType();
     $showResult = false;
-    $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
-    $answers = $objAnswerTmp->getAnswers();
+    //$objAnswerTmp = new Answer($questionId, api_get_course_int_id());
+    $answers = $question->getAnswers();
     if (!empty($answers)) {
         foreach ($answers as $answerData) {
-            if (isset($answerData['destination'])) {
-                $itemList = explode('@@', $answerData['destination']);
+            $destination = $answerData->getDestination();
+            if (!empty($destination)) {
+                $itemList = explode('@@', $destination);
                 if (isset($itemList[0]) && !empty($itemList[0])) {
                     $allowTryAgain = true;
                     break;
@@ -102,7 +108,7 @@ function SendEx(num) {
     } else {
         num -= 1;
         window.location.href = "exercise_submit.php?'.api_get_cidreq().'&tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-    }    
+    }
     return false;
 }
 </script>';
@@ -148,18 +154,18 @@ if (empty($choiceValue) && empty($hotSpot) && $loaded) {
 if (empty($choiceValue) && empty($hotSpot)) {
     echo "<script>
         // this works for only radio buttons
-        var f = window.document.frm_exercise;        
+        var f = window.document.frm_exercise;
         var choice_js = {answers: []};
         var hotspot = new Array();
         var hotspotcoord = new Array();
         var counter = 0;
-        
-        for (var i = 0; i < f.elements.length; i++) {            
-            if (f.elements[i].type == 'radio' && f.elements[i].checked) {                
+
+        for (var i = 0; i < f.elements.length; i++) {
+            if (f.elements[i].type == 'radio' && f.elements[i].checked) {
                 choice_js.answers.push(f.elements[i].value);
                 counter ++;
             }
-            
+
             if (f.elements[i].type == 'checkbox' && f.elements[i].checked) {
                 choice_js.answers.push(f.elements[i].value);
                 counter ++;
@@ -167,7 +173,7 @@ if (empty($choiceValue) && empty($hotSpot)) {
 
             if (f.elements[i].type == 'hidden') {
                 var name = f.elements[i].name;
-                
+
                 if (name.substr(0,7) == 'hotspot') {
                     hotspot.push(f.elements[i].value);
                 }
@@ -177,9 +183,9 @@ if (empty($choiceValue) && empty($hotSpot)) {
                 }
             }
         }
-        
+
         var my_choice = $('*[name*=\"choice[".$questionId."]\"]').serialize();
-        var hotspot = $('*[name*=\"hotspot[".$questionId."]\"]').serialize();     
+        var hotspot = $('*[name*=\"hotspot[".$questionId."]\"]').serialize();
     ";
 
     // IMPORTANT
@@ -206,7 +212,7 @@ if (is_array($choice)) {
         $exerciseResult = $choice;
     } else {
         // gets the question ID from $choice. It is the key of the array
-        list($key) = array_keys($choice);
+        [$key] = array_keys($choice);
         // if the user didn't already answer this question
         if (!isset($exerciseResult[$key])) {
             // stores the user answer into the array
@@ -218,8 +224,7 @@ if (is_array($choice)) {
 // the script "exercise_result.php" will take the variable $exerciseResult from the session
 Session::write('exerciseResult', $exerciseResult);
 
-$objQuestionTmp = Question::read($questionId);
-$answerType = $objQuestionTmp->selectType();
+$answerType = $question->getType();
 $showResult = false;
 
 $objAnswerTmp = new Answer($questionId, api_get_course_int_id());

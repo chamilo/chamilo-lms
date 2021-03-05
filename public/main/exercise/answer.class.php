@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 
 /**
  * Class Answer
@@ -125,7 +127,6 @@ class Answer
 
         $sql = "SELECT * FROM $table
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id ='".$questionId."'
                 ORDER BY position";
 
@@ -148,33 +149,6 @@ class Answer
             $i++;
         }
         $this->nbrAnswers = $i - 1;
-    }
-
-    /**
-     * Get answers already added to question.
-     *
-     * @return array
-     */
-    public function getAnswers()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $questionId = $this->questionId;
-
-        $sql = "SELECT * FROM $table
-                WHERE c_id = {$this->course_id}
-                    AND question_id = $questionId
-                ORDER BY position";
-
-        $result = Database::query($sql);
-
-        $answers = [];
-
-        // while a record is found
-        while ($answer = Database::fetch_assoc($result)) {
-            $answers[] = $answer;
-        }
-
-        return $answers;
     }
 
     /**
@@ -328,7 +302,7 @@ class Answer
      */
     public function selectAutoId($id)
     {
-        return isset($this->autoId[$id]) ? $this->autoId[$id] : 0;
+        return isset($this->iid[$id]) ? (int) $this->iid[$id] : 0;
     }
 
     /**
@@ -395,7 +369,7 @@ class Answer
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
         $sql = "SELECT iid, answer FROM $table
-                WHERE c_id = {$this->course_id} AND iid='$auto_id'";
+                WHERE iid='$auto_id'";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -697,12 +671,16 @@ class Answer
 
         $courseId = $this->course['real_id'];
         $answerList = [];
+        $questionRepo = Container::getQuestionRepository();
+        /** @var CQuizQuestion $question */
+        $question = $questionRepo->find($questionId);
+        $questionType = $question->getType();
 
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-            $answer = $this->new_answer[$i];
+            $answer = (string) $this->new_answer[$i];
             $correct = isset($this->new_correct[$i]) ? (int) $this->new_correct[$i] : null;
             $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : null;
-            $weighting = isset($this->new_weighting[$i]) ? $this->new_weighting[$i] : null;
+            $weighting = isset($this->new_weighting[$i]) ? (float) $this->new_weighting[$i] : null;
             $position = isset($this->new_position[$i]) ? $this->new_position[$i] : null;
             $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : null;
             $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : null;
@@ -713,8 +691,7 @@ class Answer
             if (!isset($this->position[$i])) {
                 $quizAnswer = new CQuizAnswer();
                 $quizAnswer
-                    ->setCId($courseId)
-                    ->setQuestionId($questionId)
+                    ->setQuestion($question)
                     ->setAnswer($answer)
                     ->setCorrect($correct)
                     ->setComment($comment)
@@ -730,11 +707,7 @@ class Answer
                 $iid = $quizAnswer->getIid();
 
                 if ($iid) {
-                    $questionType = $this->getQuestionType();
-                    if (in_array(
-                        $questionType,
-                        [MATCHING, MATCHING_DRAGGABLE]
-                    )) {
+                    if (in_array($questionType, [MATCHING, MATCHING_DRAGGABLE])) {
                         $answer = new self($this->questionId, $courseId, $this->exercise, false);
                         $answer->read();
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
@@ -770,8 +743,6 @@ class Answer
 
             $answerList[$i] = $iid;
         }
-
-        $questionType = $this->getQuestionType();
 
         switch ($questionType) {
             case MATCHING_DRAGGABLE:
@@ -934,7 +905,6 @@ class Answer
 
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
-                        ->setCId($courseId)
                         ->setQuestionId($newQuestionId)
                         ->setAnswer($answer['answer'])
                         ->setCorrect($answer['correct'])
@@ -982,7 +952,6 @@ class Answer
 
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
-                        ->setCId($courseId)
                         ->setQuestionId($newQuestionId)
                         ->setAnswer($this->answer[$i])
                         ->setCorrect($correct)

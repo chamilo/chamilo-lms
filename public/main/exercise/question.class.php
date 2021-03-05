@@ -195,9 +195,8 @@ abstract class Question
                     $sql = "SELECT DISTINCT q.quiz_id
                             FROM $TBL_EXERCISE_QUESTION q
                             INNER JOIN $tblQuiz e
-                            ON e.c_id = q.c_id AND e.iid = q.quiz_id
+                            ON e.iid = q.quiz_id
                             WHERE
-                                q.c_id = $course_id AND
                                 q.question_id = $id AND
                                 e.active >= 0";
 
@@ -587,18 +586,15 @@ abstract class Question
                     $TBL_EXERCISE_QUESTION as test_question
                     WHERE
                         question.iid = test_question.question_id AND
-                        test_question.quiz_id = ".$exerciseId." AND
-                        question.c_id = $c_id AND
-                        test_question.c_id = $c_id ";
+                        test_question.quiz_id = ".$exerciseId;
             $result = Database::query($sql);
             $current_position = Database::result($result, 0, 0);
             $this->updatePosition($current_position + 1);
             $position = $this->position;
-            $exerciseEntity = $exerciseRepo->find($exerciseId);
+            //$exerciseEntity = $exerciseRepo->find($exerciseId);
 
             $question = new CQuizQuestion();
             $question
-                ->setCId($c_id)
                 ->setQuestion($this->question)
                 ->setDescription($this->description)
                 ->setPonderation($this->weighting)
@@ -607,7 +603,6 @@ abstract class Question
                 ->setExtra($this->extra)
                 ->setLevel((int) $this->level)
                 ->setFeedback($this->feedback)
-                //->setParent($exerciseEntity)
                 ->setParent($courseEntity)
                 ->addCourseLink(
                     $courseEntity,
@@ -639,9 +634,7 @@ abstract class Question
                 if (HOT_SPOT == $type || HOT_SPOT_ORDER == $type) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
-                        ->setCId($c_id)
-                        ->setQuestionId($this->id)
-                        ->setAnswer('')
+                        ->setQuestion($question)
                         ->setPonderation(10)
                         ->setPosition(1)
                         ->setHotspotCoordinates('0;0|0|0')
@@ -654,9 +647,7 @@ abstract class Question
                 if (HOT_SPOT_DELINEATION == $type) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
-                        ->setCId($c_id)
-                        ->setQuestionId($this->id)
-                        ->setAnswer('')
+                        ->setQuestion($question)
                         ->setPonderation(10)
                         ->setPosition(1)
                         ->setHotspotCoordinates('0;0|0|0')
@@ -850,8 +841,8 @@ abstract class Question
             $newExercise->read($exerciseId, false);
             $count = $newExercise->getQuestionCount();
             $count++;
-            $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, quiz_id, question_order)
-                    VALUES ({$this->course['real_id']}, ".$id.', '.$exerciseId.", '$count')";
+            $sql = "INSERT INTO $exerciseRelQuestionTable (question_id, quiz_id, question_order)
+                    VALUES (".$id.', '.$exerciseId.", '$count')";
             Database::query($sql);
 
             // we do not want to reindex if we had just saved adnd indexed the question
@@ -891,7 +882,6 @@ abstract class Question
             $sql = "SELECT question_order
                     FROM $table
                     WHERE
-                        c_id = $courseId AND
                         question_id = $id AND
                         quiz_id = $exerciseId";
             $res = Database::query($sql);
@@ -901,7 +891,6 @@ abstract class Question
                     $sql = "UPDATE $table
                             SET question_order = question_order-1
                             WHERE
-                                c_id = $courseId AND
                                 quiz_id = $exerciseId AND
                                 question_order > ".$row['question_order'];
                     Database::query($sql);
@@ -910,7 +899,6 @@ abstract class Question
 
             $sql = "DELETE FROM $table
                     WHERE
-                        c_id = $courseId AND
                         question_id = $id AND
                         quiz_id = $exerciseId";
             Database::query($sql);
@@ -954,7 +942,7 @@ abstract class Question
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT quiz_id, question_order
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = ".$id;
+                    WHERE question_id = ".$id;
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -963,7 +951,6 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id = $courseId AND
                                     quiz_id = ".(int) ($row['quiz_id']).' AND
                                     question_order > '.$row['question_order'];
                         Database::query($sql);
@@ -972,21 +959,20 @@ abstract class Question
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = ".$id;
+                    WHERE question_id = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE c_id = $courseId AND iid = ".$id;
+                    WHERE iid = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
-                    WHERE c_id = $courseId AND question_id = ".$id;
+                    WHERE question_id = ".$id;
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
                     WHERE
-                        c_id = $courseId AND
                         question_id = ".$id;
             Database::query($sql);
 

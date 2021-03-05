@@ -77,6 +77,7 @@ class TrackEAttemptRecording
         $this->teacherComment = '';
         $this->answer = null;
         $this->sessionId = 0;
+        $this->author = 0;
     }
 
     /**

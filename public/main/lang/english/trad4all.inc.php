@@ -615,7 +615,7 @@ $Stats = "Statistics";
 $UplPage = "Upload page and link to Home Page";
 $LinkSite = "Add link to page on Home Page";
 $HasDel = "has been deleted";
-$ByDel = "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?";
+$ByDel = "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses).";
 $Y = "YES";
 $N = "NO";
 $DepartmentUrl = "Department URL";
@@ -5832,7 +5832,7 @@ $Item = "Item";
 $ConfigureDashboardPlugin = "Configure Dashboard Plugin";
 $EditBlocks = "Edit blocks";
 $Never = "Never";
-$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user, 
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user,
 
 Your account has now been activated on the platform. Please login and enjoy your courses.";
 $SessionFields = "Session fields";
@@ -6675,7 +6675,7 @@ $NewExercises = "New exercises";
 $MyAverage = "My average";
 $AllAttempts = "All attempts";
 $QuestionsToReview = "Questions to be reviewed";
-$QuestionWithNoAnswer = "Questions without answer";
+$QuestionWithNoAnswer = "Questions without answer will be highlighted in Red below";
 $ValidateAnswers = "Validate answers";
 $ReviewQuestions = "Review selected questions";
 $YouTriedToResolveThisExerciseEarlier = "You have tried to resolve this exercise earlier";
@@ -7574,7 +7574,7 @@ $Convert = "Convert";
 $PortalLimitType = "Portal's limit type";
 $PortalName = "Portal name";
 $BestScore = "Best score";
-$AreYouSureToDeleteJS = "Are you sure to delete";
+$AreYouSureToDeleteJS = "Are you sure to delete?";
 $ConversionToSameFileFormat = "Conversion to same file format. Please choose another.";
 $FileFormatNotSupported = "File format not supported";
 $FileConvertedFromXToY = "File converted from %s to %s";
@@ -8006,11 +8006,11 @@ $SpecificDate = "Specific dispatch date";
 $BaseDate = "Dispatch based on the session's start/end dates";
 $AfterOrBefore = "After or before";
 $Before = "Before";
-$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session. 
+$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session.
 
-There are two types of announcements that can be sent: 
+There are two types of announcements that can be sent:
 
-Specific date: In this case a specific day is selected to make the announcement. 
+Specific date: In this case a specific day is selected to make the announcement.
 
 Based on the start / end date of the session: in this case the number of days to pass before sending the announcement must be indicated. And those days can be associated to before or after the start / end date. For example: 3 days after the start date.";
 $MandatorySurveyNoAnswered = "A mandatory survey is waiting your answer. To enter the course, you must first complete the survey.";
@@ -8717,4 +8717,54 @@ $MoveUsersFromCourseToSession = "Move users results from base course to a sessio
 $IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments = "If your quiz have hotspot questions included, you should select the images related from the documents.";
 $BackToAttemptList = "Back to the attempt list";
 $ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached.";
+$AddGradebookComment = "Comment";
+$LatestLoginInAnyCourse = "Latest login in a course";
+$The = "The";
+$MultiplicateQuestionsByClass = "Multiplicate questions by class";
+$MultiplicateQuestionsByUser = "Multiplicate questions by user";
+$QuestionForNextUser = "Questions about next user";
+$CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "Course code to be entered in capital letters to confirm the deletion: %s";
+$BadgeXTitle = "Badge: %s";
+$PortfolioCommentFromXUser = "Comment by %s";
+$PortfolioItemFromXUser = "Portfolio item by %s";
+$CopyToMyPortfolio = "Copy to my portfolio";
+$CopyToStudentPortfolio = "Copy to student portfolio";
+$OriginallyPublishedAsXTitleByYUser = "Originally published as \"%s\" by %s";
+$OriginallyCommentedByXUserInYItem = "Originally commented by %s in \"%s\"";
+$PortfolioItemAddedToStudents = "Item added to students own portfolio";
+$MarkCommentAsImportant = "Mark comment as important";
+$UnmarkCommentAsImportant = "Unmark comment as important";
+$CommentMarkedAsImportant = "Portfolio item marked as important";
+$SelectLearnerPortfolio = "Select a learner portfolio";
+$SeeMyPortfolio = "See my portfolio in this course";
+$PortfolioDetails = "Portfolio details";
+$PortfolioItemTitle = "Item title";
+$CreationDateXDate = "Creation date: %s";
+$UpdateDateXDate = "Update date: %s";
+$CategoryXName = "Category: %s";
+$DateXDate = "Date: %s";
+$PortfolioItemTitleXName = "Item title: %s";
+$NoItemsInYourPortfolio = "No items in your portfolio";
+$YouHaveNotCommented = "You have not commented";
+$PortfolioItems = "Portfolio items";
+$PortfolioComments = "Portfolio comments";
+$PortfolioCommentsMade = "Comments made";
+$QualifyThisPortfolioItem = "Grade this item";
+$PortfolioItemGraded = "Portfolio item was graded";
+$ContextForCommentToBeGrade = "Context for the comment to be grade";
+$QualifyThisPortfolioComment = "Grade this comment";
+$PortfolioCommentGraded = "Portfolio comment was graded";
+$QualifyPortfolioItems = "Grade items";
+$QualifyPortfolioComments = "Grade comments";
+$HideCorrectAnsweredQuestions = "Hide correct answered questions";
+$TheSettingXWillChangeToX = "The setting \"%s\" will change to \"%s\"";
+$VerificationOfAnsweredQuestions = "Verification of answered questions";
+$StudentPublicationToCorrect = "Student's assignments to be corrected";
+$StudentPublicationCorrectionWarning = "You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status.";
+$BackToMainPortfolio = "Back to the main course portfolio";
+$ExportMyPortfolioDataPdf = "Export my portfolio data in a PDF file";
+$ExportMyPortfolioDataZip = "Export my portfolio data in a ZIP file";
+$PortfolioCategoryFieldHelp = "Categories are for organization only in personal portfolio.";
+$ExportMytPortfolioDataPdf = "Export my portfolio data to a PDF file";
+$ExportMytPortfolioDataZip = "Export my portfolio data to a ZIP file";
 ?>

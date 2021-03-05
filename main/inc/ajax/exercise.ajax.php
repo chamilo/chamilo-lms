@@ -418,12 +418,14 @@ switch ($action) {
         echo $objExercise->getReminderTable($questionList, $statInfo, true);
         break;
     case 'save_exercise_by_now':
+        header('Content-Type: application/json');
+
         $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
 
         // Use have permissions to edit exercises results now?
         if (false === api_is_allowed_to_session_edit()) {
-            echo 'error';
+            echo json_encode(['error' => true]);
             if ($debug) {
                 error_log(
                     'Exercises attempt '.$exeId.': Failed saving question(s) in course/session '.
@@ -472,7 +474,7 @@ switch ($action) {
 
         // If exercise or question is not set then exit.
         if (empty($question_list) || empty($objExercise)) {
-            echo 'error';
+            echo json_encode(['error' => true]);
             if ($debug) {
                 if (empty($question_list)) {
                     error_log("question_list is empty");
@@ -486,11 +488,11 @@ switch ($action) {
 
         if (WhispeakAuthPlugin::questionRequireAuthentify($question_id)) {
             if ($objExercise->type == ONE_PER_PAGE) {
-                echo 'one_per_page';
+                echo json_encode(['type' => 'one_per_page']);
                 break;
             }
 
-            echo 'ok';
+            echo json_encode(['ok' => true]);
             break;
         } else {
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
@@ -512,7 +514,7 @@ switch ($action) {
         // No exe id? Can't save answer.
         if (empty($exeId)) {
             // Fires an error.
-            echo 'error';
+            echo json_encode(['error' => true]);
             if ($debug) {
                 error_log('exe_id is empty');
             }
@@ -574,7 +576,7 @@ switch ($action) {
                     ' for track_e_exercises.exe_id = '.$exeId.
                     ', we received an empty set of answers.'.
                     'Preventing submission to avoid overwriting w/ null.');
-                echo 'error';
+                echo json_encode(['error' => true]);
                 exit;
             }
         }
@@ -639,7 +641,7 @@ switch ($action) {
                 if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
                     $questionDuration = Event::getAttemptQuestionDuration($exeId, $objQuestionTmp->iid);
                     if (empty($questionDuration)) {
-                        echo 'error';
+                        echo json_encode(['error' => true]);
                         if ($debug) {
                             error_log("Question duration = 0, in exeId: $exeId, question_id: $my_question_id");
                         }
@@ -809,12 +811,27 @@ switch ($action) {
             error_log('Finished questions loop in save_exercise_by_now');
         }
 
+        $questionsCount = count(explode(',', $exercise_stat_info['data_tracking']));
+        $savedAnswersCount = $objExercise->countUserAnswersSavedInExercise($exeId);
+
+        if ($savedAnswersCount !== $questionsCount) {
+            $savedQuestionsMessage = Display::span(
+                sprintf(get_lang('XAnswersSavedByUsersFromXTotal'), $savedAnswersCount, $questionsCount),
+                ['class' => 'text-warning']
+            );
+        } else {
+            $savedQuestionsMessage = Display::span(
+                sprintf(get_lang('XAnswersSavedByUsersFromXTotal'), $savedAnswersCount, $questionsCount),
+                ['class' => 'text-success']
+            );
+        }
+
         if ($type === 'all') {
             if ($debug) {
                 error_log("result: ok - all");
                 error_log(" ------ end ajax call ------- ");
             }
-            echo 'ok';
+            echo json_encode(['ok' => true, 'savedAnswerMessage' => $savedQuestionsMessage]);
             exit;
         }
 
@@ -823,14 +840,14 @@ switch ($action) {
                 error_log("result: one_per_page");
                 error_log(" ------ end ajax call ------- ");
             }
-            echo 'one_per_page';
+            echo json_encode(['type' => 'one_per_page', 'savedAnswerMessage' => $savedQuestionsMessage]);
             exit;
         }
         if ($debug) {
             error_log("result: ok");
             error_log(" ------ end ajax call ------- ");
         }
-        echo 'ok';
+        echo json_encode(['ok' => true, 'savedAnswerMessage' => $savedQuestionsMessage]);
         break;
     case 'show_question':
         $isAllowedToEdit = api_is_allowed_to_edit(null, true, false, false);

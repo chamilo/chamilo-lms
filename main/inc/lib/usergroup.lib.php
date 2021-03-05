@@ -445,51 +445,14 @@ class UserGroup extends Model
     /**
      * Gets all users that are part of a group or class.
      *
-     * Example to obtain the number of registered:
-     * <code>
-     * <?php
-     *
-     * $options['where'] = [' usergroup.course_id = ? ' => $course_id];
-     * $obj = new UserGroup();
-     * $count = $obj->getUserGroupInCourse(
-     * $options,
-     * -1,
-     * true,
-     * true
-     * );
-     * echo "<pre>".var_export($count,true)."</pre>";
-     * ?>
-     * </code>
-     *
-     *
-     * Example to obtain the list of classes or groups registered:
-     * <code>
-     * <?php
-     *
-     * $options['where'] = [' usergroup.course_id = ? ' => $course_id];
-     * $obj = new UserGroup();
-     * $students = $obj->getUserGroupInCourse(
-     * $options,
-     * -1,
-     * false,
-     * true
-     * );
-     * echo "<pre>".var_export($students,true)."</pre>";
-     * ?>
-     * </code>
-     *
      * @param array $options
      * @param int   $type        0 = classes / 1 = social groups
      * @param bool  $withClasses Return with classes.
      *
      * @return array
      */
-    public function getUserGroupInCourse(
-        $options = [],
-        $type = -1,
-        $getCount = false,
-        $withClasses = false
-    ) {
+    public function getUserGroupInCourse($options = [], $type = -1, $getCount = false, $withClasses = false)
+    {
         $data = [];
         $sqlClasses = '';
         $whereClasess = '';
@@ -616,12 +579,8 @@ class UserGroup extends Model
      *
      * @return array|bool
      */
-    public function getUserGroupNotInCourse(
-        $options = [],
-        $type = -1,
-        $getCount = false,
-        $withClasses = false
-    ) {
+    public function getUserGroupNotInCourse($options = [], $type = -1, $getCount = false, $withClasses = false)
+    {
         $data = [];
         $sqlClasses = '';
         $whereClasess = '';
@@ -657,12 +616,12 @@ class UserGroup extends Model
         if ($this->getUseMultipleUrl()) {
             if ($withClasses == false) {
                 $sql = "SELECT $select
-                    FROM {$this->table} u
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (a.usergroup_id = u.id)
-                    LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
-                    ON (u.id = urc.usergroup_id AND course_id = $course_id)
-            ";
+                        FROM {$this->table} u
+                        INNER JOIN {$this->access_url_rel_usergroup} a
+                        ON (a.usergroup_id = u.id)
+                        LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
+                        ON (u.id = urc.usergroup_id AND course_id = $course_id)
+                ";
             } else {
                 $sqlClasses = " SELECT".
                     " $select".

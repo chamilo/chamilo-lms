@@ -1079,10 +1079,10 @@ class MySpace
         $tableHtml = '';
         // Printing table
         $total = 0;
-        $table = '<div class="table-responsive"><table class="table table-hover table-striped table-bordered data_table">';
+        $table = "<div class='table-responsive'><table class='table table-hover table-striped table-bordered data_table'>";
 
         $displayText = get_lang('Company');
-        $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
+        $table .= "<thead><tr><th class='th-header'>$displayText</th><th class='th-header'> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
 
         foreach ($companys as $entity => $student) {
             $table .= "<tr><td>$entity</td><td>".count($student)."</td></tr>";
@@ -1169,19 +1169,18 @@ class MySpace
             REPLACE (efv.`value`, ';', ',') AS users_id,
             c.title AS course_title,
             c.`code` AS course_code
-        FROM
-            $tblExtraFieldValue AS efv
-            INNER JOIN $tblExtraField AS ef ON (
-                efv.field_id = ef.id AND
-                ef.variable = 'authorlpitem' AND
-                efv.`value` != '' )
-            INNER JOIN $tblLpItem AS lpi ON (
-                efv.item_id = lpi.iid )
-            INNER JOIN $tblLp AS lp ON (
-                lpi.lp_id= lp.iid )
-            INNER JOIN $tblCourse AS c ON (
-                lp.c_id = c.id )
-        ";
+        FROM $tblExtraFieldValue AS efv
+        INNER JOIN $tblExtraField AS ef
+        ON (
+            efv.field_id = ef.id AND
+            ef.variable = 'authorlpitem' AND
+            efv.`value` != '' )
+        INNER JOIN $tblLpItem AS lpi
+        ON ( efv.item_id = lpi.iid )
+        INNER JOIN $tblLp AS lp
+        ON ( lpi.lp_id= lp.iid )
+        INNER JOIN $tblCourse AS c
+        ON ( lp.c_id = c.id )";
         $queryResult = Database::query($query);
         $dataTeachers = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($dataTeachers);
@@ -1280,17 +1279,19 @@ class MySpace
             $index = 0;
             $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
             $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
-            $htmlData = "<div class='table-responsive'>";
-            $htmlData .= "<table class='table table-hover table-striped table-bordered data_table'>";
-            $htmlData .= '<thead>';
-            $htmlData .= '<tr>';
-            $htmlData .= "<th class=\"th-header\">".get_lang('Author').'</th>';
-            $htmlData .= "<th class=\"th-header\">".get_lang('LearningPathList').'</th>';
-            $htmlData .= "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers').'</th>';
-            $htmlData .= "<th class=\"th-header\">".get_lang('StudentList').'</th>';
-            $htmlData .= '</tr>';
-            $htmlData .= '</thead>';
-            $htmlData .= '<tbody>';
+            $htmlData = "<div class='table-responsive'>".
+                "<table class='table table-hover table-striped table-bordered data_table'>".
+                "<thead>".
+                "<tr>".
+                "<th class='th-header'>".get_lang('Author').'</th>'.
+                "<th class='th-header'>".get_lang('LearningPathList').
+                "</th>".
+                "<th class='th-header'>".get_lang('CountOfSubscribedUsers').
+                "</th>".
+                "<th class='th-header'>".get_lang('StudentList')."</th>".
+                "</tr>".
+                "</thead>".
+                "<tbody>";
             $totalStudents = 0;
             $lastTeacher = '';
             /* csv */
@@ -1325,12 +1326,11 @@ class MySpace
                         || !empty($courseStudentGroup)
                         || !empty($sessionStudent)
                     ) {
-                        $htmlData .= "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>";
-                        $htmlData .= "<div class='icon_add'>$iconAdd</div>";
-                        $htmlData .= "<div class='icon_remove hidden'>$iconRemove</div>";
-                        $htmlData .= '</a>';
-                        $htmlData .= "<div id='$hiddenField' class='hidden'>";
-
+                        $htmlData .= "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
+                            "<div class='icon_add'>$iconAdd</div>".
+                            "<div class='icon_remove hidden'>$iconRemove</div>".
+                            "</a>".
+                            "<div id='$hiddenField' class='hidden'>";
                         $studentRegistered = [];
                         foreach ($courseStudent as $student) {
                             $reportLink = Display::url(
@@ -1382,27 +1382,27 @@ class MySpace
                                 $totalStudent++;
                             }
                         }
-                        $htmlData .= '</div>';
+                        $htmlData .= "</div>";
                     }
-                    $htmlData .= '</td></tr>';
+                    $htmlData .= "</td></tr>";
                     $index++;
                     $csv_row[] = trim($studentsName, ' / ');
                     $studentsName = '';
                     $csvContent[] = $csv_row;
                     $lastTeacher = $teacherData['complete_name'];
                 }
-                $htmlData .= '<tr>';
-                $htmlData .= '<td></td>';
-                $htmlData .= '<td><strong>'.get_lang('LearnpathsTotal')." ".count($teacher)." </strong></td>";
-                $htmlData .= "<td><strong>$totalStudent</strong></td>";
-                $htmlData .= '<td></td>';
-                $htmlData .= '</tr>';
+                $htmlData .= "<tr>".
+                    "<td></td>".
+                    "<td><strong>".get_lang('LearnpathsTotal')." ".count($teacher)." </strong></td>".
+                    "<td><strong>$totalStudent</strong></td>".
+                    "<td></td>".
+                    "</tr>";
             }
-            $htmlData .= '</tbody>';
-            $htmlData .= '</table>';
-            $htmlData .= '</div>';
+            $htmlData .= "</tbody>".
+                "</table>".
+                "</div>";
         }
-        if ($csv == false) {
+        if (false == $csv) {
             $form = new FormValidator('searchDate', 'get');
             $form->addHidden('display', 'learningPath');
             $today = new DateTime();
@@ -1425,7 +1425,7 @@ class MySpace
                     'value' => $endDate,
                 ]);
             $form->addButtonSearch(get_lang('Search'));
-            if (count($csvContent) != 0) {
+            if (0 != count($csvContent)) {
                 $form
                     ->addButton(
                         'export_csv',
@@ -1478,10 +1478,11 @@ class MySpace
         $dataSet = [];
         /** Get lp items only with authors */
         $sql = " SELECT
-                   efv.item_id AS lp_item_id,
-                   efv.`value` AS author
+                efv.item_id AS lp_item_id,
+                efv.`value` AS author
             FROM $tblExtraFieldValue AS efv
-            INNER JOIN $tblExtraField AS ef ON (
+            INNER JOIN $tblExtraField AS ef
+            ON (
                 ef.variable = 'authorlpitem' AND
                 efv.field_id = ef.id and efv.`value` != '' )
             ORDER BY efv.item_id ";
@@ -1499,14 +1500,15 @@ class MySpace
                 lpi.title AS title,
                 efv.`value` AS price
             FROM $tblExtraFieldValue AS efv
-            INNER JOIN $tblExtraField AS ef ON (
+            INNER JOIN $tblExtraField AS ef
+            ON (
                 ef.variable = 'price' AND
                 efv.field_id = ef.id AND
                 efv.`value` > 0 )
-            INNER JOIN $tblLpItem AS lpi on (
-                lpi.iid = efv.item_id )
-            INNER JOIN $tblLp AS lpt on (
-                lpi.lp_id = lpt.iid ) ";
+            INNER JOIN $tblLpItem AS lpi
+            ON ( lpi.iid = efv.item_id )
+            INNER JOIN $tblLp AS lpt
+            ON ( lpi.lp_id = lpt.iid ) ";
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($data);
@@ -1527,7 +1529,7 @@ class MySpace
                 <table class='table table-hover table-striped table-bordered data_table'>
                 <thead>
                     <tr>
-                    <th class=\"th-header\">".get_lang('NoDataAvailable')."</th>
+                    <th class='th-header'>".get_lang('NoDataAvailable')."</th>
                 </tr>
                 </thead>
                 </tbody>
@@ -1571,7 +1573,6 @@ class MySpace
                         if (!isset($authorArray[$tempArrayAuthor[$j]])) {
                             $authorArray[$tempArrayAuthor[$j]] = api_get_user_info($tempArrayAuthor[$j]);
                         }
-
                         $dataSet[$tempArrayAuthor[$j]][$lpItemId] = [
                             'course' => $byCourse,
                             'courseGroups' => $byCourseGroups,
@@ -1598,12 +1599,12 @@ class MySpace
                     <table class='table table-hover table-striped table-bordered data_table'>
                     <thead>
                     <tr>
-                    <th class=\"th-header\">".get_lang('Author')."</th>
-                    <th class=\"th-header\">".get_lang('ContentList')."</th>
-                    <th class=\"th-header\">".get_lang('Tariff')."</th>
-                    <th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>
-                    <th class=\"th-header\">".get_lang('ToInvoice')."</th>
-                    <th class=\"th-header\">".get_lang('StudentList')."</th>
+                    <th class='th-header'>".get_lang('Author')."</th>
+                    <th class='th-header'>".get_lang('ContentList')."</th>
+                    <th class='th-header'>".get_lang('Tariff')."</th>
+                    <th class='th-header'>".get_lang('CountOfSubscribedUsers')."</th>
+                    <th class='th-header'>".get_lang('ToInvoice')."</th>
+                    <th class='th-header'>".get_lang('StudentList')."</th>
                     </tr>
                     </thead>
                     <tbody>";
@@ -1627,22 +1628,12 @@ class MySpace
                         $hide = "class='author_$authorId hidden' ";
                         $tableTemp = '';
                         if ($lastAuthor != $autor) {
-                            $table .= "<tr>";
-                            $table .= "<td>".$autor['complete_name'].
-                                "</td>";
+                            $table .= "<tr><td>" . $autor['complete_name'] . "</td>";
                         } else {
-                            $table .= "<tr $hide >";
-                            $table .= "<td></td>";
+                            $table .= "<tr $hide ><td></td>";
                         }
-
-                        if ($lastAuthor != $autor) {
-                            $table .= "<td>$title".
-                                "</td>";
-                        } else {
-                            $table .= "<td>$title</td>";
-                        }
-                        $table .= "<td>$price</td>";
-
+                        $table .= "<td>$title</td>" .
+                            "<td>$price</td>";
                         $studentRegister = count($byCourse);
                         $studentGroupsRegister = count($byCourseGroups);
                         $studentRegisterBySession = count($bySession);
@@ -1754,30 +1745,28 @@ class MySpace
                         } else {
                             $tableTemp .= "<td></td>";
                         }
-
                         $table .= "<td>$totalStudent</td>";
                         $invoicing = ($totalStudent * $price);
                         $table .= "<td>$invoicing</td>";
                         $total += $invoicing;
                         $totalSudent += $totalStudent;
-                        $table .= $tableTemp;
-                        $table .= "</tr>";
+                        $table .= $tableTemp . "</tr>";
                         $lastAuthor = $autor;
                     }
                     $hiddenFieldLink = 'student__show_'.$index.'_';
                     $index++;
                     $table .= "<tr>".
-                        "<th class=\"th-header\"></th>".
-                        "<th class=\"th-header\">".
+                        "<th class='th-header'></th>".
+                        "<th class='th-header'>".
                         "<a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>".
                         "<div class='icon_add_author_$authorId'>$iconAdd</div>".
                         "<div class='icon_remove_author_$authorId hidden'>$iconRemove</div>".
                         "</a>".
                         "</th>".
-                        "<th class=\"th-header\"></th>".
-                        "<th class=\"th-header\">$totalSudent</th>".
-                        "<th class=\"th-header\">$total</th>".
-                        "<th class=\"th-header\"></tr>";
+                        "<th class='th-header'></th>".
+                        "<th class='th-header'>$totalSudent</th>".
+                        "<th class='th-header'>$total</th>".
+                        "<th class='th-header'></tr>";
                     $total = 0;
                 }
                 $table .= "</tbody>".
@@ -1974,8 +1963,7 @@ class MySpace
             $extra = " AND lpi.lp_id in ($whereInLp) ";
         }
 
-        $sql = "
-        SELECT DISTINCT
+        $sql = "SELECT DISTINCT
             lpt.iid AS lp,
             lpi.iid AS lp_item,
             lpi.iid AS lp_item_id,
@@ -1984,24 +1972,26 @@ class MySpace
             u.username AS username,
             td.default_date AS default_date,
             td.default_event_type AS type
-        FROM
-             $tblTrackDefault AS td
-        INNER JOIN $tblSessionRelCourseUser AS srcu on (
+        FROM $tblTrackDefault AS td
+        INNER JOIN $tblSessionRelCourseUser AS srcu
+        ON (
             td.default_value = srcu.user_id )
-        INNER JOIN $tblLp AS lpt on (
+        INNER JOIN $tblLp AS lpt
+        ON  (
             lpt.c_id = srcu.c_id )
-        INNER JOIN $tblLpItem AS lpi on (
+        INNER JOIN $tblLpItem AS lpi
+        ON  (
             lpi.c_id = srcu.c_id and
             lpt.id = lpi.lp_id )
-        INNER JOIN $tblUser AS u ON (
+        INNER JOIN $tblUser AS u
+        ON  (
             u.id = srcu.user_id )
         WHERE
-            td.default_event_type = 'session_add_user_course'
-            AND td.default_date >= '$startDate'
-            AND td.default_date <= '$endDate'
+            td.default_event_type = 'session_add_user_course' AND
+            td.default_date >= '$startDate' AND
+            td.default_date <= '$endDate'
             $extra
-        ORDER BY td.default_value
-        ";
+        ORDER BY td.default_value ";
         $queryResult = Database::query($sql);
         $dataTrack = Database::store_result($queryResult, 'ASSOC');
         foreach ($dataTrack as $item) {
@@ -4345,19 +4335,16 @@ class MySpace
         if (0 != $userId) {
             $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
             $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-            $sql = "
-            SELECT
+            $sql = "SELECT
                 extra_field_value.item_id AS userId,
                 extra_field_value.`value` AS company
-            FROM
-                $tblExtraFieldValue AS extra_field_value
-                INNER JOIN $tblExtraField AS extra_field ON (
-                    extra_field_value.field_id = extra_field.id AND extra_field.variable = 'company'
-                    )
+            FROM $tblExtraFieldValue AS extra_field_value
+            INNER JOIN $tblExtraField AS extra_field
+           ON ( extra_field_value.field_id = extra_field.id AND
+                extra_field.variable = 'company' )
             WHERE
-                extra_field_value.`value` != ''
-                AND extra_field_value.item_id = $userId ";
-
+                extra_field_value.`value` != '' AND
+                extra_field_value.item_id = $userId ";
             $queryResult = Database::query($sql);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);
@@ -4420,56 +4407,56 @@ class MySpace
         if (!empty($startDate)) {
             $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
             $_GET['startDate'] = $startDate;
-            $whereCondition .= " AND ipt.lastedit_date >= '$startDate' ";
+            $whereCondition .= " AND ip.lastedit_date >= '$startDate' ";
         }
         if (!empty($endDate)) {
             $endDate = api_get_utc_datetime($endDate->setTime(23, 59, 59)->format('Y-m-d H:i:s'));
             $_GET['endDate'] = $endDate;
-            $whereCondition .= " AND ipt.lastedit_date <= '$endDate' ";
+            $whereCondition .= " AND ip.lastedit_date <= '$endDate' ";
         }
         if (!empty($whereInLp)) {
-            $whereCondition .= " AND ipt.ref in ($whereInLp) ";
+            $whereCondition .= " AND ip.ref in ($whereInLp) ";
         }
         $datas = [];
         if (!empty($startDate) or !empty($endDate)) {
             $query = " SELECT DISTINCT
-                    ipt.ref AS lp_item,
+                    ip.ref AS lp_item,
                     lp_table_item.iid AS lp_item_id,
-                    ipt.session_id AS session_id,
-                    ipt.lastedit_type AS type,
+                    ip.session_id AS session_id,
+                    ip.lastedit_type AS type,
                     u.username AS username,
-                    ipt.lastedit_date AS lastedit_date, ";
+                    ip.lastedit_date AS lastedit_date, ";
             if ($withGroups) {
-                $query .= ' ipt.to_group_id AS group_id,
+                $query .= ' ip.to_group_id AS group_id,
                 ug.user_id AS id ';
             } else {
-                $query .= ' ipt.to_user_id AS id
+                $query .= ' ip.to_user_id AS id
                 ';
             }
             $query .= " FROM
-                    $tblItemProperty AS ipt";
+                    $tblItemProperty AS ip";
             if ($withGroups) {
-                $query .= " INNER JOIN $tblGroupUser AS ug ON (
-                    ug.group_id = ipt.to_group_id )
-                INNER JOIN $tblUser AS u ON (
-                    u.id = ug.user_id ) ";
+                $query .= " INNER JOIN $tblGroupUser AS ug
+                ON ( ug.group_id = ip.to_group_id )
+                INNER JOIN $tblUser AS u
+                ON ( u.id = ug.user_id ) ";
             } else {
-                $query .= " INNER JOIN $tblUser AS u ON (
-                     u.id = ipt.to_user_id ) ";
+                $query .= " INNER JOIN $tblUser AS u
+                ON ( u.id = ip.to_user_id ) ";
             }
-            $query .= " INNER JOIN $tblLp AS lp_table on (
-                    lp_table.iid = ipt.ref )
-                INNER JOIN $tblLpItem AS lp_table_item on (
-                    lp_table.id = lp_table_item.lp_id )
-                WHERE
-                    ipt.lastedit_type = 'LearnpathSubscription' ";
+            $query .= " INNER JOIN $tblLp AS lp_table
+            ON ( lp_table.iid = ip.ref )
+            INNER JOIN $tblLpItem AS lp_table_item
+            ON ( lp_table.id = lp_table_item.lp_id )
+            WHERE
+                ip.lastedit_type = 'LearnpathSubscripion' ";
             if (strlen($whereCondition) > 2) {
                 $query .= $whereCondition;
             }
             if ($withGroups) {
-                $query .= ' AND ipt.to_group_id != 0 ';
+                $query .= ' AND ip.to_group_id != 0 ';
             }
-            $query .= " ORDER BY ipt.ref, ipt.session_id ";
+            $query .= " ORDER BY ip.ref, ip.session_id ";
             $queryResult = Database::query($query);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);

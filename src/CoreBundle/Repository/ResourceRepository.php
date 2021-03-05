@@ -340,6 +340,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setFile($file)
             ->setDescription($description)
             ->setName($resource->getResourceName())
+            ->setResourceNode($resourceNode)
         ;
         $em->persist($resourceFile);
         $resourceNode->setResourceFile($resourceFile);

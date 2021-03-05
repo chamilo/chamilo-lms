@@ -5931,13 +5931,16 @@ function api_get_tool_information_by_name($name)
             WHERE name = '".Database::escape_string($name)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
-    $tool = $data['id'];
+    if ($data) {
+        $tool = $data['id'];
+        $sql = "SELECT * FROM $t_tool
+                WHERE c_id = $course_id  AND tool_id = '".$tool."' ";
+        $rs = Database::query($sql);
 
-    $sql = "SELECT * FROM $t_tool
-            WHERE c_id = $course_id  AND tool_id = '".$tool."' ";
-    $rs = Database::query($sql);
+        return Database::fetch_array($rs, 'ASSOC');
+    }
 
-    return Database::fetch_array($rs, 'ASSOC');
+    return [];
 }
 
 /**
@@ -7936,8 +7939,8 @@ function api_mail_html(
 }
 
 /**
- * @param string $tool       Possible values: GroupManager::GROUP_TOOL_*
- * @param bool   $showHeader
+ * @param int  $tool Possible values: GroupManager::GROUP_TOOL_*
+ * @param bool $showHeader
  */
 function api_protect_course_group($tool, $showHeader = true)
 {

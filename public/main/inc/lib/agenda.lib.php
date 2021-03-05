@@ -34,6 +34,11 @@ class Agenda
     /** @var bool */
     private $isAllowedToEdit;
 
+    private $tbl_global_agenda;
+    private $tbl_personal_agenda;
+    private $tbl_course_agenda;
+    private $table_repeat;
+
     /**
      * Constructor.
      *

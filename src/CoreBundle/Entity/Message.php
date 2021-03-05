@@ -167,10 +167,8 @@ class Message
      * Set sendDate.
      *
      * @param DateTime $sendDate
-     *
-     * @return Message
      */
-    public function setSendDate($sendDate)
+    public function setSendDate($sendDate): self
     {
         $this->sendDate = $sendDate;
 
@@ -187,24 +185,14 @@ class Message
         return $this->sendDate;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -235,10 +223,8 @@ class Message
      * Set groupId.
      *
      * @param int $groupId
-     *
-     * @return Message
      */
-    public function setGroupId($groupId)
+    public function setGroupId($groupId): self
     {
         $this->groupId = $groupId;
 
@@ -259,10 +245,8 @@ class Message
      * Set updateDate.
      *
      * @param DateTime $updateDate
-     *
-     * @return Message
      */
-    public function setUpdateDate($updateDate)
+    public function setUpdateDate($updateDate): self
     {
         $this->updateDate = $updateDate;
 
@@ -289,24 +273,14 @@ class Message
         return $this->id;
     }
 
-    /**
-     * Set votes.
-     *
-     * @param int $votes
-     */
-    public function setVotes($votes): self
+    public function setVotes(int $votes): self
     {
         $this->votes = $votes;
 
         return $this;
     }
 
-    /**
-     * Get votes.
-     *
-     * @return int
-     */
-    public function getVotes()
+    public function getVotes(): int
     {
         return $this->votes;
     }

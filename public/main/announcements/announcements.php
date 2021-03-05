@@ -91,6 +91,7 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 $announcementAttachmentIsDisabled = api_get_configuration_value('disable_announcement_attachment');
+$thisAnnouncementId = null;
 
 switch ($action) {
     case 'move':

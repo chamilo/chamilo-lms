@@ -1544,7 +1544,7 @@ class UserManager
      * Get the users by ID.
      *
      * @param array  $ids    student ids
-     * @param string $active
+     * @param bool   $active
      * @param string $order
      * @param string $limit
      *

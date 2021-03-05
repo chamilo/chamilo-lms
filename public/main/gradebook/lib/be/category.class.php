@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\Course;
 use ChamiloSession as Session;
 
 /**
@@ -761,41 +762,6 @@ class Category implements GradebookItem
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'DELETE FROM '.$table.' WHERE id = '.intval($this->id);
         Database::query($sql);
-    }
-
-    /**
-     * Delete the gradebook categories from a course, including course sessions.
-     *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     */
-    public static function deleteFromCourse($course)
-    {
-        $em = Database::getManager();
-        $categories = $em
-            ->createQuery(
-                'SELECT DISTINCT gc.sessionId
-                FROM ChamiloCoreBundle:GradebookCategory gc WHERE gc.course = :course'
-            )
-            ->setParameter('course', $course)
-            ->getResult();
-
-        foreach ($categories as $category) {
-            $cats = self::load(
-                null,
-                null,
-                $course->getCode(),
-                null,
-                null,
-                (int) $category['sessionId']
-            );
-
-            if (!empty($cats)) {
-                /** @var self $cat */
-                foreach ($cats as $cat) {
-                    $cat->delete_all();
-                }
-            }
-        }
     }
 
     /**

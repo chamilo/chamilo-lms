@@ -625,7 +625,7 @@ class AnnouncementManager
      * @param bool   $sendToUsersInSession Send announcements to users inside a session.
      * @param int    $authorId
      *
-     * @return int false on failure, ID of the announcement on success
+     * @return int|bool false on failure, ID of the announcement on success
      */
     public static function add_announcement(
         $courseInfo,
@@ -723,7 +723,7 @@ class AnnouncementManager
      * @param string $file_comment
      * @param bool   $sendToUsersInSession
      *
-     * @return bool|int
+     * @return bool|CAnnouncement
      */
     public static function addGroupAnnouncement(
         $title,

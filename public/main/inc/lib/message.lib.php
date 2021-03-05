@@ -788,7 +788,7 @@ class MessageManager
 
     /**
      * @param int    $receiverUserId
-     * @param int    $subject
+     * @param string $subject
      * @param string $message
      * @param int    $sender_id
      * @param bool   $sendCopyToDrhUsers send copy to related DRH users

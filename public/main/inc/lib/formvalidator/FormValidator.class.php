@@ -1145,12 +1145,12 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
+     * @param string       $name
+     * @param string|array $label
      *
      * @return mixed
      */
-    public function addButtonAdvancedSettings($name, $label = '')
+    public function addButtonAdvancedSettings($name, $label = null)
     {
         $label = !empty($label) ? $label : get_lang('Advanced settings');
 

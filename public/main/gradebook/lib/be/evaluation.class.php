@@ -333,7 +333,7 @@ class Evaluation implements GradebookItem
                 ->setCategory($category)
                 ->setUser(api_get_user_entity($this->get_user_id()))
                 ->setWeight(api_float_val($this->get_weight()))
-                ->setMax($this->get_max())
+                ->setMax(api_float_val($this->get_max()))
                 ->setVisible($this->is_visible())
                 ->setType($this->type)
             ;

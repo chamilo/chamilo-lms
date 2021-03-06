@@ -3,6 +3,11 @@ parameters:
 	paths:
 		- src
 #		- public/main
+#		- public/main/inc/lib/agenda.lib.php
+#		- public/main/inc/lib/AnnouncementEmail.php
+#		- public/main/inc/lib/AnnouncementManager.php
+#		- public/main/inc/lib/api.lib.php
+#		- public/main/inc/lib/array.lib.php
 	bootstrapFiles:
 	  - public/legacy.php
 	  - public/main/inc/lib/events.lib.php

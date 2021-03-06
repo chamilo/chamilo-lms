@@ -30,7 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             SetList::SYMFONY,
             SetList::PSR_12,
             SetList::PHP_CS_FIXER,
-            //SetList::DOCTRINE_ANNOTATIONS,
+            SetList::DOCTRINE_ANNOTATIONS,
             //SetList::SYMFONY_RISKY,
         ]
     );
@@ -50,7 +50,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(\PhpCsFixer\Fixer\ReturnNotation\NoUselessReturnFixer::class);
     $services->set(\PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer::class);
     $services->set(\PhpCsFixer\Fixer\Casing\ConstantCaseFixer::class);
-
     $services->set(\PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer::class);
     $services->set(\PhpCsFixer\Fixer\Operator\ConcatSpaceFixer::class)
         ->call(
@@ -100,6 +99,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             \PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer::class,
             //\PhpCsFixer\Fixer\Phpdoc\PhpdocOrderFixer::class,
             PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer::class,
+            PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationSpacesFixer::class,
+            PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer::class,
+
             //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
         ]

@@ -11,6 +11,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // get parameters
     $parameters = $containerConfigurator->parameters();
 
+    // paths to refactor; solid alternative to CLI arguments
+    $parameters->set(Option::PATHS, [
+        __DIR__.'/src',
+    ]);
+
     // Define what rule sets will be applied
     $parameters->set(Option::SETS, [
         //SetList::DEAD_CODE,
@@ -25,7 +30,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TypedPropertyRector::class);
 
     $services->set(\Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector::class);
-
     $services->set(\Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector::class);
     $services->set(\Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector::class);
 
@@ -41,14 +45,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     //$services->set(\Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector::class, false);
     $services->set(\PhpCsFixer\Fixer\Import\OrderedImportsFixer::class);
 
-    $parameters->set(
+    /*$parameters->set(
         Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
         __DIR__ . '/var/cache/dev/Chamilo_KernelDevDebugContainer.xml'
-    );
+    );*/
 
     $parameters->set(
         Option::SKIP,
         [
+            __DIR__.'/public/*',
             __DIR__.'/src/CoreBundle/Menu/*',
             __DIR__.'/src/CoreBundle/Component/Editor/*',
             __DIR__.'/src/CourseBundle/Component/CourseCopy/*',
@@ -57,7 +62,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__.'/src/CoreBundle/Hook/*',
             __DIR__.'/src/CoreBundle/Migrations/*',
             __DIR__.'/src/CoreBundle/Twig/SettingsHelper.php',
-            __DIR__.'/src/CoreBundle/Settings/SettingsResolver.php',
+            __DIR__.'/src/CoreBundle/Settings/*',
             //__DIR__.'/src/CoreBundle/Controller/ResourceApiController.php',
             //__DIR__.'/src/CoreBundle/Controller/EditorController.php',
             __DIR__.'/src/CoreBundle/Component/Editor/*',
@@ -67,12 +72,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             \Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class,
             \Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class,
             \Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class,
+            Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector::class,
             //\Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
-            \Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector::class,
+            Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector::class,
+            Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector::class,
+            Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector::class,
+            Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector::class,
+            Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
+            Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector::class,
+            Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class,
+            Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector::class,
+
+
+
         ]
     );
 
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+    //$parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     // get services (needed for register a single rule)
     // $services = $containerConfigurator->services();

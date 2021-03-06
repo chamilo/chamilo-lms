@@ -42,27 +42,27 @@ class PersonalAgenda
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     /**
      * @ORM\Column(name="text", type="text", nullable=true)
      */
-    protected ?string $text;
+    protected ?string $text = null;
 
     /**
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    protected ?DateTime $date;
+    protected ?DateTime $date = null;
 
     /**
      * @ORM\Column(name="enddate", type="datetime", nullable=true)
      */
-    protected ?DateTime $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
      * @ORM\Column(name="parent_event_id", type="integer", nullable=true)
      */
-    protected ?int $parentEventId;
+    protected ?int $parentEventId = null;
 
     /**
      * @ORM\Column(name="all_day", type="integer", nullable=false)
@@ -72,7 +72,7 @@ class PersonalAgenda
     /**
      * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
-    protected ?string $color;
+    protected ?string $color = null;
 
     /**
      * Get id.
@@ -113,12 +113,7 @@ class PersonalAgenda
         return $this->text;
     }
 
-    /**
-     * Set date.
-     *
-     * @param DateTime $date
-     */
-    public function setDate($date): self
+    public function setDate(DateTime $date): self
     {
         $this->date = $date;
 
@@ -138,11 +133,9 @@ class PersonalAgenda
     /**
      * Set enddate.
      *
-     * @param DateTime $value
-     *
      * @return PersonalAgenda
      */
-    public function setEndDate($value): self
+    public function setEndDate(DateTime $value): self
     {
         $this->endDate = $value;
 
@@ -160,11 +153,9 @@ class PersonalAgenda
     /**
      * Set parentEventId.
      *
-     * @param int $parentEventId
-     *
      * @return PersonalAgenda
      */
-    public function setParentEventId($parentEventId): self
+    public function setParentEventId(int $parentEventId): self
     {
         $this->parentEventId = $parentEventId;
 
@@ -184,11 +175,9 @@ class PersonalAgenda
     /**
      * Set allDay.
      *
-     * @param int $allDay
-     *
      * @return PersonalAgenda
      */
-    public function setAllDay($allDay): self
+    public function setAllDay(int $allDay): self
     {
         $this->allDay = $allDay;
 
@@ -214,11 +203,9 @@ class PersonalAgenda
     }
 
     /**
-     * @param string $color
-     *
      * @return PersonalAgenda
      */
-    public function setColor($color): self
+    public function setColor(string $color): self
     {
         $this->color = $color;
 

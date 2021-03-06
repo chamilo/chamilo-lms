@@ -41,11 +41,9 @@ class Tag
     /**
      * Set tag.
      *
-     * @param string $tag
-     *
      * @return Tag
      */
-    public function setTag($tag)
+    public function setTag(string $tag)
     {
         $this->tag = $tag;
 
@@ -65,11 +63,9 @@ class Tag
     /**
      * Set fieldId.
      *
-     * @param int $fieldId
-     *
      * @return Tag
      */
-    public function setFieldId($fieldId)
+    public function setFieldId(int $fieldId)
     {
         $this->fieldId = $fieldId;
 
@@ -89,11 +85,9 @@ class Tag
     /**
      * Set count.
      *
-     * @param int $count
-     *
      * @return Tag
      */
-    public function setCount($count)
+    public function setCount(int $count)
     {
         $this->count = $count;
 

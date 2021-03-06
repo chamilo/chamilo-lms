@@ -57,11 +57,9 @@ class ToolResourceRight
     }
 
     /**
-     * @param Tool $tool
-     *
      * @return $this
      */
-    public function setTool($tool)
+    public function setTool(Tool $tool)
     {
         $this->tool = $tool;
 
@@ -77,11 +75,9 @@ class ToolResourceRight
     }
 
     /**
-     * @param string $role
-     *
      * @return $this
      */
-    public function setRole($role)
+    public function setRole(string $role)
     {
         $this->role = $role;
 

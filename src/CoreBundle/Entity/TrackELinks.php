@@ -24,7 +24,7 @@ class TrackELinks
     /**
      * @ORM\Column(name="links_user_id", type="integer", nullable=true)
      */
-    protected ?int $linksUserId;
+    protected ?int $linksUserId = null;
 
     /**
      * @ORM\Column(name="links_date", type="datetime", nullable=false)
@@ -56,11 +56,9 @@ class TrackELinks
     /**
      * Set linksUserId.
      *
-     * @param int $linksUserId
-     *
      * @return TrackELinks
      */
-    public function setLinksUserId($linksUserId)
+    public function setLinksUserId(int $linksUserId)
     {
         $this->linksUserId = $linksUserId;
 
@@ -80,11 +78,9 @@ class TrackELinks
     /**
      * Set linksDate.
      *
-     * @param DateTime $linksDate
-     *
      * @return TrackELinks
      */
-    public function setLinksDate($linksDate)
+    public function setLinksDate(DateTime $linksDate)
     {
         $this->linksDate = $linksDate;
 
@@ -104,11 +100,9 @@ class TrackELinks
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackELinks
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -128,11 +122,9 @@ class TrackELinks
     /**
      * Set linksLinkId.
      *
-     * @param int $linksLinkId
-     *
      * @return TrackELinks
      */
-    public function setLinksLinkId($linksLinkId)
+    public function setLinksLinkId(int $linksLinkId)
     {
         $this->linksLinkId = $linksLinkId;
 
@@ -152,11 +144,9 @@ class TrackELinks
     /**
      * Set linksSessionId.
      *
-     * @param int $linksSessionId
-     *
      * @return TrackELinks
      */
-    public function setLinksSessionId($linksSessionId)
+    public function setLinksSessionId(int $linksSessionId)
     {
         $this->linksSessionId = $linksSessionId;
 

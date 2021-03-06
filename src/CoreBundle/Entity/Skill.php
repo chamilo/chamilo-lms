@@ -47,23 +47,23 @@ class Skill
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
      *
-     * @var \Chamilo\CoreBundle\Entity\SkillRelUser[]|Collection
+     * @var SkillRelUser[]|Collection
      */
-    protected $issuedSkills;
+    protected Collection $issuedSkills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
      *
      * @var Collection|SkillRelItem[]
      */
-    protected $items;
+    protected Collection $items;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
      *
      * @var Collection|SkillRelCourse[]
      */
-    protected $courses;
+    protected Collection $courses;
 
     /**
      * @Groups({"skill:read", "skill:write"})
@@ -101,7 +101,7 @@ class Skill
     /**
      * @ORM\Column(name="criteria", type="text", nullable=true)
      */
-    protected ?string $criteria;
+    protected ?string $criteria = null;
 
     /**
      * @ORM\Column(name="status", type="integer", nullable=false, options={"default":1})
@@ -117,6 +117,9 @@ class Skill
 
     public function __construct()
     {
+        $this->issuedSkills = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->courses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
     }
@@ -132,11 +135,9 @@ class Skill
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return Skill
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -150,10 +151,10 @@ class Skill
      *
      * @return string
      */
-    public function getName($translated = true)
+    public function getName(bool $translated = true)
     {
         if ($translated) {
-            $variable = ChamiloApi::getLanguageVar($this->name, 'Skill');
+            $variable = ChamiloApi::getLanguageVar($this->name, \Skill::class);
 
             return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $this->name;
         }
@@ -164,11 +165,9 @@ class Skill
     /**
      * Set shortCode.
      *
-     * @param string $shortCode
-     *
      * @return Skill
      */
-    public function setShortCode($shortCode)
+    public function setShortCode(string $shortCode)
     {
         $this->shortCode = $shortCode;
 
@@ -182,7 +181,7 @@ class Skill
      *
      * @return string
      */
-    public function getShortCode($translated = true)
+    public function getShortCode(bool $translated = true)
     {
         if ($translated && !empty($this->shortCode)) {
             $variable = ChamiloApi::getLanguageVar($this->shortCode, 'SkillCode');
@@ -196,11 +195,9 @@ class Skill
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return Skill
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -220,11 +217,9 @@ class Skill
     /**
      * Set accessUrlId.
      *
-     * @param int $accessUrlId
-     *
      * @return Skill
      */
-    public function setAccessUrlId($accessUrlId)
+    public function setAccessUrlId(int $accessUrlId)
     {
         $this->accessUrlId = $accessUrlId;
 
@@ -244,11 +239,9 @@ class Skill
     /**
      * Set icon.
      *
-     * @param string $icon
-     *
      * @return Skill
      */
-    public function setIcon($icon)
+    public function setIcon(string $icon)
     {
         $this->icon = $icon;
 
@@ -268,11 +261,9 @@ class Skill
     /**
      * Set criteria.
      *
-     * @param string $criteria
-     *
      * @return Skill
      */
-    public function setCriteria($criteria)
+    public function setCriteria(string $criteria)
     {
         $this->criteria = $criteria;
 
@@ -292,11 +283,9 @@ class Skill
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return Skill
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -356,11 +345,9 @@ class Skill
     }
 
     /**
-     * @param Profile $profile
-     *
      * @return Skill
      */
-    public function setProfile($profile)
+    public function setProfile(Profile $profile)
     {
         $this->profile = $profile;
 
@@ -386,11 +373,9 @@ class Skill
     }
 
     /**
-     * @param ArrayCollection $items
-     *
      * @return Skill
      */
-    public function setItems($items)
+    public function setItems(ArrayCollection $items)
     {
         $this->items = $items;
 
@@ -398,13 +383,11 @@ class Skill
     }
 
     /**
-     * @param int $itemId
-     *
      * @return bool
      */
-    public function hasItem($typeId, $itemId)
+    public function hasItem($typeId, int $itemId)
     {
-        if ($this->getItems()->count()) {
+        if (0 !== $this->getItems()->count()) {
             $found = false;
             /** @var SkillRelItem $item */
             foreach ($this->getItems() as $item) {
@@ -436,11 +419,9 @@ class Skill
     }
 
     /**
-     * @param ArrayCollection $courses
-     *
      * @return Skill
      */
-    public function setCourses($courses)
+    public function setCourses(ArrayCollection $courses)
     {
         $this->courses = $courses;
 
@@ -452,14 +433,14 @@ class Skill
      */
     public function hasCourseAndSession(SkillRelCourse $searchItem)
     {
-        if ($this->getCourses()->count()) {
+        if (0 !== $this->getCourses()->count()) {
             $found = false;
             /** @var SkillRelCourse $item */
             foreach ($this->getCourses() as $item) {
                 $sessionPassFilter = false;
                 $session = $item->getSession();
-                $sessionId = !empty($session) ? $session->getId() : 0;
-                $searchSessionId = !empty($searchItem->getSession()) ? $searchItem->getSession()->getId() : 0;
+                $sessionId = empty($session) ? 0 : $session->getId();
+                $searchSessionId = empty($searchItem->getSession()) ? 0 : $searchItem->getSession()->getId();
 
                 if ($sessionId === $searchSessionId) {
                     $sessionPassFilter = true;

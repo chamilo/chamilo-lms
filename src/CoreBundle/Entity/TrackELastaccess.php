@@ -39,12 +39,12 @@ class TrackELastaccess
     /**
      * @ORM\Column(name="access_tool", type="string", length=30, nullable=true)
      */
-    protected ?string $accessTool;
+    protected ?string $accessTool = null;
 
     /**
      * @ORM\Column(name="access_session_id", type="integer", nullable=true)
      */
-    protected ?int $accessSessionId;
+    protected ?int $accessSessionId = null;
 
     /**
      * @ORM\Column(name="access_id", type="bigint")
@@ -56,11 +56,9 @@ class TrackELastaccess
     /**
      * Set accessUserId.
      *
-     * @param int $accessUserId
-     *
      * @return TrackELastaccess
      */
-    public function setAccessUserId($accessUserId)
+    public function setAccessUserId(int $accessUserId)
     {
         $this->accessUserId = $accessUserId;
 
@@ -80,11 +78,9 @@ class TrackELastaccess
     /**
      * Set accessDate.
      *
-     * @param DateTime $accessDate
-     *
      * @return TrackELastaccess
      */
-    public function setAccessDate($accessDate)
+    public function setAccessDate(DateTime $accessDate)
     {
         $this->accessDate = $accessDate;
 
@@ -104,11 +100,9 @@ class TrackELastaccess
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackELastaccess
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -128,11 +122,9 @@ class TrackELastaccess
     /**
      * Set accessTool.
      *
-     * @param string $accessTool
-     *
      * @return TrackELastaccess
      */
-    public function setAccessTool($accessTool)
+    public function setAccessTool(string $accessTool)
     {
         $this->accessTool = $accessTool;
 
@@ -152,11 +144,9 @@ class TrackELastaccess
     /**
      * Set accessSessionId.
      *
-     * @param int $accessSessionId
-     *
      * @return TrackELastaccess
      */
-    public function setAccessSessionId($accessSessionId)
+    public function setAccessSessionId(int $accessSessionId)
     {
         $this->accessSessionId = $accessSessionId;
 

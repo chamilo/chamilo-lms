@@ -78,25 +78,25 @@ class Session
     protected int $id;
 
     /**
-     * @var ArrayCollection|SkillRelCourse[]
+     * @var Collection|SkillRelCourse[]
      * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
      */
-    protected $skills;
+    protected Collection $skills;
 
     /**
-     * @var ArrayCollection|SessionRelCourse[]
+     * @var Collection|SessionRelCourse[]
      *
      * @ORM\OrderBy({"position"="ASC"})
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $courses;
+    protected Collection $courses;
 
     /**
-     * @var ArrayCollection|SessionRelUser[]
+     * @var Collection|SessionRelUser[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $users;
+    protected Collection $users;
 
     /**
      * @ORM\OneToMany(
@@ -115,7 +115,7 @@ class Session
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="session", cascade={"persist"})
      */
-    protected $issuedSkills;
+    protected Collection $issuedSkills;
 
     /**
      * @var AccessUrlRelSession[]|Collection
@@ -126,14 +126,14 @@ class Session
      *     cascade={"persist"}, orphanRemoval=true
      * )
      */
-    protected $urls;
+    protected Collection $urls;
 
     /**
      * @var Collection|ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
      */
-    protected $resourceLinks;
+    protected Collection $resourceLinks;
 
     protected AccessUrl $currentUrl;
 
@@ -161,7 +161,7 @@ class Session
     /**
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
-    protected ?int $duration;
+    protected ?int $duration = null;
 
     /**
      * @Groups({"session:read"})
@@ -196,7 +196,7 @@ class Session
     /**
      * @ORM\Column(name="promotion_id", type="integer", nullable=true, unique=false)
      */
-    protected ?int $promotionId;
+    protected ?int $promotionId = null;
 
     /**
      * @Groups({"session:read"})
@@ -273,10 +273,13 @@ class Session
      *     orphanRemoval=true
      * )
      */
-    protected $studentPublications;
+    protected Collection $studentPublications;
 
     public function __construct()
     {
+        $this->skills = new ArrayCollection();
+        $this->issuedSkills = new ArrayCollection();
+        $this->resourceLinks = new ArrayCollection();
         $this->courses = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->userCourseSubscriptions = new ArrayCollection();
@@ -369,10 +372,7 @@ class Session
         }
     }
 
-    /**
-     * @param int $status
-     */
-    public function addUserInSession($status, User $user): self
+    public function addUserInSession(int $status, User $user): self
     {
         $sessionRelUser = new SessionRelUser();
         $sessionRelUser->setSession($this);
@@ -389,7 +389,7 @@ class Session
      */
     public function hasUser(SessionRelUser $subscription)
     {
-        if ($this->getUsers()->count()) {
+        if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
@@ -431,7 +431,7 @@ class Session
 
     public function hasCourse(Course $course): bool
     {
-        if ($this->getCourses()->count()) {
+        if (0 !== $this->getCourses()->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('course', $course)
             );
@@ -458,10 +458,8 @@ class Session
 
     /**
      * Remove $course.
-     *
-     * @param SessionRelCourse $course
      */
-    public function removeCourses($course): void
+    public function removeCourses(SessionRelCourse $course): void
     {
         foreach ($this->courses as $key => $value) {
             if ($value->getId() === $course->getId()) {
@@ -497,7 +495,7 @@ class Session
      * @param int $status if not set it will check if the user is registered
      *                    with any status
      */
-    public function hasUserInCourse(User $user, Course $course, $status = null): bool
+    public function hasUserInCourse(User $user, Course $course, int $status = null): bool
     {
         $relation = $this->getUserInCourse($user, $course, $status);
 
@@ -541,11 +539,9 @@ class Session
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -577,11 +573,9 @@ class Session
     /**
      * Set nbrCourses.
      *
-     * @param int $nbrCourses
-     *
      * @return Session
      */
-    public function setNbrCourses($nbrCourses)
+    public function setNbrCourses(int $nbrCourses)
     {
         $this->nbrCourses = $nbrCourses;
 
@@ -601,11 +595,9 @@ class Session
     /**
      * Set nbrUsers.
      *
-     * @param int $nbrUsers
-     *
      * @return Session
      */
-    public function setNbrUsers($nbrUsers)
+    public function setNbrUsers(int $nbrUsers)
     {
         $this->nbrUsers = $nbrUsers;
 
@@ -625,11 +617,9 @@ class Session
     /**
      * Set nbrClasses.
      *
-     * @param int $nbrClasses
-     *
      * @return Session
      */
-    public function setNbrClasses($nbrClasses)
+    public function setNbrClasses(int $nbrClasses)
     {
         $this->nbrClasses = $nbrClasses;
 
@@ -649,11 +639,9 @@ class Session
     /**
      * Set visibility.
      *
-     * @param int $visibility
-     *
      * @return Session
      */
-    public function setVisibility($visibility)
+    public function setVisibility(int $visibility)
     {
         $this->visibility = $visibility;
 
@@ -673,11 +661,9 @@ class Session
     /**
      * Set promotionId.
      *
-     * @param int $promotionId
-     *
      * @return Session
      */
-    public function setPromotionId($promotionId)
+    public function setPromotionId(int $promotionId)
     {
         $this->promotionId = $promotionId;
 
@@ -697,11 +683,9 @@ class Session
     /**
      * Set displayStartDate.
      *
-     * @param DateTime $displayStartDate
-     *
      * @return Session
      */
-    public function setDisplayStartDate($displayStartDate)
+    public function setDisplayStartDate(DateTime $displayStartDate)
     {
         $this->displayStartDate = $displayStartDate;
 
@@ -721,11 +705,9 @@ class Session
     /**
      * Set displayEndDate.
      *
-     * @param DateTime $displayEndDate
-     *
      * @return Session
      */
-    public function setDisplayEndDate($displayEndDate)
+    public function setDisplayEndDate(DateTime $displayEndDate)
     {
         $this->displayEndDate = $displayEndDate;
 
@@ -745,11 +727,9 @@ class Session
     /**
      * Set accessStartDate.
      *
-     * @param DateTime $accessStartDate
-     *
      * @return Session
      */
-    public function setAccessStartDate($accessStartDate)
+    public function setAccessStartDate(DateTime $accessStartDate)
     {
         $this->accessStartDate = $accessStartDate;
 
@@ -769,11 +749,9 @@ class Session
     /**
      * Set accessEndDate.
      *
-     * @param DateTime $accessEndDate
-     *
      * @return Session
      */
-    public function setAccessEndDate($accessEndDate)
+    public function setAccessEndDate(DateTime $accessEndDate)
     {
         $this->accessEndDate = $accessEndDate;
 
@@ -793,11 +771,9 @@ class Session
     /**
      * Set coachAccessStartDate.
      *
-     * @param DateTime $coachAccessStartDate
-     *
      * @return Session
      */
-    public function setCoachAccessStartDate($coachAccessStartDate)
+    public function setCoachAccessStartDate(DateTime $coachAccessStartDate)
     {
         $this->coachAccessStartDate = $coachAccessStartDate;
 
@@ -817,11 +793,9 @@ class Session
     /**
      * Set coachAccessEndDate.
      *
-     * @param DateTime $coachAccessEndDate
-     *
      * @return Session
      */
-    public function setCoachAccessEndDate($coachAccessEndDate)
+    public function setCoachAccessEndDate(DateTime $coachAccessEndDate)
     {
         $this->coachAccessEndDate = $coachAccessEndDate;
 
@@ -861,7 +835,7 @@ class Session
         return $this->category;
     }
 
-    public function setCategory($category): self
+    public function setCategory(SessionCategory $category): self
     {
         $this->category = $category;
 
@@ -885,11 +859,7 @@ class Session
     {
         $now = new Datetime('now');
 
-        if ($now > $this->getAccessStartDate()) {
-            return true;
-        }
-
-        return false;
+        return $now > $this->getAccessStartDate();
     }
 
     public function isActiveForStudent(): bool
@@ -943,7 +913,7 @@ class Session
     public function removeCourse(Course $course)
     {
         $relCourse = $this->getCourseSubscription($course);
-        if ($relCourse) {
+        if (null !== $relCourse) {
             $this->courses->removeElement($relCourse);
             $this->setNbrCourses(count($this->courses));
 
@@ -959,11 +929,9 @@ class Session
     }
 
     /**
-     * @param ArrayCollection $userCourseSubscriptions
-     *
      * @return $this
      */
-    public function setUserCourseSubscriptions($userCourseSubscriptions)
+    public function setUserCourseSubscriptions(ArrayCollection $userCourseSubscriptions)
     {
         $this->userCourseSubscriptions = new ArrayCollection();
 
@@ -997,10 +965,8 @@ class Session
     /**
      * Add a user course subscription.
      * If user status in session is student, then increase number of course users.
-     *
-     * @param int $status
      */
-    public function addUserInCourse($status, User $user, Course $course): void
+    public function addUserInCourse(int $status, User $user, Course $course): void
     {
         $userRelCourseRelSession = new SessionRelCourseRelUser();
         $userRelCourseRelSession->setCourse($course);
@@ -1023,7 +989,7 @@ class Session
      */
     public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription)
     {
-        if ($this->getUserCourseSubscriptions()->count()) {
+        if (0 !== $this->getUserCourseSubscriptions()->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
@@ -1086,11 +1052,9 @@ class Session
     /**
      * Get user from course by status.
      *
-     * @param int $status
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
+     * @return ArrayCollection|Collection
      */
-    public function getUserCourseSubscriptionsByStatus(Course $course, $status)
+    public function getUserCourseSubscriptionsByStatus(Course $course, int $status)
     {
         $criteria = Criteria::create()
             ->where(
@@ -1205,11 +1169,9 @@ class Session
     }
 
     /**
-     * @param int $position
-     *
      * @return Session
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
@@ -1244,11 +1206,7 @@ class Session
     {
         $generalCoach = $this->getGeneralCoach();
 
-        if ($generalCoach instanceof User && $user->getId() === $generalCoach->getId()) {
-            return true;
-        }
-
-        return false;
+        return $generalCoach instanceof User && $user->getId() === $generalCoach->getId();
     }
 
     /**
@@ -1285,30 +1243,20 @@ class Session
         return false;
     }
 
-    /**
-     * @param DateTime $start
-     * @param DateTime $end
-     */
-    protected function compareDates($start, $end): bool
+    protected function compareDates(DateTime $start, DateTime $end): bool
     {
         $now = new Datetime('now');
 
-        if (!empty($start) && !empty($end)) {
-            if ($now >= $start && $now <= $end) {
-                return true;
-            }
+        if (!empty($start) && !empty($end) && ($now >= $start && $now <= $end)) {
+            return true;
         }
 
-        if (!empty($start)) {
-            if ($now >= $start) {
-                return true;
-            }
+        if (!empty($start) && $now >= $start) {
+            return true;
         }
 
-        if (!empty($end)) {
-            if ($now <= $end) {
-                return true;
-            }
+        if (!empty($end) && $now <= $end) {
+            return true;
         }
 
         return false;

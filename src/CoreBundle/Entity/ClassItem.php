@@ -26,7 +26,7 @@ class ClassItem
     /**
      * @ORM\Column(name="code", type="string", length=40, nullable=true)
      */
-    protected ?string $code;
+    protected ?string $code = null;
 
     /**
      * @ORM\Column(name="name", type="text", nullable=false)
@@ -36,11 +36,9 @@ class ClassItem
     /**
      * Set code.
      *
-     * @param string $code
-     *
      * @return ClassItem
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -60,11 +58,9 @@ class ClassItem
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return ClassItem
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 

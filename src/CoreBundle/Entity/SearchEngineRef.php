@@ -35,7 +35,7 @@ class SearchEngineRef
     /**
      * @ORM\Column(name="ref_id_second_level", type="integer", nullable=true)
      */
-    protected ?int $refIdSecondLevel;
+    protected ?int $refIdSecondLevel = null;
 
     /**
      * @ORM\Column(name="search_did", type="integer", nullable=false)
@@ -76,11 +76,9 @@ class SearchEngineRef
     /**
      * Set toolId.
      *
-     * @param string $toolId
-     *
      * @return SearchEngineRef
      */
-    public function setToolId($toolId)
+    public function setToolId(string $toolId)
     {
         $this->toolId = $toolId;
 
@@ -100,11 +98,9 @@ class SearchEngineRef
     /**
      * Set refIdHighLevel.
      *
-     * @param int $refIdHighLevel
-     *
      * @return SearchEngineRef
      */
-    public function setRefIdHighLevel($refIdHighLevel)
+    public function setRefIdHighLevel(int $refIdHighLevel)
     {
         $this->refIdHighLevel = $refIdHighLevel;
 
@@ -124,11 +120,9 @@ class SearchEngineRef
     /**
      * Set refIdSecondLevel.
      *
-     * @param int $refIdSecondLevel
-     *
      * @return SearchEngineRef
      */
-    public function setRefIdSecondLevel($refIdSecondLevel)
+    public function setRefIdSecondLevel(int $refIdSecondLevel)
     {
         $this->refIdSecondLevel = $refIdSecondLevel;
 
@@ -148,11 +142,9 @@ class SearchEngineRef
     /**
      * Set searchDid.
      *
-     * @param int $searchDid
-     *
      * @return SearchEngineRef
      */
-    public function setSearchDid($searchDid)
+    public function setSearchDid(int $searchDid)
     {
         $this->searchDid = $searchDid;
 

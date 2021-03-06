@@ -53,7 +53,7 @@ class SequenceRuleCondition
     /**
      * @return SequenceRuleCondition
      */
-    public function setRule($rule)
+    public function setRule(?SequenceRule $rule)
     {
         $this->rule = $rule;
 
@@ -68,7 +68,7 @@ class SequenceRuleCondition
     /**
      * @return SequenceRuleCondition
      */
-    public function setCondition($condition)
+    public function setCondition(?SequenceCondition $condition)
     {
         $this->condition = $condition;
 

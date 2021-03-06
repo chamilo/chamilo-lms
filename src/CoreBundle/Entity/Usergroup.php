@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,7 +43,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="group_type", type="integer", nullable=false)
@@ -52,12 +53,12 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
-    protected ?string $picture;
+    protected ?string $picture = null;
 
     /**
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
-    protected ?string $url;
+    protected ?string $url = null;
 
     /**
      * @ORM\Column(name="visibility", type="string", length=255, nullable=false)
@@ -67,7 +68,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @ORM\Column(name="author_id", type="integer", nullable=true)
      */
-    protected ?string $authorId;
+    protected ?string $authorId = null;
 
     /**
      * @ORM\Column(name="allow_members_leave_group", type="integer")
@@ -75,10 +76,10 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected int $allowMembersToLeaveGroup;
 
     /**
-     * @var ArrayCollection|UsergroupRelUser[]
+     * @var Collection|UsergroupRelUser[]
      * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $users;
+    protected Collection $users;
 
     public function __construct()
     {
@@ -149,12 +150,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -180,11 +176,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     }
 
     /**
-     * @param int $groupType
-     *
      * @return Usergroup
      */
-    public function setGroupType($groupType)
+    public function setGroupType(int $groupType)
     {
         $this->groupType = $groupType;
 
@@ -248,7 +242,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         $size = empty($size) ? 32 : $size;
 
-        return "/img/icons/{$size}/group_na.png";
+        return sprintf('/img/icons/%s/group_na.png', $size);
     }
 
     public function getResourceIdentifier(): int

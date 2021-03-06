@@ -32,17 +32,17 @@ class SysCalendar
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected ?string $content;
+    protected ?string $content = null;
 
     /**
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $startDate;
+    protected ?DateTime $startDate = null;
 
     /**
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
@@ -57,11 +57,9 @@ class SysCalendar
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return SysCalendar
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -81,11 +79,9 @@ class SysCalendar
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return SysCalendar
      */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -105,11 +101,9 @@ class SysCalendar
     /**
      * Set startDate.
      *
-     * @param DateTime $startDate
-     *
      * @return SysCalendar
      */
-    public function setStartDate($startDate): self
+    public function setStartDate(DateTime $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -129,11 +123,9 @@ class SysCalendar
     /**
      * Set endDate.
      *
-     * @param DateTime $endDate
-     *
      * @return SysCalendar
      */
-    public function setEndDate($endDate): self
+    public function setEndDate(DateTime $endDate): self
     {
         $this->endDate = $endDate;
 
@@ -153,11 +145,9 @@ class SysCalendar
     /**
      * Set accessUrlId.
      *
-     * @param int $accessUrlId
-     *
      * @return SysCalendar
      */
-    public function setAccessUrlId($accessUrlId): self
+    public function setAccessUrlId(int $accessUrlId): self
     {
         $this->accessUrlId = $accessUrlId;
 
@@ -177,11 +167,9 @@ class SysCalendar
     /**
      * Set allDay.
      *
-     * @param int $allDay
-     *
      * @return SysCalendar
      */
-    public function setAllDay($allDay): self
+    public function setAllDay(int $allDay): self
     {
         $this->allDay = $allDay;
 

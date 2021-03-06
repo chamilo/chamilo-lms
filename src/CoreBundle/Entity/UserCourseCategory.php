@@ -42,21 +42,19 @@ class UserCourseCategory
     /**
      * @ORM\Column(name="sort", type="integer", nullable=true)
      */
-    protected ?int $sort;
+    protected ?int $sort = null;
 
     /**
      * @ORM\Column(name="collapsed", type="boolean", nullable=true)
      */
-    protected ?bool $isCollapsed;
+    protected ?bool $isCollapsed = null;
 
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return UserCourseCategory
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -76,11 +74,9 @@ class UserCourseCategory
     /**
      * Set sort.
      *
-     * @param int $sort
-     *
      * @return UserCourseCategory
      */
-    public function setSort($sort)
+    public function setSort(int $sort)
     {
         $this->sort = $sort;
 

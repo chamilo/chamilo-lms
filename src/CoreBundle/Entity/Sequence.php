@@ -35,7 +35,7 @@ class Sequence
     /**
      * @ORM\Column(name="graph", type="text", nullable=true)
      */
-    protected ?string $graph;
+    protected ?string $graph = null;
 
     public function __toString(): string
     {
@@ -59,11 +59,9 @@ class Sequence
     }
 
     /**
-     * @param string $name
-     *
      * @return Sequence
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -79,11 +77,9 @@ class Sequence
     }
 
     /**
-     * @param string $graph
-     *
      * @return Sequence
      */
-    public function setGraph($graph)
+    public function setGraph(string $graph)
     {
         $this->graph = $graph;
 
@@ -95,7 +91,7 @@ class Sequence
      */
     public function hasGraph()
     {
-        return !empty($this->graph) ? true : false;
+        return !empty($this->graph);
     }
 
     /**

@@ -31,7 +31,7 @@ class TrackEDownloads
     /**
      * @ORM\Column(name="down_user_id", type="integer", nullable=true)
      */
-    protected ?int $downUserId;
+    protected ?int $downUserId = null;
 
     /**
      * @ORM\Column(name="down_date", type="datetime", nullable=false)
@@ -56,11 +56,9 @@ class TrackEDownloads
     /**
      * Set downUserId.
      *
-     * @param int $downUserId
-     *
      * @return TrackEDownloads
      */
-    public function setDownUserId($downUserId)
+    public function setDownUserId(int $downUserId)
     {
         $this->downUserId = $downUserId;
 
@@ -80,11 +78,9 @@ class TrackEDownloads
     /**
      * Set downDate.
      *
-     * @param DateTime $downDate
-     *
      * @return TrackEDownloads
      */
-    public function setDownDate($downDate)
+    public function setDownDate(DateTime $downDate)
     {
         $this->downDate = $downDate;
 
@@ -104,11 +100,9 @@ class TrackEDownloads
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEDownloads
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -128,11 +122,9 @@ class TrackEDownloads
     /**
      * Set downDocPath.
      *
-     * @param string $downDocPath
-     *
      * @return TrackEDownloads
      */
-    public function setDownDocPath($downDocPath)
+    public function setDownDocPath(string $downDocPath)
     {
         $this->downDocPath = $downDocPath;
 
@@ -152,11 +144,9 @@ class TrackEDownloads
     /**
      * Set downSessionId.
      *
-     * @param int $downSessionId
-     *
      * @return TrackEDownloads
      */
-    public function setDownSessionId($downSessionId)
+    public function setDownSessionId(int $downSessionId)
     {
         $this->downSessionId = $downSessionId;
 

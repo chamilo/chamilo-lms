@@ -36,11 +36,9 @@ class UsergroupRelSession
     /**
      * Set usergroupId.
      *
-     * @param int $usergroupId
-     *
      * @return UsergroupRelSession
      */
-    public function setUsergroupId($usergroupId)
+    public function setUsergroupId(int $usergroupId)
     {
         $this->usergroupId = $usergroupId;
 
@@ -60,11 +58,9 @@ class UsergroupRelSession
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return UsergroupRelSession
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 

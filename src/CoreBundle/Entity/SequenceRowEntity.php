@@ -68,11 +68,9 @@ class SequenceRowEntity
     }
 
     /**
-     * @param int $cId
-     *
      * @return SequenceRowEntity
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -88,11 +86,9 @@ class SequenceRowEntity
     }
 
     /**
-     * @param int $sessionId
-     *
      * @return SequenceRowEntity
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -108,11 +104,9 @@ class SequenceRowEntity
     }
 
     /**
-     * @param int $rowId
-     *
      * @return SequenceRowEntity
      */
-    public function setRowId($rowId)
+    public function setRowId(int $rowId)
     {
         $this->rowId = $rowId;
 
@@ -128,11 +122,9 @@ class SequenceRowEntity
     }
 
     /**
-     * @param string $name
-     *
      * @return SequenceRowEntity
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -147,7 +139,7 @@ class SequenceRowEntity
     /**
      * @return SequenceRowEntity
      */
-    public function setType($type)
+    public function setType(?SequenceTypeEntity $type)
     {
         $this->type = $type;
 

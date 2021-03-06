@@ -51,11 +51,9 @@ class SpecificFieldValues
     /**
      * Set courseCode.
      *
-     * @param string $courseCode
-     *
      * @return SpecificFieldValues
      */
-    public function setCourseCode($courseCode)
+    public function setCourseCode(string $courseCode)
     {
         $this->courseCode = $courseCode;
 
@@ -75,11 +73,9 @@ class SpecificFieldValues
     /**
      * Set toolId.
      *
-     * @param string $toolId
-     *
      * @return SpecificFieldValues
      */
-    public function setToolId($toolId)
+    public function setToolId(string $toolId)
     {
         $this->toolId = $toolId;
 
@@ -99,11 +95,9 @@ class SpecificFieldValues
     /**
      * Set refId.
      *
-     * @param int $refId
-     *
      * @return SpecificFieldValues
      */
-    public function setRefId($refId)
+    public function setRefId(int $refId)
     {
         $this->refId = $refId;
 
@@ -123,11 +117,9 @@ class SpecificFieldValues
     /**
      * Set fieldId.
      *
-     * @param int $fieldId
-     *
      * @return SpecificFieldValues
      */
-    public function setFieldId($fieldId)
+    public function setFieldId(int $fieldId)
     {
         $this->fieldId = $fieldId;
 
@@ -147,11 +139,9 @@ class SpecificFieldValues
     /**
      * Set value.
      *
-     * @param string $value
-     *
      * @return SpecificFieldValues
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $this->value = $value;
 

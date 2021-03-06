@@ -36,11 +36,9 @@ class SkillRelProfile
     /**
      * Set skillId.
      *
-     * @param int $skillId
-     *
      * @return SkillRelProfile
      */
-    public function setSkillId($skillId)
+    public function setSkillId(int $skillId)
     {
         $this->skillId = $skillId;
 
@@ -60,11 +58,9 @@ class SkillRelProfile
     /**
      * Set profileId.
      *
-     * @param int $profileId
-     *
      * @return SkillRelProfile
      */
-    public function setProfileId($profileId)
+    public function setProfileId(int $profileId)
     {
         $this->profileId = $profileId;
 

@@ -41,7 +41,7 @@ class GradebookEvaluation
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookEvaluations")
@@ -95,22 +95,22 @@ class GradebookEvaluation
     /**
      * @ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $bestScore;
+    protected ?float $bestScore = null;
 
     /**
      * @ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $averageScore;
+    protected ?float $averageScore = null;
 
     /**
      * @ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $scoreWeight;
+    protected ?float $scoreWeight = null;
 
     /**
      * @ORM\Column(name="user_score_list", type="array", nullable=true)
      */
-    protected ?array $userScoreList;
+    protected ?array $userScoreList = null;
 
     public function __construct()
     {
@@ -120,11 +120,9 @@ class GradebookEvaluation
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return GradebookEvaluation
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -161,11 +159,9 @@ class GradebookEvaluation
     /**
      * Set createdAt.
      *
-     * @param DateTime $createdAt
-     *
      * @return GradebookEvaluation
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -185,11 +181,9 @@ class GradebookEvaluation
     /**
      * Set weight.
      *
-     * @param float $weight
-     *
      * @return GradebookEvaluation
      */
-    public function setWeight($weight)
+    public function setWeight(float $weight)
     {
         $this->weight = $weight;
 
@@ -209,11 +203,9 @@ class GradebookEvaluation
     /**
      * Set max.
      *
-     * @param float $max
-     *
      * @return GradebookEvaluation
      */
-    public function setMax($max)
+    public function setMax(float $max)
     {
         $this->max = $max;
 
@@ -233,11 +225,9 @@ class GradebookEvaluation
     /**
      * Set visible.
      *
-     * @param int $visible
-     *
      * @return GradebookEvaluation
      */
-    public function setVisible($visible)
+    public function setVisible(int $visible)
     {
         $this->visible = $visible;
 
@@ -257,11 +247,9 @@ class GradebookEvaluation
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return GradebookEvaluation
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -281,11 +269,9 @@ class GradebookEvaluation
     /**
      * Set locked.
      *
-     * @param int $locked
-     *
      * @return GradebookEvaluation
      */
-    public function setLocked($locked)
+    public function setLocked(int $locked)
     {
         $this->locked = $locked;
 
@@ -321,11 +307,9 @@ class GradebookEvaluation
     }
 
     /**
-     * @param float $bestScore
-     *
      * @return GradebookEvaluation
      */
-    public function setBestScore($bestScore)
+    public function setBestScore(float $bestScore)
     {
         $this->bestScore = $bestScore;
 
@@ -341,11 +325,9 @@ class GradebookEvaluation
     }
 
     /**
-     * @param float $averageScore
-     *
      * @return GradebookEvaluation
      */
-    public function setAverageScore($averageScore)
+    public function setAverageScore(float $averageScore)
     {
         $this->averageScore = $averageScore;
 
@@ -365,11 +347,9 @@ class GradebookEvaluation
     }
 
     /**
-     * @param array $userScoreList
-     *
      * @return GradebookEvaluation
      */
-    public function setUserScoreList($userScoreList)
+    public function setUserScoreList(array $userScoreList)
     {
         $this->userScoreList = $userScoreList;
 
@@ -385,11 +365,9 @@ class GradebookEvaluation
     }
 
     /**
-     * @param float $scoreWeight
-     *
      * @return GradebookEvaluation
      */
-    public function setScoreWeight($scoreWeight)
+    public function setScoreWeight(float $scoreWeight)
     {
         $this->scoreWeight = $scoreWeight;
 

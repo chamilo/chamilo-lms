@@ -63,11 +63,9 @@ class SequenceResource
     /**
      * Set the integer type.
      *
-     * @param int $type
-     *
      * @return SequenceResource
      */
-    public function setType($type)
+    public function setType(int $type)
     {
         $this->type = $type;
 
@@ -89,7 +87,7 @@ class SequenceResource
     {
         $graph = $this->getSequence()->getGraph();
 
-        return !empty($graph) ? true : false;
+        return !empty($graph);
     }
 
     /**
@@ -101,11 +99,9 @@ class SequenceResource
     }
 
     /**
-     * @param int $resourceId
-     *
      * @return $this
      */
-    public function setResourceId($resourceId)
+    public function setResourceId(int $resourceId)
     {
         $this->resourceId = $resourceId;
 

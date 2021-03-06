@@ -31,16 +31,14 @@ class TrackEAttemptCoeff
     /**
      * @ORM\Column(name="marks_coeff", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $marksCoeff;
+    protected ?float $marksCoeff = null;
 
     /**
      * Set attemptId.
      *
-     * @param int $attemptId
-     *
      * @return TrackEAttemptCoeff
      */
-    public function setAttemptId($attemptId)
+    public function setAttemptId(int $attemptId)
     {
         $this->attemptId = $attemptId;
 
@@ -60,11 +58,9 @@ class TrackEAttemptCoeff
     /**
      * Set marksCoeff.
      *
-     * @param float $marksCoeff
-     *
      * @return TrackEAttemptCoeff
      */
-    public function setMarksCoeff($marksCoeff)
+    public function setMarksCoeff(float $marksCoeff)
     {
         $this->marksCoeff = $marksCoeff;
 

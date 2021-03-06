@@ -110,7 +110,7 @@ class TrackEExercises
     /**
      * @ORM\Column(name="expired_time_control", type="datetime", nullable=true)
      */
-    protected ?DateTime $expiredTimeControl;
+    protected ?DateTime $expiredTimeControl = null;
 
     /**
      * @ORM\Column(name="orig_lp_item_view_id", type="integer", nullable=false)
@@ -135,11 +135,9 @@ class TrackEExercises
     /**
      * Set exeUserId.
      *
-     * @param int $exeUserId
-     *
      * @return TrackEExercises
      */
-    public function setExeUserId($exeUserId)
+    public function setExeUserId(int $exeUserId)
     {
         $this->exeUserId = $exeUserId;
 
@@ -159,11 +157,9 @@ class TrackEExercises
     /**
      * Set exeDate.
      *
-     * @param DateTime $exeDate
-     *
      * @return TrackEExercises
      */
-    public function setExeDate($exeDate)
+    public function setExeDate(DateTime $exeDate)
     {
         $this->exeDate = $exeDate;
 
@@ -183,11 +179,9 @@ class TrackEExercises
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEExercises
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -207,11 +201,9 @@ class TrackEExercises
     /**
      * Set exeExoId.
      *
-     * @param int $exeExoId
-     *
      * @return TrackEExercises
      */
-    public function setExeExoId($exeExoId)
+    public function setExeExoId(int $exeExoId)
     {
         $this->exeExoId = $exeExoId;
 
@@ -226,11 +218,9 @@ class TrackEExercises
     /**
      * Set userIp.
      *
-     * @param string $userIp
-     *
      * @return TrackEExercises
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
 
@@ -250,11 +240,9 @@ class TrackEExercises
     /**
      * Set status.
      *
-     * @param string $status
-     *
      * @return TrackEExercises
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
 
@@ -274,11 +262,9 @@ class TrackEExercises
     /**
      * Set dataTracking.
      *
-     * @param string $dataTracking
-     *
      * @return TrackEExercises
      */
-    public function setDataTracking($dataTracking)
+    public function setDataTracking(string $dataTracking)
     {
         $this->dataTracking = $dataTracking;
 
@@ -298,11 +284,9 @@ class TrackEExercises
     /**
      * Set startDate.
      *
-     * @param DateTime $startDate
-     *
      * @return TrackEExercises
      */
-    public function setStartDate($startDate)
+    public function setStartDate(DateTime $startDate)
     {
         $this->startDate = $startDate;
 
@@ -322,11 +306,9 @@ class TrackEExercises
     /**
      * Set stepsCounter.
      *
-     * @param int $stepsCounter
-     *
      * @return TrackEExercises
      */
-    public function setStepsCounter($stepsCounter)
+    public function setStepsCounter(int $stepsCounter)
     {
         $this->stepsCounter = $stepsCounter;
 
@@ -346,11 +328,9 @@ class TrackEExercises
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackEExercises
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -370,11 +350,9 @@ class TrackEExercises
     /**
      * Set origLpId.
      *
-     * @param int $origLpId
-     *
      * @return TrackEExercises
      */
-    public function setOrigLpId($origLpId)
+    public function setOrigLpId(int $origLpId)
     {
         $this->origLpId = $origLpId;
 
@@ -394,11 +372,9 @@ class TrackEExercises
     /**
      * Set origLpItemId.
      *
-     * @param int $origLpItemId
-     *
      * @return TrackEExercises
      */
-    public function setOrigLpItemId($origLpItemId)
+    public function setOrigLpItemId(int $origLpItemId)
     {
         $this->origLpItemId = $origLpItemId;
 
@@ -418,11 +394,9 @@ class TrackEExercises
     /**
      * Set exeDuration.
      *
-     * @param int $exeDuration
-     *
      * @return TrackEExercises
      */
-    public function setExeDuration($exeDuration)
+    public function setExeDuration(int $exeDuration)
     {
         $this->exeDuration = $exeDuration;
 
@@ -442,11 +416,9 @@ class TrackEExercises
     /**
      * Set expiredTimeControl.
      *
-     * @param DateTime $expiredTimeControl
-     *
      * @return TrackEExercises
      */
-    public function setExpiredTimeControl($expiredTimeControl)
+    public function setExpiredTimeControl(DateTime $expiredTimeControl)
     {
         $this->expiredTimeControl = $expiredTimeControl;
 
@@ -466,11 +438,9 @@ class TrackEExercises
     /**
      * Set origLpItemViewId.
      *
-     * @param int $origLpItemViewId
-     *
      * @return TrackEExercises
      */
-    public function setOrigLpItemViewId($origLpItemViewId)
+    public function setOrigLpItemViewId(int $origLpItemViewId)
     {
         $this->origLpItemViewId = $origLpItemViewId;
 
@@ -490,11 +460,9 @@ class TrackEExercises
     /**
      * Set questionsToCheck.
      *
-     * @param string $questionsToCheck
-     *
      * @return TrackEExercises
      */
-    public function setQuestionsToCheck($questionsToCheck)
+    public function setQuestionsToCheck(string $questionsToCheck)
     {
         $this->questionsToCheck = $questionsToCheck;
 

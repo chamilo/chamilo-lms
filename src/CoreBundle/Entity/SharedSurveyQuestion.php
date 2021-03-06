@@ -66,11 +66,9 @@ class SharedSurveyQuestion
     /**
      * Set surveyId.
      *
-     * @param int $surveyId
-     *
      * @return SharedSurveyQuestion
      */
-    public function setSurveyId($surveyId)
+    public function setSurveyId(int $surveyId)
     {
         $this->surveyId = $surveyId;
 
@@ -90,11 +88,9 @@ class SharedSurveyQuestion
     /**
      * Set surveyQuestion.
      *
-     * @param string $surveyQuestion
-     *
      * @return SharedSurveyQuestion
      */
-    public function setSurveyQuestion($surveyQuestion)
+    public function setSurveyQuestion(string $surveyQuestion)
     {
         $this->surveyQuestion = $surveyQuestion;
 
@@ -114,11 +110,9 @@ class SharedSurveyQuestion
     /**
      * Set surveyQuestionComment.
      *
-     * @param string $surveyQuestionComment
-     *
      * @return SharedSurveyQuestion
      */
-    public function setSurveyQuestionComment($surveyQuestionComment)
+    public function setSurveyQuestionComment(string $surveyQuestionComment)
     {
         $this->surveyQuestionComment = $surveyQuestionComment;
 
@@ -138,11 +132,9 @@ class SharedSurveyQuestion
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return SharedSurveyQuestion
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -162,11 +154,9 @@ class SharedSurveyQuestion
     /**
      * Set display.
      *
-     * @param string $display
-     *
      * @return SharedSurveyQuestion
      */
-    public function setDisplay($display)
+    public function setDisplay(string $display)
     {
         $this->display = $display;
 
@@ -186,11 +176,9 @@ class SharedSurveyQuestion
     /**
      * Set sort.
      *
-     * @param int $sort
-     *
      * @return SharedSurveyQuestion
      */
-    public function setSort($sort)
+    public function setSort(int $sort)
     {
         $this->sort = $sort;
 
@@ -210,11 +198,9 @@ class SharedSurveyQuestion
     /**
      * Set code.
      *
-     * @param string $code
-     *
      * @return SharedSurveyQuestion
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -234,11 +220,9 @@ class SharedSurveyQuestion
     /**
      * Set maxValue.
      *
-     * @param int $maxValue
-     *
      * @return SharedSurveyQuestion
      */
-    public function setMaxValue($maxValue)
+    public function setMaxValue(int $maxValue)
     {
         $this->maxValue = $maxValue;
 

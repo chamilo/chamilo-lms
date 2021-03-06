@@ -35,7 +35,7 @@ class TrackEHotpotatoes
     /**
      * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
      */
-    protected ?int $exeUserId;
+    protected ?int $exeUserId = null;
 
     /**
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
@@ -60,11 +60,9 @@ class TrackEHotpotatoes
     /**
      * Set exeName.
      *
-     * @param string $exeName
-     *
      * @return TrackEHotpotatoes
      */
-    public function setExeName($exeName)
+    public function setExeName(string $exeName)
     {
         $this->exeName = $exeName;
 
@@ -84,11 +82,9 @@ class TrackEHotpotatoes
     /**
      * Set exeUserId.
      *
-     * @param int $exeUserId
-     *
      * @return TrackEHotpotatoes
      */
-    public function setExeUserId($exeUserId)
+    public function setExeUserId(int $exeUserId)
     {
         $this->exeUserId = $exeUserId;
 
@@ -108,11 +104,9 @@ class TrackEHotpotatoes
     /**
      * Set exeDate.
      *
-     * @param DateTime $exeDate
-     *
      * @return TrackEHotpotatoes
      */
-    public function setExeDate($exeDate)
+    public function setExeDate(DateTime $exeDate)
     {
         $this->exeDate = $exeDate;
 
@@ -132,11 +126,9 @@ class TrackEHotpotatoes
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEHotpotatoes
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

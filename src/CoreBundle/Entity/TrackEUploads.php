@@ -34,7 +34,7 @@ class TrackEUploads
     /**
      * @ORM\Column(name="upload_user_id", type="integer", nullable=true)
      */
-    protected ?int $uploadUserId;
+    protected ?int $uploadUserId = null;
 
     /**
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
@@ -44,7 +44,7 @@ class TrackEUploads
     /**
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected ?int $cId;
+    protected ?int $cId = null;
 
     /**
      * @ORM\Column(name="upload_work_id", type="integer", nullable=false)
@@ -59,11 +59,9 @@ class TrackEUploads
     /**
      * Set uploadUserId.
      *
-     * @param int $uploadUserId
-     *
      * @return TrackEUploads
      */
-    public function setUploadUserId($uploadUserId)
+    public function setUploadUserId(int $uploadUserId)
     {
         $this->uploadUserId = $uploadUserId;
 
@@ -83,11 +81,9 @@ class TrackEUploads
     /**
      * Set uploadDate.
      *
-     * @param DateTime $uploadDate
-     *
      * @return TrackEUploads
      */
-    public function setUploadDate($uploadDate)
+    public function setUploadDate(DateTime $uploadDate)
     {
         $this->uploadDate = $uploadDate;
 
@@ -107,11 +103,9 @@ class TrackEUploads
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEUploads
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -131,11 +125,9 @@ class TrackEUploads
     /**
      * Set uploadWorkId.
      *
-     * @param int $uploadWorkId
-     *
      * @return TrackEUploads
      */
-    public function setUploadWorkId($uploadWorkId)
+    public function setUploadWorkId(int $uploadWorkId)
     {
         $this->uploadWorkId = $uploadWorkId;
 
@@ -155,11 +147,9 @@ class TrackEUploads
     /**
      * Set uploadSessionId.
      *
-     * @param int $uploadSessionId
-     *
      * @return TrackEUploads
      */
-    public function setUploadSessionId($uploadSessionId)
+    public function setUploadSessionId(int $uploadSessionId)
     {
         $this->uploadSessionId = $uploadSessionId;
 

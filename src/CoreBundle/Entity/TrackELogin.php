@@ -38,7 +38,7 @@ class TrackELogin
     /**
      * @ORM\Column(name="logout_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $logoutDate;
+    protected ?DateTime $logoutDate = null;
 
     /**
      * @ORM\Column(name="login_id", type="integer")
@@ -50,11 +50,9 @@ class TrackELogin
     /**
      * Set loginUserId.
      *
-     * @param int $loginUserId
-     *
      * @return TrackELogin
      */
-    public function setLoginUserId($loginUserId)
+    public function setLoginUserId(int $loginUserId)
     {
         $this->loginUserId = $loginUserId;
 
@@ -74,11 +72,9 @@ class TrackELogin
     /**
      * Set loginDate.
      *
-     * @param DateTime $loginDate
-     *
      * @return TrackELogin
      */
-    public function setLoginDate($loginDate)
+    public function setLoginDate(DateTime $loginDate)
     {
         $this->loginDate = $loginDate;
 
@@ -98,11 +94,9 @@ class TrackELogin
     /**
      * Set userIp.
      *
-     * @param string $userIp
-     *
      * @return TrackELogin
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
 
@@ -122,11 +116,9 @@ class TrackELogin
     /**
      * Set logoutDate.
      *
-     * @param DateTime $logoutDate
-     *
      * @return TrackELogin
      */
-    public function setLogoutDate($logoutDate)
+    public function setLogoutDate(DateTime $logoutDate)
     {
         $this->logoutDate = $logoutDate;
 

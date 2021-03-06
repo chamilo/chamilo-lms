@@ -44,9 +44,9 @@ class SkillRelUser
      *     orphanRemoval=true
      * )
      *
-     * @var \Doctrine\Common\Collections\Collection|SkillRelUserComment[]
+     * @var Collection|SkillRelUserComment[]
      */
-    protected $comments;
+    protected Collection $comments;
 
     /**
      * Whether this has been confirmed by a teacher or not
@@ -82,13 +82,13 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
      */
-    protected ?Course $course;
+    protected ?Course $course = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Level")
@@ -180,11 +180,9 @@ class SkillRelUser
     /**
      * Set acquiredSkillAt.
      *
-     * @param DateTime $acquiredSkillAt
-     *
      * @return SkillRelUser
      */
-    public function setAcquiredSkillAt($acquiredSkillAt)
+    public function setAcquiredSkillAt(DateTime $acquiredSkillAt)
     {
         $this->acquiredSkillAt = $acquiredSkillAt;
 
@@ -204,11 +202,9 @@ class SkillRelUser
     /**
      * Set assignedBy.
      *
-     * @param int $assignedBy
-     *
      * @return SkillRelUser
      */
-    public function setAssignedBy($assignedBy)
+    public function setAssignedBy(int $assignedBy)
     {
         $this->assignedBy = $assignedBy;
 
@@ -238,11 +234,9 @@ class SkillRelUser
     /**
      * Set acquiredLevel.
      *
-     * @param Level $acquiredLevel
-     *
      * @return SkillRelUser
      */
-    public function setAcquiredLevel($acquiredLevel)
+    public function setAcquiredLevel(Level $acquiredLevel)
     {
         $this->acquiredLevel = $acquiredLevel;
 
@@ -262,11 +256,9 @@ class SkillRelUser
     /**
      * Set argumentationAuthorId.
      *
-     * @param int $argumentationAuthorId
-     *
      * @return SkillRelUser
      */
-    public function setArgumentationAuthorId($argumentationAuthorId)
+    public function setArgumentationAuthorId(int $argumentationAuthorId)
     {
         $this->argumentationAuthorId = $argumentationAuthorId;
 
@@ -286,11 +278,9 @@ class SkillRelUser
     /**
      * Set argumentation.
      *
-     * @param string $argumentation
-     *
      * @return SkillRelUser
      */
-    public function setArgumentation($argumentation)
+    public function setArgumentation(string $argumentation)
     {
         $this->argumentation = $argumentation;
 
@@ -315,11 +305,11 @@ class SkillRelUser
     public function getSourceName()
     {
         $source = '';
-        if ($this->session) {
-            $source .= "[{$this->session->getName()}] ";
+        if (null !== $this->session) {
+            $source .= sprintf('[%s] ', $this->session->getName());
         }
 
-        if ($this->course) {
+        if (null !== $this->course) {
             $source .= $this->course->getTitle();
         }
 
@@ -333,7 +323,7 @@ class SkillRelUser
      */
     public function getIssueUrl()
     {
-        return api_get_path(WEB_PATH)."badge/{$this->id}";
+        return api_get_path(WEB_PATH).sprintf('badge/%s', $this->id);
     }
 
     /**
@@ -343,7 +333,7 @@ class SkillRelUser
      */
     public function getIssueUrlAll()
     {
-        return api_get_path(WEB_PATH)."skill/{$this->skill->getId()}/user/{$this->user->getId()}";
+        return api_get_path(WEB_PATH).sprintf('skill/%s/user/%s', $this->skill->getId(), $this->user->getId());
     }
 
     /**
@@ -355,14 +345,12 @@ class SkillRelUser
     {
         $url = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
 
-        $url .= http_build_query([
+        return $url.http_build_query([
             'user' => $this->user->getId(),
             'skill' => $this->skill->getId(),
-            'course' => $this->course ? $this->course->getId() : 0,
-            'session' => $this->session ? $this->session->getId() : 0,
+            'course' => null !== $this->course ? $this->course->getId() : 0,
+            'session' => null !== $this->session ? $this->session->getId() : 0,
         ]);
-
-        return $url;
     }
 
     public function getComments(bool $sortDescByDateTime = false): Collection
@@ -409,11 +397,9 @@ class SkillRelUser
     }
 
     /**
-     * @param int $validationStatus
-     *
      * @return SkillRelUser
      */
-    public function setValidationStatus($validationStatus)
+    public function setValidationStatus(int $validationStatus)
     {
         $this->validationStatus = $validationStatus;
 

@@ -67,11 +67,9 @@ class TrackCourseRanking
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackCourseRanking
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -91,11 +89,9 @@ class TrackCourseRanking
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackCourseRanking
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -115,11 +111,9 @@ class TrackCourseRanking
     /**
      * Set urlId.
      *
-     * @param int $urlId
-     *
      * @return TrackCourseRanking
      */
-    public function setUrlId($urlId)
+    public function setUrlId(int $urlId)
     {
         $this->urlId = $urlId;
 
@@ -139,11 +133,9 @@ class TrackCourseRanking
     /**
      * Set accesses.
      *
-     * @param int $accesses
-     *
      * @return TrackCourseRanking
      */
-    public function setAccesses($accesses)
+    public function setAccesses(int $accesses)
     {
         $this->accesses = $accesses;
 
@@ -163,11 +155,9 @@ class TrackCourseRanking
     /**
      * Set totalScore.
      *
-     * @param int $totalScore
-     *
      * @return TrackCourseRanking
      */
-    public function setTotalScore($totalScore)
+    public function setTotalScore(int $totalScore)
     {
         $this->totalScore = $totalScore;
 
@@ -187,11 +177,9 @@ class TrackCourseRanking
     /**
      * Set users.
      *
-     * @param int $users
-     *
      * @return TrackCourseRanking
      */
-    public function setUsers($users)
+    public function setUsers(int $users)
     {
         $this->users = $users;
 
@@ -211,11 +199,9 @@ class TrackCourseRanking
     /**
      * Set creationDate.
      *
-     * @param DateTime $creationDate
-     *
      * @return TrackCourseRanking
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(DateTime $creationDate)
     {
         $this->creationDate = $creationDate;
 

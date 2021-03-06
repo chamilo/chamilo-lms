@@ -67,11 +67,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceMethod
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -87,11 +85,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $formula
-     *
      * @return SequenceMethod
      */
-    public function setFormula($formula)
+    public function setFormula(string $formula)
     {
         $this->formula = $formula;
 
@@ -107,11 +103,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $assign
-     *
      * @return SequenceMethod
      */
-    public function setAssign($assign)
+    public function setAssign(string $assign)
     {
         $this->assign = $assign;
 
@@ -127,11 +121,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $metType
-     *
      * @return SequenceMethod
      */
-    public function setMetType($metType)
+    public function setMetType(string $metType)
     {
         $this->metType = $metType;
 
@@ -147,11 +139,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $actFalse
-     *
      * @return SequenceMethod
      */
-    public function setActFalse($actFalse)
+    public function setActFalse(string $actFalse)
     {
         $this->actFalse = $actFalse;
 

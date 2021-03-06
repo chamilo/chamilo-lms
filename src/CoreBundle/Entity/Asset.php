@@ -44,7 +44,7 @@ class Asset
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     /**
      * @Assert\NotBlank()
@@ -59,7 +59,7 @@ class Asset
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected ?string $category;
+    protected ?string $category = null;
 
     /**
      * @Assert\NotNull()
@@ -83,12 +83,12 @@ class Asset
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected ?string $mimeType;
+    protected ?string $mimeType = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    protected ?string $originalName;
+    protected ?string $originalName = null;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
@@ -104,7 +104,7 @@ class Asset
     /**
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
-    protected ?string $crop;
+    protected ?string $crop = null;
 
     /**
      * @ORM\Column(type="array", nullable=true)
@@ -114,7 +114,7 @@ class Asset
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @var DateTime|DateTimeImmutable
@@ -157,21 +157,15 @@ class Asset
     public function isImage(): bool
     {
         $mimeType = $this->getMimeType();
-        if (false !== strpos($mimeType, 'image')) {
-            return true;
-        }
 
-        return false;
+        return false !== strpos($mimeType, 'image');
     }
 
     public function isVideo(): bool
     {
         $mimeType = $this->getMimeType();
-        if (false !== strpos($mimeType, 'video')) {
-            return true;
-        }
 
-        return false;
+        return false !== strpos($mimeType, 'video');
     }
 
     /**
@@ -182,10 +176,7 @@ class Asset
         return $this->crop;
     }
 
-    /**
-     * @param string $crop
-     */
-    public function setCrop($crop): self
+    public function setCrop(string $crop): self
     {
         $this->crop = $crop;
 
@@ -197,10 +188,7 @@ class Asset
         return $this->size;
     }
 
-    /**
-     * @param int $size
-     */
-    public function setSize($size): self
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -224,10 +212,7 @@ class Asset
         return $this->mimeType;
     }
 
-    /**
-     * @param string $mimeType
-     */
-    public function setMimeType($mimeType): self
+    public function setMimeType(string $mimeType): self
     {
         $this->mimeType = $mimeType;
 
@@ -239,10 +224,7 @@ class Asset
         return (string) $this->originalName;
     }
 
-    /**
-     * @param string $originalName
-     */
-    public function setOriginalName($originalName): self
+    public function setOriginalName(string $originalName): self
     {
         $this->originalName = $originalName;
 
@@ -254,7 +236,7 @@ class Asset
         return $this->dimensions;
     }
 
-    public function setDimensions($dimensions): self
+    public function setDimensions(?array $dimensions): self
     {
         $this->dimensions = $dimensions;
 
@@ -264,7 +246,7 @@ class Asset
     public function getWidth(): int
     {
         $data = $this->getDimensions();
-        if ($data) {
+        if ([] !== $data) {
             //$data = explode(',', $data);
 
             return (int) $data[0];
@@ -277,7 +259,7 @@ class Asset
     {
         $data = $this->getDimensions();
 
-        if ($data) {
+        if ([] !== $data) {
             //$data = explode(',', $data);
 
             return (int) $data[1];
@@ -341,7 +323,7 @@ class Asset
         return $this->title;
     }
 
-    public function setTitle($title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 

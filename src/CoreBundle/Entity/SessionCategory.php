@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -43,7 +44,7 @@ class SessionCategory
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
      */
-    protected Session $session;
+    protected Session $sessions;
 
     /**
      * @Assert\NotBlank
@@ -55,12 +56,17 @@ class SessionCategory
     /**
      * @ORM\Column(name="date_start", type="date", nullable=true, unique=false)
      */
-    protected ?DateTime $dateStart;
+    protected ?DateTime $dateStart = null;
 
     /**
      * @ORM\Column(name="date_end", type="date", nullable=true, unique=false)
      */
-    protected ?DateTime $dateEnd;
+    protected ?DateTime $dateEnd = null;
+
+    public function __construct()
+    {
+        $this->sessions = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -101,12 +107,7 @@ class SessionCategory
         return $this->name;
     }
 
-    /**
-     * Set dateStart.
-     *
-     * @param DateTime $dateStart
-     */
-    public function setDateStart($dateStart): self
+    public function setDateStart(DateTime $dateStart): self
     {
         $this->dateStart = $dateStart;
 
@@ -126,11 +127,9 @@ class SessionCategory
     /**
      * Set dateEnd.
      *
-     * @param DateTime $dateEnd
-     *
      * @return SessionCategory
      */
-    public function setDateEnd($dateEnd)
+    public function setDateEnd(DateTime $dateEnd)
     {
         $this->dateEnd = $dateEnd;
 

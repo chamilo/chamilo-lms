@@ -59,11 +59,9 @@ class UserRelCourseVote
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return UserRelCourseVote
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -83,11 +81,9 @@ class UserRelCourseVote
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return UserRelCourseVote
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -107,11 +103,9 @@ class UserRelCourseVote
     /**
      * Set urlId.
      *
-     * @param int $urlId
-     *
      * @return UserRelCourseVote
      */
-    public function setUrlId($urlId)
+    public function setUrlId(int $urlId)
     {
         $this->urlId = $urlId;
 
@@ -131,11 +125,9 @@ class UserRelCourseVote
     /**
      * Set vote.
      *
-     * @param int $vote
-     *
      * @return UserRelCourseVote
      */
-    public function setVote($vote)
+    public function setVote(int $vote)
     {
         $this->vote = $vote;
 

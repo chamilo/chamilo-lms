@@ -32,7 +32,7 @@ class HookObserver
     /**
      * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
      */
-    protected ?string $className;
+    protected ?string $className = null;
 
     /**
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
@@ -42,16 +42,14 @@ class HookObserver
     /**
      * @ORM\Column(name="plugin_name", type="string", length=255, nullable=true)
      */
-    protected ?string $pluginName;
+    protected ?string $pluginName = null;
 
     /**
      * Set className.
      *
-     * @param string $className
-     *
      * @return HookObserver
      */
-    public function setClassName($className)
+    public function setClassName(string $className)
     {
         $this->className = $className;
 
@@ -71,11 +69,9 @@ class HookObserver
     /**
      * Set path.
      *
-     * @param string $path
-     *
      * @return HookObserver
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -95,11 +91,9 @@ class HookObserver
     /**
      * Set pluginName.
      *
-     * @param string $pluginName
-     *
      * @return HookObserver
      */
-    public function setPluginName($pluginName)
+    public function setPluginName(string $pluginName)
     {
         $this->pluginName = $pluginName;
 

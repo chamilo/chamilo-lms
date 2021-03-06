@@ -64,11 +64,9 @@ class TrackEOnline
     /**
      * Set loginUserId.
      *
-     * @param int $loginUserId
-     *
      * @return TrackEOnline
      */
-    public function setLoginUserId($loginUserId)
+    public function setLoginUserId(int $loginUserId)
     {
         $this->loginUserId = $loginUserId;
 
@@ -88,11 +86,9 @@ class TrackEOnline
     /**
      * Set loginDate.
      *
-     * @param DateTime $loginDate
-     *
      * @return TrackEOnline
      */
-    public function setLoginDate($loginDate)
+    public function setLoginDate(DateTime $loginDate)
     {
         $this->loginDate = $loginDate;
 
@@ -112,11 +108,9 @@ class TrackEOnline
     /**
      * Set userIp.
      *
-     * @param string $userIp
-     *
      * @return TrackEOnline
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
 
@@ -136,11 +130,9 @@ class TrackEOnline
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEOnline
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -160,11 +152,9 @@ class TrackEOnline
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackEOnline
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -184,11 +174,9 @@ class TrackEOnline
     /**
      * Set accessUrlId.
      *
-     * @param int $accessUrlId
-     *
      * @return TrackEOnline
      */
-    public function setAccessUrlId($accessUrlId)
+    public function setAccessUrlId(int $accessUrlId)
     {
         $this->accessUrlId = $accessUrlId;
 

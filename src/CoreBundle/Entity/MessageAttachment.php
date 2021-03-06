@@ -31,7 +31,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="size", type="integer", nullable=false)
@@ -57,11 +57,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set path.
      *
-     * @param string $path
-     *
      * @return MessageAttachment
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -81,11 +79,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set comment.
      *
-     * @param string $comment
-     *
      * @return MessageAttachment
      */
-    public function setComment($comment)
+    public function setComment(string $comment)
     {
         $this->comment = $comment;
 
@@ -105,11 +101,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set size.
      *
-     * @param int $size
-     *
      * @return MessageAttachment
      */
-    public function setSize($size)
+    public function setSize(int $size)
     {
         $this->size = $size;
 
@@ -151,11 +145,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set filename.
      *
-     * @param string $filename
-     *
      * @return MessageAttachment
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 

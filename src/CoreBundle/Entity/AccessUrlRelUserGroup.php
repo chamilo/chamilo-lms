@@ -51,11 +51,9 @@ class AccessUrlRelUserGroup
     }
 
     /**
-     * @param int $userGroupId
-     *
      * @return AccessUrlRelUserGroup
      */
-    public function setUserGroupId($userGroupId)
+    public function setUserGroupId(int $userGroupId)
     {
         $this->userGroupId = $userGroupId;
 

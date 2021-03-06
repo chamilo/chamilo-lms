@@ -33,11 +33,9 @@ class CourseRelClass
     /**
      * Set courseCode.
      *
-     * @param string $courseCode
-     *
      * @return CourseRelClass
      */
-    public function setCourseCode($courseCode)
+    public function setCourseCode(string $courseCode)
     {
         $this->courseCode = $courseCode;
 
@@ -57,11 +55,9 @@ class CourseRelClass
     /**
      * Set classId.
      *
-     * @param int $classId
-     *
      * @return CourseRelClass
      */
-    public function setClassId($classId)
+    public function setClassId(int $classId)
     {
         $this->classId = $classId;
 

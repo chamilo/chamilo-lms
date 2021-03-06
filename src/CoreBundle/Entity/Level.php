@@ -74,11 +74,9 @@ class Level
     }
 
     /**
-     * @param string $name
-     *
      * @return Level
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -93,7 +91,7 @@ class Level
     /**
      * @return Level
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
@@ -108,7 +106,7 @@ class Level
     /**
      * @return Level
      */
-    public function setShortName($shortName)
+    public function setShortName(string $shortName)
     {
         $this->shortName = $shortName;
 
@@ -126,7 +124,7 @@ class Level
     /**
      * @return Level
      */
-    public function setProfile($profile)
+    public function setProfile(Profile $profile)
     {
         $this->profile = $profile;
 

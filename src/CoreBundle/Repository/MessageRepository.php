@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 class MessageRepository extends ServiceEntityRepository
@@ -34,7 +35,7 @@ class MessageRepository extends ServiceEntityRepository
             )
             ->orderBy(
                 'm.sendDate',
-                'DESC'
+                Criteria::DESC
             )
         ;
 

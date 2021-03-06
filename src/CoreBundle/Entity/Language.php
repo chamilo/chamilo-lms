@@ -34,7 +34,7 @@ class Language
      *
      * @ORM\Column(name="original_name", type="string", length=255, nullable=true)
      */
-    protected ?string $originalName;
+    protected ?string $originalName = null;
 
     /**
      * @Assert\NotBlank()
@@ -59,7 +59,7 @@ class Language
      * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
-    protected ?Language $parent;
+    protected ?Language $parent = null;
 
     /**
      * @ORM\OneToMany(targetEntity="Language", mappedBy="parent")
@@ -74,11 +74,9 @@ class Language
     /**
      * Set originalName.
      *
-     * @param string $originalName
-     *
      * @return Language
      */
-    public function setOriginalName($originalName)
+    public function setOriginalName(string $originalName)
     {
         $this->originalName = $originalName;
 
@@ -98,11 +96,9 @@ class Language
     /**
      * Set englishName.
      *
-     * @param string $englishName
-     *
      * @return Language
      */
-    public function setEnglishName($englishName)
+    public function setEnglishName(string $englishName)
     {
         $this->englishName = $englishName;
 
@@ -122,11 +118,9 @@ class Language
     /**
      * Set isocode.
      *
-     * @param string $isocode
-     *
      * @return Language
      */
-    public function setIsocode($isocode)
+    public function setIsocode(string $isocode)
     {
         $this->isocode = $isocode;
 
@@ -146,11 +140,9 @@ class Language
     /**
      * Set available.
      *
-     * @param bool $available
-     *
      * @return Language
      */
-    public function setAvailable($available)
+    public function setAvailable(bool $available)
     {
         $this->available = $available;
 

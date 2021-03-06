@@ -61,11 +61,9 @@ class Templates
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return Templates
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -85,11 +83,9 @@ class Templates
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return Templates
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -109,11 +105,9 @@ class Templates
     /**
      * Set refDoc.
      *
-     * @param int $refDoc
-     *
      * @return Templates
      */
-    public function setRefDoc($refDoc)
+    public function setRefDoc(int $refDoc)
     {
         $this->refDoc = $refDoc;
 
@@ -133,11 +127,9 @@ class Templates
     /**
      * Set image.
      *
-     * @param string $image
-     *
      * @return Templates
      */
-    public function setImage($image)
+    public function setImage(string $image)
     {
         $this->image = $image;
 

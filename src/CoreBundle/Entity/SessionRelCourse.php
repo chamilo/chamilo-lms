@@ -66,11 +66,9 @@ class SessionRelCourse
     }
 
     /**
-     * @param Session $session
-     *
      * @return $this
      */
-    public function setSession($session)
+    public function setSession(Session $session)
     {
         $this->session = $session;
 
@@ -88,11 +86,9 @@ class SessionRelCourse
     }
 
     /**
-     * @param Course $course
-     *
      * @return $this
      */
-    public function setCourse($course)
+    public function setCourse(Course $course)
     {
         $this->course = $course;
 
@@ -112,11 +108,9 @@ class SessionRelCourse
     /**
      * Set nbrUsers.
      *
-     * @param int $nbrUsers
-     *
      * @return SessionRelCourse
      */
-    public function setNbrUsers($nbrUsers)
+    public function setNbrUsers(int $nbrUsers)
     {
         $this->nbrUsers = $nbrUsers;
 
@@ -141,10 +135,7 @@ class SessionRelCourse
         return $this->position;
     }
 
-    /**
-     * @param int $position
-     */
-    public function setPosition($position): void
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }

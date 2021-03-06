@@ -80,7 +80,7 @@ class TrackEAttempt
     /**
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    protected ?int $position;
+    protected ?int $position = null;
 
     /**
      * @ORM\Column(name="tms", type="datetime", nullable=false)
@@ -95,7 +95,7 @@ class TrackEAttempt
     /**
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)
      */
-    protected ?string $filename;
+    protected ?string $filename = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempts")
@@ -117,11 +117,9 @@ class TrackEAttempt
     /**
      * Set exeId.
      *
-     * @param int $exeId
-     *
      * @return TrackEAttempt
      */
-    public function setExeId($exeId)
+    public function setExeId(int $exeId)
     {
         $this->exeId = $exeId;
 
@@ -141,11 +139,9 @@ class TrackEAttempt
     /**
      * Set questionId.
      *
-     * @param int $questionId
-     *
      * @return TrackEAttempt
      */
-    public function setQuestionId($questionId)
+    public function setQuestionId(int $questionId)
     {
         $this->questionId = $questionId;
 
@@ -165,11 +161,9 @@ class TrackEAttempt
     /**
      * Set answer.
      *
-     * @param string $answer
-     *
      * @return TrackEAttempt
      */
-    public function setAnswer($answer)
+    public function setAnswer(string $answer)
     {
         $this->answer = $answer;
 
@@ -189,11 +183,9 @@ class TrackEAttempt
     /**
      * Set teacherComment.
      *
-     * @param string $teacherComment
-     *
      * @return TrackEAttempt
      */
-    public function setTeacherComment($teacherComment)
+    public function setTeacherComment(string $teacherComment)
     {
         $this->teacherComment = $teacherComment;
 
@@ -213,11 +205,9 @@ class TrackEAttempt
     /**
      * Set marks.
      *
-     * @param float $marks
-     *
      * @return TrackEAttempt
      */
-    public function setMarks($marks)
+    public function setMarks(float $marks)
     {
         $this->marks = $marks;
 
@@ -237,11 +227,9 @@ class TrackEAttempt
     /**
      * Set position.
      *
-     * @param int $position
-     *
      * @return TrackEAttempt
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
@@ -261,11 +249,9 @@ class TrackEAttempt
     /**
      * Set tms.
      *
-     * @param DateTime $tms
-     *
      * @return TrackEAttempt
      */
-    public function setTms($tms)
+    public function setTms(DateTime $tms)
     {
         $this->tms = $tms;
 
@@ -285,11 +271,9 @@ class TrackEAttempt
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackEAttempt
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -309,11 +293,9 @@ class TrackEAttempt
     /**
      * Set filename.
      *
-     * @param string $filename
-     *
      * @return TrackEAttempt
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 

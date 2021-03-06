@@ -88,22 +88,22 @@ class GradebookLink
     /**
      * @ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $bestScore;
+    protected ?float $bestScore = null;
 
     /**
      * @ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $averageScore;
+    protected ?float $averageScore = null;
 
     /**
      * @ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $scoreWeight;
+    protected ?float $scoreWeight = null;
 
     /**
      * @ORM\Column(name="user_score_list", type="array", nullable=true)
      */
-    protected ?array $userScoreList;
+    protected ?array $userScoreList = null;
 
     public function __construct()
     {
@@ -113,11 +113,9 @@ class GradebookLink
     /**
      * Set type.
      *
-     * @param int $type
-     *
      * @return GradebookLink
      */
-    public function setType($type)
+    public function setType(int $type)
     {
         $this->type = $type;
 
@@ -137,11 +135,9 @@ class GradebookLink
     /**
      * Set refId.
      *
-     * @param int $refId
-     *
      * @return GradebookLink
      */
-    public function setRefId($refId)
+    public function setRefId(int $refId)
     {
         $this->refId = $refId;
 
@@ -161,11 +157,9 @@ class GradebookLink
     /**
      * Set createdAt.
      *
-     * @param DateTime $createdAt
-     *
      * @return GradebookLink
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -185,11 +179,9 @@ class GradebookLink
     /**
      * Set weight.
      *
-     * @param float $weight
-     *
      * @return GradebookLink
      */
-    public function setWeight($weight)
+    public function setWeight(float $weight)
     {
         $this->weight = $weight;
 
@@ -209,11 +201,9 @@ class GradebookLink
     /**
      * Set visible.
      *
-     * @param int $visible
-     *
      * @return GradebookLink
      */
-    public function setVisible($visible)
+    public function setVisible(int $visible)
     {
         $this->visible = $visible;
 
@@ -233,11 +223,9 @@ class GradebookLink
     /**
      * Set locked.
      *
-     * @param int $locked
-     *
      * @return GradebookLink
      */
-    public function setLocked($locked)
+    public function setLocked(int $locked)
     {
         $this->locked = $locked;
 
@@ -272,10 +260,7 @@ class GradebookLink
         return $this->bestScore;
     }
 
-    /**
-     * @param float $bestScore
-     */
-    public function setBestScore($bestScore): self
+    public function setBestScore(float $bestScore): self
     {
         $this->bestScore = $bestScore;
 
@@ -290,10 +275,7 @@ class GradebookLink
         return $this->averageScore;
     }
 
-    /**
-     * @param float $averageScore
-     */
-    public function setAverageScore($averageScore): self
+    public function setAverageScore(float $averageScore): self
     {
         $this->averageScore = $averageScore;
 
@@ -312,10 +294,7 @@ class GradebookLink
         return $this->userScoreList;
     }
 
-    /**
-     * @param array $userScoreList
-     */
-    public function setUserScoreList($userScoreList): self
+    public function setUserScoreList(array $userScoreList): self
     {
         $this->userScoreList = $userScoreList;
 
@@ -330,10 +309,7 @@ class GradebookLink
         return $this->scoreWeight;
     }
 
-    /**
-     * @param float $scoreWeight
-     */
-    public function setScoreWeight($scoreWeight): self
+    public function setScoreWeight(float $scoreWeight): self
     {
         $this->scoreWeight = $scoreWeight;
 

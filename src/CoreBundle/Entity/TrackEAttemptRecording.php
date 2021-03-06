@@ -83,11 +83,9 @@ class TrackEAttemptRecording
     /**
      * Set exeId.
      *
-     * @param int $exeId
-     *
      * @return TrackEAttemptRecording
      */
-    public function setExeId($exeId)
+    public function setExeId(int $exeId)
     {
         $this->exeId = $exeId;
 
@@ -107,11 +105,9 @@ class TrackEAttemptRecording
     /**
      * Set questionId.
      *
-     * @param int $questionId
-     *
      * @return TrackEAttemptRecording
      */
-    public function setQuestionId($questionId)
+    public function setQuestionId(int $questionId)
     {
         $this->questionId = $questionId;
 
@@ -131,11 +127,9 @@ class TrackEAttemptRecording
     /**
      * Set marks.
      *
-     * @param int $marks
-     *
      * @return TrackEAttemptRecording
      */
-    public function setMarks($marks)
+    public function setMarks(int $marks)
     {
         $this->marks = $marks;
 
@@ -155,11 +149,9 @@ class TrackEAttemptRecording
     /**
      * Set insertDate.
      *
-     * @param DateTime $insertDate
-     *
      * @return TrackEAttemptRecording
      */
-    public function setInsertDate($insertDate)
+    public function setInsertDate(DateTime $insertDate)
     {
         $this->insertDate = $insertDate;
 
@@ -179,11 +171,9 @@ class TrackEAttemptRecording
     /**
      * Set author.
      *
-     * @param int $author
-     *
      * @return TrackEAttemptRecording
      */
-    public function setAuthor($author)
+    public function setAuthor(int $author)
     {
         $this->author = $author;
 
@@ -203,11 +193,9 @@ class TrackEAttemptRecording
     /**
      * Set teacherComment.
      *
-     * @param string $teacherComment
-     *
      * @return TrackEAttemptRecording
      */
-    public function setTeacherComment($teacherComment)
+    public function setTeacherComment(string $teacherComment)
     {
         $this->teacherComment = $teacherComment;
 
@@ -227,11 +215,9 @@ class TrackEAttemptRecording
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackEAttemptRecording
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -266,10 +252,7 @@ class TrackEAttemptRecording
         return $this->answer;
     }
 
-    /**
-     * @param int $answer
-     */
-    public function setAnswer($answer): self
+    public function setAnswer(int $answer): self
     {
         $this->answer = $answer;
 

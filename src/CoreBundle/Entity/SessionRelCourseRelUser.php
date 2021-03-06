@@ -151,11 +151,9 @@ class SessionRelCourseRelUser
     /**
      * Set legalAgreement.
      *
-     * @param int $legalAgreement
-     *
      * @return $this
      */
-    public function setLegalAgreement($legalAgreement)
+    public function setLegalAgreement(int $legalAgreement)
     {
         $this->legalAgreement = $legalAgreement;
 

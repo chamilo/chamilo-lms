@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Tree\Traits\NestedSetEntity;
@@ -98,7 +99,7 @@ class ResourceComment
      * )
      * @ORM\OrderBy({"id"="ASC"})
      */
-    protected $children;
+    protected Collection $children;
 
     public function __construct()
     {
@@ -129,7 +130,7 @@ class ResourceComment
         return $this->resourceNode;
     }
 
-    public function setResourceNode($resourceNode): self
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
@@ -153,7 +154,7 @@ class ResourceComment
         return $this->parent;
     }
 
-    public function setParent($parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 

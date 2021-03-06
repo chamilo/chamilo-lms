@@ -55,22 +55,22 @@ class CourseRequest
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="category_code", type="string", length=40, nullable=true)
      */
-    protected ?string $categoryCode;
+    protected ?string $categoryCode = null;
 
     /**
      * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true)
      */
-    protected ?string $tutorName;
+    protected ?string $tutorName = null;
 
     /**
      * @ORM\Column(name="visual_code", type="string", length=40, nullable=true)
      */
-    protected ?string $visualCode;
+    protected ?string $visualCode = null;
 
     /**
      * @ORM\Column(name="request_date", type="datetime", nullable=false)
@@ -80,12 +80,12 @@ class CourseRequest
     /**
      * @ORM\Column(name="objetives", type="text", nullable=true)
      */
-    protected ?string $objetives;
+    protected ?string $objetives = null;
 
     /**
      * @ORM\Column(name="target_audience", type="text", nullable=true)
      */
-    protected ?string $targetAudience;
+    protected ?string $targetAudience = null;
 
     /**
      * @ORM\Column(name="status", type="integer", nullable=false)
@@ -113,11 +113,9 @@ class CourseRequest
     /**
      * Set code.
      *
-     * @param string $code
-     *
      * @return CourseRequest
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -137,11 +135,9 @@ class CourseRequest
     /**
      * Set courseLanguage.
      *
-     * @param string $courseLanguage
-     *
      * @return CourseRequest
      */
-    public function setCourseLanguage($courseLanguage)
+    public function setCourseLanguage(string $courseLanguage)
     {
         $this->courseLanguage = $courseLanguage;
 
@@ -161,11 +157,9 @@ class CourseRequest
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CourseRequest
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -185,11 +179,9 @@ class CourseRequest
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return CourseRequest
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -209,11 +201,9 @@ class CourseRequest
     /**
      * Set categoryCode.
      *
-     * @param string $categoryCode
-     *
      * @return CourseRequest
      */
-    public function setCategoryCode($categoryCode)
+    public function setCategoryCode(string $categoryCode)
     {
         $this->categoryCode = $categoryCode;
 
@@ -233,11 +223,9 @@ class CourseRequest
     /**
      * Set tutorName.
      *
-     * @param string $tutorName
-     *
      * @return CourseRequest
      */
-    public function setTutorName($tutorName)
+    public function setTutorName(string $tutorName)
     {
         $this->tutorName = $tutorName;
 
@@ -257,11 +245,9 @@ class CourseRequest
     /**
      * Set visualCode.
      *
-     * @param string $visualCode
-     *
      * @return CourseRequest
      */
-    public function setVisualCode($visualCode)
+    public function setVisualCode(string $visualCode)
     {
         $this->visualCode = $visualCode;
 
@@ -281,11 +267,9 @@ class CourseRequest
     /**
      * Set requestDate.
      *
-     * @param DateTime $requestDate
-     *
      * @return CourseRequest
      */
-    public function setRequestDate($requestDate)
+    public function setRequestDate(DateTime $requestDate)
     {
         $this->requestDate = $requestDate;
 
@@ -305,11 +289,9 @@ class CourseRequest
     /**
      * Set objetives.
      *
-     * @param string $objetives
-     *
      * @return CourseRequest
      */
-    public function setObjetives($objetives)
+    public function setObjetives(string $objetives)
     {
         $this->objetives = $objetives;
 
@@ -329,11 +311,9 @@ class CourseRequest
     /**
      * Set targetAudience.
      *
-     * @param string $targetAudience
-     *
      * @return CourseRequest
      */
-    public function setTargetAudience($targetAudience)
+    public function setTargetAudience(string $targetAudience)
     {
         $this->targetAudience = $targetAudience;
 
@@ -353,11 +333,9 @@ class CourseRequest
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return CourseRequest
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -377,11 +355,9 @@ class CourseRequest
     /**
      * Set info.
      *
-     * @param int $info
-     *
      * @return CourseRequest
      */
-    public function setInfo($info)
+    public function setInfo(int $info)
     {
         $this->info = $info;
 
@@ -401,11 +377,9 @@ class CourseRequest
     /**
      * Set exemplaryContent.
      *
-     * @param int $exemplaryContent
-     *
      * @return CourseRequest
      */
-    public function setExemplaryContent($exemplaryContent)
+    public function setExemplaryContent(int $exemplaryContent)
     {
         $this->exemplaryContent = $exemplaryContent;
 

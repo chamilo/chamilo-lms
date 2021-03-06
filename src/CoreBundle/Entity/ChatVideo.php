@@ -56,11 +56,9 @@ class ChatVideo
     /**
      * Set fromUser.
      *
-     * @param int $fromUser
-     *
      * @return ChatVideo
      */
-    public function setFromUser($fromUser)
+    public function setFromUser(int $fromUser)
     {
         $this->fromUser = $fromUser;
 
@@ -80,11 +78,9 @@ class ChatVideo
     /**
      * Set toUser.
      *
-     * @param int $toUser
-     *
      * @return ChatVideo
      */
-    public function setToUser($toUser)
+    public function setToUser(int $toUser)
     {
         $this->toUser = $toUser;
 
@@ -104,11 +100,9 @@ class ChatVideo
     /**
      * Set room_name.
      *
-     * @param string $roomName
-     *
      * @return ChatVideo
      */
-    public function setRoomName($roomName)
+    public function setRoomName(string $roomName)
     {
         $this->roomName = $roomName;
 
@@ -128,11 +122,9 @@ class ChatVideo
     /**
      * Set datetime.
      *
-     * @param DateTime $datetime
-     *
      * @return ChatVideo
      */
-    public function setDatetime($datetime)
+    public function setDatetime(DateTime $datetime)
     {
         $this->datetime = $datetime;
 

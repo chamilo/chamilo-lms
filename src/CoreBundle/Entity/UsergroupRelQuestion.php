@@ -41,16 +41,14 @@ class UsergroupRelQuestion
     /**
      * @ORM\Column(name="coefficient", type="float", precision=6, scale=2, nullable=true)
      */
-    protected ?float $coefficient;
+    protected ?float $coefficient = null;
 
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return UsergroupRelQuestion
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -70,11 +68,9 @@ class UsergroupRelQuestion
     /**
      * Set questionId.
      *
-     * @param int $questionId
-     *
      * @return UsergroupRelQuestion
      */
-    public function setQuestionId($questionId)
+    public function setQuestionId(int $questionId)
     {
         $this->questionId = $questionId;
 
@@ -94,11 +90,9 @@ class UsergroupRelQuestion
     /**
      * Set usergroupId.
      *
-     * @param int $usergroupId
-     *
      * @return UsergroupRelQuestion
      */
-    public function setUsergroupId($usergroupId)
+    public function setUsergroupId(int $usergroupId)
     {
         $this->usergroupId = $usergroupId;
 
@@ -118,11 +112,9 @@ class UsergroupRelQuestion
     /**
      * Set coefficient.
      *
-     * @param float $coefficient
-     *
      * @return UsergroupRelQuestion
      */
-    public function setCoefficient($coefficient)
+    public function setCoefficient(float $coefficient)
     {
         $this->coefficient = $coefficient;
 

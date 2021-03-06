@@ -29,42 +29,42 @@ class SharedSurvey
     /**
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
      */
-    protected ?string $code;
+    protected ?string $code = null;
 
     /**
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     /**
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    protected ?string $subtitle;
+    protected ?string $subtitle = null;
 
     /**
      * @ORM\Column(name="author", type="string", length=250, nullable=true)
      */
-    protected ?string $author;
+    protected ?string $author = null;
 
     /**
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
      */
-    protected ?string $lang;
+    protected ?string $lang = null;
 
     /**
      * @ORM\Column(name="template", type="string", length=20, nullable=true)
      */
-    protected ?string $template;
+    protected ?string $template = null;
 
     /**
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    protected ?string $intro;
+    protected ?string $intro = null;
 
     /**
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    protected ?string $surveythanks;
+    protected ?string $surveythanks = null;
 
     /**
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
@@ -79,11 +79,9 @@ class SharedSurvey
     /**
      * Set code.
      *
-     * @param string $code
-     *
      * @return SharedSurvey
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -103,11 +101,9 @@ class SharedSurvey
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return SharedSurvey
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -127,11 +123,9 @@ class SharedSurvey
     /**
      * Set subtitle.
      *
-     * @param string $subtitle
-     *
      * @return SharedSurvey
      */
-    public function setSubtitle($subtitle)
+    public function setSubtitle(string $subtitle)
     {
         $this->subtitle = $subtitle;
 
@@ -151,11 +145,9 @@ class SharedSurvey
     /**
      * Set author.
      *
-     * @param string $author
-     *
      * @return SharedSurvey
      */
-    public function setAuthor($author)
+    public function setAuthor(string $author)
     {
         $this->author = $author;
 
@@ -175,11 +167,9 @@ class SharedSurvey
     /**
      * Set lang.
      *
-     * @param string $lang
-     *
      * @return SharedSurvey
      */
-    public function setLang($lang)
+    public function setLang(string $lang)
     {
         $this->lang = $lang;
 
@@ -199,11 +189,9 @@ class SharedSurvey
     /**
      * Set template.
      *
-     * @param string $template
-     *
      * @return SharedSurvey
      */
-    public function setTemplate($template)
+    public function setTemplate(string $template)
     {
         $this->template = $template;
 
@@ -223,11 +211,9 @@ class SharedSurvey
     /**
      * Set intro.
      *
-     * @param string $intro
-     *
      * @return SharedSurvey
      */
-    public function setIntro($intro)
+    public function setIntro(string $intro)
     {
         $this->intro = $intro;
 
@@ -247,11 +233,9 @@ class SharedSurvey
     /**
      * Set surveythanks.
      *
-     * @param string $value
-     *
      * @return SharedSurvey
      */
-    public function setSurveyThanks($value)
+    public function setSurveyThanks(string $value)
     {
         $this->surveythanks = $value;
 
@@ -269,11 +253,9 @@ class SharedSurvey
     /**
      * Set creationDate.
      *
-     * @param DateTime $creationDate
-     *
      * @return SharedSurvey
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(DateTime $creationDate)
     {
         $this->creationDate = $creationDate;
 
@@ -293,11 +275,9 @@ class SharedSurvey
     /**
      * Set courseCode.
      *
-     * @param string $courseCode
-     *
      * @return SharedSurvey
      */
-    public function setCourseCode($courseCode)
+    public function setCourseCode(string $courseCode)
     {
         $this->courseCode = $courseCode;
 

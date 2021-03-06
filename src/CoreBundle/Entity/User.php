@@ -65,42 +65,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 {
     use TimestampableEntity;
 
-    /**
-     * @var string
-     */
     public const ROLE_DEFAULT = 'ROLE_USER';
-
-    /**
-     * @var string
-     */
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
-
-    /**
-     * @var int
-     */
     public const COURSE_MANAGER = 1;
-
-    /**
-     * @var int
-     */
     public const TEACHER = 1;
-    /**
-     * @var int
-     */
     public const SESSION_ADMIN = 3;
-    /**
-     * * @var int
-     */
     public const DRH = 4;
-
-    /**
-     * * @var int
-     */
     public const STUDENT = 5;
-
-    /**
-     * * @var int
-     */
     public const ANONYMOUS = 6;
 
     /**
@@ -1907,7 +1878,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $urlImg = '/img/';
         $iconStatus = '';
         switch ($status) {
-            case STUDENT:
+            case self::STUDENT:
                 if ($hasCertificates) {
                     $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
                 } else {
@@ -1915,7 +1886,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                 }
 
                 break;
-            case COURSEMANAGER:
+            case self::COURSE_MANAGER:
                 if ($this->isAdmin()) {
                     $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
                 } else {

@@ -84,11 +84,9 @@ class UsergroupRelUser
     /**
      * Set relationType.
      *
-     * @param int $relationType
-     *
      * @return $this
      */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType)
     {
         $this->relationType = $relationType;
 

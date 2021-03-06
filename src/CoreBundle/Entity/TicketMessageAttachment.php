@@ -64,12 +64,12 @@ class TicketMessageAttachment
     /**
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected ?int $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
     /**
      * @return int
@@ -88,11 +88,9 @@ class TicketMessageAttachment
     }
 
     /**
-     * @param TicketMessage $message
-     *
      * @return TicketMessageAttachment
      */
-    public function setMessage($message)
+    public function setMessage(TicketMessage $message)
     {
         $this->message = $message;
 
@@ -108,11 +106,9 @@ class TicketMessageAttachment
     }
 
     /**
-     * @param string $path
-     *
      * @return TicketMessageAttachment
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -128,11 +124,9 @@ class TicketMessageAttachment
     }
 
     /**
-     * @param string $filename
-     *
      * @return TicketMessageAttachment
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 
@@ -148,11 +142,9 @@ class TicketMessageAttachment
     }
 
     /**
-     * @param int $size
-     *
      * @return TicketMessageAttachment
      */
-    public function setSize($size)
+    public function setSize(int $size)
     {
         $this->size = $size;
 

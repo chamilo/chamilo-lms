@@ -49,7 +49,7 @@ class ExtraFieldOptionRelFieldOption
     /**
      * @ORM\Column(name="role_id", type="integer", nullable=true, unique=false)
      */
-    protected ?int $roleId;
+    protected ?int $roleId = null;
 
     /**
      * Get id.
@@ -64,11 +64,9 @@ class ExtraFieldOptionRelFieldOption
     /**
      * Set roleId.
      *
-     * @param int $roleId
-     *
      * @return ExtraFieldOptionRelFieldOption
      */
-    public function setRoleId($roleId)
+    public function setRoleId(int $roleId)
     {
         $this->roleId = $roleId;
 

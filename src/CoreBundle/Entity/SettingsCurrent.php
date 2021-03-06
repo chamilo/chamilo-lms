@@ -50,22 +50,22 @@ class SettingsCurrent
     /**
      * @ORM\Column(name="subkey", type="string", length=190, nullable=true)
      */
-    protected ?string $subkey;
+    protected ?string $subkey = null;
 
     /**
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    protected ?string $type;
+    protected ?string $type = null;
 
     /**
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
-    protected ?string $category;
+    protected ?string $category = null;
 
     /**
      * @ORM\Column(name="selected_value", type="text", nullable=true)
      */
-    protected ?string $selectedValue;
+    protected ?string $selectedValue = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -75,7 +75,7 @@ class SettingsCurrent
     /**
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="scope", type="string", length=50, nullable=true)
@@ -108,11 +108,9 @@ class SettingsCurrent
     /**
      * Set variable.
      *
-     * @param string $variable
-     *
      * @return SettingsCurrent
      */
-    public function setVariable($variable)
+    public function setVariable(string $variable)
     {
         $this->variable = $variable;
 
@@ -132,11 +130,9 @@ class SettingsCurrent
     /**
      * Set subkey.
      *
-     * @param string $subkey
-     *
      * @return SettingsCurrent
      */
-    public function setSubkey($subkey)
+    public function setSubkey(string $subkey)
     {
         $this->subkey = $subkey;
 
@@ -156,11 +152,9 @@ class SettingsCurrent
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return SettingsCurrent
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -180,11 +174,9 @@ class SettingsCurrent
     /**
      * Set category.
      *
-     * @param string $category
-     *
      * @return SettingsCurrent
      */
-    public function setCategory($category)
+    public function setCategory(string $category)
     {
         $this->category = $category;
 
@@ -204,11 +196,9 @@ class SettingsCurrent
     /**
      * Set selectedValue.
      *
-     * @param string $selectedValue
-     *
      * @return SettingsCurrent
      */
-    public function setSelectedValue($selectedValue)
+    public function setSelectedValue(string $selectedValue)
     {
         $this->selectedValue = $selectedValue;
 
@@ -228,11 +218,9 @@ class SettingsCurrent
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return SettingsCurrent
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -252,11 +240,9 @@ class SettingsCurrent
     /**
      * Set comment.
      *
-     * @param string $comment
-     *
      * @return SettingsCurrent
      */
-    public function setComment($comment)
+    public function setComment(string $comment)
     {
         $this->comment = $comment;
 
@@ -273,12 +259,7 @@ class SettingsCurrent
         return $this->comment;
     }
 
-    /**
-     * Set scope.
-     *
-     * @param string $scope
-     */
-    public function setScope($scope): self
+    public function setScope(string $scope): self
     {
         $this->scope = $scope;
 
@@ -295,12 +276,7 @@ class SettingsCurrent
         return $this->scope;
     }
 
-    /**
-     * Set subkeytext.
-     *
-     * @param string $subkeytext
-     */
-    public function setSubkeytext($subkeytext): self
+    public function setSubkeytext(string $subkeytext): self
     {
         $this->subkeytext = $subkeytext;
 
@@ -317,12 +293,7 @@ class SettingsCurrent
         return $this->subkeytext;
     }
 
-    /**
-     * Set accessUrlChangeable.
-     *
-     * @param int $accessUrlChangeable
-     */
-    public function setAccessUrlChangeable($accessUrlChangeable): self
+    public function setAccessUrlChangeable(int $accessUrlChangeable): self
     {
         $this->accessUrlChangeable = $accessUrlChangeable;
 
@@ -339,12 +310,7 @@ class SettingsCurrent
         return $this->accessUrlChangeable;
     }
 
-    /**
-     * Set accessUrlLocked.
-     *
-     * @param int $accessUrlLocked
-     */
-    public function setAccessUrlLocked($accessUrlLocked): self
+    public function setAccessUrlLocked(int $accessUrlLocked): self
     {
         $this->accessUrlLocked = (int) $accessUrlLocked;
 
@@ -379,10 +345,7 @@ class SettingsCurrent
         return $this->url;
     }
 
-    /**
-     * @param AccessUrl $url
-     */
-    public function setUrl($url): self
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 

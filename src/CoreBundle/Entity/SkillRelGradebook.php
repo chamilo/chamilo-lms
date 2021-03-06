@@ -41,11 +41,9 @@ class SkillRelGradebook
     /**
      * Set gradebookId.
      *
-     * @param int $gradebookId
-     *
      * @return SkillRelGradebook
      */
-    public function setGradebookId($gradebookId)
+    public function setGradebookId(int $gradebookId)
     {
         $this->gradebookId = $gradebookId;
 
@@ -65,11 +63,9 @@ class SkillRelGradebook
     /**
      * Set skillId.
      *
-     * @param int $skillId
-     *
      * @return SkillRelGradebook
      */
-    public function setSkillId($skillId)
+    public function setSkillId(int $skillId)
     {
         $this->skillId = $skillId;
 
@@ -89,11 +85,9 @@ class SkillRelGradebook
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return SkillRelGradebook
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 

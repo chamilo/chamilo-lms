@@ -53,7 +53,7 @@ class SequenceValid
     /**
      * @return SequenceValid
      */
-    public function setVariable($variable)
+    public function setVariable(?SequenceVariable $variable)
     {
         $this->variable = $variable;
 
@@ -68,7 +68,7 @@ class SequenceValid
     /**
      * @return SequenceValid
      */
-    public function setCondition($condition)
+    public function setCondition(?SequenceCondition $condition)
     {
         $this->condition = $condition;
 

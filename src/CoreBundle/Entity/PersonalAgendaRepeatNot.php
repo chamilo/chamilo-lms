@@ -33,11 +33,9 @@ class PersonalAgendaRepeatNot
     /**
      * Set calId.
      *
-     * @param int $calId
-     *
      * @return PersonalAgendaRepeatNot
      */
-    public function setCalId($calId)
+    public function setCalId(int $calId)
     {
         $this->calId = $calId;
 
@@ -57,11 +55,9 @@ class PersonalAgendaRepeatNot
     /**
      * Set calDate.
      *
-     * @param int $calDate
-     *
      * @return PersonalAgendaRepeatNot
      */
-    public function setCalDate($calDate)
+    public function setCalDate(int $calDate)
     {
         $this->calDate = $calDate;
 

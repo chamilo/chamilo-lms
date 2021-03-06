@@ -33,7 +33,7 @@ class GradebookScoreDisplay
     /**
      * @ORM\Column(name="display", type="string", length=40, nullable=false)
      */
-    protected ?string $display;
+    protected ?string $display = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
@@ -49,11 +49,9 @@ class GradebookScoreDisplay
     /**
      * Set score.
      *
-     * @param float $score
-     *
      * @return GradebookScoreDisplay
      */
-    public function setScore($score)
+    public function setScore(float $score)
     {
         $this->score = $score;
 
@@ -70,12 +68,7 @@ class GradebookScoreDisplay
         return $this->score;
     }
 
-    /**
-     * Set display.
-     *
-     * @param string $display
-     */
-    public function setDisplay($display): self
+    public function setDisplay(string $display): self
     {
         $this->display = $display;
 
@@ -92,12 +85,7 @@ class GradebookScoreDisplay
         return $this->display;
     }
 
-    /**
-     * Set scoreColorPercent.
-     *
-     * @param float $scoreColorPercent
-     */
-    public function setScoreColorPercent($scoreColorPercent): self
+    public function setScoreColorPercent(float $scoreColorPercent): self
     {
         $this->scoreColorPercent = $scoreColorPercent;
 

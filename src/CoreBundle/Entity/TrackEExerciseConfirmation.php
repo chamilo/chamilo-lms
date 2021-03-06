@@ -89,11 +89,9 @@ class TrackEExerciseConfirmation
     }
 
     /**
-     * @param int $courseId
-     *
      * @return TrackEExerciseConfirmation
      */
-    public function setCourseId($courseId)
+    public function setCourseId(int $courseId)
     {
         $this->courseId = $courseId;
 
@@ -109,11 +107,9 @@ class TrackEExerciseConfirmation
     }
 
     /**
-     * @param int $attemptId
-     *
      * @return TrackEExerciseConfirmation
      */
-    public function setAttemptId($attemptId)
+    public function setAttemptId(int $attemptId)
     {
         $this->attemptId = $attemptId;
 
@@ -129,11 +125,9 @@ class TrackEExerciseConfirmation
     }
 
     /**
-     * @param int $quizId
-     *
      * @return TrackEExerciseConfirmation
      */
-    public function setQuizId($quizId)
+    public function setQuizId(int $quizId)
     {
         $this->quizId = $quizId;
 
@@ -149,11 +143,9 @@ class TrackEExerciseConfirmation
     }
 
     /**
-     * @param int $sessionId
-     *
      * @return TrackEExerciseConfirmation
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -169,11 +161,9 @@ class TrackEExerciseConfirmation
     }
 
     /**
-     * @param bool $confirmed
-     *
      * @return TrackEExerciseConfirmation
      */
-    public function setConfirmed($confirmed)
+    public function setConfirmed(bool $confirmed)
     {
         $this->confirmed = $confirmed;
 
@@ -189,11 +179,9 @@ class TrackEExerciseConfirmation
     }
 
     /**
-     * @param int $questionsCount
-     *
      * @return TrackEExerciseConfirmation
      */
-    public function setQuestionsCount($questionsCount)
+    public function setQuestionsCount(int $questionsCount)
     {
         $this->questionsCount = $questionsCount;
 
@@ -209,11 +197,9 @@ class TrackEExerciseConfirmation
     }
 
     /**
-     * @param int $savedAnswersCount
-     *
      * @return TrackEExerciseConfirmation
      */
-    public function setSavedAnswersCount($savedAnswersCount)
+    public function setSavedAnswersCount(int $savedAnswersCount)
     {
         $this->savedAnswersCount = $savedAnswersCount;
 

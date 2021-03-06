@@ -47,11 +47,9 @@ class SequenceRule
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceRule
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 

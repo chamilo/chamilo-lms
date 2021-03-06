@@ -39,7 +39,7 @@ class Career
     /**
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="status", type="integer", nullable=false)
@@ -64,11 +64,9 @@ class Career
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return Career
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -88,11 +86,9 @@ class Career
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return Career
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -112,11 +108,9 @@ class Career
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return Career
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 

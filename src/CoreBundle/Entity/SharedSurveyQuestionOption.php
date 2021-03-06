@@ -46,11 +46,9 @@ class SharedSurveyQuestionOption
     /**
      * Set questionId.
      *
-     * @param int $questionId
-     *
      * @return SharedSurveyQuestionOption
      */
-    public function setQuestionId($questionId)
+    public function setQuestionId(int $questionId)
     {
         $this->questionId = $questionId;
 
@@ -70,11 +68,9 @@ class SharedSurveyQuestionOption
     /**
      * Set surveyId.
      *
-     * @param int $surveyId
-     *
      * @return SharedSurveyQuestionOption
      */
-    public function setSurveyId($surveyId)
+    public function setSurveyId(int $surveyId)
     {
         $this->surveyId = $surveyId;
 
@@ -94,11 +90,9 @@ class SharedSurveyQuestionOption
     /**
      * Set optionText.
      *
-     * @param string $optionText
-     *
      * @return SharedSurveyQuestionOption
      */
-    public function setOptionText($optionText)
+    public function setOptionText(string $optionText)
     {
         $this->optionText = $optionText;
 
@@ -118,11 +112,9 @@ class SharedSurveyQuestionOption
     /**
      * Set sort.
      *
-     * @param int $sort
-     *
      * @return SharedSurveyQuestionOption
      */
-    public function setSort($sort)
+    public function setSort(int $sort)
     {
         $this->sort = $sort;
 

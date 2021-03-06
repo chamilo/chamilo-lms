@@ -33,11 +33,9 @@ class ClassUser
     /**
      * Set classId.
      *
-     * @param int $classId
-     *
      * @return ClassUser
      */
-    public function setClassId($classId)
+    public function setClassId(int $classId)
     {
         $this->classId = $classId;
 
@@ -57,11 +55,9 @@ class ClassUser
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return ClassUser
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 

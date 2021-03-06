@@ -53,7 +53,7 @@ class SequenceFormula
     /**
      * @return SequenceFormula
      */
-    public function setMethod($method)
+    public function setMethod(?SequenceMethod $method)
     {
         $this->method = $method;
 
@@ -68,7 +68,7 @@ class SequenceFormula
     /**
      * @return SequenceFormula
      */
-    public function setVariable($variable)
+    public function setVariable(?SequenceVariable $variable)
     {
         $this->variable = $variable;
 

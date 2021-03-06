@@ -87,11 +87,9 @@ class GradebookScoreLog
     /**
      * Set the achieved score.
      *
-     * @param float $score
-     *
      * @return $this
      */
-    public function setScore($score)
+    public function setScore(float $score)
     {
         $this->score = $score;
 

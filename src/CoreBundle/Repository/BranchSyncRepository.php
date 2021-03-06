@@ -6,22 +6,21 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\BranchSync;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 class BranchSyncRepository extends NestedTreeRepository
 {
-    /**
-     * @param string $keyword
-     */
-    public function searchByKeyword($keyword)
+    public function searchByKeyword(string $keyword)
     {
         $qb = $this->createQueryBuilder('a');
 
         //Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from('Chamilo\CoreBundle\Entity\BranchSync', 'b');
+        $qb->from(BranchSync::class, 'b');
 
         //Selecting courses for users
         //$qb->innerJoin('u.courses', 'c');
@@ -45,10 +44,11 @@ class BranchSyncRepository extends NestedTreeRepository
         //Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from('Chamilo\CoreBundle\Entity\BranchSync', 'b');
+        $qb->from(BranchSync::class, 'b');
         $qb->where('b.parent IS NULL');
-        $qb->orderBy('b.id', 'ASC');
+        $qb->orderBy('b.id', Criteria::ASC);
         $qb->setMaxResults(1);
+
         $q = $qb->getQuery()->getResult();
         if (empty($q)) {
             return null;

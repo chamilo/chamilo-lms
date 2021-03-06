@@ -143,11 +143,9 @@ class SkillRelUserComment
     /**
      * Set feedbackText.
      *
-     * @param string $feedbackText
-     *
      * @return SkillRelUserComment
      */
-    public function setFeedbackText($feedbackText)
+    public function setFeedbackText(string $feedbackText)
     {
         $this->feedbackText = $feedbackText;
 
@@ -157,11 +155,9 @@ class SkillRelUserComment
     /**
      * Set feebackValue.
      *
-     * @param int $feedbackValue
-     *
      * @return SkillRelUserComment
      */
-    public function setFeedbackValue($feedbackValue)
+    public function setFeedbackValue(int $feedbackValue)
     {
         $this->feedbackValue = $feedbackValue;
 

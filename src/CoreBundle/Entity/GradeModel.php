@@ -31,31 +31,29 @@ class GradeModel
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    protected ?bool $defaultLowestEvalExclude;
+    protected ?bool $defaultLowestEvalExclude = null;
 
     /**
      * @ORM\Column(name="default_external_eval", type="boolean", nullable=true)
      */
-    protected ?bool $defaultExternalEval;
+    protected ?bool $defaultExternalEval = null;
 
     /**
      * @ORM\Column(name="default_external_eval_prefix", type="string", length=140, nullable=true)
      */
-    protected ?string $defaultExternalEvalPrefix;
+    protected ?string $defaultExternalEvalPrefix = null;
 
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return GradeModel
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -75,11 +73,9 @@ class GradeModel
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return GradeModel
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -99,11 +95,9 @@ class GradeModel
     /**
      * Set defaultLowestEvalExclude.
      *
-     * @param bool $defaultLowestEvalExclude
-     *
      * @return GradeModel
      */
-    public function setDefaultLowestEvalExclude($defaultLowestEvalExclude)
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude)
     {
         $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
@@ -123,11 +117,9 @@ class GradeModel
     /**
      * Set defaultExternalEval.
      *
-     * @param bool $defaultExternalEval
-     *
      * @return GradeModel
      */
-    public function setDefaultExternalEval($defaultExternalEval)
+    public function setDefaultExternalEval(bool $defaultExternalEval)
     {
         $this->defaultExternalEval = $defaultExternalEval;
 
@@ -147,11 +139,9 @@ class GradeModel
     /**
      * Set defaultExternalEvalPrefix.
      *
-     * @param string $defaultExternalEvalPrefix
-     *
      * @return GradeModel
      */
-    public function setDefaultExternalEvalPrefix($defaultExternalEvalPrefix)
+    public function setDefaultExternalEvalPrefix(string $defaultExternalEvalPrefix)
     {
         $this->defaultExternalEvalPrefix = $defaultExternalEvalPrefix;
 

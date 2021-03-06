@@ -227,11 +227,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * Set url.
      *
-     * @param string $url
-     *
      * @return AccessUrl
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
         $this->url = $url;
 
@@ -248,12 +246,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->url;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -270,12 +263,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set active.
-     *
-     * @param int $active
-     */
-    public function setActive($active): self
+    public function setActive(int $active): self
     {
         $this->active = $active;
 
@@ -295,11 +283,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * Set createdBy.
      *
-     * @param int $createdBy
-     *
      * @return AccessUrl
      */
-    public function setCreatedBy($createdBy)
+    public function setCreatedBy(int $createdBy)
     {
         $this->createdBy = $createdBy;
 
@@ -319,11 +305,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * Set tms.
      *
-     * @param DateTime $tms
-     *
      * @return AccessUrl
      */
-    public function setTms($tms)
+    public function setTms(DateTime $tms)
     {
         $this->tms = $tms;
 
@@ -343,11 +327,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * Set urlType.
      *
-     * @param bool $urlType
-     *
      * @return AccessUrl
      */
-    public function setUrlType($urlType)
+    public function setUrlType(bool $urlType)
     {
         $this->urlType = $urlType;
 
@@ -373,11 +355,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param int $limitActiveCourses
-     *
      * @return AccessUrl
      */
-    public function setLimitActiveCourses($limitActiveCourses)
+    public function setLimitActiveCourses(int $limitActiveCourses)
     {
         $this->limitActiveCourses = $limitActiveCourses;
 
@@ -392,10 +372,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->limitSessions;
     }
 
-    /**
-     * @param int $limitSessions
-     */
-    public function setLimitSessions($limitSessions): self
+    public function setLimitSessions(int $limitSessions): self
     {
         $this->limitSessions = $limitSessions;
 
@@ -410,10 +387,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->limitUsers;
     }
 
-    /**
-     * @param int $limitUsers
-     */
-    public function setLimitUsers($limitUsers): self
+    public function setLimitUsers(int $limitUsers): self
     {
         $this->limitUsers = $limitUsers;
 
@@ -428,10 +402,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->limitTeachers;
     }
 
-    /**
-     * @param int $limitTeachers
-     */
-    public function setLimitTeachers($limitTeachers): self
+    public function setLimitTeachers(int $limitTeachers): self
     {
         $this->limitTeachers = $limitTeachers;
 
@@ -446,10 +417,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->limitDiskSpace;
     }
 
-    /**
-     * @param int $limitDiskSpace
-     */
-    public function setLimitDiskSpace($limitDiskSpace): self
+    public function setLimitDiskSpace(int $limitDiskSpace): self
     {
         $this->limitDiskSpace = $limitDiskSpace;
 
@@ -465,11 +433,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param string $email
-     *
      * @return AccessUrl
      */
-    public function setEmail($email)
+    public function setEmail(string $email)
     {
         $this->email = $email;
 
@@ -484,7 +450,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @param Collection<int, SettingsCurrent>|SettingsCurrent[] $settings
      */
-    public function setSettings($settings): self
+    public function setSettings(Collection $settings): self
     {
         $this->settings = $settings;
 
@@ -499,10 +465,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->limitCourses;
     }
 
-    /**
-     * @param int $limitCourses
-     */
-    public function setLimitCourses($limitCourses): self
+    public function setLimitCourses(int $limitCourses): self
     {
         $this->limitCourses = $limitCourses;
 
@@ -517,7 +480,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @param AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse> $courses
      */
-    public function setCourses($courses): self
+    public function setCourses(Collection $courses): self
     {
         $this->courses = $courses;
 
@@ -532,7 +495,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @param Collection<int, SessionCategory>|SessionCategory[] $sessionCategories
      */
-    public function setSessionCategories($sessionCategories): self
+    public function setSessionCategories(Collection $sessionCategories): self
     {
         $this->sessionCategories = $sessionCategories;
 

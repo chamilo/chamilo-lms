@@ -50,16 +50,14 @@ class UserRelUser
     /**
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
-    protected ?DateTime $lastEdit;
+    protected ?DateTime $lastEdit = null;
 
     /**
      * Set friendUserId.
      *
-     * @param int $friendUserId
-     *
      * @return UserRelUser
      */
-    public function setFriendUserId($friendUserId)
+    public function setFriendUserId(int $friendUserId)
     {
         $this->friendUserId = $friendUserId;
 
@@ -79,11 +77,9 @@ class UserRelUser
     /**
      * Set relationType.
      *
-     * @param int $relationType
-     *
      * @return UserRelUser
      */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType)
     {
         $this->relationType = $relationType;
 
@@ -103,11 +99,9 @@ class UserRelUser
     /**
      * Set lastEdit.
      *
-     * @param DateTime $lastEdit
-     *
      * @return UserRelUser
      */
-    public function setLastEdit($lastEdit)
+    public function setLastEdit(DateTime $lastEdit)
     {
         $this->lastEdit = $lastEdit;
 

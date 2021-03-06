@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -41,12 +43,13 @@ class ResourceType
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
      *
-     * @var \Chamilo\CoreBundle\Entity\ResourceNode[]|\Doctrine\Common\Collections\Collection
+     * @var ResourceNode[]|Collection
      */
-    protected $resourceNodes;
+    protected Collection $resourceNodes;
 
     public function __construct()
     {
+        $this->resourceNodes = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -79,10 +82,7 @@ class ResourceType
         return $this->tool;
     }
 
-    /**
-     * @param Tool $tool
-     */
-    public function setTool($tool): self
+    public function setTool(Tool $tool): self
     {
         $this->tool = $tool;
 

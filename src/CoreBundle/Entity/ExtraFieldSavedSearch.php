@@ -45,7 +45,7 @@ class ExtraFieldSavedSearch
      *
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
-    protected ?array $value;
+    protected ?array $value = [];
 
     /**
      * Get id.

@@ -51,11 +51,9 @@ class HookCall
     /**
      * Set hookEventId.
      *
-     * @param int $hookEventId
-     *
      * @return HookCall
      */
-    public function setHookEventId($hookEventId)
+    public function setHookEventId(int $hookEventId)
     {
         $this->hookEventId = $hookEventId;
 
@@ -75,11 +73,9 @@ class HookCall
     /**
      * Set hookObserverId.
      *
-     * @param int $hookObserverId
-     *
      * @return HookCall
      */
-    public function setHookObserverId($hookObserverId)
+    public function setHookObserverId(int $hookObserverId)
     {
         $this->hookObserverId = $hookObserverId;
 
@@ -99,11 +95,9 @@ class HookCall
     /**
      * Set type.
      *
-     * @param bool $type
-     *
      * @return HookCall
      */
-    public function setType($type)
+    public function setType(bool $type)
     {
         $this->type = $type;
 
@@ -123,11 +117,9 @@ class HookCall
     /**
      * Set hookOrder.
      *
-     * @param int $hookOrder
-     *
      * @return HookCall
      */
-    public function setHookOrder($hookOrder)
+    public function setHookOrder(int $hookOrder)
     {
         $this->hookOrder = $hookOrder;
 
@@ -147,11 +139,9 @@ class HookCall
     /**
      * Set enabled.
      *
-     * @param bool $enabled
-     *
      * @return HookCall
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled)
     {
         $this->enabled = $enabled;
 

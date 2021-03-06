@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CourseBundle\Entity\CGroup;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -78,7 +79,7 @@ class ResourceLink
      *
      * @var Collection|ResourceRight[]
      */
-    protected $resourceRights;
+    protected Collection $resourceRights;
 
     /**
      * @ORM\Column(name="visibility", type="integer", nullable=false)
@@ -90,19 +91,21 @@ class ResourceLink
      *
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
      */
-    protected ?DateTimeInterface $startVisibilityAt = null;
+    protected ?DateTimeInterface $startVisibilityAt;
 
     /**
      * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      *
      * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
      */
-    protected ?DateTimeInterface $endVisibilityAt = null;
+    protected ?DateTimeInterface $endVisibilityAt;
 
     public function __construct()
     {
         $this->resourceRights = new ArrayCollection();
         $this->visibility = self::VISIBILITY_DRAFT;
+        $this->startVisibilityAt = new DateTime(null);
+        $this->endVisibilityAt = new DateTime(null);
     }
 
     public function __toString(): string
@@ -115,7 +118,7 @@ class ResourceLink
         return $this->startVisibilityAt;
     }
 
-    public function setStartVisibilityAt($startVisibilityAt): self
+    public function setStartVisibilityAt(?DateTimeInterface $startVisibilityAt): self
     {
         $this->startVisibilityAt = $startVisibilityAt;
 
@@ -127,7 +130,7 @@ class ResourceLink
         return $this->endVisibilityAt;
     }
 
-    public function setEndVisibilityAt($endVisibilityAt): self
+    public function setEndVisibilityAt(?DateTimeInterface $endVisibilityAt): self
     {
         $this->endVisibilityAt = $endVisibilityAt;
 

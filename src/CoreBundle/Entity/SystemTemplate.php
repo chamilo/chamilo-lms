@@ -51,11 +51,9 @@ class SystemTemplate
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return SystemTemplate
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -75,11 +73,9 @@ class SystemTemplate
     /**
      * Set comment.
      *
-     * @param string $comment
-     *
      * @return SystemTemplate
      */
-    public function setComment($comment)
+    public function setComment(string $comment)
     {
         $this->comment = $comment;
 
@@ -99,11 +95,9 @@ class SystemTemplate
     /**
      * Set image.
      *
-     * @param string $image
-     *
      * @return SystemTemplate
      */
-    public function setImage($image)
+    public function setImage(string $image)
     {
         $this->image = $image;
 
@@ -123,11 +117,9 @@ class SystemTemplate
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return SystemTemplate
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -46,67 +47,67 @@ class BranchSync
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="branch_ip", type="string", length=40, nullable=true, unique=false)
      */
-    protected ?string $branchIp;
+    protected ?string $branchIp = null;
 
     /**
      * @ORM\Column(name="latitude", type="decimal", nullable=true, unique=false)
      */
-    protected ?float $latitude;
+    protected ?float $latitude = null;
 
     /**
      * @ORM\Column(name="longitude", type="decimal", nullable=true, unique=false)
      */
-    protected ?float $longitude;
+    protected ?float $longitude = null;
 
     /**
      * @ORM\Column(name="dwn_speed", type="integer", nullable=true, unique=false)
      */
-    protected ?int $dwnSpeed;
+    protected ?int $dwnSpeed = null;
 
     /**
      * @ORM\Column(name="up_speed", type="integer", nullable=true, unique=false)
      */
-    protected ?int $upSpeed;
+    protected ?int $upSpeed = null;
 
     /**
      * @ORM\Column(name="delay", type="integer", nullable=true, unique=false)
      */
-    protected ?int $delay;
+    protected ?int $delay = null;
 
     /**
      * @ORM\Column(name="admin_mail", type="string", length=250, nullable=true, unique=false)
      */
-    protected ?string $adminMail;
+    protected ?string $adminMail = null;
 
     /**
      * @ORM\Column(name="admin_name", type="string", length=250, nullable=true, unique=false)
      */
-    protected ?string $adminName;
+    protected ?string $adminName = null;
 
     /**
      * @ORM\Column(name="admin_phone", type="string", length=250, nullable=true, unique=false)
      */
-    protected ?string $adminPhone;
+    protected ?string $adminPhone = null;
 
     /**
      * @ORM\Column(name="last_sync_trans_id", type="bigint", nullable=true, unique=false)
      */
-    protected ?int $lastSyncTransId;
+    protected ?int $lastSyncTransId = null;
 
     /**
      * @ORM\Column(name="last_sync_trans_date", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $lastSyncTransDate;
+    protected ?DateTime $lastSyncTransDate = null;
 
     /**
      * @ORM\Column(name="last_sync_type", type="string", length=20, nullable=true, unique=false)
      */
-    protected ?string $lastSyncType;
+    protected ?string $lastSyncType = null;
 
     /**
      * @ORM\Column(name="ssl_pub_key", type="string", length=250, nullable=true, unique=false)
@@ -116,31 +117,31 @@ class BranchSync
     /**
      * @ORM\Column(name="branch_type", type="string", length=250, nullable=true, unique=false)
      */
-    protected ?string $branchType;
+    protected ?string $branchType = null;
 
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
      */
-    protected ?int $lft;
+    protected ?int $lft = null;
 
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
      */
-    protected ?int $rgt;
+    protected ?int $rgt = null;
 
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
      */
-    protected ?int $lvl;
+    protected ?int $lvl = null;
 
     /**
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true, unique=false)
      */
-    protected ?int $root;
+    protected ?int $root = null;
 
     /**
      * @Gedmo\TreeParent
@@ -155,10 +156,11 @@ class BranchSync
      *
      * @var BranchSync[]|Collection
      */
-    protected $children;
+    protected Collection $children;
 
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->uniqueId = sha1(uniqid());
         $this->sslPubKey = sha1(uniqid());
         // $this->lastSyncTransDate = new \DateTime();
@@ -177,11 +179,9 @@ class BranchSync
     /**
      * Set branchName.
      *
-     * @param string $branchName
-     *
      * @return BranchSync
      */
-    public function setBranchName($branchName)
+    public function setBranchName(string $branchName)
     {
         $this->branchName = $branchName;
 
@@ -201,11 +201,9 @@ class BranchSync
     /**
      * Set branchIp.
      *
-     * @param string $branchIp
-     *
      * @return BranchSync
      */
-    public function setBranchIp($branchIp)
+    public function setBranchIp(string $branchIp)
     {
         $this->branchIp = $branchIp;
 
@@ -225,11 +223,9 @@ class BranchSync
     /**
      * Set latitude.
      *
-     * @param float $latitude
-     *
      * @return BranchSync
      */
-    public function setLatitude($latitude)
+    public function setLatitude(float $latitude)
     {
         $this->latitude = $latitude;
 
@@ -249,11 +245,9 @@ class BranchSync
     /**
      * Set longitude.
      *
-     * @param float $longitude
-     *
      * @return BranchSync
      */
-    public function setLongitude($longitude)
+    public function setLongitude(float $longitude)
     {
         $this->longitude = $longitude;
 
@@ -273,11 +267,9 @@ class BranchSync
     /**
      * Set dwnSpeed.
      *
-     * @param int $dwnSpeed
-     *
      * @return BranchSync
      */
-    public function setDwnSpeed($dwnSpeed)
+    public function setDwnSpeed(int $dwnSpeed)
     {
         $this->dwnSpeed = $dwnSpeed;
 
@@ -297,11 +289,9 @@ class BranchSync
     /**
      * Set upSpeed.
      *
-     * @param int $upSpeed
-     *
      * @return BranchSync
      */
-    public function setUpSpeed($upSpeed)
+    public function setUpSpeed(int $upSpeed)
     {
         $this->upSpeed = $upSpeed;
 
@@ -321,11 +311,9 @@ class BranchSync
     /**
      * Set delay.
      *
-     * @param int $delay
-     *
      * @return BranchSync
      */
-    public function setDelay($delay)
+    public function setDelay(int $delay)
     {
         $this->delay = $delay;
 
@@ -345,11 +333,9 @@ class BranchSync
     /**
      * Set adminMail.
      *
-     * @param string $adminMail
-     *
      * @return BranchSync
      */
-    public function setAdminMail($adminMail)
+    public function setAdminMail(string $adminMail)
     {
         $this->adminMail = $adminMail;
 
@@ -369,11 +355,9 @@ class BranchSync
     /**
      * Set adminName.
      *
-     * @param string $adminName
-     *
      * @return BranchSync
      */
-    public function setAdminName($adminName)
+    public function setAdminName(string $adminName)
     {
         $this->adminName = $adminName;
 
@@ -393,11 +377,9 @@ class BranchSync
     /**
      * Set adminPhone.
      *
-     * @param string $adminPhone
-     *
      * @return BranchSync
      */
-    public function setAdminPhone($adminPhone)
+    public function setAdminPhone(string $adminPhone)
     {
         $this->adminPhone = $adminPhone;
 
@@ -417,11 +399,9 @@ class BranchSync
     /**
      * Set lastSyncTransId.
      *
-     * @param int $lastSyncTransId
-     *
      * @return BranchSync
      */
-    public function setLastSyncTransId($lastSyncTransId)
+    public function setLastSyncTransId(int $lastSyncTransId)
     {
         $this->lastSyncTransId = $lastSyncTransId;
 
@@ -441,11 +421,9 @@ class BranchSync
     /**
      * Set lastSyncTransDate.
      *
-     * @param DateTime $lastSyncTransDate
-     *
      * @return BranchSync
      */
-    public function setLastSyncTransDate($lastSyncTransDate)
+    public function setLastSyncTransDate(DateTime $lastSyncTransDate)
     {
         $this->lastSyncTransDate = $lastSyncTransDate;
 
@@ -455,11 +433,9 @@ class BranchSync
     /**
      * Set sslPubKey.
      *
-     * @param string $sslPubKey
-     *
      * @return BranchSync
      */
-    public function setSslPubKey($sslPubKey)
+    public function setSslPubKey(string $sslPubKey)
     {
         $this->sslPubKey = $sslPubKey;
 
@@ -479,11 +455,9 @@ class BranchSync
     /**
      * Set sslPubKey.
      *
-     * @param string $branchType
-     *
      * @return BranchSync
      */
-    public function setBranchType($branchType)
+    public function setBranchType(string $branchType)
     {
         $this->branchType = $branchType;
 
@@ -513,11 +487,9 @@ class BranchSync
     /**
      * Set lastSyncType.
      *
-     * @param string $lastSyncType
-     *
      * @return BranchSync
      */
-    public function setLastSyncType($lastSyncType)
+    public function setLastSyncType(string $lastSyncType)
     {
         $this->lastSyncType = $lastSyncType;
 
@@ -537,11 +509,9 @@ class BranchSync
     /**
      * Set lft.
      *
-     * @param int $lft
-     *
      * @return BranchSync
      */
-    public function setLft($lft)
+    public function setLft(int $lft)
     {
         $this->lft = $lft;
 
@@ -561,11 +531,9 @@ class BranchSync
     /**
      * Set rgt.
      *
-     * @param int $rgt
-     *
      * @return BranchSync
      */
-    public function setRgt($rgt)
+    public function setRgt(int $rgt)
     {
         $this->rgt = $rgt;
 
@@ -585,11 +553,9 @@ class BranchSync
     /**
      * Set lvl.
      *
-     * @param int $lvl
-     *
      * @return BranchSync
      */
-    public function setLvl($lvl)
+    public function setLvl(int $lvl)
     {
         $this->lvl = $lvl;
 
@@ -609,11 +575,9 @@ class BranchSync
     /**
      * Set root.
      *
-     * @param int $root
-     *
      * @return BranchSync
      */
-    public function setRoot($root)
+    public function setRoot(int $root)
     {
         $this->root = $root;
 
@@ -654,11 +618,9 @@ class BranchSync
     }
 
     /**
-     * @param string $uniqueId
-     *
      * @return $this
      */
-    public function setUniqueId($uniqueId)
+    public function setUniqueId(string $uniqueId)
     {
         $this->uniqueId = $uniqueId;
 
@@ -673,10 +635,7 @@ class BranchSync
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

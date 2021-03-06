@@ -42,22 +42,22 @@ class Notification
     /**
      * @ORM\Column(name="dest_mail", type="string", length=255, nullable=true)
      */
-    protected ?string $destMail;
+    protected ?string $destMail = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected ?string $content;
+    protected ?string $content = null;
 
     /**
      * @ORM\Column(name="send_freq", type="smallint", nullable=true)
      */
-    protected ?int $sendFreq;
+    protected ?int $sendFreq = null;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -68,16 +68,14 @@ class Notification
     /**
      * @ORM\Column(name="sent_at", type="datetime", nullable=true)
      */
-    protected ?DateTime $sentAt;
+    protected ?DateTime $sentAt = null;
 
     /**
      * Set destUserId.
      *
-     * @param int $destUserId
-     *
      * @return Notification
      */
-    public function setDestUserId($destUserId)
+    public function setDestUserId(int $destUserId)
     {
         $this->destUserId = $destUserId;
 
@@ -97,11 +95,9 @@ class Notification
     /**
      * Set destMail.
      *
-     * @param string $destMail
-     *
      * @return Notification
      */
-    public function setDestMail($destMail)
+    public function setDestMail(string $destMail)
     {
         $this->destMail = $destMail;
 
@@ -121,11 +117,9 @@ class Notification
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return Notification
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -145,11 +139,9 @@ class Notification
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return Notification
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 
@@ -169,11 +161,9 @@ class Notification
     /**
      * Set sendFreq.
      *
-     * @param int $sendFreq
-     *
      * @return Notification
      */
-    public function setSendFreq($sendFreq)
+    public function setSendFreq(int $sendFreq)
     {
         $this->sendFreq = $sendFreq;
 
@@ -193,11 +183,9 @@ class Notification
     /**
      * Set createdAt.
      *
-     * @param DateTime $createdAt
-     *
      * @return Notification
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -217,11 +205,9 @@ class Notification
     /**
      * Set sentAt.
      *
-     * @param DateTime $sentAt
-     *
      * @return Notification
      */
-    public function setSentAt($sentAt)
+    public function setSentAt(DateTime $sentAt)
     {
         $this->sentAt = $sentAt;
 

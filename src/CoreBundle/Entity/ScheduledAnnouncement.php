@@ -37,7 +37,7 @@ class ScheduledAnnouncement
     /**
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    protected ?DateTime $date;
+    protected ?DateTime $date = null;
 
     /**
      * @ORM\Column(name="sent", type="boolean")
@@ -52,7 +52,7 @@ class ScheduledAnnouncement
     /**
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected ?int $cId;
+    protected ?int $cId = null;
 
     public function __construct()
     {

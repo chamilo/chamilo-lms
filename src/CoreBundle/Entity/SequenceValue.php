@@ -62,7 +62,7 @@ class SequenceValue
     /**
      * @ORM\Column(name="success_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $successDate;
+    protected ?DateTime $successDate = null;
 
     /**
      * @ORM\Column(name="available", type="boolean")
@@ -72,12 +72,12 @@ class SequenceValue
     /**
      * @ORM\Column(name="available_start_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $availableStartDate;
+    protected ?DateTime $availableStartDate = null;
 
     /**
      * @ORM\Column(name="available_end_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $availableEndDate;
+    protected ?DateTime $availableEndDate = null;
 
     /**
      * Get id.
@@ -97,7 +97,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setEntity($entity)
+    public function setEntity(?SequenceRowEntity $entity)
     {
         $this->entity = $entity;
 
@@ -113,11 +113,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $advance
-     *
      * @return SequenceValue
      */
-    public function setAdvance($advance)
+    public function setAdvance(int $advance)
     {
         $this->advance = $advance;
 
@@ -133,11 +131,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $completeItems
-     *
      * @return SequenceValue
      */
-    public function setCompleteItems($completeItems)
+    public function setCompleteItems(int $completeItems)
     {
         $this->completeItems = $completeItems;
 
@@ -153,11 +149,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $totalItems
-     *
      * @return SequenceValue
      */
-    public function setTotalItems($totalItems)
+    public function setTotalItems(int $totalItems)
     {
         $this->totalItems = $totalItems;
 
@@ -173,11 +167,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $success
-     *
      * @return SequenceValue
      */
-    public function setSuccess($success)
+    public function setSuccess(int $success)
     {
         $this->success = $success;
 
@@ -193,11 +185,9 @@ class SequenceValue
     }
 
     /**
-     * @param DateTime $successDate
-     *
      * @return SequenceValue
      */
-    public function setSuccessDate($successDate)
+    public function setSuccessDate(DateTime $successDate)
     {
         $this->successDate = $successDate;
 
@@ -213,11 +203,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $available
-     *
      * @return SequenceValue
      */
-    public function setAvailable($available)
+    public function setAvailable(int $available)
     {
         $this->available = $available;
 
@@ -233,11 +221,9 @@ class SequenceValue
     }
 
     /**
-     * @param DateTime $availableStartDate
-     *
      * @return SequenceValue
      */
-    public function setAvailableStartDate($availableStartDate)
+    public function setAvailableStartDate(DateTime $availableStartDate)
     {
         $this->availableStartDate = $availableStartDate;
 
@@ -253,11 +239,9 @@ class SequenceValue
     }
 
     /**
-     * @param DateTime $availableEndDate
-     *
      * @return SequenceValue
      */
-    public function setAvailableEndDate($availableEndDate)
+    public function setAvailableEndDate(DateTime $availableEndDate)
     {
         $this->availableEndDate = $availableEndDate;
 

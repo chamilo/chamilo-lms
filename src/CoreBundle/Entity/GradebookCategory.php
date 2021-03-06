@@ -59,13 +59,13 @@ class GradebookCategory
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected ?GradebookCategory $parent;
+    protected ?GradebookCategory $parent = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     /**
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
@@ -80,12 +80,12 @@ class GradebookCategory
     /**
      * @ORM\Column(name="certif_min_score", type="integer", nullable=true)
      */
-    protected ?int $certifMinScore;
+    protected ?int $certifMinScore = null;
 
     /**
      * @ORM\Column(name="document_id", type="integer", nullable=true)
      */
-    protected ?int $documentId;
+    protected ?int $documentId = null;
 
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
@@ -95,7 +95,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    protected ?bool $defaultLowestEvalExclude;
+    protected ?bool $defaultLowestEvalExclude = null;
 
     /**
      * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
@@ -105,7 +105,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="grade_model_id", type="integer", nullable=true)
      */
-    protected ?int $gradeModelId;
+    protected ?int $gradeModelId = null;
 
     /**
      * @ORM\Column(
@@ -120,24 +120,24 @@ class GradebookCategory
     /**
      * @ORM\Column(name="depends", type="text", nullable=true)
      */
-    protected ?string $depends;
+    protected ?string $depends = null;
 
     /**
      * @ORM\Column(name="minimum_to_validate", type="integer", nullable=true)
      */
-    protected ?int $minimumToValidate;
+    protected ?int $minimumToValidate = null;
 
     /**
      * @ORM\Column(name="gradebooks_to_validate_in_dependence", type="integer", nullable=true)
      */
-    protected ?int $gradeBooksToValidateInDependence;
+    protected ?int $gradeBooksToValidateInDependence = null;
 
     /**
      * @var Collection|GradebookComment[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradebook")
      */
-    protected $comments;
+    protected \Doctrine\Common\Collections\Collection $comments;
 
     public function __construct()
     {
@@ -161,11 +161,9 @@ class GradebookCategory
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return GradebookCategory
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -194,12 +192,7 @@ class GradebookCategory
         return $this->description;
     }
 
-    /**
-     * Set weight.
-     *
-     * @param float $weight
-     */
-    public function setWeight($weight): self
+    public function setWeight(float $weight): self
     {
         $this->weight = (float) $weight;
 
@@ -219,11 +212,9 @@ class GradebookCategory
     /**
      * Set visible.
      *
-     * @param bool $visible
-     *
      * @return GradebookCategory
      */
-    public function setVisible($visible)
+    public function setVisible(bool $visible)
     {
         $this->visible = $visible;
 
@@ -243,11 +234,9 @@ class GradebookCategory
     /**
      * Set certifMinScore.
      *
-     * @param int $certifMinScore
-     *
      * @return GradebookCategory
      */
-    public function setCertifMinScore($certifMinScore)
+    public function setCertifMinScore(int $certifMinScore)
     {
         $this->certifMinScore = $certifMinScore;
 
@@ -267,11 +256,9 @@ class GradebookCategory
     /**
      * Set documentId.
      *
-     * @param int $documentId
-     *
      * @return GradebookCategory
      */
-    public function setDocumentId($documentId)
+    public function setDocumentId(int $documentId)
     {
         $this->documentId = $documentId;
 
@@ -291,11 +278,9 @@ class GradebookCategory
     /**
      * Set locked.
      *
-     * @param int $locked
-     *
      * @return GradebookCategory
      */
-    public function setLocked($locked)
+    public function setLocked(int $locked)
     {
         $this->locked = $locked;
 
@@ -315,11 +300,9 @@ class GradebookCategory
     /**
      * Set defaultLowestEvalExclude.
      *
-     * @param bool $defaultLowestEvalExclude
-     *
      * @return GradebookCategory
      */
-    public function setDefaultLowestEvalExclude($defaultLowestEvalExclude)
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude)
     {
         $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
@@ -339,11 +322,9 @@ class GradebookCategory
     /**
      * Set generateCertificates.
      *
-     * @param bool $generateCertificates
-     *
      * @return GradebookCategory
      */
-    public function setGenerateCertificates($generateCertificates)
+    public function setGenerateCertificates(bool $generateCertificates)
     {
         $this->generateCertificates = $generateCertificates;
 
@@ -363,11 +344,9 @@ class GradebookCategory
     /**
      * Set gradeModelId.
      *
-     * @param int $gradeModelId
-     *
      * @return GradebookCategory
      */
-    public function setGradeModelId($gradeModelId)
+    public function setGradeModelId(int $gradeModelId)
     {
         $this->gradeModelId = $gradeModelId;
 
@@ -387,11 +366,9 @@ class GradebookCategory
     /**
      * Set isRequirement.
      *
-     * @param bool $isRequirement
-     *
      * @return GradebookCategory
      */
-    public function setIsRequirement($isRequirement)
+    public function setIsRequirement(bool $isRequirement)
     {
         $this->isRequirement = $isRequirement;
 
@@ -467,7 +444,7 @@ class GradebookCategory
     /**
      * @param GradebookComment[]|Collection $comments
      */
-    public function setComments($comments): self
+    public function setComments(Collection $comments): self
     {
         $this->comments = $comments;
 

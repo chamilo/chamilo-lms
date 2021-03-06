@@ -32,7 +32,7 @@ class TrackEAccess
     /**
      * @ORM\Column(name="access_user_id", type="integer", nullable=true)
      */
-    protected ?int $accessUserId;
+    protected ?int $accessUserId = null;
 
     /**
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
@@ -47,7 +47,7 @@ class TrackEAccess
     /**
      * @ORM\Column(name="access_tool", type="string", length=30, nullable=true)
      */
-    protected ?string $accessTool;
+    protected ?string $accessTool = null;
 
     /**
      * @ORM\Column(name="access_session_id", type="integer", nullable=false)
@@ -62,11 +62,9 @@ class TrackEAccess
     /**
      * Set accessUserId.
      *
-     * @param int $accessUserId
-     *
      * @return TrackEAccess
      */
-    public function setAccessUserId($accessUserId)
+    public function setAccessUserId(int $accessUserId)
     {
         $this->accessUserId = $accessUserId;
 
@@ -86,11 +84,9 @@ class TrackEAccess
     /**
      * Set accessDate.
      *
-     * @param DateTime $accessDate
-     *
      * @return TrackEAccess
      */
-    public function setAccessDate($accessDate)
+    public function setAccessDate(DateTime $accessDate)
     {
         $this->accessDate = $accessDate;
 
@@ -110,11 +106,9 @@ class TrackEAccess
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEAccess
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -134,11 +128,9 @@ class TrackEAccess
     /**
      * Set accessTool.
      *
-     * @param string $accessTool
-     *
      * @return TrackEAccess
      */
-    public function setAccessTool($accessTool)
+    public function setAccessTool(string $accessTool)
     {
         $this->accessTool = $accessTool;
 
@@ -158,11 +150,9 @@ class TrackEAccess
     /**
      * Set accessSessionId.
      *
-     * @param int $accessSessionId
-     *
      * @return TrackEAccess
      */
-    public function setAccessSessionId($accessSessionId)
+    public function setAccessSessionId(int $accessSessionId)
     {
         $this->accessSessionId = $accessSessionId;
 
@@ -182,11 +172,9 @@ class TrackEAccess
     /**
      * Set userIp.
      *
-     * @param string $userIp
-     *
      * @return TrackEAccess
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
 

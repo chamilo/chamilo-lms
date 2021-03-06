@@ -68,11 +68,9 @@ class SkillRelCourse
     }
 
     /**
-     * @param Skill $skill
-     *
      * @return SkillRelCourse
      */
-    public function setSkill($skill)
+    public function setSkill(Skill $skill)
     {
         $this->skill = $skill;
 
@@ -88,11 +86,9 @@ class SkillRelCourse
     }
 
     /**
-     * @param Course $course
-     *
      * @return SkillRelCourse
      */
-    public function setCourse($course)
+    public function setCourse(Course $course)
     {
         $this->course = $course;
 
@@ -108,11 +104,9 @@ class SkillRelCourse
     }
 
     /**
-     * @param Session $session
-     *
      * @return SkillRelCourse
      */
-    public function setSession($session)
+    public function setSession(Session $session)
     {
         $this->session = $session;
 
@@ -128,11 +122,9 @@ class SkillRelCourse
     }
 
     /**
-     * @param DateTime $createdAt
-     *
      * @return SkillRelCourse
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -148,11 +140,9 @@ class SkillRelCourse
     }
 
     /**
-     * @param DateTime $updatedAt
-     *
      * @return SkillRelCourse
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 

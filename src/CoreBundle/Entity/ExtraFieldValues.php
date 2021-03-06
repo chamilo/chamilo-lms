@@ -37,7 +37,7 @@ class ExtraFieldValues
     /**
      * @ORM\Column(name="value", type="text", nullable=true, unique=false)
      */
-    protected ?string $value;
+    protected ?string $value = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")

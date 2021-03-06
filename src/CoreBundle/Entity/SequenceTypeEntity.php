@@ -57,11 +57,9 @@ class SequenceTypeEntity
     }
 
     /**
-     * @param string $name
-     *
      * @return SequenceTypeEntity
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -77,11 +75,9 @@ class SequenceTypeEntity
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceTypeEntity
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -97,11 +93,9 @@ class SequenceTypeEntity
     }
 
     /**
-     * @param string $entityTable
-     *
      * @return SequenceTypeEntity
      */
-    public function setEntityTable($entityTable)
+    public function setEntityTable(string $entityTable)
     {
         $this->entityTable = $entityTable;
 

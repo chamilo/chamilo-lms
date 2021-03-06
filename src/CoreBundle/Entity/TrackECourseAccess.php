@@ -55,7 +55,7 @@ class TrackECourseAccess
     /**
      * @ORM\Column(name="logout_course_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $logoutCourseDate;
+    protected ?DateTime $logoutCourseDate = null;
 
     /**
      * @ORM\Column(name="counter", type="integer", nullable=false)
@@ -75,11 +75,9 @@ class TrackECourseAccess
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackECourseAccess
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -99,11 +97,9 @@ class TrackECourseAccess
     /**
      * Set loginCourseDate.
      *
-     * @param DateTime $loginCourseDate
-     *
      * @return TrackECourseAccess
      */
-    public function setLoginCourseDate($loginCourseDate)
+    public function setLoginCourseDate(DateTime $loginCourseDate)
     {
         $this->loginCourseDate = $loginCourseDate;
 
@@ -123,11 +119,9 @@ class TrackECourseAccess
     /**
      * Set logoutCourseDate.
      *
-     * @param DateTime $logoutCourseDate
-     *
      * @return TrackECourseAccess
      */
-    public function setLogoutCourseDate($logoutCourseDate)
+    public function setLogoutCourseDate(DateTime $logoutCourseDate)
     {
         $this->logoutCourseDate = $logoutCourseDate;
 
@@ -147,11 +141,9 @@ class TrackECourseAccess
     /**
      * Set counter.
      *
-     * @param int $counter
-     *
      * @return TrackECourseAccess
      */
-    public function setCounter($counter)
+    public function setCounter(int $counter)
     {
         $this->counter = $counter;
 
@@ -171,11 +163,9 @@ class TrackECourseAccess
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackECourseAccess
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -195,11 +185,9 @@ class TrackECourseAccess
     /**
      * Set userIp.
      *
-     * @param string $userIp
-     *
      * @return TrackECourseAccess
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
 

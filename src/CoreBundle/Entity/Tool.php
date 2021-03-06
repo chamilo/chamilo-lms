@@ -36,9 +36,9 @@ class Tool
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
      *
-     * @var \Chamilo\CoreBundle\Entity\ResourceType[]|\Doctrine\Common\Collections\Collection
+     * @var ResourceType[]|Collection
      */
-    protected $resourceTypes;
+    protected Collection $resourceTypes;
 
     public function __construct()
     {
@@ -111,7 +111,7 @@ class Tool
 
     public function hasResourceType(ResourceType $resourceType): bool
     {
-        if ($this->resourceTypes->count()) {
+        if (0 !== $this->resourceTypes->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('name', $resourceType->getName())
             );
@@ -123,7 +123,7 @@ class Tool
         return false;
     }
 
-    public function setResourceTypes($resourceTypes): self
+    public function setResourceTypes(Collection $resourceTypes): self
     {
         $this->resourceTypes = $resourceTypes;
 

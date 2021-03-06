@@ -53,11 +53,11 @@ class ToolChain
     /**
      * @var \Chamilo\CoreBundle\Tool\AbstractTool[]|mixed[]
      */
-    protected array $tools;
+    protected array $tools = [];
     /**
      * @var mixed[]
      */
-    protected array $typeList;
+    protected array $typeList = [];
 
     protected \Doctrine\ORM\EntityManagerInterface $entityManager;
 
@@ -67,7 +67,7 @@ class ToolChain
     /**
      * @var mixed[]
      */
-    protected array $repoEntityList;
+    protected array $repoEntityList = [];
 
     public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)
     {
@@ -120,7 +120,7 @@ class ToolChain
 
             $types = $tool->getResourceTypes();
             if (!empty($types)) {
-                foreach ($types as $name => $data) {
+                foreach (array_keys($types) as $name) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
                     if ($toolEntity->hasResourceType($resourceType)) {

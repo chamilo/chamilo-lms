@@ -32,7 +32,7 @@ class TicketMessage
     /**
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    protected ?string $message;
+    protected ?string $message = null;
 
     /**
      * @ORM\Column(name="status", type="string", nullable=false)
@@ -63,12 +63,12 @@ class TicketMessage
     /**
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected ?int $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
     /**
      * @return int
@@ -87,11 +87,9 @@ class TicketMessage
     }
 
     /**
-     * @param string $subject
-     *
      * @return TicketMessage
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject)
     {
         $this->subject = $subject;
 
@@ -107,11 +105,9 @@ class TicketMessage
     }
 
     /**
-     * @param string $message
-     *
      * @return TicketMessage
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
 
@@ -127,11 +123,9 @@ class TicketMessage
     }
 
     /**
-     * @param string $status
-     *
      * @return TicketMessage
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
 
@@ -147,11 +141,9 @@ class TicketMessage
     }
 
     /**
-     * @param string $ipAddress
-     *
      * @return TicketMessage
      */
-    public function setIpAddress($ipAddress)
+    public function setIpAddress(string $ipAddress)
     {
         $this->ipAddress = $ipAddress;
 
@@ -167,11 +159,9 @@ class TicketMessage
     }
 
     /**
-     * @param Ticket $ticket
-     *
      * @return TicketMessage
      */
-    public function setTicket($ticket)
+    public function setTicket(Ticket $ticket)
     {
         $this->ticket = $ticket;
 
@@ -187,11 +177,9 @@ class TicketMessage
     }
 
     /**
-     * @param int $insertUserId
-     *
      * @return TicketMessage
      */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId)
     {
         $this->insertUserId = $insertUserId;
 
@@ -207,11 +195,9 @@ class TicketMessage
     }
 
     /**
-     * @param DateTime $insertDateTime
-     *
      * @return TicketMessage
      */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime)
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -227,11 +213,9 @@ class TicketMessage
     }
 
     /**
-     * @param int $lastEditUserId
-     *
      * @return TicketMessage
      */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId)
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -247,11 +231,9 @@ class TicketMessage
     }
 
     /**
-     * @param DateTime $lastEditDateTime
-     *
      * @return TicketMessage
      */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime)
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

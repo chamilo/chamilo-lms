@@ -37,7 +37,7 @@ class SettingsOptions
     /**
      * @ORM\Column(name="value", type="string", length=190, nullable=true)
      */
-    protected ?string $value;
+    protected ?string $value = null;
 
     /**
      * @ORM\Column(name="display_text", type="string", length=255, nullable=false)
@@ -47,11 +47,9 @@ class SettingsOptions
     /**
      * Set variable.
      *
-     * @param string $variable
-     *
      * @return SettingsOptions
      */
-    public function setVariable($variable)
+    public function setVariable(string $variable)
     {
         $this->variable = $variable;
 
@@ -71,11 +69,9 @@ class SettingsOptions
     /**
      * Set value.
      *
-     * @param string $value
-     *
      * @return SettingsOptions
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $this->value = $value;
 
@@ -95,11 +91,9 @@ class SettingsOptions
     /**
      * Set displayText.
      *
-     * @param string $displayText
-     *
      * @return SettingsOptions
      */
-    public function setDisplayText($displayText)
+    public function setDisplayText(string $displayText)
     {
         $this->displayText = $displayText;
 

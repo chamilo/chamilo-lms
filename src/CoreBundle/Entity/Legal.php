@@ -31,7 +31,7 @@ class Legal
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected ?string $content;
+    protected ?string $content = null;
 
     /**
      * @ORM\Column(name="type", type="integer", nullable=false)
@@ -46,7 +46,7 @@ class Legal
     /**
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
-    protected ?int $version;
+    protected ?int $version = null;
 
     /**
      * @ORM\Column(name="language_id", type="integer")
@@ -64,11 +64,9 @@ class Legal
     /**
      * Set date.
      *
-     * @param int $date
-     *
      * @return Legal
      */
-    public function setDate($date)
+    public function setDate(int $date)
     {
         $this->date = $date;
 
@@ -88,11 +86,9 @@ class Legal
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return Legal
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 
@@ -112,11 +108,9 @@ class Legal
     /**
      * Set type.
      *
-     * @param int $type
-     *
      * @return Legal
      */
-    public function setType($type)
+    public function setType(int $type)
     {
         $this->type = $type;
 
@@ -136,11 +130,9 @@ class Legal
     /**
      * Set changes.
      *
-     * @param string $changes
-     *
      * @return Legal
      */
-    public function setChanges($changes)
+    public function setChanges(string $changes)
     {
         $this->changes = $changes;
 
@@ -160,11 +152,9 @@ class Legal
     /**
      * Set version.
      *
-     * @param int $version
-     *
      * @return Legal
      */
-    public function setVersion($version)
+    public function setVersion(int $version)
     {
         $this->version = $version;
 
@@ -184,11 +174,9 @@ class Legal
     /**
      * Set languageId.
      *
-     * @param int $languageId
-     *
      * @return Legal
      */
-    public function setLanguageId($languageId)
+    public function setLanguageId(int $languageId)
     {
         $this->languageId = $languageId;
 

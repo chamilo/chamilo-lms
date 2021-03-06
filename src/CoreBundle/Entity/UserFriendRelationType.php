@@ -31,11 +31,9 @@ class UserFriendRelationType
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return UserFriendRelationType
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ExtraFieldOptionsRepository extends ServiceEntityRepository
@@ -32,7 +33,7 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
             ->andWhere(
                 $qb->expr()->eq('so.value', $option->getId())
             )
-            ->orderBy('so.displayText', 'ASC')
+            ->orderBy('so.displayText', Criteria::ASC)
         ;
 
         return $qb

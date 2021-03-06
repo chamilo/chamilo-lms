@@ -49,11 +49,9 @@ class ExtraFieldRelTag
     /**
      * Set fieldId.
      *
-     * @param int $fieldId
-     *
      * @return ExtraFieldRelTag
      */
-    public function setFieldId($fieldId)
+    public function setFieldId(int $fieldId)
     {
         $this->fieldId = $fieldId;
 
@@ -63,11 +61,9 @@ class ExtraFieldRelTag
     /**
      * Set tagId.
      *
-     * @param int $tagId
-     *
      * @return ExtraFieldRelTag
      */
-    public function setTagId($tagId)
+    public function setTagId(int $tagId)
     {
         $this->tagId = $tagId;
 
@@ -77,11 +73,9 @@ class ExtraFieldRelTag
     /**
      * Set itemId.
      *
-     * @param int $itemId
-     *
      * @return ExtraFieldRelTag
      */
-    public function setItemId($itemId)
+    public function setItemId(int $itemId)
     {
         $this->itemId = $itemId;
 

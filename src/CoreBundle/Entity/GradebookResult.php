@@ -47,7 +47,7 @@ class GradebookResult
     /**
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected ?float $score;
+    protected ?float $score = null;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -58,11 +58,9 @@ class GradebookResult
     /**
      * Set createdAt.
      *
-     * @param DateTime $createdAt
-     *
      * @return GradebookResult
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -82,11 +80,9 @@ class GradebookResult
     /**
      * Set score.
      *
-     * @param float $score
-     *
      * @return GradebookResult
      */
-    public function setScore($score)
+    public function setScore(float $score)
     {
         $this->score = $score;
 

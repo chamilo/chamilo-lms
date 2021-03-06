@@ -29,12 +29,12 @@ class GradebookResultAttempt
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?bool $comment;
+    protected ?bool $comment = null;
 
     /**
      * @ORM\Column(name="score", type="float", nullable=true)
      */
-    protected ?float $score;
+    protected ?float $score = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookResult")

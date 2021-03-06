@@ -76,7 +76,7 @@ class SessionRelUser
     /**
      * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $movedAt = null;
+    protected ?DateTime $movedAt;
 
     /**
      * @ORM\Column(name="registered_at", type="datetime")
@@ -89,6 +89,7 @@ class SessionRelUser
         $this->movedTo = null;
         $this->movedStatus = null;
         $this->registeredAt = new DateTime('now', new DateTimeZone('UTC'));
+        $this->movedAt = new DateTime(null);
     }
 
     public function setSession(Session $session): self
@@ -132,11 +133,9 @@ class SessionRelUser
     /**
      * Set movedTo.
      *
-     * @param int $movedTo
-     *
      * @return SessionRelUser
      */
-    public function setMovedTo($movedTo)
+    public function setMovedTo(int $movedTo)
     {
         $this->movedTo = $movedTo;
 
@@ -156,11 +155,9 @@ class SessionRelUser
     /**
      * Set movedStatus.
      *
-     * @param int $movedStatus
-     *
      * @return SessionRelUser
      */
-    public function setMovedStatus($movedStatus)
+    public function setMovedStatus(int $movedStatus)
     {
         $this->movedStatus = $movedStatus;
 
@@ -180,11 +177,9 @@ class SessionRelUser
     /**
      * Set movedAt.
      *
-     * @param DateTime $movedAt
-     *
      * @return SessionRelUser
      */
-    public function setMovedAt($movedAt)
+    public function setMovedAt(DateTime $movedAt)
     {
         $this->movedAt = $movedAt;
 
@@ -232,11 +227,9 @@ class SessionRelUser
     }
 
     /**
-     * @param int $duration
-     *
      * @return SessionRelUser
      */
-    public function setDuration($duration)
+    public function setDuration(int $duration)
     {
         $this->duration = $duration;
 

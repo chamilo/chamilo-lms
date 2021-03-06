@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Form;
 
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -45,7 +46,7 @@ class JuryType extends AbstractType
                     return $er->createQueryBuilder('u')
                             //->where('u.role LIKE :role')
                             //->setParameter(':role', 'ROLE_JURY%')
-                        ->orderBy('u.branchName', \Doctrine\Common\Collections\Criteria::DESC)
+                        ->orderBy('u.branchName', Criteria::DESC)
                     ;
                 },
             ]

@@ -36,7 +36,7 @@ class TicketStatus
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @return int
@@ -55,11 +55,9 @@ class TicketStatus
     }
 
     /**
-     * @param string $code
-     *
      * @return TicketStatus
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -75,11 +73,9 @@ class TicketStatus
     }
 
     /**
-     * @param string $name
-     *
      * @return TicketStatus
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -95,11 +91,9 @@ class TicketStatus
     }
 
     /**
-     * @param string $description
-     *
      * @return TicketStatus
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 

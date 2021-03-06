@@ -32,7 +32,7 @@ class TicketCategory
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="total_tickets", type="integer", nullable=false)
@@ -63,12 +63,12 @@ class TicketCategory
     /**
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected ?int $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
     public function __construct()
     {
@@ -93,11 +93,9 @@ class TicketCategory
     }
 
     /**
-     * @param string $name
-     *
      * @return TicketCategory
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -113,11 +111,9 @@ class TicketCategory
     }
 
     /**
-     * @param string $description
-     *
      * @return TicketCategory
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -133,11 +129,9 @@ class TicketCategory
     }
 
     /**
-     * @param int $totalTickets
-     *
      * @return TicketCategory
      */
-    public function setTotalTickets($totalTickets)
+    public function setTotalTickets(int $totalTickets)
     {
         $this->totalTickets = $totalTickets;
 
@@ -150,11 +144,9 @@ class TicketCategory
     }
 
     /**
-     * @param bool $courseRequired
-     *
      * @return TicketCategory
      */
-    public function setCourseRequired($courseRequired)
+    public function setCourseRequired(bool $courseRequired)
     {
         $this->courseRequired = $courseRequired;
 
@@ -170,11 +162,9 @@ class TicketCategory
     }
 
     /**
-     * @param TicketProject $project
-     *
      * @return TicketCategory
      */
-    public function setProject($project)
+    public function setProject(TicketProject $project)
     {
         $this->project = $project;
 
@@ -190,11 +180,9 @@ class TicketCategory
     }
 
     /**
-     * @param int $insertUserId
-     *
      * @return TicketCategory
      */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId)
     {
         $this->insertUserId = $insertUserId;
 
@@ -210,11 +198,9 @@ class TicketCategory
     }
 
     /**
-     * @param DateTime $insertDateTime
-     *
      * @return TicketCategory
      */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime)
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -230,11 +216,9 @@ class TicketCategory
     }
 
     /**
-     * @param int $lastEditUserId
-     *
      * @return TicketCategory
      */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId)
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -250,11 +234,9 @@ class TicketCategory
     }
 
     /**
-     * @param DateTime $lastEditDateTime
-     *
      * @return TicketCategory
      */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime)
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

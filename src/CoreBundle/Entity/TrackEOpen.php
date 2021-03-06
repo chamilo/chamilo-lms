@@ -47,11 +47,9 @@ class TrackEOpen
     /**
      * Set openRemoteHost.
      *
-     * @param string $openRemoteHost
-     *
      * @return TrackEOpen
      */
-    public function setOpenRemoteHost($openRemoteHost)
+    public function setOpenRemoteHost(string $openRemoteHost)
     {
         $this->openRemoteHost = $openRemoteHost;
 
@@ -71,11 +69,9 @@ class TrackEOpen
     /**
      * Set openAgent.
      *
-     * @param string $openAgent
-     *
      * @return TrackEOpen
      */
-    public function setOpenAgent($openAgent)
+    public function setOpenAgent(string $openAgent)
     {
         $this->openAgent = $openAgent;
 
@@ -95,11 +91,9 @@ class TrackEOpen
     /**
      * Set openReferer.
      *
-     * @param string $openReferer
-     *
      * @return TrackEOpen
      */
-    public function setOpenReferer($openReferer)
+    public function setOpenReferer(string $openReferer)
     {
         $this->openReferer = $openReferer;
 
@@ -119,11 +113,9 @@ class TrackEOpen
     /**
      * Set openDate.
      *
-     * @param DateTime $openDate
-     *
      * @return TrackEOpen
      */
-    public function setOpenDate($openDate)
+    public function setOpenDate(DateTime $openDate)
     {
         $this->openDate = $openDate;
 

@@ -36,11 +36,9 @@ class SkillProfile
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return SkillProfile
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -60,11 +58,9 @@ class SkillProfile
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return SkillProfile
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 

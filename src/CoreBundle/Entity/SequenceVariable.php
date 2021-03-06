@@ -28,17 +28,17 @@ class SequenceVariable
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", nullable=true)
      */
-    protected ?string $name;
+    protected ?string $name = null;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="default_val", type="string", nullable=true)
      */
-    protected ?string $defaultValue;
+    protected ?string $defaultValue = null;
 
     /**
      * Get id.
@@ -59,11 +59,9 @@ class SequenceVariable
     }
 
     /**
-     * @param string $name
-     *
      * @return SequenceVariable
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -79,11 +77,9 @@ class SequenceVariable
     }
 
     /**
-     * @param string $defaultValue
-     *
      * @return SequenceVariable
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(string $defaultValue)
     {
         $this->defaultValue = $defaultValue;
 
@@ -99,11 +95,9 @@ class SequenceVariable
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceVariable
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 

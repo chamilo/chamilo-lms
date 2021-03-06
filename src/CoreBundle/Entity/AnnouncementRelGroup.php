@@ -33,11 +33,9 @@ class AnnouncementRelGroup
     /**
      * Set groupId.
      *
-     * @param int $groupId
-     *
      * @return AnnouncementRelGroup
      */
-    public function setGroupId($groupId)
+    public function setGroupId(int $groupId)
     {
         $this->groupId = $groupId;
 
@@ -57,11 +55,9 @@ class AnnouncementRelGroup
     /**
      * Set announcementId.
      *
-     * @param int $announcementId
-     *
      * @return AnnouncementRelGroup
      */
-    public function setAnnouncementId($announcementId)
+    public function setAnnouncementId(int $announcementId)
     {
         $this->announcementId = $announcementId;
 

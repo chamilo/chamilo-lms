@@ -82,7 +82,7 @@ class SysAnnouncement
     /**
      * @ORM\Column(name="lang", type="string", length=70, nullable=true)
      */
-    protected ?string $lang;
+    protected ?string $lang = null;
 
     /**
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
@@ -114,11 +114,9 @@ class SysAnnouncement
     /**
      * Set dateStart.
      *
-     * @param DateTime $dateStart
-     *
      * @return SysAnnouncement
      */
-    public function setDateStart($dateStart)
+    public function setDateStart(DateTime $dateStart)
     {
         $this->dateStart = $dateStart;
 
@@ -138,11 +136,9 @@ class SysAnnouncement
     /**
      * Set dateEnd.
      *
-     * @param DateTime $dateEnd
-     *
      * @return SysAnnouncement
      */
-    public function setDateEnd($dateEnd)
+    public function setDateEnd(DateTime $dateEnd)
     {
         $this->dateEnd = $dateEnd;
 
@@ -162,11 +158,9 @@ class SysAnnouncement
     /**
      * Set visibleTeacher.
      *
-     * @param bool $visibleTeacher
-     *
      * @return SysAnnouncement
      */
-    public function setVisibleTeacher($visibleTeacher)
+    public function setVisibleTeacher(bool $visibleTeacher)
     {
         $this->visibleTeacher = $visibleTeacher;
 
@@ -186,11 +180,9 @@ class SysAnnouncement
     /**
      * Set visibleStudent.
      *
-     * @param bool $visibleStudent
-     *
      * @return SysAnnouncement
      */
-    public function setVisibleStudent($visibleStudent)
+    public function setVisibleStudent(bool $visibleStudent)
     {
         $this->visibleStudent = $visibleStudent;
 
@@ -210,11 +202,9 @@ class SysAnnouncement
     /**
      * Set visibleGuest.
      *
-     * @param bool $visibleGuest
-     *
      * @return SysAnnouncement
      */
-    public function setVisibleGuest($visibleGuest)
+    public function setVisibleGuest(bool $visibleGuest)
     {
         $this->visibleGuest = $visibleGuest;
 
@@ -234,11 +224,9 @@ class SysAnnouncement
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return SysAnnouncement
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -258,11 +246,9 @@ class SysAnnouncement
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return SysAnnouncement
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 
@@ -282,11 +268,9 @@ class SysAnnouncement
     /**
      * Set lang.
      *
-     * @param string $lang
-     *
      * @return SysAnnouncement
      */
-    public function setLang($lang)
+    public function setLang(string $lang)
     {
         $this->lang = $lang;
 
@@ -306,11 +290,9 @@ class SysAnnouncement
     /**
      * Set accessUrlId.
      *
-     * @param int $accessUrlId
-     *
      * @return SysAnnouncement
      */
-    public function setAccessUrlId($accessUrlId)
+    public function setAccessUrlId(int $accessUrlId)
     {
         $this->accessUrlId = $accessUrlId;
 

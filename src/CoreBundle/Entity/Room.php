@@ -33,22 +33,22 @@ class Room
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="geolocation", type="string", length=255, nullable=true, unique=false)
      */
-    protected ?string $geolocation;
+    protected ?string $geolocation = null;
 
     /**
      * @ORM\Column(name="ip", type="string", length=39, nullable=true, unique=false)
      */
-    protected ?string $ip;
+    protected ?string $ip = null;
 
     /**
      * @ORM\Column(name="ip_mask", type="string", length=6, nullable=true, unique=false)
      */
-    protected ?string $ipMask;
+    protected ?string $ipMask = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
@@ -69,11 +69,9 @@ class Room
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return $this
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -99,11 +97,9 @@ class Room
     }
 
     /**
-     * @param string $description
-     *
      * @return Room
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -119,11 +115,9 @@ class Room
     }
 
     /**
-     * @param string $geolocation
-     *
      * @return Room
      */
-    public function setGeolocation($geolocation)
+    public function setGeolocation(string $geolocation)
     {
         $this->geolocation = $geolocation;
 
@@ -139,11 +133,9 @@ class Room
     }
 
     /**
-     * @param string $ip
-     *
      * @return Room
      */
-    public function setIp($ip)
+    public function setIp(string $ip)
     {
         $this->ip = $ip;
 
@@ -159,11 +151,9 @@ class Room
     }
 
     /**
-     * @param string $ipMask
-     *
      * @return Room
      */
-    public function setIpMask($ipMask)
+    public function setIpMask(string $ipMask)
     {
         $this->ipMask = $ipMask;
 
@@ -179,11 +169,9 @@ class Room
     }
 
     /**
-     * @param BranchSync $branch
-     *
      * @return $this
      */
-    public function setBranch($branch)
+    public function setBranch(BranchSync $branch)
     {
         $this->branch = $branch;
 

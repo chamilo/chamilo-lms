@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -43,9 +44,9 @@ class Group
     /**
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\User", mappedBy="groups")
      *
-     * @var \Chamilo\CoreBundle\Entity\User[]|\Doctrine\Common\Collections\Collection
+     * @var User[]|Collection
      */
-    protected $users;
+    protected Collection $users;
 
     public function __construct(string $name, array $roles = [])
     {

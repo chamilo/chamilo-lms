@@ -32,21 +32,19 @@ class HookEvent
     /**
      * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
      */
-    protected ?string $className;
+    protected ?string $className = null;
 
     /**
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * Set className.
      *
-     * @param string $className
-     *
      * @return HookEvent
      */
-    public function setClassName($className)
+    public function setClassName(string $className)
     {
         $this->className = $className;
 
@@ -66,11 +64,9 @@ class HookEvent
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return HookEvent
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 

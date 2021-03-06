@@ -39,7 +39,7 @@ class TrackEDefault
     /**
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected ?int $cId;
+    protected ?int $cId = null;
 
     /**
      * @ORM\Column(name="default_date", type="datetime", nullable=false)
@@ -64,16 +64,14 @@ class TrackEDefault
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected ?int $sessionId;
+    protected ?int $sessionId = null;
 
     /**
      * Set defaultUserId.
      *
-     * @param int $defaultUserId
-     *
      * @return TrackEDefault
      */
-    public function setDefaultUserId($defaultUserId)
+    public function setDefaultUserId(int $defaultUserId)
     {
         $this->defaultUserId = $defaultUserId;
 
@@ -93,11 +91,9 @@ class TrackEDefault
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEDefault
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -117,11 +113,9 @@ class TrackEDefault
     /**
      * Set defaultDate.
      *
-     * @param DateTime $defaultDate
-     *
      * @return TrackEDefault
      */
-    public function setDefaultDate($defaultDate)
+    public function setDefaultDate(DateTime $defaultDate)
     {
         $this->defaultDate = $defaultDate;
 
@@ -141,11 +135,9 @@ class TrackEDefault
     /**
      * Set defaultEventType.
      *
-     * @param string $defaultEventType
-     *
      * @return TrackEDefault
      */
-    public function setDefaultEventType($defaultEventType)
+    public function setDefaultEventType(string $defaultEventType)
     {
         $this->defaultEventType = $defaultEventType;
 
@@ -165,11 +157,9 @@ class TrackEDefault
     /**
      * Set defaultValueType.
      *
-     * @param string $defaultValueType
-     *
      * @return TrackEDefault
      */
-    public function setDefaultValueType($defaultValueType)
+    public function setDefaultValueType(string $defaultValueType)
     {
         $this->defaultValueType = $defaultValueType;
 
@@ -189,11 +179,9 @@ class TrackEDefault
     /**
      * Set defaultValue.
      *
-     * @param string $defaultValue
-     *
      * @return TrackEDefault
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(string $defaultValue)
     {
         $this->defaultValue = $defaultValue;
 
@@ -213,11 +201,9 @@ class TrackEDefault
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackEDefault
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 

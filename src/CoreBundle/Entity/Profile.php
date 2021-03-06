@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,17 +33,23 @@ class Profile
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Skill", mappedBy="profile", cascade={"persist"})
      *
-     * @var \Chamilo\CoreBundle\Entity\Skill[]|\Doctrine\Common\Collections\Collection
+     * @var Skill[]|Collection
      */
-    protected $skills;
+    protected Collection $skills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
      * @ORM\OrderBy({"position"="ASC"})
      *
-     * @var \Chamilo\CoreBundle\Entity\Level[]|\Doctrine\Common\Collections\Collection
+     * @var Level[]|Collection
      */
-    protected $levels;
+    protected Collection $levels;
+
+    public function __construct()
+    {
+        $this->skills = new ArrayCollection();
+        $this->levels = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -68,11 +76,9 @@ class Profile
     }
 
     /**
-     * @param string $name
-     *
      * @return Profile
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 

@@ -90,7 +90,7 @@ class CourseRelUser
     /**
      * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
      */
-    protected ?int $legalAgreement;
+    protected ?int $legalAgreement = null;
 
     public function __construct()
     {
@@ -146,12 +146,7 @@ class CourseRelUser
         return $this->status;
     }
 
-    /**
-     * Set sort.
-     *
-     * @param int $sort
-     */
-    public function setSort($sort): self
+    public function setSort(int $sort): self
     {
         $this->sort = $sort;
 
@@ -180,12 +175,7 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Set userCourseCat.
-     *
-     * @param int $userCourseCat
-     */
-    public function setUserCourseCat($userCourseCat): self
+    public function setUserCourseCat(int $userCourseCat): self
     {
         $this->userCourseCat = $userCourseCat;
 
@@ -202,12 +192,7 @@ class CourseRelUser
         return $this->userCourseCat;
     }
 
-    /**
-     * Set legalAgreement.
-     *
-     * @param int $legalAgreement
-     */
-    public function setLegalAgreement($legalAgreement): self
+    public function setLegalAgreement(int $legalAgreement): self
     {
         $this->legalAgreement = $legalAgreement;
 

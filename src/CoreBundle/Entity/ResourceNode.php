@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -91,7 +92,7 @@ class ResourceNode
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
-    protected $resourceLinks;
+    protected Collection $resourceLinks;
 
     /**
      * ResourceFile available file for this node.
@@ -142,7 +143,7 @@ class ResourceNode
      * )
      * @ORM\OrderBy({"id"="ASC"})
      */
-    protected $children;
+    protected Collection $children;
 
     /**
      * @Groups({"resource_node:read", "document:read"})
@@ -164,7 +165,7 @@ class ResourceNode
      *
      * @ORM\OneToMany(targetEntity="ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
-    protected $comments;
+    protected Collection $comments;
 
     /**
      * @Groups({"resource_node:read", "document:read"})
@@ -325,10 +326,8 @@ class ResourceNode
             $value = $parts[0];
             $id = $parts[1];
 
-            if (!empty($baseRoot)) {
-                if ($id < $baseRoot) {
-                    continue;
-                }
+            if (!empty($baseRoot) && $id < $baseRoot) {
+                continue;
             }
             $list[$id] = $value;
         }
@@ -376,11 +375,9 @@ class ResourceNode
     /**
      * Convert a path for display: remove ids.
      *
-     * @param string $path
-     *
      * @return string
      */
-    public function convertPathForDisplay($path)
+    public function convertPathForDisplay(string $path)
     {
         /*$pathForDisplay = preg_replace(
             '/-\d+'.self::PATH_SEPARATOR.'/',
@@ -528,12 +525,12 @@ class ResourceNode
     public function getThumbnail(RouterInterface $router): string
     {
         $size = 'fa-3x';
-        $class = "fa fa-folder {$size}";
+        $class = sprintf('fa fa-folder %s', $size);
         if ($this->hasResourceFile()) {
-            $class = "far fa-file {$size}";
+            $class = sprintf('far fa-file %s', $size);
 
             if ($this->isResourceFileAnImage()) {
-                $class = "far fa-file-image {$size}";
+                $class = sprintf('far fa-file-image %s', $size);
 
                 $params = [
                     'id' => $this->getId(),
@@ -546,10 +543,10 @@ class ResourceNode
                     $params
                 );
 
-                return "<img src='{$url}'/>";
+                return sprintf('<img src=\'%s\'/>', $url);
             }
             if ($this->isResourceFileAVideo()) {
-                $class = "far fa-file-video {$size}";
+                $class = sprintf('far fa-file-video %s', $size);
             }
         }
 

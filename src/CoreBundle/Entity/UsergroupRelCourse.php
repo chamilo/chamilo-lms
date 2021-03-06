@@ -34,11 +34,9 @@ class UsergroupRelCourse
     /**
      * Set usergroupId.
      *
-     * @param int $usergroupId
-     *
      * @return UsergroupRelCourse
      */
-    public function setUsergroupId($usergroupId)
+    public function setUsergroupId(int $usergroupId)
     {
         $this->usergroupId = $usergroupId;
 
@@ -58,11 +56,9 @@ class UsergroupRelCourse
     /**
      * Set courseId.
      *
-     * @param int $courseId
-     *
      * @return UsergroupRelCourse
      */
-    public function setCourseId($courseId)
+    public function setCourseId(int $courseId)
     {
         $this->courseId = $courseId;
 

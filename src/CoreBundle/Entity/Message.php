@@ -163,12 +163,7 @@ class Message
         return $this->msgStatus;
     }
 
-    /**
-     * Set sendDate.
-     *
-     * @param DateTime $sendDate
-     */
-    public function setSendDate($sendDate): self
+    public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
 
@@ -197,12 +192,7 @@ class Message
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -219,12 +209,7 @@ class Message
         return $this->content;
     }
 
-    /**
-     * Set groupId.
-     *
-     * @param int $groupId
-     */
-    public function setGroupId($groupId): self
+    public function setGroupId(int $groupId): self
     {
         $this->groupId = $groupId;
 
@@ -241,12 +226,7 @@ class Message
         return $this->groupId;
     }
 
-    /**
-     * Set updateDate.
-     *
-     * @param DateTime $updateDate
-     */
-    public function setUpdateDate($updateDate): self
+    public function setUpdateDate(DateTime $updateDate): self
     {
         $this->updateDate = $updateDate;
 

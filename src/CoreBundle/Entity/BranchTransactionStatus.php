@@ -41,11 +41,9 @@ class BranchTransactionStatus
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return BranchTransactionStatus
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 

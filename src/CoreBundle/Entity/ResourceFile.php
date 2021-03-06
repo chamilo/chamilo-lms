@@ -87,19 +87,19 @@ class ResourceFile
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected ?string $name;
+    protected ?string $name = null;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected ?string $mimeType;
+    protected ?string $mimeType = null;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected ?string $originalName;
+    protected ?string $originalName = null;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
@@ -125,12 +125,12 @@ class ResourceFile
      *     dimensions="dimensions"
      * )
      */
-    protected ?File $file;
+    protected ?File $file = null;
 
     /**
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
-    protected ?string $crop;
+    protected ?string $crop = null;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceFile")
@@ -142,27 +142,27 @@ class ResourceFile
      *
      * @ORM\Column(type="array", nullable=true)
      */
-    protected ?array $metadata;
+    protected ?array $metadata = [];
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected ?bool $image;
+    protected ?bool $image = null;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected ?bool $video;
+    protected ?bool $video = null;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected ?bool $text;
+    protected ?bool $text = null;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @var DateTime|DateTimeImmutable
@@ -186,31 +186,22 @@ class ResourceFile
     public function isText(): bool
     {
         $mimeType = $this->getMimeType();
-        if (false !== strpos($mimeType, 'text')) {
-            return true;
-        }
 
-        return false;
+        return false !== strpos($mimeType, 'text');
     }
 
     public function isImage(): bool
     {
         $mimeType = $this->getMimeType();
-        if (false !== strpos($mimeType, 'image')) {
-            return true;
-        }
 
-        return false;
+        return false !== strpos($mimeType, 'image');
     }
 
     public function isVideo(): bool
     {
         $mimeType = $this->getMimeType();
-        if (false !== strpos($mimeType, 'video')) {
-            return true;
-        }
 
-        return false;
+        return false !== strpos($mimeType, 'video');
     }
 
     public function getName(): string
@@ -233,10 +224,7 @@ class ResourceFile
         return $this->crop;
     }
 
-    /**
-     * @param string $crop
-     */
-    public function setCrop($crop): self
+    public function setCrop(string $crop): self
     {
         $this->crop = $crop;
 
@@ -304,10 +292,7 @@ class ResourceFile
         return $this->mimeType;
     }
 
-    /**
-     * @param string $mimeType
-     */
-    public function setMimeType($mimeType): self
+    public function setMimeType(string $mimeType): self
     {
         $this->mimeType = $mimeType;
 
@@ -319,10 +304,7 @@ class ResourceFile
         return $this->originalName;
     }
 
-    /**
-     * @param string $originalName
-     */
-    public function setOriginalName($originalName): self
+    public function setOriginalName(string $originalName): self
     {
         $this->originalName = $originalName;
 
@@ -334,7 +316,7 @@ class ResourceFile
         return $this->dimensions;
     }
 
-    public function setDimensions($dimensions): self
+    public function setDimensions(?array $dimensions): self
     {
         $this->dimensions = $dimensions;
 

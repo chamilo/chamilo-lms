@@ -41,11 +41,9 @@ class UserGroupRelUserGroup
     /**
      * Set groupId.
      *
-     * @param int $groupId
-     *
      * @return $this
      */
-    public function setGroupId($groupId)
+    public function setGroupId(int $groupId)
     {
         $this->groupId = $groupId;
 
@@ -65,11 +63,9 @@ class UserGroupRelUserGroup
     /**
      * Set subgroupId.
      *
-     * @param int $subgroupId
-     *
      * @return $this
      */
-    public function setSubgroupId($subgroupId)
+    public function setSubgroupId(int $subgroupId)
     {
         $this->subgroupId = $subgroupId;
 
@@ -89,11 +85,9 @@ class UserGroupRelUserGroup
     /**
      * Set relationType.
      *
-     * @param int $relationType
-     *
      * @return $this
      */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType)
     {
         $this->relationType = $relationType;
 

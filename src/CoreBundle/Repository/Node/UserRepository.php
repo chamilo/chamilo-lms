@@ -1445,7 +1445,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 $qb->expr()->eq('l.loginUserId', $user->getId())
             )
             ->setMaxResults(1)
-            ->orderBy('l.loginDate', \Doctrine\Common\Collections\Criteria::DESC)
+            ->orderBy('l.loginDate', Criteria::DESC)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -1455,7 +1455,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
 
-        $qb->orderBy('u.firstname', \Doctrine\Common\Collections\Criteria::ASC);
+        $qb->orderBy('u.firstname', Criteria::ASC);
         $qb->where('u.firstname LIKE :keyword OR u.lastname LIKE :keyword ');
         $qb->setParameter('keyword', "%{$keyword}%", Types::STRING);
 

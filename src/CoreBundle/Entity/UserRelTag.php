@@ -46,11 +46,9 @@ class UserRelTag
     /**
      * Set tagId.
      *
-     * @param int $tagId
-     *
      * @return UserRelTag
      */
-    public function setTagId($tagId)
+    public function setTagId(int $tagId)
     {
         $this->tagId = $tagId;
 

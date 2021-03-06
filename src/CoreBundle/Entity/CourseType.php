@@ -31,26 +31,24 @@ class CourseType
     /**
      * @ORM\Column(name="translation_var", type="string", length=40, nullable=true)
      */
-    protected ?string $translationVar;
+    protected ?string $translationVar = null;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="props", type="text", nullable=true)
      */
-    protected ?string $props;
+    protected ?string $props = null;
 
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return CourseType
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -70,11 +68,9 @@ class CourseType
     /**
      * Set translationVar.
      *
-     * @param string $translationVar
-     *
      * @return CourseType
      */
-    public function setTranslationVar($translationVar)
+    public function setTranslationVar(string $translationVar)
     {
         $this->translationVar = $translationVar;
 
@@ -94,11 +90,9 @@ class CourseType
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return CourseType
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -118,11 +112,9 @@ class CourseType
     /**
      * Set props.
      *
-     * @param string $props
-     *
      * @return CourseType
      */
-    public function setProps($props)
+    public function setProps(string $props)
     {
         $this->props = $props;
 

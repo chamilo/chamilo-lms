@@ -136,11 +136,9 @@ class Portfolio
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return Portfolio
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -160,11 +158,9 @@ class Portfolio
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return Portfolio
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 
@@ -238,11 +234,9 @@ class Portfolio
     /**
      * Set isVisible.
      *
-     * @param bool $isVisible
-     *
      * @return Portfolio
      */
-    public function setIsVisible($isVisible)
+    public function setIsVisible(bool $isVisible)
     {
         $this->isVisible = $isVisible;
 

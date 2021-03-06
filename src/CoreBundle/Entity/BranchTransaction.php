@@ -38,27 +38,27 @@ class BranchTransaction
     /**
      * @ORM\Column(name="action", type="string", length=20, nullable=true, unique=false)
      */
-    protected ?string $action;
+    protected ?string $action = null;
 
     /**
      * @ORM\Column(name="item_id", type="string", length=255, nullable=true, unique=false)
      */
-    protected ?string $itemId;
+    protected ?string $itemId = null;
 
     /**
      * @ORM\Column(name="origin", type="string", length=255, nullable=true, unique=false)
      */
-    protected ?string $origin;
+    protected ?string $origin = null;
 
     /**
      * @ORM\Column(name="dest_id", type="string", length=255, nullable=true, unique=false)
      */
-    protected ?string $destId;
+    protected ?string $destId = null;
 
     /**
      * @ORM\Column(name="external_info", type="string", length=255, nullable=true, unique=false)
      */
-    protected ?string $externalInfo;
+    protected ?string $externalInfo = null;
 
     /**
      * @ORM\Column(name="time_insert", type="datetime")
@@ -91,12 +91,7 @@ class BranchTransaction
         return $this->id;
     }
 
-    /**
-     * Set action.
-     *
-     * @param string $action
-     */
-    public function setAction($action): self
+    public function setAction(string $action): self
     {
         $this->action = $action;
 
@@ -116,11 +111,9 @@ class BranchTransaction
     /**
      * Set itemId.
      *
-     * @param string $itemId
-     *
      * @return BranchTransaction
      */
-    public function setItemId($itemId)
+    public function setItemId(string $itemId)
     {
         $this->itemId = $itemId;
 
@@ -140,11 +133,9 @@ class BranchTransaction
     /**
      * Set destId.
      *
-     * @param string $destId
-     *
      * @return BranchTransaction
      */
-    public function setDestId($destId)
+    public function setDestId(string $destId)
     {
         $this->destId = $destId;
 
@@ -164,11 +155,9 @@ class BranchTransaction
     /**
      * Set timeInsert.
      *
-     * @param DateTime $timeInsert
-     *
      * @return BranchTransaction
      */
-    public function setTimeInsert($timeInsert)
+    public function setTimeInsert(DateTime $timeInsert)
     {
         $this->timeInsert = $timeInsert;
 
@@ -188,11 +177,9 @@ class BranchTransaction
     /**
      * Set timeUpdate.
      *
-     * @param DateTime $timeUpdate
-     *
      * @return BranchTransaction
      */
-    public function setTimeUpdate($timeUpdate)
+    public function setTimeUpdate(DateTime $timeUpdate)
     {
         $this->timeUpdate = $timeUpdate;
 
@@ -218,11 +205,9 @@ class BranchTransaction
     }
 
     /**
-     * @param string $origin
-     *
      * @return BranchTransaction
      */
-    public function setOrigin($origin)
+    public function setOrigin(string $origin)
     {
         $this->origin = $origin;
 
@@ -238,11 +223,9 @@ class BranchTransaction
     }
 
     /**
-     * @param string $externalInfo
-     *
      * @return BranchTransaction
      */
-    public function setExternalInfo($externalInfo)
+    public function setExternalInfo(string $externalInfo)
     {
         $this->externalInfo = $externalInfo;
 
@@ -258,11 +241,9 @@ class BranchTransaction
     }
 
     /**
-     * @param int $failedAttempts
-     *
      * @return BranchTransaction
      */
-    public function setFailedAttempts($failedAttempts)
+    public function setFailedAttempts(int $failedAttempts)
     {
         $this->failedAttempts = $failedAttempts;
 
@@ -278,11 +259,9 @@ class BranchTransaction
     }
 
     /**
-     * @param BranchSync $branch
-     *
      * @return $this
      */
-    public function setBranch($branch)
+    public function setBranch(BranchSync $branch)
     {
         $this->branch = $branch;
 
@@ -298,11 +277,9 @@ class BranchTransaction
     }
 
     /**
-     * @param Room $branchTransactionStatus
-     *
      * @return BranchTransaction
      */
-    public function setBranchTransactionStatus($branchTransactionStatus)
+    public function setBranchTransactionStatus(Room $branchTransactionStatus)
     {
         $this->branchTransactionStatus = $branchTransactionStatus;
 
@@ -318,11 +295,9 @@ class BranchTransaction
     }
 
     /**
-     * @param int $externalTransactionId
-     *
      * @return BranchTransaction
      */
-    public function setExternalTransactionId($externalTransactionId)
+    public function setExternalTransactionId(int $externalTransactionId)
     {
         $this->externalTransactionId = $externalTransactionId;
 

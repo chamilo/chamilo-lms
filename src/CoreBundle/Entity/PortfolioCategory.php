@@ -41,7 +41,7 @@ class PortfolioCategory
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
@@ -92,11 +92,9 @@ class PortfolioCategory
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return PortfolioCategory
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -116,11 +114,9 @@ class PortfolioCategory
     /**
      * Set description.
      *
-     * @param null|string $description
-     *
      * @return PortfolioCategory
      */
-    public function setDescription($description)
+    public function setDescription(?string $description)
     {
         $this->description = $description;
 
@@ -135,11 +131,9 @@ class PortfolioCategory
     /**
      * Set isVisible.
      *
-     * @param bool $isVisible
-     *
      * @return PortfolioCategory
      */
-    public function setIsVisible($isVisible)
+    public function setIsVisible(bool $isVisible)
     {
         $this->isVisible = $isVisible;
 
@@ -149,11 +143,9 @@ class PortfolioCategory
     /**
      * Get items.
      *
-     * @param bool $onlyVisibles
-     *
      * @return ArrayCollection
      */
-    public function getItems(Course $course = null, Session $session = null, $onlyVisibles = false)
+    public function getItems(Course $course = null, Session $session = null, bool $onlyVisibles = false)
     {
         $criteria = Criteria::create();
 
@@ -163,7 +155,7 @@ class PortfolioCategory
             );
         }
 
-        if ($course) {
+        if (null !== $course) {
             $criteria
                 ->andWhere(
                     Criteria::expr()->eq('course', $course)

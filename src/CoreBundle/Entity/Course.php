@@ -77,7 +77,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     /**
      * The course code.
@@ -117,28 +117,28 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *     mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $urls;
+    protected Collection $urls;
 
     /**
      * @var Collection|SessionRelCourse[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $sessions;
+    protected Collection $sessions;
 
     /**
      * @var Collection|SessionRelCourseRelUser[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $sessionUserSubscriptions;
+    protected Collection $sessionUserSubscriptions;
 
     /**
      * @var Collection|CTool[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $tools;
+    protected Collection $tools;
 
     protected Session $currentSession;
 
@@ -149,63 +149,63 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $skills;
+    protected Collection $skills;
 
     /**
      * @var Collection|SkillRelUser[]
      *
      * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $issuedSkills;
+    protected Collection $issuedSkills;
 
     /**
      * @var Collection|GradebookCategory[]
      *
      * @ORM\OneToMany(targetEntity="GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $gradebookCategories;
+    protected Collection $gradebookCategories;
 
     /**
      * @var Collection|GradebookEvaluation[]
      *
      * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $gradebookEvaluations;
+    protected Collection $gradebookEvaluations;
 
     /**
      * @var Collection|GradebookLink[]
      *
      * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $gradebookLinks;
+    protected Collection $gradebookLinks;
 
     /**
      * @var Collection|TrackEHotspot[]
      *
      * @ORM\OneToMany(targetEntity="TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $trackEHotspots;
+    protected Collection $trackEHotspots;
 
     /**
      * @var Collection|TrackEAttempt[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $trackEAttempts;
+    protected Collection $trackEAttempts;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SearchEngineRef", mappedBy="course", cascade={"persist", "remove"})
      *
      * @var SearchEngineRef[]|Collection
      */
-    protected $searchEngineRefs;
+    protected Collection $searchEngineRefs;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="course", cascade={"persist", "remove"})
      *
      * @var Templates[]|Collection
      */
-    protected $templates;
+    protected Collection $templates;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
@@ -220,7 +220,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\Column(name="directory", type="string", length=40, nullable=true, unique=false)
      */
-    protected ?string $directory;
+    protected ?string $directory = null;
 
     /**
      * @Groups({"course:read", "list"})
@@ -261,7 +261,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\Column(name="show_score", type="integer", nullable=true, unique=false)
      */
-    protected ?int $showScore;
+    protected ?int $showScore = null;
 
     /**
      * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true, unique=false)
@@ -271,13 +271,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
      */
-    protected ?string $visualCode;
+    protected ?string $visualCode = null;
 
     /**
      * @Groups({"course:read", "list"})
      * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */
-    protected ?string $departmentName;
+    protected ?string $departmentName = null;
 
     /**
      * @Groups({"course:read", "list"})
@@ -285,12 +285,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
      */
-    protected ?string $departmentUrl;
+    protected ?string $departmentUrl = null;
 
     /**
      * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
      */
-    protected ?int $diskQuota;
+    protected ?int $diskQuota = null;
 
     /**
      * @ORM\Column(name="last_visit", type="datetime", nullable=true, unique=false)
@@ -311,7 +311,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @Groups({"course:read", "list"})
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $expirationDate;
+    protected ?DateTime $expirationDate = null;
 
     /**
      * @ORM\Column(name="subscribe", type="boolean", nullable=false, unique=false)
@@ -361,6 +361,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function __construct()
     {
+        $this->sessions = new ArrayCollection();
+        $this->sessionUserSubscriptions = new ArrayCollection();
+        $this->skills = new ArrayCollection();
+        $this->issuedSkills = new ArrayCollection();
         $this->creationDate = new DateTime();
         $this->lastVisit = new DateTime();
         $this->lastEdit = new DateTime();
@@ -402,10 +406,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->tools;
     }
 
-    /**
-     * @param array $tools
-     */
-    public function setTools($tools)
+    public function setTools(array $tools)
     {
         foreach ($tools as $tool) {
             $this->addTool($tool);
@@ -488,10 +489,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->users->matching($criteria);
     }
 
-    /**
-     * @param Collection $users
-     */
-    public function setUsers($users)
+    public function setUsers(Collection $users)
     {
         $this->users = new ArrayCollection();
 
@@ -588,11 +586,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set code.
      *
-     * @param string $code
-     *
      * @return Course
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
         $this->visualCode = $code;
@@ -614,11 +610,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set directory.
      *
-     * @param string $directory
-     *
      * @return Course
      */
-    public function setDirectory($directory)
+    public function setDirectory(string $directory)
     {
         $this->directory = $directory;
 
@@ -638,11 +632,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set courseLanguage.
      *
-     * @param string $courseLanguage
-     *
      * @return Course
      */
-    public function setCourseLanguage($courseLanguage)
+    public function setCourseLanguage(string $courseLanguage)
     {
         $this->courseLanguage = $courseLanguage;
 
@@ -662,11 +654,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return Course
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -694,11 +684,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return Course
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -759,11 +747,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set showScore.
      *
-     * @param int $showScore
-     *
      * @return Course
      */
-    public function setShowScore($showScore)
+    public function setShowScore(int $showScore)
     {
         $this->showScore = $showScore;
 
@@ -795,11 +781,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set visualCode.
      *
-     * @param string $visualCode
-     *
      * @return Course
      */
-    public function setVisualCode($visualCode)
+    public function setVisualCode(string $visualCode)
     {
         $this->visualCode = $visualCode;
 
@@ -819,11 +803,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set departmentName.
      *
-     * @param string $departmentName
-     *
      * @return Course
      */
-    public function setDepartmentName($departmentName)
+    public function setDepartmentName(string $departmentName)
     {
         $this->departmentName = $departmentName;
 
@@ -843,11 +825,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set departmentUrl.
      *
-     * @param string $departmentUrl
-     *
      * @return Course
      */
-    public function setDepartmentUrl($departmentUrl)
+    public function setDepartmentUrl(string $departmentUrl)
     {
         $this->departmentUrl = $departmentUrl;
 
@@ -889,11 +869,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set lastVisit.
      *
-     * @param DateTime $lastVisit
-     *
      * @return Course
      */
-    public function setLastVisit($lastVisit)
+    public function setLastVisit(DateTime $lastVisit)
     {
         $this->lastVisit = $lastVisit;
 
@@ -913,11 +891,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set lastEdit.
      *
-     * @param DateTime $lastEdit
-     *
      * @return Course
      */
-    public function setLastEdit($lastEdit)
+    public function setLastEdit(DateTime $lastEdit)
     {
         $this->lastEdit = $lastEdit;
 
@@ -937,11 +913,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set creationDate.
      *
-     * @param DateTime $creationDate
-     *
      * @return Course
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(DateTime $creationDate)
     {
         $this->creationDate = $creationDate;
 
@@ -961,11 +935,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set expirationDate.
      *
-     * @param DateTime $expirationDate
-     *
      * @return Course
      */
-    public function setExpirationDate($expirationDate)
+    public function setExpirationDate(DateTime $expirationDate)
     {
         $this->expirationDate = $expirationDate;
 
@@ -985,11 +957,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set subscribe.
      *
-     * @param bool $subscribe
-     *
      * @return Course
      */
-    public function setSubscribe($subscribe)
+    public function setSubscribe(bool $subscribe)
     {
         $this->subscribe = (bool) $subscribe;
 
@@ -1009,11 +979,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set unsubscribe.
      *
-     * @param bool $unsubscribe
-     *
      * @return Course
      */
-    public function setUnsubscribe($unsubscribe)
+    public function setUnsubscribe(bool $unsubscribe)
     {
         $this->unsubscribe = (bool) $unsubscribe;
 
@@ -1033,11 +1001,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set registrationCode.
      *
-     * @param string $registrationCode
-     *
      * @return Course
      */
-    public function setRegistrationCode($registrationCode)
+    public function setRegistrationCode(string $registrationCode)
     {
         $this->registrationCode = $registrationCode;
 
@@ -1057,11 +1023,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set legal.
      *
-     * @param string $legal
-     *
      * @return Course
      */
-    public function setLegal($legal)
+    public function setLegal(string $legal)
     {
         $this->legal = $legal;
 
@@ -1081,11 +1045,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set activateLegal.
      *
-     * @param int $activateLegal
-     *
      * @return Course
      */
-    public function setActivateLegal($activateLegal)
+    public function setActivateLegal(int $activateLegal)
     {
         $this->activateLegal = $activateLegal;
 
@@ -1110,10 +1072,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->addTeachersToSessionsCourses;
     }
 
-    /**
-     * @param bool $addTeachersToSessionsCourses
-     */
-    public function setAddTeachersToSessionsCourses($addTeachersToSessionsCourses): self
+    public function setAddTeachersToSessionsCourses(bool $addTeachersToSessionsCourses): self
     {
         $this->addTeachersToSessionsCourses = $addTeachersToSessionsCourses;
 
@@ -1123,11 +1082,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set courseTypeId.
      *
-     * @param int $courseTypeId
-     *
      * @return Course
      */
-    public function setCourseTypeId($courseTypeId)
+    public function setCourseTypeId(int $courseTypeId)
     {
         $this->courseTypeId = $courseTypeId;
 
@@ -1254,7 +1211,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasSubscription(CourseRelUser $subscription): bool
     {
-        if ($this->getUsers()->count()) {
+        if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
@@ -1312,7 +1269,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @return Course
      */
-    public function setSkills($skills)
+    public function setSkills(Collection $skills)
     {
         $this->skills = $skills;
 
@@ -1332,7 +1289,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @return Course
      */
-    public function setGradebookCategories($gradebookCategories)
+    public function setGradebookCategories(Collection $gradebookCategories)
     {
         $this->gradebookCategories = $gradebookCategories;
 
@@ -1352,7 +1309,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @return Course
      */
-    public function setGradebookEvaluations($gradebookEvaluations)
+    public function setGradebookEvaluations(Collection $gradebookEvaluations)
     {
         $this->gradebookEvaluations = $gradebookEvaluations;
 
@@ -1372,7 +1329,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @return Course
      */
-    public function setGradebookLinks($gradebookLinks)
+    public function setGradebookLinks(Collection $gradebookLinks)
     {
         $this->gradebookLinks = $gradebookLinks;
 
@@ -1390,7 +1347,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param TrackEHotspot[]|Collection $trackEHotspots
      */
-    public function setTrackEHotspots($trackEHotspots): self
+    public function setTrackEHotspots(Collection $trackEHotspots): self
     {
         $this->trackEHotspots = $trackEHotspots;
 
@@ -1408,7 +1365,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param TrackEAttempt[]|Collection $trackEAttempts
      */
-    public function setTrackEAttempts($trackEAttempts): self
+    public function setTrackEAttempts(Collection $trackEAttempts): self
     {
         $this->trackEAttempts = $trackEAttempts;
 
@@ -1426,7 +1383,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param SearchEngineRef[]|Collection $searchEngineRefs
      */
-    public function setSearchEngineRefs($searchEngineRefs): self
+    public function setSearchEngineRefs(Collection $searchEngineRefs): self
     {
         $this->searchEngineRefs = $searchEngineRefs;
 
@@ -1444,7 +1401,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param Templates[]|Collection $templates
      */
-    public function setTemplates($templates): self
+    public function setTemplates(Collection $templates): self
     {
         $this->templates = $templates;
 

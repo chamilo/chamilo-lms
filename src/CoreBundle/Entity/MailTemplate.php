@@ -34,7 +34,7 @@ class MailTemplate
     /**
      * @ORM\Column(name="template", type="text", nullable=true)
      */
-    protected ?string $template;
+    protected ?string $template = null;
 
     /**
      * @ORM\Column(name="type", type="string", nullable=false)

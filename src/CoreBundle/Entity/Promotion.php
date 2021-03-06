@@ -39,7 +39,7 @@ class Promotion
     /**
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career")
@@ -70,11 +70,9 @@ class Promotion
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return Promotion
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -91,12 +89,7 @@ class Promotion
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -130,12 +123,7 @@ class Promotion
         return $this->career;
     }
 
-    /**
-     * Set status.
-     *
-     * @param int $status
-     */
-    public function setStatus($status): self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 

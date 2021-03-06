@@ -37,7 +37,7 @@ class TicketPriority
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="color", type="string", nullable=false)
@@ -62,12 +62,12 @@ class TicketPriority
     /**
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected ?int $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
     public function __construct()
     {
@@ -93,11 +93,9 @@ class TicketPriority
     }
 
     /**
-     * @param string $name
-     *
      * @return TicketPriority
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -113,11 +111,9 @@ class TicketPriority
     }
 
     /**
-     * @param string $code
-     *
      * @return TicketPriority
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -133,11 +129,9 @@ class TicketPriority
     }
 
     /**
-     * @param string $description
-     *
      * @return TicketPriority
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -153,11 +147,9 @@ class TicketPriority
     }
 
     /**
-     * @param string $color
-     *
      * @return TicketPriority
      */
-    public function setColor($color)
+    public function setColor(string $color)
     {
         $this->color = $color;
 
@@ -173,11 +165,9 @@ class TicketPriority
     }
 
     /**
-     * @param string $urgency
-     *
      * @return TicketPriority
      */
-    public function setUrgency($urgency)
+    public function setUrgency(string $urgency)
     {
         $this->urgency = $urgency;
 
@@ -193,11 +183,9 @@ class TicketPriority
     }
 
     /**
-     * @param int $insertUserId
-     *
      * @return TicketPriority
      */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId)
     {
         $this->insertUserId = $insertUserId;
 
@@ -213,11 +201,9 @@ class TicketPriority
     }
 
     /**
-     * @param DateTime $insertDateTime
-     *
      * @return TicketPriority
      */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime)
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -233,11 +219,9 @@ class TicketPriority
     }
 
     /**
-     * @param int $lastEditUserId
-     *
      * @return TicketPriority
      */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId)
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -253,11 +237,9 @@ class TicketPriority
     }
 
     /**
-     * @param DateTime $lastEditDateTime
-     *
      * @return TicketPriority
      */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime)
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

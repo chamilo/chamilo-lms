@@ -67,11 +67,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceCondition
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -87,11 +85,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $mathOperation
-     *
      * @return SequenceCondition
      */
-    public function setMathOperation($mathOperation)
+    public function setMathOperation(string $mathOperation)
     {
         $this->mathOperation = $mathOperation;
 
@@ -107,11 +103,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $param
-     *
      * @return SequenceCondition
      */
-    public function setParam($param)
+    public function setParam(string $param)
     {
         $this->param = $param;
 
@@ -127,11 +121,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $actTrue
-     *
      * @return SequenceCondition
      */
-    public function setActTrue($actTrue)
+    public function setActTrue(string $actTrue)
     {
         $this->actTrue = $actTrue;
 
@@ -147,11 +139,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $actFalse
-     *
      * @return SequenceCondition
      */
-    public function setActFalse($actFalse)
+    public function setActFalse(string $actFalse)
     {
         $this->actFalse = $actFalse;
 

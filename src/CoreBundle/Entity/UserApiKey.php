@@ -44,36 +44,34 @@ class UserApiKey
     /**
      * @ORM\Column(name="api_end_point", type="text", nullable=true)
      */
-    protected ?string $apiEndPoint;
+    protected ?string $apiEndPoint = null;
 
     /**
      * @ORM\Column(name="created_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $createdDate;
+    protected ?DateTime $createdDate = null;
 
     /**
      * @ORM\Column(name="validity_start_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $validityStartDate;
+    protected ?DateTime $validityStartDate = null;
 
     /**
      * @ORM\Column(name="validity_end_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $validityEndDate;
+    protected ?DateTime $validityEndDate = null;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return UserApiKey
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -93,11 +91,9 @@ class UserApiKey
     /**
      * Set apiKey.
      *
-     * @param string $apiKey
-     *
      * @return UserApiKey
      */
-    public function setApiKey($apiKey)
+    public function setApiKey(string $apiKey)
     {
         $this->apiKey = $apiKey;
 
@@ -117,11 +113,9 @@ class UserApiKey
     /**
      * Set apiService.
      *
-     * @param string $apiService
-     *
      * @return UserApiKey
      */
-    public function setApiService($apiService)
+    public function setApiService(string $apiService)
     {
         $this->apiService = $apiService;
 
@@ -141,11 +135,9 @@ class UserApiKey
     /**
      * Set apiEndPoint.
      *
-     * @param string $apiEndPoint
-     *
      * @return UserApiKey
      */
-    public function setApiEndPoint($apiEndPoint)
+    public function setApiEndPoint(string $apiEndPoint)
     {
         $this->apiEndPoint = $apiEndPoint;
 
@@ -165,11 +157,9 @@ class UserApiKey
     /**
      * Set createdDate.
      *
-     * @param DateTime $createdDate
-     *
      * @return UserApiKey
      */
-    public function setCreatedDate($createdDate)
+    public function setCreatedDate(DateTime $createdDate)
     {
         $this->createdDate = $createdDate;
 
@@ -189,11 +179,9 @@ class UserApiKey
     /**
      * Set validityStartDate.
      *
-     * @param DateTime $validityStartDate
-     *
      * @return UserApiKey
      */
-    public function setValidityStartDate($validityStartDate)
+    public function setValidityStartDate(DateTime $validityStartDate)
     {
         $this->validityStartDate = $validityStartDate;
 
@@ -213,11 +201,9 @@ class UserApiKey
     /**
      * Set validityEndDate.
      *
-     * @param DateTime $validityEndDate
-     *
      * @return UserApiKey
      */
-    public function setValidityEndDate($validityEndDate)
+    public function setValidityEndDate(DateTime $validityEndDate)
     {
         $this->validityEndDate = $validityEndDate;
 
@@ -237,11 +223,9 @@ class UserApiKey
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return UserApiKey
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 

@@ -95,11 +95,9 @@ class MessageFeedback
     }
 
     /**
-     * @param bool $liked
-     *
      * @return MessageFeedback
      */
-    public function setLiked($liked)
+    public function setLiked(bool $liked)
     {
         $this->liked = $liked;
 
@@ -112,11 +110,9 @@ class MessageFeedback
     }
 
     /**
-     * @param bool $disliked
-     *
      * @return MessageFeedback
      */
-    public function setDisliked($disliked)
+    public function setDisliked(bool $disliked)
     {
         $this->disliked = $disliked;
 

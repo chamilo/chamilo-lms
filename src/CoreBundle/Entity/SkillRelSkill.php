@@ -46,11 +46,9 @@ class SkillRelSkill
     /**
      * Set skillId.
      *
-     * @param int $skillId
-     *
      * @return SkillRelSkill
      */
-    public function setSkillId($skillId)
+    public function setSkillId(int $skillId)
     {
         $this->skillId = $skillId;
 
@@ -70,11 +68,9 @@ class SkillRelSkill
     /**
      * Set parentId.
      *
-     * @param int $parentId
-     *
      * @return SkillRelSkill
      */
-    public function setParentId($parentId)
+    public function setParentId(int $parentId)
     {
         $this->parentId = $parentId;
 
@@ -94,11 +90,9 @@ class SkillRelSkill
     /**
      * Set relationType.
      *
-     * @param int $relationType
-     *
      * @return SkillRelSkill
      */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType)
     {
         $this->relationType = $relationType;
 
@@ -118,11 +112,9 @@ class SkillRelSkill
     /**
      * Set level.
      *
-     * @param int $level
-     *
      * @return SkillRelSkill
      */
-    public function setLevel($level)
+    public function setLevel(int $level)
     {
         $this->level = $level;
 

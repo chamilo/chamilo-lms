@@ -33,27 +33,27 @@ class ExtraFieldOptions
     /**
      * @ORM\Column(name="option_value", type="text", nullable=true)
      */
-    protected ?string $value;
+    protected ?string $value = null;
 
     /**
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true)
      */
-    protected ?string $displayText;
+    protected ?string $displayText = null;
 
     /**
      * @ORM\Column(name="priority", type="string", length=255, nullable=true)
      */
-    protected ?string $priority;
+    protected ?string $priority = null;
 
     /**
      * @ORM\Column(name="priority_message", type="string", length=255, nullable=true)
      */
-    protected ?string $priorityMessage;
+    protected ?string $priorityMessage = null;
 
     /**
      * @ORM\Column(name="option_order", type="integer", nullable=true)
      */
-    protected ?int $optionOrder;
+    protected ?int $optionOrder = null;
 
     /**
      * @return int
@@ -72,11 +72,9 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param int $optionOrder
-     *
      * @return $this
      */
-    public function setOptionOrder($optionOrder)
+    public function setOptionOrder(int $optionOrder)
     {
         $this->optionOrder = $optionOrder;
 
@@ -92,11 +90,9 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param ExtraField $field
-     *
      * @return $this
      */
-    public function setField($field)
+    public function setField(ExtraField $field)
     {
         $this->field = $field;
 
@@ -112,11 +108,9 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param string $value
-     *
      * @return $this
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $this->value = $value;
 
@@ -128,7 +122,7 @@ class ExtraFieldOptions
      *
      * @return string
      */
-    public function getDisplayText($translated = true)
+    public function getDisplayText(bool $translated = true)
     {
         if ($translated) {
             return ExtraFieldOption::translateDisplayName($this->displayText);
@@ -138,11 +132,9 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param string $displayText
-     *
      * @return $this
      */
-    public function setDisplayText($displayText)
+    public function setDisplayText(string $displayText)
     {
         $this->displayText = $displayText;
 
@@ -158,11 +150,9 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param string $priority
-     *
      * @return $this
      */
-    public function setPriority($priority)
+    public function setPriority(string $priority)
     {
         $this->priority = $priority;
 
@@ -178,11 +168,9 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param string $priorityMessage
-     *
      * @return $this
      */
-    public function setPriorityMessage($priorityMessage)
+    public function setPriorityMessage(string $priorityMessage)
     {
         $this->priorityMessage = $priorityMessage;
 

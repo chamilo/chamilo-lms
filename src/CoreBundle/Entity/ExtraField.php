@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -73,22 +75,22 @@ class ExtraField
     /**
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
      */
-    protected ?string $displayText;
+    protected ?string $displayText = null;
 
     /**
      * @ORM\Column(name="helper_text", type="text", nullable=true, unique=false)
      */
-    protected ?string $helperText;
+    protected ?string $helperText = null;
 
     /**
      * @ORM\Column(name="default_value", type="text", nullable=true, unique=false)
      */
-    protected ?string $defaultValue;
+    protected ?string $defaultValue = null;
 
     /**
      * @ORM\Column(name="field_order", type="integer", nullable=true, unique=false)
      */
-    protected ?int $fieldOrder;
+    protected ?int $fieldOrder = null;
 
     /**
      * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
@@ -103,19 +105,19 @@ class ExtraField
     /**
      * @ORM\Column(name="changeable", type="boolean", nullable=true, unique=false)
      */
-    protected ?bool $changeable;
+    protected ?bool $changeable = null;
 
     /**
      * @ORM\Column(name="filter", type="boolean", nullable=true, unique=false)
      */
-    protected ?bool $filter;
+    protected ?bool $filter = null;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
      *
-     * @var \Chamilo\CoreBundle\Entity\ExtraFieldOptions[]|\Doctrine\Common\Collections\Collection
+     * @var ExtraFieldOptions[]|Collection
      */
-    protected $options;
+    protected Collection $options;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -125,6 +127,7 @@ class ExtraField
 
     public function __construct()
     {
+        $this->options = new ArrayCollection();
         $this->description = '';
         $this->visibleToOthers = false;
         $this->visibleToSelf = false;
@@ -148,10 +151,7 @@ class ExtraField
         return $this->extraFieldType;
     }
 
-    /**
-     * @param int $extraFieldType
-     */
-    public function setExtraFieldType($extraFieldType): self
+    public function setExtraFieldType(int $extraFieldType): self
     {
         $this->extraFieldType = $extraFieldType;
 
@@ -167,11 +167,9 @@ class ExtraField
     }
 
     /**
-     * @param int $fieldType
-     *
      * @return $this
      */
-    public function setFieldType($fieldType)
+    public function setFieldType(int $fieldType)
     {
         $this->fieldType = $fieldType;
 
@@ -187,11 +185,9 @@ class ExtraField
     }
 
     /**
-     * @param string $variable
-     *
      * @return $this
      */
-    public function setVariable($variable)
+    public function setVariable(string $variable)
     {
         $this->variable = $variable;
 
@@ -203,7 +199,7 @@ class ExtraField
      *
      * @return string
      */
-    public function getDisplayText($translated = true)
+    public function getDisplayText(bool $translated = true)
     {
         if ($translated) {
             return \ExtraField::translateDisplayName($this->variable, $this->displayText);
@@ -213,11 +209,9 @@ class ExtraField
     }
 
     /**
-     * @param string $displayText
-     *
      * @return $this
      */
-    public function setDisplayText($displayText)
+    public function setDisplayText(string $displayText)
     {
         $this->displayText = $displayText;
 
@@ -233,11 +227,9 @@ class ExtraField
     }
 
     /**
-     * @param string $defaultValue
-     *
      * @return $this
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(string $defaultValue)
     {
         $this->defaultValue = $defaultValue;
 
@@ -253,11 +245,9 @@ class ExtraField
     }
 
     /**
-     * @param int $fieldOrder
-     *
      * @return $this
      */
-    public function setFieldOrder($fieldOrder)
+    public function setFieldOrder(int $fieldOrder)
     {
         $this->fieldOrder = $fieldOrder;
 
@@ -273,11 +263,9 @@ class ExtraField
     }
 
     /**
-     * @param bool $changeable
-     *
      * @return $this
      */
-    public function setChangeable($changeable)
+    public function setChangeable(bool $changeable)
     {
         $this->changeable = $changeable;
 
@@ -290,11 +278,9 @@ class ExtraField
     }
 
     /**
-     * @param bool $filter
-     *
      * @return $this
      */
-    public function setFilter($filter)
+    public function setFilter(bool $filter)
     {
         $this->filter = $filter;
 
@@ -307,11 +293,9 @@ class ExtraField
     }
 
     /**
-     * @param bool $visibleToSelf
-     *
      * @return ExtraField
      */
-    public function setVisibleToSelf($visibleToSelf)
+    public function setVisibleToSelf(bool $visibleToSelf)
     {
         $this->visibleToSelf = $visibleToSelf;
 
@@ -324,11 +308,9 @@ class ExtraField
     }
 
     /**
-     * @param bool $visibleToOthers
-     *
      * @return ExtraField
      */
-    public function setVisibleToOthers($visibleToOthers)
+    public function setVisibleToOthers(bool $visibleToOthers)
     {
         $this->visibleToOthers = $visibleToOthers;
 

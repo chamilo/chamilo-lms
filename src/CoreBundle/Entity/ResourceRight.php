@@ -58,10 +58,7 @@ class ResourceRight
         return $this->mask;
     }
 
-    /**
-     * @param int $mask
-     */
-    public function setMask($mask): self
+    public function setMask(int $mask): self
     {
         $this->mask = $mask;
 

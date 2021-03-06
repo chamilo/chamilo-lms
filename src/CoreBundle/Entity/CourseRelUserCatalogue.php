@@ -90,12 +90,7 @@ class CourseRelUserCatalogue
         return $this->course;
     }
 
-    /**
-     * Set visible.
-     *
-     * @param int $visible
-     */
-    public function setVisible($visible): self
+    public function setVisible(int $visible): self
     {
         $this->visible = $visible;
 

@@ -46,11 +46,9 @@ class GradeComponents
     /**
      * Set percentage.
      *
-     * @param string $percentage
-     *
      * @return GradeComponents
      */
-    public function setPercentage($percentage)
+    public function setPercentage(string $percentage)
     {
         $this->percentage = $percentage;
 
@@ -70,11 +68,9 @@ class GradeComponents
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return GradeComponents
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -94,11 +90,9 @@ class GradeComponents
     /**
      * Set acronym.
      *
-     * @param string $acronym
-     *
      * @return GradeComponents
      */
-    public function setAcronym($acronym)
+    public function setAcronym(string $acronym)
     {
         $this->acronym = $acronym;
 
@@ -118,11 +112,9 @@ class GradeComponents
     /**
      * Set gradeModelId.
      *
-     * @param int $gradeModelId
-     *
      * @return GradeComponents
      */
-    public function setGradeModelId($gradeModelId)
+    public function setGradeModelId(int $gradeModelId)
     {
         $this->gradeModelId = $gradeModelId;
 

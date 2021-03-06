@@ -32,17 +32,17 @@ class TicketProject
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="email", type="string", nullable=true)
      */
-    protected ?string $email;
+    protected ?string $email = null;
 
     /**
      * @ORM\Column(name="other_area", type="integer", nullable=true)
      */
-    protected ?string $otherArea;
+    protected ?string $otherArea = null;
 
     /**
      * @ORM\Column(name="sys_insert_user_id", type="integer")
@@ -57,12 +57,12 @@ class TicketProject
     /**
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected ?int $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
     public function __construct()
     {
@@ -86,11 +86,9 @@ class TicketProject
     }
 
     /**
-     * @param string $name
-     *
      * @return TicketProject
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -106,11 +104,9 @@ class TicketProject
     }
 
     /**
-     * @param string $description
-     *
      * @return TicketProject
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -126,11 +122,9 @@ class TicketProject
     }
 
     /**
-     * @param string $email
-     *
      * @return TicketProject
      */
-    public function setEmail($email)
+    public function setEmail(string $email)
     {
         $this->email = $email;
 
@@ -146,11 +140,9 @@ class TicketProject
     }
 
     /**
-     * @param string $otherArea
-     *
      * @return TicketProject
      */
-    public function setOtherArea($otherArea)
+    public function setOtherArea(string $otherArea)
     {
         $this->otherArea = $otherArea;
 
@@ -166,11 +158,9 @@ class TicketProject
     }
 
     /**
-     * @param int $insertUserId
-     *
      * @return TicketProject
      */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId)
     {
         $this->insertUserId = $insertUserId;
 
@@ -186,11 +176,9 @@ class TicketProject
     }
 
     /**
-     * @param DateTime $insertDateTime
-     *
      * @return TicketProject
      */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime)
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -206,11 +194,9 @@ class TicketProject
     }
 
     /**
-     * @param int $lastEditUserId
-     *
      * @return TicketProject
      */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId)
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -226,11 +212,9 @@ class TicketProject
     }
 
     /**
-     * @param DateTime $lastEditDateTime
-     *
      * @return TicketProject
      */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime)
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

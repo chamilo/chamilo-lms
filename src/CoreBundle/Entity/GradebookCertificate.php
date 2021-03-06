@@ -55,21 +55,19 @@ class GradebookCertificate
     /**
      * @ORM\Column(name="path_certificate", type="text", nullable=true)
      */
-    protected ?string $pathCertificate;
+    protected ?string $pathCertificate = null;
 
     /**
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
      */
-    protected ?DateTime $downloadedAt;
+    protected ?DateTime $downloadedAt = null;
 
     /**
      * Set scoreCertificate.
      *
-     * @param float $scoreCertificate
-     *
      * @return GradebookCertificate
      */
-    public function setScoreCertificate($scoreCertificate)
+    public function setScoreCertificate(float $scoreCertificate)
     {
         $this->scoreCertificate = $scoreCertificate;
 
@@ -89,11 +87,9 @@ class GradebookCertificate
     /**
      * Set createdAt.
      *
-     * @param DateTime $createdAt
-     *
      * @return GradebookCertificate
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -113,11 +109,9 @@ class GradebookCertificate
     /**
      * Set pathCertificate.
      *
-     * @param string $pathCertificate
-     *
      * @return GradebookCertificate
      */
-    public function setPathCertificate($pathCertificate)
+    public function setPathCertificate(string $pathCertificate)
     {
         $this->pathCertificate = $pathCertificate;
 

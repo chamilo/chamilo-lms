@@ -40,11 +40,9 @@ class SpecificField
     /**
      * Set code.
      *
-     * @param string $code
-     *
      * @return SpecificField
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -64,11 +62,9 @@ class SpecificField
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return SpecificField
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 

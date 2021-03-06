@@ -79,11 +79,9 @@ class SkillRelItemRelUser
     }
 
     /**
-     * @param SkillRelItem $skillRelItem
-     *
      * @return SkillRelItemRelUser
      */
-    public function setSkillRelItem($skillRelItem)
+    public function setSkillRelItem(SkillRelItem $skillRelItem)
     {
         $this->skillRelItem = $skillRelItem;
 
@@ -99,11 +97,9 @@ class SkillRelItemRelUser
     }
 
     /**
-     * @param int $createdBy
-     *
      * @return SkillRelItemRelUser
      */
-    public function setCreatedBy($createdBy)
+    public function setCreatedBy(int $createdBy)
     {
         $this->createdBy = $createdBy;
 
@@ -119,11 +115,9 @@ class SkillRelItemRelUser
     }
 
     /**
-     * @param int $updatedBy
-     *
      * @return SkillRelItemRelUser
      */
-    public function setUpdatedBy($updatedBy)
+    public function setUpdatedBy(int $updatedBy)
     {
         $this->updatedBy = $updatedBy;
 
@@ -139,11 +133,9 @@ class SkillRelItemRelUser
     }
 
     /**
-     * @param int $resultId
-     *
      * @return SkillRelItemRelUser
      */
-    public function setResultId($resultId)
+    public function setResultId(int $resultId)
     {
         $this->resultId = $resultId;
 
@@ -151,11 +143,9 @@ class SkillRelItemRelUser
     }
 
     /**
-     * @param string $cidReq
-     *
      * @return string
      */
-    public function getUserItemResultUrl($cidReq)
+    public function getUserItemResultUrl(string $cidReq)
     {
         $resultId = $this->getResultId();
 

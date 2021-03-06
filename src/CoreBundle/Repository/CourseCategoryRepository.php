@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -36,7 +37,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
                 'c = a.courseCategory'
             )
             ->where($qb->expr()->eq('a.url', $accessUrl))
-            ->orderBy('c.treePos', 'ASC')
+            ->orderBy('c.treePos', Criteria::ASC)
         ;
 
         if ($allowBaseCategories) {

@@ -75,12 +75,12 @@ class CourseCategory
      * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected ?CourseCategory $parent;
+    protected ?CourseCategory $parent = null;
 
     /**
      * @ORM\Column(name="tree_pos", type="integer", nullable=true)
      */
-    protected ?int $treePos;
+    protected ?int $treePos = null;
 
     /**
      * @ORM\Column(name="children_count", type="smallint", nullable=true)
@@ -90,23 +90,23 @@ class CourseCategory
     /**
      * @ORM\Column(name="auth_course_child", type="string", length=40, nullable=true)
      */
-    protected ?string $authCourseChild;
+    protected ?string $authCourseChild = null;
 
     /**
      * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
      */
-    protected ?string $authCatChild;
+    protected ?string $authCatChild = null;
 
     /**
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
-    protected ?string $image;
+    protected ?string $image = null;
 
     /**
      * @Groups({"course_category:read", "course_category:write"})
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\OneToMany(
@@ -116,7 +116,7 @@ class CourseCategory
      *
      * @var AccessUrlRelCourseCategory[]|Collection
      */
-    protected $urls;
+    protected Collection $urls;
 
     /**
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="categories")
@@ -125,6 +125,7 @@ class CourseCategory
 
     public function __construct()
     {
+        $this->urls = new ArrayCollection();
         $this->childrenCount = 0;
         $this->children = new ArrayCollection();
         $this->courses = new ArrayCollection();
@@ -134,7 +135,7 @@ class CourseCategory
     {
         $name = strip_tags($this->name);
 
-        return "{$name} ({$this->code})";
+        return sprintf('%s (%s)', $name, $this->code);
     }
 
     /**
@@ -178,11 +179,9 @@ class CourseCategory
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return CourseCategory
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -202,11 +201,9 @@ class CourseCategory
     /**
      * Set code.
      *
-     * @param string $code
-     *
      * @return CourseCategory
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -223,12 +220,7 @@ class CourseCategory
         return $this->code;
     }
 
-    /**
-     * Set treePos.
-     *
-     * @param int $treePos
-     */
-    public function setTreePos($treePos): self
+    public function setTreePos(int $treePos): self
     {
         $this->treePos = $treePos;
 
@@ -245,12 +237,7 @@ class CourseCategory
         return $this->treePos;
     }
 
-    /**
-     * Set childrenCount.
-     *
-     * @param int $childrenCount
-     */
-    public function setChildrenCount($childrenCount): self
+    public function setChildrenCount(int $childrenCount): self
     {
         $this->childrenCount = $childrenCount;
 
@@ -267,12 +254,7 @@ class CourseCategory
         return $this->childrenCount;
     }
 
-    /**
-     * Set authCourseChild.
-     *
-     * @param string $authCourseChild
-     */
-    public function setAuthCourseChild($authCourseChild): self
+    public function setAuthCourseChild(string $authCourseChild): self
     {
         $this->authCourseChild = $authCourseChild;
 
@@ -289,12 +271,7 @@ class CourseCategory
         return $this->authCourseChild;
     }
 
-    /**
-     * Set authCatChild.
-     *
-     * @param string $authCatChild
-     */
-    public function setAuthCatChild($authCatChild): self
+    public function setAuthCatChild(string $authCatChild): self
     {
         $this->authCatChild = $authCatChild;
 

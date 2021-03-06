@@ -37,7 +37,7 @@ class Ticket
     /**
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    protected ?string $message;
+    protected ?string $message = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="TicketProject")
@@ -77,7 +77,7 @@ class Ticket
     /**
      * @ORM\Column(name="assigned_last_user", type="integer", nullable=true)
      */
-    protected ?int $assignedLastUser;
+    protected ?int $assignedLastUser = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="TicketStatus")
@@ -93,22 +93,22 @@ class Ticket
     /**
      * @ORM\Column(name="keyword", type="string", length=255, nullable=true)
      */
-    protected ?string $keyword;
+    protected ?string $keyword = null;
 
     /**
      * @ORM\Column(name="source", type="string", length=255, nullable=true)
      */
-    protected ?string $source;
+    protected ?string $source = null;
 
     /**
      * @ORM\Column(name="start_date", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $startDate;
+    protected ?DateTime $startDate = null;
 
     /**
      * @ORM\Column(name="end_date", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
      * @ORM\Column(name="sys_insert_user_id", type="integer")
@@ -147,11 +147,9 @@ class Ticket
     }
 
     /**
-     * @param string $code
-     *
      * @return Ticket
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
 
@@ -167,11 +165,9 @@ class Ticket
     }
 
     /**
-     * @param string $subject
-     *
      * @return Ticket
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject)
     {
         $this->subject = $subject;
 
@@ -187,11 +183,9 @@ class Ticket
     }
 
     /**
-     * @param string $message
-     *
      * @return Ticket
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
 

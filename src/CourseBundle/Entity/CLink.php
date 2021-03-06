@@ -24,7 +24,7 @@ class CLink extends AbstractResource implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected ?int $iid;
+    protected ?int $iid = null;
 
     /**
      * @Assert\NotBlank()
@@ -57,7 +57,7 @@ class CLink extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="target", type="string", length=10, nullable=true)
      */
-    protected ?string $target;
+    protected ?string $target = null;
 
     public function __construct()
     {
@@ -114,11 +114,9 @@ class CLink extends AbstractResource implements ResourceInterface
     /**
      * Set displayOrder.
      *
-     * @param int $displayOrder
-     *
      * @return CLink
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder(int $displayOrder)
     {
         $this->displayOrder = $displayOrder;
 
@@ -135,12 +133,7 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->displayOrder;
     }
 
-    /**
-     * Set target.
-     *
-     * @param string $target
-     */
-    public function setTarget($target): self
+    public function setTarget(string $target): self
     {
         $this->target = $target;
 

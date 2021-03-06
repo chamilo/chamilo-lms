@@ -89,7 +89,6 @@ class SessionRelUser
         $this->movedTo = null;
         $this->movedStatus = null;
         $this->registeredAt = new DateTime('now', new DateTimeZone('UTC'));
-        $this->movedAt = new DateTime(null);
     }
 
     public function setSession(Session $session): self

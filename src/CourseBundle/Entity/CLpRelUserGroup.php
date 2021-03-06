@@ -45,7 +45,7 @@ class CLpRelUserGroup
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
@@ -57,7 +57,7 @@ class CLpRelUserGroup
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
      */
-    protected ?Usergroup $userGroup;
+    protected ?Usergroup $userGroup = null;
 
     /**
      * @Gedmo\Timestampable(on="create")

@@ -37,12 +37,12 @@ class CGlossary extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="display_order", type="integer", nullable=true)
      */
-    protected ?int $displayOrder;
+    protected ?int $displayOrder = null;
 
     public function __toString(): string
     {
@@ -81,11 +81,9 @@ class CGlossary extends AbstractResource implements ResourceInterface
     /**
      * Set displayOrder.
      *
-     * @param int $displayOrder
-     *
      * @return CGlossary
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder(int $displayOrder)
     {
         $this->displayOrder = $displayOrder;
 

@@ -87,11 +87,9 @@ class CLpIvInteraction
     /**
      * Set orderId.
      *
-     * @param int $orderId
-     *
      * @return CLpIvInteraction
      */
-    public function setOrderId($orderId)
+    public function setOrderId(int $orderId)
     {
         $this->orderId = $orderId;
 
@@ -111,11 +109,9 @@ class CLpIvInteraction
     /**
      * Set lpIvId.
      *
-     * @param int $lpIvId
-     *
      * @return CLpIvInteraction
      */
-    public function setLpIvId($lpIvId)
+    public function setLpIvId(int $lpIvId)
     {
         $this->lpIvId = $lpIvId;
 
@@ -135,11 +131,9 @@ class CLpIvInteraction
     /**
      * Set interactionId.
      *
-     * @param string $interactionId
-     *
      * @return CLpIvInteraction
      */
-    public function setInteractionId($interactionId)
+    public function setInteractionId(string $interactionId)
     {
         $this->interactionId = $interactionId;
 
@@ -159,11 +153,9 @@ class CLpIvInteraction
     /**
      * Set interactionType.
      *
-     * @param string $interactionType
-     *
      * @return CLpIvInteraction
      */
-    public function setInteractionType($interactionType)
+    public function setInteractionType(string $interactionType)
     {
         $this->interactionType = $interactionType;
 
@@ -183,11 +175,9 @@ class CLpIvInteraction
     /**
      * Set weighting.
      *
-     * @param float $weighting
-     *
      * @return CLpIvInteraction
      */
-    public function setWeighting($weighting)
+    public function setWeighting(float $weighting)
     {
         $this->weighting = $weighting;
 
@@ -207,11 +197,9 @@ class CLpIvInteraction
     /**
      * Set completionTime.
      *
-     * @param string $completionTime
-     *
      * @return CLpIvInteraction
      */
-    public function setCompletionTime($completionTime)
+    public function setCompletionTime(string $completionTime)
     {
         $this->completionTime = $completionTime;
 
@@ -231,11 +219,9 @@ class CLpIvInteraction
     /**
      * Set correctResponses.
      *
-     * @param string $correctResponses
-     *
      * @return CLpIvInteraction
      */
-    public function setCorrectResponses($correctResponses)
+    public function setCorrectResponses(string $correctResponses)
     {
         $this->correctResponses = $correctResponses;
 
@@ -255,11 +241,9 @@ class CLpIvInteraction
     /**
      * Set studentResponse.
      *
-     * @param string $studentResponse
-     *
      * @return CLpIvInteraction
      */
-    public function setStudentResponse($studentResponse)
+    public function setStudentResponse(string $studentResponse)
     {
         $this->studentResponse = $studentResponse;
 
@@ -279,11 +263,9 @@ class CLpIvInteraction
     /**
      * Set result.
      *
-     * @param string $result
-     *
      * @return CLpIvInteraction
      */
-    public function setResult($result)
+    public function setResult(string $result)
     {
         $this->result = $result;
 
@@ -303,11 +285,9 @@ class CLpIvInteraction
     /**
      * Set latency.
      *
-     * @param string $latency
-     *
      * @return CLpIvInteraction
      */
-    public function setLatency($latency)
+    public function setLatency(string $latency)
     {
         $this->latency = $latency;
 
@@ -327,11 +307,9 @@ class CLpIvInteraction
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLpIvInteraction
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

@@ -49,17 +49,17 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="author", type="string", length=255, nullable=true)
      */
-    protected ?string $author;
+    protected ?string $author = null;
 
     /**
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
-    protected ?int $active;
+    protected ?int $active = null;
 
     /**
      * @ORM\Column(name="accepted", type="boolean", nullable=true)
      */
-    protected ?bool $accepted;
+    protected ?bool $accepted = null;
 
     /**
      * @ORM\Column(name="post_group_id", type="integer", nullable=false)
@@ -84,7 +84,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="view_properties", type="boolean", nullable=true)
      */
-    protected ?bool $viewProperties;
+    protected ?bool $viewProperties = null;
 
     /**
      * @ORM\Column(name="qualification", type="float", precision=6, scale=2, nullable=false)
@@ -94,7 +94,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="date_of_qualification", type="datetime", nullable=true)
      */
-    protected ?DateTime $dateOfQualification;
+    protected ?DateTime $dateOfQualification = null;
 
     /**
      * @var Collection|CStudentPublication[]
@@ -153,7 +153,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="filesize", type="integer", nullable=true)
      */
-    protected ?int $fileSize;
+    protected ?int $fileSize = null;
 
     public function __construct()
     {
@@ -185,12 +185,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -219,12 +214,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set author.
-     *
-     * @param string $author
-     */
-    public function setAuthor($author): self
+    public function setAuthor(string $author): self
     {
         $this->author = $author;
 
@@ -258,12 +248,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->active;
     }
 
-    /**
-     * Set accepted.
-     *
-     * @param bool $accepted
-     */
-    public function setAccepted($accepted): self
+    public function setAccepted(bool $accepted): self
     {
         $this->accepted = $accepted;
 
@@ -283,11 +268,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set postGroupId.
      *
-     * @param int $postGroupId
-     *
      * @return CStudentPublication
      */
-    public function setPostGroupId($postGroupId)
+    public function setPostGroupId(int $postGroupId)
     {
         $this->postGroupId = $postGroupId;
 
@@ -304,12 +287,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->postGroupId;
     }
 
-    /**
-     * Set sentDate.
-     *
-     * @param DateTime $sentDate
-     */
-    public function setSentDate($sentDate): self
+    public function setSentDate(DateTime $sentDate): self
     {
         $this->sentDate = $sentDate;
 
@@ -326,12 +304,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->sentDate;
     }
 
-    /**
-     * Set filetype.
-     *
-     * @param string $filetype
-     */
-    public function setFiletype($filetype): self
+    public function setFiletype(string $filetype): self
     {
         $this->filetype = $filetype;
 
@@ -348,12 +321,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->filetype;
     }
 
-    /**
-     * Set hasProperties.
-     *
-     * @param int $hasProperties
-     */
-    public function setHasProperties($hasProperties): self
+    public function setHasProperties(int $hasProperties): self
     {
         $this->hasProperties = $hasProperties;
 
@@ -370,12 +338,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->hasProperties;
     }
 
-    /**
-     * Set viewProperties.
-     *
-     * @param bool $viewProperties
-     */
-    public function setViewProperties($viewProperties): self
+    public function setViewProperties(bool $viewProperties): self
     {
         $this->viewProperties = $viewProperties;
 
@@ -395,11 +358,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set qualification.
      *
-     * @param float $qualification
-     *
      * @return CStudentPublication
      */
-    public function setQualification($qualification)
+    public function setQualification(float $qualification)
     {
         $this->qualification = $qualification;
 
@@ -419,11 +380,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set dateOfQualification.
      *
-     * @param DateTime $dateOfQualification
-     *
      * @return CStudentPublication
      */
-    public function setDateOfQualification($dateOfQualification)
+    public function setDateOfQualification(DateTime $dateOfQualification)
     {
         $this->dateOfQualification = $dateOfQualification;
 
@@ -443,11 +402,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set qualificatorId.
      *
-     * @param int $qualificatorId
-     *
      * @return CStudentPublication
      */
-    public function setQualificatorId($qualificatorId)
+    public function setQualificatorId(int $qualificatorId)
     {
         $this->qualificatorId = $qualificatorId;
 
@@ -462,11 +419,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set weight.
      *
-     * @param float $weight
-     *
      * @return CStudentPublication
      */
-    public function setWeight($weight)
+    public function setWeight(float $weight)
     {
         $this->weight = $weight;
 
@@ -483,12 +438,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->weight;
     }
 
-    /**
-     * Set allowTextAssignment.
-     *
-     * @param int $allowTextAssignment
-     */
-    public function setAllowTextAssignment($allowTextAssignment): self
+    public function setAllowTextAssignment(int $allowTextAssignment): self
     {
         $this->allowTextAssignment = $allowTextAssignment;
 
@@ -505,12 +455,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->allowTextAssignment;
     }
 
-    /**
-     * Set containsFile.
-     *
-     * @param int $containsFile
-     */
-    public function setContainsFile($containsFile): self
+    public function setContainsFile(int $containsFile): self
     {
         $this->containsFile = $containsFile;
 
@@ -535,10 +480,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->documentId;
     }
 
-    /**
-     * @param int $documentId
-     */
-    public function setDocumentId($documentId): self
+    public function setDocumentId(int $documentId): self
     {
         $this->documentId = $documentId;
 
@@ -634,7 +576,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @param CStudentPublicationComment[]|Collection $comments
      */
-    public function setComments($comments): self
+    public function setComments(Collection $comments): self
     {
         $this->comments = $comments;
 

@@ -58,7 +58,7 @@ class CGroup extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="CGroupCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected ?CGroupCategory $category;
+    protected ?CGroupCategory $category = null;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -156,12 +156,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -173,12 +168,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->name;
     }
 
-    /**
-     * Set status.
-     *
-     * @param bool $status
-     */
-    public function setStatus($status): self
+    public function setStatus(bool $status): self
     {
         $this->status = $status;
 
@@ -236,12 +226,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->docState;
     }
 
-    /**
-     * Set calendarState.
-     *
-     * @param int $calendarState
-     */
-    public function setCalendarState($calendarState): self
+    public function setCalendarState(int $calendarState): self
     {
         $this->calendarState = $calendarState;
 
@@ -258,12 +243,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->calendarState;
     }
 
-    /**
-     * Set workState.
-     *
-     * @param int $workState
-     */
-    public function setWorkState($workState): self
+    public function setWorkState(int $workState): self
     {
         $this->workState = $workState;
 
@@ -280,12 +260,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->workState;
     }
 
-    /**
-     * Set announcementsState.
-     *
-     * @param int $announcementsState
-     */
-    public function setAnnouncementsState($announcementsState): self
+    public function setAnnouncementsState(int $announcementsState): self
     {
         $this->announcementsState = $announcementsState;
 
@@ -302,12 +277,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->announcementsState;
     }
 
-    /**
-     * Set forumState.
-     *
-     * @param int $forumState
-     */
-    public function setForumState($forumState): self
+    public function setForumState(int $forumState): self
     {
         $this->forumState = $forumState;
 
@@ -319,12 +289,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->forumState;
     }
 
-    /**
-     * Set wikiState.
-     *
-     * @param int $wikiState
-     */
-    public function setWikiState($wikiState): self
+    public function setWikiState(int $wikiState): self
     {
         $this->wikiState = $wikiState;
 
@@ -341,12 +306,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->wikiState;
     }
 
-    /**
-     * Set chatState.
-     *
-     * @param int $chatState
-     */
-    public function setChatState($chatState): self
+    public function setChatState(int $chatState): self
     {
         $this->chatState = $chatState;
 
@@ -363,12 +323,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->chatState;
     }
 
-    /**
-     * Set selfRegistrationAllowed.
-     *
-     * @param bool $selfRegistrationAllowed
-     */
-    public function setSelfRegistrationAllowed($selfRegistrationAllowed): self
+    public function setSelfRegistrationAllowed(bool $selfRegistrationAllowed): self
     {
         $this->selfRegistrationAllowed = $selfRegistrationAllowed;
 
@@ -385,12 +340,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->selfRegistrationAllowed;
     }
 
-    /**
-     * Set selfUnregistrationAllowed.
-     *
-     * @param bool $selfUnregistrationAllowed
-     */
-    public function setSelfUnregistrationAllowed($selfUnregistrationAllowed): self
+    public function setSelfUnregistrationAllowed(bool $selfUnregistrationAllowed): self
     {
         $this->selfUnregistrationAllowed = $selfUnregistrationAllowed;
 

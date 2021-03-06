@@ -53,7 +53,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLink", mappedBy="category")
      */
-    protected $links;
+    protected Collection $links;
 
     public function __construct()
     {

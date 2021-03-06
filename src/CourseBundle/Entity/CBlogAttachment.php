@@ -41,7 +41,7 @@ class CBlogAttachment
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="size", type="integer", nullable=false)
@@ -71,11 +71,9 @@ class CBlogAttachment
     /**
      * Set path.
      *
-     * @param string $path
-     *
      * @return CBlogAttachment
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -95,11 +93,9 @@ class CBlogAttachment
     /**
      * Set comment.
      *
-     * @param string $comment
-     *
      * @return CBlogAttachment
      */
-    public function setComment($comment)
+    public function setComment(string $comment)
     {
         $this->comment = $comment;
 
@@ -119,11 +115,9 @@ class CBlogAttachment
     /**
      * Set size.
      *
-     * @param int $size
-     *
      * @return CBlogAttachment
      */
-    public function setSize($size)
+    public function setSize(int $size)
     {
         $this->size = $size;
 
@@ -143,11 +137,9 @@ class CBlogAttachment
     /**
      * Set postId.
      *
-     * @param int $postId
-     *
      * @return CBlogAttachment
      */
-    public function setPostId($postId)
+    public function setPostId(int $postId)
     {
         $this->postId = $postId;
 
@@ -167,11 +159,9 @@ class CBlogAttachment
     /**
      * Set filename.
      *
-     * @param string $filename
-     *
      * @return CBlogAttachment
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 
@@ -191,11 +181,9 @@ class CBlogAttachment
     /**
      * Set blogId.
      *
-     * @param int $blogId
-     *
      * @return CBlogAttachment
      */
-    public function setBlogId($blogId)
+    public function setBlogId(int $blogId)
     {
         $this->blogId = $blogId;
 
@@ -215,11 +203,9 @@ class CBlogAttachment
     /**
      * Set commentId.
      *
-     * @param int $commentId
-     *
      * @return CBlogAttachment
      */
-    public function setCommentId($commentId)
+    public function setCommentId(int $commentId)
     {
         $this->commentId = $commentId;
 
@@ -239,11 +225,9 @@ class CBlogAttachment
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CBlogAttachment
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

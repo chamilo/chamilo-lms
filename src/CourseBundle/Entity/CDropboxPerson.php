@@ -47,11 +47,9 @@ class CDropboxPerson
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CDropboxPerson
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -71,11 +69,9 @@ class CDropboxPerson
     /**
      * Set fileId.
      *
-     * @param int $fileId
-     *
      * @return CDropboxPerson
      */
-    public function setFileId($fileId)
+    public function setFileId(int $fileId)
     {
         $this->fileId = $fileId;
 
@@ -95,11 +91,9 @@ class CDropboxPerson
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CDropboxPerson
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 

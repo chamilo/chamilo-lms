@@ -52,26 +52,12 @@ class CWikiDiscuss
     /**
      * @ORM\Column(name="p_score", type="string", length=255, nullable=true)
      */
-    protected ?string $pScore;
+    protected ?string $pScore = null;
 
     /**
      * @ORM\Column(name="dtime", type="datetime", nullable=false)
      */
     protected DateTime $dtime;
-
-    /**
-     * Set publicationId.
-     *
-     * @param int $publicationId
-     *
-     * @return CWikiDiscuss
-     */
-    public function setPublicationId($publicationId)
-    {
-        $this->publicationId = $publicationId;
-
-        return $this;
-    }
 
     /**
      * Get publicationId.
@@ -84,15 +70,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set usercId.
-     *
-     * @param int $usercId
+     * Set publicationId.
      *
      * @return CWikiDiscuss
      */
-    public function setUsercId($usercId)
+    public function setPublicationId(int $publicationId)
     {
-        $this->usercId = $usercId;
+        $this->publicationId = $publicationId;
 
         return $this;
     }
@@ -108,15 +92,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set comment.
-     *
-     * @param string $comment
+     * Set usercId.
      *
      * @return CWikiDiscuss
      */
-    public function setComment($comment)
+    public function setUsercId(int $usercId)
     {
-        $this->comment = $comment;
+        $this->usercId = $usercId;
 
         return $this;
     }
@@ -132,15 +114,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set pScore.
-     *
-     * @param string $pScore
+     * Set comment.
      *
      * @return CWikiDiscuss
      */
-    public function setPScore($pScore)
+    public function setComment(string $comment)
     {
-        $this->pScore = $pScore;
+        $this->comment = $comment;
 
         return $this;
     }
@@ -156,15 +136,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set dtime.
-     *
-     * @param DateTime $dtime
+     * Set pScore.
      *
      * @return CWikiDiscuss
      */
-    public function setDtime($dtime)
+    public function setPScore(string $pScore)
     {
-        $this->dtime = $dtime;
+        $this->pScore = $pScore;
 
         return $this;
     }
@@ -180,15 +158,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
+     * Set dtime.
      *
      * @return CWikiDiscuss
      */
-    public function setCId($cId)
+    public function setDtime(DateTime $dtime)
     {
-        $this->cId = $cId;
+        $this->dtime = $dtime;
 
         return $this;
     }
@@ -201,5 +177,17 @@ class CWikiDiscuss
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set cId.
+     *
+     * @return CWikiDiscuss
+     */
+    public function setCId(int $cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
     }
 }

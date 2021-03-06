@@ -33,7 +33,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="size", type="integer", nullable=false)
@@ -56,12 +56,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->getFilename();
     }
 
-    /**
-     * Set path.
-     *
-     * @param string $path
-     */
-    public function setPath($path): self
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -78,12 +73,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->path;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -100,12 +90,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->comment;
     }
 
-    /**
-     * Set size.
-     *
-     * @param int $size
-     */
-    public function setSize($size): self
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -127,12 +112,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->iid;
     }
 
-    /**
-     * Set filename.
-     *
-     * @param string $filename
-     */
-    public function setFilename($filename): self
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 

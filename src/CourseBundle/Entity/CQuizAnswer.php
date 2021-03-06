@@ -106,12 +106,7 @@ class CQuizAnswer
         return $this->answer;
     }
 
-    /**
-     * Set correct.
-     *
-     * @param int $correct
-     */
-    public function setCorrect($correct): self
+    public function setCorrect(int $correct): self
     {
         $this->correct = $correct;
 
@@ -128,12 +123,7 @@ class CQuizAnswer
         return $this->correct;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -150,12 +140,7 @@ class CQuizAnswer
         return $this->comment;
     }
 
-    /**
-     * Set weight.
-     *
-     * @param float $weight
-     */
-    public function setPonderation($weight): self
+    public function setPonderation(float $weight): self
     {
         $this->ponderation = empty($weight) ? 0.0 : (float) $weight;
 
@@ -172,12 +157,7 @@ class CQuizAnswer
         return $this->ponderation;
     }
 
-    /**
-     * Set position.
-     *
-     * @param int $position
-     */
-    public function setPosition($position): self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -194,12 +174,7 @@ class CQuizAnswer
         return $this->position;
     }
 
-    /**
-     * Set hotspotCoordinates.
-     *
-     * @param string $hotspotCoordinates
-     */
-    public function setHotspotCoordinates($hotspotCoordinates): self
+    public function setHotspotCoordinates(string $hotspotCoordinates): self
     {
         $this->hotspotCoordinates = $hotspotCoordinates;
 
@@ -216,12 +191,7 @@ class CQuizAnswer
         return $this->hotspotCoordinates;
     }
 
-    /**
-     * Set hotspotType.
-     *
-     * @param string $hotspotType
-     */
-    public function setHotspotType($hotspotType): self
+    public function setHotspotType(string $hotspotType): self
     {
         $this->hotspotType = $hotspotType;
 
@@ -238,12 +208,7 @@ class CQuizAnswer
         return $this->hotspotType;
     }
 
-    /**
-     * Set destination.
-     *
-     * @param string $destination
-     */
-    public function setDestination($destination)
+    public function setDestination(string $destination)
     {
         $this->destination = empty($destination) ? null : $destination;
 

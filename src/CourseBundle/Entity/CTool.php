@@ -48,7 +48,7 @@ class CTool extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
-    protected ?bool $visibility;
+    protected ?bool $visibility = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
@@ -131,11 +131,9 @@ class CTool extends AbstractResource implements ResourceInterface
     /**
      * Set visibility.
      *
-     * @param bool $visibility
-     *
      * @return CTool
      */
-    public function setVisibility($visibility)
+    public function setVisibility(bool $visibility)
     {
         $this->visibility = $visibility;
 

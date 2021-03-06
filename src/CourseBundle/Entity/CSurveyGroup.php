@@ -51,11 +51,9 @@ class CSurveyGroup
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return CSurveyGroup
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -75,11 +73,9 @@ class CSurveyGroup
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return CSurveyGroup
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -99,11 +95,9 @@ class CSurveyGroup
     /**
      * Set surveyId.
      *
-     * @param int $surveyId
-     *
      * @return CSurveyGroup
      */
-    public function setSurveyId($surveyId)
+    public function setSurveyId(int $surveyId)
     {
         $this->surveyId = $surveyId;
 
@@ -123,11 +117,9 @@ class CSurveyGroup
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CSurveyGroup
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

@@ -47,7 +47,7 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="description_type", type="integer", nullable=false)
@@ -59,12 +59,7 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
         return (string) $this->getIid();
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 

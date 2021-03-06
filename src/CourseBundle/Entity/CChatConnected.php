@@ -59,11 +59,9 @@ class CChatConnected
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CChatConnected
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -83,11 +81,9 @@ class CChatConnected
     /**
      * Set toGroupId.
      *
-     * @param int $toGroupId
-     *
      * @return CChatConnected
      */
-    public function setToGroupId($toGroupId)
+    public function setToGroupId(int $toGroupId)
     {
         $this->toGroupId = $toGroupId;
 
@@ -107,11 +103,9 @@ class CChatConnected
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CChatConnected
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -131,11 +125,9 @@ class CChatConnected
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CChatConnected
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -155,11 +147,9 @@ class CChatConnected
     /**
      * Set lastConnection.
      *
-     * @param DateTime $lastConnection
-     *
      * @return CChatConnected
      */
-    public function setLastConnection($lastConnection)
+    public function setLastConnection(DateTime $lastConnection)
     {
         $this->lastConnection = $lastConnection;
 

@@ -54,7 +54,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="forum_threads", type="integer", nullable=true)
      */
-    protected ?int $forumThreads;
+    protected ?int $forumThreads = null;
 
     /**
      * @ORM\Column(name="forum_posts", type="integer", nullable=true)
@@ -73,37 +73,37 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumCategory", inversedBy="forums")
      * @ORM\JoinColumn(name="forum_category", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected ?CForumCategory $forumCategory;
+    protected ?CForumCategory $forumCategory = null;
 
     /**
      * @ORM\Column(name="allow_anonymous", type="integer", nullable=true)
      */
-    protected ?int $allowAnonymous;
+    protected ?int $allowAnonymous = null;
 
     /**
      * @ORM\Column(name="allow_edit", type="integer", nullable=true)
      */
-    protected ?int $allowEdit;
+    protected ?int $allowEdit = null;
 
     /**
      * @ORM\Column(name="approval_direct_post", type="string", length=20, nullable=true)
      */
-    protected ?string $approvalDirectPost;
+    protected ?string $approvalDirectPost = null;
 
     /**
      * @ORM\Column(name="allow_attachments", type="integer", nullable=true)
      */
-    protected ?int $allowAttachments;
+    protected ?int $allowAttachments = null;
 
     /**
      * @ORM\Column(name="allow_new_threads", type="integer", nullable=true)
      */
-    protected ?int $allowNewThreads;
+    protected ?int $allowNewThreads = null;
 
     /**
      * @ORM\Column(name="default_view", type="string", length=20, nullable=true)
      */
-    protected ?string $defaultView;
+    protected ?string $defaultView = null;
 
     /**
      * @ORM\Column(name="forum_of_group", type="string", length=20, nullable=true)
@@ -120,7 +120,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
      *
      * @ORM\Column(name="forum_order", type="integer", nullable=true)
      */
-    protected ?int $forumOrder;
+    protected ?int $forumOrder = null;
 
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
@@ -140,37 +140,37 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
-    protected ?DateTime $startTime;
+    protected ?DateTime $startTime = null;
 
     /**
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
-    protected ?DateTime $endTime;
+    protected ?DateTime $endTime = null;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="forum")
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", nullable=true)
      */
-    protected ?CLp $lp;
+    protected ?CLp $lp = null;
 
     /**
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
-    protected ?bool $moderated;
+    protected ?bool $moderated = null;
 
     /**
      * @var ArrayCollection|CForumThread[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum")
      */
-    protected $threads;
+    protected \Doctrine\Common\Collections\Collection $threads;
 
     /**
      * @var ArrayCollection|CForumPost[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="forum")
      */
-    protected $posts;
+    protected \Doctrine\Common\Collections\Collection $posts;
 
     public function __construct()
     {
@@ -213,12 +213,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->forumComment;
     }
 
-    /**
-     * Set forumThreads.
-     *
-     * @param int $forumThreads
-     */
-    public function setForumThreads($forumThreads): self
+    public function setForumThreads(int $forumThreads): self
     {
         $this->forumThreads = $forumThreads;
 
@@ -243,11 +238,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set forumPosts.
      *
-     * @param int $forumPosts
-     *
      * @return CForumForum
      */
-    public function setForumPosts($forumPosts)
+    public function setForumPosts(int $forumPosts)
     {
         $this->forumPosts = $forumPosts;
 
@@ -289,11 +282,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set allowAnonymous.
      *
-     * @param int $allowAnonymous
-     *
      * @return CForumForum
      */
-    public function setAllowAnonymous($allowAnonymous)
+    public function setAllowAnonymous(int $allowAnonymous)
     {
         $this->allowAnonymous = $allowAnonymous;
 
@@ -330,11 +321,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set approvalDirectPost.
      *
-     * @param string $approvalDirectPost
-     *
      * @return CForumForum
      */
-    public function setApprovalDirectPost($approvalDirectPost)
+    public function setApprovalDirectPost(string $approvalDirectPost)
     {
         $this->approvalDirectPost = $approvalDirectPost;
 
@@ -354,11 +343,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set allowAttachments.
      *
-     * @param int $allowAttachments
-     *
      * @return CForumForum
      */
-    public function setAllowAttachments($allowAttachments)
+    public function setAllowAttachments(int $allowAttachments)
     {
         $this->allowAttachments = $allowAttachments;
 
@@ -378,11 +365,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set allowNewThreads.
      *
-     * @param int $allowNewThreads
-     *
      * @return CForumForum
      */
-    public function setAllowNewThreads($allowNewThreads)
+    public function setAllowNewThreads(int $allowNewThreads)
     {
         $this->allowNewThreads = $allowNewThreads;
 
@@ -402,11 +387,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set defaultView.
      *
-     * @param string $defaultView
-     *
      * @return CForumForum
      */
-    public function setDefaultView($defaultView)
+    public function setDefaultView(string $defaultView)
     {
         $this->defaultView = $defaultView;
 
@@ -426,11 +409,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set forumOfGroup.
      *
-     * @param string $forumOfGroup
-     *
      * @return CForumForum
      */
-    public function setForumOfGroup($forumOfGroup)
+    public function setForumOfGroup(string $forumOfGroup)
     {
         $this->forumOfGroup = $forumOfGroup;
 
@@ -465,11 +446,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set forumOrder.
      *
-     * @param int $forumOrder
-     *
      * @return CForumForum
      */
-    public function setForumOrder($forumOrder)
+    public function setForumOrder(int $forumOrder)
     {
         $this->forumOrder = $forumOrder;
 
@@ -489,11 +468,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set locked.
      *
-     * @param int $locked
-     *
      * @return CForumForum
      */
-    public function setLocked($locked)
+    public function setLocked(int $locked)
     {
         $this->locked = $locked;
 
@@ -513,11 +490,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CForumForum
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -537,11 +512,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set forumImage.
      *
-     * @param string $forumImage
-     *
      * @return CForumForum
      */
-    public function setForumImage($forumImage)
+    public function setForumImage(string $forumImage)
     {
         $this->forumImage = $forumImage;
 
@@ -561,11 +534,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set startTime.
      *
-     * @param DateTime $startTime
-     *
      * @return CForumForum
      */
-    public function setStartTime($startTime)
+    public function setStartTime(DateTime $startTime)
     {
         $this->startTime = $startTime;
 
@@ -585,11 +556,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set endTime.
      *
-     * @param DateTime $endTime
-     *
      * @return CForumForum
      */
-    public function setEndTime($endTime)
+    public function setEndTime(DateTime $endTime)
     {
         $this->endTime = $endTime;
 
@@ -609,11 +578,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumForum
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

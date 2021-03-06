@@ -37,12 +37,12 @@ class CStudentPublicationAssignment
     /**
      * @ORM\Column(name="expires_on", type="datetime", nullable=true)
      */
-    protected ?DateTime $expiresOn;
+    protected ?DateTime $expiresOn = null;
 
     /**
      * @ORM\Column(name="ends_on", type="datetime", nullable=true)
      */
-    protected ?DateTime $endsOn;
+    protected ?DateTime $endsOn = null;
 
     /**
      * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
@@ -70,12 +70,7 @@ class CStudentPublicationAssignment
         return $this->iid;
     }
 
-    /**
-     * Set expiresOn.
-     *
-     * @param DateTime $expiresOn
-     */
-    public function setExpiresOn($expiresOn): self
+    public function setExpiresOn(DateTime $expiresOn): self
     {
         $this->expiresOn = $expiresOn;
 
@@ -92,12 +87,7 @@ class CStudentPublicationAssignment
         return $this->expiresOn;
     }
 
-    /**
-     * Set endsOn.
-     *
-     * @param DateTime $endsOn
-     */
-    public function setEndsOn($endsOn): self
+    public function setEndsOn(DateTime $endsOn): self
     {
         $this->endsOn = $endsOn;
 
@@ -114,12 +104,7 @@ class CStudentPublicationAssignment
         return $this->endsOn;
     }
 
-    /**
-     * Set addToCalendar.
-     *
-     * @param bool $addToCalendar
-     */
-    public function setAddToCalendar($addToCalendar): self
+    public function setAddToCalendar(bool $addToCalendar): self
     {
         $this->addToCalendar = $addToCalendar;
 
@@ -136,12 +121,7 @@ class CStudentPublicationAssignment
         return $this->addToCalendar;
     }
 
-    /**
-     * Set enableQualification.
-     *
-     * @param bool $enableQualification
-     */
-    public function setEnableQualification($enableQualification): self
+    public function setEnableQualification(bool $enableQualification): self
     {
         $this->enableQualification = $enableQualification;
 
@@ -161,11 +141,9 @@ class CStudentPublicationAssignment
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CStudentPublicationAssignment
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

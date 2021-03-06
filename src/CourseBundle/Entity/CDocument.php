@@ -189,12 +189,7 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(?string $comment): self
     {
         $this->comment = $comment;
 
@@ -246,11 +241,9 @@ class CDocument extends AbstractResource implements ResourceInterface
     /**
      * Set readonly.
      *
-     * @param bool $readonly
-     *
      * @return CDocument
      */
-    public function setReadonly($readonly)
+    public function setReadonly(bool $readonly)
     {
         $this->readonly = $readonly;
 

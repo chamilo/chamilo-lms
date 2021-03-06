@@ -94,11 +94,9 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CNotebook
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -118,11 +116,9 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set course.
      *
-     * @param string $course
-     *
      * @return CNotebook
      */
-    public function setCourse($course)
+    public function setCourse(string $course)
     {
         $this->course = $course;
 
@@ -142,11 +138,9 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CNotebook
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -195,11 +189,9 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set creationDate.
      *
-     * @param DateTime $creationDate
-     *
      * @return CNotebook
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(DateTime $creationDate)
     {
         $this->creationDate = $creationDate;
 
@@ -219,11 +211,9 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set updateDate.
      *
-     * @param DateTime $updateDate
-     *
      * @return CNotebook
      */
-    public function setUpdateDate($updateDate)
+    public function setUpdateDate(DateTime $updateDate)
     {
         $this->updateDate = $updateDate;
 
@@ -243,11 +233,9 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return CNotebook
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -267,11 +255,9 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CNotebook
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

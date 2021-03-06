@@ -59,11 +59,9 @@ class CBlogTaskRelUser
     /**
      * Set targetDate.
      *
-     * @param DateTime $targetDate
-     *
      * @return CBlogTaskRelUser
      */
-    public function setTargetDate($targetDate)
+    public function setTargetDate(DateTime $targetDate)
     {
         $this->targetDate = $targetDate;
 
@@ -83,11 +81,9 @@ class CBlogTaskRelUser
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CBlogTaskRelUser
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -107,11 +103,9 @@ class CBlogTaskRelUser
     /**
      * Set blogId.
      *
-     * @param int $blogId
-     *
      * @return CBlogTaskRelUser
      */
-    public function setBlogId($blogId)
+    public function setBlogId(int $blogId)
     {
         $this->blogId = $blogId;
 
@@ -131,11 +125,9 @@ class CBlogTaskRelUser
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CBlogTaskRelUser
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -155,11 +147,9 @@ class CBlogTaskRelUser
     /**
      * Set taskId.
      *
-     * @param int $taskId
-     *
      * @return CBlogTaskRelUser
      */
-    public function setTaskId($taskId)
+    public function setTaskId(int $taskId)
     {
         $this->taskId = $taskId;
 

@@ -64,7 +64,7 @@ class CSurveyInvitation
     /**
      * @ORM\Column(name="reminder_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $reminderDate;
+    protected ?DateTime $reminderDate = null;
 
     /**
      * @ORM\Column(name="answered", type="integer", nullable=false)
@@ -84,16 +84,14 @@ class CSurveyInvitation
     /**
      * @ORM\Column(name="answered_at", type="datetime", nullable=true)
      */
-    protected ?DateTime $answeredAt;
+    protected ?DateTime $answeredAt = null;
 
     /**
      * Set surveyCode.
      *
-     * @param string $surveyCode
-     *
      * @return CSurveyInvitation
      */
-    public function setSurveyCode($surveyCode)
+    public function setSurveyCode(string $surveyCode)
     {
         $this->surveyCode = $surveyCode;
 
@@ -113,11 +111,9 @@ class CSurveyInvitation
     /**
      * Set user.
      *
-     * @param string $user
-     *
      * @return CSurveyInvitation
      */
-    public function setUser($user)
+    public function setUser(string $user)
     {
         $this->user = $user;
 
@@ -137,11 +133,9 @@ class CSurveyInvitation
     /**
      * Set invitationCode.
      *
-     * @param string $invitationCode
-     *
      * @return CSurveyInvitation
      */
-    public function setInvitationCode($invitationCode)
+    public function setInvitationCode(string $invitationCode)
     {
         $this->invitationCode = $invitationCode;
 
@@ -161,11 +155,9 @@ class CSurveyInvitation
     /**
      * Set invitationDate.
      *
-     * @param DateTime $invitationDate
-     *
      * @return CSurveyInvitation
      */
-    public function setInvitationDate($invitationDate)
+    public function setInvitationDate(DateTime $invitationDate)
     {
         $this->invitationDate = $invitationDate;
 
@@ -185,11 +177,9 @@ class CSurveyInvitation
     /**
      * Set reminderDate.
      *
-     * @param DateTime $reminderDate
-     *
      * @return CSurveyInvitation
      */
-    public function setReminderDate($reminderDate)
+    public function setReminderDate(DateTime $reminderDate)
     {
         $this->reminderDate = $reminderDate;
 
@@ -209,11 +199,9 @@ class CSurveyInvitation
     /**
      * Set answered.
      *
-     * @param int $answered
-     *
      * @return CSurveyInvitation
      */
-    public function setAnswered($answered)
+    public function setAnswered(int $answered)
     {
         $this->answered = $answered;
 
@@ -233,11 +221,9 @@ class CSurveyInvitation
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CSurveyInvitation
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -257,11 +243,9 @@ class CSurveyInvitation
     /**
      * Set groupId.
      *
-     * @param int $groupId
-     *
      * @return CSurveyInvitation
      */
-    public function setGroupId($groupId)
+    public function setGroupId(int $groupId)
     {
         $this->groupId = $groupId;
 
@@ -281,11 +265,9 @@ class CSurveyInvitation
     /**
      * Set surveyInvitationId.
      *
-     * @param int $surveyInvitationId
-     *
      * @return CSurveyInvitation
      */
-    public function setSurveyInvitationId($surveyInvitationId)
+    public function setSurveyInvitationId(int $surveyInvitationId)
     {
         $this->surveyInvitationId = $surveyInvitationId;
 
@@ -305,11 +287,9 @@ class CSurveyInvitation
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CSurveyInvitation
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

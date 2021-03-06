@@ -46,7 +46,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected ?string $content;
+    protected ?string $content = null;
 
     /**
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
@@ -83,11 +83,9 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return CThematicAdvance
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 
@@ -107,11 +105,9 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     /**
      * Set startDate.
      *
-     * @param DateTime $startDate
-     *
      * @return CThematicAdvance
      */
-    public function setStartDate($startDate)
+    public function setStartDate(DateTime $startDate)
     {
         $this->startDate = $startDate;
 
@@ -131,11 +127,9 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     /**
      * Set duration.
      *
-     * @param int $duration
-     *
      * @return CThematicAdvance
      */
-    public function setDuration($duration)
+    public function setDuration(int $duration)
     {
         $this->duration = $duration;
 
@@ -155,11 +149,9 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     /**
      * Set doneAdvance.
      *
-     * @param bool $doneAdvance
-     *
      * @return CThematicAdvance
      */
-    public function setDoneAdvance($doneAdvance)
+    public function setDoneAdvance(bool $doneAdvance)
     {
         $this->doneAdvance = $doneAdvance;
 

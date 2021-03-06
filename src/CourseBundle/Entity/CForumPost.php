@@ -57,7 +57,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="post_text", type="text", nullable=true)
      */
-    protected ?string $postText;
+    protected ?string $postText = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
@@ -85,7 +85,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="post_notification", type="boolean", nullable=true)
      */
-    protected ?bool $postNotification;
+    protected ?bool $postNotification = null;
 
     /**
      * @ORM\Column(name="post_parent_id", type="integer", nullable=true)
@@ -100,7 +100,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    protected ?int $status;
+    protected ?int $status = null;
 
     /**
      * @var Collection|CForumAttachment[]
@@ -110,7 +110,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
      *     mappedBy="post", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $attachments;
+    protected Collection $attachments;
 
     public function __construct()
     {
@@ -127,11 +127,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Set postTitle.
      *
-     * @param string $postTitle
-     *
      * @return CForumPost
      */
-    public function setPostTitle($postTitle)
+    public function setPostTitle(string $postTitle)
     {
         $this->postTitle = $postTitle;
 
@@ -180,11 +178,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Set postDate.
      *
-     * @param DateTime $postDate
-     *
      * @return CForumPost
      */
-    public function setPostDate($postDate)
+    public function setPostDate(DateTime $postDate)
     {
         $this->postDate = $postDate;
 
@@ -204,11 +200,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Set postNotification.
      *
-     * @param bool $postNotification
-     *
      * @return CForumPost
      */
-    public function setPostNotification($postNotification)
+    public function setPostNotification(bool $postNotification)
     {
         $this->postNotification = $postNotification;
 
@@ -228,11 +222,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Set postParentId.
      *
-     * @param int $postParentId
-     *
      * @return CForumPost
      */
-    public function setPostParentId($postParentId)
+    public function setPostParentId(int $postParentId)
     {
         $this->postParentId = $postParentId;
 
@@ -252,11 +244,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Set visible.
      *
-     * @param bool $visible
-     *
      * @return CForumPost
      */
-    public function setVisible($visible)
+    public function setVisible(bool $visible)
     {
         $this->visible = $visible;
 
@@ -276,11 +266,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumPost
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -306,11 +294,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param int $status
-     *
      * @return CForumPost
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 

@@ -65,11 +65,9 @@ class CBlogPost
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CBlogPost
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -89,11 +87,9 @@ class CBlogPost
     /**
      * Set fullText.
      *
-     * @param string $fullText
-     *
      * @return CBlogPost
      */
-    public function setFullText($fullText)
+    public function setFullText(string $fullText)
     {
         $this->fullText = $fullText;
 
@@ -113,11 +109,9 @@ class CBlogPost
     /**
      * Set dateCreation.
      *
-     * @param DateTime $dateCreation
-     *
      * @return CBlogPost
      */
-    public function setDateCreation($dateCreation)
+    public function setDateCreation(DateTime $dateCreation)
     {
         $this->dateCreation = $dateCreation;
 
@@ -137,11 +131,9 @@ class CBlogPost
     /**
      * Set blogId.
      *
-     * @param int $blogId
-     *
      * @return CBlogPost
      */
-    public function setBlogId($blogId)
+    public function setBlogId(int $blogId)
     {
         $this->blogId = $blogId;
 
@@ -161,11 +153,9 @@ class CBlogPost
     /**
      * Set authorId.
      *
-     * @param int $authorId
-     *
      * @return CBlogPost
      */
-    public function setAuthorId($authorId)
+    public function setAuthorId(int $authorId)
     {
         $this->authorId = $authorId;
 
@@ -185,11 +175,9 @@ class CBlogPost
     /**
      * Set postId.
      *
-     * @param int $postId
-     *
      * @return CBlogPost
      */
-    public function setPostId($postId)
+    public function setPostId(int $postId)
     {
         $this->postId = $postId;
 
@@ -209,11 +197,9 @@ class CBlogPost
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CBlogPost
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

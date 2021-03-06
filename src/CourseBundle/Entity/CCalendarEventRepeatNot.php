@@ -39,11 +39,9 @@ class CCalendarEventRepeatNot
     /**
      * Set calDate.
      *
-     * @param int $calDate
-     *
      * @return CCalendarEventRepeatNot
      */
-    public function setCalDate($calDate)
+    public function setCalDate(int $calDate)
     {
         $this->calDate = $calDate;
 

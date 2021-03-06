@@ -41,12 +41,12 @@ class CWikiMailcue
     /**
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    protected ?int $groupId;
+    protected ?int $groupId = null;
 
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected ?int $sessionId;
+    protected ?int $sessionId = null;
 
     /**
      * @ORM\Column(name="user_id", type="integer")
@@ -56,11 +56,9 @@ class CWikiMailcue
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return CWikiMailcue
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -80,11 +78,9 @@ class CWikiMailcue
     /**
      * Set groupId.
      *
-     * @param int $groupId
-     *
      * @return CWikiMailcue
      */
-    public function setGroupId($groupId)
+    public function setGroupId(int $groupId)
     {
         $this->groupId = $groupId;
 
@@ -104,11 +100,9 @@ class CWikiMailcue
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CWikiMailcue
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -128,11 +122,9 @@ class CWikiMailcue
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CWikiMailcue
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -152,11 +144,9 @@ class CWikiMailcue
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CWikiMailcue
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 

@@ -46,11 +46,9 @@ class CBlogRelUser
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CBlogRelUser
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -70,11 +68,9 @@ class CBlogRelUser
     /**
      * Set blogId.
      *
-     * @param int $blogId
-     *
      * @return CBlogRelUser
      */
-    public function setBlogId($blogId)
+    public function setBlogId(int $blogId)
     {
         $this->blogId = $blogId;
 
@@ -94,11 +90,9 @@ class CBlogRelUser
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CBlogRelUser
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 

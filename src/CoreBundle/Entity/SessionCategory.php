@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -44,7 +45,7 @@ class SessionCategory
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
      */
-    protected Session $sessions;
+    protected Collection $sessions;
 
     /**
      * @Assert\NotBlank

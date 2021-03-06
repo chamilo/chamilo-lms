@@ -43,23 +43,23 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected ?string $content;
+    protected ?string $content = null;
 
     /**
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $startDate;
+    protected ?DateTime $startDate = null;
 
     /**
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
      * @var Collection|CCalendarEvent[]
      * @ORM\OneToMany(targetEntity="CCalendarEvent", mappedBy="parentEvent")
      */
-    protected $children;
+    protected Collection $children;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="children")
@@ -72,7 +72,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      *
      * @ORM\OneToMany(targetEntity="CCalendarEventRepeat", mappedBy="event", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $repeatEvents;
+    protected Collection $repeatEvents;
 
     /**
      * @ORM\Column(name="all_day", type="integer", nullable=false)
@@ -82,12 +82,12 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="color", type="string", length=100, nullable=true)
      */
-    protected ?string $color;
+    protected ?string $color = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
@@ -102,7 +102,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      *     targetEntity="CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}
      * )
      */
-    protected $attachments;
+    protected Collection $attachments;
 
     public function __construct()
     {
@@ -213,12 +213,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Set allDay.
-     *
-     * @param int $allDay
-     */
-    public function setAllDay($allDay): self
+    public function setAllDay(int $allDay): self
     {
         $this->allDay = $allDay;
 
@@ -265,10 +260,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this->color;
     }
 
-    /**
-     * @param string $color
-     */
-    public function setColor($color): self
+    public function setColor(string $color): self
     {
         $this->color = $color;
 
@@ -291,10 +283,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this->attachments;
     }
 
-    /**
-     * @param Collection $attachments
-     */
-    public function setAttachments($attachments): self
+    public function setAttachments(Collection $attachments): self
     {
         $this->attachments = $attachments;
 
@@ -321,7 +310,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      *
      * @return CCalendarEvent
      */
-    public function setRepeatEvents($repeatEvents)
+    public function setRepeatEvents(Collection $repeatEvents)
     {
         $this->repeatEvents = $repeatEvents;
 

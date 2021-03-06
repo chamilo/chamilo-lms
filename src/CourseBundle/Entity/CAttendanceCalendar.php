@@ -62,12 +62,7 @@ class CAttendanceCalendar
         return $this;
     }
 
-    /**
-     * Set dateTime.
-     *
-     * @param DateTime $dateTime
-     */
-    public function setDateTime($dateTime): self
+    public function setDateTime(DateTime $dateTime): self
     {
         $this->dateTime = $dateTime;
 
@@ -87,11 +82,9 @@ class CAttendanceCalendar
     /**
      * Set doneAttendance.
      *
-     * @param bool $doneAttendance
-     *
      * @return CAttendanceCalendar
      */
-    public function setDoneAttendance($doneAttendance)
+    public function setDoneAttendance(bool $doneAttendance)
     {
         $this->doneAttendance = $doneAttendance;
 

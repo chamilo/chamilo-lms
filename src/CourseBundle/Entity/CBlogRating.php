@@ -66,11 +66,9 @@ class CBlogRating
     /**
      * Set blogId.
      *
-     * @param int $blogId
-     *
      * @return CBlogRating
      */
-    public function setBlogId($blogId)
+    public function setBlogId(int $blogId)
     {
         $this->blogId = $blogId;
 
@@ -90,11 +88,9 @@ class CBlogRating
     /**
      * Set ratingType.
      *
-     * @param string $ratingType
-     *
      * @return CBlogRating
      */
-    public function setRatingType($ratingType)
+    public function setRatingType(string $ratingType)
     {
         $this->ratingType = $ratingType;
 
@@ -114,11 +110,9 @@ class CBlogRating
     /**
      * Set itemId.
      *
-     * @param int $itemId
-     *
      * @return CBlogRating
      */
-    public function setItemId($itemId)
+    public function setItemId(int $itemId)
     {
         $this->itemId = $itemId;
 
@@ -138,11 +132,9 @@ class CBlogRating
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CBlogRating
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -162,11 +154,9 @@ class CBlogRating
     /**
      * Set rating.
      *
-     * @param int $rating
-     *
      * @return CBlogRating
      */
-    public function setRating($rating)
+    public function setRating(int $rating)
     {
         $this->rating = $rating;
 
@@ -186,11 +176,9 @@ class CBlogRating
     /**
      * Set ratingId.
      *
-     * @param int $ratingId
-     *
      * @return CBlogRating
      */
-    public function setRatingId($ratingId)
+    public function setRatingId(int $ratingId)
     {
         $this->ratingId = $ratingId;
 
@@ -210,11 +198,9 @@ class CBlogRating
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CBlogRating
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

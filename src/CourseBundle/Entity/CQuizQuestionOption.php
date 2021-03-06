@@ -51,11 +51,9 @@ class CQuizQuestionOption
     /**
      * Set questionId.
      *
-     * @param int $questionId
-     *
      * @return CQuizQuestionOption
      */
-    public function setQuestionId($questionId)
+    public function setQuestionId(int $questionId)
     {
         $this->questionId = $questionId;
 
@@ -75,11 +73,9 @@ class CQuizQuestionOption
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return CQuizQuestionOption
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -99,11 +95,9 @@ class CQuizQuestionOption
     /**
      * Set position.
      *
-     * @param int $position
-     *
      * @return CQuizQuestionOption
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
@@ -123,11 +117,9 @@ class CQuizQuestionOption
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CQuizQuestionOption
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

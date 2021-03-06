@@ -57,16 +57,14 @@ class CAttendanceSheetLog
     /**
      * @ORM\Column(name="calendar_date_value", type="datetime", nullable=true)
      */
-    protected ?DateTime $calendarDateValue;
+    protected ?DateTime $calendarDateValue = null;
 
     /**
      * Set attendanceId.
      *
-     * @param int $attendanceId
-     *
      * @return CAttendanceSheetLog
      */
-    public function setAttendanceId($attendanceId)
+    public function setAttendanceId(int $attendanceId)
     {
         $this->attendanceId = $attendanceId;
 
@@ -86,11 +84,9 @@ class CAttendanceSheetLog
     /**
      * Set lasteditDate.
      *
-     * @param DateTime $lasteditDate
-     *
      * @return CAttendanceSheetLog
      */
-    public function setLasteditDate($lasteditDate)
+    public function setLasteditDate(DateTime $lasteditDate)
     {
         $this->lasteditDate = $lasteditDate;
 
@@ -110,11 +106,9 @@ class CAttendanceSheetLog
     /**
      * Set lasteditType.
      *
-     * @param string $lasteditType
-     *
      * @return CAttendanceSheetLog
      */
-    public function setLasteditType($lasteditType)
+    public function setLasteditType(string $lasteditType)
     {
         $this->lasteditType = $lasteditType;
 
@@ -134,11 +128,9 @@ class CAttendanceSheetLog
     /**
      * Set lasteditUserId.
      *
-     * @param int $lasteditUserId
-     *
      * @return CAttendanceSheetLog
      */
-    public function setLasteditUserId($lasteditUserId)
+    public function setLasteditUserId(int $lasteditUserId)
     {
         $this->lasteditUserId = $lasteditUserId;
 
@@ -158,11 +150,9 @@ class CAttendanceSheetLog
     /**
      * Set calendarDateValue.
      *
-     * @param DateTime $calendarDateValue
-     *
      * @return CAttendanceSheetLog
      */
-    public function setCalendarDateValue($calendarDateValue)
+    public function setCalendarDateValue(DateTime $calendarDateValue)
     {
         $this->calendarDateValue = $calendarDateValue;
 
@@ -182,11 +172,9 @@ class CAttendanceSheetLog
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CAttendanceSheetLog
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

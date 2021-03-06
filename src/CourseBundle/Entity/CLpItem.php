@@ -84,7 +84,7 @@ class CLpItem
     /**
      * @ORM\Column(name="mastery_score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected ?float $masteryScore;
+    protected ?float $masteryScore = null;
 
     /**
      * @ORM\Column(name="parent_item_id", type="integer", nullable=false)
@@ -109,12 +109,12 @@ class CLpItem
     /**
      * @ORM\Column(name="prerequisite", type="text", nullable=true)
      */
-    protected ?string $prerequisite;
+    protected ?string $prerequisite = null;
 
     /**
      * @ORM\Column(name="parameters", type="text", nullable=true)
      */
-    protected ?string $parameters;
+    protected ?string $parameters = null;
 
     /**
      * @ORM\Column(name="launch_data", type="text", nullable=false)
@@ -124,32 +124,32 @@ class CLpItem
     /**
      * @ORM\Column(name="max_time_allowed", type="string", length=13, nullable=true)
      */
-    protected ?string $maxTimeAllowed;
+    protected ?string $maxTimeAllowed = null;
 
     /**
      * @ORM\Column(name="terms", type="text", nullable=true)
      */
-    protected ?string $terms;
+    protected ?string $terms = null;
 
     /**
      * @ORM\Column(name="search_did", type="integer", nullable=true)
      */
-    protected ?int $searchDid;
+    protected ?int $searchDid = null;
 
     /**
      * @ORM\Column(name="audio", type="string", length=250, nullable=true)
      */
-    protected ?string $audio;
+    protected ?string $audio = null;
 
     /**
      * @ORM\Column(name="prerequisite_min_score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected ?float $prerequisiteMinScore;
+    protected ?float $prerequisiteMinScore = null;
 
     /**
      * @ORM\Column(name="prerequisite_max_score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected ?float $prerequisiteMaxScore;
+    protected ?float $prerequisiteMaxScore = null;
 
     public function __construct()
     {
@@ -181,11 +181,9 @@ class CLpItem
     /**
      * Set itemType.
      *
-     * @param string $itemType
-     *
      * @return CLpItem
      */
-    public function setItemType($itemType)
+    public function setItemType(string $itemType)
     {
         $this->itemType = $itemType;
 
@@ -205,11 +203,9 @@ class CLpItem
     /**
      * Set ref.
      *
-     * @param string $ref
-     *
      * @return CLpItem
      */
-    public function setRef($ref)
+    public function setRef(string $ref)
     {
         $this->ref = $ref;
 
@@ -229,11 +225,9 @@ class CLpItem
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CLpItem
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -253,11 +247,9 @@ class CLpItem
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return CLpItem
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -277,11 +269,9 @@ class CLpItem
     /**
      * Set path.
      *
-     * @param string $path
-     *
      * @return CLpItem
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -301,11 +291,9 @@ class CLpItem
     /**
      * Set minScore.
      *
-     * @param float $minScore
-     *
      * @return CLpItem
      */
-    public function setMinScore($minScore)
+    public function setMinScore(float $minScore)
     {
         $this->minScore = $minScore;
 
@@ -325,11 +313,9 @@ class CLpItem
     /**
      * Set maxScore.
      *
-     * @param float $maxScore
-     *
      * @return CLpItem
      */
-    public function setMaxScore($maxScore)
+    public function setMaxScore(float $maxScore)
     {
         $this->maxScore = $maxScore;
 
@@ -349,11 +335,9 @@ class CLpItem
     /**
      * Set masteryScore.
      *
-     * @param float $masteryScore
-     *
      * @return CLpItem
      */
-    public function setMasteryScore($masteryScore)
+    public function setMasteryScore(float $masteryScore)
     {
         $this->masteryScore = $masteryScore;
 
@@ -373,11 +357,9 @@ class CLpItem
     /**
      * Set parentItemId.
      *
-     * @param int $parentItemId
-     *
      * @return CLpItem
      */
-    public function setParentItemId($parentItemId)
+    public function setParentItemId(int $parentItemId)
     {
         $this->parentItemId = $parentItemId;
 
@@ -397,11 +379,9 @@ class CLpItem
     /**
      * Set previousItemId.
      *
-     * @param int $previousItemId
-     *
      * @return CLpItem
      */
-    public function setPreviousItemId($previousItemId)
+    public function setPreviousItemId(int $previousItemId)
     {
         $this->previousItemId = $previousItemId;
 
@@ -421,11 +401,9 @@ class CLpItem
     /**
      * Set nextItemId.
      *
-     * @param int $nextItemId
-     *
      * @return CLpItem
      */
-    public function setNextItemId($nextItemId)
+    public function setNextItemId(int $nextItemId)
     {
         $this->nextItemId = $nextItemId;
 
@@ -445,11 +423,9 @@ class CLpItem
     /**
      * Set displayOrder.
      *
-     * @param int $displayOrder
-     *
      * @return CLpItem
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder(int $displayOrder)
     {
         $this->displayOrder = $displayOrder;
 
@@ -469,11 +445,9 @@ class CLpItem
     /**
      * Set prerequisite.
      *
-     * @param string $prerequisite
-     *
      * @return CLpItem
      */
-    public function setPrerequisite($prerequisite)
+    public function setPrerequisite(string $prerequisite)
     {
         $this->prerequisite = $prerequisite;
 
@@ -493,11 +467,9 @@ class CLpItem
     /**
      * Set parameters.
      *
-     * @param string $parameters
-     *
      * @return CLpItem
      */
-    public function setParameters($parameters)
+    public function setParameters(string $parameters)
     {
         $this->parameters = $parameters;
 
@@ -517,11 +489,9 @@ class CLpItem
     /**
      * Set launchData.
      *
-     * @param string $launchData
-     *
      * @return CLpItem
      */
-    public function setLaunchData($launchData)
+    public function setLaunchData(string $launchData)
     {
         $this->launchData = $launchData;
 
@@ -541,11 +511,9 @@ class CLpItem
     /**
      * Set maxTimeAllowed.
      *
-     * @param string $maxTimeAllowed
-     *
      * @return CLpItem
      */
-    public function setMaxTimeAllowed($maxTimeAllowed)
+    public function setMaxTimeAllowed(string $maxTimeAllowed)
     {
         $this->maxTimeAllowed = $maxTimeAllowed;
 
@@ -565,11 +533,9 @@ class CLpItem
     /**
      * Set terms.
      *
-     * @param string $terms
-     *
      * @return CLpItem
      */
-    public function setTerms($terms)
+    public function setTerms(string $terms)
     {
         $this->terms = $terms;
 
@@ -589,11 +555,9 @@ class CLpItem
     /**
      * Set searchDid.
      *
-     * @param int $searchDid
-     *
      * @return CLpItem
      */
-    public function setSearchDid($searchDid)
+    public function setSearchDid(int $searchDid)
     {
         $this->searchDid = $searchDid;
 
@@ -613,11 +577,9 @@ class CLpItem
     /**
      * Set audio.
      *
-     * @param string $audio
-     *
      * @return CLpItem
      */
-    public function setAudio($audio)
+    public function setAudio(string $audio)
     {
         $this->audio = $audio;
 
@@ -637,11 +599,9 @@ class CLpItem
     /**
      * Set prerequisiteMinScore.
      *
-     * @param float $prerequisiteMinScore
-     *
      * @return CLpItem
      */
-    public function setPrerequisiteMinScore($prerequisiteMinScore)
+    public function setPrerequisiteMinScore(float $prerequisiteMinScore)
     {
         $this->prerequisiteMinScore = $prerequisiteMinScore;
 
@@ -661,11 +621,9 @@ class CLpItem
     /**
      * Set prerequisiteMaxScore.
      *
-     * @param float $prerequisiteMaxScore
-     *
      * @return CLpItem
      */
-    public function setPrerequisiteMaxScore($prerequisiteMaxScore)
+    public function setPrerequisiteMaxScore(float $prerequisiteMaxScore)
     {
         $this->prerequisiteMaxScore = $prerequisiteMaxScore;
 
@@ -685,11 +643,9 @@ class CLpItem
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLpItem
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

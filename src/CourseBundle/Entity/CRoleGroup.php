@@ -52,11 +52,9 @@ class CRoleGroup
     /**
      * Set roleId.
      *
-     * @param int $roleId
-     *
      * @return CRoleGroup
      */
-    public function setRoleId($roleId)
+    public function setRoleId(int $roleId)
     {
         $this->roleId = $roleId;
 
@@ -76,11 +74,9 @@ class CRoleGroup
     /**
      * Set scope.
      *
-     * @param string $scope
-     *
      * @return CRoleGroup
      */
-    public function setScope($scope)
+    public function setScope(string $scope)
     {
         $this->scope = $scope;
 
@@ -100,11 +96,9 @@ class CRoleGroup
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CRoleGroup
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -124,11 +118,9 @@ class CRoleGroup
     /**
      * Set groupId.
      *
-     * @param int $groupId
-     *
      * @return CRoleGroup
      */
-    public function setGroupId($groupId)
+    public function setGroupId(int $groupId)
     {
         $this->groupId = $groupId;
 

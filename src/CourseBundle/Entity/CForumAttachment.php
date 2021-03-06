@@ -43,7 +43,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="size", type="integer", nullable=false)
@@ -83,11 +83,9 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set path.
      *
-     * @param string $path
-     *
      * @return CForumAttachment
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -107,11 +105,9 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set comment.
      *
-     * @param string $comment
-     *
      * @return CForumAttachment
      */
-    public function setComment($comment)
+    public function setComment(string $comment)
     {
         $this->comment = $comment;
 
@@ -131,11 +127,9 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set size.
      *
-     * @param int $size
-     *
      * @return CForumAttachment
      */
-    public function setSize($size)
+    public function setSize(int $size)
     {
         $this->size = $size;
 
@@ -155,11 +149,9 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set filename.
      *
-     * @param string $filename
-     *
      * @return CForumAttachment
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 
@@ -179,11 +171,9 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumAttachment
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

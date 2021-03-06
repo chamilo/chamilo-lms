@@ -72,12 +72,7 @@ class CAttendanceResult
         return $this;
     }
 
-    /**
-     * Set score.
-     *
-     * @param int $score
-     */
-    public function setScore($score): self
+    public function setScore(int $score): self
     {
         $this->score = $score;
 

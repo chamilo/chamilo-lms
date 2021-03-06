@@ -73,11 +73,9 @@ class CSurveyAnswer
     /**
      * Set value.
      *
-     * @param int $value
-     *
      * @return CSurveyAnswer
      */
-    public function setValue($value)
+    public function setValue(int $value)
     {
         $this->value = $value;
 
@@ -136,11 +134,9 @@ class CSurveyAnswer
     /**
      * Set user.
      *
-     * @param string $user
-     *
      * @return CSurveyAnswer
      */
-    public function setUser($user)
+    public function setUser(string $user)
     {
         $this->user = $user;
 
@@ -160,11 +156,9 @@ class CSurveyAnswer
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CSurveyAnswer
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

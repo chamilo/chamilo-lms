@@ -46,11 +46,9 @@ class COnlineLink
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return COnlineLink
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -70,11 +68,9 @@ class COnlineLink
     /**
      * Set url.
      *
-     * @param string $url
-     *
      * @return COnlineLink
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
         $this->url = $url;
 
@@ -94,11 +90,9 @@ class COnlineLink
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return COnlineLink
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

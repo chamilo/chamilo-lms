@@ -76,12 +76,12 @@ class CLpItemView
     /**
      * @ORM\Column(name="suspend_data", type="text", nullable=true)
      */
-    protected ?string $suspendData;
+    protected ?string $suspendData = null;
 
     /**
      * @ORM\Column(name="lesson_location", type="text", nullable=true)
      */
-    protected ?string $lessonLocation;
+    protected ?string $lessonLocation = null;
 
     /**
      * @ORM\Column(name="core_exit", type="string", length=32, nullable=false, options={"default":"none"})
@@ -91,7 +91,7 @@ class CLpItemView
     /**
      * @ORM\Column(name="max_score", type="string", length=8, nullable=true)
      */
-    protected ?string $maxScore;
+    protected ?string $maxScore = null;
 
     public function __construct()
     {
@@ -107,11 +107,9 @@ class CLpItemView
     /**
      * Set lpItemId.
      *
-     * @param int $lpItemId
-     *
      * @return CLpItemView
      */
-    public function setLpItemId($lpItemId)
+    public function setLpItemId(int $lpItemId)
     {
         $this->lpItemId = $lpItemId;
 
@@ -131,11 +129,9 @@ class CLpItemView
     /**
      * Set lpViewId.
      *
-     * @param int $lpViewId
-     *
      * @return CLpItemView
      */
-    public function setLpViewId($lpViewId)
+    public function setLpViewId(int $lpViewId)
     {
         $this->lpViewId = $lpViewId;
 
@@ -155,11 +151,9 @@ class CLpItemView
     /**
      * Set viewCount.
      *
-     * @param int $viewCount
-     *
      * @return CLpItemView
      */
-    public function setViewCount($viewCount)
+    public function setViewCount(int $viewCount)
     {
         $this->viewCount = $viewCount;
 
@@ -179,11 +173,9 @@ class CLpItemView
     /**
      * Set startTime.
      *
-     * @param int $startTime
-     *
      * @return CLpItemView
      */
-    public function setStartTime($startTime)
+    public function setStartTime(int $startTime)
     {
         $this->startTime = $startTime;
 
@@ -203,11 +195,9 @@ class CLpItemView
     /**
      * Set totalTime.
      *
-     * @param int $totalTime
-     *
      * @return CLpItemView
      */
-    public function setTotalTime($totalTime)
+    public function setTotalTime(int $totalTime)
     {
         $this->totalTime = $totalTime;
 
@@ -227,11 +217,9 @@ class CLpItemView
     /**
      * Set score.
      *
-     * @param float $score
-     *
      * @return CLpItemView
      */
-    public function setScore($score)
+    public function setScore(float $score)
     {
         $this->score = $score;
 
@@ -251,11 +239,9 @@ class CLpItemView
     /**
      * Set status.
      *
-     * @param string $status
-     *
      * @return CLpItemView
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
 
@@ -275,11 +261,9 @@ class CLpItemView
     /**
      * Set suspendData.
      *
-     * @param string $suspendData
-     *
      * @return CLpItemView
      */
-    public function setSuspendData($suspendData)
+    public function setSuspendData(string $suspendData)
     {
         $this->suspendData = $suspendData;
 
@@ -299,11 +283,9 @@ class CLpItemView
     /**
      * Set lessonLocation.
      *
-     * @param string $lessonLocation
-     *
      * @return CLpItemView
      */
-    public function setLessonLocation($lessonLocation)
+    public function setLessonLocation(string $lessonLocation)
     {
         $this->lessonLocation = $lessonLocation;
 
@@ -323,11 +305,9 @@ class CLpItemView
     /**
      * Set coreExit.
      *
-     * @param string $coreExit
-     *
      * @return CLpItemView
      */
-    public function setCoreExit($coreExit)
+    public function setCoreExit(string $coreExit)
     {
         $this->coreExit = $coreExit;
 
@@ -347,11 +327,9 @@ class CLpItemView
     /**
      * Set maxScore.
      *
-     * @param string $maxScore
-     *
      * @return CLpItemView
      */
-    public function setMaxScore($maxScore)
+    public function setMaxScore(string $maxScore)
     {
         $this->maxScore = $maxScore;
 
@@ -371,11 +349,9 @@ class CLpItemView
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLpItemView
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

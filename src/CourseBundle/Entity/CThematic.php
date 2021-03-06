@@ -42,7 +42,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected ?string $content;
+    protected ?string $content = null;
 
     /**
      * @ORM\Column(name="display_order", type="integer", nullable=false)
@@ -61,7 +61,7 @@ class CThematic extends AbstractResource implements ResourceInterface
      *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $plans;
+    protected \Doctrine\Common\Collections\Collection $plans;
 
     /**
      * @var ArrayCollection|CThematicAdvance[]
@@ -72,7 +72,7 @@ class CThematic extends AbstractResource implements ResourceInterface
      *     targetEntity="CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $advances;
+    protected \Doctrine\Common\Collections\Collection $advances;
 
     public function __construct()
     {
@@ -86,12 +86,7 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -120,12 +115,7 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->content;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @param int $displayOrder
-     */
-    public function setDisplayOrder($displayOrder): self
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -142,12 +132,7 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->displayOrder;
     }
 
-    /**
-     * Set active.
-     *
-     * @param bool $active
-     */
-    public function setActive($active): self
+    public function setActive(bool $active): self
     {
         $this->active = $active;
 

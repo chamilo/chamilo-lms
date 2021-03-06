@@ -52,7 +52,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="attendance_qualify_title", type="string", length=255, nullable=true)
      */
-    protected ?string $attendanceQualifyTitle;
+    protected ?string $attendanceQualifyTitle = null;
 
     /**
      * @ORM\Column(name="attendance_qualify_max", type="integer", nullable=false)
@@ -76,7 +76,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
      *     targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $calendars;
+    protected \Doctrine\Common\Collections\Collection $calendars;
 
     public function __construct()
     {
@@ -136,11 +136,9 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * Set attendanceQualifyTitle.
      *
-     * @param string $attendanceQualifyTitle
-     *
      * @return CAttendance
      */
-    public function setAttendanceQualifyTitle($attendanceQualifyTitle)
+    public function setAttendanceQualifyTitle(string $attendanceQualifyTitle)
     {
         $this->attendanceQualifyTitle = $attendanceQualifyTitle;
 
@@ -157,12 +155,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->attendanceQualifyTitle;
     }
 
-    /**
-     * Set attendanceQualifyMax.
-     *
-     * @param int $attendanceQualifyMax
-     */
-    public function setAttendanceQualifyMax($attendanceQualifyMax): self
+    public function setAttendanceQualifyMax(int $attendanceQualifyMax): self
     {
         $this->attendanceQualifyMax = $attendanceQualifyMax;
 
@@ -179,12 +172,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->attendanceQualifyMax;
     }
 
-    /**
-     * Set attendanceWeight.
-     *
-     * @param float $attendanceWeight
-     */
-    public function setAttendanceWeight($attendanceWeight): self
+    public function setAttendanceWeight(float $attendanceWeight): self
     {
         $this->attendanceWeight = $attendanceWeight;
 

@@ -45,7 +45,7 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="page_id", type="integer", nullable=true)
      */
-    protected ?int $pageId;
+    protected ?int $pageId = null;
 
     /**
      * @ORM\Column(name="reflink", type="string", length=255, nullable=false)
@@ -74,12 +74,12 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    protected ?int $groupId;
+    protected ?int $groupId = null;
 
     /**
      * @ORM\Column(name="dtime", type="datetime", nullable=true)
      */
-    protected ?DateTime $dtime;
+    protected ?DateTime $dtime = null;
 
     /**
      * @ORM\Column(name="addlock", type="integer", nullable=false)
@@ -129,12 +129,12 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="score", type="integer", nullable=true)
      */
-    protected ?int $score;
+    protected ?int $score = null;
 
     /**
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
-    protected ?int $version;
+    protected ?int $version = null;
 
     /**
      * @ORM\Column(name="is_editing", type="integer", nullable=false)
@@ -144,12 +144,12 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="time_edit", type="datetime", nullable=true)
      */
-    protected ?DateTime $timeEdit;
+    protected ?DateTime $timeEdit = null;
 
     /**
      * @ORM\Column(name="hits", type="integer", nullable=true)
      */
-    protected ?int $hits;
+    protected ?int $hits = null;
 
     /**
      * @ORM\Column(name="linksto", type="text", nullable=false)
@@ -169,28 +169,31 @@ class CWiki extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected ?int $sessionId;
+    protected ?int $sessionId = null;
 
     public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    public function getIid(): int
+    /**
+     * Get title.
+     *
+     * @return string
+     */
+    public function getTitle()
     {
-        return $this->iid;
+        return $this->title;
     }
 
     /**
-     * Set pageId.
-     *
-     * @param int $pageId
+     * Set title.
      *
      * @return CWiki
      */
-    public function setPageId($pageId)
+    public function setTitle(string $title)
     {
-        $this->pageId = $pageId;
+        $this->title = $title;
 
         return $this;
     }
@@ -206,15 +209,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set reflink.
-     *
-     * @param string $reflink
+     * Set pageId.
      *
      * @return CWiki
      */
-    public function setReflink($reflink)
+    public function setPageId(int $pageId)
     {
-        $this->reflink = $reflink;
+        $this->pageId = $pageId;
 
         return $this;
     }
@@ -230,39 +231,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set title.
-     *
-     * @param string $title
+     * Set reflink.
      *
      * @return CWiki
      */
-    public function setTitle($title)
+    public function setReflink(string $reflink)
     {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return CWiki
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
+        $this->reflink = $reflink;
 
         return $this;
     }
@@ -278,15 +253,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set userId.
-     *
-     * @param int $userId
+     * Set content.
      *
      * @return CWiki
      */
-    public function setUserId($userId)
+    public function setContent(string $content)
     {
-        $this->userId = $userId;
+        $this->content = $content;
 
         return $this;
     }
@@ -302,15 +275,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set groupId.
-     *
-     * @param int $groupId
+     * Set userId.
      *
      * @return CWiki
      */
-    public function setGroupId($groupId)
+    public function setUserId(int $userId)
     {
-        $this->groupId = $groupId;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -326,15 +297,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set dtime.
-     *
-     * @param DateTime $dtime
+     * Set groupId.
      *
      * @return CWiki
      */
-    public function setDtime($dtime)
+    public function setGroupId(int $groupId)
     {
-        $this->dtime = $dtime;
+        $this->groupId = $groupId;
 
         return $this;
     }
@@ -350,15 +319,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set addlock.
-     *
-     * @param int $addlock
+     * Set dtime.
      *
      * @return CWiki
      */
-    public function setAddlock($addlock)
+    public function setDtime(DateTime $dtime)
     {
-        $this->addlock = $addlock;
+        $this->dtime = $dtime;
 
         return $this;
     }
@@ -374,15 +341,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set editlock.
-     *
-     * @param int $editlock
+     * Set addlock.
      *
      * @return CWiki
      */
-    public function setEditlock($editlock)
+    public function setAddlock(int $addlock)
     {
-        $this->editlock = $editlock;
+        $this->addlock = $addlock;
 
         return $this;
     }
@@ -398,15 +363,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set visibility.
-     *
-     * @param int $visibility
+     * Set editlock.
      *
      * @return CWiki
      */
-    public function setVisibility($visibility)
+    public function setEditlock(int $editlock)
     {
-        $this->visibility = $visibility;
+        $this->editlock = $editlock;
 
         return $this;
     }
@@ -422,15 +385,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set addlockDisc.
-     *
-     * @param int $addlockDisc
+     * Set visibility.
      *
      * @return CWiki
      */
-    public function setAddlockDisc($addlockDisc)
+    public function setVisibility(int $visibility)
     {
-        $this->addlockDisc = $addlockDisc;
+        $this->visibility = $visibility;
 
         return $this;
     }
@@ -446,15 +407,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set visibilityDisc.
-     *
-     * @param int $visibilityDisc
+     * Set addlockDisc.
      *
      * @return CWiki
      */
-    public function setVisibilityDisc($visibilityDisc)
+    public function setAddlockDisc(int $addlockDisc)
     {
-        $this->visibilityDisc = $visibilityDisc;
+        $this->addlockDisc = $addlockDisc;
 
         return $this;
     }
@@ -470,15 +429,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set ratinglockDisc.
-     *
-     * @param int $ratinglockDisc
+     * Set visibilityDisc.
      *
      * @return CWiki
      */
-    public function setRatinglockDisc($ratinglockDisc)
+    public function setVisibilityDisc(int $visibilityDisc)
     {
-        $this->ratinglockDisc = $ratinglockDisc;
+        $this->visibilityDisc = $visibilityDisc;
 
         return $this;
     }
@@ -494,15 +451,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set assignment.
-     *
-     * @param int $assignment
+     * Set ratinglockDisc.
      *
      * @return CWiki
      */
-    public function setAssignment($assignment)
+    public function setRatinglockDisc(int $ratinglockDisc)
     {
-        $this->assignment = $assignment;
+        $this->ratinglockDisc = $ratinglockDisc;
 
         return $this;
     }
@@ -518,15 +473,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set comment.
-     *
-     * @param string $comment
+     * Set assignment.
      *
      * @return CWiki
      */
-    public function setComment($comment)
+    public function setAssignment(int $assignment)
     {
-        $this->comment = $comment;
+        $this->assignment = $assignment;
 
         return $this;
     }
@@ -542,15 +495,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set progress.
-     *
-     * @param string $progress
+     * Set comment.
      *
      * @return CWiki
      */
-    public function setProgress($progress)
+    public function setComment(string $comment)
     {
-        $this->progress = $progress;
+        $this->comment = $comment;
 
         return $this;
     }
@@ -566,15 +517,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set score.
-     *
-     * @param int $score
+     * Set progress.
      *
      * @return CWiki
      */
-    public function setScore($score)
+    public function setProgress(string $progress)
     {
-        $this->score = $score;
+        $this->progress = $progress;
 
         return $this;
     }
@@ -590,15 +539,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set version.
-     *
-     * @param int $version
+     * Set score.
      *
      * @return CWiki
      */
-    public function setVersion($version)
+    public function setScore(int $score)
     {
-        $this->version = $version;
+        $this->score = $score;
 
         return $this;
     }
@@ -614,15 +561,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set isEditing.
-     *
-     * @param int $isEditing
+     * Set version.
      *
      * @return CWiki
      */
-    public function setIsEditing($isEditing)
+    public function setVersion(int $version)
     {
-        $this->isEditing = $isEditing;
+        $this->version = $version;
 
         return $this;
     }
@@ -638,15 +583,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set timeEdit.
-     *
-     * @param DateTime $timeEdit
+     * Set isEditing.
      *
      * @return CWiki
      */
-    public function setTimeEdit($timeEdit)
+    public function setIsEditing(int $isEditing)
     {
-        $this->timeEdit = $timeEdit;
+        $this->isEditing = $isEditing;
 
         return $this;
     }
@@ -662,15 +605,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set hits.
-     *
-     * @param int $hits
+     * Set timeEdit.
      *
      * @return CWiki
      */
-    public function setHits($hits)
+    public function setTimeEdit(DateTime $timeEdit)
     {
-        $this->hits = $hits;
+        $this->timeEdit = $timeEdit;
 
         return $this;
     }
@@ -686,15 +627,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set linksto.
-     *
-     * @param string $linksto
+     * Set hits.
      *
      * @return CWiki
      */
-    public function setLinksto($linksto)
+    public function setHits(int $hits)
     {
-        $this->linksto = $linksto;
+        $this->hits = $hits;
 
         return $this;
     }
@@ -710,15 +649,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set tag.
-     *
-     * @param string $tag
+     * Set linksto.
      *
      * @return CWiki
      */
-    public function setTag($tag)
+    public function setLinksto(string $linksto)
     {
-        $this->tag = $tag;
+        $this->linksto = $linksto;
 
         return $this;
     }
@@ -734,15 +671,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set userIp.
-     *
-     * @param string $userIp
+     * Set tag.
      *
      * @return CWiki
      */
-    public function setUserIp($userIp)
+    public function setTag(string $tag)
     {
-        $this->userIp = $userIp;
+        $this->tag = $tag;
 
         return $this;
     }
@@ -758,15 +693,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
+     * Set userIp.
      *
      * @return CWiki
      */
-    public function setSessionId($sessionId)
+    public function setUserIp(string $userIp)
     {
-        $this->sessionId = $sessionId;
+        $this->userIp = $userIp;
 
         return $this;
     }
@@ -782,15 +715,13 @@ class CWiki extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
+     * Set sessionId.
      *
      * @return CWiki
      */
-    public function setCId($cId)
+    public function setSessionId(int $sessionId)
     {
-        $this->cId = $cId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
@@ -805,9 +736,26 @@ class CWiki extends AbstractResource implements ResourceInterface
         return $this->cId;
     }
 
+    /**
+     * Set cId.
+     *
+     * @return CWiki
+     */
+    public function setCId(int $cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
     }
 
     public function getResourceName(): string

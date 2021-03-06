@@ -62,12 +62,12 @@ class CDropboxFile
     /**
      * @ORM\Column(name="description", type="string", length=250, nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="author", type="string", length=250, nullable=true)
      */
-    protected ?string $author;
+    protected ?string $author = null;
 
     /**
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
@@ -92,11 +92,9 @@ class CDropboxFile
     /**
      * Set uploaderId.
      *
-     * @param int $uploaderId
-     *
      * @return CDropboxFile
      */
-    public function setUploaderId($uploaderId)
+    public function setUploaderId(int $uploaderId)
     {
         $this->uploaderId = $uploaderId;
 
@@ -116,11 +114,9 @@ class CDropboxFile
     /**
      * Set filename.
      *
-     * @param string $filename
-     *
      * @return CDropboxFile
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 
@@ -140,11 +136,9 @@ class CDropboxFile
     /**
      * Set filesize.
      *
-     * @param int $filesize
-     *
      * @return CDropboxFile
      */
-    public function setFilesize($filesize)
+    public function setFilesize(int $filesize)
     {
         $this->filesize = $filesize;
 
@@ -164,11 +158,9 @@ class CDropboxFile
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CDropboxFile
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -188,11 +180,9 @@ class CDropboxFile
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return CDropboxFile
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -212,11 +202,9 @@ class CDropboxFile
     /**
      * Set author.
      *
-     * @param string $author
-     *
      * @return CDropboxFile
      */
-    public function setAuthor($author)
+    public function setAuthor(string $author)
     {
         $this->author = $author;
 
@@ -236,11 +224,9 @@ class CDropboxFile
     /**
      * Set uploadDate.
      *
-     * @param DateTime $uploadDate
-     *
      * @return CDropboxFile
      */
-    public function setUploadDate($uploadDate)
+    public function setUploadDate(DateTime $uploadDate)
     {
         $this->uploadDate = $uploadDate;
 
@@ -260,11 +246,9 @@ class CDropboxFile
     /**
      * Set lastUploadDate.
      *
-     * @param DateTime $lastUploadDate
-     *
      * @return CDropboxFile
      */
-    public function setLastUploadDate($lastUploadDate)
+    public function setLastUploadDate(DateTime $lastUploadDate)
     {
         $this->lastUploadDate = $lastUploadDate;
 
@@ -284,11 +268,9 @@ class CDropboxFile
     /**
      * Set catId.
      *
-     * @param int $catId
-     *
      * @return CDropboxFile
      */
-    public function setCatId($catId)
+    public function setCatId(int $catId)
     {
         $this->catId = $catId;
 
@@ -308,11 +290,9 @@ class CDropboxFile
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CDropboxFile
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -332,11 +312,9 @@ class CDropboxFile
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CDropboxFile
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

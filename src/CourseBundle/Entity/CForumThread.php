@@ -72,13 +72,13 @@ class CForumThread extends AbstractResource implements ResourceInterface
      *     orphanRemoval=true
      * )
      */
-    protected $posts;
+    protected Collection $posts;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid", onDelete="SET NULL")
      */
-    protected ?CForumPost $threadLastPost;
+    protected ?CForumPost $threadLastPost = null;
 
     /**
      * @ORM\Column(name="thread_date", type="datetime", nullable=false)
@@ -98,7 +98,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="thread_title_qualify", type="string", length=255, nullable=true)
      */
-    protected ?string $threadTitleQualify;
+    protected ?string $threadTitleQualify = null;
 
     /**
      * @ORM\Column(name="thread_qualify_max", type="float", precision=6, scale=2, nullable=false)
@@ -108,7 +108,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="thread_close_date", type="datetime", nullable=true)
      */
-    protected ?DateTime $threadCloseDate;
+    protected ?DateTime $threadCloseDate = null;
 
     /**
      * @ORM\Column(name="thread_weight", type="float", precision=6, scale=2, nullable=false)
@@ -151,23 +151,16 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * set threadPeerQualify.
      *
-     * @param bool $threadPeerQualify
-     *
      * @return $this
      */
-    public function setThreadPeerQualify($threadPeerQualify): self
+    public function setThreadPeerQualify(bool $threadPeerQualify): self
     {
         $this->threadPeerQualify = $threadPeerQualify;
 
         return $this;
     }
 
-    /**
-     * Set threadTitle.
-     *
-     * @param string $threadTitle
-     */
-    public function setThreadTitle($threadTitle): self
+    public function setThreadTitle(string $threadTitle): self
     {
         $this->threadTitle = $threadTitle;
 
@@ -204,11 +197,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Set threadReplies.
      *
-     * @param int $threadReplies
-     *
      * @return CForumThread
      */
-    public function setThreadReplies($threadReplies): self
+    public function setThreadReplies(int $threadReplies): self
     {
         $this->threadReplies = $threadReplies;
 
@@ -225,12 +216,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadReplies;
     }
 
-    /**
-     * Set threadViews.
-     *
-     * @param int $threadViews
-     */
-    public function setThreadViews($threadViews): self
+    public function setThreadViews(int $threadViews): self
     {
         $this->threadViews = $threadViews;
 
@@ -247,12 +233,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadViews;
     }
 
-    /**
-     * Set threadDate.
-     *
-     * @param DateTime $threadDate
-     */
-    public function setThreadDate($threadDate): self
+    public function setThreadDate(DateTime $threadDate): self
     {
         $this->threadDate = $threadDate;
 
@@ -269,12 +250,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadDate;
     }
 
-    /**
-     * Set threadSticky.
-     *
-     * @param bool $threadSticky
-     */
-    public function setThreadSticky($threadSticky): self
+    public function setThreadSticky(bool $threadSticky): self
     {
         $this->threadSticky = $threadSticky;
 
@@ -291,12 +267,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadSticky;
     }
 
-    /**
-     * Set locked.
-     *
-     * @param int $locked
-     */
-    public function setLocked($locked): self
+    public function setLocked(int $locked): self
     {
         $this->locked = $locked;
 
@@ -313,12 +284,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->locked;
     }
 
-    /**
-     * Set threadTitleQualify.
-     *
-     * @param string $threadTitleQualify
-     */
-    public function setThreadTitleQualify($threadTitleQualify): self
+    public function setThreadTitleQualify(string $threadTitleQualify): self
     {
         $this->threadTitleQualify = $threadTitleQualify;
 
@@ -335,12 +301,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadTitleQualify;
     }
 
-    /**
-     * Set threadQualifyMax.
-     *
-     * @param float $threadQualifyMax
-     */
-    public function setThreadQualifyMax($threadQualifyMax): self
+    public function setThreadQualifyMax(float $threadQualifyMax): self
     {
         $this->threadQualifyMax = (float) $threadQualifyMax;
 
@@ -357,12 +318,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadQualifyMax;
     }
 
-    /**
-     * Set threadCloseDate.
-     *
-     * @param DateTime $threadCloseDate
-     */
-    public function setThreadCloseDate($threadCloseDate): self
+    public function setThreadCloseDate(DateTime $threadCloseDate): self
     {
         $this->threadCloseDate = $threadCloseDate;
 
@@ -382,11 +338,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Set threadWeight.
      *
-     * @param float $threadWeight
-     *
      * @return CForumThread
      */
-    public function setThreadWeight($threadWeight): self
+    public function setThreadWeight(float $threadWeight): self
     {
         $this->threadWeight = (float) $threadWeight;
 
@@ -406,11 +360,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Set lpItemId.
      *
-     * @param int $lpItemId
-     *
      * @return $this
      */
-    public function setLpItemId($lpItemId)
+    public function setLpItemId(int $lpItemId)
     {
         $this->lpItemId = $lpItemId;
 

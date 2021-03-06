@@ -44,7 +44,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
      */
-    protected ?string $code;
+    protected ?string $code = null;
 
     /**
      * @Assert\NotBlank()
@@ -70,32 +70,32 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="avail_from", type="datetime", nullable=true)
      */
-    protected ?DateTime $availFrom;
+    protected ?DateTime $availFrom = null;
 
     /**
      * @ORM\Column(name="avail_till", type="datetime", nullable=true)
      */
-    protected ?DateTime $availTill;
+    protected ?DateTime $availTill = null;
 
     /**
      * @ORM\Column(name="is_shared", type="string", length=1, nullable=true)
      */
-    protected ?string $isShared;
+    protected ?string $isShared = null;
 
     /**
      * @ORM\Column(name="template", type="string", length=20, nullable=true)
      */
-    protected ?string $template;
+    protected ?string $template = null;
 
     /**
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    protected ?string $intro;
+    protected ?string $intro = null;
 
     /**
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    protected ?string $surveyThanks;
+    protected ?string $surveyThanks = null;
 
     /**
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
@@ -135,7 +135,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="access_condition", type="text", nullable=true)
      */
-    protected ?string $accessCondition;
+    protected ?string $accessCondition = null;
 
     /**
      * @ORM\Column(name="shuffle", type="boolean", nullable=false)
@@ -180,7 +180,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="visible_results", type="integer", nullable=true)
      */
-    protected ?int $visibleResults;
+    protected ?int $visibleResults = null;
 
     /**
      * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
@@ -243,11 +243,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CSurvey
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -276,12 +274,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->subtitle;
     }
 
-    /**
-     * Set author.
-     *
-     * @param string $author
-     */
-    public function setAuthor($author): self
+    public function setAuthor(string $author): self
     {
         $this->author = $author;
 
@@ -301,11 +294,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set lang.
      *
-     * @param string $lang
-     *
      * @return CSurvey
      */
-    public function setLang($lang)
+    public function setLang(string $lang)
     {
         $this->lang = $lang;
 
@@ -325,11 +316,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set availFrom.
      *
-     * @param DateTime $availFrom
-     *
      * @return CSurvey
      */
-    public function setAvailFrom($availFrom)
+    public function setAvailFrom(DateTime $availFrom)
     {
         $this->availFrom = $availFrom;
 
@@ -349,11 +338,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set availTill.
      *
-     * @param DateTime $availTill
-     *
      * @return CSurvey
      */
-    public function setAvailTill($availTill)
+    public function setAvailTill(DateTime $availTill)
     {
         $this->availTill = $availTill;
 
@@ -373,11 +360,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set isShared.
      *
-     * @param string $isShared
-     *
      * @return CSurvey
      */
-    public function setIsShared($isShared)
+    public function setIsShared(string $isShared)
     {
         $this->isShared = $isShared;
 
@@ -397,11 +382,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set template.
      *
-     * @param string $template
-     *
      * @return CSurvey
      */
-    public function setTemplate($template)
+    public function setTemplate(string $template)
     {
         $this->template = $template;
 
@@ -421,11 +404,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set intro.
      *
-     * @param string $intro
-     *
      * @return CSurvey
      */
-    public function setIntro($intro)
+    public function setIntro(string $intro)
     {
         $this->intro = $intro;
 
@@ -445,11 +426,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set surveythanks.
      *
-     * @param string $surveythanks
-     *
      * @return CSurvey
      */
-    public function setSurveythanks($surveythanks)
+    public function setSurveythanks(string $surveythanks)
     {
         $this->surveyThanks = $surveythanks;
 
@@ -469,11 +448,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set creationDate.
      *
-     * @param DateTime $creationDate
-     *
      * @return CSurvey
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(DateTime $creationDate)
     {
         $this->creationDate = $creationDate;
 
@@ -493,11 +470,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set invited.
      *
-     * @param int $invited
-     *
      * @return CSurvey
      */
-    public function setInvited($invited)
+    public function setInvited(int $invited)
     {
         $this->invited = $invited;
 
@@ -517,11 +492,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set answered.
      *
-     * @param int $answered
-     *
      * @return CSurvey
      */
-    public function setAnswered($answered)
+    public function setAnswered(int $answered)
     {
         $this->answered = $answered;
 
@@ -541,11 +514,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set inviteMail.
      *
-     * @param string $inviteMail
-     *
      * @return CSurvey
      */
-    public function setInviteMail($inviteMail)
+    public function setInviteMail(string $inviteMail)
     {
         $this->inviteMail = $inviteMail;
 
@@ -565,11 +536,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set reminderMail.
      *
-     * @param string $reminderMail
-     *
      * @return CSurvey
      */
-    public function setReminderMail($reminderMail)
+    public function setReminderMail(string $reminderMail)
     {
         $this->reminderMail = $reminderMail;
 
@@ -589,11 +558,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set mailSubject.
      *
-     * @param string $mailSubject
-     *
      * @return CSurvey
      */
-    public function setMailSubject($mailSubject)
+    public function setMailSubject(string $mailSubject)
     {
         $this->mailSubject = $mailSubject;
 
@@ -613,11 +580,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set anonymous.
      *
-     * @param string $anonymous
-     *
      * @return CSurvey
      */
-    public function setAnonymous($anonymous)
+    public function setAnonymous(string $anonymous)
     {
         $this->anonymous = $anonymous;
 
@@ -637,11 +602,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set accessCondition.
      *
-     * @param string $accessCondition
-     *
      * @return CSurvey
      */
-    public function setAccessCondition($accessCondition)
+    public function setAccessCondition(string $accessCondition)
     {
         $this->accessCondition = $accessCondition;
 
@@ -661,11 +624,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set shuffle.
      *
-     * @param bool $shuffle
-     *
      * @return CSurvey
      */
-    public function setShuffle($shuffle)
+    public function setShuffle(bool $shuffle)
     {
         $this->shuffle = $shuffle;
 
@@ -685,11 +646,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set oneQuestionPerPage.
      *
-     * @param bool $oneQuestionPerPage
-     *
      * @return CSurvey
      */
-    public function setOneQuestionPerPage($oneQuestionPerPage)
+    public function setOneQuestionPerPage(bool $oneQuestionPerPage)
     {
         $this->oneQuestionPerPage = $oneQuestionPerPage;
 
@@ -709,11 +668,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set surveyVersion.
      *
-     * @param string $surveyVersion
-     *
      * @return CSurvey
      */
-    public function setSurveyVersion($surveyVersion)
+    public function setSurveyVersion(string $surveyVersion)
     {
         $this->surveyVersion = $surveyVersion;
 
@@ -733,11 +690,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set parentId.
      *
-     * @param int $parentId
-     *
      * @return CSurvey
      */
-    public function setParentId($parentId)
+    public function setParentId(int $parentId)
     {
         $this->parentId = $parentId;
 
@@ -757,11 +712,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set surveyType.
      *
-     * @param int $surveyType
-     *
      * @return CSurvey
      */
-    public function setSurveyType($surveyType)
+    public function setSurveyType(int $surveyType)
     {
         $this->surveyType = $surveyType;
 
@@ -781,11 +734,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set showFormProfile.
      *
-     * @param int $showFormProfile
-     *
      * @return CSurvey
      */
-    public function setShowFormProfile($showFormProfile)
+    public function setShowFormProfile(int $showFormProfile)
     {
         $this->showFormProfile = $showFormProfile;
 
@@ -805,11 +756,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set formFields.
      *
-     * @param string $formFields
-     *
      * @return CSurvey
      */
-    public function setFormFields($formFields)
+    public function setFormFields(string $formFields)
     {
         $this->formFields = $formFields;
 
@@ -829,11 +778,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CSurvey
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -853,11 +800,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set visibleResults.
      *
-     * @param int $visibleResults
-     *
      * @return CSurvey
      */
-    public function setVisibleResults($visibleResults)
+    public function setVisibleResults(int $visibleResults)
     {
         $this->visibleResults = $visibleResults;
 
@@ -877,11 +822,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CSurvey
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -899,11 +842,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param bool $isMandatory
-     *
      * @return CSurvey
      */
-    public function setIsMandatory($isMandatory)
+    public function setIsMandatory(bool $isMandatory)
     {
         $this->isMandatory = $isMandatory;
 

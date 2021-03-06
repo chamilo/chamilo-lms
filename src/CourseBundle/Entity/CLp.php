@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -54,7 +55,7 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="ref", type="text", nullable=true)
      */
-    protected ?string $ref;
+    protected ?string $ref = null;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -160,7 +161,7 @@ class CLp extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory", inversedBy="lps")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
-    protected ?CLpCategory $category;
+    protected ?CLpCategory $category = null;
 
     /**
      * @ORM\Column(name="max_attempts", type="integer", nullable=false)
@@ -194,7 +195,7 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="expired_on", type="datetime", nullable=true)
      */
-    protected ?DateTime $expiredOn;
+    protected ?DateTime $expiredOn = null;
 
     /**
      * @ORM\Column(name="accumulate_scorm_time", type="integer", nullable=false, options={"default":1})
@@ -211,7 +212,7 @@ class CLp extends AbstractResource implements ResourceInterface
      *
      * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    protected $items;
+    protected Collection $items;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="lp")
@@ -263,11 +264,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set lpType.
      *
-     * @param int $lpType
-     *
      * @return CLp
      */
-    public function setLpType($lpType)
+    public function setLpType(int $lpType)
     {
         $this->lpType = $lpType;
 
@@ -287,11 +286,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set name.
      *
-     * @param string $name
-     *
      * @return CLp
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -306,11 +303,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set ref.
      *
-     * @param string $ref
-     *
      * @return CLp
      */
-    public function setRef($ref)
+    public function setRef(string $ref)
     {
         $this->ref = $ref;
 
@@ -342,11 +337,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set path.
      *
-     * @param string $path
-     *
      * @return CLp
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -366,11 +359,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set forceCommit.
      *
-     * @param bool $forceCommit
-     *
      * @return CLp
      */
-    public function setForceCommit($forceCommit)
+    public function setForceCommit(bool $forceCommit)
     {
         $this->forceCommit = $forceCommit;
 
@@ -390,11 +381,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set defaultViewMod.
      *
-     * @param string $defaultViewMod
-     *
      * @return CLp
      */
-    public function setDefaultViewMod($defaultViewMod)
+    public function setDefaultViewMod(string $defaultViewMod)
     {
         $this->defaultViewMod = $defaultViewMod;
 
@@ -414,11 +403,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set defaultEncoding.
      *
-     * @param string $defaultEncoding
-     *
      * @return CLp
      */
-    public function setDefaultEncoding($defaultEncoding)
+    public function setDefaultEncoding(string $defaultEncoding)
     {
         $this->defaultEncoding = $defaultEncoding;
 
@@ -438,11 +425,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set displayOrder.
      *
-     * @param int $displayOrder
-     *
      * @return CLp
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder(int $displayOrder)
     {
         $this->displayOrder = $displayOrder;
 
@@ -462,11 +447,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set contentMaker.
      *
-     * @param string $contentMaker
-     *
      * @return CLp
      */
-    public function setContentMaker($contentMaker)
+    public function setContentMaker(string $contentMaker)
     {
         $this->contentMaker = $contentMaker;
 
@@ -486,11 +469,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set contentLocal.
      *
-     * @param string $contentLocal
-     *
      * @return CLp
      */
-    public function setContentLocal($contentLocal)
+    public function setContentLocal(string $contentLocal)
     {
         $this->contentLocal = $contentLocal;
 
@@ -510,11 +491,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set contentLicense.
      *
-     * @param string $contentLicense
-     *
      * @return CLp
      */
-    public function setContentLicense($contentLicense)
+    public function setContentLicense(string $contentLicense)
     {
         $this->contentLicense = $contentLicense;
 
@@ -534,11 +513,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set preventReinit.
      *
-     * @param bool $preventReinit
-     *
      * @return CLp
      */
-    public function setPreventReinit($preventReinit)
+    public function setPreventReinit(bool $preventReinit)
     {
         $this->preventReinit = $preventReinit;
 
@@ -558,11 +535,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set jsLib.
      *
-     * @param string $jsLib
-     *
      * @return CLp
      */
-    public function setJsLib($jsLib)
+    public function setJsLib(string $jsLib)
     {
         $this->jsLib = $jsLib;
 
@@ -582,11 +557,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set debug.
      *
-     * @param bool $debug
-     *
      * @return CLp
      */
-    public function setDebug($debug)
+    public function setDebug(bool $debug)
     {
         $this->debug = $debug;
 
@@ -606,11 +579,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set theme.
      *
-     * @param string $theme
-     *
      * @return CLp
      */
-    public function setTheme($theme)
+    public function setTheme(string $theme)
     {
         $this->theme = $theme;
 
@@ -630,11 +601,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set author.
      *
-     * @param string $author
-     *
      * @return CLp
      */
-    public function setAuthor($author)
+    public function setAuthor(string $author)
     {
         $this->author = $author;
 
@@ -654,11 +623,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CLp
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -678,11 +645,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set prerequisite.
      *
-     * @param int $prerequisite
-     *
      * @return CLp
      */
-    public function setPrerequisite($prerequisite)
+    public function setPrerequisite(int $prerequisite)
     {
         $this->prerequisite = $prerequisite;
 
@@ -702,11 +667,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set hideTocFrame.
      *
-     * @param bool $hideTocFrame
-     *
      * @return CLp
      */
-    public function setHideTocFrame($hideTocFrame)
+    public function setHideTocFrame(bool $hideTocFrame)
     {
         $this->hideTocFrame = $hideTocFrame;
 
@@ -726,11 +689,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set seriousgameMode.
      *
-     * @param bool $seriousgameMode
-     *
      * @return CLp
      */
-    public function setSeriousgameMode($seriousgameMode)
+    public function setSeriousgameMode(bool $seriousgameMode)
     {
         $this->seriousgameMode = $seriousgameMode;
 
@@ -750,11 +711,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set useMaxScore.
      *
-     * @param int $useMaxScore
-     *
      * @return CLp
      */
-    public function setUseMaxScore($useMaxScore)
+    public function setUseMaxScore(int $useMaxScore)
     {
         $this->useMaxScore = $useMaxScore;
 
@@ -774,11 +733,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set autolaunch.
      *
-     * @param int $autolaunch
-     *
      * @return CLp
      */
-    public function setAutolaunch($autolaunch)
+    public function setAutolaunch(int $autolaunch)
     {
         $this->autolaunch = $autolaunch;
 
@@ -798,11 +755,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set createdOn.
      *
-     * @param DateTime $createdOn
-     *
      * @return CLp
      */
-    public function setCreatedOn($createdOn)
+    public function setCreatedOn(DateTime $createdOn)
     {
         $this->createdOn = $createdOn;
 
@@ -822,11 +777,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set modifiedOn.
      *
-     * @param DateTime $modifiedOn
-     *
      * @return CLp
      */
-    public function setModifiedOn($modifiedOn)
+    public function setModifiedOn(DateTime $modifiedOn)
     {
         $this->modifiedOn = $modifiedOn;
 
@@ -846,11 +799,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set publicatedOn.
      *
-     * @param DateTime $publicatedOn
-     *
      * @return CLp
      */
-    public function setPublicatedOn($publicatedOn)
+    public function setPublicatedOn(DateTime $publicatedOn)
     {
         $this->publicatedOn = $publicatedOn;
 
@@ -870,11 +821,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set expiredOn.
      *
-     * @param DateTime $expiredOn
-     *
      * @return CLp
      */
-    public function setExpiredOn($expiredOn)
+    public function setExpiredOn(DateTime $expiredOn)
     {
         $this->expiredOn = $expiredOn;
 
@@ -894,11 +843,9 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLp
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -936,11 +883,9 @@ class CLp extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param int $accumulateScormTime
-     *
      * @return CLp
      */
-    public function setAccumulateScormTime($accumulateScormTime)
+    public function setAccumulateScormTime(int $accumulateScormTime)
     {
         $this->accumulateScormTime = $accumulateScormTime;
 

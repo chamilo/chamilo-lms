@@ -104,8 +104,6 @@ class ResourceLink
     {
         $this->resourceRights = new ArrayCollection();
         $this->visibility = self::VISIBILITY_DRAFT;
-        $this->startVisibilityAt = new DateTime(null);
-        $this->endVisibilityAt = new DateTime(null);
     }
 
     public function __toString(): string

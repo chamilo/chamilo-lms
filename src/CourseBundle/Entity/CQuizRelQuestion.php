@@ -52,11 +52,9 @@ class CQuizRelQuestion
     /**
      * Set questionOrder.
      *
-     * @param int $questionOrder
-     *
      * @return CQuizRelQuestion
      */
-    public function setQuestionOrder($questionOrder)
+    public function setQuestionOrder(int $questionOrder)
     {
         $this->questionOrder = $questionOrder;
 

@@ -64,11 +64,9 @@ class CDropboxFeedback
     /**
      * Set fileId.
      *
-     * @param int $fileId
-     *
      * @return CDropboxFeedback
      */
-    public function setFileId($fileId)
+    public function setFileId(int $fileId)
     {
         $this->fileId = $fileId;
 
@@ -88,11 +86,9 @@ class CDropboxFeedback
     /**
      * Set authorUserId.
      *
-     * @param int $authorUserId
-     *
      * @return CDropboxFeedback
      */
-    public function setAuthorUserId($authorUserId)
+    public function setAuthorUserId(int $authorUserId)
     {
         $this->authorUserId = $authorUserId;
 
@@ -112,11 +108,9 @@ class CDropboxFeedback
     /**
      * Set feedback.
      *
-     * @param string $feedback
-     *
      * @return CDropboxFeedback
      */
-    public function setFeedback($feedback)
+    public function setFeedback(string $feedback)
     {
         $this->feedback = $feedback;
 
@@ -136,11 +130,9 @@ class CDropboxFeedback
     /**
      * Set feedbackDate.
      *
-     * @param DateTime $feedbackDate
-     *
      * @return CDropboxFeedback
      */
-    public function setFeedbackDate($feedbackDate)
+    public function setFeedbackDate(DateTime $feedbackDate)
     {
         $this->feedbackDate = $feedbackDate;
 
@@ -160,11 +152,9 @@ class CDropboxFeedback
     /**
      * Set feedbackId.
      *
-     * @param int $feedbackId
-     *
      * @return CDropboxFeedback
      */
-    public function setFeedbackId($feedbackId)
+    public function setFeedbackId(int $feedbackId)
     {
         $this->feedbackId = $feedbackId;
 
@@ -184,11 +174,9 @@ class CDropboxFeedback
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CDropboxFeedback
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

@@ -41,12 +41,12 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="file", type="string", length=255, nullable=true)
      */
-    protected ?string $file;
+    protected ?string $file = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
@@ -74,12 +74,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this->iid;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -96,12 +91,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this->comment;
     }
 
-    /**
-     * Set file.
-     *
-     * @param string $file
-     */
-    public function setFile($file): self
+    public function setFile(string $file): self
     {
         $this->file = $file;
 
@@ -130,12 +120,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this;
     }
 
-    /**
-     * Set sentAt.
-     *
-     * @param DateTime $sentAt
-     */
-    public function setSentAt($sentAt): self
+    public function setSentAt(DateTime $sentAt): self
     {
         $this->sentAt = $sentAt;
 

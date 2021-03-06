@@ -171,12 +171,7 @@ class SettingsCurrent
         return $this->type;
     }
 
-    /**
-     * Set category.
-     *
-     * @return SettingsCurrent
-     */
-    public function setCategory(string $category)
+    public function setCategory(?string $category): self
     {
         $this->category = $category;
 
@@ -198,7 +193,7 @@ class SettingsCurrent
      *
      * @return SettingsCurrent
      */
-    public function setSelectedValue(string $selectedValue)
+    public function setSelectedValue(?string $selectedValue)
     {
         $this->selectedValue = $selectedValue;
 

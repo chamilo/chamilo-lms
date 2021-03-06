@@ -28,7 +28,7 @@ class CChatConversation extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    protected ?string $name;
+    protected ?string $name = null;
 
     public function __toString(): string
     {

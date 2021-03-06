@@ -54,11 +54,9 @@ class CForumMailcue
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumMailcue
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -78,11 +76,9 @@ class CForumMailcue
     /**
      * Set threadId.
      *
-     * @param int $threadId
-     *
      * @return CForumMailcue
      */
-    public function setThreadId($threadId)
+    public function setThreadId(int $threadId)
     {
         $this->threadId = $threadId;
 
@@ -102,11 +98,9 @@ class CForumMailcue
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CForumMailcue
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -126,11 +120,9 @@ class CForumMailcue
     /**
      * Set postId.
      *
-     * @param int $postId
-     *
      * @return CForumMailcue
      */
-    public function setPostId($postId)
+    public function setPostId(int $postId)
     {
         $this->postId = $postId;
 

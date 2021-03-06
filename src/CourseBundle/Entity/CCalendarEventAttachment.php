@@ -32,7 +32,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
@@ -50,12 +50,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this->getFilename();
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -75,11 +70,9 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     /**
      * Set filename.
      *
-     * @param string $filename
-     *
      * @return CCalendarEventAttachment
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 

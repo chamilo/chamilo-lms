@@ -64,11 +64,9 @@ class CLpCategoryUser
     }
 
     /**
-     * @param CLpCategory $category
-     *
      * @return CLpCategoryUser
      */
-    public function setCategory($category)
+    public function setCategory(CLpCategory $category)
     {
         $this->category = $category;
 

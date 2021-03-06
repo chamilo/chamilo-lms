@@ -43,7 +43,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
@@ -63,7 +63,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="picture", type="string", length=50, nullable=true)
      */
-    protected ?string $picture;
+    protected ?string $picture = null;
 
     /**
      * @ORM\Column(name="level", type="integer", nullable=false)
@@ -73,17 +73,17 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="feedback", type="text", nullable=true)
      */
-    protected ?string $feedback;
+    protected ?string $feedback = null;
 
     /**
      * @ORM\Column(name="extra", type="string", length=255, nullable=true)
      */
-    protected ?string $extra;
+    protected ?string $extra = null;
 
     /**
      * @ORM\Column(name="question_code", type="string", length=10, nullable=true)
      */
-    protected ?string $questionCode;
+    protected ?string $questionCode = null;
 
     /**
      * @var Collection|CQuizQuestionCategory[]
@@ -98,7 +98,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      *     }
      * )
      */
-    protected $categories;
+    protected Collection $categories;
 
     /**
      * @var Collection|CQuizRelQuestion[]
@@ -170,12 +170,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         $category->removeQuestion($this);
     }
 
-    /**
-     * Set question.
-     *
-     * @param string $question
-     */
-    public function setQuestion($question): self
+    public function setQuestion(string $question): self
     {
         $this->question = $question;
 
@@ -187,12 +182,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->question;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -243,12 +233,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->position;
     }
 
-    /**
-     * Set type.
-     *
-     * @param int $type
-     */
-    public function setType($type): self
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -265,12 +250,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->type;
     }
 
-    /**
-     * Set picture.
-     *
-     * @param string $picture
-     */
-    public function setPicture($picture): self
+    public function setPicture(string $picture): self
     {
         $this->picture = $picture;
 
@@ -287,12 +267,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->picture;
     }
 
-    /**
-     * Set level.
-     *
-     * @param int $level
-     */
-    public function setLevel($level): self
+    public function setLevel(int $level): self
     {
         $this->level = $level;
 
@@ -309,12 +284,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->level;
     }
 
-    /**
-     * Set extra.
-     *
-     * @param string $extra
-     */
-    public function setExtra($extra): self
+    public function setExtra(string $extra): self
     {
         $this->extra = $extra;
 
@@ -331,12 +301,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->extra;
     }
 
-    /**
-     * Set questionCode.
-     *
-     * @param string $questionCode
-     */
-    public function setQuestionCode($questionCode): self
+    public function setQuestionCode(string $questionCode): self
     {
         $this->questionCode = $questionCode;
 
@@ -361,10 +326,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->feedback;
     }
 
-    /**
-     * @param string $feedback
-     */
-    public function setFeedback($feedback): self
+    public function setFeedback(string $feedback): self
     {
         $this->feedback = $feedback;
 

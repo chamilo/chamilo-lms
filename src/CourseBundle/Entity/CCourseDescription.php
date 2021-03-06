@@ -40,7 +40,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
@@ -72,11 +72,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CCourseDescription
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -96,11 +94,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return CCourseDescription
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 
@@ -120,11 +116,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     /**
      * Set descriptionType.
      *
-     * @param int $descriptionType
-     *
      * @return CCourseDescription
      */
-    public function setDescriptionType($descriptionType)
+    public function setDescriptionType(int $descriptionType)
     {
         $this->descriptionType = $descriptionType;
 
@@ -144,11 +138,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     /**
      * Set progress.
      *
-     * @param int $progress
-     *
      * @return CCourseDescription
      */
-    public function setProgress($progress)
+    public function setProgress(int $progress)
     {
         $this->progress = $progress;
 

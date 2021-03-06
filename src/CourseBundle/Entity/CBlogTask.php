@@ -66,11 +66,9 @@ class CBlogTask
     /**
      * Set blogId.
      *
-     * @param int $blogId
-     *
      * @return CBlogTask
      */
-    public function setBlogId($blogId)
+    public function setBlogId(int $blogId)
     {
         $this->blogId = $blogId;
 
@@ -90,11 +88,9 @@ class CBlogTask
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CBlogTask
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -114,11 +110,9 @@ class CBlogTask
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return CBlogTask
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -138,11 +132,9 @@ class CBlogTask
     /**
      * Set color.
      *
-     * @param string $color
-     *
      * @return CBlogTask
      */
-    public function setColor($color)
+    public function setColor(string $color)
     {
         $this->color = $color;
 
@@ -162,11 +154,9 @@ class CBlogTask
     /**
      * Set systemTask.
      *
-     * @param bool $systemTask
-     *
      * @return CBlogTask
      */
-    public function setSystemTask($systemTask)
+    public function setSystemTask(bool $systemTask)
     {
         $this->systemTask = $systemTask;
 
@@ -186,11 +176,9 @@ class CBlogTask
     /**
      * Set taskId.
      *
-     * @param int $taskId
-     *
      * @return CBlogTask
      */
-    public function setTaskId($taskId)
+    public function setTaskId(int $taskId)
     {
         $this->taskId = $taskId;
 
@@ -210,11 +198,9 @@ class CBlogTask
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CBlogTask
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

@@ -93,11 +93,9 @@ class CGroupRelTutor
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CGroupRelTutor
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

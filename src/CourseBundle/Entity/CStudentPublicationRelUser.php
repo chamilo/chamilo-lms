@@ -48,11 +48,9 @@ class CStudentPublicationRelUser
     /**
      * Set workId.
      *
-     * @param int $workId
-     *
      * @return CStudentPublicationRelUser
      */
-    public function setWorkId($workId)
+    public function setWorkId(int $workId)
     {
         $this->workId = $workId;
 
@@ -72,11 +70,9 @@ class CStudentPublicationRelUser
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CStudentPublicationRelUser
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -96,11 +92,9 @@ class CStudentPublicationRelUser
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CStudentPublicationRelUser
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

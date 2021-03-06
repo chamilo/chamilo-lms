@@ -70,11 +70,9 @@ class CDropboxCategory
     /**
      * Set catName.
      *
-     * @param string $catName
-     *
      * @return CDropboxCategory
      */
-    public function setCatName($catName)
+    public function setCatName(string $catName)
     {
         $this->catName = $catName;
 
@@ -94,11 +92,9 @@ class CDropboxCategory
     /**
      * Set received.
      *
-     * @param bool $received
-     *
      * @return CDropboxCategory
      */
-    public function setReceived($received)
+    public function setReceived(bool $received)
     {
         $this->received = $received;
 
@@ -118,11 +114,9 @@ class CDropboxCategory
     /**
      * Set sent.
      *
-     * @param bool $sent
-     *
      * @return CDropboxCategory
      */
-    public function setSent($sent)
+    public function setSent(bool $sent)
     {
         $this->sent = $sent;
 
@@ -142,11 +136,9 @@ class CDropboxCategory
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CDropboxCategory
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -166,11 +158,9 @@ class CDropboxCategory
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CDropboxCategory
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -190,11 +180,9 @@ class CDropboxCategory
     /**
      * Set catId.
      *
-     * @param int $catId
-     *
      * @return CDropboxCategory
      */
-    public function setCatId($catId)
+    public function setCatId(int $catId)
     {
         $this->catId = $catId;
 
@@ -214,11 +202,9 @@ class CDropboxCategory
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CDropboxCategory
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

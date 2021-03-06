@@ -78,46 +78,32 @@ class CWikiConf
     /**
      * @ORM\Column(name="max_size", type="integer", nullable=true)
      */
-    protected ?int $maxSize;
+    protected ?int $maxSize = null;
 
     /**
      * @ORM\Column(name="max_text", type="integer", nullable=true)
      */
-    protected ?int $maxText;
+    protected ?int $maxText = null;
 
     /**
      * @ORM\Column(name="max_version", type="integer", nullable=true)
      */
-    protected ?int $maxVersion;
+    protected ?int $maxVersion = null;
 
     /**
      * @ORM\Column(name="startdate_assig", type="datetime", nullable=true)
      */
-    protected ?DateTime $startdateAssig;
+    protected ?DateTime $startdateAssig = null;
 
     /**
      * @ORM\Column(name="enddate_assig", type="datetime", nullable=true)
      */
-    protected ?DateTime $enddateAssig;
+    protected ?DateTime $enddateAssig = null;
 
     /**
      * @ORM\Column(name="delayedsubmit", type="integer", nullable=false)
      */
     protected int $delayedsubmit;
-
-    /**
-     * Set task.
-     *
-     * @param string $task
-     *
-     * @return CWikiConf
-     */
-    public function setTask($task)
-    {
-        $this->task = $task;
-
-        return $this;
-    }
 
     /**
      * Get task.
@@ -130,15 +116,13 @@ class CWikiConf
     }
 
     /**
-     * Set feedback1.
-     *
-     * @param string $feedback1
+     * Set task.
      *
      * @return CWikiConf
      */
-    public function setFeedback1($feedback1)
+    public function setTask(string $task)
     {
-        $this->feedback1 = $feedback1;
+        $this->task = $task;
 
         return $this;
     }
@@ -154,15 +138,13 @@ class CWikiConf
     }
 
     /**
-     * Set feedback2.
-     *
-     * @param string $feedback2
+     * Set feedback1.
      *
      * @return CWikiConf
      */
-    public function setFeedback2($feedback2)
+    public function setFeedback1(string $feedback1)
     {
-        $this->feedback2 = $feedback2;
+        $this->feedback1 = $feedback1;
 
         return $this;
     }
@@ -178,15 +160,13 @@ class CWikiConf
     }
 
     /**
-     * Set feedback3.
-     *
-     * @param string $feedback3
+     * Set feedback2.
      *
      * @return CWikiConf
      */
-    public function setFeedback3($feedback3)
+    public function setFeedback2(string $feedback2)
     {
-        $this->feedback3 = $feedback3;
+        $this->feedback2 = $feedback2;
 
         return $this;
     }
@@ -202,15 +182,13 @@ class CWikiConf
     }
 
     /**
-     * Set fprogress1.
-     *
-     * @param string $fprogress1
+     * Set feedback3.
      *
      * @return CWikiConf
      */
-    public function setFprogress1($fprogress1)
+    public function setFeedback3(string $feedback3)
     {
-        $this->fprogress1 = $fprogress1;
+        $this->feedback3 = $feedback3;
 
         return $this;
     }
@@ -226,15 +204,13 @@ class CWikiConf
     }
 
     /**
-     * Set fprogress2.
-     *
-     * @param string $fprogress2
+     * Set fprogress1.
      *
      * @return CWikiConf
      */
-    public function setFprogress2($fprogress2)
+    public function setFprogress1(string $fprogress1)
     {
-        $this->fprogress2 = $fprogress2;
+        $this->fprogress1 = $fprogress1;
 
         return $this;
     }
@@ -250,15 +226,13 @@ class CWikiConf
     }
 
     /**
-     * Set fprogress3.
-     *
-     * @param string $fprogress3
+     * Set fprogress2.
      *
      * @return CWikiConf
      */
-    public function setFprogress3($fprogress3)
+    public function setFprogress2(string $fprogress2)
     {
-        $this->fprogress3 = $fprogress3;
+        $this->fprogress2 = $fprogress2;
 
         return $this;
     }
@@ -274,15 +248,13 @@ class CWikiConf
     }
 
     /**
-     * Set maxSize.
-     *
-     * @param int $maxSize
+     * Set fprogress3.
      *
      * @return CWikiConf
      */
-    public function setMaxSize($maxSize)
+    public function setFprogress3(string $fprogress3)
     {
-        $this->maxSize = $maxSize;
+        $this->fprogress3 = $fprogress3;
 
         return $this;
     }
@@ -298,15 +270,13 @@ class CWikiConf
     }
 
     /**
-     * Set maxText.
-     *
-     * @param int $maxText
+     * Set maxSize.
      *
      * @return CWikiConf
      */
-    public function setMaxText($maxText)
+    public function setMaxSize(int $maxSize)
     {
-        $this->maxText = $maxText;
+        $this->maxSize = $maxSize;
 
         return $this;
     }
@@ -322,15 +292,13 @@ class CWikiConf
     }
 
     /**
-     * Set maxVersion.
-     *
-     * @param int $maxVersion
+     * Set maxText.
      *
      * @return CWikiConf
      */
-    public function setMaxVersion($maxVersion)
+    public function setMaxText(int $maxText)
     {
-        $this->maxVersion = $maxVersion;
+        $this->maxText = $maxText;
 
         return $this;
     }
@@ -346,15 +314,13 @@ class CWikiConf
     }
 
     /**
-     * Set startdateAssig.
-     *
-     * @param DateTime $startdateAssig
+     * Set maxVersion.
      *
      * @return CWikiConf
      */
-    public function setStartdateAssig($startdateAssig)
+    public function setMaxVersion(int $maxVersion)
     {
-        $this->startdateAssig = $startdateAssig;
+        $this->maxVersion = $maxVersion;
 
         return $this;
     }
@@ -370,15 +336,13 @@ class CWikiConf
     }
 
     /**
-     * Set enddateAssig.
-     *
-     * @param DateTime $enddateAssig
+     * Set startdateAssig.
      *
      * @return CWikiConf
      */
-    public function setEnddateAssig($enddateAssig)
+    public function setStartdateAssig(DateTime $startdateAssig)
     {
-        $this->enddateAssig = $enddateAssig;
+        $this->startdateAssig = $startdateAssig;
 
         return $this;
     }
@@ -394,15 +358,13 @@ class CWikiConf
     }
 
     /**
-     * Set delayedsubmit.
-     *
-     * @param int $delayedsubmit
+     * Set enddateAssig.
      *
      * @return CWikiConf
      */
-    public function setDelayedsubmit($delayedsubmit)
+    public function setEnddateAssig(DateTime $enddateAssig)
     {
-        $this->delayedsubmit = $delayedsubmit;
+        $this->enddateAssig = $enddateAssig;
 
         return $this;
     }
@@ -418,15 +380,13 @@ class CWikiConf
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
+     * Set delayedsubmit.
      *
      * @return CWikiConf
      */
-    public function setCId($cId)
+    public function setDelayedsubmit(int $delayedsubmit)
     {
-        $this->cId = $cId;
+        $this->delayedsubmit = $delayedsubmit;
 
         return $this;
     }
@@ -442,15 +402,13 @@ class CWikiConf
     }
 
     /**
-     * Set pageId.
-     *
-     * @param int $pageId
+     * Set cId.
      *
      * @return CWikiConf
      */
-    public function setPageId($pageId)
+    public function setCId(int $cId)
     {
-        $this->pageId = $pageId;
+        $this->cId = $cId;
 
         return $this;
     }
@@ -463,5 +421,17 @@ class CWikiConf
     public function getPageId()
     {
         return $this->pageId;
+    }
+
+    /**
+     * Set pageId.
+     *
+     * @return CWikiConf
+     */
+    public function setPageId(int $pageId)
+    {
+        $this->pageId = $pageId;
+
+        return $this;
     }
 }

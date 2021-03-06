@@ -73,11 +73,9 @@ class CSurveyQuestionOption
     /**
      * Set optionText.
      *
-     * @param string $optionText
-     *
      * @return CSurveyQuestionOption
      */
-    public function setOptionText($optionText)
+    public function setOptionText(string $optionText)
     {
         $this->optionText = $optionText;
 
@@ -97,11 +95,9 @@ class CSurveyQuestionOption
     /**
      * Set sort.
      *
-     * @param int $sort
-     *
      * @return CSurveyQuestionOption
      */
-    public function setSort($sort)
+    public function setSort(int $sort)
     {
         $this->sort = $sort;
 
@@ -121,11 +117,9 @@ class CSurveyQuestionOption
     /**
      * Set value.
      *
-     * @param int $value
-     *
      * @return CSurveyQuestionOption
      */
-    public function setValue($value)
+    public function setValue(int $value)
     {
         $this->value = $value;
 
@@ -145,11 +139,9 @@ class CSurveyQuestionOption
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CSurveyQuestionOption
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

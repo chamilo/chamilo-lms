@@ -70,7 +70,7 @@ class CSurveyQuestion
     /**
      * @ORM\Column(name="survey_question_comment", type="text", nullable=false)
      */
-    protected ?string $surveyQuestionComment;
+    protected ?string $surveyQuestionComment = null;
 
     /**
      * @ORM\Column(name="type", type="string", length=250, nullable=false)
@@ -90,12 +90,12 @@ class CSurveyQuestion
     /**
      * @ORM\Column(name="shared_question_id", type="integer", nullable=true)
      */
-    protected ?int $sharedQuestionId;
+    protected ?int $sharedQuestionId = null;
 
     /**
      * @ORM\Column(name="max_value", type="integer", nullable=true)
      */
-    protected ?int $maxValue;
+    protected ?int $maxValue = null;
 
     /**
      * @ORM\Column(name="survey_group_pri", type="integer", nullable=false)
@@ -122,7 +122,7 @@ class CSurveyQuestion
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question")
      */
-    protected $answers;
+    protected Collection $answers;
 
     public function __construct()
     {
@@ -141,11 +141,9 @@ class CSurveyQuestion
     /**
      * Set surveyQuestion.
      *
-     * @param string $surveyQuestion
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyQuestion($surveyQuestion)
+    public function setSurveyQuestion(string $surveyQuestion)
     {
         $this->surveyQuestion = $surveyQuestion;
 
@@ -165,11 +163,9 @@ class CSurveyQuestion
     /**
      * Set surveyQuestionComment.
      *
-     * @param string $surveyQuestionComment
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyQuestionComment($surveyQuestionComment)
+    public function setSurveyQuestionComment(string $surveyQuestionComment)
     {
         $this->surveyQuestionComment = $surveyQuestionComment;
 
@@ -189,11 +185,9 @@ class CSurveyQuestion
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return CSurveyQuestion
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -213,11 +207,9 @@ class CSurveyQuestion
     /**
      * Set display.
      *
-     * @param string $display
-     *
      * @return CSurveyQuestion
      */
-    public function setDisplay($display)
+    public function setDisplay(string $display)
     {
         $this->display = $display;
 
@@ -237,11 +229,9 @@ class CSurveyQuestion
     /**
      * Set sort.
      *
-     * @param int $sort
-     *
      * @return CSurveyQuestion
      */
-    public function setSort($sort)
+    public function setSort(int $sort)
     {
         $this->sort = $sort;
 
@@ -278,11 +268,9 @@ class CSurveyQuestion
     /**
      * Set maxValue.
      *
-     * @param int $maxValue
-     *
      * @return CSurveyQuestion
      */
-    public function setMaxValue($maxValue)
+    public function setMaxValue(int $maxValue)
     {
         $this->maxValue = $maxValue;
 
@@ -302,11 +290,9 @@ class CSurveyQuestion
     /**
      * Set surveyGroupPri.
      *
-     * @param int $surveyGroupPri
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupPri($surveyGroupPri)
+    public function setSurveyGroupPri(int $surveyGroupPri)
     {
         $this->surveyGroupPri = $surveyGroupPri;
 
@@ -326,11 +312,9 @@ class CSurveyQuestion
     /**
      * Set surveyGroupSec1.
      *
-     * @param int $surveyGroupSec1
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupSec1($surveyGroupSec1)
+    public function setSurveyGroupSec1(int $surveyGroupSec1)
     {
         $this->surveyGroupSec1 = $surveyGroupSec1;
 
@@ -350,11 +334,9 @@ class CSurveyQuestion
     /**
      * Set surveyGroupSec2.
      *
-     * @param int $surveyGroupSec2
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupSec2($surveyGroupSec2)
+    public function setSurveyGroupSec2(int $surveyGroupSec2)
     {
         $this->surveyGroupSec2 = $surveyGroupSec2;
 
@@ -374,11 +356,9 @@ class CSurveyQuestion
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CSurveyQuestion
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

@@ -59,7 +59,7 @@ class CLpView
     /**
      * @ORM\Column(name="progress", type="integer", nullable=true)
      */
-    protected ?int $progress;
+    protected ?int $progress = null;
 
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=false)
@@ -69,11 +69,9 @@ class CLpView
     /**
      * Set lpId.
      *
-     * @param int $lpId
-     *
      * @return CLpView
      */
-    public function setLpId($lpId)
+    public function setLpId(int $lpId)
     {
         $this->lpId = $lpId;
 
@@ -93,11 +91,9 @@ class CLpView
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CLpView
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -117,11 +113,9 @@ class CLpView
     /**
      * Set viewCount.
      *
-     * @param int $viewCount
-     *
      * @return CLpView
      */
-    public function setViewCount($viewCount)
+    public function setViewCount(int $viewCount)
     {
         $this->viewCount = $viewCount;
 
@@ -141,11 +135,9 @@ class CLpView
     /**
      * Set lastItem.
      *
-     * @param int $lastItem
-     *
      * @return CLpView
      */
-    public function setLastItem($lastItem)
+    public function setLastItem(int $lastItem)
     {
         $this->lastItem = $lastItem;
 
@@ -165,11 +157,9 @@ class CLpView
     /**
      * Set progress.
      *
-     * @param int $progress
-     *
      * @return CLpView
      */
-    public function setProgress($progress)
+    public function setProgress(int $progress)
     {
         $this->progress = $progress;
 
@@ -189,11 +179,9 @@ class CLpView
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CLpView
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -213,11 +201,9 @@ class CLpView
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLpView
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

@@ -44,37 +44,37 @@ class CCourseSetting
     /**
      * @ORM\Column(name="subkey", type="string", length=255, nullable=true)
      */
-    protected ?string $subkey;
+    protected ?string $subkey = null;
 
     /**
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    protected ?string $type;
+    protected ?string $type = null;
 
     /**
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
-    protected ?string $category;
+    protected ?string $category = null;
 
     /**
      * @ORM\Column(name="value", type="text", nullable=true)
      */
-    protected ?string $value;
+    protected ?string $value = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     /**
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
-    protected ?string $comment;
+    protected ?string $comment = null;
 
     /**
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
-    protected ?string $subkeytext;
+    protected ?string $subkeytext = null;
 
     public function setVariable(string $variable): self
     {
@@ -96,11 +96,9 @@ class CCourseSetting
     /**
      * Set subkey.
      *
-     * @param string $subkey
-     *
      * @return CCourseSetting
      */
-    public function setSubkey($subkey)
+    public function setSubkey(string $subkey)
     {
         $this->subkey = $subkey;
 
@@ -120,11 +118,9 @@ class CCourseSetting
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return CCourseSetting
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -144,11 +140,9 @@ class CCourseSetting
     /**
      * Set category.
      *
-     * @param string $category
-     *
      * @return CCourseSetting
      */
-    public function setCategory($category)
+    public function setCategory(string $category)
     {
         $this->category = $category;
 
@@ -165,7 +159,7 @@ class CCourseSetting
         return $this->category;
     }
 
-    public function setValue($value): self
+    public function setValue(string $value): self
     {
         $this->value = $value;
 
@@ -185,11 +179,9 @@ class CCourseSetting
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CCourseSetting
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -209,11 +201,9 @@ class CCourseSetting
     /**
      * Set comment.
      *
-     * @param string $comment
-     *
      * @return CCourseSetting
      */
-    public function setComment($comment)
+    public function setComment(string $comment)
     {
         $this->comment = $comment;
 
@@ -233,11 +223,9 @@ class CCourseSetting
     /**
      * Set subkeytext.
      *
-     * @param string $subkeytext
-     *
      * @return CCourseSetting
      */
-    public function setSubkeytext($subkeytext)
+    public function setSubkeytext(string $subkeytext)
     {
         $this->subkeytext = $subkeytext;
 
@@ -257,11 +245,9 @@ class CCourseSetting
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CCourseSetting
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

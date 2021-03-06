@@ -72,11 +72,9 @@ class CLpIvObjective
     /**
      * Set lpIvId.
      *
-     * @param int $lpIvId
-     *
      * @return CLpIvObjective
      */
-    public function setLpIvId($lpIvId)
+    public function setLpIvId(int $lpIvId)
     {
         $this->lpIvId = $lpIvId;
 
@@ -96,11 +94,9 @@ class CLpIvObjective
     /**
      * Set orderId.
      *
-     * @param int $orderId
-     *
      * @return CLpIvObjective
      */
-    public function setOrderId($orderId)
+    public function setOrderId(int $orderId)
     {
         $this->orderId = $orderId;
 
@@ -120,11 +116,9 @@ class CLpIvObjective
     /**
      * Set objectiveId.
      *
-     * @param string $objectiveId
-     *
      * @return CLpIvObjective
      */
-    public function setObjectiveId($objectiveId)
+    public function setObjectiveId(string $objectiveId)
     {
         $this->objectiveId = $objectiveId;
 
@@ -144,11 +138,9 @@ class CLpIvObjective
     /**
      * Set scoreRaw.
      *
-     * @param float $scoreRaw
-     *
      * @return CLpIvObjective
      */
-    public function setScoreRaw($scoreRaw)
+    public function setScoreRaw(float $scoreRaw)
     {
         $this->scoreRaw = $scoreRaw;
 
@@ -168,11 +160,9 @@ class CLpIvObjective
     /**
      * Set scoreMax.
      *
-     * @param float $scoreMax
-     *
      * @return CLpIvObjective
      */
-    public function setScoreMax($scoreMax)
+    public function setScoreMax(float $scoreMax)
     {
         $this->scoreMax = $scoreMax;
 
@@ -192,11 +182,9 @@ class CLpIvObjective
     /**
      * Set scoreMin.
      *
-     * @param float $scoreMin
-     *
      * @return CLpIvObjective
      */
-    public function setScoreMin($scoreMin)
+    public function setScoreMin(float $scoreMin)
     {
         $this->scoreMin = $scoreMin;
 
@@ -216,11 +204,9 @@ class CLpIvObjective
     /**
      * Set status.
      *
-     * @param string $status
-     *
      * @return CLpIvObjective
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
 
@@ -240,11 +226,9 @@ class CLpIvObjective
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLpIvObjective
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

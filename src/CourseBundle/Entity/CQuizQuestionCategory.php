@@ -46,14 +46,14 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @var Collection|CQuizQuestion[]
      *
      * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", mappedBy="categories")
      */
-    protected $questions;
+    protected Collection $questions;
 
     public function __construct()
     {
@@ -141,7 +141,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * @param Collection|CQuizQuestion[] $questions
      */
-    public function setQuestions($questions): self
+    public function setQuestions(Collection $questions): self
     {
         $this->questions = $questions;
 

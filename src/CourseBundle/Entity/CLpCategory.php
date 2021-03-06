@@ -46,7 +46,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected int $position;
 
     /**
-     * @var Collection|CLpCategoryUser
+     * @var Collection|CLpCategoryUser[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
@@ -55,14 +55,14 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      *     orphanRemoval=true
      * )
      */
-    protected $users;
+    protected Collection $users;
 
     /**
      * @var Collection|CLp[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLp", mappedBy="category", cascade={"detach"})
      */
-    protected $lps;
+    protected Collection $lps;
 
     public function __construct()
     {
@@ -126,10 +126,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->users;
     }
 
-    /**
-     * @param Collection $users
-     */
-    public function setUsers($users): void
+    public function setUsers(Collection $users): void
     {
         $this->users = new ArrayCollection();
         foreach ($users as $user) {
@@ -167,11 +164,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
-    public function hasUserAdded($user)
+    public function hasUserAdded(User $user)
     {
         if (0 !== $this->getUsers()->count()) {
             $categoryUser = new CLpCategoryUser();

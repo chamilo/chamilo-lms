@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -59,11 +60,11 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected int $catId;
 
     /**
-     * @var ArrayCollection|CForumForum[]
+     * @var Collection|CForumForum[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
      */
-    protected $forums;
+    protected Collection $forums;
 
     public function __construct()
     {
@@ -91,11 +92,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     /**
      * Set catTitle.
      *
-     * @param string $catTitle
-     *
      * @return CForumCategory
      */
-    public function setCatTitle($catTitle)
+    public function setCatTitle(string $catTitle)
     {
         $this->catTitle = $catTitle;
 
@@ -127,11 +126,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     /**
      * Set catOrder.
      *
-     * @param int $catOrder
-     *
      * @return CForumCategory
      */
-    public function setCatOrder($catOrder)
+    public function setCatOrder(int $catOrder)
     {
         $this->catOrder = $catOrder;
 
@@ -151,11 +148,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     /**
      * Set locked.
      *
-     * @param int $locked
-     *
      * @return CForumCategory
      */
-    public function setLocked($locked)
+    public function setLocked(int $locked)
     {
         $this->locked = $locked;
 
@@ -175,11 +170,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     /**
      * Set catId.
      *
-     * @param int $catId
-     *
      * @return CForumCategory
      */
-    public function setCatId($catId)
+    public function setCatId(int $catId)
     {
         $this->catId = $catId;
 
@@ -199,7 +192,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     /**
      * Get forums.
      *
-     * @return ArrayCollection|CForumForum[]
+     * @return Collection|CForumForum[]
      */
     public function getForums()
     {

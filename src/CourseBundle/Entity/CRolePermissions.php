@@ -57,11 +57,9 @@ class CRolePermissions
     /**
      * Set defaultPerm.
      *
-     * @param bool $defaultPerm
-     *
      * @return CRolePermissions
      */
-    public function setDefaultPerm($defaultPerm)
+    public function setDefaultPerm(bool $defaultPerm)
     {
         $this->defaultPerm = $defaultPerm;
 
@@ -81,11 +79,9 @@ class CRolePermissions
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CRolePermissions
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -105,11 +101,9 @@ class CRolePermissions
     /**
      * Set roleId.
      *
-     * @param int $roleId
-     *
      * @return CRolePermissions
      */
-    public function setRoleId($roleId)
+    public function setRoleId(int $roleId)
     {
         $this->roleId = $roleId;
 
@@ -129,11 +123,9 @@ class CRolePermissions
     /**
      * Set tool.
      *
-     * @param string $tool
-     *
      * @return CRolePermissions
      */
-    public function setTool($tool)
+    public function setTool(string $tool)
     {
         $this->tool = $tool;
 
@@ -153,11 +145,9 @@ class CRolePermissions
     /**
      * Set action.
      *
-     * @param string $action
-     *
      * @return CRolePermissions
      */
-    public function setAction($action)
+    public function setAction(string $action)
     {
         $this->action = $action;
 

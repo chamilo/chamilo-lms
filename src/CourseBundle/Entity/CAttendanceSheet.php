@@ -49,11 +49,9 @@ class CAttendanceSheet
     /**
      * Set presence.
      *
-     * @param bool $presence
-     *
      * @return CAttendanceSheet
      */
-    public function setPresence($presence)
+    public function setPresence(bool $presence)
     {
         $this->presence = $presence;
 

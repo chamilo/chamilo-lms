@@ -84,11 +84,9 @@ class CGroupRelUser
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return CGroupRelUser
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -108,11 +106,9 @@ class CGroupRelUser
     /**
      * Set role.
      *
-     * @param string $role
-     *
      * @return CGroupRelUser
      */
-    public function setRole($role)
+    public function setRole(string $role)
     {
         $this->role = $role;
 
@@ -132,11 +128,9 @@ class CGroupRelUser
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CGroupRelUser
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

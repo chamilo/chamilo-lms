@@ -52,7 +52,7 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="blog_subtitle", type="string", length=250, nullable=true)
      */
-    protected ?string $blogSubtitle;
+    protected ?string $blogSubtitle = null;
 
     /**
      * @ORM\Column(name="date_creation", type="datetime", nullable=false)
@@ -67,7 +67,7 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected ?int $sessionId;
+    protected ?int $sessionId = null;
 
     public function __toString(): string
     {
@@ -77,11 +77,9 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * Set blogName.
      *
-     * @param string $blogName
-     *
      * @return CBlog
      */
-    public function setBlogName($blogName)
+    public function setBlogName(string $blogName)
     {
         $this->blogName = $blogName;
 
@@ -101,11 +99,9 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * Set blogSubtitle.
      *
-     * @param string $blogSubtitle
-     *
      * @return CBlog
      */
-    public function setBlogSubtitle($blogSubtitle)
+    public function setBlogSubtitle(string $blogSubtitle)
     {
         $this->blogSubtitle = $blogSubtitle;
 
@@ -125,11 +121,9 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * Set dateCreation.
      *
-     * @param DateTime $dateCreation
-     *
      * @return CBlog
      */
-    public function setDateCreation($dateCreation)
+    public function setDateCreation(DateTime $dateCreation)
     {
         $this->dateCreation = $dateCreation;
 
@@ -149,11 +143,9 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * Set visibility.
      *
-     * @param bool $visibility
-     *
      * @return CBlog
      */
-    public function setVisibility($visibility)
+    public function setVisibility(bool $visibility)
     {
         $this->visibility = $visibility;
 
@@ -173,11 +165,9 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CBlog
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -197,11 +187,9 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * Set blogId.
      *
-     * @param int $blogId
-     *
      * @return CBlog
      */
-    public function setBlogId($blogId)
+    public function setBlogId(int $blogId)
     {
         $this->blogId = $blogId;
 
@@ -221,11 +209,9 @@ class CBlog extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CBlog
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

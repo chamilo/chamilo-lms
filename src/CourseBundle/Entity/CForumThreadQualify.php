@@ -53,21 +53,19 @@ class CForumThreadQualify
     /**
      * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
      */
-    protected ?int $qualifyUserId;
+    protected ?int $qualifyUserId = null;
 
     /**
      * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
      */
-    protected ?DateTime $qualifyTime;
+    protected ?DateTime $qualifyTime = null;
 
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CForumThreadQualify
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -87,11 +85,9 @@ class CForumThreadQualify
     /**
      * Set threadId.
      *
-     * @param int $threadId
-     *
      * @return CForumThreadQualify
      */
-    public function setThreadId($threadId)
+    public function setThreadId(int $threadId)
     {
         $this->threadId = $threadId;
 
@@ -111,11 +107,9 @@ class CForumThreadQualify
     /**
      * Set qualify.
      *
-     * @param float $qualify
-     *
      * @return CForumThreadQualify
      */
-    public function setQualify($qualify)
+    public function setQualify(float $qualify)
     {
         $this->qualify = $qualify;
 
@@ -135,11 +129,9 @@ class CForumThreadQualify
     /**
      * Set qualifyUserId.
      *
-     * @param int $qualifyUserId
-     *
      * @return CForumThreadQualify
      */
-    public function setQualifyUserId($qualifyUserId)
+    public function setQualifyUserId(int $qualifyUserId)
     {
         $this->qualifyUserId = $qualifyUserId;
 
@@ -159,11 +151,9 @@ class CForumThreadQualify
     /**
      * Set qualifyTime.
      *
-     * @param DateTime $qualifyTime
-     *
      * @return CForumThreadQualify
      */
-    public function setQualifyTime($qualifyTime)
+    public function setQualifyTime(DateTime $qualifyTime)
     {
         $this->qualifyTime = $qualifyTime;
 
@@ -183,11 +173,9 @@ class CForumThreadQualify
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumThreadQualify
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

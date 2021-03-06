@@ -47,11 +47,9 @@ class COnlineConnected
     /**
      * Set lastConnection.
      *
-     * @param DateTime $lastConnection
-     *
      * @return COnlineConnected
      */
-    public function setLastConnection($lastConnection)
+    public function setLastConnection(DateTime $lastConnection)
     {
         $this->lastConnection = $lastConnection;
 
@@ -71,11 +69,9 @@ class COnlineConnected
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return COnlineConnected
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -95,11 +91,9 @@ class COnlineConnected
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return COnlineConnected
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 

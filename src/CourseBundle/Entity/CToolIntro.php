@@ -46,11 +46,9 @@ class CToolIntro
     /**
      * Set introText.
      *
-     * @param string $introText
-     *
      * @return CToolIntro
      */
-    public function setIntroText($introText)
+    public function setIntroText(string $introText)
     {
         $this->introText = $introText;
 
@@ -70,11 +68,9 @@ class CToolIntro
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CToolIntro
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -94,11 +90,9 @@ class CToolIntro
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CToolIntro
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 

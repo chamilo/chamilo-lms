@@ -56,12 +56,12 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="sound", type="string", length=255, nullable=true)
      */
-    protected ?string $sound;
+    protected ?string $sound = null;
 
     /**
      * @ORM\Column(name="type", type="integer", nullable=false)
@@ -91,7 +91,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="access_condition", type="text", nullable=true)
      */
-    protected ?string $accessCondition;
+    protected ?string $accessCondition = null;
 
     /**
      * @ORM\Column(name="max_attempt", type="integer", nullable=false)
@@ -101,12 +101,12 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
-    protected ?DateTime $startTime;
+    protected ?DateTime $startTime = null;
 
     /**
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
-    protected ?DateTime $endTime;
+    protected ?DateTime $endTime = null;
 
     /**
      * @ORM\Column(name="feedback_type", type="integer", nullable=false)
@@ -121,7 +121,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected ?int $sessionId;
+    protected ?int $sessionId = null;
 
     /**
      * @ORM\Column(name="propagate_neg", type="integer", nullable=false)
@@ -146,7 +146,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="text_when_finished", type="text", nullable=true)
      */
-    protected ?string $textWhenFinished;
+    protected ?string $textWhenFinished = null;
 
     /**
      * @ORM\Column(name="display_category_name", type="integer", nullable=false)
@@ -156,7 +156,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="pass_percentage", type="integer", nullable=true)
      */
-    protected ?int $passPercentage;
+    protected ?int $passPercentage = null;
 
     /**
      * @ORM\Column(name="prevent_backwards", type="integer", nullable=false, options={"default":0})
@@ -166,7 +166,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="question_selection_type", type="integer", nullable=true)
      */
-    protected ?int $questionSelectionType;
+    protected ?int $questionSelectionType = null;
 
     /**
      * @ORM\Column(name="hide_question_title", type="boolean", nullable=false)
@@ -204,17 +204,18 @@ class CQuiz extends AbstractResource implements ResourceInterface
      *
      * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
      */
-    protected $questions;
+    protected \Doctrine\Common\Collections\Collection $questions;
 
     /**
      * @var Collection|CQuizRelQuestionCategory[]
      *
      * @ORM\OneToMany(targetEntity="CQuizRelQuestionCategory", mappedBy="quiz", cascade={"persist"}))
      */
-    protected $questionsCategories;
+    protected \Doctrine\Common\Collections\Collection $questionsCategories;
 
     public function __construct()
     {
+        $this->questionsCategories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->hideQuestionTitle = false;
         $this->type = self::ONE_PER_PAGE;
         $this->showPreviousButton = true;
@@ -279,12 +280,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set sound.
-     *
-     * @param string $sound
-     */
-    public function setSound($sound): self
+    public function setSound(string $sound): self
     {
         $this->sound = $sound;
 
@@ -313,12 +309,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->type;
     }
 
-    /**
-     * Set random.
-     *
-     * @param int $random
-     */
-    public function setRandom($random): self
+    public function setRandom(int $random): self
     {
         $this->random = $random;
 
@@ -335,12 +326,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->random;
     }
 
-    /**
-     * Set randomAnswers.
-     *
-     * @param bool $randomAnswers
-     */
-    public function setRandomAnswers($randomAnswers): self
+    public function setRandomAnswers(bool $randomAnswers): self
     {
         $this->randomAnswers = $randomAnswers;
 
@@ -357,12 +343,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->randomAnswers;
     }
 
-    /**
-     * Set active.
-     *
-     * @param bool $active
-     */
-    public function setActive($active): self
+    public function setActive(bool $active): self
     {
         $this->active = $active;
 
@@ -379,12 +360,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->active;
     }
 
-    /**
-     * Set resultsDisabled.
-     *
-     * @param int $resultsDisabled
-     */
-    public function setResultsDisabled($resultsDisabled): self
+    public function setResultsDisabled(int $resultsDisabled): self
     {
         $this->resultsDisabled = $resultsDisabled;
 
@@ -404,11 +380,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set accessCondition.
      *
-     * @param string $accessCondition
-     *
      * @return CQuiz
      */
-    public function setAccessCondition($accessCondition)
+    public function setAccessCondition(string $accessCondition)
     {
         $this->accessCondition = $accessCondition;
 
@@ -428,11 +402,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set maxAttempt.
      *
-     * @param int $maxAttempt
-     *
      * @return CQuiz
      */
-    public function setMaxAttempt($maxAttempt)
+    public function setMaxAttempt(int $maxAttempt)
     {
         $this->maxAttempt = $maxAttempt;
 
@@ -452,11 +424,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set startTime.
      *
-     * @param DateTime $startTime
-     *
      * @return CQuiz
      */
-    public function setStartTime($startTime)
+    public function setStartTime(DateTime $startTime)
     {
         $this->startTime = $startTime;
 
@@ -476,11 +446,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set endTime.
      *
-     * @param DateTime $endTime
-     *
      * @return CQuiz
      */
-    public function setEndTime($endTime)
+    public function setEndTime(DateTime $endTime)
     {
         $this->endTime = $endTime;
 
@@ -500,11 +468,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set feedbackType.
      *
-     * @param int $feedbackType
-     *
      * @return CQuiz
      */
-    public function setFeedbackType($feedbackType)
+    public function setFeedbackType(int $feedbackType)
     {
         $this->feedbackType = $feedbackType;
 
@@ -524,11 +490,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set expiredTime.
      *
-     * @param int $expiredTime
-     *
      * @return CQuiz
      */
-    public function setExpiredTime($expiredTime)
+    public function setExpiredTime(int $expiredTime)
     {
         $this->expiredTime = $expiredTime;
 
@@ -548,11 +512,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CQuiz
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -572,11 +534,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set propagateNeg.
      *
-     * @param int $propagateNeg
-     *
      * @return CQuiz
      */
-    public function setPropagateNeg($propagateNeg)
+    public function setPropagateNeg(int $propagateNeg)
     {
         $this->propagateNeg = $propagateNeg;
 
@@ -594,11 +554,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param int $saveCorrectAnswers
-     *
      * @return CQuiz
      */
-    public function setSaveCorrectAnswers($saveCorrectAnswers)
+    public function setSaveCorrectAnswers(int $saveCorrectAnswers)
     {
         $this->saveCorrectAnswers = $saveCorrectAnswers;
 
@@ -616,11 +574,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set reviewAnswers.
      *
-     * @param int $reviewAnswers
-     *
      * @return CQuiz
      */
-    public function setReviewAnswers($reviewAnswers)
+    public function setReviewAnswers(int $reviewAnswers)
     {
         $this->reviewAnswers = $reviewAnswers;
 
@@ -640,11 +596,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set randomByCategory.
      *
-     * @param int $randomByCategory
-     *
      * @return CQuiz
      */
-    public function setRandomByCategory($randomByCategory)
+    public function setRandomByCategory(int $randomByCategory)
     {
         $this->randomByCategory = $randomByCategory;
 
@@ -664,11 +618,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set textWhenFinished.
      *
-     * @param string $textWhenFinished
-     *
      * @return CQuiz
      */
-    public function setTextWhenFinished($textWhenFinished)
+    public function setTextWhenFinished(string $textWhenFinished)
     {
         $this->textWhenFinished = $textWhenFinished;
 
@@ -688,11 +640,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set displayCategoryName.
      *
-     * @param int $displayCategoryName
-     *
      * @return CQuiz
      */
-    public function setDisplayCategoryName($displayCategoryName)
+    public function setDisplayCategoryName(int $displayCategoryName)
     {
         $this->displayCategoryName = $displayCategoryName;
 
@@ -712,11 +662,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set passPercentage.
      *
-     * @param int $passPercentage
-     *
      * @return CQuiz
      */
-    public function setPassPercentage($passPercentage)
+    public function setPassPercentage(int $passPercentage)
     {
         $this->passPercentage = $passPercentage;
 
@@ -736,11 +684,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CQuiz
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -777,10 +723,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->questionSelectionType;
     }
 
-    /**
-     * @param int $questionSelectionType
-     */
-    public function setQuestionSelectionType($questionSelectionType): self
+    public function setQuestionSelectionType(int $questionSelectionType): self
     {
         $this->questionSelectionType = $questionSelectionType;
 
@@ -792,10 +735,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->hideQuestionTitle;
     }
 
-    /**
-     * @param bool $hideQuestionTitle
-     */
-    public function setHideQuestionTitle($hideQuestionTitle): self
+    public function setHideQuestionTitle(bool $hideQuestionTitle): self
     {
         $this->hideQuestionTitle = $hideQuestionTitle;
 

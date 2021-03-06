@@ -41,12 +41,12 @@ class CRole
     /**
      * @ORM\Column(name="role_comment", type="text", nullable=true)
      */
-    protected ?string $roleComment;
+    protected ?string $roleComment = null;
 
     /**
      * @ORM\Column(name="default_role", type="boolean", nullable=true)
      */
-    protected ?bool $defaultRole;
+    protected ?bool $defaultRole = null;
 
     /**
      * @ORM\Column(name="role_id", type="integer")
@@ -56,11 +56,9 @@ class CRole
     /**
      * Set roleName.
      *
-     * @param string $roleName
-     *
      * @return CRole
      */
-    public function setRoleName($roleName)
+    public function setRoleName(string $roleName)
     {
         $this->roleName = $roleName;
 
@@ -80,11 +78,9 @@ class CRole
     /**
      * Set roleComment.
      *
-     * @param string $roleComment
-     *
      * @return CRole
      */
-    public function setRoleComment($roleComment)
+    public function setRoleComment(string $roleComment)
     {
         $this->roleComment = $roleComment;
 
@@ -104,11 +100,9 @@ class CRole
     /**
      * Set defaultRole.
      *
-     * @param bool $defaultRole
-     *
      * @return CRole
      */
-    public function setDefaultRole($defaultRole)
+    public function setDefaultRole(bool $defaultRole)
     {
         $this->defaultRole = $defaultRole;
 
@@ -128,11 +122,9 @@ class CRole
     /**
      * Set roleId.
      *
-     * @param int $roleId
-     *
      * @return CRole
      */
-    public function setRoleId($roleId)
+    public function setRoleId(int $roleId)
     {
         $this->roleId = $roleId;
 
@@ -152,11 +144,9 @@ class CRole
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CRole
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

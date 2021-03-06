@@ -44,7 +44,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="end_date", type="date", nullable=true)
      */
-    protected ?DateTime $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
      * @ORM\Column(name="display_order", type="integer", nullable=false)
@@ -54,7 +54,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="email_sent", type="boolean", nullable=true)
      */
-    protected ?bool $emailSent;
+    protected ?bool $emailSent = null;
 
     /**
      * @var Collection<int, CAnnouncementAttachment>
@@ -125,12 +125,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->endDate;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @param int $displayOrder
-     */
-    public function setDisplayOrder($displayOrder): self
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -147,12 +142,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->displayOrder;
     }
 
-    /**
-     * Set emailSent.
-     *
-     * @param bool $emailSent
-     */
-    public function setEmailSent($emailSent): self
+    public function setEmailSent(bool $emailSent): self
     {
         $this->emailSent = $emailSent;
 

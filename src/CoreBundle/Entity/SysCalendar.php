@@ -61,7 +61,7 @@ class SysCalendar
      *
      * @return SysCalendar
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -85,7 +85,7 @@ class SysCalendar
      *
      * @return SysCalendar
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -109,7 +109,7 @@ class SysCalendar
      *
      * @return SysCalendar
      */
-    public function setStartDate($startDate)
+    public function setStartDate($startDate): self
     {
         $this->startDate = $startDate;
 
@@ -133,7 +133,7 @@ class SysCalendar
      *
      * @return SysCalendar
      */
-    public function setEndDate($endDate)
+    public function setEndDate($endDate): self
     {
         $this->endDate = $endDate;
 
@@ -157,7 +157,7 @@ class SysCalendar
      *
      * @return SysCalendar
      */
-    public function setAccessUrlId($accessUrlId)
+    public function setAccessUrlId($accessUrlId): self
     {
         $this->accessUrlId = $accessUrlId;
 
@@ -181,7 +181,7 @@ class SysCalendar
      *
      * @return SysCalendar
      */
-    public function setAllDay($allDay)
+    public function setAllDay($allDay): self
     {
         $this->allDay = $allDay;
 

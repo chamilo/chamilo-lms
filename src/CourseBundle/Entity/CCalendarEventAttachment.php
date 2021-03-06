@@ -14,9 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  * CCalendarEventAttachment.
  *
  * @ORM\Table(
- *  name="c_calendar_event_attachment",
- *  indexes={
- *  }
+ *     name="c_calendar_event_attachment",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

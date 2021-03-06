@@ -13,9 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CCalendarEventRepeat.
  *
  * @ORM\Table(
- *  name="c_calendar_event_repeat",
- *  indexes={
- *  }
+ *     name="c_calendar_event_repeat",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

@@ -489,7 +489,6 @@ class Agenda
             return false;
         }
 
-        $courseId = $this->course['real_id'];
         $eventId = (int) $eventId;
 
         $sql = "SELECT title, content, start_date, end_date, all_day
@@ -510,15 +509,15 @@ class Agenda
             'yearly',
         ];
 
-        if (!in_array($type, $typeList)) {
+        if (!in_array($type, $typeList, true)) {
             return false;
         }
 
         $now = time();
-
+        $endTimeStamp = api_strtotime($end, 'UTC');
         // The event has to repeat *in the future*. We don't allow repeated
         // events in the past
-        if ($end > $now) {
+        if ($endTimeStamp < $now) {
             return false;
         }
 
@@ -530,7 +529,6 @@ class Agenda
 
         $type = Database::escape_string($type);
         $end = Database::escape_string($end);
-        $endTimeStamp = api_strtotime($end, 'UTC');
         $sql = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end)
                 VALUES ('$eventId', '$type', '$endTimeStamp')";
         Database::query($sql);

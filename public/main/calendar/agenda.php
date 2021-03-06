@@ -68,7 +68,8 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" />&nbsp; <br />'.get_lang('Description').'&nbsp;&nbsp;<input type=\"text\" name=\"legend[]\"  /><br /><br />";
+	document.
+	    getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" />&nbsp; <br />'.get_lang('Description').'&nbsp;&nbsp;<input type=\"text\" name=\"legend[]\"  /><br /><br />";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -120,12 +121,12 @@ if ($allowToEdit) {
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
 
-                $sendEmail = isset($values['add_announcement']) ? true : false;
+                $sendEmail = isset($values['add_announcement']);
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-                $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
-                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
-                $comment = isset($values['comment']) ? $values['comment'] : null;
-                $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
+                $sendAttachment = isset($_FILES) && !empty($_FILES);
+                $attachmentCommentList = $values['legend'] ?? null;
+                $comment = $values['comment'] ?? null;
+                $usersToSend = $values['users_to_send'] ?? '';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 

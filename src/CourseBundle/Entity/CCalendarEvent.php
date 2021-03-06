@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,9 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CCalendarEvent.
  *
  * @ORM\Table(
- *  name="c_calendar_event",
- *  indexes={
- *  }
+ *     name="c_calendar_event",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */
@@ -55,7 +56,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected ?DateTime $endDate;
 
     /**
-     * @var ArrayCollection|CCalendarEvent[]
+     * @var Collection|CCalendarEvent[]
      * @ORM\OneToMany(targetEntity="CCalendarEvent", mappedBy="parentEvent")
      */
     protected $children;
@@ -67,7 +68,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected ?CCalendarEvent $parentEvent = null;
 
     /**
-     * @var ArrayCollection|CCalendarEventRepeat[]
+     * @var Collection|CCalendarEventRepeat[]
      *
      * @ORM\OneToMany(targetEntity="CCalendarEventRepeat", mappedBy="event", cascade={"persist"}, orphanRemoval=true)
      */
@@ -95,10 +96,10 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected ?Room $room = null;
 
     /**
-     * @var ArrayCollection|CCalendarEventAttachment[]
+     * @var Collection|CCalendarEventAttachment[]
      *
      * @ORM\OneToMany(
-     *   targetEntity="CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}
      * )
      */
     protected $attachments;
@@ -106,6 +107,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
+        $this->repeatEvents = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -120,12 +123,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -189,7 +187,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CCalendarEvent[]
+     * @return Collection|CCalendarEvent[]
      */
     public function getChildren()
     {
@@ -240,28 +238,19 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this->comment;
     }
 
-    /**
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    /**
-     * @return Room
-     */
-    public function getRoom()
+    public function getRoom(): ?Room
     {
         return $this->room;
     }
 
-    /**
-     * @param Room $room
-     */
-    public function setRoom($room): self
+    public function setRoom(Room $room): self
     {
         $this->room = $room;
 
@@ -295,7 +284,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CCalendarEventAttachment[]
+     * @return Collection|CCalendarEventAttachment[]
      */
     public function getAttachments()
     {
@@ -303,7 +292,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param ArrayCollection|CCalendarEventAttachment[] $attachments
+     * @param Collection|CCalendarEventAttachment[] $attachments
      */
     public function setAttachments($attachments): self
     {
@@ -320,7 +309,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CCalendarEventRepeat[]
+     * @return Collection|CCalendarEventRepeat[]
      */
     public function getRepeatEvents()
     {
@@ -328,7 +317,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param ArrayCollection|CCalendarEventRepeat[] $repeatEvents
+     * @param Collection|CCalendarEventRepeat[] $repeatEvents
      *
      * @return CCalendarEvent
      */

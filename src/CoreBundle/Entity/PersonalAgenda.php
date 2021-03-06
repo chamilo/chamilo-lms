@@ -75,13 +75,16 @@ class PersonalAgenda
     protected ?string $color;
 
     /**
-     * Set title.
+     * Get id.
      *
-     * @param string $title
-     *
-     * @return PersonalAgenda
+     * @return int
      */
-    public function setTitle($title)
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -98,26 +101,14 @@ class PersonalAgenda
         return $this->title;
     }
 
-    /**
-     * Set text.
-     *
-     * @param string $text
-     *
-     * @return PersonalAgenda
-     */
-    public function setText($text)
+    public function setText(string $text): self
     {
         $this->text = $text;
 
         return $this;
     }
 
-    /**
-     * Get text.
-     *
-     * @return string
-     */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }
@@ -126,10 +117,8 @@ class PersonalAgenda
      * Set date.
      *
      * @param DateTime $date
-     *
-     * @return PersonalAgenda
      */
-    public function setDate($date)
+    public function setDate($date): self
     {
         $this->date = $date;
 
@@ -153,7 +142,7 @@ class PersonalAgenda
      *
      * @return PersonalAgenda
      */
-    public function setEndDate($value)
+    public function setEndDate($value): self
     {
         $this->endDate = $value;
 
@@ -175,7 +164,7 @@ class PersonalAgenda
      *
      * @return PersonalAgenda
      */
-    public function setParentEventId($parentEventId)
+    public function setParentEventId($parentEventId): self
     {
         $this->parentEventId = $parentEventId;
 
@@ -199,7 +188,7 @@ class PersonalAgenda
      *
      * @return PersonalAgenda
      */
-    public function setAllDay($allDay)
+    public function setAllDay($allDay): self
     {
         $this->allDay = $allDay;
 
@@ -217,16 +206,6 @@ class PersonalAgenda
     }
 
     /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * @return string
      */
     public function getColor()
@@ -239,7 +218,7 @@ class PersonalAgenda
      *
      * @return PersonalAgenda
      */
-    public function setColor($color)
+    public function setColor($color): self
     {
         $this->color = $color;
 

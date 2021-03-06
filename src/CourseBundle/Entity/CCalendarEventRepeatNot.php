@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CCalendarEventRepeatNot.
  *
  * @ORM\Table(
- *  name="c_calendar_event_repeat_not"
+ *     name="c_calendar_event_repeat_not"
  * )
  * @ORM\Entity
  */

@@ -60,7 +60,7 @@ class Template
             return $this->{$action};
         }
 
-        throw new InvalidArgumentException("No template found for action: {$action}");
+        throw new InvalidArgumentException(sprintf('No template found for action: %s', $action));
     }
 
     public function setIndex(string $index): self

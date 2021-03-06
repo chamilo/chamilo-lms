@@ -56,7 +56,7 @@ class CourseHomeController extends ToolBaseController
 
         $userId = 0;
         $user = $this->getUser();
-        if ($user) {
+        if (null !== $user) {
             $userId = $this->getUser()->getId();
         }
 
@@ -80,10 +80,8 @@ class CourseHomeController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
-        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg'])) {
-            if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
-                $session->set('is_allowed_in_course', true);
-            }
+        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) && CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
+            $session->set('is_allowed_in_course', true);
         }
 
         $action = empty($_GET['action']) ? '' : Security::remove_XSS($_GET['action']);
@@ -116,6 +114,7 @@ class CourseHomeController extends ToolBaseController
         $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
         $qb->addSelect('tool');
         $qb->innerJoin('resource.tool', 'tool');
+
         $result = $qb->getQuery()->getResult();
         $tools = [];
         /** @var CTool $item */
@@ -187,7 +186,7 @@ class CourseHomeController extends ToolBaseController
         Exercise::cleanSessionVariables();
 
         $shortcuts = [];
-        if ($user) {
+        if (null !== $user) {
             $shortcutQuery = $shortcutRepository->getResources($user, $course->getResourceNode(), $course);
             $shortcuts = $shortcutQuery->getQuery()->getResult();
         }
@@ -235,14 +234,13 @@ class CourseHomeController extends ToolBaseController
     /**
      * Edit configuration with given namespace.
      *
-     * @param string $namespace
      * @Route("/{cid}/settings/{namespace}", name="chamilo_core_course_settings")
      *
      * @Entity("course", expr="repository.find(cid)")
      *
      * @return Response
      */
-    public function updateSettingsAction(Request $request, Course $course, $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory)
+    public function updateSettingsAction(Request $request, Course $course, string $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory)
     {
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);
@@ -259,8 +257,8 @@ class CourseHomeController extends ToolBaseController
                 $manager->setCourse($course);
                 $manager->save($form->getData());
                 $message = $this->trans('Update');
-            } catch (ValidatorException $exception) {
-                $message = $this->trans($exception->getMessage());
+            } catch (ValidatorException $validatorException) {
+                $message = $this->trans($validatorException->getMessage());
                 $messageType = 'error';
             }
             $this->addFlash($messageType, $message);
@@ -304,7 +302,7 @@ class CourseHomeController extends ToolBaseController
                         // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
-                        header("Location: {$url}");
+                        header(sprintf('Location: %s', $url));
                         exit;
                     }
                 }
@@ -340,7 +338,7 @@ class CourseHomeController extends ToolBaseController
                                     'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
 
                                 $_SESSION[$session_key] = true;
-                                header("Location: {$url}");
+                                header(sprintf('Location: %s', $url));
                                 exit;
                             }
                         }
@@ -360,12 +358,12 @@ class CourseHomeController extends ToolBaseController
             if ($allowAutoLaunchForCourseAdmins) {
                 if (empty($autoLaunchWarning)) {
                     $autoLaunchWarning = get_lang(
-                        'The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.'
+                        "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course."
                     );
                 }
             } else {
                 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
-                header("Location: {$url}");
+                header(sprintf('Location: %s', $url));
                 exit;
             }
         }
@@ -382,7 +380,7 @@ class CourseHomeController extends ToolBaseController
                 } else {
                     // Redirecting to the document
                     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
-                    header("Location: {$url}");
+                    header(sprintf('Location: %s', $url));
                     exit;
                 }
             } elseif (1 === $exerciseAutoLaunch) {
@@ -417,7 +415,7 @@ class CourseHomeController extends ToolBaseController
                         $exerciseId = $row['iid'];
                         $url = api_get_path(WEB_CODE_PATH).
                             'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
-                        header("Location: {$url}");
+                        header(sprintf('Location: %s', $url));
                         exit;
                     }
                 }
@@ -435,7 +433,7 @@ class CourseHomeController extends ToolBaseController
             } else {
                 // Redirecting to the document
                 $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
-                header("Location: {$url}");
+                header("Location: $url");
                 exit;
             }
         }

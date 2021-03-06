@@ -72,10 +72,8 @@ class EditorController extends BaseController
 
     /**
      * @Route("/resources/{tool}/{type}/{parentId}", methods={"GET"}, name="resources_filemanager")
-     *
-     * @param int $parentId
      */
-    public function customEditorFileManager(ResourceFactory $resourceFactory, Request $request, $tool, $type, $parentId = 0): Response
+    public function customEditorFileManager(ResourceFactory $resourceFactory, Request $request, $tool, $type, int $parentId = 0): Response
     {
         $id = $request->get('id');
 

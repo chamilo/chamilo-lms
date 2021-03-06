@@ -49,7 +49,7 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder
-            ->innerJoin("{$rootAlias}.resourceNode", 'node')
+            ->innerJoin("$rootAlias.resourceNode", 'node')
             ->innerJoin('node.resourceLinks', 'links')
         ;
 

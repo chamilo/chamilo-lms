@@ -39,11 +39,9 @@ class AdminController extends BaseController
     }
 
     /**
-     * @param string $url
-     *
      * @return FormValidator
      */
-    private function getSearchForm($url)
+    private function getSearchForm(string $url)
     {
         $form = new FormValidator(
             'search-form',

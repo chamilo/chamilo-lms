@@ -46,10 +46,8 @@ class NewsController extends BaseController
 
     /**
      * @Route("/{id}", name="news", methods={"GET", "POST"}, options={"expose"=true})
-     *
-     * @param int $id
      */
-    public function newsAction($id = 0): Response
+    public function newsAction(int $id = 0): Response
     {
         $visibility = SystemAnnouncementManager::getCurrentUserVisibility();
 

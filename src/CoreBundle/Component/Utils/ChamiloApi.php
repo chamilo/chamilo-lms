@@ -36,11 +36,9 @@ class ChamiloApi
     }
 
     /**
-     * @param string $variable
-     *
      * @return bool|string
      */
-    public static function getConfigurationValue($variable)
+    public static function getConfigurationValue(string $variable)
     {
         $configuration = self::getConfigurationArray();
         if (array_key_exists($variable, $configuration)) {
@@ -74,13 +72,9 @@ class ChamiloApi
     /**
      * Get the platform logo path.
      *
-     * @param string $theme
-     * @param bool   $getSysPath
-     * @param bool   $forcedGetter
-     *
      * @return null|string
      */
-    public static function getPlatformLogoPath($theme = '', $getSysPath = false, $forcedGetter = false)
+    public static function getPlatformLogoPath(string $theme = '', bool $getSysPath = false, bool $forcedGetter = false)
     {
         static $logoPath;
 
@@ -99,22 +93,22 @@ class ChamiloApi
                 }
             }
             $themeDir = Template::getThemeDir($theme);
-            $customLogoPath = $themeDir."images/header-logo-custom{$accessUrlId}.png";
+            $customLogoPath = $themeDir.sprintf('images/header-logo-custom%s.png', $accessUrlId);
 
             $svgIcons = api_get_setting('icons_mode_svg');
             if ('true' === $svgIcons) {
                 $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
-                if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPathSVG}")) {
+                if (file_exists(api_get_path(SYS_PUBLIC_PATH).sprintf('css/%s', $customLogoPathSVG))) {
                     if ($getSysPath) {
-                        return api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPathSVG}";
+                        return api_get_path(SYS_PUBLIC_PATH).sprintf('css/%s', $customLogoPathSVG);
                     }
 
                     return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
                 }
             }
-            if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPath}")) {
+            if (file_exists(api_get_path(SYS_PUBLIC_PATH).sprintf('css/%s', $customLogoPath))) {
                 if ($getSysPath) {
-                    return api_get_path(SYS_PUBLIC_PATH)."css/{$customLogoPath}";
+                    return api_get_path(SYS_PUBLIC_PATH).sprintf('css/%s', $customLogoPath);
                 }
 
                 return api_get_path(WEB_CSS_PATH).$customLogoPath;
@@ -147,20 +141,16 @@ class ChamiloApi
 
     /**
      * Get the platform logo.
-     * Return a <img> if the logo image exists. Otherwise return a <h2> with the institution name.
-     *
-     * @param string $theme
-     * @param array  $imageAttributes optional
-     * @param bool   $getSysPath
-     * @param bool   $forcedGetter
+     * Return a <img> if the logo image exists.
+     * Otherwise return a <h2> with the institution name.
      *
      * @return string
      */
     public static function getPlatformLogo(
-        $theme = '',
-        $imageAttributes = [],
-        $getSysPath = false,
-        $forcedGetter = false
+        string $theme = '',
+        array $imageAttributes = [],
+        bool $getSysPath = false,
+        bool $forcedGetter = false
     ) {
         $logoPath = self::getPlatformLogoPath($theme, $getSysPath, $forcedGetter);
         $institution = api_get_setting('Institution');
@@ -204,12 +194,11 @@ class ChamiloApi
     /**
      * Like strip_tags(), but leaves an additional space and removes only the given tags.
      *
-     * @param string $string
-     * @param array  $tags   Tags to be removed
+     * @param array $tags Tags to be removed
      *
      * @return string The original string without the given tags
      */
-    public static function stripGivenTags($string, $tags)
+    public static function stripGivenTags(string $string, array $tags)
     {
         foreach ($tags as $tag) {
             $string2 = preg_replace('#</\b'.$tag.'\b[^>]*>#i', ' ', $string);
@@ -230,10 +219,12 @@ class ChamiloApi
      *
      * @return string
      */
-    public static function addOrSubTimeToDateTime($time, $datetime = 'now', $operation = true)
+    public static function addOrSubTimeToDateTime(string $time, string $datetime = 'now', bool $operation = true)
     {
         $date = new DateTime($datetime);
-        $hours = $minutes = $seconds = 0;
+        $hours = 0;
+        $minutes = 0;
+        $seconds = 0;
         sscanf($time, '%d:%d:%d', $hours, $minutes, $seconds);
         $timeSeconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
         if ($operation) {
@@ -252,7 +243,7 @@ class ChamiloApi
      *
      * @return int
      */
-    public static function getCourseIdByDirectory($directory = null)
+    public static function getCourseIdByDirectory(string $directory = null)
     {
         if (!empty($directory)) {
             $directory = Database::escape_string($directory);
@@ -292,12 +283,9 @@ class ChamiloApi
     /**
      * Get a variable name for language file from a text.
      *
-     * @param string $text
-     * @param string $prefix
-     *
      * @return string
      */
-    public static function getLanguageVar($text, $prefix = '')
+    public static function getLanguageVar(string $text, string $prefix = '')
     {
         $text = api_replace_dangerous_char($text);
         $text = str_replace(['-', ' ', '.'], '_', $text);
@@ -317,10 +305,10 @@ class ChamiloApi
     {
         $visualTheme = api_get_visual_theme();
 
-        $cssFile = api_get_path(SYS_CSS_PATH)."themes/{$visualTheme}/document.css";
+        $cssFile = api_get_path(SYS_CSS_PATH).sprintf('themes/%s/document.css', $visualTheme);
 
         if (is_file($cssFile)) {
-            return api_get_path(WEB_CSS_PATH)."themes/{$visualTheme}/document.css";
+            return api_get_path(WEB_CSS_PATH).sprintf('themes/%s/document.css', $visualTheme);
         }
 
         return api_get_path(WEB_CSS_PATH).'document.css';
@@ -335,10 +323,10 @@ class ChamiloApi
     {
         $visualTheme = api_get_visual_theme();
 
-        $cssFile = api_get_path(SYS_CSS_PATH)."themes/{$visualTheme}/editor_content.css";
+        $cssFile = api_get_path(SYS_CSS_PATH).sprintf('themes/%s/editor_content.css', $visualTheme);
 
         if (is_file($cssFile)) {
-            return api_get_path(WEB_CSS_PATH)."themes/{$visualTheme}/editor_content.css";
+            return api_get_path(WEB_CSS_PATH).sprintf('themes/%s/editor_content.css', $visualTheme);
         }
 
         return api_get_path(WEB_CSS_PATH).'editor_content.css';
@@ -355,9 +343,9 @@ class ChamiloApi
      * @return array An array of string colors
      */
     public static function getColorPalette(
-        $decimalOpacity = false,
-        $wrapInRGBA = false,
-        $fillUpTo = null
+        bool $decimalOpacity = false,
+        bool $wrapInRGBA = false,
+        int $fillUpTo = null
     ) {
         // Get the common colors from the palette used for pchart
         $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';
@@ -399,7 +387,7 @@ class ChamiloApi
      *
      * @return DateTime
      */
-    public static function getServerMidnightTime($utcTime = null)
+    public static function getServerMidnightTime(?string $utcTime = null)
     {
         $localTime = api_get_local_time($utcTime);
         $localTimeZone = api_get_timezone();

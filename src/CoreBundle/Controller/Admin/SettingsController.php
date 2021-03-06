@@ -111,10 +111,8 @@ class SettingsController extends BaseController
      * @IsGranted("ROLE_ADMIN")
      *
      * @Route("/settings/{namespace}", name="chamilo_platform_settings")
-     *
-     * @param string $namespace
      */
-    public function updateSettingAction(Request $request, $namespace): Response
+    public function updateSettingAction(Request $request, string $namespace): Response
     {
         $manager = $this->getSettingsManager();
         // @todo improve get the current url entity
@@ -169,9 +167,9 @@ class SettingsController extends BaseController
             try {
                 $manager->save($form->getData());
                 $message = $this->trans('Settings have been successfully updated');
-            } catch (ValidatorException $exception) {
+            } catch (ValidatorException $validatorException) {
                 //$message = $this->trans($exception->getMessage(), [], 'validators');
-                $message = $this->trans($exception->getMessage());
+                $message = $this->trans($validatorException->getMessage());
                 $messageType = 'error';
             }
 

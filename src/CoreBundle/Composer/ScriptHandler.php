@@ -261,13 +261,9 @@ class ScriptHandler
     /**
      * Copied from chamilo rmdirr function.
      *
-     * @param string     $dirname
-     * @param bool|false $delete_only_content_in_folder
-     * @param bool|false $strict
-     *
      * @return bool
      */
-    private static function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = false)
+    private static function rmdirr(string $dirname, bool $delete_only_content_in_folder = false, bool $strict = false)
     {
         $res = true;
 
@@ -293,14 +289,14 @@ class ScriptHandler
 
                 // Recurse.
                 if ($strict) {
-                    $result = self::rmdirr("{$dirname}/{$entry}");
-                    if (false === $result) {
+                    $result = self::rmdirr(sprintf('%s/%s', $dirname, $entry));
+                    if (!$result) {
                         $res = false;
 
                         break;
                     }
                 } else {
-                    self::rmdirr("{$dirname}/{$entry}");
+                    self::rmdirr(sprintf('%s/%s', $dirname, $entry));
                 }
             }
         }
@@ -310,7 +306,7 @@ class ScriptHandler
             $dir->close();
         }
 
-        if (false === $delete_only_content_in_folder) {
+        if (!$delete_only_content_in_folder) {
             $res = rmdir($dirname);
         }
 

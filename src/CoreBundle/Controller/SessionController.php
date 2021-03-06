@@ -235,7 +235,7 @@ class SessionController extends AbstractController
             //'sequences' => $sessionRequirements,
             'is_premium' => $sessionIsPremium,
             'show_tutor' => 'true' === api_get_setting('show_session_coach'),
-            'page_url' => api_get_path(WEB_PATH)."sessions/{$session->getId()}/about/",
+            'page_url' => api_get_path(WEB_PATH).sprintf('sessions/%s/about/', $session->getId()),
             'session_date' => $sessionDates,
             'is_subscribed' => SessionManager::isUserSubscribedAsStudent(
                 $session->getId(),

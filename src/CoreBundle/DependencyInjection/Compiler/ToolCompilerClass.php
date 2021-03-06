@@ -26,7 +26,7 @@ class ToolCompilerClass implements CompilerPassInterface
         if ($container->has(ToolChain::class)) {
             $definition = $container->findDefinition(ToolChain::class);
             $taggedServices = $container->findTaggedServiceIds('chamilo_core.tool');
-            foreach ($taggedServices as $id => $attributes) {
+            foreach (array_keys($taggedServices) as $id) {
                 $definition->addMethodCall('addTool', [new Reference($id)]);
             }
         }

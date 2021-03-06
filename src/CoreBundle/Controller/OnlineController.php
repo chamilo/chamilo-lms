@@ -61,10 +61,8 @@ class OnlineController extends BaseController
 
     /**
      * @Route("/in_sessions", name="online_users_in_session", methods={"GET", "POST"}, options={"expose"=true})
-     *
-     * @param int $id
      */
-    public function onlineUsersInCoursesSessionAction($id = 0): Response
+    public function onlineUsersInCoursesSessionAction(int $id = 0): Response
     {
         $users = who_is_online_in_this_course(
             0,

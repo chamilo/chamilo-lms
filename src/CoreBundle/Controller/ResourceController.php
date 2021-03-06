@@ -159,7 +159,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $course = $this->getCourse();
         $totalSize = 0;
-        if ($course) {
+        if (null !== $course) {
             $totalSize = $course->getDiskQuota();
         }
 
@@ -750,11 +750,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param string $fileType
-     *
      * @return RedirectResponse|Response
      */
-    private function createResource(Request $request, $fileType = 'file')
+    private function createResource(Request $request, string $fileType = 'file')
     {
         $resourceNodeParentId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);

@@ -16,7 +16,7 @@ class DoctrineEntityListenerPass implements CompilerPassInterface
         $definition = $container->getDefinition('chamilo.doctrine.entity_listener_resolver');
         $services = $container->findTaggedServiceIds('doctrine.entity_listener');
 
-        foreach ($services as $service => $attributes) {
+        foreach (array_keys($services) as $service) {
             $definition->addMethodCall(
                 'addMapping',
                 [$container->getDefinition($service)->getClass(), $service]

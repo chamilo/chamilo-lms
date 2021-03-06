@@ -87,7 +87,7 @@ class CourseController extends AbstractController
 
         $courseValues = new ExtraFieldValue('course');
 
-        $urlCourse = api_get_path(WEB_PATH)."course/{$courseId}/about";
+        $urlCourse = api_get_path(WEB_PATH).sprintf('course/%s/about', $courseId);
         $courseTeachers = $course->getTeachers();
         $teachersData = [];
 

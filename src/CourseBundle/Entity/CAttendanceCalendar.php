@@ -13,10 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CAttendanceCalendar.
  *
  * @ORM\Table(
- *  name="c_attendance_calendar",
- *  indexes={
- *      @ORM\Index(name="done_attendance", columns={"done_attendance"})
- *  }
+ *     name="c_attendance_calendar",
+ *     indexes={
+ *         @ORM\Index(name="done_attendance", columns={"done_attendance"})
+ *     }
  * )
  * @ORM\Entity
  */

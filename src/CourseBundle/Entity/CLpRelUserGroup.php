@@ -19,7 +19,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * CLp.
  *
  * @ORM\Table(
- *  name="c_lp_rel_usergroup"
+ *     name="c_lp_rel_usergroup"
  * )
  * @ORM\Entity
  */

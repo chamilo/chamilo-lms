@@ -13,12 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
  * CChatConnected.
  *
  * @ORM\Table(
- *  name="c_chat_connected",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="user", columns={"user_id"}),
- *      @ORM\Index(name="char_connected_index", columns={"user_id", "session_id", "to_group_id"})
- *  }
+ *     name="c_chat_connected",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="user", columns={"user_id"}),
+ *         @ORM\Index(name="char_connected_index", columns={"user_id", "session_id", "to_group_id"})
+ *     }
  * )
  * @ORM\Entity
  */

@@ -14,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CGroupRelUser.
  *
  * @ORM\Table(
- *  name="c_group_rel_user",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_group_rel_user",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

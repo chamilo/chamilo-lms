@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(
- *  name="c_student_publication_correction"
+ *     name="c_student_publication_correction"
  * )
  * @ORM\Entity()
  */

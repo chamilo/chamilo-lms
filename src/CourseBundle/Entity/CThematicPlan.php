@@ -15,10 +15,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CThematicPlan.
  *
  * @ORM\Table(
- *  name="c_thematic_plan",
- *  indexes={
- *      @ORM\Index(name="thematic_id", columns={"thematic_id", "description_type"})
- *  }
+ *     name="c_thematic_plan",
+ *     indexes={
+ *         @ORM\Index(name="thematic_id", columns={"thematic_id", "description_type"})
+ *     }
  * )
  * @ORM\Entity
  */

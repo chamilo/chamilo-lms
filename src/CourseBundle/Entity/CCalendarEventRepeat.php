@@ -142,4 +142,9 @@ class CCalendarEventRepeat
     {
         return $this->calDays;
     }
+
+    public function getEvent(): CCalendarEvent
+    {
+        return $this->event;
+    }
 }

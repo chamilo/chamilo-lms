@@ -13,10 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CAttendanceSheet.
  *
  * @ORM\Table(
- *  name="c_attendance_sheet",
- *  indexes={
- *      @ORM\Index(name="presence", columns={"presence"})
- *  }
+ *     name="c_attendance_sheet",
+ *     indexes={
+ *         @ORM\Index(name="presence", columns={"presence"})
+ *     }
  * )
  * @ORM\Entity
  */

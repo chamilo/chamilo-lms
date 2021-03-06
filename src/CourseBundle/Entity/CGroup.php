@@ -24,9 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @ORM\Table(
- *  name="c_group_info",
- *  indexes={
- *  }
+ *     name="c_group_info",
+ *     indexes={
+ *     }
  * )
  *
  * @ORM\Entity

@@ -22,22 +22,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *      shortName="Documents",
- *      normalizationContext={"groups"={"document:read", "resource_node:read"}},
- *      denormalizationContext={"groups"={"document:write"}},
- *      itemOperations={
- *          "put" ={
- *              "controller"=UpdateResourceNodeFileAction::class,
- *              "deserialize"=false,
- *              "security" = "is_granted('EDIT', object.resourceNode)",
- *              "validation_groups"={"media_object_create", "document:write"},
- *          },
- *          "get" = {
- *              "security" = "is_granted('VIEW', object.resourceNode)",
- *          },
- *          "delete" = {
- *              "security" = "is_granted('DELETE', object.resourceNode)",
- *          },
+ *     shortName="Documents",
+ *     normalizationContext={"groups"={"document:read", "resource_node:read"}},
+ *     denormalizationContext={"groups"={"document:write"}},
+ *     itemOperations={
+ *         "put" ={
+ *             "controller"=UpdateResourceNodeFileAction::class,
+ *             "deserialize"=false,
+ *             "security" = "is_granted('EDIT', object.resourceNode)",
+ *             "validation_groups"={"media_object_create", "document:write"},
+ *         },
+ *         "get" = {
+ *             "security" = "is_granted('VIEW', object.resourceNode)",
+ *         },
+ *         "delete" = {
+ *             "security" = "is_granted('DELETE', object.resourceNode)",
+ *         },
  *     },
  *     collectionOperations={
  *         "post"={
@@ -75,18 +75,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                     "resourceLinkList"={
  *                                         "type"="array",
  *                                         "items": {
- *                                              "type": "object",
- *                                              "properties"={
- *                                                  "visibility"={
- *                                                       "type"="integer",
- *                                                   },
- *                                                  "c_id"={
- *                                                       "type"="integer",
- *                                                   },
- *                                                   "session_id"={
- *                                                       "type"="integer",
- *                                                   },
- *                                              }
+ *                                             "type": "object",
+ *                                             "properties"={
+ *                                                 "visibility"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                                 "c_id"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                                 "session_id"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                             }
  *                                         }
  *                                     },
  *                                 }
@@ -104,20 +104,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={
- *          "id",
- *          "filetype",
- *          "resourceNode.title",
- *          "resourceNode.createdAt",
- *          "resourceNode.resourceFile.size",
- *          "resourceNode.updatedAt"
- *      }
+ *         "id",
+ *         "filetype",
+ *         "resourceNode.title",
+ *         "resourceNode.createdAt",
+ *         "resourceNode.resourceFile.size",
+ *         "resourceNode.updatedAt"
+ *     }
  * )
  *
  * @ORM\Table(
- *  name="c_document",
- *  indexes={
- *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
- *  }
+ *     name="c_document",
+ *     indexes={
+ *         @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
+ *     }
  * )
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Entity

@@ -51,7 +51,7 @@ class SettingsCourseManager extends SettingsManager
         $schema->buildSettings($settingsBuilder);
 
         // Remove unknown settings' parameters (e.g. From a previous version of the settings schema)
-        if (true === $ignoreUnknown) {
+        if ($ignoreUnknown) {
             foreach ($parameters as $name => $value) {
                 if (!$settingsBuilder->isDefined($name)) {
                     unset($parameters[$name]);

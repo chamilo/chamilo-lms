@@ -19,9 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CQuizQuestionCategory.
  *
  * @ORM\Table(
- *  name="c_quiz_question_category",
- *  indexes={
- *  }
+ *     name="c_quiz_question_category",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

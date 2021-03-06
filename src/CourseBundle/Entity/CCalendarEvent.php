@@ -284,7 +284,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return Collection|CCalendarEventAttachment[]
+     * @return Collection
      */
     public function getAttachments()
     {
@@ -292,7 +292,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param Collection|CCalendarEventAttachment[] $attachments
+     * @param Collection $attachments
      */
     public function setAttachments($attachments): self
     {

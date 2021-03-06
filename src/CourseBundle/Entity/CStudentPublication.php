@@ -20,9 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CStudentPublication.
  *
  * @ORM\Table(
- *  name="c_student_publication",
- *  indexes={
- *  }
+ *     name="c_student_publication",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity()
  */

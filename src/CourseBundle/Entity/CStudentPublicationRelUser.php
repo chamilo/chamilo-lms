@@ -12,12 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  * CStudentPublicationRelUser.
  *
  * @ORM\Table(
- *  name="c_student_publication_rel_user",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="work", columns={"work_id"}),
- *      @ORM\Index(name="user", columns={"user_id"})
- *  }
+ *     name="c_student_publication_rel_user",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="work", columns={"work_id"}),
+ *         @ORM\Index(name="user", columns={"user_id"})
+ *     }
  * )
  * @ORM\Entity
  */

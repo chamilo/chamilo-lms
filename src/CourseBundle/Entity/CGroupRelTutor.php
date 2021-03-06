@@ -13,10 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CGroupRelTutor.
  *
  * @ORM\Table(
- *  name="c_group_rel_tutor",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_group_rel_tutor",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

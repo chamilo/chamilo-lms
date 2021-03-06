@@ -16,10 +16,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CLp.
- *
  * @ORM\Table(
- *  name="c_lp"
+ *     name="c_lp"
  * )
  * @ORM\Entity
  */

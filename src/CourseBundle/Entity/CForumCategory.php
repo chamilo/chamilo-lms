@@ -16,9 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CForumCategory.
  *
  * @ORM\Table(
- *  name="c_forum_category",
- *  indexes={
- *  }
+ *     name="c_forum_category",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

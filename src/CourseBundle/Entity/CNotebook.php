@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  * @ORM\Table(
- *  name="c_notebook"
+ *     name="c_notebook"
  * )
  */
 class CNotebook extends AbstractResource implements ResourceInterface

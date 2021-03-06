@@ -18,10 +18,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CForumForum.
  *
  * @ORM\Table(
- *  name="c_forum_forum",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_forum_forum",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

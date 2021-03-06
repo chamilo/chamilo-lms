@@ -13,12 +13,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLpItem.
  *
  * @ORM\Table(
- *  name="c_lp_item",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="lp_id", columns={"lp_id"}),
- *      @ORM\Index(name="idx_c_lp_item_cid_lp_id", columns={"c_id", "lp_id"})
- *  }
+ *     name="c_lp_item",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="lp_id", columns={"lp_id"}),
+ *         @ORM\Index(name="idx_c_lp_item_cid_lp_id", columns={"c_id", "lp_id"})
+ *     }
  * )
  * @ORM\Entity
  */

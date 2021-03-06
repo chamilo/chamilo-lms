@@ -21,11 +21,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
- *  name="c_tool",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *     name="c_tool",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */

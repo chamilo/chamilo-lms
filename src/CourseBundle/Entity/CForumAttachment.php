@@ -14,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CForumAttachment.
  *
  * @ORM\Table(
- *  name="c_forum_attachment",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_forum_attachment",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

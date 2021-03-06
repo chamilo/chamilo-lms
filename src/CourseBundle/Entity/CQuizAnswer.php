@@ -13,10 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CQuizAnswer.
  *
  * @ORM\Table(
- *  name="c_quiz_answer",
- *  indexes={
- *      @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
- *  }
+ *     name="c_quiz_answer",
+ *     indexes={
+ *         @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
+ *     }
  * )
  * @ORM\Entity
  */

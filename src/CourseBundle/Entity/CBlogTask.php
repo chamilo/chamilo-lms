@@ -12,10 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CBlogTask.
  *
  * @ORM\Table(
- *  name="c_blog_task",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_blog_task",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

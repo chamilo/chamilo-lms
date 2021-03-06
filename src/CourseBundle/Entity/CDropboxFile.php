@@ -13,15 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  * CDropboxFile.
  *
  * @ORM\Table(
- *  name="c_dropbox_file",
- *  options={"row_format":"DYNAMIC"},
- *  uniqueConstraints={
- *      @ORM\UniqueConstraint(name="UN_filename", columns={"filename"})
- *  },
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *     name="c_dropbox_file",
+ *     options={"row_format":"DYNAMIC"},
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="UN_filename", columns={"filename"})
+ *     },
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */

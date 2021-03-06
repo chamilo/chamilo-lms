@@ -34,7 +34,7 @@ final class CShortcutRepository extends ResourceRepository
         return $this->findOneBy($criteria);
     }
 
-    public function addShortCut(AbstractResource $resource, ResourceInterface $parent, Course $course, Session $session = null): ?CShortcut
+    public function addShortCut(AbstractResource $resource, ResourceInterface $parent, Course $course, Session $session = null): CShortcut
     {
         $shortcut = $this->getShortcutFromResource($resource);
 

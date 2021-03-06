@@ -17,9 +17,9 @@ use Doctrine\ORM\Mapping as ORM;
  * CStudentPublicationComment.
  *
  * @ORM\Table(
- *  name="c_student_publication_comment",
- *  indexes={
- *  }
+ *     name="c_student_publication_comment",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

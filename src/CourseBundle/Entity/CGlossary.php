@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CGlossary.
  *
  * @ORM\Table(
- *  name="c_glossary"
+ *     name="c_glossary"
  * )
  * @ORM\Entity
  */

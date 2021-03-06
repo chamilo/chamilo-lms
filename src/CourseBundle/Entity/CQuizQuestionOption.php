@@ -12,10 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CQuizQuestionOption.
  *
  * @ORM\Table(
- *  name="c_quiz_question_option",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_quiz_question_option",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

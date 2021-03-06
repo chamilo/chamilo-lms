@@ -15,10 +15,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CSurveyQuestion.
  *
  * @ORM\Table(
- *  name="c_survey_question",
- *  indexes={
- *     @ORM\Index(name="course", columns={"c_id"}),
- *  }
+ *     name="c_survey_question",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *     }
  * )
  * @ORM\Entity
  */

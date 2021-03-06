@@ -13,11 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
  * CForumThreadQualifyLog.
  *
  * @ORM\Table(
- *  name="c_forum_thread_qualify_log",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id", "thread_id"})
- *  }
+ *     name="c_forum_thread_qualify_log",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="user_id", columns={"user_id", "thread_id"})
+ *     }
  * )
  * @ORM\Entity
  */

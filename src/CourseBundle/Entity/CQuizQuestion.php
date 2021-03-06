@@ -17,10 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CQuizQuestion.
  *
  * @ORM\Table(
- *  name="c_quiz_question",
- *  indexes={
- *      @ORM\Index(name="position", columns={"position"})
- *  }
+ *     name="c_quiz_question",
+ *     indexes={
+ *         @ORM\Index(name="position", columns={"position"})
+ *     }
  * )
  * @ORM\Entity()
  */
@@ -90,8 +90,12 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      *
      * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", inversedBy="questions")
      * @ORM\JoinTable(name="c_quiz_question_rel_category",
-     *      joinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="iid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="question_id", referencedColumnName="iid")}
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
+     *     }
      * )
      */
     protected $categories;
@@ -205,9 +209,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set ponderation.
-     */
     public function setPonderation(float $ponderation): self
     {
         $this->ponderation = $ponderation;
@@ -225,9 +226,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->ponderation;
     }
 
-    /**
-     * Set position.
-     */
     public function setPosition(int $position): self
     {
         $this->position = $position;

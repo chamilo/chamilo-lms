@@ -13,10 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CAttendanceSheetLog.
  *
  * @ORM\Table(
- *  name="c_attendance_sheet_log",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_attendance_sheet_log",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

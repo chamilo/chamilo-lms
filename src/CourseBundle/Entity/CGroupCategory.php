@@ -15,9 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CGroupCategory.
  *
  * @ORM\Table(
- *  name="c_group_category",
- *  indexes={
- *  }
+ *     name="c_group_category",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

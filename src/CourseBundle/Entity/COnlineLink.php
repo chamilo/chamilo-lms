@@ -12,10 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  * COnlineLink.
  *
  * @ORM\Table(
- *  name="c_online_link",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_online_link",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

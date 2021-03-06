@@ -17,9 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLinkCategory.
  *
  * @ORM\Table(
- *  name="c_link_category",
- *  indexes={
- *  }
+ *     name="c_link_category",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

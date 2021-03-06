@@ -12,11 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  * CRoleGroup.
  *
  * @ORM\Table(
- *  name="c_role_group",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="group", columns={"group_id"})
- *  }
+ *     name="c_role_group",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="group", columns={"group_id"})
+ *     }
  * )
  * @ORM\Entity
  */

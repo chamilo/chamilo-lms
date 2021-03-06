@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * CAttendanceResult.
  *
  * @ORM\Table(
- *  name="c_attendance_result",
- *  indexes={
- *  }
+ *     name="c_attendance_result",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */

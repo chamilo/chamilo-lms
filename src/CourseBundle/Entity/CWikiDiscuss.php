@@ -13,10 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CWikiDiscuss.
  *
  * @ORM\Table(
- *  name="c_wiki_discuss",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_wiki_discuss",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */

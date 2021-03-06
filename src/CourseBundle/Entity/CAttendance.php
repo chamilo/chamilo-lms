@@ -17,10 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CAttendance.
  *
  * @ORM\Table(
- *  name="c_attendance",
- *  indexes={
- *      @ORM\Index(name="active", columns={"active"})
- *  }
+ *     name="c_attendance",
+ *     indexes={
+ *         @ORM\Index(name="active", columns={"active"})
+ *     }
  * )
  * @ORM\Entity
  */

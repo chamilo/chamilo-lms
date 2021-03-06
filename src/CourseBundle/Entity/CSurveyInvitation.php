@@ -14,11 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  * CSurveyInvitation.
  *
  * @ORM\Table(
- *  name="c_survey_invitation",
- *  indexes={
- *     @ORM\Index(name="course", columns={"c_id"}),
- *     @ORM\Index(name="idx_survey_inv_code", columns={"survey_code"})
- *  }
+ *     name="c_survey_invitation",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="idx_survey_inv_code", columns={"survey_code"})
+ *     }
  * )
  * @ORM\Entity
  */

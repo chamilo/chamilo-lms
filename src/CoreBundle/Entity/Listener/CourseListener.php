@@ -84,11 +84,9 @@ class CourseListener
     }
 
     /**
-     * @param CourseRepository $repo
-     *
      * @throws Exception
      */
-    protected function checkLimit($repo, Course $course, AccessUrl $url): void
+    protected function checkLimit(CourseRepository $repo, Course $course, AccessUrl $url): void
     {
         $limit = $url->getLimitCourses();
 

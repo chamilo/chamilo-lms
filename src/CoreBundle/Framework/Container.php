@@ -86,18 +86,12 @@ class Container
     public static Environment $twig;
     public static string $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public static function setContainer($container): void
+    public static function setContainer(ContainerInterface $container): void
     {
         self::$container = $container;
     }
 
-    /**
-     * @param string $parameter
-     */
-    public static function getParameter($parameter)
+    public static function getParameter(string $parameter)
     {
         if (self::$container->hasParameter($parameter)) {
             return self::$container->getParameter($parameter);
@@ -176,10 +170,7 @@ class Container
         return self::$container->get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * @param Request $request
-     */
-    public static function setRequest($request): void
+    public static function setRequest(Request $request): void
     {
         self::$request = $request;
     }
@@ -485,10 +476,9 @@ class Container
     }
 
     /**
-     * @param string $message
-     * @param string $type    error|success|warning|danger
+     * @param string $type error|success|warning|danger
      */
-    public static function addFlash($message, $type = 'success'): void
+    public static function addFlash(string $message, string $type = 'success'): void
     {
         $session = self::getSession();
         $session->getFlashBag()->add($type, $message);

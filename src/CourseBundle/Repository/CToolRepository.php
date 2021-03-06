@@ -51,7 +51,7 @@ final class CToolRepository extends ResourceRepository
 
         $isAdmin = $checker->isGranted('ROLE_ADMIN') || $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        if (false === $isAdmin) {
+        if (!$isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)

@@ -23,17 +23,14 @@ class CNotebookRepository extends ResourceRepository
     /**
      * Get the user notebooks in a course.
      *
-     * @param string $orderField
-     * @param string $orderDirection
-     *
      * @return array
      */
     public function findByUser(
         User $user,
         Course $course,
         Session $session = null,
-        $orderField = 'creation_date',
-        $orderDirection = 'DESC'
+        string $orderField = 'creation_date',
+        string $orderDirection = 'DESC'
     ) {
         switch ($orderField) {
             case 'creation_date':

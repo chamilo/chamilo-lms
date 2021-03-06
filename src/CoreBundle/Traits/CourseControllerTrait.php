@@ -159,6 +159,6 @@ trait CourseControllerTrait
 
     public function getSessionId(): int
     {
-        return $this->session ? $this->getSession()->getId() : 0;
+        return $this->session !== null ? $this->getSession()->getId() : 0;
     }
 }

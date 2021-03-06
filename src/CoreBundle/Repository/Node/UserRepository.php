@@ -280,7 +280,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ;
         }
 
-        $qb->orderBy('course.title', 'DESC');
+        $qb->orderBy('course.title', Criteria::DESC);
 
         $query = $qb->getQuery();
 
@@ -660,6 +660,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         $user->setPassword($substitutionTerms['password']);
         $user->setSalt($substitutionTerms['salt']);
+
         $noDataLabel = $substitutionTerms['empty'];
 
         // Dummy content
@@ -1444,7 +1445,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 $qb->expr()->eq('l.loginUserId', $user->getId())
             )
             ->setMaxResults(1)
-            ->orderBy('l.loginDate', 'DESC')
+            ->orderBy('l.loginDate', \Doctrine\Common\Collections\Criteria::DESC)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -1454,7 +1455,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
 
-        $qb->orderBy('u.firstname', 'ASC');
+        $qb->orderBy('u.firstname', \Doctrine\Common\Collections\Criteria::ASC);
         $qb->where('u.firstname LIKE :keyword OR u.lastname LIKE :keyword ');
         $qb->setParameter('keyword', "%{$keyword}%", Types::STRING);
 

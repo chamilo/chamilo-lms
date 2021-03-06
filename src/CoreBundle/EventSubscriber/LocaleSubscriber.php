@@ -108,7 +108,7 @@ class LocaleSubscriber implements EventSubscriberInterface
 
             $locale = '';
             foreach ($priorityList as $setting) {
-                $priority = $this->settingsManager->getSetting("language.{$setting}");
+                $priority = $this->settingsManager->getSetting(sprintf('language.%s', $setting));
                 if (!empty($priority) && isset($localeList[$priority])) {
                     $locale = $localeList[$priority];
 

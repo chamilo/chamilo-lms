@@ -48,7 +48,7 @@ class LegalRepository extends ServiceEntityRepository
      *
      * @return array The terms for those type and language
      */
-    public function findOneByTypeAndLanguage($typeId, $languageId)
+    public function findOneByTypeAndLanguage(int $typeId, int $languageId)
     {
         $qb = $this->createQueryBuilder('l');
         $qb->select('l.content')

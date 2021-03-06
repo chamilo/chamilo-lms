@@ -72,7 +72,7 @@ class SessionType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\Session',
+                'data_class' => Session::class,
             ]
         );
     }

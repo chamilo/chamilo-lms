@@ -31,7 +31,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function getVisibleValues($extraFieldType, $itemId)
+    public function getVisibleValues(int $extraFieldType, int $itemId)
     {
         $queryBuilder = $this->createQueryBuilder('fv');
 

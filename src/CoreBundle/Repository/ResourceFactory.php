@@ -24,14 +24,14 @@ class ResourceFactory
 
         $resourceTypeList = $tool->getResourceTypes();
         if (!isset($resourceTypeList[$type])) {
-            throw new InvalidArgumentException("Resource type doesn't exist: {$type}");
+            throw new InvalidArgumentException(sprintf('Resource type doesn\'t exist: %s', $type));
         }
 
         $typeConfig = $resourceTypeList[$type];
         $repo = $typeConfig['repository'];
 
         if (!class_exists($repo)) {
-            throw new InvalidArgumentException("Check that this classes exists: {$repo}");
+            throw new InvalidArgumentException(sprintf('Check that this classes exists: %s', $repo));
         }
 
         return $repo;

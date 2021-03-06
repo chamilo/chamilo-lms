@@ -123,7 +123,7 @@ class ResourceListener
         ]);
 
         if (null === $resourceType) {
-            throw new InvalidArgumentException("ResourceType: {$name} not found");
+            throw new InvalidArgumentException(sprintf('ResourceType: %s not found', $name));
         }
 
         $resourceNode

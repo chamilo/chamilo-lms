@@ -27,11 +27,8 @@ class SequenceResourceRepository extends ServiceEntityRepository
 
     /**
      * Find the SequenceResource based in the resourceId and type.
-     *
-     * @param int $resourceId
-     * @param int $type
      */
-    public function findRequirementForResource($resourceId, $type): ?SequenceResource
+    public function findRequirementForResource(int $resourceId, int $type): ?SequenceResource
     {
         return $this->findOneBy([
             'resourceId' => $resourceId,
@@ -42,12 +39,9 @@ class SequenceResourceRepository extends ServiceEntityRepository
     /**
      * @todo implement for all types only work for sessions
      *
-     * @param int $resourceId
-     * @param int $type
-     *
      * @return array
      */
-    public function getRequirementAndDependencies($resourceId, $type)
+    public function getRequirementAndDependencies(int $resourceId, int $type)
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
         $result = [
@@ -81,11 +75,8 @@ class SequenceResourceRepository extends ServiceEntityRepository
     /**
      * Deletes a node and check in all the dependencies if the node exists in
      * order to deleted.
-     *
-     * @param int $resourceId
-     * @param int $type
      */
-    public function deleteSequenceResource($resourceId, $type): void
+    public function deleteSequenceResource(int $resourceId, int $type): void
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
         if ($sequence && $sequence->hasGraph()) {
@@ -121,7 +112,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function getRequirements($resourceId, $type)
+    public function getRequirements(int $resourceId, int $type)
     {
         $sequencesResource = $this->findBy([
             'resourceId' => $resourceId,
@@ -182,7 +173,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function getRequirementsAndDependenciesWithinSequences($resourceId, $type)
+    public function getRequirementsAndDependenciesWithinSequences(int $resourceId, int $type)
     {
         $sequencesResource = $this->findBy([
             'resourceId' => $resourceId,
@@ -221,11 +212,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @param array $sequences The sequences
      * @param int   $type      The type of sequence resource
-     * @param int   $userId
      *
      * @return array
      */
-    public function checkRequirementsForUser(array $sequences, $type, $userId)
+    public function checkRequirementsForUser(array $sequences, int $type, int $userId)
     {
         $sequenceList = [];
         $em = $this->getEntityManager();
@@ -392,11 +382,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
      * Get sessions from vertices.
      *
      * @param Vertices $verticesEdges The vertices
-     * @param int      $type
      *
      * @return array
      */
-    protected function findVerticesEdges(Vertices $verticesEdges, $type)
+    protected function findVerticesEdges(Vertices $verticesEdges, int $type)
     {
         $sessionVertices = [];
         $em = $this->getEntityManager();

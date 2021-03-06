@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Session;
 
 trait SessionTrait
 {
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     /**
      * @return Session

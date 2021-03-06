@@ -96,9 +96,9 @@ class CourseRepository extends ResourceRepository
         );
 
         if (api_is_western_name_order()) {
-            $queryBuilder->orderBy('user.firstname', 'ASC');
+            $queryBuilder->orderBy('user.firstname', Criteria::ASC);
         } else {
-            $queryBuilder->orderBy('user.lastname', 'ASC');
+            $queryBuilder->orderBy('user.lastname', Criteria::ASC);
         }
 
         $wherePart = $queryBuilder->expr()->andx();

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -33,7 +34,7 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->orderBy('u.name', 'DESC')
+                        ->orderBy('u.name', Criteria::DESC)
                     ;
                 },
             ]
@@ -47,7 +48,7 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->orderBy('u.name', 'DESC')
+                        ->orderBy('u.name', Criteria::DESC)
                     ;
                 },
             ]
@@ -61,7 +62,7 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->orderBy('u.name', 'DESC')
+                        ->orderBy('u.name', Criteria::DESC)
                     ;
                 },
             ]
@@ -75,7 +76,7 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->orderBy('u.name', 'DESC')
+                        ->orderBy('u.name', Criteria::DESC)
                     ;
                 },
             ]
@@ -89,7 +90,7 @@ class SessionTreeType extends AbstractType
                 'property' => 'title',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->orderBy('u.title', 'DESC')
+                        ->orderBy('u.title', Criteria::DESC)
                     ;
                 },
             ]

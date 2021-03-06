@@ -100,11 +100,9 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     }
 
     /**
-     * @param int $userId
-     *
      * @return array
      */
-    public function getAllDocumentsByAuthor($userId)
+    public function getAllDocumentsByAuthor(int $userId)
     {
         $repo = $this->repository;
 

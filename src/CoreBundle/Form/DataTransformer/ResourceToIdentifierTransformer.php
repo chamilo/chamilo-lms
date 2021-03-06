@@ -16,7 +16,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
 
     private string $identifier;
 
-    public function __construct($repository, ?string $identifier = null)
+    public function __construct(ObjectRepository $repository, ?string $identifier = null)
     {
         $this->repository = $repository;
         $this->identifier = $identifier ?? 'id';

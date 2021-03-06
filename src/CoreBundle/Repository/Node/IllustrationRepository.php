@@ -68,10 +68,8 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
     /**
      * @param ResourceInterface|User|UserInterface $resource
-     * @param User                                 $user
-     * @param string                               $crop
      */
-    public function addIllustration($resource, $user, UploadedFile $uploadFile = null, $crop = ''): ?ResourceFile
+    public function addIllustration(User $resource, User $user, UploadedFile $uploadFile = null, string $crop = ''): ?ResourceFile
     {
         if (null === $uploadFile) {
             return null;

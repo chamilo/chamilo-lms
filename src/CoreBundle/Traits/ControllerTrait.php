@@ -89,15 +89,7 @@ trait ControllerTrait
         return $this->container->get('request_stack')->getCurrentRequest();
     }
 
-    /*public function getBreadCrumb(): BreadcrumbBlockService
-    {
-        return $this->container->get('breadcrumb');
-    }*/
-
-    /**
-     * @param string $message
-     */
-    public function abort($message = ''): void
+    public function abort(string $message = ''): void
     {
         throw new NotFoundHttpException($message);
     }
@@ -105,11 +97,10 @@ trait ControllerTrait
     /**
      * Translator shortcut.
      *
-     * @param string $variable
      *
      * @return string
      */
-    public function trans($variable)
+    public function trans(string $variable)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->container->get('translator');

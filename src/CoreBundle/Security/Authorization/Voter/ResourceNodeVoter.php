@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
-use Laminas\Permissions\Acl\Role\GenericRole as Role;
+use Laminas\Permissions\Acl\Role\GenericRole;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -30,7 +30,6 @@ class ResourceNodeVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
     public const EXPORT = 'EXPORT';
-
     public const ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
     public const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
     public const ROLE_CURRENT_COURSE_GROUP_TEACHER = 'ROLE_CURRENT_COURSE_GROUP_TEACHER';
@@ -358,26 +357,27 @@ class ResourceNodeVoter extends Voter
         // Asked mask
         $mask = new MaskBuilder();
         $mask->add($attribute);
+
         $askedMask = (string) $mask->get();
 
         // Creating roles
         // @todo move this in a service
-        $anon = new Role('IS_AUTHENTICATED_ANONYMOUSLY');
-        $userRole = new Role('ROLE_USER');
-        $student = new Role('ROLE_STUDENT');
-        $teacher = new Role('ROLE_TEACHER');
+        $anon = new GenericRole('IS_AUTHENTICATED_ANONYMOUSLY');
+        $userRole = new GenericRole('ROLE_USER');
+        $student = new GenericRole('ROLE_STUDENT');
+        $teacher = new GenericRole('ROLE_TEACHER');
 
-        $currentStudent = new Role(self::ROLE_CURRENT_COURSE_STUDENT);
-        $currentTeacher = new Role(self::ROLE_CURRENT_COURSE_TEACHER);
+        $currentStudent = new GenericRole(self::ROLE_CURRENT_COURSE_STUDENT);
+        $currentTeacher = new GenericRole(self::ROLE_CURRENT_COURSE_TEACHER);
 
-        $currentStudentGroup = new Role(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
-        $currentTeacherGroup = new Role(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
+        $currentStudentGroup = new GenericRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
+        $currentTeacherGroup = new GenericRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
 
-        $currentStudentSession = new Role(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-        $currentTeacherSession = new Role(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+        $currentStudentSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
+        $currentTeacherSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
 
-        $superAdmin = new Role('ROLE_SUPER_ADMIN');
-        $admin = new Role('ROLE_ADMIN');
+        $superAdmin = new GenericRole('ROLE_SUPER_ADMIN');
+        $admin = new GenericRole('ROLE_ADMIN');
 
         // Setting Simple ACL.
         $acl = new Acl();

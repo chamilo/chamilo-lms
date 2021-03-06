@@ -72,7 +72,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
             }
 
             return '';
-        } catch (Throwable $exception) {
+        } catch (Throwable $throwable) {
             throw new FileNotFoundException($resourceNode->getTitle());
         }
     }

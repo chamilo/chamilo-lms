@@ -56,11 +56,9 @@ class SessionListener
     }
 
     /**
-     * @param SessionRepository $repo
-     *
      * @throws Exception
      */
-    protected function checkLimit($repo, AccessUrl $url): void
+    protected function checkLimit(SessionRepository $repo, AccessUrl $url): void
     {
         $limit = $url->getLimitSessions();
 

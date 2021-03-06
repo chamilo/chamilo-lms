@@ -37,7 +37,7 @@ class ResourceRightType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\ResourceRight',
+                'data_class' => ResourceRight::class,
             ]
         );
     }

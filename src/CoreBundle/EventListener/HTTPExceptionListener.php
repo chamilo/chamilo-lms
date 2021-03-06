@@ -25,6 +25,7 @@ final class HTTPExceptionListener
             'error' => $exception->getMessage(),
         ]);
         $response->setStatusCode($exception->getStatusCode());
+
         $event->setResponse($response);
     }
 }

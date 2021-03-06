@@ -18,11 +18,9 @@ final class CExerciseCategoryRepository extends ResourceRepository
     }
 
     /**
-     * @param int $courseId
-     *
      * @return array
      */
-    public function getCategories($courseId)
+    public function getCategories(int $courseId)
     {
         $query = $this->createQueryBuilder('e');
         $query->where('e.course = :cId');

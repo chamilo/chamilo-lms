@@ -74,17 +74,14 @@ class SequenceRepository extends ServiceEntityRepository
                 break;
         }
 
-        if ($repo) {
+        if (null !== $repo) {
             $resource = $repo->find($itemId);
         }
 
         return $resource;
     }
 
-    /**
-     * @param int $id
-     */
-    public function removeSequence($id): void
+    public function removeSequence(int $id): void
     {
         $sequence = $this->find($id);
         $em = $this->getEntityManager();
@@ -98,11 +95,9 @@ class SequenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $type
-     *
      * @return array
      */
-    public function findAllToSelect($type)
+    public function findAllToSelect(string $type)
     {
         $qb = $this->createQueryBuilder('r');
         $qb

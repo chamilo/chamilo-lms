@@ -37,9 +37,8 @@ class LoginSuccessHandler
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $request = $event->getRequest();
-        $user = $event->getAuthenticationToken()->getUser();
         /** @var User $user */
-        //$user = $token->getUser();
+        $user = $event->getAuthenticationToken()->getUser();
         $userId = $user->getId();
         $session = $request->getSession();
 

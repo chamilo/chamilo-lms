@@ -22,19 +22,14 @@ class CForumPostRepository extends ResourceRepository
         parent::__construct($registry, CForumPost::class);
     }
 
-    /**
-     * @param bool   $onlyVisible
-     * @param bool   $isAllowedToEdit
-     * @param string $orderDirection
-     */
     public function findAllInCourseByThread(
-        $onlyVisible,
-        $isAllowedToEdit,
+        bool $onlyVisible,
+        bool $isAllowedToEdit,
         CForumThread $thread,
         Course $course,
         User $currentUser = null,
         CGroup $group = null,
-        $orderDirection = 'ASC'
+        string $orderDirection = 'ASC'
     ): array {
         $conditionVisibility = $onlyVisible ? 'p.visible = 1' : 'p.visible != 2';
         $conditionModerated = '';

@@ -84,7 +84,7 @@ class CourseType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\Course',
+                'data_class' => Course::class,
             ]
         );
     }

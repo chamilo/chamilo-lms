@@ -306,7 +306,7 @@ abstract class AbstractResource
         return null !== $this->parentResourceNode && 0 !== $this->parentResourceNode;
     }
 
-    public function setParentResourceNode($resourceNode): self
+    public function setParentResourceNode(?int $resourceNode): self
     {
         $this->parentResourceNode = $resourceNode;
 
@@ -328,7 +328,7 @@ abstract class AbstractResource
         return $this->uploadFile;
     }
 
-    public function setUploadFile($file): self
+    public function setUploadFile(?UploadedFile $file): self
     {
         $this->uploadFile = $file;
 

@@ -174,7 +174,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $class = str_replace('\\Repository\\', '\\Entity\\', $class);
         $class = str_replace('Repository', '', $class);
         if (!class_exists($class)) {
-            throw new Exception("Repo: {$class} not found ");
+            throw new Exception(sprintf('Repo: %s not found ', $class));
         }
 
         return $class;
@@ -631,7 +631,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $resourceNode = $resource->getResourceNode();
 
             return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
-        } catch (Throwable $exception) {
+        } catch (Throwable $throwable) {
             throw new FileNotFoundException($resource->getResourceName());
         }
     }
@@ -689,11 +689,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $content
-     *
      * @return bool
      */
-    public function updateResourceFileContent(AbstractResource $resource, $content)
+    public function updateResourceFileContent(AbstractResource $resource, string $content)
     {
         error_log('updateResourceFileContent');
 

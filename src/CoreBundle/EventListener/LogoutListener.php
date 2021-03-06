@@ -83,7 +83,7 @@ class LogoutListener
             }
 
             $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-            $sql = 'DELETE FROM '.$online_table." WHERE login_user_id = {$userId}";
+            $sql = "DELETE FROM $online_table WHERE login_user_id = $userId";
             $connection->executeQuery($sql);
         }
 

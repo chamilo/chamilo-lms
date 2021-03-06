@@ -18,14 +18,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class Exporter
 {
     /**
-     * @param string $format
-     * @param string $filename
-     *
      * @throws RuntimeException
      *
      * @return StreamedResponse
      */
-    public function getResponse($format, $filename, SourceIteratorInterface $source)
+    public function getResponse(string $format, string $filename, SourceIteratorInterface $source)
     {
         switch ($format) {
             case 'xls':

@@ -32,7 +32,7 @@ class ExtraFieldRelTagRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function getTags(ExtraField $extraField, $itemId)
+    public function getTags(ExtraField $extraField, int $itemId)
     {
         $queryBuilder = $this->createQueryBuilder('ft');
 

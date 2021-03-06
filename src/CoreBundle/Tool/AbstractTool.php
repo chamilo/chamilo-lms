@@ -15,10 +15,7 @@ abstract class AbstractTool implements ToolInterface
     protected string $link;
     protected string $image;
     protected string $admin;
-    /**
-     * @var null|array|SchemaInterface
-     */
-    protected $settings;
+    protected ?SchemaInterface $settings = null;
     protected ?array $resourceTypes;
 
     /**
@@ -31,14 +28,7 @@ abstract class AbstractTool implements ToolInterface
      */
     protected string $scope;
 
-    /**
-     * @param string          $name
-     * @param string          $category
-     * @param string          $link
-     * @param SchemaInterface $settings
-     * @param array           $resourceTypes
-     */
-    public function __construct($name, $category, $link, $settings = null, $resourceTypes = [])
+    public function __construct(string $name, string $category, string $link, SchemaInterface $settings = null, array $resourceTypes = [])
     {
         $this->name = $name;
         $this->category = $category;

@@ -45,7 +45,7 @@ class SessionVoter extends Voter
         $this->settingsManager = $settingsManager;
     }
 
-    public function supports(string $attribute, $subject): bool
+    protected function supports(string $attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -194,10 +194,7 @@ class SessionVoter extends Voter
         return $totalDuration > $currentTime;
     }
 
-    /**
-     * @param bool $checkSession
-     */
-    private function canEditSession(User $user, Session $session, $checkSession = true): bool
+    private function canEditSession(User $user, Session $session, bool $checkSession = true): bool
     {
         if (!$this->allowToManageSessions()) {
             return false;

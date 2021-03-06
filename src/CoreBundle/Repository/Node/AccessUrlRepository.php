@@ -25,6 +25,7 @@ class AccessUrlRepository extends ResourceRepository
     {
         $qb = $this->createQueryBuilder('a');
         $qb->select('MIN (a.id)');
+
         $q = $qb->getQuery();
 
         return (int) $q->execute();

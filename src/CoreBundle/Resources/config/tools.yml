@@ -15,7 +15,7 @@ services:
             - 'global'
             - ''
             - ''
-            - ''
+            - ~
             -
                 urls:
                     repository: Chamilo\CoreBundle\Repository\Node\AccessUrlRepository
@@ -32,7 +32,7 @@ services:
             - 'asset'
             - ''
             - ''
-            - ''
+            - ~
             -
                 illustrations:
                     repository: Chamilo\CoreBundle\Repository\Node\IllustrationRepository
@@ -135,7 +135,7 @@ services:
             - 'course_tool'
             - 'admin'
             - '/resources/course_tool/links'
-            - ''
+            - ~
             -
                 links:
                     repository: Chamilo\CourseBundle\Repository\CToolRepository
@@ -362,7 +362,7 @@ services:
             - 'shortcut'
             - ''
             - ''
-            - ''
+            -  ~
             -
                 shortcuts:
                     repository: Chamilo\CourseBundle\Repository\CShortcutRepository

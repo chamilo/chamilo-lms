@@ -328,7 +328,7 @@ class CourseListener
         //$request->setLocale($request->getPreferredLanguage());
     }
 
-    private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, string $origin): string
+    private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, ?string $origin): string
     {
         if (null !== $course) {
             $cidReqURL = '&cid='.$course->getId();

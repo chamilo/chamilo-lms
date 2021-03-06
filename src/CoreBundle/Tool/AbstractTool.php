@@ -28,8 +28,13 @@ abstract class AbstractTool implements ToolInterface
      */
     protected string $scope;
 
-    public function __construct(string $name, string $category, string $link, SchemaInterface $settings = null, array $resourceTypes = [])
-    {
+    public function __construct(
+        string $name,
+        string $category,
+        string $link,
+        ?SchemaInterface $settings = null,
+        ?array $resourceTypes = []
+    ) {
         $this->name = $name;
         $this->category = $category;
         $this->link = $link;

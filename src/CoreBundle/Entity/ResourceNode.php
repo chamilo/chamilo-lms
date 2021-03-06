@@ -355,6 +355,8 @@ class ResourceNode
 
     public function setTitle(string $title)
     {
+        $title = str_replace('/', '-', $title);
+
         $this->title = $title;
 
         return $this;
@@ -499,7 +501,7 @@ class ResourceNode
         return false;
     }
 
-    public function setResourceFile(ResourceFile $resourceFile = null): self
+    public function setResourceFile(?ResourceFile $resourceFile = null): self
     {
         $this->resourceFile = $resourceFile;
 

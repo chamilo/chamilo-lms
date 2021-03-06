@@ -1012,7 +1012,7 @@ EOT;
      * @param string $title     visible title
      * @param array  $groupList list of group or elements
      */
-    public function addPanelOption($name, $title, $groupList, $icon, $open = false, $parent)
+    public function addPanelOption($name, $title, $groupList, $icon, $open, $parent)
     {
         $html = '<div class="card">';
         $html .= '<div class="card-header" id="card_'.$name.'">';

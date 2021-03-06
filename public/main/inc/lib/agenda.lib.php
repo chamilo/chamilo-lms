@@ -2980,10 +2980,10 @@ class Agenda
      */
     public static function get_global_agenda_items(
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_global_agenda = Database::get_main_table(
@@ -3109,10 +3109,10 @@ class Agenda
     public static function get_personal_agenda_items(
         $user_id,
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
@@ -3235,7 +3235,7 @@ class Agenda
         $agendaitems,
         $month,
         $year,
-        $weekdaynames = [],
+        $weekdaynames,
         $monthName,
         $show_content = true
     ) {

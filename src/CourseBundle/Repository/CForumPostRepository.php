@@ -23,12 +23,12 @@ class CForumPostRepository extends ResourceRepository
     }
 
     /**
-     * @param bool   $onlyVisibles
+     * @param bool   $onlyVisible
      * @param bool   $isAllowedToEdit
      * @param string $orderDirection
      */
     public function findAllInCourseByThread(
-        $onlyVisibles,
+        $onlyVisible,
         $isAllowedToEdit,
         CForumThread $thread,
         Course $course,
@@ -36,24 +36,24 @@ class CForumPostRepository extends ResourceRepository
         CGroup $group = null,
         $orderDirection = 'ASC'
     ): array {
-        $conditionVisibility = $onlyVisibles ? 'p.visible = 1' : 'p.visible != 2';
-        $conditionModetared = '';
+        $conditionVisibility = $onlyVisible ? 'p.visible = 1' : 'p.visible != 2';
+        $conditionModerated = '';
         $filterModerated = true;
 
         if (
             (empty($group) && $isAllowedToEdit) ||
             (
                 (null !== $group ? $group->userIsTutor($currentUser) : false) ||
-                !$onlyVisibles
+                !$onlyVisible
             )
         ) {
             $filterModerated = false;
         }
 
-        if ($filterModerated && $onlyVisibles && $thread->getForum()->isModerated()) {
+        if ($filterModerated && $onlyVisible && $thread->getForum()->isModerated()) {
             $userId = null !== $currentUser ? $currentUser->getId() : 0;
 
-            $conditionModetared = 'AND p.status = 1 OR
+            $conditionModerated = 'AND p.status = 1 OR
                 (p.status = '.CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = {$userId}) OR
                 (p.status = ".CForumPost::STATUS_REJECTED." AND p.poster = {$userId}) OR
                 (p.status IS NULL AND p.posterId = {$userId})";
@@ -65,7 +65,7 @@ class CForumPostRepository extends ResourceRepository
                 p.thread = :thread AND
                 p.cId = :course AND
                 {$conditionVisibility}
-                {$conditionModetared}
+                {$conditionModerated}
             ORDER BY p.iid {$orderDirection}";
 
         return $this

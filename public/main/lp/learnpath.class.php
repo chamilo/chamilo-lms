@@ -6906,7 +6906,7 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_link_form($action = 'add', $lpItem, $link)
+    public function display_link_form($action, $lpItem, $link)
     {
         $item_url = '';
         if ($link) {
@@ -6941,7 +6941,7 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_quiz_form($action = 'add', $lpItem, $exercise)
+    public function display_quiz_form($action, $lpItem, $exercise)
     {
         $form = new FormValidator(
             'quiz_form',
@@ -6965,7 +6965,7 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_forum_form($action = 'add', $lpItem, $resource)
+    public function display_forum_form($action, $lpItem, $resource)
     {
         $form = new FormValidator(
             'forum_form',
@@ -6994,7 +6994,7 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_thread_form($action = 'add', $lpItem, $resource)
+    public function display_thread_form($action, $lpItem, $resource)
     {
         $form = new FormValidator(
             'thread_form',
@@ -7046,11 +7046,8 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_student_publication_form(
-        $action = 'add',
-        CLpItem $lpItem,
-        $resource
-    ) {
+    public function display_student_publication_form($action, CLpItem $lpItem, $resource)
+    {
         $form = new FormValidator('frm_student_publication', 'post', '#');
         LearnPathItemForm::setForm($form, 'edit', $this, $lpItem);
 

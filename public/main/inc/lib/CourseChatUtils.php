@@ -37,7 +37,7 @@ class CourseChatUtils
      * @param int $sessionId
      * @param int $groupId
      */
-    public function __construct($courseId, $userId, $sessionId = 0, $groupId = 0, ResourceNode $resourceNode, ResourceRepository $repository)
+    public function __construct($courseId, $userId, $sessionId, $groupId, ResourceNode $resourceNode, ResourceRepository $repository)
     {
         $this->courseId = (int) $courseId;
         $this->userId = (int) $userId;

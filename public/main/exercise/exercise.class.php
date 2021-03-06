@@ -6125,12 +6125,12 @@ class Exercise
      * @return bool
      */
     public function send_mail_notification_for_exam(
-        $type = 'end',
+        $type,
         $question_list_answers,
         $origin,
         $exe_id,
-        $score = null,
-        $weight = null
+        $score,
+        $weight
     ) {
         $setting = api_get_course_setting('email_alert_manager_on_new_quiz');
 
@@ -7682,7 +7682,7 @@ class Exercise
         $current_question,
         $questions_in_media = [],
         $last_question_in_media = false,
-        $realQuestionList,
+        $realQuestionList = [],
         $generateJS = true
     ) {
         // With this option on the question is loaded via AJAX

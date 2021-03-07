@@ -38,9 +38,10 @@ class UserRelUser
     protected User $user;
 
     /**
-     * @ORM\Column(name="friend_user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $friendUserId;
+    protected User $friend;
 
     /**
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
@@ -52,34 +53,32 @@ class UserRelUser
      */
     protected ?DateTime $lastEdit = null;
 
-    /**
-     * Set friendUserId.
-     *
-     * @return UserRelUser
-     */
-    public function setFriendUserId(int $friendUserId)
+    public function getUser(): User
     {
-        $this->friendUserId = $friendUserId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get friendUserId.
-     *
-     * @return int
-     */
-    public function getFriendUserId()
+    public function getFriend(): User
     {
-        return $this->friendUserId;
+        return $this->friend;
     }
 
-    /**
-     * Set relationType.
-     *
-     * @return UserRelUser
-     */
-    public function setRelationType(int $relationType)
+    public function setFriend(User $friend): self
+    {
+        $this->friend = $friend;
+
+        return $this;
+    }
+
+
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 
@@ -96,12 +95,7 @@ class UserRelUser
         return $this->relationType;
     }
 
-    /**
-     * Set lastEdit.
-     *
-     * @return UserRelUser
-     */
-    public function setLastEdit(DateTime $lastEdit)
+    public function setLastEdit(DateTime $lastEdit): self
     {
         $this->lastEdit = $lastEdit;
 

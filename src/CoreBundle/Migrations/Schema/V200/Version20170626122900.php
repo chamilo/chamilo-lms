@@ -149,7 +149,16 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('user_rel_user');
+        $this->addSql('DELETE FROM user_rel_user WHERE user_id = 0 OR friend_user_id = 0');
+
         $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT DEFAULT NULL');
+
+        if (false === $table->hasForeignKey('FK_DBF650A893D1119E')) {
+            $this->addSql(
+                ' ALTER TABLE user_rel_user ADD CONSTRAINT FK_DBF650A893D1119E FOREIGN KEY (friend_user_id) REFERENCES user (id) ON DELETE CASCADE;'
+            );
+        }
 
         if (false === $table->hasForeignKey('FK_DBF650A8A76ED395')) {
             $this->addSql(

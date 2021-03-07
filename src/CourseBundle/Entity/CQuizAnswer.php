@@ -130,17 +130,12 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    public function setPonderation(float $weight): self
+    public function setPonderation($weight): self
     {
         $this->ponderation = empty($weight) ? 0.0 : (float) $weight;
 
@@ -174,7 +169,7 @@ class CQuizAnswer
         return $this->position;
     }
 
-    public function setHotspotCoordinates(string $hotspotCoordinates): self
+    public function setHotspotCoordinates(?string $hotspotCoordinates): self
     {
         $this->hotspotCoordinates = $hotspotCoordinates;
 
@@ -191,7 +186,7 @@ class CQuizAnswer
         return $this->hotspotCoordinates;
     }
 
-    public function setHotspotType(string $hotspotType): self
+    public function setHotspotType(?string $hotspotType): self
     {
         $this->hotspotType = $hotspotType;
 
@@ -208,7 +203,7 @@ class CQuizAnswer
         return $this->hotspotType;
     }
 
-    public function setDestination(string $destination)
+    public function setDestination(?string $destination)
     {
         $this->destination = empty($destination) ? null : $destination;
 

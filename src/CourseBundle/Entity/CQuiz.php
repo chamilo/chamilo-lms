@@ -23,8 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="c_quiz",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
  *     }
  * )
  * @ORM\Entity
@@ -41,11 +39,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected int $iid;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @Assert\NotBlank()
@@ -117,11 +110,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="expired_time", type="integer", nullable=false)
      */
     protected int $expiredTime;
-
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected ?int $sessionId = null;
 
     /**
      * @ORM\Column(name="propagate_neg", type="integer", nullable=false)
@@ -401,10 +389,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Set maxAttempt.
-     *
-     * @return CQuiz
      */
-    public function setMaxAttempt(int $maxAttempt)
+    public function setMaxAttempt(int $maxAttempt): self
     {
         $this->maxAttempt = $maxAttempt;
 
@@ -421,12 +407,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->maxAttempt;
     }
 
-    /**
-     * Set startTime.
-     *
-     * @return CQuiz
-     */
-    public function setStartTime(DateTime $startTime)
+    public function setStartTime(?DateTime $startTime) : self
     {
         $this->startTime = $startTime;
 
@@ -448,7 +429,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
      *
      * @return CQuiz
      */
-    public function setEndTime(DateTime $endTime)
+    public function setEndTime(?DateTime $endTime)
     {
         $this->endTime = $endTime;
 
@@ -507,28 +488,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getExpiredTime()
     {
         return $this->expiredTime;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @return CQuiz
-     */
-    public function setSessionId(int $sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
     }
 
     /**
@@ -679,28 +638,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getPassPercentage()
     {
         return $this->passPercentage;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CQuiz
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getExerciseCategory(): ?CExerciseCategory

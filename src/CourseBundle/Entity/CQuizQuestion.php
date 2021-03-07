@@ -115,6 +115,13 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected Collection $answers;
 
     /**
+     * @var Collection|CQuizQuestionOption[]
+     *
+     * @ORM\OneToMany(targetEntity="CQuizQuestionOption", mappedBy="question", cascade={"persist"})
+     */
+    protected Collection $options;
+
+    /**
      * @ORM\Column(name="mandatory", type="integer")
      */
     protected int $mandatory;
@@ -124,6 +131,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         $this->categories = new ArrayCollection();
         $this->relQuizzes = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->options = new ArrayCollection();
         $this->ponderation = 0.0;
         $this->mandatory = 0;
     }
@@ -318,15 +326,12 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->questionCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getFeedback()
+    public function getFeedback(): ?string
     {
         return $this->feedback;
     }
 
-    public function setFeedback(string $feedback): self
+    public function setFeedback(?string $feedback): self
     {
         $this->feedback = $feedback;
 
@@ -360,6 +365,24 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     public function getMandatory(): int
     {
         return $this->mandatory;
+    }
+
+    /**
+     * @return CQuizQuestionOption[]|Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param CQuizQuestionOption[]|Collection $options
+     */
+    public function setOptions(Collection $options): self
+    {
+        $this->options = $options;
+
+        return $this;
     }
 
     /**

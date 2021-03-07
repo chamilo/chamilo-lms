@@ -49,12 +49,7 @@ class CQuizRelQuestion
      */
     protected CQuiz $quiz;
 
-    /**
-     * Set questionOrder.
-     *
-     * @return CQuizRelQuestion
-     */
-    public function setQuestionOrder(int $questionOrder)
+    public function setQuestionOrder(int $questionOrder): self
     {
         $this->questionOrder = $questionOrder;
 

@@ -54,6 +54,14 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);');
         }
 
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_quiz');
+        }
+
+        if ($table->hasIndex('session')) {
+            $this->addSql('DROP INDEX session ON c_quiz');
+        }
+
         if (false === $table->hasColumn('show_previous_button')) {
             $this->addSql(
                 'ALTER TABLE c_quiz ADD COLUMN show_previous_button TINYINT(1) DEFAULT 1 NOT NULL'
@@ -174,6 +182,11 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_quiz_question_option');
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_quiz_question_option DROP id');
+        }
+
+        if (!$table->hasForeignKey('FK_499A73F31E27F6BF')) {
+            $this->addSql('ALTER TABLE c_quiz_question_option ADD CONSTRAINT FK_499A73F31E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid) ON DELETE CASCADE');
+            $this->addSql('CREATE INDEX IDX_499A73F31E27F6BF ON c_quiz_question_option (question_id);');
         }
 
         $table = $schema->getTable('c_quiz_rel_question');

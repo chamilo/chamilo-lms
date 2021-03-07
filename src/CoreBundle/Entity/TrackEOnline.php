@@ -25,6 +25,13 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEOnline
 {
     /**
+     * @ORM\Column(name="login_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected int $loginId;
+
+    /**
      * @ORM\Column(name="login_user_id", type="integer", nullable=false)
      */
     protected int $loginUserId;
@@ -53,13 +60,6 @@ class TrackEOnline
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
     protected int $accessUrlId;
-
-    /**
-     * @ORM\Column(name="login_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected int $loginId;
 
     /**
      * Set loginUserId.

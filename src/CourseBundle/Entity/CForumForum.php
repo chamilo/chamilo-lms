@@ -65,7 +65,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")
      * @ORM\JoinColumn(name="forum_last_post", referencedColumnName="iid")
      */
-    protected CForumPost $forumLastPost;
+    protected ?CForumPost $forumLastPost = null;
 
     /**
      * @Gedmo\SortableGroup
@@ -531,12 +531,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->forumImage;
     }
 
-    /**
-     * Set startTime.
-     *
-     * @return CForumForum
-     */
-    public function setStartTime(DateTime $startTime)
+    public function setStartTime(?DateTime $startTime): self
     {
         $this->startTime = $startTime;
 
@@ -553,12 +548,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->startTime;
     }
 
-    /**
-     * Set endTime.
-     *
-     * @return CForumForum
-     */
-    public function setEndTime(DateTime $endTime)
+    public function setEndTime(?DateTime $endTime): self
     {
         $this->endTime = $endTime;
 

@@ -448,7 +448,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $relation->count() > 0;
     }
 
-    public function getCategory(): CGroupCategory
+    public function getCategory(): ?CGroupCategory
     {
         return $this->category;
     }

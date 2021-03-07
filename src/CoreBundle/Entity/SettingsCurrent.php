@@ -307,7 +307,7 @@ class SettingsCurrent
 
     public function setAccessUrlLocked(int $accessUrlLocked): self
     {
-        $this->accessUrlLocked = (int) $accessUrlLocked;
+        $this->accessUrlLocked = $accessUrlLocked;
 
         return $this;
     }

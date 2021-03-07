@@ -345,7 +345,7 @@ class Session
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getUsers()
     {
@@ -407,7 +407,7 @@ class Session
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getCourses()
     {

@@ -194,7 +194,7 @@ class GradebookCategory
 
     public function setWeight(float $weight): self
     {
-        $this->weight = (float) $weight;
+        $this->weight = $weight;
 
         return $this;
     }

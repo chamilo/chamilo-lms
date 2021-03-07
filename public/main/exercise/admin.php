@@ -436,7 +436,8 @@ if ($newQuestion || $editQuestion) {
             echo '</div>';
         } else {
             require 'question_admin.inc.php';
-            ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->getId());
+            // @todo
+            //ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->getId());
         }
     }
 }

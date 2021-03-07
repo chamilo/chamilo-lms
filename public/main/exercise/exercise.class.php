@@ -201,7 +201,7 @@ class Exercise
             $this->results_disabled = $object->results_disabled;
             $this->attempts = $object->max_attempt;
             $this->feedback_type = $object->feedback_type;
-            $this->sessionId = $object->session_id;
+            //$this->sessionId = $object->session_id;
             $this->propagate_neg = $object->propagate_neg;
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;
@@ -1676,8 +1676,6 @@ class Exercise
             // Creates a new exercise
             $courseEntity = api_get_course_entity($this->course_id);
             $exercise
-                ->setSessionId(api_get_session_id())
-                ->setCId($courseEntity->getId())
                 ->setParent($courseEntity)
                 ->addCourseLink($courseEntity, api_get_session_entity());
             $em->persist($exercise);
@@ -5672,11 +5670,6 @@ class Exercise
                             $overlap = (int) $final_overlap;
                         }
 
-                        $overlap = 0;
-                        if ($final_overlap > 0) {
-                            $overlap = (int) $final_overlap;
-                        }
-
                         $excess = 0;
                         if ($final_excess > 0) {
                             $excess = (int) $final_excess;
@@ -5743,10 +5736,11 @@ class Exercise
                             $questionScore = 0;
                         }
                         // we always insert the answer_id 1 = delineation
-                        Event::saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0);
+                        Event::saveQuestionAttempt($this, $questionScore, 1, $quesId, $exeId, 0);
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
                         $hotspotValue = isset($hotspot_delineation_result[1]) ? 1 === (int) $hotspot_delineation_result[1] ? 1 : 0 : 0;
                         Event::saveExerciseAttemptHotspot(
+                            $this,
                             $exeId,
                             $quesId,
                             1,
@@ -5757,10 +5751,11 @@ class Exercise
                         if (0 == $final_answer) {
                             $questionScore = 0;
                             $answer = 0;
-                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($this, $questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
                                     Event::saveExerciseAttemptHotspot(
+                                        $this,
                                         $exeId,
                                         $quesId,
                                         $idx,
@@ -5770,11 +5765,12 @@ class Exercise
                                 }
                             }
                         } else {
-                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($this, $questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
                                     $hotspotValue = 1 === (int) $choice[$idx] ? 1 : 0;
                                     Event::saveExerciseAttemptHotspot(
+                                        $this,
                                         $exeId,
                                         $quesId,
                                         $idx,
@@ -5872,6 +5868,7 @@ class Exercise
                                 $answerDegreeCertainty = isset($replyDegreeCertainty[$i]) ? $replyDegreeCertainty[$i] : '';
                                 $answerValue = isset($choiceDegreeCertainty[$answerDegreeCertainty]) ? $choiceDegreeCertainty[$answerDegreeCertainty] : '';
                                 Event::saveQuestionAttempt(
+                                    $this,
                                     $questionScore,
                                     $chosenAnswer.':'.$choice[$chosenAnswer].':'.$answerValue,
                                     $quesId,
@@ -5884,6 +5881,7 @@ class Exercise
                             }
                         } else {
                             Event::saveQuestionAttempt(
+                                $this,
                                 $questionScore,
                                 $chosenAnswer.':'.$choice[$chosenAnswer],
                                 $quesId,
@@ -5900,6 +5898,7 @@ class Exercise
                     }
                 } else {
                     Event::saveQuestionAttempt(
+                        $this,
                         $questionScore,
                         0,
                         $quesId,
@@ -5916,6 +5915,7 @@ class Exercise
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt(
+                            $this,
                             $questionScore,
                             $ans,
                             $quesId,
@@ -5928,6 +5928,7 @@ class Exercise
                     }
                 } else {
                     Event::saveQuestionAttempt(
+                        $this,
                         $questionScore,
                         0,
                         $quesId,
@@ -5944,6 +5945,7 @@ class Exercise
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt(
+                            $this,
                             $questionScore,
                             $ans,
                             $quesId,
@@ -5956,6 +5958,7 @@ class Exercise
                     }
                 } else {
                     Event::saveQuestionAttempt(
+                        $this,
                         $questionScore,
                         0,
                         $quesId,
@@ -5970,6 +5973,7 @@ class Exercise
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
                         Event::saveQuestionAttempt(
+                            $this,
                             $questionScore,
                             $val,
                             $quesId,
@@ -5984,6 +5988,7 @@ class Exercise
             } elseif (FREE_ANSWER == $answerType) {
                 $answer = $choice;
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     $answer,
                     $quesId,
@@ -5997,6 +6002,7 @@ class Exercise
                 $answer = $choice;
                 /** @var OralExpression $objQuestionTmp */
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     $answer,
                     $quesId,
@@ -6015,6 +6021,7 @@ class Exercise
             ) {
                 $answer = $choice;
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     $answer,
                     $quesId,
@@ -6048,13 +6055,13 @@ class Exercise
                             error_log('Hotspot value: '.$hotspotValue);
                         }
                         Event::saveExerciseAttemptHotspot(
+                            $this,
                             $exeId,
                             $quesId,
                             $idx,
                             $hotspotValue,
                             $val,
-                            false,
-                            $this->id
+                            false
                         );
                     }
                 } else {
@@ -6063,6 +6070,7 @@ class Exercise
                     }
                 }
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     implode('|', $answer),
                     $quesId,
@@ -6074,6 +6082,7 @@ class Exercise
                 );
             } else {
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     $answer,
                     $quesId,
@@ -8772,7 +8781,6 @@ class Exercise
         $allowDelete = self::allowAction('delete');
         $allowClean = self::allowAction('clean_results');
 
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
         $categoryId = (int) $categoryId;
@@ -8792,7 +8800,6 @@ class Exercise
         $courseId = $courseInfo['real_id'];
         $tableRows = [];
         $origin = api_get_origin();
-        $userInfo = $userId ? api_get_user_info($userId) : api_get_user_info();
         $charset = 'utf-8';
         $token = Security::get_token();
         $userId = $userId ? (int) $userId : api_get_user_id();
@@ -8941,7 +8948,9 @@ class Exercise
                     $lp_blocked = null;
                     if (true == $exercise->exercise_was_added_in_lp) {
                         $lp_blocked = Display::div(
-                            get_lang('This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.'),
+                            get_lang(
+                                'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.'
+                            ),
                             ['class' => 'lp_content_type_label']
                         );
                     }
@@ -8999,12 +9008,13 @@ class Exercise
                     $currentRow['title'] = $url.' '.$session_img.$lp_blocked;
 
                     // Count number exercise - teacher
-                    $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
+                    /*$sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
                             WHERE quiz_id = $exerciseId";
                     $sqlresult = Database::query($sql);
-                    $rowi = (int) Database::result($sqlresult, 0, 0);
+                    $rowi = (int) Database::result($sqlresult, 0, 0);*/
+                    $rowi = $exerciseEntity->getQuestions()->count();
 
-                    if ($sessionId == $exerciseEntity->getSessionId()) {
+                    if ($repo->isGranted('EDIT', $exerciseEntity)) {
                         // Questions list
                         $actions = Display::url(
                             Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
@@ -9233,7 +9243,7 @@ class Exercise
 
                     // Delete
                     $delete = '';
-                    if ($sessionId == $exerciseEntity->getSessionId()) {
+                    if ($repo->isGranted('DELETE', $exerciseEntity)) {
                         if (false == $locked) {
                             $delete = Display::url(
                                 Display::return_icon(
@@ -9327,6 +9337,7 @@ class Exercise
                     if ($returnData) {
                         $currentRow['title'] = $exercise->getUnformattedTitle();
                     }
+
                     // Don't remove this marker: note-query-exe-results
                     $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                             WHERE

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use DateTime;
@@ -387,9 +386,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->accessCondition;
     }
 
-    /**
-     * Set maxAttempt.
-     */
     public function setMaxAttempt(int $maxAttempt): self
     {
         $this->maxAttempt = $maxAttempt;
@@ -407,7 +403,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->maxAttempt;
     }
 
-    public function setStartTime(?DateTime $startTime) : self
+    public function setStartTime(?DateTime $startTime): self
     {
         $this->startTime = $startTime;
 

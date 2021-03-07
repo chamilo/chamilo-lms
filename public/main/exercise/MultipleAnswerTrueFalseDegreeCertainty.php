@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -244,19 +246,19 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $objAnswer = new Answer($this->id);
         $nbAnswers = $form->getSubmitValue('nb_answers');
         $courseId = api_get_course_int_id();
-        $correct = [];
-        $options = Question::readQuestionOption($this->id, $courseId);
+
+        $repo = Container::getQuestionRepository();
+        /** @var CQuizQuestion $question */
+        $question = $repo->find($this->id);
+        $options = $question->getOptions();
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['iid'];
-                unset($optionData['iid']);
-                Question::updateQuestionOption($id, $optionData, $courseId);
+                $optionData->setName($optionData);
             }
         } else {
             for ($i = 1; $i <= 8; $i++) {
-                $lastId = Question::saveQuestionOption($this->id, $this->options[$i], $courseId, $i);
-                $correct[$i] = $lastId;
+                Question::saveQuestionOption($question, $this->options[$i], $i);
             }
         }
 
@@ -505,7 +507,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if ($category) {
                 $categoryQuestionName = $category->name;
             }
-            list($noValue, $height) = self::displayDegreeChartChildren(
+            [$noValue, $height] = self::displayDegreeChartChildren(
                 $scoreListForCategory,
                 300,
                 '',
@@ -1092,7 +1094,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // get student answer option id
-        $studentAnswerOptionId = isset($splitAnswer[1]) ? $splitAnswer[1] : null;
+        $studentAnswerOptionId = $splitAnswer[1] ?? null;
 
         // we got the correct answer option id, let's compare ti with the student answer
         $percentage = null;
@@ -1169,18 +1171,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function getCorrectAnswerOptionId($idAuto)
     {
         $tblAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $courseId = api_get_course_int_id();
         $idAuto = (int) $idAuto;
         $sql = "SELECT correct FROM $tblAnswer
-                WHERE c_id = $courseId AND iid = $idAuto";
+                WHERE iid = $idAuto";
 
         $res = Database::query($sql);
         $data = Database::fetch_assoc($res);
         if (Database::num_rows($res) > 0) {
             return $data['correct'];
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     /**

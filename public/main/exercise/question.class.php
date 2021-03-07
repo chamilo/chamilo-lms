@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 
 /**
  * Class Question.
@@ -545,7 +546,6 @@ abstract class Question
 
         $questionCategoryRepo = Container::getQuestionCategoryRepository();
         $questionRepo = Container::getQuestionRepository();
-        $exerciseRepo = Container::getQuizRepository();
 
         // question already exists
         if (!empty($id)) {
@@ -1569,22 +1569,23 @@ abstract class Question
     }
 
     /**
-     * @param int    $question_id
-     * @param string $name
-     * @param int    $course_id
-     * @param int    $position
+     * @param CQuizQuestion $question
+     * @param string        $name
+     * @param int           $position
      *
-     * @return false|string
+     * @return null|CQuizQuestion
      */
-    public static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
+    public static function saveQuestionOption(CQuizQuestion $question, $name, $position = 0)
     {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $params['question_id'] = (int) $question_id;
-        $params['name'] = $name;
-        $params['position'] = $position;
-        $params['c_id'] = $course_id;
-
-        return Database::insert($table, $params);
+        $option = new CQuizQuestionOption();
+        $option
+            ->setQuestion($question)
+            ->setName($name)
+            ->setPosition($position)
+        ;
+        $em = Database::getManager();
+        $em->persist($option);
+        $em->flush();
     }
 
     /**
@@ -1606,30 +1607,11 @@ abstract class Question
     }
 
     /**
-     * @param int   $id
-     * @param array $params
-     * @param int   $course_id
-     *
-     * @return bool|int
-     */
-    public static function updateQuestionOption($id, $params, $course_id)
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-
-        return Database::update(
-            $table,
-            $params,
-            ['c_id = ? AND iid = ?' => [$course_id, $id]]
-        );
-    }
-
-    /**
      * @param int $question_id
-     * @param int $course_id
      *
      * @return array
      */
-    public static function readQuestionOption($question_id, $course_id)
+    public static function readQuestionOption($question_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
@@ -1638,8 +1620,7 @@ abstract class Question
             $table,
             [
                 'where' => [
-                    'c_id = ? AND question_id = ?' => [
-                        $course_id,
+                    'question_id = ?' => [
                         $question_id,
                     ],
                 ],

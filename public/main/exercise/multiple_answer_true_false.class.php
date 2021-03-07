@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -17,9 +19,6 @@ class MultipleAnswerTrueFalse extends Question
     public $explanationLangVar = 'Multiple answer true/false/don\'t know';
     public $options;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -246,25 +245,19 @@ class MultipleAnswerTrueFalse extends Question
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
         $course_id = api_get_course_int_id();
-
-        $correct = [];
-        $options = Question::readQuestionOption($this->id, $course_id);
+        $repo = Container::getQuestionRepository();
+        /** @var CQuizQuestion $question */
+        $question = $repo->find($this->id);
+        $options = $question->getOptions();
+        $em = Database::getManager();
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['iid'];
-                unset($optionData['iid']);
-                Question::updateQuestionOption($id, $optionData, $course_id);
+                $optionData->setName($optionData);
             }
         } else {
             for ($i = 1; $i <= 3; $i++) {
-                $last_id = Question::saveQuestionOption(
-                    $this->id,
-                    $this->options[$i],
-                    $course_id,
-                    $i
-                );
-                $correct[$i] = $last_id;
+                Question::saveQuestionOption($question, $this->options[$i], $i);
             }
         }
 

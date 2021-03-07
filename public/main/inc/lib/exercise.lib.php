@@ -1730,10 +1730,8 @@ HOTSPOT;
                 FROM $quizTable as q
                 INNER JOIN $trackExerciseTable as tee
                 ON q.iid = tee.exe_exo_id
-                INNER JOIN $courseTable c
-                ON c.id = tee.c_id
                 WHERE
-                    tee.exe_id = $exeId AND q.c_id = c.id";
+                    tee.exe_id = $exeId";
 
             $sqlResult = Database::query($sql);
             if (Database::num_rows($sqlResult)) {
@@ -1752,25 +1750,18 @@ HOTSPOT;
     /**
      * Validates the time control key.
      *
-     * @param int $exercise_id
-     * @param int $lp_id
-     * @param int $lp_item_id
+     * @param Exercise $exercise
+     * @param int      $lp_id
+     * @param int      $lp_item_id
      *
      * @return bool
      */
-    public static function exercise_time_control_is_valid(
-        $exercise_id,
-        $lp_id = 0,
-        $lp_item_id = 0
-    ) {
-        $course_id = api_get_course_int_id();
-        $exercise_id = (int) $exercise_id;
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "SELECT expired_time FROM $table
-                WHERE c_id = $course_id AND iid = $exercise_id";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
-        if (!empty($row['expired_time'])) {
+    public static function exercise_time_control_is_valid(Exercise $exercise, $lp_id = 0, $lp_item_id = 0)
+    {
+        $exercise_id = $exercise->getId();
+        $expiredTime = $exercise->expired_time;
+
+        if (!empty($expiredTime)) {
             $current_expired_time_key = self::get_time_control_key(
                 $exercise_id,
                 $lp_id,
@@ -2128,8 +2119,7 @@ HOTSPOT;
                 ON (user.user_id = exe_user_id)
                 WHERE
                     te.c_id = $course_id $session_id_and AND
-                    ce.active <> -1 AND
-                    ce.c_id = $course_id
+                    ce.active <> -1
                     $exercise_where
                     $extra_where_conditions
                 ";
@@ -5641,9 +5631,9 @@ EOT;
         $sql = "SELECT q.question, question_id, count(q.iid) count
                 FROM $attemptTable t
                 INNER JOIN $questionTable q
-                ON (q.c_id = t.c_id AND q.iid = t.question_id)
+                ON (q.iid = t.question_id)
                 INNER JOIN $trackTable te
-                ON (te.c_id = q.c_id AND t.exe_id = te.exe_id)
+                ON (t.exe_id = te.exe_id)
                 WHERE
                     t.c_id = $courseId AND
                     t.marks != q.ponderation AND

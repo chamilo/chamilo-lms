@@ -41,9 +41,10 @@ $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
 $imagePath = $questionRepo->getHotSpotImageUrl($objQuestion).'?'.api_get_cidreq();
 $course_id = api_get_course_int_id();
+$answers = $objQuestion->getAnswers();
 
 // Query db for answers
-if (HOT_SPOT_DELINEATION == $answer_type) {
+/*if (HOT_SPOT_DELINEATION == $answer_type) {
     $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
 	        WHERE
@@ -57,7 +58,7 @@ if (HOT_SPOT_DELINEATION == $answer_type) {
 	        WHERE c_id = $course_id AND question_id = $questionId
 	        ORDER BY position";
 }
-$result = Database::query($sql);
+$result = Database::query($sql);*/
 
 $data = [];
 $data['type'] = 'user';
@@ -69,41 +70,46 @@ $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 $data['answers'] = [];
 
-$nmbrTries = 0;
-
-while ($hotspot = Database::fetch_assoc($result)) {
+$numberOfTries = 0;
+foreach ($answers as $hotspot) {
+    $type = $hotspot->getHotspotType();
+    if (HOT_SPOT_DELINEATION == $answer_type) {
+        if ('delineation' !== $type) {
+            continue;
+        }
+    }
     $hotSpot = [];
-    $hotSpot['id'] = $hotspot['iid'];
-    $hotSpot['iid'] = $hotspot['iid'];
-    $hotSpot['answer'] = $hotspot['answer'];
+    $hotSpot['id'] = $hotspot->getIid();
+    $hotSpot['iid'] = $hotspot->getIid();
+    $hotSpot['answer'] = $hotspot->getAnswer();
 
     // Square or rectangle
-    if ('square' === $hotspot['hotspot_type']) {
+    if ('square' === $type) {
         $hotSpot['type'] = 'square';
     }
     // Circle or oval
-    if ('circle' === $hotspot['hotspot_type']) {
+    if ('circle' === $type) {
         $hotSpot['type'] = 'circle';
     }
     // Polygon
-    if ('poly' === $hotspot['hotspot_type']) {
+    if ('poly' === $type) {
         $hotSpot['type'] = 'poly';
     }
     // Delineation
-    if ('delineation' === $hotspot['hotspot_type']) {
+    if ('delineation' === $type) {
         $hotSpot['type'] = 'delineation';
     }
     // No error
-    if ('noerror' === $hotspot['hotspot_type']) {
+    if ('noerror' === $type) {
         $hotSpot['type'] = 'noerror';
     }
 
     // This is a good answer, count + 1 for nmbr of clicks
-    if ($hotspot['hotspot_type'] > 0) {
-        $nmbrTries++;
+    if ($type > 0) {
+        $numberOfTries++;
     }
 
-    $hotSpot['coord'] = $hotspot['hotspot_coordinates'];
+    $hotSpot['coord'] = $hotspot->getHotspotCoordinates();
     $data['hotspots'][] = $hotSpot;
 }
 
@@ -144,7 +150,7 @@ if (!empty($attemptList)) {
     }
 }
 
-$data['nmbrTries'] = $nmbrTries;
+$data['nmbrTries'] = $numberOfTries;
 $data['done'] = 'done';
 
 if (Session::has("hotspot_ordered$questionId")) {

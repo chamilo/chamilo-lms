@@ -486,6 +486,7 @@ class Event
      * @return bool Result of the insert query
      */
     public static function saveQuestionAttempt(
+        Exercise $exercise,
         $score,
         $answer,
         $question_id,
@@ -547,7 +548,7 @@ class Event
         }
 
         //Validation in case of fraud with active control time
-        if (!ExerciseLib::exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
+        if (!ExerciseLib::exercise_time_control_is_valid($exercise, $learnpath_id, $learnpath_item_id)) {
             if ($debug) {
                 error_log("exercise_time_control_is_valid is false");
             }
@@ -674,33 +675,33 @@ class Event
     /**
      * Record an hotspot spot for this attempt at answering an hotspot question.
      *
-     * @param int    $exeId
-     * @param int    $questionId    Question ID
-     * @param int    $answerId      Answer ID
-     * @param int    $correct
-     * @param string $coords        Coordinates of this point (e.g. 123;324)
-     * @param bool   $updateResults
-     * @param int    $exerciseId
+     * @param Exercise $exercise
+     * @param int      $exeId
+     * @param int      $questionId Question ID
+     * @param int      $answerId   Answer ID
+     * @param int      $correct
+     * @param string   $coords     Coordinates of this point (e.g. 123;324)
+     * @param bool     $updateResults
      *
      * @return bool Result of the insert query
      *
      * @uses \Course code and user_id from global scope $_cid and $_user
      */
     public static function saveExerciseAttemptHotspot(
+        Exercise $exercise,
         $exeId,
         $questionId,
         $answerId,
         $correct,
         $coords,
-        $updateResults = false,
-        $exerciseId = 0
+        $updateResults = false
     ) {
         $debug = false;
         global $safe_lp_id, $safe_lp_item_id;
 
         if (false == $updateResults) {
             // Validation in case of fraud with activated control time
-            if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
+            if (!ExerciseLib::exercise_time_control_is_valid($exercise, $safe_lp_id, $safe_lp_item_id)) {
                 if ($debug) {
                     error_log('Attempt is fraud');
                 }

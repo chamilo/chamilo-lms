@@ -662,6 +662,7 @@ class GroupManager
         $table_forum = Database::get_course_table(TABLE_FORUM);
         $categoryId = (int) $categoryId;
         $group_id = (int) $group_id;
+        $forumState = (int) $forumState;
         $repo = Container::getGroupRepository();
 
         /** @var CGroup $group */
@@ -692,7 +693,6 @@ class GroupManager
 
         /* Here we are updating a field in the table forum_forum that perhaps
         duplicates the table group_info.forum_state cvargas*/
-        $forumState = (int) $forumState;
         $sql2 = "UPDATE $table_forum SET ";
         if (1 === $forumState) {
             $sql2 .= " forum_group_public_private='public' ";

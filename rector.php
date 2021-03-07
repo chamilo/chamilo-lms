@@ -82,11 +82,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector::class,
             Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class,
             Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector::class,
-
-
+            Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector::class,
+            Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector::class,
+            Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector::class,
+            Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector::class,
+            Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector::class,
+            \Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector::class,
+            Rector\Php74\Rector\Property\TypedPropertyRector::class,
 
         ]
     );
+
+    $parameters->set(Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_74);
 
     //$parameters->set(Option::AUTO_IMPORT_NAMES, true);
 

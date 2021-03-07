@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Script showing information about a user (name, e-mail, courses and sessions).
@@ -190,7 +191,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     );
     $icon = Display::return_icon('accept_na.png');
     if (!empty($value['value'])) {
-        list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+        [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
         $icon = Display::return_icon('accept.png');
         $timeLegalAccept = api_get_local_time($legalTime);
         $btn = Display::url(
@@ -618,26 +619,23 @@ if ($studentBossList) {
 $em = Database::getManager();
 $userRepository = UserManager::getRepository();
 
-$hrmList = $userRepository->getAssignedHrmUserList(
-    $user->getId(),
-    api_get_current_access_url_id()
-);
+$hrmList = $userRepository->getAssignedHrmUserList($user->getId(), api_get_current_access_url_id());
 
 if ($hrmList) {
     echo Display::page_subheader(get_lang('Human Resource Managers list'));
     echo '<div class="row">';
-    /** @var UserRelUser $hrm */
+    $repo = Container::getIllustrationRepository();
     foreach ($hrmList as $hrm) {
-        $hrmInfo = api_get_user_info($hrm->getFriendUserId());
-        $userPicture = isset($hrmInfo['avatar_medium']) ? $hrmInfo['avatar_medium'] : $hrmInfo['avatar'];
+        $url = $repo->getIllustrationUrl($hrm);
+        $fullName = UserManager::formatUserFullName($hrm);
         echo '<div class="col-sm-4 col-md-3">';
         echo '<div class="media">';
         echo '<div class="media-left">';
-        echo Display::img($userPicture, $hrmInfo['complete_name'], ['class' => 'media-object'], false);
+        echo Display::img($url, $fullName, ['class' => 'media-object'], false);
         echo '</div>';
         echo '<div class="media-body">';
-        echo '<h4 class="media-heading">'.$hrmInfo['complete_name_with_message_link'].'</h4>';
-        echo $hrmInfo['username'];
+        echo '<h4 class="media-heading">'.$fullName.'</h4>';
+        echo $hrm->getUsername();
         echo '</div>';
         echo '</div>';
         echo '</div>';

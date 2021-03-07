@@ -32,7 +32,7 @@ $subscribedUsers = $userRepository->getAssignedHrmUserList(
 $hrmOptions = [];
 /** @var UserRelUser $subscribedUser */
 foreach ($subscribedUsers as $subscribedUser) {
-    $hrm = api_get_user_entity($subscribedUser->getFriendUserId());
+    $hrm = api_get_user_entity($subscribedUser->getFriend()->getId());
 
     if (null === $hrm) {
         continue;

@@ -331,7 +331,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     {
         $qb = $this->createQueryBuilder('u');
 
-        $this->addFilterByAccessUrlQueryBuilder($accessUrlId, $qb);
+        $this->addSearchByPortal($accessUrlId, $qb);
         $this->addSearchByStatusQueryBuilder($status, $qb);
         $this->addSearchByKeywordQueryBuilder($keyword, $qb);
 
@@ -544,23 +544,32 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
         $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
 
+        $messageTool = 'true' === api_get_setting('allow_message_tool');
+        if (!$messageTool) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('u');
+        $this->addSearchByActiveAndNotAnonUser($qb);
+        $this->addSearchByPortal($accessUrlId, $qb);
+
         $dql = null;
-        if ('true' === api_get_setting('allow_social_tool') &&
-            'true' === api_get_setting('allow_message_tool')
-        ) {
+        if ('true' === api_get_setting('allow_social_tool')) {
             // All users
             if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
-                $dql = "SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:User U
-                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
-                        WITH U = R.user
-                        WHERE
-                            U.active = 1 AND
-                            U.status != 6  AND
-                            U.id != {$currentUserId} AND
-                            R.url = {$accessUrlId}";
+                $this->addSearchByNotCurrentUser($currentUserId, $qb);
+            /*$dql = "SELECT DISTINCT U
+                    FROM ChamiloCoreBundle:User U
+                    LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                    WITH U = R.user
+                    WHERE
+                        U.active = 1 AND
+                        U.status != 6  AND
+                        U.id != {$currentUserId} AND
+                        R.url = {$accessUrlId}";*/
             } else {
-                $dql = 'SELECT DISTINCT U
+                $this->addSearchByOnlyMyFriends($currentUserId, $qb);
+                /*$dql = 'SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
                         INNER JOIN ChamiloCoreBundle:User AS U
                         WITH UF.friendUserId = U
@@ -571,23 +580,16 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                             UF.user = {$currentUserId} AND
                             UF.friendUserId != {$currentUserId} AND
                             U = R.user AND
-                            R.url = {$accessUrlId}";
+                            R.url = {$accessUrlId}";*/
             }
-        } elseif (
-            'false' === api_get_setting('allow_social_tool') &&
-            'true' === api_get_setting('allow_message_tool')
-        ) {
+        } else {
             if ('true' === $allowSendMessageToAllUsers) {
-                $dql = "SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:User U
-                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
-                        WITH U = R.user
-                        WHERE
-                            U.active = 1 AND
-                            U.status != 6  AND
-                            U.id != {$currentUserId} AND
-                            R.url = {$accessUrlId}";
+                $this->addSearchByNotCurrentUser($currentUserId, $qb);
             } else {
+                return [];
+            }
+
+            /*else {
                 $time_limit = (int) api_get_setting('time_limit_whosonline');
                 $online_time = time() - ($time_limit * 60);
                 $limit_date = api_get_utc_datetime($online_time);
@@ -598,49 +600,29 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                         WHERE
                           U.active = 1 AND
                           T.loginDate >= '".$limit_date."'";
-            }
+            }*/
         }
 
-        $parameters = [];
-
-        if (!empty($searchFilter) && !empty($dql)) {
-            $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
-            $parameters['search'] = "%{$searchFilter}%";
+        if (!empty($searchFilter)) {
+            $this->addSearchByKeywordQueryBuilder($searchFilter, $qb);
         }
 
-        return $this->getEntityManager()
-            ->createQuery($dql)
-            ->setMaxResults($limit)
-            ->setParameters($parameters)
-            ->getResult()
-        ;
+        return $qb->getQuery()->getResult();
     }
 
     /**
      * Get the list of HRM who have assigned this user.
      *
-     * @return array
+     * @return User[]
      */
     public function getAssignedHrmUserList(int $userId, int $urlId)
     {
-        $qb = $this->createQueryBuilder('user');
+        $qb = $this->createQueryBuilder('u');
+        $this->addSearchByPortal($urlId, $qb);
+        $this->addSearchByActiveAndNotAnonUser($qb);
+        $this->addSearchByMyConnectionsWithStatus($userId, USER_RELATION_TYPE_RRHH, $qb);
 
-        return $qb
-            ->select('uru')
-            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.user = user.id')
-            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.user = uru.friendUserId')
-            ->where(
-                $qb->expr()->eq('auru.url', $urlId)
-            )
-            ->andWhere(
-                $qb->expr()->eq('uru.user', $userId)
-            )
-            ->andWhere(
-                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
-            )
-            ->getQuery()
-            ->getResult()
-        ;
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -792,7 +774,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             $qb = $em->createQueryBuilder();
             $qb->select($qb->expr()->count('l'))
                 ->from($entity, 'l')
-                ->where("l.{$field} = :login")
+                ->where("l.$field = :login")
                 ->setParameter('login', $userId)
             ;
             $query = $qb->getQuery();
@@ -802,7 +784,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 $qb = $em->getRepository($entity)->createQueryBuilder('l');
                 $qb
                     ->select('l')
-                    ->where("l.{$field} = :login")
+                    ->where("l.$field = :login")
                     ->setParameter('login', $userId)
                 ;
                 $qb
@@ -1456,8 +1438,83 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
 
         $qb->orderBy('u.firstname', Criteria::ASC);
-        $qb->where('u.firstname LIKE :keyword OR u.lastname LIKE :keyword ');
-        $qb->setParameter('keyword', "%{$keyword}%", Types::STRING);
+        $qb->where('
+            u.firstname LIKE :keyword OR
+            u.lastname LIKE :keyword OR
+            u.email LIKE :keyword OR
+            u.username LIKE :keyword
+        ');
+        $qb->setParameter('keyword', "%$keyword%", Types::STRING);
+
+        return $qb;
+    }
+
+    private function addSearchByMyConnectionsWithStatus(int $userId, int $status, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        $qb->leftJoin('u.userRelUsers', 'relations');
+        $qb
+            ->andWhere('relations.relationType = :status')
+            ->andWhere('relations.user = :user AND relations.friend <> :user')
+            ->setParameters(
+                [
+                    'status' => $status,
+                    'user' => $userId,
+                ]
+            )
+        ;
+
+        return $qb;
+    }
+
+    private function addSearchByOnlyMyFriends(int $userId, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        $qb->leftJoin('u.userRelUsers', 'relations');
+        $qb
+            ->andWhere(
+                $qb->expr()->notIn('relations.relationType', [USER_RELATION_TYPE_DELETED, USER_RELATION_TYPE_RRHH])
+            )
+            ->andWhere('relations.user = :user AND relations.friend <> :user')
+            ->setParameter('user', $userId, Types::INTEGER)
+        ;
+
+        return $qb;
+    }
+
+    private function addSearchByPortal(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        $qb->innerJoin('u.portals', 'p');
+        $qb
+            ->andWhere('p.url = :url')
+            ->setParameter('url', $accessUrlId, Types::INTEGER)
+        ;
+
+        return $qb;
+    }
+
+    private function addSearchByNotCurrentUser(int $userId, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+
+        $qb
+            ->where('u.id <> :id')
+            ->setParameter('id', $userId, Types::INTEGER)
+        ;
+
+        return $qb;
+    }
+
+    private function addSearchByActiveAndNotAnonUser(QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+
+        $qb
+            ->where('u.active = 1')
+            ->andWhere('u.status <> :status')
+            ->setParameter('status', User::ANONYMOUS, Types::INTEGER)
+        ;
 
         return $qb;
     }
@@ -1470,29 +1527,6 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->where('u.status = :status')
             ->setParameter('status', $status, Types::INTEGER)
         ;
-
-        return $qb;
-    }
-
-    private function addFilterByAccessUrlQueryBuilder(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
-    {
-        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-
-        if ($accessUrlId > 0) {
-            $qb->innerJoin(
-                'ChamiloCoreBundle:AccessUrlRelUser',
-                'auru',
-                Join::WITH,
-                'u.id = auru.user'
-            );
-        }
-
-        if ($accessUrlId > 0) {
-            $qb
-                ->andWhere('auru.url = :url')
-                ->setParameter(':url', $accessUrlId, Types::INTEGER)
-            ;
-        }
 
         return $qb;
     }

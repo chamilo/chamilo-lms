@@ -24,7 +24,7 @@ class ResourceFactory
 
         $resourceTypeList = $tool->getResourceTypes();
         if (!isset($resourceTypeList[$type])) {
-            throw new InvalidArgumentException(sprintf('Resource type doesn\'t exist: %s', $type));
+            throw new InvalidArgumentException(sprintf("Resource type doesn't exist: %s", $type));
         }
 
         $typeConfig = $resourceTypeList[$type];

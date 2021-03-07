@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
@@ -16,6 +18,7 @@ use Oneup\UploaderBundle\Uploader\File\FileInterface;
 use Oneup\UploaderBundle\Uploader\File\FilesystemFile;
 use Oneup\UploaderBundle\Uploader\Response\EmptyResponse;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ResourceUploadController extends BlueimpController
@@ -82,7 +85,6 @@ class ResourceUploadController extends BlueimpController
                     $this->dispatchPreUploadEvent($file, $response, $request);
                     /** @var AbstractResource|ResourceInterface $resource */
                     $resource = $repo->saveUpload($file);
-                    //$resource = $repo->saveUpload($file, $course, $session);
 
                     // @todo fix correct $parent
                     //$resource->setParent($parent);
@@ -101,8 +103,8 @@ class ResourceUploadController extends BlueimpController
                     /*$chunked ?
                         $this->handleChunkedUpload($file, $response, $request) :
                         $this->handleUpload($file, $response, $request);*/
-                } catch (UploadException $e) {
-                    $this->errorHandler->addException($response, $e);
+                } catch (UploadException $uploadException) {
+                    $this->errorHandler->addException($response, $uploadException);
                 }
             }
         } catch (UploadException $e) {

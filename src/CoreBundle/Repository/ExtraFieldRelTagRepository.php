@@ -45,7 +45,7 @@ class ExtraFieldRelTagRepository extends ServiceEntityRepository
             )
             ->where(
                 $queryBuilder->expr()->andX(
-                    $queryBuilder->expr()->eq('ft.itemId', (int) $itemId),
+                    $queryBuilder->expr()->eq('ft.itemId', $itemId),
                     $queryBuilder->expr()->eq('ft.fieldId', $extraField->getId())
                 )
             )

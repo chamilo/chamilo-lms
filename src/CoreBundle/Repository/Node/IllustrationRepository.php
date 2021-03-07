@@ -23,7 +23,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 final class IllustrationRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
@@ -67,10 +66,14 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     }
 
     /**
-     * @param ResourceInterface|User|UserInterface $resource
+     * @param ResourceInterface|User $resource
      */
-    public function addIllustration(User $resource, User $user, UploadedFile $uploadFile = null, string $crop = ''): ?ResourceFile
-    {
+    public function addIllustration(
+        ResourceInterface $resource,
+        User $user,
+        UploadedFile $uploadFile = null,
+        string $crop = ''
+    ): ?ResourceFile {
         if (null === $uploadFile) {
             return null;
         }
@@ -80,9 +83,8 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
         if (null === $illustrationNode) {
             $illustration = new Illustration();
-            $illustration->setParentResourceNode($user->getResourceNode());
-            $em->persist($illustration);
             $this->addResourceNode($illustration, $user, $resource);
+            $em->persist($illustration);
         } else {
             $illustration = $this->findOneBy([
                 'resourceNode' => $illustrationNode,

@@ -147,7 +147,6 @@ class ResourceNodeVoter extends Voter
         $linkFound = 0;
         $link = null;
         // @todo implement view, edit, delete.
-        /** @var ResourceLink $link */
         foreach ($links as $link) {
             // Block access if visibility is deleted. Creator and admin have already access.
             if (ResourceLink::VISIBILITY_DELETED === $link->getVisibility()) {

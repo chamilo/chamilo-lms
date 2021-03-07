@@ -280,12 +280,12 @@ class SequenceResourceRepository extends ServiceEntityRepository
                         $id = $resource->getId();
                         $status = $this->checkCourseRequirements($userId, $resource, 0);
 
-                        if (false === $status) {
+                        if (!$status) {
                             $sessionsInCourse = SessionManager::get_session_by_course($id);
                             foreach ($sessionsInCourse as $session) {
                                 if (in_array($session['id'], $sessionUserList, true)) {
                                     $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
-                                    if (true === $status) {
+                                    if ($status) {
                                         break;
                                     }
                                 }

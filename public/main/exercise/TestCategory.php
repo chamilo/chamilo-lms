@@ -69,23 +69,17 @@ class TestCategory
      */
     public function save($courseId = 0)
     {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $courseInfo = api_get_course_info_by_id($courseId);
-        if (empty($courseInfo)) {
+        $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
+
+        if (empty($courseId)) {
             return false;
         }
 
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $course = api_get_course_entity($courseId);
+        $repo = Container::getQuestionCategoryRepository();
+        $category = $repo->findResourceByTitle($this->name, $course->getResourceNode(), $course);
 
-        // check if name already exists
-        $sql = "SELECT count(*) AS nb FROM $table
-                WHERE title = '".Database::escape_string($this->name)."' AND c_id = $courseId";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        // lets add in BDD if not the same name
-        if ($row['nb'] <= 0) {
-            $repo = Container::getQuestionCategoryRepository();
-            $course = $courseInfo['entity'];
+        if (null === $category) {
             $category = new CQuizQuestionCategory();
             $category
                 ->setTitle($this->name)
@@ -1145,27 +1139,24 @@ class TestCategory
         $html = '';
         foreach ($categories as $category) {
             $id = $category->getIid();
-            $nb_question = $category->getQuestions()->count();
+            $count = $category->getQuestions()->count();
             $rowname = self::protectJSDialogQuote($category->getTitle());
-            $nb_question_label = 1 == $nb_question ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang(
-                    'Questions'
-                );
-            $content = "<span style='float:right'>".$nb_question_label."</span>";
+            $label = 1 === $count ? $count.' '.get_lang('Question') : $count.' '.get_lang('Questions');
+            $content = "<span style='float:right'>".$label."</span>";
             $content .= '<div class="sectioncomment">';
             $content .= $category->getDescription();
             $content .= '</div>';
             $links = '';
 
             if (!$sessionId) {
-                $links .= '<a href="'.api_get_self(
-                    ).'?action=editcategory&category_id='.$id.'&'.api_get_cidreq().'">'.
-                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-                $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq(
-                    ).'&action=deletecategory&category_id='.$id.'" ';
-                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(
-                        get_lang('DeleteCategoryAreYouSure').'['.$rowname
-                    ).'] ?\', \'id_cat'.$id.'\');">';
-                $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+                $links .= '<a
+                    href="'.api_get_self().'?action=editcategory&id='.$id.'&'.api_get_cidreq().'">'.
+                    Display::return_icon('edit.png', get_lang('Edit'), []).'</a>';
+                $links .= ' <a
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&id='.$id.'" ';
+                $links .= 'onclick="return confirmDelete(\''.
+                    self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$id.'\');">';
+                $links .= Display::return_icon('delete.png', get_lang('Delete'), []).'</a>';
             }
 
             $html .= Display::panel($content, $category->getTitle().$links);

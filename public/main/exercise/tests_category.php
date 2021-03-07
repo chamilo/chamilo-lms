@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+require_once __DIR__.'/../inc/global.inc.php';
+
 /**
   hubert.borderiou
   Manage tests category page
@@ -21,9 +23,6 @@ $htmlHeadXtra[] = '
 </script>';
 
 $nameTools = '';
-
-require_once __DIR__.'/../inc/global.inc.php';
-
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
@@ -41,7 +40,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = $_GET['action'] ?? '';
 $content = '';
 
 switch ($action) {
@@ -157,6 +156,7 @@ function edit_category_form($action)
         // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
+
             if ($check) {
                 $values = $form->exportValues();
                 $category = new TestCategory();
@@ -237,7 +237,7 @@ function add_category_form($action)
             if ($category->save()) {
                 Display::addFlash(Display::return_message(get_lang('Category added')));
             } else {
-                Display::addFlash(Display::return_message(get_lang('AddCategory nameAlreadyExists'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('Already exists'), 'warning'));
             }
         }
         Security::clear_token();

@@ -8353,8 +8353,9 @@ class Exercise
         if ($pageConfig) {
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
-
-            return $type->convertToPHPValue($this->pageResultConfiguration, $platform);
+var_dump($this->pageResultConfiguration);
+            return $this->pageResultConfiguration;
+            //return $type->convertToPHPValue($this->pageResultConfiguration, $platform);
         }
 
         return [];

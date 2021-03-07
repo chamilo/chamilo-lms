@@ -501,12 +501,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // get the max height of item to have each table the same height if displayed side by side
-        $testCategory = new TestCategory();
         foreach ($scoreList as $categoryId => $scoreListForCategory) {
-            $category = $testCategory->getCategory($categoryId);
-            if ($category) {
-                $categoryQuestionName = $category->name;
-            }
             [$noValue, $height] = self::displayDegreeChartChildren(
                 $scoreListForCategory,
                 300,
@@ -520,12 +515,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if ($height > $maxHeight) {
                 $maxHeight = $height;
             }
-        }
-
-        if (count($scoreList) > 1) {
-            $boxWidth = $sizeRatio * 300 * 2 + 54;
-        } else {
-            $boxWidth = $sizeRatio * 300 + 54;
         }
 
         $html = '<div class="row-chart">';

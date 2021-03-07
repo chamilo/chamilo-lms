@@ -337,13 +337,11 @@ $sql = "SELECT attempts.question_id, answer
         ON stats_exercises.exe_id = attempts.exe_id
         INNER JOIN $TBL_EXERCISE_QUESTION AS quizz_rel_questions
         ON
-            quizz_rel_questions.quiz_id=stats_exercises.exe_exo_id AND
-            quizz_rel_questions.question_id = attempts.question_id AND
-            quizz_rel_questions.c_id=".api_get_course_int_id()."
+            quizz_rel_questions.quiz_id = stats_exercises.exe_exo_id AND
+            quizz_rel_questions.question_id = attempts.question_id
         INNER JOIN $TBL_QUESTIONS AS questions
         ON
-            questions.iid = quizz_rel_questions.question_id AND
-            questions.c_id = ".api_get_course_int_id()."
+            questions.iid = quizz_rel_questions.question_id
         WHERE
             attempts.exe_id = $id $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";

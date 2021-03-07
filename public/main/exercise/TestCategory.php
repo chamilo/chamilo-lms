@@ -44,7 +44,7 @@ class TestCategory
         $id = (int) $id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
-                WHERE iid = $id AND c_id = ".$courseId;
+                WHERE iid = $id";
         $res = Database::query($sql);
 
         if (Database::num_rows($res)) {

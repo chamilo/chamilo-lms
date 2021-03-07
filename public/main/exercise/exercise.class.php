@@ -3768,17 +3768,16 @@ class Exercise
                         $choice = [];
                         $choiceDegreeCertainty = [];
                         $sql = "SELECT answer
-                            FROM $TBL_TRACK_ATTEMPT
-                            WHERE
-                            exe_id = $exeId AND question_id = $questionId";
+                                FROM $TBL_TRACK_ATTEMPT
+                                WHERE exe_id = $exeId AND question_id = $questionId";
 
                         $result = Database::query($sql);
                         while ($row = Database::fetch_array($result)) {
                             $ind = $row['answer'];
                             $values = explode(':', $ind);
-                            $myAnswerId = $values[0];
-                            $option = $values[1];
-                            $percent = $values[2];
+                            $myAnswerId = $values[0] ?? null;
+                            $option = $values[1] ?? null;
+                            $percent = $values[2] ?? null;
                             $choice[$myAnswerId] = $option;
                             $choiceDegreeCertainty[$myAnswerId] = $percent;
                         }

@@ -1028,7 +1028,6 @@ function updateWorkUrl($id, $new_path, $parent_id)
  */
 function updateDirName($work_data, $newPath)
 {
-    $course_id = $work_data['c_id'];
     $work_id = (int) ($work_data['iid']);
     $oldPath = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
@@ -3414,13 +3413,11 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     if (0 == $session_id) {
         $sql = "SELECT user_id as id FROM $work_table
                 WHERE
-                    c_id = $course_id AND
                     parent_id = '$task_id' AND
                     active IN (0, 1)";
     } else {
         $sql = "SELECT user_id as id FROM $work_table
                 WHERE
-                    c_id = $course_id AND
                     parent_id = '$task_id' $sessionCondition AND
                     active IN (0, 1)";
     }
@@ -5198,9 +5195,8 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
         $workTable,
         $filteredParams,
         [
-            'iid = ? AND c_id = ?' => [
+            'iid = ?' => [
                 $workId,
-                $courseInfo['real_id'],
             ],
         ]
     );

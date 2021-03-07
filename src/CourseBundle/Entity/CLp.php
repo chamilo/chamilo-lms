@@ -208,7 +208,7 @@ class CLp extends AbstractResource implements ResourceInterface
     protected int $accumulateWorkTime;
 
     /**
-     * @var ArrayCollection|CLpItem[]
+     * @var Collection|CLpItem[]
      *
      * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
      */
@@ -217,7 +217,7 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="lp")
      */
-    protected CForumForum $forum;
+    protected ?CForumForum $forum = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
@@ -234,9 +234,10 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->contentLocal = 'local';
         $this->contentMaker = 'chamilo';
         $this->contentLicense = '';
-        $this->createdOn = new DateTime();
-        $this->modifiedOn = new DateTime();
-        $this->publicatedOn = new DateTime();
+        $now = new DateTime();
+        $this->createdOn = $now;
+        $this->modifiedOn = $now;
+        $this->publicatedOn = $now;
         $this->defaultEncoding = 'UTF-8';
         $this->defaultViewMod = 'embedded';
         $this->description = '';
@@ -818,12 +819,7 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->publicatedOn;
     }
 
-    /**
-     * Set expiredOn.
-     *
-     * @return CLp
-     */
-    public function setExpiredOn(DateTime $expiredOn)
+    public function setExpiredOn(?DateTime $expiredOn): self
     {
         $this->expiredOn = $expiredOn;
 
@@ -902,6 +898,22 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->accumulateWorkTime = $accumulateWorkTime;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxAttempts(): int
+    {
+        return $this->maxAttempts;
+    }
+
+    /**
+     * @return CLpItem[]|Collection
+     */
+    public function getItems()
+    {
+        return $this->items;
     }
 
     /**

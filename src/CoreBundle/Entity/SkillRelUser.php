@@ -375,7 +375,7 @@ class SkillRelUser
         $sum = 0;
         $countValues = 0;
         foreach ($this->comments as $comment) {
-            if (!$comment->getFeedbackValue()) {
+            if (0 === $comment->getFeedbackValue()) {
                 continue;
             }
 

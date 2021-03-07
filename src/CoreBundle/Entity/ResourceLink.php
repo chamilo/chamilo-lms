@@ -91,14 +91,14 @@ class ResourceLink
      *
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
      */
-    protected ?DateTimeInterface $startVisibilityAt;
+    protected ?DateTimeInterface $startVisibilityAt = null;
 
     /**
      * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      *
      * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
      */
-    protected ?DateTimeInterface $endVisibilityAt;
+    protected ?DateTimeInterface $endVisibilityAt = null;
 
     public function __construct()
     {

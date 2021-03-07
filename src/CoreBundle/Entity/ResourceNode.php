@@ -543,7 +543,7 @@ class ResourceNode
                     $params
                 );
 
-                return sprintf('<img src=\'%s\'/>', $url);
+                return sprintf("<img src='%s'/>", $url);
             }
             if ($this->isResourceFileAVideo()) {
                 $class = sprintf('far fa-file-video %s', $size);

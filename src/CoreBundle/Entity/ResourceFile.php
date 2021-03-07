@@ -326,7 +326,7 @@ class ResourceFile
     public function getWidth(): int
     {
         $data = $this->getDimensions();
-        if ($data) {
+        if ([] !== $data) {
             //$data = explode(',', $data);
 
             return (int) $data[0];
@@ -339,7 +339,7 @@ class ResourceFile
     {
         $data = $this->getDimensions();
 
-        if ($data) {
+        if ([] !== $data) {
             //$data = explode(',', $data);
 
             return (int) $data[1];

@@ -77,7 +77,6 @@ class UserRelUser
         return $this;
     }
 
-
     public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;

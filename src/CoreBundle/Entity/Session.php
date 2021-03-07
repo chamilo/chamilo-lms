@@ -1255,10 +1255,6 @@ class Session
             return true;
         }
 
-        if (!empty($end) && $now <= $end) {
-            return true;
-        }
-
-        return false;
+        return !empty($end) && $now <= $end;
     }
 }

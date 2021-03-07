@@ -76,7 +76,7 @@ class SessionRelUser
     /**
      * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $movedAt;
+    protected ?DateTime $movedAt = null;
 
     /**
      * @ORM\Column(name="registered_at", type="datetime")

@@ -1191,7 +1191,7 @@ class MySpace
         $learningPaths = [];
         $csvContent = [];
         $htmlData = '';
-
+        /* use 'for' to performance */
         for ($i = 0; $i < $totalData; $i++) {
             $row = $dataTeachers[$i];
             $lpId = $row['lp_id'];
@@ -1222,11 +1222,13 @@ class MySpace
             $registeredUsers = self::getCompanyLearnpathSubscription(
                 $startDate,
                 $endDate,
-                $whereInLp);
-            foreach ($registeredUsers as $student) {
-                $totalStudents = count($student);
+                $whereInLp
+            );
+            foreach ($registeredUsers as $students) {
+                $totalStudents = count($students);
+                /* use 'for' to performance */
                 for ($i = 0; $i < $totalStudents; $i++) {
-                    $user = $student[$i];
+                    $user = $students[$i];
                     $lpId = $user['lp_item'];
                     $studentId = $user['id'];
                     if (!isset($users[$studentId])) {
@@ -1236,7 +1238,6 @@ class MySpace
                     $learningPaths[$lpId]['courseStudent'][$studentId] = $users[$studentId];
                 }
             }
-
             $registeredUsersBySession = self::getSessionAddUserCourseFromTrackDefault(
                 $startDate,
                 $endDate,
@@ -1244,6 +1245,7 @@ class MySpace
             );
             foreach ($registeredUsersBySession as $lpId => $student) {
                 $totalStudents = count($student);
+                /* use 'for' to performance */
                 for ($i = 0; $i < $totalStudents; $i++) {
                     $user = $student[$i];
                     $lpId = $user['lp'];
@@ -1265,6 +1267,7 @@ class MySpace
             );
             foreach ($registeredUsersGroup as $student) {
                 $totalStudents = count($student);
+                /* use 'for' to performance */
                 for ($i = 0; $i < $totalStudents; $i++) {
                     $user = $student[$i];
                     $lpId = $user['lp_item'];
@@ -1491,6 +1494,7 @@ class MySpace
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($data);
+        /* use 'for' to performance */
         for ($i = 0; $i < $totalData; $i++) {
             $cLpItemsAuthor[$data[$i]['lp_item_id']] = $data[$i]['author'];
         }
@@ -1515,6 +1519,7 @@ class MySpace
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($data);
+        /* use 'for' to performance */
         for ($i = 0; $i < $totalData; $i++) {
             $item = $data[$i];
             $lpItemId = (int) $item['lp_item_id'];
@@ -1561,7 +1566,7 @@ class MySpace
                 $whereInLp,
                 true
             );
-
+            /* use 'for' to performance */
             for ($i = 0; $i < $totalLpItems; $i++) {
                 $lpItem = $cLpItems[$i];
                 $lpItemId = $lpItem['lp_item_id'];
@@ -1653,6 +1658,7 @@ class MySpace
                                 "</a>".
                                 "<div id='$hiddenField' class='hidden'>";
                             $studentProcessed = [];
+                            /* use 'for' to performance */
                             /* Student by course*/
                             for ($i = 0; $i < count($byCourse); $i++) {
                                 $student = $byCourse[$i];
@@ -1682,6 +1688,7 @@ class MySpace
                                 }
                                 $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tempString.'<br>';
                             }
+                            /* use 'for' to performance */
                             /* Student by course groups */
                             for ($i = 0; $i < count($byCourseGroups); $i++) {
                                 $student = $byCourseGroups[$i];
@@ -1707,6 +1714,7 @@ class MySpace
                                 }
                                 $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tempString."<br>";
                             }
+                            /* use 'for' to performance */
                             /* Student by session, keep it first */
                             for ($i = 0; $i < count($bySession); $i++) {
                                 $student = $bySession[$i];
@@ -1858,6 +1866,7 @@ class MySpace
                         0 != $studentRegisterBySession ||
                         0 != $studentGroupsRegister) {
                         $studentProcessed = [];
+                        /* use 'for' to performance */
                         /* Student by course*/
                         for ($i = 0; $i < count($byCourse); $i++) {
                             $student = $byCourse[$i];
@@ -1872,7 +1881,7 @@ class MySpace
                             $type = isset($student['type']) ? $student['type'] : null;
                             $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
                         }
-
+                        /* use 'for' to performance */
                         /* Student by course groups */
                         for ($i = 0; $i < count($byCourseGroups); $i++) {
                             $student = $byCourseGroups[$i];
@@ -1887,6 +1896,7 @@ class MySpace
                             $type = isset($student['type']) ? $student['type'] : null;
                             $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
                         }
+                        /* use 'for' to performance */
                         /* Student by session, keep it first */
                         for ($i = 0; $i < count($bySession); $i++) {
                             $student = $bySession[$i];
@@ -4352,6 +4362,7 @@ class MySpace
             $queryResult = Database::query($sql);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);
+            /* use 'for' to performance */
             for ($i = 0; $i < $totalData; $i++) {
                 $row = $data[$i];
                 if (isset($row['company']) && !empty($row['company'])) {
@@ -4476,6 +4487,7 @@ class MySpace
             $queryResult = Database::query($query);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);
+            /* use 'for' to performance */
             for ($i = 0; $i < $totalData; $i++) {
                 $row = $data[$i];
                 $row['company'] = self::getCompanyOfUser($row['id']);

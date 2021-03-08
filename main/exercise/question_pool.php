@@ -626,7 +626,7 @@ function getQuestions(
     if (!empty($fromExercise)) {
         $currentCourseId = api_get_course_int_id();
         $currentExerciseCondition = "
-            AND qu.id NOT IN (
+            AND qu.iid NOT IN (
                 SELECT question_id FROM $TBL_EXERCISE_QUESTION
                 WHERE exercice_id = $fromExercise AND c_id = $currentCourseId
             )";
@@ -642,7 +642,7 @@ function getQuestions(
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
             $where .= " AND
                     crc.c_id = $selected_course AND
-                    crc.question_id = qu.id AND
+                    crc.question_id = qu.iid AND
                     crc.category_id = $courseCategoryId";
         }
         if (isset($exerciseLevel) && -1 != $exerciseLevel) {
@@ -661,7 +661,7 @@ function getQuestions(
         }
 
         $select = 'DISTINCT
-                    id,
+                    iid,
                     question,
                     type,
                     level,
@@ -673,7 +673,7 @@ function getQuestions(
                 FROM
                     $TBL_EXERCISE_QUESTION qt
                     INNER JOIN $TBL_QUESTIONS qu
-                    ON qt.question_id = qu.id
+                    ON qt.question_id = qu.iid
                     $from
                     {$efConditions['from']}
                 WHERE
@@ -692,7 +692,7 @@ function getQuestions(
         $from = '';
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
             $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc
-                      ON crc.question_id = q.id AND crc.c_id = q.c_id ";
+                      ON crc.question_id = q.iid AND crc.c_id = q.c_id ";
             $level_where .= " AND
                     crc.c_id = $selected_course AND
                     crc.category_id = $courseCategoryId";
@@ -723,7 +723,7 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     INNER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                    ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
                     INNER JOIN $TBL_EXERCISES ex
                     ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
                     $from
@@ -740,7 +740,7 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                    ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
                     $from
                     {$efConditions['from']}
                     WHERE
@@ -755,7 +755,7 @@ function getQuestions(
                         SELECT $select
                         FROM $TBL_QUESTIONS qu
                         INNER JOIN $TBL_EXERCISE_QUESTION r
-                        ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                        ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
                         $from
                         {$efConditions['from']}
                         WHERE
@@ -779,7 +779,7 @@ function getQuestions(
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
             $filter .= " AND
                         crc.c_id = $selected_course AND
-                        crc.question_id = qu.id AND
+                        crc.question_id = qu.iid AND
                         crc.category_id = $courseCategoryId";
         }
         if (isset($exerciseLevel) && -1 != $exerciseLevel) {
@@ -813,9 +813,9 @@ function getQuestions(
                 FROM
                 $TBL_QUESTIONS as qu
                 INNER JOIN $TBL_EXERCISE_QUESTION as qt
-                ON (qu.id = qt.question_id AND qu.c_id = qt.c_id)
+                ON (qu.iid = qt.question_id AND qu.c_id = qt.c_id)
                 INNER JOIN $TBL_EXERCISES as q
-                ON (q.c_id = qu.c_id AND q.id = qt.exercice_id)
+                ON (q.c_id = qu.c_id AND q.iid = qt.exercice_id)
                 {$efConditions['from']}
                 $from
                 WHERE

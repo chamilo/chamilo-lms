@@ -658,7 +658,7 @@ class Exercise
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
-                    ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
+                    ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".$this->id."' ";
 
             $orderCondition = ' ORDER BY question_order ';
@@ -754,10 +754,10 @@ class Exercise
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT count(q.id) as count
+        $sql = "SELECT count(q.iid) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = ".$this->id;
@@ -788,7 +788,7 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $exerciseQuestionTable e
                 INNER JOIN $questionTable q
-                ON (e.question_id= q.id AND e.c_id = q.c_id)
+                ON (e.question_id= q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->id."'
@@ -1159,7 +1159,7 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id= q.id AND e.c_id = q.c_id)
+                ON (e.question_id= q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".Database::escape_string($this->id)."'
@@ -1205,10 +1205,10 @@ class Exercise
 
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.id
+        $sql = "SELECT q.iid
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     q.id = $questionId AND
                     e.c_id = {$this->course_id} AND
@@ -1225,10 +1225,10 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.id
+        $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     q.type = $type AND
                     e.c_id = {$this->course_id} AND
@@ -1249,10 +1249,10 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.id
+        $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     q.type NOT IN ('$questionTypeToString')  AND
                     e.c_id = {$this->course_id} AND
@@ -2978,7 +2978,7 @@ class Exercise
                 unset($di);
                 $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
                 foreach ($this->questionList as $question_i) {
-                    $sql = 'SELECT type FROM %s WHERE id=%s';
+                    $sql = 'SELECT type FROM %s WHERE iid = %s';
                     $sql = sprintf($sql, $tbl_quiz_question, $question_i);
                     $qres = Database::query($sql);
                     if (Database::num_rows($qres) > 0) {
@@ -7910,11 +7910,11 @@ class Exercise
         $sql = "SELECT DISTINCT cat.*
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 INNER JOIN $categoryRelTable catRel
                 ON (catRel.question_id = e.question_id AND catRel.c_id = e.c_id)
                 INNER JOIN $categoryTable cat
-                ON (cat.id = catRel.category_id AND cat.c_id = e.c_id)
+                ON (cat.iid = catRel.category_id AND cat.c_id = e.c_id)
                 WHERE
                   e.c_id = {$this->course_id} AND
                   e.exercice_id	= ".intval($this->id);
@@ -8592,7 +8592,7 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->id."'
@@ -10762,7 +10762,7 @@ class Exercise
         $sql = "SELECT DISTINCT count(e.question_order) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                   e.c_id = {$this->course_id} AND
                   e.exercice_id	= ".$this->id;
@@ -10775,7 +10775,7 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->id."'

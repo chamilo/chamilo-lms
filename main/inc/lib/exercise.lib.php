@@ -6021,7 +6021,7 @@ EOT;
         $sql = "SELECT q.question, question_id, count(q.iid) count
                 FROM $attemptTable t
                 INNER JOIN $questionTable q
-                ON (q.c_id = t.c_id AND q.id = t.question_id)
+                ON (q.c_id = t.c_id AND q.iid = t.question_id)
                 INNER JOIN $trackTable te
                 ON (te.c_id = q.c_id AND t.exe_id = te.exe_id)
                 WHERE

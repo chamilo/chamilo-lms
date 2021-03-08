@@ -148,7 +148,7 @@ abstract class Question
 
         $sql = "SELECT *
                 FROM $TBL_QUESTIONS
-                WHERE c_id = $course_id AND id = $id ";
+                WHERE iid = $id ";
         $result = Database::query($sql);
 
         // if the question has been found
@@ -187,7 +187,7 @@ abstract class Question
                     $sql = "SELECT DISTINCT q.exercice_id
                             FROM $TBL_EXERCISE_QUESTION q
                             INNER JOIN $tblQuiz e
-                            ON e.c_id = q.c_id AND e.id = q.exercice_id
+                            ON e.c_id = q.c_id AND e.iid = q.exercice_id
                             WHERE
                                 q.c_id = $course_id AND
                                 q.question_id = $id AND
@@ -879,7 +879,7 @@ abstract class Question
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "UPDATE $table SET
                 picture = '".Database::escape_string($picture)."'
-                WHERE c_id = $course_id AND id='".intval($questionId)."'";
+                WHERE iid = '".intval($questionId)."'";
         Database::query($sql);
 
         $documentId = add_document(
@@ -989,7 +989,7 @@ abstract class Question
             Database::update(
                 $TBL_QUESTIONS,
                 $params,
-                ['c_id = ? AND id = ?' => [$c_id, $id]]
+                ['iid = ?' => [$id]]
             );
 
             Event::addEvent(
@@ -1017,7 +1017,7 @@ abstract class Question
                     FROM $TBL_QUESTIONS as question,
                     $TBL_EXERCISE_QUESTION as test_question
                     WHERE
-                        question.id = test_question.question_id AND
+                        question.iid = test_question.question_id AND
                         test_question.exercice_id = ".$exerciseId." AND
                         question.c_id = $c_id AND
                         test_question.c_id = $c_id ";
@@ -1423,8 +1423,7 @@ abstract class Question
                     WHERE c_id = $courseId AND question_id = ".$id;
             Database::query($sql);
 
-            $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE c_id = $courseId AND id = ".$id;
+            $sql = "DELETE FROM $TBL_QUESTIONS WHERE iid = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
@@ -2130,7 +2129,7 @@ abstract class Question
                         $question_id,
                     ],
                 ],
-                'order' => 'id ASC',
+                'order' => 'iid ASC',
             ]
         );
     }
@@ -2327,7 +2326,7 @@ abstract class Question
                 FROM $tbl_quiz_question q
                 INNER JOIN $tbl_quiz_rel_question r
                 ON
-                    q.id = r.question_id AND
+                    q.iid = r.question_id AND
                     exercice_id = $quiz_id AND
                     q.c_id = $course_id AND
                     r.c_id = $course_id";
@@ -2514,7 +2513,7 @@ abstract class Question
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
-            ['c_id = ? AND id = ?' => [$this->course['real_id'], $this->id]]
+            ['id = ?' => [$this->id]]
         );
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',

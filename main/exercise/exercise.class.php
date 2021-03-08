@@ -6842,7 +6842,7 @@ class Exercise
                                 );
                                 $isVisible = false;
                                 // See BT#18165
-                                $message .= $this->remedialCourseList(api_get_user_id(), false, api_get_session_id());
+                                $message .= $this->remedialCourseList(api_get_user_id(), false, api_get_session_id(), true);
                             }
                         }
                     }
@@ -10934,8 +10934,9 @@ class Exercise
      * @param int  $userId
      * @param bool $review
      * @param int  $sessionId
+     * @param bool  $blockPercentage
      */
-    public function remedialCourseList($userId = 0, $review = false, $sessionId = 0)
+    public function remedialCourseList($userId = 0, $review = false, $sessionId = 0, $blockPercentage = false)
     {
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
         if (!$pluginRemedial) {
@@ -10975,6 +10976,10 @@ class Exercise
                             $questionOpen = 1;
                             break;
                         }
+                    }
+                    if($blockPercentage == true){
+                        // With blocking percentage, it does not matter if there is an open question
+                        $questionOpen = 0;
                     }
                     if (1 == $questionOpen) {
                         $score = $attemp['exe_result'];

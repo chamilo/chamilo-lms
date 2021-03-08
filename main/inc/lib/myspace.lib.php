@@ -1174,13 +1174,14 @@ class MySpace
         ON (
             efv.field_id = ef.id AND
             ef.variable = 'authorlpitem' AND
-            efv.`value` != '' )
+            efv.`value` != ''
+        )
         INNER JOIN $tblLpItem AS lpi
-        ON ( efv.item_id = lpi.iid )
+        ON (efv.item_id = lpi.iid)
         INNER JOIN $tblLp AS lp
-        ON ( lpi.lp_id= lp.iid )
+        ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
         INNER JOIN $tblCourse AS c
-        ON ( lp.c_id = c.id )";
+        ON (lp.c_id = c.id)";
         $queryResult = Database::query($query);
         $dataTeachers = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($dataTeachers);
@@ -1206,12 +1207,12 @@ class MySpace
             } else {
                 $items = explode(',', $authorData);
                 for ($j = 0; $j < count($items); $j++) {
-                    $authorData = $items[$j];
-                    if (!isset($users[$authorData])) {
-                        $users[$authorData] = api_get_user_info($authorData);
-                    }
-                    $teachers[$authorData][$lpId] = $users[$authorData];
-                    $learningPaths[$lpId]['teachers'][$authorData] = $users[$authorData];
+                        $authorData = $items[$j];
+                        if (!isset($users[$authorData])) {
+                            $users[$authorData] = api_get_user_info($authorData);
+                        }
+                        $teachers[$authorData][$lpId] = $users[$authorData];
+                        $learningPaths[$lpId]['teachers'][$authorData] = $users[$authorData];
                 }
             }
         }
@@ -1484,7 +1485,8 @@ class MySpace
             INNER JOIN $tblExtraField AS ef
             ON (
                 ef.variable = 'authorlpitem' AND
-                efv.field_id = ef.id and efv.`value` != '' )
+                efv.field_id = ef.id and efv.`value` != ''
+            )
             ORDER BY efv.item_id ";
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
@@ -1504,11 +1506,12 @@ class MySpace
             ON (
                 ef.variable = 'price' AND
                 efv.field_id = ef.id AND
-                efv.`value` > 0 )
+                efv.`value` > 0
+            )
             INNER JOIN $tblLpItem AS lpi
-            ON ( lpi.iid = efv.item_id )
+            ON (lpi.iid = efv.item_id)
             INNER JOIN $tblLp AS lpt
-            ON ( lpi.lp_id = lpt.iid ) ";
+            ON (lpi.lp_id = lpt.iid AND lpi.c_id = lpt.c_id) ";
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($data);
@@ -1974,18 +1977,17 @@ class MySpace
             td.default_event_type AS type
         FROM $tblTrackDefault AS td
         INNER JOIN $tblSessionRelCourseUser AS srcu
-        ON (
-            td.default_value = srcu.user_id )
+        ON (td.default_value = srcu.user_id)
         INNER JOIN $tblLp AS lpt
-        ON  (
-            lpt.c_id = srcu.c_id )
+        ON  (lpt.c_id = srcu.c_id)
         INNER JOIN $tblLpItem AS lpi
         ON  (
-            lpi.c_id = srcu.c_id and
-            lpt.id = lpi.lp_id )
+            lpi.c_id = srcu.c_id AND
+            lpt.id = lpi.lp_id AND
+            lpi.c_id = lpt.c_id
+        )
         INNER JOIN `$tblUser` AS u
-        ON  (
-            u.id = srcu.user_id )
+        ON  (u.id = srcu.user_id)
         WHERE
             td.default_event_type = 'session_add_user_course' AND
             td.default_date >= '$startDate' AND
@@ -4336,15 +4338,17 @@ class MySpace
             $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
             $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
             $sql = "SELECT
-                extra_field_value.item_id AS userId,
-                extra_field_value.`value` AS company
-            FROM $tblExtraFieldValue AS extra_field_value
-            INNER JOIN $tblExtraField AS extra_field
-           ON ( extra_field_value.field_id = extra_field.id AND
-                extra_field.variable = 'company' )
-            WHERE
-                extra_field_value.`value` != '' AND
-                extra_field_value.item_id = $userId ";
+                    extra_field_value.item_id AS userId,
+                    extra_field_value.`value` AS company
+                FROM $tblExtraFieldValue AS extra_field_value
+                INNER JOIN $tblExtraField AS extra_field
+                ON (
+                    extra_field_value.field_id = extra_field.id AND
+                    extra_field.variable = 'company'
+                )
+                WHERE
+                    extra_field_value.`value` != '' AND
+                    extra_field_value.item_id = $userId ";
             $queryResult = Database::query($sql);
             $data = Database::store_result($queryResult, 'ASSOC');
             $totalData = count($data);
@@ -4422,7 +4426,7 @@ class MySpace
             $query = "
             SELECT DISTINCT
                 ip.ref AS lp_item,
-                lp_table_item.iid AS lp_item_id,
+                lpi.iid AS lp_item_id,
                 ip.session_id AS session_id,
                 ip.lastedit_type AS type,
                 u.username AS username,
@@ -4430,11 +4434,11 @@ class MySpace
                 ip.to_user_id AS id
             FROM $tblItemProperty AS ip
             INNER JOIN `$tblUser` AS u
-            ON ( u.id = ip.to_user_id )
-            INNER JOIN $tblLp AS lp_table
-            ON ( lp_table.iid = ip.ref )
-            INNER JOIN $tblLpItem AS lp_table_item
-            ON ( lp_table.id = lp_table_item.lp_id )
+            ON (u.id = ip.to_user_id)
+            INNER JOIN $tblLp AS lp
+            ON (lp.iid = ip.ref)
+            INNER JOIN $tblLpItem AS lpi
+            ON (lp.id = lpi.lp_id AND lp.c_id = lpi.c_id)
             WHERE
                 ip.lastedit_type = 'LearnpathSubscription' ";
             if (strlen($whereCondition) > 2) {
@@ -4444,7 +4448,7 @@ class MySpace
                 $query = "
                 SELECT DISTINCT
                     ip.ref AS lp_item,
-                    lp_table_item.iid AS lp_item_id,
+                    lpi.iid AS lp_item_id,
                     ip.session_id AS session_id,
                     ip.lastedit_type AS type,
                     u.username AS username,
@@ -4454,17 +4458,16 @@ class MySpace
                 FROM
                     $tblItemProperty AS ip
                 INNER JOIN $tblGroupUser AS ug
-                ON ( ug.group_id = ip.to_group_id )
+                ON (ug.group_id = ip.to_group_id AND ug.c_id = lp.c_id)
                 INNER JOIN `$tblUser` AS u
-                ON ( u.id = ug.user_id )
-                INNER JOIN $tblLp AS lp_table
-                ON ( lp_table.iid = ip.ref )
-                INNER JOIN $tblLpItem AS lp_table_item
-                ON ( lp_table.id = lp_table_item.lp_id )
+                ON (u.id = ug.user_id)
+                INNER JOIN $tblLp AS lp
+                ON (lp.iid = ip.ref AND ug.c_id = lp.c_id)
+                INNER JOIN $tblLpItem AS lpi
+                ON (lp.id = lpi.lp_id AND lp.c_id = lpi.c_id)
                 WHERE
                     ip.lastedit_type = 'LearnpathSubscription' AND
-                    ip.to_group_id != 0
-                ";
+                    ip.to_group_id != 0 ";
                 if (strlen($whereCondition) > 2) {
                     $query .= $whereCondition;
                 }

@@ -1258,7 +1258,6 @@ class MySpace
                     $learningPaths[$lpId]['sessionStudent'][$studentId]['session_id'] = $user['session_id'];
                 }
             }
-
             $registeredUsersGroup = self::getCompanyLearnpathSubscription(
                 $startDate,
                 $endDate,
@@ -1283,20 +1282,17 @@ class MySpace
             $index = 0;
             $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
             $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
-            $htmlData = "<div class='table-responsive'>".
-                "<table class='table table-hover table-striped table-bordered data_table'>".
-                "<thead>".
-                "<tr>".
-                "<th class='th-header'>".get_lang('Author').'</th>'.
-                "<th class='th-header'>".get_lang('LearningPathList').
-                "</th>".
-                "<th class='th-header'>".get_lang('CountOfSubscribedUsers').
-                "</th>".
-                "<th class='th-header'>".get_lang('StudentList')."</th>".
-                "</tr>".
-                "</thead>".
-                "<tbody>";
-            $totalStudents = 0;
+            $htmlData = "<div class='table-responsive'>
+            <table class='table table-hover table-striped table-bordered data_table'>
+            <thead>
+                <tr>
+                    <th class='th-header'>".get_lang('Author')."</th>
+                    <th class='th-header'>".get_lang('LearningPathList')."</th>
+                    <th class='th-header'>".get_lang('CountOfSubscribedUsers')."</th>
+                    <th class='th-header'>".get_lang('StudentList')."</th>
+                </tr>
+            </thead>
+                <tbody>";
             $lastTeacher = '';
             /* csv */
             $csv_row = [];
@@ -1330,11 +1326,11 @@ class MySpace
                         || !empty($courseStudentGroup)
                         || !empty($sessionStudent)
                     ) {
-                        $htmlData .= "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
-                            "<div class='icon_add'>$iconAdd</div>".
-                            "<div class='icon_remove hidden'>$iconRemove</div>".
-                            "</a>".
-                            "<div id='$hiddenField' class='hidden'>";
+                        $htmlData .= "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>
+                        <div class='icon_add'>$iconAdd</div>
+                        <div class='icon_remove hidden'>$iconRemove</div>
+                        </a>
+                        <div id='$hiddenField' class='hidden'>";
                         $studentRegistered = [];
                         foreach ($courseStudent as $student) {
                             $reportLink = Display::url(
@@ -1348,7 +1344,6 @@ class MySpace
                                 $studentRegistered[$student['id']][0] = $student;
                                 $htmlData .= "$reportLink ".$student['complete_name'].'<br>';
                                 $studentsName .= $student['complete_name'].' / ';
-                                $totalStudents++;
                                 $totalStudent++;
                             }
                         }
@@ -1367,7 +1362,6 @@ class MySpace
                                 $studentsName .= $student['complete_name'].' / ';
                                 $htmlData .= "$reportLink <strong>".$student['complete_name'].'</strong><br>';
                                 $totalStudent++;
-                                $totalStudents++;
                             }
                         }
                         foreach ($sessionStudent as $student) {
@@ -1382,7 +1376,6 @@ class MySpace
                                 $studentRegistered[$student['id']][$lpSessionId] = $student;
                                 $htmlData .= "$reportLink ".$student['complete_name'].'<br>';
                                 $studentsName .= $student['complete_name'].' / ';
-                                $totalStudents++;
                                 $totalStudent++;
                             }
                         }
@@ -1395,16 +1388,16 @@ class MySpace
                     $csvContent[] = $csv_row;
                     $lastTeacher = $teacherData['complete_name'];
                 }
-                $htmlData .= "<tr>".
-                    "<td></td>".
-                    "<td><strong>".get_lang('LearnpathsTotal')." ".count($teacher)." </strong></td>".
-                    "<td><strong>$totalStudent</strong></td>".
-                    "<td></td>".
-                    "</tr>";
+                $htmlData .= "<tr>
+                <td></td>
+                <td><strong>".get_lang('LearnpathsTotal')." ".count($teacher)." </strong></td>
+                <td><strong>$totalStudent</strong></td>
+                <td></td>
+                </tr>";
             }
-            $htmlData .= "</tbody>".
-                "</table>".
-                "</div>";
+            $htmlData .= "</tbody>
+            </table>
+            </div>";
         }
         if (false == $csv) {
             $form = new FormValidator('searchDate', 'get');
@@ -1545,11 +1538,8 @@ class MySpace
                 </table>
                 </div>";
         } else {
-            $whereInLpItem = array_unique($whereInLpItem);
             $whereInLp = array_unique($whereInLp);
-            $whereInLpItem = implode(',', $whereInLpItem);
             $whereInLp = implode(',', $whereInLp);
-
             $registeredUsersBySession = self::getSessionAddUserCourseFromTrackDefault(
                 $startDate,
                 $endDate,
@@ -1640,8 +1630,7 @@ class MySpace
                         } else {
                             $table .= "<tr $hide ><td></td>";
                         }
-                        $table .= "<td>$title</td>".
-                            "<td>$price</td>";
+                        $table .= "<td>$title</td><td>$price</td>";
                         $studentRegister = count($byCourse);
                         $studentGroupsRegister = count($byCourseGroups);
                         $studentRegisterBySession = count($bySession);
@@ -1651,12 +1640,12 @@ class MySpace
                         if (0 != $studentRegister ||
                             0 != $studentRegisterBySession ||
                             0 != $studentGroupsRegister) {
-                            $tableTemp .= "<td>".
-                                "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
-                                "<div class='icon_add'>$iconAdd</div>".
-                                "<div class='icon_remove hidden'>$iconRemove</div>".
-                                "</a>".
-                                "<div id='$hiddenField' class='hidden'>";
+                            $tableTemp .= "<td>
+                            <a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>
+                            <div class='icon_add'>$iconAdd</div>
+                            <div class='icon_remove hidden'>$iconRemove</div>
+                            </a>
+                            <div id='$hiddenField' class='hidden'>";
                             $studentProcessed = [];
                             /* use 'for' to performance */
                             /* Student by course*/
@@ -1766,23 +1755,21 @@ class MySpace
                     }
                     $hiddenFieldLink = 'student__show_'.$index.'_';
                     $index++;
-                    $table .= "<tr>".
-                        "<th class='th-header'></th>".
-                        "<th class='th-header'>".
-                        "<a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>".
-                        "<div class='icon_add_author_$authorId'>$iconAdd</div>".
-                        "<div class='icon_remove_author_$authorId hidden'>$iconRemove</div>".
-                        "</a>".
-                        "</th>".
-                        "<th class='th-header'></th>".
-                        "<th class='th-header'>$totalSudent</th>".
-                        "<th class='th-header'>$total</th>".
-                        "<th class='th-header'></tr>";
+                    $table .= "<tr>
+                    <th class='th-header'></th>
+                    <th class='th-header'>
+                    <a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>
+                    <div class='icon_add_author_$authorId'>$iconAdd</div>
+                    <div class='icon_remove_author_$authorId hidden'>$iconRemove</div>
+                    </a>
+                    </th>
+                    <th class='th-header'></th>
+                    <th class='th-header'>$totalSudent</th>
+                    <th class='th-header'>$total</th>
+                    <th class='th-header'></tr>";
                     $total = 0;
                 }
-                $table .= "</tbody>".
-                    "</table>".
-                    "</div>";
+                $table .= "</tbody></table></div>";
                 $tableHtml = $table;
             }
 
@@ -4469,7 +4456,7 @@ class MySpace
                 FROM
                     $tblItemProperty AS ip
                 INNER JOIN $tblGroupUser AS ug
-                ON (ug.group_id = ip.to_group_id AND ug.c_id = lp.c_id)
+                ON (ug.group_id = ip.to_group_id)
                 INNER JOIN `$tblUser` AS u
                 ON (u.id = ug.user_id)
                 INNER JOIN $tblLp AS lp

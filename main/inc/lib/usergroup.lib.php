@@ -447,78 +447,63 @@ class UserGroup extends Model
      *
      * @param array $options
      * @param int   $type        0 = classes / 1 = social groups
-     * @param bool  $withClasses Return with classes.
      *
      * @return array
      */
-    public function getUserGroupInCourse($options = [], $type = -1, $getCount = false, $withClasses = false)
+    public function getUserGroupInCourse($options = [], $type = -1, $getCount = false)
     {
-        $data = [];
-        $sqlClasses = '';
-        $whereClasess = '';
-        $resultClasess = null;
-        $counts = 0;
-
         $select = 'DISTINCT u.*';
         if ($getCount) {
             $select = 'count(u.id) as count';
         }
 
-        if (
-            $withClasses == true &&
-            isset($options['session_id']) &&
-            (int) $options['session_id'] != 0
-        ) {
-            $sessionId = (int) $options['session_id'];
-            $courseId = (int) $options['course_id'];
-            unset($options['session_id']);
-            $whereClasess = " WHERE ur.session_id = $sessionId AND sc.c_id = $courseId ";
-        } else {
-            $withClasses = false;
+        $sessionCheck = false;
+        if (isset($options['session_id']) && !empty($options['session_id'])) {
+            $sessionCheck = true;
         }
 
         if ($this->getUseMultipleUrl()) {
-            if ($withClasses != true) {
+            if (false === $sessionCheck) {
                 $sql = "SELECT $select
-                    FROM {$this->usergroup_rel_course_table} usergroup
-                    INNER JOIN {$this->table} u
-                    ON (u.id = usergroup.usergroup_id)
-                    INNER JOIN {$this->table_course} c
-                    ON (usergroup.course_id = c.id)
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (a.usergroup_id = u.id)
+                        FROM {$this->usergroup_rel_course_table} usergroup
+                        INNER JOIN {$this->table} u
+                        ON (u.id = usergroup.usergroup_id)
+                        INNER JOIN {$this->table_course} c
+                        ON (usergroup.course_id = c.id)
+                        INNER JOIN {$this->access_url_rel_usergroup} a
+                        ON (a.usergroup_id = u.id)
                    ";
             } else {
-                $sqlClasses = "SELECT".
-                    " $select ".
-                    " FROM".
-                    " {$this->usergroup_rel_session_table} ur".
-                    " INNER JOIN {$this->usergroup_table} u ON  u.id = ur.usergroup_id ".
-                    " INNER JOIN `{$this->session_table}` s ON  s.id = ur.session_id".
-                    " INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.id) ".
-                    " INNER JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
-                    " $whereClasess ";
+                $sql = "SELECT $select
+                        FROM {$this->usergroup_rel_session_table} usergroup
+                        INNER JOIN {$this->table} u
+                        ON (u.id = usergroup.usergroup_id)
+                        INNER JOIN {$this->session_table} s
+                        ON (usergroup.session_id = s.id)
+                        INNER JOIN {$this->access_url_rel_usergroup} a
+                        ON (a.usergroup_id = u.id)
+                   ";
             }
         } else {
-            if ($withClasses != true) {
+            if (false === $sessionCheck) {
                 $sql = "SELECT $select
-                    FROM {$this->usergroup_rel_course_table} usergroup
-                    INNER JOIN {$this->table} u
-                    ON (u.id = usergroup.usergroup_id)
-                    INNER JOIN {$this->table_course} c
-                    ON (usergroup.course_id = c.id)
-                   ";
+                        FROM {$this->usergroup_rel_course_table} usergroup
+                        INNER JOIN {$this->table} u
+                        ON (u.id = usergroup.usergroup_id)
+                        INNER JOIN {$this->table_course} c
+                        ON (usergroup.course_id = c.id)
+                       ";
             } else {
-                $sqlClasses = "SELECT".
-                    " $select ".
-                    " FROM".
-                    " {$this->usergroup_rel_session_table} ur".
-                    " INNER JOIN {$this->usergroup_table} u ON  u.id = ur.usergroup_id ".
-                    " INNER JOIN `{$this->session_table}` s ON  s.id = ur.session_id".
-                    " INNER JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
-                    " $whereClasess ";
+                $sql = "SELECT $select
+                        FROM {$this->usergroup_rel_course_table} usergroup
+                        INNER JOIN {$this->table} u
+                        ON (u.id = usergroup.usergroup_id)
+                        INNER JOIN {$this->session_table} s
+                        ON (usergroup.session_id = s.id)
+                       ";
             }
         }
+
         if (-1 != $type) {
             $type = (int) $type;
             $options['where']['AND group_type = ? '] = $type;
@@ -529,42 +514,22 @@ class UserGroup extends Model
         }
 
         $conditions = Database::parse_conditions($options);
-
-        if ($withClasses == true) {
-            $resultClasess = Database::query($sqlClasses);
-        } else {
-            $sql .= $conditions;
-            $result = Database::query($sql);
-        }
+        $sql .= $conditions;
+        $result = Database::query($sql);
 
         if ($getCount) {
-            if (!empty($result)) {
-                if (Database::num_rows($result)) {
-                    $row = Database::fetch_array($result);
-                    $counts += $row['count'];
-                }
-            }
-            if (!empty($sqlClasses)) {
-                if (Database::num_rows($resultClasess)) {
-                    $row = Database::fetch_array($resultClasess);
-                    $counts += $row['count'];
-                }
+            if (Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+                return  $row['count'];
             }
 
-            return $counts;
+            return 0;
         }
-        if (!empty($result)) {
-            if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    $data[] = $row;
-                }
-            }
-        }
-        if (!empty($sqlClasses)) {
-            if (Database::num_rows($resultClasess) > 0) {
-                while ($row = Database::fetch_array($resultClasess, 'ASSOC')) {
-                    $data[] = $row;
-                }
+
+        $data = [];
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $data[] = $row;
             }
         }
 
@@ -575,24 +540,18 @@ class UserGroup extends Model
      * @param array $options
      * @param int   $type
      * @param bool  $getCount
-     * @param bool  $withClasses
      *
      * @return array|bool
      */
-    public function getUserGroupNotInCourse($options = [], $type = -1, $getCount = false, $withClasses = false)
+    public function getUserGroupNotInCourse($options = [], $type = -1, $getCount = false)
     {
-        $data = [];
-        $sqlClasses = '';
-        $whereClasess = '';
-        $resultClasess = null;
-
-        $course_id = null;
+        $courseId = 0;
         if (isset($options['course_id'])) {
-            $course_id = (int) $options['course_id'];
+            $courseId = (int) $options['course_id'];
             unset($options['course_id']);
         }
 
-        if (empty($course_id)) {
+        if (empty($courseId)) {
             return false;
         }
 
@@ -601,54 +560,44 @@ class UserGroup extends Model
             $select = 'count(u.id) as count';
         }
 
-        if (
-            $withClasses == true &&
-            isset($options['session_id']) &&
-            (int) $options['session_id'] != 0
-        ) {
+        $sessionCheck = false;
+        $sessionId = 0;
+        if (isset($options['session_id']) && !empty($options['session_id'])) {
+            $sessionCheck = true;
             $sessionId = (int) $options['session_id'];
-            unset($options['session_id']);
-            $whereClasess = " WHERE ur.session_id != $sessionId ";
-        } else {
-            $withClasses = false;
         }
 
         if ($this->getUseMultipleUrl()) {
-            if ($withClasses == false) {
+            if (false === $sessionCheck) {
                 $sql = "SELECT $select
                         FROM {$this->table} u
                         INNER JOIN {$this->access_url_rel_usergroup} a
                         ON (a.usergroup_id = u.id)
                         LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
-                        ON (u.id = urc.usergroup_id AND course_id = $course_id)
+                        ON (u.id = urc.usergroup_id AND course_id = $courseId)
                 ";
             } else {
-                $sqlClasses = " SELECT".
-                    " $select".
-                    " FROM".
-                    " {$this->usergroup_rel_session_table} ur".
-                    " LEFT OUTER  JOIN {$this->usergroup_table} u ON u.id = ur.usergroup_id".
-                    " INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.id) ".
-                    " LEFT JOIN `{$this->session_table}` s ON s.id = ur.session_id".
-                    " LEFT JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
-                    " $whereClasess ";
+                $sql = "SELECT $select
+                        FROM {$this->table} u
+                        INNER JOIN {$this->access_url_rel_usergroup} a
+                        ON (a.usergroup_id = u.id)
+                        LEFT OUTER JOIN {$this->usergroup_rel_session_table} urs
+                        ON (u.id = urs.usergroup_id AND session_id = $sessionId)
+                ";
             }
         } else {
-            if ($withClasses == false) {
+            if (false === $sessionCheck) {
                 $sql = "SELECT $select
-                    FROM {$this->table} u
-                    LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
-                    ON (u.id = urc.usergroup_id AND course_id = $course_id)
-            ";
+                        FROM {$this->table} u
+                        LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
+                        ON (u.id = urc.usergroup_id AND course_id = $courseId)
+                ";
             } else {
-                $sqlClasses = " SELECT".
-                    " $select".
-                    " FROM".
-                    " {$this->usergroup_rel_session_table} ur".
-                    " LEFT OUTER  JOIN {$this->usergroup_table} u ON u.id = ur.usergroup_id".
-                    " LEFT JOIN `{$this->session_table}` s ON s.id = ur.session_id".
-                    " LEFT JOIN {$this->session_rel_course_table} sc ON s.id = sc.session_id ".
-                    " $whereClasess ";
+                $sql = "SELECT $select
+                        FROM {$this->table} u
+                        LEFT OUTER JOIN {$this->usergroup_rel_session_table} urc
+                        ON (u.id = urc.usergroup_id AND session_id = $sessionId)
+                ";
             }
         }
 
@@ -669,41 +618,24 @@ class UserGroup extends Model
         }*/
 
         $conditions = Database::parse_conditions($options);
-
-        if ($withClasses == true) {
-            $resultClasess = Database::query($sqlClasses);
-        } else {
-            $sql .= $conditions;
-            $result = Database::query($sql);
-        }
+        $sql .= $conditions;
+        $result = Database::query($sql);
 
         if ($getCount) {
-            if (!empty($result)) {
-                $result = Database::query($sql);
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
                 $array = Database::fetch_array($result, 'ASSOC');
 
                 return $array['count'];
             }
-            if (!empty($sqlClasses)) {
-                if (Database::num_rows($resultClasess)) {
-                    $row = Database::fetch_array($resultClasess);
 
-                    return $row['count'];
-                }
-            }
+            return 0;
         }
-        if (!empty($result)) {
-            if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    $data[] = $row;
-                }
-            }
-        }
-        if (!empty($sqlClasses)) {
-            if (Database::num_rows($resultClasess) > 0) {
-                while ($row = Database::fetch_array($resultClasess, 'ASSOC')) {
-                    $data[] = $row;
-                }
+
+        $data = [];
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $data[] = $row;
             }
         }
 

@@ -6137,8 +6137,8 @@ class Exercise
         $question_list_answers,
         $origin,
         $exe_id,
-        $score,
-        $weight
+        $score = null,
+        $weight = null
     ) {
         $setting = api_get_course_setting('email_alert_manager_on_new_quiz');
 

@@ -322,7 +322,7 @@ switch ($action) {
             );
 
             foreach ($exercises as $exercise) {
-                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
+                $data[] = ['id' => $exercise->getIid(), 'text' => html_entity_decode($exercise->getTitle())];
             }
             if (!empty($data)) {
                 $data[] = ['id' => 'T', 'text' => 'TODOS'];

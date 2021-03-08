@@ -3,12 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_TRACKING;
-//keep course_code form as it is loaded (global) by the table's get_user_data
 $courseInfo = api_get_course_info();
 if (empty($courseInfo)) {
     api_not_allowed(true);
@@ -471,7 +471,7 @@ if ($nbStudents > 0) {
             $trackingDirection,
             $conditions
         );
-        $userRepo = \Chamilo\CoreBundle\Framework\Container::getUserRepository();
+        $userRepo = Container::getUserRepository();
         foreach ($usersTracking as $userTracking) {
             $user = $userRepo->findOneBy(['username' => $userTracking[3]]);
             if (empty($user)) {
@@ -553,7 +553,7 @@ if ($nbStudents > 0) {
     //$html .= $formExtraField->returnForm();
     $html .= $mainForm->returnForm();
 
-    $getLangXDays = get_lang('XDays');
+    $getLangXDays = get_lang('%s days');
     $form = new FormValidator(
         'reminder_form',
         'get',
@@ -798,7 +798,6 @@ $exerciseList = ExerciseLib::get_all_exercises(
     false,
     3
 );
-//$groupList = null;
 if (!empty($groupList)) {
     $totalTime = null;
     $totalLpProgress = null;
@@ -854,7 +853,7 @@ if (!empty($groupList)) {
                 foreach ($exerciseList as $exerciseData) {
                     foreach ($usersInGroup as $userId) {
                         $results = Event::get_best_exercise_results_by_user(
-                            $exerciseData['iid'],
+                            $exerciseData->getIid(),
                             $courseInfo['real_id'],
                             0,
                             $userId

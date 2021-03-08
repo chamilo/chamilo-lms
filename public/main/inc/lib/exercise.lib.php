@@ -3035,12 +3035,12 @@ EOT;
      * @param bool   $check_publication_dates
      * @param string $search                  Search exercise name
      * @param bool   $search_all_sessions     Search exercises in all sessions
-     * @param   int 0 = only inactive exercises
+     * @param   int     0 = only inactive exercises
      *                  1 = only active exercises,
      *                  2 = all exercises
      *                  3 = active <> -1
      *
-     * @return array array with exercise data
+     * @return CQuiz[]
      */
     public static function get_all_exercises(
         $course_info = null,
@@ -3051,7 +3051,6 @@ EOT;
         $active = 2
     ) {
         $course_id = api_get_course_int_id();
-
         if (!empty($course_info) && !empty($course_info['real_id'])) {
             $course_id = $course_info['real_id'];
         }
@@ -3059,8 +3058,19 @@ EOT;
         if (-1 == $session_id) {
             $session_id = 0;
         }
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
 
-        $now = api_get_utc_datetime();
+        if (null === $course) {
+            return [];
+        }
+
+        /*$activeFilter = 0;
+        if (2 !== $active) {
+            $activeFilter = (int) $active;
+        }*/
+
+        /*$now = api_get_utc_datetime();
         $timeConditions = '';
         if ($check_publication_dates) {
             // Start and end are set
@@ -3074,19 +3084,14 @@ EOT;
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
-        $needle = !empty($search) ? "%".$search."%" : '';
+        $needle = !empty($search) ? "%".$search."%" : '';*/
+
+        $repo = Container::getQuizRepository();
+
+        return $repo->findQuizzes($course, $session, (string) $search, $active);
 
         // Show courses by active status
-        $active_sql = '';
-        if (3 == $active) {
-            $active_sql = ' active <> -1 AND';
-        } else {
-            if (2 != $active) {
-                $active_sql = sprintf(' active = %d AND', $active);
-            }
-        }
-
-        if (true == $search_all_sessions) {
+        /*if (true == $search_all_sessions) {
             $conditions = [
                 'where' => [
                     $active_sql.' c_id = ? '.$needle_where.$timeConditions => [
@@ -3123,7 +3128,7 @@ EOT;
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
 
-        return Database::select('*', $table, $conditions);
+        return Database::select('*', $table, $conditions);*/
     }
 
     /**
@@ -3601,7 +3606,7 @@ EOT;
      * @param string $course_code
      * @param int    $session_id
      *
-     * @return array
+     * @return CQuiz
      */
     public static function get_exercises_to_be_taken($course_code, $session_id)
     {
@@ -3610,10 +3615,8 @@ EOT;
         $result = [];
         $now = time() + 15 * 24 * 60 * 60;
         foreach ($exercises as $exercise_item) {
-            if (isset($exercise_item['end_time']) &&
-                !empty($exercise_item['end_time']) &&
-                api_strtotime($exercise_item['end_time'], 'UTC') < $now
-            ) {
+            $endTime = $exercise_item->getEndTime() ?: null;
+            if (null !== $endTime && $endTime->getTimestamp() < $now) {
                 $result[] = $exercise_item;
             }
         }

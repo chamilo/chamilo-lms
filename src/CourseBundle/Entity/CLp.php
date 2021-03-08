@@ -227,6 +227,10 @@ class CLp extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $now = new DateTime();
+        $this->createdOn = $now;
+        $this->modifiedOn = $now;
+        $this->publicatedOn = $now;
         $this->accumulateScormTime = 1;
         $this->accumulateWorkTime = 0;
         $this->author = '';
@@ -234,10 +238,6 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->contentLocal = 'local';
         $this->contentMaker = 'chamilo';
         $this->contentLicense = '';
-        $now = new DateTime();
-        $this->createdOn = $now;
-        $this->modifiedOn = $now;
-        $this->publicatedOn = $now;
         $this->defaultEncoding = 'UTF-8';
         $this->defaultViewMod = 'embedded';
         $this->description = '';
@@ -900,9 +900,6 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxAttempts(): int
     {
         return $this->maxAttempts;

@@ -980,7 +980,7 @@ if ($isFeedbackAllowed) {
     }
 }
 
-if ($isFeedbackAllowed && 'learnpath' != $origin && 'student_progress' != $origin) {
+if ($isFeedbackAllowed && 'learnpath' !== $origin && 'student_progress' !== $origin) {
     if (in_array($origin, ['tracking_course', 'user_course', 'correct_exercise_in_lp'])) {
         $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
@@ -990,7 +990,6 @@ if ($isFeedbackAllowed && 'learnpath' != $origin && 'student_progress' != $origi
             'exeid' => $id,
             'origin' => $origin,
             'details' => 'true',
-            'course' => Security::remove_XSS($_GET['cidReq']),
         ]);
 
         $emailForm = new FormValidator('form-email', 'post', $formUrl, '', ['id' => 'form-email']);

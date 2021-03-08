@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -2327,16 +2328,18 @@ class Tracking
 
             // Compose a filter based on optional session id given
             $condition_session = '';
+            $session = null;
             if (isset($session_id)) {
+                $session = api_get_session_entity($course_info['real_id']);
                 $session_id = (int) $session_id;
                 $condition_session = " AND session_id = $session_id ";
             }
+
+            $condition_active = '';
             if (1 == $active_filter) {
                 $condition_active = 'AND active <> -1';
             } elseif (0 == $active_filter) {
                 $condition_active = 'AND active <> 0';
-            } else {
-                $condition_active = '';
             }
             $condition_into_lp = '';
             $select_lp_id = '';
@@ -2346,17 +2349,23 @@ class Tracking
                 $select_lp_id = ', orig_lp_id as lp_id ';
             }
 
-            $sql = "SELECT count(iid)
+            $quizRepo = Container::getQuizRepository();
+            $course = api_get_course_entity($course_info['real_id']);
+            $qb = $quizRepo->getResourcesByCourse($course, $session);
+            $qb
+                ->select('count(resource)')
+                ->setMaxResults(1);
+            $count_quiz = $qb->getQuery()->getSingleScalarResult();
+
+            /*$sql = "SELECT count(iid)
     		        FROM $tbl_course_quiz
     				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
             $count_quiz = 0;
-
             $countQuizResult = Database::query($sql);
             if (!empty($countQuizResult)) {
                 $count_quiz = Database::fetch_row($countQuizResult);
-            }
-
-            if (!empty($count_quiz[0]) && !empty($student_id)) {
+            }*/
+            if (!empty($count_quiz) && !empty($student_id)) {
                 if (is_array($student_id)) {
                     $student_id = array_map('intval', $student_id);
                     $condition_user = " AND exe_user_id IN (".implode(',', $student_id).") ";
@@ -2381,7 +2390,6 @@ class Tracking
                     }
                 }
 
-                $count_quiz = Database::fetch_row(Database::query($sql));
                 $sql = "SELECT
                         SUM(score/max_score*100) as avg_score,
                         COUNT(*) as num_attempts
@@ -2507,15 +2515,15 @@ class Tracking
     /**
      * Get count student's exercise progress.
      *
-     * @param array $exercise_list
-     * @param int   $user_id
-     * @param int   $courseId
-     * @param int   $session_id
+     * @param CQuiz[] $exerciseList
+     * @param int     $user_id
+     * @param int     $courseId
+     * @param int     $session_id
      *
      * @return string
      */
     public static function get_exercise_student_progress(
-        $exercise_list,
+        $exerciseList,
         $user_id,
         $courseId,
         $session_id
@@ -2524,14 +2532,15 @@ class Tracking
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
 
-        if (empty($exercise_list)) {
+        if (empty($exerciseList)) {
             return '0%';
         }
         $tbl_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $exercise_list = array_keys($exercise_list);
-        $exercise_list = array_map('intval', $exercise_list);
-
-        $exercise_list_imploded = implode("' ,'", $exercise_list);
+        $exerciseIdList = [];
+        foreach ($exerciseList as $exercise) {
+            $exerciseIdList[] = $exercise->getIid();
+        }
+        $exercise_list_imploded = implode("' ,'", $exerciseIdList);
 
         $sql = "SELECT COUNT(DISTINCT ex.exe_exo_id)
                 FROM $tbl_stats_exercises AS ex
@@ -2554,7 +2563,7 @@ class Tracking
     }
 
     /**
-     * @param array $exercise_list
+     * @param CQuiz $exercise_list
      * @param int   $user_id
      * @param int   $courseId
      * @param int   $session_id
@@ -2570,7 +2579,7 @@ class Tracking
         $result = 0;
         if (!empty($exercise_list)) {
             foreach ($exercise_list as $exercise_data) {
-                $exercise_id = $exercise_data['iid'];
+                $exercise_id = $exercise_data->getIid();
                 $best_attempt = Event::get_best_attempt_exercise_results_per_user(
                     $user_id,
                     $exercise_id,
@@ -4952,7 +4961,7 @@ class Tracking
                     if (!empty($exerciseList)) {
                         foreach ($exerciseList as $exerciseData) {
                             $results = Event::get_best_exercise_results_by_user(
-                                $exerciseData['id'],
+                                $exerciseData->getIid(),
                                 $courseInfo['real_id'],
                                 0,
                                 $user_id
@@ -5072,14 +5081,16 @@ class Tracking
                     );
 
                     foreach ($exercise_list as $exercise_data) {
-                        $exercise_obj = new Exercise($course_data['real_id']);
-                        $exercise_obj->read($exercise_data['id']);
+                        //$exercise_obj = new Exercise($course_data['real_id']);
+                        //$exercise_obj->read($exercise_data['id']);
                         // Exercise is not necessary to be visible to show results check the result_disable configuration instead
                         //$visible_return = $exercise_obj->is_visible();
-                        if (0 == $exercise_data['results_disabled'] || 2 == $exercise_data['results_disabled']) {
+                        $disabled = $exercise_data->getResultsDisabled();
+                        $exerciseId = $exercise_data->getIid();
+                        if (0 == $disabled || 2 == $disabled) {
                             $best_average = (int)
                                 ExerciseLib::get_best_average_score_by_exercise(
-                                    $exercise_data['id'],
+                                    $exerciseId,
                                     $course_data['real_id'],
                                     $my_session_id,
                                     $user_count
@@ -5091,7 +5102,7 @@ class Tracking
 
                             $user_result_data = ExerciseLib::get_best_attempt_by_user(
                                 api_get_user_id(),
-                                $exercise_data['id'],
+                                $exerciseId,
                                 $course_data['real_id'],
                                 $my_session_id
                             );
@@ -5100,17 +5111,19 @@ class Tracking
                             if (!empty($user_result_data['max_score']) && 0 != intval($user_result_data['max_score'])) {
                                 $score = intval($user_result_data['score'] / $user_result_data['max_score'] * 100);
                             }
-                            $time = api_strtotime($exercise_data['start_time']) ? api_strtotime($exercise_data['start_time'], 'UTC') : 0;
+                            $start = $exercise_data->getStartTime() ? $exercise_data->getStartTime()->getTimestamp() : null;
+                            $time = null !== $start ? $start : 0;
                             $all_exercise_start_time[] = $time;
                             $my_results[] = $score;
+                            $exerciseTitle = $exercise_data->getTitle();
                             if (count($exercise_list) <= 10) {
-                                $title = cut($course_data['title'], 30)." \n ".cut($exercise_data['title'], 30);
+                                $title = cut($course_data['title'], 30)." \n ".cut($exerciseTitle, 30);
                                 $exercise_graph_name_list[] = $title;
                                 $all_exercise_graph_name_list[] = $title;
                             } else {
                                 // if there are more than 10 results, space becomes difficult to find,
                                 // so only show the title of the exercise, not the tool
-                                $title = cut($exercise_data['title'], 30);
+                                $title = cut($exerciseTitle, 30);
                                 $exercise_graph_name_list[] = $title;
                                 $all_exercise_graph_name_list[] = $title;
                             }
@@ -5202,7 +5215,7 @@ class Tracking
                         foreach ($exercises as $exercise_item) {
                             $attempts = Event::count_exercise_attempts_by_user(
                                 api_get_user_id(),
-                                $exercise_item['id'],
+                                $exercise_item->getIid(),
                                 $courseInfo['real_id'],
                                 $my_session_id
                             );
@@ -5360,7 +5373,7 @@ class Tracking
                     foreach ($exercises as $exercise_item) {
                         $attempts = Event::count_exercise_attempts_by_user(
                             api_get_user_id(),
-                            $exercise_item['id'],
+                            $exercise_item->getIid(),
                             $courseId,
                             $session_id_from_get
                         );
@@ -8249,7 +8262,7 @@ class TrackingCourseLog
                         }
 
                         if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $result_extra_field['field_type']) {
-                            list($level1, $level2, $level3) = explode(';', $row['value']);
+                            [$level1, $level2, $level3] = explode(';', $row['value']);
 
                             $row['value'] = $result_extra_field['options'][$level1]['display_text'].' / ';
                             $row['value'] .= $result_extra_field['options'][$level2]['display_text'].' / ';

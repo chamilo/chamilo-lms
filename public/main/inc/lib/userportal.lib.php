@@ -55,7 +55,8 @@ class IndexManager
      */
     public function return_exercise_block($personal_course_list)
     {
-        $exercise_list = [];
+        throw new Exception('return_exercise_block');
+        /*$exercise_list = [];
         if (!empty($personal_course_list)) {
             foreach ($personal_course_list as $course_item) {
                 $course_code = $course_item['c'];
@@ -89,7 +90,7 @@ class IndexManager
                     api_convert_and_format_date($my_exercise['end_time'], DATE_FORMAT_SHORT)
                 );
             }
-        }
+        }*/
     }
 
     /**

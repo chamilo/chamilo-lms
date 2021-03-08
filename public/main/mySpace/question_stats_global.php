@@ -36,7 +36,7 @@ if (!empty($courseIdList)) {
 
         if (!empty($courseExerciseList)) {
             foreach ($courseExerciseList as $exercise) {
-                $exerciseId = $exercise['iid'];
+                $exerciseId = $exercise->getIid();
                 if (in_array($exerciseId, $exercises)) {
                     $selectedExercises[$courseId][] = $exerciseId;
                 }

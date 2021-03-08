@@ -150,23 +150,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->templates;
     }
 
-    public function findResourceByTitle(
-        string $title,
-        ResourceNode $parentNode,
-        Course $course,
-        Session $session = null,
-        CGroup $group = null
-    ): ?ResourceInterface {
-        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
-        $qb
-            ->andWhere('node.title = :title')
-            ->setParameter('title', $title, Types::STRING)
-            ->setMaxResults(1)
-        ;
-
-        return $qb->getQuery()->getOneOrNullResult();
-    }
-
     public function getClassName(): string
     {
         $class = get_class($this);
@@ -320,6 +303,33 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->flush();
 
         return $resourceNode;
+    }
+
+    public function findResourceByTitle(
+        string $title,
+        ResourceNode $parentNode,
+        Course $course,
+        Session $session = null,
+        CGroup $group = null
+    ): ?ResourceInterface {
+        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
+        $this->addTitleQueryBuilder($title, $qb);
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findResourcesByTitle(
+        string $title,
+        ResourceNode $parentNode,
+        Course $course,
+        Session $session = null,
+        CGroup $group = null
+    ) {
+        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
+        $this->addTitleQueryBuilder($title, $qb);
+
+        return $qb->getQuery()->getResult();
     }
 
     public function addFile(ResourceInterface $resource, UploadedFile $file, string $description = ''): ?ResourceFile
@@ -906,6 +916,19 @@ abstract class ResourceRepository extends ServiceEntityRepository
     protected function getOrCreateQueryBuilder(QueryBuilder $qb = null, string $alias = 'resource'): QueryBuilder
     {
         return $qb ?: $this->createQueryBuilder($alias);
+    }
+
+    protected function addTitleQueryBuilder(string $title, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        if (!empty($title)) {
+            $qb
+                ->andWhere('node.title = :title')
+                ->setParameter('title', $title)
+            ;
+        }
+
+        return $qb;
     }
 
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool

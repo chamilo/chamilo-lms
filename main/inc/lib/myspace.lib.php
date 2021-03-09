@@ -1154,12 +1154,18 @@ class MySpace
         $endDate = null,
         $csv = false
     ) {
-        $tableHtml = '';
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblAccessUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $accessUrlFilter = '';
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlCourse aurc
+                      ON (c.id = aurc.c_id AND aurc.access_url_id = $urlId)";
+        }
         $query = "
         SELECT DISTINCT
             lp.name,
@@ -1181,7 +1187,8 @@ class MySpace
         INNER JOIN $tblLp AS lp
         ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
         INNER JOIN $tblCourse AS c
-        ON (lp.c_id = c.id)";
+        ON (lp.c_id = c.id)
+        $accessUrlFilter";
         $queryResult = Database::query($query);
         $dataTeachers = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($dataTeachers);
@@ -1206,13 +1213,14 @@ class MySpace
                 $learningPaths[$lpId]['teachers'][$authorData] = $users[$authorData];
             } else {
                 $items = explode(',', $authorData);
-                for ($j = 0; $j < count($items); $j++) {
-                        $authorData = $items[$j];
-                        if (!isset($users[$authorData])) {
-                            $users[$authorData] = api_get_user_info($authorData);
-                        }
-                        $teachers[$authorData][$lpId] = $users[$authorData];
-                        $learningPaths[$lpId]['teachers'][$authorData] = $users[$authorData];
+                $totalItems = count($items);
+                for ($j = 0; $j < $totalItems; $j++) {
+                    $authorData = $items[$j];
+                    if (!isset($users[$authorData])) {
+                        $users[$authorData] = api_get_user_info($authorData);
+                    }
+                    $teachers[$authorData][$lpId] = $users[$authorData];
+                    $learningPaths[$lpId]['teachers'][$authorData] = $users[$authorData];
                 }
             }
         }
@@ -1465,6 +1473,13 @@ class MySpace
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblAccessUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $accessUrlFilter = '';
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlCourse aurc
+                      ON (lp.c_id = aurc.c_id AND aurc.access_url_id = $urlId)";
+        }
         $index = 0;
         $cLpItems = [];
         $cLpItemsAuthor = [];
@@ -1481,7 +1496,8 @@ class MySpace
             INNER JOIN $tblExtraField AS ef
             ON (
                 ef.variable = 'authorlpitem' AND
-                efv.field_id = ef.id and efv.`value` != ''
+                efv.field_id = ef.id AND
+                efv.`value` != ''
             )
             ORDER BY efv.item_id ";
         $queryResult = Database::query($sql);
@@ -1508,7 +1524,8 @@ class MySpace
             INNER JOIN $tblLpItem AS lpi
             ON (lpi.iid = efv.item_id)
             INNER JOIN $tblLp AS lp
-            ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id) ";
+            ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
+            $accessUrlFilter";
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($data);
@@ -1938,6 +1955,13 @@ class MySpace
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlFilter = '';
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlUser auru
+                      ON (u.id = auru.user_id AND auru.access_url_id = $urlId)";
+        }
 
         if (!empty($startDate)) {
             $startDate = new DateTime($startDate);
@@ -1986,6 +2010,7 @@ class MySpace
         )
         INNER JOIN `$tblUser` AS u
         ON  (u.id = srcu.user_id)
+        $accessUrlFilter
         WHERE
             td.default_event_type = 'session_add_user_course' AND
             td.default_date >= '$startDate' AND
@@ -4389,6 +4414,13 @@ class MySpace
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblGroupUser = Database::get_course_table(TABLE_GROUP_USER);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlFilter = '';
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlUser auru
+                      ON (u.id = auru.user_id AND auru.access_url_id = $urlId)";
+        }
         $whereCondition = '';
         //Validating dates
         if (!empty($startDate)) {
@@ -4438,6 +4470,7 @@ class MySpace
             ON (lp.iid = ip.ref)
             INNER JOIN $tblLpItem AS lpi
             ON (lp.id = lpi.lp_id AND lp.c_id = lpi.c_id)
+            $accessUrlFilter
             WHERE
                 ip.lastedit_type = 'LearnpathSubscription' ";
             if (strlen($whereCondition) > 2) {
@@ -4450,7 +4483,6 @@ class MySpace
                     lpi.iid AS lp_item_id,
                     ip.session_id AS session_id,
                     ip.lastedit_type AS type,
-                    u.username AS username,
                     ip.lastedit_date AS lastedit_date,
                     ip.to_group_id AS group_id,
                     ug.user_id AS id

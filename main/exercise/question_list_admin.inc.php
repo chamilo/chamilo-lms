@@ -191,8 +191,9 @@ if (!$inATest) {
             };
             echo $pagination;
         } else {
-            // Classic order
-            $questionList = $objExercise->selectQuestionList(true, true);
+            // Teacher view, see all questions.
+            //$questionList = $objExercise->selectQuestionList(true, true);
+            $questionList = $objExercise->getQuestionOrderedList(true);
         }
 
         // Restore original value
@@ -240,7 +241,9 @@ if (!$inATest) {
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
-                            get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
+                            get_lang(
+                                'QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'
+                            ),
                             [],
                             ICON_SIZE_TINY
                         ),

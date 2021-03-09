@@ -4474,7 +4474,8 @@ class MySpace
                 ON (lp.iid = ip.ref AND ug.c_id = lp.c_id)
                 INNER JOIN $tblLpItem AS lpi
                 ON (lp.id = lpi.lp_id AND lp.c_id = lpi.c_id)
-                WHERE
+                $accessUrlFilter
+                 WHERE
                     ip.lastedit_type = 'LearnpathSubscription' AND
                     ip.to_group_id != 0 ";
                 if (strlen($whereCondition) > 2) {

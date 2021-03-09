@@ -1370,6 +1370,7 @@ class MySpace
                             }
                         }
                         foreach ($sessionStudent as $student) {
+                            $lpSessionId = (int) $student['session_id'];
                             $reportLink = Display::url(
                                 Display::return_icon('statistics.png', get_lang('Stats')),
                                 api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.

@@ -1240,7 +1240,6 @@ class MySpace
                     $lpId = $user['lp_item'];
                     $studentId = $user['id'];
                     if (!isset($users[$studentId])) {
-                        $users[$studentId] = api_get_user_info($studentId);
                         $users[$studentId]['company'] = $user['company'];
                     }
                     $learningPaths[$lpId]['courseStudent'][$studentId] = $users[$studentId];
@@ -1259,7 +1258,6 @@ class MySpace
                     $lpId = $user['lp'];
                     $studentId = $user['id'];
                     if (!isset($users[$studentId])) {
-                        $users[$studentId] = api_get_user_info($studentId);
                         $users[$studentId]['company'] = $user['company'];
                     }
                     $learningPaths[$lpId]['sessionStudent'][$studentId] = $users[$studentId];
@@ -1280,7 +1278,6 @@ class MySpace
                     $lpId = $user['lp_item'];
                     $studentId = $user['id'];
                     if (!isset($users[$studentId])) {
-                        $users[$studentId] = api_get_user_info($studentId);
                         $users[$studentId]['company'] = $user['company'];
                     }
                     $learningPaths[$lpId]['courseStudentGroup'][$studentId] = $users[$studentId];
@@ -1485,7 +1482,6 @@ class MySpace
         $cLpItemsAuthor = [];
         $authorArray = [];
         $studentArray = [];
-        $whereInLpItem = [];
         $whereInLp = [];
         $dataSet = [];
         /** Get lp items only with authors */
@@ -1533,7 +1529,6 @@ class MySpace
         for ($i = 0; $i < $totalData; $i++) {
             $item = $data[$i];
             $lpItemId = (int) $item['lp_item_id'];
-            $whereInLpItem[] = $item['lp_item_id'];
             $whereInLp[] = $item['lp_id'];
             $author = isset($cLpItemsAuthor[$lpItemId]) ? $cLpItemsAuthor[$lpItemId] : null;
             $item['author'] = $author;
@@ -1670,12 +1665,8 @@ class MySpace
                                 $student = $byCourse[$i];
                                 $studentId = $student['id'];
                                 $lpItemIdStudent = $student['lp_item_id'];
-                                if (!isset($studentArray[$studentId])) {
-                                    $studentArray[$studentId] = api_get_user_info($studentId);
-                                }
                                 $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
-                                $tempStudent = $studentArray[$studentId];
-                                $studentName = $tempStudent['complete_name'];
+                                $studentName = $student['complete_name'];
                                 $studentCompany = $student['company'];
                                 $type = isset($student['type']) ? $student['type'] : null;
                                 $iconSession = Display::return_icon(
@@ -1700,12 +1691,8 @@ class MySpace
                                 $student = $byCourseGroups[$i];
                                 $studentId = $student['id'];
                                 $lpItemIdStudent = $student['lp_item_id'];
-                                if (!isset($studentArray[$studentId])) {
-                                    $studentArray[$studentId] = api_get_user_info($studentId);
-                                }
-                                $tempStudent = $studentArray[$studentId];
                                 $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
-                                $studentName = $tempStudent['complete_name'];
+                                $studentName = $student['complete_name'];
                                 $studentCompany = $student['company'];
                                 $type = isset($student['type']) ? $student['type'] : null;
                                 $iconGroup = Display::return_icon(
@@ -1727,12 +1714,8 @@ class MySpace
                                 $student = $bySession[$i];
                                 $studentId = $student['id'];
                                 $lpItemIdStudent = $student['lp_item_id'];
-                                if (!isset($studentArray[$studentId])) {
-                                    $studentArray[$studentId] = api_get_user_info($studentId);
-                                }
-                                $tempStudent = $studentArray[$studentId];
+                                $studentName = $student['complete_name'];
                                 $type = isset($student['type']) ? $student['type'] : null;
-                                $studentName = $tempStudent['complete_name'];
                                 $studentCompany = $student['company'];
                                 $iconSession = Display::return_icon(
                                     'admin_star.png',
@@ -1877,11 +1860,7 @@ class MySpace
                             $student = $byCourse[$i];
                             $studentId = $student['id'];
                             $lpItemIdStudent = $student['lp_item_id'];
-                            if (!isset($studentArray[$studentId])) {
-                                $studentArray[$studentId] = api_get_user_info($studentId);
-                            }
-                            $tempStudent = $studentArray[$studentId];
-                            $studentName = $tempStudent['complete_name'];
+                            $studentName = $student['complete_name'];
                             $studentCompany = $student['company'];
                             $type = isset($student['type']) ? $student['type'] : null;
                             $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
@@ -1892,11 +1871,7 @@ class MySpace
                             $student = $byCourseGroups[$i];
                             $studentId = $student['id'];
                             $lpItemIdStudent = $student['lp_item_id'];
-                            if (!isset($studentArray[$studentId])) {
-                                $studentArray[$studentId] = api_get_user_info($studentId);
-                            }
-                            $tempStudent = $studentArray[$studentId];
-                            $studentName = $tempStudent['complete_name'];
+                            $studentName = $student['complete_name'];
                             $studentCompany = $student['company'];
                             $type = isset($student['type']) ? $student['type'] : null;
                             $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
@@ -1907,12 +1882,8 @@ class MySpace
                             $student = $bySession[$i];
                             $studentId = $student['id'];
                             $lpItemIdStudent = $student['lp_item_id'];
-                            if (!isset($studentArray[$studentId])) {
-                                $studentArray[$studentId] = api_get_user_info($studentId);
-                            }
-                            $tempStudent = $studentArray[$studentId];
+                            $studentName = $student['complete_name'];
                             $type = isset($student['type']) ? $student['type'] : null;
-                            $studentName = $tempStudent['complete_name'];
                             $studentCompany = $student['company'];
                             $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
                         }
@@ -1996,7 +1967,9 @@ class MySpace
             srcu.session_id AS session_id,
             u.username AS username,
             td.default_date AS default_date,
-            td.default_event_type AS type
+            td.default_event_type AS type,
+            u.firstname as firstname,
+            u.lastname as lastname
         FROM $tblTrackDefault AS td
         INNER JOIN $tblSessionRelCourseUser AS srcu
         ON (td.default_value = srcu.user_id AND td.c_id = srcu.c_id)
@@ -2020,6 +1993,7 @@ class MySpace
         $queryResult = Database::query($sql);
         $dataTrack = Database::store_result($queryResult, 'ASSOC');
         foreach ($dataTrack as $item) {
+            $item['complete_name'] = api_get_person_name($item['firstname'], $item['lastname']);
             $item['company'] = self::getCompanyOfUser($item['id']);
             $data[$item['lp_item_id']][] = $item;
         }
@@ -4462,7 +4436,9 @@ class MySpace
                 ip.lastedit_type AS type,
                 u.username AS username,
                 ip.lastedit_date AS lastedit_date,
-                ip.to_user_id AS id
+                ip.to_user_id AS id,
+                u.firstname as firstname,
+                u.lastname as lastname
             FROM $tblItemProperty AS ip
             INNER JOIN `$tblUser` AS u
             ON (u.id = ip.to_user_id)
@@ -4485,7 +4461,9 @@ class MySpace
                     ip.lastedit_type AS type,
                     ip.lastedit_date AS lastedit_date,
                     ip.to_group_id AS group_id,
-                    ug.user_id AS id
+                    ug.user_id AS id,
+                    u.firstname as firstname,
+                    u.lastname as lastname
                 FROM
                     $tblItemProperty AS ip
                 INNER JOIN $tblGroupUser AS ug
@@ -4510,6 +4488,7 @@ class MySpace
             /* use 'for' to performance */
             for ($i = 0; $i < $totalData; $i++) {
                 $row = $data[$i];
+                $row['complete_name'] = api_get_person_name($row['firstname'], $row['lastname']);
                 $row['company'] = self::getCompanyOfUser($row['id']);
                 $datas[$row['lp_item_id']][] = $row;
             }

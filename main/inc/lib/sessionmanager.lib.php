@@ -796,8 +796,8 @@ class SessionManager
      * @return array table with user name, lp name, progress
      */
     public static function get_session_lp_progress(
-        $sessionId = 0,
-        $courseId = 0,
+        $sessionId,
+        $courseId,
         $date_from,
         $date_to,
         $options
@@ -917,9 +917,9 @@ class SessionManager
      * @return array table with user name, lp name, progress
      */
     public static function get_survey_overview(
-        $sessionId = 0,
-        $courseId = 0,
-        $surveyId = 0,
+        $sessionId,
+        $courseId,
+        $surveyId,
         $date_from,
         $date_to,
         $options
@@ -1390,7 +1390,7 @@ class SessionManager
         $profile = '',
         $date_from = '',
         $date_to = '',
-        $options
+        $options = []
     ) {
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);

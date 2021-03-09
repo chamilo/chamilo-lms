@@ -2427,7 +2427,7 @@ class IndexManager
     private static function getHtmlForCourse(
         $courseInfo,
         $userCategoryId,
-        $displayButton = false,
+        $displayButton,
         $loadDirs
     ) {
         if (empty($courseInfo)) {

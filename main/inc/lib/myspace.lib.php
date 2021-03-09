@@ -1436,7 +1436,7 @@ class MySpace
                     );
             }
             $tableContent = $form->returnForm();
-            if (!empty($startDate) or !empty($endDate)) {
+            if (!empty($startDate) || !empty($endDate)) {
                 $tableContent .= $htmlData;
             }
             $tpl = new Template('', false, false, false, false, false, false);
@@ -1493,11 +1493,11 @@ class MySpace
         }
         /** Get lp items only with price */
         $sql = " SELECT
-                lpt.iid AS lp_id,
-                lpt.name AS lp_name,
-                efv.item_id AS lp_item_id,
-                lpi.title AS title,
-                efv.`value` AS price
+               lp.iid AS lp_id,
+               lp.name AS lp_name,
+               efv.item_id AS lp_item_id,
+               lpi.title AS title,
+               efv.`value` AS price
             FROM $tblExtraFieldValue AS efv
             INNER JOIN $tblExtraField AS ef
             ON (
@@ -1507,8 +1507,8 @@ class MySpace
             )
             INNER JOIN $tblLpItem AS lpi
             ON (lpi.iid = efv.item_id)
-            INNER JOIN $tblLp AS lpt
-            ON (lpi.lp_id = lpt.iid AND lpi.c_id = lpt.c_id) ";
+            INNER JOIN $tblLp AS lp
+            ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id) ";
         $queryResult = Database::query($sql);
         $data = Database::store_result($queryResult, 'ASSOC');
         $totalData = count($data);
@@ -1566,8 +1566,8 @@ class MySpace
                 $byCourseGroups = isset($registeredUsersGroups[$lpItemId]) ? $registeredUsersGroups[$lpItemId] : [];
                 $bySession = isset($registeredUsersBySession[$lpItemId]) ? $registeredUsersBySession[$lpItemId] : [];
                 if (is_array($tempArrayAuthor)) {
-                    $totalAuhtors = count($tempArrayAuthor);
-                    for ($j = 0; $j < $totalAuhtors; $j++) {
+                    $totalAuthors = count($tempArrayAuthor);
+                    for ($j = 0; $j < $totalAuthors; $j++) {
                         if (!isset($authorArray[$tempArrayAuthor[$j]])) {
                             $authorArray[$tempArrayAuthor[$j]] = api_get_user_info($tempArrayAuthor[$j]);
                         }
@@ -1649,7 +1649,7 @@ class MySpace
                             $studentProcessed = [];
                             /* use 'for' to performance */
                             /* Student by course*/
-                            for ($i = 0; $i < count($byCourse); $i++) {
+                            for ($i = 0; $i < $studentRegister; $i++) {
                                 $student = $byCourse[$i];
                                 $studentId = $student['id'];
                                 $lpItemIdStudent = $student['lp_item_id'];
@@ -1679,7 +1679,7 @@ class MySpace
                             }
                             /* use 'for' to performance */
                             /* Student by course groups */
-                            for ($i = 0; $i < count($byCourseGroups); $i++) {
+                            for ($i = 0; $i < $studentGroupsRegister; $i++) {
                                 $student = $byCourseGroups[$i];
                                 $studentId = $student['id'];
                                 $lpItemIdStudent = $student['lp_item_id'];
@@ -1695,7 +1695,8 @@ class MySpace
                                     'group_summary.png',
                                     $studentName,
                                     '',
-                                    ICON_SIZE_MEDIUM);
+                                    ICON_SIZE_MEDIUM
+                                );
                                 if ($sessionStudentLp != 0) {
                                     $tempString = "<strong>$iconGroup $studentName($studentCompany)</strong>";
                                 } else {
@@ -1705,7 +1706,7 @@ class MySpace
                             }
                             /* use 'for' to performance */
                             /* Student by session, keep it first */
-                            for ($i = 0; $i < count($bySession); $i++) {
+                            for ($i = 0; $i < $studentRegisterBySession; $i++) {
                                 $student = $bySession[$i];
                                 $studentId = $student['id'];
                                 $lpItemIdStudent = $student['lp_item_id'];
@@ -1855,7 +1856,7 @@ class MySpace
                         $studentProcessed = [];
                         /* use 'for' to performance */
                         /* Student by course*/
-                        for ($i = 0; $i < count($byCourse); $i++) {
+                        for ($i = 0; $i < $studentRegister; $i++) {
                             $student = $byCourse[$i];
                             $studentId = $student['id'];
                             $lpItemIdStudent = $student['lp_item_id'];
@@ -1870,7 +1871,7 @@ class MySpace
                         }
                         /* use 'for' to performance */
                         /* Student by course groups */
-                        for ($i = 0; $i < count($byCourseGroups); $i++) {
+                        for ($i = 0; $i < $studentGroupsRegister; $i++) {
                             $student = $byCourseGroups[$i];
                             $studentId = $student['id'];
                             $lpItemIdStudent = $student['lp_item_id'];
@@ -1885,7 +1886,7 @@ class MySpace
                         }
                         /* use 'for' to performance */
                         /* Student by session, keep it first */
-                        for ($i = 0; $i < count($bySession); $i++) {
+                        for ($i = 0; $i < $studentRegisterBySession; $i++) {
                             $student = $bySession[$i];
                             $studentId = $student['id'];
                             $lpItemIdStudent = $student['lp_item_id'];
@@ -1964,7 +1965,7 @@ class MySpace
         }
 
         $sql = "SELECT DISTINCT
-            lpt.iid AS lp,
+            lp.iid AS lp,
             lpi.iid AS lp_item,
             lpi.iid AS lp_item_id,
             td.default_value AS id,
@@ -1975,13 +1976,13 @@ class MySpace
         FROM $tblTrackDefault AS td
         INNER JOIN $tblSessionRelCourseUser AS srcu
         ON (td.default_value = srcu.user_id)
-        INNER JOIN $tblLp AS lpt
-        ON  (lpt.c_id = srcu.c_id)
+        INNER JOIN $tblLp AS lp
+        ON  (lp.c_id = srcu.c_id)
         INNER JOIN $tblLpItem AS lpi
         ON  (
             lpi.c_id = srcu.c_id AND
-            lpt.id = lpi.lp_id AND
-            lpi.c_id = lpt.c_id
+            lp.id = lpi.lp_id AND
+            lpi.c_id = lp.c_id
         )
         INNER JOIN `$tblUser` AS u
         ON  (u.id = srcu.user_id)

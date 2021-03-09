@@ -1537,7 +1537,7 @@ class MySpace
             }
         }
         $totalLpItems = count($cLpItems);
-        if ($totalLpItems == 0) {
+        if ($totalLpItems == 0 && 0 != count($whereInLp)) {
             $tableHtml = "<div class='table-responsive'>
                 <table class='table table-hover table-striped table-bordered data_table'>
                 <thead>

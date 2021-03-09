@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -22,7 +23,25 @@ class CForumPostRepository extends ResourceRepository
         parent::__construct($registry, CForumPost::class);
     }
 
-    public function findAllInCourseByThread(
+    public function countUserForumPosts(User $user, Course $course, Session $session = null)
+    {
+        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+
+        $qb->select('count(resource)');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countCourseForumPosts(Course $course, Session $session = null)
+    {
+        $qb = $this->getResourcesByCourse($course, $session);
+
+        $qb->select('count(resource)');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /*public function findAllInCourseByThread(
         bool $onlyVisible,
         bool $isAllowedToEdit,
         CForumThread $thread,
@@ -72,7 +91,7 @@ class CForumPostRepository extends ResourceRepository
             ])
             ->getResult()
         ;
-    }
+    }*/
 
     public function delete(ResourceInterface $resource): void
     {

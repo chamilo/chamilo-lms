@@ -100,7 +100,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     }
 
     /**
-     * @return array
+     * @return CDocument[]
      */
     public function getAllDocumentsByAuthor(int $userId)
     {
@@ -122,8 +122,31 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $query->getResult();
     }
 
+    public function countUserDocuments(User $user, Course $course, Session $session = null, CGroup $group = null)
+    {
+        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
+
+        // Add "not deleted" filters.
+        $qb->select('count(resource)');
+
+        $this->addFileTypeQueryBuilder('file', $qb);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function getResourceFormType(): string
     {
         return CDocumentType::class;
+    }
+
+    protected function addFileTypeQueryBuilder(string $fileType, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        $qb
+            ->andWhere('resource.fileType :type')
+            ->setParameter('type', $fileType)
+        ;
+
+        return $qb;
     }
 }

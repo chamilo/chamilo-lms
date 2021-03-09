@@ -42,6 +42,25 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $qb;
     }
 
+    public function countUserPublications(User $user, Course $course, Session $session = null, CGroup $group = null)
+    {
+        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+
+        $qb->select('count(resource)');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countCoursePublications(Course $course, Session $session = null, CGroup $group = null)
+    {
+        $qb = $this->getResourcesByCourse($course, $session, $group);
+
+        $qb->select('count(resource)');
+        $this->addNotDeletedPublicationQueryBuilder($qb);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * Find all the works registered by a teacher.
      */
@@ -77,5 +96,15 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    protected function addNotDeletedPublicationQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        $qb
+            ->andWhere('resource.active <> 2')
+        ;
+
+        return $qb;
     }
 }

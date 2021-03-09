@@ -8,9 +8,7 @@ namespace Chamilo\CoreBundle\Repository\Node;
 
 use Agenda;
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Message;
@@ -67,14 +65,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use UrlManager;
 
-/**
- * Class UserRepository.
- *
- * All functions that query the database (selects)
- * Functions should return query builders.
- */
 class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
     protected ?UserPasswordEncoderInterface $encoder = null;
@@ -249,28 +240,25 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getCourses(User $user, AccessUrl $url, int $status, string $keyword = '')
     {
-        $qb = $this->createQueryBuilder('user');
+        $qb = $this->createQueryBuilder('u');
 
         $qb
-            ->select('DISTINCT course')
-            ->innerJoin(
-                CourseRelUser::class,
-                'courseRelUser',
-                Join::WITH,
-                'user = courseRelUser.user'
-            )
+            //->select('DISTINCT course')
+            ->innerJoin('u.courses', 'courseRelUser')
             ->innerJoin('courseRelUser.course', 'course')
             ->innerJoin('course.urls', 'accessUrlRelCourse')
             ->innerJoin('accessUrlRelCourse.url', 'url')
-            ->where('user = :user')
-            ->andWhere('url = :url')
+            ->where('url = :url')
+            ->andWhere('courseRelUser.user = :user')
             ->andWhere('courseRelUser.status = :status')
-            ->setParameters([
-                'user' => $user,
-                'url' => $url,
-                'status' => $status,
-            ])
-            ->addSelect('courseRelUser')
+            ->setParameters(
+                [
+                    'user' => $user,
+                    'url' => $url,
+                    'status' => $status,
+                ]
+            )
+        //    ->addSelect('courseRelUser')
         ;
 
         if (!empty($keyword)) {
@@ -327,12 +315,12 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      *
      * @return User[]
      */
-    public function findByStatus(string $keyword, int $status, int $accessUrlId = null)
+    public function findByStatus(string $keyword, int $status, int $accessUrlId = 0)
     {
         $qb = $this->createQueryBuilder('u');
 
-        $this->addSearchByPortal($accessUrlId, $qb);
-        $this->addSearchByStatusQueryBuilder($status, $qb);
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
+        $this->addStatusQueryBuilder($status, $qb);
         $this->addSearchByKeywordQueryBuilder($keyword, $qb);
 
         return $qb->getQuery()->getResult();
@@ -550,14 +538,14 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         }
 
         $qb = $this->createQueryBuilder('u');
-        $this->addSearchByActiveAndNotAnonUser($qb);
-        $this->addSearchByPortal($accessUrlId, $qb);
+        $this->addActiveAndNotAnonUserQueryBuilder($qb);
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
 
         $dql = null;
         if ('true' === api_get_setting('allow_social_tool')) {
             // All users
             if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
-                $this->addSearchByNotCurrentUser($currentUserId, $qb);
+                $this->addNotCurrentUserQueryBuilder($currentUserId, $qb);
             /*$dql = "SELECT DISTINCT U
                     FROM ChamiloCoreBundle:User U
                     LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
@@ -568,7 +556,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                         U.id != {$currentUserId} AND
                         R.url = {$accessUrlId}";*/
             } else {
-                $this->addSearchByOnlyMyFriends($currentUserId, $qb);
+                $this->addOnlyMyFriendsQueryBuilder($currentUserId, $qb);
                 /*$dql = 'SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
                         INNER JOIN ChamiloCoreBundle:User AS U
@@ -584,7 +572,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             }
         } else {
             if ('true' === $allowSendMessageToAllUsers) {
-                $this->addSearchByNotCurrentUser($currentUserId, $qb);
+                $this->addNotCurrentUserQueryBuilder($currentUserId, $qb);
             } else {
                 return [];
             }
@@ -618,9 +606,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     public function getAssignedHrmUserList(int $userId, int $urlId)
     {
         $qb = $this->createQueryBuilder('u');
-        $this->addSearchByPortal($urlId, $qb);
-        $this->addSearchByActiveAndNotAnonUser($qb);
-        $this->addSearchByMyConnectionsWithStatus($userId, USER_RELATION_TYPE_RRHH, $qb);
+        $this->addAccessUrlQueryBuilder($urlId, $qb);
+        $this->addActiveAndNotAnonUserQueryBuilder($qb);
+        $this->addUserRelUserQueryBuilder($userId, USER_RELATION_TYPE_RRHH, $qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -1419,15 +1407,15 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     public function getLastLogin(User $user)
     {
         $repo = $this->getEntityManager()->getRepository(TrackELogin::class);
-        $qb = $repo->createQueryBuilder('l');
+        $qb = $repo->createQueryBuilder('u');
 
         return $qb
-            ->select('l')
+            ->select('u')
             ->where(
-                $qb->expr()->eq('l.loginUserId', $user->getId())
+                $qb->expr()->eq('u.loginUserId', $user->getId())
             )
             ->setMaxResults(1)
-            ->orderBy('l.loginDate', Criteria::DESC)
+            ->orderBy('u.loginDate', Criteria::DESC)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -1449,7 +1437,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $qb;
     }
 
-    private function addSearchByMyConnectionsWithStatus(int $userId, int $status, QueryBuilder $qb = null): QueryBuilder
+    private function addUserRelUserQueryBuilder(int $userId, int $status, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb->leftJoin('u.userRelUsers', 'relations');
@@ -1467,7 +1455,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $qb;
     }
 
-    private function addSearchByOnlyMyFriends(int $userId, QueryBuilder $qb = null): QueryBuilder
+    private function addOnlyMyFriendsQueryBuilder(int $userId, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb->leftJoin('u.userRelUsers', 'relations');
@@ -1482,7 +1470,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $qb;
     }
 
-    private function addSearchByPortal(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
+    private function addAccessUrlQueryBuilder(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb->innerJoin('u.portals', 'p');
@@ -1494,7 +1482,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $qb;
     }
 
-    private function addSearchByNotCurrentUser(int $userId, QueryBuilder $qb = null): QueryBuilder
+    private function addNotCurrentUserQueryBuilder(int $userId, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
 
@@ -1506,7 +1494,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $qb;
     }
 
-    private function addSearchByActiveAndNotAnonUser(QueryBuilder $qb = null): QueryBuilder
+    private function addActiveAndNotAnonUserQueryBuilder(QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
 
@@ -1519,7 +1507,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $qb;
     }
 
-    private function addSearchByStatusQueryBuilder(int $status, QueryBuilder $qb = null): QueryBuilder
+    private function addStatusQueryBuilder(int $status, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
 

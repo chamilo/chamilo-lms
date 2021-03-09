@@ -1999,17 +1999,17 @@ class MySpace
             td.default_event_type AS type
         FROM $tblTrackDefault AS td
         INNER JOIN $tblSessionRelCourseUser AS srcu
-        ON (td.default_value = srcu.user_id)
+        ON (td.default_value = srcu.user_id AND td.c_id = srcu.c_id)
         INNER JOIN $tblLp AS lp
-        ON  (lp.c_id = srcu.c_id)
+        ON (lp.c_id = srcu.c_id)
         INNER JOIN $tblLpItem AS lpi
-        ON  (
+        ON (
             lpi.c_id = srcu.c_id AND
             lp.id = lpi.lp_id AND
             lpi.c_id = lp.c_id
         )
         INNER JOIN `$tblUser` AS u
-        ON  (u.id = srcu.user_id)
+        ON (u.id = srcu.user_id)
         $accessUrlFilter
         WHERE
             td.default_event_type = 'session_add_user_course' AND
@@ -4467,7 +4467,7 @@ class MySpace
             INNER JOIN `$tblUser` AS u
             ON (u.id = ip.to_user_id)
             INNER JOIN $tblLp AS lp
-            ON (lp.iid = ip.ref)
+            ON (lp.iid = ip.ref AND lp.c_id = ip.c_id)
             INNER JOIN $tblLpItem AS lpi
             ON (lp.id = lpi.lp_id AND lp.c_id = lpi.c_id)
             $accessUrlFilter
@@ -4489,7 +4489,7 @@ class MySpace
                 FROM
                     $tblItemProperty AS ip
                 INNER JOIN $tblGroupUser AS ug
-                ON (ug.group_id = ip.to_group_id)
+                ON (ug.group_id = ip.to_group_id AND ip.c_id = ug.c_id)
                 INNER JOIN `$tblUser` AS u
                 ON (u.id = ug.user_id)
                 INNER JOIN $tblLp AS lp

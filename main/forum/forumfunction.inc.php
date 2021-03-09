@@ -111,7 +111,7 @@ function handle_forum_and_forumcategories($lp_id = null)
 
     // Adding a forum category
     if (($action_forum_cat === 'add' && $get_content === 'forumcategory') || $post_submit_cat) {
-        $content = show_add_forumcategory_form([], $lp_id); //$lp_id when is called from learning path
+        $content = show_add_forumcategory_form($lp_id); //$lp_id when is called from learning path
     }
 
     // Adding a forum
@@ -189,7 +189,7 @@ function handle_forum_and_forumcategories($lp_id = null)
  *
  * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forumcategory_form($inputvalues = [], $lp_id)
+function show_add_forumcategory_form($lp_id)
 {
     $form = new FormValidator(
         'forumcategory',
@@ -254,7 +254,7 @@ function show_add_forumcategory_form($inputvalues = [], $lp_id)
  *
  * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forum_form($inputvalues = [], $lp_id)
+function show_add_forum_form($inputvalues = [], $lp_id = 0)
 {
     $_course = api_get_course_info();
     $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());

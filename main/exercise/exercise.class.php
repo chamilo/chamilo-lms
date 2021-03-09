@@ -6168,7 +6168,7 @@ class Exercise
      * @return bool
      */
     public function send_mail_notification_for_exam(
-        $type = 'end',
+        $type,
         $question_list_answers,
         $origin,
         $exe_id,
@@ -7716,7 +7716,7 @@ class Exercise
         $current_question,
         $questions_in_media = [],
         $last_question_in_media = false,
-        $realQuestionList,
+        $realQuestionList = [],
         $generateJS = true
     ) {
         // With this option on the question is loaded via AJAX

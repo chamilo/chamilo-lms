@@ -211,20 +211,20 @@ $htmlHeadXtra[] = "
 </script>";
 
 $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
-    [
-        'fromExercise' => $fromExercise,
-        'session_id' => $session_id,
-        'selected_course' => $selected_course,
-        'courseCategoryId' => $courseCategoryId,
-        'exerciseId' => $exerciseId,
-        'exerciseLevel' => $exerciseLevel,
-        'answerType' => $answerType,
-        'question_id' => $questionId,
-        'description' => Security::remove_XSS($description),
-        'course_id_changed' => $course_id_changed,
-        'exercise_id_changed' => $exercise_id_changed,
-    ]
-);
+        [
+            'fromExercise' => $fromExercise,
+            'session_id' => $session_id,
+            'selected_course' => $selected_course,
+            'courseCategoryId' => $courseCategoryId,
+            'exerciseId' => $exerciseId,
+            'exerciseLevel' => $exerciseLevel,
+            'answerType' => $answerType,
+            'question_id' => $questionId,
+            'description' => Security::remove_XSS($description),
+            'course_id_changed' => $course_id_changed,
+            'exercise_id_changed' => $exercise_id_changed,
+        ]
+    );
 
 if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
@@ -300,7 +300,7 @@ Display::display_header($nameTools, 'Exercise');
 echo '<div class="actions">';
 if (isset($fromExercise) && $fromExercise > 0) {
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     $titleAdd = get_lang('AddQuestionToTest');
 } else {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
@@ -520,7 +520,7 @@ echo '<script>$(function () {
         '.$jsForExtraFields['jquery_ready_content'].'
     })</script>';
 ?>
-<div class="clear"></div>
+    <div class="clear"></div>
 <?php
 
 /**
@@ -1004,33 +1004,33 @@ if (is_array($mainQuestionList)) {
         $row[] = TestCategory::getCategoryNameForQuestion($question['id'], $selected_course);
         $row[] = $question['level'];
         $row[] = get_action_icon_for_question(
-            $actionIcon1,
-            $fromExercise,
-            $question['id'],
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $question['exerciseId'],
-            $objExercise
-        ).'&nbsp;'.
-        get_action_icon_for_question(
-            $actionIcon2,
-            $fromExercise,
-            $question['id'],
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $question['exerciseId'],
-            $objExercise
-        );
+                $actionIcon1,
+                $fromExercise,
+                $question['id'],
+                $question['type'],
+                $question['question'],
+                $selected_course,
+                $courseCategoryId,
+                $exerciseLevel,
+                $answerType,
+                $session_id,
+                $question['exerciseId'],
+                $objExercise
+            ).'&nbsp;'.
+            get_action_icon_for_question(
+                $actionIcon2,
+                $fromExercise,
+                $question['id'],
+                $question['type'],
+                $question['question'],
+                $selected_course,
+                $courseCategoryId,
+                $exerciseLevel,
+                $answerType,
+                $session_id,
+                $question['exerciseId'],
+                $objExercise
+            );
         $data[] = $row;
     }
 }
@@ -1109,13 +1109,12 @@ if ($selected_course == api_get_course_int_id()) {
 
 foreach ($actions as $action => &$label) {
     $html .= '<li>
-            <a
-                data-action ="'.$action.'"
-                href="#"
-                onclick="javascript:action_click(this, \''.$tableId.'\');">'.
-                $label.'
-            </a>
-          </li>';
+        <a
+            dasta-action ="'.$action.'"
+            href="#"
+            onclick="javascript:action_click(this, \''.$tableId.'\');">'
+        .$label
+        .'</a></li>';
 }
 $html .= '</ul>';
 $html .= '</div>'; //btn-group
@@ -1198,18 +1197,22 @@ function getLinkForQuestion(
 }
 
 /**
-    Return the <a> html code for delete, add, clone, edit a question
-    in_action = the code of the action triggered by the button
-    from_exercise = the id of the current exercise from which we click on question pool
-    in_questionid = the id of the current question
-    in_questiontype = the code of the type of the current question
-    in_questionname = the name of the question
-    in_selected_course = the if of the course chosen in the FILTERING MENU
-    in_courseCategoryId = the id of the category chosen in the FILTERING MENU
-    in_exerciseLevel = the level of the exercise chosen in the FILTERING MENU
-    in_answerType = the code of the type of the question chosen in the FILTERING MENU
-    in_session_id = the id of the session_id chosen in the FILTERING MENU
-    in_exercise_id = the id of the exercise chosen in the FILTERING MENU
+ * Return the <a> html code for delete, add, clone, edit a question
+ *
+ * @param string    $in_action           The code of the action triggered by the button
+ * @param int       $from_exercise       The id of the current exercise from which we click on question pool
+ * @param int       $in_questionid       The id of the current question
+ * @param int       $in_questiontype     The code of the type of the current question
+ * @param int       $in_questionname     The name of the question
+ * @param int       $in_selected_course  The if of the course chosen in the FILTERING MENU
+ * @param int       $in_courseCategoryId The id of the category chosen in the FILTERING MENU
+ * @param string    $in_exerciseLevel    The level of the exercise chosen in the FILTERING MENU
+ * @param string    $in_answerType       The code of the type of the question chosen in the FILTERING MENU
+ * @param int       $in_session_id       The id of the session_id chosen in the FILTERING MENU
+ * @param int       $in_exercise_id      The id of the exercise chosen in the FILTERING MENU
+ * @param \Exercise $myObjEx
+ *
+ * @return string
  */
 function get_action_icon_for_question(
     $in_action,

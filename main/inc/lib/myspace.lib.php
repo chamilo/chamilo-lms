@@ -1312,7 +1312,7 @@ class MySpace
             $studentsName = '';
             /* csv */
             foreach ($teachers as $authorLId => $teacher) {
-                $totalStudent = 0;
+                $totalStudents = 0;
                 foreach ($teacher as $lpId => $teacherData) {
                     $lpSessionId = 0;
                     $lpData = $learningPaths[$lpId];
@@ -1352,7 +1352,7 @@ class MySpace
                                 $studentRegistered[$student['id']][0] = $student;
                                 $htmlData .= "$reportLink ".$student['complete_name'].'<br>';
                                 $studentsName .= $student['complete_name'].' / ';
-                                $totalStudent++;
+                                $totalStudents++;
                             }
                         }
                         foreach ($sessionStudent as $student) {
@@ -1369,7 +1369,7 @@ class MySpace
                                 $studentRegistered[$student['id']][$lpSessionId] = $student;
                                 $studentsName .= $student['complete_name'].' / ';
                                 $htmlData .= "$reportLink <strong>".$student['complete_name'].'</strong><br>';
-                                $totalStudent++;
+                                $totalStudents++;
                             }
                         }
                         foreach ($sessionStudent as $student) {
@@ -1384,7 +1384,7 @@ class MySpace
                                 $studentRegistered[$student['id']][$lpSessionId] = $student;
                                 $htmlData .= "$reportLink ".$student['complete_name'].'<br>';
                                 $studentsName .= $student['complete_name'].' / ';
-                                $totalStudent++;
+                                $totalStudents++;
                             }
                         }
                         $htmlData .= "</div>";
@@ -1399,7 +1399,7 @@ class MySpace
                 $htmlData .= "<tr>
                 <td></td>
                 <td><strong>".get_lang('LearnpathsTotal')." ".count($teacher)." </strong></td>
-                <td><strong>$totalStudent</strong></td>
+                <td><strong>$totalStudents</strong></td>
                 <td></td>
                 </tr>";
             }
@@ -1633,7 +1633,7 @@ class MySpace
                     $authorTemp = $authorArray[$authorId];
                     $totalSudent = 0;
                     foreach ($lpItems as $lpItem) {
-                        $totalStudent = 0;
+                        $totalStudents = 0;
                         $itemLp = $lpItem['lp_item'];
                         $title = $itemLp['title'];
                         $price = $itemLp['price'];
@@ -1749,11 +1749,11 @@ class MySpace
                                     foreach ($student as $userId => $text) {
                                         if ('LearnpathSubscription' == $type) {
                                             $tableTemp .= $text;
-                                            $totalStudent++;
+                                            $totalStudents++;
                                         } else {
                                             if (!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])) {
                                                 $tableTemp .= $text;
-                                                $totalStudent++;
+                                                $totalStudents++;
                                             }
                                         }
                                     }
@@ -1763,11 +1763,11 @@ class MySpace
                         } else {
                             $tableTemp .= "<td></td>";
                         }
-                        $table .= "<td>$totalStudent</td>";
-                        $invoicing = ($totalStudent * $price);
+                        $table .= "<td>$totalStudents</td>";
+                        $invoicing = ($totalStudents * $price);
                         $table .= "<td>$invoicing</td>";
                         $total += $invoicing;
-                        $totalSudent += $totalStudent;
+                        $totalSudent += $totalStudents;
                         $table .= $tableTemp."</tr>";
                         $lastAuthor = $authorTemp;
                     }
@@ -1849,7 +1849,7 @@ class MySpace
                 $authorTemp = $authorArray[$authorId];
                 $totalSudent = 0;
                 foreach ($lpItems as $lpItem) {
-                    $totalStudent = 0;
+                    $totalStudents = 0;
                     $itemLp = $lpItem['lp_item'];
                     $itemLpId = $itemLp['lp_item_id'];
                     $title = $itemLp['title'];
@@ -1922,19 +1922,19 @@ class MySpace
                                 foreach ($student as $userId => $text) {
                                     if ('LearnpathSubscription' == $type) {
                                         $studentsName .= $text;
-                                        $totalStudent++;
+                                        $totalStudents++;
                                     } else {
                                         if (!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])) {
                                             $studentsName .= $text;
-                                            $totalStudent++;
+                                            $totalStudents++;
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    $csv_row[] = $totalStudent;
-                    $csv_row[] = $price * $totalStudent;
+                    $csv_row[] = $totalStudents;
+                    $csv_row[] = $price * $totalStudents;
                     $csv_row[] = trim($studentsName, " / ");
                     $csv_content[] = $csv_row;
                 }

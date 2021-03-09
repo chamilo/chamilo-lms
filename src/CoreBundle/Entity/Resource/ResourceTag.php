@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -33,5 +34,5 @@ class ResourceTag
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceComments")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?\Chamilo\CoreBundle\Entity\User $author = null;
+    protected ?User $author = null;
 }

@@ -32,13 +32,13 @@ class SequenceRuleMethod
      * @ORM\ManyToOne(targetEntity="SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SequenceRule $rule = null;
+    protected ?SequenceRule $rule = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SequenceMethod $method = null;
+    protected ?SequenceMethod $method = null;
 
     /**
      * Get id.

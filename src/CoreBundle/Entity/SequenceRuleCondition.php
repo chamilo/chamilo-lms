@@ -27,13 +27,13 @@ class SequenceRuleCondition
      * @ORM\ManyToOne(targetEntity="SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SequenceRule $rule = null;
+    protected ?SequenceRule $rule = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SequenceCondition $condition = null;
+    protected ?SequenceCondition $condition = null;
 
     /**
      * Get id.

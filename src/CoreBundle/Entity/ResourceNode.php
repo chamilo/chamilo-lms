@@ -501,7 +501,7 @@ class ResourceNode
     public function setResourceFile(?ResourceFile $resourceFile = null): self
     {
         $this->resourceFile = $resourceFile;
-        if ($resourceFile) {
+        if (null !== $resourceFile) {
             $resourceFile->setResourceNode($this);
         }
 

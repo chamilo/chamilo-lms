@@ -29,13 +29,13 @@ class AccessUrlRelSession
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\Session $session = null;
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="session", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\AccessUrl $url = null;
+    protected ?AccessUrl $url = null;
 
     /**
      * Get id.

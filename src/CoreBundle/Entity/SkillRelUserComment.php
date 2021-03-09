@@ -33,13 +33,13 @@ class SkillRelUserComment
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", inversedBy="comments")
      * @ORM\JoinColumn(name="skill_rel_user_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SkillRelUser $skillRelUser = null;
+    protected ?SkillRelUser $skillRelUser = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="commentedUserSkills")
      * @ORM\JoinColumn(name="feedback_giver_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\User $feedbackGiver = null;
+    protected ?User $feedbackGiver = null;
 
     /**
      * @ORM\Column(name="feedback_text", type="text")

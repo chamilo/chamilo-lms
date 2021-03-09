@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -28,11 +29,11 @@ class ResourceUserTag
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceTags")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?\Chamilo\CoreBundle\Entity\User $user = null;
+    protected ?User $user = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceTag")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?\Chamilo\CoreBundle\Entity\Resource\ResourceTag $tag = null;
+    protected ?ResourceTag $tag = null;
 }

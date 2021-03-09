@@ -82,7 +82,7 @@ class Portfolio
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioCategory", inversedBy="items")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    protected \Chamilo\CoreBundle\Entity\PortfolioCategory $category;
+    protected PortfolioCategory $category;
 
     public function __construct()
     {

@@ -31,7 +31,7 @@ class SkillRelItem
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="items")
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\Skill $skill = null;
+    protected ?Skill $skill = null;
 
     /**
      * See ITEM_TYPE_* constants in api.lib.php.

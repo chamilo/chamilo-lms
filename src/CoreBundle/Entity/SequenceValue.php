@@ -37,7 +37,7 @@ class SequenceValue
      * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
      * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SequenceRowEntity $entity = null;
+    protected ?SequenceRowEntity $entity = null;
 
     /**
      * @ORM\Column(name="advance", type="float")

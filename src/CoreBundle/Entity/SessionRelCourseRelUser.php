@@ -148,24 +148,14 @@ class SessionRelCourseRelUser
         return $this->status;
     }
 
-    /**
-     * Set legalAgreement.
-     *
-     * @return $this
-     */
-    public function setLegalAgreement(int $legalAgreement)
+    public function setLegalAgreement(int $legalAgreement): self
     {
         $this->legalAgreement = $legalAgreement;
 
         return $this;
     }
 
-    /**
-     * Get legalAgreement.
-     *
-     * @return int
-     */
-    public function getLegalAgreement()
+    public function getLegalAgreement(): int
     {
         return $this->legalAgreement;
     }

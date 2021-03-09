@@ -75,7 +75,7 @@ class Session
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @var Collection|SkillRelCourse[]
@@ -702,12 +702,7 @@ class Session
         return $this->displayStartDate;
     }
 
-    /**
-     * Set displayEndDate.
-     *
-     * @return Session
-     */
-    public function setDisplayEndDate(DateTime $displayEndDate)
+    public function setDisplayEndDate(DateTime $displayEndDate): self
     {
         $this->displayEndDate = $displayEndDate;
 
@@ -724,12 +719,7 @@ class Session
         return $this->displayEndDate;
     }
 
-    /**
-     * Set accessStartDate.
-     *
-     * @return Session
-     */
-    public function setAccessStartDate(DateTime $accessStartDate)
+    public function setAccessStartDate(DateTime $accessStartDate): self
     {
         $this->accessStartDate = $accessStartDate;
 
@@ -746,12 +736,7 @@ class Session
         return $this->accessStartDate;
     }
 
-    /**
-     * Set accessEndDate.
-     *
-     * @return Session
-     */
-    public function setAccessEndDate(DateTime $accessEndDate)
+    public function setAccessEndDate(DateTime $accessEndDate): self
     {
         $this->accessEndDate = $accessEndDate;
 
@@ -768,12 +753,7 @@ class Session
         return $this->accessEndDate;
     }
 
-    /**
-     * Set coachAccessStartDate.
-     *
-     * @return Session
-     */
-    public function setCoachAccessStartDate(DateTime $coachAccessStartDate)
+    public function setCoachAccessStartDate(DateTime $coachAccessStartDate): self
     {
         $this->coachAccessStartDate = $coachAccessStartDate;
 
@@ -790,12 +770,7 @@ class Session
         return $this->coachAccessStartDate;
     }
 
-    /**
-     * Set coachAccessEndDate.
-     *
-     * @return Session
-     */
-    public function setCoachAccessEndDate(DateTime $coachAccessEndDate)
+    public function setCoachAccessEndDate(DateTime $coachAccessEndDate): self
     {
         $this->coachAccessEndDate = $coachAccessEndDate;
 
@@ -910,7 +885,7 @@ class Session
      *
      * @return bool whether the course was actually found in this session and removed from it
      */
-    public function removeCourse(Course $course)
+    public function removeCourse(Course $course): bool
     {
         $relCourse = $this->getCourseSubscription($course);
         if (null !== $relCourse) {
@@ -928,10 +903,7 @@ class Session
         return $this->userCourseSubscriptions;
     }
 
-    /**
-     * @return $this
-     */
-    public function setUserCourseSubscriptions(ArrayCollection $userCourseSubscriptions)
+    public function setUserCourseSubscriptions(ArrayCollection $userCourseSubscriptions): self
     {
         $this->userCourseSubscriptions = new ArrayCollection();
 
@@ -977,17 +949,11 @@ class Session
 
         if (self::STUDENT === $status) {
             $sessionCourse = $this->getCourseSubscription($course);
-
-            $sessionCourse->setNbrUsers(
-                $sessionCourse->getNbrUsers() + 1
-            );
+            $sessionCourse->setNbrUsers($sessionCourse->getNbrUsers() + 1);
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription)
+    public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription): bool
     {
         if (0 !== $this->getUserCourseSubscriptions()->count()) {
             $criteria = Criteria::create()->where(
@@ -1068,10 +1034,7 @@ class Session
         return $this->userCourseSubscriptions->matching($criteria);
     }
 
-    /**
-     * @return Session
-     */
-    public function setStudentPublications(Collection $studentPublications)
+    public function setStudentPublications(Collection $studentPublications): self
     {
         $this->studentPublications = new ArrayCollection();
 
@@ -1082,10 +1045,7 @@ class Session
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function addStudentPublication(CStudentPublication $studentPublication)
+    public function addStudentPublication(CStudentPublication $studentPublication): self
     {
         $this->studentPublications[] = $studentPublication;
 
@@ -1102,13 +1062,9 @@ class Session
         return $this->issuedSkills;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCurrentUrl(AccessUrl $url)
+    public function setCurrentUrl(AccessUrl $url): self
     {
         $urlList = $this->getUrls();
-        /** @var AccessUrlRelCourse $item */
         foreach ($urlList as $item) {
             if ($item->getUrl()->getId() === $url->getId()) {
                 $this->currentUrl = $url;
@@ -1168,10 +1124,7 @@ class Session
         return $this->position;
     }
 
-    /**
-     * @return Session
-     */
-    public function setPosition(int $position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -1202,6 +1155,22 @@ class Session
         return $this;
     }
 
+    /**
+     * @return SkillRelCourse[]|Collection
+     */
+    public function getSkills()
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @return ResourceLink[]|Collection
+     */
+    public function getResourceLinks()
+    {
+        return $this->resourceLinks;
+    }
+
     public function isUserGeneralCoach(User $user): bool
     {
         $generalCoach = $this->getGeneralCoach();
@@ -1211,12 +1180,9 @@ class Session
 
     /**
      * Check if $user is course coach in any course.
-     *
-     * @return bool
      */
-    public function hasCoachInCourseList(User $user)
+    public function hasCoachInCourseList(User $user): bool
     {
-        /** @var SessionRelCourse $sessionCourse */
         foreach ($this->courses as $sessionCourse) {
             if ($this->hasCoachInCourseWithStatus($user, $sessionCourse->getCourse())) {
                 return true;
@@ -1228,12 +1194,9 @@ class Session
 
     /**
      * Check if $user is student in any course.
-     *
-     * @return bool
      */
-    public function hasStudentInCourseList(User $user)
+    public function hasStudentInCourseList(User $user): bool
     {
-        /** @var SessionRelCourse $sessionCourse */
         foreach ($this->courses as $sessionCourse) {
             if ($this->hasStudentInCourse($user, $sessionCourse->getCourse())) {
                 return true;

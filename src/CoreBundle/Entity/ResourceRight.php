@@ -25,7 +25,7 @@ class ResourceRight
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", inversedBy="resourceRight")
      * @ORM\JoinColumn(name="resource_link_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?\Chamilo\CoreBundle\Entity\ResourceLink $resourceLink = null;
+    protected ?ResourceLink $resourceLink = null;
 
     /**
      * @ORM\Column(name="role", type="string", length=255, nullable=false)

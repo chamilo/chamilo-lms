@@ -47,7 +47,7 @@ class Level
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="levels")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\Profile $profile = null;
+    protected ?Profile $profile = null;
 
     /**
      * @return string

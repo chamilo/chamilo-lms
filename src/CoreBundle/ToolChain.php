@@ -51,7 +51,7 @@ use Symfony\Component\Security\Core\Security;
 class ToolChain
 {
     /**
-     * @var \Chamilo\CoreBundle\Tool\AbstractTool[]|mixed[]
+     * @var AbstractTool[]|mixed[]
      */
     protected array $tools = [];
     /**
@@ -59,11 +59,11 @@ class ToolChain
      */
     protected array $typeList = [];
 
-    protected \Doctrine\ORM\EntityManagerInterface $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    protected \Chamilo\CoreBundle\Settings\SettingsManager $settingsManager;
+    protected SettingsManager $settingsManager;
 
-    protected \Symfony\Component\Security\Core\Security $security;
+    protected Security $security;
     /**
      * @var mixed[]
      */

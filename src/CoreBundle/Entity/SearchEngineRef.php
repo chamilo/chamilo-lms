@@ -20,7 +20,7 @@ class SearchEngineRef
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="searchEngineRefs")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\Course $course = null;
+    protected ?Course $course = null;
 
     /**
      * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
@@ -52,8 +52,6 @@ class SearchEngineRef
     /**
      * Set course.
      *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     *
      * @return \Chamilo\CoreBundle\Entity\SearchEngineRef
      */
     public function setCourse(Course $course)
@@ -66,7 +64,7 @@ class SearchEngineRef
     /**
      * Get course.
      *
-     * @return \Chamilo\CoreBundle\Entity\Course
+     * @return Course
      */
     public function getCourse()
     {

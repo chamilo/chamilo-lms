@@ -66,7 +66,7 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", nullable=false)
      */
-    protected ?\Chamilo\CoreBundle\Entity\Skill $skill = null;
+    protected ?Skill $skill = null;
 
     /**
      * @ORM\Column(name="acquired_skill_at", type="datetime", nullable=false)

@@ -26,21 +26,16 @@ class SessionRelCourse
     protected int $id;
 
     /**
-     * @ORM\Column(name="nbr_users", type="integer")
-     */
-    protected int $nbrUsers;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
-    protected ?\Chamilo\CoreBundle\Entity\Session $session = null;
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    protected ?\Chamilo\CoreBundle\Entity\Course $course = null;
+    protected ?Course $course = null;
 
     /**
      * @ORM\Column(name="position", type="integer", nullable=false)
@@ -48,11 +43,14 @@ class SessionRelCourse
     protected int $position;
 
     /**
-     * Constructor.
+     * @ORM\Column(name="nbr_users", type="integer")
      */
+    protected int $nbrUsers;
+
     public function __construct()
     {
         $this->nbrUsers = 0;
+        $this->position = 0;
     }
 
     /**
@@ -65,72 +63,43 @@ class SessionRelCourse
         return $this->id;
     }
 
-    /**
-     * @return $this
-     */
-    public function setSession(Session $session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * Get course.
-     *
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get Session.
-     *
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }
 
-    /**
-     * Set nbrUsers.
-     *
-     * @return SessionRelCourse
-     */
-    public function setNbrUsers(int $nbrUsers)
+    public function setNbrUsers(int $nbrUsers): self
     {
         $this->nbrUsers = $nbrUsers;
 
         return $this;
     }
 
-    /**
-     * Get nbrUsers.
-     *
-     * @return int
-     */
-    public function getNbrUsers()
+    public function getNbrUsers(): int
     {
         return $this->nbrUsers;
     }
 
-    /**
-     * @return int
-     */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }

@@ -38,7 +38,7 @@ class ToolResourceRight
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="toolResourceRight", cascade={"persist"})
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\Tool $tool = null;
+    protected ?Tool $tool = null;
 
     /**
      * @return string

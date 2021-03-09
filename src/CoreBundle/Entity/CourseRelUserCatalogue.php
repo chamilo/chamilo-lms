@@ -37,13 +37,13 @@ class CourseRelUserCatalogue
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\User $user = null;
+    protected ?User $user = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\Course $course = null;
+    protected ?Course $course = null;
 
     /**
      * @ORM\Column(name="visible", type="integer")

@@ -27,13 +27,13 @@ class SequenceFormula
      * @ORM\ManyToOne(targetEntity="SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SequenceMethod $method = null;
+    protected ?SequenceMethod $method = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceVariable")
      * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
      */
-    protected ?\Chamilo\CoreBundle\Entity\SequenceVariable $variable = null;
+    protected ?SequenceVariable $variable = null;
 
     /**
      * Get id.

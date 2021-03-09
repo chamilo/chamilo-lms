@@ -2,12 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  */
-
-use Symfony\Component\DomCrawler\Crawler;
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -134,7 +133,15 @@ function updateUsers(
             $phone = isset($user['PhoneNumber']) ? $user['PhoneNumber'] : $userInfo['phone'];
             $pictureUrl = isset($user['PictureUri']) ? $user['PictureUri'] : $userInfo['picture_uri'];
             $expirationDate = isset($user['ExpiryDate']) ? $user['ExpiryDate'] : $userInfo['expiration_date'];
-            $active = isset($user['Active']) ? $user['Active'] : $userInfo['active'];
+            $active = $userInfo['active'];
+            if (isset($user['Active'])) {
+                $user['Active'] = (int) $user['Active'];
+                if (-1 === $user['Active']) {
+                    $user['Active'] = 0;
+                }
+                $active = $user['Active'];
+            }
+
             $creatorId = $userInfo['creator_id'];
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];

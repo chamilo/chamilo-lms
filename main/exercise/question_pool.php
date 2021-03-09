@@ -725,7 +725,7 @@ function getQuestions(
                     INNER JOIN $TBL_EXERCISE_QUESTION r
                     ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
                     INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                    ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
                     $from
                     {$efConditions['from']}
                     WHERE

@@ -1678,7 +1678,7 @@ if (empty($details)) {
             'quiz.session_id'
         );
 
-        $sql = "SELECT quiz.title, id
+        $sql = "SELECT quiz.title, iid
                 FROM $t_quiz AS quiz
                 WHERE
                     quiz.c_id = ".$courseInfo['real_id']." AND
@@ -1689,7 +1689,7 @@ if (empty($details)) {
         $i = 0;
         if (Database::num_rows($result_exercices) > 0) {
             while ($exercices = Database::fetch_array($result_exercices)) {
-                $exercise_id = (int) $exercices['id'];
+                $exercise_id = (int) $exercices['iid'];
                 $count_attempts = Tracking::count_student_exercise_attempts(
                     $student_id,
                     $courseInfo['real_id'],

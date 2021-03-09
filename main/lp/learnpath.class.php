@@ -7647,7 +7647,7 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
                     FROM $tbl_quiz
-                    WHERE c_id = $course_id AND iid = ".$extra_info;
+                    WHERE iid = ".$extra_info;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -10489,7 +10489,7 @@ class learnpath
                         c_id = $course_id AND
                         path LIKE '".$uploadPath."/%/%htm%'
                         $condition_session
-                     ORDER BY id ASC";
+                     ORDER BY iid ASC";
 
         $res_quiz = Database::query($sql_quiz);
         $res_hot = Database::query($sql_hot);
@@ -10552,7 +10552,7 @@ class learnpath
                 $exerciseUrl.'&file='.$row_hot['path'],
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" data_id="'.$row_hot['id'].'" data_type="hotpotatoes" title="'.$row_hot['title'].'" >';
+            $return .= '<li class="lp_resource_element" data_id="'.$row_hot['iid'].'" data_type="hotpotatoes" title="'.$row_hot['title'].'" >';
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon(
                 'move_everywhere.png',
@@ -10562,7 +10562,7 @@ class learnpath
             );
             $return .= '</a> ';
             $return .= Display::return_icon('hotpotatoes_s.png');
-            $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_HOTPOTATOES.'&file='.$row_hot['id'].'&lp_id='.$this->lp_id.'">'.
+            $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_HOTPOTATOES.'&file='.$row_hot['iid'].'&lp_id='.$this->lp_id.'">'.
                 ((!empty($row_hot['comment'])) ? $row_hot['comment'] : Security::remove_XSS($row_hot['title'])).$link.'</a>';
             $return .= '</li>';
         }
@@ -13508,7 +13508,7 @@ EOD;
                 break;
             case TOOL_QUIZ:
                 $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $id");
+                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE iid = $id");
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['title'];
                 break;

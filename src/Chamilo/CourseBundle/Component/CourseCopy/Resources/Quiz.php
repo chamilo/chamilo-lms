@@ -33,7 +33,7 @@ class Quiz extends Resource
     {
         $this->obj = $obj;
         $this->obj->quiz_type = $this->obj->type;
-        parent::__construct($obj->id, RESOURCE_QUIZ);
+        parent::__construct($obj->iid, RESOURCE_QUIZ);
     }
 
     /**

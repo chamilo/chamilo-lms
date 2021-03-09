@@ -427,8 +427,7 @@ class CourseRecycler
             if (!empty($ids)) {
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
-                $sql = "DELETE FROM ".$table_qui."
-                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                $sql = "DELETE FROM $table_qui WHERE iid IN(".$ids.")";
                 Database::query($sql);
                 $sql = "DELETE FROM ".$table_rel."
                         WHERE c_id = ".$this->course_id." AND exercice_id IN(".$ids.")";
@@ -445,8 +444,8 @@ class CourseRecycler
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
 
                         INNER JOIN $table_qui ex
-                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
-                        WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
+                        ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
+                        WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.iid = '-1')
                     )
                     UNION
                     (

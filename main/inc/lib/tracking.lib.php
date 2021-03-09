@@ -387,9 +387,7 @@ class Tracking
                         $my_path = Database::escape_string($row['path']);
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
-                                WHERE
-                                    c_id = $course_id AND
-                                    id ='".$my_path."'";
+                                WHERE iid ='".$my_path."'";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -694,7 +692,7 @@ class Tracking
                         $my_path = Database::escape_string($my_path);
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
-                                WHERE c_id = $course_id AND id = '$my_path' ";
+                                WHERE iid = '$my_path' ";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -2281,7 +2279,7 @@ class Tracking
             $condition_quiz = "";
             if (!empty($exercise_id)) {
                 $exercise_id = intval($exercise_id);
-                $condition_quiz = " AND id = $exercise_id ";
+                $condition_quiz = " AND iid = $exercise_id ";
             }
 
             // Compose a filter based on optional session id given
@@ -2324,14 +2322,14 @@ class Tracking
                 }
 
                 if (empty($exercise_id)) {
-                    $sql = "SELECT id FROM $tbl_course_quiz
+                    $sql = "SELECT iid FROM $tbl_course_quiz
                             WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz";
                     $result = Database::query($sql);
                     $exercise_list = [];
                     $exercise_id = null;
                     if (!empty($result) && Database::num_rows($result)) {
                         while ($row = Database::fetch_array($result)) {
-                            $exercise_list[] = $row['id'];
+                            $exercise_list[] = $row['iid'];
                         }
                     }
                     if (!empty($exercise_list)) {
@@ -6483,7 +6481,7 @@ class Tracking
                 ta.answer as answer_id,
                 ta.tms as time,
                 te.exe_exo_id as quiz_id,
-                CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
+                CONCAT ('c', q.c_id, '_e', q.iid) as exercise_id,
                 q.title as quiz_title,
                 qq.description as description
                 FROM $ttrack_exercises te
@@ -7946,8 +7944,7 @@ class TrackingCourseLog
                         $row[5] = $obj_document->name;
                         break;
                     case 'quiz':
-                        $sql = "SELECT title FROM $table_tool
-                                WHERE c_id = $course_id AND id = $ref";
+                        $sql = "SELECT title FROM $table_tool WHERE iid = $ref";
                         $rs_document = Database::query($sql);
                         $obj_document = Database::fetch_object($rs_document);
                         if ($obj_document) {

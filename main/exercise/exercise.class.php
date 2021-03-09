@@ -177,7 +177,7 @@ class Exercise
         }
 
         $sql = "SELECT * FROM $table
-                WHERE c_id = ".$this->course_id." AND id = ".$id;
+                WHERE iid = ".$id;
         $result = Database::query($sql);
 
         // if the exercise has been found
@@ -1681,7 +1681,7 @@ class Exercise
             Database::update(
                 $TBL_EXERCISES,
                 $params,
-                ['c_id = ? AND id = ?' => [$this->course_id, $id]]
+                ['iid = ?' => [$id]]
             );
 
             // update into the item_property table
@@ -1778,7 +1778,7 @@ class Exercise
 
                 $sql = "UPDATE $TBL_EXERCISES
                         SET question_selection_type= ".$this->getQuestionSelectionType()."
-                        WHERE id = ".$this->id." AND c_id = ".$this->course_id;
+                        WHERE iid = {$this->id}";
                 Database::query($sql);
 
                 // insert into the item_property table
@@ -1929,8 +1929,7 @@ class Exercise
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET active='-1'
-                WHERE c_id = ".$this->course_id." AND id = ".intval($this->id);
+        $sql = "UPDATE $table SET active='-1' WHERE iid = ". (int) $this->id;
         Database::query($sql);
 
         api_item_property_update(
@@ -8043,7 +8042,7 @@ class Exercise
                     cq.c_id = %s AND
                     (cq.session_id = %s OR cq.session_id = 0) AND
                     cq.active = 0
-                ORDER BY cq.id";
+                ORDER BY cq.iid";
         $sql = sprintf($sql, $courseId, $sessionId);
 
         $result = Database::query($sql);
@@ -8541,8 +8540,7 @@ class Exercise
     public function enableAutoLaunch()
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET autolaunch = 1
-                WHERE iid = ".$this->iId;
+        $sql = "UPDATE $table SET autolaunch = 1 WHERE iid = ".$this->iId;
         Database::query($sql);
     }
 

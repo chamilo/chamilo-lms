@@ -200,6 +200,9 @@ class GradebookUtils
             case LINK_DROPBOX:
                 $icon = 'dropbox.gif';
                 break;
+            case 'portfolio':
+                $icon = 'wiki_task.png';
+                break;
             default:
                 $icon = 'link.gif';
                 break;

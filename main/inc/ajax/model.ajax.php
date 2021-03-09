@@ -938,29 +938,36 @@ switch ($action) {
         $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
 
         $course_id = api_get_course_int_id();
+        $sessionId = api_get_session_id();
         $options = [];
         $options['course_id'] = $course_id;
-        $options['session_id'] = api_get_session_id();
+        $options['session_id'] = $sessionId;
 
         switch ($type) {
             case 'not_registered':
-                $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                if (empty($sessionId)) {
+                    $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                } else {
+                    $options['where'] = [' (session_id IS NULL OR session_id != ?) ' => $sessionId];
+                }
                 if (!empty($keyword)) {
                     $options['where']['AND name like %?% '] = $keyword;
                 }
                 $count = $obj->getUserGroupNotInCourse(
                     $options,
                     $groupFilter,
-                    true,
                     true
                 );
                 break;
             case 'registered':
-                $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+                if (empty($sessionId)) {
+                    $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+                } else {
+                    $options['where'] = [' usergroup.session_id = ? ' => $sessionId];
+                }
                 $count = $obj->getUserGroupInCourse(
                     $options,
                     $groupFilter,
-                    true,
                     true
                 );
                 break;
@@ -2492,27 +2499,26 @@ switch ($action) {
         $columns = ['name', 'users', 'status', 'group_type', 'actions'];
         $options['order'] = "name $sord";
         $options['limit'] = "$start , $limit";
-        $options['session_id'] = api_get_session_id();
+        $options['session_id'] = $sessionId;
         switch ($type) {
             case 'not_registered':
-                $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                if (empty($sessionId)) {
+                    $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                } else {
+                    $options['where'] = [' (session_id IS NULL OR session_id != ?) ' => $sessionId];
+                }
                 if (!empty($keyword)) {
                     $options['where']['AND name like %?% '] = $keyword;
                 }
                 $result = $obj->getUserGroupNotInCourse(
                     $options,
-                    $groupFilter,
-                    false,
-                    true
+                    $groupFilter
                 );
-            // $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
                 break;
             case 'registered':
                 $result = $obj->getUserGroupInCourse(
                     $options,
-                    $groupFilter,
-                    false,
-                    true
+                    $groupFilter
                 );
                 break;
         }
@@ -2525,7 +2531,6 @@ switch ($action) {
             foreach ($result as $group) {
                 $countUsers = count($obj->get_users_by_usergroup($group['id']));
                 $group['users'] = $countUsers;
-
                 if (!empty($countUsers)) {
                     $group['users'] = Display::url(
                         $countUsers,

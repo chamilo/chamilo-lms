@@ -1458,13 +1458,13 @@ echo '<script>
             url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
             data: dataparam,
             success: function(return_value) {
-                if (return_value == "ok") {
+                if (return_value.ok) {
                     $("#save_for_now_"+question_id).html(\''.
                     Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
-                } else if (return_value == "error") {
+                } else if (return_value.error) {
                     $("#save_for_now_"+question_id).html(\''.
                         Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
-                } else if (return_value == "one_per_page") {
+                } else if (return_value.type == "one_per_page") {
                     var url = "";
                     if ('.$reminder.' == 1 ) {
                         url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
@@ -1486,7 +1486,7 @@ echo '<script>
                     }
 
                     $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\' + return_value.savedAnswerMessage);
 
                     // Show popup
                     if ("check_answers" === url_extra) {
@@ -1580,8 +1580,9 @@ echo '<script>
             url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
             data: requestData,
             success: function(return_value) {
-                if (return_value == "ok") {
+                if (return_value.ok) {
                     if (validate == "validate") {
+                        $("#save_all_response").html(return_value.savedAnswerMessage);
                         window.location = "'.$script_php.'?'.$params.'";
                     } else {
                         $("#save_all_response").html(\''.Display::return_icon('accept.png').'\');

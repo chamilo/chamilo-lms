@@ -865,7 +865,7 @@ class CourseBuilder
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $question->add_answer(
-                    $obj2->id,
+                    $obj2->iid,
                     $obj2->answer,
                     $obj2->correct,
                     $obj2->comment,
@@ -956,7 +956,7 @@ class CourseBuilder
                         if (Database::num_rows($db_result2)) {
                             while ($obj2 = Database::fetch_object($db_result2)) {
                                 $question->add_answer(
-                                    $obj2->id,
+                                    $obj2->iid,
                                     $obj2->answer,
                                     $obj2->correct,
                                     $obj2->comment,
@@ -1048,7 +1048,7 @@ class CourseBuilder
                 $db_result2 = Database::query($sql);
                 while ($obj2 = Database::fetch_object($db_result2)) {
                     $question->add_answer(
-                        $obj2->id,
+                        $obj2->iid,
                         $obj2->answer,
                         $obj2->correct,
                         $obj2->comment,

@@ -134,7 +134,7 @@ class Answer
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
-            $this->id[$i] = $object->id;
+            $this->id[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -209,7 +209,7 @@ class Answer
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        $sql = "SELECT id FROM
+        $sql = "SELECT iid FROM
               $table
               WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
 
@@ -218,7 +218,7 @@ class Answer
         // while a record is found
         if (Database::num_rows($result) > 0) {
             while ($object = Database::fetch_array($result)) {
-                $id[] = $object['id'];
+                $id[] = $object['iid'];
             }
         }
 
@@ -393,7 +393,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT id, answer, id_auto FROM $table
+        $sql = "SELECT iid, answer, id_auto FROM $table
                 WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
         $rs = Database::query($sql);
 
@@ -1027,11 +1027,7 @@ class Answer
                             $tableAnswer,
                             $params,
                             [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
-                                    $answer_id,
-                                    $courseId,
-                                    $newQuestionId,
-                                ],
+                                'iid = ?' => [$answer_id],
                             ]
                         );
                     }

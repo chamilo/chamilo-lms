@@ -40,10 +40,7 @@ $course_id = api_get_course_int_id();
 $sql = "UPDATE $TBL_ANSWER SET
             hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
             hotspot_type = '".Database::escape_string($hotspot_type)."'
-        WHERE
-            c_id = $course_id AND
-            id = ".intval($answerId)." AND
-            question_id = ".intval($questionId)."
+        WHERE iid = ".intval($answerId)."
         LIMIT 1 ";
 $result = Database::query($sql);
 echo "done=done";

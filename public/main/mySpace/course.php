@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Courses reporting.
- */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 ob_start();
 $cidReset = true;
 
@@ -275,8 +275,9 @@ function get_courses($from, $limit, $column, $direction)
         $session = api_get_session_entity($sessionId);
         foreach ($courses as $data) {
             $courseCode = $data['code'];
+            $courseId = $data['real_id'];
             $courseInfo = api_get_course_info($courseCode);
-            $course = api_get_course_entity($courseCode['real_id']);
+            $course = api_get_course_entity($courseId);
 
             if (empty($sessionId)) {
                 $userList = CourseManager::get_user_list_from_course_code($data['code']);
@@ -307,11 +308,18 @@ function get_courses($from, $limit, $column, $direction)
             if (count($userIdList) > 0) {
                 $countStudents = count($userIdList);
                 // tracking data
-                $avgProgressInCourse = Tracking :: get_avg_student_progress($userIdList, $courseCode, [], $sessionId);
-                $avgScoreInCourse = Tracking :: get_avg_student_score($userIdList, $courseCode, [], $sessionId);
-                $avgTimeSpentInCourse = Tracking :: get_time_spent_on_the_course($userIdList, $courseInfo['real_id'], $sessionId);
-                $messagesInCourse = Tracking :: count_student_messages($userIdList, $courseCode, $sessionId);
-                $assignmentsInCourse = Tracking :: count_student_assignments($userIdList, $courseCode, $sessionId);
+                $avgProgressInCourse = Tracking::get_avg_student_progress($userIdList, $courseCode, [], $sessionId);
+                $avgScoreInCourse = Tracking::get_avg_student_score($userIdList, $courseCode, [], $sessionId);
+                $avgTimeSpentInCourse = Tracking::get_time_spent_on_the_course(
+                    $userIdList,
+                    $courseInfo['real_id'],
+                    $sessionId
+                );
+                $messagesInCourse = Container::getForumPostRepository()->countCourseForumPosts($course, $session);
+                $assignmentsInCourse = Container::getStudentPublicationRepository()->countCoursePublications(
+                    $course,
+                    $session
+                );
                 $avgTimeSpentInCourse = api_time_to_hms($avgTimeSpentInCourse / $countStudents);
                 $avgProgressInCourse = round($avgProgressInCourse / $countStudents, 2);
 
@@ -324,13 +332,16 @@ function get_courses($from, $limit, $column, $direction)
             $tematic_advance = $thematic->get_total_average_of_thematic_advances($course, $session);
             $tematicAdvanceProgress = '-';
             if (!empty($tematic_advance)) {
-                $tematicAdvanceProgress = '<a title="'.get_lang('Go to thematic advance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$courseCode.'&id_session='.$sessionId.'">'.
+                $tematicAdvanceProgress = '<a
+                    title="'.get_lang('Go to thematic advance').'"
+                    href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cid='.$courseId.'&sid='.$sessionId.'">'.
                     $tematic_advance.'%</a>';
             }
 
-            $courseIcon = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.$sessionId.'">
-                        '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
-                      </a>';
+            $courseIcon = '<a
+                href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cid='.$courseId.'&sid='.$sessionId.'">
+                '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+              </a>';
             $title = Display::url(
                 $data['title'],
                 $courseInfo['course_public_url'].'?id_session='.$sessionId
@@ -338,7 +349,7 @@ function get_courses($from, $limit, $column, $direction)
 
             $attendanceLink = Display::url(
                 Display::return_icon('attendance_list.png', get_lang('Attendance'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&action=calendar_logins'
+                api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
             );
 
             $courseList[] = [

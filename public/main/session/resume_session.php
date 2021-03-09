@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -24,9 +23,10 @@ if (empty($sessionId)) {
     api_not_allowed(true);
 }
 
-SessionManager::protectSession($sessionId);
-$codePath = api_get_path(WEB_CODE_PATH);
+$session = api_get_session_entity($sessionId);
+SessionManager::protectSession($session);
 
+$codePath = api_get_path(WEB_CODE_PATH);
 $tool_name = get_lang('Session overview');
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
@@ -47,11 +47,9 @@ $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 $em = Database::getManager();
-$sessionInfo = api_get_session_info($sessionId);
-$session = api_get_session_entity($sessionId);
 $sessionCategory = $session->getCategory();
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 $url_id = api_get_current_access_url_id();
 
 switch ($action) {
@@ -130,7 +128,6 @@ $url = Display::url(
 );
 
 $sessionTitle = Display::page_subheader(get_lang('General properties').$url);
-$generalCoach = api_get_user_info($sessionInfo['id_coach']);
 
 $sessionField = new ExtraField('session');
 $extraFieldData = $sessionField->getDataAndFormattedValues($sessionId);
@@ -298,10 +295,11 @@ if (!empty($userList)) {
     $table = new HTML_Table(
         ['class' => 'table table-bordered', 'id' => 'session-user-list']
     );
-    $table->setHeaderContents(0, 0, get_lang('User'));
-    $table->setHeaderContents(0, 1, get_lang('Status'));
-    $table->setHeaderContents(0, 2, get_lang('Registration date'));
-    $table->setHeaderContents(0, 3, get_lang('Detail'));
+    $table->setHeaderContents(0, 0, '#');
+    $table->setHeaderContents(0, 1, get_lang('User'));
+    $table->setHeaderContents(0, 2, get_lang('Status'));
+    $table->setHeaderContents(0, 3, get_lang('Registration date'));
+    $table->setHeaderContents(0, 4, get_lang('Detail'));
 
     $row = 1;
     foreach ($userList as $user) {
@@ -348,8 +346,6 @@ if (!empty($userList)) {
                 $editUrl
             );
         }*/
-
-        $table->setCellContents($row, 0, $userLink);
         $link = $reportingLink.$courseUserLink.$removeLink.$addUserToUrlLink.$editUrl;
         switch ($user['relation_type']) {
             case 1:
@@ -365,9 +361,11 @@ if (!empty($userList)) {
 
         $registered = !empty($user['registered_at']) ? Display::dateToStringAgoAndLongDate($user['registered_at']) : '';
 
-        $table->setCellContents($row, 1, $status);
-        $table->setCellContents($row, 2, $registered);
-        $table->setCellContents($row, 3, $link);
+        $table->setCellContents($row, 0, $row);
+        $table->setCellContents($row, 1, $userLink);
+        $table->setCellContents($row, 2, $status);
+        $table->setCellContents($row, 3, $registered);
+        $table->setCellContents($row, 4, $link);
         $row++;
     }
     $userListToShow .= $table->toHtml();
@@ -391,25 +389,18 @@ if (!empty($requirementAndDependencies['dependencies'])) {
     $dependencies .= implode(', ', array_column($requirementAndDependencies['dependencies'], 'admin_link'));
 }
 
-$promotion = null;
-if (!empty($sessionInfo['promotion_id'])) {
-    $promotion = $em->getRepository(Promotion::class);
-    $promotion = $promotion->find($sessionInfo['promotion_id']);
-}
-
+$promotion = $session->getPromotion();
 $programmedAnnouncement = new ScheduledAnnouncement();
 $programmedAnnouncement = $programmedAnnouncement->allowed();
 
 $tpl = new Template($tool_name);
 $tpl->assign('session_header', $sessionHeader);
 $tpl->assign('title', $sessionTitle);
-$tpl->assign('general_coach', $generalCoach);
-$tpl->assign('session_admin', api_get_user_info($session->getSessionAdmin()->getId()));
-$tpl->assign('session', $sessionInfo);
+$tpl->assign('session', $session);
 $tpl->assign('programmed_announcement', $programmedAnnouncement);
 $tpl->assign('session_category', is_null($sessionCategory) ? null : $sessionCategory->getName());
-$tpl->assign('session_dates', SessionManager::parseSessionDates($sessionInfo, true));
-$tpl->assign('session_visibility', SessionManager::getSessionVisibility($sessionInfo));
+//$tpl->assign('session_dates', SessionManager::parseSessionDates($sessionInfo, true));
+//$tpl->assign('session_visibility', SessionManager::getSessionVisibility($sessionInfo));
 $tpl->assign('promotion', $promotion);
 $tpl->assign('url_list', $urlList);
 $tpl->assign('extra_fields', $extraFieldData);

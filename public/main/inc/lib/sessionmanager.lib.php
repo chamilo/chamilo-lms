@@ -4762,24 +4762,18 @@ class SessionManager
         return $row[0];
     }
 
-    /**
-     * @param int  $id
-     * @param bool $checkSession
-     *
-     * @return bool
-     */
-    public static function cantEditSession($id, $checkSession = true)
+    public static function cantEditSession(Session $session, bool $checkSession = true): bool
     {
         if (!self::allowToManageSessions()) {
             return false;
         }
 
-        if (api_is_platform_admin() && self::allowed($id)) {
+        if (api_is_platform_admin() && self::allowed($session)) {
             return true;
         }
 
         if ($checkSession) {
-            if (self::allowed($id)) {
+            if (self::allowed($session)) {
                 return true;
             }
 
@@ -4792,14 +4786,11 @@ class SessionManager
     /**
      * Protect a session to be edited.
      *
-     * @param int  $id
-     * @param bool $checkSession
-     *
      * @return mixed | bool true if pass the check, api_not_allowed otherwise
      */
-    public static function protectSession($id, $checkSession = true)
+    public static function protectSession(Session $session, bool $checkSession = true)
     {
-        if (!self::cantEditSession($id, $checkSession)) {
+        if (!self::cantEditSession($session, $checkSession)) {
             api_not_allowed(true);
         }
     }
@@ -4815,7 +4806,7 @@ class SessionManager
 
         $setting = api_get_setting('allow_teachers_to_create_sessions');
 
-        if (api_is_teacher() && 'true' == $setting) {
+        if (api_is_teacher() && 'true' === $setting) {
             return true;
         }
 
@@ -9599,19 +9590,8 @@ class SessionManager
         }
     }
 
-    /**
-     * @param int $id
-     *
-     * @return bool
-     */
-    private static function allowed($id)
+    private static function allowed(Session $session): bool
     {
-        $sessionInfo = self::fetch($id);
-
-        if (empty($sessionInfo)) {
-            return false;
-        }
-
         if (api_is_platform_admin()) {
             return true;
         }
@@ -9619,17 +9599,18 @@ class SessionManager
         $userId = api_get_user_id();
 
         if (api_is_session_admin() &&
-            'true' != api_get_setting('allow_session_admins_to_manage_all_sessions')
+            'true' !== api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
-            if ($sessionInfo['session_admin_id'] != $userId) {
+
+            if ($userId !== $session->getSessionAdmin()->getId()) {
                 return false;
             }
         }
 
         if (api_is_teacher() &&
-            'true' == api_get_setting('allow_teachers_to_create_sessions')
+            'true' === api_get_setting('allow_teachers_to_create_sessions')
         ) {
-            if ($sessionInfo['id_coach'] != $userId) {
+            if ($userId !== $session->getGeneralCoach()->getId())  {
                 return false;
             }
         }

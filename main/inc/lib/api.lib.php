@@ -8730,6 +8730,12 @@ function api_is_allowed_in_course()
     return Session::read('is_allowed_in_course');
 }
 
+function api_set_cookie($name, $value, $expires = 0)
+{
+    $expires = (int) $expires;
+    setcookie($name, $value, $expires, '', '', api_is_https(), true);
+}
+
 /**
  * Set the cookie to go directly to the course code $in_firstpage
  * after login.
@@ -8738,7 +8744,7 @@ function api_is_allowed_in_course()
  */
 function api_set_firstpage_parameter($value)
 {
-    setcookie('GotoCourse', $value);
+    api_set_cookie('GotoCourse', $value);
 }
 
 /**
@@ -8747,7 +8753,7 @@ function api_set_firstpage_parameter($value)
  */
 function api_delete_firstpage_parameter()
 {
-    setcookie('GotoCourse', '', time() - 3600);
+    api_set_cookie('GotoCourse', '', time() - 3600);
 }
 
 /**
@@ -9096,7 +9102,7 @@ function api_get_users_status_ignored_in_reports($format = 'array')
  */
 function api_set_site_use_cookie_warning_cookie()
 {
-    setcookie('ChamiloUsesCookies', 'ok', time() + 31556926);
+    api_set_cookie('ChamiloUsesCookies', 'ok', time() + 31556926);
 }
 
 /**

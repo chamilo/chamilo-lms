@@ -6095,7 +6095,7 @@ __metadata:
     filemanager-webpack-plugin: ^3.0
     flag-icon-css: ^3.0
     free-jqgrid: "https://github.com/chamilo/jqGrid.git#bs4"
-    fullcalendar: ^5.3.2
+    fullcalendar: ^5.5.1
     highlight.js: ^10.0
     hljs: ^6.2
     html2canvas: ^1.0.0-rc.7
@@ -9834,7 +9834,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"fullcalendar@npm:^5.3.2":
+"fullcalendar@npm:^5.5.1":
   version: 5.5.1
   resolution: "fullcalendar@npm:5.5.1"
   checksum: f167170c457645c678e6cd83ede1f99d2bba9ac3c418cddc6461b1f89b8d9c5e86c88e622d343611278ebe28f06ae5c1d6b303139a16aa5f11edbefb743e37fb

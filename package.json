@@ -34,7 +34,7 @@
     "eslint-plugin-vue": "^7.6.0",
     "file-loader": "^4.2.0",
     "flag-icon-css": "^3.0",
-    "fullcalendar": "^5.3.2",
+    "fullcalendar": "^5.5.1",
     "highlight.js": "^10.0",
     "hljs": "^6.2",
     "html2canvas": "^1.0.0-rc.7",

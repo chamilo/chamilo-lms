@@ -48,7 +48,7 @@ class SessionRelUser
     protected Session $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsRelUser", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected User $user;

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -48,6 +49,15 @@ class Promotion
     protected Career $career;
 
     /**
+     * @var Collection|Session[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="promotion", cascade={"persist"}
+     * )
+     */
+    protected Collection $sessions;
+
+    /**
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     protected int $status;
@@ -67,12 +77,7 @@ class Promotion
         return $this->id;
     }
 
-    /**
-     * Set name.
-     *
-     * @return Promotion
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 

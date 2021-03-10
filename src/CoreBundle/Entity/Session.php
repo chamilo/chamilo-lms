@@ -188,15 +188,25 @@ class Session
     protected User $sessionAdmin;
 
     /**
+     * @Assert\NotBlank
+     * @Groups({"session:read", "session:write"})
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsAsGeneralCoach")
+     * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
+     */
+    protected User $generalCoach;
+
+    /**
      * @Groups({"session:read"})
      * @ORM\Column(name="visibility", type="integer")
      */
     protected int $visibility;
 
     /**
-     * @ORM\Column(name="promotion_id", type="integer", nullable=true, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Promotion", inversedBy="sessions", cascade={"persist"})
+     * @ORM\JoinColumn(name="promotion_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?int $promotionId = null;
+    protected ?Promotion $promotion;
 
     /**
      * @Groups({"session:read"})
@@ -241,15 +251,6 @@ class Session
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     protected int $status;
-
-    /**
-     * @Assert\NotBlank
-     * @Groups({"session:read", "session:write"})
-     *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsAsGeneralCoach")
-     * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
-     */
-    protected User $generalCoach;
 
     /**
      * @Groups({"session:read", "session:write"})
@@ -658,26 +659,16 @@ class Session
         return $this->visibility;
     }
 
-    /**
-     * Set promotionId.
-     *
-     * @return Session
-     */
-    public function setPromotionId(int $promotionId)
+    public function getPromotion(): ?Promotion
     {
-        $this->promotionId = $promotionId;
-
-        return $this;
+        return $this->promotion;
     }
 
-    /**
-     * Get promotionId.
-     *
-     * @return int
-     */
-    public function getPromotionId()
+    public function setPromotion(?Promotion $promotion): self
     {
-        return $this->promotionId;
+        $this->promotion = $promotion;
+
+        return $this;
     }
 
     /**

@@ -1368,7 +1368,7 @@ class MySpace
                                 $totalStudents++;
                             }
                         }
-                        foreach ($sessionStudent as $student) {
+                        foreach ($courseStudentGroup as $student) {
                             $lpSessionId = (int) $student['session_id'];
                             $reportLink = Display::url(
                                 Display::return_icon('statistics.png', get_lang('Stats')),

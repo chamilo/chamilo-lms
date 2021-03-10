@@ -491,7 +491,7 @@
                 {% if user.complete_name_link is defined %}
                     {{ user.complete_name_link }}
                 {% else %}
-                    {{ user | format_user_full_name }}
+                    {{ user | user_complete_name }}
                 {% endif %}
             </h3>
             <p class="email">{{ user.email }}</p>

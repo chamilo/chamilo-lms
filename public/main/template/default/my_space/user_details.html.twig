@@ -6,7 +6,7 @@
 {% endif %}
 
 <div class="page-header">
-    <h3>{{ user | format_user_full_name }}</h3>
+    <h3>{{ user | user_complete_name }}</h3>
 </div>
 <!-- NO DETAILS -->
 {% if details != true %}

@@ -102,13 +102,13 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     /**
      * @return CDocument[]
      */
-    public function getAllDocumentsByAuthor(int $userId)
+    public function findDocumentsByAuthor(int $userId)
     {
         $repo = $this->repository;
 
         $qb = $repo->createQueryBuilder('d');
         $query = $qb
-            ->innerJoin('d.resourceNode', 'r')
+            ->innerJoin('d.resourceNode', 'node')
             ->innerJoin('r.resourceLinks', 'l')
             ->where('l.user = :user')
             ->andWhere('l.visibility <> :visibility')

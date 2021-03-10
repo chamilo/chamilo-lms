@@ -68,7 +68,6 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     private function addDateFilterQueryBuilder(DateTime $dateTime, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
-
         $qb
             ->andWhere("(
                 (

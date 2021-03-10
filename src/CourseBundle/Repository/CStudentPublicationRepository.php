@@ -33,8 +33,8 @@ final class CStudentPublicationRepository extends ResourceRepository
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group);
 
-        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
         $qb
+            ->andWhere($qb->expr()->in('resource.active', [1, 0]))
             ->andWhere('resource.publicationParent =:publicationParent')
             ->setParameter('publicationParent', $publication)
         ;

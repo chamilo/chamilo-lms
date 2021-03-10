@@ -3517,7 +3517,7 @@ class Exercise
      *
      * @return string
      */
-    public function showTimeControlJS($timeLeft)
+    public function showTimeControlJS($timeLeft, $redirectToExerciseSubmit = false)
     {
         $timeLeft = (int) $timeLeft;
         $script = 'redirectExerciseToResult();';
@@ -3526,6 +3526,13 @@ class Exercise
         } elseif (ONE_PER_PAGE == $this->type) {
             $script = 'window.quizTimeEnding = true;
                 $(\'[name="save_now"]\').trigger(\'click\');';
+        }
+
+        $exerciseSubmitRedirect = '';
+        if ($redirectToExerciseSubmit) {
+            $url = api_get_path(WEB_CODE_PATH).
+                'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$this->id;
+            $exerciseSubmitRedirect = "window.location = '$url'";
         }
 
         return "<script>
@@ -3560,6 +3567,7 @@ class Exercise
                 if ($('#exercise_form').length) {
                     $script
                 } else {
+                    $exerciseSubmitRedirect
                     // In exercise_reminder.php
                     final_submit();
                 }

@@ -559,9 +559,10 @@ switch ($action) {
             error_log('Starting questions loop in save_exercise_by_now');
         }
 
-        // Check we have at least one non-empty answer in the array
-        // provided by the user's click on the "Finish test" button.
+        $now = time();
         if ('all' === $type) {
+            // Check we have at least one non-empty answer in the array
+            // provided by the user's click on the "Finish test" button.
             $atLeastOneAnswer = false;
             foreach ($question_list as $my_question_id) {
                 if (!empty($choice[$my_question_id])) {
@@ -569,13 +570,32 @@ switch ($action) {
                     break;
                 }
             }
+
             if (!$atLeastOneAnswer) {
+                // Check if time is over.
+                if ($objExercise->expired_time != 0) {
+                    $clockExpiredTime = ExerciseLib::get_session_time_control_key(
+                        $objExercise->id,
+                        $learnpath_id,
+                        $learnpath_item_id
+                    );
+                    if (!empty($clockExpiredTime)) {
+                        $timeLeft = api_strtotime($clockExpiredTime, 'UTC') - $now;
+                        if ($timeLeft <= 0) {
+                            // There's no time, but still no answers ...
+                            echo json_encode(['ok' => true, 'savedAnswerMessage' => '']);
+                            exit;
+                        }
+                    }
+                }
+
                 error_log(
                     'In '.__FILE__.'::action save_exercise_by_now,'.
                     ' from user '.api_get_user_id().
                     ' for track_e_exercises.exe_id = '.$exeId.
                     ', we received an empty set of answers.'.
-                    'Preventing submission to avoid overwriting w/ null.');
+                    'Preventing submission to avoid overwriting w/ null.'
+                );
                 echo json_encode(['error' => true]);
                 exit;
             }
@@ -728,7 +748,6 @@ switch ($action) {
             }
 
             $duration = 0;
-            $now = time();
             if ($type === 'all') {
                 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
             }

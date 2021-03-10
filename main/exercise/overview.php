@@ -69,7 +69,7 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left, true);
 }
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {

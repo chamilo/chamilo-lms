@@ -1921,10 +1921,16 @@ abstract class Question
 
         //Save normal question if NOT media
         if (MEDIA_QUESTION != $this->type) {
+            $creationMode = empty($this->id);
             $this->save($exercise);
-            // modify the exercise
             $exercise->addToList($this->id);
-            $exercise->update_question_positions();
+
+            // Only update position in creation and when using ordered or random types.
+            if ($creationMode &&
+                in_array($exercise->questionSelectionType, [EX_Q_SELECTION_ORDERED, EX_Q_SELECTION_RANDOM])
+            ) {
+                $exercise->update_question_positions();
+            }
 
             $params = $form->exportValues();
             $params['item_id'] = $this->id;

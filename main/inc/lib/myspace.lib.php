@@ -1342,7 +1342,6 @@ class MySpace
                                 Display::return_icon('statistics.png', get_lang('Stats')),
                                 api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
                                 $student['id']
-                                ."&id_session=$lpSessionId"
                                 ."&course=$lpCourseCode"
                             );
                             if (!isset($studentRegistered[$student['id']])) {

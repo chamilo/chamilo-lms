@@ -11,7 +11,8 @@ set_time_limit(0);
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
-SessionManager::protectSession($session_id);
+$session = api_get_session_entity($session_id);
+SessionManager::protectSession($session);
 
 $form_sent = 0;
 $tool_name = get_lang('Import users');

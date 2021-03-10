@@ -8,16 +8,16 @@
 <table id="session-properties" class="table table-bordered">
     <tr>
         <td>{{ 'Created by'|get_lang }}</td>
-        <td>{{ session_admin.complete_name_with_message_link }}</td>
+        <td>{{ session.sessionAdmin | user_complete_name_with_link }}</td>
     </tr>
     <tr>
         <td>{{ 'General coach' | get_lang}} :</td>
-        <td>{{ general_coach.complete_name_with_message_link }}</td>
+        <td>{{ session.generalCoach | user_complete_name_with_link }}</td>
     </tr>
-    {% if session_category  %}
+    {% if session.category  %}
     <tr>
         <td>{{ 'Session category' | get_lang}} </td>
-        <td>{{ session_category }}</td>
+        <td>{{ session.category.name }}</td>
     </tr>
     {% endif %}
 
@@ -52,7 +52,7 @@
     <tr>
         <td>{{ 'Show description' | get_lang}} </td>
         <td>
-            {% if session.show_description == 1 %}
+            {% if session.showDescription == 1 %}
                 {{ 'Yes' | get_lang}}
             {% else %}
                 {{ 'No' | get_lang}}
@@ -65,20 +65,20 @@
             {{ session_visibility }}
         </td>
     </tr>
-    {% if promotion %}
+    {% if session.promotion %}
         <tr>
             <td>{{ 'Career' | get_lang}}</td>
             <td>
-                <a href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ promotion.career.id }}&submit=&_qf__filter_form=">
-                    {{ promotion.career.name }}
+                <a href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form=">
+                    {{ session.promotion.career.name }}
                 </a>
             </td>
         </tr>
         <tr>
             <td>{{ 'Promotion' | get_lang}}</td>
             <td>
-                <a href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ promotion.id }}">
-                    {{ promotion.name }}
+                <a href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ session.promotion.id }}">
+                    {{ session.promotion.name }}
                 </a>
             </td>
         </tr>

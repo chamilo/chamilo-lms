@@ -18,8 +18,8 @@ $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $id = (int) $_GET['id'];
 
-SessionManager::protectSession($id);
-
+$session = api_get_session_entity($id);
+SessionManager::protectSession($session);
 $sessionInfo = SessionManager::fetch($id);
 
 // Sets to local time to show it correctly when you edit a session

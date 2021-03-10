@@ -21,8 +21,8 @@ if (empty($id_session) || empty($courseId)) {
 
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
-SessionManager::protectSession($id_session);
-
+$session = api_get_session_entity($id_session);
+SessionManager::protectSession($session);
 $courseInfo = api_get_course_info_by_id($courseId);
 
 // setting breadcrumbs

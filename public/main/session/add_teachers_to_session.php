@@ -23,7 +23,8 @@ $form_sent = 0;
 $errorMsg = '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-SessionManager::protectSession($id);
+$session = api_get_session_entity($id);
+SessionManager::protectSession($session);
 
 $htmlResult = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {

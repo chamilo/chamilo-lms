@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Framework\Container;
  *
  * @author Bart Mollet
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -20,7 +21,6 @@ if (empty($userId)) {
     api_not_allowed(true);
 }
 $user = api_get_user_entity($userId);
-//$user = api_get_user_info($userId, true);
 
 if (null === $user) {
     api_not_allowed(true);
@@ -145,7 +145,7 @@ $data = [
     get_lang('Phone') => $user->getPhone(),
     get_lang('Course code') => $user->getOfficialCode(),
     //get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
-    get_lang('Status') => 1 == $user->getStatus() ? get_lang('Trainer') : get_lang('Learner'),
+    get_lang('Status') => 1 === $user->getStatus() ? get_lang('Trainer') : get_lang('Learner'),
 ];
 
 $params = [];
@@ -229,7 +229,6 @@ foreach ($data as $label => $item) {
  * Show social activity.
  */
 if ('true' === api_get_setting('allow_social_tool')) {
-    $userObject = api_get_user_entity($userId);
     $data = [];
     $messagesSent = '';
     // Calculate values
@@ -264,7 +263,9 @@ if ('true' === api_get_setting('allow_social_tool')) {
 /**
  * Show the sessions in which this user is subscribed.
  */
-$sessions = SessionManager::get_sessions_by_user($userId, true);
+//$sessions = SessionManager::get_sessions_by_user($userId, true);
+$sessions = Container::getSessionRepository()->getSessionsByUser($user, api_get_url_entity());
+
 $personal_course_list = [];
 $courseToolInformationTotal = null;
 $sessionInformation = '';
@@ -286,19 +287,24 @@ if (count($sessions) > 0) {
     $csvContent[] = [];
     $csvContent[] = [get_lang('Course sessions')];
 
-    foreach ($sessions as $session_item) {
+    foreach ($sessions as $session) {
         $data = [];
         $personal_course_list = [];
-        $id_session = $session_item['session_id'];
+        $sessionId = $session->getId();
 
-        $csvContent[] = [$session_item['session_name']];
+        $csvContent[] = [$session->getName()];
         $csvContent[] = $headerList;
-        foreach ($session_item['courses'] as $my_course) {
-            $courseInfo = api_get_course_info_by_id($my_course['real_id']);
+        foreach ($session->getCourses() as $sessionRelCourse) {
+            $course = $sessionRelCourse->getCourse();
+            $courseId = $sessionRelCourse->getCourse()->getId();
+            $courseCode = $sessionRelCourse->getCourse()->getCode();
+
+            $courseUrl = api_get_course_url($courseCode);
+
             $sessionStatus = SessionManager::get_user_status_in_course_session(
                 $userId,
-                $courseInfo['real_id'],
-                $id_session
+                $courseId,
+                $sessionId
             );
             $status = null;
             switch ($sessionStatus) {
@@ -313,39 +319,39 @@ if (count($sessions) > 0) {
 
             $tools = Display::url(
                 Display::return_icon('statistics.png', get_lang('Statistics')),
-                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session='.$id_session.'&course='.$courseInfo['code']
+                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session='.$sessionId.'&course='.$courseCode
             );
-            $tools .= '&nbsp;<a href="course_information.php?code='.$courseInfo['code'].'&id_session='.$id_session.'">'.
+            $tools .= '&nbsp;<a href="course_information.php?code='.$courseCode.'&id_session='.$sessionId.'">'.
                 Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
-                '<a href="'.$courseInfo['course_public_url'].'?id_session='.$id_session.'">'.
+                '<a href="'.$courseUrl.'?id_session='.$sessionId.'">'.
                 Display::return_icon('course_home.png', get_lang('Course home')).'</a>';
 
-            if (!empty($my_course['status']) && STUDENT == $my_course['status']) {
+            /*if (!empty($my_course['status']) && STUDENT == $my_course['status']) {
                 $tools .= '<a
-                    href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
+                    href="user_information.php?action=unsubscribe_session_course&course_id='.$courseId.'&user_id='.$userId.'&id_session='.$sessionId.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
-            }
+            }*/
 
             $timeSpent = api_time_to_hms(
                 Tracking::get_time_spent_on_the_course(
                     $userId,
-                    $courseInfo['real_id'],
-                    $id_session
+                    $courseId,
+                    $sessionId
                 )
             );
 
-            $totalForumMessages = CourseManager::getCountPostInForumPerUser(
-                $userId,
-                $courseInfo['real_id'],
-                $id_session
+            $totalForumMessages = Container::getForumPostRepository()->countUserForumPosts(
+                $user,
+                $course,
+                $session
             );
 
             $row = [
                 Display::url(
-                    $courseInfo['code'],
-                    $courseInfo['course_public_url'].'?id_session='.$id_session
+                    $courseCode,
+                    $courseUrl.'?id_session='.$sessionId
                 ),
-                $courseInfo['title'],
+                $course->getTitle(),
                 $status,
                 $timeSpent,
                 $totalForumMessages,
@@ -355,20 +361,22 @@ if (count($sessions) > 0) {
             $csvContent[] = array_map('strip_tags', $row);
             $data[] = $row;
 
-            $result = Tracking::getToolInformation(
+            /*$result = Tracking::getToolInformation(
                 $userId,
                 $courseInfo,
-                $id_session
+                $sessionId
             );
-
             if (!empty($result['html'])) {
                 $courseToolInformationTotal .= $result['html'];
                 $csvContent = array_merge($csvContent, $result['array']);
-            }
+            }*/
         }
 
         $dates = array_filter(
-            [$session_item['access_start_date'], $session_item['access_end_date']]
+            [
+                $session->getAccessStartDate()->format('Y-m-d H:i:s'),
+                $session->getAccessEndDate()->format('Y-m-d H:i:s'),
+            ]
         );
 
         $certificateLink = Display::url(
@@ -378,15 +386,15 @@ if (count($sessions) > 0) {
                 [
                     'action' => 'export_to_pdf',
                     'type' => 'achievement',
-                    'session_to_export' => $id_session,
+                    'session_to_export' => $sessionId,
                     'student' => $userId,
                 ]
             ),
             ['target' => '_blank']
         );
         $sessionInformation .= Display::page_subheader(
-            '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$id_session.'">'.
-            $session_item['session_name'].'</a>',
+            '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId.'">'.
+            $session->getName().'</a>',
             $certificateLink.' '.implode(' - ', $dates)
         );
 
@@ -404,16 +412,9 @@ if (count($sessions) > 0) {
 }
 $courseToolInformationTotal = '';
 
-/**
- * Show the courses in which this user is subscribed.
- */
-$sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c
-        WHERE
-            cu.user_id = '.$userId.' AND
-            cu.c_id = c.id AND
-            cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
-$res = Database::query($sql);
-if (Database::num_rows($res) > 0) {
+$courseRelUserList = Container::getCourseRepository()->getCoursesByUser($user, api_get_url_entity());
+
+if (count($courseRelUserList) > 0) {
     $header = [
         [get_lang('Course code')],
         [get_lang('Title')],
@@ -433,44 +434,41 @@ if (Database::num_rows($res) > 0) {
 
     $data = [];
     $courseToolInformationTotal = null;
-    while ($course = Database::fetch_object($res)) {
-        $courseInfo = api_get_course_info_by_id($course->c_id);
-        $courseCode = $courseInfo['code'];
+    foreach ($courseRelUserList as $courseRelUser) {
+        $course = $courseRelUser->getCourse();
+        $courseId = $course->getId();
+        $courseCode = $course->getCode();
         $courseToolInformation = null;
 
+        $courseUrl = api_get_course_url($courseCode);
         $tools = Display::url(
             Display::return_icon('statistics.png', get_lang('Statistics')),
             api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session=0&course='.$courseCode
         );
-
         $tools .= '&nbsp;<a href="course_information.php?code='.$courseCode.'">'.
             Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
-            '<a href="'.$courseInfo['course_public_url'].'">'.
+            '<a href="'.$courseUrl.'">'.
             Display::return_icon('course_home.png', get_lang('Course home')).'</a>'.
-            '<a href="course_edit.php?id='.$course->c_id.'">'.
+            '<a href="course_edit.php?id='.$courseId.'">'.
             Display::return_icon('edit.png', get_lang('Edit')).'</a>';
-        if (STUDENT == $course->status) {
-            $tools .= '<a href="user_information.php?action=unsubscribe&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'">'.
+        if (STUDENT == $courseRelUser->getStatus()) {
+            $tools .= '<a href="user_information.php?action=unsubscribe&course_id='.$courseId.'&user_id='.$userId.'">'.
                 Display::return_icon('delete.png', get_lang('Delete')).'</a>';
         }
 
         $timeSpent = api_time_to_hms(
             Tracking::get_time_spent_on_the_course(
                 $userId,
-                $courseInfo['real_id']
+                $courseId
             )
         );
 
-        $totalForumMessages = CourseManager::getCountPostInForumPerUser(
-            $userId,
-            $course->id,
-            0
-        );
+        $totalForumMessages = Container::getForumPostRepository()->countUserForumPosts($user, $course);
 
         $row = [
-            Display::url($courseCode, $courseInfo['course_public_url']),
-            $course->title,
-            STUDENT == $course->status ? get_lang('Learner') : get_lang('Trainer'),
+            Display::url($courseCode, $courseUrl),
+            $course->getTitle(),
+            STUDENT == $courseRelUser->getStatus() ? get_lang('Learner') : get_lang('Trainer'),
             $timeSpent,
             $totalForumMessages,
             $tools,
@@ -479,13 +477,13 @@ if (Database::num_rows($res) > 0) {
         $csvContent[] = array_map('strip_tags', $row);
         $data[] = $row;
 
-        $result = Tracking::getToolInformation(
+        /*$result = Tracking::getToolInformation(
             $userId,
             $courseInfo,
             0
         );
         $courseToolInformationTotal .= $result['html'];
-        $csvContent = array_merge($csvContent, $result['array']);
+        $csvContent = array_merge($csvContent, $result['array']);*/
     }
 
     $courseInformation = Display::return_sortable_table(

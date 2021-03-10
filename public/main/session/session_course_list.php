@@ -10,7 +10,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-SessionManager::protectSession($id_session);
+$session = api_get_session_entity($id_session);
+SessionManager::protectSession($session);
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);

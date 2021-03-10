@@ -15,7 +15,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
-SessionManager::protectSession($id_session);
+$session = api_get_session_entity($id_session);
+SessionManager::protectSession($session);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];

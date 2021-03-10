@@ -78,7 +78,7 @@ class SessionManager
             'nbr_classes' => $session->getNbrClasses(),
             'session_admin_id' => $session->getSessionAdmin()->getId(),
             'visibility' => $session->getVisibility(),
-            'promotion_id' => $session->getPromotionId(),
+            'promotion_id' => $session->getPromotion() ? $session->getPromotion()->getId() : 0,
             'display_start_date' => $session->getDisplayStartDate()
                 ? $session->getDisplayStartDate()->format('Y-m-d H:i:s')
                 : null,
@@ -3576,12 +3576,19 @@ class SessionManager
 
             return Database::affected_rows($result) > 0;
         }
+        $em = Database::getManager();
+        $sessionRelCourseRelUser = new SessionRelCourseRelUser();
+        $sessionRelCourseRelUser
+            ->setSession(api_get_session_entity($sessionId))
+            ->setCourse(api_get_course_entity($courseId))
+            ->setUser(api_get_user_entity($userId))
+            ->setStatus(2)
+            ->setVisibility(1)
+        ;
+        $em->persist($sessionRelCourseRelUser);
+        $em->flush();
 
-        $sql = "INSERT INTO $tblSessionRelCourseRelUser(session_id, c_id, user_id, status, visibility)
-                VALUES($sessionId, $courseId, $userId, 2, 1)";
-        $result = Database::query($sql);
-
-        return Database::affected_rows($result) > 0;
+        return true;
     }
 
     /**
@@ -4762,7 +4769,7 @@ class SessionManager
         return $row[0];
     }
 
-    public static function cantEditSession(Session $session, bool $checkSession = true): bool
+    public static function cantEditSession(?Session $session = null, bool $checkSession = true): bool
     {
         if (!self::allowToManageSessions()) {
             return false;
@@ -4788,25 +4795,20 @@ class SessionManager
      *
      * @return mixed | bool true if pass the check, api_not_allowed otherwise
      */
-    public static function protectSession(Session $session, bool $checkSession = true)
+    public static function protectSession(?Session $session = null, bool $checkSession = true)
     {
         if (!self::cantEditSession($session, $checkSession)) {
             api_not_allowed(true);
         }
     }
 
-    /**
-     * @return bool
-     */
-    public static function allowToManageSessions()
+    public static function allowToManageSessions(): bool
     {
         if (self::allowManageAllSessions()) {
             return true;
         }
 
-        $setting = api_get_setting('allow_teachers_to_create_sessions');
-
-        if (api_is_teacher() && 'true' === $setting) {
+        if (api_is_teacher() && 'true' === api_get_setting('allow_teachers_to_create_sessions')) {
             return true;
         }
 
@@ -7737,14 +7739,9 @@ class SessionManager
         return $sessionList;
     }
 
-    /**
-     * @param array $sessionInfo
-     *
-     * @return string
-     */
-    public static function getSessionVisibility($sessionInfo)
+    public static function getSessionVisibility(Session $session) : string
     {
-        switch ($sessionInfo['visibility']) {
+        switch ($session->getVisibility()) {
             case 1:
                 return get_lang('Read only');
             case 2:
@@ -7757,40 +7754,35 @@ class SessionManager
     /**
      * Returns a human readable string.
      *
-     * @param array $sessionInfo An array with all the session dates
-     * @param bool  $showTime
-     *
      * @return array
      */
-    public static function parseSessionDates($sessionInfo, $showTime = false)
+    public static function parseSessionDates(Session $session, bool $showTime = false)
     {
         $displayDates = self::convertSessionDateToString(
-            $sessionInfo['display_start_date'],
-            $sessionInfo['display_end_date'],
+            $session->getDisplayStartDate()->format('Y-m-d H:i:s'),
+            $session->getDisplayEndDate()->format('Y-m-d H:i:s'),
             $showTime,
             true
         );
         $accessDates = self::convertSessionDateToString(
-            $sessionInfo['access_start_date'],
-            $sessionInfo['access_end_date'],
+            $session->getAccessStartDate()->format('Y-m-d H:i:s'),
+            $session->getAccessEndDate()->format('Y-m-d H:i:s'),
             $showTime,
             true
         );
 
         $coachDates = self::convertSessionDateToString(
-            $sessionInfo['coach_access_start_date'],
-            $sessionInfo['coach_access_end_date'],
+            $session->getCoachAccessStartDate()->format('Y-m-d H:i:s'),
+            $session->getCoachAccessEndDate()->format('Y-m-d H:i:s'),
             $showTime,
             true
         );
 
-        $result = [
+        return [
             'access' => $accessDates,
             'display' => $displayDates,
             'coach' => $coachDates,
         ];
-
-        return $result;
     }
 
     /**
@@ -9590,10 +9582,14 @@ class SessionManager
         }
     }
 
-    private static function allowed(Session $session): bool
+    private static function allowed(?Session $session = null): bool
     {
         if (api_is_platform_admin()) {
             return true;
+        }
+
+        if (null === $session) {
+            return false;
         }
 
         $userId = api_get_user_id();
@@ -9602,20 +9598,20 @@ class SessionManager
             'true' !== api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
 
-            if ($userId !== $session->getSessionAdmin()->getId()) {
-                return false;
+            if ($userId === $session->getSessionAdmin()->getId()) {
+                return true;
             }
         }
 
         if (api_is_teacher() &&
             'true' === api_get_setting('allow_teachers_to_create_sessions')
         ) {
-            if ($userId !== $session->getGeneralCoach()->getId())  {
-                return false;
+            if ($userId === $session->getGeneralCoach()->getId())  {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**

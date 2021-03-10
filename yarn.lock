@@ -6078,7 +6078,7 @@ __metadata:
     bootstrap-select: ^1.13.17
     bootstrap-vue: ^2.20
     chart.js: ^2.9.3
-    ckeditor4: ^4.0.0
+    ckeditor4: ^4.16
     copy-webpack-plugin: ^6.0
     create-nuxt-app: ^3.5.2
     cropper: ^4.0
@@ -6100,7 +6100,7 @@ __metadata:
     hljs: ^6.2
     html2canvas: ^1.0.0-rc.7
     image-map-resizer: ^1.0.10
-    jquery: ^3.5
+    jquery: ^3.6
     jquery-contextmenu: ^2.9.0
     jquery-ui: ^1.12.1
     jquery-ui-timepicker-addon: ^1.6.3
@@ -6109,7 +6109,6 @@ __metadata:
     jspdf: ^2.3
     jsplumb: ^2.12
     linkifyjs: ^2.1
-    lodash: ^4.17
     mathjax: ^2.7
     mediaelement: ^4.2
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
@@ -6307,7 +6306,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ckeditor4@npm:^4.0.0":
+"ckeditor4@npm:^4.16":
   version: 4.16.0
   resolution: "ckeditor4@npm:4.16.0"
   checksum: e7a1a0ff4e549a142cfde77fb5f3c0119022c2158328a498eeb920829554e7a338456a39ab5225b4e8a1ae14c2b87ad583e9665593e861d91acea789c617210f
@@ -12027,10 +12026,17 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"jquery@npm:>2.1.4, jquery@npm:>=1.10, jquery@npm:>=1.5.0 <4.0, jquery@npm:>=1.6.0, jquery@npm:>=1.7, jquery@npm:^3.3.1, jquery@npm:^3.5, jquery@npm:^3.5.0, jquery@npm:^3.5.1":
+"jquery@npm:>2.1.4, jquery@npm:>=1.10, jquery@npm:>=1.5.0 <4.0, jquery@npm:>=1.6.0, jquery@npm:>=1.7, jquery@npm:^3.3.1, jquery@npm:^3.5.0, jquery@npm:^3.5.1":
   version: 3.5.1
   resolution: "jquery@npm:3.5.1"
   checksum: c50818c84837902a60938c85786feb612f346a9918f7285409d605449460790b3815ad8aaf5806f19e89f1a79b27d327802b421ab354fe213f3fd1801e3562e6
+  languageName: node
+  linkType: hard
+
+"jquery@npm:^3.6":
+  version: 3.6.0
+  resolution: "jquery@npm:3.6.0"
+  checksum: a0a819022a1bdff5efa79bbd9d4d7352de5bd32dabe42108e6ec0797238dba36c09c108e0eea2724f5d03acc1b30ee87d76bec80e15b9510106532292ebe6ba4
   languageName: node
   linkType: hard
 
@@ -12815,7 +12821,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"lodash@npm:4, lodash@npm:>=3.5 <5, lodash@npm:^4.0.0, lodash@npm:^4.17, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.3, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:~4.17.10":
+"lodash@npm:4, lodash@npm:>=3.5 <5, lodash@npm:^4.0.0, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.3, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:~4.17.10":
   version: 4.17.20
   resolution: "lodash@npm:4.17.20"
   checksum: c62101d2500c383b5f174a7e9e6fe8098149ddd6e9ccfa85f36d4789446195f5c4afd3cfba433026bcaf3da271256566b04a2bf2618e5a39f6e67f8c12030cb6

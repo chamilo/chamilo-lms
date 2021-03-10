@@ -1537,18 +1537,21 @@ class MySpace
             }
         }
         $totalLpItems = count($cLpItems);
-        if ($totalLpItems == 0 && 0 != count($whereInLp)) {
-            $tableHtml = "<div class='table-responsive'>
+        $tableNoData = "<div class='table-responsive'>
                 <table class='table table-hover table-striped table-bordered data_table'>
                 <thead>
                     <tr>
-                    <th class='th-header'>".get_lang('NoDataAvailable')."</th>
+                    <th class='th-header'>".get_lang('NoDataAvailable').'</th>
                 </tr>
                 </thead>
                 </tbody>
                 </tbody>
                 </table>
-                </div>";
+                </div>';
+        if (0 == $totalLpItems) {
+            $tableHtml = $tableNoData;
+        }elseif(0 == count($whereInLp)){
+            $tableHtml = $tableNoData;
         } else {
             $whereInLp = array_unique($whereInLp);
             $whereInLp = implode(',', $whereInLp);

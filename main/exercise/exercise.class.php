@@ -3513,11 +3513,12 @@ class Exercise
     /**
      * So the time control will work.
      *
-     * @param int $timeLeft
+     * @param int    $timeLeft
+     * @param string $redirectToUrl
      *
      * @return string
      */
-    public function showTimeControlJS($timeLeft, $redirectToExerciseSubmit = false)
+    public function showTimeControlJS($timeLeft, $redirectToUrl = '')
     {
         $timeLeft = (int) $timeLeft;
         $script = 'redirectExerciseToResult();';
@@ -3529,10 +3530,8 @@ class Exercise
         }
 
         $exerciseSubmitRedirect = '';
-        if ($redirectToExerciseSubmit) {
-            $url = api_get_path(WEB_CODE_PATH).
-                'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$this->id;
-            $exerciseSubmitRedirect = "window.location = '$url'";
+        if (!empty($redirectToUrl)) {
+            $exerciseSubmitRedirect = "window.location = '$redirectToUrl'";
         }
 
         return "<script>

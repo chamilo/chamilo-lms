@@ -6,10 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Twig\Extension;
 
+use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Twig\SettingsHelper;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -18,11 +21,15 @@ class ChamiloExtension extends AbstractExtension
 {
     private IllustrationRepository $illustrationRepository;
     private SettingsHelper $helper;
+    private RouterInterface $router;
+    private NameConvention $nameConvention;
 
-    public function __construct(IllustrationRepository $illustrationRepository, SettingsHelper $helper)
+    public function __construct(IllustrationRepository $illustrationRepository, SettingsHelper $helper, RouterInterface $router, NameConvention $nameConvention)
     {
         $this->illustrationRepository = $illustrationRepository;
         $this->helper = $helper;
+        $this->router = $router;
+        $this->nameConvention = $nameConvention;
     }
 
     public function getFilters(): array
@@ -41,13 +48,11 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate'),
             new TwigFilter('api_get_configuration_value', 'api_get_configuration_value'),
             new TwigFilter('remove_xss', 'Security::remove_XSS'),
-            new TwigFilter('format_user_full_name', 'UserManager::formatUserFullName'),
+            new TwigFilter('user_complete_name', 'UserManager::formatUserFullName'),
+            new TwigFilter('user_complete_name_with_link', [$this, 'completeUserNameWithLink']),
             new TwigFilter('illustration', [$this, 'getIllustration']),
 
-            //new \Twig_SimpleFunction('chamilo_settings_all', array($this, 'getSettings')),
-            new TwigFilter('get_setting', [$this, 'getSettingsParameter']),
             new TwigFilter('api_get_setting', [$this, 'getSettingsParameter']),
-            //new \Twig_SimpleFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
         ];
     }
 
@@ -58,6 +63,20 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('chamilo_settings_get', [$this, 'getSettingsParameter']),
             new TwigFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
         ];
+    }
+
+    public function completeUserNameWithLink(User $user): string
+    {
+        $url = $this->router->generate(
+            'legacy_main',
+            [
+                'name' => '/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id='.$user->getId(),
+            ]
+        );
+
+        $name = $this->nameConvention->getPersonName($user);
+
+        return "<a href=\"$url\" class=\"ajax\">$name</a>";
     }
 
     public function getIllustration(ResourceIllustrationInterface $resource): string

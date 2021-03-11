@@ -24,16 +24,23 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         parent::__construct($registry, CQuiz::class);
     }
 
-    public function findQuizzes(Course $course, Session $session = null, string $title = '', ?int $active = null)
-    {
+    public function findAllByCourse(
+        Course $course,
+        Session $session = null,
+        ?string $title = null,
+        ?int $active = null,
+        bool $onlyPublished = true
+    ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
-        $this->addDateFilterQueryBuilder(new DateTime(), $qb);
+        if ($onlyPublished) {
+            $this->addDateFilterQueryBuilder(new DateTime(), $qb);
+        }
         $this->addActiveQueryBuilder($active, $qb);
         $this->addNotDeletedQueryBuilder($qb);
         $this->addTitleQueryBuilder($title, $qb);
 
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
     public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
@@ -96,15 +103,29 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $qb;
     }
 
+    /**
+     * @param int|null $active
+     *                         null = no filter
+     *                         -1 = deleted exercises
+     *                         0 = inactive exercises
+     *                         1 = active exercises
+     *                         2 = all exercises (active and inactive)
+     */
     private function addActiveQueryBuilder(?int $active = null, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
         if (null !== $active) {
-            $qb
-                ->andWhere('resource.active = :active')
-                ->setParameter('active', $active)
-            ;
+            if (2 === $active) {
+                $qb
+                    ->andWhere('resource.active = 1 OR resource.active = 0')
+                ;
+            } else {
+                $qb
+                    ->andWhere('resource.active = :active')
+                    ->setParameter('active', $active)
+                ;
+            }
         }
 
         return $qb;

@@ -319,6 +319,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    public function getCount(QueryBuilder $qb)
+    {
+        $qb->select('count(resource)');
+        $qb->setMaxResults(1);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function findResourcesByTitle(
         string $title,
         ResourceNode $parentNode,
@@ -918,15 +926,17 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb ?: $this->createQueryBuilder($alias);
     }
 
-    protected function addTitleQueryBuilder(string $title, QueryBuilder $qb = null): QueryBuilder
+    protected function addTitleQueryBuilder(?string $title, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
-        if (!empty($title)) {
-            $qb
-                ->andWhere('node.title = :title')
-                ->setParameter('title', $title)
-            ;
+        if (null === $title) {
+            return $qb;
         }
+
+        $qb
+            ->andWhere('node.title = :title')
+            ->setParameter('title', $title)
+        ;
 
         return $qb;
     }

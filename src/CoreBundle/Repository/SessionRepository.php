@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -37,18 +38,26 @@ class SessionRepository extends ServiceEntityRepository
             return [];
         }
 
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->addSessionRelUserFilterByUrl($session, $url);
+        $qb->orderBy('sru.relationType');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getUsersByCourse(Session $session, Course $course, AccessUrl $url)
+    {
+        if (0 === $session->getUsers()->count()) {
+            return [];
+        }
+
+        $qb = $this->addSessionRelUserFilterByUrl($session, $url);
         $qb
-            ->select('sru')
-            ->from(User::class, 'u')
-            ->innerJoin(SessionRelUser::class, 'sru')
-            ->innerJoin(AccessUrlRelUser::class, 'uru')
-            ->andWhere('sru.session = :session AND uru.url = :url ')
+            ->innerJoin(SessionRelCourseRelUser::class, 'srcu')
+            ->andWhere('srcu.session = :session AND srcu.course = :course ')
             ->setParameters([
+                'course' => $course,
                 'session' => $session,
-                'url' => $url,
             ])
-            ->orderBy('sru.relationType')
         ;
 
         return $qb->getQuery()->getResult();
@@ -112,5 +121,23 @@ class SessionRepository extends ServiceEntityRepository
                     break;
             }
         }
+    }
+
+    private function addSessionRelUserFilterByUrl(Session $session, AccessUrl $url)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('sru')
+            ->from(User::class, 'u')
+            ->innerJoin(SessionRelUser::class, 'sru')
+            ->innerJoin(AccessUrlRelUser::class, 'uru')
+            ->andWhere('sru.session = :session AND uru.url = :url')
+            ->setParameters([
+                'session' => $session,
+                'url' => $url,
+            ])
+        ;
+
+        return $qb;
     }
 }

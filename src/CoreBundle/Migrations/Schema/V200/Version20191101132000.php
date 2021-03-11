@@ -34,6 +34,10 @@ class Version20191101132000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX category_code ON course');
         }
 
+        if ($table->hasIndex('directory')) {
+            $this->addSql('DROP INDEX directory ON course;');
+        }
+
         $this->addSql('UPDATE course SET course_language = "en" WHERE course_language IS NULL');
         $this->addSql('ALTER TABLE course CHANGE course_language course_language VARCHAR(20) NOT NULL');
 

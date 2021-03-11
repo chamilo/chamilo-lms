@@ -39,7 +39,7 @@ class CSurveyQuestion
 
     /**
      * @var Collection|CSurveyQuestion[]
-     * @ORM\OneToMany(targetEntity="CSurveyQuestion", mappedBy="parentEvent")
+     * @ORM\OneToMany(targetEntity="CSurveyQuestion", mappedBy="parent")
      */
     protected Collection $children;
 

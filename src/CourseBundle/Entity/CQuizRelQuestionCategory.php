@@ -30,7 +30,7 @@ class CQuizRelQuestionCategory
     protected CQuizQuestionCategory $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuiz", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="questionsCategories", cascade={"persist"})
      * @ORM\JoinColumn(name="exercise_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CQuiz $quiz;

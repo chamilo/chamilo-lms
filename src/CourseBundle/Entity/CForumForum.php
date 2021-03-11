@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -159,18 +160,18 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected ?bool $moderated = null;
 
     /**
-     * @var ArrayCollection|CForumThread[]
+     * @var Collection|CForumThread[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum")
      */
-    protected \Doctrine\Common\Collections\Collection $threads;
+    protected Collection $threads;
 
     /**
-     * @var ArrayCollection|CForumPost[]
+     * @var Collection|CForumPost[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="forum")
      */
-    protected \Doctrine\Common\Collections\Collection $posts;
+    protected Collection $posts;
 
     public function __construct()
     {

@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -61,10 +62,10 @@ class CThematic extends AbstractResource implements ResourceInterface
      *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected \Doctrine\Common\Collections\Collection $plans;
+    protected Collection $plans;
 
     /**
-     * @var ArrayCollection|CThematicAdvance[]
+     * @var Collection|CThematicAdvance[]
      *
      * @ORM\OrderBy({"startDate" = "ASC"})
      *
@@ -72,7 +73,7 @@ class CThematic extends AbstractResource implements ResourceInterface
      *     targetEntity="CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected \Doctrine\Common\Collections\Collection $advances;
+    protected Collection $advances;
 
     public function __construct()
     {

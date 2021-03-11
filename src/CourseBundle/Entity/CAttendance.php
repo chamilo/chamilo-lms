@@ -76,7 +76,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
      *     targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected \Doctrine\Common\Collections\Collection $calendars;
+    protected Collection $calendars;
 
     public function __construct()
     {

@@ -43,12 +43,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="course",
  *     indexes={
- *         @ORM\Index(name="directory", columns={"directory"}),
  *     }
  * )
  * @UniqueEntity("code")
  * @UniqueEntity("visualCode")
- * @UniqueEntity("directory")
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
@@ -583,16 +581,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->id;
     }
 
-    /**
-     * Set code.
-     *
-     * @return Course
-     */
-    public function setCode(string $code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
         $this->visualCode = $code;
-        $this->directory = $code;
 
         return $this;
     }
@@ -651,12 +643,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->courseLanguage;
     }
 
-    /**
-     * Set title.
-     *
-     * @return Course
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -681,12 +668,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getTitle().' ('.$this->getCode().')';
     }
 
-    /**
-     * Set description.
-     *
-     * @return Course
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -703,11 +685,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->description;
     }
 
-    /**
-     * Set category.
-     *
-     * @return Course
-     */
     public function setCategories(Collection $categories): self
     {
         $this->categories = $categories;
@@ -744,12 +721,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->visibility;
     }
 
-    /**
-     * Set showScore.
-     *
-     * @return Course
-     */
-    public function setShowScore(int $showScore)
+    public function setShowScore(int $showScore): self
     {
         $this->showScore = $showScore;
 
@@ -778,12 +750,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->tutorName;
     }
 
-    /**
-     * Set visualCode.
-     *
-     * @return Course
-     */
-    public function setVisualCode(string $visualCode)
+    public function setVisualCode(string $visualCode): self
     {
         $this->visualCode = $visualCode;
 
@@ -800,12 +767,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->visualCode;
     }
 
-    /**
-     * Set departmentName.
-     *
-     * @return Course
-     */
-    public function setDepartmentName(string $departmentName)
+    public function setDepartmentName(string $departmentName): self
     {
         $this->departmentName = $departmentName;
 
@@ -822,12 +784,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->departmentName;
     }
 
-    /**
-     * Set departmentUrl.
-     *
-     * @return Course
-     */
-    public function setDepartmentUrl(string $departmentUrl)
+    public function setDepartmentUrl(string $departmentUrl): self
     {
         $this->departmentUrl = $departmentUrl;
 
@@ -844,12 +801,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->departmentUrl;
     }
 
-    /**
-     * Set diskQuota.
-     *
-     * @return Course
-     */
-    public function setDiskQuota(int $diskQuota)
+    public function setDiskQuota(int $diskQuota): self
     {
         $this->diskQuota = $diskQuota;
 
@@ -866,12 +818,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->diskQuota;
     }
 
-    /**
-     * Set lastVisit.
-     *
-     * @return Course
-     */
-    public function setLastVisit(DateTime $lastVisit)
+    public function setLastVisit(DateTime $lastVisit): self
     {
         $this->lastVisit = $lastVisit;
 
@@ -888,12 +835,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->lastVisit;
     }
 
-    /**
-     * Set lastEdit.
-     *
-     * @return Course
-     */
-    public function setLastEdit(DateTime $lastEdit)
+    public function setLastEdit(DateTime $lastEdit): self
     {
         $this->lastEdit = $lastEdit;
 
@@ -910,12 +852,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->lastEdit;
     }
 
-    /**
-     * Set creationDate.
-     *
-     * @return Course
-     */
-    public function setCreationDate(DateTime $creationDate)
+    public function setCreationDate(DateTime $creationDate): self
     {
         $this->creationDate = $creationDate;
 
@@ -932,12 +869,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->creationDate;
     }
 
-    /**
-     * Set expirationDate.
-     *
-     * @return Course
-     */
-    public function setExpirationDate(DateTime $expirationDate)
+    public function setExpirationDate(DateTime $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 
@@ -954,12 +886,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->expirationDate;
     }
 
-    /**
-     * Set subscribe.
-     *
-     * @return Course
-     */
-    public function setSubscribe(bool $subscribe)
+    public function setSubscribe(bool $subscribe): self
     {
         $this->subscribe = $subscribe;
 
@@ -976,12 +903,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->subscribe;
     }
 
-    /**
-     * Set unsubscribe.
-     *
-     * @return Course
-     */
-    public function setUnsubscribe(bool $unsubscribe)
+    public function setUnsubscribe(bool $unsubscribe): self
     {
         $this->unsubscribe = $unsubscribe;
 
@@ -998,12 +920,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->unsubscribe;
     }
 
-    /**
-     * Set registrationCode.
-     *
-     * @return Course
-     */
-    public function setRegistrationCode(string $registrationCode)
+    public function setRegistrationCode(string $registrationCode): self
     {
         $this->registrationCode = $registrationCode;
 
@@ -1020,12 +937,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->registrationCode;
     }
 
-    /**
-     * Set legal.
-     *
-     * @return Course
-     */
-    public function setLegal(string $legal)
+    public function setLegal(string $legal): self
     {
         $this->legal = $legal;
 
@@ -1042,12 +954,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->legal;
     }
 
-    /**
-     * Set activateLegal.
-     *
-     * @return Course
-     */
-    public function setActivateLegal(int $activateLegal)
+    public function setActivateLegal(int $activateLegal): self
     {
         $this->activateLegal = $activateLegal;
 
@@ -1079,12 +986,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Set courseTypeId.
-     *
-     * @return Course
-     */
-    public function setCourseTypeId(int $courseTypeId)
+    public function setCourseTypeId(int $courseTypeId): self
     {
         $this->courseTypeId = $courseTypeId;
 
@@ -1266,10 +1168,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @param SkillRelCourse[]|Collection $skills
-     *
-     * @return Course
      */
-    public function setSkills(Collection $skills)
+    public function setSkills(Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -1286,10 +1186,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @param GradebookCategory[]|Collection $gradebookCategories
-     *
-     * @return Course
      */
-    public function setGradebookCategories(Collection $gradebookCategories)
+    public function setGradebookCategories(Collection $gradebookCategories): self
     {
         $this->gradebookCategories = $gradebookCategories;
 
@@ -1306,10 +1204,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @param GradebookEvaluation[]|Collection $gradebookEvaluations
-     *
-     * @return Course
      */
-    public function setGradebookEvaluations(Collection $gradebookEvaluations)
+    public function setGradebookEvaluations(Collection $gradebookEvaluations): self
     {
         $this->gradebookEvaluations = $gradebookEvaluations;
 
@@ -1326,10 +1222,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @param GradebookLink[]|Collection $gradebookLinks
-     *
-     * @return Course
      */
-    public function setGradebookLinks(Collection $gradebookLinks)
+    public function setGradebookLinks(Collection $gradebookLinks): self
     {
         $this->gradebookLinks = $gradebookLinks;
 

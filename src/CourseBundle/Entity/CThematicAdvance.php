@@ -32,7 +32,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic", inversedBy="advances")
      * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
     protected CThematic $thematic;

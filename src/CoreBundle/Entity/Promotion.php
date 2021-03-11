@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -65,6 +66,7 @@ class Promotion
     public function __construct()
     {
         $this->status = self::PROMOTION_STATUS_ACTIVE;
+        $this->sessions = new ArrayCollection();
     }
 
     /**

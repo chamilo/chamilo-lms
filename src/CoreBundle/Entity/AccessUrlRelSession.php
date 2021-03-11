@@ -32,7 +32,7 @@ class AccessUrlRelSession
     protected ?Session $session = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="session", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected ?AccessUrl $url = null;

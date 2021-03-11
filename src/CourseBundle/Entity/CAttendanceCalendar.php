@@ -30,7 +30,7 @@ class CAttendanceCalendar
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="calendars")
      * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
      */
     protected CAttendance $attendance;

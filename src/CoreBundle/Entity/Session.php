@@ -11,7 +11,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Database;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -185,7 +184,7 @@ class Session
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="session_admin_id", referencedColumnName="id", nullable=true)
      */
-    protected User $sessionAdmin;
+    protected ?User $sessionAdmin = null;
 
     /**
      * @Assert\NotBlank
@@ -206,7 +205,7 @@ class Session
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Promotion", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="promotion_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?Promotion $promotion;
+    protected ?Promotion $promotion = null;
 
     /**
      * @Groups({"session:read"})
@@ -254,27 +253,15 @@ class Session
 
     /**
      * @Groups({"session:read", "session:write"})
-     * @ORM\ManyToOne(targetEntity="SessionCategory", inversedBy="session")
+     * @ORM\ManyToOne(targetEntity="SessionCategory", inversedBy="sessions")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */
-    protected ?SessionCategory $category;
+    protected ?SessionCategory $category = null;
 
     /**
      * @ORM\Column(name="send_subscription_notification", type="boolean", nullable=false, options={"default":false})
      */
     protected bool $sendSubscriptionNotification;
-
-    /**
-     * @var Collection|CStudentPublication[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication",
-     *     mappedBy="session",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     */
-    protected Collection $studentPublications;
 
     public function __construct()
     {
@@ -284,7 +271,6 @@ class Session
         $this->courses = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->userCourseSubscriptions = new ArrayCollection();
-        $this->studentPublications = new ArrayCollection();
         //$this->items = new ArrayCollection();
         $this->urls = new ArrayCollection();
 
@@ -293,12 +279,13 @@ class Session
         $this->nbrUsers = 0;
         $this->nbrCourses = 0;
         $this->sendSubscriptionNotification = false;
-        $this->displayStartDate = new DateTime();
-        $this->displayEndDate = new DateTime();
-        $this->accessStartDate = new DateTime();
-        $this->accessEndDate = new DateTime();
-        $this->coachAccessStartDate = new DateTime();
-        $this->coachAccessEndDate = new DateTime();
+        $now = new DateTime();
+        $this->displayStartDate = $now;
+        $this->displayEndDate = $now;
+        $this->accessStartDate = $now;
+        $this->accessEndDate = $now;
+        $this->coachAccessStartDate = $now;
+        $this->coachAccessEndDate = $now;
         $this->visibility = 1;
         $this->showDescription = false;
         $this->category = null;
@@ -571,12 +558,7 @@ class Session
         return $this->description;
     }
 
-    /**
-     * Set nbrCourses.
-     *
-     * @return Session
-     */
-    public function setNbrCourses(int $nbrCourses)
+    public function setNbrCourses(int $nbrCourses): self
     {
         $this->nbrCourses = $nbrCourses;
 
@@ -593,12 +575,7 @@ class Session
         return $this->nbrCourses;
     }
 
-    /**
-     * Set nbrUsers.
-     *
-     * @return Session
-     */
-    public function setNbrUsers(int $nbrUsers)
+    public function setNbrUsers(int $nbrUsers): self
     {
         $this->nbrUsers = $nbrUsers;
 
@@ -615,12 +592,7 @@ class Session
         return $this->nbrUsers;
     }
 
-    /**
-     * Set nbrClasses.
-     *
-     * @return Session
-     */
-    public function setNbrClasses(int $nbrClasses)
+    public function setNbrClasses(int $nbrClasses): self
     {
         $this->nbrClasses = $nbrClasses;
 
@@ -637,12 +609,7 @@ class Session
         return $this->nbrClasses;
     }
 
-    /**
-     * Set visibility.
-     *
-     * @return Session
-     */
-    public function setVisibility(int $visibility)
+    public function setVisibility(int $visibility): self
     {
         $this->visibility = $visibility;
 
@@ -671,12 +638,7 @@ class Session
         return $this;
     }
 
-    /**
-     * Set displayStartDate.
-     *
-     * @return Session
-     */
-    public function setDisplayStartDate(DateTime $displayStartDate)
+    public function setDisplayStartDate(?DateTime $displayStartDate): self
     {
         $this->displayStartDate = $displayStartDate;
 
@@ -693,7 +655,7 @@ class Session
         return $this->displayStartDate;
     }
 
-    public function setDisplayEndDate(DateTime $displayEndDate): self
+    public function setDisplayEndDate(?DateTime $displayEndDate): self
     {
         $this->displayEndDate = $displayEndDate;
 
@@ -710,7 +672,7 @@ class Session
         return $this->displayEndDate;
     }
 
-    public function setAccessStartDate(DateTime $accessStartDate): self
+    public function setAccessStartDate(?DateTime $accessStartDate): self
     {
         $this->accessStartDate = $accessStartDate;
 
@@ -727,7 +689,7 @@ class Session
         return $this->accessStartDate;
     }
 
-    public function setAccessEndDate(DateTime $accessEndDate): self
+    public function setAccessEndDate(?DateTime $accessEndDate): self
     {
         $this->accessEndDate = $accessEndDate;
 
@@ -744,7 +706,7 @@ class Session
         return $this->accessEndDate;
     }
 
-    public function setCoachAccessStartDate(DateTime $coachAccessStartDate): self
+    public function setCoachAccessStartDate(?DateTime $coachAccessStartDate): self
     {
         $this->coachAccessStartDate = $coachAccessStartDate;
 
@@ -761,7 +723,7 @@ class Session
         return $this->coachAccessStartDate;
     }
 
-    public function setCoachAccessEndDate(DateTime $coachAccessEndDate): self
+    public function setCoachAccessEndDate(?DateTime $coachAccessEndDate): self
     {
         $this->coachAccessEndDate = $coachAccessEndDate;
 
@@ -778,10 +740,7 @@ class Session
         return $this->coachAccessEndDate;
     }
 
-    /**
-     * @return User
-     */
-    public function getGeneralCoach()
+    public function getGeneralCoach(): User
     {
         return $this->generalCoach;
     }
@@ -793,15 +752,12 @@ class Session
         return $this;
     }
 
-    /**
-     * @return SessionCategory
-     */
-    public function getCategory()
+    public function getCategory(): ?SessionCategory
     {
         return $this->category;
     }
 
-    public function setCategory(SessionCategory $category): self
+    public function setCategory(?SessionCategory $category): self
     {
         $this->category = $category;
 
@@ -1025,29 +981,6 @@ class Session
         return $this->userCourseSubscriptions->matching($criteria);
     }
 
-    public function setStudentPublications(Collection $studentPublications): self
-    {
-        $this->studentPublications = new ArrayCollection();
-
-        foreach ($studentPublications as $studentPublication) {
-            $this->addStudentPublication($studentPublication);
-        }
-
-        return $this;
-    }
-
-    public function addStudentPublication(CStudentPublication $studentPublication): self
-    {
-        $this->studentPublications[] = $studentPublication;
-
-        return $this;
-    }
-
-    public function getStudentPublications(): Collection
-    {
-        return $this->studentPublications;
-    }
-
     public function getIssuedSkills(): Collection
     {
         return $this->issuedSkills;
@@ -1134,7 +1067,7 @@ class Session
         return $this;
     }
 
-    public function getSessionAdmin(): User
+    public function getSessionAdmin(): ?User
     {
         return $this->sessionAdmin;
     }

@@ -135,9 +135,9 @@ class GradebookCategory
     /**
      * @var Collection|GradebookComment[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradebook")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradeBook")
      */
-    protected \Doctrine\Common\Collections\Collection $comments;
+    protected Collection $comments;
 
     public function __construct()
     {

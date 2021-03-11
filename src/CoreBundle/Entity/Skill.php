@@ -117,9 +117,9 @@ class Skill
 
     public function __construct()
     {
-        $this->issuedSkills = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->courses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->issuedSkills = new ArrayCollection();
+        $this->items = new ArrayCollection();
+        $this->courses = new ArrayCollection();
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
     }

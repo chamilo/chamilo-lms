@@ -191,18 +191,19 @@ class CQuiz extends AbstractResource implements ResourceInterface
      *
      * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
      */
-    protected \Doctrine\Common\Collections\Collection $questions;
+    protected Collection $questions;
 
     /**
      * @var Collection|CQuizRelQuestionCategory[]
      *
      * @ORM\OneToMany(targetEntity="CQuizRelQuestionCategory", mappedBy="quiz", cascade={"persist"}))
      */
-    protected \Doctrine\Common\Collections\Collection $questionsCategories;
+    protected Collection $questionsCategories;
 
     public function __construct()
     {
-        $this->questionsCategories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->questionsCategories = new ArrayCollection();
         $this->hideQuestionTitle = false;
         $this->type = self::ONE_PER_PAGE;
         $this->showPreviousButton = true;
@@ -222,7 +223,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
         $this->pageResultConfiguration = null;
-        $this->questions = new ArrayCollection();
     }
 
     public function __toString(): string

@@ -57,7 +57,7 @@ class PortfolioCategory
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="category")
      */
-    protected \Doctrine\Common\Collections\ArrayCollection $items;
+    protected ArrayCollection $items;
 
     public function __construct()
     {

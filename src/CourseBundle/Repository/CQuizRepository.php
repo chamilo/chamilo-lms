@@ -29,13 +29,15 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         Session $session = null,
         ?string $title = null,
         ?int $active = null,
-        bool $onlyPublished = true
+        bool $onlyPublished = true,
+        ?int $categoryId = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
         if ($onlyPublished) {
             $this->addDateFilterQueryBuilder(new DateTime(), $qb);
         }
+        $this->addCategoryQueryBuilder($categoryId, $qb);
         $this->addActiveQueryBuilder($active, $qb);
         $this->addNotDeletedQueryBuilder($qb);
         $this->addTitleQueryBuilder($title, $qb);
@@ -99,6 +101,20 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         $qb = $this->getOrCreateQueryBuilder($qb);
 
         $qb->andWhere('resource.active <> -1');
+
+        return $qb;
+    }
+
+    private function addCategoryQueryBuilder(?int $categoryId = null, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+
+        if (null !== $categoryId) {
+            $qb
+                ->andWhere('resource.exerciseCategory = :category_id')
+                ->setParameter('category_id', $categoryId)
+            ;
+        }
 
         return $qb;
     }

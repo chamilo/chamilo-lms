@@ -509,6 +509,7 @@ function display_addcategory_form($category_name = '', $id = 0, $action = '')
 function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id = 0)
 {
     $course_info = api_get_course_info();
+    $course = api_get_course_entity();
     $_user = api_get_user_info();
     $is_courseAdmin = api_is_course_admin();
     $is_courseTutor = api_is_course_tutor();
@@ -687,7 +688,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
         && 'true' == $allowGroups || 'true' === $allowStudentToStudent
     ) {
-        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info);
+        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course);
 
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {

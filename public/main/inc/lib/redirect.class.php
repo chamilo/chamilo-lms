@@ -51,7 +51,7 @@ class Redirect
      * @param bool Whether the user just logged in (in this case, use page_after_login rules)
      * @param int  The user_id, if defined. Otherwise just send to where the page_after_login setting says
      */
-    public static function session_request_uri($logging_in = false, $user_id = null)
+    public static function session_request_uri($logging_in = false, $userInfo = null)
     {
         $no_redirection = isset($_SESSION['noredirection']) ? $_SESSION['noredirection'] : false;
 
@@ -75,17 +75,18 @@ class Redirect
         } elseif ($logging_in ||
             (isset($_REQUEST['sso_referer']) && !empty($_REQUEST['sso_referer']))
         ) {
-            if (isset($user_id)) {
+            if (isset($userInfo) && !empty($userInfo)) {
+                $userId = $userInfo['user_id'];
                 $allow = api_get_configuration_value('plugin_redirection_enabled');
                 if ($allow) {
                     $allow = api_get_configuration_value('plugin_redirection_enabled');
                     if ($allow) {
-                        RedirectionPlugin::redirectUser($user_id);
+                        RedirectionPlugin::redirectUser($userId);
                     }
                 }
 
                 // Make sure we use the appropriate role redirection in case one has been defined
-                $user_status = api_get_user_status($user_id);
+                $user_status = $userInfo['status'];
                 switch ($user_status) {
                     case COURSEMANAGER:
                         $redir = api_get_setting('teacher_page_after_login');
@@ -122,12 +123,12 @@ class Redirect
                     // if multiple URLs are enabled, make sure he's admin of the
                     // current URL before redirecting
                     $url = api_get_current_access_url_id();
-                    if (api_is_platform_admin_by_id($user_id, $url)) {
+                    if (api_is_platform_admin_by_id($userId, $url)) {
                         self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
                     }
                 } else {
                     // if no multiple URL, then it's enough to be platform admin
-                    if (api_is_platform_admin_by_id($user_id)) {
+                    if (api_is_platform_admin_by_id($userId)) {
                         self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
                     }
                 }

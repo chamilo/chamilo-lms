@@ -18,6 +18,7 @@ if (!$isAllowedToEdit) {
 }
 
 $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+$course = api_get_course_entity();
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
 $courseId = api_get_course_int_id();
@@ -157,7 +158,7 @@ $lpInfo = Database::select(
     'first'
 );
 
-$groups = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
+$groups = GroupManager::get_group_list(null, $course, null, $sessionId);
 $label = get_lang('Groups');
 $classes = [];
 if ($allowUserGroups) {

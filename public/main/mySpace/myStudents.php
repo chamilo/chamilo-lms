@@ -15,9 +15,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-//$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 $htmlHeadXtra[] = null;
-$export = isset($_GET['export']) ? $_GET['export'] : false;
+$export = $_GET['export'] ?? false;
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 $origin = api_get_origin();
 $courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : '';
@@ -129,7 +128,7 @@ if (!empty($details)) {
         } else {
             if ('resume_session' === $origin) {
                 $interbreadcrumb[] = [
-                    'url' => "../session/session_list.php",
+                    'url' => '../session/session_list.php',
                     'name' => get_lang('Session list'),
                 ];
                 $interbreadcrumb[] = [
@@ -210,15 +209,15 @@ if (!empty($details)) {
 // Database Table Definitions
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = $_GET['action'] ?? '';
 
 switch ($action) {
     case 'add_work_time':
         if (false === $workingTimeEdit) {
             api_not_allowed(true);
         }
-        $workingTime = isset($_GET['time']) ? $_GET['time'] : '';
-        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : '';
+        $workingTime = $_GET['time'] ?? '';
+        $workId = $_GET['work_id'] ?? '';
         Event::eventAddVirtualCourseTime($courseInfo['real_id'], $studentId, $sessionId, $workingTime, $workId);
         Display::addFlash(Display::return_message(get_lang('Updated')));
 
@@ -228,8 +227,8 @@ switch ($action) {
         if (false === $workingTimeEdit) {
             api_not_allowed(true);
         }
-        $workingTime = isset($_GET['time']) ? $_GET['time'] : '';
-        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : '';
+        $workingTime = $_GET['time'] ?? '';
+        $workId = $_GET['work_id'] ?? '';
         Event::eventRemoveVirtualCourseTime($courseInfo['real_id'], $studentId, $sessionId, $workingTime, $workId);
 
         Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -461,8 +460,8 @@ switch ($action) {
         break;
     case 'send_message':
         if (true === $allowMessages) {
-            $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
-            $message = isset($_POST['message']) ? $_POST['message'] : '';
+            $subject = $_POST['subject'] ?? '';
+            $message = $_POST['message'] ?? '';
             $userInfo = api_get_user_info($studentId);
 
             if (!empty($subject) && !empty($message)) {
@@ -574,7 +573,6 @@ switch ($action) {
 }
 
 $courses_in_session = [];
-
 // See #4676
 $drh_can_access_all_courses = false;
 if (api_is_drh() || api_is_platform_admin() || api_is_student_boss() || api_is_session_admin()) {
@@ -650,10 +648,7 @@ while ($row = Database::fetch_array($rs, 'ASSOC')) {
     }
 }
 
-$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-    api_get_user_id(),
-    $courseInfo
-);
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), $courseInfo);
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($studentId)) {
@@ -1078,8 +1073,6 @@ if (isset($_GET['action']) && 'all_attendance' === $_GET['action']) {
     }
     echo '</tbody>
     </table></div>';
-    /** Display dates */
-    /*Display all attendances */
     Display::display_footer();
     exit();
 }
@@ -1874,16 +1867,13 @@ if (empty($details)) {
         $result_exercices = Database::query($sql);
         $i = 0;*/
 
-        $repo = Container::getQuizRepository();
         $course = api_get_course_entity($courseInfo['real_id']);
         $session = api_get_session_entity($sessionId);
-        // 2. Get query builder from repo.
-        $qb = $repo->getResourcesByCourse($course, $session);
-        $qb->andWhere('resource.active = 1 OR resource.active = 0');
+        $repo = Container::getQuizRepository();
+        $qb = $repo->findAllByCourse($course, $session, null, 2, false);
         $exerciseList = $qb->getQuery()->getResult();
 
         if ($exerciseList) {
-            //while ($exercices = Database::fetch_array($result_exercices)) {
             /** @var CQuiz $exercise */
             foreach ($exerciseList as $exercise) {
                 $exercise_id = (int) $exercise->getIid();
@@ -1928,10 +1918,8 @@ if (empty($details)) {
                 if ($i % 2) {
                     $css_class = 'row_odd';
                 }
-
-                echo '<tr class="'.$css_class.'"><td>'.Exercise::get_formated_title_variable(
-                        $exercise->getTitle()
-                    ).'</td>';
+                $exerciseTitle = Exercise::get_formated_title_variable($exercise->getTitle());
+                echo '<tr class="'.$css_class.'"><td>'.$exerciseTitle.'</td>';
                 echo '<td>';
 
                 if (!empty($lp_name)) {
@@ -2121,9 +2109,8 @@ if (empty($details)) {
             echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
             echo '<td class="text-center">'.$qualification.'</td>';
-            echo '<td class="text-center">'.api_convert_and_format_date(
-                    $results['sent_date_from_db']
-                ).' '.$results['expiry_note'].'</td>';
+            echo '<td class="text-center">'.
+                api_convert_and_format_date($results['sent_date_from_db']).' '.$results['expiry_note'].'</td>';
             $assignment = get_work_assignment_by_id($work->iid, $courseInfo['real_id']);
 
             echo '<td class="text-center">';
@@ -2169,7 +2156,6 @@ if (empty($details)) {
     ';
 
     $csv_content[] = [];
-
     $csv_content[] = [
         get_lang('OTI (Online Training Interaction) settings report'),
     ];
@@ -2198,7 +2184,7 @@ if (empty($details)) {
         get_lang('Latest chat connection'),
         $chat_last_connection,
     ];
-} //end details
+}
 
 if (true === $allowMessages) {
     // Messages

@@ -1033,7 +1033,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
 
         //If password is set and user is not registered to the course then the course is not visible
-        if (false == $isAllowedInCourse &&
+        if (false === $isAllowedInCourse &&
             isset($course_info['registration_code']) &&
             !empty($course_info['registration_code'])
         ) {
@@ -2416,7 +2416,7 @@ function api_format_course_array(Course $course = null)
     $courseData['code'] = $courseData['sysCode'] = $course->getCode();
     $courseData['name'] = $courseData['title'] = $course->getTitle();
     $courseData['official_code'] = $courseData['visual_code'] = $course->getVisualCode();
-    $courseData['path'] = $courseData['directory'] = $course->getDirectory(); // Use as key in path.
+    //$courseData['path'] = $courseData['directory'] = $course->getDirectory(); // Use as key in path.
     $courseData['creation_date'] = $course->getCreationDate()->format('Y-m-d H:i:s');
     $courseData['titular'] = $course->getTutorName();
     $courseData['language'] = $courseData['course_language'] = $course->getCourseLanguage();
@@ -2631,27 +2631,27 @@ function get_status_from_code($status_code)
 {
     switch ($status_code) {
         case STUDENT:
-            return get_lang('Student', '');
+            return get_lang('Student');
         case COURSEMANAGER:
-            return get_lang('Teacher', '');
+            return get_lang('Teacher');
         case SESSIONADMIN:
-            return get_lang('SessionsAdmin', '');
+            return get_lang('SessionsAdmin');
         case DRH:
-            return get_lang('Drh', '');
+            return get_lang('Drh');
         case ANONYMOUS:
-            return get_lang('Anonymous', '');
+            return get_lang('Anonymous');
         case PLATFORM_ADMIN:
-            return get_lang('Administrator', '');
+            return get_lang('Administrator');
         case SESSION_COURSE_COACH:
-            return get_lang('SessionCourseCoach', '');
+            return get_lang('SessionCourseCoach');
         case SESSION_GENERAL_COACH:
-            return get_lang('SessionGeneralCoach', '');
+            return get_lang('SessionGeneralCoach');
         case COURSE_TUTOR:
-            return get_lang('CourseAssistant', '');
+            return get_lang('CourseAssistant');
         case STUDENT_BOSS:
-            return get_lang('StudentBoss', '');
+            return get_lang('StudentBoss');
         case INVITEE:
-            return get_lang('Invitee', '');
+            return get_lang('Invitee');
     }
 }
 
@@ -3399,38 +3399,6 @@ function api_is_invitee()
 }
 
 /**
- * This function checks whether a session is assigned into a category.
- *
- * @param int       - session id
- * @param string    - category name
- *
- * @return bool - true if is found, otherwise false
- */
-function api_is_session_in_category($session_id, $category_name)
-{
-    $session_id = (int) $session_id;
-    $category_name = Database::escape_string($category_name);
-    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
-    $sql = "SELECT 1
-            FROM $tbl_session
-            WHERE $session_id IN (
-                SELECT s.id FROM $tbl_session s, $tbl_session_category sc
-                WHERE
-                  s.session_category_id = sc.id AND
-                  sc.name LIKE '%$category_name'
-            )";
-    $rs = Database::query($sql);
-
-    if (Database::num_rows($rs) > 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * Displays the title of a tool.
  * Normal use: parameter is a string:
  * api_display_tool_title("My Tool").
@@ -3855,18 +3823,6 @@ function api_is_allowed($tool, $action, $task_id = 0)
  */
 function api_is_anonymous($user_id = null, $db_check = false)
 {
-    /*if ($db_check) {
-        if (!isset($user_id)) {
-            $user_id = api_get_user_id();
-        }
-
-        $info = api_get_user_info($user_id);
-
-        if (6 == $info['status'] || 0 == $user_id || empty($info)) {
-            return true;
-        }
-    }*/
-
     return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
 }
 

@@ -227,35 +227,34 @@ $actions = null;
 if (api_is_student_boss()) {
     $actions .= Display::url(
         Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
     );
     $actions .= Display::url(
         Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH)."mySpace/student.php"
+        api_get_path(WEB_CODE_PATH).'mySpace/student.php'
     );
     $actions .= Display::url(
-        Display::return_icon("statistics.png", get_lang("Corporate report"), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('statistics.png', get_lang('Corporate report'), [], ICON_SIZE_MEDIUM),
         "#"
     );
     $actions .= Display::url(
         Display::return_icon(
-            "certificate_list.png",
-            get_lang("GradebookSeeListOfLearnersCertificates"),
+            'certificate_list.png',
+            get_lang('GradebookSeeListOfLearnersCertificates'),
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
+        api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
     );
 }
 
 $content = '<div class="actions">';
-
 if (!empty($actions)) {
     $content .= $actions;
 }
 $content .= Display::url(
     get_lang("Corporate reportResumed"),
-    api_get_path(WEB_CODE_PATH)."mySpace/company_reports_resumed.php",
+    api_get_path(WEB_CODE_PATH).'mySpace/company_reports_resumed.php',
     [
         'class' => 'btn btn-success',
     ]

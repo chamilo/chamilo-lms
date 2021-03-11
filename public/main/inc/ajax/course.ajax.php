@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 
 /**
  * Responses to AJAX calls.
@@ -310,16 +312,22 @@ switch ($action) {
         break;
     case 'search_exercise_by_course':
         if (api_is_platform_admin()) {
-            $course = api_get_course_info_by_id($_GET['course_id']);
-            $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
-            $exercises = ExerciseLib::get_all_exercises(
+            $course = api_get_course_entity($_GET['course_id']);
+            $session_id = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
+            $session = api_get_session_entity($session_id);
+
+            $qb = Container::getQuizRepository()->findAllByCourse($course, $session, $_GET['q'], 2, false);
+            /** @var CQuiz[] $exercises */
+            $exercises = $qb->getQuery()->getResult();
+
+            /*$exercises = ExerciseLib::get_all_exercises(
                 $course,
                 $session_id,
                 false,
                 $_GET['q'],
                 true,
                 3
-            );
+            );*/
 
             foreach ($exercises as $exercise) {
                 $data[] = ['id' => $exercise->getIid(), 'text' => html_entity_decode($exercise->getTitle())];

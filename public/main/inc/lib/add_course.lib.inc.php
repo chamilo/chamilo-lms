@@ -756,7 +756,6 @@ class AddCourse
             $course = new Course();
             $course
                 ->setCode($code)
-                ->setDirectory($directory)
                 ->setCourseLanguage($course_language)
                 ->setTitle($title)
                 ->setDescription(get_lang('Course Description'))

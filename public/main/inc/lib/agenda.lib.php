@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Doctrine\DBAL\Types\Types;
+use Chamilo\CoreBundle\Entity\Course;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -954,7 +954,7 @@ class Agenda
                 $this->getPlatformEvents($start, $end);
                 break;
             case 'course':
-                $courseInfo = api_get_course_info_by_id($courseId);
+                $course = api_get_course_entity($courseId);
 
                 // Session coach can see all events inside a session.
                 if (api_is_coach()) {
@@ -962,7 +962,7 @@ class Agenda
                     $this->getCourseEvents(
                         $start,
                         $end,
-                        $courseInfo,
+                        $course,
                         $groupId,
                         $this->sessionId,
                         $user_id
@@ -980,7 +980,7 @@ class Agenda
                     $this->getCourseEvents(
                         $start,
                         $end,
-                        $courseInfo,
+                        $course,
                         $groupId,
                         $this->sessionId,
                         $user_id
@@ -1056,13 +1056,11 @@ class Agenda
 
                         if (!empty($my_courses)) {
                             foreach ($my_courses as $course_item) {
-                                $courseInfo = api_get_course_info_by_id(
-                                    $course_item['real_id']
-                                );
+                                $course = api_get_course_entity($course_item['real_id']);
                                 $this->getCourseEvents(
                                     $start,
                                     $end,
-                                    $courseInfo,
+                                    $course,
                                     0,
                                     $my_session_id
                                 );
@@ -1073,15 +1071,13 @@ class Agenda
 
                 if (!empty($my_course_list) && false == $sessionFilterActive) {
                     foreach ($my_course_list as $courseInfoItem) {
-                        $courseInfo = api_get_course_info_by_id(
-                            $courseInfoItem['real_id']
-                        );
+                        $course = api_get_course_entity($courseInfoItem['real_id']);
                         if (isset($courseId) && !empty($courseId)) {
-                            if ($courseInfo['real_id'] == $courseId) {
+                            if ($course->getId() == $courseId) {
                                 $this->getCourseEvents(
                                     $start,
                                     $end,
-                                    $courseInfo,
+                                    $course,
                                     0,
                                     0,
                                     $user_id
@@ -1091,7 +1087,7 @@ class Agenda
                             $this->getCourseEvents(
                                 $start,
                                 $end,
-                                $courseInfo,
+                                $course,
                                 0,
                                 0,
                                 $user_id
@@ -1399,6 +1395,7 @@ class Agenda
 
         if (!empty($courses)) {
             foreach ($courses as $course) {
+                $course = api_get_course_entity($course['real_id']);
                 $this->getCourseEvents(
                     $start,
                     $end,
@@ -1415,7 +1412,7 @@ class Agenda
     /**
      * @param int    $start
      * @param int    $end
-     * @param array  $courseInfo
+     * @param Course $course
      * @param int    $groupId
      * @param int    $sessionId
      * @param int    $user_id
@@ -1426,7 +1423,7 @@ class Agenda
     public function getCourseEvents(
         $start,
         $end,
-        $courseInfo,
+        Course $course,
         $groupId = 0,
         $sessionId = 0,
         $user_id = 0,
@@ -1438,23 +1435,18 @@ class Agenda
         $start = !empty($start) ? api_get_utc_datetime($start) : null;
         $end = !empty($end) ? api_get_utc_datetime($end) : null;
 
-        if (empty($courseInfo)) {
+        if (null === $course) {
             return [];
         }
 
-        $courseId = $courseInfo['real_id'];
-
-        if (empty($courseId)) {
-            return [];
-        }
-
+        $courseId = $course->getId();
         $userId = api_get_user_id();
         $sessionId = (int) $sessionId;
         $user_id = (int) $user_id;
 
         $groupList = GroupManager::get_group_list(
             null,
-            $courseInfo,
+            $course,
             null,
             $sessionId
         );
@@ -1462,10 +1454,7 @@ class Agenda
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             $isAllowToEdit = true;
         } else {
-            $isAllowToEdit = CourseManager::isCourseTeacher(
-                $userId,
-                $courseId
-            );
+            $isAllowToEdit = CourseManager::isCourseTeacher($userId, $courseId);
         }
 
         $isAllowToEditByHrm = false;
@@ -1494,9 +1483,8 @@ class Agenda
         }
 
         $repo = Container::getCalendarEventRepository();
-        $courseEntity = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
-        $qb = $repo->getResourcesByCourseOnly($courseEntity, $courseEntity->getResourceNode());
+        $qb = $repo->getResourcesByCourseOnly($course, $course->getResourceNode());
         $userCondition = '';
 
         if ($isAllowToEdit) {
@@ -1685,7 +1673,7 @@ class Agenda
             }*/
 
             $event['session_name'] = $sessionInfo['name'] ?? '';
-            $event['course_name'] = $courseInfo['title'] ?? '';
+            $event['course_name'] = $course->getTitle();
 
             /*if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                 $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;
@@ -1799,7 +1787,7 @@ class Agenda
             }*/
             $event['sent_to'] = implode('<br />', $sentTo);
             $event['description'] = $row->getContent();
-            $event['visibility'] = $row->isVisible($courseEntity, $session) ? 1 : 0;
+            $event['visibility'] = $row->isVisible($course, $session) ? 1 : 0;
             $event['real_id'] = $eventId;
             $event['allDay'] = $row->getAllDay();
             $event['parent_event_id'] = $row->getParentEvent() ? $row->getParentEvent()->getIid() : null;

@@ -2,16 +2,20 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
-$course_info = api_get_course_info();
+$course = api_get_course_entity();
 $groupId = api_get_group_id();
 $session_id = api_get_session_id();
+$session = api_get_session_entity($session_id);
+
 $from_myspace = false;
-$from = isset($_GET['from']) ? $_GET['from'] : null;
+$from = $_GET['from'] ?? null;
 
 $this_section = SECTION_COURSES;
 if ('myspace' === $from) {
@@ -57,7 +61,7 @@ if ($export_csv) {
 $csv_content = [];
 
 // Breadcrumbs.
-if (isset($_GET['origin']) && 'resume_session' == $_GET['origin']) {
+if (isset($_GET['origin']) && 'resume_session' === $_GET['origin']) {
     $interbreadcrumb[] = ['url' => '../admin/index.php', 'name' => get_lang('Administration')];
     $interbreadcrumb[] = ['url' => '../session/session_list.php', 'name' => get_lang('Session list')];
     $interbreadcrumb[] = [
@@ -66,7 +70,7 @@ if (isset($_GET['origin']) && 'resume_session' == $_GET['origin']) {
     ];
 }
 
-$view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
+$view = $_REQUEST['view'] ?? '';
 $nameTools = get_lang('Reporting');
 
 // Display the header.
@@ -75,7 +79,7 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager:: get_student_list_from_course_code(
+    $a_students = CourseManager::get_student_list_from_course_code(
         api_get_course_id(),
         false,
         0,
@@ -86,7 +90,7 @@ if (empty($session_id)) {
     );
 } else {
     // Registered students in session.
-    $a_students = CourseManager:: get_student_list_from_course_code(
+    $a_students = CourseManager::get_student_list_from_course_code(
         api_get_course_id(),
         true,
         api_get_session_id()
@@ -114,7 +118,7 @@ $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 
 if ($lpReporting) {
-    $list = new LearnpathList(null, $course_info, $session_id);
+    $list = new LearnpathList(null, ['real_id' => $course->getId(), 'code' => $course->getCode()], $session_id);
     $flat_list = $list->get_flat_list();
 
     if (count($flat_list) > 0) {
@@ -181,10 +185,6 @@ if ($exerciseReporting) {
         ).' '.get_lang('Tests score')
     );
     echo '<table class="data_table">';
-    $course_id = api_get_course_int_id();
-    $sql = "SELECT iid, title FROM $TABLEQUIZ
-            WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
-    $rs = Database::query($sql);
 
     if ($export_csv) {
         $temp = [get_lang('Progress in courses'), ''];
@@ -192,17 +192,28 @@ if ($exerciseReporting) {
         $csv_content[] = $temp;
     }
 
-    $course_path_params = '&cidReq='.$course_code.'&id_session='.$session_id;
+    $course_path_params = '&cid='.$course_id.'&sid='.$session_id;
 
-    if (Database::num_rows($rs) > 0) {
-        while ($quiz = Database::fetch_array($rs)) {
+    /*$course_id = api_get_course_int_id();
+    $sql = "SELECT iid, title FROM $TABLEQUIZ
+            WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
+    $rs = Database::query($sql);*/
+
+    $session = api_get_session_entity($session_id);
+    $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2, false);
+    /** @var CQuiz[] $exercises */
+    $exercises = $qb->getQuery()->getResult();
+
+    if (!empty($exercises)) {
+        foreach ($exercises as $exercise) {
+            $exerciseId = $exercise->getIid();
             $quiz_avg_score = 0;
             if ($studentCount > 0) {
                 foreach ($student_ids as $student_id) {
                     $avg_student_score = Tracking::get_avg_student_exercise_score(
                         $student_id,
                         $course_code,
-                        $quiz['iid'],
+                        $exerciseId,
                         $session_id
                     );
                     $quiz_avg_score += $avg_student_score;
@@ -210,16 +221,16 @@ if ($exerciseReporting) {
             }
             $studentCount = (0 == $studentCount || is_null($studentCount) || '' == $studentCount) ? 1 : $studentCount;
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
-            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['iid'].$course_path_params;
+            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exerciseId.$course_path_params;
 
             echo '<tr><td>';
             echo Display::url(
-                $quiz['title'],
+                $exercise->getTitle(),
                 $url
             );
             echo '</td><td align="right">'.$quiz_avg_score.'</td></tr>';
             if ($export_csv) {
-                $temp = [$quiz['title'], $quiz_avg_score];
+                $temp = [$exercise->getTitle(), $quiz_avg_score];
                 $csv_content[] = $temp;
             }
         }

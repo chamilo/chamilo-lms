@@ -1866,12 +1866,12 @@ HOTSPOT;
      *
      * @param int    $exerciseId
      * @param array  $conditions
-     * @param string $courseCode
+     * @param int    $courseId
      * @param bool   $showSession
      *
      * @return array
      */
-    public static function get_count_exam_results($exerciseId, $conditions, $courseCode = '', $showSession = false)
+    public static function get_count_exam_results($exerciseId, $conditions, $courseId, $showSession = false)
     {
         $count = self::get_exam_results_data(
             null,
@@ -1881,7 +1881,7 @@ HOTSPOT;
             $exerciseId,
             $conditions,
             true,
-            $courseCode,
+            $courseId,
             $showSession
         );
 
@@ -1900,7 +1900,7 @@ HOTSPOT;
      * @param int    $exercise_id
      * @param null   $extra_where_conditions
      * @param bool   $get_count
-     * @param string $courseCode
+     * @param int    $courseId
      * @param bool   $showSessionField
      * @param bool   $showExerciseCategories
      * @param array  $userExtraFieldsToAdd
@@ -1918,7 +1918,7 @@ HOTSPOT;
         $exercise_id,
         $extra_where_conditions = null,
         $get_count = false,
-        $courseCode = null,
+        $courseId = null,
         $showSessionField = false,
         $showExerciseCategories = false,
         $userExtraFieldsToAdd = [],
@@ -1928,16 +1928,12 @@ HOTSPOT;
     ) {
         //@todo replace all this globals
         global $filter;
-        $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
-        $courseInfo = api_get_course_info($courseCode);
-
-        if (empty($courseInfo)) {
+        $courseId = (int) $courseId;
+        $course = api_get_course_entity($courseId);
+        if (null === $course) {
             return [];
         }
 
-        //$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-
-        $course_id = $courseInfo['real_id'];
         $sessionId = api_get_session_id();
         $exercise_id = (int) $exercise_id;
 
@@ -1974,7 +1970,7 @@ HOTSPOT;
             LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
             ON (ttte.exe_id = tr.exe_id)
             WHERE
-                c_id = $course_id AND
+                c_id = $courseId AND
                 exe_exo_id = $exercise_id
                 $sessionCondition
         )";
@@ -1997,9 +1993,9 @@ HOTSPOT;
                         g.id as group_id
                     FROM $TBL_USER u
                     INNER JOIN $TBL_GROUP_REL_USER gru
-                    ON (gru.user_id = u.id AND gru.c_id= $course_id )
+                    ON (gru.user_id = u.id AND gru.c_id= $courseId )
                     INNER JOIN $TBL_GROUP g
-                    ON (gru.group_id = g.id AND g.c_id= $course_id )
+                    ON (gru.group_id = g.id AND g.c_id= $courseId )
                 )";
             }
 
@@ -2060,9 +2056,9 @@ HOTSPOT;
                     g.iid as group_id
                 FROM $TBL_USER u
                 LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
-                ON (gru.user_id = u.id AND gru.c_id= $course_id )
+                ON (gru.user_id = u.id AND gru.c_id= $courseId )
                 LEFT OUTER JOIN $TBL_GROUP g
-                ON (gru.group_id = g.id AND g.c_id = $course_id )
+                ON (gru.group_id = g.id AND g.c_id = $courseId )
             )";
             }
 
@@ -2079,7 +2075,7 @@ HOTSPOT;
             }
 
             $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
-            $sqlWhereOption = "  AND gru.c_id = $course_id AND gru.user_id = user.id ";
+            $sqlWhereOption = "  AND gru.c_id = $courseId AND gru.user_id = user.id ";
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
@@ -2118,7 +2114,7 @@ HOTSPOT;
                 INNER JOIN $sql_inner_join_tbl_user AS user
                 ON (user.user_id = exe_user_id)
                 WHERE
-                    te.c_id = $course_id $session_id_and AND
+                    te.c_id = $courseId $session_id_and AND
                     ce.active <> -1
                     $exercise_where
                     $extra_where_conditions
@@ -2136,7 +2132,7 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($course->getCode());
         $teacher_id_list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -2172,7 +2168,7 @@ HOTSPOT;
             $results[] = $rowx;
         }
 
-        $group_list = GroupManager::get_group_list(null, $courseInfo);
+        $group_list = GroupManager::get_group_list(null, $course);
         $clean_group_list = [];
         if (!empty($group_list)) {
             foreach ($group_list as $group) {
@@ -2187,7 +2183,7 @@ HOTSPOT;
         if (is_array($results)) {
             $users_array_id = [];
             $from_gradebook = false;
-            if (isset($_GET['gradebook']) && 'view' == $_GET['gradebook']) {
+            if (isset($_GET['gradebook']) && 'view' === $_GET['gradebook']) {
                 $from_gradebook = true;
             }
             $sizeof = count($results);
@@ -2200,7 +2196,7 @@ HOTSPOT;
             // Looping results
             for ($i = 0; $i < $sizeof; $i++) {
                 $revised = $results[$i]['revised'];
-                if ('incomplete' == $results[$i]['completion_status']) {
+                if ('incomplete' === $results[$i]['completion_status']) {
                     // If the exercise was incomplete, we need to determine
                     // if it is still into the time allowed, or if its
                     // allowed time has expired and it can be closed
@@ -2244,7 +2240,8 @@ HOTSPOT;
                 }
                 $lp_name = null;
                 if ($lp_obj) {
-                    $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                    $url = api_get_path(WEB_CODE_PATH).
+                        'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
                     $lp_name = Display::url(
                         $lp_obj['lp_name'],
                         $url,
@@ -2469,7 +2466,7 @@ HOTSPOT;
                             }
                         }
 
-                        $objExercise = new Exercise($course_id);
+                        $objExercise = new Exercise($courseId);
                         if ($showExerciseCategories) {
                             // Getting attempt info
                             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
@@ -3065,30 +3062,9 @@ EOT;
             return [];
         }
 
-        /*$activeFilter = 0;
-        if (2 !== $active) {
-            $activeFilter = (int) $active;
-        }*/
-
-        /*$now = api_get_utc_datetime();
-        $timeConditions = '';
-        if ($check_publication_dates) {
-            // Start and end are set
-            $timeConditions = " AND ((start_time <> '' AND start_time < '$now' AND end_time <> '' AND end_time > '$now' )  OR ";
-            // only start is set
-            $timeConditions .= " (start_time <> '' AND start_time < '$now' AND end_time is NULL) OR ";
-            // only end is set
-            $timeConditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
-            // nothing is set
-            $timeConditions .= ' (start_time IS NULL AND end_time IS NULL)) ';
-        }
-
-        $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
-        $needle = !empty($search) ? "%".$search."%" : '';*/
-
         $repo = Container::getQuizRepository();
 
-        return $repo->findQuizzes($course, $session, (string) $search, $active);
+        return $repo->findAllByCourse($course, $session, (string) $search, $active);
 
         // Show courses by active status
         /*if (true == $search_all_sessions) {
@@ -3600,28 +3576,6 @@ EOT;
         }
 
         return $avg_score;
-    }
-
-    /**
-     * @param string $course_code
-     * @param int    $session_id
-     *
-     * @return CQuiz
-     */
-    public static function get_exercises_to_be_taken($course_code, $session_id)
-    {
-        $course_info = api_get_course_info($course_code);
-        $exercises = self::get_all_exercises($course_info, $session_id);
-        $result = [];
-        $now = time() + 15 * 24 * 60 * 60;
-        foreach ($exercises as $exercise_item) {
-            $endTime = $exercise_item->getEndTime() ?: null;
-            if (null !== $endTime && $endTime->getTimestamp() < $now) {
-                $result[] = $exercise_item;
-            }
-        }
-
-        return $result;
     }
 
     /**

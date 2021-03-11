@@ -631,7 +631,7 @@ if (!api_is_anonymous()) {
         $reportingTab .= '<br />';
         $reportingTab .= Tracking::show_course_detail(
             api_get_user_id(),
-            $courseCode,
+            $course_id,
             $session_id
         );
     }

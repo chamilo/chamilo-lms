@@ -31,7 +31,7 @@ $result = ExerciseLib::get_exam_results_data(
     $exerciseId,
     '',
     false,
-    null,
+    api_get_course_int_id(),
     false,
     false,
     [],

@@ -181,7 +181,7 @@ if (api_is_drh()) {
     $menu_items = [
         Display::url(
             Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         ),
         Display::url(Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM), 'student.php'),
         Display::url(

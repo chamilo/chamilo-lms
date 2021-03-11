@@ -1078,7 +1078,7 @@ if ('student_progress' == $origin) {
 } elseif ('myprogress' == $origin) {
         ?>
     <button type="button" class="save"
-            onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id(); ?>'"
+            onclick="top.location.href='../auth/my_progress.php?cid=<?php echo api_get_course_int_id(); ?>'"
             value="<?php echo get_lang('Quit test'); ?>">
         <?php echo get_lang('Quit test'); ?>
     </button>

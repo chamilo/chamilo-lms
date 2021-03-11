@@ -92,59 +92,38 @@ class GroupManager
     /**
      * Get list of groups for current course.
      *
-     * @param int   $categoryId  The id of the category from which the groups are
+     * @param int    $categoryId The id of the category from which the groups are
      *                           requested
-     * @param array $course_info Default is current course
-     * @param int   $status      group status
-     * @param int   $sessionId
-     * @param bool  $getCount
-     * @param bool  $notInGroup  Get groups not in a category
+     * @param Course $course     Default is current course
+     * @param int    $status     group status
+     * @param int    $sessionId
+     * @param bool   $getCount
+     * @param bool   $notInGroup Get groups not in a category
      *
      * @return array an array with all information about the groups
      */
     public static function get_group_list(
         $categoryId = null,
-        $course_info = [],
+        $course = null,
         $status = null,
         $sessionId = 0,
         $getCount = false,
         $filterByKeyword = '',
         $returnEntityList = false
     ) {
-        $course_info = empty($course_info) ? api_get_course_info() : $course_info;
+        $course = $course ?? api_get_course_entity();
 
-        if (empty($course_info)) {
+        if (null === $course) {
             return [];
         }
 
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-        $course_id = $course_info['real_id'];
-
         $repo = Container::getGroupRepository();
-        $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($sessionId);
-        //$group = api_get_group_entity(api_get_group_id());
-        $group = null;
-        $qb = $repo->getResourcesByCourse($course, $session, $group);
-
-        if (null === $categoryId) {
-            $qb
-                ->andWhere('resource.category is NULL');
-        } else {
-            $qb
-                ->andWhere('resource.category = :category')
-                ->setParameter('category', $categoryId);
-        }
-
-        if (!empty($filterByKeyword)) {
-            $qb->andWhere($qb->expr()->like('resource.name', ':keyword'));
-            $qb->setParameter('keyword', "%$filterByKeyword%");
-        }
+        $qb = $repo->findAllByCourse($course, $session, $filterByKeyword, $status);
 
         if ($getCount) {
-            $qb->select('count(resource)');
-
-            return $qb->getQuery()->getSingleScalarResult();
+            return $repo->getCount($qb);
         }
 
         if ($returnEntityList) {
@@ -2851,12 +2830,12 @@ class GroupManager
     }
 
     /**
-     * @param array  $courseInfo
+     * @param Course $course
      * @param string $keyword
      *
      * @return string
      */
-    public static function getOverview($courseInfo, $keyword = '')
+    public static function getOverview(Course $course, $keyword = '')
     {
         $content = null;
         $categories = self::get_categories();
@@ -2866,7 +2845,7 @@ class GroupManager
                 if ('true' === api_get_setting('allow_group_categories')) {
                     $content .= '<h2>'.$category['title'].'</h2>';
                 }
-                $groups = self::get_group_list($category['iid'], $courseInfo, null, 0, false, $keyword);
+                $groups = self::get_group_list($category['iid'], $course, null, 0, false, $keyword);
                 $content .= '<ul>';
                 if (!empty($groups)) {
                     foreach ($groups as $group) {
@@ -2878,7 +2857,7 @@ class GroupManager
         }
 
         // Check groups with no categories.
-        $groups = self::get_group_list(null, api_get_course_info(), null, api_get_session_id(), false, true);
+        $groups = self::get_group_list(null, $course, null, api_get_session_id(), false, true);
         if (!empty($groups)) {
             $content .= '<h2>'.get_lang('NoCategorySelected').'</h2>';
             $content .= '<ul>';

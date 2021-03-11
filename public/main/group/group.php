@@ -239,13 +239,15 @@ if ('true' === api_get_setting('allow_group_categories')) {
         'title' => get_lang('Default groups'),
     ];
     $categories = array_merge([$defaultCategory], $categories);
-
+    $course = api_get_course_entity();
     foreach ($categories as $index => $category) {
         $categoryId = $category['iid'];
-        $groupList = GroupManager::get_group_list($categoryId, [],
-             null,
+        $groupList = GroupManager::get_group_list(
+            $categoryId,
+            $course,
             null,
-             false,
+            null,
+            false,
             null,
             true
         );

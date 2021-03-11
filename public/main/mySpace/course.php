@@ -86,11 +86,11 @@ if (api_is_platform_admin(true, true)) {
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
             Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menu_items[] = Display::url(
             Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
-            "index.php?view=drh_students&amp;display=yourstudents"
+            'index.php?view=drh_students&display=yourstudents'
         );
         $menu_items[] = Display::url(
             Display::return_icon('teacher.png', get_lang('Teachers'), [], ICON_SIZE_MEDIUM),
@@ -114,7 +114,8 @@ if (api_is_platform_admin(true, true)) {
             api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php'
         );
         if (api_can_login_as($user_id)) {
-            $link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::get_existing_token().'">'.
+            $link = '<a
+                href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::get_existing_token().'">'.
                     Display::return_icon('login_as.png', get_lang('Login as'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
             $menu_items[] = $link;
         }
@@ -143,7 +144,7 @@ if (api_is_platform_admin(true, true)) {
 
 if ($showImportIcon) {
     echo "<div align=\"right\">";
-    echo '<a href="user_import.php?id_session='.$sessionId.'&action=export&amp;type=xml">'.
+    echo '<a href="user_import.php?id_session='.$sessionId.'&action=export&type=xml">'.
             Display::return_icon('excel.gif', get_lang('Import users list')).'&nbsp;'.get_lang('Import users list').'</a>';
     echo "</div><br />";
 }

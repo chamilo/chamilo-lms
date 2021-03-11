@@ -36,8 +36,8 @@ if ($pluginCalendar) {
 $user_id = api_get_user_id();
 $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
-$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
-$courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
+$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
 
 if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
@@ -78,7 +78,7 @@ if (!empty($courseUserList)) {
 }
 
 $content = Tracking::show_user_progress($user_id, $sessionId);
-$content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId);
+$content .= Tracking::show_course_detail($user_id, $courseId, $sessionId);
 
 if (!empty($dates)) {
     if (!empty($content)) {

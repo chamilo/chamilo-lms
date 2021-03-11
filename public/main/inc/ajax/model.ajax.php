@@ -654,7 +654,8 @@ switch ($action) {
 
         $count = ExerciseLib::get_count_exam_results(
             $exercise_id,
-            $whereCondition
+            $whereCondition,
+            api_get_course_int_id()
         );
         break;
     case 'get_exercise_results_report':
@@ -687,7 +688,7 @@ switch ($action) {
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
             $whereCondition,
-            $courseInfo['code'],
+            $courseInfo['real_id'],
             true
         );
         break;
@@ -1519,7 +1520,9 @@ switch ($action) {
             $sidx,
             $sord,
             $exercise_id,
-            $whereCondition
+            $whereCondition,
+            false,
+            api_get_course_int_id()
         );
         break;
     case 'get_exercise_results_report':
@@ -1579,7 +1582,7 @@ switch ($action) {
         if (!empty($categoryList)) {
             foreach ($categoryList as $categoryInfo) {
                 $label = 'category_'.$categoryInfo['id'];
-                if ('excel' == $operation) {
+                if ('excel' === $operation) {
                     $columns[] = $label.'_score_percentage';
                     $columns[] = $label.'_only_score';
                     $columns[] = $label.'_total';
@@ -1610,7 +1613,7 @@ switch ($action) {
             $exerciseId,
             $whereCondition,
             false,
-            $courseInfo['code'],
+            $courseInfo['real_id'],
             true,
             true,
             $extraFieldsToAdd,

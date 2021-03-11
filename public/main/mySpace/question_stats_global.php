@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
@@ -24,15 +27,19 @@ $exerciseList = [];
 $selectedExercises = [];
 if (!empty($courseIdList)) {
     foreach ($courseIdList as $courseId) {
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $courseExerciseList = ExerciseLib::get_all_exercises(
+        $course = api_get_course_entity($courseId);
+        /*$courseExerciseList = ExerciseLib::get_all_exercises(
             $courseInfo,
             0,
             false,
             null,
             false,
             3
-        );
+        );*/
+
+        $qb = Container::getQuizRepository()->findAllByCourse($course, null, null, 2, false);
+        /** @var CQuiz[] $courseExerciseList */
+        $courseExerciseList = $qb->getQuery()->getResult();
 
         if (!empty($courseExerciseList)) {
             foreach ($courseExerciseList as $exercise) {
@@ -43,7 +50,7 @@ if (!empty($courseIdList)) {
             }
             $exerciseList += array_column($courseExerciseList, 'title', 'iid');
         }
-        $courseOptions[$courseId] = $courseInfo['name'];
+        $courseOptions[$courseId] = $course->getTitle();
     }
 }
 

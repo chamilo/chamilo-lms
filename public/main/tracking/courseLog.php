@@ -4,13 +4,14 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_TRACKING;
-$courseInfo = api_get_course_info();
-if (empty($courseInfo)) {
+$course = api_get_course_entity();
+if (null === $course) {
     api_not_allowed(true);
 }
 $sessionId = api_get_session_id();
@@ -21,20 +22,19 @@ if (!$is_allowedToTrack) {
 }
 
 //keep course_code form as it is loaded (global) by the table's get_user_data
-$courseCode = $courseInfo['code'];
-$courseId = $courseInfo['real_id'];
+$courseCode = $course->getCode();
+$courseId = $course->getId();
 
 // PERSON_NAME_DATA_EXPORT is buggy
 $sortByFirstName = api_sort_by_first_name();
 $from_myspace = false;
-$from = isset($_GET['from']) ? $_GET['from'] : null;
+$from = $_GET['from'] ?? null;
 $origin = api_get_origin();
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-$htmlHeadXtra[] = ' ';
 
 $this_section = SECTION_COURSES;
 if ('myspace' === $from) {
@@ -50,8 +50,8 @@ if (api_is_drh()) {
         $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
         $coursesFromSessionCodeList = [];
         if (!empty($coursesFromSession)) {
-            foreach ($coursesFromSession as $course) {
-                $coursesFromSessionCodeList[$course['code']] = $course['code'];
+            foreach ($coursesFromSession as $courseItem) {
+                $coursesFromSessionCodeList[$courseItem['code']] = $courseItem['code'];
             }
         }
 
@@ -213,7 +213,8 @@ if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 
-$actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
+$actionsRight .= '<a
+    href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
      '.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
 $actionsRight .= '</div>';
 // Create a search-box.
@@ -236,7 +237,7 @@ echo Display::toolbarAction(
     [$actionsLeft, $form_search->returnForm(), $actionsRight]
 );
 
-$course_name = get_lang('Course').' '.$courseInfo['name'];
+$course_name = get_lang('Course').' '.$course->getTitle();
 
 if ($sessionId) {
     $titleSession = Display::return_icon(
@@ -257,11 +258,11 @@ if ($sessionId) {
         get_lang('Course'),
         [],
         ICON_SIZE_SMALL
-    ).' '.$courseInfo['name'];
+    ).' '.$course->getTitle();
 }
 
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
-    $courseInfo['code'],
+    $courseCode,
     ',',
     true,
     true
@@ -271,7 +272,7 @@ $coaches = null;
 if (!empty($sessionId)) {
     $coaches = CourseManager::get_coachs_from_course_to_string(
         $sessionId,
-        $courseInfo['real_id'],
+        $courseId,
         ',',
         true,
         true
@@ -290,7 +291,7 @@ if (!empty($coaches)) {
 
 $showReporting = false === api_get_configuration_value('hide_reporting_session_list');
 if ($showReporting) {
-    $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
+    $sessionList = SessionManager::get_session_by_course($courseId);
     if (!empty($sessionList)) {
         $html .= Display::page_subheader2(get_lang('Session list'));
         $icon = Display::return_icon(
@@ -306,30 +307,30 @@ if ($showReporting) {
         foreach ($sessionList as $session) {
             if (!$isAdmin) {
                 // Check session visibility
-                $visibility = api_get_session_visibility($session['id'], api_get_course_int_id());
+                $visibility = api_get_session_visibility($session['id'], $courseId);
                 if (SESSION_INVISIBLE == $visibility) {
                     continue;
                 }
 
                 // Check if is coach
-                $isCoach = api_is_coach($session['id'], api_get_course_int_id());
+                $isCoach = api_is_coach($session['id'], $courseId);
                 if (!$isCoach) {
                     continue;
                 }
             }
-            $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
+            $url = $urlWebCode.'mySpace/course.php?sid='.$session['id'].'&cid='.$courseId;
             $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
         }
         $html .= '</ul>';
     }
 }
 
-$trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
-$trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
+$trackingColumn = $_GET['users_tracking_column'] ?? null;
+$trackingDirection = $_GET['users_tracking_direction'] ?? null;
 $hideReports = api_get_configuration_value('hide_course_report_graph');
 $conditions = [];
 
-$groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
+$groupList = GroupManager::get_group_list(null, $course, 1, $sessionId);
 $class = new UserGroup();
 //$options['where'] = [' usergroup.course_id = ? ' => $courseId];
 //$classes = $class->getUserGroupInCourse($options);
@@ -463,6 +464,7 @@ if ($nbStudents > 0) {
     }
 
     if (false === $hideReports) {
+        $conditions['course_id'] = $courseId;
         $conditions['include_invited_users'] = false;
         $usersTracking = TrackingCourseLog::get_user_data(
             null,
@@ -582,7 +584,7 @@ if ($nbStudents > 0) {
     $el->setSelected(7);
     $form->addElement('hidden', 'action', 'add');
     $form->addElement('hidden', 'remindallinactives', 'true');
-    $form->addElement('hidden', 'cidReq', $courseInfo['code']);
+    $form->addElement('hidden', 'cidReq', $course->getCode());
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('Notify'));
 
@@ -609,6 +611,7 @@ if ($nbStudents > 0) {
         $table->total_number_of_items = $nbStudents;
     } else {
         $conditions['include_invited_users'] = true;
+        $conditions['course_id'] = $courseId;
         $table = new SortableTable(
             'users_tracking',
             ['TrackingCourseLog', 'get_number_of_users'],
@@ -790,14 +793,20 @@ $groupTable->setHeaderContents(0, $column++, get_lang('AverageTrainingTime'));
 $groupTable->setHeaderContents(0, $column++, get_lang('CourseProgress'));
 $groupTable->setHeaderContents(0, $column++, get_lang('ExerciseAverage'));
 
-$exerciseList = ExerciseLib::get_all_exercises(
+/*$exerciseList = ExerciseLib::get_all_exercises(
     $courseInfo,
     $sessionId,
     false,
     null,
     false,
     3
-);
+);*/
+
+$session = api_get_session_entity($sessionId);
+$qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2, false);
+/** @var CQuiz[] $exercises */
+$exercises = $qb->getQuery()->getResult();
+
 if (!empty($groupList)) {
     $totalTime = null;
     $totalLpProgress = null;
@@ -849,12 +858,12 @@ if (!empty($groupList)) {
                 $totalLpProgress += $totalGroupLpProgress;
             }
 
-            if (!empty($exerciseList)) {
-                foreach ($exerciseList as $exerciseData) {
+            if (!empty($exercises)) {
+                foreach ($exercises as $exerciseData) {
                     foreach ($usersInGroup as $userId) {
                         $results = Event::get_best_exercise_results_by_user(
                             $exerciseData->getIid(),
-                            $courseInfo['real_id'],
+                            $courseId,
                             0,
                             $userId
                         );
@@ -873,7 +882,7 @@ if (!empty($groupList)) {
                     }
                 }
                 $bestScoreAverageNotInLP = round(
-                    $bestScoreAverageNotInLP / count($exerciseList) * 100 / $userInGroupCount,
+                    $bestScoreAverageNotInLP / count($exercises) * 100 / $userInGroupCount,
                     2
                 );
 
@@ -946,12 +955,12 @@ if (!empty($groupList)) {
     }
     $totalBestScoreAverageNotInLP = 0;
     $bestScoreAverageNotInLP = 0;
-    if (!empty($exerciseList)) {
-        foreach ($exerciseList as $exerciseData) {
+    if (!empty($exercises)) {
+        foreach ($exercises as $exerciseData) {
             foreach ($studentIdList as $userId) {
                 $results = Event::get_best_exercise_results_by_user(
-                    $exerciseData['iid'],
-                    $courseInfo['real_id'],
+                    $exerciseData->getIid(),
+                    $courseId,
                     $sessionId,
                     $userId
                 );
@@ -972,7 +981,7 @@ if (!empty($groupList)) {
         }
         if (!empty($nbStudents)) {
             $bestScoreAverageNotInLP = round(
-                $bestScoreAverageNotInLP / count($exerciseList) * 100 / $nbStudents,
+                $bestScoreAverageNotInLP / count($exercises) * 100 / $nbStudents,
                 2
             ).' %';
         }

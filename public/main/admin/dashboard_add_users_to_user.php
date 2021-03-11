@@ -34,9 +34,7 @@ $user_id = isset($_GET['user']) ? (int) $_GET['user'] : 0;
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
-
-$userStatus = api_get_user_status($user_id);
-
+$userStatus = $user_info['status'];
 $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
 
 // setting the name of the tool

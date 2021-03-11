@@ -104,4 +104,4 @@ $_user['uidReset'] = true;
 ChamiloSession::write('_user', $_user);
 ChamiloSession::write('_user_auth_source', 'azure_active_directory');
 
-Redirect::session_request_uri(true, $userInfo['user_id']);
+Redirect::session_request_uri(true, $userInfo);

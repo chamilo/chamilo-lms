@@ -1132,18 +1132,19 @@ class SessionManager
                 $arrLesson[$row['session_id']]['lessons_total']++;
             }
         }
+        $session = api_get_session_entity($sessionId);
+        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2);
+        $exercises = $qb->getQuery()->getResult();
+        $exercises_total = count($exercises);
 
-        /**
-         *  Exercises.
-         */
-        $exercises = ExerciseLib::get_all_exercises(
+        /*$exercises = ExerciseLib::get_all_exercises(
             $course,
             $sessionId,
             false,
             '',
             $getAllSessions
         );
-        $exercises_total = count($exercises);
+        $exercises_total = count($exercises);*/
 
         /**
          *  Assignments.
@@ -1246,7 +1247,8 @@ class SessionManager
             }
 
             //Lessons
-            //TODO: Lessons done and left is calculated by progress per item in lesson, maybe we should calculate it only per completed lesson?
+            //TODO: Lessons done and left is calculated by progress per item in lesson,
+            // maybe we should calculate it only per completed lesson?
             $lessons_progress = Tracking::get_avg_student_progress(
                 $user['user_id'],
                 $course['code'],
@@ -1271,7 +1273,11 @@ class SessionManager
             $exercises_left = $exercises_total - $exercises_done;
 
             //Assignments
-            $assignments_done = Tracking::count_student_assignments($user['user_id'], $course['code'], $user['id_session']);
+            $assignments_done = Container::getStudentPublicationRepository()->countUserPublications(
+                $user['user_id'],
+                $course['code'],
+                $user['id_session']
+            );
             $assignments_left = $assignments_total - $assignments_done;
             if (!empty($assignments_total)) {
                 $assignments_progress = round((($assignments_done * 100) / $assignments_total), 2);
@@ -1673,11 +1679,8 @@ class SessionManager
         } else {
             $sessionInfo = self::get_session_by_name($name);
             $exists = false;
-
-            if (!empty($sessionInfo)) {
-                if ($sessionInfo['id'] != $id) {
-                    $exists = true;
-                }
+            if (!empty($sessionInfo) && $sessionInfo['id'] !== $id) {
+                $exists = true;
             }
 
             if ($exists) {
@@ -1687,7 +1690,6 @@ class SessionManager
 
                 return false;
             } else {
-                /** @var Session $sessionEntity */
                 $sessionEntity = api_get_session_entity($id);
                 $sessionEntity
                     ->setName($name)

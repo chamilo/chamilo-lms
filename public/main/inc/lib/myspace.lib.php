@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -117,7 +119,7 @@ class MySpace
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menuItems[] = Display::url(
             Display::return_icon(
@@ -294,38 +296,32 @@ class MySpace
     /**
      * Creates a small table in the last column of the table with the user overview.
      *
-     * @param int $user_id the id of the user
-     *
      * @return array List course
      */
-    public static function returnCourseTracking($user_id)
+    public static function returnCourseTracking(User $user)
     {
-        $user_id = (int) $user_id;
-
-        if (empty($user_id)) {
-            return [];
-        }
-
+        $userId = $user->getId();
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         // getting all the courses of the user
         $sql = "SELECT * FROM $tbl_course_user
                 WHERE
-                    user_id = $user_id AND
+                    user_id = $userId AND
                     relation_type <> ".COURSE_RELATION_TYPE_RRHH;
         $result = Database::query($sql);
 
         $list = [];
 
         while ($row = Database::fetch_array($result)) {
-            $courseInfo = api_get_course_info_by_id($row['c_id']);
-            $courseId = $courseInfo['real_id'];
-            $courseCode = $courseInfo['code'];
+            $course = api_get_course_entity($row['c_id']);
 
-            if (empty($courseInfo)) {
+            if (null === $course) {
                 continue;
             }
 
-            $avg_score = Tracking::get_avg_student_score($user_id, $courseCode);
+            $courseId = $course->getId();
+            $courseCode = $course->getCode();
+
+            $avg_score = Tracking::get_avg_student_score($userId, $courseCode);
             if (is_numeric($avg_score)) {
                 $avg_score = round($avg_score, 2);
             } else {
@@ -333,29 +329,34 @@ class MySpace
             }
 
             // Student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
-            $exercisesResults = self::exercises_results($user_id, $courseCode);
+            $exercisesResults = self::exercises_results($userId, $courseCode);
 
             $resultToString = '';
             if (!is_null($exercisesResults['percentage'])) {
-                $resultToString = $exercisesResults['score_obtained'].'/'.$exercisesResults['score_possible'].' ( '.$exercisesResults['percentage'].'% )';
+                $resultToString =
+                    $exercisesResults['score_obtained'].'/'.$exercisesResults['score_possible'].
+                    ' ( '.$exercisesResults['percentage'].'% )';
             }
 
             $item = [
-                'code' => $courseInfo['code'],
-                'real_id' => $courseInfo['real_id'],
-                'title' => $courseInfo['title'],
+                'code' => $courseCode,
+                'real_id' => $courseId,
+                'title' => $course->getTitle(),
                 'category' => '',
                 //'category' => $courseInfo['categoryName'], // @todo show categories instead of 1 category
-                'image_small' => $courseInfo['course_image'],
-                'image_large' => $courseInfo['course_image_large'],
-                'time_spent' => api_time_to_hms(Tracking::get_time_spent_on_the_course($user_id, $courseId)),
-                'student_progress' => round(Tracking::get_avg_student_progress($user_id, $courseCode)),
+                //'image_small' => $courseInfo['course_image'],
+                //'image_large' => $courseInfo['course_image_large'],
+                'time_spent' => api_time_to_hms(Tracking::get_time_spent_on_the_course($userId, $courseId)),
+                'student_progress' => round(Tracking::get_avg_student_progress($userId, $courseCode)),
                 'student_score' => $avg_score,
-                'student_message' => Tracking::count_student_messages($user_id, $courseCode),
-                'student_assignments' => Tracking::count_student_assignments($user_id, $courseCode),
+                'student_message' => Container::getForumPostRepository()->countUserForumPosts($user, $course),
+                'student_assignments' => Container::getStudentPublicationRepository()->countUserPublications($user, $course),
                 'student_exercises' => $resultToString,
                 'questions_answered' => $exercisesResults['questions_answered'],
-                'last_connection' => Tracking::get_last_connection_date_on_the_course($user_id, $courseInfo),
+                'last_connection' => Tracking::get_last_connection_date_on_the_course(
+                    $user_id,
+                    ['real_id' => $courseId]
+                ),
             ];
             $list[] = $item;
         }
@@ -374,26 +375,25 @@ class MySpace
      *
      * @since April 2019
      */
-    public static function returnTrackingUserOverviewFilter($user_id)
+    public static function returnTrackingUserOverviewFilter($userId)
     {
         $tpl = new Template('', false, false, false, false, false, false);
-        $userInfo = api_get_user_info($user_id);
+        $user = api_get_user_entity($userId);
+        $url = Container::getIllustrationRepository()->getIllustrationUrl($user);
 
-        $avatar = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL);
-        $user = [
-            'id' => $user_id,
-            'code_user' => $userInfo['official_code'],
-            'complete_name' => $userInfo['complete_name'],
-            'username' => $userInfo['username'],
-            'course' => self::returnCourseTracking($user_id),
-            'avatar' => $avatar,
+        $item = [
+            'id' => $user->getId(),
+            'code_user' => $user->getOfficialCode(),
+            'complete_name' => UserManager::formatUserFullName($user),
+            'username' => $user->getUsername(),
+            'course' => self::returnCourseTracking($user),
+            'avatar' => $url,
         ];
 
-        $tpl->assign('item', $user);
+        $tpl->assign('item', $item);
         $templateName = $tpl->get_template('my_space/partials/tracking_user_overview.tpl');
-        $content = $tpl->fetch($templateName);
 
-        return $content;
+        return $tpl->fetch($templateName);
     }
 
     /**
@@ -1512,8 +1512,8 @@ class MySpace
         $list = [];
         foreach ($courses as $course) {
             $list[] = [
-                '0' => $course['code'],
-                'col0' => $course['code'],
+                '0' => $course['real_id'],
+                'col0' => $course['real_id'],
             ];
         }
 
@@ -1531,24 +1531,14 @@ class MySpace
      */
     public static function course_tracking_filter($course_code, $url_params, $row)
     {
-        $course_code = $row[0];
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
+        $courseId = $row[0];
+        $course = api_get_course_entity($courseId);
+        $courseCode = $course->getCode();
 
         $tpl = new Template('', false, false, false, false, false, false);
         $data = null;
 
-        // database table definition
-        $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        // getting all the courses of the user
-        $sql = "SELECT *
-                FROM $tbl_user AS u
-                INNER JOIN $tbl_course_rel_user AS cu
-                ON cu.user_id = u.user_id
-                WHERE cu.c_id = '".$courseId."'";
-        $result = Database::query($sql);
         $time_spent = 0;
         $progress = 0;
         $nb_progress_lp = 0;
@@ -1560,15 +1550,22 @@ class MySpace
         $total_score_obtained = 0;
         $total_score_possible = 0;
         $total_questions_answered = 0;
-        while ($row = Database::fetch_object($result)) {
+
+        $courseId = $course->getId();
+        $courseCode = $course->getCode();
+        $courseRelUsers = $course->getUsers();
+        foreach ($courseRelUsers as $courseRelUser) {
+            $user = $courseRelUser->getUser();
+            $userId = $user->getId();
+
             // get time spent in the course and session
             $time_spent += Tracking::get_time_spent_on_the_course(
-                $row->user_id,
-                $courseInfo['real_id']
+                $userId,
+                $courseId
             );
             $progress_tmp = Tracking::get_avg_student_progress(
-                $row->user_id,
-                $course_code,
+                $userId,
+                $courseCode,
                 [],
                 null,
                 true
@@ -1576,8 +1573,8 @@ class MySpace
             $progress += $progress_tmp[0];
             $nb_progress_lp += $progress_tmp[1];
             $score_tmp = Tracking::get_avg_student_score(
-                $row->user_id,
-                $course_code,
+                $userId,
+                $courseCode,
                 [],
                 null,
                 true
@@ -1586,17 +1583,12 @@ class MySpace
                 $score += $score_tmp[0];
                 $nb_score_lp += $score_tmp[1];
             }
-            $nb_messages += Tracking::count_student_messages(
-                $row->user_id,
-                $course_code
-            );
-            $nb_assignments += Tracking::count_student_assignments(
-                $row->user_id,
-                $course_code
-            );
+            $nb_messages += Container::getForumPostRepository($user, $course);
+            $nb_assignments += Container::getStudentPublicationRepository($user, $course);
+
             $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
-                $row->user_id,
-                $courseInfo,
+                $userId,
+                ['real_id' => $courseId],
                 null,
                 false
             );
@@ -1612,7 +1604,7 @@ class MySpace
                 }
             }
 
-            $exercise_results_tmp = self::exercises_results($row->user_id, $course_code);
+            $exercise_results_tmp = self::exercises_results($userId, $courseCode);
             $total_score_obtained += $exercise_results_tmp['score_obtained'];
             $total_score_possible += $exercise_results_tmp['score_possible'];
             $total_questions_answered += $exercise_results_tmp['questions_answered'];
@@ -1648,13 +1640,13 @@ class MySpace
         }
 
         $data = [
-            'course_code' => $course_code,
+            'course_code' => $courseCode,
             'id' => $courseId,
-            'image' => $courseInfo['course_image_large'],
-            'image_small' => $courseInfo['course_image'],
-            'title' => $courseInfo['title'],
-            'url' => $courseInfo['course_public_url'],
-            'category' => $courseInfo['categoryName'],
+            //'image' => $courseInfo['course_image_large'],
+            //'image_small' => $courseInfo['course_image'],
+            'title' => $course->getTitle(),
+            //'url' => $courseInfo['course_public_url'],
+            //'category' => $courseInfo['categoryName'],
             'time_spent' => api_time_to_hms($time_spent),
             'avg_progress' => $avg_progress,
             'avg_score' => $avg_score,
@@ -1667,9 +1659,8 @@ class MySpace
 
         $tpl->assign('data', $data);
         $layout = $tpl->get_template('my_space/partials/tracking_course_overview.tpl');
-        $content = $tpl->fetch($layout);
 
-        return $content;
+        return $tpl->fetch($layout);
     }
 
     /**
@@ -1725,21 +1716,15 @@ class MySpace
 
         // the other lines (the data)
         foreach ($course_data as $key => $course) {
-            $course_code = $course[0];
-            $courseInfo = api_get_course_info($course_code);
-            $course_title = $courseInfo['title'];
-            $courseId = $courseInfo['real_id'];
+            $courseId = $course[0];
+            $course = api_get_course_entity($courseId);
+            $courseCode = $course->getCode();
+            $course_title = $course->getTitle();
 
             $csv_row = [];
             $csv_row[] = $course_title;
 
-            // getting all the courses of the session
-            $sql = "SELECT *
-                    FROM $tbl_user AS u
-                    INNER JOIN $tbl_course_rel_user AS cu
-                    ON cu.user_id = u.user_id
-                    WHERE cu.c_id = '".$courseId."'";
-            $result = Database::query($sql);
+
             $time_spent = 0;
             $progress = 0;
             $nb_progress_lp = 0;
@@ -1751,15 +1736,20 @@ class MySpace
             $total_score_obtained = 0;
             $total_score_possible = 0;
             $total_questions_answered = 0;
-            while ($row = Database::fetch_object($result)) {
+
+            $courseRelUsers = $course->getUsers();
+            foreach ($courseRelUsers as $courseRelUser) {
+                $user = $courseRelUser->getUser();
+                $userId = $user->getId();
+
                 // get time spent in the course and session
                 $time_spent += Tracking::get_time_spent_on_the_course(
-                    $row->user_id,
+                    $userId,
                     $courseId
                 );
                 $progress_tmp = Tracking::get_avg_student_progress(
-                    $row->user_id,
-                    $course_code,
+                    $userId,
+                    $courseCode,
                     [],
                     null,
                     true
@@ -1767,8 +1757,8 @@ class MySpace
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
                 $score_tmp = Tracking::get_avg_student_score(
-                    $row->user_id,
-                    $course_code,
+                    $userId,
+                    $courseCode,
                     [],
                     null,
                     true
@@ -1777,18 +1767,12 @@ class MySpace
                     $score += $score_tmp[0];
                     $nb_score_lp += $score_tmp[1];
                 }
-                $nb_messages += Tracking::count_student_messages(
-                    $row->user_id,
-                    $course_code
-                );
-                $nb_assignments += Tracking::count_student_assignments(
-                    $row->user_id,
-                    $course_code
-                );
+                $nb_messages += Container::getForumPostRepository()->countUserForumPosts($user, $course);
+                $nb_assignments += Container::getStudentPublicationRepository()->countUserPublications($user, $course);
 
                 $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
-                    $row->user_id,
-                    $courseInfo,
+                    $userId,
+                    ['real_id' => $courseId],
                     null,
                     false
                 );
@@ -1803,7 +1787,7 @@ class MySpace
                     }
                 }
 
-                $exercise_results_tmp = self::exercises_results($row->user_id, $course_code);
+                $exercise_results_tmp = self::exercises_results($userId, $courseCode);
                 $total_score_obtained += $exercise_results_tmp['score_obtained'];
                 $total_score_possible += $exercise_results_tmp['score_possible'];
                 $total_questions_answered += $exercise_results_tmp['questions_answered'];
@@ -1967,28 +1951,25 @@ class MySpace
      */
     public static function session_tracking_filter($session_id, $url_params, $row)
     {
-        $session_id = $row[0];
+        $sessionId = $row[0];
+        $url = api_get_url_entity();
+        $session = api_get_session_entity($sessionId);
         // the table header
-        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $return = '<table
+            class="data_table"
+            style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 
-        // database table definition
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-
-        // getting all the courses of the user
-        $sql = "SELECT * FROM $tbl_course AS c
-                INNER JOIN $tbl_session_rel_course AS sc
-                ON sc.c_id = c.id
-                WHERE sc.session_id = '".$session_id."'";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_object($result)) {
-            $courseId = $row->c_id;
-            $courseInfo = api_get_course_info_by_id($courseId);
+        $sessionRelCourses = $session->getCourses();
+        foreach ($sessionRelCourses as $sessionRelCourse) {
+            $course = $sessionRelCourse->getCourse();
+            $courseId = $course->getId();
+            $courseCode = $course->getCode();
             $return .= '<tr>';
-            // course code
-            $return .= '    <td width="157px" >'.$row->title.'</td>';
+            $return .= '<td>'.$course->getTitle().'</td>';
+            //$users = Container::getSessionRepository()->getUsersByCourse($session, $course, $url);
+
             // get the users in the course
             $sql = "SELECT u.user_id
                     FROM $tbl_user AS u
@@ -2008,21 +1989,32 @@ class MySpace
             $total_score_possible = 0;
             $total_questions_answered = 0;
             while ($row_user = Database::fetch_object($result_users)) {
+                $user = api_get_user_entity($row_user->user_id);
                 // get time spent in the course and session
                 $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $courseId, $session_id);
-                $progress_tmp = Tracking::get_avg_student_progress($row_user->user_id, $row->code, [], $session_id, true);
+                $progress_tmp = Tracking::get_avg_student_progress(
+                    $row_user->user_id,
+                    $courseCode,
+                    [],
+                    $session_id,
+                    true
+                );
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
-                $score_tmp = Tracking::get_avg_student_score($row_user->user_id, $row->code, [], $session_id, true);
+                $score_tmp = Tracking::get_avg_student_score($row_user->user_id, $courseCode, [], $session_id, true);
                 if (is_array($score_tmp)) {
                     $score += $score_tmp[0];
                     $nb_score_lp += $score_tmp[1];
                 }
-                $nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
-                $nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
+                $nb_messages += Container::getForumPostRepository()->countUserForumPosts($user, $course, $session);
+                $nb_assignments += Container::getStudentPublicationRepository()->countUserPublications(
+                    $user,
+                    $course,
+                    $session
+                );
                 $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
                     $row_user->user_id,
-                    $courseInfo,
+                    ['real_id' => $courseId],
                     $session_id,
                     false
                 );
@@ -2991,7 +2983,7 @@ class MySpace
             $sql_select = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_course_rel_user
                            WHERE session_id='$id_session' AND c_id='$enreg_course'";
             $rs = Database::query($sql_select);
-            list($nbr_users) = Database::fetch_array($rs);
+            [$nbr_users] = Database::fetch_array($rs);
             $sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
                            WHERE session_id='$id_session' AND c_id='$enreg_course'";
             Database::query($sql_update);

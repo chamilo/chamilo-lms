@@ -32,11 +32,10 @@ $courseList = [];
 if ($global) {
     $temp = CourseManager::get_courses_list();
     foreach ($temp as $tempCourse) {
-        $courseInfo = api_get_course_info($tempCourse['code']);
-        $courseList[] = $courseInfo;
+        $courseList[] = api_get_course_entity($tempCourse['real_id']);
     }
 } else {
-    $courseList = [api_get_course_info()];
+    $courseList = [api_get_course_entity()];
 }
 
 $sessionId = api_get_session_id();
@@ -157,9 +156,10 @@ if ($global) {
 $export_array_global = $export_array = [];
 $s_css_class = null;
 
-if (!empty($courseList) && is_array($courseList)) {
-    foreach ($courseList as $courseInfo) {
-        $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
+if (!empty($courseList)) {
+    foreach ($courseList as $course) {
+        $courseId = $course->getId();
+        $sessionList = SessionManager::get_session_by_course($courseId);
 
         $newSessionList = [];
         if (!empty($sessionList)) {
@@ -168,9 +168,8 @@ if (!empty($courseList) && is_array($courseList)) {
             }
         }
 
-        $courseId = $courseInfo['real_id'];
-
         if ($global) {
+            // @todo use CQuizRepository
             $sql = "SELECT count(iid) as count
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND  active = 1 AND (session_id = 0 OR session_id IS NULL)";
@@ -184,7 +183,6 @@ if (!empty($courseList) && is_array($courseList)) {
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseSessionCount = $countExercises[0]['count'];
-
             $exerciseCount = $exerciseCount + $exerciseCount * count($newSessionList) + $exerciseSessionCount;
 
             // Add course and session list.
@@ -193,7 +191,7 @@ if (!empty($courseList) && is_array($courseList)) {
             }
             $html .= "<tr>
                         <td rowspan=$exerciseCount>";
-            $html .= $courseInfo['title'];
+            $html .= $course->getTitle();
             $html .= "</td>";
         }
 
@@ -206,9 +204,9 @@ if (!empty($courseList) && is_array($courseList)) {
             // Getting the exam list.
             if ($global) {
                 $sql = "SELECT quiz.title, iid, session_id
-                    FROM $quizTable AS quiz
-                    WHERE c_id = $courseId AND active = 1
-                    ORDER BY session_id, quiz.title ASC";
+                        FROM $quizTable AS quiz
+                        WHERE c_id = $courseId AND active = 1
+                        ORDER BY session_id, quiz.title ASC";
             } else {
                 //$sessionCondition = api_get_session_condition($sessionId, true, false);
                 if (!empty($exerciseId)) {

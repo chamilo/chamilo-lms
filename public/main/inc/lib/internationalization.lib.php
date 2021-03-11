@@ -760,10 +760,6 @@ function api_get_person_name(
             switch ($format) {
                 case PERSON_NAME_COMMON_CONVENTION:
                     $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
-                    $usernameOrderFromDatabase = api_get_setting('user_name_order');
-                    if (isset($usernameOrderFromDatabase) && !empty($usernameOrderFromDatabase)) {
-                        $valid[$format][$language] = $usernameOrderFromDatabase;
-                    }
                     break;
                 case PERSON_NAME_WESTERN_ORDER:
                     $valid[$format][$language] = '%t %f %l';

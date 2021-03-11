@@ -1065,6 +1065,98 @@ class MySpace
     }
 
     /**
+     * Generates a structure to show the links or names for the authors by lesson report
+     * @param array $students
+     * @param array $studentRegistered
+     * @param       $lpCourseCode
+     *
+     */
+    public static function getStudentDataToReportByLp($students = [], $studentRegistered = [], $lpCourseCode)
+    {
+        $data = [];
+        $totalStudents = 0;
+        $data['csv'] = '';
+        $data['html'] = '';
+        foreach ($students as $student) {
+            $lpSessionId = isset($student['session_id'])?(int)$student['session_id']:0;
+            $studentId = (int)$student['id'];
+            if (!isset($studentRegistered[$studentId][$lpSessionId])) {
+                $url = api_get_path(WEB_CODE_PATH)."mySpace/myStudents.php?details=true&student=$studentId";
+                if (0 != $lpSessionId) {
+                    $url .= "&id_session=$lpSessionId";
+                }
+                $url .= "&course=$lpCourseCode";
+                $icon = Display::return_icon('statistics.png', get_lang('Stats'));
+                $reportLink = Display::url(
+                    $icon,
+                    $url
+                );
+                $studentName = $student['complete_name']."(".$student['company'].")";
+                $studentRegistered[$studentId][$lpSessionId] = $student;
+                $data['csv'] .= $studentName.' / ';
+                $data['html'] .= "$reportLink <strong>$studentName</strong><br>";
+                $totalStudents++;
+            }
+        }
+        $data['student_registered'] = $studentRegistered;
+        $data['total_students'] = $totalStudents;
+
+        return $data;
+    }
+
+    /**
+     * * Generates a structure to show the names for the authors by lesson report by item
+     * @param array  $students
+     * @param array  $studentProcessed
+     * @param string $typeReport
+     * @param false  $csv
+     *
+     */
+    public static function getStudentDataToReportByLpItem($students = [], $studentProcessed = [], $typeReport='', $csv = false)
+    {
+        $totalStudent = count($students);
+        /* use 'for' to performance */
+        for ($i = 0; $i < $totalStudent; $i++) {
+            $student = $students[$i];
+            $studentId = $student['id'];
+            $lpItemIdStudent = $student['lp_item_id'];
+            $sessionId = isset($student['session_id']) ? (int) $student['session_id'] : 0;
+            $studentName = $student['complete_name'];
+            $studentCompany = $student['company'];
+            $studentName =  "$studentName($studentCompany)";
+            $type = isset($student['type']) ? $student['type'] : null;
+            $icon = null;
+            if (0 != $sessionId) {
+                $icon = Display::return_icon(
+                    'admin_star.png',
+                    $studentName,
+                    [],
+                    ICON_SIZE_MEDIUM
+                );
+            }
+            if('class' == $typeReport){
+                $icon = Display::return_icon(
+                    'group_summary.png',
+                    $studentName,
+                    '',
+                    ICON_SIZE_MEDIUM
+                );
+            }
+            $studentString = "$icon $studentName";
+            if (0 != $sessionId) {
+                $studentString = "<strong>$studentString</strong>";
+            }
+            if($csv == false) {
+                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentString.'<br>';
+            }else{
+                $studentProcessed[$lpItemIdStudent][$type][$studentId] = "$studentName / ";
+            }
+        }
+
+        return $studentProcessed;
+    }
+
+    /**
      * Displays a list as a table of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
      *
@@ -1239,10 +1331,7 @@ class MySpace
                     $user = $students[$i];
                     $lpId = $user['lp_item'];
                     $studentId = $user['id'];
-                    if (!isset($users[$studentId])) {
-                        $users[$studentId]['company'] = $user['company'];
-                    }
-                    $learningPaths[$lpId]['courseStudent'][$studentId] = $users[$studentId];
+                    $learningPaths[$lpId]['courseStudent'][$studentId] = $user;
                 }
             }
             $registeredUsersBySession = self::getSessionAddUserCourseFromTrackDefault(
@@ -1257,11 +1346,8 @@ class MySpace
                     $user = $student[$i];
                     $lpId = $user['lp'];
                     $studentId = $user['id'];
-                    if (!isset($users[$studentId])) {
-                        $users[$studentId]['company'] = $user['company'];
-                    }
-                    $learningPaths[$lpId]['sessionStudent'][$studentId] = $users[$studentId];
-                    $learningPaths[$lpId]['sessionStudent'][$studentId]['session_id'] = $user['session_id'];
+                    $learningPaths[$lpId]['sessionStudent'][$studentId] = $user;
+                    $learningPaths[$lpId]['sessionStudent'][$studentId]['session_id'] = $user;
                 }
             }
             $registeredUsersGroup = self::getCompanyLearnpathSubscription(
@@ -1277,10 +1363,7 @@ class MySpace
                     $user = $student[$i];
                     $lpId = $user['lp_item'];
                     $studentId = $user['id'];
-                    if (!isset($users[$studentId])) {
-                        $users[$studentId]['company'] = $user['company'];
-                    }
-                    $learningPaths[$lpId]['courseStudentGroup'][$studentId] = $users[$studentId];
+                    $learningPaths[$lpId]['courseStudentGroup'][$studentId] = $user;
                 }
             }
 
@@ -1337,53 +1420,26 @@ class MySpace
                         </a>
                         <div id='$hiddenField' class='hidden'>";
                         $studentRegistered = [];
-                        foreach ($courseStudent as $student) {
-                            $reportLink = Display::url(
-                                Display::return_icon('statistics.png', get_lang('Stats')),
-                                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
-                                $student['id']
-                                ."&course=$lpCourseCode"
-                            );
-                            if (!isset($studentRegistered[$student['id']])) {
-                                $studentRegistered[$student['id']][0] = $student;
-                                $htmlData .= "$reportLink ".$student['complete_name'].'<br>';
-                                $studentsName .= $student['complete_name'].' / ';
-                                $totalStudents++;
-                            }
-                        }
-                        foreach ($sessionStudent as $student) {
-                            $lpSessionId = (int) $student['session_id'];
-                            $reportLink = Display::url(
-                                Display::return_icon('statistics.png', get_lang('Stats')),
-                                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
-                                $student['id']
-                                ."&id_session=$lpSessionId"
-                                ."&course=$lpCourseCode"
-                            );
 
-                            if (!isset($studentRegistered[$student['id']][$lpSessionId])) {
-                                $studentRegistered[$student['id']][$lpSessionId] = $student;
-                                $studentsName .= $student['complete_name'].' / ';
-                                $htmlData .= "$reportLink <strong>".$student['complete_name'].'</strong><br>';
-                                $totalStudents++;
-                            }
-                        }
-                        foreach ($courseStudentGroup as $student) {
-                            $lpSessionId = (int) $student['session_id'];
-                            $reportLink = Display::url(
-                                Display::return_icon('statistics.png', get_lang('Stats')),
-                                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.
-                                $student['id']
-                                ."&id_session=".($lpSessionId)
-                                ."&course=$lpCourseCode"
-                            );
-                            if (!isset($studentRegistered[$student['id']][$lpSessionId])) {
-                                $studentRegistered[$student['id']][$lpSessionId] = $student;
-                                $htmlData .= "$reportLink ".$student['complete_name'].'<br>';
-                                $studentsName .= $student['complete_name'].' / ';
-                                $totalStudents++;
-                            }
-                        }
+                        $tempArray = self::getStudentDataToReportByLp($courseStudent,$studentRegistered,$lpCourseCode);
+                        $studentsName.= $tempArray['csv'];
+                        $htmlData.= $tempArray['html'];
+                        $studentRegistered = $tempArray['student_registered'];
+                        $totalStudents += $tempArray['total_students'];
+
+                        $tempArray = self::getStudentDataToReportByLp($sessionStudent,$studentRegistered,$lpCourseCode);
+                        $studentsName.= $tempArray['csv'];
+                        $htmlData.= $tempArray['html'];
+                        $studentRegistered = $tempArray['student_registered'];
+                        $totalStudents += $tempArray['total_students'];
+
+
+                        $tempArray = self::getStudentDataToReportByLp($courseStudentGroup,$studentRegistered,$lpCourseCode);
+                        $studentsName.= $tempArray['csv'];
+                        $htmlData.= $tempArray['html'];
+                        $studentRegistered = $tempArray['student_registered'];
+                        $totalStudents += $tempArray['total_students'];
+
                         $htmlData .= "</div>";
                     }
                     $htmlData .= "</td></tr>";
@@ -1662,73 +1718,12 @@ class MySpace
                             </a>
                             <div id='$hiddenField' class='hidden'>";
                             $studentProcessed = [];
-                            /* use 'for' to performance */
                             /* Student by course*/
-                            for ($i = 0; $i < $studentRegister; $i++) {
-                                $student = $byCourse[$i];
-                                $studentId = $student['id'];
-                                $lpItemIdStudent = $student['lp_item_id'];
-                                $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
-                                $studentName = $student['complete_name'];
-                                $studentCompany = $student['company'];
-                                $type = isset($student['type']) ? $student['type'] : null;
-                                $iconSession = Display::return_icon(
-                                    'admin_star.png',
-                                    $studentName,
-                                    [],
-                                    ICON_SIZE_MEDIUM
-                                );
-                                if (0 == $sessionStudentLp) {
-                                    $iconSession = null;
-                                }
-                                if ($sessionStudentLp != 0) {
-                                    $tempString = "<strong>$iconSession $studentName($studentCompany)</strong>";
-                                } else {
-                                    $tempString = "$iconSession $studentName($studentCompany)";
-                                }
-                                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tempString.'<br>';
-                            }
-                            /* use 'for' to performance */
-                            /* Student by course groups */
-                            for ($i = 0; $i < $studentGroupsRegister; $i++) {
-                                $student = $byCourseGroups[$i];
-                                $studentId = $student['id'];
-                                $lpItemIdStudent = $student['lp_item_id'];
-                                $sessionStudentLp = isset($student['session_id']) ? (int) $student['session_id'] : 0;
-                                $studentName = $student['complete_name'];
-                                $studentCompany = $student['company'];
-                                $type = isset($student['type']) ? $student['type'] : null;
-                                $iconGroup = Display::return_icon(
-                                    'group_summary.png',
-                                    $studentName,
-                                    '',
-                                    ICON_SIZE_MEDIUM
-                                );
-                                if ($sessionStudentLp != 0) {
-                                    $tempString = "<strong>$iconGroup $studentName($studentCompany)</strong>";
-                                } else {
-                                    $tempString = "$iconGroup $studentName($studentCompany)";
-                                }
-                                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tempString."<br>";
-                            }
-                            /* use 'for' to performance */
-                            /* Student by session, keep it first */
-                            for ($i = 0; $i < $studentRegisterBySession; $i++) {
-                                $student = $bySession[$i];
-                                $studentId = $student['id'];
-                                $lpItemIdStudent = $student['lp_item_id'];
-                                $studentName = $student['complete_name'];
-                                $type = isset($student['type']) ? $student['type'] : null;
-                                $studentCompany = $student['company'];
-                                $iconSession = Display::return_icon(
-                                    'admin_star.png',
-                                    $studentName,
-                                    [],
-                                    ICON_SIZE_MEDIUM
-                                );
-                                $tempString = $iconSession."<strong>$studentName ($studentCompany)</strong>";
-                                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $tempString.'<br>';
-                            }
+                            $studentProcessed = self::getStudentDataToReportByLpItem($byCourse, $studentProcessed );
+                            /* Student by Class*/
+                            $studentProcessed = self::getStudentDataToReportByLpItem($byCourseGroups, $studentProcessed ,'class');
+                            /* Student by sessions*/
+                            $studentProcessed = self::getStudentDataToReportByLpItem($bySession, $studentProcessed );
                             $index++;
                             foreach ($studentProcessed as $lpItemId => $item) {
                                 foreach ($item as $type => $student) {
@@ -1857,39 +1852,13 @@ class MySpace
                         0 != $studentRegisterBySession ||
                         0 != $studentGroupsRegister) {
                         $studentProcessed = [];
-                        /* use 'for' to performance */
                         /* Student by course*/
-                        for ($i = 0; $i < $studentRegister; $i++) {
-                            $student = $byCourse[$i];
-                            $studentId = $student['id'];
-                            $lpItemIdStudent = $student['lp_item_id'];
-                            $studentName = $student['complete_name'];
-                            $studentCompany = $student['company'];
-                            $type = isset($student['type']) ? $student['type'] : null;
-                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
-                        }
-                        /* use 'for' to performance */
-                        /* Student by course groups */
-                        for ($i = 0; $i < $studentGroupsRegister; $i++) {
-                            $student = $byCourseGroups[$i];
-                            $studentId = $student['id'];
-                            $lpItemIdStudent = $student['lp_item_id'];
-                            $studentName = $student['complete_name'];
-                            $studentCompany = $student['company'];
-                            $type = isset($student['type']) ? $student['type'] : null;
-                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
-                        }
-                        /* use 'for' to performance */
-                        /* Student by session, keep it first */
-                        for ($i = 0; $i < $studentRegisterBySession; $i++) {
-                            $student = $bySession[$i];
-                            $studentId = $student['id'];
-                            $lpItemIdStudent = $student['lp_item_id'];
-                            $studentName = $student['complete_name'];
-                            $type = isset($student['type']) ? $student['type'] : null;
-                            $studentCompany = $student['company'];
-                            $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentName.' ('.$studentCompany.') / ';
-                        }
+                        $studentProcessed = self::getStudentDataToReportByLpItem($byCourse, $studentProcessed ,'',true);
+                        /* Student by Class*/
+                        $studentProcessed = self::getStudentDataToReportByLpItem($byCourseGroups, $studentProcessed ,'class',true);
+                        /* Student by sessions*/
+                        $studentProcessed = self::getStudentDataToReportByLpItem($bySession, $studentProcessed ,'',true);
+
                         $index++;
                         foreach ($studentProcessed as $lpItemId => $item) {
                             foreach ($item as $type => $student) {

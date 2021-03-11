@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -163,6 +165,11 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->getSubmitValues();
+
+            if (strlen($values['new_dir']) > CStudentPublication::WORK_TITLE_MAX_LENGTH) {
+                $values['new_dir'] = api_substr($values['new_dir'], 0, CStudentPublication::WORK_TITLE_MAX_LENGTH);
+            }
+
             $result = addDir(
                 $values,
                 $user_id,

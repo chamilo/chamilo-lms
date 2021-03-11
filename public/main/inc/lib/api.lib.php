@@ -2308,31 +2308,6 @@ function api_get_course_info($courseCode = null)
         return api_format_course_array($course);
     }
 
-    /*$course_code = Database::escape_string($course_code);
-    $courseId = api_get_course_int_id($course_code);
-    if (empty($courseId)) {
-        return [];
-    }
-
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $sql = "SELECT
-                course.*,
-                course_category.code faCode,
-                course_category.name faName
-            FROM $course_table
-            LEFT JOIN $course_cat_table
-            ON course.category_code = course_category.code
-            WHERE course.id = $courseId";
-    $result = Database::query($sql);
-    $courseInfo = [];
-    if (Database::num_rows($result) > 0) {
-        $data = Database::fetch_array($result);
-        $courseInfo = api_format_course_array($data);
-    }
-
-    return $courseInfo;*/
-
     $course = Session::read('_course');
     if ('-1' == $course) {
         $course = [];
@@ -5766,27 +5741,6 @@ function api_is_valid_secret_key($original_key_secret, $security_key)
 }
 
 /**
- * Checks whether a user is into course.
- *
- * @param int $course_id - the course id
- * @param int $user_id   - the user id
- *
- * @return bool
- */
-function api_is_user_of_course($course_id, $user_id)
-{
-    $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = 'SELECT user_id FROM '.$tbl_course_rel_user.'
-            WHERE
-                c_id ="'.intval($course_id).'" AND
-                user_id = "'.intval($user_id).'" AND
-                relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
-    $result = Database::query($sql);
-
-    return 1 == Database::num_rows($result);
-}
-
-/**
  * Checks whether the server's operating system is Windows (TM).
  *
  * @return bool - true if the operating system is Windows, false otherwise
@@ -6535,10 +6489,8 @@ function api_get_course_url($courseCode = null, $sessionId = null, $groupId = nu
 
 /**
  * Check if the current portal has the $_configuration['multiple_access_urls'] parameter on.
- *
- * @return bool true if multi site is enabled
  */
-function api_get_multiple_access_url()
+function api_get_multiple_access_url(): bool
 {
     global $_configuration;
     if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
@@ -6548,10 +6500,7 @@ function api_get_multiple_access_url()
     return false;
 }
 
-/**
- * @return bool
- */
-function api_is_multiple_url_enabled()
+function api_is_multiple_url_enabled(): bool
 {
     return api_get_multiple_access_url();
 }
@@ -6563,9 +6512,7 @@ function api_is_multiple_url_enabled()
  */
 function api_get_unique_id()
 {
-    $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
-
-    return $id;
+    return md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
 }
 
 /**
@@ -6616,7 +6563,12 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
     }
 
     if (api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code)) {
-        $message = Display::return_message(get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'), 'warning');
+        $message = Display::return_message(
+            get_lang(
+                'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
+            ),
+            'warning'
+        );
         api_not_allowed(true, $message);
     }
 }
@@ -6629,7 +6581,7 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
 function api_check_php_version()
 {
     if (!function_exists('version_compare') ||
-        version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')
+        version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')
     ) {
         throw new Exception('Wrong PHP version');
     }
@@ -6642,7 +6594,12 @@ function api_check_php_version()
 function api_check_archive_dir()
 {
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-        $message = Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'warning');
+        $message = Display::return_message(
+            get_lang(
+                'The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
+            ),
+            'warning'
+        );
         api_not_allowed(true, $message);
     }
 }
@@ -6878,14 +6835,6 @@ function api_set_default_visibility(
                 break;
         }
     }
-}
-
-/**
- * @return string
- */
-function api_get_security_key()
-{
-    return api_get_configuration_value('security_key');
 }
 
 /**
@@ -7446,21 +7395,6 @@ function api_get_protocol()
 }
 
 /**
- * Return a string where " are replaced with 2 '
- * It is useful when you pass a PHP variable in a Javascript browser dialog
- * e.g. : alert("<?php get_lang('Message') ?>");
- * and message contains character ".
- *
- * @param string $in_text
- *
- * @return string
- */
-function convert_double_quote_to_single($in_text)
-{
-    return api_preg_replace('/"/', "''", $in_text);
-}
-
-/**
  * Get origin.
  *
  * @param string
@@ -7773,48 +7707,13 @@ function api_format_time($time, $originFormat = 'php')
         $secs = 0;
     }
 
-    if ('js' == $originFormat) {
+    if ('js' === $originFormat) {
         $formattedTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
     } else {
         $formattedTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
     }
 
     return $formattedTime;
-}
-
-/**
- * Create a new empty directory with index.html file.
- *
- * @param string $name            The new directory name
- * @param string $parentDirectory Directory parent directory name
- *
- * @deprecated use Resources
- *
- * @return bool Return true if the directory was create. Otherwise return false
- */
-function api_create_protected_dir($name, $parentDirectory)
-{
-    $isCreated = false;
-
-    if (!is_writable($parentDirectory)) {
-        return false;
-    }
-
-    $fullPath = $parentDirectory.api_replace_dangerous_char($name);
-
-    if (mkdir($fullPath, api_get_permissions_for_new_directories(), true)) {
-        $fp = fopen($fullPath.'/index.html', 'w');
-
-        if ($fp) {
-            if (fwrite($fp, '<html><head></head><body></body></html>')) {
-                $isCreated = true;
-            }
-        }
-
-        fclose($fp);
-    }
-
-    return $isCreated;
 }
 
 /**
@@ -8256,18 +8155,6 @@ function api_location($url, $exit = true)
 
     if ($exit) {
         exit;
-    }
-}
-
-/**
- * @return string
- */
-function api_get_web_url()
-{
-    if ('test' === api_get_setting('server_type')) {
-        return api_get_path(WEB_PATH).'web/app_dev.php/';
-    } else {
-        return api_get_path(WEB_PATH).'web/';
     }
 }
 

@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageFeedback;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -134,19 +135,19 @@ switch ($action) {
 
         switch ($action) {
             case 'load_course':
-                $course_id = intval($_POST['course_code']); // the int course id
-                $course_info = api_get_course_info_by_id($course_id);
-                $course_code = $course_info['code'];
+                $courseId = intval($_POST['course_code']); // the int course id
+                $course = api_get_course_entity($courseId);
+                $course_code = $course->getCode();
+                $user = api_get_user_entity();
 
-                if (api_is_user_of_course($course_id, api_get_user_id())) {
+                if ($course->hasUser($user)) {
                     //------Forum messages
-                    $forum_result = get_all_post_from_user($user_id, $course_id);
+                    $forum_result = Container::getForumPostRepository()->countUserForumPosts($user, $course);
                     $all_result_data = 0;
                     if ('' != $forum_result) {
                         echo '<div id="social-forum-main-title">';
                         echo api_xml_http_response_encode(get_lang('Forum'));
                         echo '</div>';
-
                         echo '<div style="background:#FAF9F6; padding:0px;" >';
                         echo api_xml_http_response_encode($forum_result);
                         echo '</div>';
@@ -155,7 +156,7 @@ switch ($action) {
                     }
 
                     //------Blog posts
-                    $result = Blog::getBlogPostFromUser($course_id, $user_id, $course_code);
+                    $result = Blog::getBlogPostFromUser($courseId, $user_id, $courseCode);
 
                     if (!empty($result)) {
                         api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
@@ -167,7 +168,7 @@ switch ($action) {
                     }
 
                     //------Blog comments
-                    $result = Blog::getBlogCommentsFromUser($course_id, $user_id, $course_code);
+                    $result = Blog::getBlogCommentsFromUser($courseId, $user_id, $course_code);
                     if (!empty($result)) {
                         echo '<div  style="background:#FAF9F6; padding-left:10px;">';
                         api_display_tool_title(api_xml_http_response_encode(get_lang('Blog comments')));

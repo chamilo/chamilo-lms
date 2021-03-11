@@ -4932,6 +4932,10 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     $directory = api_replace_dangerous_char($formValues['new_dir']);
     $directory = disable_dangerous_file($directory);
 
+    if (strlen($directory) > CStudentPublication::WORK_TITLE_MAX_LENGTH) {
+        $directory = api_substr($directory, 0, CStudentPublication::WORK_TITLE_MAX_LENGTH);
+    }
+
     $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
     if (empty($created_dir)) {
@@ -5458,7 +5462,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
         'new_dir',
         get_lang('AssignmentName'),
         true,
-        ['maxlength' => CStudentPublication::WORK_TITLE_MAX_LENGTH]
+        ['maxlength' => 255]
     );
     $form->addHtmlEditor(
         'description',

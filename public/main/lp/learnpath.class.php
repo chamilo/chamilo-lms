@@ -7875,26 +7875,36 @@ class learnpath
         $condition_session = api_get_session_condition($session_id, true, true);
         $setting = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
 
-        $activeCondition = ' active <> -1 ';
+        //$activeCondition = ' active <> -1 ';
+        $active = 2;
         if ($setting) {
-            $activeCondition = ' active = 1 ';
+            $active = 1;
+            //$activeCondition = ' active = 1 ';
         }
 
         $categoryCondition = '';
-        $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
-        if (api_get_configuration_value('allow_exercise_categories') && !empty($categoryId)) {
+
+        $keyword = $_REQUEST['keyword'] ?? null;
+        $categoryId = $_REQUEST['category_id'] ?? null;
+        /*if (api_get_configuration_value('allow_exercise_categories') && !empty($categoryId)) {
             $categoryCondition = " AND exercise_category_id = $categoryId ";
         }
 
         $keywordCondition = '';
-        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
 
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND title LIKE '%$keyword%' ";
         }
+        */
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
 
-        $sql_quiz = "SELECT * FROM $tbl_quiz
+        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, $keyword, $active, false, $categoryId);
+        /** @var CQuiz[] $exercises */
+        $exercises = $qb->getQuery()->getResult();
+
+        /*$sql_quiz = "SELECT * FROM $tbl_quiz
                      WHERE
                             c_id = $course_id AND
                             $activeCondition
@@ -7902,7 +7912,7 @@ class learnpath
                             $categoryCondition
                             $keywordCondition
                      ORDER BY title ASC";
-        $res_quiz = Database::query($sql_quiz);
+        $res_quiz = Database::query($sql_quiz);*/
 
         $currentUrl = api_get_self().'?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$this->lp_id.'#resource_tab-2';
 
@@ -7953,18 +7963,12 @@ class learnpath
         );
         $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
         $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
-
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
-        $repo = Container::getQuizRepository();
-        $courseEntity = api_get_course_entity();
-        $sessionEntity = api_get_session_entity();
-        while ($row_quiz = Database::fetch_array($res_quiz)) {
-            $exerciseId = $row_quiz['iid'];
-            /** @var CQuiz $exercise */
-            $exercise = $repo->find($exerciseId);
-            $title = strip_tags(api_html_entity_decode($row_quiz['title']));
+        foreach ($exercises as $exercise) {
+            $exerciseId = $exercise->getIid();
+            $title = strip_tags(api_html_entity_decode($exercise->getTitle()));
+            $visibility = $exercise->isVisible($course, $session);
 
-            $visibility = $exercise->isVisible($courseEntity, $sessionEntity);
             $link = Display::url(
                 $previewIcon,
                 $exerciseUrl.'&exerciseId='.$exerciseId,
@@ -7973,10 +7977,11 @@ class learnpath
             $return .= '<li class="lp_resource_element" title="'.$title.'">';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
-            $sessionStar = api_get_session_image(
+            $sessionStar = '';
+            /*$sessionStar = api_get_session_image(
                 $row_quiz['session_id'],
                 $userInfo['status']
-            );
+            );*/
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
                 api_get_self().'?'.

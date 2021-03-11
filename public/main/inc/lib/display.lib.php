@@ -199,7 +199,7 @@ class Display
         $editor_config = null
     ) {
         $moduleId = $tool;
-        if ('true' == api_get_setting('enable_tool_introduction') || TOOL_COURSE_HOMEPAGE == $tool) {
+        if ('true' === api_get_setting('enable_tool_introduction') || TOOL_COURSE_HOMEPAGE == $tool) {
             $introduction_section = null;
             require api_get_path(SYS_CODE_PATH).'inc/introductionSection.inc.php';
 

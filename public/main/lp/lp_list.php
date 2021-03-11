@@ -53,9 +53,9 @@ $courseEntity = api_get_course_entity($courseId);
 $sessionEntity = api_get_session_entity($sessionId);
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
-
+$introduction = '';
 /* Introduction section (editable by course admins) */
-$introduction = Display::return_introduction_section(
+/*$introduction = Display::return_introduction_section(
     TOOL_LEARNPATH,
     [
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH)
@@ -65,7 +65,7 @@ $introduction = Display::return_introduction_section(
         'BaseHref' => api_get_path(WEB_COURSE_PATH)
             .api_get_course_path().'/',
     ]
-);
+);*/
 
 $message = '';
 $actions = '';

@@ -828,7 +828,7 @@ class GradebookUtils
 
         $new_content_html = isset($content_html['content']) ? $content_html['content'] : null;
         $variables = isset($content_html['variables']) ? $content_html['variables'] : null;
-        $path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path($course_code).'/document/images/gallery';
+        $path_image = api_get_path(WEB_PUBLIC_PATH).'/img/gallery';
         $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);
 
         $path_image_in_default_course = api_get_path(WEB_CODE_PATH).'default_course_document';

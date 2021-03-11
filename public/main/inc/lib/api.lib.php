@@ -2047,24 +2047,6 @@ function api_get_course_int_id($code = null)
 }
 
 /**
- * Returns the current course directory.
- *
- * This function relies on api_get_course_info()
- *
- * @param string    The course code - optional (takes it from session if not given)
- *
- * @return string The directory where the course is located inside the Chamilo "courses" directory
- *
- * @author Yannick Warnier <yannick.warnier@beeznest.com>
- */
-function api_get_course_path($course_code = null)
-{
-    $info = !empty($course_code) ? api_get_course_info($course_code) : api_get_course_info();
-
-    return $info['path'];
-}
-
-/**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
  * @param string $settingName The name of the setting we want from the table

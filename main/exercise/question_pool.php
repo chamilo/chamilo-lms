@@ -661,7 +661,7 @@ function getQuestions(
         }
 
         $select = 'DISTINCT
-                    iid,
+                    qu.iid,
                     question,
                     type,
                     level,

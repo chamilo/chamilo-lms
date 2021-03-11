@@ -863,6 +863,11 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->category;
     }
 
+    public function hasCategory(): bool
+    {
+        return null !== $this->category;
+    }
+
     public function setCategory(CLpCategory $category = null): self
     {
         $this->category = $category;

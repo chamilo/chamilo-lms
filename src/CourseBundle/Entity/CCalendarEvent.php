@@ -204,9 +204,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param ArrayCollection|CCalendarEvent[] $children
+     * @param Collection|CCalendarEvent[] $children
      */
-    public function setChildren($children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 

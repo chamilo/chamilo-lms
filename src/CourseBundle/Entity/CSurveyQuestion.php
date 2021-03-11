@@ -408,9 +408,9 @@ class CSurveyQuestion
     }
 
     /**
-     * @param ArrayCollection|CSurveyQuestion[] $children
+     * @param Collection|CSurveyQuestion[] $children
      */
-    public function setChildren($children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 

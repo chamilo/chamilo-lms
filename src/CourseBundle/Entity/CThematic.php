@@ -56,7 +56,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected bool $active;
 
     /**
-     * @var ArrayCollection|CThematicPlan[]
+     * @var Collection|CThematicPlan[]
      *
      * @ORM\OneToMany(
      *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
@@ -156,7 +156,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CThematicPlan[]
+     * @return Collection|CThematicPlan[]
      */
     public function getPlans()
     {
@@ -164,7 +164,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CThematicAdvance[]
+     * @return Collection|CThematicAdvance[]
      */
     public function getAdvances()
     {

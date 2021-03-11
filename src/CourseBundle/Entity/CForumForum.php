@@ -613,7 +613,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     /**
      * Get threads.
      *
-     * @return ArrayCollection|CForumThread[]
+     * @return Collection|CForumThread[]
      */
     public function getThreads()
     {
@@ -645,7 +645,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection|CForumPost[]
+     * @return Collection|CForumPost[]
      */
     public function getPosts()
     {

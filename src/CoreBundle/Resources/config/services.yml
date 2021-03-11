@@ -1,8 +1,4 @@
 # Settings parameters that will be used in the 'services' section
-parameters:
-    chamilo_core.entity.manager.session_manager.class: Chamilo\CoreBundle\Entity\Manager\SessionManager
-    chamilo_core.entity.session: Chamilo\CoreBundle\Entity\Session
-
 services:
     _defaults:
         autowire: true
@@ -28,17 +24,6 @@ services:
         arguments: ['@request_stack']
         tags:
             - {name: knp_menu.voter}
-
-    # Entity managers
-    chamilo_core.entity.manager.session_manager:
-        class: '%chamilo_core.entity.manager.session_manager.class%'
-        arguments: ['%chamilo_core.entity.session%', '@doctrine']
-
-    # Chamilo Twig extension (already added with autowiring)
-#    twig.extension.chamilo_extension:
-#        class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
-#        tags:
-#            - {name: twig.extension}
 
 #    twig.extension.date:
 #        class: Twig_Extensions_Extension_Date
@@ -90,7 +75,7 @@ services:
 #        tags:
 #            - {name: kernel.event_listener, event: kernel.controller, method: onCoreController}
 
-    Chamilo\CoreBundle\Repository\AssetRepository:
+    Chamilo\CoreBundle\Repository\AssetRepository: ~
 
     Chamilo\CoreBundle\EventListener\AssetListener:
         arguments:

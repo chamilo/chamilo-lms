@@ -45,8 +45,14 @@ services:
         # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
 
-    Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer:
+#    App\ApiPlatform\AutoGroupResourceMetadataFactory:
+#        # causes this to decorate around the cached factory so that
+#        # our service is never cached (which, of course, can have performance
+#        # implications!
+#        decoration_priority: -20
 
+    Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer: ~
+    Chamilo\CoreBundle\Component\Utils\NameConvention: ~
     Chamilo\CoreBundle\Component\Utils\Glide:
         arguments:
             - {source: '@oneup_flysystem.resources_filesystem', cache: '@oneup_flysystem.cache_resources_filesystem'}

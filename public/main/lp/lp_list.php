@@ -49,8 +49,8 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $courseInfo = api_get_course_info();
-$courseEntity = api_get_course_entity($courseId);
-$sessionEntity = api_get_session_entity($sessionId);
+$course = api_get_course_entity($courseId);
+$session = api_get_session_entity($sessionId);
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 $introduction = '';
@@ -218,7 +218,7 @@ foreach ($categories as $category) {
     $categoryId = $category->getIid();
     $visibility = true;
     if (null !== $categoryId) {
-        $visibility = $category->isVisible($courseEntity, $sessionEntity);
+        $visibility = $category->isVisible($course, $session);
     }
     if (0 !== $categoryId && true == $subscriptionSettings['allow_add_users_to_lp_category']) {
         // "Without category" has id = 0
@@ -284,14 +284,14 @@ foreach ($categories as $category) {
                 continue;
             }
 
-            $lpVisibility = learnpath::is_lp_visible_for_student($details['entity'], $userId, $courseInfo);
+            $lpVisibility = learnpath::is_lp_visible_for_student($details['entity'], $userId, $course);
 
             // Check if the learnpath is visible for student.
             if (!$is_allowed_to_edit) {
                 $isBlocked = learnpath::isBlockedByPrerequisite(
                     $userId,
                     $details['prerequisite'],
-                    $courseInfo,
+                    $course,
                     $sessionId
                 );
                 if (false === $lpVisibility && $isBlocked && false === $showBlockedPrerequisite) {

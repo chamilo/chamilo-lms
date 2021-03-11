@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -2076,24 +2077,24 @@ class learnpath
     }
 
     /**
-     * @param int   $studentId
-     * @param int   $prerequisite
-     * @param array $courseInfo
-     * @param int   $sessionId
+     * @param int    $studentId
+     * @param int    $prerequisite
+     * @param Course $course
+     * @param int    $sessionId
      *
      * @return bool
      */
     public static function isBlockedByPrerequisite(
         $studentId,
         $prerequisite,
-        $courseInfo,
+        Course $course,
         $sessionId
     ) {
-        if (empty($courseInfo)) {
+        if (null === $course) {
             return false;
         }
 
-        $courseId = $courseInfo['real_id'];
+        $courseId = $course->getId();
 
         $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
         if ($allow) {
@@ -2157,23 +2158,12 @@ class learnpath
      * Checks if the learning path is visible for student after the progress
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
-     *
-     * @param int   $student_id
-     * @param array $courseInfo
-     * @param int   $sessionId
-     *
-     * @return bool
      */
-    public static function is_lp_visible_for_student(
-        CLp $lp,
-        $student_id,
-        $courseInfo = [],
-        $sessionId = 0
-    ) {
-        $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
+    public static function is_lp_visible_for_student(CLp $lp, $student_id, Course $course, $sessionId = 0): bool
+    {
         $sessionId = (int) $sessionId;
 
-        if (empty($courseInfo)) {
+        if (null === $course) {
             return false;
         }
 
@@ -2181,7 +2171,7 @@ class learnpath
             $sessionId = api_get_session_id();
         }
 
-        $courseId = $courseInfo['real_id'];
+        $courseId = $course->getId();
 
         /*$itemInfo = api_get_item_property_info(
             $courseId,
@@ -2190,38 +2180,28 @@ class learnpath
             $sessionId
         );*/
 
-        $visibility = $lp->isVisible($courseInfo['entity'], api_get_session_entity($sessionId));
+        $visibility = $lp->isVisible($course, api_get_session_entity($sessionId));
         // If the item was deleted.
         if (false === $visibility) {
             return false;
         }
 
-        $lp_id = $lp->getIid();
-        // @todo remove this query and load the row info as a parameter
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        // Get current prerequisite
-        $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on, category_id
-                FROM $table
-                WHERE iid = $lp_id";
-        $rs = Database::query($sql);
         $now = time();
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs, 'ASSOC');
+        if ($lp->hasCategory()) {
+            $category = $lp->getCategory();
 
-            if (!empty($row['category_id'])) {
-                $category = Container::getLpCategoryRepository()->find($row['category_id']);
-                if (false === self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id))) {
-                    return false;
-                }
+            if (false === self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id))) {
+                return false;
             }
 
-            $prerequisite = $row['prerequisite'];
+
+            $prerequisite = $lp->getPrerequisite();
             $is_visible = true;
 
             $isBlocked = self::isBlockedByPrerequisite(
                 $student_id,
                 $prerequisite,
-                $courseInfo,
+                $course,
                 $sessionId
             );
 
@@ -2232,8 +2212,8 @@ class learnpath
             // Also check the time availability of the LP
             if ($is_visible) {
                 // Adding visibility restrictions
-                if (!empty($row['publicated_on'])) {
-                    if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
+                if (null !== $lp->getPublicatedOn()) {
+                    if ($now < $lp->getPublicatedOn()->getTimestamp()) {
                         $is_visible = false;
                     }
                 }
@@ -2242,13 +2222,13 @@ class learnpath
                 if (isset($_custom['lps_hidden_when_no_start_date']) &&
                     $_custom['lps_hidden_when_no_start_date']
                 ) {
-                    if (empty($row['publicated_on'])) {
+                    if (null !== $lp->getPublicatedOn()) {
                         $is_visible = false;
                     }
                 }
 
-                if (!empty($row['expired_on'])) {
-                    if ($now > api_strtotime($row['expired_on'], 'UTC')) {
+                if (null !== $lp->getExpiredOn()) {
+                    if ($now > $lp->getExpiredOn()->getTimestamp()) {
                         $is_visible = false;
                     }
                 }
@@ -2258,20 +2238,22 @@ class learnpath
                 $subscriptionSettings = self::getSubscriptionSettings();
 
                 // Check if the subscription users/group to a LP is ON
-                if (isset($row['subscribe_users']) && 1 == $row['subscribe_users'] &&
+                if (1 == $lp->getSubscribeUsers() &&
                     true === $subscriptionSettings['allow_add_users_to_lp']
                 ) {
                     // Try group
                     $is_visible = false;
                     // Checking only the user visibility
-                    $userVisibility = api_get_item_visibility(
+                    // @todo fix visibility
+                    $userVisibility = 1;
+                    /*$userVisibility = api_get_item_visibility(
                         $courseInfo,
                         'learnpath',
                         $row['id'],
                         $sessionId,
                         $student_id,
                         'LearnpathSubscription'
-                    );
+                    );*/
 
                     if (1 == $userVisibility) {
                         $is_visible = true;
@@ -2280,7 +2262,9 @@ class learnpath
                         if (!empty($userGroups)) {
                             foreach ($userGroups as $groupInfo) {
                                 $groupId = $groupInfo['iid'];
-                                $userVisibility = api_get_item_visibility(
+                                // @todo fix visibility.
+                                $userVisibility = 1;
+                                /*$userVisibility = api_get_item_visibility(
                                     $courseInfo,
                                     'learnpath',
                                     $row['id'],
@@ -2288,7 +2272,7 @@ class learnpath
                                     null,
                                     'LearnpathSubscription',
                                     $groupId
-                                );
+                                );*/
 
                                 if (1 == $userVisibility) {
                                     $is_visible = true;

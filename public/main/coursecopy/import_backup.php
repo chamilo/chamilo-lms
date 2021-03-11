@@ -78,21 +78,29 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
             $course = CourseArchiver::readCourse($filename, $delete_file);
         }
     }
-
     if (!$error && is_object($course) && $course->has_resources()) {
         $cr = new CourseRestorer($course);
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
         echo Display::return_message(get_lang('Import finished'));
-        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.
+        echo '<a class="btn btn-default" href="'.api_get_course_url(api_get_course_id()).'">'.
             get_lang('Course home').'</a>';
     } else {
         if (!$error) {
             echo Display::return_message(get_lang('There are no resources in backup file'), 'warning');
-            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
+            echo '<a
+                class="btn btn-default"
+                href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
         } elseif (false === $filename) {
-            echo Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'error');
-            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
+            echo Display::return_message(
+                get_lang(
+                    'The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
+                ),
+                'error'
+            );
+            echo '<a
+                class="btn btn-default"
+                href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
         } else {
             if ('' == $filename) {
                 echo Display::return_message(get_lang('Select a backup file'), 'error');

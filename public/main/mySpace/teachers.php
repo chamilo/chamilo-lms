@@ -17,21 +17,21 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-$active = isset($_GET['active']) ? intval($_GET['active']) : 1;
-$sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+$active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
+$sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
 $nameTools = get_lang('Trainers');
 $this_section = SECTION_TRACKING;
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 
-if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && !isset($_GET["type"])) {
-    $interbreadcrumb[] = ["url" => "teachers.php", "name" => get_lang('Trainers')];
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) {
+    $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Trainers')];
 }
 
-if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "coach" == $_GET["type"]) {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' == $_GET['type']) {
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
 }
 
 function get_count_users()
@@ -61,7 +61,7 @@ function get_users($from, $limit, $column, $direction)
 {
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+    $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
     $lastConnectionDate = null;
@@ -109,7 +109,6 @@ function get_users($from, $limit, $column, $direction)
             $keyword
         );
     }
-
     $all_datas = [];
     $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
     foreach ($students as $student_data) {

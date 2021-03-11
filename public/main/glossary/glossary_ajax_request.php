@@ -16,15 +16,16 @@ api_protect_course_script(true);
 $charset = api_get_system_encoding();
 
 // Replace image path
-$path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path();
-$path_image_search = '../..'.api_get_path(REL_COURSE_PATH).api_get_course_path();
+// @todo redo the image path replace
+/*$path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path();
+$path_image_search = '../..'.api_get_path(REL_COURSE_PATH).api_get_course_path();*/
 $glossaryId = isset($_REQUEST['glossary_id']) ? (int) $_REQUEST['glossary_id'] : 0;
 $description = get_lang('No results found');
 
 if (!empty($glossaryId)) {
     $description = GlossaryManager::get_glossary_term_by_glossary_id($glossaryId);
-    $description = str_replace($path_image_search, $path_image, $description);
-} elseif (isset($_REQUEST['glossary_data']) && 'true' == $_REQUEST['glossary_data']) {
+    //$description = str_replace($path_image_search, $path_image, $description);
+} elseif (isset($_REQUEST['glossary_data']) && 'true' === $_REQUEST['glossary_data']) {
     // get_glossary_terms
     $glossary_data = GlossaryManager::get_glossary_terms();
     $glossary_all_data = [];
@@ -38,11 +39,11 @@ if (!empty($glossaryId)) {
     $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name($_REQUEST['glossary_name']);
 
     if (!empty($glossaryInfo)) {
-        $description = str_replace(
+        /*$description = str_replace(
             $path_image_search,
             $path_image,
             $glossaryInfo['description']
-        );
+        );*/
 
         if (null === $description || 0 == strlen(trim($description))) {
             $description = get_lang('No results found');

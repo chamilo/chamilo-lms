@@ -174,17 +174,7 @@ class SessionController extends AbstractController
             ];
         }
 
-        $sessionDates = SessionManager::parseSessionDates(
-            [
-                'display_start_date' => $session->getDisplayStartDate(),
-                'display_end_date' => $session->getDisplayEndDate(),
-                'access_start_date' => $session->getAccessStartDate(),
-                'access_end_date' => $session->getAccessEndDate(),
-                'coach_access_start_date' => $session->getCoachAccessStartDate(),
-                'coach_access_end_date' => $session->getCoachAccessEndDate(),
-            ],
-            true
-        );
+        $sessionDates = SessionManager::parseSessionDates($session, true);
 
         /*$sessionRequirements = $sequenceResourceRepo->getRequirements(
             $session->getId(),

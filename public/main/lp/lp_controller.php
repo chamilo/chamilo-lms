@@ -28,6 +28,7 @@ $current_course_tool = TOOL_LEARNPATH;
 $course_id = api_get_course_int_id();
 $lpRepo = Container::getLpRepository();
 $courseInfo = api_get_course_info();
+$course = api_get_course_entity();
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
@@ -911,7 +912,7 @@ switch ($action) {
 
         // Teachers can export to PDF
         if (!$is_allowed_to_edit) {
-            if (!learnpath::is_lp_visible_for_student($oLP->getEntity(), api_get_user_id(), $courseInfo)) {
+            if (!learnpath::is_lp_visible_for_student($oLP->getEntity(), api_get_user_id(), $course)) {
                 api_not_allowed();
             }
         }

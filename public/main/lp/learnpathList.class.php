@@ -129,7 +129,7 @@ class LearnpathList
                     $lpVisibility = learnpath::is_lp_visible_for_student(
                         $lp,
                         $user_id,
-                        $courseInfo
+                        $course
                     );
                     if (false === $lpVisibility) {
                         continue;

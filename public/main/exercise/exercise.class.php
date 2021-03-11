@@ -6551,7 +6551,8 @@ class Exercise
             return [];
         }
 
-        $link = $exercise->getFirstResourceLinkFromCourseSession(api_get_course_entity($this->course_id));
+        $course = api_get_course_entity($this->course_id);
+        $link = $exercise->getFirstResourceLinkFromCourseSession($course);
 
         if ($link->isDraft()) {
             $this->active = 0;
@@ -6575,7 +6576,7 @@ class Exercise
             $lp = Container::getLpRepository()->find($lpId);
             // 2.1 LP is loaded
             if ($lp && 0 == $this->active &&
-                !learnpath::is_lp_visible_for_student($lp, api_get_user_id())
+                !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)
             ) {
                 return [
                     'value' => false,

@@ -31,8 +31,8 @@ $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
-$courseEntity = api_get_course_entity($course_id);
-$sessionEntity = api_get_session_entity($sessionId);
+$course = api_get_course_entity($course_id);
+$session = api_get_session_entity($sessionId);
 
 /** @var learnpath $lp */
 //$oLP = Session::read('oLP');
@@ -42,14 +42,14 @@ $lp = $lp;
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
     if (!api_is_allowed_to_edit(null, true, false, false) &&
-        !learnpath::is_lp_visible_for_student($lp, api_get_user_id())
+        !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)
     ) {
         api_not_allowed(true);
     }
 }
 
 // Checking visibility (eye icon)
-$visibility = $lp->isVisible($courseEntity, $sessionEntity);
+$visibility = $lp->isVisible($course, $session);
 
 if (false === $visibility &&
     !api_is_allowed_to_edit(false, true, false, false)

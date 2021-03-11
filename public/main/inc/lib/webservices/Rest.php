@@ -823,13 +823,11 @@ class Rest extends WebService
         $categoriesTempList = learnpath::getCategories($this->course->getId());
 
         $categoryNone = new CLpCategory();
-        $categoryNone->setId(0);
         $categoryNone->setName(get_lang('WithOutCategory'));
         $categoryNone->setPosition(0);
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
         $categoryData = [];
-
         /** @var CLpCategory $category */
         foreach ($categories as $category) {
             $learnPathList = new LearnpathList(
@@ -838,7 +836,7 @@ class Rest extends WebService
                 $sessionId,
                 null,
                 false,
-                $category->getId()
+                $category->getIid()
             );
 
             $flatLpList = $learnPathList->get_flat_list();
@@ -857,7 +855,7 @@ class Rest extends WebService
                 if (!learnpath::is_lp_visible_for_student(
                     $lpId,
                     $this->user->getId(),
-                    api_get_course_info($this->course->getCode()),
+                    $this->course,
                     $sessionId
                 )) {
                     continue;

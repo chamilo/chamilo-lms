@@ -1,7 +1,7 @@
 // require('mediaelement');
 // import('multiselect-two-sides');
 // require('@fortawesome/fontawesome-free');
-require('qtip2');
+
 require('image-map-resizer/js/imageMapResizer.js');
 require('cropper');
 // require('jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon');

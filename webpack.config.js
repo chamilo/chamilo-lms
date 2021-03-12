@@ -180,8 +180,6 @@ themes.forEach(function (theme) {
 //     }
 // }));
 
-//module.exports = Encore.getWebpackConfig();
-
 const config = Encore.getWebpackConfig();
 
 config.resolve.alias =  {

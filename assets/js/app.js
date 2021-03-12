@@ -3,11 +3,13 @@
 // Load symfony routes in order to use it in a js
 const routes = require('../../public/js/fos_js_routes.json');
 import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
-import $ from 'jquery';
+//import $ from 'jquery';
+const $ = require('jquery');
 
 window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
+global.$ = global.jQuery = $
 
 Routing.setRoutingData(routes);
 
@@ -41,9 +43,6 @@ const webAjax = homePublicUrl + 'main/inc/ajax/';
 var ajax_url = webAjax + 'chat.ajax.php';
 var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';
 var offline_button = '<img src="' + homePublicUrl + 'img/statusoffline.png">';
-/*var connect_lang = '{{ "ChatConnected"|get_lang }}';
-var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';*/
-
 var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
@@ -263,8 +262,8 @@ $(function () {
 
   // Date time settings.
   //moment.locale(locale);
-  $.datepicker.setDefaults($.datepicker.regional[locale]);
-  $.datepicker.regional["local"] = $.datepicker.regional[locale];
+  //$.datepicker.setDefaults($.datepicker.regional[locale]);
+  //$.datepicker.regional["local"] = $.datepicker.regional[locale];
 
   // Fix old calls of "inc/lib/mediaplayer/player.swf" and convert to <audio> tag, then rendered by media element js
   // see BT#13405
@@ -274,7 +273,7 @@ $(function () {
       var audioId = Math.floor(Math.random() * 99999);
       flashVars = flashVars.replace('&autostart=false', '');
       flashVars = flashVars.replace('&autostart=true', '');
-      var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"  ></source></audio>';
+      var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"></source></audio>';
       $(this).hide();
       $(this).after(audioDiv);
     }
@@ -328,8 +327,6 @@ $(function () {
       $("#column-left").addClass('col-md-12');
       $("#column-right").addClass('col-md-12');
     }
-
-
     if ($("#preview_course_add_course").length >= 0) {
       $("#preview_course_add_course").toggle();
     }
@@ -384,7 +381,7 @@ $(function () {
   var tip_options = {
     placement: 'right'
   };
-  $('.boot-tooltip').tooltip(tip_options);
+  //$('.boot-tooltip').tooltip(tip_options);
 
   $('.star-rating li a').on('click', function (event) {
     var id = $(this).parents('ul').attr('id');
@@ -421,8 +418,8 @@ $(document).scroll(function () {
     $('.bottom_actions').addClass('bottom_actions_fixed');
   }
 
-  //Exercise warning fixed at the top
-  var fixed =  $("#exercise_clock_warning");
+  // Exercise warning fixed at the top.
+  var fixed = $("#exercise_clock_warning");
   if (fixed.length) {
     if (!fixed.attr('data-top')) {
       // If already fixed, then do nothing
@@ -532,7 +529,7 @@ function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
   }
 }
 
-function expandColumnToogle(buttonSelector, col1Info, col2Info)
+function expandColumnToggle(buttonSelector, col1Info, col2Info)
 {
   $(buttonSelector).on('click', function (e) {
     e.preventDefault();
@@ -674,7 +671,7 @@ function copyTextToClipBoard(elementId)
 
 // Expose functions to be use inside chamilo.
 // @todo check if there's a better way to expose functions.
-window.expandColumnToogle = expandColumnToogle;
+window.expandColumnToggle = expandColumnToggle;
 window.get_url_params = get_url_params;
 window.setCheckbox = setCheckbox;
 window.action_click = action_click;

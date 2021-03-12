@@ -1,9 +1,9 @@
 {
   "root": true,
   "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "parser": "babel-eslint"
+    "ecmaVersion": 9,
+    "sourceType": "module"
+    //"parser": "babel-eslint"
   },
   "env": {
     "browser": true,

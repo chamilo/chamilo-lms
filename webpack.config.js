@@ -29,7 +29,6 @@ Encore
 
     .enableSingleRuntimeChunk()
     .enableIntegrityHashes()
-
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     //.enableVersioning(Encore.isProduction())
@@ -43,7 +42,7 @@ Encore
     })
 
     .enableSassLoader()
-    .enableVueLoader(function (options) {}, {runtimeCompilerBuild: false})
+    .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
     .autoProvidejQuery()
     /*.enablePostCssLoader(function (options) {
         options.config = {
@@ -94,12 +93,12 @@ Encore
         },*/
     ])
     // define the environment variables
-    .configureDefinePlugin(options => {
-        /*const env = dotEnv.config({ path: '.env.local' });
+    /*.configureDefinePlugin(options => {
+        const env = dotEnv.config({ path: '.env.local' });
         if (env.parsed) {
             options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
-        }*/
-    })
+        }
+    })*/
     // enable ESLint
     // .addLoader({
     //     enforce: 'pre',

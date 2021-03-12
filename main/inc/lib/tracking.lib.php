@@ -6524,7 +6524,6 @@ class Tracking
                             FROM $tquiz_question tq, $tquiz_answer tqa
                             WHERE
                                 tqa.question_id = tq.iid AND
-                                tqa.c_id = tq.c_id AND
                                 tq.c_id = $courseIdx AND
                                 tq.iid IN (".implode(',', $questionIds).")";
 

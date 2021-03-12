@@ -156,7 +156,7 @@ function getAnswers($courseId, $id)
     $id = (int) $id;
     $tableQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     $sql = "SELECT * FROM $tableQuizAnswer
-    	    WHERE c_id = $courseId AND question_id = $id
+    	    WHERE question_id = $id
     	    ORDER BY position ASC;";
     $res = Database::query($sql);
     $aux = [];

@@ -684,7 +684,7 @@ abstract class Question
             ) {
                 // removes old answers
                 $sql = "DELETE FROM $table
-                        WHERE c_id = $course_id AND question_id = ".intval($this->id);
+                        WHERE question_id = ".intval($this->id);
                 Database::query($sql);
             }
 
@@ -1427,7 +1427,7 @@ abstract class Question
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
-                    WHERE c_id = $courseId AND question_id = ".$id;
+                    WHERE question_id = ".$id;
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table

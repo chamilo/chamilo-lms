@@ -125,7 +125,6 @@ class Answer
 
         $sql = "SELECT * FROM $table
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id ='".$questionId."'
                 ORDER BY position";
 
@@ -161,8 +160,7 @@ class Answer
         $questionId = $this->questionId;
 
         $sql = "SELECT * FROM $table
-                WHERE c_id = {$this->course_id}
-                    AND question_id = $questionId
+                WHERE question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -211,7 +209,7 @@ class Answer
 
         $sql = "SELECT iid FROM
               $table
-              WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+              WHERE question_id ='".$questionId."'";
 
         $result = Database::query($sql);
         $id = [];
@@ -274,7 +272,6 @@ class Answer
                     iid
                 FROM $TBL_ANSWER
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id='".$questionId."'
                 ORDER BY $field $order";
         $result = Database::query($sql);
@@ -394,7 +391,7 @@ class Answer
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
         $sql = "SELECT iid, answer, id_auto FROM $table
-                WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+                WHERE id_auto='$auto_id'";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -818,7 +815,6 @@ class Answer
                 $position = $this->position[$i];
                 $sql = "DELETE FROM $answerTable
                         WHERE
-                            c_id = {$this->course_id} AND
                             question_id = '".$questionId."' AND
                             position ='$position'";
                 Database::query($sql);

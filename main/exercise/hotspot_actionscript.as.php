@@ -40,14 +40,13 @@ if ($answer_type == HOT_SPOT_DELINEATION) {
     $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
 	        WHERE
-	            c_id = $course_id AND
 	            question_id = $questionId AND
 	            hotspot_type = 'delineation'
             ORDER BY iid";
 } else {
     $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
-	        WHERE c_id = $course_id AND question_id = $questionId
+	        WHERE question_id = $questionId
 	        ORDER BY position";
 }
 $result = Database::query($sql);

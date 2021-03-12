@@ -55,11 +55,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected int $locked;
 
     /**
-     * @ORM\Column(name="cat_id", type="integer")
-     */
-    protected int $catId;
-
-    /**
      * @var Collection|CForumForum[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
@@ -70,7 +65,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     {
         $this->catComment = '';
         $this->locked = 0;
-        $this->catId = 0;
         $this->forums = new ArrayCollection();
     }
 
@@ -165,28 +159,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     public function getLocked()
     {
         return $this->locked;
-    }
-
-    /**
-     * Set catId.
-     *
-     * @return CForumCategory
-     */
-    public function setCatId(int $catId)
-    {
-        $this->catId = $catId;
-
-        return $this;
-    }
-
-    /**
-     * Get catId.
-     *
-     * @return int
-     */
-    public function getCatId()
-    {
-        return $this->catId;
     }
 
     /**

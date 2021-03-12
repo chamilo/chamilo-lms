@@ -86,6 +86,39 @@ class Version20170625123000 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_AD1394FAA76ED395 ON c_attendance_sheet (user_id);');
         }
 
+        $table = $schema->getTable('c_attendance_sheet_log');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_attendance_sheet_log;');
+        }
+
+        if ($table->hasIndex('user')) {
+            $this->addSql('DROP INDEX user ON c_attendance_sheet;');
+        }
+
+        $this->addSql('DELETE FROM c_attendance_sheet_log WHERE attendance_id = 0');
+        $this->addSql('DELETE FROM c_attendance_sheet_log WHERE lastedit_user_id = 0');
+
+        $this->addSql('ALTER TABLE c_attendance_sheet_log CHANGE attendance_id attendance_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_attendance_sheet_log CHANGE lastedit_user_id lastedit_user_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_181D0917163DDA15')) {
+            $this->addSql(
+                'ALTER TABLE c_attendance_sheet_log ADD CONSTRAINT FK_181D0917163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE'
+            );
+        }
+        if (!$table->hasForeignKey('FK_181D091731BA5DD')) {
+            $this->addSql(
+                'ALTER TABLE c_attendance_sheet_log ADD CONSTRAINT FK_181D091731BA5DD FOREIGN KEY (lastedit_user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+        if (!$table->hasIndex('IDX_181D0917163DDA15')) {
+            $this->addSql('CREATE INDEX IDX_181D0917163DDA15 ON c_attendance_sheet_log (attendance_id)');
+        }
+        if (!$table->hasIndex('IDX_181D091731BA5DD')) {
+            $this->addSql('CREATE INDEX IDX_181D091731BA5DD ON c_attendance_sheet_log (lastedit_user_id)');
+        }
+
         $table = $schema->getTable('c_attendance_result');
 
         if ($table->hasIndex('course')) {

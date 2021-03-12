@@ -93,12 +93,7 @@ class CCourseSetting
         return $this->variable;
     }
 
-    /**
-     * Set subkey.
-     *
-     * @return CCourseSetting
-     */
-    public function setSubkey(string $subkey)
+    public function setSubkey(string $subkey): self
     {
         $this->subkey = $subkey;
 
@@ -120,7 +115,7 @@ class CCourseSetting
      *
      * @return CCourseSetting
      */
-    public function setType(string $type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -142,7 +137,7 @@ class CCourseSetting
      *
      * @return CCourseSetting
      */
-    public function setCategory(string $category)
+    public function setCategory(string $category): self
     {
         $this->category = $category;
 
@@ -181,7 +176,7 @@ class CCourseSetting
      *
      * @return CCourseSetting
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -203,7 +198,7 @@ class CCourseSetting
      *
      * @return CCourseSetting
      */
-    public function setComment(string $comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -225,7 +220,7 @@ class CCourseSetting
      *
      * @return CCourseSetting
      */
-    public function setSubkeytext(string $subkeytext)
+    public function setSubkeytext(string $subkeytext): self
     {
         $this->subkeytext = $subkeytext;
 

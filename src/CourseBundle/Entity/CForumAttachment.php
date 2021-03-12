@@ -80,12 +80,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set path.
-     *
-     * @return CForumAttachment
-     */
-    public function setPath(string $path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -102,12 +97,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this->path;
     }
 
-    /**
-     * Set comment.
-     *
-     * @return CForumAttachment
-     */
-    public function setComment(string $comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -124,12 +114,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this->comment;
     }
 
-    /**
-     * Set size.
-     *
-     * @return CForumAttachment
-     */
-    public function setSize(int $size)
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -146,12 +131,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this->size;
     }
 
-    /**
-     * Set filename.
-     *
-     * @return CForumAttachment
-     */
-    public function setFilename(string $filename)
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 

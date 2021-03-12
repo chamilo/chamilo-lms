@@ -287,7 +287,6 @@ function api_get_utc_datetime(
     // If time is a timestamp, return directly in utc
     if (is_numeric($time)) {
         $time = (int) $time;
-
         $time = gmdate('Y-m-d H:i:s', $time);
         if ($returnObj) {
             return new DateTime($time, new DateTimeZone('UTC'));

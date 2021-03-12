@@ -308,7 +308,7 @@ function forumForm(CForumForum $forum = null, $lp_id)
     $forum_categories = get_forum_categories();
     $forum_categories_titles = [];
     foreach ($forum_categories as $value) {
-        $forum_categories_titles[$value->getCatId()] = $value->getCatTitle();
+        $forum_categories_titles[$value->getIid()] = $value->getCatTitle();
     }
     $form->addElement(
         'select',
@@ -608,8 +608,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
-    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
-
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
     /*$sql = "SELECT MAX(cat_order) as sort_max
             FROM $table_categories
@@ -659,8 +657,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 
         $last_id = $category->getIid();
         if ($last_id > 0) {
-            $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
-            Database::query($sql);
             $message = get_lang('The forum category has been added');
         }
 
@@ -761,11 +757,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
 
     if (!isset($values['forum_id'])) {
         $forum = new CForumForum();
-        $forum
-            ->setCId($courseId)
-            ->setSessionId($session_id)
-            ->setForumOrder(isset($new_max) ? $new_max : null)
-        ;
+        $forum->setForumOrder($new_max ?? null);
     } else {
         /** @var CForumForum $forum */
         $forum = $repo->find($values['forum_id']);
@@ -1847,7 +1839,7 @@ function getPosts(
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('thread', $threadId))
-        ->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
+        //->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
         ->andWhere($visibleCriteria)
     ;
 
@@ -1897,7 +1889,7 @@ function getPosts(
     foreach ($posts as $post) {
         $postInfo = [
             'iid' => $post->getIid(),
-            'c_id' => $post->getCId(),
+            //'c_id' => $post->getCId(),
             'post_id' => $post->getIid(),
             'post_title' => $post->getPostTitle(),
             'post_text' => $post->getPostText(),
@@ -2153,38 +2145,6 @@ function get_thread_users_not_qualify($thread_id)
 }
 
 /**
- * This function retrieves all the information of a given forumcategory id.
- *
- * @param int $cat_id that indicates the forum
- *
- * @return array returns if there are category or bool returns if there aren't category
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function get_forumcategory_information($cat_id)
-{
-    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-    $course_id = api_get_course_int_id();
-    $sql = "SELECT *
-            FROM $table_categories forumcategories
-            INNER JOIN $table_item_property item_properties
-            ON (forumcategories.c_id = item_properties.c_id)
-            WHERE
-                forumcategories.c_id = $course_id AND
-                item_properties.c_id = $course_id AND
-                item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
-                item_properties.ref='".Database::escape_string($cat_id)."' AND
-                forumcategories.cat_id='".Database::escape_string($cat_id)."'";
-    $result = Database::query($sql);
-
-    return Database::fetch_array($result);
-}
-
-/**
  * This function counts the number of forums inside a given category.
  *
  * @param int $cat_id the id of the forum category
@@ -2431,7 +2391,7 @@ function saveThread(
     // We now store the content in the table_post table.
     $post = new CForumPost();
     $post
-        ->setCId($course_id)
+        //->setCId($course_id)
         ->setPostTitle($clean_post_title)
         ->setPostText($values['post_text'])
         ->setThread($thread)
@@ -3385,7 +3345,7 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
 
         $post = new CForumPost();
         $post
-            ->setCId($courseId)
+            //->setCId($courseId)
             ->setPostTitle($values['post_title'])
             ->setPostText(isset($values['post_text']) ?: null)
             ->setThread($thread)
@@ -3946,7 +3906,7 @@ function get_unaproved_messages($forum_id)
  */
 function send_notification_mails(CForumForum $forum, CForumThread $thread, $reply_info)
 {
-    $courseEntity = api_get_course_entity($forum->getCId());
+    $courseEntity = api_get_course_entity();
     $courseId = $courseEntity->getId();
 
     $sessionId = api_get_session_id();
@@ -6187,7 +6147,7 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('status', $status))
-        ->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
+        //->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
         ->andWhere(Criteria::expr()->eq('visible', 1))
     ;
 

@@ -69,12 +69,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    /**
-     * Set title.
-     *
-     * @return CCourseDescription
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -91,12 +86,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @return CCourseDescription
-     */
-    public function setContent(string $content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -113,12 +103,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->content;
     }
 
-    /**
-     * Set descriptionType.
-     *
-     * @return CCourseDescription
-     */
-    public function setDescriptionType(int $descriptionType)
+    public function setDescriptionType(int $descriptionType): self
     {
         $this->descriptionType = $descriptionType;
 
@@ -135,12 +120,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->descriptionType;
     }
 
-    /**
-     * Set progress.
-     *
-     * @return CCourseDescription
-     */
-    public function setProgress(int $progress)
+    public function setProgress(int $progress): self
     {
         $this->progress = $progress;
 
@@ -165,9 +145,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

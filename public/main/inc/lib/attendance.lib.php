@@ -4,9 +4,11 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceSheetLog;
 use Doctrine\Common\Collections\Criteria;
 
 class Attendance
@@ -22,7 +24,6 @@ class Attendance
     private $description;
     private $attendance_qualify_title;
     private $attendance_weight;
-    private $course_int_id;
 
     /**
      * Get attendance list only the id, name and attendance_qualify_max fields.
@@ -618,27 +619,14 @@ class Attendance
         $attendance->setLocked($lock);
         $repo->update($attendance);
 
+        $this->saveAttendanceSheetLog(
+            $attendance,
+            api_get_utc_datetime(time(), false, true),
+            self::LOCKED_ATTENDANCE_LOG_TYPE,
+            api_get_user_entity()
+        );
+
         return true;
-
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $course_id = api_get_course_int_id();
-        $attendanceId = (int) $attendanceId;
-        $locked = $lock ? 1 : 0;
-        $upd = "UPDATE $tbl_attendance SET locked = $locked
-                WHERE iid = $attendanceId";
-        $result = Database::query($upd);
-        $affected_rows = Database::affected_rows($result);
-        if ($affected_rows && $lock) {
-            // Save attendance sheet log
-            $this->saveAttendanceSheetLog(
-                $attendanceId,
-                api_get_utc_datetime(),
-                self::LOCKED_ATTENDANCE_LOG_TYPE,
-                api_get_user_id()
-            );
-        }
-
-        return $affected_rows;
     }
 
     /**
@@ -761,14 +749,11 @@ class Attendance
      */
     public function attendance_sheet_add($calendar_id, $users_present, CAttendance $attendance)
     {
-        $attendanceId = $attendance->getIid();
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 
         $calendar_id = (int) $calendar_id;
         $users = $this->get_users_rel_course();
-        $course_id = api_get_course_int_id();
-
         $user_ids = array_keys($users);
         $users_absent = array_diff($user_ids, $users_present);
         $affected_rows = 0;
@@ -842,11 +827,11 @@ class Attendance
         if ($affected_rows) {
             //save attendance sheet log
             $this->saveAttendanceSheetLog(
-                $attendanceId,
-                api_get_utc_datetime(),
+                $attendance,
+                api_get_utc_datetime(time(), false, true),
                 $lastedit_type,
-                api_get_user_id(),
-                $calendar_data['date_time']
+                api_get_user_entity(),
+                api_get_utc_datetime($calendar_data['date_time'], true, true)
             );
         }
 
@@ -932,48 +917,25 @@ class Attendance
 
     /**
      * update attendance_sheet_log table, is used as history of an attendance sheet.
-     *
-     * @param   int     Attendance id
-     * @param   string  Last edit datetime
-     * @param   string  Event type ('locked_attendance', 'done_attendance_sheet' ...)
-     * @param   int     Last edit user id
-     * @param   string  Calendar datetime value (optional, when event type is 'done_attendance_sheet')
-     *
-     * @return int Affected rows
      */
     public function saveAttendanceSheetLog(
-        $attendanceId,
-        $lastedit_date,
-        $lastedit_type,
-        $lastedit_user_id,
-        $calendar_date_value = null
+        CAttendance $attendance,
+        DateTime $lastEditDate,
+        string $lastEditType,
+        User $user,
+        ?DateTime $dateValue = null
     ) {
-        $course_id = api_get_course_int_id();
-
-        // define table
-        $tbl_attendance_sheet_log = Database::get_course_table(TABLE_ATTENDANCE_SHEET_LOG);
-
-        // protect data
-        $attendanceId = (int) $attendanceId;
-        $lastedit_user_id = (int) $lastedit_user_id;
-
-        if (isset($calendar_date_value)) {
-            $calendar_date_value = $calendar_date_value;
-        } else {
-            $calendar_date_value = '';
-        }
-
-        // save data
-        $params = [
-            'c_id' => $course_id,
-            'attendance_id' => $attendanceId,
-            'lastedit_date' => $lastedit_date,
-            'lastedit_type' => $lastedit_type,
-            'lastedit_user_id' => $lastedit_user_id,
-            'calendar_date_value' => $calendar_date_value,
-        ];
-
-        return Database::insert($tbl_attendance_sheet_log, $params);
+        $log = new CAttendanceSheetLog();
+        $log
+            ->setAttendance($attendance)
+            ->setUser($user)
+            ->setCalendarDateValue($dateValue)
+            ->setLasteditDate($lastEditDate)
+            ->setLasteditType($lastEditType)
+        ;
+        $em = Database::getManager();
+        $em->persist($log);
+        $em->flush();
     }
 
     /**

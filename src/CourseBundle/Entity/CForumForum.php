@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="c_forum_forum",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
  *     }
  * )
  * @ORM\Entity
@@ -34,11 +33,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected int $iid;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @Assert\NotBlank
@@ -564,28 +558,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     public function getEndTime()
     {
         return $this->endTime;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CForumForum
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function isModerated(): bool

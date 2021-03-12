@@ -1697,16 +1697,17 @@ class SocialManager extends UserManager
                     $row['forum_title'] = '';
                     $row['thread_url'] = '';
                     if (MESSAGE_STATUS_FORUM === (int) $row['msg_status']) {
+                        // @todo use repositories to get post and threads.
                         /** @var CForumPost $post */
                         $post = $repo->find($row['id']);
                         /** @var CForumThread $thread */
                         $thread = $repoThread->find($row['thread_id']);
                         if ($post && $thread) {
-                            $courseInfo = api_get_course_info_by_id($post->getCId());
+                            //$courseInfo = api_get_course_info_by_id($post->getCId());
                             $row['post_title'] = $post->getForum()->getForumTitle();
                             $row['forum_title'] = $thread->getThreadTitle();
                             $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
-                                    'cid' => $courseInfo['real_id'],
+                                    //'cid' => $courseInfo['real_id'],
                                     'forum' => $post->getForum()->getIid(),
                                     'thread' => $post->getThread()->getIid(),
                                     'post_id' => $post->getIid(),

@@ -21,11 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="c_forum_post",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
  *         @ORM\Index(name="forum_id", columns={"forum_id"}),
  *         @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}),
  *         @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
- *         @ORM\Index(name="c_id_visible_post_date", columns={"c_id", "visible", "post_date"})
  *     }
  * )
  * @ORM\Entity
@@ -42,11 +40,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected int $iid;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @Assert\NotBlank()
@@ -261,28 +254,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function getVisible()
     {
         return $this->visible;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CForumPost
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

@@ -228,34 +228,19 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get filetype.
-     *
-     * @return string
-     */
-    public function getFiletype()
+    public function getFiletype(): string
     {
         return $this->filetype;
     }
 
-    /**
-     * Set readonly.
-     *
-     * @return CDocument
-     */
-    public function setReadonly(bool $readonly)
+    public function setReadonly(bool $readonly): self
     {
         $this->readonly = $readonly;
 
         return $this;
     }
 
-    /**
-     * Get readonly.
-     *
-     * @return bool
-     */
-    public function getReadonly()
+    public function getReadonly(): bool
     {
         return $this->readonly;
     }

@@ -61,6 +61,10 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_47A9C991BAD783F ON c_forum_forum (resource_node_id)');
         }
 
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_forum_forum;');
+        }
+
         if ($table->hasIndex('FK_47A9C9968DFD1EF')) {
             $this->addSql('ALTER TABLE c_forum_forum DROP INDEX FK_47A9C9968DFD1EF');
         }
@@ -95,10 +99,49 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
         //$this->addSql('ALTER TABLE c_forum_thread_qualify DROP id');
         //$this->addSql('ALTER TABLE c_forum_thread_qualify_log DROP id');
+        $table = $schema->getTable('c_forum_thread_qualify');
+
+        $this->addSql('DELETE FROM c_forum_thread_qualify WHERE user_id = 0');
+        $this->addSql('DELETE FROM c_forum_thread_qualify WHERE thread_id = 0');
+
+        $this->addSql('ALTER TABLE c_forum_thread_qualify CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_forum_thread_qualify CHANGE thread_id thread_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_715FC3A5A76ED395')) {
+            $this->addSql('ALTER TABLE c_forum_thread_qualify ADD CONSTRAINT FK_715FC3A5A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        }
+        if (!$table->hasForeignKey('FK_715FC3A5E2904019')) {
+            $this->addSql(
+                'ALTER TABLE c_forum_thread_qualify ADD CONSTRAINT FK_715FC3A5E2904019 FOREIGN KEY (thread_id) REFERENCES c_forum_thread (iid) ON DELETE CASCADE'
+            );
+        }
+        if (!$table->hasForeignKey('FK_715FC3A5E5E1B95C')) {
+            $this->addSql(
+                'ALTER TABLE c_forum_thread_qualify ADD CONSTRAINT FK_715FC3A5E5E1B95C FOREIGN KEY (qualify_user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_715FC3A5A76ED395')) {
+            $this->addSql('CREATE INDEX IDX_715FC3A5A76ED395 ON c_forum_thread_qualify (user_id)');
+        }
+        if (!$table->hasIndex('IDX_715FC3A5E2904019')) {
+            $this->addSql('CREATE INDEX IDX_715FC3A5E2904019 ON c_forum_thread_qualify (thread_id)');
+        }
+        if (!$table->hasIndex('IDX_715FC3A5E5E1B95C')) {
+            $this->addSql('CREATE INDEX IDX_715FC3A5E5E1B95C ON c_forum_thread_qualify (qualify_user_id)');
+        }
 
         $table = $schema->getTable('c_forum_post');
         if ($table->hasForeignKey('FK_B5BEF559E2904019')) {
             $this->addSql('ALTER TABLE c_forum_post DROP FOREIGN KEY FK_B5BEF559E2904019');
+        }
+
+        if ($table->hasIndex('c_id_visible_post_date')) {
+            $this->addSql('DROP INDEX c_id_visible_post_date ON c_forum_post');
+        }
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_forum_post');
         }
 
         if (false === $table->hasColumn('resource_node_id')) {

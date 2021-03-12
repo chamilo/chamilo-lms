@@ -29,7 +29,7 @@ class CLpItem
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected ?int $iid;
+    protected ?int $iid = null;
 
     /**
      * @ORM\Column(name="c_id", type="integer")
@@ -153,7 +153,6 @@ class CLpItem
 
     public function __construct()
     {
-        $this->iid = null;
         $this->path = '';
         $this->parentItemId = 0;
         $this->previousItemId = 0;

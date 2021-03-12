@@ -78,6 +78,15 @@ class CAttendance extends AbstractResource implements ResourceInterface
      */
     protected Collection $calendars;
 
+    /**
+     * @var Collection|CAttendanceSheetLog[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="CAttendanceSheetLog", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected Collection $logs;
+
     public function __construct()
     {
         $this->description = '';
@@ -85,6 +94,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         $this->attendanceQualifyMax = 0;
         $this->locked = 0;
         $this->calendars = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -219,6 +229,24 @@ class CAttendance extends AbstractResource implements ResourceInterface
     public function setCalendars(Collection $calendars): self
     {
         $this->calendars = $calendars;
+
+        return $this;
+    }
+
+    /**
+     * @return CAttendanceSheetLog[]|Collection
+     */
+    public function getLogs()
+    {
+        return $this->logs;
+    }
+
+    /**
+     * @param CAttendanceSheetLog[]|Collection $logs
+     */
+    public function setLogs(Collection $logs): self
+    {
+        $this->logs = $logs;
 
         return $this;
     }

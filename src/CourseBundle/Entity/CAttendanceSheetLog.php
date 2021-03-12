@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_attendance_sheet_log",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
  *     }
  * )
  * @ORM\Entity
@@ -30,14 +30,16 @@ class CAttendanceSheetLog
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="logs")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $cId;
+    protected CAttendance $attendance;
 
     /**
-     * @ORM\Column(name="attendance_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="lastedit_user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $attendanceId;
+    protected User $user;
 
     /**
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
@@ -50,65 +52,23 @@ class CAttendanceSheetLog
     protected string $lasteditType;
 
     /**
-     * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
-     */
-    protected int $lasteditUserId;
-
-    /**
      * @ORM\Column(name="calendar_date_value", type="datetime", nullable=true)
      */
     protected ?DateTime $calendarDateValue = null;
 
-    /**
-     * Set attendanceId.
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setAttendanceId(int $attendanceId)
-    {
-        $this->attendanceId = $attendanceId;
-
-        return $this;
-    }
-
-    /**
-     * Get attendanceId.
-     *
-     * @return int
-     */
-    public function getAttendanceId()
-    {
-        return $this->attendanceId;
-    }
-
-    /**
-     * Set lasteditDate.
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setLasteditDate(DateTime $lasteditDate)
+    public function setLasteditDate(DateTime $lasteditDate): self
     {
         $this->lasteditDate = $lasteditDate;
 
         return $this;
     }
 
-    /**
-     * Get lasteditDate.
-     *
-     * @return DateTime
-     */
-    public function getLasteditDate()
+    public function getLasteditDate(): DateTime
     {
         return $this->lasteditDate;
     }
 
-    /**
-     * Set lasteditType.
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setLasteditType(string $lasteditType)
+    public function setLasteditType(string $lasteditType): self
     {
         $this->lasteditType = $lasteditType;
 
@@ -125,34 +85,7 @@ class CAttendanceSheetLog
         return $this->lasteditType;
     }
 
-    /**
-     * Set lasteditUserId.
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setLasteditUserId(int $lasteditUserId)
-    {
-        $this->lasteditUserId = $lasteditUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get lasteditUserId.
-     *
-     * @return int
-     */
-    public function getLasteditUserId()
-    {
-        return $this->lasteditUserId;
-    }
-
-    /**
-     * Set calendarDateValue.
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setCalendarDateValue(DateTime $calendarDateValue)
+    public function setCalendarDateValue(?DateTime $calendarDateValue): self
     {
         $this->calendarDateValue = $calendarDateValue;
 
@@ -169,25 +102,27 @@ class CAttendanceSheetLog
         return $this->calendarDateValue;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setCId(int $cId)
+    public function getAttendance(): CAttendance
     {
-        $this->cId = $cId;
+        return $this->attendance;
+    }
+
+    public function setAttendance(CAttendance $attendance): self
+    {
+        $this->attendance = $attendance;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getUser(): User
     {
-        return $this->cId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

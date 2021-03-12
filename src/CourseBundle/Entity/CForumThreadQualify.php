@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,14 +37,22 @@ class CForumThreadQualify
     protected int $cId;
 
     /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $userId;
+    protected ?User $user;
 
     /**
-     * @ORM\Column(name="thread_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="qualifications")
+     * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
-    protected int $threadId;
+    protected CForumThread $thread;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="qualify_user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected User $qualifyUser;
 
     /**
      * @ORM\Column(name="qualify", type="float", precision=6, scale=2, nullable=false)
@@ -51,58 +60,9 @@ class CForumThreadQualify
     protected float $qualify;
 
     /**
-     * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
-     */
-    protected ?int $qualifyUserId = null;
-
-    /**
      * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
      */
     protected ?DateTime $qualifyTime = null;
-
-    /**
-     * Set userId.
-     *
-     * @return CForumThreadQualify
-     */
-    public function setUserId(int $userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set threadId.
-     *
-     * @return CForumThreadQualify
-     */
-    public function setThreadId(int $threadId)
-    {
-        $this->threadId = $threadId;
-
-        return $this;
-    }
-
-    /**
-     * Get threadId.
-     *
-     * @return int
-     */
-    public function getThreadId()
-    {
-        return $this->threadId;
-    }
 
     /**
      * Set qualify.
@@ -124,28 +84,6 @@ class CForumThreadQualify
     public function getQualify()
     {
         return $this->qualify;
-    }
-
-    /**
-     * Set qualifyUserId.
-     *
-     * @return CForumThreadQualify
-     */
-    public function setQualifyUserId(int $qualifyUserId)
-    {
-        $this->qualifyUserId = $qualifyUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get qualifyUserId.
-     *
-     * @return int
-     */
-    public function getQualifyUserId()
-    {
-        return $this->qualifyUserId;
     }
 
     /**

@@ -6,7 +6,7 @@
 
 <div class="page-header">
     <h4>
-        {{ 'Overview' | get_lang  }}
+        {{ 'Overview' | trans  }}
     </h4>
 </div>
 
@@ -15,7 +15,11 @@
         <div class="col-lg-3 col-sm-3">
             <div class="card">
                 <div class="content">
-                    <div class="card-title"><a href="{{ _p.web_main }}mySpace/student.php">{{ 'FollowedStudents' | get_lang }}</a></div>
+                    <div class="card-title">
+                        <a href="{{ url('legacy_main', {'name' : 'mySpace/student.php'}) }}">
+                            {{ 'FollowedStudents' | trans }}
+                        </a>
+                    </div>
                     <div class="row">
                         <div class="col-xs-5">
                             <div class="icon-big icon-student text-center">
@@ -24,7 +28,6 @@
                         </div>
                         <div class="col-xs-7">
                             <div class="numbers">
-
                                 <h2>{{ students }}</h2>
                             </div>
                         </div>
@@ -35,7 +38,11 @@
         <div class="col-lg-3 col-sm-3">
             <div class="card">
                 <div class="content">
-                    <div class="card-title"><a href="{{ _p.web_main }}mySpace/users.php?status={{ studentboss }}">{{ 'FollowedStudentBosses' | get_lang }}</a></div>
+                    <div class="card-title">
+                        <a href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}?status={{ studentboss }}">
+                            {{ 'FollowedStudentBosses' | trans }}
+                        </a>
+                    </div>
                     <div class="row">
                         <div class="col-xs-5">
                             <div class="icon-big icon-studentboss text-center">
@@ -55,7 +62,11 @@
         <div class="col-lg-3 col-sm-3">
             <div class="card">
                 <div class="content">
-                    <div class="card-title"><a href="{{ _p.web_main }}mySpace/teachers.php">{{ 'FollowedTeachers' | get_lang }}</a></div>
+                    <div class="card-title">
+                        <a href="{{ url('legacy_main', {'name' : 'mySpace/teachers.php'}) }}">
+                            {{ 'FollowedTeachers' | trans }}
+                        </a>
+                    </div>
                     <div class="row">
                         <div class="col-xs-5">
                             <div class="icon-big icon-teachers text-center">
@@ -75,7 +86,11 @@
         <div class="col-lg-3 col-sm-3">
             <div class="card">
                 <div class="content">
-                    <div class="card-title"><a href="{{ _p.web_main }}mySpace/users.php?status={{ drh }}">{{ 'FollowedHumanResources' | get_lang }}</a></div>
+                    <div class="card-title">
+                        <a href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}?status={{ drh }}">
+                            {{ 'FollowedHumanResources' | trans }}
+                        </a>
+                    </div>
                     <div class="row">
                         <div class="col-xs-5">
                             <div class="icon-big icon-humanresources text-center">
@@ -103,14 +118,17 @@
                             <span class="percent">{{ total_user }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default" href="{{ _p.web_main }}mySpace/users.php">
-                                {{ 'FollowedUsers' | get_lang }}
+                            <a class="btn btn-default" href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}">
+                                {{ 'FollowedUsers' | trans }}
                             </a>
                         </div>
                     </div>
 
-                    {% if _u.status == 1 %}
-                        <a href="{{ _p.web_main }}admin/dashboard_add_users_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
+                    {% if app.user.status == 1 %}
+                        <a
+                           href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_users_to_user.php'}) }}?user={{ app.user.id }}"
+                           class="btn btn-default btn-sm"
+                        >
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -121,13 +139,17 @@
                             <span class="percent">{{ stats.courses }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default" href="{{ _p.web_main }}mySpace/course.php">
-                                {{ 'AssignedCourses' | get_lang }}
+                            <a class="btn btn-default"
+                               href="{{ url('legacy_main', {'name' : 'mySpace/course.php'}) }}"
+                            >
+                                {{ 'AssignedCourses' | trans }}
                             </a>
                         </div>
                     </div>
-                    {% if _u.status == 1 %}
-                        <a href="{{ _p.web_main }}mySpace/course.php" class="btn btn-default btn-sm">
+                    {% if app.user.status == 1 %}
+                        <a
+                            href="{{ url('legacy_main', {'name' : 'mySpace/course.php'}) }}"
+                           class="btn btn-default btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -138,11 +160,17 @@
                             <span class="percent">{{ stats.assigned_courses }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default" href="{{ _p.web_main }}mySpace/course.php?follow">{{ 'FollowedCourses' | get_lang }}</a>
+                            <a class="btn btn-default"
+                               href="{{ url('legacy_main', {'name' : 'mySpace/course.php?follow'}) }}"
+                            >
+                                {{ 'FollowedCourses' | trans }}
+                            </a>
                         </div>
                     </div>
-                    {% if _u.status == 1 %}
-                        <a href="{{ _p.web_main }}mySpace/course.php?follow" class="btn btn-default btn-sm">
+                    {% if app.user.status == 1 %}
+                        <a
+                            href="{{ url('legacy_main', {'name' : 'mySpace/course.php?follow'}) }}"
+                            class="btn btn-default btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -153,11 +181,18 @@
                             <span class="percent">{{ stats.session_list |length }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default" href="{{ _p.web_main }}mySpace/session.php">{{ 'FollowedSessions' | get_lang }}</a>
+                            <a class="btn btn-default"
+                               href="{{ url('legacy_main', {'name' : 'mySpace/session.php'}) }}"
+                            >
+                                {{ 'FollowedSessions' | trans }}
+                            </a>
                         </div>
                     </div>
-                    {% if _u.status == 1 %}
-                        <a href="{{ _p.web_main }}admin/dashboard_add_sessions_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
+                    {% if app.user.status == 1 %}
+                        <a
+                            href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_sessions_to_user.php'}) }}?user={{ app.user.id }}"
+                            class="btn btn-default btn-sm"
+                        >
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -182,7 +217,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'AverageCoursePerStudent' | get_lang }}</p>
+                <p>{{ 'AverageCoursePerStudent' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -194,7 +229,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'InactivesStudents' | get_lang }}</p>
+                <p>{{ 'InactivesStudents' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -206,7 +241,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'AverageTimeSpentOnThePlatform' | get_lang }}</p>
+                <p>{{ 'AverageTimeSpentOnThePlatform' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -218,7 +253,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'AverageProgressInLearnpath' | get_lang }}</p>
+                <p>{{ 'AverageProgressInLearnpath' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -231,7 +266,7 @@
 
                     </div>
                 </div>
-                <p>{{ 'AvgCourseScore' | get_lang }}</p>
+                <p>{{ 'AvgCourseScore' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -244,7 +279,7 @@
 
                     </div>
                 </div>
-                <p> {{ 'AveragePostsInForum' | get_lang }}</p>
+                <p> {{ 'AveragePostsInForum' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -257,7 +292,7 @@
 
                     </div>
                 </div>
-                <p> {{ 'AverageAssignments' | get_lang }}</p>
+                <p> {{ 'AverageAssignments' | trans }}</p>
             </div>
         </div>
     </div>

@@ -14,7 +14,8 @@
 
     <ul class="nav navbar-nav d-md-down-none">
         <li class="nav-item px-3">
-            <a class="nav-link " href="{{ url('legacy_main', { 'name' : 'auth/courses.php' }) }}" id="btncatalog" role="button" >
+            <a class="nav-link"
+               href="{{ url('legacy_main', { 'name' : 'auth/courses.php' }) }}" id="btncatalog" role="button" >
                 {{ "Course catalog"|trans }}
             </a>
         </li>
@@ -45,7 +46,9 @@
             </li>
         {% endif %}#}
             <li class="nav-item d-md-down-none">
-                <a id="list_notifications_friends" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <a id="list_notifications_friends"
+                   class="nav-link"
+                   data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-bell"></i>
                     <span id="notifications-social" class="badge badge-pill badge-danger"></span>
                 </a>
@@ -60,7 +63,9 @@
                 </ul>
             </li>
             <li class="nav-item d-md-down-none">
-                <a id="list_notifications_inbox" class="nav-link" href="#" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <a id="list_notifications_inbox"
+                   class="nav-link"
+                   href="#" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-envelope"></i>
                     <span id="notifications-inbox" class="badge badge-pill badge-info"></span>
                 </a>
@@ -75,7 +80,8 @@
                 </ul>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link nav-link-user dropdown-toggle d-sm-inline-block mr-2" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link nav-link-user dropdown-toggle d-sm-inline-block mr-2"
+                   data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <img src="{{ app.user | illustration }}?w=32&h=32&fit=crop">
                     <span class="d-none">{{ app.user.firstname }} {{ app.user.lastname }}</span>
                 </a>

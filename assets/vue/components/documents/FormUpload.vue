@@ -12,8 +12,6 @@
 <!--          multiple-->
 <!--          @change="selectFile"-->
 <!--        />-->
-
-
         <div class="input-group mb-3">
           <div class="custom-file">
 
@@ -27,7 +25,10 @@
                 @change="selectFile"
             />
 
-            <label class="custom-file-label" for="file_upload" aria-describedby="File upload">
+            <label
+                class="custom-file-label"
+                for="file_upload"
+                aria-describedby="File upload">
               Choose file
             </label>
           </div>
@@ -46,12 +47,12 @@
               </span>
               <span>
               <a @click.prevent="files.splice(index, 1)"
-                 class="delete">
-                <font-awesome-icon icon="trash"/>
+                 class="delete"
+              >
+                <font-awesome-icon icon="trash" />
               </a>
             </span>
             </div>
-
           </div>
         </div>
       </b-col>

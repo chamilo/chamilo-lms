@@ -1,5 +1,5 @@
 import {mapFields} from 'vuex-map-fields';
-import Component from "../components/Snackbar.vue";
+//import Component from "../components/Snackbar.vue";
 
 export default {
     computed: {
@@ -18,7 +18,7 @@ export default {
         showMessage(message, type = 'success') {
             const content = {
                 // Your component or JSX template
-                component: Component,
+                //component: Component,
 
                 // Props are just regular props, but these won't be reactive
                 props: {

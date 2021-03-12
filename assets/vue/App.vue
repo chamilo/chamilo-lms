@@ -1,12 +1,12 @@
 <template>
   <div class="d-flex flex-column h-100">
-    <transition
-        name="fade"
-        mode="out-in"
-        appear
-    >
+<!--    <transition-->
+<!--        name="fade"-->
+<!--        mode="out-in"-->
+<!--        appear-->
+<!--    >-->
       <Header/>
-    </transition>
+<!--    </transition>-->
 
     <Sidebar/>
 
@@ -90,7 +90,7 @@ export default {
     }),
   },
   watch: {
-    $route(to, from) {
+    $route() {
       this.$data.legacy_content = '';
       if (document.querySelector("#sectionMainContent")) {
         document.querySelector("#sectionMainContent").remove();

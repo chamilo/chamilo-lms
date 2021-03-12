@@ -160,7 +160,7 @@ $(function () {
   });
 
   $('#global-modal').on('hidden.bs.modal', function () {
-    jQuery(".embed-responsive").find('iframe').remove();
+    $(".embed-responsive").find('iframe').remove();
   });
 
   // Expands an image modal

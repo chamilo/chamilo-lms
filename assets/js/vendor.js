@@ -13,7 +13,7 @@ require('easy-pie-chart/dist/jquery.easypiechart.min');
 // require('jquery-ui-timepicker-addon');
 require('@fancyapps/fancybox/dist/jquery.fancybox.js');
 require('@fancyapps/fancybox/src/js/media.js');
-require('jquery-contextmenu/dist/jquery.contextMenu.js');
+//require('jquery-contextmenu/dist/jquery.contextMenu.js');
 
 var hljs = require('highlight.js');
 global.hljs = hljs;

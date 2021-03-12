@@ -6100,8 +6100,7 @@ __metadata:
     hljs: ^6.2
     html2canvas: ^1.0.0-rc.7
     image-map-resizer: ^1.0.10
-    jquery: ^3.6
-    jquery-contextmenu: ^2.9.0
+    jquery: ^3.5.0
     jquery-ui: ^1.12.1
     jquery-ui-timepicker-addon: ^1.6.3
     jquery-ui-touch-punch: ^0.2.3
@@ -6117,11 +6116,10 @@ __metadata:
     mxgraph: ^4.0
     node-sass: ^4.0
     optimize-css-assets-webpack-plugin: ^5.0.3
-    pace-js-amd-fix: ^1.0.5
     perfect-scrollbar: ^1.4
     popper.js: ^1.14.7
     portal-vue: ^2.1.7
-    pretty-bytes: ^5.4.1
+    pretty-bytes: ^5.6
     pretty-checkbox: ^3.0.3
     pwstrength-bootstrap: ^3.0
     qtip2: ^3.0.3
@@ -6136,7 +6134,7 @@ __metadata:
     tempusdominus-core: ^5.19.0
     textcomplete: ^0.18.1
     timeago: ^1.6.7
-    timepicker: ^1.11.14
+    timepicker: ^1.13
     tinymce: ^5.6
     typescript: ^3.8.3
     video.js: ^7.6.6
@@ -6146,13 +6144,13 @@ __metadata:
     vue-loader: ^15.7.0
     vue-moment: ^4.1.0
     vue-perfect-scrollbar: ^0.2.1
-    vue-router: ^3.1.6
+    vue-router: ^3.5
     vue-sidebar-menu: ^4.7.1
     vue-template-compiler: ^2.6.10
     vue-toastification: ^1.7.7
     vuelidate: ^0.7.5
     vuetify: ^2.2.27
-    vuex: ^3.3.0
+    vuex: ^3.6
     vuex-map-fields: ^1.4.0
     vuex-persistedstate: ^3.0.1
     webcamjs: ^1.0
@@ -11994,17 +11992,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"jquery-contextmenu@npm:^2.9.0":
-  version: 2.9.2
-  resolution: "jquery-contextmenu@npm:2.9.2"
-  dependencies:
-    jquery: ^3.5.0
-  peerDependencies:
-    jquery: ">=1.8.2"
-  checksum: 48c086e17e2e32ad18737eadbaa82008693bba046ae0ccf74ac16c9afc608a509048cce0b29a1268f6d4218775fa2b9f07c9ffb1a2cf1d58f98aa5dd7e76bc7c
-  languageName: node
-  linkType: hard
-
 "jquery-ui-timepicker-addon@npm:^1.6.3":
   version: 1.6.3
   resolution: "jquery-ui-timepicker-addon@npm:1.6.3"
@@ -12030,13 +12017,6 @@ fsevents@~2.3.1:
   version: 3.5.1
   resolution: "jquery@npm:3.5.1"
   checksum: c50818c84837902a60938c85786feb612f346a9918f7285409d605449460790b3815ad8aaf5806f19e89f1a79b27d327802b421ab354fe213f3fd1801e3562e6
-  languageName: node
-  linkType: hard
-
-"jquery@npm:^3.6":
-  version: 3.6.0
-  resolution: "jquery@npm:3.6.0"
-  checksum: a0a819022a1bdff5efa79bbd9d4d7352de5bd32dabe42108e6ec0797238dba36c09c108e0eea2724f5d03acc1b30ee87d76bec80e15b9510106532292ebe6ba4
   languageName: node
   linkType: hard
 
@@ -14574,13 +14554,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"pace-js-amd-fix@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "pace-js-amd-fix@npm:1.0.5"
-  checksum: 4c463cea181ba15df3cb9bed8d60a36fe5a853e8aad9f47e05698c550018246f636c82cf85f18bc930bcf1dda4ca2d02c79d980028b611208f99e6995091af1d
-  languageName: node
-  linkType: hard
-
 "package-json@npm:^4.0.0":
   version: 4.0.1
   resolution: "package-json@npm:4.0.1"
@@ -15629,10 +15602,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:^5.4.1":
-  version: 5.5.0
-  resolution: "pretty-bytes@npm:5.5.0"
-  checksum: 1add1ac6526b71eed7ddff575d4f91e6c077e84563bb6d1caf59b5b834e15a4f9e6da8853a0cc14eed63f1c6bf9fb8553ece117f845ad2014bb534742d29ffa9
+"pretty-bytes@npm:^5.6":
+  version: 5.6.0
+  resolution: "pretty-bytes@npm:5.6.0"
+  checksum: 2a2db3daaee5c7271dbc68cc875118f4e2b6697e9e4e73b4ea5d5639f50cff2c1f1f7db4775119974eff86fdbd1fac2a5d9f16bc41d90626821a9f6a0e6e26cf
   languageName: node
   linkType: hard
 
@@ -18453,7 +18426,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"timepicker@npm:^1.11.14":
+"timepicker@npm:^1.13":
   version: 1.13.18
   resolution: "timepicker@npm:1.13.18"
   dependencies:
@@ -19537,7 +19510,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"vue-router@npm:^3.1.6":
+"vue-router@npm:^3.5":
   version: 3.5.1
   resolution: "vue-router@npm:3.5.1"
   checksum: cf53dc6bdb280090831fb68d324326a5d5da3cb686c4b5a53fd1ac25294c03009442c5102ac94f82596ea9851805ba4ef796cbe734e215602adede1fb94304c7
@@ -19644,7 +19617,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"vuex@npm:^3.3.0":
+"vuex@npm:^3.6":
   version: 3.6.2
   resolution: "vuex@npm:3.6.2"
   peerDependencies:

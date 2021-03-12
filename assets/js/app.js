@@ -18,14 +18,13 @@ require('select2/dist/js/select2.full.min');
 require('flatpickr');
 //import('bootstrap-vue');
 import('bootstrap');
-require('bootstrap-daterangepicker');
 import('webpack-jquery-ui');
 import('webpack-jquery-ui/css');
 require('./vendor');
 import('./main');
+require('bootstrap-daterangepicker');
+//require('bootstrap-daterangepicker/daterangepicker.js');
 
-require('webpack-jquery-ui');
-require('webpack-jquery-ui/css');
 require('blueimp-file-upload');
 require('blueimp-load-image');
 import('mediaelement');

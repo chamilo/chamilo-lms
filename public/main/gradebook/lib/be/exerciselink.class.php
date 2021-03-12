@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
+
 /**
  * Class ExerciseLink
  * Defines a gradebook ExerciseLink object.
@@ -11,7 +14,6 @@
 class ExerciseLink extends AbstractLink
 {
     public $checkBaseExercises = false;
-    private $course_info;
     private $exercise_table;
     private $exercise_data = [];
     private $is_hp;
@@ -38,10 +40,8 @@ class ExerciseLink extends AbstractLink
      */
     public function get_all_links($getOnlyHotPotatoes = false)
     {
-        //$tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $exerciseTable = $this->get_exercise_table();
         $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
-        //$documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
         if (empty($this->course_code)) {
             return [];
         }
@@ -54,33 +54,30 @@ class ExerciseLink extends AbstractLink
 
         // @todo
         $uploadPath = null;
+        $repo = Container::getQuizRepository();
+        $course = api_get_course_entity($this->course_id);
+        $session = api_get_session_entity($sessionId);
 
-        $sql = 'SELECT iid, title FROM '.$exerciseTable.'
-				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
+        $qb = $repo->findAllByCourse($course, $session, null, 1, false);
+        /** @var CQuiz[] $exercises */
+        $exercises = $qb->getQuery()->getResult();
+        $cats = [];
+        if (!empty($exercises)) {
+            foreach ($exercises as $exercise) {
+                $cats[] = [$exercise->getIid(), $exercise->getTitle()];
+            }
+        }
 
         $sqlLp = "SELECT e.iid, e.title
                   FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
-                  ON (e.c_id = i.c_id AND e.iid = i.path)
+                  ON (e.iid = i.path)
 				  WHERE
-				    e.c_id = $this->course_id AND
 				    active = 0 AND
 				    item_type = 'quiz'
-				  $session_condition";
-
-        $exerciseInLP = [];
-        $result = Database::query($sql);
+				  ";
         $resultLp = Database::query($sqlLp);
         $exerciseInLP = Database::store_result($resultLp);
-
-        $cats = [];
-        if (isset($result)) {
-            if (Database::num_rows($result) > 0) {
-                while ($data = Database::fetch_array($result)) {
-                    $cats[] = [$data['iid'], $data['title']];
-                }
-            }
-        }
 
         if (!empty($exerciseInLP)) {
             foreach ($exerciseInLP as $exercise) {

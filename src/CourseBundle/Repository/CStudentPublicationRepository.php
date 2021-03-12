@@ -25,6 +25,22 @@ final class CStudentPublicationRepository extends ResourceRepository
         parent::__construct($registry, CStudentPublication::class);
     }
 
+    public function findAllByCourse(
+        Course $course,
+        Session $session = null,
+        ?string $title = null,
+        ?int $active = null,
+        ?string $fileType = null
+    ): QueryBuilder {
+        $qb = $this->getResourcesByCourse($course, $session);
+
+        $this->addTitleQueryBuilder($title, $qb);
+        $this->addActiveQueryBuilder($active, $qb);
+        $this->addFileTypeQueryBuilder($fileType, $qb);
+
+        return $qb;
+    }
+
     public function getStudentAssignments(
         CStudentPublication $publication,
         Course $course,
@@ -33,8 +49,8 @@ final class CStudentPublicationRepository extends ResourceRepository
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group);
 
+        $this->addNotDeletedPublicationQueryBuilder($qb);
         $qb
-            ->andWhere($qb->expr()->in('resource.active', [1, 0]))
             ->andWhere('resource.publicationParent =:publicationParent')
             ->setParameter('publicationParent', $publication)
         ;
@@ -98,11 +114,40 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
     }
 
-    protected function addNotDeletedPublicationQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    private function addActiveQueryBuilder(?int $active = null, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+
+        if (null !== $active) {
+            $qb
+                ->andWhere('resource.active = :active')
+                ->setParameter('active', $active)
+            ;
+        }
+
+        return $qb;
+    }
+
+    private function addNotDeletedPublicationQueryBuilder(QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb
             ->andWhere('resource.active <> 2')
+        ;
+
+        return $qb;
+    }
+
+    private function addFileTypeQueryBuilder(?string $fileType, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        if (null === $fileType) {
+            return $qb;
+        }
+
+        $qb
+            ->andWhere('resource.filetype = :filetype')
+            ->setParameter('filetype', $fileType)
         ;
 
         return $qb;

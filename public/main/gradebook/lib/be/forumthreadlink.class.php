@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumThread;
+
 /**
  * Class ForumThreadLink.
  *
@@ -56,23 +59,32 @@ class ForumThreadLink extends AbstractLink
             $session_condition = '(tl.session_id = 0 OR tl.session_id IS NULL)';
         }
 
-        $sql = 'SELECT tl.iid as thread_id, tl.thread_title, tl.thread_title_qualify
+        $repo = Container::getForumThreadRepository();
+        $course = api_get_course_entity($this->course_id);
+        $session = api_get_session_entity($sessionId);
+
+        $qb = $repo->findAllByCourse($course, $session);
+        /** @var CForumThread[] $threads */
+        $threads = $qb->getQuery()->getResult();
+
+        /*$sql = 'SELECT tl.iid as thread_id, tl.thread_title, tl.thread_title_qualify
                 FROM '.$tbl_grade_links.' tl
                 WHERE
                     tl.c_id = '.$this->course_id.' AND
                     '.$session_condition.'
                 ';
-
-        $result = Database::query($sql);
-        while ($data = Database::fetch_array($result)) {
-            if (isset($data['thread_title_qualify']) && '' != $data['thread_title_qualify']) {
-                $cats[] = [$data['thread_id'], $data['thread_title_qualify']];
-            } else {
-                $cats[] = [$data['thread_id'], $data['thread_title']];
+        $result = Database::query($sql);*/
+        $cats = [];
+        foreach ($threads as $thread) {
+            $title = $thread->getThreadTitle();
+            $threadQualify = $thread->getThreadTitleQualify();
+            if (!empty($threadQualify)) {
+                $title = $threadQualify;
             }
+            $cats[] = [$thread->getIid(), $title];
         }
 
-        return isset($cats) ? $cats : [];
+        return $cats;
     }
 
     /**

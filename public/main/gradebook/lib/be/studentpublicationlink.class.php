@@ -14,9 +14,6 @@ class StudentPublicationLink extends AbstractLink
 {
     private $studpub_table;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -61,8 +58,7 @@ class StudentPublicationLink extends AbstractLink
         //Only show works from the session
         //AND has_properties != ''
         $repo = Container::getStudentPublicationRepository();
-        $qb = $repo->getResourcesByCourse(api_get_course_entity($this->course_id), $session);
-        $qb->andWhere("resource.filetype = 'folder' AND resource.active = true");
+        $qb = $repo->findAllByCourse(api_get_course_entity($this->course_id), $session, null, 1, 'folder');
         $links = $qb->getQuery()->getResult();
 
         /*$links = Container::getStudentPublicationRepository()
@@ -98,12 +94,11 @@ class StudentPublicationLink extends AbstractLink
         $session = api_get_session_entity($this->get_session_id());
         $results = Container::getStudentPublicationRepository()
             ->findBy([
-                'cId' => $this->course_id,
                 'parentId' => $id,
                 'session' => $session,
             ]);
 
-        return 0 != count($results);
+        return 0 !== count($results);
     }
 
     /**
@@ -138,31 +133,26 @@ class StudentPublicationLink extends AbstractLink
 
         if (empty($session)) {
             $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
-                   WHERE
-                        a.cId = :course AND
+                    WHERE
                         a.active = :active AND
-                        a.parentId = :parent AND
+                        a.publicationParent = :parent AND
                         a.session is null AND
                         a.qualificatorId <> 0
                     ';
-
             $params = [
-                'course' => $this->course_id,
                 'parent' => $parentId,
                 'active' => true,
             ];
         } else {
             $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
                     WHERE
-                        a.cId = :course AND
                         a.active = :active AND
-                        a.parentId = :parent AND
+                        a.publicationParent = :parent AND
                         a.session = :session AND
                         a.qualificatorId <> 0
                     ';
 
             $params = [
-                'course' => $this->course_id,
                 'parent' => $parentId,
                 'session' => $session,
                 'active' => true,

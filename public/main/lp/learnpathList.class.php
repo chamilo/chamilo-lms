@@ -52,7 +52,7 @@ class LearnpathList
             $courseInfo = api_get_course_info();
         }
 
-        $this->course_code = $courseInfo['code'];
+        //$this->course_code = $courseInfo['code'];
         $course_id = $courseInfo['real_id'];
         $this->user_id = $user_id;
 

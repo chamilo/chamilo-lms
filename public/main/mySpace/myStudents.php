@@ -20,10 +20,10 @@ $export = $_GET['export'] ?? false;
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 $origin = api_get_origin();
 $courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : '';
-$courseInfo = api_get_course_info_by_id($courseId);
+$course = api_get_course_entity($courseId);
 $courseCode = '';
-if ($courseInfo) {
-    $courseCode = $courseInfo['code'];
+if (null !== $course) {
+    $courseCode = $course->getCode();
 }
 $studentId = isset($_GET['student']) ? (int) $_GET['student'] : 0;
 $coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
@@ -50,11 +50,11 @@ $allowedToTrackUser =
     api_is_teacher()
 ;
 
-if (false === $allowedToTrackUser && !empty($courseInfo)) {
+if (false === $allowedToTrackUser && null !== $course) {
     if (empty($sessionId)) {
         $isTeacher = CourseManager::isCourseTeacher(
             api_get_user_id(),
-            $courseInfo['code']
+            $course->getId()
         );
 
         if ($isTeacher) {
@@ -63,7 +63,7 @@ if (false === $allowedToTrackUser && !empty($courseInfo)) {
             // Check if the user is tutor of the course
             $userCourseStatus = CourseManager::get_tutor_in_course_status(
                 api_get_user_id(),
-                $courseInfo['real_id']
+                $course->getId()
             );
 
             if (1 == $userCourseStatus) {
@@ -71,7 +71,7 @@ if (false === $allowedToTrackUser && !empty($courseInfo)) {
             }
         }
     } else {
-        $coach = api_is_coach($sessionId, $courseInfo['real_id']);
+        $coach = api_is_coach($sessionId, $course->getId());
 
         if ($coach) {
             $allowedToTrackUser = true;
@@ -87,7 +87,7 @@ if (empty($studentId)) {
 }
 
 $user = api_get_user_entity($studentId);
-if (empty($user)) {
+if (null === $user) {
     api_not_allowed(true);
 }
 
@@ -111,8 +111,8 @@ if (!empty($details)) {
     if ('user_course' === $origin) {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
-                'url' => $courseInfo['course_public_url'],
-                'name' => $courseInfo['title'],
+                'url' => api_get_course_url($course->getCode()),
+                'name' => $course->getTitle(),
             ];
         }
         $interbreadcrumb[] = [
@@ -218,7 +218,7 @@ switch ($action) {
         }
         $workingTime = $_GET['time'] ?? '';
         $workId = $_GET['work_id'] ?? '';
-        Event::eventAddVirtualCourseTime($courseInfo['real_id'], $studentId, $sessionId, $workingTime, $workId);
+        Event::eventAddVirtualCourseTime($courseId, $studentId, $sessionId, $workingTime, $workId);
         Display::addFlash(Display::return_message(get_lang('Updated')));
 
         header('Location: '.$currentUrl);
@@ -229,7 +229,7 @@ switch ($action) {
         }
         $workingTime = $_GET['time'] ?? '';
         $workId = $_GET['work_id'] ?? '';
-        Event::eventRemoveVirtualCourseTime($courseInfo['real_id'], $studentId, $sessionId, $workingTime, $workId);
+        Event::eventRemoveVirtualCourseTime($courseId, $studentId, $sessionId, $workingTime, $workId);
 
         Display::addFlash(Display::return_message(get_lang('Updated')));
 
@@ -558,7 +558,7 @@ switch ($action) {
             Event::delete_student_lp_events(
                 $studentId,
                 $lp_id,
-                $courseInfo,
+                ['real_id' => $courseId],
                 $sessionId
             );
 
@@ -648,7 +648,7 @@ while ($row = Database::fetch_array($rs, 'ASSOC')) {
     }
 }
 
-$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), $courseInfo);
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), ['real_id' => $courseId]);
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($studentId)) {
@@ -806,11 +806,11 @@ if ($isSubscribedToCourse) {
 
 $avg_student_progress = round($avg_student_progress, 2);
 $time_spent_on_the_course = 0;
-if (!empty($courseInfo)) {
+if (null !== $course) {
     $time_spent_on_the_course = api_time_to_hms(
         Tracking::get_time_spent_on_the_course(
             $studentId,
-            $courseInfo['real_id'],
+            $courseId,
             $sessionId
         )
     );
@@ -1087,14 +1087,19 @@ $tpl = new Template(
     false
 );
 
-if (!empty($courseInfo)) {
-    $nb_assignments = Tracking::count_student_assignments($studentId, $courseCode, $sessionId);
-    $messages = Tracking::count_student_messages($studentId, $courseCode, $sessionId);
-    $links = Tracking::count_student_visited_links($studentId, $courseInfo['real_id'], $sessionId);
-    $chat_last_connection = Tracking::chat_last_connection($studentId, $courseInfo['real_id'], $sessionId);
-    $documents = Tracking::count_student_downloaded_documents($studentId, $courseInfo['real_id'], $sessionId);
+if (null !== $course) {
+    $session = api_get_session_entity($sessionId);
+    $nb_assignments = Container::getStudentPublicationRepository()->countUserPublications(
+        $user,
+        $course,
+        $session
+    );
+    $messages = Container::getForumPostRepository()->countUserForumPosts($user, $course, $session);
+    $links = Tracking::count_student_visited_links($studentId, $courseId, $sessionId);
+    $chat_last_connection = Tracking::chat_last_connection($studentId, $courseId, $sessionId);
+    $documents = Tracking::count_student_downloaded_documents($studentId, $courseId, $sessionId);
     $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $courseCode, $sessionId);
-    $tpl->assign('title', $courseInfo['title']);
+    $tpl->assign('title', $course->getTitle());
 
     $userInfoExtra['tools'] = [
         'tasks' => $nb_assignments,
@@ -1105,11 +1110,15 @@ if (!empty($courseInfo)) {
         'upload_documents' => $uploaded_documents,
         'course_first_access' => Tracking::get_first_connection_date_on_the_course(
             $studentId,
-            $courseInfo['real_id'],
+            $courseId,
             $sessionId
         ),
-        'course_last_access' => Tracking::get_last_connection_date_on_the_course($studentId, $courseInfo, $sessionId),
-        'count_access_dates' => Tracking::getNumberOfCourseAccessDates($studentId, $courseInfo['real_id'], $sessionId),
+        'course_last_access' => Tracking::get_last_connection_date_on_the_course(
+            $studentId,
+            ['real_id' => $courseId],
+            $sessionId
+        ),
+        'count_access_dates' => Tracking::getNumberOfCourseAccessDates($studentId, $courseId, $sessionId),
     ];
 } else {
     $details = false;
@@ -1135,7 +1144,7 @@ if ($allowAll) {
     // Default behaviour - Show all skills depending the course and session id
     echo Tracking::displayUserSkills(
         $studentId,
-        $courseInfo ? $courseInfo['real_id'] : 0,
+        $courseId,
         $sessionId
     );
 }
@@ -1502,8 +1511,8 @@ if (empty($details)) {
     ];
 
     $timeCourse = null;
-    if (Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])) {
-        $timeCourse = Tracking::getCalculateTime($studentId, $courseInfo['real_id'], $sessionId);
+    if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
+        $timeCourse = Tracking::getCalculateTime($studentId, $courseId, $sessionId);
     }
 
     if (INVITEE != $user->getStatus()) {
@@ -1546,7 +1555,7 @@ if (empty($details)) {
 
         $csv_content[] = $columnHeadersToExport;
         $columnHeadersKeys = array_keys($columnHeaders);
-        $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
+        $categoriesTempList = learnpath::getCategories($courseId);
         $categoryTest = new CLpCategory();
         //$categoryTest->setId(0);
         //$categoryTest->setId(0);
@@ -1565,13 +1574,13 @@ if (empty($details)) {
         /** @var CLpCategory $item */
         foreach ($categories as $item) {
             $categoryId = $item->getIid();
-            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseInfo['real_id'], $sessionId)) {
+            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseId, $sessionId)) {
                 continue;
             }
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $courseInfo,
+                ['real_id' => $courseId],
                 $sessionId,
                 null,
                 false,
@@ -1761,7 +1770,7 @@ if (empty($details)) {
                     }
                     $link = Display::url(
                         Display::return_icon('2rightarrow.png', get_lang('Details')),
-                        $codePath.'mySpace/lp_tracking.php?cid='.$courseInfo['real_id'].'&course='.$courseCode.$from.'&origin='.$origin
+                        $codePath.'mySpace/lp_tracking.php?cid='.$courseId.'&course='.$courseCode.$from.'&origin='.$origin
                         .'&lp_id='.$lp_id.'&student_id='.$studentId.'&sid='.$sessionId
                     );
                     echo Display::tag('td', $link);
@@ -1770,7 +1779,7 @@ if (empty($details)) {
                 if (api_is_allowed_to_edit()) {
                     echo '<td>';
                     if (true === $any_result) {
-                        $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cid='.$courseInfo['real_id'].'&course='
+                        $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cid='.$courseId.'&course='
                             .$courseCode.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='
                             .$studentId.'&details=true&sid='.$sessionId;
                         echo Display::url(
@@ -1867,7 +1876,7 @@ if (empty($details)) {
         $result_exercices = Database::query($sql);
         $i = 0;*/
 
-        $course = api_get_course_entity($courseInfo['real_id']);
+        $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
         $repo = Container::getQuizRepository();
         $qb = $repo->findAllByCourse($course, $session, null, 2, false);
@@ -1879,7 +1888,7 @@ if (empty($details)) {
                 $exercise_id = (int) $exercise->getIid();
                 $count_attempts = Tracking::count_student_exercise_attempts(
                     $studentId,
-                    $courseInfo['real_id'],
+                    $courseId,
                     $exercise_id,
                     0,
                     0,
@@ -1946,7 +1955,7 @@ if (empty($details)) {
                          WHERE
                             exe_exo_id = "'.$exercise_id.'" AND
                             exe_user_id ="'.$studentId.'" AND
-                            c_id = '.$courseInfo['real_id'].' AND
+                            c_id = '.$courseId.' AND
                             session_id = "'.$sessionId.'" AND
                             status = ""
                         ORDER BY exe_date DESC
@@ -2078,7 +2087,7 @@ if (empty($details)) {
         }
     }
 
-    $userWorks = getWorkPerUser($studentId, $courseInfo['real_id'], $sessionId);
+    $userWorks = getWorkPerUser($studentId, $courseId, $sessionId);
     echo '
         <div class="table-responsive">
             <table class="table table-striped table-hover">
@@ -2100,7 +2109,6 @@ if (empty($details)) {
         $showOnce = true;
         foreach ($work->user_results as $key => $results) {
             $resultId = $results['id'];
-
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
@@ -2111,7 +2119,7 @@ if (empty($details)) {
             echo '<td class="text-center">'.$qualification.'</td>';
             echo '<td class="text-center">'.
                 api_convert_and_format_date($results['sent_date_from_db']).' '.$results['expiry_note'].'</td>';
-            $assignment = get_work_assignment_by_id($work->iid, $courseInfo['real_id']);
+            $assignment = get_work_assignment_by_id($work->iid, $courseId);
 
             echo '<td class="text-center">';
             if (!empty($assignment['expires_on'])) {
@@ -2217,7 +2225,6 @@ $allow = api_get_configuration_value('allow_user_message_tracking');
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($studentId);
     echo Display::page_subheader2(get_lang('MessageReporting'));
-
     $table = new HTML_Table(['class' => 'table']);
     $column = 0;
     $row = 0;

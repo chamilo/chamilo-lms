@@ -1,12 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Report for current courses followed by the user.
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
-
 $filename = 'reporting';
 
 if (!api_is_allowed_to_create_course()) {
@@ -19,7 +20,6 @@ $array = [];
 
 $i = 0;
 $session_id = 0;
-
 if (!empty($my_courses)) {
     foreach ($my_courses as $course) {
         $course_code = $course['code'];

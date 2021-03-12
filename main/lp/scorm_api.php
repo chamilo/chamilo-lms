@@ -473,10 +473,10 @@ function LMSGetValue(param) {
         } else {
             //result='not attempted';
         }
-    } else if(param == 'cmi.core.student_id'){
+    } else if(param == 'cmi.core.student_id' || param == 'cmi.learner_id') { // cmi.learner_id widens support for SCORM 2004
         // ---- cmi.core.student_id
         result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
-    } else if(param == 'cmi.core.student_name'){
+    } else if(param == 'cmi.core.student_name' || param == 'cmi.learner_name') { // cmi.learner_name widens support for SCORM 2004
         // ---- cmi.core.student_name
         <?php
           $who = addslashes(trim($user['lastname']).', '.trim($user['firstname']));
@@ -510,7 +510,8 @@ function LMSGetValue(param) {
         // ---- cmi.core.lesson_mode
         result = olms.lms_item_lesson_mode;
     } else if(param == 'cmi.suspend_data'){
-    // ---- cmi.suspend_data
+        // ---- cmi.suspend_data
+        olms.suspend_data = get_local_suspend_data(); // check localStorage suspend data, if available
         result = olms.suspend_data;
     } else if(param == 'cmi.launch_data'){
     // ---- cmi.launch_data
@@ -698,6 +699,7 @@ function LMSSetValue(param, val) {
     } else if ( param == "cmi.suspend_data") {
         olms.suspend_data = val;
         olms.updatable_vars_list['cmi.suspend_data'] = true;
+        save_suspend_data_in_local(); // save to local storage if available
         return_value='true';
     } else if ( param == "cmi.core.exit" ) {
         olms.lms_item_core_exit = val;
@@ -2542,3 +2544,56 @@ function update_chronometer(text_hour, text_minute, text_second)
 
     return true;
 }
+
+/**
+ * Get suspend_data from localStorage
+ * see suspend_data case in function LMSGetValue correction bn
+ */
+function get_local_suspend_data()
+{
+    var final_suspend_data = olms.suspend_data;
+    var idSuspendData = olms.lms_item_id + 'suspenddata' +  olms.lms_view_id + 'u' + olms.lms_user_id;
+
+    if (olms.suspend_data.indexOf("ICPLAYER_") != -1) {
+        final_suspend_data = "";
+        try {
+            if (localStorage) {
+                mem_suspend_data = window.localStorage.getItem(idSuspendData);
+                if (mem_suspend_data === null||mem_suspend_data == "null") {
+                    mem_suspend_data = "";
+                }
+                if (mem_suspend_data === undefined) {
+                    mem_suspend_data = "";
+                }
+                if (typeof mem_suspend_data == 'undefined') {
+                    mem_suspend_data = "";
+                }
+                if (mem_suspend_data!="") {
+                    final_suspend_data = mem_suspend_data;
+                }
+            }
+        } catch(err) {}
+    }
+
+    return final_suspend_data;
+}
+
+/**
+ * Save suspend_data in localStorage
+ * see suspend_data case in function LMSSetValue
+ */
+function save_suspend_data_in_local()
+{
+    if (localStorage) {
+        if (olms.suspend_data) {
+            var suspend_data_local = olms.suspend_data;
+            var idSuspendData = olms.lms_item_id + 'suspenddata' +  olms.lms_view_id + 'u' + olms.lms_user_id;
+            try {
+                window.localStorage.setItem(idSuspendData,suspend_data_local);
+            } catch(err) {
+
+            }
+        }
+    }
+}
+

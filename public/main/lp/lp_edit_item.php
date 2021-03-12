@@ -95,7 +95,7 @@ function confirmation(name) {
 
 $(function() {
     $('.scrollbar-inner').scrollbar();
-    expandColumnToogle('#hide_bar_template', {
+    expandColumnToggle('#hide_bar_template', {
         selector: '#lp_sidebar'
     }, {
         selector: '#doc_form'

@@ -113,7 +113,7 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
             $('#subtab ').on('click', 'a:first', function () {
                 window.location.reload();
             });
-            expandColumnToogle('#hide_bar_template', {
+            expandColumnToggle('#hide_bar_template', {
                 selector: '#lp_sidebar'
             }, {
                 selector: '#doc_form'

@@ -1682,26 +1682,30 @@ HOTSPOT;
      */
     public static function showTestsWhereQuestionIsUsed(int $questionId, int $excludeTestId = 0)
     {
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
         $questionId = (int) $questionId;
-        $sql = "SELECT qz.title quiz_title,
-                        c.title course_title,
-                        s.name session_name,
-                        qz.iid as quiz_id,
-                        qz.c_id,
-                        qz.session_id
-                FROM c_quiz qz,
-                    c_quiz_rel_question qq,
-                    course c,
-                    session s
-                WHERE qz.c_id = c.id AND
-                    (qz.session_id = s.id OR qz.session_id = 0) AND
-                    qq.exercice_id = qz.iid AND ";
+        $sql = "SELECT
+                q.title quiz_title,
+                q.iid quiz_id,
+                c.id c_id,
+                c.title course_title,
+                c.code course_code,
+                s.id session_id,
+                s.name session_name
+            FROM $tblQuiz q
+            INNER JOIN $tblCourse c ON q.c_id = c.id
+            LEFT JOIN $tblSession s ON q.session_id = s.id
+            INNER JOIN $tblQuizRelQuestion qq ON q.iid = qq.exercice_id
+            WHERE qq.question_id = $questionId";
+
         if (!empty($excludeTestId)) {
             $excludeTestId = (int) $excludeTestId;
-            $sql .= " qz.iid != $excludeTestId AND ";
+            $sql .= " AND q.iid <> $excludeTestId";
         }
-        $sql .= "     qq.question_id = $questionId
-                GROUP BY qq.iid";
 
         $result = [];
         $html = "";
@@ -1715,7 +1719,9 @@ HOTSPOT;
                 $tmp[1] = $row['session_name'];
                 $tmp[2] = $row['quiz_title'];
                 // Send do other test with r=1 to reset current test session variables
-                $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'].'&r=1';
+                $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'
+                    .api_get_cidreq_params($row['course_code'], $row['session_id']).'&'
+                    .http_build_query(['exerciseId' => $row['quiz_id'], 'r' => 1]);
                 $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::return_icon('quiz.png', get_lang('Edit')).'</a>';
                 if ((int) $row['session_id'] == 0) {
                     $tmp[1] = '-';

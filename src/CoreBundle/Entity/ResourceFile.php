@@ -115,7 +115,6 @@ class ResourceFile
     protected ?int $size = 0;
 
     /**
-     * @Assert\NotNull()
      * @Vich\UploadableField(
      *     mapping="resources",
      *     fileNameProperty="name",
@@ -287,12 +286,12 @@ class ResourceFile
         return $this;
     }*/
 
-    public function getMimeType(): string
+    public function getMimeType(): ?string
     {
         return $this->mimeType;
     }
 
-    public function setMimeType(string $mimeType): self
+    public function setMimeType(?string $mimeType): self
     {
         $this->mimeType = $mimeType;
 
@@ -304,7 +303,7 @@ class ResourceFile
         return $this->originalName;
     }
 
-    public function setOriginalName(string $originalName): self
+    public function setOriginalName(?string $originalName): self
     {
         $this->originalName = $originalName;
 

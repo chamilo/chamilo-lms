@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -987,7 +988,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                         $link->setResourceRights($rights);
                     }
                 } else {
-                    $link->setResourceRights([]);
+                    $link->setResourceRights(new ArrayCollection());
                 }
                 $em->persist($link);
             }

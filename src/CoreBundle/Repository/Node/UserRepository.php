@@ -1424,15 +1424,16 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     private function addSearchByKeywordQueryBuilder($keyword, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-
-        $qb->orderBy('u.firstname', Criteria::ASC);
-        $qb->where('
-            u.firstname LIKE :keyword OR
-            u.lastname LIKE :keyword OR
-            u.email LIKE :keyword OR
-            u.username LIKE :keyword
-        ');
-        $qb->setParameter('keyword', "%$keyword%", Types::STRING);
+        $qb
+            ->andWhere('
+                u.firstname LIKE :keyword OR
+                u.lastname LIKE :keyword OR
+                u.email LIKE :keyword OR
+                u.username LIKE :keyword
+            ')
+            ->setParameter('keyword', "%$keyword%", Types::STRING)
+            ->orderBy('u.firstname', Criteria::ASC)
+        ;
 
         return $qb;
     }
@@ -1458,8 +1459,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     private function addOnlyMyFriendsQueryBuilder(int $userId, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        $qb->leftJoin('u.userRelUsers', 'relations');
         $qb
+            ->leftJoin('u.userRelUsers', 'relations')
             ->andWhere(
                 $qb->expr()->notIn('relations.relationType', [USER_RELATION_TYPE_DELETED, USER_RELATION_TYPE_RRHH])
             )
@@ -1473,8 +1474,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     private function addAccessUrlQueryBuilder(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        $qb->innerJoin('u.portals', 'p');
         $qb
+            ->innerJoin('u.portals', 'p')
             ->andWhere('p.url = :url')
             ->setParameter('url', $accessUrlId, Types::INTEGER)
         ;
@@ -1485,9 +1486,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     private function addNotCurrentUserQueryBuilder(int $userId, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-
         $qb
-            ->where('u.id <> :id')
+            ->andWhere('u.id <> :id')
             ->setParameter('id', $userId, Types::INTEGER)
         ;
 
@@ -1497,9 +1497,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     private function addActiveAndNotAnonUserQueryBuilder(QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-
         $qb
-            ->where('u.active = 1')
+            ->andWhere('u.active = 1')
             ->andWhere('u.status <> :status')
             ->setParameter('status', User::ANONYMOUS, Types::INTEGER)
         ;
@@ -1510,9 +1509,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     private function addStatusQueryBuilder(int $status, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-
         $qb
-            ->where('u.status = :status')
+            ->andWhere('u.status = :status')
             ->setParameter('status', $status, Types::INTEGER)
         ;
 

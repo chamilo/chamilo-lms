@@ -148,11 +148,11 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_question_option CHANGE survey_id survey_id INT DEFAULT NULL;');
 
         if (false === $table->hasForeignKey('FK_C4B6F5F1E27F6BF')) {
-            $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid);');
+            $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid) ON DELETE CASCADE');
         }
 
         if (false === $table->hasForeignKey('FK_C4B6F5FB3FE509D')) {
-            $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5FB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid);');
+            $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5FB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid) ON DELETE CASCADE');
         }
 
         if (false === $table->hasIndex('IDX_C4B6F5FB3FE509D')) {

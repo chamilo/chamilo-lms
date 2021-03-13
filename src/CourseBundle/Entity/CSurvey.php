@@ -274,11 +274,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->author;
     }
 
-    /**
-     * Set lang.
-     *
-     * @return CSurvey
-     */
     public function setLang(string $lang): self
     {
         $this->lang = $lang;
@@ -296,11 +291,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->lang;
     }
 
-    /**
-     * Set availFrom.
-     *
-     * @return CSurvey
-     */
     public function setAvailFrom(DateTime $availFrom): self
     {
         $this->availFrom = $availFrom;
@@ -308,12 +298,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get availFrom.
-     *
-     * @return DateTime
-     */
-    public function getAvailFrom()
+    public function getAvailFrom(): ?DateTime
     {
         return $this->availFrom;
     }
@@ -325,21 +310,11 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get availTill.
-     *
-     * @return DateTime
-     */
-    public function getAvailTill()
+    public function getAvailTill(): ?DateTime
     {
         return $this->availTill;
     }
 
-    /**
-     * Set isShared.
-     *
-     * @return CSurvey
-     */
     public function setIsShared(string $isShared): self
     {
         $this->isShared = $isShared;
@@ -357,11 +332,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->isShared;
     }
 
-    /**
-     * Set template.
-     *
-     * @return CSurvey
-     */
     public function setTemplate(string $template): self
     {
         $this->template = $template;

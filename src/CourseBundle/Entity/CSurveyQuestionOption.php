@@ -30,13 +30,13 @@ class CSurveyQuestionOption
 
     /**
      * @ORM\ManyToOne(targetEntity="CSurveyQuestion")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurveyQuestion $question;
 
     /**
      * @ORM\ManyToOne(targetEntity="CSurvey")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurvey $survey;
 

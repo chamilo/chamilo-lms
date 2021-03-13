@@ -19,6 +19,15 @@ class Version20180319145700 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $survey = $schema->getTable('c_survey');
+
+        if ($survey->hasIndex('session_id')) {
+            $this->addSql(' DROP INDEX session_id ON c_survey;');
+        }
+
+        if ($survey->hasIndex('course')) {
+            $this->addSql(' DROP INDEX course ON c_survey;');
+        }
+
         if (false === $survey->hasColumn('is_mandatory')) {
             $this->addSql('ALTER TABLE c_survey ADD COLUMN is_mandatory TINYINT(1) DEFAULT "0" NOT NULL');
         }
@@ -32,31 +41,38 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL;');
         $this->addSql('ALTER TABLE c_survey CHANGE avail_till avail_till DATETIME DEFAULT NULL;');
 
+
+        $table = $schema->getTable('c_survey_answer');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_survey_answer;');
+        }
+
         $this->addSql('ALTER TABLE c_survey_answer CHANGE survey_id survey_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_answer CHANGE question_id question_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_answer CHANGE option_id option_id INT DEFAULT NULL');
 
-        if (!$survey->hasForeignKey('FK_8A897DDB3FE509D')) {
+        if (!$table->hasForeignKey('FK_8A897DDB3FE509D')) {
             $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid);');
         }
 
-        if (!$survey->hasForeignKey('FK_8A897DD1E27F6BF')) {
+        if (!$table->hasForeignKey('FK_8A897DD1E27F6BF')) {
             $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DD1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid);');
         }
 
-        if (!$survey->hasForeignKey('FK_8A897DDA7C41D6F')) {
+        if (!$table->hasForeignKey('FK_8A897DDA7C41D6F')) {
             $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDA7C41D6F FOREIGN KEY (option_id) REFERENCES c_survey_question_option (iid);');
         }
 
-        if (!$survey->hasIndex('IDX_8A897DDB3FE509D')) {
+        if (!$table->hasIndex('IDX_8A897DDB3FE509D')) {
             $this->addSql('CREATE INDEX IDX_8A897DDB3FE509D ON c_survey_answer (survey_id);');
         }
 
-        if (!$survey->hasIndex('IDX_8A897DD1E27F6BF')) {
+        if (!$table->hasIndex('IDX_8A897DD1E27F6BF')) {
             $this->addSql('CREATE INDEX IDX_8A897DD1E27F6BF ON c_survey_answer (question_id);');
         }
 
-        if (!$survey->hasIndex('IDX_8A897DDA7C41D6F')) {
+        if (!$table->hasIndex('IDX_8A897DDA7C41D6F')) {
             $this->addSql('CREATE INDEX IDX_8A897DDA7C41D6F ON c_survey_answer (option_id);');
         }
 
@@ -78,6 +94,11 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_survey_question');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_survey_question');
+        }
+
         if (false === $table->hasColumn('is_required')) {
             $table
                 ->addColumn('is_required', Types::BOOLEAN)
@@ -115,6 +136,10 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_survey_question_option');
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_survey_question_option');
+        }
+
         /*if (false === $table->hasIndex('idx_survey_qo_qid')) {
             $this->addSql('CREATE INDEX idx_survey_qo_qid ON c_survey_question_option (question_id)');
         }*/

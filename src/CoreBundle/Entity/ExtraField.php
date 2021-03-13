@@ -120,6 +120,13 @@ class ExtraField
     protected Collection $options;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Tag", mappedBy="field")
+     *
+     * @var Tag[]|Collection
+     */
+    protected Collection $tags;
+
+    /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -128,6 +135,7 @@ class ExtraField
     public function __construct()
     {
         $this->options = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->description = '';
         $this->visibleToOthers = false;
         $this->visibleToSelf = false;
@@ -166,10 +174,7 @@ class ExtraField
         return $this->fieldType;
     }
 
-    /**
-     * @return $this
-     */
-    public function setFieldType(int $fieldType)
+    public function setFieldType(int $fieldType): self
     {
         $this->fieldType = $fieldType;
 
@@ -184,10 +189,7 @@ class ExtraField
         return $this->variable;
     }
 
-    /**
-     * @return $this
-     */
-    public function setVariable(string $variable)
+    public function setVariable(string $variable): self
     {
         $this->variable = $variable;
 
@@ -208,10 +210,7 @@ class ExtraField
         return $this->displayText;
     }
 
-    /**
-     * @return $this
-     */
-    public function setDisplayText(string $displayText)
+    public function setDisplayText(string $displayText): self
     {
         $this->displayText = $displayText;
 
@@ -226,10 +225,7 @@ class ExtraField
         return $this->defaultValue;
     }
 
-    /**
-     * @return $this
-     */
-    public function setDefaultValue(string $defaultValue)
+    public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
 
@@ -244,10 +240,7 @@ class ExtraField
         return $this->fieldOrder;
     }
 
-    /**
-     * @return $this
-     */
-    public function setFieldOrder(int $fieldOrder)
+    public function setFieldOrder(int $fieldOrder): self
     {
         $this->fieldOrder = $fieldOrder;
 
@@ -262,10 +255,7 @@ class ExtraField
         return $this->changeable;
     }
 
-    /**
-     * @return $this
-     */
-    public function setChangeable(bool $changeable)
+    public function setChangeable(bool $changeable): self
     {
         $this->changeable = $changeable;
 
@@ -277,10 +267,7 @@ class ExtraField
         return $this->filter;
     }
 
-    /**
-     * @return $this
-     */
-    public function setFilter(bool $filter)
+    public function setFilter(bool $filter): self
     {
         $this->filter = $filter;
 
@@ -292,10 +279,7 @@ class ExtraField
         return $this->visibleToSelf;
     }
 
-    /**
-     * @return ExtraField
-     */
-    public function setVisibleToSelf(bool $visibleToSelf)
+    public function setVisibleToSelf(bool $visibleToSelf): self
     {
         $this->visibleToSelf = $visibleToSelf;
 
@@ -307,10 +291,7 @@ class ExtraField
         return $this->visibleToOthers;
     }
 
-    /**
-     * @return ExtraField
-     */
-    public function setVisibleToOthers(bool $visibleToOthers)
+    public function setVisibleToOthers(bool $visibleToOthers): self
     {
         $this->visibleToOthers = $visibleToOthers;
 
@@ -325,6 +306,36 @@ class ExtraField
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return ExtraFieldOptions[]|Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    public function setOptions(Collection $options): self
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return Tag[]|Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setTags(Collection $tags): self
+    {
+        $this->tags = $tags;
 
         return $this;
     }

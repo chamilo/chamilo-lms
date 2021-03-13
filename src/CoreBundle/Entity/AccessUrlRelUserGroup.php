@@ -30,9 +30,10 @@ class AccessUrlRelUserGroup
     protected AccessUrl $url;
 
     /**
-     * @ORM\Column(name="usergroup_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="urls", cascade={"persist"})
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $userGroupId;
+    protected Usergroup $userGroup;
 
     /**
      * @return int
@@ -40,24 +41,6 @@ class AccessUrlRelUserGroup
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserGroupId()
-    {
-        return $this->userGroupId;
-    }
-
-    /**
-     * @return AccessUrlRelUserGroup
-     */
-    public function setUserGroupId(int $userGroupId)
-    {
-        $this->userGroupId = $userGroupId;
-
-        return $this;
     }
 
     public function getUrl(): AccessUrl
@@ -68,6 +51,18 @@ class AccessUrlRelUserGroup
     public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getUserGroup(): Usergroup
+    {
+        return $this->userGroup;
+    }
+
+    public function setUserGroup(Usergroup $userGroup): AccessUrlRelUserGroup
+    {
+        $this->userGroup = $userGroup;
 
         return $this;
     }

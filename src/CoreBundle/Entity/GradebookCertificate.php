@@ -67,7 +67,7 @@ class GradebookCertificate
      *
      * @return GradebookCertificate
      */
-    public function setScoreCertificate(float $scoreCertificate)
+    public function setScoreCertificate(float $scoreCertificate): self
     {
         $this->scoreCertificate = $scoreCertificate;
 

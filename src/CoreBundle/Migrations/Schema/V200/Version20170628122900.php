@@ -131,13 +131,24 @@ class Version20170628122900 extends AbstractMigrationChamilo
 
         // access_url_rel_usergroup.
         $table = $schema->getTable('access_url_rel_usergroup');
-        if (false === $table->hasForeignKey('FK_AD488DD573444FD5')) {
+        if (!$table->hasForeignKey('FK_AD488DD573444FD5')) {
             $this->addSql(
                 'ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD573444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)'
             );
         }
-        if (false === $table->hasIndex('IDX_AD488DD573444FD5')) {
+        if (!$table->hasIndex('IDX_AD488DD573444FD5')) {
             $this->addSql('CREATE INDEX IDX_AD488DD573444FD5 ON access_url_rel_usergroup (access_url_id)');
+        }
+
+        $this->addSql('ALTER TABLE access_url_rel_usergroup CHANGE usergroup_id usergroup_id INT DEFAULT NULL;');
+
+        if (!$table->hasForeignKey('FK_AD488DD5D2112630')) {
+            $this->addSql(
+                'ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD5D2112630 FOREIGN KEY (usergroup_id) REFERENCES usergroup (id) ON DELETE CASCADE;'
+            );
+        }
+        if (!$table->hasIndex('IDX_AD488DD5D2112630')) {
+            $this->addSql('CREATE INDEX IDX_AD488DD5D2112630 ON access_url_rel_usergroup (usergroup_id);');
         }
     }
 

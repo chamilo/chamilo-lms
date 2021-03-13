@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_survey_question_option",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
  *         @ORM\Index(name="idx_survey_qo_qid", columns={"question_id"})
  *     }
  * )
@@ -28,11 +27,6 @@ class CSurveyQuestionOption
      * @ORM\GeneratedValue
      */
     protected int $iid;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @ORM\ManyToOne(targetEntity="CSurveyQuestion")
@@ -70,12 +64,7 @@ class CSurveyQuestionOption
         return $this->iid;
     }
 
-    /**
-     * Set optionText.
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setOptionText(string $optionText)
+    public function setOptionText(string $optionText): self
     {
         $this->optionText = $optionText;
 
@@ -92,12 +81,7 @@ class CSurveyQuestionOption
         return $this->optionText;
     }
 
-    /**
-     * Set sort.
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setSort(int $sort)
+    public function setSort(int $sort): self
     {
         $this->sort = $sort;
 
@@ -114,12 +98,7 @@ class CSurveyQuestionOption
         return $this->sort;
     }
 
-    /**
-     * Set value.
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setValue(int $value)
+    public function setValue(int $value): self
     {
         $this->value = $value;
 
@@ -134,28 +113,6 @@ class CSurveyQuestionOption
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getQuestion(): CSurveyQuestion

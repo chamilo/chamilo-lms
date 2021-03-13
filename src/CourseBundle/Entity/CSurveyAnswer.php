@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_survey_answer",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
  *     }
  * )
  * @ORM\Entity
@@ -27,11 +26,6 @@ class CSurveyAnswer
      * @ORM\GeneratedValue
      */
     protected int $iid;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @ORM\ManyToOne(targetEntity="CSurvey")
@@ -70,12 +64,7 @@ class CSurveyAnswer
         return $this->iid;
     }
 
-    /**
-     * Set value.
-     *
-     * @return CSurveyAnswer
-     */
-    public function setValue(int $value)
+    public function setValue(int $value): self
     {
         $this->value = $value;
 
@@ -97,9 +86,6 @@ class CSurveyAnswer
         return $this->survey;
     }
 
-    /**
-     * @return CSurveyAnswer
-     */
     public function setSurvey(CSurvey $survey): self
     {
         $this->survey = $survey;
@@ -131,12 +117,7 @@ class CSurveyAnswer
         return $this;
     }
 
-    /**
-     * Set user.
-     *
-     * @return CSurveyAnswer
-     */
-    public function setUser(string $user)
+    public function setUser(string $user): self
     {
         $this->user = $user;
 
@@ -151,27 +132,5 @@ class CSurveyAnswer
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CSurveyAnswer
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

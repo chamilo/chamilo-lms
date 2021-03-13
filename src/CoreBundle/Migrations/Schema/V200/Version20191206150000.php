@@ -43,5 +43,29 @@ class Version20191206150000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE extra_field_option_rel_field_option ADD CONSTRAINT FK_8E04DF6B443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id);');
             $this->addSql('CREATE INDEX IDX_8E04DF6B443707B0 ON extra_field_option_rel_field_option (field_id);');
         }
+
+        $table = $schema->getTable('extra_field_rel_tag');
+
+        $this->addSql('ALTER TABLE extra_field_rel_tag CHANGE field_id field_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE extra_field_rel_tag CHANGE tag_id tag_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_F8817295443707B0')) {
+            $this->addSql('ALTER TABLE extra_field_rel_tag ADD CONSTRAINT FK_F8817295443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id) ON DELETE CASCADE');
+        }
+
+        if (!$table->hasForeignKey('FK_F8817295BAD26311')) {
+            $this->addSql(
+                'ALTER TABLE extra_field_rel_tag ADD CONSTRAINT FK_F8817295BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE'
+            );
+        }
+
+        $table = $schema->getTable('tag');
+        $this->addSql('ALTER TABLE tag CHANGE field_id field_id INT DEFAULT NULL');
+        if (!$table->hasForeignKey('FK_389B783443707B0')) {
+            $this->addSql(
+                'ALTER TABLE tag ADD CONSTRAINT FK_389B783443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id) ON DELETE CASCADE'
+            );
+            $this->addSql('CREATE INDEX IDX_389B783443707B0 ON tag (field_id)');
+        }
     }
 }

@@ -81,9 +81,20 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
      */
     protected Collection $users;
 
+    /**
+     * @var AccessUrlRelUserGroup[]|Collection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup",
+     *     mappedBy="userGroup", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected Collection $urls;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->urls = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -94,6 +105,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function getUrls()
+    {
+        return $this->urls;
     }
 
     public function setUsers($users): void
@@ -175,10 +191,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->groupType;
     }
 
-    /**
-     * @return Usergroup
-     */
-    public function setGroupType(int $groupType)
+    public function setGroupType(int $groupType): self
     {
         $this->groupType = $groupType;
 

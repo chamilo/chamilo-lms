@@ -27,79 +27,32 @@ class ExtraFieldRelTag
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue()
      */
     protected int $id;
 
     /**
-     * @ORM\Column(name="field_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $fieldId;
+    protected ExtraField $field;
 
     /**
-     * @ORM\Column(name="tag_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tag")
+     * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $tagId;
+    protected Tag $tag;
 
     /**
      * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
     protected int $itemId;
 
-    /**
-     * Set fieldId.
-     *
-     * @return ExtraFieldRelTag
-     */
-    public function setFieldId(int $fieldId)
-    {
-        $this->fieldId = $fieldId;
-
-        return $this;
-    }
-
-    /**
-     * Set tagId.
-     *
-     * @return ExtraFieldRelTag
-     */
-    public function setTagId(int $tagId)
-    {
-        $this->tagId = $tagId;
-
-        return $this;
-    }
-
-    /**
-     * Set itemId.
-     *
-     * @return ExtraFieldRelTag
-     */
-    public function setItemId(int $itemId)
+    public function setItemId(int $itemId): self
     {
         $this->itemId = $itemId;
 
         return $this;
-    }
-
-    /**
-     * Get fieldId.
-     *
-     * @return int
-     */
-    public function getFieldId()
-    {
-        return $this->fieldId;
-    }
-
-    /**
-     * Get tagId.
-     *
-     * @return int
-     */
-    public function getTagId()
-    {
-        return $this->tagId;
     }
 
     /**
@@ -120,5 +73,29 @@ class ExtraFieldRelTag
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getField(): ExtraField
+    {
+        return $this->field;
+    }
+
+    public function setField(ExtraField $field): self
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    public function getTag(): Tag
+    {
+        return $this->tag;
+    }
+
+    public function setTag(Tag $tag): self
+    {
+        $this->tag = $tag;
+
+        return $this;
     }
 }

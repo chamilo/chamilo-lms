@@ -112,6 +112,24 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_96A4C705A76ED395 ON gradebook_category (user_id)');
         }
 
+        if (!$table->hasForeignKey('FK_96A4C705378B7921')) {
+            $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705378B7921 FOREIGN KEY (grade_model_id) REFERENCES grade_model (id) ON DELETE CASCADE;');
+        }
+        if (!$table->hasIndex('IDX_96A4C705378B7921')) {
+            $this->addSql('CREATE INDEX IDX_96A4C705378B7921 ON gradebook_category (grade_model_id);');
+        }
+
+        // grade_components.
+        $table = $schema->getTable('grade_components');
+
+        $this->addSql('ALTER TABLE grade_components CHANGE grade_model_id grade_model_id INT DEFAULT NULL');
+        if (!$table->hasForeignKey('FK_F34247C378B7921')) {
+            $this->addSql('ALTER TABLE grade_components ADD CONSTRAINT FK_F34247C378B7921 FOREIGN KEY (grade_model_id) REFERENCES grade_model (id) ON DELETE CASCADE;');
+        }
+        if (!$table->hasIndex('IDX_F34247C378B7921')) {
+            $this->addSql('CREATE INDEX IDX_F34247C378B7921 ON grade_components (grade_model_id);');
+        }
+
         // Evaluation.
         $table = $schema->getTable('gradebook_evaluation');
         if (false === $table->hasColumn('c_id')) {

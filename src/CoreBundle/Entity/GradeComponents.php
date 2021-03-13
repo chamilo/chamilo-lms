@@ -39,16 +39,12 @@ class GradeComponents
     protected string $acronym;
 
     /**
-     * @ORM\Column(name="grade_model_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
+     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $gradeModelId;
+    protected GradeModel $gradeModel;
 
-    /**
-     * Set percentage.
-     *
-     * @return GradeComponents
-     */
-    public function setPercentage(string $percentage)
+    public function setPercentage(string $percentage): self
     {
         $this->percentage = $percentage;
 
@@ -65,12 +61,7 @@ class GradeComponents
         return $this->percentage;
     }
 
-    /**
-     * Set title.
-     *
-     * @return GradeComponents
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -87,12 +78,7 @@ class GradeComponents
         return $this->title;
     }
 
-    /**
-     * Set acronym.
-     *
-     * @return GradeComponents
-     */
-    public function setAcronym(string $acronym)
+    public function setAcronym(string $acronym): self
     {
         $this->acronym = $acronym;
 
@@ -110,28 +96,6 @@ class GradeComponents
     }
 
     /**
-     * Set gradeModelId.
-     *
-     * @return GradeComponents
-     */
-    public function setGradeModelId(int $gradeModelId)
-    {
-        $this->gradeModelId = $gradeModelId;
-
-        return $this;
-    }
-
-    /**
-     * Get gradeModelId.
-     *
-     * @return int
-     */
-    public function getGradeModelId()
-    {
-        return $this->gradeModelId;
-    }
-
-    /**
      * Get id.
      *
      * @return int
@@ -139,5 +103,17 @@ class GradeComponents
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getGradeModel(): GradeModel
+    {
+        return $this->gradeModel;
+    }
+
+    public function setGradeModel(GradeModel $gradeModel): self
+    {
+        $this->gradeModel = $gradeModel;
+
+        return $this;
     }
 }

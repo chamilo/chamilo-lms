@@ -103,11 +103,6 @@ class GradebookCategory
     protected bool $generateCertificates;
 
     /**
-     * @ORM\Column(name="grade_model_id", type="integer", nullable=true)
-     */
-    protected ?int $gradeModelId = null;
-
-    /**
      * @ORM\Column(
      *     name="is_requirement",
      *     type="boolean",
@@ -139,6 +134,12 @@ class GradebookCategory
      */
     protected Collection $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
+     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected ?GradeModel $gradeModel = null;
+
     public function __construct()
     {
         $this->description = '';
@@ -158,12 +159,7 @@ class GradebookCategory
         return $this->id;
     }
 
-    /**
-     * Set name.
-     *
-     * @return GradebookCategory
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -209,12 +205,7 @@ class GradebookCategory
         return $this->weight;
     }
 
-    /**
-     * Set visible.
-     *
-     * @return GradebookCategory
-     */
-    public function setVisible(bool $visible)
+    public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
 
@@ -231,12 +222,7 @@ class GradebookCategory
         return $this->visible;
     }
 
-    /**
-     * Set certifMinScore.
-     *
-     * @return GradebookCategory
-     */
-    public function setCertifMinScore(int $certifMinScore)
+    public function setCertifMinScore(int $certifMinScore): self
     {
         $this->certifMinScore = $certifMinScore;
 
@@ -275,12 +261,7 @@ class GradebookCategory
         return $this->documentId;
     }
 
-    /**
-     * Set locked.
-     *
-     * @return GradebookCategory
-     */
-    public function setLocked(int $locked)
+    public function setLocked(int $locked): self
     {
         $this->locked = $locked;
 
@@ -297,12 +278,7 @@ class GradebookCategory
         return $this->locked;
     }
 
-    /**
-     * Set defaultLowestEvalExclude.
-     *
-     * @return GradebookCategory
-     */
-    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude)
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
     {
         $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
@@ -319,12 +295,7 @@ class GradebookCategory
         return $this->defaultLowestEvalExclude;
     }
 
-    /**
-     * Set generateCertificates.
-     *
-     * @return GradebookCategory
-     */
-    public function setGenerateCertificates(bool $generateCertificates)
+    public function setGenerateCertificates(bool $generateCertificates): self
     {
         $this->generateCertificates = $generateCertificates;
 
@@ -341,34 +312,7 @@ class GradebookCategory
         return $this->generateCertificates;
     }
 
-    /**
-     * Set gradeModelId.
-     *
-     * @return GradebookCategory
-     */
-    public function setGradeModelId(int $gradeModelId)
-    {
-        $this->gradeModelId = $gradeModelId;
-
-        return $this;
-    }
-
-    /**
-     * Get gradeModelId.
-     *
-     * @return int
-     */
-    public function getGradeModelId()
-    {
-        return $this->gradeModelId;
-    }
-
-    /**
-     * Set isRequirement.
-     *
-     * @return GradebookCategory
-     */
-    public function setIsRequirement(bool $isRequirement)
+    public function setIsRequirement(bool $isRequirement): self
     {
         $this->isRequirement = $isRequirement;
 
@@ -447,6 +391,18 @@ class GradebookCategory
     public function setComments(Collection $comments): self
     {
         $this->comments = $comments;
+
+        return $this;
+    }
+
+    public function getGradeModel(): ?GradeModel
+    {
+        return $this->gradeModel;
+    }
+
+    public function setGradeModel(?GradeModel $gradeModel): self
+    {
+        $this->gradeModel = $gradeModel;
 
         return $this;
     }

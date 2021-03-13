@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="c_survey_question",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
  *     }
  * )
  * @ORM\Entity
@@ -54,11 +53,6 @@ class CSurveyQuestion
      * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
      */
     protected CSurvey $survey;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @Assert\NotBlank()
@@ -138,12 +132,7 @@ class CSurveyQuestion
         return $this->iid;
     }
 
-    /**
-     * Set surveyQuestion.
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSurveyQuestion(string $surveyQuestion)
+    public function setSurveyQuestion(string $surveyQuestion): self
     {
         $this->surveyQuestion = $surveyQuestion;
 
@@ -160,12 +149,7 @@ class CSurveyQuestion
         return $this->surveyQuestion;
     }
 
-    /**
-     * Set surveyQuestionComment.
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSurveyQuestionComment(string $surveyQuestionComment)
+    public function setSurveyQuestionComment(string $surveyQuestionComment): self
     {
         $this->surveyQuestionComment = $surveyQuestionComment;
 
@@ -182,12 +166,7 @@ class CSurveyQuestion
         return $this->surveyQuestionComment;
     }
 
-    /**
-     * Set type.
-     *
-     * @return CSurveyQuestion
-     */
-    public function setType(string $type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -204,12 +183,7 @@ class CSurveyQuestion
         return $this->type;
     }
 
-    /**
-     * Set display.
-     *
-     * @return CSurveyQuestion
-     */
-    public function setDisplay(string $display)
+    public function setDisplay(string $display): self
     {
         $this->display = $display;
 
@@ -226,12 +200,7 @@ class CSurveyQuestion
         return $this->display;
     }
 
-    /**
-     * Set sort.
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSort(int $sort)
+    public function setSort(int $sort): self
     {
         $this->sort = $sort;
 
@@ -265,12 +234,7 @@ class CSurveyQuestion
         return $this->sharedQuestionId;
     }
 
-    /**
-     * Set maxValue.
-     *
-     * @return CSurveyQuestion
-     */
-    public function setMaxValue(int $maxValue)
+    public function setMaxValue(int $maxValue): self
     {
         $this->maxValue = $maxValue;
 
@@ -351,28 +315,6 @@ class CSurveyQuestion
     public function getSurveyGroupSec2()
     {
         return $this->surveyGroupSec2;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CSurveyQuestion
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function isMandatory(): bool

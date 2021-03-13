@@ -29,9 +29,10 @@ class Tag
     protected string $tag;
 
     /**
-     * @ORM\Column(name="field_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="tags")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $fieldId;
+    protected ExtraField $field;
 
     /**
      * @ORM\Column(name="count", type="integer", nullable=false)
@@ -53,28 +54,6 @@ class Tag
     public function getTag()
     {
         return $this->tag;
-    }
-
-    /**
-     * Set fieldId.
-     *
-     * @return Tag
-     */
-    public function setFieldId(int $fieldId)
-    {
-        $this->fieldId = $fieldId;
-
-        return $this;
-    }
-
-    /**
-     * Get fieldId.
-     *
-     * @return int
-     */
-    public function getFieldId()
-    {
-        return $this->fieldId;
     }
 
     public function setCount(int $count): self
@@ -102,5 +81,17 @@ class Tag
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getField(): ExtraField
+    {
+        return $this->field;
+    }
+
+    public function setField(ExtraField $field): Tag
+    {
+        $this->field = $field;
+
+        return $this;
     }
 }

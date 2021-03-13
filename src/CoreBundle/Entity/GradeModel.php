@@ -48,12 +48,7 @@ class GradeModel
      */
     protected ?string $defaultExternalEvalPrefix = null;
 
-    /**
-     * Set name.
-     *
-     * @return GradeModel
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -70,12 +65,7 @@ class GradeModel
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @return GradeModel
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -92,12 +82,7 @@ class GradeModel
         return $this->description;
     }
 
-    /**
-     * Set defaultLowestEvalExclude.
-     *
-     * @return GradeModel
-     */
-    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude)
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
     {
         $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
@@ -114,12 +99,7 @@ class GradeModel
         return $this->defaultLowestEvalExclude;
     }
 
-    /**
-     * Set defaultExternalEval.
-     *
-     * @return GradeModel
-     */
-    public function setDefaultExternalEval(bool $defaultExternalEval)
+    public function setDefaultExternalEval(bool $defaultExternalEval): self
     {
         $this->defaultExternalEval = $defaultExternalEval;
 
@@ -136,12 +116,7 @@ class GradeModel
         return $this->defaultExternalEval;
     }
 
-    /**
-     * Set defaultExternalEvalPrefix.
-     *
-     * @return GradeModel
-     */
-    public function setDefaultExternalEvalPrefix(string $defaultExternalEvalPrefix)
+    public function setDefaultExternalEvalPrefix(string $defaultExternalEvalPrefix): self
     {
         $this->defaultExternalEvalPrefix = $defaultExternalEvalPrefix;
 

@@ -207,6 +207,8 @@ class ExtraFieldValue extends Model
                         $em->remove($extraFieldtag);
                     }
                     $em->flush();
+                    $fieldEntity = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraField::class)->findBy($extraFieldInfo['id']);
+
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];
                     foreach ($tagValues as $tagValue) {
@@ -222,7 +224,7 @@ class ExtraFieldValue extends Model
 
                         if (empty($tagsResult)) {
                             $tag = new Tag();
-                            $tag->setFieldId($extraFieldInfo['id']);
+                            $tag->setField($fieldEntity);
                             $tag->setTag($tagValue);
 
                             $tags[] = $tag;
@@ -246,9 +248,9 @@ class ExtraFieldValue extends Model
 
                     foreach ($tags as $tag) {
                         $fieldRelTag = new ExtraFieldRelTag();
-                        $fieldRelTag->setFieldId($extraFieldInfo['id']);
+                        $fieldRelTag->setField($fieldEntity);
                         $fieldRelTag->setItemId($params['item_id']);
-                        $fieldRelTag->setTagId($tag->getId());
+                        $fieldRelTag->setTag($tag);
                         $em->persist($fieldRelTag);
                     }
 
@@ -965,10 +967,9 @@ class ExtraFieldValue extends Model
                     if ($tags) {
                         /** @var ExtraFieldRelTag $extraFieldTag */
                         foreach ($tags as $extraFieldTag) {
-                            /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
-                            $tag = $em->find(Tag::class, $extraFieldTag->getTagId());
+                            $tag = $extraFieldTag->getTag();
                             $tagResult[] = [
-                                'id' => $extraFieldTag->getTagId(),
+                                'id' => $extraFieldTag->getTag()->getId(),
                                 'value' => $tag->getTag(),
                             ];
                         }

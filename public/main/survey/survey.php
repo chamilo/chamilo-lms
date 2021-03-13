@@ -283,11 +283,9 @@ $sql = "SELECT survey_question.*, count(survey_question_option.iid) as number_of
         FROM $table_survey_question survey_question
         LEFT JOIN $table_survey_question_option survey_question_option
         ON
-            survey_question.iid = survey_question_option.question_id AND
-            survey_question_option.c_id = $course_id
+            survey_question.iid = survey_question_option.question_id
         WHERE
-            survey_question.survey_id 	= $survey_id AND
-            survey_question.c_id 		= $course_id
+            survey_question.survey_id = $survey_id
         GROUP BY survey_question.iid
         ORDER BY survey_question.sort ASC";
 

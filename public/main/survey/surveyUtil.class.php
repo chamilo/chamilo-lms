@@ -30,18 +30,18 @@ class SurveyUtil
 
         // Getting the information of the question
         $sql = "SELECT * FROM $tbl_survey_question
-                WHERE c_id = $course_id AND survey_id='".$survey_id."'
+                WHERE survey_id='".$survey_id."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
         $total = Database::num_rows($result);
         $counter = 1;
         $error = false;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            if (1 == $counter && 'pagebreak' == $row['type']) {
+            if (1 == $counter && 'pagebreak' === $row['type']) {
                 echo Display::return_message(get_lang('The page break cannot be the first'), 'error', false);
                 $error = true;
             }
-            if ($counter == $total && 'pagebreak' == $row['type']) {
+            if ($counter == $total && 'pagebreak' === $row['type']) {
                 echo Display::return_message(get_lang('The page break cannot be the last one'), 'error', false);
                 $error = true;
             }
@@ -3292,18 +3292,16 @@ class SurveyUtil
         }
     }
 
-    /**
-     * This function calculates the total number of surveys.
-     *
-     * @return int Total number of surveys
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version January 2007
-     */
     public static function get_number_of_surveys()
     {
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $repo = Container::getSurveyRepository();
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $qb = $repo->findAllByCourse($course, $session);
+
+        return $repo->getCount($qb);
+
+        /*$table_survey = Database::get_course_table(TABLE_SURVEY);
         $course_id = api_get_course_int_id();
 
         $search_restriction = self::survey_search_restriction();
@@ -3317,7 +3315,7 @@ class SurveyUtil
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return $obj->total_number_of_items;
+        return $obj->total_number_of_items;*/
     }
 
     /**
@@ -3353,6 +3351,15 @@ class SurveyUtil
         $direction,
         $isDrh = false
     ) {
+
+        $repo = Container::getSurveyRepository();
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $qb = $repo->findAllByCourse($course, $session);
+        /** @var CSurvey[] $surveys */
+        $surveys = $qb->getQuery()->getResult();
+
+
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -3409,89 +3416,94 @@ class SurveyUtil
             LIMIT $from,$number_of_items
         ";
 
-        $res = Database::query($sql);
-        $surveys = [];
+        //$res = Database::query($sql);
         $array = [];
         $efv = new ExtraFieldValue('survey');
-        while ($survey = Database::fetch_array($res)) {
-            $array[0] = $survey[0];
-            if (self::checkHideEditionToolsByCode($survey['col2'])) {
-                $array[1] = $survey[1];
+        $list = [];
+        foreach ($surveys as $survey) {
+            $surveyId = $survey->getIid();
+            $array[0] = $survey->getIid();
+            $type = $survey->getSurveyType();
+            $title = $survey->getTitle();
+
+            if (self::checkHideEditionToolsByCode($survey->getCode())) {
+                $array[1] = $title;
             } else {
                 // Doodle
-                if (3 == $survey['survey_type']) {
+                if (3 == $type) {
                     $array[1] = Display::url(
-                        $survey[1],
-                        api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey[0].'&'.api_get_cidreq()
+                        $title,
+                        api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
                     );
                 } else {
                     $array[1] = Display::url(
-                        $survey[1],
-                        api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
+                        $title,
+                        api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq()
                     );
                 }
             }
 
             // Validation when belonging to a session
-            $session_img = api_get_session_image($survey['session_id'], $_user['status']);
-            $array[2] = $survey[2].$session_img;
-            $array[3] = $survey[3];
-            $array[4] = $survey[4];
-
+            //$session_img = api_get_session_image($survey['session_id'], $_user['status']);
+            $session_img = '';
+            $array[2] = '$survey[2]'.$session_img;
+            $array[3] = '$survey[3]';
+            $array[4] = '$survey[4]';
             // Dates
             $array[5] = '';
 
-            if (!empty($survey[5]) && '0000-00-00' !== $survey[5] && '0000-00-00 00:00:00' !== $survey[5]) {
+            $from = $survey->getAvailFrom() ?? $survey->getAvailFrom()->format('Y-m-d H:i:s');
+            if (null !== $from) {
                 $array[5] = api_convert_and_format_date(
-                    $survey[5],
+                    $from,
                     $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
                 );
             }
-
+            $till = $survey->getAvailTill() ?? $survey->getAvailTill()->format('Y-m-d H:i:s');
             $array[6] = '';
-            if (!empty($survey[6]) && '0000-00-00' !== $survey[6] && '0000-00-00 00:00:00' !== $survey[6]) {
+            if (null !== $till) {
                 $array[6] = api_convert_and_format_date(
-                    $survey[6],
+                    $till,
                     $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
                 );
             }
 
             $array[7] =
                 Display::url(
-                    $survey['answered'],
-                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey[0].'&'
+                    $survey->getAnswered(),
+                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$surveyId.'&'
                         .api_get_cidreq()
                 ).' / '.
                 Display::url(
-                    $survey['invited'],
-                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey[0].'&'
+                    $survey->getInvited(),
+                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$surveyId.'&'
                         .api_get_cidreq()
                 );
             // Anon
-            $array[8] = $survey['col8'];
+            $array[8] = $survey->getAnonymous();
             if ($mandatoryAllowed) {
                 $efvMandatory = $efv->get_values_by_handler_and_field_variable(
-                    $survey[9],
+                    $surveyId,
                     'is_mandatory'
                 );
 
                 $array[9] = $efvMandatory ? $efvMandatory['value'] : 0;
                 // Survey id
-                $array[10] = $survey['col9'];
+                $array[10] = $surveyId;
             } else {
                 // Survey id
-                $array[9] = $survey['col9'];
+                $array[9] = $surveyId;
             }
 
             if ($isDrh) {
-                $array[1] = $survey[1];
-                $array[7] = strip_tags($array[7]);
+                $array[1] = $title;
+                $array[7] = strip_tags($survey->getInvited());
             }
 
-            $surveys[] = $array;
+            $list[] = $array;
         }
 
-        return $surveys;
+        return $list;
     }
 
     /**

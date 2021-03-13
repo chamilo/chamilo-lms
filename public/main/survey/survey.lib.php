@@ -160,9 +160,7 @@ class SurveyManager
                 return [];
             }
             $sql = "SELECT * FROM $table_survey
-		            WHERE
-		                iid = '".$survey_id."' AND
-		                c_id = ".$courseInfo['real_id'];
+		            WHERE iid = $survey_id";
         }
 
         $result = Database::query($sql);
@@ -349,7 +347,6 @@ class SurveyManager
             $session = api_get_session_entity();
 
             $survey
-                ->setCId($course_id)
                 ->setCode(self::generateSurveyCode($values['survey_code']))
                 ->setTitle($values['survey_title'])
                 ->setSubtitle($values['survey_title'])
@@ -362,7 +359,6 @@ class SurveyManager
                 ->setIntro($values['survey_introduction'])
                 ->setSurveyThanks($values['survey_thanks'])
                 ->setAnonymous((string) $values['anonymous'])
-                ->setSessionId(api_get_session_id())
                 ->setVisibleResults((int) $values['visible_results'])
                 ->setParent($course)
                 ->addCourseLink($course, $session)
@@ -1092,7 +1088,7 @@ class SurveyManager
 
         // Getting the information of the question
         $sql = "SELECT * FROM $tbl_survey_question
-		        WHERE c_id = $courseId AND survey_id= $surveyId ";
+		        WHERE survey_id= $surveyId ";
         $result = Database::query($sql);
         $questions = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -1108,7 +1104,7 @@ class SurveyManager
 
             // Getting the information of the question options
             $sql = "SELECT * FROM $table_survey_question_option
-		             WHERE c_id = $courseId AND survey_id= $surveyId  AND question_id = $questionId";
+		             WHERE survey_id= $surveyId  AND question_id = $questionId";
             $resultOptions = Database::query($sql);
             while ($rowOption = Database::fetch_array($resultOptions, 'ASSOC')) {
                 $questions[$questionId]['answers'][] = $rowOption['option_text'];
@@ -1175,7 +1171,7 @@ class SurveyManager
                     // Finding the max sort order of the questions in the given survey
                     $sql = "SELECT max(sort) AS max_sort
 					        FROM $tbl_survey_question
-                            WHERE c_id = $course_id AND survey_id = $surveyId ";
+                            WHERE survey_id = $surveyId ";
                     $result = Database::query($sql);
                     $row = Database::fetch_array($result, 'ASSOC');
                     $max_sort = $row['max_sort'];
@@ -1196,7 +1192,7 @@ class SurveyManager
                         ->setSurveyQuestionComment($form_content['question_comment'] ?? '')
                         ->setMaxValue($form_content['maximum_score'] ?? 0)
                         ->setDisplay($form_content['horizontalvertical'] ?? '')
-                        ->setCId($course_id)
+                        //->setCId($course_id)
                         ->setSurvey($survey)
                         ->setSurveyQuestion($form_content['question'])
                         ->setType($form_content['type'])
@@ -1483,8 +1479,6 @@ class SurveyManager
         if (empty($questionId)) {
             return false;
         }
-        $course_id = api_get_course_int_id();
-
         if ($shared) {
             self::delete_shared_survey_question($survey_id, $questionId);
         }
@@ -1592,7 +1586,6 @@ class SurveyManager
                 if (empty($answerId)) {
                     $option = new CSurveyQuestionOption();
                     $option
-                        ->setCId($course_id)
                         ->setQuestion($question)
                         ->setOptionText($form_content['answers'][$i])
                         ->setSurvey($survey)
@@ -1813,9 +1806,9 @@ class SurveyManager
 			            user.lastname,
 			            user.id as user_id
                     FROM $table_survey_answer answered_user
-                    LEFT JOIN $table_user as user ON answered_user.user = user.id
+                    LEFT JOIN $table_user as user
+                    ON answered_user.user = user.id
                     WHERE
-                        answered_user.c_id = $course_id AND
                         survey_id= '".$survey_id."' ".
                 $order_clause;
         } else {
@@ -1829,8 +1822,6 @@ class SurveyManager
                 $sql = "SELECT i.user FROM $tblInvitation i
                     INNER JOIN $tblSurvey s
                     ON i.survey_code = s.code
-                        AND i.c_id = s.c_id
-                        AND i.session_id = s.session_id
                     WHERE i.answered IS TRUE AND s.iid = $survey_id";
             }
         }
@@ -2486,7 +2477,6 @@ class SurveyManager
                 WHERE
                     survey_question NOT LIKE '%{{%' AND
                     type = 'pagebreak' AND
-                    c_id = $courseId AND
                     survey_id = $surveyId";
         $result = Database::query($sql);
         $numberPageBreaks = Database::result($result, 0, 0);
@@ -2496,7 +2486,6 @@ class SurveyManager
                 WHERE
                     survey_question NOT LIKE '%{{%' AND
                     type != 'pagebreak' AND
-                    c_id = $courseId AND
                     survey_id = $surveyId";
         $result = Database::query($sql);
         $countOfQuestions = Database::result($result, 0, 0);

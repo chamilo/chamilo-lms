@@ -701,15 +701,17 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     if (null === $values['forum_category']) {
         $new_max = null;
     } else {
-        $sql = "SELECT MAX(forum_order) as sort_max
+        /*$sql = "SELECT MAX(forum_order) as sort_max
                 FROM $table_forums
                 WHERE
                     c_id = $courseId AND
                     forum_category='".Database::escape_string($values['forum_category'])."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        $new_max = $row['sort_max'] + 1;
+        $new_max = $row['sort_max'] + 1;*/
     }
+
+    $new_max = 0;
 
     // Forum images
     $has_attachment = false;
@@ -3799,11 +3801,12 @@ function updateThreadInfo($threadId, $lastPostId, $post_date)
  * This function is used to find all the information about what's new in the forum tool.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
+ * @deprecated
  * @version february 2006, dokeos 1.8
  */
 function get_whats_new()
 {
+    return ;
     $userId = api_get_user_id();
     $course_id = api_get_course_int_id();
 

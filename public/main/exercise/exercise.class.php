@@ -10008,13 +10008,11 @@ var_dump($this->pageResultConfiguration);
         $sql = "SELECT
                     lp.name,
                     lpi.lp_id,
-                    lpi.max_score,
-                    lp.session_id
+                    lpi.max_score
                 FROM $tableLpItem lpi
                 INNER JOIN $tblLp lp
-                ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
+                ON (lpi.lp_id = lp.iid)
                 WHERE
-                    lpi.c_id = $courseId AND
                     lpi.item_type = '".TOOL_QUIZ."' AND
                     lpi.path = '$exerciseId'";
         $result = Database::query($sql);

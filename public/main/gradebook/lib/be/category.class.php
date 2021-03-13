@@ -597,7 +597,11 @@ class Category implements GradebookItem
             $category->setCertifMinScore($this->certificate_min_score);
             $category->setSession(api_get_session_entity($this->session_id));
             $category->setGenerateCertificates($this->generateCertificates);
-            $category->setGradeModelId($this->grade_model_id);
+            if (!empty($this->grade_model_id)) {
+                $model = $em->getRepository(\Chamilo\CoreBundle\Entity\GradeModel::class)->find($this->grade_model_id);
+                $category->setGradeModel($model);
+            }
+
             $category->setIsRequirement($this->isRequirement);
             $category->setLocked(0);
 
@@ -678,13 +682,16 @@ class Category implements GradebookItem
         $category->setDescription($this->description);
         $category->setUser(api_get_user_entity($this->user_id));
         $category->setCourse($course);
-        //$category->setCourseCode($this->course_code);
         $category->setParent($parent);
         $category->setWeight($this->weight);
         $category->setVisible($this->visible);
         $category->setCertifMinScore($this->certificate_min_score);
         $category->setGenerateCertificates($this->generateCertificates);
-        $category->setGradeModelId($this->grade_model_id);
+        if (!empty($this->grade_model_id)) {
+            $model = $em->getRepository(\Chamilo\CoreBundle\Entity\GradeModel::class)->find($this->grade_model_id);
+            $category->setGradeModel($model);
+        }
+
         $category->setIsRequirement($this->isRequirement);
 
         $em->persist($category);

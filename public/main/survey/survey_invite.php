@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
@@ -11,8 +13,6 @@
  * @todo check if the mailtext contains the **link** part, if not, add the link to the end
  * @todo add rules: title and text cannot be empty
  */
-
-use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -77,10 +77,15 @@ $(function() {
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey
-        WHERE c_id = $course_id AND code='".Database::escape_string($survey_data['code'])."'";
+        WHERE code='".Database::escape_string($survey_data['code'])."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 1) {
-    echo Display::return_message(get_lang('This survey code already exists. That probably means the survey exists in other languages. Invited people will choose between different languages.'), 'warning');
+    echo Display::return_message(
+        get_lang(
+            'This survey code already exists. That probably means the survey exists in other languages. Invited people will choose between different languages.'
+        ),
+        'warning'
+    );
 }
 
 // Invited / answered message
@@ -109,15 +114,15 @@ $sessionId = api_get_session_id();
 CourseManager::addUserGroupMultiSelect($form, [], true);
 
 // Additional users
-$form->addElement(
+$form->addTextarea(
     'textarea',
     'additional_users',
     [get_lang('Additional users'), get_lang('Additional usersComment')],
-    ['rows' => 5]
+    //['rows' => 5]
 );
 
 $form->addElement('html', '<div id="check_mail">');
-$form->addElement('checkbox', 'send_mail', '', get_lang('Send mail'));
+$form->addCheckBox('send_mail', '', get_lang('Send mail'));
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div id="mail_text_wrapper">');
 
@@ -126,7 +131,12 @@ $form->addText('mail_title', get_lang('Mail subject'), false);
 // The text of the mail
 $form->addHtmlEditor(
     'mail_text',
-    [get_lang('E-mail message'), get_lang('The selected users will receive an email with the text above and a unique link that they have to click to fill the survey. If you want to put the link somewhere in your text you have to put the following text wherever you want in your text: **link** (star star link star star). This will then automatically be replaced by the unique link. If you do not add **link** to your text then the email link will be added to the end of the mail')],
+    [
+        get_lang('E-mail message'),
+        get_lang(
+            'The selected users will receive an email with the text above and a unique link that they have to click to fill the survey. If you want to put the link somewhere in your text you have to put the following text wherever you want in your text: **link** (star star link star star). This will then automatically be replaced by the unique link. If you do not add **link** to your text then the email link will be added to the end of the mail'
+        ),
+    ],
     false,
     ['ToolbarSet' => 'Survey', 'Height' => '150']
 );
@@ -136,7 +146,13 @@ if (1 != $survey_data['anonymous'] || api_get_configuration_value('survey_anonym
     $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('Remind only users who didn\'t answer'));
 }
 // Allow resending to all selected users
-$form->addElement('checkbox', 'resend_to_all', '', get_lang('Remind all users of the survey. If you do not check this checkbox only the newly-added users will receive an e-mail.'));
+$form->addCheckBox(
+    'resend_to_all',
+    '',
+    get_lang(
+        'Remind all users of the survey. If you do not check this checkbox only the newly-added users will receive an e-mail.'
+    )
+);
 $form->addElement('checkbox', 'hide_link', '', get_lang('Hide survey invitation link'));
 
 // Submit button
@@ -181,8 +197,6 @@ if ($form->validate()) {
             $defaults['send_mail'] = 1;
             $form->setDefaults($defaults);
             $form->display();
-
-            return;
         }
     }
 

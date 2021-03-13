@@ -86,7 +86,6 @@ if (isset($_GET['show'])) {
     $sql = "SELECT * FROM $table_survey_question
             WHERE
               survey_question NOT LIKE '%{{%' AND
-              c_id = $course_id AND
               survey_id = $surveyId
             ORDER BY sort ASC";
     $result = Database::query($sql);
@@ -133,12 +132,10 @@ if (isset($_GET['show'])) {
                 FROM $table_survey_question survey_question
                 LEFT JOIN $table_survey_question_option survey_question_option
                 ON
-                    survey_question.iid = survey_question_option.question_id AND
-                    survey_question_option.c_id = survey_question.c_id
+                    survey_question.iid = survey_question_option.question_id
                 WHERE
                     survey_question.survey_id = '".$surveyId."' AND
                     survey_question.iid IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
-                    survey_question.c_id = $course_id AND
                     survey_question NOT LIKE '%{{%'
                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
 

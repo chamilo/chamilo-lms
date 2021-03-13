@@ -139,7 +139,7 @@ class LearnpathList
 
             $this->list[$lp->getIid()] = [
                 'lp_type' => $lp->getLpType(),
-                'lp_session' => $lp->getSessionId(),
+                'lp_session' => 0,
                 'lp_name' => stripslashes($lp->getName()),
                 'lp_desc' => stripslashes($lp->getDescription()),
                 'lp_path' => $lp->getPath(),
@@ -155,7 +155,6 @@ class LearnpathList
                 'lp_scorm_debug' => $lp->getDebug(),
                 'lp_display_order' => $lp->getDisplayOrder(),
                 'autolaunch' => $lp->getAutolaunch(),
-                'session_id' => $lp->getSessionId(),
                 'created_on' => $lp->getCreatedOn() ? $lp->getCreatedOn()->format('Y-m-d H:i:s') : null,
                 'modified_on' => $lp->getModifiedOn() ? $lp->getModifiedOn()->format('Y-m-d H:i:s') : null,
                 'publicated_on' => $lp->getPublicatedOn() ? $lp->getPublicatedOn()->format('Y-m-d H:i:s') : null,

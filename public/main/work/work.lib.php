@@ -94,7 +94,7 @@ function get_work_data_by_path($path, $courseId = 0)
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT *  FROM $table
-            WHERE url = '$path' AND c_id = $courseId ";
+            WHERE url = '$path' ";
     $result = Database::query($sql);
     $return = [];
     if (Database::num_rows($result)) {
@@ -202,7 +202,6 @@ function get_work_count_by_student($user_id, $work_id)
     $sql = "SELECT COUNT(*) as count
             FROM  $table
             WHERE
-                c_id = $course_id AND
                 parent_id = $work_id AND
                 user_id = $user_id AND
                 active IN (0, 1)
@@ -232,7 +231,7 @@ function get_work_assignment_by_id($id, $courseId = 0)
     $id = (int) $id;
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $sql = "SELECT * FROM $table
-            WHERE c_id = $courseId AND publication_id = $id";
+            WHERE publication_id = $id";
     $result = Database::query($sql);
     $return = [];
     if (Database::num_rows($result)) {
@@ -412,8 +411,6 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
             INNER JOIN $user_table u
             ON w.user_id = u.id
             WHERE
-                w.c_id = $course_id
-                $sessionCondition AND
                 w.parent_id = $workId AND
                 w.post_group_id = $groupIid AND
                 w.active IN (0, 1)
@@ -490,8 +487,6 @@ function getUniqueStudentAttempts(
                 ON w.user_id = u.id
                 WHERE
                     w.filetype = 'file' AND
-                    w.c_id = $course_id
-                    $sessionCondition AND
                     $workCondition
                     w.post_group_id = $groupIid AND
                     w.active IN (0, 1) $studentCondition
@@ -716,7 +711,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $move_file = (int) $move_file;
     $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT title, url FROM $tbl_work
-            WHERE c_id = $course_id AND iid ='".$move_file."'";
+            WHERE iid ='".$move_file."'";
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
     $title = empty($row['title']) ? basename($row['url']) : $row['title'];
@@ -910,18 +905,18 @@ function deleteDirWork($id)
 
         // Gets calendar_id from student_publication_assigment
         $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
-                WHERE c_id = $course_id AND publication_id = $id";
+                WHERE publication_id = $id";
         $res = Database::query($sql);
         $calendar_id = Database::fetch_row($res);
 
         // delete from agenda if it exists
         if (!empty($calendar_id[0])) {
             $sql = "DELETE FROM $t_agenda
-                    WHERE c_id = $course_id AND id = '".$calendar_id[0]."'";
+                    WHERE id = '".$calendar_id[0]."'";
             Database::query($sql);
         }
         $sql = "DELETE FROM $TSTDPUBASG
-                WHERE c_id = $course_id AND publication_id = $id";
+                WHERE publication_id = $id";
         Database::query($sql);
 
         Skill::deleteSkillsFromItem($id, ITEM_TYPE_STUDENT_PUBLICATION);
@@ -968,7 +963,7 @@ function get_work_path($id)
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = api_get_course_int_id();
     $sql = 'SELECT url FROM '.$table.'
-            WHERE c_id = '.$course_id.' AND id='.(int) $id;
+            WHERE id='.(int) $id;
     $res = Database::query($sql);
     if (Database::num_rows($res)) {
         $row = Database::fetch_array($res);
@@ -999,7 +994,7 @@ function updateWorkUrl($id, $new_path, $parent_id)
     $parent_id = (int) $parent_id;
 
     $sql = "SELECT * FROM $table
-            WHERE c_id = $course_id AND id = $id";
+            WHERE iid = $id";
     $res = Database::query($sql);
     if (1 != Database::num_rows($res)) {
         return -1;
@@ -1114,56 +1109,6 @@ function to_javascript_work()
             });
         });
     </script>';
-}
-
-/**
- * Gets the id of a student publication with a given path.
- *
- * @param string $path
- *
- * @return true if is found / false if not found
- */
-// TODO: The name of this function does not fit with the kind of information it returns.
-// Maybe check_work_id() or is_work_id()?
-function get_work_id($path)
-{
-    $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $course_id = api_get_course_int_id();
-    $path = Database::escape_string($path);
-
-    if (api_is_allowed_to_edit()) {
-        $sql = "SELECT work.iid
-                FROM $TBL_STUDENT_PUBLICATION AS work, $TBL_PROP_TABLE AS props
-                WHERE
-                    props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    props.tool='work' AND
-                    work.id=props.ref AND
-                    work.url LIKE 'work/".$path."%' AND
-                    work.filetype='file' AND
-                    props.visibility<>'2'";
-    } else {
-        $sql = "SELECT work.iid
-                FROM $TBL_STUDENT_PUBLICATION AS work, $TBL_PROP_TABLE AS props
-                WHERE
-                    props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    props.tool='work' AND
-                    work.id=props.ref AND
-                    work.url LIKE 'work/".$path."%' AND
-                    work.filetype='file' AND
-                    props.visibility<>'2' AND
-                    props.lastedit_user_id = '".api_get_user_id()."'";
-    }
-    $result = Database::query($sql);
-    $num_rows = Database::num_rows($result);
-
-    if ($result && $num_rows > 0) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 /**
@@ -1660,21 +1605,14 @@ function getWorkListTeacher(
     $where_condition,
     $getCount = false
 ) {
-    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
-    $courseInfo = api_get_course_info();
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
-    $groupIid = (int) $groupIid;
-
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     if (!in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
@@ -3622,7 +3560,7 @@ function getAllDocumentToWork($workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = [
-        'work_id = ? and c_id = ?' => [$workId, $courseId],
+        'work_id = ?' => [$workId],
     ];
 
     return Database::select('*', $table, ['where' => $params]);
@@ -3686,7 +3624,7 @@ function getAllUserToWork($workId, $courseId, $getCount = false)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
     $params = [
-        'work_id = ? and c_id = ?' => [$workId, $courseId],
+        'work_id = ?' => [$workId],
     ];
     if ($getCount) {
         $count = 0;

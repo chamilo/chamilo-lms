@@ -710,13 +710,15 @@ class ExtraField extends Model
      * Add elements to a form.
      *
      * @param FormValidator $form                            The form object to which to attach this element
-     * @param int           $itemId                          The item (course, user, session, etc) this extra_field is linked to
+     * @param int           $itemId                          The item (course, user, session, etc) this extra_field is
+     *                                                       linked to
      * @param array         $exclude                         Variables of extra field to exclude
-     * @param bool          $filter                          Whether to get only the fields with the "filter" flag set to 1 (true)
-     *                                                       or not (false)
+     * @param bool          $filter                          Whether to get only the fields with the "filter" flag set
+     *                                                       to 1 (true) or not (false)
      * @param bool          $useTagAsSelect                  Whether to show tag fields as select drop-down or not
      * @param array         $showOnlyTheseFields             Limit the extra fields shown to just the list given here
-     * @param array         $orderFields                     An array containing the names of the fields shown, in the right order
+     * @param array         $orderFields                     An array containing the names of the fields shown, in the
+     *                                                       right order
      * @param array         $extraData
      * @param bool          $orderDependingDefaults
      * @param bool          $adminPermissions
@@ -1279,9 +1281,9 @@ class ExtraField extends Model
                                         ''
                                     );
                                 }
-
+                                /** @var ExtraFieldRelTag $fieldTag */
                                 foreach ($fieldTags as $fieldTag) {
-                                    $tag = $em->find(Tag::class, $fieldTag->getTagId());
+                                    $tag = $fieldTag->getTag();
 
                                     if (empty($tag)) {
                                         continue;
@@ -1350,8 +1352,7 @@ class ExtraField extends Model
 
                                 /** @var ExtraFieldRelTag $fieldTag */
                                 foreach ($fieldTags as $fieldTag) {
-                                    /** @var Tag $tag */
-                                    $tag = $em->find(Tag::class, $fieldTag->getTagId());
+                                    $tag = $fieldTag->getTag();
                                     if (empty($tag)) {
                                         continue;
                                     }
@@ -1382,15 +1383,15 @@ class ExtraField extends Model
                                             ]
                                         );
                                     $tagsAdded = [];
+                                    /** @var ExtraFieldRelTag $fieldTag */
                                     foreach ($fieldTags as $fieldTag) {
-                                        $tag = $em->find(Tag::class, $fieldTag->getTagId());
+                                        $tag = $fieldTag->getTag();
 
                                         if (empty($tag)) {
                                             continue;
                                         }
 
                                         $tagText = $tag->getTag();
-
                                         if (in_array($tagText, $tagsAdded)) {
                                             continue;
                                         }
@@ -2931,11 +2932,10 @@ JAVASCRIPT;
             if (self::FIELD_TYPE_TAG === $fieldType) {
                 $tags = $repoTag->findBy(['fieldId' => $field['id'], 'itemId' => $itemId]);
                 if ($tags) {
-                    /** @var ExtraFieldRelTag $tag */
                     $data = [];
+                    /** @var ExtraFieldRelTag $tag */
                     foreach ($tags as $extraFieldTag) {
-                        /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
-                        $tag = $em->find(Tag::class, $extraFieldTag->getTagId());
+                        $tag = $extraFieldTag->getTag();
                         $data[] = $tag->getTag();
                     }
                     $valueData = implode(',', $data);

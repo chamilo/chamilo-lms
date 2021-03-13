@@ -37,6 +37,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(\PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer::class);
     $services->set(\PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer::class);
     $services->set(Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class);
+    $services->set(\Rector\Php52\Rector\Property\VarToPublicPropertyRector::class);
+    //$services->set(\Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector::class);
+
+
 
     //$services->set(Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector::class);
     //$services->set(\Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class);
@@ -66,21 +70,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             //__DIR__.'/src/CoreBundle/Controller/ResourceApiController.php',
             //__DIR__.'/src/CoreBundle/Controller/EditorController.php',
             __DIR__.'/src/CoreBundle/Component/Editor/*',
-            \Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector::class,
+            //\Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector::class,
             \PhpCsFixer\Fixer\FunctionNotation\UseArrowFunctionsFixer::class,
             \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class,
             \Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class,
             \Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class,
-            \Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class,
+            Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class,
             Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector::class,
-            //\Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
             Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector::class,
             Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector::class,
+            Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
             Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector::class,
             Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector::class,
-            Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
             Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector::class,
-            Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class,
             Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector::class,
             Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector::class,
             Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector::class,
@@ -89,7 +91,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector::class,
             \Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector::class,
             Rector\Php74\Rector\Property\TypedPropertyRector::class,
-
+            Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class,
         ]
     );
 

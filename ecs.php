@@ -84,7 +84,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         Option::SKIP,
         [
             __DIR__.'/public/main/admin/db.php',
-
             __DIR__.'/src/CoreBundle/Hook/*',
             __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
             __DIR__.'/src/CoreBundle/Traits/*',
@@ -102,8 +101,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationSpacesFixer::class,
             PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer::class,
             \Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector::class,
-
-
             //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
         ]

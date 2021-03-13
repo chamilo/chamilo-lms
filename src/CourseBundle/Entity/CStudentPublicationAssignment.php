@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_student_publication_assignment",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
  *     }
  * )
  * @ORM\Entity
@@ -28,11 +27,6 @@ class CStudentPublicationAssignment
      * @ORM\GeneratedValue
      */
     protected int $iid;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
 
     /**
      * @ORM\Column(name="expires_on", type="datetime", nullable=true)
@@ -60,14 +54,14 @@ class CStudentPublicationAssignment
      */
     protected CStudentPublication $publication;
 
-    public function __toString(): string
-    {
-        return (string) $this->getIid();
-    }
-
     public function getIid(): int
     {
         return $this->iid;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getIid();
     }
 
     public function setExpiresOn(DateTime $expiresOn): self
@@ -77,12 +71,7 @@ class CStudentPublicationAssignment
         return $this;
     }
 
-    /**
-     * Get expiresOn.
-     *
-     * @return DateTime
-     */
-    public function getExpiresOn()
+    public function getExpiresOn(): ?DateTime
     {
         return $this->expiresOn;
     }
@@ -94,12 +83,7 @@ class CStudentPublicationAssignment
         return $this;
     }
 
-    /**
-     * Get endsOn.
-     *
-     * @return DateTime
-     */
-    public function getEndsOn()
+    public function getEndsOn(): ?DateTime
     {
         return $this->endsOn;
     }
@@ -111,12 +95,7 @@ class CStudentPublicationAssignment
         return $this;
     }
 
-    /**
-     * Get addToCalendar.
-     *
-     * @return bool
-     */
-    public function getAddToCalendar()
+    public function getAddToCalendar(): bool
     {
         return $this->addToCalendar;
     }
@@ -128,36 +107,9 @@ class CStudentPublicationAssignment
         return $this;
     }
 
-    /**
-     * Get enableQualification.
-     *
-     * @return bool
-     */
-    public function getEnableQualification()
+    public function getEnableQualification(): bool
     {
         return $this->enableQualification;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CStudentPublicationAssignment
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /*

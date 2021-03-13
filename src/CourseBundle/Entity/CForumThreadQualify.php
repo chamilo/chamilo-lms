@@ -40,7 +40,7 @@ class CForumThreadQualify
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?User $user;
+    protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="qualifications")
@@ -64,12 +64,7 @@ class CForumThreadQualify
      */
     protected ?DateTime $qualifyTime = null;
 
-    /**
-     * Set qualify.
-     *
-     * @return CForumThreadQualify
-     */
-    public function setQualify(float $qualify)
+    public function setQualify(float $qualify): self
     {
         $this->qualify = $qualify;
 
@@ -86,12 +81,7 @@ class CForumThreadQualify
         return $this->qualify;
     }
 
-    /**
-     * Set qualifyTime.
-     *
-     * @return CForumThreadQualify
-     */
-    public function setQualifyTime(DateTime $qualifyTime)
+    public function setQualifyTime(DateTime $qualifyTime): self
     {
         $this->qualifyTime = $qualifyTime;
 

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,9 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_student_publication_rel_user",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="work", columns={"work_id"}),
- *         @ORM\Index(name="user", columns={"user_id"})
  *     }
  * )
  * @ORM\Entity
@@ -31,83 +29,38 @@ class CStudentPublicationRelUser
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="CStudentPublication")
+     * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $cId;
+    protected CStudentPublication $publication;
 
     /**
-     * @ORM\Column(name="work_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $workId;
+    protected User $user;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected int $userId;
-
-    /**
-     * Set workId.
-     *
-     * @return CStudentPublicationRelUser
-     */
-    public function setWorkId(int $workId)
+    public function getPublication(): CStudentPublication
     {
-        $this->workId = $workId;
+        return $this->publication;
+    }
+
+    public function setPublication(CStudentPublication $publication): self
+    {
+        $this->publication = $publication;
 
         return $this;
     }
 
-    /**
-     * Get workId.
-     *
-     * @return int
-     */
-    public function getWorkId()
+    public function getUser(): User
     {
-        return $this->workId;
+        return $this->user;
     }
 
-    /**
-     * Set userId.
-     *
-     * @return CStudentPublicationRelUser
-     */
-    public function setUserId(int $userId)
+    public function setUser(User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CStudentPublicationRelUser
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

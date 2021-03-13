@@ -148,12 +148,7 @@ class CLpItemView
         return $this->lpViewId;
     }
 
-    /**
-     * Set viewCount.
-     *
-     * @return CLpItemView
-     */
-    public function setViewCount(int $viewCount)
+    public function setViewCount(int $viewCount): self
     {
         $this->viewCount = $viewCount;
 
@@ -170,12 +165,7 @@ class CLpItemView
         return $this->viewCount;
     }
 
-    /**
-     * Set startTime.
-     *
-     * @return CLpItemView
-     */
-    public function setStartTime(int $startTime)
+    public function setStartTime(int $startTime): self
     {
         $this->startTime = $startTime;
 
@@ -285,7 +275,7 @@ class CLpItemView
      *
      * @return CLpItemView
      */
-    public function setLessonLocation(string $lessonLocation)
+    public function setLessonLocation(string $lessonLocation): self
     {
         $this->lessonLocation = $lessonLocation;
 
@@ -302,12 +292,7 @@ class CLpItemView
         return $this->lessonLocation;
     }
 
-    /**
-     * Set coreExit.
-     *
-     * @return CLpItemView
-     */
-    public function setCoreExit(string $coreExit)
+    public function setCoreExit(string $coreExit): self
     {
         $this->coreExit = $coreExit;
 
@@ -324,12 +309,7 @@ class CLpItemView
         return $this->coreExit;
     }
 
-    /**
-     * Set maxScore.
-     *
-     * @return CLpItemView
-     */
-    public function setMaxScore(string $maxScore)
+    public function setMaxScore(string $maxScore): self
     {
         $this->maxScore = $maxScore;
 

@@ -39,10 +39,7 @@ class CLpCategoryUser
      */
     protected User $user;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getId();
     }
@@ -55,18 +52,12 @@ class CLpCategoryUser
         return $this->id;
     }
 
-    /**
-     * @return CLpCategory
-     */
-    public function getCategory()
+    public function getCategory(): CLpCategory
     {
         return $this->category;
     }
 
-    /**
-     * @return CLpCategoryUser
-     */
-    public function setCategory(CLpCategory $category)
+    public function setCategory(CLpCategory $category): self
     {
         $this->category = $category;
 

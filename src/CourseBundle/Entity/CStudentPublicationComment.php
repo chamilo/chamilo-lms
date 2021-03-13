@@ -127,12 +127,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this;
     }
 
-    /**
-     * Get sentAt.
-     *
-     * @return DateTime
-     */
-    public function getSentAt()
+    public function getSentAt(): DateTime
     {
         return $this->sentAt;
     }

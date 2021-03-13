@@ -122,6 +122,13 @@ class Version20190110182615 extends AbstractMigrationChamilo
                 'ALTER TABLE c_lp_item ADD CONSTRAINT FK_CCC9C1ED68DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid)'
             );
         }
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_lp_item;');
+        }
+
+        if ($table->hasIndex('idx_c_lp_item_cid_lp_id')) {
+            $this->addSql('DROP INDEX idx_c_lp_item_cid_lp_id ON c_lp_item;');
+        }
 
         $table = $schema->getTable('c_lp_view');
         if ($table->hasColumn('id')) {

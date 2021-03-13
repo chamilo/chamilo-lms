@@ -694,7 +694,7 @@ class learnpath
             $expired_on = api_get_utc_datetime($expired_on, true, true);
         }
 
-        $check_name = "SELECT * FROM $tbl_lp
+        /*$check_name = "SELECT * FROM $tbl_lp
                        WHERE c_id = $course_id AND name = '".Database::escape_string($name)."'";
         $res_name = Database::query($check_name);
 
@@ -705,7 +705,7 @@ class learnpath
             $check_name = "SELECT * FROM $tbl_lp
                            WHERE c_id = $course_id AND name = '".Database::escape_string($name)."' ";
             $res_name = Database::query($check_name);
-        }
+        }*/
         // New name does not exist yet; keep it.
         // Escape description.
         // Kevin: added htmlentities().

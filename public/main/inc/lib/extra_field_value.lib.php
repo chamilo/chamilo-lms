@@ -199,7 +199,7 @@ class ExtraFieldValue extends Model
                     $currentTags = $em
                         ->getRepository(ExtraFieldRelTag::class)
                         ->findBy([
-                            'fieldId' => $extraFieldInfo['id'],
+                            'field' => $extraFieldInfo['id'],
                             'itemId' => $params['item_id'],
                         ]);
 
@@ -219,7 +219,7 @@ class ExtraFieldValue extends Model
                         $tagsResult = $em->getRepository(Tag::class)
                             ->findBy([
                                 'tag' => $tagValue,
-                                'fieldId' => $extraFieldInfo['id'],
+                                'field' => $extraFieldInfo['id'],
                             ]);
 
                         if (empty($tagsResult)) {
@@ -960,7 +960,7 @@ class ExtraFieldValue extends Model
                     $tags = $em->getRepository(ExtraFieldRelTag::class)
                         ->findBy(
                             [
-                                'fieldId' => $field['id'],
+                                'field' => $field['id'],
                                 'itemId' => $itemId,
                             ]
                         );

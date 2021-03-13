@@ -1262,7 +1262,7 @@ class ExtraField extends Model
                                 ->getRepository(ExtraFieldRelTag::class)
                                 ->findBy(
                                     [
-                                        'fieldId' => $field_id,
+                                        'field' => $field_id,
                                         'itemId' => $itemId,
                                     ]
                                 );
@@ -1345,7 +1345,7 @@ class ExtraField extends Model
                                 )
                                 ->findBy(
                                     [
-                                        'fieldId' => $field_id,
+                                        'field' => $field_id,
                                         'itemId' => $itemId,
                                     ]
                                 );
@@ -1379,7 +1379,7 @@ class ExtraField extends Model
                                     $fieldTags = $em->getRepository(ExtraFieldRelTag::class)
                                         ->findBy(
                                             [
-                                                'fieldId' => $field_id,
+                                                'field' => $field_id,
                                             ]
                                         );
                                     $tagsAdded = [];
@@ -2930,7 +2930,7 @@ JAVASCRIPT;
 
             $fieldType = (int) $field['field_type'];
             if (self::FIELD_TYPE_TAG === $fieldType) {
-                $tags = $repoTag->findBy(['fieldId' => $field['id'], 'itemId' => $itemId]);
+                $tags = $repoTag->findBy(['field' => $field['id'], 'itemId' => $itemId]);
                 if ($tags) {
                     $data = [];
                     /** @var ExtraFieldRelTag $tag */

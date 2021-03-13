@@ -515,7 +515,7 @@ class ExtraFieldOption extends Model
                 $orderBy = ['id' => 'ASC'];
                 break;
             case 'field_id':
-                $orderBy = ['fieldId' => 'ASC'];
+                $orderBy = ['field' => 'ASC'];
                 break;
             case 'option_value':
                 $orderBy = ['optionValue' => 'ASC'];

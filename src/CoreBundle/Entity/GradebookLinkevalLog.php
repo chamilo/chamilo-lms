@@ -92,12 +92,7 @@ class GradebookLinkevalLog
         return $this->idLinkevalLog;
     }
 
-    /**
-     * Set name.
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -114,12 +109,7 @@ class GradebookLinkevalLog
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

@@ -176,12 +176,7 @@ class CourseCategory
         return $this;
     }
 
-    /**
-     * Set name.
-     *
-     * @return CourseCategory
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -198,12 +193,7 @@ class CourseCategory
         return $this->name;
     }
 
-    /**
-     * Set code.
-     *
-     * @return CourseCategory
-     */
-    public function setCode(string $code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 

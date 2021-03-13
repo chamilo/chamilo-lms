@@ -128,12 +128,7 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Set visibility.
-     *
-     * @return CTool
-     */
-    public function setVisibility(bool $visibility)
+    public function setVisibility(bool $visibility): self
     {
         $this->visibility = $visibility;
 

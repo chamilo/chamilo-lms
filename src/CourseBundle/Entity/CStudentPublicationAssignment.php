@@ -54,14 +54,14 @@ class CStudentPublicationAssignment
      */
     protected CStudentPublication $publication;
 
-    public function getIid(): int
-    {
-        return $this->iid;
-    }
-
     public function __toString(): string
     {
         return (string) $this->getIid();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
     }
 
     public function setExpiresOn(DateTime $expiresOn): self

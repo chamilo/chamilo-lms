@@ -43,12 +43,7 @@ class CToolIntro
      */
     protected int $sessionId;
 
-    /**
-     * Set introText.
-     *
-     * @return CToolIntro
-     */
-    public function setIntroText(string $introText)
+    public function setIntroText(string $introText): self
     {
         $this->introText = $introText;
 

@@ -63,11 +63,13 @@ class AccessUrlRelCourse
         return $this;
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function getUrl()
+    public function getUrl(): AccessUrl
     {
         return $this->url;
+    }
+
+    public function getCourse(): Course
+    {
+        return $this->course;
     }
 }

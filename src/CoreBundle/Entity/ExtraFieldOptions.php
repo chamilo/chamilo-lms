@@ -71,28 +71,19 @@ class ExtraFieldOptions
         return $this->optionOrder;
     }
 
-    /**
-     * @return $this
-     */
-    public function setOptionOrder(int $optionOrder)
+    public function setOptionOrder(int $optionOrder): self
     {
         $this->optionOrder = $optionOrder;
 
         return $this;
     }
 
-    /**
-     * @return ExtraField
-     */
-    public function getField()
+    public function getField(): ExtraField
     {
         return $this->field;
     }
 
-    /**
-     * @return $this
-     */
-    public function setField(ExtraField $field)
+    public function setField(ExtraField $field): self
     {
         $this->field = $field;
 
@@ -107,10 +98,7 @@ class ExtraFieldOptions
         return $this->value;
     }
 
-    /**
-     * @return $this
-     */
-    public function setValue(string $value)
+    public function setValue(string $value): self
     {
         $this->value = $value;
 
@@ -131,10 +119,7 @@ class ExtraFieldOptions
         return $this->displayText;
     }
 
-    /**
-     * @return $this
-     */
-    public function setDisplayText(string $displayText)
+    public function setDisplayText(string $displayText): self
     {
         $this->displayText = $displayText;
 
@@ -149,10 +134,7 @@ class ExtraFieldOptions
         return $this->priority;
     }
 
-    /**
-     * @return $this
-     */
-    public function setPriority(string $priority)
+    public function setPriority(string $priority): self
     {
         $this->priority = $priority;
 
@@ -167,10 +149,7 @@ class ExtraFieldOptions
         return $this->priorityMessage;
     }
 
-    /**
-     * @return $this
-     */
-    public function setPriorityMessage(string $priorityMessage)
+    public function setPriorityMessage(string $priorityMessage): self
     {
         $this->priorityMessage = $priorityMessage;
 

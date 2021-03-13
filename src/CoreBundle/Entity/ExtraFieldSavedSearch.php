@@ -41,8 +41,6 @@ class ExtraFieldSavedSearch
     protected User $user;
 
     /**
-     * @var array
-     *
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
     protected ?array $value = [];

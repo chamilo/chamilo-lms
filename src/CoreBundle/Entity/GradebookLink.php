@@ -154,12 +154,7 @@ class GradebookLink
         return $this->refId;
     }
 
-    /**
-     * Set createdAt.
-     *
-     * @return GradebookLink
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -176,12 +171,7 @@ class GradebookLink
         return $this->createdAt;
     }
 
-    /**
-     * Set weight.
-     *
-     * @return GradebookLink
-     */
-    public function setWeight(float $weight)
+    public function setWeight(float $weight): self
     {
         $this->weight = $weight;
 
@@ -198,12 +188,7 @@ class GradebookLink
         return $this->weight;
     }
 
-    /**
-     * Set visible.
-     *
-     * @return GradebookLink
-     */
-    public function setVisible(int $visible)
+    public function setVisible(int $visible): self
     {
         $this->visible = $visible;
 
@@ -220,12 +205,7 @@ class GradebookLink
         return $this->visible;
     }
 
-    /**
-     * Set locked.
-     *
-     * @return GradebookLink
-     */
-    public function setLocked(int $locked)
+    public function setLocked(int $locked): self
     {
         $this->locked = $locked;
 

@@ -61,12 +61,7 @@ class Legal
         return $this->id;
     }
 
-    /**
-     * Set date.
-     *
-     * @return Legal
-     */
-    public function setDate(int $date)
+    public function setDate(int $date): self
     {
         $this->date = $date;
 
@@ -83,12 +78,7 @@ class Legal
         return $this->date;
     }
 
-    /**
-     * Set content.
-     *
-     * @return Legal
-     */
-    public function setContent(string $content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -105,12 +95,7 @@ class Legal
         return $this->content;
     }
 
-    /**
-     * Set type.
-     *
-     * @return Legal
-     */
-    public function setType(int $type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -127,12 +112,7 @@ class Legal
         return $this->type;
     }
 
-    /**
-     * Set changes.
-     *
-     * @return Legal
-     */
-    public function setChanges(string $changes)
+    public function setChanges(string $changes): self
     {
         $this->changes = $changes;
 
@@ -149,12 +129,7 @@ class Legal
         return $this->changes;
     }
 
-    /**
-     * Set version.
-     *
-     * @return Legal
-     */
-    public function setVersion(int $version)
+    public function setVersion(int $version): self
     {
         $this->version = $version;
 
@@ -171,12 +146,7 @@ class Legal
         return $this->version;
     }
 
-    /**
-     * Set languageId.
-     *
-     * @return Legal
-     */
-    public function setLanguageId(int $languageId)
+    public function setLanguageId(int $languageId): self
     {
         $this->languageId = $languageId;
 

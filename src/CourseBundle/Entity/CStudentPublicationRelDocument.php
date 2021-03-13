@@ -44,7 +44,7 @@ class CStudentPublicationRelDocument
         return $this->publication;
     }
 
-    public function setPublication(CStudentPublication $publication): CStudentPublicationRelDocument
+    public function setPublication(CStudentPublication $publication): self
     {
         $this->publication = $publication;
 
@@ -56,7 +56,7 @@ class CStudentPublicationRelDocument
         return $this->document;
     }
 
-    public function setDocument(CDocument $document): CStudentPublicationRelDocument
+    public function setDocument(CDocument $document): self
     {
         $this->document = $document;
 

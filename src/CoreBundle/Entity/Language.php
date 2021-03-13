@@ -93,12 +93,7 @@ class Language
         return $this->originalName;
     }
 
-    /**
-     * Set englishName.
-     *
-     * @return Language
-     */
-    public function setEnglishName(string $englishName)
+    public function setEnglishName(string $englishName): self
     {
         $this->englishName = $englishName;
 
@@ -115,12 +110,7 @@ class Language
         return $this->englishName;
     }
 
-    /**
-     * Set isocode.
-     *
-     * @return Language
-     */
-    public function setIsocode(string $isocode)
+    public function setIsocode(string $isocode): self
     {
         $this->isocode = $isocode;
 
@@ -137,12 +127,7 @@ class Language
         return $this->isocode;
     }
 
-    /**
-     * Set available.
-     *
-     * @return Language
-     */
-    public function setAvailable(bool $available)
+    public function setAvailable(bool $available): self
     {
         $this->available = $available;
 
@@ -159,12 +144,7 @@ class Language
         return $this->available;
     }
 
-    /**
-     * Set parent.
-     *
-     * @return Language
-     */
-    public function setParent(self $parent)
+    public function setParent(self $parent): self
     {
         $this->parent = $parent;
 

@@ -224,12 +224,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    /**
-     * Set url.
-     *
-     * @return AccessUrl
-     */
-    public function setUrl(string $url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
@@ -280,12 +275,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->active;
     }
 
-    /**
-     * Set createdBy.
-     *
-     * @return AccessUrl
-     */
-    public function setCreatedBy(int $createdBy)
+    public function setCreatedBy(int $createdBy): self
     {
         $this->createdBy = $createdBy;
 
@@ -302,12 +292,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->createdBy;
     }
 
-    /**
-     * Set tms.
-     *
-     * @return AccessUrl
-     */
-    public function setTms(DateTime $tms)
+    public function setTms(DateTime $tms): self
     {
         $this->tms = $tms;
 
@@ -324,12 +309,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->tms;
     }
 
-    /**
-     * Set urlType.
-     *
-     * @return AccessUrl
-     */
-    public function setUrlType(bool $urlType)
+    public function setUrlType(bool $urlType): self
     {
         $this->urlType = $urlType;
 
@@ -354,10 +334,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->limitActiveCourses;
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function setLimitActiveCourses(int $limitActiveCourses)
+    public function setLimitActiveCourses(int $limitActiveCourses): self
     {
         $this->limitActiveCourses = $limitActiveCourses;
 
@@ -432,10 +409,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this->email;
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function setEmail(string $email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 

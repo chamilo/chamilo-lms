@@ -43,12 +43,7 @@ class CourseType
      */
     protected ?string $props = null;
 
-    /**
-     * Set name.
-     *
-     * @return CourseType
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -65,12 +60,7 @@ class CourseType
         return $this->name;
     }
 
-    /**
-     * Set translationVar.
-     *
-     * @return CourseType
-     */
-    public function setTranslationVar(string $translationVar)
+    public function setTranslationVar(string $translationVar): self
     {
         $this->translationVar = $translationVar;
 
@@ -87,12 +77,7 @@ class CourseType
         return $this->translationVar;
     }
 
-    /**
-     * Set description.
-     *
-     * @return CourseType
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -109,12 +94,7 @@ class CourseType
         return $this->description;
     }
 
-    /**
-     * Set props.
-     *
-     * @return CourseType
-     */
-    public function setProps(string $props)
+    public function setProps(string $props): self
     {
         $this->props = $props;
 

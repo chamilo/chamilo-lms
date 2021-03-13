@@ -38,12 +38,7 @@ class Tag
      */
     protected int $count;
 
-    /**
-     * Set tag.
-     *
-     * @return Tag
-     */
-    public function setTag(string $tag)
+    public function setTag(string $tag): self
     {
         $this->tag = $tag;
 
@@ -82,12 +77,7 @@ class Tag
         return $this->fieldId;
     }
 
-    /**
-     * Set count.
-     *
-     * @return Tag
-     */
-    public function setCount(int $count)
+    public function setCount(int $count): self
     {
         $this->count = $count;
 

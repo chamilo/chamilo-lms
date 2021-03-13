@@ -80,12 +80,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
         return (string) $this->getIid();
     }
 
-    /**
-     * Set content.
-     *
-     * @return CThematicAdvance
-     */
-    public function setContent(string $content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -102,12 +97,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
         return $this->content;
     }
 
-    /**
-     * Set startDate.
-     *
-     * @return CThematicAdvance
-     */
-    public function setStartDate(DateTime $startDate)
+    public function setStartDate(DateTime $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -124,12 +114,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
         return $this->startDate;
     }
 
-    /**
-     * Set duration.
-     *
-     * @return CThematicAdvance
-     */
-    public function setDuration(int $duration)
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
 
@@ -146,12 +131,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
         return $this->duration;
     }
 
-    /**
-     * Set doneAdvance.
-     *
-     * @return CThematicAdvance
-     */
-    public function setDoneAdvance(bool $doneAdvance)
+    public function setDoneAdvance(bool $doneAdvance): self
     {
         $this->doneAdvance = $doneAdvance;
 
@@ -168,18 +148,12 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
         return $this->doneAdvance;
     }
 
-    /**
-     * @return Room
-     */
-    public function getRoom()
+    public function getRoom(): ?Room
     {
         return $this->room;
     }
 
-    /**
-     * @return $this
-     */
-    public function setRoom(Room $room)
+    public function setRoom(Room $room): self
     {
         $this->room = $room;
 

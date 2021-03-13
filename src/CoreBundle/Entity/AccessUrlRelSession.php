@@ -47,40 +47,26 @@ class AccessUrlRelSession
         return $this->id;
     }
 
-    /**
-     * Set url.
-     *
-     * @return AccessUrlRelSession
-     */
-    public function setUrl(AccessUrl $url)
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function getUrl()
+    public function getUrl(): AccessUrl
     {
         return $this->url;
     }
 
-    /**
-     * @return $this
-     */
-    public function setSession(Session $session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }

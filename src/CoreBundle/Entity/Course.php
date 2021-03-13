@@ -599,12 +599,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->code;
     }
 
-    /**
-     * Set directory.
-     *
-     * @return Course
-     */
-    public function setDirectory(string $directory)
+    public function setDirectory(string $directory): self
     {
         $this->directory = $directory;
 
@@ -621,12 +616,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->directory;
     }
 
-    /**
-     * Set courseLanguage.
-     *
-     * @return Course
-     */
-    public function setCourseLanguage(string $courseLanguage)
+    public function setCourseLanguage(string $courseLanguage): self
     {
         $this->courseLanguage = $courseLanguage;
 

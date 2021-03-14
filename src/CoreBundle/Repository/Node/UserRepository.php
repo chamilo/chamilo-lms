@@ -1438,19 +1438,15 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $qb;
     }
 
-    private function addUserRelUserQueryBuilder(int $userId, int $status, QueryBuilder $qb = null): QueryBuilder
+    private function addUserRelUserQueryBuilder(int $userId, int $relationType, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb->leftJoin('u.userRelUsers', 'relations');
         $qb
-            ->andWhere('relations.relationType = :status')
-            ->andWhere('relations.user = :user AND relations.friend <> :user')
-            ->setParameters(
-                [
-                    'status' => $status,
-                    'user' => $userId,
-                ]
-            )
+            ->andWhere('relations.relationType = :relationType')
+            ->andWhere('relations.user = :userRelation AND relations.friend <> :userRelation')
+            ->setParameter('relationType', $relationType)
+            ->setParameter('userRelation', $userId)
         ;
 
         return $qb;

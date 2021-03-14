@@ -2166,7 +2166,7 @@ class learnpath
         );*/
 
         $visibility = $lp->isVisible($course, $session);
-        var_dump($visibility);
+
         // If the item was deleted.
         if (false === $visibility) {
             return false;
@@ -2176,10 +2176,14 @@ class learnpath
         if ($lp->hasCategory()) {
             $category = $lp->getCategory();
 
-            if (false === self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id), $course, $session)) {
+            if (false === self::categoryIsVisibleForStudent(
+                    $category,
+                    api_get_user_entity($student_id),
+                    $course,
+                    $session
+                )) {
                 return false;
             }
-
 
             $prerequisite = $lp->getPrerequisite();
             $is_visible = true;
@@ -2273,7 +2277,7 @@ class learnpath
             return $is_visible;
         }
 
-        return false;
+        return true;
     }
 
     /**

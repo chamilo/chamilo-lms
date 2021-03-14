@@ -129,7 +129,6 @@ class LearnpathList
                         $user_id,
                         $course
                     );
-                    var_dump($lpVisibility);
                     if (false === $lpVisibility) {
                         continue;
                     }

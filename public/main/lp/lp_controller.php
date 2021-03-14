@@ -54,7 +54,11 @@ $(window).on("load", function () {
     setFocus();
 });
 </script>';
-$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?'.api_get_cidreq();
+
+$lpItemId = $_REQUEST['id'] ?? 0;
+$lpId = $_REQUEST['lp_id'] ?? 0;
+
+$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.(int) $lpId.'&'.api_get_cidreq();
 $listUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $htmlHeadXtra[] = '
 <script>
@@ -317,8 +321,6 @@ if (!empty($lpObject)) {
     }
 }
 
-$lpItemId = $_REQUEST['id'] ?? 0;
-$lpId = $_REQUEST['lp_id'] ?? 0;
 $lpItem = null;
 $lp = null;
 if (!empty($lpItemId)) {

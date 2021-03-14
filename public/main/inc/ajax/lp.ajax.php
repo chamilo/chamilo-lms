@@ -10,10 +10,12 @@ require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
 
 $debug = false;
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
+$action = $_REQUEST['a'] ?? '';
+$lpId = $_REQUEST['lp_id'] ?? 0;
 
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
+
 
 switch ($action) {
     case 'get_lp_list_by_course':
@@ -37,7 +39,6 @@ switch ($action) {
         if (empty($folderId)) {
             exit;
         }
-        $lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : false;
         $url = isset($_GET['url']) ? $_GET['url'] : '';
         $addMove = isset($_GET['add_move_button']) && 1 == $_GET['add_move_button'] ? true : false;
 
@@ -60,8 +61,15 @@ switch ($action) {
             exit;
         }
 
+        $lpRepo = Container::getLpRepository();
+        $lp = $lpRepo->find($lpId);
+        if (null === $lp) {
+            exit;
+        }
+
         /** @var learnpath $learningPath */
-        $learningPath = Session::read('oLP');
+        //$learningPath = learnpath::read('oLP');
+        $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
         if ($learningPath) {
             $learningPath->set_modified_on();
             $title = $_REQUEST['title'] ?? '';
@@ -89,7 +97,7 @@ switch ($action) {
                 $type,
                 $id,
                 $title,
-                null
+                ''
             );
 
             echo $learningPath->returnLpItemList(null);

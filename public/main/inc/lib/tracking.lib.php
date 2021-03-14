@@ -369,11 +369,10 @@ class Tracking
                     path
                 FROM $TBL_LP_ITEM as i
                 INNER JOIN $TBL_LP_ITEM_VIEW as iv
-                ON (i.iid = iv.lp_item_id AND i.c_id = iv.c_id)
+                ON (i.iid = iv.lp_item_id)
                 INNER JOIN $TBL_LP_VIEW as v
-                ON (iv.lp_view_id = v.iid AND v.c_id = iv.c_id)
+                ON (iv.lp_view_id = v.iid)
                 WHERE
-                    v.c_id = $course_id AND
                     i.iid = $my_item_id AND
                     i.lp_id = $lp_id  AND
                     v.user_id = $user_id AND
@@ -810,7 +809,6 @@ class Tracking
                             $sql = "SELECT iid, score
                                     FROM $TBL_LP_ITEM_VIEW
                                     WHERE
-                                        c_id = $course_id AND
                                         lp_item_id = '".(int) $my_id."' AND
                                         lp_view_id = '".(int) $my_lp_view_id."'
                                     ORDER BY view_count DESC
@@ -821,7 +819,6 @@ class Tracking
                             $sql = "SELECT SUM(total_time) as total_time
                                     FROM $TBL_LP_ITEM_VIEW
                                     WHERE
-                                        c_id = $course_id AND
                                         lp_item_id = '".(int) $my_id."' AND
                                         lp_view_id = '".(int) $my_lp_view_id."'";
                             $res_time = Database::query($sql);
@@ -842,7 +839,7 @@ class Tracking
                                             question_id, marks, ponderation
                                         FROM $tbl_stats_attempts as at
                                         INNER JOIN $tbl_quiz_questions as q
-                                        ON (q.iid = at.question_id AND q.c_id = $course_id)
+                                        ON (q.iid = at.question_id)
                                         WHERE exe_id ='$id_last_attempt'
                                     ) as t";
 
@@ -1095,7 +1092,6 @@ class Tracking
                         ) {
                             $sql = "SELECT path FROM $TBL_LP_ITEM
                                     WHERE
-                                        c_id = $course_id AND
                                         iid = '$lp_item_id' AND
                                         lp_id = '$lp_id'";
                             $res_path = Database::query($sql);

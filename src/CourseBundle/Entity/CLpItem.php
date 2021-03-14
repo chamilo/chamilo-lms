@@ -30,7 +30,7 @@ class CLpItem
     protected ?int $iid = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
     protected CLp $lp;

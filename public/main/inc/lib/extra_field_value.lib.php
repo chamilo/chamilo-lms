@@ -207,7 +207,7 @@ class ExtraFieldValue extends Model
                         $em->remove($extraFieldtag);
                     }
                     $em->flush();
-                    $fieldEntity = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraField::class)->findBy($extraFieldInfo['id']);
+                    $fieldEntity = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraField::class)->find($extraFieldInfo['id']);
 
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];

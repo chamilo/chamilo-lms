@@ -108,7 +108,7 @@ class GroupManager
         $status = null,
         $sessionId = 0,
         $getCount = false,
-        $filterByKeyword = '',
+        $filterByKeyword = null,
         $returnEntityList = false
     ) {
         $course = $course ?? api_get_course_entity();
@@ -120,7 +120,7 @@ class GroupManager
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $repo = Container::getGroupRepository();
         $session = api_get_session_entity($sessionId);
-        $qb = $repo->findAllByCourse($course, $session, $filterByKeyword, $status);
+        $qb = $repo->findAllByCourse($course, $session, $filterByKeyword, $status, $categoryId);
 
         if ($getCount) {
             return $repo->getCount($qb);
@@ -131,6 +131,7 @@ class GroupManager
         }
 
         return $qb->getQuery()->getArrayResult();
+
         /*$table_group = Database::get_course_table(TABLE_GROUP);
         $select = ' g.iid,
                     g.name,
@@ -2141,6 +2142,10 @@ class GroupManager
         $surveyGroupExists = $extraField->get_handler_field_info_by_field_variable('group_id') ? true : false;
         $url = api_get_path(WEB_CODE_PATH).'group/';
 
+        $confirmMessage = addslashes(
+            api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset)
+        );
+
         foreach ($groupList as $group) {
             $groupId = $group->getIid();
 
@@ -2174,7 +2179,7 @@ class GroupManager
                 $group_name2 = '';
                 if (api_get_configuration_value('extra')) {
                     $group_name2 = '<a
-                        href="group_space_tracking.php?cid='.api_get_course_int_id().'&gid='.$groupId.'">'.
+                        href="group_space_tracking.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'">'.
                         get_lang('suivi_de').''.stripslashes($group->getName()).'</a>';
                 }
 
@@ -2245,13 +2250,11 @@ class GroupManager
             $row[] = $tutor_info;
 
             // Max number of members in group
-            $max_members = self::MEMBER_PER_GROUP_NO_LIMIT == $group->getMaxStudent() ? ' ' : ' / '.$group->getMaxStudent();
+            $max_members = self::MEMBER_PER_GROUP_NO_LIMIT === $group->getMaxStudent() ? ' ' : ' / '.$group->getMaxStudent();
             $registeredUsers = self::getStudentsCount($groupId);
             // Number of members in group
             $row[] = $registeredUsers.$max_members;
-            $confirmMessage = addslashes(
-                api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset)
-            );
+
             // Self-registration / unregistration
             if (!api_is_allowed_to_edit(false, true)) {
                 if (self::is_self_registration_allowed($user_id, $group)) {

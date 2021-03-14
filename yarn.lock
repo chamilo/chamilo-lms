@@ -1907,6 +1907,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.11.2":
+  version: 7.13.10
+  resolution: "@babel/runtime@npm:7.13.10"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 22014226b96a8c8e8d4e8bcdb011f317d1b32881aef424a669dc6ceaee14993d3609172967853cbf9c25c724c25145d45885b6c9df56ba241c12820776607f1f
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.0.0, @babel/template@npm:^7.12.13":
   version: 7.12.13
   resolution: "@babel/template@npm:7.12.13"
@@ -2928,6 +2937,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@videojs/http-streaming@npm:2.6.4":
+  version: 2.6.4
+  resolution: "@videojs/http-streaming@npm:2.6.4"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.0
+    aes-decrypter: 3.1.2
+    global: ^4.4.0
+    m3u8-parser: 4.5.2
+    mpd-parser: 0.15.4
+    mux.js: 5.10.0
+    video.js: ^6 || ^7
+  checksum: ea9858d09ba45d82cadc7c88de12a8debd5c7554d1c189f9090e3478ecd319032a49588dfda1ab056b092c21f4574e09a345df237df92d363c72767d7d23716d
+  languageName: node
+  linkType: hard
+
 "@videojs/vhs-utils@npm:^2.2.1, @videojs/vhs-utils@npm:^2.3.0":
   version: 2.3.0
   resolution: "@videojs/vhs-utils@npm:2.3.0"
@@ -2936,6 +2961,17 @@ __metadata:
     global: ^4.3.2
     url-toolkit: ^2.1.6
   checksum: 3f0f5f189ab8fc293da00186bca6385ba5badd7f4310f6e3519b91c07d7789fa4ebd3ccd44b28eca0f46f42b7576d01b82d8fa87c2a3f85dbf06ceb58329b0af
+  languageName: node
+  linkType: hard
+
+"@videojs/vhs-utils@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@videojs/vhs-utils@npm:3.0.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    global: ^4.4.0
+    url-toolkit: ^2.2.1
+  checksum: 8daa4947e3b4051a10ddedb1375d9717f35e7cabf508ee2baaf4313efe6ec6560c76376b7de3305e7ebb10cd41b7ddf521c4184f6610fac8a38e94871970ac34
   languageName: node
   linkType: hard
 
@@ -3799,6 +3835,18 @@ __metadata:
     global: ^4.3.2
     pkcs7: ^1.0.4
   checksum: f458f61ee2bf5d2eaceb3c1b8e87e79ff6be52a619b04d445a73eb1b0b091363d9e1e1c1e49f1127c67954e2776539bc8f1e2b11a07f41fe66dd19f499b69368
+  languageName: node
+  linkType: hard
+
+"aes-decrypter@npm:3.1.2":
+  version: 3.1.2
+  resolution: "aes-decrypter@npm:3.1.2"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.0
+    global: ^4.4.0
+    pkcs7: ^1.0.4
+  checksum: ad61143d452f5058d328c53bb3bee417dbbeb55988df5ae474e89fc3d092ab4a6e4415b70561575cfc7992292a4abe71f240c4ec13134df334c93b93f4735b2d
   languageName: node
   linkType: hard
 
@@ -6592,6 +6640,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chainsaw@npm:>=0.0.7 <0.1":
+  version: 0.0.9
+  resolution: "chainsaw@npm:0.0.9"
+  dependencies:
+    traverse: ">=0.3.0 <0.4"
+  checksum: d35858c678dfa32eae451da8dea6683cf3e71ca9149ab06f513bf9a63ccc8a721030256abd5c16fed3b42d0a33ec3db6eafc0520270fc5c45af337d1243bbe73
+  languageName: node
+  linkType: hard
+
 "chalk@npm:2.4.2, chalk@npm:^2.0.0, chalk@npm:^2.0.1, chalk@npm:^2.3.0, chalk@npm:^2.4.1, chalk@npm:^2.4.2":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
@@ -6725,7 +6782,7 @@ __metadata:
     timepicker: ^1.13
     tinymce: ^5.6
     typescript: ^3.8.3
-    video.js: ^7.6.6
+    video.js: ^7.11.4
     vue: ^2.6.12
     vue-flatpickr-component: ^8.0
     vue-i18n: ^8.17.4
@@ -9367,6 +9424,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"estree-walker@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "estree-walker@npm:0.6.1"
+  checksum: a63b94b841fcda2d79ff8e313b4ea8439b3364094ba66547289814bd7da4399a54cd33849b23504d239266430f219a142627071201a9fb6eb488bd025575f8fc
+  languageName: node
+  linkType: hard
+
 "estree-walker@npm:^2.0.1":
   version: 2.0.2
   resolution: "estree-walker@npm:2.0.2"
@@ -11261,6 +11325,15 @@ fsevents@~2.3.1:
     inherits: ^2.0.3
     minimalistic-assert: ^1.0.1
   checksum: fceb7fb87e224f4b399212f902d3a34c3ed8512560868b56dde92f617fac9c66b501e583bab2996ed7493be5ab3385e05a69d2209fa6a9144391b22e1c2d245b
+  languageName: node
+  linkType: hard
+
+"hashish@npm:>=0.0.2 <0.1":
+  version: 0.0.4
+  resolution: "hashish@npm:0.0.4"
+  dependencies:
+    traverse: ">=0.2.4"
+  checksum: a4050113656e67a9c62e29682d709889964a0fbfadfd2d4f7d8d74a07d29aab223cff494f406f2ceaa46540fdc4c69f0baecf8b079f284f4922e9293780fc178
   languageName: node
   linkType: hard
 
@@ -13558,7 +13631,18 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.25.7":
+"m3u8-parser@npm:4.5.2":
+  version: 4.5.2
+  resolution: "m3u8-parser@npm:4.5.2"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.0
+    global: ^4.4.0
+  checksum: ed02715f564badd2f2d87329c922fc71d0034c3fd94807ecaf21281d378705a6208643db13a02cd17a2ac75c3c9afafa2bd09161616a10bd5d4ee5fdcf068624
+  languageName: node
+  linkType: hard
+
+"magic-string@npm:^0.25.2, magic-string@npm:^0.25.7":
   version: 0.25.7
   resolution: "magic-string@npm:0.25.7"
   dependencies:
@@ -14100,6 +14184,18 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"mpd-parser@npm:0.15.4":
+  version: 0.15.4
+  resolution: "mpd-parser@npm:0.15.4"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.0
+    global: ^4.4.0
+    xmldom: ^0.4.0
+  checksum: 7f66e6bfeb4c772aa7a4014f40607ece07c7f735299c9a79ca5279608d0316e8dc4313c85aa3eb22ebcdb242a0bb9a8b6dae701af2b74be1692c8a6a4d913073
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -14167,6 +14263,17 @@ fsevents@~2.3.1:
   version: 0.0.8
   resolution: "mute-stream@npm:0.0.8"
   checksum: 315c40f463ec31deee54c5b8779207feb6b63dd4c58fe0f84ad46abdd6dac1ada578d53efde4a47b0ae4d29d453d35bb39ecdd98ee9ebf538929039a3a9945df
+  languageName: node
+  linkType: hard
+
+"mux.js@npm:5.10.0":
+  version: 5.10.0
+  resolution: "mux.js@npm:5.10.0"
+  dependencies:
+    "@babel/runtime": ^7.11.2
+  bin:
+    muxjs-transmux: bin/transmux.js
+  checksum: f463d685321a8f8f083c7720fac78c311ada496bcc98dc3d14c8e9ac70e842738a96cf6930637332da7761d83743ed23b0bf7fa580de4c511784d21efb4b79f1
   languageName: node
   linkType: hard
 
@@ -16955,6 +17062,15 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"remove@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "remove@npm:0.1.5"
+  dependencies:
+    seq: ">= 0.3.5"
+  checksum: f8b9451dbe21f898ab16f8ca2896beb9d2fbd2a1d3d7a598a6f51ced3d5fcf7692ca256477ad8b358ecd5a612a134cb3d53008ea281c4a2820ce352a845dcbd2
+  languageName: node
+  linkType: hard
+
 "renderkid@npm:^2.0.4":
   version: 2.0.5
   resolution: "renderkid@npm:2.0.5"
@@ -17267,6 +17383,25 @@ fsevents@~2.3.1:
     semver-compare: ^1.0.0
     sprintf-js: ^1.1.2
   checksum: 14f4920920e9e39717ce9cd2203694a0cfed06723d16328990c1507d768daed6b9256f58cc61e96ccebc93378a6f50af7982debee03bf88c04eddf8bf45d1897
+  languageName: node
+  linkType: hard
+
+"rollup-plugin-replace@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "rollup-plugin-replace@npm:2.2.0"
+  dependencies:
+    magic-string: ^0.25.2
+    rollup-pluginutils: ^2.6.0
+  checksum: f40e4b9ea2af618d7768cd20604d36f49d37c4060a2ed5cf9fb29be5a92c5188f19be03ba16df302389ef1b72593b93d89782c5bf47cfd4db8c45a236f522854
+  languageName: node
+  linkType: hard
+
+"rollup-pluginutils@npm:^2.6.0":
+  version: 2.8.2
+  resolution: "rollup-pluginutils@npm:2.8.2"
+  dependencies:
+    estree-walker: ^0.6.1
+  checksum: 6922c1a26df033cc3da4650106244fb2211b5ddf72a93be5010cbe51a0817c9abcab08f61cbc3f5fc906b2701df123d8c9b0dae0a34e69dd07218e34e5d357b8
   languageName: node
   linkType: hard
 
@@ -17659,6 +17794,16 @@ fsevents@~2.3.1:
     tslib: ^2.0.3
     upper-case-first: ^2.0.2
   checksum: 39bf70b87190064fdccd357ebd78ea9196a260ee6b87893b5099aa54af92f5a49676fa9f94c7ccf501a3fa0d72e3438237c110022b6cec760d6dd921b1bf16f7
+  languageName: node
+  linkType: hard
+
+"seq@npm:>= 0.3.5":
+  version: 0.3.5
+  resolution: "seq@npm:0.3.5"
+  dependencies:
+    chainsaw: ">=0.0.7 <0.1"
+    hashish: ">=0.0.2 <0.1"
+  checksum: e02a3e5a28e5aa15920e42ccfe89d96d8647f4227589df163309099a62940c81aeb45a57ca7a4b9ddb12139b203e2bc084739141168f989d0ddcde7245e7eb46
   languageName: node
   linkType: hard
 
@@ -19190,6 +19335,20 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"traverse@npm:>=0.2.4":
+  version: 0.6.6
+  resolution: "traverse@npm:0.6.6"
+  checksum: f2bfaae69246bc1b630ad51d44be0a2a953be1650f754c299e5a05e4f00e4b493aa6c37a98410f9c2c902a21bef7f1ab10a9cdb9b9e8ee8813e1a9e95074dafd
+  languageName: node
+  linkType: hard
+
+"traverse@npm:>=0.3.0 <0.4":
+  version: 0.3.9
+  resolution: "traverse@npm:0.3.9"
+  checksum: f2f99aa18539e8a1420b41456ad931bd5c2c8091bb993416b4ae9d234edc82052dac5d61cb422b2053101f67e804a1bdf022bff7436b7fa4ac518a7aff6f7cc3
+  languageName: node
+  linkType: hard
+
 "treeify@npm:^1.1.0":
   version: 1.1.0
   resolution: "treeify@npm:1.1.0"
@@ -19701,7 +19860,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"url-toolkit@npm:^2.1.6":
+"url-toolkit@npm:^2.1.6, url-toolkit@npm:^2.2.1":
   version: 2.2.1
   resolution: "url-toolkit@npm:2.2.1"
   checksum: 2558ba9b44cf68294444b89063464f7cd84c5f9c5c871a2906ff8e2074b93383029605fc33a2de1455b6ef6307c28ed41408bcc719158a91f7037745f8abc673
@@ -19884,7 +20043,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"video.js@npm:^6 || ^7, video.js@npm:^7.6.6":
+"video.js@npm:^6 || ^7":
   version: 7.11.5
   resolution: "video.js@npm:7.11.5"
   dependencies:
@@ -19897,6 +20056,24 @@ fsevents@~2.3.1:
     videojs-font: 3.2.0
     videojs-vtt.js: ^0.15.2
   checksum: e014baaa89d9e38437a24f4d071435011e7976e8127fbabade9fcbe766b06ab8601c8d3cb8d765f00bcc07d11e84fc742b09cd135b15cd39f8b7c451740399a8
+  languageName: node
+  linkType: hard
+
+"video.js@npm:^7.11.4":
+  version: 7.11.7
+  resolution: "video.js@npm:7.11.7"
+  dependencies:
+    "@babel/runtime": ^7.9.2
+    "@videojs/http-streaming": 2.6.4
+    "@videojs/xhr": 2.5.1
+    global: 4.3.2
+    keycode: ^2.2.0
+    remove: ^0.1.5
+    rollup-plugin-replace: ^2.2.0
+    safe-json-parse: 4.0.0
+    videojs-font: 3.2.0
+    videojs-vtt.js: ^0.15.2
+  checksum: 857f86daf1434a4aa2a67c71b09734f6bf626984a9aeaef708989aae4e04f258f3f97ab22561047fe271cb4542ade5447d7257b068624d11465a1b98ab23399a
   languageName: node
   linkType: hard
 
@@ -20731,6 +20908,13 @@ fsevents@~2.3.1:
   version: 0.1.31
   resolution: "xmldom@npm:0.1.31"
   checksum: 69b741952c32338c915a74d3a6edc37bade58f93ff3722704cc6a10461c62cb5d6d1bcf2e7a3db6e3ff713f15c7e43089e54dfa369d471898905c489bd8e397b
+  languageName: node
+  linkType: hard
+
+"xmldom@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "xmldom@npm:0.4.0"
+  checksum: 305db82f6183b523e9372ab1049aa4b030960f8cd6068c1f03667f91e2a0fc32a49b3dc107aec67ba90dddb5bda7d6d47c1dae0e5764158667c1e26bcc3f1259
   languageName: node
   linkType: hard
 

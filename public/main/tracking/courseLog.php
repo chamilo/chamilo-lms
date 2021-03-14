@@ -16,6 +16,7 @@ if (null === $course) {
 }
 $sessionId = api_get_session_id();
 $is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
+$session = api_get_session_entity($sessionId);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -844,9 +845,9 @@ if (!empty($groupList)) {
             foreach ($usersInGroup as $studentId) {
                 $lpProgress = Tracking::get_avg_student_progress(
                     $usersInGroup,
-                    $courseCode,
+                    $course,
                     [],
-                    $sessionId
+                    $session
                 );
                 $totalGroupLpProgress += $lpProgress;
             }
@@ -941,9 +942,9 @@ if (!empty($groupList)) {
     foreach ($studentIdList as $studentId) {
         $lpProgress = Tracking::get_avg_student_progress(
             $studentId,
-            $courseCode,
+            $course,
             [],
-            $sessionId
+            $session
         );
         $totalLpProgress += $lpProgress;
     }

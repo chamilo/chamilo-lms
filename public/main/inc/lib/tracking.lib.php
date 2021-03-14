@@ -7,7 +7,9 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -80,29 +82,25 @@ class Tracking
                     );
                     $average = self::get_avg_student_score(
                         $user_data['user_id'],
-                        $courseCode,
+                        $course,
                         [],
-                        $sessionId
+                        $session
                     );
                     if (is_numeric($average)) {
                         $avg_student_score += $average;
                     }
                     $avg_student_progress += self::get_avg_student_progress(
                         $user_data['user_id'],
-                        $courseCode,
+                        $course,
                         [],
-                        $sessionId
+                        $session
                     );
                     $work += Container::getStudentPublicationRepository()->countUserPublications(
                         $user,
                         $course,
                         $session
                     );
-                    $messages += self::count_student_messages(
-                        $user_data['user_id'],
-                        $courseInfo['code'],
-                        $sessionId
-                    );
+                    $messages += Container::getForumPostRepository()->countUserForumPosts($user, $course, $session);
                 }
 
                 $countUsers = count($users);
@@ -2303,7 +2301,8 @@ class Tracking
      * @param string code
      * @param int id (optional), filtered by exercise
      * @param int id (optional), if param $session_id is null
-     *                                                it'll return results including sessions, 0 = session is not filtered
+     *                                                it'll return results including sessions, 0 = session is not
+     *                                                filtered
      *
      * @return string value (number %) Which represents a round integer about the score average
      */
@@ -2605,23 +2604,23 @@ class Tracking
      * Returns the average student progress in the learning paths of the given
      * course, it will take into account the progress that were not started.
      *
-     * @param int|array $studentId
-     * @param string    $courseCode
-     * @param array     $lpIdList        Limit average to listed lp ids
-     * @param int       $sessionId       Session id (optional),
-     *                                   if parameter $session_id is null(default) it'll return results including
-     *                                   sessions, 0 = session is not filtered
-     * @param bool      $returnArray     Will return an array of the type:
-     *                                   [sum_of_progresses, number] if it is set to true
-     * @param bool      $onlySeriousGame Optional. Limit average to lp on seriousgame mode
+     * @param int|array     $studentId
+     * @param Course        $course
+     * @param array         $lpIdList        Limit average to listed lp ids
+     * @param SessionEntity $session         Session id (optional),
+     *                                       if parameter $session_id is null(default) it'll return results including
+     *                                       sessions, 0 = session is not filtered
+     * @param bool          $returnArray     Will return an array of the type:
+     *                                       [sum_of_progresses, number] if it is set to true
+     * @param bool          $onlySeriousGame Optional. Limit average to lp on seriousgame mode
      *
      * @return float Average progress of the user in this course from 0 to 100
      */
     public static function get_avg_student_progress(
         $studentId,
-        $courseCode = null,
+        Course $course,
         $lpIdList = [],
-        $sessionId = null,
+        SessionEntity $session = null,
         $returnArray = false,
         $onlySeriousGame = false
     ) {
@@ -2630,16 +2629,24 @@ class Tracking
             return false;
         }
 
-        $sessionId = (int) $sessionId;
-        $courseInfo = api_get_course_info($courseCode);
+        $repo = Container::getLpRepository();
+        $qb = $repo->findAllByCourse($course, $session);
+        $lps = $qb->getQuery()->getResult();
+        $filteredLP = [];
 
-        if (empty($courseInfo)) {
+        $sessionId = null !== $session ? $session->getId() : 0;
+
+        /** @var CLp $lp */
+        foreach ($lps as $lp) {
+            $filteredLP[] = $lp->getIid();
+        }
+
+        if (empty($filteredLP)) {
             return false;
         }
 
-        $lPTable = Database::get_course_table(TABLE_LP_MAIN);
         $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
-        $lpConditions = [];
+        /*$lpConditions = [];
         $lpConditions['c_id = ? '] = $courseInfo['real_id'];
 
         if ($sessionId > 0) {
@@ -2669,10 +2676,10 @@ class Tracking
 
         if (empty($filteredLP)) {
             return false;
-        }
+        }*/
 
         $conditions = [
-            " c_id = {$courseInfo['real_id']} ",
+            //" c_id = {$courseInfo['real_id']} ",
             " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
         ];
 
@@ -2688,7 +2695,7 @@ class Tracking
             if (empty($lpIdList)) {
                 $lpList = new LearnpathList(
                     $studentId,
-                    $courseInfo,
+                    ['real_id' => $course->getId()],
                     $sessionId,
                     null,
                     false,
@@ -2767,42 +2774,38 @@ class Tracking
      * 2. The score average from all Tests (quiz) in all LP in a course-> All the answers / All the max scores.
      * 3. And finally it will return the average between 1. and 2.
      *
+     * @param mixed         $student_id                      Array of user ids or an user id
+     * @param Course        $course
+     * @param array         $lp_ids                          List of LP ids
+     * @param SessionEntity $session
+     *                                                       if param $session_id is null(default) it'll return results
+     *                                                       including sessions, 0 = session is not filtered
+     * @param bool          $return_array                    Returns an array of the
+     *                                                       type [sum_score, num_score] if set to true
+     * @param bool          $get_only_latest_attempt_results get only the latest attempts or ALL attempts
+     * @param bool          $getOnlyBestAttempt
+     *
+     * @return string value (number %) Which represents a round integer explain in got in 3
      * @todo improve performance, when loading 1500 users with 20 lps the script dies
      * This function does not take the results of a Test out of a LP
      *
-     * @param mixed  $student_id                      Array of user ids or an user id
-     * @param string $course_code
-     * @param array  $lp_ids                          List of LP ids
-     * @param int    $session_id                      Session id (optional),
-     *                                                if param $session_id is null(default) it'll return results
-     *                                                including sessions, 0 = session is not filtered
-     * @param bool   $return_array                    Returns an array of the
-     *                                                type [sum_score, num_score] if set to true
-     * @param bool   $get_only_latest_attempt_results get only the latest attempts or ALL attempts
-     * @param bool   $getOnlyBestAttempt
-     *
-     * @return string value (number %) Which represents a round integer explain in got in 3
      */
     public static function get_avg_student_score(
         $student_id,
-        $course_code,
+        Course $course,
         $lp_ids = [],
-        $session_id = null,
+        SessionEntity $session = null,
         $return_array = false,
         $get_only_latest_attempt_results = false,
         $getOnlyBestAttempt = false
     ) {
-        $debug = false;
-        if ($debug) {
-            echo '<h1>Tracking::get_avg_student_score</h1>';
-        }
-        $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $tbl_stats_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $course = api_get_course_info($course_code);
-
-        if (empty($course)) {
+        if (empty($student_id)) {
             return null;
         }
+
+        $debug = false;
+        $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tbl_stats_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         // Get course tables names
         $tbl_quiz_questions = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -2810,7 +2813,7 @@ class Tracking
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
         $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $course_id = $course['real_id'];
+        $course_id = $course->getId();
 
         // Compose a filter based on optional learning paths list given
         $condition_lp = '';
@@ -2819,8 +2822,8 @@ class Tracking
         }
 
         // Compose a filter based on optional session id
-        $session_id = (int) $session_id;
-        if (count($lp_ids) > 0) {
+        //$session_id = (int) $session_id;
+        /*if (count($lp_ids) > 0) {
             $condition_session = " AND session_id = $session_id ";
         } else {
             $condition_session = " WHERE session_id = $session_id ";
@@ -2835,18 +2838,33 @@ class Tracking
                         c_id = $course_id AND
                         (session_id = 0 OR session_id IS NULL) $condition_lp ";
         } else {
-            $sql = "SELECT DISTINCT(iid), use_max_score
-                    FROM $lp_table
-                    WHERE c_id = $course_id $condition_lp ";
-        }
 
-        $res_row_lp = Database::query($sql);
-        $count_row_lp = Database::num_rows($res_row_lp);
+        }*/
 
         $lp_list = $use_max_score = [];
-        while ($row_lp = Database::fetch_array($res_row_lp)) {
-            $lp_list[] = $row_lp['iid'];
-            $use_max_score[$row_lp['iid']] = $row_lp['use_max_score'];
+        if (empty($condition_lp)) {
+            $repo = Container::getLpRepository();
+            $qb = $repo->findAllByCourse($course, $session);
+            $lps = $qb->getQuery()->getResult();
+            /** @var CLp $lp */
+            foreach ($lps as $lp) {
+                $lpId = $lp->getIid();
+                $lp_list[] = $lpId;
+                $use_max_score[$lpId] = $lp->getUseMaxScore();
+            }
+        } else {
+            $sql = "SELECT DISTINCT(iid), use_max_score
+                    FROM $lp_table
+                    WHERE $condition_lp ";
+            $res_row_lp = Database::query($sql);
+            while ($row_lp = Database::fetch_array($res_row_lp)) {
+                $lp_list[] = $row_lp['iid'];
+                $use_max_score[$row_lp['iid']] = $row_lp['use_max_score'];
+            }
+        }
+
+        if (empty($lp_list)) {
+            return null;
         }
 
         // prepare filter on users
@@ -2857,24 +2875,18 @@ class Tracking
             $condition_user1 = " AND user_id = $student_id ";
         }
 
-        if (empty($count_row_lp) || empty($student_id)) {
-            return null;
-        }
-
         // Getting latest LP result for a student
         //@todo problem when a  course have more than 1500 users
         $sql = "SELECT MAX(view_count) as vc, iid, progress, lp_id, user_id
                 FROM $lp_view_table
                 WHERE
-                    c_id = $course_id AND
                     lp_id IN (".implode(',', $lp_list).")
-                    $condition_user1 AND
-                    session_id = $session_id
+                    $condition_user1
                 GROUP BY lp_id, user_id";
+        //AND        session_id = $session_id
 
         $rs_last_lp_view_id = Database::query($sql);
         $global_result = 0;
-
         if (Database::num_rows($rs_last_lp_view_id) > 0) {
             // Cycle through each line of the results (grouped by lp_id, user_id)
             while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
@@ -2896,7 +2908,6 @@ class Tracking
                     $sql = "SELECT DISTINCT lp_item_id
                             FROM $lp_item_view_table
                             WHERE
-                                c_id = $course_id AND
                                 lp_view_id = $lp_view_id
                             ORDER BY lp_item_id";
                     $res_lp_item = Database::query($sql);
@@ -2920,12 +2931,9 @@ class Tracking
                                 FROM $lp_item_view_table as lp_iv
                                 INNER JOIN $lp_item_table as lp_i
                                 ON (
-                                    lp_i.iid = lp_iv.lp_item_id AND
-                                    lp_iv.c_id = lp_i.c_id
+                                    lp_i.iid = lp_iv.lp_item_id
                                 )
                                 WHERE
-                                    lp_iv.c_id = $course_id AND
-                                    lp_i.c_id  = $course_id AND
                                     lp_item_id = $my_lp_item_id AND
                                     lp_view_id = $lp_view_id AND
                                     (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
@@ -2950,11 +2958,8 @@ class Tracking
                                 lp_i.iid
                               FROM $lp_item_view_table as lp_iv
                               INNER JOIN $lp_item_table as lp_i
-                              ON lp_i.iid = lp_iv.lp_item_id AND
-                                 lp_iv.c_id = lp_i.c_id
+                              ON lp_i.iid = lp_iv.lp_item_id
                               WHERE
-                                lp_iv.c_id = $course_id AND
-                                lp_i.c_id  = $course_id AND
                                 lp_view_id = $lp_view_id AND
                                 (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
                             ";
@@ -2976,7 +2981,7 @@ class Tracking
                         echo '<h3>Item Type: '.$row_max_score['item_type'].'</h3>';
                     }
 
-                    if ('sco' == $row_max_score['item_type']) {
+                    if ('sco' === $row_max_score['item_type']) {
                         /* Check if it is sco (easier to get max_score)
                            when there's no max score, we assume 100 as the max score,
                            as the SCORM 1.2 says that the value should always be between 0 and 100.
@@ -3050,19 +3055,19 @@ class Tracking
                             // the max_scores of all questions that it was
                             // made of (we need to make this call dynamic because of random questions selection)
                             $sql = "SELECT SUM(t.ponderation) as maxscore FROM
-                                            (
-                                                SELECT DISTINCT
-                                                    question_id,
-                                                    marks,
-                                                    ponderation
-                                                FROM $tbl_stats_attempts AS at
-                                                INNER JOIN $tbl_quiz_questions AS q
-                                                ON (q.iid = at.question_id AND q.c_id = q.c_id)
-                                                WHERE
-                                                    exe_id ='$id_last_attempt' AND
-                                                    q.c_id = $course_id
-                                            )
-                                            AS t";
+                                        (
+                                            SELECT DISTINCT
+                                                question_id,
+                                                marks,
+                                                ponderation
+                                            FROM $tbl_stats_attempts AS at
+                                            INNER JOIN $tbl_quiz_questions AS q
+                                            ON (q.iid = at.question_id)
+                                            WHERE
+                                                exe_id ='$id_last_attempt' AND
+                                                at.c_id = $course_id
+                                        )
+                                        AS t";
 
                             $res_max_score_bis = Database::query($sql);
                             $row_max_score_bis = Database::fetch_array($res_max_score_bis);
@@ -3094,7 +3099,7 @@ class Tracking
                             echo '$count_items: '.$count_items;
                         }
                     }
-                } //end for
+                }
 
                 $score_of_scorm_calculate += $count_items ? (($lpPartialTotal / $count_items) * 100) : 0;
                 $global_result += $score_of_scorm_calculate;
@@ -3104,7 +3109,7 @@ class Tracking
                     var_dump("score_of_scorm_calculate: $score_of_scorm_calculate");
                     var_dump("global_result: $global_result");
                 }
-            } // end while
+            }
         }
 
         $lp_with_quiz = 0;
@@ -3113,7 +3118,6 @@ class Tracking
             $sql = "SELECT count(iid) as count
                     FROM $lp_item_table
                     WHERE
-                        c_id = $course_id AND
                         (item_type = 'quiz' OR item_type = 'sco') AND
                         lp_id = ".$lp_id;
             $result_have_quiz = Database::query($sql);
@@ -3127,8 +3131,6 @@ class Tracking
 
         if ($debug) {
             echo '<h3>$lp_with_quiz '.$lp_with_quiz.' </h3>';
-        }
-        if ($debug) {
             echo '<h3>Final return</h3>';
         }
 
@@ -4836,11 +4838,11 @@ class Tracking
                     $time = api_time_to_hms($total_time_login);
                     $progress = self::get_avg_student_progress(
                         $user_id,
-                        $courseCode
+                        $course
                     );
                     $bestScore = self::get_avg_student_score(
                         $user_id,
-                        $courseCode,
+                        $course,
                         [],
                         null,
                         false,
@@ -4905,7 +4907,7 @@ class Tracking
                     } else {
                         $html .= '<tr class="row_even">';
                     }
-                    $url = api_get_course_url($courseCode, $session_id);
+                    $url = api_get_course_url($courseId, $session_id);
                     $course_url = Display::url($course_title, $url, ['target' => SESSION_LINK_TARGET]);
                     if (empty($bestScore)) {
                         $bestScoreResult = '-';
@@ -5308,9 +5310,9 @@ class Tracking
 
                     $bestScore = self::get_avg_student_score(
                         $user_id,
-                        $course_code,
+                        $course,
                         [],
-                        $session_id_from_get,
+                        $session,
                         false,
                         false,
                         true
@@ -5333,9 +5335,9 @@ class Tracking
 
                     $progress = self::get_avg_student_progress(
                         $user_id,
-                        $course_code,
+                        $course,
                         [],
-                        $session_id_from_get
+                        $session
                     );
 
                     $total_time_login = self::get_time_spent_on_the_course(
@@ -5347,9 +5349,9 @@ class Tracking
 
                     $percentage_score = self::get_avg_student_score(
                         $user_id,
-                        $course_code,
+                        $course,
                         [],
-                        $session_id_from_get
+                        $session
                     );
                     $courseCodeFromGet = isset($_GET['course']) ? $_GET['course'] : null;
 
@@ -5359,7 +5361,7 @@ class Tracking
                         $html .= '<tr class="row_even">';
                     }
 
-                    $url = api_get_course_url($course_code, $session_id_from_get);
+                    $url = api_get_course_url($courseId, $session_id_from_get);
                     $course_url = Display::url(
                         $course_title,
                         $url,
@@ -5395,7 +5397,8 @@ class Tracking
                         '#course_session_data'
                         );
                     } else {
-                        $url = api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data';
+                        $url = api_get_self().
+                            '?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data';
                         $details = Display::url(
                             Display::return_icon(
                                 '2rightarrow.png',
@@ -6558,11 +6561,9 @@ class Tracking
 
     /**
      * @param string              $tool
-     * @param sessionEntity |null $session Optional
+     * @param SessionEntity |null $session
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
-     * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
+     * @return CStudentPublication|null
      */
     public static function getLastStudentPublication(
         User $user,
@@ -7369,10 +7370,10 @@ class Tracking
                             $created_dir = '/'.$created_dir;
                             $now = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
                             //Creating directory
-                            $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
+                            $publication = new CStudentPublication();
                             $publication
-                                ->setUrl($created_dir)
-                                ->setCId($course_id)
+                                //->setUrl($created_dir)
+                                //->setCId($course_id)
                                 ->setTitle($parent_data['title'])
                                 ->setDescription(
                                     $parent_data['description']."folder_moved_from_session_id_$origin_session_id"
@@ -7457,7 +7458,7 @@ class Tracking
                         $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
 
                         $data['post_group_id'] = (int) $data['post_group_id'];
-                        $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
+                        $publication = new CStudentPublication();
                         $publication
                             ->setUrl($new_url)
                             ->setCId($course_id)
@@ -8262,7 +8263,7 @@ class TrackingCourseLog
         $conditions = [],
         $options = []
     ) {
-        global $user_ids, $course_code, $export_csv, $session_id;
+        global $user_ids, $export_csv, $session_id;
         $includeInvitedUsers = $conditions['include_invited_users']; // include the invited users
         $getCount = isset($conditions['get_count']) ? $conditions['get_count'] : false;
 
@@ -8437,17 +8438,17 @@ class TrackingCourseLog
             );
 
             $avg_student_score = Tracking::get_avg_student_score(
-                $user['user_id'],
-                $courseCode,
+                $userEntity,
+                $course,
                 [],
-                $session_id
+                $session
             );
 
             $averageBestScore = Tracking::get_avg_student_score(
                 $user['user_id'],
-                $courseCode,
+                $course,
                 [],
-                $session_id,
+                $session,
                 false,
                 false,
                 true
@@ -8455,9 +8456,9 @@ class TrackingCourseLog
 
             $avg_student_progress = Tracking::get_avg_student_progress(
                 $user['user_id'],
-                $courseCode,
+                $course,
                 [],
-                $session_id
+                $session
             );
 
             if (empty($avg_student_progress)) {

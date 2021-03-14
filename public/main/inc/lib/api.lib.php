@@ -2307,6 +2307,10 @@ function api_get_course_entity($courseId = 0): ?Course
         $courseId = api_get_course_int_id();
     }
 
+    if (empty($courseId)) {
+        return null;
+    }
+
     return Container::getCourseRepository()->find($courseId);
 }
 
@@ -6381,23 +6385,21 @@ function api_get_jquery_libraries_js($libraries)
  *
  * This function relies on api_get_course_info()
  *
- * @param string $courseCode The course code - optional (takes it from context if not given)
+ * @param int    $courseId The course code - optional (takes it from context if not given)
  * @param int    $sessionId  The session ID  - optional (takes it from context if not given)
  * @param int    $groupId    The group ID - optional (takes it from context if not given)
  *
  * @return string The URL to a course, a session, or empty string if nothing works
  *                e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
  *
- * @author  Julio Montoya <gugli100@gmail.com>
+ * @author  Julio Montoya
  */
-function api_get_course_url($courseCode = null, $sessionId = null, $groupId = null)
+function api_get_course_url($courseId = null, $sessionId = null, $groupId = null)
 {
     $url = '';
     // If courseCode not set, get context or []
-    if (empty($courseCode)) {
-        $courseInfo = api_get_course_info();
-    } else {
-        $courseInfo = api_get_course_info($courseCode);
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
     }
 
     // If sessionId not set, get context or 0
@@ -6410,10 +6412,12 @@ function api_get_course_url($courseCode = null, $sessionId = null, $groupId = nu
         $groupId = api_get_group_id();
     }
 
+
     // Build the URL
-    if (!empty($courseInfo)) {
+    if (!empty($courseId)) {
+        $webCourseHome = '/course/'.$courseId.'/home';
         // directory not empty, so we do have a course
-        $url = $courseInfo['course_public_url'].'?sid='.$sessionId.'&gid='.$groupId;
+        $url = $webCourseHome.'?sid='.$sessionId.'&gid='.$groupId;
     } else {
         if (!empty($sessionId) && 'true' !== api_get_setting('session.remove_session_url')) {
             // if the course was unset and the session was set, send directly to the session

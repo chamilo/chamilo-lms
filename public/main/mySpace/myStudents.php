@@ -25,10 +25,11 @@ $courseCode = '';
 if (null !== $course) {
     $courseCode = $course->getCode();
 }
+$session = api_get_session_entity($sessionId);
 $studentId = isset($_GET['student']) ? (int) $_GET['student'] : 0;
 $coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
 $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
-$currentUrl = api_get_self().'?student='.$studentId.'&course='.$courseCode.'&id_session='.$sessionId
+$currentUrl = api_get_self().'?student='.$studentId.'&course='.$courseCode.'&sid='.$sessionId
     .'&origin='.$origin.'&details='.$details.'&cid='.$courseId;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
 $workingTime = api_get_configuration_value('considered_working_time');
@@ -111,7 +112,7 @@ if (!empty($details)) {
     if ('user_course' === $origin) {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
-                'url' => api_get_course_url($course->getCode()),
+                'url' => api_get_course_url($course->getId()),
                 'name' => $course->getTitle(),
             ];
         }
@@ -320,9 +321,9 @@ switch ($action) {
 
             foreach ($courses as $course) {
                 $courseId = $course['c_id'];
-                $courseInfoItem = api_get_course_info_by_id($courseId);
-                $courseId = $courseInfoItem['real_id'];
-                $courseCodeItem = $courseInfoItem['code'];
+                $course = api_get_course_entity($courseId);
+                $courseId = $course->getId();
+                $courseCodeItem = $course->getCode();
 
                 $isSubscribed = CourseManager::is_user_subscribed_in_course(
                     $studentId,
@@ -357,8 +358,8 @@ switch ($action) {
 
                     $courseTable .= '<tr>
                         <td>
-                            <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                        $courseInfoItem['title'].'</a>
+                            <a href="'.api_get_course_url($courseId).'?sid='.$sId.'">'.
+                        $course->getTitle().'</a>
                         </td>
                         <td >'.$time_spent_on_course.'</td>
                         <td >'.$progress.'</td>
@@ -790,17 +791,17 @@ if (empty($sessionId)) {
 if ($isSubscribedToCourse) {
     $avg_student_progress = Tracking::get_avg_student_progress(
         $studentId,
-        $courseCode,
+        $course,
         [],
-        $sessionId
+        $session
     );
 
     // the score inside the Reporting table
     $avg_student_score = Tracking::get_avg_student_score(
         $studentId,
-        $courseCode,
+        $course,
         [],
-        $sessionId
+        $session
     );
 }
 
@@ -1248,10 +1249,11 @@ if (empty($details)) {
             $totalCourses = count($courses);
             $scoreDisplay = ScoreDisplay::instance();
 
+            $session = api_get_session_entity($sId);
             foreach ($courses as $courseId) {
-                $courseInfoItem = api_get_course_info_by_id($courseId);
-                $courseId = $courseInfoItem['real_id'];
-                $courseCodeItem = $courseInfoItem['code'];
+                $course = api_get_course_entity($courseId);
+                $courseId = $course->getId();
+                $courseCodeItem = $course->getCode();
 
                 if (empty($session_info)) {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1279,8 +1281,8 @@ if (empty($details)) {
                     // get average of faults in attendances by student
                     $results_faults_avg = $attendance->get_faults_average_by_course(
                         $studentId,
-                        api_get_course_entity($courseId),
-                        api_get_session_entity($sId)
+                        $course,
+                        $session
                     );
 
                     $attendances_faults_avg = '0/0 (0%)';
@@ -1288,9 +1290,9 @@ if (empty($details)) {
                         if (api_is_drh()) {
                             $attendances_faults_avg = Display::url(
                                 $results_faults_avg['faults'].'/'.$results_faults_avg['total']
-                                .' ('.$results_faults_avg['porcent'].'%)',
+                                .' ('.$results_faults_avg['percent'].'%)',
                                 api_get_path(WEB_CODE_PATH)
-                                .'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='
+                                .'attendance/index.php?cid='.$courseId.'&sid='.$sId.'&student_id='
                                 .$studentId,
                                 ['title' => get_lang('GoAttendance')]
                             );
@@ -1335,18 +1337,18 @@ if (empty($details)) {
 
                     $progress = Tracking::get_avg_student_progress(
                         $studentId,
-                        $courseCodeItem,
+                        $course,
                         [],
-                        $sId
+                        $session
                     );
 
                     $totalProgress += $progress;
 
                     $score = Tracking::get_avg_student_score(
                         $studentId,
-                        $courseCodeItem,
+                        $course,
                         [],
-                        $sId
+                        $session
                     );
 
                     if (is_numeric($score)) {
@@ -1358,7 +1360,7 @@ if (empty($details)) {
 
                     $csvRow = [
                         $session_name,
-                        $courseInfoItem['title'],
+                        $course->getTitle(),
                         $time_spent_on_course,
                         $progress,
                         $score,
@@ -1371,8 +1373,8 @@ if (empty($details)) {
 
                     echo '<tr>
                     <td>
-                        <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                        $courseInfoItem['title'].'
+                        <a href="'.api_get_course_url($courseId).'?sid='.$sId.'">'.
+                        $course->getTitle().'
                         </a>
                     </td>
                     <td >'.$time_spent_on_course.'</td>
@@ -1383,12 +1385,12 @@ if (empty($details)) {
 
                     if (!empty($coachId)) {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$studentId
-                            .'&details=true&course='.$courseInfoItem['code'].'&id_coach='.$coachId.'&origin='.$origin
+                            .'&details=true&course='.$courseCode.'&id_coach='.$coachId.'&origin='.$origin
                             .'&id_session='.$sId.'#infosStudent">'
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     } else {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$studentId
-                            .'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId.'#infosStudent">'
+                            .'&details=true&course='.$courseCode.'&origin='.$origin.'&id_session='.$sId.'#infosStudent">'
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     }
                     echo '</tr>';

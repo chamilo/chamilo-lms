@@ -856,7 +856,7 @@ class Rest extends WebService
                     $lpId,
                     $this->user->getId(),
                     $this->course,
-                    $sessionId
+                    $this->session
                 )) {
                     continue;
                 }

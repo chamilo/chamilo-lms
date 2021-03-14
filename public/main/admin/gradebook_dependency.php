@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -68,12 +69,13 @@ foreach ($dependencies as $courseId) {
 }
 $courseUserLoaded = [];
 
+$gradeBookRepo = Container::getGradeBookCategoryRepository();
 foreach ($dependencyList as $courseId => $courseInfo) {
     $courseCode = $courseInfo['code'];
-    $subCategory = Category::load(null, null, $courseCode);
-    /** @var Category $subCategory */
-    $subCategory = $subCategory ? $subCategory[0] : [];
-    if (empty($subCategory)) {
+    //$subCategory = Category::load(null, null, $courseCode);
+    $subCategory = $gradeBookRepo->findOneBy(['course' => $courseId]);
+    //$subCategory = $subCategory ? $subCategory[0] : [];
+    if (null === $subCategory) {
         continue;
     }
 
@@ -113,12 +115,12 @@ foreach ($dependencyList as $courseId => $courseInfo) {
                 $courseUserLoaded[$userId][$myCourseId] = true;
             }
 
-            $courseCategory = Category::load(
+            /*$courseCategory = Category::load(
                 null,
                 null,
                 $myCourseCode
-            );
-            $courseCategory = isset($courseCategory[0]) ? $courseCategory[0] : [];
+            );*/
+            $courseCategory = $gradeBookRepo->findOneBy(['course' => $myCourseId]);
             $userResult[$userId]['result_out_dependencies'][$myCourseCode] = false;
             if (!empty($courseCategory)) {
                 $result = Category::userFinishedCourse(

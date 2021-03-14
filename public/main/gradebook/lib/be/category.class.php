@@ -535,39 +535,6 @@ class Category implements GradebookItem
     }
 
     /**
-     * Create a category object from a GradebookCategory entity.
-     *
-     * @param GradebookCategory $gradebookCategory The entity
-     *
-     * @return \Category
-     */
-    public static function createCategoryObjectFromEntity(GradebookCategory $gradebookCategory)
-    {
-        $category = new Category();
-        $category->set_id($gradebookCategory->getId());
-        $category->set_name($gradebookCategory->getName());
-        $category->set_description($gradebookCategory->getDescription());
-        $category->set_user_id($gradebookCategory->getId());
-        //$category->set_course_code($gradebookCategory->getCourseCode());
-        $category->setCourseId($gradebookCategory->getCourse()->getId());
-        $category->set_parent_id($gradebookCategory->getParent()->getId());
-        $category->set_weight($gradebookCategory->getWeight());
-        $category->set_visible($gradebookCategory->getVisible());
-
-        if ($gradebookCategory->getSession()) {
-            $category->set_session_id($gradebookCategory->getSession()->getId());
-        }
-
-        $category->set_certificate_min_score($gradebookCategory->getCertifMinScore());
-        $category->set_grade_model_id($gradebookCategory->getGradeModelId());
-        $category->set_locked($gradebookCategory->getLocked());
-        $category->setGenerateCertificates($gradebookCategory->getGenerateCertificates());
-        $category->setIsRequirement($gradebookCategory->getIsRequirement());
-
-        return $category;
-    }
-
-    /**
      * Insert this category into the database.
      */
     public function add()
@@ -2332,29 +2299,25 @@ class Category implements GradebookItem
     /**
      * Check whether a user has finished a course by its gradebook.
      *
-     * @param int       $userId           The user ID
-     * @param \Category $category         Optional. The gradebook category.
-     *                                    To check by the gradebook category
-     * @param bool      $recalculateScore Whether recalculate the score
+     * @param int               $userId           The user ID
+     * @param GradebookCategory $category
+     *                                            To check by the gradebook category
+     * @param bool              $recalculateScore Whether recalculate the score
      *
      * @return bool
      */
     public static function userFinishedCourse(
         $userId,
-        Category $category,
+        GradebookCategory $category,
         $recalculateScore = false
     ) {
-        if (empty($category)) {
-            return false;
-        }
-
         $currentScore = self::getCurrentScore(
             $userId,
             $category,
             $recalculateScore
         );
 
-        $minCertificateScore = $category->getCertificateMinScore();
+        $minCertificateScore = $category->getCertifMinScore();
 
         return $currentScore >= $minCertificateScore;
     }
@@ -2362,21 +2325,17 @@ class Category implements GradebookItem
     /**
      * Get the current score (as percentage) on a gradebook category for a user.
      *
-     * @param int      $userId      The user id
-     * @param Category $category    The gradebook category
-     * @param bool     $recalculate
+     * @param int               $userId The user id
+     * @param GradebookCategory $category
+     * @param bool              $recalculate
      *
      * @return float The score
      */
     public static function getCurrentScore(
         $userId,
-        $category,
+        GradebookCategory $category,
         $recalculate = false
     ) {
-        if (empty($category)) {
-            return 0;
-        }
-
         if ($recalculate) {
             return self::calculateCurrentScore(
                 $userId,
@@ -2389,7 +2348,7 @@ class Category implements GradebookItem
             Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_LOG),
             [
                 'where' => [
-                    'category_id = ? AND user_id = ?' => [$category->get_id(), $userId],
+                    'category_id = ? AND user_id = ?' => [$category->getId(), $userId],
                 ],
                 'order' => 'registered_at DESC',
                 'limit' => '1',
@@ -2785,14 +2744,14 @@ class Category implements GradebookItem
     /**
      * Calculate the current score on a gradebook category for a user.
      *
-     * @param int      $userId   The user id
-     * @param Category $category The gradebook category
+     * @param int               $userId   The user id
+     * @param GradebookCategory $category
      *
      * @return float The score
      */
     private static function calculateCurrentScore($userId, $category)
     {
-        if (empty($category)) {
+        if (null === $category) {
             return 0;
         }
 

@@ -2135,7 +2135,7 @@ class IndexManager
             );
 
             $courseList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
-            $courseList = isset($courseList['courses']) ? $courseList['courses'] : [];
+            $courseList = $courseList['courses'] ?? [];
             $mandatoryCourse = [];
             if (!empty($courseList)) {
                 foreach ($courseList as $courseId) {

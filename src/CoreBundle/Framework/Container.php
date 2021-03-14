@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Framework;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -333,6 +334,11 @@ class Container
     public static function getForumThreadRepository(): CForumThreadRepository
     {
         return self::$container->get(CForumThreadRepository::class);
+    }
+
+    public static function getGradeBookCategoryRepository(): GradeBookCategoryRepository
+    {
+        return self::$container->get(GradeBookCategoryRepository::class);
     }
 
     public static function getGroupRepository(): CGroupRepository

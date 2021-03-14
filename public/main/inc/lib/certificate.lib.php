@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
 
@@ -474,7 +475,7 @@ class Certificate extends Model
         ) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
             $now = api_get_utc_datetime();
-            $sql = 'UPDATE '.$table.' SET 
+            $sql = 'UPDATE '.$table.' SET
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
                     WHERE cat_id = "'.$categoryId.'" AND user_id="'.$user_id.'" ';
@@ -717,7 +718,7 @@ class Certificate extends Model
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
         $termsValidationDate = '';
         if (isset($value) && !empty($value['value'])) {
-            list($id, $id2, $termsValidationDate) = explode(':', $value['value']);
+            [$id, $id2, $termsValidationDate] = explode(':', $value['value']);
         }
 
         $sessions = SessionManager::get_sessions_by_user($this->user_id, false, true);
@@ -726,24 +727,28 @@ class Certificate extends Model
         $coursesApproved = [];
         $courseList = [];
 
+        $gradeBookRepo = Container::getGradeBookCategoryRepository();
         if ($sessions) {
             foreach ($sessions as $session) {
                 $allCoursesApproved = [];
                 foreach ($session['courses'] as $course) {
                     $courseInfo = api_get_course_info_by_id($course['real_id']);
                     $courseCode = $courseInfo['code'];
-                    $gradebookCategories = Category::load(
+
+                    $category = $gradeBookRepo->findOneBy(
+                        ['course' => $course['real_id'], 'session' => $session['session_id']]
+                    );
+
+                    /*$gradebookCategories = Category::load(
                         null,
                         null,
                         $courseCode,
                         null,
                         false,
                         $session['session_id']
-                    );
+                    );*/
 
-                    if (isset($gradebookCategories[0])) {
-                        /** @var Category $category */
-                        $category = $gradebookCategories[0];
+                    if (null !== $category) {
                         $result = Category::userFinishedCourse(
                             $this->user_id,
                             $category,

@@ -254,8 +254,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
 
                         foreach ($sessionsCourses as $sessionCourse) {
                             $course = $sessionCourse->getCourse();
-
-                            $gradebooks = $gradebookCategoryRepo->findBy(
+                            $categories = $gradebookCategoryRepo->findBy(
                                 [
                                     'courseCode' => $course->getCode(),
                                     'sessionId' => $resource->getId(),
@@ -263,9 +262,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
                                 ]
                             );
 
-                            foreach ($gradebooks as $gradebook) {
-                                $category = Category::createCategoryObjectFromEntity($gradebook);
-
+                            foreach ($categories as $category) {
                                 if (!empty($userId)) {
                                     $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
                                         $userId,
@@ -317,7 +314,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
 
         $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
-        $gradebooks = $gradebookCategoryRepo->findBy(
+        $categories = $gradebookCategoryRepo->findBy(
             [
                 'courseCode' => $course->getCode(),
                 'sessionId' => $sessionId,
@@ -325,13 +322,12 @@ class SequenceResourceRepository extends ServiceEntityRepository
             ]
         );
 
-        if (empty($gradebooks)) {
+        if (empty($categories)) {
             return false;
         }
 
         $status = true;
-        foreach ($gradebooks as $gradebook) {
-            $category = Category::createCategoryObjectFromEntity($gradebook);
+        foreach ($categories as $category) {
             $userFinishedCourse = Category::userFinishedCourse(
                 $userId,
                 $category,

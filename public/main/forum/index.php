@@ -156,7 +156,7 @@ $form_count = 0;
 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
 $formContent = handleForum($url);
 
-get_whats_new();
+//get_whats_new();
 $whatsnew_post_info = Session::read('whatsnew_post_info');
 Event::event_access_tool(TOOL_FORUM);
 

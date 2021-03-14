@@ -15,6 +15,7 @@ if (api_get_configuration_value('disable_my_lps_page')) {
 api_block_anonymous_users();
 
 $userId = api_get_user_id();
+$courseId = api_get_course_int_id();
 $courses = CourseManager::get_courses_list_by_user_id($userId, true);
 
 $lps = [];
@@ -48,12 +49,12 @@ if (!empty($courses)) {
             ";
 
     $learningPaths = Database::getManager()->createQuery($dql)->getResult();
+    $course = api_get_course_entity($courseId);
+
     /** @var CLp $lp */
     foreach ($learningPaths as $lp) {
         $id = $lp->getIid();
-        $courseId = $lp->getCId();
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $lpVisibility = learnpath::is_lp_visible_for_student($id, $userId, $courseInfo);
+        $lpVisibility = learnpath::is_lp_visible_for_student($id, $userId, $course);
         if (false === $lpVisibility) {
             continue;
         }
@@ -61,12 +62,12 @@ if (!empty($courses)) {
         if (isset($courseWithSession[$courseId])) {
             $sessionId = $courseWithSession[$courseId];
         }
-        $lpSessionId = $lp->getSessionId();
+        //$lpSessionId = $lp->getSessionId();
         if (!empty($lpSessionId)) {
             $sessionId = $lpSessionId;
         }
 
-        $params = '&cid='.$courseInfo['real_id'].'&sid='.$sessionId;
+        $params = '&cid='.$course->getId().'&sid='.$sessionId;
         $link = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view'.$params.'&lp_id='.$id;
         $icon = Display::url(
             Display::return_icon(

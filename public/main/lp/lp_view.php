@@ -362,7 +362,7 @@ $mediaplayer = $oLP->get_mediaplayer($oLP->current, $autostart);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 // Getting all the information about the item.
 $sql = "SELECT audio FROM $tbl_lp_item
-        WHERE c_id = $course_id AND lp_id = ".$lp->getIid();
+        WHERE lp_id = ".$lp->getIid();
 $res_media = Database::query($sql);
 
 $show_audioplayer = false;

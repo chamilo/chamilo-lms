@@ -52,7 +52,6 @@ class LearnpathList
             $courseInfo = api_get_course_info();
         }
 
-        //$this->course_code = $courseInfo['code'];
         $course_id = $courseInfo['real_id'];
         $this->user_id = $user_id;
 
@@ -99,7 +98,6 @@ class LearnpathList
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
         $learningPaths = $qb->getQuery()->getResult();
-
         $shortcutRepository = Container::getShortcutRepository();
 
         /** @var CLp $lp */
@@ -131,6 +129,7 @@ class LearnpathList
                         $user_id,
                         $course
                     );
+                    var_dump($lpVisibility);
                     if (false === $lpVisibility) {
                         continue;
                     }

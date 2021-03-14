@@ -151,7 +151,6 @@ class learnpathItem
         if (!empty($this->lp_id)) {
             $sql = "SELECT iid FROM $items_table
                     WHERE
-                        c_id = $courseId AND
                         lp_id = ".$this->lp_id." AND
                         parent_item_id = $id";
             $res = Database::query($sql);

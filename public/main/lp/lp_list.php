@@ -220,7 +220,7 @@ foreach ($categories as $category) {
     if (null !== $categoryId) {
         $visibility = $category->isVisible($course, $session);
     }
-    if (0 !== $categoryId && true == $subscriptionSettings['allow_add_users_to_lp_category']) {
+    if (null !== $categoryId && true === $subscriptionSettings['allow_add_users_to_lp_category']) {
         // "Without category" has id = 0
         /*$categoryVisibility = api_get_item_visibility(
             $courseInfo,
@@ -235,7 +235,7 @@ foreach ($categories as $category) {
             }
         }
 
-        if ($user && !learnpath::categoryIsVisibleForStudent($category, $user)) {
+        if ($user && !learnpath::categoryIsVisibleForStudent($category, $user, $course)) {
             continue;
         }
     }
@@ -995,17 +995,6 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
         }
     }
 }
-
-/*$em = Database::getManager();
-$asset = $em->getRepository(\Chamilo\CoreBundle\Entity\Asset::class)->find(1);
-$fs = Container::getAssetFileSystem();
-var_dump($fs->listContents());
-$data = $fs->get('/scorm/'.$asset->getTitle().'/'.$asset->getTitle());
-$data =
-var_dump($data->getType());
-exit;*/
-//$zipAdapter->getArchive()->extractTo();
-//$asset->getFile()
 
 $template = new Template($nameTools);
 $template->assign('first_session_category', $firstSessionCategoryId);

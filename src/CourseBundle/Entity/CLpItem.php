@@ -147,9 +147,12 @@ class CLpItem
     public function __construct()
     {
         $this->path = '';
+        $this->ref = '';
+        $this->launchData = '';
         $this->parentItemId = 0;
         $this->previousItemId = 0;
         $this->description = '';
+        $this->minScore = 0;
         $this->maxScore = 100.0;
     }
 

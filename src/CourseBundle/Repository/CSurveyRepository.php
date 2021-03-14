@@ -31,5 +31,4 @@ final class CSurveyRepository extends ResourceRepository
 
         return $qb;
     }
-
 }

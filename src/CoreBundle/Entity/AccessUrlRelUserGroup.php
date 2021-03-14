@@ -60,7 +60,7 @@ class AccessUrlRelUserGroup
         return $this->userGroup;
     }
 
-    public function setUserGroup(Usergroup $userGroup): AccessUrlRelUserGroup
+    public function setUserGroup(Usergroup $userGroup): self
     {
         $this->userGroup = $userGroup;
 

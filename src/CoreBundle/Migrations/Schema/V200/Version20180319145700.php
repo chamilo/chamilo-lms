@@ -41,7 +41,6 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL;');
         $this->addSql('ALTER TABLE c_survey CHANGE avail_till avail_till DATETIME DEFAULT NULL;');
 
-
         $table = $schema->getTable('c_survey_answer');
 
         if ($table->hasIndex('course')) {

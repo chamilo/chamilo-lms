@@ -88,7 +88,7 @@ class Tag
         return $this->field;
     }
 
-    public function setField(ExtraField $field): Tag
+    public function setField(ExtraField $field): self
     {
         $this->field = $field;
 

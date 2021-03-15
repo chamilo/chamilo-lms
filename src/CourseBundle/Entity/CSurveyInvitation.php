@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,14 +33,22 @@ class CSurveyInvitation
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected int $cId;
+    protected ?Course $course = null;
 
     /**
-     * @ORM\Column(name="survey_invitation_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected int $surveyInvitationId;
+    protected ?Session $session = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
+     */
+    protected ?CGroup $group = null;
 
     /**
      * @ORM\Column(name="survey_code", type="string", length=20, nullable=false)
@@ -57,6 +66,11 @@ class CSurveyInvitation
     protected string $invitationCode;
 
     /**
+     * @ORM\Column(name="answered", type="integer", nullable=false)
+     */
+    protected int $answered;
+
+    /**
      * @ORM\Column(name="invitation_date", type="datetime", nullable=false)
      */
     protected DateTime $invitationDate;
@@ -67,31 +81,11 @@ class CSurveyInvitation
     protected ?DateTime $reminderDate = null;
 
     /**
-     * @ORM\Column(name="answered", type="integer", nullable=false)
-     */
-    protected int $answered;
-
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected int $sessionId;
-
-    /**
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
-     */
-    protected int $groupId;
-
-    /**
      * @ORM\Column(name="answered_at", type="datetime", nullable=true)
      */
     protected ?DateTime $answeredAt = null;
 
-    /**
-     * Set surveyCode.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setSurveyCode(string $surveyCode)
+    public function setSurveyCode(string $surveyCode): self
     {
         $this->surveyCode = $surveyCode;
 
@@ -108,12 +102,7 @@ class CSurveyInvitation
         return $this->surveyCode;
     }
 
-    /**
-     * Set user.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setUser(string $user)
+    public function setUser(string $user): self
     {
         $this->user = $user;
 
@@ -130,12 +119,7 @@ class CSurveyInvitation
         return $this->user;
     }
 
-    /**
-     * Set invitationCode.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setInvitationCode(string $invitationCode)
+    public function setInvitationCode(string $invitationCode): self
     {
         $this->invitationCode = $invitationCode;
 
@@ -152,12 +136,7 @@ class CSurveyInvitation
         return $this->invitationCode;
     }
 
-    /**
-     * Set invitationDate.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setInvitationDate(DateTime $invitationDate)
+    public function setInvitationDate(DateTime $invitationDate): self
     {
         $this->invitationDate = $invitationDate;
 
@@ -174,12 +153,7 @@ class CSurveyInvitation
         return $this->invitationDate;
     }
 
-    /**
-     * Set reminderDate.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setReminderDate(DateTime $reminderDate)
+    public function setReminderDate(DateTime $reminderDate): self
     {
         $this->reminderDate = $reminderDate;
 
@@ -196,12 +170,7 @@ class CSurveyInvitation
         return $this->reminderDate;
     }
 
-    /**
-     * Set answered.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setAnswered(int $answered)
+    public function setAnswered(int $answered): self
     {
         $this->answered = $answered;
 
@@ -218,94 +187,6 @@ class CSurveyInvitation
         return $this->answered;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setSessionId(int $sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set groupId.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setGroupId(int $groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId.
-     *
-     * @return int
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * Set surveyInvitationId.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setSurveyInvitationId(int $surveyInvitationId)
-    {
-        $this->surveyInvitationId = $surveyInvitationId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyInvitationId.
-     *
-     * @return int
-     */
-    public function getSurveyInvitationId()
-    {
-        return $this->surveyInvitationId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @return CSurveyInvitation
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
     public function getAnsweredAt(): DateTime
     {
         return $this->answeredAt;
@@ -314,6 +195,42 @@ class CSurveyInvitation
     public function setAnsweredAt(DateTime $answeredAt): self
     {
         $this->answeredAt = $answeredAt;
+
+        return $this;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): self
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): self
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    public function getGroup(): ?CGroup
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?CGroup $group): self
+    {
+        $this->group = $group;
 
         return $this;
     }

@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CSurveyGroup.
  *
+ * @deprecated ?
  * @ORM\Table(
  *     name="c_survey_group",
  *     indexes={

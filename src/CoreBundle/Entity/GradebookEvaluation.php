@@ -117,12 +117,7 @@ class GradebookEvaluation
         $this->locked = 0;
     }
 
-    /**
-     * Set name.
-     *
-     * @return GradebookEvaluation
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -156,12 +151,7 @@ class GradebookEvaluation
         return $this->description;
     }
 
-    /**
-     * Set createdAt.
-     *
-     * @return GradebookEvaluation
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -178,12 +168,7 @@ class GradebookEvaluation
         return $this->createdAt;
     }
 
-    /**
-     * Set weight.
-     *
-     * @return GradebookEvaluation
-     */
-    public function setWeight(float $weight)
+    public function setWeight(float $weight): self
     {
         $this->weight = $weight;
 
@@ -200,12 +185,7 @@ class GradebookEvaluation
         return $this->weight;
     }
 
-    /**
-     * Set max.
-     *
-     * @return GradebookEvaluation
-     */
-    public function setMax(float $max)
+    public function setMax(float $max): self
     {
         $this->max = $max;
 
@@ -222,12 +202,7 @@ class GradebookEvaluation
         return $this->max;
     }
 
-    /**
-     * Set visible.
-     *
-     * @return GradebookEvaluation
-     */
-    public function setVisible(int $visible)
+    public function setVisible(int $visible): self
     {
         $this->visible = $visible;
 
@@ -244,12 +219,7 @@ class GradebookEvaluation
         return $this->visible;
     }
 
-    /**
-     * Set type.
-     *
-     * @return GradebookEvaluation
-     */
-    public function setType(string $type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -266,12 +236,7 @@ class GradebookEvaluation
         return $this->type;
     }
 
-    /**
-     * Set locked.
-     *
-     * @return GradebookEvaluation
-     */
-    public function setLocked(int $locked)
+    public function setLocked(int $locked): self
     {
         $this->locked = $locked;
 
@@ -306,10 +271,7 @@ class GradebookEvaluation
         return $this->bestScore;
     }
 
-    /**
-     * @return GradebookEvaluation
-     */
-    public function setBestScore(float $bestScore)
+    public function setBestScore(float $bestScore): self
     {
         $this->bestScore = $bestScore;
 
@@ -324,10 +286,7 @@ class GradebookEvaluation
         return $this->averageScore;
     }
 
-    /**
-     * @return GradebookEvaluation
-     */
-    public function setAverageScore(float $averageScore)
+    public function setAverageScore(float $averageScore): self
     {
         $this->averageScore = $averageScore;
 

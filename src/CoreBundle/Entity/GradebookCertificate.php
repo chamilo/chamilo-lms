@@ -62,11 +62,6 @@ class GradebookCertificate
      */
     protected ?DateTime $downloadedAt = null;
 
-    /**
-     * Set scoreCertificate.
-     *
-     * @return GradebookCertificate
-     */
     public function setScoreCertificate(float $scoreCertificate): self
     {
         $this->scoreCertificate = $scoreCertificate;
@@ -84,12 +79,7 @@ class GradebookCertificate
         return $this->scoreCertificate;
     }
 
-    /**
-     * Set createdAt.
-     *
-     * @return GradebookCertificate
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 

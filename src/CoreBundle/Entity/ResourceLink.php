@@ -54,12 +54,6 @@ class ResourceLink
     protected ?Session $session = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     */
-    protected ?User $user = null;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
@@ -70,6 +64,12 @@ class ResourceLink
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected ?Usergroup $userGroup = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected ?User $user = null;
 
     /**
      * @ORM\OneToMany(

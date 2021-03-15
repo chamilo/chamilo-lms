@@ -11,11 +11,13 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 
-/**
- * Survey changes.
- */
 class Version20180319145700 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Migrate Survey tables';
+    }
+
     public function up(Schema $schema): void
     {
         $survey = $schema->getTable('c_survey');
@@ -85,11 +87,43 @@ class Version20180319145700 extends AbstractMigrationChamilo
         );
 
         $table = $schema->getTable('c_survey_invitation');
-        if (false === $table->hasColumn('answered_at')) {
+
+        if (!$table->hasColumn('answered_at')) {
             $this->addSql('ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;');
         }
-        if (false === $table->hasIndex('idx_survey_inv_code')) {
+
+        if (!$table->hasIndex('idx_survey_inv_code')) {
             $this->addSql('CREATE INDEX idx_survey_inv_code ON c_survey_invitation (survey_code)');
+        }
+
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE session_id session_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE group_id group_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_D0BC7C291D79BD3')) {
+            $this->addSql(
+                'ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasForeignKey('FK_D0BC7C2613FECDF')) {
+            $this->addSql(
+                'ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C2613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasForeignKey('FK_D0BC7C2FE54D947')) {
+            $this->addSql(
+                'ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C2FE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_D0BC7C2613FECDF')) {
+            $this->addSql('CREATE INDEX IDX_D0BC7C2613FECDF ON c_survey_invitation (session_id)');
+        }
+
+        if (!$table->hasIndex('IDX_D0BC7C2FE54D947')) {
+            $this->addSql('CREATE INDEX IDX_D0BC7C2FE54D947 ON c_survey_invitation (group_id)');
         }
 
         $table = $schema->getTable('c_survey_question');

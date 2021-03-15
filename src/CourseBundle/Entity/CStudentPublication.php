@@ -115,6 +115,12 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected ?CStudentPublication $publicationParent;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected User $user;
+
+    /**
      * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationAssignment", mappedBy="publication")
      */
     protected ?CStudentPublicationAssignment $assignment = null;
@@ -128,12 +134,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="weight", type="float", precision=6, scale=2, nullable=false)
      */
     protected float $weight;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    protected User $user;
 
     /**
      * @ORM\Column(name="allow_text_assignment", type="integer", nullable=false)

@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * c_forum.
- */
 class Version20170625153000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Migrate c_forum tables';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_forum_attachment');
@@ -160,28 +162,5 @@ class Version20170625153000 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE c_forum_post SET post_date = NOW() WHERE post_date = "" OR post_date is NULL OR post_date = 0');
         $this->addSql('ALTER TABLE c_forum_post CHANGE post_date post_date DATETIME NOT NULL');
-
-        $table = $schema->getTable('c_course_description');
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_course_description ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_course_description ADD CONSTRAINT FK_EC3CD8091BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_EC3CD8091BAD783F ON c_course_description (resource_node_id)');
-        }
-
-        if ($table->hasIndex('session_id')) {
-            $this->addSql('DROP INDEX session_id ON c_course_description');
-        }
-
-        $table = $schema->getTable('c_notebook');
-
-        if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_notebook');
-        }
-
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_notebook ADD resource_node_id INT DEFAULT NULL, DROP notebook_id');
-            $this->addSql('ALTER TABLE c_notebook ADD CONSTRAINT FK_E7EE1CE01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_E7EE1CE01BAD783F ON c_notebook (resource_node_id)');
-        }
     }
 }

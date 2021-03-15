@@ -59,7 +59,7 @@ class GradebookLink
     protected Course $course;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected GradebookCategory $category;

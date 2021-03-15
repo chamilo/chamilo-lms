@@ -58,7 +58,7 @@ class NotebookManager
         $notebook
             ->setTitle($values['note_title'])
             ->setDescription($values['note_comment'])
-            ->setUserId($userId)
+            ->setUser(api_get_user_entity($userId))
             ->addCourseLink($course, $session)
         ;
 

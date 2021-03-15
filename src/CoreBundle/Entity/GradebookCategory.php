@@ -68,6 +68,20 @@ class GradebookCategory
     protected ?Session $session = null;
 
     /**
+     * @var Collection|GradebookEvaluation[]
+     *
+     * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="category", cascade={"persist", "remove"})
+     */
+    protected Collection $evaluations;
+
+    /**
+     * @var Collection|GradebookLink[]
+     *
+     * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="category", cascade={"persist", "remove"})
+     */
+    protected Collection $links;
+
+    /**
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
     protected float $weight;
@@ -144,6 +158,8 @@ class GradebookCategory
     {
         $this->description = '';
         $this->comments = new ArrayCollection();
+        $this->evaluations = new ArrayCollection();
+        $this->links = new ArrayCollection();
         $this->locked = 0;
         $this->generateCertificates = false;
         $this->isRequirement = false;
@@ -406,4 +422,86 @@ class GradebookCategory
 
         return $this;
     }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return GradebookEvaluation[]|Collection
+     */
+    public function getEvaluations()
+    {
+        return $this->evaluations;
+    }
+
+    /**
+     * @param GradebookEvaluation[]|Collection $evaluations
+     */
+    public function setEvaluations(Collection$evaluations)
+    {
+        $this->evaluations = $evaluations;
+
+        return $this;
+    }
+
+    /**
+     * @return GradebookLink[]|Collection
+     */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
+    /**
+     * @param GradebookLink[]|Collection $links
+     */
+    public function setLinks(Collection $links): self
+    {
+        $this->links = $links;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDepends(): ?string
+    {
+        return $this->depends;
+    }
+
+    public function setDepends(?string $depends): self
+    {
+        $this->depends = $depends;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMinimumToValidate(): ?int
+    {
+        return $this->minimumToValidate;
+    }
+
+    public function setMinimumToValidate(?int $minimumToValidate): self
+    {
+        $this->minimumToValidate = $minimumToValidate;
+
+        return $this;
+    }
+
 }

@@ -991,7 +991,6 @@ class SystemAnnouncementManager
         if (count($announcements) === 0) {
             return null;
         }
-        echo "/*".__LINE__."**/<pre>".var_export($announcementToGroup,true)."</pre><br>";
         $template = new Template(null, false, false);
         $template->assign('announcements', $announcements);
         $layout = $template->get_template('announcement/slider.tpl');

@@ -131,7 +131,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
 
         $this->addFileTypeQueryBuilder('file', $qb);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $this->getCount($qb);
     }
 
     public function getResourceFormType(): string

@@ -27,18 +27,14 @@ class CForumPostRepository extends ResourceRepository
     {
         $qb = $this->getResourcesByCourse($course, $session);
 
-        $qb->select('count(resource)');
-
-        return $qb->getQuery()->getSingleScalarResult();
+        return $this->getCount($qb);
     }
 
     public function countUserForumPosts(User $user, Course $course, Session $session = null): int
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
 
-        $qb->select('count(resource)');
-
-        return $qb->getQuery()->getSingleScalarResult();
+        return $this->getCount($qb);
     }
 
     /*public function findAllInCourseByThread(

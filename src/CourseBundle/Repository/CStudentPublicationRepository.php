@@ -62,19 +62,16 @@ final class CStudentPublicationRepository extends ResourceRepository
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
 
-        $qb->select('count(resource)');
-
-        return $qb->getQuery()->getSingleScalarResult();
+        return $this->getCount($qb);
     }
 
     public function countCoursePublications(Course $course, Session $session = null, CGroup $group = null): int
     {
         $qb = $this->getResourcesByCourse($course, $session, $group);
 
-        $qb->select('count(resource)');
         $this->addNotDeletedPublicationQueryBuilder($qb);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $this->getCount($qb);
     }
 
     /**

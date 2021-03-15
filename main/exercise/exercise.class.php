@@ -1929,7 +1929,7 @@ class Exercise
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET active='-1' WHERE iid = ". (int) $this->id;
+        $sql = "UPDATE $table SET active='-1' WHERE iid = ".(int) $this->id;
         Database::query($sql);
 
         api_item_property_update(

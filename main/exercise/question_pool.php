@@ -1199,7 +1199,7 @@ function getLinkForQuestion(
 }
 
 /**
- * Return the <a> html code for delete, add, clone, edit a question
+ * Return the <a> html code for delete, add, clone, edit a question.
  *
  * @param string    $in_action           The code of the action triggered by the button
  * @param int       $from_exercise       The id of the current exercise from which we click on question pool

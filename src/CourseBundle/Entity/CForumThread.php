@@ -152,11 +152,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadPeerQualify;
     }
 
-    /**
-     * set threadPeerQualify.
-     *
-     * @return $this
-     */
     public function setThreadPeerQualify(bool $threadPeerQualify): self
     {
         $this->threadPeerQualify = $threadPeerQualify;
@@ -198,11 +193,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->forum;
     }
 
-    /**
-     * Set threadReplies.
-     *
-     * @return CForumThread
-     */
     public function setThreadReplies(int $threadReplies): self
     {
         $this->threadReplies = $threadReplies;
@@ -339,11 +329,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadCloseDate;
     }
 
-    /**
-     * Set threadWeight.
-     *
-     * @return CForumThread
-     */
     public function setThreadWeight(float $threadWeight): self
     {
         $this->threadWeight = $threadWeight;

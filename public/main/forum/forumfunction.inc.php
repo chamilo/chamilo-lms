@@ -2317,8 +2317,8 @@ function saveThread(
         ->setThreadDate($post_date)
         ->setThreadSticky((bool) ($values['thread_sticky'] ?? false))
         ->setThreadTitleQualify($values['calification_notebook_title'] ?? '')
-        ->setThreadQualifyMax($values['numeric_calification'] ?? 0)
-        ->setThreadWeight($values['weight_calification'] ?? 0)
+        ->setThreadQualifyMax(api_float_val($values['numeric_calification'] ?? 0))
+        ->setThreadWeight(api_float_val($values['weight_calification'] ?? 0))
         ->setThreadPeerQualify(isset($values['thread_peer_qualify']) ? (bool) $values['thread_peer_qualify'] : false)
         ->setParent($forum)
         ->addCourseLink($course, $session)
@@ -3792,14 +3792,15 @@ function increase_thread_view($thread_id)
 function updateThreadInfo($threadId, $lastPostId, $post_date)
 {
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-    $course_id = api_get_course_int_id();
+    $threadId = (int) $threadId;
+    $lastPostId = (int) $lastPostId;
+
     $sql = "UPDATE $table_threads SET
             thread_replies = thread_replies+1,
-            thread_last_post = '".Database::escape_string($lastPostId)."',
+            thread_last_post = '".$lastPostId."',
             thread_date = '".Database::escape_string($post_date)."'
             WHERE
-                c_id = $course_id AND
-                iid ='".Database::escape_string($threadId)."'"; // this needs to be cleaned first
+                iid ='".$threadId."'"; // this needs to be cleaned first
     Database::query($sql);
 }
 
@@ -3812,7 +3813,7 @@ function updateThreadInfo($threadId, $lastPostId, $post_date)
  */
 function get_whats_new()
 {
-    return ;
+    return;
     $userId = api_get_user_id();
     $course_id = api_get_course_int_id();
 

@@ -71,7 +71,6 @@ $sql = "SELECT username, firstname, lastname, u.id, post_date, post_title, post_
         INNER JOIN $table_users u
         ON (posts.poster_id = u.id)
         WHERE
-            posts.c_id = $course_id AND
             posts.thread_id='".$threadEntity->getIid()."'
         ORDER BY posts.iid ASC";
 $result = Database::query($sql);

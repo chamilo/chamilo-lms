@@ -182,9 +182,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected ?bool $autoLaunch;
 
     /**
-     * @ORM\Column(name="page_result_configuration", type="array", nullable=true)
+     * @ORM\Column(name="page_result_configuration", type="array")
      */
-    protected ?array $pageResultConfiguration;
+    protected array $pageResultConfiguration = [];
 
     /**
      * @var Collection|CQuizRelQuestion[]
@@ -222,7 +222,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->reviewAnswers = 0;
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
-        $this->pageResultConfiguration = null;
+        $this->pageResultConfiguration = [];
     }
 
     public function __toString(): string
@@ -736,7 +736,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->pageResultConfiguration;
     }
 
-    public function setPageResultConfiguration(?array $pageResultConfiguration): self
+    public function setPageResultConfiguration(array $pageResultConfiguration): self
     {
         $this->pageResultConfiguration = $pageResultConfiguration;
 

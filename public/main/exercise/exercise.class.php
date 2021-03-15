@@ -224,7 +224,7 @@ class Exercise
             }
 
             if (!empty($object->page_result_configuration)) {
-                $this->pageResultConfiguration = $object->page_result_configuration;
+                //$this->pageResultConfiguration = $object->page_result_configuration;
             }
 
             if (isset($object->show_previous_button)) {
@@ -1579,7 +1579,6 @@ class Exercise
         $text_when_finished = $this->text_when_finished;
         $display_category_name = (int) $this->display_category_name;
         $pass_percentage = (int) $this->pass_percentage;
-        $session_id = $this->sessionId;
 
         // If direct we do not show results
         $results_disabled = (int) $this->results_disabled;
@@ -1588,7 +1587,6 @@ class Exercise
         }
         $expired_time = (int) $this->expired_time;
 
-        $em = Database::getManager();
         $repo = Container::getQuizRepository();
         $repoCategory = Container::getExerciseCategoryRepository();
 
@@ -1636,15 +1634,11 @@ class Exercise
             ->setQuestionSelectionType($this->getQuestionSelectionType());
 
         $allow = api_get_configuration_value('allow_exercise_categories');
-        if (true === $allow) {
-            if (!empty($this->getExerciseCategoryId())) {
-                $exercise->setExerciseCategory($repoCategory->find($this->getExerciseCategoryId()));
-            }
+        if (true === $allow && !empty($this->getExerciseCategoryId())) {
+            $exercise->setExerciseCategory($repoCategory->find($this->getExerciseCategoryId()));
         }
 
-        if (api_get_configuration_value('quiz_prevent_backwards_move')) {
-            $exercise->setPreventBackwards($this->getPreventBackwards());
-        }
+        $exercise->setPreventBackwards($this->getPreventBackwards());
 
         $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
         if (true === $allow) {
@@ -1663,6 +1657,8 @@ class Exercise
         if (!empty($this->pageResultConfiguration)) {
             $exercise->setPageResultConfiguration($this->pageResultConfiguration);
         }
+
+        $em = Database::getManager();
 
         if ($id) {
             $repo->updateNodeForResource($exercise);
@@ -2285,15 +2281,11 @@ class Exercise
                 ]
             );
             $form->addElement('html', '</div>');
-
-            if (api_get_configuration_value('quiz_prevent_backwards_move')) {
-                $form->addCheckBox(
-                    'prevent_backwards',
-                    null,
-                    get_lang('QuizPreventBackwards')
-                );
-            }
-
+            $form->addCheckBox(
+                'prevent_backwards',
+                null,
+                get_lang('QuizPreventBackwards')
+            );
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2675,11 +2667,9 @@ class Exercise
 
         // Update title in all LPs that have this quiz added
         if (1 == $form->getSubmitValue('update_title_in_lps')) {
-            $courseId = api_get_course_int_id();
             $table = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT * FROM $table
+            $sql = "SELECT iid FROM $table
                     WHERE
-                        c_id = $courseId AND
                         item_type = 'quiz' AND
                         path = '".$this->getId()."'
                     ";
@@ -2688,8 +2678,9 @@ class Exercise
             if (!empty($items)) {
                 foreach ($items as $item) {
                     $itemId = $item['iid'];
-                    $sql = "UPDATE $table SET title = '".$this->title."'
-                            WHERE iid = $itemId AND c_id = $courseId ";
+                    $sql = "UPDATE $table
+                            SET title = '".$this->title."'
+                            WHERE iid = $itemId ";
                     Database::query($sql);
                 }
             }
@@ -6768,7 +6759,6 @@ class Exercise
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT max_score FROM $TBL_LP_ITEM
                 WHERE
-                    c_id = {$this->course_id} AND
                     item_type = '".TOOL_QUIZ."' AND
                     path = '{$this->getId()}'";
         $result = Database::query($sql);
@@ -8284,11 +8274,6 @@ class Exercise
 
     public function getPreventBackwards()
     {
-        $allow = api_get_configuration_value('quiz_prevent_backwards_move');
-        if (false === $allow) {
-            return 0;
-        }
-
         return (int) $this->preventBackwards;
     }
 
@@ -8314,22 +8299,16 @@ class Exercise
         }
     }
 
-    /**
-     * @param array $values
-     */
-    public function setPageResultConfiguration($values)
+    public function setPageResultConfiguration(array $values)
     {
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
             $params = [
-                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
-                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
-                'hide_category_table' => isset($values['hide_category_table']) ? $values['hide_category_table'] : '',
+                'hide_expected_answer' => $values['hide_expected_answer'] ?? '',
+                'hide_question_score' => $values['hide_question_score'] ?? '',
+                'hide_total_score' => $values['hide_total_score'] ?? '',
+                'hide_category_table' => $values['hide_category_table'] ?? '',
             ];
-            $type = Type::getType('array');
-            $platform = Database::getManager()->getConnection()->getDatabasePlatform();
-            //$this->pageResultConfiguration = $type->convertToDatabaseValue($params, $platform);
             $this->pageResultConfiguration = $params;
         }
     }
@@ -8858,7 +8837,8 @@ class Exercise
         }
 
         $exerciseList = $qb->getQuery()->getResult();
-        $total = $qb->select('count(resource.iid)')->setMaxResults(1)->getQuery()->getScalarResult();
+        $total = $repo->getCount($qb);
+
         $webPath = api_get_path(WEB_CODE_PATH);
         if (!empty($exerciseList)) {
             $visibilitySetting = api_get_configuration_value('show_hidden_exercise_added_to_lp');

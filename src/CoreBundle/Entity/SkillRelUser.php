@@ -38,6 +38,30 @@ class SkillRelUser
     protected int $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="achievedSkills", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    protected User $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="issuedSkills", cascade={"persist"})
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    protected ?Skill $skill = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected ?Course $course = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected ?Session $session = null;
+
+    /**
      * @ORM\OneToMany(
      *     targetEntity="SkillRelUserComment", mappedBy="skillRelUser",
      *     cascade={"persist", "remove"},
@@ -49,6 +73,17 @@ class SkillRelUser
     protected Collection $comments;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Level")
+     * @ORM\JoinColumn(name="acquired_level", referencedColumnName="id")
+     */
+    protected Level $acquiredLevel;
+
+    /**
+     * @ORM\Column(name="acquired_skill_at", type="datetime", nullable=false)
+     */
+    protected DateTime $acquiredSkillAt;
+
+    /**
      * Whether this has been confirmed by a teacher or not
      * Only set to 0 when the skill_rel_item says requires_validation = 1.
      *
@@ -57,44 +92,9 @@ class SkillRelUser
     protected int $validationStatus;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="achievedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    protected User $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", nullable=false)
-     */
-    protected ?Skill $skill = null;
-
-    /**
-     * @ORM\Column(name="acquired_skill_at", type="datetime", nullable=false)
-     */
-    protected DateTime $acquiredSkillAt;
-
-    /**
      * @ORM\Column(name="assigned_by", type="integer", nullable=false)
      */
     protected int $assignedBy;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
-     */
-    protected ?Course $course = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
-     */
-    protected ?Session $session = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Level")
-     * @ORM\JoinColumn(name="acquired_level", referencedColumnName="id")
-     */
-    protected Level $acquiredLevel;
 
     /**
      * @ORM\Column(name="argumentation", type="text")

@@ -68,6 +68,20 @@ class GradebookCategory
     protected ?Session $session = null;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="parent")
+     *
+     * @var GradebookCategory[]|Collection
+     */
+    protected Collection $subCategories;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="gradeBookCategory")
+     *
+     * @var SkillRelGradebook[]|Collection
+     */
+    protected Collection $skills;
+
+    /**
      * @var Collection|GradebookEvaluation[]
      *
      * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="category", cascade={"persist", "remove"})
@@ -80,6 +94,19 @@ class GradebookCategory
      * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="category", cascade={"persist", "remove"})
      */
     protected Collection $links;
+
+    /**
+     * @var Collection|GradebookComment[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradeBook")
+     */
+    protected Collection $comments;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
+     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected ?GradeModel $gradeModel = null;
 
     /**
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
@@ -141,25 +168,15 @@ class GradebookCategory
      */
     protected ?int $gradeBooksToValidateInDependence = null;
 
-    /**
-     * @var Collection|GradebookComment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradeBook")
-     */
-    protected Collection $comments;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
-     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected ?GradeModel $gradeModel = null;
-
     public function __construct()
     {
-        $this->description = '';
         $this->comments = new ArrayCollection();
         $this->evaluations = new ArrayCollection();
         $this->links = new ArrayCollection();
+        $this->subCategories = new ArrayCollection();
+        $this->skills = new ArrayCollection();
+
+        $this->description = '';
         $this->locked = 0;
         $this->generateCertificates = false;
         $this->isRequirement = false;
@@ -471,6 +488,23 @@ class GradebookCategory
         return $this;
     }
 
+    public function getSubCategories()
+    {
+        return $this->subCategories;
+    }
+
+    public function hasSubCategories(): bool
+    {
+        return $this->subCategories->count() > 0;
+    }
+
+    public function setSubCategories(Collection $subCategories): self
+    {
+        $this->subCategories = $subCategories;
+
+        return $this;
+    }
+
     public function getDepends(): ?string
     {
         return $this->depends;
@@ -494,4 +528,21 @@ class GradebookCategory
 
         return $this;
     }
+
+    public function getSkills()
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @param GradebookCategory[]|Collection $skills
+     */
+    public function setSkills(Collection $skills): self
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+
 }

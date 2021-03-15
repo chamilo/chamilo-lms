@@ -29,21 +29,21 @@ class SkillRelCourse
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="courses")
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Skill $skill;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="skills", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="skills", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected Session $session;
+    protected ?Session $session = null;
 
     public function __construct()
     {
@@ -59,54 +59,36 @@ class SkillRelCourse
         return $this->id;
     }
 
-    /**
-     * @return Skill
-     */
-    public function getSkill()
+    public function getSkill(): Skill
     {
         return $this->skill;
     }
 
-    /**
-     * @return SkillRelCourse
-     */
-    public function setSkill(Skill $skill)
+    public function setSkill(Skill $skill): self
     {
         $this->skill = $skill;
 
         return $this;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @return SkillRelCourse
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @return SkillRelCourse
-     */
-    public function setSession(Session $session)
+    public function setSession(?Session $session): self
     {
         $this->session = $session;
 

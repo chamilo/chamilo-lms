@@ -24,70 +24,23 @@ class SkillRelGradebook
     protected int $id;
 
     /**
-     * @ORM\Column(name="gradebook_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="gradeBookCategories")
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $gradebookId;
+    protected Skill $skill;
 
     /**
-     * @ORM\Column(name="skill_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="skills")
+     * @ORM\JoinColumn(name="gradebook_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $skillId;
+    protected GradebookCategory $gradeBookCategory;
 
     /**
      * @ORM\Column(name="type", type="string", length=10, nullable=false)
      */
     protected string $type;
 
-    /**
-     * Set gradebookId.
-     *
-     * @return SkillRelGradebook
-     */
-    public function setGradebookId(int $gradebookId)
-    {
-        $this->gradebookId = $gradebookId;
-
-        return $this;
-    }
-
-    /**
-     * Get gradebookId.
-     *
-     * @return int
-     */
-    public function getGradebookId()
-    {
-        return $this->gradebookId;
-    }
-
-    /**
-     * Set skillId.
-     *
-     * @return SkillRelGradebook
-     */
-    public function setSkillId(int $skillId)
-    {
-        $this->skillId = $skillId;
-
-        return $this;
-    }
-
-    /**
-     * Get skillId.
-     *
-     * @return int
-     */
-    public function getSkillId()
-    {
-        return $this->skillId;
-    }
-
-    /**
-     * Set type.
-     *
-     * @return SkillRelGradebook
-     */
-    public function setType(string $type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -112,5 +65,29 @@ class SkillRelGradebook
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getSkill(): Skill
+    {
+        return $this->skill;
+    }
+
+    public function setSkill(Skill $skill): self
+    {
+        $this->skill = $skill;
+
+        return $this;
+    }
+
+    public function getGradeBookCategory(): GradebookCategory
+    {
+        return $this->gradeBookCategory;
+    }
+
+    public function setGradeBookCategory(GradebookCategory $gradeBookCategory): self
+    {
+        $this->gradeBookCategory = $gradeBookCategory;
+
+        return $this;
     }
 }

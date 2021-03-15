@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SkillProfile.
@@ -24,6 +25,7 @@ class SkillProfile
     protected int $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected string $name;
@@ -33,12 +35,7 @@ class SkillProfile
      */
     protected string $description;
 
-    /**
-     * Set name.
-     *
-     * @return SkillProfile
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -55,12 +52,7 @@ class SkillProfile
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @return SkillProfile
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

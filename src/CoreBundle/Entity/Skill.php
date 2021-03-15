@@ -66,6 +66,13 @@ class Skill
     protected Collection $courses;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="skill", cascade={"persist"})
+     *
+     * @var Collection|SkillRelGradebook[]
+     */
+    protected Collection $gradeBookCategories;
+
+    /**
      * @Groups({"skill:read", "skill:write"})
      * @Assert\NotBlank()
      *
@@ -124,9 +131,6 @@ class Skill
         $this->status = self::STATUS_ENABLED;
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return (string) $this->getName();
@@ -162,12 +166,7 @@ class Skill
         return $this->name;
     }
 
-    /**
-     * Set shortCode.
-     *
-     * @return Skill
-     */
-    public function setShortCode(string $shortCode)
+    public function setShortCode(string $shortCode): self
     {
         $this->shortCode = $shortCode;
 
@@ -192,12 +191,7 @@ class Skill
         return $this->shortCode;
     }
 
-    /**
-     * Set description.
-     *
-     * @return Skill
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

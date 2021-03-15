@@ -24,58 +24,16 @@ class SkillRelProfile
     protected int $id;
 
     /**
-     * @ORM\Column(name="skill_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", cascade={"persist"})
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $skillId;
+    protected Skill $skill;
 
     /**
-     * @ORM\Column(name="profile_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillProfile", cascade={"persist"})
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $profileId;
-
-    /**
-     * Set skillId.
-     *
-     * @return SkillRelProfile
-     */
-    public function setSkillId(int $skillId)
-    {
-        $this->skillId = $skillId;
-
-        return $this;
-    }
-
-    /**
-     * Get skillId.
-     *
-     * @return int
-     */
-    public function getSkillId()
-    {
-        return $this->skillId;
-    }
-
-    /**
-     * Set profileId.
-     *
-     * @return SkillRelProfile
-     */
-    public function setProfileId(int $profileId)
-    {
-        $this->profileId = $profileId;
-
-        return $this;
-    }
-
-    /**
-     * Get profileId.
-     *
-     * @return int
-     */
-    public function getProfileId()
-    {
-        return $this->profileId;
-    }
+    protected SkillProfile $profile;
 
     /**
      * Get id.
@@ -86,4 +44,34 @@ class SkillRelProfile
     {
         return $this->id;
     }
+
+    /**
+     * @return Skill
+     */
+    public function getSkill(): Skill
+    {
+        return $this->skill;
+    }
+
+    public function setSkill(Skill $skill): self
+    {
+        $this->skill = $skill;
+
+        return $this;
+    }
+
+    public function getProfile(): SkillProfile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(SkillProfile $profile): self
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+
+
 }

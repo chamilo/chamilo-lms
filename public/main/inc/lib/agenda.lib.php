@@ -369,7 +369,7 @@ class Agenda
                         ->setStartDate($start)
                         ->setEndDate($end)
                         ->setAllDay($allDay)
-                        ->setAccessUrlId(api_get_current_access_url_id())
+                        ->setUrl(api_get_url_entity())
                     ;
                     $em->persist($event);
                     $em->flush();

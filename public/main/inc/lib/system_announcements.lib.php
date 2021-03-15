@@ -668,7 +668,7 @@ class SystemAnnouncementManager
             ->setContent($content)
             ->setDateStart($dateStart)
             ->setDateEnd($dateEnd)
-            ->setAccessUrlId(api_get_current_access_url_id());
+            ->setUrl(api_get_url_entity());
 
         $em->persist($announcement);
         $em->flush();

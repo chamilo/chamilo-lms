@@ -149,4 +149,16 @@ class SysCalendar
     {
         return $this->id;
     }
+
+    public function getUrl(): AccessUrl
+    {
+        return $this->url;
+    }
+
+    public function setUrl(AccessUrl $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
 }

@@ -85,9 +85,10 @@ class SysAnnouncement
     protected ?string $lang = null;
 
     /**
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="AccessUrl")
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $accessUrlId;
+    protected AccessUrl $url;
 
     /**
      * @ORM\Column(name="career_id", type="integer", nullable=true)
@@ -112,18 +113,6 @@ class SysAnnouncement
     }
 
     /**
-     * Set dateStart.
-     *
-     * @return SysAnnouncement
-     */
-    public function setDateStart(DateTime $dateStart)
-    {
-        $this->dateStart = $dateStart;
-
-        return $this;
-    }
-
-    /**
      * Get dateStart.
      *
      * @return DateTime
@@ -133,14 +122,9 @@ class SysAnnouncement
         return $this->dateStart;
     }
 
-    /**
-     * Set dateEnd.
-     *
-     * @return SysAnnouncement
-     */
-    public function setDateEnd(DateTime $dateEnd)
+    public function setDateStart(DateTime $dateStart): self
     {
-        $this->dateEnd = $dateEnd;
+        $this->dateStart = $dateStart;
 
         return $this;
     }
@@ -155,14 +139,9 @@ class SysAnnouncement
         return $this->dateEnd;
     }
 
-    /**
-     * Set visibleTeacher.
-     *
-     * @return SysAnnouncement
-     */
-    public function setVisibleTeacher(bool $visibleTeacher)
+    public function setDateEnd(DateTime $dateEnd): self
     {
-        $this->visibleTeacher = $visibleTeacher;
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }
@@ -177,14 +156,9 @@ class SysAnnouncement
         return $this->visibleTeacher;
     }
 
-    /**
-     * Set visibleStudent.
-     *
-     * @return SysAnnouncement
-     */
-    public function setVisibleStudent(bool $visibleStudent)
+    public function setVisibleTeacher(bool $visibleTeacher): self
     {
-        $this->visibleStudent = $visibleStudent;
+        $this->visibleTeacher = $visibleTeacher;
 
         return $this;
     }
@@ -199,14 +173,9 @@ class SysAnnouncement
         return $this->visibleStudent;
     }
 
-    /**
-     * Set visibleGuest.
-     *
-     * @return SysAnnouncement
-     */
-    public function setVisibleGuest(bool $visibleGuest)
+    public function setVisibleStudent(bool $visibleStudent): self
     {
-        $this->visibleGuest = $visibleGuest;
+        $this->visibleStudent = $visibleStudent;
 
         return $this;
     }
@@ -221,14 +190,9 @@ class SysAnnouncement
         return $this->visibleGuest;
     }
 
-    /**
-     * Set title.
-     *
-     * @return SysAnnouncement
-     */
-    public function setTitle(string $title)
+    public function setVisibleGuest(bool $visibleGuest): self
     {
-        $this->title = $title;
+        $this->visibleGuest = $visibleGuest;
 
         return $this;
     }
@@ -243,14 +207,9 @@ class SysAnnouncement
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @return SysAnnouncement
-     */
-    public function setContent(string $content)
+    public function setTitle(string $title): self
     {
-        $this->content = $content;
+        $this->title = $title;
 
         return $this;
     }
@@ -265,14 +224,9 @@ class SysAnnouncement
         return $this->content;
     }
 
-    /**
-     * Set lang.
-     *
-     * @return SysAnnouncement
-     */
-    public function setLang(string $lang)
+    public function setContent(string $content): self
     {
-        $this->lang = $lang;
+        $this->content = $content;
 
         return $this;
     }
@@ -287,26 +241,11 @@ class SysAnnouncement
         return $this->lang;
     }
 
-    /**
-     * Set accessUrlId.
-     *
-     * @return SysAnnouncement
-     */
-    public function setAccessUrlId(int $accessUrlId)
+    public function setLang(string $lang): self
     {
-        $this->accessUrlId = $accessUrlId;
+        $this->lang = $lang;
 
         return $this;
-    }
-
-    /**
-     * Get accessUrlId.
-     *
-     * @return int
-     */
-    public function getAccessUrlId()
-    {
-        return $this->accessUrlId;
     }
 
     /**
@@ -336,9 +275,8 @@ class SysAnnouncement
         return $this->visibleSessionAdmin;
     }
 
-    public function setVisibleSessionAdmin(
-        bool $visibleSessionAdmin
-    ): self {
+    public function setVisibleSessionAdmin(bool $visibleSessionAdmin): self
+    {
         $this->visibleSessionAdmin = $visibleSessionAdmin;
 
         return $this;
@@ -352,6 +290,18 @@ class SysAnnouncement
     public function setVisibleBoss(bool $visibleBoss): self
     {
         $this->visibleBoss = $visibleBoss;
+
+        return $this;
+    }
+
+    public function getUrl(): AccessUrl
+    {
+        return $this->url;
+    }
+
+    public function setUrl(AccessUrl $url): self
+    {
+        $this->url = $url;
 
         return $this;
     }

@@ -71,12 +71,7 @@ class Language
         $this->subLanguages = new ArrayCollection();
     }
 
-    /**
-     * Set originalName.
-     *
-     * @return Language
-     */
-    public function setOriginalName(string $originalName)
+    public function setOriginalName(string $originalName): self
     {
         $this->originalName = $originalName;
 

@@ -54,12 +54,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->getFilename();
     }
 
-    /**
-     * Set path.
-     *
-     * @return MessageAttachment
-     */
-    public function setPath(string $path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -76,12 +71,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->path;
     }
 
-    /**
-     * Set comment.
-     *
-     * @return MessageAttachment
-     */
-    public function setComment(string $comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -98,12 +88,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->comment;
     }
 
-    /**
-     * Set size.
-     *
-     * @return MessageAttachment
-     */
-    public function setSize(int $size)
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -120,12 +105,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->size;
     }
 
-    /**
-     * Set message.
-     *
-     * @return MessageAttachment
-     */
-    public function setMessage(Message $message)
+    public function setMessage(Message $message): self
     {
         $this->message = $message;
 
@@ -142,12 +122,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->message;
     }
 
-    /**
-     * Set filename.
-     *
-     * @return MessageAttachment
-     */
-    public function setFilename(string $filename)
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 

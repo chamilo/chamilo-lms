@@ -58,7 +58,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $qb;
     }
 
-    public function countUserPublications(User $user, Course $course, Session $session = null, CGroup $group = null)
+    public function countUserPublications(User $user, Course $course, Session $session = null, CGroup $group = null): int
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
 
@@ -67,7 +67,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function countCoursePublications(Course $course, Session $session = null, CGroup $group = null)
+    public function countCoursePublications(Course $course, Session $session = null, CGroup $group = null): int
     {
         $qb = $this->getResourcesByCourse($course, $session, $group);
 

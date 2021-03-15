@@ -122,7 +122,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $query->getResult();
     }
 
-    public function countUserDocuments(User $user, Course $course, Session $session = null, CGroup $group = null)
+    public function countUserDocuments(User $user, Course $course, Session $session = null, CGroup $group = null): int
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
 

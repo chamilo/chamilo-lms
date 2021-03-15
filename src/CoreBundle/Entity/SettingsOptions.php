@@ -44,12 +44,7 @@ class SettingsOptions
      */
     protected string $displayText;
 
-    /**
-     * Set variable.
-     *
-     * @return SettingsOptions
-     */
-    public function setVariable(string $variable)
+    public function setVariable(string $variable): self
     {
         $this->variable = $variable;
 
@@ -66,12 +61,7 @@ class SettingsOptions
         return $this->variable;
     }
 
-    /**
-     * Set value.
-     *
-     * @return SettingsOptions
-     */
-    public function setValue(string $value)
+    public function setValue(string $value): self
     {
         $this->value = $value;
 
@@ -88,12 +78,7 @@ class SettingsOptions
         return $this->value;
     }
 
-    /**
-     * Set displayText.
-     *
-     * @return SettingsOptions
-     */
-    public function setDisplayText(string $displayText)
+    public function setDisplayText(string $displayText): self
     {
         $this->displayText = $displayText;
 

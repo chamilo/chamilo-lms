@@ -105,12 +105,7 @@ class SettingsCurrent
         $this->accessUrlLocked = 0;
     }
 
-    /**
-     * Set variable.
-     *
-     * @return SettingsCurrent
-     */
-    public function setVariable(string $variable)
+    public function setVariable(string $variable): self
     {
         $this->variable = $variable;
 
@@ -127,12 +122,7 @@ class SettingsCurrent
         return $this->variable;
     }
 
-    /**
-     * Set subkey.
-     *
-     * @return SettingsCurrent
-     */
-    public function setSubkey(string $subkey)
+    public function setSubkey(string $subkey): self
     {
         $this->subkey = $subkey;
 
@@ -149,12 +139,7 @@ class SettingsCurrent
         return $this->subkey;
     }
 
-    /**
-     * Set type.
-     *
-     * @return SettingsCurrent
-     */
-    public function setType(string $type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -188,12 +173,7 @@ class SettingsCurrent
         return $this->category;
     }
 
-    /**
-     * Set selectedValue.
-     *
-     * @return SettingsCurrent
-     */
-    public function setSelectedValue(?string $selectedValue)
+    public function setSelectedValue(?string $selectedValue): self
     {
         $this->selectedValue = $selectedValue;
 
@@ -210,12 +190,7 @@ class SettingsCurrent
         return $this->selectedValue;
     }
 
-    /**
-     * Set title.
-     *
-     * @return SettingsCurrent
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -232,12 +207,7 @@ class SettingsCurrent
         return $this->title;
     }
 
-    /**
-     * Set comment.
-     *
-     * @return SettingsCurrent
-     */
-    public function setComment(string $comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 

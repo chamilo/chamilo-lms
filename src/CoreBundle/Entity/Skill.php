@@ -382,10 +382,7 @@ class Skill
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasItem($typeId, int $itemId)
+    public function hasItem(int $typeId, int $itemId): bool
     {
         if (0 !== $this->getItems()->count()) {
             $found = false;

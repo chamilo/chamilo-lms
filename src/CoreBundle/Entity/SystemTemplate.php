@@ -48,12 +48,7 @@ class SystemTemplate
         $this->comment = '';
     }
 
-    /**
-     * Set title.
-     *
-     * @return SystemTemplate
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -70,12 +65,7 @@ class SystemTemplate
         return $this->title;
     }
 
-    /**
-     * Set comment.
-     *
-     * @return SystemTemplate
-     */
-    public function setComment(string $comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -92,12 +82,7 @@ class SystemTemplate
         return $this->comment;
     }
 
-    /**
-     * Set image.
-     *
-     * @return SystemTemplate
-     */
-    public function setImage(string $image)
+    public function setImage(string $image): self
     {
         $this->image = $image;
 
@@ -114,12 +99,7 @@ class SystemTemplate
         return $this->image;
     }
 
-    /**
-     * Set content.
-     *
-     * @return SystemTemplate
-     */
-    public function setContent(string $content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 

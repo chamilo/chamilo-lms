@@ -23,18 +23,18 @@ class CForumPostRepository extends ResourceRepository
         parent::__construct($registry, CForumPost::class);
     }
 
-    public function countUserForumPosts(User $user, Course $course, Session $session = null)
+    public function countCourseForumPosts(Course $course, Session $session = null): int
     {
-        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        $qb = $this->getResourcesByCourse($course, $session);
 
         $qb->select('count(resource)');
 
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function countCourseForumPosts(Course $course, Session $session = null)
+    public function countUserForumPosts(User $user, Course $course, Session $session = null): int
     {
-        $qb = $this->getResourcesByCourse($course, $session);
+        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
 
         $qb->select('count(resource)');
 

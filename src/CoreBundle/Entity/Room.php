@@ -66,12 +66,7 @@ class Room
         return $this->id;
     }
 
-    /**
-     * Set title.
-     *
-     * @return $this
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -96,10 +91,7 @@ class Room
         return $this->description;
     }
 
-    /**
-     * @return Room
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -114,10 +106,7 @@ class Room
         return $this->geolocation;
     }
 
-    /**
-     * @return Room
-     */
-    public function setGeolocation(string $geolocation)
+    public function setGeolocation(string $geolocation): self
     {
         $this->geolocation = $geolocation;
 
@@ -132,10 +121,7 @@ class Room
         return $this->ip;
     }
 
-    /**
-     * @return Room
-     */
-    public function setIp(string $ip)
+    public function setIp(string $ip): self
     {
         $this->ip = $ip;
 
@@ -150,10 +136,7 @@ class Room
         return $this->ipMask;
     }
 
-    /**
-     * @return Room
-     */
-    public function setIpMask(string $ipMask)
+    public function setIpMask(string $ipMask): self
     {
         $this->ipMask = $ipMask;
 
@@ -168,10 +151,7 @@ class Room
         return $this->branch;
     }
 
-    /**
-     * @return $this
-     */
-    public function setBranch(BranchSync $branch)
+    public function setBranch(BranchSync $branch): self
     {
         $this->branch = $branch;
 

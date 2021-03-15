@@ -73,10 +73,7 @@ class Level
         return $this->name;
     }
 
-    /**
-     * @return Level
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -88,10 +85,7 @@ class Level
         return $this->position;
     }
 
-    /**
-     * @return Level
-     */
-    public function setPosition(int $position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -103,10 +97,7 @@ class Level
         return $this->shortName;
     }
 
-    /**
-     * @return Level
-     */
-    public function setShortName(string $shortName)
+    public function setShortName(string $shortName): self
     {
         $this->shortName = $shortName;
 
@@ -121,10 +112,7 @@ class Level
         return $this->profile;
     }
 
-    /**
-     * @return Level
-     */
-    public function setProfile(Profile $profile)
+    public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
 

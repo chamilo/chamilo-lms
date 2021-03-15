@@ -110,11 +110,6 @@ class SessionRelUser
         return $this;
     }
 
-    /**
-     * Set relationTypeByName.
-     *
-     * @return SessionRelUser
-     */
     public function setRelationTypeByName(string $relationType): self
     {
         if (isset($this->relationTypeList[$relationType])) {
@@ -129,12 +124,7 @@ class SessionRelUser
         return $this->relationType;
     }
 
-    /**
-     * Set movedTo.
-     *
-     * @return SessionRelUser
-     */
-    public function setMovedTo(int $movedTo)
+    public function setMovedTo(int $movedTo): self
     {
         $this->movedTo = $movedTo;
 
@@ -151,12 +141,7 @@ class SessionRelUser
         return $this->movedTo;
     }
 
-    /**
-     * Set movedStatus.
-     *
-     * @return SessionRelUser
-     */
-    public function setMovedStatus(int $movedStatus)
+    public function setMovedStatus(int $movedStatus): self
     {
         $this->movedStatus = $movedStatus;
 
@@ -173,12 +158,7 @@ class SessionRelUser
         return $this->movedStatus;
     }
 
-    /**
-     * Set movedAt.
-     *
-     * @return SessionRelUser
-     */
-    public function setMovedAt(DateTime $movedAt)
+    public function setMovedAt(DateTime $movedAt): self
     {
         $this->movedAt = $movedAt;
 
@@ -195,12 +175,7 @@ class SessionRelUser
         return $this->movedAt;
     }
 
-    /**
-     * Set registeredAt.
-     *
-     * @return $this
-     */
-    public function setRegisteredAt(DateTime $registeredAt)
+    public function setRegisteredAt(DateTime $registeredAt): self
     {
         $this->registeredAt = $registeredAt;
 
@@ -225,10 +200,7 @@ class SessionRelUser
         return $this->duration;
     }
 
-    /**
-     * @return SessionRelUser
-     */
-    public function setDuration(int $duration)
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
 

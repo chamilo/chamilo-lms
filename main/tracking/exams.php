@@ -68,12 +68,14 @@ if ($global) {
                 $sessionCondition
             ORDER BY quiz.title ASC";
     $result = Database::query($sql);
-
-    $exerciseList = [get_lang('All')];
-    while ($row = Database::fetch_array($result)) {
-        $exerciseList[$row['id']] = $row['title'];
+    // Only show select bar if there is more than one test
+    if (Database::num_rows($result) > 0) {
+        $exerciseList = [get_lang('All')];
+        while ($row = Database::fetch_array($result)) {
+            $exerciseList[$row['id']] = $row['title'];
+        }
+        $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
     }
-    $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
 }
 $form->addButton('filter', get_lang('Filter'), 'filter', 'primary', null, null, ['style' => 'margin-top: 5px; margin-left: 15px;']);
 

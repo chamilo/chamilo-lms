@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use ChamiloSession as Session;
 
 /**

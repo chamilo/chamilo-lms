@@ -8352,11 +8352,7 @@ class Exercise
     {
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
-            $type = Type::getType('array');
-            $platform = Database::getManager()->getConnection()->getDatabasePlatform();
-var_dump($this->pageResultConfiguration);
             return $this->pageResultConfiguration;
-            //return $type->convertToPHPValue($this->pageResultConfiguration, $platform);
         }
 
         return [];

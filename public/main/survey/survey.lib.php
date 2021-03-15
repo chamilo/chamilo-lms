@@ -350,7 +350,6 @@ class SurveyManager
                 ->setCode(self::generateSurveyCode($values['survey_code']))
                 ->setTitle($values['survey_title'])
                 ->setSubtitle($values['survey_title'])
-                //->setAuthor($_user['user_id'])
                 ->setLang($values['survey_language'])
                 ->setAvailFrom($from)
                 ->setAvailTill($until)
@@ -462,7 +461,6 @@ class SurveyManager
             $survey
                 ->setTitle($values['survey_title'])
                 ->setSubtitle($values['survey_title'])
-                ->setAuthor($_user['user_id'])
                 ->setLang($values['survey_language'])
                 ->setAvailFrom(api_get_utc_datetime($values['start_date'].':00', true, true))
                 ->setAvailTill(api_get_utc_datetime($values['end_date'].':59', true, true))
@@ -471,7 +469,6 @@ class SurveyManager
                 ->setIntro($values['survey_introduction'])
                 ->setSurveyThanks($values['survey_thanks'])
                 ->setAnonymous((string) $values['anonymous'])
-                ->setSessionId(api_get_session_id())
                 ->setVisibleResults((int) $values['visible_results'])
             ;
 

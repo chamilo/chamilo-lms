@@ -294,7 +294,7 @@ if (!empty($sessionRelUsers)) {
         $userId = $user->getId();
 
         $userLink = '<a href="'.$codePath.'admin/user_information.php?user_id='.$userId.'">'.
-            api_htmlentities(UserManager::formatUserFullName($user)).'</a>';
+            api_htmlentities(UserManager::formatUserFullName($user, true)).'</a>';
 
         $reportingLink = Display::url(
             Display::return_icon('statistics.gif', get_lang('Reporting')),

@@ -231,10 +231,6 @@ define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
 // Course settings table
 define('TABLE_COURSE_SETTING', 'course_setting');
 
-// Course online tables
-define('TABLE_ONLINE_LINK', 'online_link');
-define('TABLE_ONLINE_CONNECTED', 'online_connected');
-
 // User database
 define('TABLE_PERSONAL_AGENDA', 'personal_agenda');
 define('TABLE_PERSONAL_AGENDA_REPEAT', 'personal_agenda_repeat');

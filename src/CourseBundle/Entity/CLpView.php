@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  *     indexes={
  *         @ORM\Index(name="course", columns={"c_id"}),
  *         @ORM\Index(name="lp_id", columns={"lp_id"}),
- *         @ORM\Index(name="user_id", columns={"user_id"}),
  *         @ORM\Index(name="session_id", columns={"session_id"})
  *     }
  * )
@@ -32,19 +33,22 @@ class CLpView
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp")
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $cId;
+    protected CLp $lp;
 
     /**
-     * @ORM\Column(name="lp_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $lpId;
+    protected Course $course;
 
     /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $userId;
+    protected ?Session $session = null;
 
     /**
      * @ORM\Column(name="view_count", type="integer", nullable=false)
@@ -61,61 +65,7 @@ class CLpView
      */
     protected ?int $progress = null;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected int $sessionId;
-
-    /**
-     * Set lpId.
-     *
-     * @return CLpView
-     */
-    public function setLpId(int $lpId)
-    {
-        $this->lpId = $lpId;
-
-        return $this;
-    }
-
-    /**
-     * Get lpId.
-     *
-     * @return int
-     */
-    public function getLpId()
-    {
-        return $this->lpId;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @return CLpView
-     */
-    public function setUserId(int $userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set viewCount.
-     *
-     * @return CLpView
-     */
-    public function setViewCount(int $viewCount)
+    public function setViewCount(int $viewCount): self
     {
         $this->viewCount = $viewCount;
 
@@ -132,12 +82,7 @@ class CLpView
         return $this->viewCount;
     }
 
-    /**
-     * Set lastItem.
-     *
-     * @return CLpView
-     */
-    public function setLastItem(int $lastItem)
+    public function setLastItem(int $lastItem): self
     {
         $this->lastItem = $lastItem;
 
@@ -154,12 +99,7 @@ class CLpView
         return $this->lastItem;
     }
 
-    /**
-     * Set progress.
-     *
-     * @return CLpView
-     */
-    public function setProgress(int $progress)
+    public function setProgress(int $progress): self
     {
         $this->progress = $progress;
 
@@ -176,47 +116,39 @@ class CLpView
         return $this->progress;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return CLpView
-     */
-    public function setSessionId(int $sessionId)
+    public function getLp(): CLp
     {
-        $this->sessionId = $sessionId;
+        return $this->lp;
+    }
+
+    public function setLp(CLp $lp): self
+    {
+        $this->lp = $lp;
 
         return $this;
     }
 
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
+    public function getCourse(): Course
     {
-        return $this->sessionId;
+        return $this->course;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return CLpView
-     */
-    public function setCId(int $cId)
+    public function setCourse(Course $course): self
     {
-        $this->cId = $cId;
+        $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getSession(): ?Session
     {
-        return $this->cId;
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): self
+    {
+        $this->session = $session;
+
+        return $this;
     }
 }

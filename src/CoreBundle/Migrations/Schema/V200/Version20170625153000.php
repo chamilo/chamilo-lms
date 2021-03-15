@@ -86,6 +86,17 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_forum_thread DROP FOREIGN KEY FK_5DA7884C29CCBAD0');
         }
 
+        $this->addSql('ALTER TABLE c_forum_thread CHANGE lp_item_id lp_item_id INT DEFAULT NULL');
+        if ($table->hasForeignKey('FK_5DA7884CDBF72317')) {
+            $this->addSql(
+                'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884CDBF72317 FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_5DA7884CDBF72317')) {
+            $this->addSql('CREATE INDEX IDX_5DA7884CDBF72317 ON c_forum_thread (lp_item_id)');
+        }
+
         $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date = "" OR thread_date is NULL OR thread_date = 0');
         $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_date thread_date DATETIME NOT NULL');
 

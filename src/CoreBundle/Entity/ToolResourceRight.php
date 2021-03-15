@@ -35,7 +35,7 @@ class ToolResourceRight
     protected int $mask;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="toolResourceRight", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", cascade={"persist"})
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
     protected ?Tool $tool = null;
@@ -48,18 +48,12 @@ class ToolResourceRight
         return (string) $this->getMask();
     }
 
-    /**
-     * @return Tool
-     */
-    public function getTool()
+    public function getTool(): Tool
     {
         return $this->tool;
     }
 
-    /**
-     * @return $this
-     */
-    public function setTool(Tool $tool)
+    public function setTool(Tool $tool): self
     {
         $this->tool = $tool;
 
@@ -74,10 +68,7 @@ class ToolResourceRight
         return $this->role;
     }
 
-    /**
-     * @return $this
-     */
-    public function setRole(string $role)
+    public function setRole(string $role): self
     {
         $this->role = $role;
 

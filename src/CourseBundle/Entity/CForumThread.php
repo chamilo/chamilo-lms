@@ -48,31 +48,10 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected ?CForumForum $forum = null;
 
     /**
-     * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default":0})
-     */
-    protected int $threadReplies;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="thread_poster_id", referencedColumnName="id")
      */
     protected User $user;
-
-    /**
-     * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default":0})
-     */
-    protected int $threadViews;
-
-    /**
-     * @var Collection|CForumPost[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CForumPost",
-     *     mappedBy="thread", cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     */
-    protected Collection $posts;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist", "remove"})
@@ -81,9 +60,39 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected ?CForumPost $threadLastPost = null;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem")
+     * @ORM\JoinColumn(name="lp_item_id", referencedColumnName="iid", onDelete="CASCADE")
+     */
+    protected ?CLpItem $item = null;
+
+    /**
+     * @var Collection|CForumPost[]
+     *
+     * @ORM\OneToMany(targetEntity="CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected Collection $posts;
+
+    /**
+     * @var Collection|CForumThreadQualify[]
+     *
+     * @ORM\OneToMany(targetEntity="CForumThreadQualify", mappedBy="thread", cascade={"persist", "remove"})
+     */
+    protected Collection $qualifications;
+
+    /**
      * @ORM\Column(name="thread_date", type="datetime", nullable=false)
      */
     protected DateTime $threadDate;
+
+    /**
+     * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default":0})
+     */
+    protected int $threadReplies;
+
+    /**
+     * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default":0})
+     */
+    protected int $threadViews;
 
     /**
      * @ORM\Column(name="thread_sticky", type="boolean", nullable=false)
@@ -120,21 +129,16 @@ class CForumThread extends AbstractResource implements ResourceInterface
      */
     protected bool $threadPeerQualify;
 
-    /**
-     * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
-     */
-    protected int $lpItemId;
-
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->qualifications = new ArrayCollection();
         $this->threadPeerQualify = false;
         $this->threadReplies = 0;
         $this->threadViews = 0;
         $this->locked = 0;
         $this->threadQualifyMax = 0;
         $this->threadWeight = 0;
-        $this->lpItemId = 0;
         $this->threadSticky = false;
     }
 
@@ -358,28 +362,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set lpItemId.
-     *
-     * @return $this
-     */
-    public function setLpItemId(int $lpItemId)
-    {
-        $this->lpItemId = $lpItemId;
-
-        return $this;
-    }
-
-    /**
-     * Get lpId.
-     *
-     * @return int
-     */
-    public function getLpItemId()
-    {
-        return $this->lpItemId;
-    }
-
-    /**
      * Get iid.
      *
      * @return int
@@ -417,6 +399,36 @@ class CForumThread extends AbstractResource implements ResourceInterface
     public function setThreadLastPost(CForumPost $threadLastPost): self
     {
         $this->threadLastPost = $threadLastPost;
+
+        return $this;
+    }
+
+    /**
+     * @return CForumThreadQualify[]|Collection
+     */
+    public function getQualifications()
+    {
+        return $this->qualifications;
+    }
+
+    /**
+     * @param CForumThreadQualify[]|Collection $qualifications
+     */
+    public function setQualifications(Collection $qualifications): self
+    {
+        $this->qualifications = $qualifications;
+
+        return $this;
+    }
+
+    public function getItem(): ?CLpItem
+    {
+        return $this->item;
+    }
+
+    public function setItem(?CLpItem $item): self
+    {
+        $this->item = $item;
 
         return $this;
     }

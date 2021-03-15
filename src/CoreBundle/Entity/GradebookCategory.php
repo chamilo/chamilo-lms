@@ -423,9 +423,6 @@ class GradebookCategory
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
@@ -449,7 +446,7 @@ class GradebookCategory
     /**
      * @param GradebookEvaluation[]|Collection $evaluations
      */
-    public function setEvaluations(Collection$evaluations)
+    public function setEvaluations(Collection $evaluations)
     {
         $this->evaluations = $evaluations;
 
@@ -474,9 +471,6 @@ class GradebookCategory
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDepends(): ?string
     {
         return $this->depends;
@@ -489,9 +483,6 @@ class GradebookCategory
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getMinimumToValidate(): ?int
     {
         return $this->minimumToValidate;
@@ -503,5 +494,4 @@ class GradebookCategory
 
         return $this;
     }
-
 }

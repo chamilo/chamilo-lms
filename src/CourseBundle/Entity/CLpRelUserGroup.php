@@ -42,16 +42,16 @@ class CLpRelUserGroup
     protected CLp $lp;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
-     */
-    protected ?Session $session = null;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected Course $course;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     */
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")

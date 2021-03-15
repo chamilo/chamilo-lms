@@ -135,13 +135,62 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_lp_view DROP id');
         }
 
+        if ($table->hasIndex('user_id')) {
+            $this->addSql('DROP INDEX user_id ON c_lp_view');
+        }
+
+        $this->addSql('ALTER TABLE c_lp_view CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp_view CHANGE lp_id lp_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp_view CHANGE session_id session_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_2D2F4F7D68DFD1EF')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_view ADD CONSTRAINT FK_2D2F4F7D68DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasForeignKey('FK_2D2F4F7D91D79BD3')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_view ADD CONSTRAINT FK_2D2F4F7D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
+            );
+        }
+        if (!$table->hasForeignKey('FK_2D2F4F7D613FECDF')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_view ADD CONSTRAINT FK_2D2F4F7D613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_2D2F4F7DFE54D947')) {
+            $this->addSql('CREATE INDEX IDX_2D2F4F7DFE54D947 ON c_lp_view (group_id)');
+        }
+
         $table = $schema->getTable('c_lp_item_view');
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_lp_item_view DROP id');
         }
 
-        if (false === $table->hasIndex('idx_c_lp_item_view_cid_id_view_count')) {
-            $this->addSql('CREATE INDEX idx_c_lp_item_view_cid_id_view_count ON c_lp_item_view (c_id, iid, view_count)');
+        if ($table->hasIndex('idx_c_lp_item_view_cid_id_view_count')) {
+            $this->addSql('DROP INDEX idx_c_lp_item_view_cid_id_view_count ON c_lp_item_view');
+        }
+        if ($table->hasIndex('idx_c_lp_item_view_cid_lp_view_id_lp_item_id')) {
+            $this->addSql('DROP INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id ON c_lp_item_view');
+        }
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_lp_item_view');
+        }
+
+        $this->addSql('ALTER TABLE c_lp_item_view CHANGE lp_item_id lp_item_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp_item_view CHANGE lp_view_id lp_view_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_445C6415DBF72317')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_item_view ADD CONSTRAINT FK_445C6415DBF72317 FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid) ON DELETE CASCADE'
+            );
+        }
+        if (!$table->hasForeignKey('FK_445C6415CA8D698E')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_item_view ADD CONSTRAINT FK_445C6415CA8D698E FOREIGN KEY (lp_view_id) REFERENCES c_lp_view (iid) ON DELETE CASCADE'
+            );
         }
 
         $table = $schema->getTable('c_lp_iv_interaction');

@@ -14,12 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_lp_item_view",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
  *         @ORM\Index(name="lp_item_id", columns={"lp_item_id"}),
  *         @ORM\Index(name="lp_view_id", columns={"lp_view_id"}),
- *         @ORM\Index(name="idx_c_lp_item_view_cid_lp_view_id_lp_item_id", columns={"c_id", "lp_view_id", "lp_item_id"}),
- *         @ORM\Index(name="idx_c_lp_item_view_cid_id_view_count", columns={"c_id", "iid", "view_count"})
- *
  *     }
  * )
  * @ORM\Entity
@@ -34,19 +30,16 @@ class CLpItemView
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem")
+     * @ORM\JoinColumn(name="lp_item_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $cId;
+    protected CLpItem $item;
 
     /**
-     * @ORM\Column(name="lp_item_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpView")
+     * @ORM\JoinColumn(name="lp_view_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $lpItemId;
-
-    /**
-     * @ORM\Column(name="lp_view_id", type="integer", nullable=false)
-     */
-    protected int $lpViewId;
+    protected CLpView $view;
 
     /**
      * @ORM\Column(name="view_count", type="integer", nullable=false)
@@ -104,50 +97,6 @@ class CLpItemView
         return $this->iid;
     }
 
-    /**
-     * Set lpItemId.
-     *
-     * @return CLpItemView
-     */
-    public function setLpItemId(int $lpItemId)
-    {
-        $this->lpItemId = $lpItemId;
-
-        return $this;
-    }
-
-    /**
-     * Get lpItemId.
-     *
-     * @return int
-     */
-    public function getLpItemId()
-    {
-        return $this->lpItemId;
-    }
-
-    /**
-     * Set lpViewId.
-     *
-     * @return CLpItemView
-     */
-    public function setLpViewId(int $lpViewId)
-    {
-        $this->lpViewId = $lpViewId;
-
-        return $this;
-    }
-
-    /**
-     * Get lpViewId.
-     *
-     * @return int
-     */
-    public function getLpViewId()
-    {
-        return $this->lpViewId;
-    }
-
     public function setViewCount(int $viewCount): self
     {
         $this->viewCount = $viewCount;
@@ -182,12 +131,7 @@ class CLpItemView
         return $this->startTime;
     }
 
-    /**
-     * Set totalTime.
-     *
-     * @return CLpItemView
-     */
-    public function setTotalTime(int $totalTime)
+    public function setTotalTime(int $totalTime): self
     {
         $this->totalTime = $totalTime;
 
@@ -204,12 +148,7 @@ class CLpItemView
         return $this->totalTime;
     }
 
-    /**
-     * Set score.
-     *
-     * @return CLpItemView
-     */
-    public function setScore(float $score)
+    public function setScore(float $score): self
     {
         $this->score = $score;
 
@@ -226,12 +165,7 @@ class CLpItemView
         return $this->score;
     }
 
-    /**
-     * Set status.
-     *
-     * @return CLpItemView
-     */
-    public function setStatus(string $status)
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -248,12 +182,7 @@ class CLpItemView
         return $this->status;
     }
 
-    /**
-     * Set suspendData.
-     *
-     * @return CLpItemView
-     */
-    public function setSuspendData(string $suspendData)
+    public function setSuspendData(string $suspendData): self
     {
         $this->suspendData = $suspendData;
 
@@ -270,11 +199,6 @@ class CLpItemView
         return $this->suspendData;
     }
 
-    /**
-     * Set lessonLocation.
-     *
-     * @return CLpItemView
-     */
     public function setLessonLocation(string $lessonLocation): self
     {
         $this->lessonLocation = $lessonLocation;
@@ -326,25 +250,27 @@ class CLpItemView
         return $this->maxScore;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return CLpItemView
-     */
-    public function setCId(int $cId)
+    public function getItem(): CLpItem
     {
-        $this->cId = $cId;
+        return $this->item;
+    }
+
+    public function setItem(CLpItem $item): self
+    {
+        $this->item = $item;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getView(): CLpView
     {
-        return $this->cId;
+        return $this->view;
+    }
+
+    public function setView(CLpView $view): self
+    {
+        $this->view = $view;
+
+        return $this;
     }
 }

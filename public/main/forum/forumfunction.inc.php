@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -2319,10 +2320,15 @@ function saveThread(
         ->setThreadQualifyMax($values['numeric_calification'] ?? 0)
         ->setThreadWeight($values['weight_calification'] ?? 0)
         ->setThreadPeerQualify(isset($values['thread_peer_qualify']) ? (bool) $values['thread_peer_qualify'] : false)
-        ->setLpItemId(isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0)
         ->setParent($forum)
         ->addCourseLink($course, $session)
     ;
+    $em = Database::getManager();
+    $itemId = isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0;
+    if (!empty($itemId)) {
+        $item = $em->getRepository(CLpItem::class)->find($itemId);
+        $thread->setItem($item);
+    }
 
     $repo = Container::getForumThreadRepository();
     $repo->create($thread);

@@ -2743,14 +2743,17 @@ class Category implements GradebookItem
 
     /**
      * Calculate the current score on a gradebook category for a user.
-     *
-     * @param int               $userId   The user id
-     * @param GradebookCategory $category
-     *
      * @return float The score
      */
-    private static function calculateCurrentScore($userId, $category)
+    private static function calculateCurrentScore(int $userId, GradebookCategory $category)
     {
+        if (null === $category) {
+            return 0;
+        }
+
+        $categoryList = self::load($category->getId());
+        $category = $categoryList[0] ?? null;
+
         if (null === $category) {
             return 0;
         }
@@ -2758,9 +2761,13 @@ class Category implements GradebookItem
         $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
+        $count = count($evaluationsAndLinks);
+        if (empty($count)) {
+            return 0;
+        }
 
         $categoryScore = 0;
-        for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
+        for ($i = 0; $i < $count; $i++) {
             /** @var AbstractLink $item */
             $item = $evaluationsAndLinks[$i];
             // Set session id from category

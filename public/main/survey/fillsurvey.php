@@ -176,7 +176,7 @@ if (!isset($_POST['finish_survey']) &&
 
 $logInfo = [
     'tool' => TOOL_SURVEY,
-    'tool_id' => $survey_invitation['survey_invitation_id'],
+    'tool_id' => $survey_invitation['iid'],
     'action' => 'invitationcode',
     'action_details' => $invitationcode,
 ];

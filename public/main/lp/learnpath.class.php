@@ -942,17 +942,17 @@ class learnpath
         // Delete lp item id.
         foreach ($this->items as $lpItemId => $dummy) {
             $sql = "DELETE FROM $lp_item_view
-                    WHERE c_id = $course_id AND lp_item_id = '".$lpItemId."'";
+                    WHERE lp_item_id = '".$lpItemId."'";
             Database::query($sql);
         }
 
         // Proposed by Christophe (nickname: clefevre)
         $sql = "DELETE FROM $lp_item
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
+                WHERE lp_id = ".$this->lp_id;
         Database::query($sql);
 
         $sql = "DELETE FROM $lp_view
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
+                WHERE lp_id = ".$this->lp_id;
         Database::query($sql);
 
         //self::toggleVisibility($this->lp_id, 0);
@@ -999,8 +999,7 @@ class learnpath
         $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
         $sql = "DELETE FROM $table
                 WHERE
-                    lp_id = {$this->lp_id} AND
-                    c_id = $course_id ";
+                    lp_id = {$this->lp_id}";
         Database::query($sql);
 
         /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -1052,12 +1051,12 @@ class learnpath
         }
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $lp_item
-                WHERE c_id = $course_id AND parent_item_id = $id";
+                WHERE parent_item_id = $id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
             $num += $this->delete_children_items($row['iid']);
             $sql = "DELETE FROM $lp_item
-                    WHERE c_id = $course_id AND iid = ".$row['iid'];
+                    WHERE iid = ".$row['iid'];
             Database::query($sql);
             $num++;
         }
@@ -1110,7 +1109,6 @@ class learnpath
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1
                     WHERE
-                        c_id = $course_id AND
                         lp_id = $lp AND
                         parent_item_id = $parent AND
                         display_order > $display";
@@ -1118,12 +1116,12 @@ class learnpath
 
         //Removing prerequisites since the item will not longer exist
         $sql_all = "UPDATE $lp_item SET prerequisite = ''
-                    WHERE c_id = $course_id AND prerequisite = '$id'";
+                    WHERE prerequisite = '$id'";
         Database::query($sql_all);
 
         $sql = "UPDATE $lp_item
                 SET previous_item_id = ".$this->getLastInFirstLevel()."
-                WHERE c_id = $course_id AND lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
+                WHERE lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql);
 
         // Remove from search engine if enabled.
@@ -5185,6 +5183,7 @@ class learnpath
      */
     public function update_display_order()
     {
+        return;
         $course_id = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $table

@@ -117,14 +117,13 @@ class SurveyLink extends AbstractLink
         $courseId = $this->getCourseId();
 
         $tbl_survey = Database::get_course_table(TABLE_SURVEY);
-        $tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $sql = "SELECT
                 COUNT(i.answered)
                 FROM $tbl_survey AS s
-                INNER JOIN $tbl_survey_invitation AS i
+                INNER JOIN $table AS i
                 ON s.code = i.survey_code
                 WHERE
-                    s.c_id = $courseId AND
                     i.c_id = $courseId AND
                     s.iid = $ref_id AND
                     i.session_id = $sessionId";
@@ -160,7 +159,6 @@ class SurveyLink extends AbstractLink
                 JOIN $tbl_survey_invitation AS i
                 ON s.code = i.survey_code
                 WHERE
-                    s.c_id = $courseId AND
                     i.c_id = $courseId AND
                     s.iid = $ref_id AND
                     i.session_id = $sessionId

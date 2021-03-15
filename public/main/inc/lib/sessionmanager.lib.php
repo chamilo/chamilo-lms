@@ -1822,7 +1822,7 @@ class SessionManager
             return false;
         }
 
-        if (self::allowed($sessionId) && !$from_ws) {
+        if (self::allowed($sessionEntity) && !$from_ws) {
             $sessionAdminId = $sessionEntity->getSessionAdmin()->getId();
             if ($sessionAdminId != $userId && !api_is_platform_admin()) {
                 api_not_allowed(true);
@@ -1860,7 +1860,7 @@ class SessionManager
                 WHERE session_id = $sessionId";
         Database::query($sql);
 
-        Database::query("DELETE FROM $tbl_student_publication WHERE session_id = $sessionId");
+        //Database::query("DELETE FROM $tbl_student_publication WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id = $sessionId");

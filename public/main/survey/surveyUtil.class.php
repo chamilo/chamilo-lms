@@ -2545,8 +2545,8 @@ class SurveyUtil
             (!empty($params['user']) || !empty($params['group_id'])) &&
             !empty($params['survey_code'])
         ) {
-            if (!isset($params['survey_invitation_id'])) {
-                $params['survey_invitation_id'] = 0;
+            if (!isset($params['iid'])) {
+                $params['iid'] = 0;
             }
             if (!isset($params['answered'])) {
                 $params['answered'] = 0;
@@ -2554,15 +2554,8 @@ class SurveyUtil
             if (!isset($params['group_id'])) {
                 $params['group_id'] = 0;
             }
-            $insertId = Database::insert($table, $params);
-            if ($insertId) {
-                $sql = "UPDATE $table
-                        SET survey_invitation_id = $insertId
-                        WHERE iid = $insertId";
-                Database::query($sql);
-            }
 
-            return $insertId;
+            return Database::insert($table, $params);
         }
 
         return false;
@@ -2584,7 +2577,7 @@ class SurveyUtil
         $groupId = (int) $groupId;
         $surveyCode = Database::escape_string($surveyCode);
 
-        $sql = "SELECT survey_invitation_id FROM $table
+        $sql = "SELECT iid FROM $table
                 WHERE
                     c_id = $courseId AND
                     session_id = $sessionId AND

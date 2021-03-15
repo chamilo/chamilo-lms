@@ -2,9 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * Sessions edition script.
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

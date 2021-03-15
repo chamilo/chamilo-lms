@@ -1576,7 +1576,7 @@ if (empty($details)) {
         /** @var CLpCategory $item */
         foreach ($categories as $item) {
             $categoryId = $item->getIid();
-            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseId, $sessionId)) {
+            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $course, $session)) {
                 continue;
             }
 

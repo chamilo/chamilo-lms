@@ -1632,6 +1632,7 @@ class SessionManager
         $sendSubscriptionNotification = false,
         $status = 0
     ) {
+        $id = (int) $id;
         $status = (int) $status;
         $coachId = (int) $coachId;
         $sessionCategoryId = (int) $sessionCategoryId;
@@ -1679,7 +1680,7 @@ class SessionManager
         } else {
             $sessionInfo = self::get_session_by_name($name);
             $exists = false;
-            if (!empty($sessionInfo) && $sessionInfo['id'] !== $id) {
+            if (!empty($sessionInfo) && (int) $sessionInfo['id'] !== $id) {
                 $exists = true;
             }
 

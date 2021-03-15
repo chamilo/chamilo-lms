@@ -399,16 +399,16 @@ $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 $titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
-        $my_exercise_list[$row['id']] = '';
-        if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
-            $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $my_exercise_list[$row['iid']] = '';
+        if ($row['iid'] == $fromExercise && $selected_course == api_get_course_int_id()) {
+            $my_exercise_list[$row['iid']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
 
         $exerciseTitle = $row['title'];
         if ($titleSavedAsHtml) {
             $exerciseTitle = strip_tags(api_html_entity_decode(trim($exerciseTitle)));
         }
-        $my_exercise_list[$row['id']] .= $exerciseTitle;
+        $my_exercise_list[$row['iid']] .= $exerciseTitle;
     }
 }
 
@@ -965,6 +965,8 @@ if ($fromExercise <= 0) {
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
+    } elseif (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+        $actionIcon2 = 'add';
     }
 }
 
@@ -973,17 +975,17 @@ if (is_array($mainQuestionList)) {
     foreach ($mainQuestionList as $question) {
         $row = [];
         // This function checks if the question can be read
-        $question_type = get_question_type_for_question($selected_course, $question['id']);
+        $question_type = get_question_type_for_question($selected_course, $question['iid']);
 
         if (empty($question_type)) {
             continue;
         }
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        if (!$objExercise->hasQuestion($question['id'])) {
+        if (!$objExercise->hasQuestion($question['iid'])) {
             $row[] = Display::input(
                 'checkbox',
                 'questions[]',
-                $question['id'],
+                $question['iid'],
                 ['class' => 'question_checkbox']
             );
         } else {
@@ -993,7 +995,7 @@ if (is_array($mainQuestionList)) {
         $row[] = getLinkForQuestion(
             $questionTagA,
             $fromExercise,
-            $question['id'],
+            $question['iid'],
             $question['type'],
             $question['question'],
             $sessionId,
@@ -1001,12 +1003,12 @@ if (is_array($mainQuestionList)) {
         );
 
         $row[] = $question_type;
-        $row[] = TestCategory::getCategoryNameForQuestion($question['id'], $selected_course);
+        $row[] = TestCategory::getCategoryNameForQuestion($question['iid'], $selected_course);
         $row[] = $question['level'];
         $row[] = get_action_icon_for_question(
                 $actionIcon1,
                 $fromExercise,
-                $question['id'],
+                $question['iid'],
                 $question['type'],
                 $question['question'],
                 $selected_course,
@@ -1020,7 +1022,7 @@ if (is_array($mainQuestionList)) {
             get_action_icon_for_question(
                 $actionIcon2,
                 $fromExercise,
-                $question['id'],
+                $question['iid'],
                 $question['type'],
                 $question['question'],
                 $selected_course,

@@ -1065,12 +1065,11 @@ class MySpace
     }
 
     /**
-     * Generates a structure to show the links or names for the authors by lesson report
+     * Generates a structure to show the links or names for the authors by lesson report.
      *
      * @param array $students
      * @param array $studentRegistered
      * @param       $lpCourseCode
-     *
      */
     public static function getStudentDataToReportByLp($students = [], $studentRegistered = [], $lpCourseCode)
     {
@@ -1079,8 +1078,8 @@ class MySpace
         $data['csv'] = '';
         $data['html'] = '';
         foreach ($students as $student) {
-            $lpSessionId = isset($student['session_id']) ? (int)$student['session_id'] : 0;
-            $studentId = (int)$student['id'];
+            $lpSessionId = isset($student['session_id']) ? (int) $student['session_id'] : 0;
+            $studentId = (int) $student['id'];
             if (!isset($studentRegistered[$studentId][$lpSessionId])) {
                 $url = api_get_path(WEB_CODE_PATH)."mySpace/myStudents.php?details=true&student=$studentId";
                 if (0 != $lpSessionId) {
@@ -1106,13 +1105,12 @@ class MySpace
     }
 
     /**
-     * * Generates a structure to show the names for the authors by lesson report by item
+     * * Generates a structure to show the names for the authors by lesson report by item.
      *
      * @param array  $students
      * @param array  $studentProcessed
      * @param string $typeReport
      * @param false  $csv
-     *
      */
     public static function getStudentDataToReportByLpItem($students = [], $studentProcessed = [], $typeReport = '', $csv = false)
     {
@@ -1122,7 +1120,7 @@ class MySpace
             $student = $students[$i];
             $studentId = $student['id'];
             $lpItemIdStudent = $student['lp_item_id'];
-            $sessionId = isset($student['session_id']) ? (int)$student['session_id'] : 0;
+            $sessionId = isset($student['session_id']) ? (int) $student['session_id'] : 0;
             $studentName = $student['complete_name'];
             $studentCompany = $student['company'];
             $studentName = "$studentName($studentCompany)";
@@ -1435,7 +1433,6 @@ class MySpace
                         $studentRegistered = $tempArray['student_registered'];
                         $totalStudents += $tempArray['total_students'];
 
-
                         $tempArray = self::getStudentDataToReportByLp($courseStudentGroup, $studentRegistered, $lpCourseCode);
                         $studentsName .= $tempArray['csv'];
                         $htmlData .= $tempArray['html'];
@@ -1586,7 +1583,7 @@ class MySpace
         /* use 'for' to performance */
         for ($i = 0; $i < $totalData; $i++) {
             $item = $data[$i];
-            $lpItemId = (int)$item['lp_item_id'];
+            $lpItemId = (int) $item['lp_item_id'];
             $whereInLp[] = $item['lp_id'];
             $author = isset($cLpItemsAuthor[$lpItemId]) ? $cLpItemsAuthor[$lpItemId] : null;
             $item['author'] = $author;
@@ -1662,7 +1659,7 @@ class MySpace
                         'lp_item' => $lpItem,
                     ];
                 }
-                }
+            }
         }
         if ($csv == false) {
             if (empty($tableHtml)) {
@@ -4302,8 +4299,9 @@ class MySpace
      *
      * @return string
      */
-    public static function getCompanyOfUser($userId = 0) {
-        $userId = (int)$userId;
+    public static function getCompanyOfUser($userId = 0)
+    {
+        $userId = (int) $userId;
         if (0 != $userId) {
             $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
             $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);

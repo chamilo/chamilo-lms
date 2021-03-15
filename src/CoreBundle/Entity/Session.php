@@ -340,7 +340,7 @@ class Session
         return $this->users;
     }
 
-    public function setUsers($users): self
+    public function setUsers(Collection $users): self
     {
         $this->users = new ArrayCollection();
 
@@ -1016,7 +1016,7 @@ class Session
         return $this->urls;
     }
 
-    public function setUrls($urls): void
+    public function setUrls(Collection $urls): void
     {
         $this->urls = new ArrayCollection();
 

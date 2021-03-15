@@ -24,58 +24,16 @@ class UsergroupRelSession
     protected int $id;
 
     /**
-     * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="sessions")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $usergroupId;
+    protected Usergroup $usergroup;
 
     /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $sessionId;
-
-    /**
-     * Set usergroupId.
-     *
-     * @return UsergroupRelSession
-     */
-    public function setUsergroupId(int $usergroupId)
-    {
-        $this->usergroupId = $usergroupId;
-
-        return $this;
-    }
-
-    /**
-     * Get usergroupId.
-     *
-     * @return int
-     */
-    public function getUsergroupId()
-    {
-        return $this->usergroupId;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @return UsergroupRelSession
-     */
-    public function setSessionId(int $sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
+    protected Session $session;
 
     /**
      * Get id.
@@ -85,5 +43,29 @@ class UsergroupRelSession
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUsergroup(): Usergroup
+    {
+        return $this->usergroup;
+    }
+
+    public function setUsergroup(Usergroup $usergroup): self
+    {
+        $this->usergroup = $usergroup;
+
+        return $this;
+    }
+
+    public function getSession(): Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(Session $session): self
+    {
+        $this->session = $session;
+
+        return $this;
     }
 }

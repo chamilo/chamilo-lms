@@ -1130,10 +1130,10 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         foreach ($result as $item) {
             $list = [
                 //'Id #'.$item->getId(),
-                'LP #'.$item->getLpId(),
+                'LP #'.$item->getLp()->getIid(),
                 'Progress: '.$item->getProgress(),
-                'Course #'.$item->getCId(),
-                'Session #'.$item->getSessionId(),
+                //'Course #'.$item->getCId(),
+                //'Session #'.$item->getSessionId(),
             ];
             $cLpView[] = implode(', ', $list);
         }
@@ -1246,8 +1246,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         /** @var UserRelCourseVote $item */
         foreach ($result as $item) {
             $list = [
-                'Course #'.$item->getCId(),
-                'Session #'.$item->getSessionId(),
+                'Course #'.$item->getCourse()->getId(),
+                //'Session #'.$item->getSession()->getId(),
                 'Vote: '.$item->getVote(),
             ];
             $userRelCourseVote[] = implode(', ', $list);

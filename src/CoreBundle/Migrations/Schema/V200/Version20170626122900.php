@@ -134,17 +134,52 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('user_rel_course_vote');
         $this->addSql('ALTER TABLE user_rel_course_vote CHANGE user_id user_id INT DEFAULT NULL');
-        if (false === $table->hasForeignKey('FK_4038AA47A76ED395')) {
+        if (!$table->hasForeignKey('FK_4038AA47A76ED395')) {
             $this->addSql(
                 'ALTER TABLE user_rel_course_vote ADD CONSTRAINT FK_4038AA47A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
         }
 
+        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE session_id session_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE url_id url_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_4038AA4791D79BD3')) {
+            $this->addSql(
+                'ALTER TABLE user_rel_course_vote ADD CONSTRAINT FK_4038AA4791D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
+            );
+        }
+        if (!$table->hasForeignKey('FK_4038AA47613FECDF')) {
+            $this->addSql(
+                'ALTER TABLE user_rel_course_vote ADD CONSTRAINT FK_4038AA47613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasForeignKey('FK_4038AA4781CFDAE7')) {
+            $this->addSql(
+                'ALTER TABLE user_rel_course_vote ADD CONSTRAINT FK_4038AA4781CFDAE7 FOREIGN KEY (url_id) REFERENCES access_url (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_4038AA47613FECDF')) {
+            $this->addSql('CREATE INDEX IDX_4038AA47613FECDF ON user_rel_course_vote (session_id)');
+        }
+        if (!$table->hasIndex('IDX_4038AA4781CFDAE7')) {
+            $this->addSql('CREATE INDEX IDX_4038AA4781CFDAE7 ON user_rel_course_vote (url_id)');
+        }
+
         $table = $schema->getTable('user_rel_tag');
         $this->addSql('ALTER TABLE user_rel_tag CHANGE user_id user_id INT DEFAULT NULL');
-        if (false === $table->hasForeignKey('FK_D5CB75B6A76ED395')) {
+        if (!$table->hasForeignKey('FK_D5CB75B6A76ED395')) {
             $this->addSql(
                 'ALTER TABLE user_rel_tag ADD CONSTRAINT FK_D5CB75B6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+        $this->addSql('ALTER TABLE user_rel_tag CHANGE tag_id tag_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_D5CB75B6BAD26311')) {
+            $this->addSql(
+                'ALTER TABLE user_rel_tag ADD CONSTRAINT FK_D5CB75B6BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE'
             );
         }
 

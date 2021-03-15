@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,19 +25,16 @@ class UsergroupRelQuestion
     protected int $id;
 
     /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected int $cId;
+    protected CQuizQuestion $question;
 
     /**
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="questions")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $questionId;
-
-    /**
-     * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
-     */
-    protected int $usergroupId;
+    protected Usergroup $usergroup;
 
     /**
      * @ORM\Column(name="coefficient", type="float", precision=6, scale=2, nullable=true)
@@ -44,77 +42,16 @@ class UsergroupRelQuestion
     protected ?float $coefficient = null;
 
     /**
-     * Set cId.
-     *
-     * @return UsergroupRelQuestion
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
+     * Get id.
      *
      * @return int
      */
-    public function getCId()
+    public function getId()
     {
-        return $this->cId;
+        return $this->id;
     }
 
-    /**
-     * Set questionId.
-     *
-     * @return UsergroupRelQuestion
-     */
-    public function setQuestionId(int $questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set usergroupId.
-     *
-     * @return UsergroupRelQuestion
-     */
-    public function setUsergroupId(int $usergroupId)
-    {
-        $this->usergroupId = $usergroupId;
-
-        return $this;
-    }
-
-    /**
-     * Get usergroupId.
-     *
-     * @return int
-     */
-    public function getUsergroupId()
-    {
-        return $this->usergroupId;
-    }
-
-    /**
-     * Set coefficient.
-     *
-     * @return UsergroupRelQuestion
-     */
-    public function setCoefficient(float $coefficient)
+    public function setCoefficient(float $coefficient): self
     {
         $this->coefficient = $coefficient;
 
@@ -131,13 +68,27 @@ class UsergroupRelQuestion
         return $this->coefficient;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getQuestion(): CQuizQuestion
     {
-        return $this->id;
+        return $this->question;
+    }
+
+    public function setQuestion(CQuizQuestion $question): self
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    public function getUsergroup(): Usergroup
+    {
+        return $this->usergroup;
+    }
+
+    public function setUsergroup(Usergroup $usergroup): self
+    {
+        $this->usergroup = $usergroup;
+
+        return $this;
     }
 }

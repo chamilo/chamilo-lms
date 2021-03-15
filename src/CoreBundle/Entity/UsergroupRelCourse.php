@@ -22,58 +22,16 @@ class UsergroupRelCourse
     protected int $id;
 
     /**
-     * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="courses")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $usergroupId;
+    protected Usergroup $usergroup;
 
     /**
-     * @ORM\Column(name="course_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $courseId;
-
-    /**
-     * Set usergroupId.
-     *
-     * @return UsergroupRelCourse
-     */
-    public function setUsergroupId(int $usergroupId)
-    {
-        $this->usergroupId = $usergroupId;
-
-        return $this;
-    }
-
-    /**
-     * Get usergroupId.
-     *
-     * @return int
-     */
-    public function getUsergroupId()
-    {
-        return $this->usergroupId;
-    }
-
-    /**
-     * Set courseId.
-     *
-     * @return UsergroupRelCourse
-     */
-    public function setCourseId(int $courseId)
-    {
-        $this->courseId = $courseId;
-
-        return $this;
-    }
-
-    /**
-     * Get courseId.
-     *
-     * @return int
-     */
-    public function getCourseId()
-    {
-        return $this->courseId;
-    }
+    protected Course $course;
 
     /**
      * Get id.
@@ -83,5 +41,29 @@ class UsergroupRelCourse
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUsergroup(): Usergroup
+    {
+        return $this->usergroup;
+    }
+
+    public function setUsergroup(Usergroup $usergroup): self
+    {
+        $this->usergroup = $usergroup;
+
+        return $this;
+    }
+
+    public function getCourse(): Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(Course $course): self
+    {
+        $this->course = $course;
+
+        return $this;
     }
 }

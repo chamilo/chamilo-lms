@@ -172,15 +172,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
                 'ALTER TABLE c_shortcut ADD CONSTRAINT FK_3F6BB9571BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
         }
-
-        $table = $schema->getTable('usergroup');
-        if (false === $table->hasForeignKey('FK_4A6478171BAD783F')) {
-            $this->addSql('ALTER TABLE usergroup ADD CONSTRAINT FK_4A6478171BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-        }
-
-        if (false === $table->hasIndex('UNIQ_4A6478171BAD783F')) {
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_4A6478171BAD783F ON usergroup (resource_node_id)');
-        }
     }
 
     public function down(Schema $schema): void

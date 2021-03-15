@@ -77,9 +77,27 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
     /**
      * @var Collection|UsergroupRelUser[]
-     * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"})
      */
     protected Collection $users;
+
+    /**
+     * @var Collection|UsergroupRelCourse[]
+     * @ORM\OneToMany(targetEntity="UsergroupRelCourse", mappedBy="usergroup", cascade={"persist"})
+     */
+    protected Collection $courses;
+
+    /**
+     * @var Collection|UsergroupRelSession[]
+     * @ORM\OneToMany(targetEntity="UsergroupRelSession", mappedBy="usergroup", cascade={"persist"})
+     */
+    protected Collection $sessions;
+
+    /**
+     * @var Collection|UsergroupRelQuestion[]
+     * @ORM\OneToMany(targetEntity="UsergroupRelQuestion", mappedBy="usergroup", cascade={"persist"})
+     */
+    protected Collection $questions;
 
     /**
      * @var AccessUrlRelUserGroup[]|Collection
@@ -95,6 +113,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
+        $this->courses = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
+        $this->questions = new ArrayCollection();
     }
 
     public function __toString(): string

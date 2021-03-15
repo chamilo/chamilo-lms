@@ -39,31 +39,10 @@ class UserRelTag
     protected User $user;
 
     /**
-     * @ORM\Column(name="tag_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tag")
+     * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected int $tagId;
-
-    /**
-     * Set tagId.
-     *
-     * @return UserRelTag
-     */
-    public function setTagId(int $tagId)
-    {
-        $this->tagId = $tagId;
-
-        return $this;
-    }
-
-    /**
-     * Get tagId.
-     *
-     * @return int
-     */
-    public function getTagId()
-    {
-        return $this->tagId;
-    }
+    protected Tag $tag;
 
     /**
      * Get id.
@@ -73,5 +52,29 @@ class UserRelTag
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTag(): Tag
+    {
+        return $this->tag;
+    }
+
+    public function setTag(Tag $tag): self
+    {
+        $this->tag = $tag;
+
+        return $this;
     }
 }

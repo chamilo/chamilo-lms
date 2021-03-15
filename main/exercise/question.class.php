@@ -1621,7 +1621,7 @@ abstract class Question
     public static function getInstance($type)
     {
         if (!is_null($type)) {
-            list($fileName, $className) = self::get_question_type($type);
+            [$fileName, $className] = self::get_question_type($type);
             if (!empty($fileName)) {
                 include_once $fileName;
                 if (class_exists($className)) {
@@ -2083,8 +2083,7 @@ abstract class Question
         Database::delete(
             $table,
             [
-                'c_id = ? AND question_id = ?' => [
-                    $course_id,
+                'question_id = ?' => [
                     $question_id,
                 ],
             ]
@@ -2105,7 +2104,7 @@ abstract class Question
         return Database::update(
             $table,
             $params,
-            ['c_id = ? AND id = ?' => [$course_id, $id]]
+            ['iid = ?' => [$course_id, $id]]
         );
     }
 
@@ -2124,8 +2123,7 @@ abstract class Question
             $table,
             [
                 'where' => [
-                    'c_id = ? AND question_id = ?' => [
-                        $course_id,
+                    'question_id = ?' => [
                         $question_id,
                     ],
                 ],

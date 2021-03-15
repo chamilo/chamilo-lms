@@ -504,7 +504,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if ($category) {
                 $categoryQuestionName = $category->name;
             }
-            list($noValue, $height) = self::displayDegreeChartChildren(
+            [$noValue, $height] = self::displayDegreeChartChildren(
                 $scoreListForCategory,
                 300,
                 '',
@@ -1143,11 +1143,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function getPercentagePosition($optionId)
     {
         $tblAnswerOption = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $courseId = api_get_course_int_id();
         $optionId = (int) $optionId;
-        $sql = "SELECT position
-                FROM $tblAnswerOption
-                WHERE c_id = $courseId AND id = $optionId";
+        $sql = "SELECT position FROM $tblAnswerOption WHERE iid = $optionId";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) == 0) {

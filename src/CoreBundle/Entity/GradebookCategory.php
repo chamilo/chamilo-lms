@@ -543,6 +543,4 @@ class GradebookCategory
 
         return $this;
     }
-
-
 }

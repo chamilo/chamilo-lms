@@ -45,9 +45,6 @@ class SkillRelProfile
         return $this->id;
     }
 
-    /**
-     * @return Skill
-     */
     public function getSkill(): Skill
     {
         return $this->skill;
@@ -71,7 +68,4 @@ class SkillRelProfile
 
         return $this;
     }
-
-
-
 }

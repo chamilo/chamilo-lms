@@ -4,6 +4,8 @@
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
+use Chamilo\CoreBundle\Framework\Container;
+
 $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -800,33 +802,30 @@ $no_qualification = false;
 $certificate = [];
 $actionsLeft = '';
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
-
+$category = null;
 if (!empty($selectCat)) {
-    $cat = new Category();
+    $repo = Container::getGradeBookCategoryRepository();
+    if (!empty($categoryId)) {
+        $category = $repo->find($selectCat);
+    }
     $course_id = CourseManager::get_course_by_category($selectCat);
-    $show_message = $cat->show_message_resource_delete($course_id);
+    $show_message = Category::show_message_resource_delete($course_id);
     if ('' == $show_message) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-            $certificate = Category::generateUserCertificate(
-                $selectCat,
-                $stud_id
-            );
+            if ($category) {
+                $certificate = Category::generateUserCertificate($category, $stud_id);
+                if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
+                    $actionsLeft .= Display::url(
+                        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download certificate in PDF'),
+                        $certificate['pdf_url'],
+                        ['class' => 'btn btn-default']
+                    );
+                }
 
-            if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
-                $actionsLeft .= Display::url(
-                    Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download certificate in PDF'),
-                    $certificate['pdf_url'],
-                    ['class' => 'btn btn-default']
-                );
+                $currentScore = Category::getCurrentScore($stud_id, $category, true);
+                Category::registerCurrentScore($currentScore, $stud_id, $selectCat);
             }
-
-            $currentScore = Category::getCurrentScore(
-                $stud_id,
-                $cats[0],
-                true
-            );
-            Category::registerCurrentScore($currentScore, $stud_id, $selectCat);
         }
     }
 }

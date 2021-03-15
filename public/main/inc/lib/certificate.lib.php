@@ -906,10 +906,11 @@ class Certificate extends Model
     {
         $controller = new IndexManager(get_lang('My courses'));
         $courseAndSessions = $controller->returnCoursesAndSessions($userId, true, null, true, false);
-
+        $repo = Container::getGradeBookCategoryRepository();
         if (isset($courseAndSessions['courses']) && !empty($courseAndSessions['courses'])) {
             foreach ($courseAndSessions['courses'] as $course) {
-                $cats = Category::load(
+                $category = $repo->findOneBy(['course' => $course['real_id']]);
+                /*$cats = Category::load(
                     null,
                     null,
                     $course['code'],
@@ -917,13 +918,9 @@ class Certificate extends Model
                     null,
                     null,
                     false
-                );
-
-                if (isset($cats[0]) && !empty($cats[0])) {
-                    Category::generateUserCertificate(
-                        $cats[0]->get_id(),
-                        $userId
-                    );
+                );*/
+                if (null !== $category) {
+                    Category::generateUserCertificate($category, $userId);
                 }
             }
         }
@@ -935,7 +932,7 @@ class Certificate extends Model
                         if (!empty($sessionData['courses'])) {
                             $sessionId = $sessionData['session_id'];
                             foreach ($sessionData['courses'] as $courseData) {
-                                $cats = Category:: load(
+                                /*$cats = Category:: load(
                                     null,
                                     null,
                                     $courseData['course_code'],
@@ -943,13 +940,13 @@ class Certificate extends Model
                                     null,
                                     $sessionId,
                                     false
-                                );
+                                );*/
 
-                                if (isset($cats[0]) && !empty($cats[0])) {
-                                    Category::generateUserCertificate(
-                                        $cats[0]->get_id(),
-                                        $userId
-                                    );
+                                $category = $repo->findOneBy(
+                                    ['course' => $courseData['real_id'], 'session' => $sessionId]
+                                );
+                                if (null !== $category) {
+                                    Category::generateUserCertificate($category, $userId);
                                 }
                             }
                         }

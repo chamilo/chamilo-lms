@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Skill as SkillEntity;
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
@@ -1149,49 +1150,38 @@ class Skill extends Model
     }
 
     /**
-     * @param int      $userId
-     * @param Category $category
-     * @param int      $courseId
-     * @param int      $sessionId
+     * @param int               $userId
+     * @param GradebookCategory $category
+     * @param int               $courseId
+     * @param int               $sessionId
      *
      * @return bool
      */
     public function addSkillToUser(
         $userId,
-        $category,
+        GradebookCategory $category,
         $courseId,
         $sessionId
     ) {
-        $skill_gradebook = new SkillRelGradebook();
         $skill_rel_user = new SkillRelUser();
 
-        if (empty($category)) {
-            return false;
-        }
-
         // Load subcategories
-        if (empty($category->get_parent_id())) {
-            $subCategories = $category->get_subcategories(
-                $userId,
-                $category->get_course_code(),
-                $category->get_session_id()
-            );
+        if ($category->hasSubCategories()) {
+            $subCategories = $category->getSubCategories();
             if (!empty($subCategories)) {
-                /** @var Category $subCategory */
                 foreach ($subCategories as $subCategory) {
                     $this->addSkillToUser($userId, $subCategory, $courseId, $sessionId);
                 }
             }
         }
 
-        $gradebookId = $category->get_id();
-        $skill_gradebooks = $skill_gradebook->get_all(['where' => ['gradebook_id = ?' => $gradebookId]]);
-
-        if (!empty($skill_gradebooks)) {
-            foreach ($skill_gradebooks as $skill_gradebook) {
+        $skills = $category->getSkills();
+        if (!empty($skills)) {
+            foreach ($skills as $skill) {
+                $skillId = $skill->getSkill()->getId();
                 $hasSkill = $this->userHasSkill(
                     $userId,
-                    $skill_gradebook['skill_id'],
+                    $skillId,
                     $courseId,
                     $sessionId
                 );
@@ -1199,12 +1189,11 @@ class Skill extends Model
                 if (!$hasSkill) {
                     $params = [
                         'user_id' => $userId,
-                        'skill_id' => $skill_gradebook['skill_id'],
+                        'skill_id' => $skillId,
                         'acquired_skill_at' => api_get_utc_datetime(),
                         'course_id' => (int) $courseId,
                         'session_id' => $sessionId ? (int) $sessionId : null,
                     ];
-
                     $skill_rel_user->save($params);
                 }
             }

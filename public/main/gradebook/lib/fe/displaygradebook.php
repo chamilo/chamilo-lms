@@ -292,9 +292,8 @@ class DisplayGradebook
             );
         }
 
-        $objcat = new Category();
         $course_id = CourseManager::get_course_by_category($selectcat);
-        $message_resource = $objcat->show_message_resource_delete($course_id);
+        $message_resource = Category::show_message_resource_delete($course_id);
         $grade_model_id = $catobj->get_grade_model_id();
         $header = null;
         if (isset($catobj) && !empty($catobj)) {

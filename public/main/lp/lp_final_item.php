@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Print a learning path finish page with details.
@@ -92,7 +95,9 @@ unset($currentItem);
 // show a prerequisites warning
 if (false == $accessGranted) {
     echo Display::return_message(
-        get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.'),
+        get_lang(
+            'This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.'
+        ),
         'warning'
     );
     $finalItemTemplate = '';
@@ -131,14 +136,12 @@ if (false == $accessGranted) {
 
         if ($link) {
             $cat = new Category();
-            $catCourseCode = CourseManager::get_course_by_category($categoryId);
-            $show_message = $cat->show_message_resource_delete($catCourseCode);
+            $show_message = Category::show_message_resource_delete($courseId);
+            $repo = Container::getGradeBookCategoryRepository();
+            $category = $repo->find($categoryId);
 
             if (false === $show_message && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-                $certificate = Category::generateUserCertificate(
-                    $categoryId,
-                    $userId
-                );
+                $certificate = Category::generateUserCertificate($category, $userId);
 
                 if (!empty($certificate['pdf_url']) ||
                     !empty($certificate['badge_link'])
@@ -147,9 +150,7 @@ if (false == $accessGranted) {
                         $downloadCertificateLink = Category::getDownloadCertificateBlock($certificate);
                     }
 
-                    if (is_array($certificate) &&
-                        isset($certificate['badge_link'])
-                    ) {
+                    if (is_array($certificate) && isset($certificate['badge_link'])) {
                         $courseId = api_get_course_int_id();
                         $badgeLink = generateLPFinalItemTemplateBadgeLinks(
                             $userId,
@@ -159,16 +160,8 @@ if (false == $accessGranted) {
                     }
                 }
 
-                $currentScore = Category::getCurrentScore(
-                    $userId,
-                    $category,
-                    true
-                );
-                Category::registerCurrentScore(
-                    $currentScore,
-                    $userId,
-                    $categoryId
-                );
+                $currentScore = Category::getCurrentScore($userId, $category, true);
+                Category::registerCurrentScore($currentScore, $userId, $categoryId);
             }
         }
 

@@ -743,18 +743,21 @@ class Category implements GradebookItem
      *
      * @return bool|string
      */
-    public function show_message_resource_delete($course_id)
+    public static function show_message_resource_delete($course_id)
     {
+        $course_id = (int) $course_id;
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT count(*) AS num
                 FROM '.$table.'
                 WHERE
-                    c_id = "'.Database::escape_string($course_id).'" AND
+                    c_id = "'.$course_id.'" AND
                     visible = 3';
         $res = Database::query($sql);
         $option = Database::fetch_array($res, 'ASSOC');
         if ($option['num'] >= 1) {
-            return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('The resource has been deleted').'&nbsp;)</span>';
+            return '&nbsp;&nbsp;<span class="resource-deleted">
+                (&nbsp;'.get_lang('The resource has been deleted').'&nbsp;)
+                </span>';
         }
 
         return false;
@@ -2026,7 +2029,6 @@ class Category implements GradebookItem
     /**
      * Generates a certificate for this user if everything matches.
      *
-     * @param int  $category_id            gradebook id
      * @param int  $user_id
      * @param bool $sendNotification
      * @param bool $skipGenerationIfExists
@@ -2034,68 +2036,30 @@ class Category implements GradebookItem
      * @return array
      */
     public static function generateUserCertificate(
-        $category_id,
+        GradebookCategory $category,
         $user_id,
         $sendNotification = false,
         $skipGenerationIfExists = false
     ) {
         $user_id = (int) $user_id;
-        $category_id = (int) $category_id;
-
-        // Generating the total score for a course
-        $category = self::load(
-            $category_id,
-            null,
-            null,
-            null,
-            null,
-            null,
-            false
-        );
-
-        /** @var Category $category */
-        $category = $category[0];
-
-        if (empty($category)) {
-            return false;
-        }
-
-        $sessionId = $category->get_session_id();
-        $courseCode = $category->get_course_code();
+        $categoryId = $category->getId();
+        $sessionId = $category->getSession() ? $category->getSession()->getId() : 0;
+        $courseCode = $category->getCourse()->getId();
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
 
-        $userFinishedCourse = self::userFinishedCourse(
-            $user_id,
-            $category,
-            true
-        );
-
+        $userFinishedCourse = self::userFinishedCourse($user_id, $category, true);
         if (!$userFinishedCourse) {
             return false;
         }
 
-        $skillToolEnabled = Skill::hasAccessToUserSkill(
-            api_get_user_id(),
-            $user_id
-        );
-
+        $skillToolEnabled = Skill::hasAccessToUserSkill(api_get_user_id(), $user_id);
         $userHasSkills = false;
         if ($skillToolEnabled) {
             $skill = new Skill();
-            $skill->addSkillToUser(
-                $user_id,
-                $category,
-                $courseId,
-                $sessionId
-            );
-
+            $skill->addSkillToUser($user_id, $category, $courseId, $sessionId);
             $objSkillRelUser = new SkillRelUser();
-            $userSkills = $objSkillRelUser->getUserSkills(
-                $user_id,
-                $courseId,
-                $sessionId
-            );
+            $userSkills = $objSkillRelUser->getUserSkills($user_id, $courseId, $sessionId);
             $userHasSkills = !empty($userSkills);
         }
 
@@ -2113,37 +2077,31 @@ class Category implements GradebookItem
 
             return false;
         }
-
-        $scoretotal = $category->calc_score($user_id);
-
-        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
-        // file load this variable as a global
-        $scoredisplay = ScoreDisplay::instance();
-        $my_score_in_gradebook = $scoredisplay->display_score(
-            $scoretotal,
-            SCORE_SIMPLE
-        );
-
-        $my_certificate = GradebookUtils::get_certificate_by_user_id(
-            $category_id,
-            $user_id
-        );
+        $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
 
         if ($skipGenerationIfExists && !empty($my_certificate)) {
             return false;
         }
 
+        $categoryLegacy = self::load($categoryId);
+        $categoryLegacy = $categoryLegacy[0];
+
+        /** @var Category $categoryLegacy */
+        $totalScore = $categoryLegacy->calc_score($user_id);
+
+        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
+        // file load this variable as a global
+        $scoredisplay = ScoreDisplay::instance();
+        $my_score_in_gradebook = $scoredisplay->display_score($totalScore, SCORE_SIMPLE);
+
         if (empty($my_certificate)) {
             GradebookUtils::registerUserInfoAboutCertificate(
-                $category_id,
+                $categoryId,
                 $user_id,
                 $my_score_in_gradebook,
                 api_get_utc_datetime()
             );
-            $my_certificate = GradebookUtils::get_certificate_by_user_id(
-                $category_id,
-                $user_id
-            );
+            $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
         }
 
         $html = [];
@@ -2206,19 +2164,6 @@ class Category implements GradebookItem
             }
 
             return $html;
-        }
-    }
-
-    /**
-     * @param int   $catId
-     * @param array $userList
-     */
-    public static function generateCertificatesInUserList($catId, $userList)
-    {
-        if (!empty($userList)) {
-            foreach ($userList as $userInfo) {
-                self::generateUserCertificate($catId, $userInfo['user_id']);
-            }
         }
     }
 
@@ -2298,19 +2243,12 @@ class Category implements GradebookItem
 
     /**
      * Check whether a user has finished a course by its gradebook.
-     *
-     * @param int               $userId           The user ID
-     * @param GradebookCategory $category
-     *                                            To check by the gradebook category
-     * @param bool              $recalculateScore Whether recalculate the score
-     *
-     * @return bool
      */
     public static function userFinishedCourse(
-        $userId,
+        int $userId,
         GradebookCategory $category,
-        $recalculateScore = false
-    ) {
+        bool $recalculateScore = false
+    ): bool {
         $currentScore = self::getCurrentScore(
             $userId,
             $category,

@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 
 require_once '../../main/inc/global.inc.php';
@@ -123,9 +124,7 @@ try {
         if (!$userFinishedCourse) {
             continue;
         }
-        /** commented until we get clear understanding of how to use the dates refs BT#12404.
-                }
-         */
+        /** commented until we get clear understanding of how to use the dates refs BT#12404. */
         $fieldStudent = $uFieldValue->get_values_by_handler_and_field_variable(
             $student->getId(),
             GradingElectronicPlugin::EXTRAFIELD_STUDENT_ID
@@ -157,11 +156,9 @@ try {
             continue;
         }
 
-        Category::generateUserCertificate(
-            $gradebook->get_id(),
-            $student->getId(),
-            true
-        );
+        $repo = Container::getGradeBookCategoryRepository();
+        $category = $repo->find($gradebook->get_id());
+        Category::generateUserCertificate($category, $student->getId(), true);
     }
 
     $fileName = implode('_', [

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -983,7 +984,7 @@ class ExerciseLib
                             }
                         }
 
-                        list($answer) = explode('@@', $answer);
+                        [$answer] = explode('@@', $answer);
                         // $correctAnswerList array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
                         api_preg_match_all(
                             '/\[[^]]+\]/',
@@ -4690,7 +4691,7 @@ EOT;
                     $total_weight,
                     $objExercise,
                     $studentInfo['id'],
-                    $courseCode,
+                    $courseId,
                     $sessionId
                 );
             }
@@ -5372,7 +5373,7 @@ EOT;
      * @param float  $totalScore
      * @param float  $totalWeight
      * @param int    $studentId
-     * @param string $courseCode
+     * @param int    $courseId
      * @param int    $sessionId
      *
      * @return string
@@ -5382,7 +5383,7 @@ EOT;
         $totalWeight,
         Exercise $objExercise,
         $studentId,
-        $courseCode,
+        $courseId,
         $sessionId = 0
     ) {
         if (!api_get_configuration_value('quiz_generate_certificate_ending') ||
@@ -5391,37 +5392,40 @@ EOT;
             return '';
         }
 
-        /** @var Category $category */
-        $category = Category::load(null, null, $courseCode, null, null, $sessionId, 'ORDER By id');
+        $repo = Container::getGradeBookCategoryRepository();
+        /** @var GradebookCategory $category */
+        $category = $repo->findOneBy(
+            ['course' => $courseId, 'session' => $sessionId]
+        );
 
-        if (empty($category)) {
+        if (null === $category) {
             return '';
         }
 
-        /** @var Category $category */
-        $category = $category[0];
-        $categoryId = $category->get_id();
-        $link = LinkFactory::load(
+        /*$category = Category::load(null, null, $courseCode, null, null, $sessionId, 'ORDER By id');
+        if (empty($category)) {
+            return '';
+        }*/
+        $categoryId = $category->getId();
+        /*$link = LinkFactory::load(
             null,
             null,
             $objExercise->getId(),
             null,
             $courseCode,
             $categoryId
-        );
+        );*/
 
-        if (empty($link)) {
+        if (empty($category->getLinks()->count())) {
             return '';
         }
 
-        $resourceDeletedMessage = $category->show_message_resource_delete($courseCode);
-
+        $resourceDeletedMessage = Category::show_message_resource_delete($courseId);
         if (false !== $resourceDeletedMessage || api_is_allowed_to_edit() || api_is_excluded_user_type()) {
             return '';
         }
 
-        $certificate = Category::generateUserCertificate($categoryId, $studentId);
-
+        $certificate = Category::generateUserCertificate($category, $studentId);
         if (!is_array($certificate)) {
             return '';
         }

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
@@ -33,6 +34,7 @@ $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
 $course = api_get_course_entity($course_id);
 $session = api_get_session_entity($sessionId);
+$lpRepo = Container::getLpRepository();
 
 /** @var learnpath $lp */
 //$oLP = Session::read('oLP');
@@ -446,9 +448,9 @@ if ($oLP->current == $oLP->get_last()) {
         ) {
             $gradebookMinScore = $categories[0]->getCertificateMinScore();
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
-
+            $categoryEntity = Container::getGradeBookCategoryRepository()->find($categories[0]->get_id());
             if ($userScore[0] >= $gradebookMinScore) {
-                Category::generateUserCertificate($categories[0]->get_id(), $user_id);
+                Category::generateUserCertificate($categoryEntity, $user_id);
             }
         }
     }

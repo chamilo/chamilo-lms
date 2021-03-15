@@ -146,7 +146,6 @@ if (!empty($exerciseId)) {
 
 $objExercise->createForm($form);
 
-// VALIDATE FORM
 if ($form->validate()) {
     $objExercise->processCreation($form);
     if ('true' === $form->getSubmitValue('edit')) {
@@ -189,12 +188,13 @@ if ($form->validate()) {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
             if (!empty($_POST['lp_id'])) {
                 $lp_id = $_POST['lp_id'];
-            //TODO:this remains to be implemented after press the first post
             } else {
+                //TODO:this remains to be implemented after press the first post
                 $lp_id = $_GET['lp_id'];
             }
             $lp_id = (int) $lp_id;
-            echo '<a href="../lp/lp_controller.php?'.api_get_cidreq().'&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-2">'.
+            echo '<a
+                href="../lp/lp_controller.php?'.api_get_cidreq().'&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-2">'.
                 Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.
@@ -205,7 +205,11 @@ if ($form->validate()) {
     echo '</div>';
 
     if (in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-        echo Display::return_message(get_lang('The test type cannot be modified since it was set to self evaluation. Self evaluation gives you the possibility to give direct feedback to the user, but this is not compatible with all question types and, so this type quiz cannot be changed afterward.'));
+        echo Display::return_message(
+            get_lang(
+                'The test type cannot be modified since it was set to self evaluation. Self evaluation gives you the possibility to give direct feedback to the user, but this is not compatible with all question types and, so this type quiz cannot be changed afterward.'
+            )
+        );
     }
 
     if ('true' === api_get_setting('search_enabled') &&

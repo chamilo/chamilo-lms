@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Adds gradebook certificates to gradebook_certificate table from users
@@ -7,6 +10,7 @@
  *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
@@ -27,10 +31,9 @@ function getAllCategoriesAndUsers()
 }
 
 if ($categoriesAndUsers = getAllCategoriesAndUsers()) {
+    $repo = Container::getGradeBookCategoryRepository();
     foreach ($categoriesAndUsers as $categoryAndUser) {
-        Category::generateUserCertificate(
-            $categoryAndUser['category_id'],
-            $categoryAndUser['user_id']
-        );
+        $category = $repo->find($categoryAndUser['category_id']);
+        Category::generateUserCertificate($category, $categoryAndUser['user_id']);
     }
 }

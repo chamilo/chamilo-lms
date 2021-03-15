@@ -132,7 +132,5 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         if (!$table->hasIndex('IDX_4AC0B45EAD3ED51C')) {
             $this->addSql('CREATE INDEX IDX_4AC0B45EAD3ED51C ON skill_rel_gradebook (gradebook_id)');
         }
-
-
     }
 }

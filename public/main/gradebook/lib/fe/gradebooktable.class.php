@@ -468,8 +468,7 @@ class GradebookTable extends SortableTable
 
                 // Edit (for admins).
                 if ($this->teacherView) {
-                    $cat = new Category();
-                    $show_message = $cat->show_message_resource_delete($item->get_course_code());
+                    $show_message = Category::show_message_resource_delete($item->getCourseId());
                     if (false === $show_message) {
                         $row[] = $this->build_edit_column($item);
                     }
@@ -644,8 +643,7 @@ class GradebookTable extends SortableTable
                                 false == isset($_GET['user_id']) &&
                                 (isset($_GET['action']) && 'export_all' != $_GET['action'] || !isset($_GET['action']))
                             ) {
-                                $cat = new Category();
-                                $show_message = $cat->show_message_resource_delete($item->get_course_code());
+                                $show_message = Category::show_message_resource_delete($item->getCourseId());
                                 if (false === $show_message) {
                                     if (false == $this->exportToPdf) {
                                         $row[] = $this->build_edit_column($item);
@@ -1227,13 +1225,13 @@ class GradebookTable extends SortableTable
 
         switch ($item->get_item_type()) {
             case 'C':
-                // Category
+                /** @var Category $item */
                 $prms_uri = '?selectcat='.$item->get_id().'&view='.$view;
                 $isStudentView = api_is_student_view_active();
                 if (isset($is_student) || $isStudentView) {
                     $prms_uri = $prms_uri.'&amp;isStudentView=studentview';
                 }
-                $show_message = $cat->show_message_resource_delete($item->get_course_code());
+                $show_message = Category::show_message_resource_delete($item->getCourseId());
 
                 return '&nbsp;<a href="'.Category::getUrl().$prms_uri.'">'
                     .$item->get_name()
@@ -1242,7 +1240,7 @@ class GradebookTable extends SortableTable
             case 'E':
                 // Evaluation
                 $course_id = CourseManager::get_course_by_category($categoryId);
-                $show_message = $cat->show_message_resource_delete($course_id);
+                $show_message = Category::show_message_resource_delete($course_id);
 
                 // course/platform admin can go to the view_results page
                 if (api_is_allowed_to_edit() && false === $show_message) {
@@ -1280,7 +1278,7 @@ class GradebookTable extends SortableTable
             case 'L':
                 // Link
                 $course_id = CourseManager::get_course_by_category($categoryId);
-                $show_message = $cat->show_message_resource_delete($course_id);
+                $show_message = Category::show_message_resource_delete($course_id);
 
                 $url = $item->get_link();
                 $text = $item->get_name();

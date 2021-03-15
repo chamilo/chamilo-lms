@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -29,6 +31,11 @@ function confirmation() {
 </script>";
 
 $categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
+$category = null;
+$repo = Container::getGradeBookCategoryRepository();
+if (!empty($categoryId)) {
+    $category = $repo->find($categoryId);
+}
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 $filterOfficialCode = isset($_POST['filter']) ? Security::remove_XSS($_POST['filter']) : null;
 $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
@@ -162,17 +169,13 @@ switch ($action) {
         }
         exit;
     case 'generate_all_certificates':
-        $userList = CourseManager::get_user_list_from_course_code(
-            api_get_course_id(),
-            api_get_session_id()
-        );
-
+        $userList = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
         if (!empty($userList)) {
             foreach ($userList as $userInfo) {
                 if (INVITEE == $userInfo['status']) {
                     continue;
                 }
-                Category::generateUserCertificate($categoryId, $userInfo['user_id']);
+                Category::generateUserCertificate($category, $userInfo['user_id']);
             }
         }
         header('Location: '.$url);

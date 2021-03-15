@@ -242,7 +242,7 @@ if (!empty($attempts)) {
                 $attempt_result['max_score'],
                 $objExercise,
                 $attempt_result['exe_user_id'],
-                $courseCode,
+                api_get_course_int_id(),
                 $sessionId
             );
         }

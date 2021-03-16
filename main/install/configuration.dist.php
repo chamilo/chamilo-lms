@@ -648,6 +648,8 @@ $_configuration['send_all_emails_to'] = [
 // - Requires DB changes:
 // CREATE TABLE track_e_exercise_confirmation (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, course_id INT NOT NULL, attempt_id INT NOT NULL, quiz_id INT NOT NULL, session_id INT NOT NULL, confirmed TINYINT(1) DEFAULT '0' NOT NULL, questions_count INT NOT NULL, saved_answers_count INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 //$_configuration['quiz_confirm_saved_answers'] = false;
+// Allow reuse of questions between courses
+// $_configuration['quiz_question_allow_inter_course_linking'] = false;
 
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;

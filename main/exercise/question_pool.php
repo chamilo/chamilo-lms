@@ -963,6 +963,8 @@ if ($fromExercise <= 0) {
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
+    } elseif (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+        $actionIcon2 = 'add';
     }
 }
 

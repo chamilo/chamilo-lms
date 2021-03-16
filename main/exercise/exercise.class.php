@@ -10908,17 +10908,17 @@ class Exercise
             if ('' == $advanceCourseExcerciseField['value'] || count($coursesIds) == 0) {
                 return null;
             }
-            $isInASession = (0==$sessionId)?false:true;
+            $isInASession = (0 == $sessionId) ? false : true;
             $courses = [];
             foreach ($coursesIds as $course) {
                 $courseData = api_get_course_info_by_id($course);
                 if (!empty($courseData) && isset($courseData['real_id'])) {
                     // if session is 0, always will be true
                     $courseExistsInSession = true;
-                    if($isInASession){
+                    if ($isInASession) {
                         $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
                     }
-                    if($courseExistsInSession) {
+                    if ($courseExistsInSession) {
                         $isSubscribed = CourseManager::is_user_subscribed_in_course(
                             $userId,
                             $courseData['code'],
@@ -11045,16 +11045,16 @@ class Exercise
                 return null;
             }
             $courses = [];
-            $isInASession = (0==$sessionId)?false:true;
+            $isInASession = (0 == $sessionId) ? false : true;
             foreach ($coursesIds as $course) {
                 $courseData = api_get_course_info_by_id($course);
                 if (!empty($courseData) && isset($courseData['real_id'])) {
                     // if session is 0, always will be true
                     $courseExistsInSession = true;
-                    if($isInASession){
+                    if ($isInASession) {
                         $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
                     }
-                    if($courseExistsInSession) {
+                    if ($courseExistsInSession) {
                         $isSubscribed = CourseManager::is_user_subscribed_in_course(
                             $userId,
                             $courseData['code'],

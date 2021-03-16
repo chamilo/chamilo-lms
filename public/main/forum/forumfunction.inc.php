@@ -959,7 +959,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
 function deletePost(CForumPost $post)
 {
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-    $course_id = api_get_course_int_id();
     $em = Database::getManager();
     if ($post) {
         $em
@@ -967,14 +966,12 @@ function deletePost(CForumPost $post)
                 UPDATE ChamiloCourseBundle:CForumPost p
                 SET p.postParentId = :parent_of_deleted_post
                 WHERE
-                    p.cId = :course AND
                     p.postParentId = :post AND
                     p.thread = :thread_of_deleted_post AND
                     p.forum = :forum_of_deleted_post
             ')
             ->execute([
                 'parent_of_deleted_post' => $post->getPostParentId(),
-                'course' => $course_id,
                 'post' => $post->getIid(),
                 'thread_of_deleted_post' => $post->getThread() ? $post->getThread()->getIid() : 0,
                 'forum_of_deleted_post' => $post->getForum(),

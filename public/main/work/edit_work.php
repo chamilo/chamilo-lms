@@ -131,7 +131,12 @@ if ($form->validate()) {
         header('Location: '.$currentUrl);
         exit;
     } else {
-        Display::addFlash(Display::return_message(get_lang('The operation is impossible, a file with this name already exists.'), 'warning'));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('The operation is impossible, a file with this name already exists.'),
+                'warning'
+            )
+        );
     }
 }
 

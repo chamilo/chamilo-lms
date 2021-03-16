@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use ChamiloSession as Session;
 
@@ -2267,10 +2268,12 @@ function get_work_user_list(
             $expiresOn = null;
             if (!empty($assignmentConfiguration)) {
                 $expiresOn = $assignmentConfiguration->getExpiresOn();
-                $time_expires = api_strtotime(
-                    $expiresOn->format('Y-m-d H:i:s'),
-                    'UTC'
-                );
+                if (!empty($expiresOn)) {
+                    $time_expires = api_strtotime(
+                        $expiresOn->format('Y-m-d H:i:s'),
+                        'UTC'
+                    );
+                }
             }
 
             if (!empty($expiresOn) &&
@@ -5237,8 +5240,20 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $endOnCondition = 'ends_on = null, ';
     }
 
+    /** @var CStudentPublication $publication */
+    $publication = Container::getStudentPublicationRepository()->find($workId);
+    $em = Database::getManager();
+
     if (empty($data)) {
-        $sql = "INSERT INTO $table SET
+        $assignment = new CStudentPublicationAssignment();
+
+        $publication
+            ->setHasProperties(1)
+            ->setViewProperties(1)
+        ;
+        $em->persist($publication);
+
+        /*$sql = "INSERT INTO $table SET
                 c_id = $course_id ,
                 $expiryDateCondition
                 $endOnCondition
@@ -5254,9 +5269,10 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                         view_properties = 1
                     WHERE iid = $workId";
             Database::query($sql);
-        }
+        }*/
     } else {
-        $sql = "UPDATE $table SET
+        $assignment = $em->getRepository(CStudentPublicationAssignment::class)->find($data['iid']);
+        /*$sql = "UPDATE $table SET
                     $expiryDateCondition
                     $endOnCondition
                     add_to_calendar  = $agendaId,
@@ -5264,8 +5280,23 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 WHERE
                     publication_id = $workId AND
                     iid = ".$data['iid'];
-        Database::query($sql);
+        Database::query($sql);*/
     }
+
+    $assignment
+        ->setAddToCalendar($agendaId)
+        ->setEnableQualification(1 === $qualification)
+        ->setPublication($publication)
+    ;
+    if (!empty($expiryDate)) {
+        $assignment->setExpiresOn(api_get_utc_datetime($expiryDate, true, true));
+    }
+
+    if (!empty($endDate)) {
+        $assignment->setEndsOn(api_get_utc_datetime($endDate, true, true));
+    }
+    $em->persist($assignment);
+    $em->flush();
 
     if (!empty($params['category_id'])) {
         $link_info = GradebookUtils::isResourceInCourseGradebook(

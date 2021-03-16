@@ -120,7 +120,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                     if (isset($_POST['qualification'])) {
                         $work->setQualificatorId(api_get_user_id());
                         $work->setQualification(api_float_val($_POST['qualification']));
-                        $work->setDateOfQualification(api_get_utc_datetime(null, true, true));
+                        $work->setDateOfQualification(api_get_utc_datetime(time(), false, true));
                         $repo->update($work);
                     }
 

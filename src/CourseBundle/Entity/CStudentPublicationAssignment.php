@@ -41,7 +41,7 @@ class CStudentPublicationAssignment
     /**
      * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
      */
-    protected bool $addToCalendar;
+    protected int $addToCalendar;
 
     /**
      * @ORM\Column(name="enable_qualification", type="boolean", nullable=false)
@@ -88,14 +88,14 @@ class CStudentPublicationAssignment
         return $this->endsOn;
     }
 
-    public function setAddToCalendar(bool $addToCalendar): self
+    public function setAddToCalendar(int $addToCalendar): self
     {
         $this->addToCalendar = $addToCalendar;
 
         return $this;
     }
 
-    public function getAddToCalendar(): bool
+    public function getAddToCalendar(): int
     {
         return $this->addToCalendar;
     }
@@ -110,6 +110,18 @@ class CStudentPublicationAssignment
     public function getEnableQualification(): bool
     {
         return $this->enableQualification;
+    }
+
+    public function getPublication(): CStudentPublication
+    {
+        return $this->publication;
+    }
+
+    public function setPublication(CStudentPublication $publication): self
+    {
+        $this->publication = $publication;
+
+        return $this;
     }
 
     /*

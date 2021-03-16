@@ -75,9 +75,9 @@ class GradebookCategory
     protected Collection $subCategories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="gradeBookCategory")
-     *
      * @var SkillRelGradebook[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="gradeBookCategory")
      */
     protected Collection $skills;
 
@@ -535,7 +535,7 @@ class GradebookCategory
     }
 
     /**
-     * @param GradebookCategory[]|Collection $skills
+     * @param SkillRelGradebook[]|Collection $skills
      */
     public function setSkills(Collection $skills): self
     {

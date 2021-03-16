@@ -861,11 +861,11 @@ class CourseBuilder
             $question->addPicture($this);
 
             $sql = 'SELECT * FROM '.$table_ans.'
-                    WHERE c_id = '.$courseId.' AND question_id = '.$obj->iid;
+                    WHERE question_id = '.$obj->iid;
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $question->add_answer(
-                    $obj2->id,
+                    $obj2->iid,
                     $obj2->answer,
                     $obj2->correct,
                     $obj2->comment,
@@ -951,7 +951,7 @@ class CourseBuilder
                         );
                         $question->addPicture($this);
                         $sql = "SELECT * FROM $table_ans
-                                WHERE c_id = $courseId AND question_id = ".$obj->id;
+                                WHERE question_id = ".$obj->id;
                         $db_result2 = Database::query($sql);
                         if (Database::num_rows($db_result2)) {
                             while ($obj2 = Database::fetch_object($db_result2)) {
@@ -1046,7 +1046,7 @@ class CourseBuilder
                 $db_result2 = Database::query($sql);
                 while ($obj2 = Database::fetch_object($db_result2)) {
                     $question->add_answer(
-                        $obj2->id,
+                        $obj2->iid,
                         $obj2->answer,
                         $obj2->correct,
                         $obj2->comment,

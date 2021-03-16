@@ -84,7 +84,7 @@ $nmbrTries = 0;
 
 while ($hotspot = Database::fetch_assoc($result)) {
     $hotSpot = [];
-    $hotSpot['id'] = $hotspot['id'];
+    $hotSpot['id'] = $hotspot['iid'];
     $hotSpot['iid'] = $hotspot['iid'];
     $hotSpot['answer'] = $hotspot['answer'];
 

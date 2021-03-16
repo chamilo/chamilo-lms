@@ -1467,7 +1467,7 @@ HTML;
                 $answers = $objAnswerTmp->selectAnswerByAutoId(
                     $objAnswerTmp->selectAutoId($answerId)
                 );
-                $answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer(
+                $answers_hotspot[$answers['iid']] = $objAnswerTmp->selectAnswer(
                     $answerId
                 );
             }

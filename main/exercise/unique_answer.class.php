@@ -494,7 +494,6 @@ class UniqueAnswer extends Question
         $sql = "SELECT max(position) as max_position
                 FROM $tbl_quiz_answer
                 WHERE
-                    c_id = $course_id AND
                     question_id = $question_id";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);

@@ -473,7 +473,7 @@ class CourseRecycler
                             WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
                     Database::query($sql);
                     $sql = "DELETE FROM ".$table_qui_ans."
-                            WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                            WHERE question_id IN(".$orphan_ids.")";
                     Database::query($sql);
                     $sql = "DELETE FROM ".$table_qui_que."
                             WHERE iid IN(".$orphan_ids.")";
